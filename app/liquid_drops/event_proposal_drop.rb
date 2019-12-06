@@ -9,6 +9,10 @@ class EventProposalDrop < Liquid::Drop
   #   @return [Integer] The numeric database ID of this event proposal
   # @!method owner
   #   @return [UserConProfileDrop] The profile of the person who submitted this event proposal
+  # @!method convention
+  #   @return [ConventionDrop] The convention this event is proposed for
+  # @!method event_category
+  #   @return [EventCategoryDrop] The category of event being proposed
   # @!method event
   #   @return [EventDrop] The event created from this proposal, if this proposal has been accepted
   # @!method status
@@ -38,6 +42,8 @@ class EventProposalDrop < Liquid::Drop
     :status,
     :title,
     :email,
+    :convention,
+    :event_category,
     :length_seconds,
     :description,
     :short_blurb,
@@ -60,5 +66,10 @@ class EventProposalDrop < Liquid::Drop
   # @return [String] The relative URL for linking admins to view the proposal
   def admin_url
     "/admin_event_proposals/#{event_proposal.id}"
+  end
+
+  # @return [String] The relative URL for linking admins to the change history of the proposal
+  def history_url
+    "/admin_event_proposals/#{event_proposal.id}/history"
   end
 end

@@ -883,7 +883,8 @@ CREATE TABLE public.notification_templates (
     convention_id bigint NOT NULL,
     event_key character varying NOT NULL,
     subject text,
-    body text,
+    body_html text,
+    body_text text,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );

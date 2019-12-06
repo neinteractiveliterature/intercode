@@ -1,0 +1,21 @@
+---
+subject: "[{{ convention.name }}: Event Proposal] Updated: {{ event_proposal.title }}"
+body_text: >
+  The event proposal for “{{ event_proposal.title }}” has been updated and is waiting for your review
+  at: {{ event_proposal.admin_url | absolute_url }}
+
+
+  A change log is available at: {{ event_proposal.history_url | absolute_url }}
+---
+<h1>Proposal updated</h1>
+
+<p>
+  The event proposal for “{{ event_proposal.title }}” has been updated and is waiting for your review
+  <a href="{{ event_proposal.admin_url | absolute_url }}">here</a>.
+<p>
+
+<hr>
+
+<h2>Change log</h2>
+
+{{ changes_html }}

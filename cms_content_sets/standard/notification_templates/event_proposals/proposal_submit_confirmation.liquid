@@ -1,0 +1,47 @@
+---
+subject: "[{{ event_proposal.convention.name }}: Event Proposal] Submitted {{ event_proposal.title }}"
+body_text: |
+  Thank you for submitting your {{ event_proposal.event_category.name | downcase }} proposal for {{ event_proposal.title }} at {{ event_proposal.convention.name }}.  We will be in touch shortly to discuss this with you.  You can still make changes to your proposal at {{ event_proposal.edit_url | absolute_url }}, and any changes you make will be sent to the convention staff.
+  {% capture contact_instructions %}
+    {% if proposal_reviewer_staff_positions.size > 0 %}
+      If you have any questions, or if you want to check in on the status of this proposal, please reach out to our
+
+      {% if proposal_reviewer_staff_positions[0].email %}
+        {{ proposal_reviewer_staff_positions[0].name | downcase }} at {{ proposal_reviewer_staff_positions[0].email }}.
+      {% else %}
+        {{ proposal_reviewer_staff_positions[0].name | downcase }}.
+      {% endif %}
+
+      (Please remember that conventions are staffed with volunteers, and we will not always be available immediately.)
+    {% endif %}
+  {% endcapture %}
+  {{ contact_instructions | condense_whitespace }}
+
+  Thanks, and we'll be in touch soon!
+---
+<p>
+  Thank you for submitting your {{ event_proposal.event_category.name | downcase }} proposal for
+  <em>{{ event_proposal.title }}</em> at {{ event_proposal.convention.name }}.
+  We will be in touch shortly to discuss this with you.  You can still make changes to your
+  proposal at <a href="{{ event_proposal.edit_url | absolute_url }}">{{ event_proposal.edit_url | absolute_url }}</a>,
+  and any changes you make will be sent to the convention staff.
+</p>
+
+{% if proposal_reviewer_staff_positions.size > 0 %}
+  <p>
+    If you have any questions, or if you want to check in on the status
+    of this proposal, please reach out to our
+
+    {% if proposal_reviewer_staff_positions[0].email %}
+      {{ proposal_reviewer_staff_positions[0].name | downcase }} at
+      <a href="mailto:{{ proposal_reviewer_staff_positions[0].email }}">{{ proposal_reviewer_staff_positions[0].email }}</a>.
+    {% else %}
+      {{ proposal_reviewer_staff_positions[0].name | downcase }}.
+    {% endif %}
+
+    (Please remember that conventions are staffed with volunteers, and we will not always be
+    available immediately.)
+  </p>
+{% endif %}
+
+<p>Thanks, and we'll be in touch soon!</p>

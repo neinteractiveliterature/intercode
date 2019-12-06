@@ -1,0 +1,30 @@
+---
+subject: "[{{ convention.name }}: Event Proposal] Reminder: {{ event_proposal.title }}"
+body_text: >
+  Hi there!  Just a reminder: you started a proposal for “{{ event_proposal.title }}”
+  on {{ event_proposal.created_at | date: "%A, %B %-d, %Y" }}, but haven’t submitted it to
+  {{ event_proposal.convention.name }} yet.
+
+
+  If you'd like to finish your proposal, go to: {{ event_proposal.edit_url | absolute_url }}
+
+
+  This is a one-time reminder.  We won’t remind you about this proposal again.
+---
+<p>
+  Hi there!  Just a reminder: you started a proposal for “{{ event_proposal.title }}”
+  on {{ event_proposal.created_at | date: "%A, %B %-d, %Y" }}, but haven’t submitted it to
+  {{ event_proposal.convention.name }} yet.
+</p>
+
+<p>
+  <strong>
+    If you'd like to finish your proposal, go
+    <a href="{{ event_proposal.edit_url | absolute_url }}">here</a>!
+  </strong>
+</p>
+
+<p>
+  This is a one-time reminder.  We won’t remind you about this proposal again.
+</p>
+
