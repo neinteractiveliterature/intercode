@@ -14,6 +14,6 @@ class CmsContentLoaders::NotificationTemplates < CmsContentLoaders::Base
   end
 
   def content_attribute
-    'body'
+    'body_html'
   end
 end

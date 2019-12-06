@@ -1,9 +1,7 @@
 class EventProposalsMailer < ApplicationMailer
   def new_proposal(event_proposal)
-    @event_proposal = event_proposal
-
     notification_template_mail(
-      @event_proposal.convention,
+      event_proposal.convention,
       'event_proposals/new_proposal',
       { 'event_proposal' => event_proposal },
       from: from_address_for_convention(event_proposal.convention),
@@ -12,44 +10,45 @@ class EventProposalsMailer < ApplicationMailer
   end
 
   def proposal_submit_confirmation(event_proposal)
-    @event_proposal = event_proposal
-    @proposal_chair_staff_position = proposal_chair_staff_positions(event_proposal)
-      .select { |staff_position| staff_position.email.present? }
-      .first
-    from_address = @proposal_chair_staff_position&.email || from_address_for_convention(event_proposal.convention)
+    proposal_reviewer_staff_positions = proposal_reviewer_staff_positions(event_proposal)
 
-    use_convention_timezone(@event_proposal.convention) do
-      mail(
-        from: from_address,
-        to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
-        subject: "#{subject_prefix(event_proposal)} Submitted"
-      )
-    end
+    notification_template_mail(
+      event_proposal.convention,
+      'event_proposals/proposal_submit_confirmation',
+      {
+        'event_proposal' => event_proposal,
+        'proposal_reviewer_staff_positions' => proposal_reviewer_staff_positions
+      },
+      from: from_address_for_convention(event_proposal.convention),
+      to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>"
+    )
   end
 
   def proposal_updated(event_proposal, changes)
-    @event_proposal = event_proposal
-    @changes = changes
-    use_convention_timezone(@event_proposal.convention) do
-      event_proposal_mail(event_proposal, 'Update')
-    end
+    changes_html = FormResponseChangeGroupPresenter.new(changes, event_proposal.convention).html
+
+    notification_template_mail(
+      event_proposal.convention,
+      'event_proposals/proposal_updated',
+      { 'event_proposal' => event_proposal, 'changes_html' => changes_html },
+      from: from_address_for_convention(event_proposal.convention),
+      to: proposal_mail_destination(event_proposal)
+    )
   end
 
   def unfinished_draft_reminder(event_proposal)
-    @event_proposal = event_proposal
-
-    use_convention_timezone(@event_proposal.convention) do
-      mail(
-        from: from_address_for_convention(event_proposal.convention),
-        to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
-        subject: "#{subject_prefix(event_proposal)} Reminder: #{event_proposal.title}"
-      )
-    end
+    notification_template_mail(
+      event_proposal.convention,
+      'event_proposals/unfinished_draft_reminder',
+      { 'event_proposal' => event_proposal },
+      from: from_address_for_convention(event_proposal.convention),
+      to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>"
+    )
   end
 
   private
 
-  def proposal_chair_staff_positions(event_proposal)
+  def proposal_reviewer_staff_positions(event_proposal)
     event_proposal.convention.staff_positions
       .where(
         id: Permission.for_model(event_proposal.event_category)
@@ -57,13 +56,7 @@ class EventProposalsMailer < ApplicationMailer
           .select(:staff_position_id)
       )
       .sort_by do |staff_position|
-        # TODO kill this with fire
-        [
-          staff_position.name =~ /proposals? (chair|coordinator)/i ? 0 : 1,
-          staff_position.name =~ /bid (chair|coordinator)/i ? 0 : 1,
-          staff_position.name =~ /people/i ? 0 : 1,
-          staff_position.name
-        ]
+        staff_position.email.present? ? 0 : 1
       end
   end
 
@@ -77,61 +70,13 @@ class EventProposalsMailer < ApplicationMailer
   end
 
   def proposal_mail_destination(event_proposal)
-    staff_positions = proposal_chair_staff_positions(event_proposal)
+    staff_positions = proposal_reviewer_staff_positions(event_proposal)
     proposal_chair_staff_position_emails = emails_for_staff_positions(staff_positions)
 
     if proposal_chair_staff_position_emails.any?
       proposal_chair_staff_position_emails
     else
       emails_for_staff_positions(global_proposal_chair_staff_positions(event_proposal.convention))
-    end
-  end
-
-  def subject_prefix(event_proposal)
-    "[#{event_proposal.convention.name}: Event Proposal]"
-  end
-
-  def event_proposal_url_for_convention(event_proposal)
-    url_with_convention_host(
-      "/admin_event_proposals/#{event_proposal.to_param}",
-      event_proposal.convention
-    )
-  end
-  helper_method :event_proposal_url_for_convention
-
-  def edit_proposal_url_for_convention(event_proposal)
-    url_with_convention_host(
-      "/event_proposals/#{event_proposal.to_param}/edit",
-      event_proposal.convention
-    )
-  end
-  helper_method :edit_proposal_url_for_convention
-
-  def event_proposal_mail(event_proposal, status_change)
-    mail(
-      from: from_address_for_convention(event_proposal.convention),
-      to: proposal_mail_destination(event_proposal),
-      subject: "#{subject_prefix(event_proposal)} #{status_change}: #{event_proposal.title}"
-    )
-  end
-
-  def notification_template_mail(convention, event_key, liquid_assigns, options = {})
-    use_convention_timezone(convention) do
-      notification_template = convention.notification_templates.find_by!(event_key: event_key)
-      rendering_context = cms_rendering_context(convention, liquid_assigns)
-
-      subject = rendering_context.cadmus_renderer.render(
-        notification_template.subject_template, :html
-      )
-      body = rendering_context.cadmus_renderer.render(
-        notification_template.body_template, :html
-      )
-
-      mail(options.merge(subject: subject)) do |format|
-        format.html do
-          render html: body
-        end
-      end
     end
   end
 end
