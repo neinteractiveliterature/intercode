@@ -14,4 +14,8 @@ class Order < ApplicationRecord
     return Money.new(0, 'USD') unless order_entries.any?
     order_entries.sum(&:price)
   end
+
+  def to_liquid
+    OrderDrop.new(self)
+  end
 end
