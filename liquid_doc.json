@@ -522,6 +522,20 @@
           ]
         },
         {
+          "name": "history_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL to use for linking to the change log for this event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
           "name": "runs",
           "docstring": "",
           "tags": [
@@ -641,6 +655,45 @@
               "text": "The short blurb for this event, rendered to HTML",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MoneyDrop",
+      "superclasses": [
+        "MoneyDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "An amount of money",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "money",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of MoneyDrop",
+              "types": [
+                "MoneyDrop"
               ]
             }
           ]
@@ -912,6 +965,20 @@
           ]
         },
         {
+          "name": "charge_id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The ID of the charge in the underlying payment processing system",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
           "name": "provided_by_event",
           "docstring": "",
           "tags": [
@@ -934,7 +1001,7 @@
               "name": null,
               "text": "The amount the person paid for the ticket",
               "types": [
-                "Money"
+                "MoneyDrop"
               ]
             }
           ]
@@ -963,6 +1030,34 @@
               "text": "The type of this ticket",
               "types": [
                 "TicketTypeDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "created_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this ticket was first created in the\ndatabase",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "updated_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this ticket was last updated in the\ndatabase",
+              "types": [
+                "ActiveSupport::TimeWithZone"
               ]
             }
           ]
@@ -2084,6 +2179,34 @@
           ]
         },
         {
+          "name": "convention",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The convention this event is proposed for",
+              "types": [
+                "ConventionDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_category",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The category of event being proposed",
+              "types": [
+                "EventCategoryDrop"
+              ]
+            }
+          ]
+        },
+        {
           "name": "event",
           "docstring": "",
           "tags": [
@@ -2269,6 +2392,237 @@
                 "String"
               ]
             }
+          ]
+        },
+        {
+          "name": "admin_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL for linking admins to view the proposal",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "history_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL for linking admins to the change history of the proposal",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CurrencyDrop",
+      "superclasses": [
+        "CurrencyDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A currency used for money",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "currency",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of CurrencyDrop",
+              "types": [
+                "CurrencyDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SignupRequestDrop",
+      "superclasses": [
+        "SignupRequestDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A request to sign up for a run of an event",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "signup_request",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of this signup request",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "target_run",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The run the signup is requested for",
+              "types": [
+                "RunDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user_con_profile",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The profile of the person who made the request",
+              "types": [
+                "UserConProfileDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "state",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The state of this signup request (e.g. pending, accepted, rejected, withdrawn)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "result_signup",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The resulting signup, if the request was accepted",
+              "types": [
+                "SignupDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event the signup is requested for",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of SignupRequestDrop",
+              "types": [
+                "SignupRequestDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL of the event's page on the convention site",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signup_moderation_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL for admins to go to moderate this signup request",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "requested_bucket",
+          "docstring": "",
+          "tags": [
+
           ]
         }
       ]
@@ -4651,6 +5005,20 @@
           "text": "the Rails documentation for this method",
           "types": null
         }
+      ]
+    },
+    {
+      "name": "absolute_url",
+      "docstring": "Given a relative URL, turns it into an absolute URL for the current convention.\nGiven an absolute URL, changes the hostname to the current convention host.",
+      "tags": [
+
+      ]
+    },
+    {
+      "name": "condense_whitespace",
+      "docstring": "Converts all whitespace in a string to single spaces, and strips whitespace off the\nbeginning and end.",
+      "tags": [
+
       ]
     }
   ]

@@ -1,0 +1,12 @@
+---
+subject: "[{{ convention.name }}: Signup Moderation] New request from {{ signup_request.user_con_profile.name }}"
+body_text: >
+  {{ signup_request.user_con_profile.name }} has requested to sign up for
+  {{ signup_request.target_run.event.title }}.  To review, accept, and/or reject the request,
+  go to: {{ signup_request.signup_moderation_url | absolute_url }}
+---
+<p>
+  {{ signup_request.user_con_profile.name }} has requested to sign up for
+  {{ signup_request.target_run.event.title }}.  To review, accept, and/or reject the request,
+  go to <a href="{{ signup_request.signup_moderation_url | absolute_url }}">the signup moderation queue</a>.
+</p>

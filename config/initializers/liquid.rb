@@ -7,3 +7,17 @@ if Rails.env.development? || Rails.env.test?
     exception.is_a?(Liquid::InternalError) ? "Liquid error: #{ERB::Util.html_escape exception.cause.message}" : exception
   end
 end
+
+# Patching Money and Money::Currency to convert to our Liquid drops
+require 'money'
+class Money
+  def to_liquid
+    MoneyDrop.new(self)
+  end
+end
+
+class Money::Currency
+  def to_liquid
+    Money::CurrencyDrop.new(self)
+  end
+end
