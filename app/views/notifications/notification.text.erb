@@ -1,1 +1,1 @@
-<%= @body_text %>
+<%= @body_text.presence || strip_tags(@body_html) %>

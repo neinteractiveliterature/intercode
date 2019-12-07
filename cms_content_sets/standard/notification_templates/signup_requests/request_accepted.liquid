@@ -1,0 +1,22 @@
+---
+subject: "[{{ convention.name }}: Signup Moderation] Request accepted: {{ signup_request.event.title }}"
+body_text: >
+  Hi {{ signup_request.user_con_profile.name_without_nickname }},
+  the {{ convention.name }} staff have accepted your request to sign up for
+  {{ signup_request.event.title }}.
+  {% if signup_request.result_signup.state == 'confirmed' %}
+    You are now signed up in the {{ signup_request.result_signup.bucket.name }} bucket.
+  {% elsif signup_request.result_signup.state == 'waitlisted' %}
+    Because the event was full, you have been placed on the waitlist.
+  {% endif %}
+---
+<p>
+  Hi {{ signup_request.user_con_profile.name_without_nickname }},
+  the {{ convention.name }} staff have accepted your request to sign up for
+  {{ signup_request.event.title }}.
+  {% if signup_request.result_signup.state == 'confirmed' %}
+    You are now signed up in the {{ signup_request.result_signup.bucket.name }} bucket.
+  {% elsif signup_request.result_signup.state == 'waitlisted' %}
+    Because the event was full, you have been placed on the waitlist.
+  {% endif %}
+</p>

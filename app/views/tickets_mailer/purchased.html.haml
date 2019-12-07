@@ -1,9 +1,0 @@
-Thanks for purchasing a #{@ticket.convention.ticket_name} for #{@ticket.convention.name}!  Your receipt
-is below.
-
-%hr
-
-%dl.dl-horizontal
-  %dt.col-md-3 Purchaser
-  %dd.col-md-9= @ticket.user_con_profile.name_without_nickname
-  = render 'tickets/ticket_data', ticket: @ticket

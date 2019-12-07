@@ -1,0 +1,45 @@
+---
+subject: "[{{ convention.name }}] {{ ticket.ticket_type.description | titleize }} Purchase Receipt"
+---
+Thanks for purchasing a {{ convention.ticket_name }} for {{ convention.name }}!  Your receipt is below.
+
+<hr/>
+
+<dl class="dl-horizontal">
+  <dt class="col-md-3">Purchaser</dt>
+  <dd class="col-md-9">
+    {{ ticket.user_con_profile.name_without_nickname }}
+  </dd>
+  <dt class="col-md-3">Type</dt>
+  <dd class="col-md-9">
+    {{ ticket.ticket_type.description }}
+  </dd>
+  {% if ticket.provided_by_event %}
+    <dt class="col-md-3">Provided by event</dt>
+    <dd class="col-md-9">
+      {{ ticket.provided_by_event.title }}
+    </dd>
+  {% endif %}
+  <dt class="col-md-3">Paid</dt>
+  <dd class="col-md-9">
+    {% if ticket.payment_amount && ticket.payment_amount.fractional > 0 %}
+      {{ ticket.payment_amount.format }}
+    {% else %}
+      0
+    {% endif %}
+  </dd>
+  <dt class="col-md-3">Transaction ID</dt>
+  <dd class="col-md-9">
+    {% if ticket.payment_amount && ticket.payment_amount.fractional > 0 %}
+      {{ ticket.charge_id }}
+    {% endif %}
+  </dd>
+  <dt class="col-md-3">Created</dt>
+  <dd class="col-md-9">
+    {{ ticket.created_at | date:"%B %e, %Y %l:%M %p %Z" }}
+  </dd>
+  <dt class="col-md-3">Last updated</dt>
+  <dd class="col-md-9">
+    {{ ticket.updated_at | date:"%B %e, %Y %l:%M %p %Z" }}
+  </dd>
+</dl>
