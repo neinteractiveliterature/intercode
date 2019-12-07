@@ -11,6 +11,10 @@ class SignupRequest < ApplicationRecord
   validates_presence_of :result_signup,
     if: ->(signup_request) { signup_request.state == 'accepted' }
 
+  def to_liquid
+    SignupRequestDrop.new(self)
+  end
+
   private
 
   def ensure_all_fields_point_at_the_same_convention

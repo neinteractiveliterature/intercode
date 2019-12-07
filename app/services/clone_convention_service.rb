@@ -130,7 +130,9 @@ class CloneConventionService < CivilService::Service
   end
 
   def clone_simple_cms_content(convention)
-      %i[cms_graphql_queries cms_variables cms_layouts cms_partials].each do |association|
+    %i[
+      cms_graphql_queries cms_variables cms_layouts cms_partials notification_templates
+    ].each do |association|
       Rails.logger.info("Cloning #{association}")
       @id_maps[association] = clone_with_id_map(
         source_convention.public_send(association),
