@@ -701,6 +701,121 @@
       ]
     },
     {
+      "name": "OrderDrop",
+      "superclasses": [
+        "OrderDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "An order from the convention's store",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "order",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of this order",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user_con_profile",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The profile of the person who placed the order",
+              "types": [
+                "UserConProfileDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "total_price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The total amount the person paid for the order",
+              "types": [
+                "MoneyDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "status",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The state of this order (e.g. pending, unpaid, paid, cancelled)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of OrderDrop",
+              "types": [
+                "OrderDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "order_entries",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The entries in this order",
+              "types": [
+                "Array<OrderEntryDrop>"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "SignupDrop",
       "superclasses": [
         "SignupDrop",
@@ -1777,6 +1892,149 @@
               "name": null,
               "text": "String The root URL for this convention",
               "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrderEntryDrop",
+      "superclasses": [
+        "OrderEntryDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "An entry in an order",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "order_entry",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of this order entry",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The total price of this entry (price_per_item * quantity)",
+              "types": [
+                "MoneyDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price_per_item",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The price per item of this entry",
+              "types": [
+                "MoneyDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "quantity",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The quantity of the item that was ordered",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "product",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The product that was ordered",
+              "types": [
+                "ProductDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "product_variant",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The product variant that was ordered, if applicable",
+              "types": [
+                "ProductVariantDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "describe_products",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A text description of the product(s) ordered in this entry",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of OrderEntryDrop",
+              "types": [
+                "OrderEntryDrop"
+              ]
             }
           ]
         }

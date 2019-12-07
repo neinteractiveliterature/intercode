@@ -34,6 +34,10 @@ class OrderEntry < ApplicationRecord
     ].compact.join(' ')
   end
 
+  def to_liquid
+    OrderEntryDrop.new(self)
+  end
+
   private
 
   def product_variant_must_belong_to_product
