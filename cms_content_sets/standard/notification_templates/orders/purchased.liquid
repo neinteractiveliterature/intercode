@@ -1,0 +1,40 @@
+---
+subject: "[{{ convention.name }}] Order Receipt"
+---
+<p>Thanks for your order for {{ convention.name }}!  Your receipt is below.</p>
+<table class="table">
+  <tr>
+    <th scope="row">Purchaser</th>
+    <td>
+      {{ order.user_con_profile.name_without_nickname }}
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Total</th>
+    <td>
+      {{ order.total_price.format }}
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Payment</th>
+    <td>
+      {% if order.status == 'unpaid' %}
+        Pay at {{ convention.name }}
+      {% else %}
+        Complete
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Items</th>
+    <td>
+      <ul class="list-unstyled m-0">
+        {% for entry in order.order_entries %}
+          <li>
+            {{ entry.describe_products }}
+          </li>
+        {% endfor %}
+      </ul>
+    </td>
+  </tr>
+</table>

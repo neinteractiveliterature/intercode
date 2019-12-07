@@ -1,7 +1,5 @@
 # A request to sign up for a run of an event
 class SignupRequestDrop < Liquid::Drop
-  include Rails.application.routes.url_helpers
-
   # @api
   attr_reader :signup_request
 
