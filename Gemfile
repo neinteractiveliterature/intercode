@@ -9,7 +9,7 @@ gem 'puma'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'haml'
-gem 'webpacker', '~> 4.2.0'
+gem 'webpacker', '~> 4.2.1'
 gem 'webpacker-react', '~> 0.3.2'
 
 gem 'with_advisory_lock'
