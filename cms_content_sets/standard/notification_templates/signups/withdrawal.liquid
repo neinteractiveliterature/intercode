@@ -1,0 +1,28 @@
+---
+subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize }} -> {{ signup.state.humanize }}: {{ signup.user_con_profile.name }}"
+---
+<h1>Withdrawal from {{ run_description }}</h1>
+
+<p>
+  {{ signup_description }}
+  {{ prev_state_description }}
+</p>
+
+{% if move_result_descriptions.size > 0 %}
+  <p>To fill the vacancy, the following signups were moved:</p>
+  <ul>
+    {% for move_result_description in move_result_descriptions %}
+      <li>
+        {{ move_result_description }}
+      </li>
+    {% endfor %}
+  </ul>
+{% elsif prev_state == 'confirmed' %}
+  <p>There were no signups that could be moved to fill the vacancy.</p>
+{% endif %}
+
+<p>
+  As of this signup, this event run has:
+  <br>
+  {{ all_signups_description | newline_to_br }}
+</p>
