@@ -1,0 +1,38 @@
+---
+subject: "[{{ convention.name }}] Order Cancellation"
+---
+<p>
+  The order you placed for {{ convention.name }} has been
+  {% if @refund_id %}
+    cancelled and refunded to your payment card.
+  {% else %}
+    cancelled.
+  {% endif %}
+  Order details are below:
+</p>
+<table class="table">
+  <tr>
+    <th scope="row">Purchaser</th>
+    <td>
+      {{ order.user_con_profile.name_without_nickname }}
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Total</th>
+    <td>
+      {{ order.total_price.format }}
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Items</th>
+    <td>
+      <ul class="list-unstyled m-0">
+        {% for entry in order.order_entries %}
+          <li>
+            {{ entry.describe_products }}
+          </li>
+        {% endfor %}
+      </ul>
+    </td>
+  </tr>
+</table>
