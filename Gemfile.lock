@@ -314,9 +314,9 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.2)
     nio4r (2.5.2-java)
-    nokogiri (1.10.5)
+    nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.5-java)
+    nokogiri (1.10.7-java)
     oj (3.10.0)
     orm_adapter (0.5.0)
     parallel (1.19.1)
@@ -474,7 +474,7 @@ GEM
     uniform_notifier (1.12.1)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webpacker (4.2.0)
+    webpacker (4.2.1)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -491,7 +491,7 @@ GEM
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
     yard (0.9.20)
-    zeitwerk (2.2.1)
+    zeitwerk (2.2.2)
 
 PLATFORMS
   java
@@ -570,7 +570,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock!
   term-ansicolor
-  webpacker (~> 4.2.0)
+  webpacker (~> 4.2.1)
   webpacker-react (~> 0.3.2)
   whenever
   will_paginate
