@@ -34,10 +34,10 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     email_team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
     email_team_member2 = create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
     no_email_team_member = create(:team_member, event: event, receive_signup_email: 'no')
+    load_cms_content_for_notifications
 
     perform_enqueued_jobs do
-      result = subject.call
-      assert result.success?
+      subject.call!
 
       assert_equal 2, ActionMailer::Base.deliveries.size
       recipients = ActionMailer::Base.deliveries.map(&:to)
@@ -74,9 +74,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
         :event,
         registration_policy: {
           buckets: [
-            { key: 'dogs', slots_limited: true, total_slots: 1 },
-            { key: 'cats', slots_limited: true, total_slots: 1 },
-            { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
+            { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 1 },
+            { key: 'cats', name: 'cats', slots_limited: true, total_slots: 1 },
+            { key: 'anything', name: 'anything', slots_limited: true, total_slots: 1, anything: true }
           ]
         }
       )
@@ -148,14 +148,26 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     it 'notifies team members who have requested it' do
       team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
       anything_signup
+      load_cms_content_for_notifications
 
       perform_enqueued_jobs do
         result = subject.call
         assert result.success?
 
+        binding.pry
+
         recipients = ActionMailer::Base.deliveries.map(&:to)
         assert_includes recipients, [team_member.user_con_profile.email]
       end
     end
+  end
+
+  private
+
+  def load_cms_content_for_notifications
+    content_set = CmsContentSet.new(name: 'standard')
+    CmsContentLoaders::CmsPartials.new(convention: convention, content_set: content_set).call!
+    CmsContentLoaders::NotificationTemplates.new(convention: convention, content_set: content_set)
+      .call!
   end
 end

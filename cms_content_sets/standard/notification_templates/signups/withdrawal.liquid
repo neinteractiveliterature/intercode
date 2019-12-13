@@ -1,19 +1,36 @@
 ---
 subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize }} -> {{ signup.state.humanize }}: {{ signup.user_con_profile.name }}"
 ---
-<h1>Withdrawal from {{ run_description }}</h1>
+{% assign run = signup.run %}
+<h1>Withdrawal from {% include 'run_description' %}</h1>
 
 <p>
-  {{ signup_description }}
-  {{ prev_state_description }}
+  <a href="mailto:{{ signup.user_con_profile.email }}">{{ signup.user_con_profile.name }}</a>
+  has withdrawn from
+  {% include 'run_description' %}.
+  (Previously, they were
+  {% if prev_bucket %}
+    {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+  {% else %}
+    {{ prev_state }}.
+  {% endif %}
 </p>
 
-{% if move_result_descriptions.size > 0 %}
+{% if move_results.size > 0 %}
   <p>To fill the vacancy, the following signups were moved:</p>
   <ul>
-    {% for move_result_description in move_result_descriptions %}
+    {% for move_result in move_results %}
       <li>
-        {{ move_result_description }}
+        <a href="mailto:{{ move_result.signup.user_con_profile.email }}">{{ move_result.signup.user_con_profile.name }}</a>:
+        {{ move_result.prev_state }}
+        {% if move_result.prev_bucket %}
+          ({{ move_result.prev_bucket.name }})
+        {% endif %}
+        →
+        {{ move_result.state }}
+        {% if move_result.bucket %}
+          ({{ move_result.bucket.name }})
+        {% endif %}
       </li>
     {% endfor %}
   </ul>
@@ -22,7 +39,7 @@ subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | huma
 {% endif %}
 
 <p>
-  As of this signup, this event run has:
+  As of this withdrawal, this event run has:
   <br>
-  {{ all_signups_description | newline_to_br }}
+  {{ run.signup_count_description | newline_to_br }}
 </p>

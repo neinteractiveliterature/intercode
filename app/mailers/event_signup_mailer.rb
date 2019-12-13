@@ -6,12 +6,7 @@ class EventSignupMailer < ApplicationMailer
     notification_template_mail(
       signup.event.convention,
       'signups/new_signup',
-      {
-        'signup' => signup,
-        'run_description' => run_description(signup.run),
-        'signup_description' => signup_description(signup, 'has signed up for'),
-        'all_signups_description' => SignupCountPresenter.new(signup.run).signups_description
-      },
+      { 'signup' => signup },
       from: from_address_for_convention(signup.event.convention),
       to: team_member.user_con_profile.email
     )
@@ -28,13 +23,10 @@ class EventSignupMailer < ApplicationMailer
       {
         'signup' => signup,
         'prev_state' => prev_state,
-        'run_description' => run_description(signup.run),
-        'signup_description' => signup_description(signup, 'has withdrawn from'),
-        'prev_state_description' => prev_state_description(prev_state, prev_bucket),
-        'move_result_descriptions' => move_results.map do |move_result|
-          move_result_description(move_result, show_buckets: true)
-        end,
-        'all_signups_description' => SignupCountPresenter.new(signup.run).signups_description
+        'prev_bucket' => prev_bucket,
+        'move_results' => move_results.map do |move_result|
+          move_result.is_a?(Hash) ? SignupMoveResult.from_h(move_result) : move_result
+        end
       },
       from: from_address_for_convention(signup.event.convention),
       to: team_member.user_con_profile.email
@@ -85,49 +77,6 @@ class EventSignupMailer < ApplicationMailer
 
   def subject_prefix(event)
     "[#{event.convention.name}: #{event.title}]"
-  end
-
-  def signup_description(signup, action_description)
-    safe_join(
-      [
-        user_con_profile_description(signup.user_con_profile),
-        ' ',
-        action_description,
-        ' ',
-        "#{run_description(signup.run)}. ",
-        "They are currently #{signup.state}",
-        *[
-          if signup.bucket_key
-            [
-              " in the #{bucket_description(signup.event.registration_policy, signup.bucket_key)} bucket",
-              *[
-                if signup.requested_bucket_key
-                  '.'
-                else
-                  ' (but have no bucket preference).'
-                end
-              ]
-            ]
-          else
-            ['.']
-          end
-        ]
-      ],
-      ''
-    )
-  end
-
-  def prev_state_description(prev_state, prev_bucket)
-    bucket_description = prev_bucket ? " in the #{prev_bucket.name} bucket" : ''
-    "(Previously, they were #{prev_state}#{bucket_description}.)"
-  end
-
-  def run_description(run)
-    if run.event.runs.size > 1
-      "#{run.event.title} on #{run.starts_at.to_s(:long_with_weekday)}"
-    else
-      run.event.title
-    end
   end
 
   def user_con_profile_description(user_con_profile)

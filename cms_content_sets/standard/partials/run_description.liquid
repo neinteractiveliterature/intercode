@@ -1,0 +1,5 @@
+{%- if run.event.runs.size > 1 -%}
+  {{ run.event.title }} on {{ run.starts_at | date: "%A, %B %-d, %Y at %l:%M%P" }}
+{%- else -%}
+  {{ run.event.title }}
+{%- endif -%}

@@ -98,6 +98,7 @@ module Intercode
       # Converts all whitespace in a string to single spaces, and strips whitespace off the
       # beginning and end.
       def condense_whitespace(input)
+        return nil unless input
         input.strip.gsub(/\s+/, ' ')
       end
     end
