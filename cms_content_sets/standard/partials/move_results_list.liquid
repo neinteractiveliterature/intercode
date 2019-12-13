@@ -1,0 +1,16 @@
+<ul>
+  {%- for move_result in move_results -%}
+    <li>
+      <a href="mailto:{{ move_result.signup.user_con_profile.email }}">{{ move_result.signup.user_con_profile.name }}</a>:
+      {{ move_result.prev_state }}
+      {% if move_result.prev_bucket -%}
+        ({{ move_result.prev_bucket.name }})
+      {%- endif %}
+      →
+      {{ move_result.state }}
+      {% if move_result.bucket -%}
+        ({{ move_result.bucket.name }})
+      {%- endif %}
+    </li>
+  {%- endfor -%}
+</ul>

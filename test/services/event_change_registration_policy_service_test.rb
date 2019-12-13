@@ -3,9 +3,9 @@ require 'test_helper'
 class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:event) { create :event }
+  let(:convention) { create(:convention, :with_notification_templates) }
+  let(:event) { create :event, convention: convention }
   let(:the_run) { create :run, event: event }
-  let(:convention) { event.convention }
   let(:new_registration_policy) do
     RegistrationPolicy.new(
       buckets: [
@@ -83,6 +83,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     let(:event) do
       create(
         :event,
+        convention: convention,
         registration_policy: RegistrationPolicy.new(
           buckets: [
             { key: 'dogs', slots_limited: true, total_slots: 2 },
@@ -238,6 +239,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     let(:event) do
       create(
         :event,
+        convention: convention,
         registration_policy: RegistrationPolicy.new(
           buckets: [
             { key: 'dogs', slots_limited: true, total_slots: 0 },

@@ -3,7 +3,9 @@ require 'test_helper'
 class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:convention) { create :convention, ticket_mode: 'required_for_signup' }
+  let(:convention) do
+    create :convention, :with_notification_templates, ticket_mode: 'required_for_signup'
+  end
   let(:event) { create :event, convention: convention }
   let(:the_run) { create :run, event: event }
   let(:user_con_profile) { create :user_con_profile, convention: convention }
@@ -45,7 +47,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe 'with a convention that does not require tickets' do
-    let(:convention) { create :convention, ticket_mode: 'disabled' }
+    let(:convention) { create :convention, :with_notification_templates, ticket_mode: 'disabled' }
 
     it 'signs the user up for an event' do
       result = subject.call
@@ -348,6 +350,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       let(:event) do
         create(
           :event,
+          convention: convention,
           registration_policy: {
             buckets: [
               { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
@@ -451,6 +454,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           let(:event) do
             create(
               :event,
+              convention: convention,
               registration_policy: {
                 buckets: [
                   { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
@@ -527,6 +531,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       let(:event) do
         create(
           :event,
+          convention: convention,
           registration_policy: {
             buckets: [
               { key: 'pc', name: 'PC', slots_limited: true, total_slots: 1 },

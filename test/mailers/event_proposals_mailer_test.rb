@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class EventProposalsMailerTest < ActionMailer::TestCase
-  let(:event_category) { create(:event_category) }
-  let(:convention) { event_category.convention }
+  let(:convention) { create(:convention, :with_notification_templates) }
+  let(:event_category) { create(:event_category, convention: convention) }
   let(:proposal_chair) do
     create(:user_con_profile, convention: convention)
   end
@@ -67,7 +67,6 @@ class EventProposalsMailerTest < ActionMailer::TestCase
         email.deliver_now
       end
 
-      assert_equal [proposal_chair_staff_position.email], email.from
       assert_equal [event_proposal.owner.email], email.to
     end
   end

@@ -53,16 +53,26 @@ class ApplicationMailer < ActionMailer::Base
       subject = rendering_context.cadmus_renderer.render(
         notification_template.subject_template, :html
       )
-      @body_html = rendering_context.cadmus_renderer.render(
-        notification_template.body_html_template, :html
-      )
-      @body_text = rendering_context.cadmus_renderer.render(
-        notification_template.body_text_template, :html # ya rly
-      )
 
       mail(options.merge(
         subject: subject, template_path: 'notifications', template_name: 'notification'
-      ))
+      )) do |format|
+        format.html do
+          @body_html = rendering_context.cadmus_renderer.render(
+            notification_template.body_html_template, :html
+          )
+          render template: 'notifications/notification'
+        end
+
+        if notification_template.body_text.present?
+          format.text do
+            body_text = rendering_context.cadmus_renderer.render(
+              notification_template.body_text_template, :html # ya rly
+            )
+            render plain: body_text
+          end
+        end
+      end
     end
   end
 end
