@@ -12,4 +12,8 @@ class CmsContentLoaders::CmsPartials < CmsContentLoaders::Base
   def identifier_attribute
     'name'
   end
+
+  def content_attribute
+    'content'
+  end
 end

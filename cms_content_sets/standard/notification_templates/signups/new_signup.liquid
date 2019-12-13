@@ -1,12 +1,28 @@
 ---
 subject: "[{{ convention.name }}: {{ signup.event.title }}] Signup: {{ signup.user_con_profile.name }}"
 ---
-<h1>New signup for {{ run_description }}</h1>
+{% assign run = signup.run %}
+<h1>New signup for {% include 'run_description' %}</h1>
+
 <p>
-  {{ signup_description }}
+  <a href="mailto:{{ signup.user_con_profile.email }}">{{ signup.user_con_profile.name }}</a>
+  has signed up for
+  {% include 'run_description' %}.
+  They are currently
+  {% if signup.bucket %}
+    {{ signup.state }} in the {{ signup.bucket.name }}
+    {% if signup.requested_bucket %}
+      bucket.
+    {% else %}
+      bucket (but have no bucket preference).
+    {% endif %}
+  {% else %}
+    {{ signup.state }}.
+  {% endif %}
 </p>
+
 <p>
   As of this signup, this event run has:
   <br>
-  {{ all_signups_description | newline_to_br }}
+  {{ run.signup_count_description | newline_to_br }}
 </p>
