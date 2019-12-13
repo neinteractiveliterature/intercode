@@ -3,9 +3,11 @@ require 'test_helper'
 class EventVacancyFillServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
+  let(:convention) { create(:convention, :with_notification_templates) }
   let(:event) do
     create(
       :event,
+      convention: convention,
       registration_policy: {
         buckets: [
           { key: 'dogs', slots_limited: true, total_slots: 1 },
@@ -17,7 +19,6 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   let(:the_run) { create :run, event: event }
-  let(:convention) { event.convention }
   let(:bucket_key) { 'dogs' }
 
   def create_signup(**attrs)
@@ -200,6 +201,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     let(:event) do
       create(
         :event,
+        convention: convention,
         registration_policy: {
           buckets: [
             { key: 'pc', slots_limited: true, total_slots: 1 },

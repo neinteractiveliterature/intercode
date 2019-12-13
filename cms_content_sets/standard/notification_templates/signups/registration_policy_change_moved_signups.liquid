@@ -1,0 +1,22 @@
+---
+subject: "[{{ convention.name }}: {{ event.title }}] Signups moved due to bucket changes"
+---
+<h1>Signup changes for {{ event.title }}</h1>
+
+<p>
+  {{ whodunit.name_without_nickname }}
+  has edited the buckets for {{ event.title }}, which has caused
+  the following signups to move:
+</p>
+
+<ul class="list-unstyled">
+  {% for run in runs %}
+    <li>
+      <strong>
+        {% include 'run_description' %}
+      </strong>
+      {% assign move_results = move_results_by_run_id[run.id] %}
+      {% include 'move_results_list' %}
+    </li>
+  {% endfor %}
+</ul>
