@@ -30,7 +30,14 @@ class RunDrop < Liquid::Drop
     "/events/#{event.to_param}"
   end
 
+  # @return [Array<String>] The names of all rooms this run is scheduled in
   def room_names
     run.rooms.map(&:name)
+  end
+
+  # @return [String] A text description of the number of signups for this run, split out by
+  #                  state and bucket
+  def signup_count_description
+    SignupCountPresenter.new(run).signups_description
   end
 end

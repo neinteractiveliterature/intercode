@@ -23,8 +23,22 @@ class SignupMoveResult
     @signup ||= Signup.find(signup_id)
   end
 
+  def bucket
+    return unless bucket_key
+    signup.event.registration_policy.bucket_with_key(bucket_key)
+  end
+
+  def prev_bucket
+    return unless prev_bucket_key
+    signup.event.registration_policy.bucket_with_key(prev_bucket_key)
+  end
+
   def should_notify?
     state != prev_state
+  end
+
+  def to_liquid
+    SignupMoveResultDrop.new(self)
   end
 
   def self.from_h(hash)

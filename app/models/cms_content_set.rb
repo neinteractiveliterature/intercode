@@ -66,7 +66,7 @@ class CmsContentSet
       frontmatter = Regexp.last_match(1)
       [regular_content.strip, YAML.safe_load(frontmatter).deep_symbolize_keys]
     else
-      [raw, {}]
+      [raw.strip, {}]
     end
   end
 

@@ -24,6 +24,10 @@ class CmsContentLoaders::Pages < CmsContentLoaders::Base
     'slug'
   end
 
+  def content_attribute
+    'content'
+  end
+
   def taken_special_identifiers
     if convention.root_page
       { 'root' => 'root page' }

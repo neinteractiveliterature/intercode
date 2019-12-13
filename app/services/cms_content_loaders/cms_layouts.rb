@@ -25,6 +25,10 @@ class CmsContentLoaders::CmsLayouts < CmsContentLoaders::Base
     'name'
   end
 
+  def content_attribute
+    'content'
+  end
+
   def taken_special_identifiers
     if convention.default_layout
       { 'Default' => 'default layout' }
