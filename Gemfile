@@ -8,7 +8,6 @@ gem 'puma'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'haml'
 gem 'webpacker', '~> 4.2.2'
 gem 'webpacker-react', '~> 0.3.2'
 

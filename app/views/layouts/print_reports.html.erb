@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>
+      <%= page_title %>
+    </title>
+    <%= stylesheet_pack_tag 'application', media: 'all' %>
+    <%= csrf_meta_tags %>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  </head>
+  <body>
+    <div class="no-print">
+      <div class="alert alert-success">
+        <h1><%= convention.name %> - <%= params[:action].humanize %> report</h1>
+        <p>This report will automatically paginate when printed.</p>
+      </div>
+    </div>
+    <%= yield %>
+  </body>
+</html>
