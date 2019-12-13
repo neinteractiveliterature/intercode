@@ -1,0 +1,32 @@
+<div class="page-break-after">
+  <h1>
+    <%= user_con_profile.name_inverted %>
+  </h1>
+  <% active_signups = user_con_profile.signups.reject(&:withdrawn?) %>
+  <% if active_signups.any? %>
+    <section>
+      <p class="font-weight-bold mb-0">Events You're Signed Up For:</p>
+      <table class="table table-striped" style="width: auto">
+        <% active_signups.sort_by { |signup| signup.run.starts_at }.each do |signup| %>
+          <tr>
+            <td>
+              <%= format_run_day_and_time signup.run.starts_at %>
+            </td>
+            <td>
+              <%= signup.run.rooms.map(&:name).sort.uniq.join(', ') %>
+            </td>
+            <td>
+              <%= signup.run.event.title %>
+              <% if signup.run.title_suffix.present? %>
+                (<%= signup.run.title_suffix %>)
+              <% end %>
+            </td>
+            <td>
+              <%= signup.state.titleize %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </section>
+  <% end %>
+</div>

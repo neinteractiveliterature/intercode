@@ -1,0 +1,37 @@
+<header class="page-header mb-4">
+  <h1>
+    <%= t('doorkeeper.authorized_applications.index.title') %>
+  </h1>
+</header>
+<% if @applications.any? %>
+  <p class="mb-2">The following applications are authorized to access your account:</p>
+  <table class="table table-striped">
+    <thead>
+      <th>Application</th>
+      <th>Permissions</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% scopes_by_app_id = Doorkeeper::AccessToken.active_for(current_user).group_by(&:application_id).transform_values { |tokens| tokens.map(&:scopes).reduce(&:+) } %>
+      <% @applications.each do |application| %>
+        <td>
+          <%= application.name %>
+        </td>
+        <td>
+          <ul>
+            <% (scopes_by_app_id[application.id] || []).each do |scope| %>
+              <li>
+                <%= t scope, scope: [:doorkeeper, :scopes] %>
+              </li>
+            <% end %>
+          </ul>
+        </td>
+        <td>
+          <%= render 'doorkeeper/authorized_applications/delete_form', application: application %>
+        </td>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>There are no outside applications authorized to access your account.</p>
+<% end %>
