@@ -1,0 +1,87 @@
+<% event.runs.each do |run| %>
+  <div class="page-break-after">
+    <section>
+      <div class="d-flex">
+        <div class="col pl-0">
+          <h1>
+            <%= event.title %>
+            <% if run.title_suffix.present? %>
+              <br/>
+              <%= run.title_suffix %>
+            <% end %>
+          </h1>
+          <%= render 'event_capacity', event: event %>
+        </div>
+        <div class="text-right font-weight-bold mt-2">
+          <%= format_run_day_and_time run.starts_at %>
+          <br/>
+          <%= run.rooms.map(&:name).sort.join(', ') %>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="d-flex">
+        <div class="mr-1">
+          <strong><%= event.event_category.team_member_name.titleize.pluralize %>:</strong>
+        </div>
+        <div>
+          <ul class="list-unstyled">
+            <% event.team_members.each do |team_member| %>
+              <li>
+                <%= team_member.name %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <% signup_counts = SignupCountPresenter.new(run) %>
+    <section>
+      <p class="font-weight-bold mb-0">
+        <%= pluralize signup_counts.confirmed_count, 'Confirmed Signup' %>
+        <% if event.registration_policy.buckets.size > 1 %>
+          &mdash;
+          <%= signup_counts.bucket_descriptions_text('confirmed') %>
+        <% end %>
+      </p>
+      <ul class="list-unstyled" style="columns: 2 auto">
+        <% confirmed_signups = signup_counts.signups_by_state_and_bucket_key['confirmed'].values.flatten %>
+        <% confirmed_signups.sort_by { |signup| signup.user_con_profile.name_inverted.downcase }.each do |signup| %>
+          <li>
+            <%= signup.user_con_profile.name_inverted %>
+            <% unless signup.counted? %>
+              (not counted)
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+    <% if signup_counts.waitlist_count > 0 %>
+      <section>
+        <p class="font-weight-bold mb-0">
+          <%= pluralize signup_counts.waitlist_count, 'Waitlisted Signup' %>
+          <%= '- In signup order' %>
+        </p>
+        <ol>
+          <% waitlist_signups = signup_counts.signups_by_state_and_bucket_key['waitlisted'].values.flatten %>
+          <% waitlist_signups.sort_by(&:created_at).each do |signup| %>
+            <li>
+              <%= signup.user_con_profile.name_inverted %>
+              <% if event.registration_policy.buckets.size > 0 %>
+                (<%= event.registration_policy.bucket_with_key(signup.requested_bucket_key)&.name || signup.requested_bucket_key %>)
+              <% end %>
+            </li>
+          <% end %>
+        </ol>
+      </section>
+    <% end %>
+    <% available_slots = run.available_slots_by_bucket_key.values.compact.sum %>
+    <% if available_slots > 0 %>
+      <section>
+        <p class="font-weight-bold">
+          <%= pluralize available_slots, 'Available Slot' %>
+        </p>
+      </section>
+    <% end %>
+  </div>
+<% end %>

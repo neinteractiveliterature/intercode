@@ -1,0 +1,21 @@
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+<title>
+  <%= page_title %>
+</title>
+<%= stylesheet_pack_tag 'application', media: 'all' %>
+<%= javascript_pack_tag 'browser-warning', defer: true %>
+<%= javascript_pack_tag 'application', defer: true, type: 'module' %>
+<script type="application/javascript">
+  if (typeof(Rollbar) !== 'undefined') {
+    Rollbar.configure({
+      payload: {
+        person: {
+          id: #{current_user&.id.to_json.html_safe},
+          email: #{current_user&.email.to_json.html_safe}
+        }
+      }
+    });
+  }
+</script>
+<%= csrf_meta_tags %>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>

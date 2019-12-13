@@ -1,0 +1,39 @@
+<% if @runs.any? %>
+  <% current_time = @runs.first.starts_at - 1.second %>
+  <% runs_by_day = @runs.group_by { |run| run.starts_at.hour < 6 ? run.starts_at.beginning_of_day - 1.day : run.starts_at.beginning_of_day } %>
+  <% runs_by_day.keys.sort.each do |day| %>
+    <div class="page-break-after">
+      <h1>
+        <%= day.strftime('%A, %B %d') %>
+      </h1>
+      <table>
+        <% runs_by_day[day].sort_by { |run| [run.starts_at, run.event.title, run.title_suffix] }.each do |run| %>
+          <tr style="<%= (current_time != run.starts_at ? 'border-top: 1px #666 solid' : '') %>">
+            <th scope="row">
+              <div class="mr-2">
+                <% if current_time != run.starts_at %>
+                  <strong>
+                    <%= format_run_time(run.starts_at) %>
+                  </strong>
+                  <% current_time = run.starts_at %>
+                <% end %>
+              </div>
+            </th>
+            <td>
+              <%= run.event.title %>
+              <% if run.title_suffix.present? %>
+                (<%= run.title_suffix %>)
+              <% end %>
+              <% if run.rooms.any? %>
+                &mdash;
+                <%= run.rooms.map(&:name).to_sentence %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+<% else %>
+  <p>No events have been scheduled yet.</p>
+<% end %>

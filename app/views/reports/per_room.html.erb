@@ -1,0 +1,44 @@
+<% @rooms.each do |room| %>
+  <div class="page-break-after">
+    <h1>
+      <%= room.name %>
+    </h1>
+    <% runs = room.runs.sort_by(&:starts_at) %>
+    <% current_day = convention.starts_at.beginning_of_day %>
+    <% while current_day < convention.ends_at %>
+      <% end_of_day = (current_day + 1.day).change(hour: 6) %>
+      <% end %>
+      <% day_runs = runs.select { |run| run.starts_at >= current_day && run.starts_at < end_of_day } %>
+      <section class="mb-4">
+        <p class="font-weight-bold mb-0">
+          <%= current_day.strftime('%A, %B %d') %>
+        </p>
+        <% if day_runs.any? %>
+          <table class="table table-striped" style="width: auto">
+            <% day_runs.each do |run| %>
+              <tr>
+                <td>
+                  <%= format_run_time_compact_hour(run.starts_at) %>
+                  &ndash;
+                  <%= format_run_time_compact_hour(run.ends_at) %>
+                </td>
+                <td>
+                  <%= run.event.title %>
+                  <% if run.title_suffix.present? %>
+                    (<%= run.title_suffix %>%)
+                  <% end %>
+                  <% if run.rooms.size > 1 %>
+                    <% other_rooms = run.rooms - [room] %>
+                    <br/>
+                    <small>Also in <%= other_rooms.map(&:name).sort.to_sentence %></small>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        <% end %>
+      </section>
+      <% current_day = end_of_day %>
+    <% end %>
+  </div>
+<% end %>
