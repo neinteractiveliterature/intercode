@@ -1,5 +1,5 @@
 ---
-subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize }} -> {{ signup.state.humanize }}: {{ signup.user_con_profile.name }}"
+subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize }} -> {{ signup.state | humanize }}: {{ signup.user_con_profile.name }}"
 ---
 {% assign run = signup.run %}
 <h1>Withdrawal from {% include 'run_description' %}</h1>
@@ -18,22 +18,7 @@ subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | huma
 
 {% if move_results.size > 0 %}
   <p>To fill the vacancy, the following signups were moved:</p>
-  <ul>
-    {% for move_result in move_results %}
-      <li>
-        <a href="mailto:{{ move_result.signup.user_con_profile.email }}">{{ move_result.signup.user_con_profile.name }}</a>:
-        {{ move_result.prev_state }}
-        {% if move_result.prev_bucket %}
-          ({{ move_result.prev_bucket.name }})
-        {% endif %}
-        →
-        {{ move_result.state }}
-        {% if move_result.bucket %}
-          ({{ move_result.bucket.name }})
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+  {% include 'move_results_list' %}
 {% elsif prev_state == 'confirmed' %}
   <p>There were no signups that could be moved to fill the vacancy.</p>
 {% endif %}

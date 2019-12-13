@@ -6,15 +6,15 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'minitest/reporters'
-if ENV['MINITEST_PROGRESS_REPORTER'].present?
+if ENV['CI'].present?
   Minitest::Reporters.use!(
-    Minitest::Reporters::ProgressReporter.new,
+    Minitest::Reporters::SpecReporter.new,
     ENV,
     Minitest.backtrace_filter
   )
 else
   Minitest::Reporters.use!(
-    Minitest::Reporters::SpecReporter.new,
+    Minitest::Reporters::ProgressReporter.new,
     ENV,
     Minitest.backtrace_filter
   )

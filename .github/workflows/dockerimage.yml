@@ -68,6 +68,7 @@ jobs:
         -e GIT_COMMIT_SHA=${GITHUB_SHA} -e GIT_BRANCH=${GITHUB_REF}
         -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
+        -e CI=true
         web
         test/travis-complete.sh
 

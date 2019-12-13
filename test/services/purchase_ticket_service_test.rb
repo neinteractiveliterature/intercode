@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class PurchaseTicketServiceTest < ActiveSupport::TestCase
-  let(:convention) { create(:convention, starts_at: 2.days.from_now, ends_at: 4.days.from_now) }
+  let(:convention) do
+    create(:convention, :with_notification_templates,
+      starts_at: 2.days.from_now, ends_at: 4.days.from_now)
+  end
   let(:user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:ticket_type) { create(:paid_ticket_type, convention: convention) }
   let(:stripe_helper) { StripeMock.create_test_helper }

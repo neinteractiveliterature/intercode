@@ -28,5 +28,15 @@ FactoryBot.define do
     after(:build) do |convention|
       convention.user_con_profile_form ||= convention.build_user_con_profile_form(form_type: 'user_con_profile')
     end
+
+    trait :with_notification_templates do
+      after(:create) do |convention|
+        content_set = CmsContentSet.new(name: 'standard')
+        CmsContentLoaders::CmsPartials.new(convention: convention, content_set: content_set).call!
+        CmsContentLoaders::NotificationTemplates.new(
+          convention: convention, content_set: content_set
+        ).call!
+      end
+    end
   end
 end
