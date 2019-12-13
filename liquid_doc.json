@@ -145,7 +145,28 @@
           "name": "room_names",
           "docstring": "",
           "tags": [
-
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The names of all rooms this run is scheduled in",
+              "types": [
+                "Array<String>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signup_count_description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A text description of the number of signups for this run, split out by\nstate and bucket",
+              "types": [
+                "String"
+              ]
+            }
           ]
         }
       ]
@@ -902,6 +923,20 @@
               "tag_name": "return",
               "name": null,
               "text": "The bucket assigned to this signup",
+              "types": [
+                "RegistrationPolicy::BucketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "requested_bucket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The bucket the user requested to sign up in, if any",
               "types": [
                 "RegistrationPolicy::BucketDrop"
               ]
@@ -3763,6 +3798,121 @@
               "name": null,
               "text": "",
               "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SignupMoveResultDrop",
+      "superclasses": [
+        "SignupMoveResultDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "The result of a signup being automatically moved from one state or bucket to another",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "signup_move_result",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "signup",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The signup that was moved",
+              "types": [
+                "SignupDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "state",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The new state of this signup (e.g. confirmed, waitlisted, withdrawn)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bucket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The new bucket assigned to this signup",
+              "types": [
+                "RegistrationPolicy::BucketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "prev_state",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The previous state of this signup (e.g. confirmed, waitlisted, withdrawn)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "prev_bucket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The previous bucket assigned to this signup",
+              "types": [
+                "RegistrationPolicy::BucketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of SignupMoveResultDrop",
+              "types": [
+                "SignupMoveResultDrop"
+              ]
             }
           ]
         }
