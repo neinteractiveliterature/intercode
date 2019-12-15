@@ -35,6 +35,14 @@ class ApplicationMailer < ActionMailer::Base
     end
   end
 
+  def emails_for_team_members(team_members)
+    team_members.map do |team_member|
+      address = Mail::Address.new(team_member.user_con_profile.email)
+      address.display_name = team_member.user_con_profile.name
+      address.format
+    end
+  end
+
   def cms_rendering_context(convention, assigns)
     CmsRenderingContext.new(
       cms_parent: convention,
