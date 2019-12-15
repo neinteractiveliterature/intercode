@@ -226,12 +226,7 @@ sign up for events."
   def notify_team_members(signup)
     return if suppress_notifications
 
-    event.team_members.find_each do |team_member|
-      next if team_member.receive_signup_email == 'no'
-      next if team_member.receive_signup_email == 'non_waitlist_signups' && signup.waitlisted?
-
-      # Wait 30 seconds because the transaction hasn't been committed yet
-      EventSignupMailer.new_signup(signup, team_member).deliver_later(wait: 30.seconds)
-    end
+    # Wait 30 seconds because the transaction hasn't been committed yet
+    EventSignupMailer.new_signup(signup).deliver_later(wait: 30.seconds)
   end
 end

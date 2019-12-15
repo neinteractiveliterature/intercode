@@ -1,15 +1,15 @@
 class EventSignupMailer < ApplicationMailer
-  def new_signup(signup, team_member)
+  def new_signup(signup)
     notification_template_mail(
       signup.event.convention,
       'signups/new_signup',
       { 'signup' => signup },
       from: from_address_for_convention(signup.event.convention),
-      to: team_member.user_con_profile.email
+      to: emails_for_team_members(team_members_to_notify_for_signup(signup))
     )
   end
 
-  def withdrawal(signup, prev_state, prev_bucket_key, move_results, team_member)
+  def withdrawal(signup, prev_state, prev_bucket_key, move_results)
     if prev_bucket_key
       prev_bucket = signup.event.registration_policy.bucket_with_key(prev_bucket_key)
     end
@@ -26,11 +26,11 @@ class EventSignupMailer < ApplicationMailer
         end
       },
       from: from_address_for_convention(signup.event.convention),
-      to: team_member.user_con_profile.email
+      to: emails_for_team_members(team_members_to_notify_for_signup(signup))
     )
   end
 
-  def registration_policy_change_moved_signups(event, move_results, team_member, whodunit)
+  def registration_policy_change_moved_signups(event, move_results, whodunit)
     move_results = move_results.map { |hash| SignupMoveResult.from_h(hash) }
 
     signups_by_id = Signup.where(id: move_results.map(&:signup_id)).includes(:run).index_by(&:id)
@@ -48,7 +48,7 @@ class EventSignupMailer < ApplicationMailer
         'runs' => move_results_by_run.keys.sort_by(&:starts_at)
       },
       from: from_address_for_convention(event.convention),
-      to: team_member.user_con_profile.email
+      to: emails_for_team_members(team_members_to_notify_for_move_results(event, move_results))
     )
   end
 
@@ -66,5 +66,25 @@ class EventSignupMailer < ApplicationMailer
       from: from_address_for_convention(signup.event.convention),
       to: signup.user_con_profile.email
     )
+  end
+
+  private
+
+  def team_members_to_notify_for_signup(signup)
+    signup.event.team_members.select do |team_member|
+      team_member.receive_signup_email != 'no' &&
+        !(team_member.receive_signup_email == 'non_waitlist_signups' && signup.waitlisted?)
+    end
+  end
+
+  def team_members_to_notify_for_move_results(event, move_results)
+    no_confirmed_moves = move_results.none? do |move_result|
+      move_result.prev_state == 'confirmed' || move_result.state == 'confirmed'
+    end
+
+    event.team_members.select do |team_member|
+      team_member.receive_signup_email != 'no' &&
+        !(team_member.receive_signup_email == 'non_waitlist_signups' && no_confirmed_moves)
+    end
   end
 end
