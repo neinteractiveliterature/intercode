@@ -52,18 +52,12 @@ class EventWithdrawService < CivilService::Service
   def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
     return if suppress_notifications
 
-    event.team_members.find_each do |team_member|
-      next if team_member.receive_signup_email == 'no'
-      next if team_member.receive_signup_email == 'non_waitlist_signups' && prev_state == 'waitlisted'
-
-      # Wait 30 seconds because the transaction hasn't been committed yet
-      EventSignupMailer.withdrawal(
-        signup,
-        prev_state,
-        prev_bucket_key,
-        move_results.map(&:to_h),
-        team_member
-      ).deliver_later(wait: 30.seconds)
-    end
+    # Wait 30 seconds because the transaction hasn't been committed yet
+    EventSignupMailer.withdrawal(
+      signup,
+      prev_state,
+      prev_bucket_key,
+      move_results.map(&:to_h)
+    ).deliver_later(wait: 30.seconds)
   end
 end
