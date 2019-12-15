@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 
 import { AccountFormContentQuery } from './queries.gql';
-import parsePageContent from '../parsePageContent';
+import parseCmsContent from '../parseCmsContent';
 
 function AccountFormContent() {
   const { data, loading, error } = useQuery(AccountFormContentQuery);
@@ -11,7 +11,7 @@ function AccountFormContent() {
     return <></>;
   }
 
-  return parsePageContent(data.accountFormContentHtml).bodyComponents;
+  return parseCmsContent(data.accountFormContentHtml).bodyComponents;
 }
 
 export default AccountFormContent;

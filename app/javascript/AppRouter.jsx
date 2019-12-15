@@ -10,30 +10,7 @@ import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
 import { reloadOnBundleHashMismatch } from './checkBundleHash';
-
-function FourOhFourPage({ location }) {
-  return (
-    <div className="alert alert-warning">
-      <h1>Oops!</h1>
-
-      <p className="mb-0">
-        We couldn&rsquo;t find a page at the location
-        {' '}
-        {location.pathname}
-        .
-      </p>
-    </div>
-  );
-}
-
-FourOhFourPage.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
-};
-
-const FourOhFourPageWithRouter = withRouter(FourOhFourPage);
-export { FourOhFourPageWithRouter as FourOhFourPage };
+import FourOhFourPage from './FourOhFourPage';
 
 function renderCommonRoutes() {
   return [
@@ -72,6 +49,7 @@ function renderCommonInConventionRoutes({ signupMode }) {
   return [
     <Route path="/admin_events" component={PageComponents.EventAdmin} key="adminEvents" />,
     <Route path="/admin_forms" component={PageComponents.FormAdmin} key="adminForms" />,
+    <Route path="/admin_notifications" component={PageComponents.NotificationAdmin} key="adminNotifications" />,
     <Route path="/admin_store" component={PageComponents.StoreAdmin} key="adminStore" />,
     <Route path="/cart" component={PageComponents.Cart} key="cart" />,
     <Route path="/clickwrap_agreement" component={PageComponents.WrappedClickwrapAgreement} key="clickwrapAgreement" />,

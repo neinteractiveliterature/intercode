@@ -7,11 +7,11 @@ import { useQuery } from 'react-apollo-hooks';
 import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import parsePageContent from '../parsePageContent';
 import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
-import { FourOhFourPage } from '../AppRouter';
+import FourOhFourPage from '../FourOhFourPage';
+import parseCmsContent from '../parseCmsContent';
 
 const PageAdminDropdown = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
@@ -25,7 +25,7 @@ function CmsPage({
         return null;
       }
 
-      return parsePageContent(data.cmsPage.content_html).bodyComponents;
+      return parseCmsContent(data.cmsPage.content_html).bodyComponents;
     },
     [data, loading, error],
   );

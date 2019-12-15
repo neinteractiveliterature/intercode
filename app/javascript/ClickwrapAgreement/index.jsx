@@ -6,8 +6,8 @@ import { AcceptClickwrapAgreement } from './mutations.gql';
 import { ClickwrapAgreementQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import parsePageContent from '../parsePageContent';
 import useAsyncFunction from '../useAsyncFunction';
+import parseCmsContent from '../parseCmsContent';
 
 function ClickwrapAgreement({ history }) {
   const { data, error } = useQuerySuspended(ClickwrapAgreementQuery);
@@ -43,7 +43,7 @@ function ClickwrapAgreement({ history }) {
             {' terms of service'}
           </div>
           <div className="card-body">
-            {parsePageContent(convention.clickwrap_agreement_html).bodyComponents}
+            {parseCmsContent(convention.clickwrap_agreement_html).bodyComponents}
 
             <ErrorDisplay graphQLError={acceptError} />
           </div>

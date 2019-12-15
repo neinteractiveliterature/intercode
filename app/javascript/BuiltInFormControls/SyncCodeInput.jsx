@@ -21,7 +21,7 @@ import 'codemirror/addon/fold/foldgutter.css';
 import defaultCodeMirrorOptions from '../defaultCodeMirrorOptions';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import parsePageContent from '../parsePageContent';
+import parseCmsContent from '../parseCmsContent';
 
 import '../Codemirror/LiquidMultiplexModes';
 
@@ -84,7 +84,7 @@ function SyncCodeInput({
 
     return (
       <div className="markdown-preview">
-        {parsePageContent(previewContent).bodyComponents}
+        {parseCmsContent(previewContent).bodyComponents}
       </div>
     );
   };
