@@ -1,12 +1,13 @@
 class CmsContentLoaders::Base < CivilService::Service
   validate :ensure_no_conflicting_content
 
-  attr_reader :convention, :content_set, :conflict_policy
+  attr_reader :convention, :content_set, :content_names, :conflict_policy
 
-  def initialize(convention:, content_set:, conflict_policy: :error)
+  def initialize(convention:, content_set:, content_names: nil, conflict_policy: :error)
     @convention = convention
     @content_set = content_set
     @conflict_policy = conflict_policy
+    @content_names = content_names
   end
 
   private
@@ -18,24 +19,30 @@ class CmsContentLoaders::Base < CivilService::Service
 
   def load_content(&block)
     content_set.all_template_paths_with_names(subdir).each do |path, name|
+      next if content_names.present? && !content_names.include?(name)
+
       content, attrs = content_set.template_content(path)
-
-      if existing_content_identifiers.include?(name)
-        next if conflict_policy == :skip
-
-        if conflict_policy == :overwrite
-          convention_association.where(identifier_attribute => name).destroy_all
-        end
-      end
-
-      model = convention_association.create!(
-        identifier_attribute => name,
-        content_attribute => content,
-        **attrs
-      )
+      model = load_item(name, content, attrs)
+      next if model == :skip
 
       block.call(model) if block
     end
+  end
+
+  def load_item(name, content, attrs)
+    if existing_content_identifiers.include?(name)
+      return :skip if conflict_policy == :skip
+
+      if conflict_policy == :overwrite
+        convention_association.where(identifier_attribute => name).destroy_all
+      end
+    end
+
+    convention_association.create!(
+      identifier_attribute => name,
+      content_attribute => content,
+      **attrs
+    )
   end
 
   def subdir
