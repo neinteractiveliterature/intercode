@@ -11,10 +11,10 @@ import AppRouter from './AppRouter';
 import ErrorDisplay from './ErrorDisplay';
 import NavigationBar from './NavigationBar';
 import PageLoadingIndicator from './PageLoadingIndicator';
-import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
 import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
+import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
@@ -48,9 +48,9 @@ function AppRoot() {
         return null;
       }
 
-      return parsePageContent(
+      return parseCmsContent(
         data.effectiveCmsLayout.content_html,
-        { ...DEFAULT_COMPONENT_MAP, AppRouter, NavigationBar },
+        { ...CMS_COMPONENT_MAP, AppRouter, NavigationBar },
       ).bodyComponents;
     },
     [data, error, loading],

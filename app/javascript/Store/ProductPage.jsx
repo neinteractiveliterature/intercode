@@ -5,11 +5,11 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrderFormProductQuery } from './queries.gql';
 import formatMoney from '../formatMoney';
-import parsePageContent from '../parsePageContent';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import parseCmsContent from '../parseCmsContent';
 
 function ProductPage({ match }) {
   const { data, error } = useQuerySuspended(
@@ -43,7 +43,7 @@ function ProductPage({ match }) {
       )}
 
       {product.description_html && (
-        <div className="mb-4">{parsePageContent(product.description_html).bodyComponents}</div>
+        <div className="mb-4">{parseCmsContent(product.description_html).bodyComponents}</div>
       )}
 
       {

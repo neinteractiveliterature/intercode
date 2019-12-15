@@ -1,9 +1,9 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import mapValues from 'lodash-es/mapValues';
 
 import ClickwrapAgreement from './ClickwrapAgreement';
 import CmsPage from './CmsPage';
-import { checkBundleHashOnError, lazyWithBundleHashCheck } from './checkBundleHash';
+import { lazyWithBundleHashCheck } from './checkBundleHash';
 
 function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -35,6 +35,7 @@ const UnwrappedNonCMSPageComponents = {
   MailingLists: () => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'),
   MyProfile: () => import(/* webpackChunkName: "my-profile" */ './MyProfile'),
   MyTicket: () => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'),
+  NotificationAdmin: () => import(/* webpackChunkName: 'notification-admin' */ './NotificationAdmin'),
   OAuthApplications: () => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications'),
   OAuthAuthorizationPrompt: () => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'),
   OrderHistory: () => import(/* webpackChunkName: "store" */ './Store/OrderHistory'),
