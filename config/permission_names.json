@@ -32,6 +32,10 @@
         "name": "read limited pre-release schedule"
       },
       {
+        "permission": "read_notification_templates",
+        "name": "read notification templates and configurations"
+      },
+      {
         "permission": "read_pending_event_proposals",
         "name": "read pending proposals"
       },
@@ -110,6 +114,10 @@
       {
         "permission": "update_forms",
         "name": "manage forms"
+      },
+      {
+        "permission": "update_notification_templates",
+        "name": "manage notification templates and configurations"
       },
       {
         "permission": "update_orders",

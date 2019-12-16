@@ -25,59 +25,52 @@ class ApplicationMailer < ActionMailer::Base
     end
   end
 
-  def emails_for_staff_positions(staff_positions)
-    staff_positions.flat_map do |staff_position|
-      staff_position.email.presence || staff_position.user_con_profiles.map do |user_con_profile|
-        address = Mail::Address.new(user_con_profile.email)
-        address.display_name = user_con_profile.name
-        address.format
-      end
+  def email_for_user_con_profile(user_con_profile)
+    address = Mail::Address.new(user_con_profile.email)
+    address.display_name = user_con_profile.name
+    address.format
+  end
+
+  def emails_for_staff_position(staff_position)
+    return [staff_position.email] if staff_position.email.present?
+    staff_position.user_con_profiles.map { |ucp| email_for_user_con_profile(ucp) }
+  end
+
+  def emails_for_destinations(destinations)
+    destinations.flat_map do |destination|
+      case destination
+      when UserConProfile then email_for_user_con_profile(destination)
+      when StaffPosition then emails_for_staff_positions(destination)
+      when nil then []
+      else raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
     end
   end
 
-  def emails_for_team_members(team_members)
-    team_members.map do |team_member|
-      address = Mail::Address.new(team_member.user_con_profile.email)
-      address.display_name = team_member.user_con_profile.name
-      address.format
-    end
+  def default_headers_from_notifier(notifier)
+    {
+      from: from_address_for_convention(notifier.convention),
+      to: emails_for_destinations(notifier.destinations)
+    }
   end
 
-  def cms_rendering_context(convention, assigns)
-    CmsRenderingContext.new(
-      cms_parent: convention,
-      controller: self,
-      assigns: {
-        'convention' => convention
-      }.merge(assigns)
-    )
-  end
+  def notification_mail(notifier, options = {})
+    use_convention_timezone(notifier.convention) do
+      rendering_context = CmsRenderingContext.new(cms_parent: notifier.convention, controller: self)
+      render_results = notifier.render(rendering_context.cadmus_renderer)
 
-  def notification_template_mail(convention, event_key, liquid_assigns, options = {})
-    use_convention_timezone(convention) do
-      notification_template = convention.notification_templates.find_by!(event_key: event_key)
-      rendering_context = cms_rendering_context(convention, liquid_assigns)
-
-      subject = rendering_context.cadmus_renderer.render(
-        notification_template.subject_template, :html
-      )
-
-      mail(options.merge(
-        subject: subject, template_path: 'notifications', template_name: 'notification'
-      )) do |format|
+      mail(
+        subject: render_results[:subject],
+        **default_headers_from_notifier(notifier),
+        **options
+      ) do |format|
         format.html do
-          @body_html = rendering_context.cadmus_renderer.render(
-            notification_template.body_html_template, :html
-          )
+          @body_html = render_results[:body_html]
           render template: 'notifications/notification'
         end
 
-        if notification_template.body_text.present?
+        if render_results[:body_text].present?
           format.text do
-            body_text = rendering_context.cadmus_renderer.render(
-              notification_template.body_text_template, :html # ya rly
-            )
-            render plain: body_text
+            render plain: render_results[:body_text]
           end
         end
       end

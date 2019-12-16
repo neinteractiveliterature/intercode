@@ -1,0 +1,121 @@
+{
+  "categories": [
+    {
+      "key": "event_proposals",
+      "name": "Event proposals",
+      "events": [
+        {
+          "key": "new_proposal",
+          "name": "New proposal submitted",
+          "destination_description": "Proposal reviewer(s)"
+        },
+        {
+          "key": "proposal_submit_confirmation",
+          "name": "Proposal submit confirmation",
+          "destination_description": "Event proposer"
+        },
+        {
+          "key": "proposal_updated",
+          "name": "Proposal updated",
+          "destination_description": "Proposal reviewer(s)"
+        },
+        {
+          "key": "unfinished_draft_reminder",
+          "name": "Unfinished draft reminder",
+          "destination_description": "Event proposer"
+        }
+      ]
+    },
+    {
+      "key": "event_signups",
+      "name": "Event signups",
+      "events": [
+        {
+          "key": "new_signup",
+          "name": "Attendee signed up for event",
+          "destination_description": "Event team members"
+        },
+        {
+          "key": "withdrawal",
+          "name": "Attendee withdrew from event",
+          "destination_description": "Event team members"
+        },
+        {
+          "key": "registration_policy_change_moved_signups",
+          "name": "Bucket changes caused signups to move",
+          "destination_description": "Event team members"
+        },
+        {
+          "key": "user_signup_moved",
+          "name": "Your signup status changed",
+          "destination_description": "Signed up attendee"
+        }
+      ]
+    },
+    {
+      "key": "signup_requests",
+      "name": "Event signup requests",
+      "events": [
+        {
+          "key": "new_signup_request",
+          "name": "New signup request received",
+          "destination_description": "Signup request admin(s)"
+        },
+        {
+          "key": "request_accepted",
+          "name": "Your signup request was accepted",
+          "destination_description": "Requester"
+        }
+      ]
+    },
+    {
+      "key": "events",
+      "name": "Events",
+      "events": [
+        {
+          "key": "event_updated",
+          "name": "Event details updated",
+          "destination_description": "Convention event admin(s)"
+        }
+      ]
+    },
+    {
+      "key": "orders",
+      "name": "Store",
+      "events": [
+        {
+          "key": "purchased",
+          "name": "Store purchase confirmation",
+          "destination_description": "Purchaser"
+        },
+        {
+          "key": "cancelled",
+          "name": "Store purchase cancelled",
+          "destination_description": "Purchaser"
+        }
+      ]
+    },
+    {
+      "key": "tickets",
+      "name": "Tickets",
+      "events": [
+        {
+          "key": "purchased",
+          "name": "Ticket purchase confirmation",
+          "destination_description": "Purchaser"
+        }
+      ]
+    },
+    {
+      "key": "user_activity_alerts",
+      "name": "User activity alerts",
+      "events": [
+        {
+          "key": "alert",
+          "name": "Alert",
+          "destination_description": "Designated admins"
+        }
+      ]
+    }
+  ]
+}
