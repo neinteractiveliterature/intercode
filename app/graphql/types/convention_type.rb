@@ -41,6 +41,7 @@ class Types::ConventionType < Types::BaseObject
     authorize_action :view_reports
   end
   field :tickets_available_for_purchase, Boolean, null: false, method: :tickets_available_for_purchase?
+  field :notification_templates, [Types::NotificationTemplateType], null: false
 
   association_loaders(
     Convention,
@@ -49,6 +50,7 @@ class Types::ConventionType < Types::BaseObject
     :cms_navigation_items,
     :default_layout,
     :forms,
+    :notification_templates,
     :organization,
     :pages,
     :products,
