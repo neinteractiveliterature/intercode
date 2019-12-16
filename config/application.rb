@@ -48,7 +48,7 @@ module Intercode
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    %w[liquid_drops presenters services].each do |subdir|
+    %w[liquid_drops notifiers presenters services].each do |subdir|
       config.eager_load_paths << Rails.root.join("app/#{subdir}")
     end
 
