@@ -26,7 +26,7 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
       updated_by: current_user
     )
 
-    SignupRequestsMailer.new_signup_request(signup_request).deliver_later
+    SignupRequests::NewSignupRequestNotifier.new(signup_request: signup_request).deliver_later
 
     { signup_request: signup_request }
   end

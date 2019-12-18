@@ -24,7 +24,7 @@ class PayOrderService < CivilService::Service
     end
 
     update_order(charge)
-    OrdersMailer.purchased(order).deliver_now
+    Orders::PurchasedNotifier.purchased(order: order).deliver_now
     success
   end
 
