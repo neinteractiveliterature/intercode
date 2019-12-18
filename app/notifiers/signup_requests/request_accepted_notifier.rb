@@ -1,4 +1,4 @@
-class Signups::RequestAcceptedNotifier < Notifier
+class SignupRequests::RequestAcceptedNotifier < Notifier
   attr_reader :signup_request
 
   def initialize(signup_request:)

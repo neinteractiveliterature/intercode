@@ -30,7 +30,7 @@ class PurchaseTicketService < CivilService::Service
     end
 
     ticket = create_ticket(charge)
-    TicketsMailer.purchased(ticket).deliver_now
+    Tickets::PurchasedNotifier.new(ticket: ticket).deliver_now
     success(ticket: ticket)
   end
 
