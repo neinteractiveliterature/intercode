@@ -34,7 +34,7 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
         order.payment_note.presence
       ].compact.join('; ')
     )
-    OrdersMailer.cancelled(order, refund&.id).deliver_later
+    Orders::CancelledNotifier.new(order: order, refund_id: refund&.id).deliver_later
 
     { order: order }
   end
