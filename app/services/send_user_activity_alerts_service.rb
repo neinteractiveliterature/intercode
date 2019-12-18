@@ -10,10 +10,10 @@ class SendUserActivityAlertsService < CivilService::Service
 
   def inner_call
     triggered_alerts.each do |alert|
-      UserActivityAlertMailer.alert(
-        user_con_profile,
-        alert,
-        event
+      UserActivityAlerts::AlertNotifier.new(
+        user_con_profile: user_con_profile,
+        user_activity_alert: alert,
+        event: event
       ).deliver_later
     end
 

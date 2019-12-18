@@ -40,7 +40,7 @@ class CmsRenderingContext
     doc.xpath('//body/*').remove
     doc.xpath('//body').first.inner_html = react_component(
       'AppRoot',
-      controller.app_component_props
+      controller&.app_component_props || {}
     )
     doc.to_s.html_safe
   rescue StandardError => e
@@ -80,7 +80,7 @@ class CmsRenderingContext
         'NavigationBar',
         navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
       ),
-      'content_for_layout' => react_component('AppRouter', alert: controller.flash.alert)
+      'content_for_layout' => react_component('AppRouter', alert: controller&.flash.alert)
     )
   end
 

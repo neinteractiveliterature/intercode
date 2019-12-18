@@ -76,11 +76,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call
         assert result.success?
 
-        assert_equal 2, ActionMailer::Base.deliveries.size
-        recipients = ActionMailer::Base.deliveries.map(&:to)
-        assert_includes recipients, [email_team_member.user_con_profile.email]
-        assert_includes recipients, [email_team_member2.user_con_profile.email]
-        refute_includes recipients, [no_email_team_member.user_con_profile.email]
+        assert_equal 1, ActionMailer::Base.deliveries.size
+        recipients = ActionMailer::Base.deliveries.flat_map(&:to)
+        assert_includes recipients, email_team_member.user_con_profile.email
+        assert_includes recipients, email_team_member2.user_con_profile.email
+        refute_includes recipients, no_email_team_member.user_con_profile.email
       end
     end
 
@@ -249,7 +249,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
       )
 
-      other_event = create(:event, length_seconds: event.length_seconds)
+      other_event = create(:event, convention: convention, length_seconds: event.length_seconds)
       other_run = create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
       other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
       assert other_signup_service.call.success?
@@ -296,7 +296,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     describe 'with a conflicting event' do
-      let(:other_event) { create(:event, length_seconds: event.length_seconds) }
+      let(:other_event) { create(:event, convention: convention, length_seconds: event.length_seconds) }
       let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }
 
       it 'disallows signups with conflicting waitlist games' do

@@ -4,8 +4,10 @@ require_relative 'convention_permissions_test_helper'
 class SignupRequestPolicyTest < ActiveSupport::TestCase
   include ConventionPermissionsTestHelper
 
-  let(:signup_request) { create(:signup_request) }
-  let(:convention) { signup_request.target_run.event.convention }
+  let(:convention) { create(:convention, :with_notification_templates) }
+  let(:event) { create(:event, convention: convention) }
+  let(:target_run) { create(:run, event: event) }
+  let(:signup_request) { create(:signup_request, target_run: target_run) }
 
   describe '#read?' do
     it 'lets users with update_signups read signup requests in a moderated-signup convention' do
