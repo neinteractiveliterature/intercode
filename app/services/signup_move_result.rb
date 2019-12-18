@@ -1,4 +1,6 @@
 class SignupMoveResult
+  include GlobalID::Identification
+
   attr_reader :signup_id, :state, :bucket_key, :prev_state, :prev_bucket_key
 
   def initialize(signup_id, state, bucket_key, prev_state, prev_bucket_key)
@@ -17,6 +19,15 @@ class SignupMoveResult
       prev_state: prev_state,
       prev_bucket_key: prev_bucket_key
     }
+  end
+
+  def id
+    [signup_id, state, bucket_key, prev_state, prev_bucket_key].join('-')
+  end
+
+  def self.find(id)
+    signup_id, state, bucket_key, prev_state, prev_bucket_key = id.split('-')
+    new(signup_id.to_i, state, bucket_key.presence, prev_state, prev_bucket_key.presence)
   end
 
   def signup

@@ -38,11 +38,11 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     perform_enqueued_jobs do
       subject.call!
 
-      assert_equal 2, ActionMailer::Base.deliveries.size
-      recipients = ActionMailer::Base.deliveries.map(&:to)
-      assert_includes recipients, [email_team_member.user_con_profile.email]
-      assert_includes recipients, [email_team_member2.user_con_profile.email]
-      refute_includes recipients, [no_email_team_member.user_con_profile.email]
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      recipients = ActionMailer::Base.deliveries.flat_map(&:to)
+      assert_includes recipients, email_team_member.user_con_profile.email
+      assert_includes recipients, email_team_member2.user_con_profile.email
+      refute_includes recipients, no_email_team_member.user_con_profile.email
     end
   end
 

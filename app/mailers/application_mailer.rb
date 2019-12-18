@@ -40,9 +40,10 @@ class ApplicationMailer < ActionMailer::Base
     destinations.flat_map do |destination|
       case destination
       when UserConProfile then email_for_user_con_profile(destination)
-      when StaffPosition then emails_for_staff_positions(destination)
+      when StaffPosition then emails_for_staff_position(destination)
       when nil then []
       else raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
+      end
     end
   end
 
@@ -55,8 +56,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def notification_mail(notifier, options = {})
     use_convention_timezone(notifier.convention) do
-      rendering_context = CmsRenderingContext.new(cms_parent: notifier.convention, controller: self)
-      render_results = notifier.render(rendering_context.cadmus_renderer)
+      render_results = notifier.render
 
       mail(
         subject: render_results[:subject],
