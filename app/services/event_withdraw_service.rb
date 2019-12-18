@@ -53,11 +53,11 @@ class EventWithdrawService < CivilService::Service
     return if suppress_notifications
 
     # Wait 30 seconds because the transaction hasn't been committed yet
-    EventSignupMailer.withdrawal(
-      signup,
-      prev_state,
-      prev_bucket_key,
-      move_results.map(&:to_h)
+    Signups::WithdrawalNotifier.new(
+      signup: signup,
+      prev_state: prev_state,
+      prev_bucket_key: prev_bucket_key,
+      move_results: move_results
     ).deliver_later(wait: 30.seconds)
   end
 end

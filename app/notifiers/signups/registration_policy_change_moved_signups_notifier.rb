@@ -23,7 +23,7 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
   end
 
   def destinations
-    team_members_to_notify_for_move_results(move_results).map(&:user_con_profile)
+    team_members_to_notify_for_move_results(event, move_results).map(&:user_con_profile)
   end
 
   def signups_by_id
