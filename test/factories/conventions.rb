@@ -38,5 +38,13 @@ FactoryBot.define do
         ).call!
       end
     end
+
+    trait :with_standard_content do
+      after(:create) do |convention|
+        convention.forms.destroy_all
+        convention.update!(user_con_profile_form: nil)
+        LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
+      end
+    end
   end
 end
