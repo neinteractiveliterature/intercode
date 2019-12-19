@@ -51,7 +51,7 @@ class FormResponseChangeGroupPresenter
     form = form_for_response(response)
     return nil unless form
 
-    item = form.form_items.find { |item| item.identifier == field_identifier }
+    item = form.form_items.find { |form_item| form_item.identifier == field_identifier }
     {
       id: item.id,
       form_section_id: item.form_section_id,

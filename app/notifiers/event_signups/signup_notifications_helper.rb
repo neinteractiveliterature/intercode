@@ -1,4 +1,4 @@
-module Signups::SignupNotificationsHelper
+module EventSignups::SignupNotificationsHelper
   def team_members_to_notify_for_signup(signup)
     signup.event.team_members.select do |team_member|
       team_member.receive_signup_email != 'no' &&

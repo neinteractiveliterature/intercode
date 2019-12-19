@@ -1,4 +1,4 @@
-class Signups::UserSignupMovedNotifier < Notifier
+class EventSignups::UserSignupMovedNotifier < Notifier
   attr_reader :move_result
   delegate :signup, to: :move_result
 

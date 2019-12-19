@@ -13,7 +13,7 @@ class UserActivityAlerts::AlertNotifier < Notifier
       'alert_user_con_profile' => alert_user_con_profile,
       'event_description' => event_description,
       'event_short_description' => event_short_description,
-      'trigger_reasons' => trigger_reasons,
+      'trigger_reasons' => trigger_reasons
     )
   end
 
@@ -39,21 +39,21 @@ class UserActivityAlerts::AlertNotifier < Notifier
   def trigger_reasons
     [
       *(
-        if user_activity_alert.matches_user?(user_con_profile)
+        if user_activity_alert.matches_user?(alert_user_con_profile)
           ["Matched user account for #{user_activity_alert.user.name}"]
         else
           []
         end
       ),
       *(
-        if user_activity_alert.matches_name?(user_con_profile)
+        if user_activity_alert.matches_name?(alert_user_con_profile)
           ["Matched partial name '#{user_activity_alert.partial_name}'"]
         else
           []
         end
       ),
       *(
-        if user_activity_alert.matches_email?(user_con_profile)
+        if user_activity_alert.matches_email?(alert_user_con_profile)
           ["Matched email address '#{user_activity_alert.email}'"]
         else
           []
