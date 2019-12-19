@@ -17,7 +17,8 @@ class LoadCmsContentSetService < CivilService::Service
     [
       CmsContentLoaders::CmsLayouts,
       CmsContentLoaders::Pages,
-      CmsContentLoaders::CmsPartials
+      CmsContentLoaders::CmsPartials,
+      CmsContentLoaders::NotificationTemplates
     ].each do |loader_class|
       loader_class.new(convention: convention, content_set: content_set).call!
     end

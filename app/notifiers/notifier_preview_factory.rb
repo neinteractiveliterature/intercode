@@ -42,6 +42,7 @@ class NotifierPreviewFactory
     when :signup then Signup.new(run: Run.new(event: Event.new(convention: convention)))
     when :signup_request
       SignupRequest.new(target_run: Run.new(event: Event.new(convention: convention)))
+    when :ticket then Ticket.new(user_con_profile: UserConProfile.new(convention: convention))
     when :user_activity_alert then UserActivityAlert.new(convention: convention)
     when :whodunit then User.new
     end
@@ -70,6 +71,7 @@ class NotifierPreviewFactory
     when :refund_id then 'refund-abc123'
     when :signup then convention.signups.first
     when :signup_request then convention.signup_requests.first
+    when :ticket then convention.tickets.first
     when :user_activity_alert then convention.user_activity_alerts.first
     when :whodunit then User.first
     end
