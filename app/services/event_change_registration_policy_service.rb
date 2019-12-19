@@ -248,13 +248,13 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   end
 
   def notify_moved_signup(result)
-    Signups::UserSignupMovedNotifier.new(move_result: result).deliver_later
+    EventSignups::UserSignupMovedNotifier.new(move_result: result).deliver_later
   end
 
   def notify_team_members(move_results)
     return unless move_results.any?
 
-    Signups::RegistrationPolicyChangeMovedSignupsNotifier.new(
+    EventSignups::RegistrationPolicyChangeMovedSignupsNotifier.new(
       event: event,
       move_results: move_results,
       whodunit: whodunit

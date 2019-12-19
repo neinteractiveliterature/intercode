@@ -1,5 +1,5 @@
-class Signups::WithdrawalNotifier < Notifier
-  include Signups::SignupNotificationsHelper
+class EventSignups::WithdrawalNotifier < Notifier
+  include EventSignups::SignupNotificationsHelper
 
   attr_reader :signup, :prev_state, :prev_bucket_key, :move_results
 
@@ -8,7 +8,7 @@ class Signups::WithdrawalNotifier < Notifier
     @prev_state = prev_state
     @prev_bucket_key = prev_bucket_key
     @move_results = move_results
-    super(convention: signup.event.convention, event_key: 'signups/withdrawal')
+    super(convention: signup.run.event.convention, event_key: 'signups/withdrawal')
   end
 
   def liquid_assigns
@@ -26,6 +26,6 @@ class Signups::WithdrawalNotifier < Notifier
 
   def prev_bucket
     return unless prev_bucket_key
-    signup.event.registration_policy.bucket_with_key(prev_bucket_key)
+    signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)
   end
 end

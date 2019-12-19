@@ -1,9 +1,12 @@
-class Signups::NewSignupRequestNotifier < Notifier
+class SignupRequests::NewSignupRequestNotifier < Notifier
   attr_reader :signup_request
 
   def initialize(signup_request:)
     @signup_request = signup_request
-    super(convention: signup_request.convention, event_key: 'signup_requests/new_signup_request')
+    super(
+      convention: signup_request.target_run.event.convention,
+      event_key: 'signup_requests/new_signup_request'
+    )
   end
 
   def liquid_assigns

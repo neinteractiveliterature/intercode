@@ -14,8 +14,10 @@ class LiquidAssignGraphqlPresenter
 
   def drop_class_name
     case assign
+    when ActiveSupport::SafeBuffer then 'String'
     when Array then "Array<#{LiquidAssignGraphqlPresenter.new(nil, assign.first).drop_class_name}>"
     when CmsVariable then 'CmsVariable'
+    when Hash then "Hash<#{LiquidAssignGraphqlPresenter.new(nil, assign.keys.first).drop_class_name}, #{LiquidAssignGraphqlPresenter.new(nil, assign.values.first).drop_class_name}>"
     when Proc then LiquidAssignGraphqlPresenter.new(name, assign.call).drop_class_name
     else assign.to_liquid.class.name
     end
