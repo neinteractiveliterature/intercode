@@ -265,6 +265,15 @@ class Types::QueryType < Types::BaseObject
     LiquidAssignGraphqlPresenter.from_hash(context[:cadmus_renderer].default_assigns)
   end
 
+  field :notifier_liquid_assigns, [Types::LiquidAssign], null: true do
+    argument :event_key, String, required: true
+  end
+
+  def notifier_liquid_assigns(event_key:)
+    notifier = NotifierPreviewFactory.new(convention: convention, event_key: event_key).notifier
+    LiquidAssignGraphqlPresenter.from_hash(notifier.liquid_assigns)
+  end
+
   field :preview_form_item, Types::FormItemType, null: false do
     argument :form_section_id, Int, required: true
     argument :form_item, Types::FormItemInputType, required: true
@@ -300,6 +309,22 @@ class Types::QueryType < Types::BaseObject
 
   def preview_liquid(content:)
     cadmus_renderer.render(Liquid::Template.parse(content), :html)
+  end
+
+  field :preview_notifier_liquid, String, null: false do
+    argument :event_key, String, required: true
+    argument :content, String, required: true
+
+    authorize do |_value, context|
+      Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
+    end
+  end
+
+  def preview_notifier_liquid(event_key:, content:)
+    notifier = NotifierPreviewFactory.new(convention: convention, event_key: event_key).notifier
+    notifier.cadmus_renderer.render(
+      Liquid::Template.parse(content), :html, assigns: notifier.liquid_assigns
+    )
   end
 
   field :product, Types::ProductType, null: false do

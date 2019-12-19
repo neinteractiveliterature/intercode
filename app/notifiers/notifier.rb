@@ -1,4 +1,16 @@
 class Notifier
+  NOTIFICATIONS_CONFIG = JSON.parse(
+    File.read(File.expand_path('config/notifications.json', Rails.root))
+  )
+  NOTIFIER_CLASSES_BY_EVENT_KEY = NOTIFICATIONS_CONFIG['categories'].flat_map do |category|
+    category['events'].map do |event|
+      [
+        "#{category['key']}/#{event['key']}",
+        "#{category['key'].camelize}::#{event['key'].camelize}Notifier".safe_constantize
+      ]
+    end
+  end.to_h
+
   attr_reader :event_key, :convention
 
   def initialize(convention:, event_key:)
@@ -36,13 +48,13 @@ class Notifier
     mail.deliver_now
   end
 
-  private
-
   def cadmus_renderer
     @cadmus_renderer ||= CmsRenderingContext.new(
       cms_parent: convention, controller: nil
     ).cadmus_renderer
   end
+
+  private
 
   def use_convention_timezone(convention, &block)
     timezone = convention&.timezone

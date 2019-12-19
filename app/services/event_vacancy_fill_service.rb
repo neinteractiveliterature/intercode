@@ -131,6 +131,6 @@ class EventVacancyFillService < CivilService::Service
     return if suppress_notifications
 
     # Wait 30 seconds because the transaction hasn't been committed yet
-    Signups::UserSignupMovedNotifier.new(move_result: result).deliver_later(wait: 30.seconds)
+    EventSignups::UserSignupMovedNotifier.new(move_result: result).deliver_later(wait: 30.seconds)
   end
 end

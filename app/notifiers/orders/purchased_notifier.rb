@@ -3,7 +3,7 @@ class Orders::PurchasedNotifier < Notifier
 
   def initialize(order:)
     @order = order
-    super(convention: order.convention, event_key: 'orders/purchased')
+    super(convention: order.user_con_profile.convention, event_key: 'orders/purchased')
   end
 
   def liquid_assigns

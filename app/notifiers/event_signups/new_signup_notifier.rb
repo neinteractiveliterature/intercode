@@ -1,11 +1,11 @@
-class Signups::NewSignupNotifier < Notifier
-  include Signups::SignupNotificationsHelper
+class EventSignups::NewSignupNotifier < Notifier
+  include EventSignups::SignupNotificationsHelper
 
   attr_reader :signup
 
   def initialize(signup:)
     @signup = signup
-    super(convention: signup.event.convention, event_key: 'signups/new_signup')
+    super(convention: signup.run.event.convention, event_key: 'signups/new_signup')
   end
 
   def liquid_assigns
