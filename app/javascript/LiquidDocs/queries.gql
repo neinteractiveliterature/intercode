@@ -1,7 +1,17 @@
+fragment LiquidAssignFields on LiquidAssign {
+  name
+  drop_class_name
+  cms_variable_value_json
+}
+
 query LiquidAssignsQuery {
   liquidAssigns {
-    name
-    drop_class_name
-    cms_variable_value_json
+    ...LiquidAssignFields
+  }
+}
+
+query NotifierLiquidAssignsQuery($eventKey: String!) {
+  liquidAssigns: notifierLiquidAssigns(eventKey: $eventKey) {
+    ...LiquidAssignFields
   }
 }

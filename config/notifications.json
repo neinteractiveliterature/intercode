@@ -27,7 +27,7 @@
       ]
     },
     {
-      "key": "event_signups",
+      "key": "signups",
       "name": "Event signups",
       "events": [
         {

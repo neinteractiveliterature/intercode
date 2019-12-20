@@ -1,5 +1,5 @@
-class EventSignups::NewSignupNotifier < Notifier
-  include EventSignups::SignupNotificationsHelper
+class Signups::NewSignupNotifier < Notifier
+  include Signups::SignupNotificationsHelper
 
   attr_reader :signup
 

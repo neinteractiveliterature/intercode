@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
@@ -9,6 +9,8 @@ import findClass from './findClass';
 function AssignDocLink({
   assign, compact = false, prefix = null, preAssignNameContent = null,
 }) {
+  const location = useLocation();
+
   const renderCard = () => (
     <div className="card mb-2">
       <div className="card-header">
@@ -33,7 +35,10 @@ function AssignDocLink({
   }
 
   return (
-    <Link to={`/liquid_docs/assigns/${prefix || ''}${assign.name}`} className="card-link m-0 text-body">
+    <Link
+      to={`/liquid_docs/assigns/${prefix || ''}${assign.name}${location.search}`}
+      className="card-link m-0 text-body"
+    >
       {renderCard()}
     </Link>
   );

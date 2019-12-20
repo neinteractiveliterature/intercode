@@ -5,3 +5,7 @@ query PreviewLiquidQuery($liquid: String!) {
 query PreviewMarkdownQuery($markdown: String!) {
   previewMarkdown(markdown: $markdown)
 }
+
+query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
+  previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
+}
