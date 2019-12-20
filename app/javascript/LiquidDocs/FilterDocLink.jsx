@@ -1,12 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import FilterDocHeader from './FilterDocHeader';
 
 function FilterDocLink({ filter }) {
+  const location = useLocation();
+
   return (
-    <Link to={`/liquid_docs/filters/${filter.name}`} className="card-link m-0 text-body">
+    <Link
+      to={`/liquid_docs/filters/${filter.name}${location.search}`}
+      className="card-link m-0 text-body"
+    >
       <div className="card mb-2">
         <div className="card-header">
           <FilterDocHeader filter={filter} />

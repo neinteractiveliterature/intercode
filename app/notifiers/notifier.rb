@@ -33,7 +33,7 @@ class Notifier
   end
 
   def liquid_assigns
-    { 'convention' => convention }
+    {}
   end
 
   def destinations
@@ -50,7 +50,7 @@ class Notifier
 
   def cadmus_renderer
     @cadmus_renderer ||= CmsRenderingContext.new(
-      cms_parent: convention, controller: nil
+      cms_parent: convention, controller: nil, assigns: { 'convention' => convention }
     ).cadmus_renderer
   end
 

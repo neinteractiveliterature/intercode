@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import { useApolloClient } from 'react-apollo-hooks';
 
 import CodeInput from './CodeInput';
-import { PreviewLiquidQuery } from './previewQueries.gql';
+import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries.gql';
 
 function LiquidInput(props) {
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');
   const client = useApolloClient();
+  const { notifierEventKey } = props;
 
   const docTabClicked = (event, tab) => {
     event.preventDefault();
@@ -18,8 +19,8 @@ function LiquidInput(props) {
 
   const getPreviewContent = props.disablePreview ? null : async (liquid) => {
     const response = await client.query({
-      query: PreviewLiquidQuery,
-      variables: { liquid },
+      query: notifierEventKey ? PreviewNotifierLiquidQuery : PreviewLiquidQuery,
+      variables: { liquid, ...(notifierEventKey ? { eventKey: notifierEventKey } : {}) },
       fetchPolicy: 'no-cache',
     });
 
@@ -30,6 +31,10 @@ function LiquidInput(props) {
     if (!showingDocs) {
       return null;
     }
+
+    const liquidDocsUrl = notifierEventKey
+      ? `/liquid_docs?notifier_event_key=${notifierEventKey}`
+      : '/liquid_docs';
 
     return (
       <>
@@ -73,7 +78,7 @@ function LiquidInput(props) {
           <iframe
             src={
               currentDocTab === 'convention'
-                ? '/liquid_docs'
+                ? liquidDocsUrl
                 : 'https://shopify.github.io/liquid/'
             }
             title="Liquid markup documentation"
@@ -113,10 +118,12 @@ function LiquidInput(props) {
 
 LiquidInput.propTypes = {
   disablePreview: PropTypes.bool,
+  notifierEventKey: PropTypes.string,
 };
 
 LiquidInput.defaultProps = {
   disablePreview: false,
+  notifierEventKey: null,
 };
 
 export default LiquidInput;

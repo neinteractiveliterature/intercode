@@ -227,6 +227,6 @@ sign up for events."
     return if suppress_notifications
 
     # Wait 30 seconds because the transaction hasn't been committed yet
-    EventSignups::NewSignupNotifier.new(signup: signup).deliver_later(wait: 30.seconds)
+    Signups::NewSignupNotifier.new(signup: signup).deliver_later(wait: 30.seconds)
   end
 end

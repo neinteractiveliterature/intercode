@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { useRouteMatch } from 'react-router-dom';
 
@@ -16,7 +16,25 @@ function NotificationConfiguration() {
 
   const { data, loading, error } = useQuery(NotificationAdminQuery);
 
-  if (loading) {
+  const eventKey = `${category.key}/${event.key}`;
+
+  const initialNotificationTemplate = (
+    loading || error
+      ? null
+      : data.convention.notification_templates
+        .find((t) => t.event_key === eventKey));
+
+  const [notificationTemplate, setNotificationTemplate] = useState(initialNotificationTemplate);
+
+  // if the page changes and we're still mounted
+  useEffect(
+    () => setNotificationTemplate(initialNotificationTemplate),
+    [initialNotificationTemplate],
+  );
+
+  const saveClicked = () => {};
+
+  if (loading || !notificationTemplate) {
     return <LoadingIndicator />;
   }
 
@@ -24,26 +42,56 @@ function NotificationConfiguration() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const notificationTemplate = data.convention.notification_templates
-    .find((t) => t.event_key === `${category.key}/${event.key}`);
-
   return (
     <>
-      <h1 className="mb-4">
-        {category.name}
-        {' '}
-        &mdash;
-        {' '}
-        {event.name}
-      </h1>
+      <header className="mb-4">
+        <h1>
+          {category.name}
+          {' '}
+          &mdash;
+          {' '}
+          {event.name}
+        </h1>
+        <h4>
+          Destination:
+          {' '}
+          {event.destination_description}
+        </h4>
+      </header>
 
-      <LiquidInput
-        value={notificationTemplate.body_html}
-      />
+      <div className="form-group">
+        <legend className="col-form-label">Subject line</legend>
+        <LiquidInput
+          value={notificationTemplate.subject}
+          onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, subject: value }))}
+          notifierEventKey={eventKey}
+          renderPreview={(previewContent) => <>{previewContent}</>}
+          lines={1}
+        />
+      </div>
 
-      <LiquidInput
-        value={notificationTemplate.body_text}
-      />
+      <div className="form-group">
+        <legend className="col-form-label">Notification body (HTML)</legend>
+        <LiquidInput
+          value={notificationTemplate.body_html}
+          onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_html: value }))}
+          notifierEventKey={eventKey}
+        />
+      </div>
+
+      <div className="form-group">
+        <legend className="col-form-label">Notification body (plain text)</legend>
+        <LiquidInput
+          value={notificationTemplate.body_text}
+          onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_text: value }))}
+          notifierEventKey={eventKey}
+          renderPreview={(previewContent) => <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>}
+        />
+      </div>
+
+      <button type="button" className="btn btn-primary" onClick={saveClicked}>
+        Save changes
+      </button>
     </>
   );
 }

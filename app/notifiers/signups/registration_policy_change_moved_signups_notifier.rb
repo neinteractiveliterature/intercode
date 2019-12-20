@@ -1,5 +1,5 @@
-class EventSignups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
-  include EventSignups::SignupNotificationsHelper
+class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
+  include Signups::SignupNotificationsHelper
 
   attr_reader :event, :move_results, :whodunit
 
