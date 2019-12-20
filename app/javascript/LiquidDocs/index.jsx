@@ -66,20 +66,18 @@ function LiquidDocs() {
         {sortedAssigns.map((assign) => (
           <Route
             path={`/liquid_docs/assigns/${assign.name}(\\..*)?`}
-            render={() => (
-              <AssignDoc assign={assign} />
-            )}
             key={`route-${assign.name}`}
-          />
+          >
+            <AssignDoc assign={assign} />
+          </Route>
         ))}
         {sortedFilters.map((filter) => (
           <Route
             path={`/liquid_docs/filters/${filter.name}(\\..*)?`}
-            render={() => (
-              <FilterDoc filter={filter} />
-            )}
             key={`route-${filter.name}`}
-          />
+          >
+            <FilterDoc filter={filter} />
+          </Route>
         ))}
         {sortedTags.map((liquidTag) => (
           <Route
