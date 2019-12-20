@@ -1,5 +1,5 @@
-class EventSignups::WithdrawalNotifier < Notifier
-  include EventSignups::SignupNotificationsHelper
+class Signups::WithdrawalNotifier < Notifier
+  include Signups::SignupNotificationsHelper
 
   attr_reader :signup, :prev_state, :prev_bucket_key, :move_results
 

@@ -19,7 +19,7 @@ function NotificationAdminIndex() {
         </thead>
         <tbody>
           {NotificationsConfig.categories.map((category) => (
-            <React.Fragment key={category}>
+            <React.Fragment key={category.key}>
               {category.events.map((event) => (
                 <tr key={`${category.key}/${event.key}`}>
                   <td>{category.name}</td>

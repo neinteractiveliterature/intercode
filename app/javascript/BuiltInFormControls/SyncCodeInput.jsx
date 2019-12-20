@@ -28,6 +28,7 @@ import '../Codemirror/LiquidMultiplexModes';
 function SyncCodeInput({
   onBlur, onChange, value, getPreviewContent, mode, disabled, codeMirrorOptions, extraNavControls,
   className, lines, formControlClassName, editorWrapperClassName, children,
+  renderPreview,
 }) {
   const [previewing, setPreviewing] = useState(false);
   const [previewContent, setPreviewContent] = useState(null);
@@ -80,6 +81,10 @@ function SyncCodeInput({
 
     if (previewError) {
       return <ErrorDisplay graphQLError={previewError} />;
+    }
+
+    if (renderPreview) {
+      return renderPreview(previewContent);
     }
 
     return (
@@ -189,6 +194,7 @@ SyncCodeInput.propTypes = {
   editorWrapperClassName: PropTypes.string,
   extraNavControls: PropTypes.node,
   disabled: PropTypes.bool,
+  renderPreview: PropTypes.func,
 };
 
 SyncCodeInput.defaultProps = {
@@ -202,6 +208,7 @@ SyncCodeInput.defaultProps = {
   extraNavControls: null,
   getPreviewContent: null,
   disabled: false,
+  renderPreview: null,
 };
 
 export default SyncCodeInput;

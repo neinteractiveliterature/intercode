@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, Switch, Route } from 'react-router-dom';
+import {
+  Link, Switch, Route, useLocation,
+} from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
 import buildMemberPrefix from './buildMemberPrefix';
@@ -10,6 +12,8 @@ import findMethodReturnClass from './findMethodReturnClass';
 import MethodDoc from './MethodDoc';
 
 function AssignDoc({ assign, prefix = null }) {
+  const location = useLocation();
+
   const assignClass = findClass(assign.drop_class_name);
   if (!assignClass) {
     return null;
@@ -52,13 +56,13 @@ function AssignDoc({ assign, prefix = null }) {
             <nav aria-label="breadcrumb mb-4">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link to="/liquid_docs">Documentation home</Link>
+                  <Link to={`/liquid_docs${location.search}`}>Documentation home</Link>
                 </li>
                 {
                   prefixParts.map((part, i) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <li className="breadcrumb-item text-nowrap" key={i}>
-                      <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}`}>
+                      <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}${location.search}`}>
                         {part}
                       </Link>
                     </li>

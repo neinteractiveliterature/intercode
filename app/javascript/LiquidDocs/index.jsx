@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
 import AssignDoc from './AssignDoc';
@@ -8,7 +8,7 @@ import DocData from '../../../liquid_doc.json';
 import findLiquidTagName from './findLiquidTagName';
 import FilterDoc from './FilterDoc';
 import FilterDocLink from './FilterDocLink';
-import { LiquidAssignsQuery } from './queries.gql';
+import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries.gql';
 import LiquidTagDoc from './LiquidTagDoc';
 import LiquidTagDocLink from './LiquidTagDocLink';
 import LoadingIndicator from '../LoadingIndicator';
@@ -18,8 +18,20 @@ function sortByName(items) {
   return [...items].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
 }
 
+const LiquidDocsContext = React.createContext({});
+
 function LiquidDocs() {
-  const { data, error, loading } = useQuery(LiquidAssignsQuery);
+  const location = useLocation();
+  const notifierEventKey = location.search
+    ? new URLSearchParams(location.search).get('notifier_event_key')
+    : null;
+
+  const { data, error, loading } = useQuery(
+    notifierEventKey ? NotifierLiquidAssignsQuery : LiquidAssignsQuery,
+    {
+      variables: notifierEventKey ? { eventKey: notifierEventKey } : {},
+    },
+  );
 
   const sortedAssigns = useMemo(
     () => ((loading || error) ? [] : sortByName(data.liquidAssigns)),
@@ -49,7 +61,7 @@ function LiquidDocs() {
   }
 
   return (
-    <>
+    <LiquidDocsContext.Provider value={{ notifierEventKey }}>
       <Switch>
         {sortedAssigns.map((assign) => (
           <Route
@@ -120,9 +132,9 @@ function LiquidDocs() {
           </>
         </Route>
 
-        <Redirect to="/liquid_docs" />
+        <Redirect to={`/liquid_docs${location.search}`} />
       </Switch>
-    </>
+    </LiquidDocsContext.Provider>
   );
 }
 
