@@ -113,6 +113,10 @@ class Types::MutationType < Types::BaseObject
   field :deleteMaximumEventProvidedTicketsOverride,
     mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
 
+  ### NotificationTemplate
+
+  field :updateNotificationTemplate, mutation: Mutations::UpdateNotificationTemplate
+
   ### OrderEntry
 
   field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder

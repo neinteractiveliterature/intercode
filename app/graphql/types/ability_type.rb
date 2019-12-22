@@ -298,6 +298,12 @@ class Types::AbilityType < Types::BaseObject
     policy(User.new).read?
   end
 
+  field :can_update_notification_templates, Boolean, null: false
+
+  def can_update_notification_templates
+    policy(NotificationTemplate.new(convention: convention)).update?
+  end
+
   field :can_update_signups, Boolean, null: false
 
   def can_update_signups
