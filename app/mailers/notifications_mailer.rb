@@ -6,6 +6,7 @@ class NotificationsMailer < ApplicationMailer
       ) do |format|
         format.html do
           @body_html = body_html
+          render 'notifications/notification', layout: 'mailer'
         end
 
         if body_text.present?
