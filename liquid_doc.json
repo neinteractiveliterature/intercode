@@ -2718,9 +2718,9 @@
       ]
     },
     {
-      "name": "CurrencyDrop",
+      "name": "Money::CurrencyDrop",
       "superclasses": [
-        "CurrencyDrop",
+        "Money::CurrencyDrop",
         "Liquid::Drop"
       ],
       "docstring": "A currency used for money",

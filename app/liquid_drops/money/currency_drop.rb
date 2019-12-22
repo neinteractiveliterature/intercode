@@ -1,5 +1,5 @@
 # A currency used for money
-class CurrencyDrop < Liquid::Drop
+class Money::CurrencyDrop < Liquid::Drop
   # @api
   attr_reader :currency
 
