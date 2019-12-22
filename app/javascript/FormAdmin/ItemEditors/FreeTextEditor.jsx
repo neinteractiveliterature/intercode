@@ -43,7 +43,7 @@ function FreeTextEditor() {
       </div>
       <BootstrapFormInput
         disabled={disabled}
-        value={formItem.properties.lines.toString()}
+        value={(formItem.properties.lines || '').toString()}
         onTextChange={(value) => formItemPropertyUpdater('lines', setFormItem)(Transforms.integer(value))}
         type="number"
         min="1"
