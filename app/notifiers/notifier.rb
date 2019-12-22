@@ -89,7 +89,7 @@ class Notifier
     destinations.flat_map do |destination|
       case destination
       when UserConProfile then email_for_user_con_profile(destination)
-      when StaffPosition then emails_for_staff_positions(destination)
+      when StaffPosition then emails_for_staff_position(destination)
       when nil then []
       else raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
       end
