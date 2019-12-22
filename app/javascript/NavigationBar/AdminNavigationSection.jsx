@@ -48,6 +48,10 @@ function ConventionAdminNavigationSection() {
           label: 'Mailing Lists',
           url: '/mailing_lists',
         },
+        currentAbility.can_update_notification_templates && {
+          label: 'Notifications',
+          url: '/admin_notifications',
+        },
         currentAbility.can_manage_oauth_applications && {
           label: 'OAuth2 Applications',
           url: '/oauth/applications-embed',

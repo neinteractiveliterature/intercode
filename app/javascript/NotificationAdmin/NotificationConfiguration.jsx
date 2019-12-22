@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { useRouteMatch } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 
 import { NotificationAdminQuery } from './queries.gql';
 import NotificationsConfig from '../../../config/notifications.json';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
+import { UpdateNotificationTemplate } from './mutations.gql';
+import useAsyncFunction from '../useAsyncFunction';
 
 
 function NotificationConfiguration() {
   const match = useRouteMatch();
+  const history = useHistory();
   const category = NotificationsConfig.categories.find((c) => c.key === match.params.category);
   const event = category.events.find((e) => e.key === match.params.event);
 
   const { data, loading, error } = useQuery(NotificationAdminQuery);
+  const [updateMutate] = useMutation(UpdateNotificationTemplate);
+  const [
+    updateNotificationTemplate, updateError, updateInProgress,
+  ] = useAsyncFunction(updateMutate);
 
   const eventKey = `${category.key}/${event.key}`;
 
@@ -32,7 +39,20 @@ function NotificationConfiguration() {
     [initialNotificationTemplate],
   );
 
-  const saveClicked = () => {};
+  const saveClicked = async () => {
+    await updateNotificationTemplate({
+      variables: {
+        eventKey,
+        notificationTemplate: {
+          subject: notificationTemplate.subject,
+          body_html: notificationTemplate.body_html,
+          body_text: notificationTemplate.body_text,
+        },
+      },
+    });
+
+    history.push('/admin_notifications');
+  };
 
   if (loading || !notificationTemplate) {
     return <LoadingIndicator />;
@@ -67,6 +87,7 @@ function NotificationConfiguration() {
           notifierEventKey={eventKey}
           renderPreview={(previewContent) => <>{previewContent}</>}
           lines={1}
+          disabled={updateInProgress}
         />
       </div>
 
@@ -76,6 +97,7 @@ function NotificationConfiguration() {
           value={notificationTemplate.body_html}
           onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_html: value }))}
           notifierEventKey={eventKey}
+          disabled={updateInProgress}
         />
       </div>
 
@@ -86,10 +108,13 @@ function NotificationConfiguration() {
           onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_text: value }))}
           notifierEventKey={eventKey}
           renderPreview={(previewContent) => <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>}
+          disabled={updateInProgress}
         />
       </div>
 
-      <button type="button" className="btn btn-primary" onClick={saveClicked}>
+      <ErrorDisplay graphQLError={updateError} />
+
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={updateInProgress}>
         Save changes
       </button>
     </>

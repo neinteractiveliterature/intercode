@@ -15,6 +15,7 @@ query AppRootQuery($path: String!) {
     can_manage_runs
     can_manage_forms
     can_read_any_mailing_list
+    can_update_notification_templates
     can_manage_oauth_applications
     can_read_reports
     can_manage_rooms
