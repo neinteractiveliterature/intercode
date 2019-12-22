@@ -10,8 +10,8 @@
     Rollbar.configure({
       payload: {
         person: {
-          id: #{current_user&.id.to_json.html_safe},
-          email: #{current_user&.email.to_json.html_safe}
+          id: <%= current_user&.id.to_json.html_safe %>,
+          email: <%= current_user&.email.to_json.html_safe %>
         }
       }
     });
