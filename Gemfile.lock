@@ -557,7 +557,7 @@ DEPENDENCIES
   solargraph
   stackprof
   stripe
-  stripe-ruby-mock
+  stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
   webpacker (~> 4.2.2)
   webpacker-react (~> 0.3.2)
