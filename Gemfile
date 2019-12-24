@@ -141,7 +141,7 @@ group :test do
   gem 'factory_bot'
   gem 'factory_bot_rails'
   gem 'simplecov'
-  gem 'stripe-ruby-mock'
+  gem 'stripe-ruby-mock', '>= 3.0.0', require: 'stripe_mock'
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
   gem 'rails-controller-testing'
