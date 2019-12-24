@@ -1,14 +1,4 @@
 GIT
-  remote: git://github.com/dbdrive/stripe-ruby-mock.git
-  revision: 72021c85b1a9fb5468368e8bd90074c9cab47801
-  branch: stripe-v5-compatability
-  specs:
-    stripe-ruby-mock (2.6.0)
-      dante (>= 0.2.0)
-      multi_json (~> 1.0)
-      stripe (> 5, < 6)
-
-GIT
   remote: https://github.com/nbudin/doorkeeper-openid_connect.git
   revision: 17245d74b43c058f51d3bdfbe3fdb01bf0325f36
   branch: fix_doorkeeper_52_compat
@@ -453,6 +443,10 @@ GEM
       sprockets (>= 3.0.0)
     stackprof (0.2.15)
     stripe (5.11.0)
+    stripe-ruby-mock (3.0.0)
+      dante (>= 0.2.0)
+      multi_json (~> 1.0)
+      stripe (> 5, < 6)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
     thor (0.20.3)
@@ -563,7 +557,7 @@ DEPENDENCIES
   solargraph
   stackprof
   stripe
-  stripe-ruby-mock!
+  stripe-ruby-mock
   term-ansicolor
   webpacker (~> 4.2.2)
   webpacker-react (~> 0.3.2)
