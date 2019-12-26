@@ -22,9 +22,9 @@ function NewUserActivityAlert({ history }) {
     user: null,
     trigger_on_ticket_create: true,
     trigger_on_user_con_profile_create: true,
-    alert_destinations: [],
+    notification_destinations: [],
   });
-  const [alertDestinationChangeSet, addAlertDestination, removeAlertDestination] = useChangeSet();
+  const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] = useChangeSet();
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateUserActivityAlert, {
       query: UserActivityAlertsAdminQuery,
@@ -35,9 +35,10 @@ function NewUserActivityAlert({ history }) {
   const combinedUserActivityAlert = useMemo(
     () => ({
       ...userActivityAlert,
-      alert_destinations: alertDestinationChangeSet.apply(userActivityAlert.alert_destinations),
+      notification_destinations: notificationDestinationChangeSet
+        .apply(userActivityAlert.notification_destinations),
     }),
-    [alertDestinationChangeSet, userActivityAlert],
+    [notificationDestinationChangeSet, userActivityAlert],
   );
 
   if (error) {
@@ -50,7 +51,7 @@ function NewUserActivityAlert({ history }) {
     await create({
       variables: {
         userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        alertDestinations: alertDestinationChangeSet.getAddValues()
+        notificationDestinations: notificationDestinationChangeSet.getAddValues()
           .map((addValue) => {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };
@@ -71,8 +72,8 @@ function NewUserActivityAlert({ history }) {
         userActivityAlert={combinedUserActivityAlert}
         convention={convention}
         onChange={setUserActivityAlert}
-        onAddAlertDestination={addAlertDestination}
-        onRemoveAlertDestination={removeAlertDestination}
+        onAddNotificationDestination={addNotificationDestination}
+        onRemoveNotificationDestination={removeNotificationDestination}
         disabled={createInProgress}
       />
 

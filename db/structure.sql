@@ -106,40 +106,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: alert_destinations; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.alert_destinations (
-    id bigint NOT NULL,
-    alert_type character varying NOT NULL,
-    alert_id bigint NOT NULL,
-    staff_position_id bigint,
-    user_con_profile_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: alert_destinations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.alert_destinations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: alert_destinations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.alert_destinations_id_seq OWNED BY public.alert_destinations.id;
-
-
---
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -871,6 +837,40 @@ CREATE SEQUENCE public.maximum_event_provided_tickets_overrides_id_seq
 --
 
 ALTER SEQUENCE public.maximum_event_provided_tickets_overrides_id_seq OWNED BY public.maximum_event_provided_tickets_overrides.id;
+
+
+--
+-- Name: notification_destinations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notification_destinations (
+    id bigint NOT NULL,
+    source_type character varying NOT NULL,
+    source_id bigint NOT NULL,
+    staff_position_id bigint,
+    user_con_profile_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: notification_destinations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.notification_destinations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notification_destinations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.notification_destinations_id_seq OWNED BY public.notification_destinations.id;
 
 
 --
@@ -1863,13 +1863,6 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: alert_destinations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.alert_destinations ALTER COLUMN id SET DEFAULT nextval('public.alert_destinations_id_seq'::regclass);
-
-
---
 -- Name: cms_content_group_associations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1993,6 +1986,13 @@ ALTER TABLE ONLY public.forms ALTER COLUMN id SET DEFAULT nextval('public.forms_
 --
 
 ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides ALTER COLUMN id SET DEFAULT nextval('public.maximum_event_provided_tickets_overrides_id_seq'::regclass);
+
+
+--
+-- Name: notification_destinations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notification_destinations ALTER COLUMN id SET DEFAULT nextval('public.notification_destinations_id_seq'::regclass);
 
 
 --
@@ -2178,14 +2178,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Name: alert_destinations alert_destinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.alert_destinations
-    ADD CONSTRAINT alert_destinations_pkey PRIMARY KEY (id);
-
-
---
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2335,6 +2327,14 @@ ALTER TABLE ONLY public.forms
 
 ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides
     ADD CONSTRAINT maximum_event_provided_tickets_overrides_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notification_destinations notification_destinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notification_destinations
+    ADD CONSTRAINT notification_destinations_pkey PRIMARY KEY (id);
 
 
 --
@@ -2572,27 +2572,6 @@ CREATE INDEX idx_max_event_provided_tickets_on_ticket_type_id ON public.maximum_
 --
 
 CREATE UNIQUE INDEX idx_permissions_unique_join ON public.permissions USING btree (staff_position_id, permission, event_category_id);
-
-
---
--- Name: index_alert_destinations_on_alert_type_and_alert_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_alert_destinations_on_alert_type_and_alert_id ON public.alert_destinations USING btree (alert_type, alert_id);
-
-
---
--- Name: index_alert_destinations_on_staff_position_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_alert_destinations_on_staff_position_id ON public.alert_destinations USING btree (staff_position_id);
-
-
---
--- Name: index_alert_destinations_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_alert_destinations_on_user_con_profile_id ON public.alert_destinations USING btree (user_con_profile_id);
 
 
 --
@@ -2887,6 +2866,27 @@ CREATE INDEX index_form_sections_on_form_id ON public.form_sections USING btree 
 --
 
 CREATE INDEX index_forms_on_convention_id ON public.forms USING btree (convention_id);
+
+
+--
+-- Name: index_notification_destinations_on_source_type_and_source_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notification_destinations_on_source_type_and_source_id ON public.notification_destinations USING btree (source_type, source_id);
+
+
+--
+-- Name: index_notification_destinations_on_staff_position_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notification_destinations_on_staff_position_id ON public.notification_destinations USING btree (staff_position_id);
+
+
+--
+-- Name: index_notification_destinations_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notification_destinations_on_user_con_profile_id ON public.notification_destinations USING btree (user_con_profile_id);
 
 
 --
@@ -3706,10 +3706,10 @@ ALTER TABLE ONLY public.conventions
 
 
 --
--- Name: alert_destinations fk_rails_b7ce40761b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notification_destinations fk_rails_b7ce40761b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.alert_destinations
+ALTER TABLE ONLY public.notification_destinations
     ADD CONSTRAINT fk_rails_b7ce40761b FOREIGN KEY (staff_position_id) REFERENCES public.staff_positions(id);
 
 
@@ -3826,10 +3826,10 @@ ALTER TABLE ONLY public.runs
 
 
 --
--- Name: alert_destinations fk_rails_f6d69543fb; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notification_destinations fk_rails_f6d69543fb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.alert_destinations
+ALTER TABLE ONLY public.notification_destinations
     ADD CONSTRAINT fk_rails_f6d69543fb FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
 
 
@@ -4022,6 +4022,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191116152842'),
 ('20191130174830'),
 ('20191205195033'),
-('20191215175849');
+('20191215175849'),
+('20191226202814');
 
 

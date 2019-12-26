@@ -1,4 +1,4 @@
-class Types::Alert < Types::BaseUnion
+class Types::NotificationSourceType < Types::BaseUnion
   possible_types Types::UserActivityAlertType
 
   def self.resolve_type(object, _context)

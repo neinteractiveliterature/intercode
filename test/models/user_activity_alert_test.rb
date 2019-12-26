@@ -108,8 +108,8 @@ class UserActivityAlertTest < ActiveSupport::TestCase
         user_con_profiles: [staff_member]
       )
       other_user_con_profile = create(:user_con_profile, convention: convention)
-      user_activity_alert.alert_destinations.create!(staff_position: staff_position)
-      user_activity_alert.alert_destinations.create!(user_con_profile: other_user_con_profile)
+      user_activity_alert.notification_destinations.create!(staff_position: staff_position)
+      user_activity_alert.notification_destinations.create!(user_con_profile: other_user_con_profile)
 
       assert_equal(
         [staff_member, other_user_con_profile].sort,

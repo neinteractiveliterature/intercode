@@ -20,7 +20,7 @@ fragment UserActivityAlertFields on UserActivityAlert {
     name
   }
 
-  alert_destinations {
+  notification_destinations {
     id
 
     staff_position {
