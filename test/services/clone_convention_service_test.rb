@@ -119,12 +119,12 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   it 'clones user activity alerts' do
     alert = create(:user_activity_alert, convention: convention)
     staff_position = create(:staff_position, convention: convention)
-    alert.alert_destinations.create!(staff_position: staff_position)
+    alert.notification_destinations.create!(staff_position: staff_position)
 
     result = service.call
     result.convention.reload
     assert result.success?
     assert_equal 1, result.convention.user_activity_alerts.count
-    assert_equal 1, result.convention.user_activity_alerts.first.alert_destinations.count
+    assert_equal 1, result.convention.user_activity_alerts.first.notification_destinations.count
   end
 end

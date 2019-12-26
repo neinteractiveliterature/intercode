@@ -23,7 +23,7 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
   const [userActivityAlert, setUserActivityAlert] = useState(
     error ? null : data.convention.user_activity_alert,
   );
-  const [alertDestinationChangeSet, addAlertDestination, removeAlertDestination] = useChangeSet();
+  const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] = useChangeSet();
   const [updateMutate] = useMutation(UpdateUserActivityAlert);
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const deleteMutate = useDeleteMutation(DeleteUserActivityAlert, {
@@ -37,10 +37,12 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
         ? null
         : {
           ...userActivityAlert,
-          alert_destinations: alertDestinationChangeSet.apply(userActivityAlert.alert_destinations),
+          notification_destinations: notificationDestinationChangeSet.apply(
+            userActivityAlert.notification_destinations,
+          ),
         }
     ),
-    [alertDestinationChangeSet, error, userActivityAlert],
+    [notificationDestinationChangeSet, error, userActivityAlert],
   );
   const confirm = useConfirm();
 
@@ -56,14 +58,14 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
       variables: {
         id: userActivityAlert.id,
         userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        addAlertDestinations: alertDestinationChangeSet.getAddValues()
+        addNotificationDestinations: notificationDestinationChangeSet.getAddValues()
           .map((addValue) => {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };
             }
             return { user_con_profile_id: addValue.user_con_profile.id };
           }),
-        removeAlertDestinationIds: alertDestinationChangeSet.getRemoveIds(),
+        removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
       },
     });
 
@@ -99,8 +101,8 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
         userActivityAlert={combinedUserActivityAlert}
         convention={convention}
         onChange={setUserActivityAlert}
-        onAddAlertDestination={addAlertDestination}
-        onRemoveAlertDestination={removeAlertDestination}
+        onAddNotificationDestination={addNotificationDestination}
+        onRemoveNotificationDestination={removeNotificationDestination}
         disabled={updateInProgress}
       />
 
