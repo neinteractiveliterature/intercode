@@ -2,11 +2,11 @@
 
 mutation CreateUserActivityAlert(
   $userActivityAlert: UserActivityAlertInput!,
-  $alertDestinations: [AlertDestinationInput!]!,
+  $notificationDestinations: [NotificationDestinationInput!]!,
 ) {
   createUserActivityAlert(input: {
     user_activity_alert: $userActivityAlert,
-    alert_destinations: $alertDestinations
+    notification_destinations: $notificationDestinations
   }) {
     user_activity_alert {
       id
@@ -18,14 +18,14 @@ mutation CreateUserActivityAlert(
 mutation UpdateUserActivityAlert(
   $id: Int!,
   $userActivityAlert: UserActivityAlertInput!,
-  $addAlertDestinations: [AlertDestinationInput!]!,
-  $removeAlertDestinationIds: [Int!]!
+  $addNotificationDestinations: [NotificationDestinationInput!]!,
+  $removeNotificationDestinationIds: [Int!]!
 ) {
   updateUserActivityAlert(input: {
     id: $id,
     user_activity_alert: $userActivityAlert,
-    add_alert_destinations: $addAlertDestinations,
-    remove_alert_destination_ids: $removeAlertDestinationIds
+    add_notification_destinations: $addNotificationDestinations,
+    remove_notification_destination_ids: $removeNotificationDestinationIds
   }) {
     user_activity_alert {
       id

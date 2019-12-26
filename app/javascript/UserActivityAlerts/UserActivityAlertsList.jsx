@@ -71,8 +71,8 @@ function renderAlertTriggers(convention, userActivityAlert) {
   return renderCriteriaList(triggers, 'Never triggers');
 }
 
-function renderAlertDestinations(userActivityAlert) {
-  const destinations = userActivityAlert.alert_destinations.map((destination) => {
+function renderAlertNotificationDestinations(userActivityAlert) {
+  const destinations = userActivityAlert.notification_destinations.map((destination) => {
     if (destination.staff_position) {
       return <li key={`staff_position_${destination.staff_position.id}`}>{destination.staff_position.name}</li>;
     }
@@ -110,7 +110,7 @@ function UserActivityAlertsList() {
               <tr key={userActivityAlert.id}>
                 <td>{renderAlertMatches(userActivityAlert)}</td>
                 <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>
-                <td>{renderAlertDestinations(userActivityAlert)}</td>
+                <td>{renderAlertNotificationDestinations(userActivityAlert)}</td>
                 <td className="text-right">
                   <Link to={`/user_activity_alerts/${userActivityAlert.id}/edit`} className="btn btn-sm btn-primary">Edit</Link>
                 </td>

@@ -11,19 +11,19 @@ import UserSelect from '../BuiltInFormControls/UserSelect';
 import useUniqueId from '../useUniqueId';
 
 function UserActivityAlertForm({
-  userActivityAlert, onChange, onAddAlertDestination, onRemoveAlertDestination,
+  userActivityAlert, onChange, onAddNotificationDestination, onRemoveNotificationDestination,
   convention, disabled,
 }) {
   const userSelectId = useUniqueId('user-');
   const confirm = useConfirm();
   const [addDestinationType, setAddDestinationType] = useState(null);
   const addStaffPositionDestination = (staffPosition) => {
-    onAddAlertDestination({ staff_position: staffPosition });
+    onAddNotificationDestination({ staff_position: staffPosition });
     setAddDestinationType(null);
   };
 
   const addUserConProfileDestination = (userConProfile) => {
-    onAddAlertDestination({ user_con_profile: userConProfile });
+    onAddNotificationDestination({ user_con_profile: userConProfile });
     setAddDestinationType(null);
   };
 
@@ -120,24 +120,24 @@ function UserActivityAlertForm({
         </div>
 
         <ul className="list-group list-group-flush">
-          {userActivityAlert.alert_destinations.map((alertDestination) => (
-            <li key={alertDestination.id} className="list-group-item">
+          {userActivityAlert.notification_destinations.map((notificationDestination) => (
+            <li key={notificationDestination.id} className="list-group-item">
               <div className="d-flex">
                 <div className="flex-grow-1">
                   {
-                    alertDestination.staff_position
+                    notificationDestination.staff_position
                       ? (
                         <>
                           <strong>Staff position:</strong>
                           {' '}
-                          {alertDestination.staff_position.name}
+                          {notificationDestination.staff_position.name}
                         </>
                       )
                       : (
                         <>
                           <strong>User:</strong>
                           {' '}
-                          {alertDestination.user_con_profile.name_without_nickname}
+                          {notificationDestination.user_con_profile.name_without_nickname}
                         </>
                       )
                   }
@@ -146,7 +146,7 @@ function UserActivityAlertForm({
                   className="btn btn-sm btn-danger"
                   type="button"
                   onClick={() => confirm({
-                    action: () => onRemoveAlertDestination(alertDestination.id),
+                    action: () => onRemoveNotificationDestination(notificationDestination.id),
                     prompt: 'Are you sure you want to remove this alert destination?',
                   })}
                   disabled={disabled}
@@ -199,8 +199,8 @@ function UserActivityAlertForm({
 
 UserActivityAlertForm.propTypes = {
   onChange: PropTypes.func.isRequired,
-  onAddAlertDestination: PropTypes.func.isRequired,
-  onRemoveAlertDestination: PropTypes.func.isRequired,
+  onAddNotificationDestination: PropTypes.func.isRequired,
+  onRemoveNotificationDestination: PropTypes.func.isRequired,
   userActivityAlert: PropTypes.shape({
     id: PropTypes.number.isRequired,
     partial_name: PropTypes.string,
@@ -211,7 +211,7 @@ UserActivityAlertForm.propTypes = {
     }),
     trigger_on_ticket_create: PropTypes.bool,
     trigger_on_user_con_profile_create: PropTypes.bool,
-    alert_destinations: PropTypes.arrayOf(PropTypes.shape({
+    notification_destinations: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       staff_position: PropTypes.shape({
         name: PropTypes.string.isRequired,

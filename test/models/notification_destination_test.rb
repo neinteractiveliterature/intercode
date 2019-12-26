@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AlertDestinationTest < ActiveSupport::TestCase
+class NotificationDestinationTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
