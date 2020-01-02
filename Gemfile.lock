@@ -405,7 +405,7 @@ GEM
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
     scheduled_value (1.2.2)
-    sequel (5.27.0)
+    sequel (5.28.0)
     shoryuken (5.0.3)
       aws-sdk-core (>= 2)
       concurrent-ruby
