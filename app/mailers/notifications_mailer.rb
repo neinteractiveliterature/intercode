@@ -5,7 +5,7 @@ class NotificationsMailer < ApplicationMailer
         subject: subject, from: from_address_for_convention(convention), to: to
       ) do |format|
         format.html do
-          @body_html = body_html
+          @body_html = body_html.html_safe
           render 'notifications/notification', layout: 'mailer'
         end
 
