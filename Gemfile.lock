@@ -278,6 +278,9 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
+    minipack (0.3.3)
+      actionview
+      railties (>= 4.2)
     minitest (5.13.0)
     minitest-focus (1.1.2)
       minitest (>= 4, < 6)
@@ -344,8 +347,6 @@ GEM
     rack (2.0.8)
     rack-mini-profiler (1.1.4)
       rack (>= 1.2.0)
-    rack-proxy (0.6.5)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.2.1)
@@ -474,12 +475,6 @@ GEM
     uniform_notifier (1.13.0)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webpacker (4.2.2)
-      activesupport (>= 4.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 4.2)
-    webpacker-react (0.3.2)
-      webpacker
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-driver (0.7.1-java)
@@ -537,6 +532,7 @@ DEPENDENCIES
   listen
   mailgun-ruby
   memory_profiler
+  minipack
   minitest-focus
   minitest-reporters
   minitest-spec-rails
@@ -569,8 +565,6 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
-  webpacker (~> 4.2.2)
-  webpacker-react (~> 0.3.2)
   whenever
   will_paginate
   with_advisory_lock

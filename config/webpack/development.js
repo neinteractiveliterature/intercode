@@ -1,4 +1,3 @@
-const { config: { outputPath: contentBase, publicPath }, devServer } = require('@rails/webpacker');
 const environment = require('./environment');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 
@@ -10,46 +9,28 @@ module.exports = {
   output: {
     ...environment.output,
     pathinfo: true,
-    ...(
-      devServer.hmr
-      ? { filename: '[name]-[hash].js' }
-      : {}
-    ),
+    publicPath: 'http://localhost:3035/packs/',
   },
   plugins: [
     ...environment.plugins,
-    ...(
-      devServer.hmr
-      ? ([
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin(),
-      ])
-      : []
-    ),
-    new DashboardPlugin({ port: devServer.port }),
+    new DashboardPlugin({ port: 3035 }),
   ],
   devServer: {
     clientLogLevel: 'none',
-    compress: devServer.compress,
-    quiet: devServer.quiet,
-    disableHostCheck: devServer.disable_host_check,
-    host: devServer.host,
-    port: devServer.port,
-    https: devServer.https,
-    hot: devServer.hmr,
-    contentBase,
-    inline: devServer.inline,
-    useLocalIp: devServer.use_local_ip,
-    public: devServer.public,
-    publicPath,
+    contentBase: environment.output.path,
+    publicPath: environment.output.publicPath,
+    disableHostCheck: true,
     historyApiFallback: {
       disableDotRule: true,
     },
-    headers: devServer.headers,
-    overlay: devServer.overlay,
     stats: {
       errorDetails: true,
     },
-    watchOptions: devServer.watch_options,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
+    transportMode: 'ws'
   },
 };

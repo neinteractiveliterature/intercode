@@ -16,10 +16,10 @@ class BundleHashController < ApplicationController
 
   def bundle_hash
     self.class.bundle_hash_value ||= begin
-      if Webpacker.instance.dev_server.running?
+      if Rails.env.development?
         'dev_server'
       else
-        Digest::MD5.hexdigest(File.read(Webpacker.instance.config.public_manifest_path))
+        Digest::MD5.hexdigest(File.read(Rails.root.join('public/packs/manifest.json')))
       end
     end
   end

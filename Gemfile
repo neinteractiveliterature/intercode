@@ -6,10 +6,9 @@ gem 'rails', '6.0.2.1'
 gem 'pg'
 gem 'puma'
 
-gem 'dotenv-rails', require: 'dotenv/rails-now'
+gem 'minipack'
 
-gem 'webpacker', '~> 4.2.2'
-gem 'webpacker-react', '~> 0.3.2'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'with_advisory_lock'
 
