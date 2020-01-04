@@ -37,10 +37,13 @@ ENV ASSETS_HOST ${ASSETS_HOST}
 
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
   --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
-  DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
+  DATABASE_URL=postgresql://fakehost/not_a_real_database yarn run build
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
   --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
   DATABASE_URL=postgresql://fakehost/not_a_real_database yarn run build:cli
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
+  --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
+  DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
 ### test
 
@@ -59,8 +62,8 @@ RUN mv public/packs public/packs-test \
 
 # Unfortunately all the previous stuff is going to have run yarn install with NODE_ENV=production
 # and we need it to be test for this
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-  yarn install --production=false
+# RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
+#   yarn install --production=false
 
 ### production
 
