@@ -21,16 +21,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-docker-${{ github.ref }}-
           ${{ runner.os }}-docker-
-    - name: Uninstall Ubuntu's version of Docker
-      run: sudo apt-get remove docker docker-engine docker.io containerd runc moby-cli moby-engine
-    - name: Install Docker GPG key
-      run: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    - name: Add Docker apt repo
-      run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    - name: apt-get update
-      run: sudo apt-get update
-    - name: Install Docker CE
-      run: sudo apt-get install docker-ce docker-ce-cli containerd.io
     - name: Install docker-compose
       run: sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     - name: chmod docker-compose
