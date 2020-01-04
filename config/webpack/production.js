@@ -28,10 +28,6 @@ module.exports = {
   bail: true,
   plugins: [
     ...environment.plugins,
-    new WebpackAssetsManifest({
-      writeToDisk: true,
-      publicPath: true
-    }),
     new CompressionPlugin({
       filename: '[path].gz[query]',
       algorithm: 'gzip',

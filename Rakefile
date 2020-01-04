@@ -10,3 +10,14 @@ require 'graphql/rake_task'
 GraphQL::RakeTask.new(schema_name: 'IntercodeSchema')
 
 Doorkeeper::Rake.load_tasks
+
+# TURBOHAX: make the yarn:install task a no-op since we can't easily stop Rails from
+# running it with assets:precompile
+
+Rake::Task['yarn:install'].clear
+
+namespace :yarn do
+  task :install do
+    # workaround to stop running yarn install after precompile
+  end
+end
