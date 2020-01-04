@@ -5,9 +5,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const { config } = require('@rails/webpacker');
 const getStyleRule = require('./getStyleRule');
 const threadLoader = require('thread-loader');
+
+const CACHE_PATH = 'tmp/cache/webpacker';
 
 threadLoader.warmup({
   // pool options, like passed to loader options
@@ -36,8 +37,8 @@ module.exports = {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
     hotUpdateChunkFilename: '[id]-[hash].hot-update.js',
-    path: config.outputPath,
-    publicPath: config.publicPath,
+    path: path.resolve('public/packs'),
+    publicPath: '/packs/',
   },
   module: {
     rules: [
@@ -48,17 +49,17 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[path][name]-[hash].[ext]',
-              context: path.join(config.source_path),
+              context: path.join('app/javascript'),
             }
           }
         ]
       },
       getStyleRule(/\.(css)$/i),
-      getStyleRule(/\.(scss|sass)$/i, false, [
+      getStyleRule(/\.(scss|sass)$/i, [
         {
           loader: 'cache-loader',
           options: {
-            cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+            cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
           },
         },
         {
@@ -77,13 +78,13 @@ module.exports = {
           {
             loader: 'cache-loader',
             options: {
-              cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+              cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
             },
           },
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(config.cache_path, 'babel-loader'),
+              cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
               presets: [
                 ["@babel/env",
                   {
@@ -105,13 +106,13 @@ module.exports = {
           {
             loader: 'cache-loader',
             options: {
-              cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+              cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
             },
           },
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(config.cache_path, 'babel-loader')
+              cacheDirectory: path.join(CACHE_PATH, 'babel-loader')
             }
           }
         ],
@@ -123,13 +124,13 @@ module.exports = {
           {
             loader: 'cache-loader',
             options: {
-              cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+              cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
             },
           },
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(config.cache_path, 'babel-loader')
+              cacheDirectory: path.join(CACHE_PATH, 'babel-loader')
             }
           }
         ],
@@ -141,7 +142,13 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: config.extensions,
+    extensions: [
+      '.js', '.jsx',
+      '.sass', '.scss',
+      '.css', '.png',
+      '.svg', '.gif',
+      '.jpeg', '.jpg'
+    ],
     alias: {
       'lodash.isequal': 'lodash-es/isEqual'
     },

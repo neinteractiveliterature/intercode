@@ -1,8 +1,8 @@
 class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
-  include Webpacker::React::Helpers
   include ApplicationHelper
+  include ActionView::Helpers::TagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files
 
   def initialize(cms_parent:, controller:, assigns: {})
@@ -38,9 +38,11 @@ class CmsRenderingContext
     layout_html = render_layout_content(cms_layout, assigns)
     doc = Nokogiri::HTML.parse(layout_html)
     doc.xpath('//body/*').remove
-    doc.xpath('//body').first.inner_html = react_component(
-      'AppRoot',
-      controller&.app_component_props || {}
+    doc.xpath('//body').first.inner_html = content_tag(
+      :div,
+      '',
+      'data-react-class' => 'AppRoot',
+      'data-react-props' => (controller&.app_component_props || {}).to_json
     )
     doc.to_s.html_safe
   rescue StandardError => e
@@ -76,11 +78,20 @@ class CmsRenderingContext
   def liquid_assigns_for_single_page_app(cms_layout)
     liquid_assigns.merge(
       'content_for_head' => '',
-      'content_for_navbar' => react_component(
-        'NavigationBar',
-        navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
+      'content_for_navbar' => content_tag(
+        :div,
+        '',
+        'data-react-class' => 'NavigationBar',
+        'data-react-props' => {
+          navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
+        }.to_json
       ),
-      'content_for_layout' => react_component('AppRouter', alert: controller&.flash.alert)
+      'content_for_layout' => content_tag(
+        :div,
+        '',
+        'data-react-class' => 'AppRouter',
+        'data-react-props' => { alert: controller&.flash.alert }.to_json
+      )
     )
   end
 
