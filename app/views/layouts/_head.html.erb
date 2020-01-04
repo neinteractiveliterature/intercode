@@ -2,9 +2,9 @@
 <title>
   <%= page_title %>
 </title>
-<%= stylesheet_pack_tag 'application', media: 'all' %>
-<%= javascript_pack_tag 'browser-warning', defer: true %>
-<%= javascript_pack_tag 'application', defer: true, type: 'module' %>
+<%= stylesheet_bundle_tag 'application', media: 'all' %>
+<%= javascript_bundle_tag 'browser-warning', defer: true %>
+<%= javascript_bundle_tag 'application', defer: true, type: 'module' %>
 <script type="application/javascript">
   if (typeof(Rollbar) !== 'undefined') {
     Rollbar.configure({

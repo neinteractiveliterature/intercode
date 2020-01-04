@@ -1,31 +1,14 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { resolve } = require('path')
-const devServer = require('@rails/webpacker/package/dev_server')
-const config = require('@rails/webpacker/package/config')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { resolve } = require('path');
 
-const inDevServer = process.argv.find(v => v.includes('webpack-dev-server'))
-const isHMR = inDevServer && (devServer && devServer.hmr)
-
-const styleLoader = {
-  loader: 'style-loader',
-  options: {
-    hmr: isHMR,
-    sourceMap: true
-  }
-}
-
-const getStyleRule = (test, modules = false, preprocessors = []) => {
+const getStyleRule = (test, preprocessors = []) => {
   const use = [
     {
       loader: 'css-loader',
       options: {
         sourceMap: true,
         importLoaders: 2,
-        modules: modules
-          ? ({
-            localIdentName: '[name]__[local]___[hash:base64:5]',
-          })
-          : false,
+        modules: false,
       }
     },
     {
@@ -36,18 +19,12 @@ const getStyleRule = (test, modules = false, preprocessors = []) => {
       }
     },
     ...preprocessors
-  ]
+  ];
 
-  const options = modules ? { include: /\.module\.[a-z]+$/ } : { exclude: /\.module\.[a-z]+$/ }
-
-  if (config.extract_css) {
-    use.unshift(MiniCssExtractPlugin.loader)
-  } else {
-    use.unshift(styleLoader)
-  }
+  use.unshift(MiniCssExtractPlugin.loader);
 
   // sideEffects - See https://github.com/webpack/webpack/issues/6571
-  return Object.assign({}, { test, use, sideEffects: !modules }, options)
-}
+  return { test, use, sideEffects: true, exclude: /\.module\.[a-z]+$/ };
+};
 
-module.exports = getStyleRule
+module.exports = getStyleRule;
