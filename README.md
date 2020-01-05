@@ -25,28 +25,9 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 # Getting Started with Developing Intercode
 
 * Intercode 2 in development mode uses `intercode.test` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.test` domain name.
-* We support (for now, at least) two development workflows: Docker Compose, and running Rails locally.  See the steps for both workflows below.
+* We used to support a Docker Compose-based development workflow, but this has been deprecated.  Please run Rails locally using the instructions below.
 
-# Developer Quickstart with Docker Compose
-
-This is a containerized development setup, and should work on Linux, macOS, and Windows.
-
-1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode.git`
-2. Install Docker Community Edition: https://store.docker.com/search?type=edition&offering=community
-  * _Optional, but recommended: on macOS, if you have the RAM to spare, we recommend increasing Docker's memory to 4GB.  (Go to Preferences -> Advanced to do this.)_
-3. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode.test`
-4. From the Intercode source folder:
-  1. Build and start the Docker image for Intercode: `docker-compose up -d` (this will take awhile)
-  2. Install JavaScript packages: `docker-compose exec cat yarn install`
-  3. Set up the database: `docker-compose exec cat bin/rails db:create db:migrate`
-  4. Start up the Intercode server: `docker-compose exec cat bin/rails server`
-  5. Start up the Webpack server: `docker-compose exec cat bin/webpack-dev-server`
-5. You should now be able to go to http://intercode.test:5000 and see the app running!
-
-If you want to automate the server running part of this, we shamelessly recommend
-[Threeman](https://github.com/patientslikeme/threeman) for Mac and Linux users.
-
-# Developer Quickstart with local Rails
+## Developer Quickstart with local Rails
 
 This is the classic Rails development setup, and should work for Mac and Linux users.
 
@@ -68,6 +49,16 @@ This is the classic Rails development setup, and should work for Mac and Linux u
   4. Start up the Intercode server: `bin/rails server`
   5. Start up the Webpack server: `bin/webpack-dev-server`
 9. You should now be able to go to http://intercode.test:3000 and see the app running!
+
+## Testing production builds
+
+If you want to test how the app runs in production, but using your local development installation, you can do so as follows:
+
+1. Build Docker images for Intercode: `docker build --target production -t local-intercode-production .`
+2. Install the `dev-proxy` npm package: `npm install -g dev-proxy`
+3. Run `dev-proxy` to start proxying HTTPS locally: `dev-proxy -p 5001:5000`
+4. Run something like the following command, changing the asset host as necessary for your setup: `docker run -it -p 5001:3000 -e DATABASE_URL=postgresql://postgres@docker.for.mac.localhost/intercode_development -e RAILS_LOG_TO_STDOUT=true -e ASSETS_HOST=//intercont.intercode.test:5000 -e RAILS_SERVE_STATIC_FILES=true local-intercode-production bin/rails`
+5. Visit https://some-convention-domain.intercode.test:5000, probably using Firefox (it seems to deal better than Chrome with self-signed certificates these days).
 
 # Contacting us
 
