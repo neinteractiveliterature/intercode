@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/justinlang/graphiql-rails.git
+  revision: fa638c98bc4179683594dd705a20f8ffc6ded652
+  branch: precompile-assets-for-sprocket-4
+  specs:
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
+
+GIT
   remote: https://github.com/nbudin/doorkeeper-openid_connect.git
   revision: 17245d74b43c058f51d3bdfbe3fdb01bf0325f36
   branch: fix_doorkeeper_52_compat
@@ -212,9 +221,6 @@ GEM
     formatador (0.2.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    graphiql-rails (1.7.0)
-      railties
-      sprockets-rails
     graphql (1.9.17)
     graphql-batch (0.4.2)
       graphql (>= 1.3, < 2)
@@ -524,7 +530,7 @@ DEPENDENCIES
   faker
   flamegraph
   fog-aws
-  graphiql-rails
+  graphiql-rails!
   graphql (>= 1.9.15)
   graphql-batch
   graphql-rails_logger
