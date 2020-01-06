@@ -38,6 +38,25 @@ class NotificationsIntegrationTest < ActiveSupport::TestCase
 
           notifier.render
         end
+
+        if %w[events event_proposals].include?(category['key'])
+          it 'can be overridden using an event category-specific template' do
+            notifier = NotifierPreviewFactory.new(
+              convention: convention, event_key: event_key
+            ).notifier
+
+            event_category = convention.event_categories.first
+            convention.notification_templates.create!(
+              event_key: event_key,
+              notification_context: event_category,
+              subject: 'blah',
+              body_html: 'blah',
+              body_text: 'blah'
+            )
+
+            assert_equal 'blah', notifier.render[:subject]
+          end
+        end
       end
     end
   end
