@@ -12,6 +12,10 @@ class EventProposals::NewProposalNotifier < Notifier
     super.merge('event_proposal' => event_proposal)
   end
 
+  def notification_context
+    event_proposal.event_category
+  end
+
   def destinations
     proposal_destinations(event_proposal)
   end

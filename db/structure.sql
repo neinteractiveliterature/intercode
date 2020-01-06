@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -885,7 +886,9 @@ CREATE TABLE public.notification_templates (
     body_html text,
     body_text text,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    notification_context_type character varying,
+    notification_context_id bigint
 );
 
 
@@ -2568,6 +2571,20 @@ CREATE INDEX idx_max_event_provided_tickets_on_ticket_type_id ON public.maximum_
 
 
 --
+-- Name: idx_notification_templates_on_notification_context; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_notification_templates_on_notification_context ON public.notification_templates USING btree (notification_context_type, notification_context_id);
+
+
+--
+-- Name: idx_notification_templates_unique_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_notification_templates_unique_key ON public.notification_templates USING btree (convention_id, event_key, notification_context_id, notification_context_type);
+
+
+--
 -- Name: idx_permissions_unique_join; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4023,6 +4040,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191130174830'),
 ('20191205195033'),
 ('20191215175849'),
-('20191226202814');
+('20191226202814'),
+('20200106153931');
 
 

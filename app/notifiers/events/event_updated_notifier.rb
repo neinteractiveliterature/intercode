@@ -22,6 +22,10 @@ class Events::EventUpdatedNotifier < Notifier
     staff_positions
   end
 
+  def notification_context
+    event.event_category
+  end
+
   def changes_html
     @changes_html ||= FormResponseChangeGroupPresenter.new(changes, event.convention).html
   end

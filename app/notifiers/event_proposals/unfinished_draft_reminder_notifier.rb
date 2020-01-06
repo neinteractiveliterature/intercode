@@ -12,6 +12,10 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
     super.merge('event_proposal' => event_proposal)
   end
 
+  def notification_context
+    event_proposal.event_category
+  end
+
   def destinations
     [event_proposal.owner]
   end

@@ -17,6 +17,10 @@ class EventProposals::ProposalUpdatedNotifier < Notifier
     proposal_destinations(event_proposal)
   end
 
+  def notification_context
+    event_proposal.event_category
+  end
+
   def changes_html
     @changes_html ||= FormResponseChangeGroupPresenter.new(changes, event_proposal.convention).html
   end

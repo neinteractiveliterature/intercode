@@ -19,17 +19,32 @@ class Notifier
   end
 
   def render
-    notification_template = convention.notification_templates.find_by!(event_key: event_key)
+    template_for_render = notification_template
 
     use_convention_timezone(convention) do
       {
-        subject: notification_template.subject_template,
-        body_html: notification_template.body_html_template,
-        body_text: notification_template.body_text_template
-      }.transform_values do |template|
-        cadmus_renderer.render(template, :html, assigns: liquid_assigns)
+        subject: template_for_render.subject_template,
+        body_html: template_for_render.body_html_template,
+        body_text: template_for_render.body_text_template
+      }.transform_values do |liquid_template|
+        cadmus_renderer.render(liquid_template, :html, assigns: liquid_assigns)
       end
     end
+  end
+
+  def notification_context
+    nil
+  end
+
+  def notification_template
+    if notification_context
+      context_template = convention.notification_templates.find_by(
+        event_key: event_key, notification_context: notification_context
+      )
+      return context_template if context_template
+    end
+
+    convention.notification_templates.find_by!(event_key: event_key)
   end
 
   def liquid_assigns

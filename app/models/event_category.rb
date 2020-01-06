@@ -4,6 +4,7 @@ class EventCategory < ApplicationRecord
   belongs_to :convention
   belongs_to :event_form, class_name: 'Form'
   belongs_to :event_proposal_form, class_name: 'Form', optional: true
+  has_many :notification_templates, as: :notification_context, dependent: :destroy
   has_many :permissions, dependent: :destroy
   has_many :events
 

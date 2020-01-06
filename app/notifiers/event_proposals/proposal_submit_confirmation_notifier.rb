@@ -18,6 +18,10 @@ class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
     )
   end
 
+  def notification_context
+    event_proposal.event_category
+  end
+
   def destinations
     [event_proposal.owner]
   end
