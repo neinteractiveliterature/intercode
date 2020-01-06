@@ -7,22 +7,26 @@
         {
           "key": "new_proposal",
           "name": "New proposal submitted",
-          "destination_description": "Proposal reviewer(s)"
+          "destination_description": "Proposal reviewer(s)",
+          "context_type": "EventCategory"
         },
         {
           "key": "proposal_submit_confirmation",
           "name": "Proposal submit confirmation",
-          "destination_description": "Event proposer"
+          "destination_description": "Event proposer",
+          "context_type": "EventCategory"
         },
         {
           "key": "proposal_updated",
           "name": "Proposal updated",
-          "destination_description": "Proposal reviewer(s)"
+          "destination_description": "Proposal reviewer(s)",
+          "context_type": "EventCategory"
         },
         {
           "key": "unfinished_draft_reminder",
           "name": "Unfinished draft reminder",
-          "destination_description": "Event proposer"
+          "destination_description": "Event proposer",
+          "context_type": "EventCategory"
         }
       ]
     },
@@ -75,7 +79,8 @@
         {
           "key": "event_updated",
           "name": "Event details updated",
-          "destination_description": "Convention event admin(s)"
+          "destination_description": "Convention event admin(s)",
+          "context_type": "EventCategory"
         }
       ]
     },
