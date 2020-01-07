@@ -21,7 +21,7 @@ import ErrorBoundary from './ErrorBoundary';
 
 export default (WrappedComponent) => {
   function Wrapper({
-    authenticityTokens, recaptchaSiteKey, stripePublishableKey, ...otherProps
+    authenticityTokens, recaptchaSiteKey, stripePublishableKey, renderRouter, ...otherProps
   }) {
     const confirm = useConfirm();
     const lazyStripeProviderValue = useMemo(
@@ -67,34 +67,40 @@ export default (WrappedComponent) => {
       return <></>;
     }
 
-    return (
-      <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-          <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-            <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-              <ApolloProvider client={apolloClient}>
-                <ApolloHooksProvider client={apolloClient}>
-                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                    <>
-                      {!unauthenticatedError && (
-                        <Suspense fallback={<PageLoadingIndicator visible />}>
-                          <AlertProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <WrappedComponent {...otherProps} />
-                            </ErrorBoundary>
-                          </AlertProvider>
-                        </Suspense>
-                      )}
-                      <AuthenticationModal />
-                    </>
-                  </AuthenticationModalContext.Provider>
-                </ApolloHooksProvider>
-              </ApolloProvider>
-            </AuthenticityTokensContext.Provider>
-          </LazyStripeContext.Provider>
-        </DndProvider>
-      </BrowserRouter>
+    const routerChildren = (
+      <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+          <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+            <ApolloProvider client={apolloClient}>
+              <ApolloHooksProvider client={apolloClient}>
+                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                  <>
+                    {!unauthenticatedError && (
+                      <Suspense fallback={<PageLoadingIndicator visible />}>
+                        <AlertProvider>
+                          <ErrorBoundary placement="replace" errorType="plain">
+                            <WrappedComponent {...otherProps} />
+                          </ErrorBoundary>
+                        </AlertProvider>
+                      </Suspense>
+                    )}
+                    <AuthenticationModal />
+                  </>
+                </AuthenticationModalContext.Provider>
+              </ApolloHooksProvider>
+            </ApolloProvider>
+          </AuthenticityTokensContext.Provider>
+        </LazyStripeContext.Provider>
+      </DndProvider>
     );
+
+    const routerProps = { basename: '/', getUserConfirmation, children: routerChildren };
+
+    if (renderRouter) {
+      return renderRouter(routerProps);
+    }
+
+    return <BrowserRouter {...routerProps} />;
   }
 
   Wrapper.propTypes = {
@@ -102,10 +108,12 @@ export default (WrappedComponent) => {
       graphql: PropTypes.string.isRequired,
     }).isRequired,
     recaptchaSiteKey: PropTypes.string.isRequired,
+    renderRouter: PropTypes.func,
     stripePublishableKey: PropTypes.string,
   };
 
   Wrapper.defaultProps = {
+    renderRouter: null,
     stripePublishableKey: null,
   };
 

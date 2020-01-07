@@ -19,6 +19,7 @@
 # Ignore build artifacts
 /bin/manifest.json
 /bin/renderFormResponseChangeGroup
+/bin/stdioRenderer
 
 # Ignore bundler config
 /.bundle

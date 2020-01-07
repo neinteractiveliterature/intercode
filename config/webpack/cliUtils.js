@@ -7,6 +7,7 @@ module.exports = {
   ...environment,
   entry: {
     renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.jsx',
+    stdioRenderer: './script/stdioRenderer.js',
   },
   devtool: 'cheap-source-map',
   output: {
@@ -22,7 +23,7 @@ module.exports = {
       raw: true,
     }),
     new WebpackShellPlugin({
-      onBuildEnd: ['chmod +x bin/renderFormResponseChangeGroup'],
+      onBuildEnd: ['chmod +x bin/renderFormResponseChangeGroup bin/stdioRenderer'],
     }),
   ],
 };
