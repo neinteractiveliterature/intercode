@@ -13,8 +13,8 @@ WORKDIR /usr/src/intercode
 COPY Gemfile Gemfile.lock /usr/src/intercode/
 RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
   bundle install -j4 --without intercode1_import \
-  && echo 'Running bundle clean' \
-  && bundle clean \
+  && echo 'Running bundle clean --force' \
+  && bundle clean --force \
   && echo 'Copying /usr/local/bundle to /usr/local/bundle-tmp' \
   && cp -R /usr/local/bundle /usr/local/bundle-tmp \
   && echo 'Cleaning cached gems and intermediate build files from /usr/local/bundle-tmp' \
