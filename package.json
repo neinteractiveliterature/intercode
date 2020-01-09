@@ -95,7 +95,7 @@
     "react-bootstrap4-modal": "^1.7.2",
     "react-clipboard.js": "^2.0.16",
     "react-codemirror2": "^6.0.0",
-    "react-color": "^2.17.3",
+    "react-color": "^2.18.0",
     "react-dnd": "^9.5.1",
     "react-dnd-html5-backend": "^9.5.1",
     "react-dnd-multi-backend": "^5.0.0",
