@@ -2137,13 +2137,7 @@ async-limiter@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
 
-async@^2.6.0:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.6.1.tgz#b245a23ca71930044ec53fa46aa00a3e87c6a610"
-  dependencies:
-    lodash "^4.17.10"
-
-async@^2.6.2:
+async@^2.6.0, async@^2.6.2:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
   integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
@@ -9504,7 +9498,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.0"
     tough-cookie ">=2.3.3"
 
-request@^2.85.0, request@^2.87.0, request@^2.88.0:
+request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   dependencies:
@@ -9673,10 +9667,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollbar-sourcemap-webpack-plugin@^2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/rollbar-sourcemap-webpack-plugin/-/rollbar-sourcemap-webpack-plugin-2.5.1.tgz#694ca1e22cac320330e7ea9488f3ed2bb9ab1f16"
-  integrity sha512-DsGM0B0kVsmJOLcmUajN02/IdouNqwtewCywXiUNay+DMpLM+k+h7uwWPbWvYe4bdo4ew2Y15zGqNUy+sH++FQ==
+rollbar-sourcemap-webpack-plugin@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/rollbar-sourcemap-webpack-plugin/-/rollbar-sourcemap-webpack-plugin-2.5.2.tgz#d78c5689b20132d8874edf0374b639da9b59ffad"
+  integrity sha512-Bzc4P1CjUrN8RCxEGjCtixoaLM4CWxK33lTybyD3QOzptdBw58rW/I6iMfRvZBY9FWGRmNnCkRWQBJyOnbI/3Q==
   dependencies:
     async "^2.6.0"
     babel-runtime "^6.26.0"
@@ -9685,7 +9679,7 @@ rollbar-sourcemap-webpack-plugin@^2.5.1:
     lodash.isfunction "^3.0.9"
     lodash.isstring "^4.0.1"
     lodash.reduce "^4.3.0"
-    request "^2.85.0"
+    request "^2.88.0"
     verror "^1.6.1"
 
 rsvp@^3.3.3:
