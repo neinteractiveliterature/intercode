@@ -221,7 +221,7 @@ class CloneConventionService < CivilService::Service
     return nil unless value
 
     value.class.new(
-      value.attributes.symbolize_keys.merge(
+      **value.attributes.symbolize_keys.merge(
         timespans: value.timespans.map do |timespan|
           {
             start: timespan.start ? timespan.start + amount : nil,
