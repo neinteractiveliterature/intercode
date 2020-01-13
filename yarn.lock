@@ -773,10 +773,10 @@
     "@babel/helper-plugin-utils" "^7.8.0"
     "@babel/plugin-syntax-jsx" "^7.8.0"
 
-"@babel/plugin-transform-regenerator@^7.7.0", "@babel/plugin-transform-regenerator@^7.7.5":
-  version "7.7.5"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-regenerator/-/plugin-transform-regenerator-7.7.5.tgz#3a8757ee1a2780f390e89f246065ecf59c26fce9"
-  integrity sha512-/8I8tPvX2FkuEyWbjRCt4qTAgZK0DVy8QRguhA524UH48RfGJy94On2ri+dCuwOpcerPRl9O4ebQkRcVzIaGBw==
+"@babel/plugin-transform-regenerator@^7.7.0", "@babel/plugin-transform-regenerator@^7.7.5", "@babel/plugin-transform-regenerator@^7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-regenerator/-/plugin-transform-regenerator-7.8.0.tgz#4a0a40af2f7d60a54a3fd7ce58f06b12ab14eaf9"
+  integrity sha512-n88GT8PZuOHWxqxCJORW3g1QaYzQhHu5sEslxYeQkHVoewfnfuWN37t7YGaRLaNUdaZUlRPXhDcLGT7zBa/u0g==
   dependencies:
     regenerator-transform "^0.14.0"
 
