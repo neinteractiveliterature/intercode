@@ -4,7 +4,7 @@
     "yarn": ">=0.25.2"
   },
   "dependencies": {
-    "@babel/core": "^7.7.7",
+    "@babel/core": "^7.8.0",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-do-expressions": "^7.7.4",
     "@babel/plugin-proposal-export-default-from": "^7.7.4",
