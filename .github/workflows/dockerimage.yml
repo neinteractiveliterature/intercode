@@ -62,13 +62,7 @@ jobs:
         web
         test/travis-complete.sh
 
-    # Build and publish the production image if on master
-    - name: Log into Docker Hub
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
-      env:
-        DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
-      run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+    # Build the production image if on master
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
       run: docker buildx build .
@@ -77,18 +71,6 @@ jobs:
         --target production
         --tag local-production
         --load
-    - name: Tag the production image with the SHA
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
-      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
-    - name: Tag the production image "latest"
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker tag local-production ${GITHUB_REPOSITORY}:latest
-    - name: Push the SHA tag to Docker Hub
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
-      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
-    - name: Push "latest" to Docker Hub
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push ${GITHUB_REPOSITORY}:latest
 
     # Push to Heroku if on master
     - name: Log into Heroku Container Registry
@@ -102,20 +84,40 @@ jobs:
     - name: Push "web" image to Heroku Container Registry
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker push registry.heroku.com/intercode/web
-    - name: Build "release" image
+    - name: Build and push "release" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/release
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         --build-arg REVISION=${GITHUB_SHA}
         -f Dockerfile.release
         --push
-        .
     - name: Build and push "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         -f Dockerfile.shoryuken
         --push
+
+    # Publish the production image if on master
+    - name: Log into Docker Hub
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
+      env:
+        DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
+      run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+    - name: Tag the production image with the SHA
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
+      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
+    - name: Tag the production image "latest"
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker tag local-production ${GITHUB_REPOSITORY}:latest
+    - name: Push the SHA tag to Docker Hub
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
+      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
+    - name: Push "latest" to Docker Hub
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push ${GITHUB_REPOSITORY}:latest
+
         .
 
 # I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
