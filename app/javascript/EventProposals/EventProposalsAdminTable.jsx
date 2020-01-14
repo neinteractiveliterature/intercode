@@ -186,7 +186,7 @@ const getPossibleColumns = (data) => [
   },
   {
     Header: 'Capacity',
-    id: 'capacity',
+    id: 'total_slots',
     width: 80,
     accessor: (eventProposal) => eventProposal.registration_policy,
     filterable: false,
@@ -195,7 +195,7 @@ const getPossibleColumns = (data) => [
   },
   {
     Header: 'Duration',
-    id: 'duration',
+    id: 'length_seconds',
     accessor: 'length_seconds',
     width: 80,
     filterable: false,
@@ -243,7 +243,7 @@ const getPossibleColumns = (data) => [
 function EventProposalsAdminTable({ history }) {
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultVisibleColumns: ['event_category', 'title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at'],
+    defaultVisibleColumns: ['event_category', 'title', 'owner', 'total_slots', 'length_seconds', 'status', 'submitted_at', 'updated_at'],
     alwaysVisibleColumns: ['_extra'],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
