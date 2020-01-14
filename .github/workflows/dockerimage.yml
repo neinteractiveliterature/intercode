@@ -87,6 +87,7 @@ jobs:
     - name: Build and push "release" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/release
+        --cache-from local-production
         --build-arg FROM_TAG=local-production
         --build-arg REVISION=${GITHUB_SHA}
         -f Dockerfile.release
@@ -95,6 +96,7 @@ jobs:
     - name: Build and push "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
+        --cache-from local-production
         --build-arg FROM_TAG=local-production
         -f Dockerfile.shoryuken
         --push
