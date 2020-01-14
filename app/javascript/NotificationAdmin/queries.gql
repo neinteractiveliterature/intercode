@@ -4,6 +4,15 @@ fragment NotificationTemplateFields on NotificationTemplate {
   subject
   body_html
   body_text
+
+  notification_context {
+    __typename
+
+    ...on EventCategory {
+      id
+      name
+    }
+  }
 }
 
 query NotificationAdminQuery {
