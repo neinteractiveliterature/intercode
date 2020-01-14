@@ -71,9 +71,6 @@ jobs:
         --target production
         --tag local-production
         --load
-    - name: Tag the production image with the SHA
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
-      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
 
     # Push to Heroku if on master
     - name: Log into Heroku Container Registry
@@ -90,7 +87,7 @@ jobs:
     - name: Build and push "release" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/release
-        --build-arg INTERCODE_TAG=${GITHUB_SHA}
+        --build-arg FROM_TAG=local-production
         --build-arg REVISION=${GITHUB_SHA}
         -f Dockerfile.release
         --push
@@ -98,7 +95,7 @@ jobs:
     - name: Build and push "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
-        --build-arg INTERCODE_TAG=${GITHUB_SHA}
+        --build-arg FROM_TAG=local-production
         -f Dockerfile.shoryuken
         --push
         .
@@ -110,6 +107,9 @@ jobs:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+    - name: Tag the production image with the SHA
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
+      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Tag the production image "latest"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:latest
