@@ -91,13 +91,14 @@ jobs:
         --build-arg REVISION=${GITHUB_SHA}
         -f Dockerfile.release
         --push
+        .
     - name: Build and push "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         -f Dockerfile.shoryuken
         --push
-
+        .
     # Publish the production image if on master
     - name: Log into Docker Hub
       if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
