@@ -3,7 +3,7 @@ class RemindDraftEventProposals < CivilService::Service
 
   def inner_call
     drafts_to_remind.each do |proposal|
-      EventProposals::UnfinishedDraftReminderNotifier.new(event_proposal: event_proposal)
+      EventProposals::UnfinishedDraftReminderNotifier.new(event_proposal: proposal)
         .deliver_later
       proposal.update_columns(reminded_at: Time.now) # avoid bumping updated_at
     end
