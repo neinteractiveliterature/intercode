@@ -59,7 +59,7 @@
     "custom-event-polyfill": "^1.0.7",
     "debounce-promise": "^3.1.2",
     "detect-browser": "^4.8.0",
-    "diff": "^4.0.1",
+    "diff": "^4.0.2",
     "exports-loader": "^0.7.0",
     "fast-diff": "^1.2.0",
     "file-loader": "^5.0.2",
