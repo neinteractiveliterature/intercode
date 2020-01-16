@@ -3,8 +3,12 @@ class Mutations::WithdrawAllUserConProfileSignups < Mutations::BaseMutation
 
   argument :user_con_profile_id, Int, required: true, camelize: false
 
-  load_and_authorize_convention_associated_model :user_con_profiles, :user_con_profile_id,
-    :withdraw_all_signups
+  attr_reader :user_con_profile
+
+  def authorized?(args)
+    @user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    self.class.check_authorization(policy(user_con_profile), :withdraw_all_signups)
+  end
 
   def resolve(**_args)
     user_con_profile.signups.where.not(state: 'withdrawn').each do |signup|
