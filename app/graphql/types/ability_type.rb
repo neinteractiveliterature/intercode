@@ -365,6 +365,14 @@ class Types::AbilityType < Types::BaseObject
     ModelPermissionLoader.for(UserConProfile).load([pundit_user, :become, args[:user_con_profile_id]])
   end
 
+  field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
+    argument :user_con_profile_id, Integer, required: true, camelize: false
+  end
+
+  def can_withdraw_all_user_con_profile_signups(**args)
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
+  end
+
   private
 
   def convention_policy

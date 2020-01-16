@@ -115,7 +115,7 @@ function UserConProfileSignupsCard({ userConProfileId }) {
         {renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
       </ul>
       {
-        data.myProfile.ability.can_update_signups && signups.length > 0
+        data.myProfile.ability.can_withdraw_all_user_con_profile_signups && signups.length > 0
           ? (
             <div className="card-footer border-top-0">
               <button

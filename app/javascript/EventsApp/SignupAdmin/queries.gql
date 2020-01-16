@@ -305,7 +305,7 @@ query UserConProfileSignupsQuery($id: Int!) {
   myProfile {
     id
     ability {
-      can_update_signups
+      can_withdraw_all_user_con_profile_signups(user_con_profile_id: $id)
     }
   }
 
