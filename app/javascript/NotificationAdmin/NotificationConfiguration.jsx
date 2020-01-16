@@ -43,6 +43,8 @@ function NotificationConfiguration() {
     await updateNotificationTemplate({
       variables: {
         eventKey,
+        notificationContextType: (notificationTemplate.notification_context || {}).__typename,
+        notificationContextId: (notificationTemplate.notification_context || {}).id,
         notificationTemplate: {
           subject: notificationTemplate.subject,
           body_html: notificationTemplate.body_html,

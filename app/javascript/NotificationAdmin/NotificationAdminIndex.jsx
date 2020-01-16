@@ -1,17 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 import sortBy from 'lodash-es/sortBy';
-import { humanize, tableize } from 'inflected';
+import { humanize, underscore, tableize } from 'inflected';
+import Modal from 'react-bootstrap4-modal';
 
 import { NotificationAdminQuery } from './queries.gql';
 import NotificationsConfig from '../../../config/notifications.json';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
+import useModal from '../ModalDialogs/useModal';
+import EventCategorySelect from '../BuiltInFormControls/EventCategorySelect';
 
 function describeNotificationContext(context, contextType) {
   if (context == null) {
-    return `All ${humanize(tableize(contextType)).toLowerCase()} without specific config`;
+    return `All ${humanize(tableize(contextType)).toLowerCase()} without overrides`;
   }
 
   if (contextType === 'EventCategory') {
@@ -21,8 +24,76 @@ function describeNotificationContext(context, contextType) {
   return JSON.stringify(context);
 }
 
+function OverrideNotificationTemplateModal({ notificationTemplate, visible, close }) {
+  const [notificationContext, setNotificationContext] = useState();
+  const { data, loading, error } = useQuery(NotificationAdminQuery);
+
+  const renderSelect = () => {
+    if (!notificationTemplate) {
+      return null;
+    }
+
+    if (notificationTemplate.event.context_type === 'EventCategory' && !loading && !error) {
+      return (
+        <EventCategorySelect
+          value={notificationContext}
+          onValueChange={setNotificationContext}
+          eventCategories={data.convention.event_categories}
+        />
+      );
+    }
+
+    return null;
+  };
+
+  const overrideClicked = () => {}
+
+  return (
+    <Modal visible={visible}>
+      <div className="modal-header">
+        Override notification
+      </div>
+
+      <div className="modal-body">
+        <p>
+          {notificationTemplate && (
+            <>
+              You can override the default notifications for “
+              {notificationTemplate.event.name}
+              ”
+              {' '}
+              on a per-
+              {humanize(underscore(notificationTemplate.event.context_type)).toLowerCase()}
+              {' '}
+              basis.
+            </>
+          )}
+        </p>
+
+        {renderSelect()}
+      </div>
+
+      <div className="modal-footer">
+        <button className="btn btn-secondary" onClick={close} type="button">
+          Cancel
+        </button>
+
+        <button
+          className="btn btn-primary"
+          disabled={!notificationContext}
+          onClick={overrideClicked}
+          type="button"
+        >
+          Override
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
 function NotificationAdminIndex() {
   const { data, loading, error } = useQuery(NotificationAdminQuery);
+  const overrideModal = useModal();
 
   const notificationTemplatesWithCategoryAndEventData = useMemo(
     () => {
@@ -106,11 +177,38 @@ function NotificationAdminIndex() {
                 >
                   Configure
                 </Link>
+                {notificationTemplate.event.context_type && (
+                  notificationTemplate.notification_context
+                    ? (
+                      <button
+                        className="d-block mt-1 btn btn-sm btn-outline-danger"
+                        aria-label="Delete override"
+                        type="button"
+                      >
+                        <i className="fa fa-trash-o" />
+                      </button>
+                    )
+                    : (
+                      <button
+                        className="d-block mt-1 btn btn-sm btn-outline-secondary"
+                        type="button"
+                        onClick={() => overrideModal.open({ notificationTemplate })}
+                      >
+                        Override
+                      </button>
+                    )
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <OverrideNotificationTemplateModal
+        visible={overrideModal.visible}
+        close={overrideModal.close}
+        notificationTemplate={(overrideModal.state || {}).notificationTemplate}
+      />
     </>
   );
 }

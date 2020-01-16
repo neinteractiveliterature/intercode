@@ -115,6 +115,7 @@ class Types::MutationType < Types::BaseObject
 
   ### NotificationTemplate
 
+  field :overrideNotificationTemplate, mutation: Mutations::OverrideNotificationTemplate
   field :updateNotificationTemplate, mutation: Mutations::UpdateNotificationTemplate
 
   ### OrderEntry

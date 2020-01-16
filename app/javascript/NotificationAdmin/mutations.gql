@@ -1,9 +1,49 @@
 #import "./queries.gql"
 
-mutation UpdateNotificationTemplate($eventKey: String!, $notificationTemplate: NotificationTemplateInput!) {
-  updateNotificationTemplate(input: { event_key: $eventKey, notification_template: $notificationTemplate }) {
+mutation UpdateNotificationTemplate(
+  $eventKey: String!,
+  $notificationContextType: NotificationContextTypeIndicator,
+  $notificationContextId: ID,
+  $notificationTemplate: NotificationTemplateInput!
+) {
+  updateNotificationTemplate(input: {
+    event_key: $eventKey,
+    notification_context_type: $notificationContextType,
+    notification_context_id: $notificationContextId,
+    notification_template: $notificationTemplate
+  }) {
     notification_template {
       ...NotificationTemplateFields
     }
+  }
+}
+
+mutation OverrideNotificationTemplate(
+  $eventKey: String!,
+  $notificationContextType: NotificationContextTypeIndicator!,
+  $notificationContextId: ID!
+) {
+  overrideNotificationTemplate(input: {
+    event_key: $eventKey,
+    notification_context_type: $notificationContextType,
+    notification_context_id: $notificationContextId
+  }) {
+    notification_template {
+      ...NotificationTemplateFields
+    }
+  }
+}
+
+mutation DeleteNotificationTemplate(
+  $eventKey: String!,
+  $notificationContextType: NotificationContextTypeIndicator!,
+  $notificationContextId: ID!
+) {
+  deleteNotificationTemplate(input: {
+    event_key: $eventKey,
+    notification_context_type: $notification_context_type,
+    notification_context_id: $notification_context_id
+  }) {
+    clientMutationId
   }
 }

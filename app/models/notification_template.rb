@@ -9,4 +9,14 @@ class NotificationTemplate < ApplicationRecord
   validates_template_validity :subject
   validates_template_validity :body_html
   validates_template_validity :body_text
+
+  before_destroy :ensure_override_template_before_destroy
+
+  private
+
+  def ensure_override_template_before_destroy
+    return if notification_context_type && notification_context_id
+
+    throw :abort
+  end
 end
