@@ -125,7 +125,7 @@
     "tinycolor2": "^1.4.1",
     "unfetch": "^4.1.0",
     "union-value": "2.0.1",
-    "uuid": "^3.3.3",
+    "uuid": "^3.4.0",
     "webpack": "^4.41.5",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-manifest-plugin": "^2.2.0",
