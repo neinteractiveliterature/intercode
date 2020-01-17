@@ -13,7 +13,11 @@ class FormResponseChangeGroupPresenter
   def html
     cmd = "#{SCRIPT_PATH} #{Shellwords.escape(component_props.to_json)}"
     stdout, stderr, status = Open3.capture3(cmd)
-    raise "#{cmd} returned error code #{status}\n#{stderr}" unless status == 0
+    unless status == 0
+      logger.warn "#{cmd} returned error code #{status}\n#{stderr}"
+      return 'Sorry, an error occurred trying to render these changes.'
+    end
+
     stdout.html_safe
   end
 
