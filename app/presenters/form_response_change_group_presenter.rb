@@ -14,7 +14,7 @@ class FormResponseChangeGroupPresenter
     cmd = "#{SCRIPT_PATH} #{Shellwords.escape(component_props.to_json)}"
     stdout, stderr, status = Open3.capture3(cmd)
     unless status == 0
-      logger.warn "#{cmd} returned error code #{status}\n#{stderr}"
+      Rails.logger.warn "#{cmd} returned error code #{status}\n#{stderr}"
       return 'Sorry, an error occurred trying to render these changes.'
     end
 
