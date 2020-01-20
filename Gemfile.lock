@@ -432,7 +432,7 @@ GEM
     skylight-core (4.2.1)
       activesupport (>= 4.2.0)
     slop (3.6.0)
-    solargraph (0.38.2)
+    solargraph (0.38.3)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -474,7 +474,7 @@ GEM
       unf_ext
     unf (0.1.4-java)
     unf_ext (0.0.7.6)
-    unicode-display_width (1.6.0)
+    unicode-display_width (1.6.1)
     uniform_notifier (1.13.0)
     warden (1.2.8)
       rack (>= 2.0.6)
