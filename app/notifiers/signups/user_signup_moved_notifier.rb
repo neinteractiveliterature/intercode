@@ -14,4 +14,8 @@ class Signups::UserSignupMovedNotifier < Notifier
   def destinations
     [signup.user_con_profile]
   end
+
+  def sends_sms?
+    true
+  end
 end

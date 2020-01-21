@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -885,7 +886,8 @@ CREATE TABLE public.notification_templates (
     body_html text,
     body_text text,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    body_sms text
 );
 
 
@@ -4023,6 +4025,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191130174830'),
 ('20191205195033'),
 ('20191215175849'),
-('20191226202814');
+('20191226202814'),
+('20200121165316');
 
 
