@@ -48,7 +48,7 @@
     "bytes": "^3.1.0",
     "cache-loader": "^4.1.0",
     "cadmus-navbar-admin": "^2.0.0",
-    "caniuse-lite": "^1.0.30001021",
+    "caniuse-lite": "^1.0.30001022",
     "classnames": "^2.2.6",
     "clipboard": "^2.0.1",
     "codemirror": "^5.51.0",
