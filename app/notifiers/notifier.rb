@@ -1,4 +1,6 @@
 class Notifier
+  include ActionView::Helpers::SanitizeHelper
+
   NOTIFICATIONS_CONFIG = JSON.parse(
     File.read(File.expand_path('config/notifications.json', Rails.root))
   )
@@ -42,16 +44,23 @@ class Notifier
 
   def deliver_later(options = {})
     mail.deliver_later(options)
+    deliver_sms # TODO later
   end
 
   def deliver_now
     mail.deliver_now
+    deliver_sms
   end
 
   def cadmus_renderer
     @cadmus_renderer ||= CmsRenderingContext.new(
       cms_parent: convention, controller: nil, assigns: { 'convention' => convention }
     ).cadmus_renderer
+  end
+
+  # Notifications have to explicitly opt into SMS
+  def sends_sms?
+    false
   end
 
   private
@@ -64,6 +73,32 @@ class Notifier
     else
       yield
     end
+  end
+
+  def deliver_sms
+    return unless should_deliver_sms?
+    return unless twilio_client && ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?
+    twilio_client.messages.create(
+      from: ENV['TWILIO_SMS_NUMBER'],
+      to: ENV['TWILIO_SMS_DEBUG_DESTINATION'],
+      body: sms_content
+    )
+  end
+
+  def should_deliver_sms?
+    return false unless sends_sms?
+    return true if ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?
+
+    (convention.starts_at - 24.hours) <= Time.now && (convention.ends_at > Time.now)
+  end
+
+  def sms_content
+    all_content = render.transform_values(&:presence).compact
+    (
+      all_content[:sms_text] ||
+      all_content[:body_text]&.strip ||
+      (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, ' '))
+    )
   end
 
   def mail
@@ -94,5 +129,11 @@ class Notifier
       else raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
       end
     end
+  end
+
+  def twilio_client
+    return unless ENV['TWILIO_ACCOUNT_SID'].present? && ENV['TWILIO_AUTH_TOKEN'].present?
+
+    @twilio_client ||= Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
   end
 end

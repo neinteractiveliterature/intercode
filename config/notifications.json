@@ -33,12 +33,14 @@
         {
           "key": "new_signup",
           "name": "Attendee signed up for event",
-          "destination_description": "Event team members"
+          "destination_description": "Event team members",
+          "sends_sms": true
         },
         {
           "key": "withdrawal",
           "name": "Attendee withdrew from event",
-          "destination_description": "Event team members"
+          "destination_description": "Event team members",
+          "sends_sms": true
         },
         {
           "key": "registration_policy_change_moved_signups",
@@ -48,7 +50,8 @@
         {
           "key": "user_signup_moved",
           "name": "Your signup status changed",
-          "destination_description": "Signed up attendee"
+          "destination_description": "Signed up attendee",
+          "sends_sms": true
         }
       ]
     },
