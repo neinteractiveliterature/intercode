@@ -28,4 +28,8 @@ class Signups::WithdrawalNotifier < Notifier
     return unless prev_bucket_key
     signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)
   end
+
+  def sends_sms?
+    true
+  end
 end

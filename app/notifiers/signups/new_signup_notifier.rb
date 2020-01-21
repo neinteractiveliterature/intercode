@@ -15,4 +15,8 @@ class Signups::NewSignupNotifier < Notifier
   def destinations
     team_members_to_notify_for_signup(signup).map(&:user_con_profile)
   end
+
+  def sends_sms?
+    true
+  end
 end
