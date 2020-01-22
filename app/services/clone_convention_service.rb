@@ -57,6 +57,7 @@ class CloneConventionService < CivilService::Service
     clone_cms_navigation_items(convention)
     clone_cms_files(convention)
     clone_forms(convention)
+    clone_cms_content_groups(convention)
 
     convention.update!(
       root_page: @id_maps[:pages][source_convention.root_page_id],
@@ -102,6 +103,22 @@ class CloneConventionService < CivilService::Service
       cloned_form.save!
       content = FormExportPresenter.new(form).as_json
       ImportFormContentService.new(form: cloned_form, content: content).call!
+    end
+  end
+
+  def clone_cms_content_groups(convention)
+    @id_maps[:cms_content_groups] = clone_with_id_map(
+      source_convention.cms_content_groups,
+      convention.cms_content_groups
+    ) do |cms_content_group, cloned_cms_content_group|
+      cloned_cms_content_group.save!
+      %i[pages cms_partials cms_layouts].each do |content_type|
+        cms_content_group.public_send(content_type).each do |item|
+          cloned_cms_content_group.cms_content_group_associations.create!(
+            source: @id_maps[content_type][item.id]
+          )
+        end
+      end
     end
   end
 
