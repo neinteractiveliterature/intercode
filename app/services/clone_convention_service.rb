@@ -115,7 +115,7 @@ class CloneConventionService < CivilService::Service
       %i[pages cms_partials cms_layouts].each do |content_type|
         cms_content_group.public_send(content_type).each do |item|
           cloned_cms_content_group.cms_content_group_associations.create!(
-            source: @id_maps[content_type][item.id]
+            content: @id_maps[content_type][item.id]
           )
         end
       end
