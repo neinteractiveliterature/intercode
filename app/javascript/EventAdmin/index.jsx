@@ -46,6 +46,10 @@ function EventAdmin({ location }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data.currentAbility.can_manage_runs) {
+    return <Redirect to="/" />;
+  }
+
   if (data.convention.site_mode === 'single_event') {
     if (data.events.length === 0) {
       return (
