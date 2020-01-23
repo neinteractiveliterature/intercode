@@ -83,7 +83,7 @@
     "node-sass": "^4.13.1",
     "path-complete-extname": "^1.0.0",
     "payment": "^2.3.0",
-    "popper.js": "^1.16.0",
+    "popper.js": "^1.16.1",
     "postcss-loader": "^3.0.0",
     "postcss-smart-import": "^0.7.6",
     "precss": "^4.0.0",
