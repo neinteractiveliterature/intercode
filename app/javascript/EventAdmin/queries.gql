@@ -124,6 +124,7 @@ fragment EventPageEventCategoryFields on EventCategory {
 query EventAdminEventsQuery {
   currentAbility {
     can_override_maximum_event_provided_tickets
+    can_manage_runs
   }
 
   convention {

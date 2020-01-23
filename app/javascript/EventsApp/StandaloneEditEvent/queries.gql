@@ -40,6 +40,7 @@ query StandaloneEditEventQuery($eventId: Int!) {
   currentAbility {
     can_override_maximum_event_provided_tickets
     can_delete_event(event_id: $eventId)
+    can_update_event(event_id: $eventId)
   }
 
   convention {

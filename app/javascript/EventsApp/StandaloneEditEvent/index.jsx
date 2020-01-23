@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
@@ -13,13 +13,13 @@ import {
   StandaloneDeleteMaximumEventProvidedTicketsOverride,
   StandaloneUpdateMaximumEventProvidedTicketsOverride,
 } from './mutations.gql';
-import useQuerySuspended from '../../useQuerySuspended';
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
 import EditEvent from '../../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
+import useQuerySuspended from '../../useQuerySuspended';
 
 function StandaloneEditEvent({ eventId, eventPath, history }) {
   const queryOptions = { variables: { eventId } };
@@ -107,6 +107,10 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (!data.currentAbility.can_update_event) {
+    return <Redirect to="/" />;
   }
 
   return (
