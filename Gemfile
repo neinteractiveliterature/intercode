@@ -74,6 +74,7 @@ gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htm
 
 # SMS and phone support
 gem 'twilio-ruby', '~> 5.31.2'
+gem 'phonelib'
 
 # Background workers and scheduling
 gem 'shoryuken'
