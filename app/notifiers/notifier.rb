@@ -78,9 +78,11 @@ class Notifier
   def deliver_sms
     return unless should_deliver_sms?
     return unless twilio_client && ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?
+
+    to_number = ENV['TWILIO_SMS_DEBUG_DESTINATION']
     twilio_client.messages.create(
       from: ENV['TWILIO_SMS_NUMBER'],
-      to: ENV['TWILIO_SMS_DEBUG_DESTINATION'],
+      to: Phonelib.parse(to_number).e164,
       body: sms_content
     )
   end
