@@ -1795,7 +1795,8 @@ CREATE TABLE public.user_con_profiles (
     gravatar_enabled boolean DEFAULT false NOT NULL,
     ical_secret text NOT NULL,
     needs_update boolean DEFAULT false NOT NULL,
-    accepted_clickwrap_agreement boolean DEFAULT false NOT NULL
+    accepted_clickwrap_agreement boolean DEFAULT false NOT NULL,
+    mobile_phone character varying
 );
 
 
@@ -4026,6 +4027,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191205195033'),
 ('20191215175849'),
 ('20191226202814'),
-('20200121165316');
+('20200121165316'),
+('20200124155649');
 
 

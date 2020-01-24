@@ -328,6 +328,7 @@ GEM
     pg_search (2.3.2)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
+    phonelib (0.6.41)
     platform-api (2.2.0)
       heroics (~> 0.0.25)
       moneta (~> 1.0.0)
@@ -552,6 +553,7 @@ DEPENDENCIES
   parallel
   pg
   pg_search
+  phonelib
   platform-api
   pry-rails
   pry-remote
