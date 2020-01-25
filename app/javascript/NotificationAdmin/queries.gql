@@ -4,6 +4,7 @@ fragment NotificationTemplateFields on NotificationTemplate {
   subject
   body_html
   body_text
+  body_sms
 }
 
 query NotificationAdminQuery {
