@@ -1796,7 +1796,8 @@ CREATE TABLE public.user_con_profiles (
     ical_secret text NOT NULL,
     needs_update boolean DEFAULT false NOT NULL,
     accepted_clickwrap_agreement boolean DEFAULT false NOT NULL,
-    mobile_phone character varying
+    mobile_phone character varying,
+    allow_sms boolean DEFAULT true NOT NULL
 );
 
 
@@ -4028,6 +4029,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191215175849'),
 ('20191226202814'),
 ('20200121165316'),
-('20200124155649');
+('20200124155649'),
+('20200125150313');
 
 

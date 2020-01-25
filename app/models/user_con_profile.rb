@@ -42,6 +42,8 @@ class UserConProfile < ApplicationRecord
     :state,
     :zipcode,
     :country,
+    :mobile_phone,
+    :allow_sms,
     :day_phone,
     :evening_phone,
     :best_call_time,

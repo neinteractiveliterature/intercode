@@ -58,6 +58,6 @@ class EventWithdrawService < CivilService::Service
       prev_state: prev_state,
       prev_bucket_key: prev_bucket_key,
       move_results: move_results
-    ).deliver_later(wait: 30.seconds)
+    ).deliver_later(wait: 5.seconds)
   end
 end
