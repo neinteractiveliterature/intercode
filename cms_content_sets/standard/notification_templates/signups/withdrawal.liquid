@@ -1,8 +1,8 @@
 ---
 subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize
   }} -> {{ signup.state | humanize }}: {{ signup.user_con_profile.name }}"
-body_text: |
-  {%- assign run = signup.run -%}
+body_text: |-
+  {% assign run = signup.run %}
   Withdrawal from {% include 'run_description' %}
 
   {{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
@@ -22,8 +22,8 @@ body_text: |
   There were no signups that could be moved to fill the vacancy.
   {% endif %}
   As of this withdrawal, this event run has:
-  {{ run.signup_count_description | newline_to_br }}
-body_sms: |
+  {{ run.signup_count_description }}
+body_sms: |-
   {%- assign run = signup.run -%}
   {{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
   {%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
@@ -42,32 +42,26 @@ body_sms: |
   There were no signups that could be moved to fill the vacancy.
   {% endif %}
   As of this withdrawal, this event run has:
-  {{ run.signup_count_description | newline_to_br }}
+  {{ run.signup_count_description }}
 ---
-{% assign run = signup.run %}
-<h1>Withdrawal from {% include 'run_description' %}</h1>
+{%- assign run = signup.run -%}
+Withdrawal from {% include 'run_description' %}
 
-<p>
-  <a href="mailto:{{ signup.user_con_profile.email }}">{{ signup.user_con_profile.name }}</a>
-  has withdrawn from
-  {% include 'run_description' %}.
-  (Previously, they were
-  {% if prev_bucket %}
-    {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
-  {% else %}
-    {{ prev_state }}.)
-  {% endif %}
-</p>
+{{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
+{%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+{%- else %} {{ prev_state }}.)
+{%- endif %}
 
-{% if move_results.size > 0 %}
-  <p>To fill the vacancy, the following signups were moved:</p>
+{% if move_results.size > 0 -%}
+To fill the vacancy, the following signups were moved:
+{% capture move_results -%}
   {% include 'move_results_list' %}
-{% elsif prev_state == 'confirmed' %}
-  <p>There were no signups that could be moved to fill the vacancy.</p>
+{%- endcapture -%}
+{%- capture newline %}
+{% endcapture -%}
+{{ move_results | replace: "</li>", "\n" | strip_html | condense_whitespace | replace: "\n", newline }}
+{%- elsif prev_state == 'confirmed' -%}
+There were no signups that could be moved to fill the vacancy.
 {% endif %}
-
-<p>
-  As of this withdrawal, this event run has:
-  <br>
-  {{ run.signup_count_description | newline_to_br }}
-</p>
+As of this withdrawal, this event run has:
+{{ run.signup_count_description | newline_to_br }}
