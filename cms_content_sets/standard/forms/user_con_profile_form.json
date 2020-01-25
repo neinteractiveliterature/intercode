@@ -62,7 +62,7 @@
           "item_type": "free_text",
           "identifier": "mobile_phone",
           "free_text_type": "tel",
-          "caption": "Mobile phone",
+          "caption": "Phone<br/>\n<small class=\"text-muted\">Include country code for phone numbers outside US or Canada</small>",
           "lines": 1
         },
         {
