@@ -159,11 +159,33 @@
       "mobile_phone": {
         "description": "Mobile phone number",
         "item_type": "free_text",
-        "required": false
+        "required": false,
+        "admin_description": "Phone",
+        "default_properties": {
+          "free_text_type": "tel",
+          "caption": "Phone<br/>\n<small class=\"text-muted\">Include country code for phone numbers outside US or Canada</small>"
+        }
       },
       "allow_sms": {
         "description": "Allow text messages from site",
-        "required": false
+        "item_type": "multiple_choice",
+        "required": false,
+        "default_value": "true",
+        "admin_description": "Receive site texts?",
+        "default_properties": {
+          "style": "radio_vertical",
+          "caption": "Receive text message notifications close to or during the convention when you get into events off a waitlist, or when signups in events you’re running change?",
+          "choices": [
+            {
+              "caption": "Receive texts",
+              "value": "true"
+            },
+            {
+              "caption": "Don't receive texts",
+              "value": "false"
+            }
+          ]
+        }
       },
       "day_phone": {
         "description": "Daytime phone number",
