@@ -23,8 +23,7 @@ body_sms: |-
     {%- if signup.requested_bucket %} bucket.
     {%- else %} bucket (but have no bucket preference).
     {%- endif -%}
-  {%- else -%}
-    {{ signup.state }}.
+  {%- else %} {{ signup.state }}.
   {%- endif %}
 
   As of this signup, this event run has:
@@ -46,7 +45,7 @@ body_sms: |-
       bucket (but have no bucket preference).
     {% endif %}
   {% else %}
-    {{ signup.state }}.
+    {{ signup.state }}).
   {% endif %}
 </p>
 
