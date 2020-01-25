@@ -17,9 +17,10 @@ class ExportCmsContentSetService < CivilService::Service
     Dir.mkdir(content_set.root_path)
 
     export_metadata
-    export_content_for_subdir('layouts', convention.cms_layouts, 'name')
-    export_content_for_subdir('pages', convention.pages, 'slug')
-    export_content_for_subdir('partials', convention.cms_partials, 'name')
+    export_content_for_subdir('layouts', convention.cms_layouts, 'name', 'content')
+    export_content_for_subdir('pages', convention.pages, 'slug', 'content')
+    export_content_for_subdir('partials', convention.cms_partials, 'name', 'content')
+    export_content_for_subdir('notification_templates', convention.notification_templates, 'event_key', 'body_html')
     export_files
     export_form_content
 
@@ -57,21 +58,22 @@ class ExportCmsContentSetService < CivilService::Service
     end
   end
 
-  def export_content_for_subdir(subdir, content, filename_attribute)
+  def export_content_for_subdir(subdir, content, filename_attribute, content_attribute)
     Dir.mkdir(File.expand_path(subdir, content_set.root_path))
 
     content.each do |model|
       filename = model.public_send(filename_attribute)
       path = File.expand_path("#{subdir}/#{filename}.liquid", content_set.root_path)
       frontmatter_attrs = frontmatter_for_content(model)
-      inherited_content = inherited_template_content_for(subdir, model.name)
-      next if [model.content, frontmatter_attrs] == inherited_content
+      inherited_content = inherited_template_content_for(subdir, model.public_send(filename_attribute))
+      content = model.public_send(content_attribute)
+      next if [content, frontmatter_attrs] == inherited_content
 
-      write_template_content(model, frontmatter_attrs, path)
+      write_template_content(content, frontmatter_attrs, path)
     end
   end
 
-  def write_template_content(model, frontmatter_attrs, path)
+  def write_template_content(content, frontmatter_attrs, path)
     FileUtils.mkdir_p(File.dirname(path))
     File.open(path, 'w') do |f|
       if frontmatter_attrs.present?
@@ -79,18 +81,21 @@ class ExportCmsContentSetService < CivilService::Service
         f.write("---\n")
       end
 
-      f.write(model.content.gsub("\r\n", "\n"))
+      f.write(content.gsub("\r\n", "\n"))
     end
   end
 
   def frontmatter_for_content(model)
     frontmatter_attrs = model.attributes.except(
       'content',
+      'body_html',
+      'event_key',
       'id',
       'slug',
       'parent_id',
       'parent_type',
       'cms_layout_id',
+      'convention_id',
       'created_at',
       'updated_at'
     ).compact

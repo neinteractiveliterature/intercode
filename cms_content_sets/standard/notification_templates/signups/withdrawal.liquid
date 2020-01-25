@@ -1,5 +1,48 @@
 ---
-subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize }} -> {{ signup.state | humanize }}: {{ signup.user_con_profile.name }}"
+subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | humanize
+  }} -> {{ signup.state | humanize }}: {{ signup.user_con_profile.name }}"
+body_text: |
+  {%- assign run = signup.run -%}
+  Withdrawal from {% include 'run_description' %}
+
+  {{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
+  {%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+  {%- else %} {{ prev_state }}.)
+  {%- endif %}
+
+  {% if move_results.size > 0 -%}
+  To fill the vacancy, the following signups were moved:
+  {% capture move_results -%}
+    {% include 'move_results_list' %}
+  {%- endcapture -%}
+  {%- capture newline %}
+  {% endcapture -%}
+  {{ move_results | replace: "</li>", "\n" | strip_html | condense_whitespace | replace: "\n", newline }}
+  {%- elsif prev_state == 'confirmed' -%}
+  There were no signups that could be moved to fill the vacancy.
+  {% endif %}
+  As of this withdrawal, this event run has:
+  {{ run.signup_count_description | newline_to_br }}
+body_sms: |
+  {%- assign run = signup.run -%}
+  {{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
+  {%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+  {%- else %} {{ prev_state }}.)
+  {%- endif %}
+
+  {% if move_results.size > 0 -%}
+  To fill the vacancy, the following signups were moved:
+  {% capture move_results -%}
+    {% include 'move_results_list' %}
+  {%- endcapture -%}
+  {%- capture newline %}
+  {% endcapture -%}
+  {{ move_results | replace: "</li>", "\n" | strip_html | condense_whitespace | replace: "\n", newline }}
+  {%- elsif prev_state == 'confirmed' -%}
+  There were no signups that could be moved to fill the vacancy.
+  {% endif %}
+  As of this withdrawal, this event run has:
+  {{ run.signup_count_description | newline_to_br }}
 ---
 {% assign run = signup.run %}
 <h1>Withdrawal from {% include 'run_description' %}</h1>
@@ -12,7 +55,7 @@ subject: "[{{ convention.name }}: {{ signup.event.title }}] {{ prev_state | huma
   {% if prev_bucket %}
     {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
   {% else %}
-    {{ prev_state }}.
+    {{ prev_state }}.)
   {% endif %}
 </p>
 

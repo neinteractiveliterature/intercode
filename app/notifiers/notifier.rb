@@ -27,7 +27,8 @@ class Notifier
       {
         subject: notification_template.subject_template,
         body_html: notification_template.body_html_template,
-        body_text: notification_template.body_text_template
+        body_text: notification_template.body_text_template,
+        body_sms: notification_template.body_sms_template
       }.transform_values do |template|
         cadmus_renderer.render(template, :html, assigns: liquid_assigns)
       end
@@ -98,7 +99,7 @@ class Notifier
   def sms_content
     all_content = render.transform_values(&:presence).compact
     (
-      all_content[:sms_text] ||
+      all_content[:body_sms] ||
       all_content[:body_text]&.strip ||
       (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, ' '))
     )

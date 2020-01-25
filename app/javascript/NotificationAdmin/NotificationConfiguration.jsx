@@ -47,6 +47,7 @@ function NotificationConfiguration() {
           subject: notificationTemplate.subject,
           body_html: notificationTemplate.body_html,
           body_text: notificationTemplate.body_text,
+          body_sms: notificationTemplate.body_sms,
         },
       },
     });
@@ -111,6 +112,25 @@ function NotificationConfiguration() {
           disabled={updateInProgress}
         />
       </div>
+
+      {event.sends_sms
+        ? (
+          <div className="form-group">
+            <legend className="col-form-label">Notification body (SMS text message)</legend>
+            <LiquidInput
+              value={notificationTemplate.body_sms}
+              onChange={(value) => setNotificationTemplate((prev) => ({
+                ...prev, body_sms: value,
+              }))}
+              notifierEventKey={eventKey}
+              renderPreview={(previewContent) => (
+                <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+              )}
+              disabled={updateInProgress}
+            />
+          </div>
+        )
+        : <p><em>This event does not send SMS text messages.</em></p>}
 
       <ErrorDisplay graphQLError={updateError} />
 

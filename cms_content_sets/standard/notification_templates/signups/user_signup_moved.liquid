@@ -1,11 +1,21 @@
 ---
-subject: >
-  [{{ convention.name }}: {{ signup.event.title }}]
-  {% if move_result.state == "confirmed" -%}
+subject: |
+  [{{ convention.name }}: {{ signup.event.title }}] {% if move_result.state == "confirmed" -%}
     Signup confirmed
   {%- else -%}
     Signup state changed
   {%- endif -%}
+body_text: |-
+  {%- assign run = signup.run -%}
+  {{ signup.user_con_profile.name_without_nickname }}: your signup for {% include 'run_description' %} is now {{ move_result.state }}
+
+  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.  As a result, the following change has been made to your signup:
+
+  Previously: {{ move_result.prev_state }}
+  Now: {{ move_result.state }}
+body_sms: |-
+  {%- assign run = signup.run -%}
+  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.  As a result, your signup is now {{ move_result.state }}.  (Previously, it was {{ move_result.prev_state }}.)
 ---
 {% assign run = signup.run %}
 <h1>
@@ -25,4 +35,3 @@ subject: >
   <br>
   Now: {{ move_result.state }}
 </p>
-
