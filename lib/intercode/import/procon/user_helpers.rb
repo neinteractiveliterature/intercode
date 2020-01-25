@@ -13,7 +13,7 @@ module Intercode::Import::Procon::UserHelpers
         last_name: person_row[:lastname] || '',
         birth_date: person_row[:birthdate],
         nickname: person_row[:nickname],
-        phone: person_row[:phone],
+        mobile_phone: person_row[:phone],
         best_call_time: person_row[:best_call_time]
       )
       user_con_profile.first_name = user.email if user_con_profile.name.blank?

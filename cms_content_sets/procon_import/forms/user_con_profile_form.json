@@ -40,10 +40,27 @@
         },
         {
           "item_type": "free_text",
-          "identifier": "phone",
+          "identifier": "mobile_phone",
           "free_text_type": "tel",
-          "caption": "Phone number",
+          "caption": "Mobile phone",
           "lines": 1
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "allow_sms",
+          "default_value": "true",
+          "style": "radio_vertical",
+          "caption": "Receive text message notifications close to or during the convention when you get into events off a waitlist, or when signups in events you’re running change?",
+          "choices": [
+            {
+              "caption": "Receive texts",
+              "value": "true"
+            },
+            {
+              "caption": "Don't receive texts",
+              "value": "false"
+            }
+          ]
         },
         {
           "item_type": "free_text",

@@ -71,8 +71,8 @@ class AcceptSignupRequestService < CivilService::Service
 
   def notify_user
     return if suppress_notifications
-    # 30-second delay to let the transaction commit
+    # 5-second delay to let the transaction commit
     SignupRequests::RequestAcceptedNotifier.new(signup_request: signup_request)
-      .deliver_later(wait: 30.seconds)
+      .deliver_later(wait: 5.seconds)
   end
 end
