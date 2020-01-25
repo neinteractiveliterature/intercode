@@ -44,12 +44,14 @@ class Notifier
 
   def deliver_later(options = {})
     mail.deliver_later(options)
-    deliver_sms # TODO later
+    sms_jobs.each do |job|
+      job.enqueue(options)
+    end
   end
 
   def deliver_now
     mail.deliver_now
-    deliver_sms
+    sms_jobs.each(&:perform_now)
   end
 
   def cadmus_renderer
@@ -75,16 +77,15 @@ class Notifier
     end
   end
 
-  def deliver_sms
-    return unless should_deliver_sms?
-    return unless twilio_client && ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?
+  def sms_jobs
+    return [] unless should_deliver_sms?
 
-    to_number = ENV['TWILIO_SMS_DEBUG_DESTINATION']
-    twilio_client.messages.create(
-      from: ENV['TWILIO_SMS_NUMBER'],
-      to: Phonelib.parse(to_number).e164,
-      body: sms_content
-    )
+    content = sms_content
+
+    user_con_profiles_for_destinations(destinations).map do |user_con_profile|
+      next nil unless user_con_profile.allow_sms?
+      DeliverSmsJob.new(user_con_profile, content, ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?)
+    end.compact
   end
 
   def should_deliver_sms?
@@ -133,9 +134,14 @@ class Notifier
     end
   end
 
-  def twilio_client
-    return unless ENV['TWILIO_ACCOUNT_SID'].present? && ENV['TWILIO_AUTH_TOKEN'].present?
-
-    @twilio_client ||= Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
+  def user_con_profiles_for_destinations(destinations)
+    destinations.flat_map do |destination|
+      case destination
+      when UserConProfile then destination
+      when StaffPosition then staff_position.user_con_profiles.to_a
+      when nil then []
+      else raise InvalidArgument, "Don't know how to get a user con profile from a #{destination.class}"
+      end
+    end
   end
 end

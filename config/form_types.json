@@ -156,23 +156,36 @@
         "description": "Country",
         "required": false
       },
+      "mobile_phone": {
+        "description": "Mobile phone number",
+        "item_type": "free_text",
+        "required": false
+      },
+      "allow_sms": {
+        "description": "Allow text messages from site",
+        "required": false
+      },
       "day_phone": {
         "description": "Daytime phone number",
         "item_type": "free_text",
-        "required": false
+        "required": false,
+        "deprecation_reason": "Day/evening phone is being phased out in favor of mobile phone"
       },
       "evening_phone": {
         "description": "Evening phone number",
         "item_type": "free_text",
-        "required": false
+        "required": false,
+        "deprecation_reason": "Day/evening phone is being phased out in favor of mobile phone"
       },
       "best_call_time": {
         "description": "Best time to call",
-        "required": false
+        "required": false,
+        "deprecation_reason": "Best time to call is being phased out in favor of mobile phone"
       },
       "preferred_contact_method": {
         "description": "Preferred contact method",
-        "required": false
+        "required": false,
+        "deprecation_reason": "Preferred contact method is no longer in use for site functionality"
       },
       "receive_whos_free_emails": {
         "description": "Receive “who’s free?” emails from convention?",

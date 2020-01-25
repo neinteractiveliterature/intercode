@@ -9,9 +9,9 @@ class Mutations::SubmitEventProposal < Mutations::BaseMutation
     if event_proposal.status == 'draft'
       event_proposal.update!(status: 'proposed', submitted_at: Time.now)
       EventProposals::NewProposalNotifier.new(event_proposal: event_proposal)
-        .deliver_later(wait: 30.seconds)
+        .deliver_later(wait: 5.seconds)
       EventProposals::ProposalSubmitConfirmationNotifier.new(event_proposal: event_proposal)
-        .deliver_later(wait: 30.seconds)
+        .deliver_later(wait: 5.seconds)
     end
 
     { event_proposal: event_proposal }

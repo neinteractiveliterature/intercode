@@ -59,6 +59,47 @@
           "other": true
         },
         {
+          "item_type": "free_text",
+          "identifier": "mobile_phone",
+          "free_text_type": "tel",
+          "caption": "Mobile phone",
+          "lines": 1
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "allow_sms",
+          "default_value": "true",
+          "style": "radio_vertical",
+          "caption": "Receive text message notifications close to or during the convention when you get into events off a waitlist, or when signups in events you’re running change?",
+          "choices": [
+            {
+              "caption": "Receive texts",
+              "value": "true"
+            },
+            {
+              "caption": "Don't receive texts",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "receive_whos_free_emails",
+          "default_value": "true",
+          "style": "radio_vertical",
+          "caption": "Closer to the convention, {{ convention.name }} may notify attendees who are free in particular time slots, to promote events that need signups in order to run.  These notifications are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
+          "choices": [
+            {
+              "caption": "Receive notifications about events that need signups",
+              "value": "true"
+            },
+            {
+              "caption": "Opt out of these notifications",
+              "value": "false"
+            }
+          ]
+        },
+        {
           "item_type": "date",
           "identifier": "birth_date",
           "caption": "<p class=\"m-0\">Birth date<br>\n<small>Note: Specifying your birth date is optional. But if you choose not to, you may not be able to sign up for age-restricted games.</small></p>"
@@ -95,46 +136,6 @@
         },
         {
           "item_type": "free_text",
-          "identifier": "day_phone",
-          "free_text_type": "tel",
-          "caption": "Daytime phone",
-          "lines": 1
-        },
-        {
-          "item_type": "free_text",
-          "identifier": "evening_phone",
-          "free_text_type": "tel",
-          "caption": "Evening phone",
-          "lines": 1
-        },
-        {
-          "item_type": "free_text",
-          "identifier": "best_call_time",
-          "caption": "Best time to call",
-          "lines": 1
-        },
-        {
-          "item_type": "multiple_choice",
-          "identifier": "preferred_contact",
-          "caption": "Preferred contact method",
-          "style": "radio_vertical",
-          "choices": [
-            {
-              "caption": "Email",
-              "value": "email"
-            },
-            {
-              "caption": "Daytime phone",
-              "value": "day_phone"
-            },
-            {
-              "caption": "Evening phone",
-              "value": "evening_phone"
-            }
-          ]
-        },
-        {
-          "item_type": "free_text",
           "identifier": "how_heard",
           "caption": "How did you hear about {{ convention.name }}?",
           "lines": 1
@@ -159,23 +160,6 @@
             {
               "caption": "Other NEIL initiatives",
               "value": "neil_other"
-            }
-          ]
-        },
-        {
-          "item_type": "multiple_choice",
-          "identifier": "receive_whos_free_emails",
-          "default_value": "true",
-          "style": "radio_vertical",
-          "caption": "Closer to the convention, {{ convention.name }} may email attendees who are free in particular time slots, to promote events that need signups in order to run.  These emails are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
-          "choices": [
-            {
-              "caption": "Receive emails about events that need signups",
-              "value": "true"
-            },
-            {
-              "caption": "Opt out of these emails",
-              "value": "false"
             }
           ]
         }
