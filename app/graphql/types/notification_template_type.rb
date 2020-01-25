@@ -6,4 +6,5 @@ class Types::NotificationTemplateType < Types::BaseObject
   field :subject, String, null: true
   field :body_html, String, null: true
   field :body_text, String, null: true
+  field :body_sms, String, null: true
 end

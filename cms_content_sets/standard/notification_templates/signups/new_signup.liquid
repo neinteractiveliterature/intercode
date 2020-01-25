@@ -1,5 +1,34 @@
 ---
-subject: "[{{ convention.name }}: {{ signup.event.title }}] Signup: {{ signup.user_con_profile.name }}"
+subject: "[{{ convention.name }}: {{ signup.event.title }}] Signup: {{ signup.user_con_profile.name
+  }}"
+body_text: |-
+  {%- assign run = signup.run -%}
+  New signup for {% include 'run_description' %}
+
+  {{ signup.user_con_profile.name }} has signed up for {% include 'run_description' %}. They are currently
+  {%- if signup.bucket %} {{ signup.state }} in the {{ signup.bucket.name }}
+    {%- if signup.requested_bucket %} bucket.
+    {%- else %} bucket (but have no bucket preference).
+    {%- endif -%}
+  {%- else -%}
+    {{ signup.state }}.
+  {%- endif %}
+
+  As of this signup, this event run has:
+  {{ run.signup_count_description | newline_to_br }}
+body_sms: |-
+  {%- assign run = signup.run -%}
+  {{ signup.user_con_profile.name }} has signed up for {% include 'run_description' %}. They are currently
+  {%- if signup.bucket %} {{ signup.state }} in the {{ signup.bucket.name }}
+    {%- if signup.requested_bucket %} bucket.
+    {%- else %} bucket (but have no bucket preference).
+    {%- endif -%}
+  {%- else -%}
+    {{ signup.state }}.
+  {%- endif %}
+
+  As of this signup, this event run has:
+  {{ run.signup_count_description | newline_to_br }}
 ---
 {% assign run = signup.run %}
 <h1>New signup for {% include 'run_description' %}</h1>
