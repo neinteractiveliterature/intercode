@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useCallback } from 'react';
 import { useMutation } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import { CreateFormItem } from './mutations.gql';
 import FormSectionNav from './FormSectionNav';
@@ -15,10 +16,11 @@ function FormSectionEditorLayout() {
   const [createFormItemMutate] = useMutation(CreateFormItem);
   const sectionBottomRef = useRef();
   const newFormItemModal = useModal();
+  const history = useHistory();
 
   const createFormItem = useCallback(
     async (newFormItem) => {
-      await createFormItemMutate({
+      const response = await createFormItemMutate({
         variables: {
           formSectionId: currentSection.id,
           formItem: buildFormItemInput(newFormItem),
@@ -35,13 +37,18 @@ function FormSectionEditorLayout() {
       if (sectionBottomRef.current) {
         sectionBottomRef.current.scrollIntoView();
       }
+
+      return response;
     },
     [createFormItemMutate, currentSection, form.id],
   );
 
   const createStaticText = useCallback(
-    () => createFormItem(buildNewFormItem('static_text')),
-    [createFormItem],
+    async () => {
+      const response = await createFormItem(buildNewFormItem('static_text'));
+      history.push(`/admin_forms/${form.id}/edit/section/${currentSection.id}/item/${response.data.createFormItem.form_item.id}`);
+    },
+    [createFormItem, currentSection.id, form.id, history],
   );
 
   return (
