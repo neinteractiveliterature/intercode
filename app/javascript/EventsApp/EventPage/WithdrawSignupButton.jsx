@@ -6,7 +6,7 @@ function WithdrawSignupButton({
 }) {
   return (
     <button
-      className={`btn ${buttonClass || 'btn-outline-danger'}`}
+      className={`btn ${buttonClass || 'btn-outline-danger'} withdraw-button`}
       type="button"
       onClick={withdrawSignup}
     >

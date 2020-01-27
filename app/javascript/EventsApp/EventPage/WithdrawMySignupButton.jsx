@@ -28,6 +28,7 @@ function WithdrawMySignupButton({
       run={run}
       event={event}
       withdrawSignup={withdrawSignup}
+      buttonClass="withdraw-user-signup-button btn-outline-danger"
       {...otherProps}
     />
   );
