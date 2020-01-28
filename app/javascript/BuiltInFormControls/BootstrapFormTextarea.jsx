@@ -4,7 +4,8 @@ import useUniqueId from '../useUniqueId';
 
 function BootstrapFormTextarea(props) {
   const {
-    name, value, label, hideLabel, disabled, invalidFeedback, onChange, onTextChange, ...otherProps
+    name, value, label, hideLabel, helpText,
+    disabled, invalidFeedback, onChange, onTextChange, ...otherProps
   } = props;
   const inputId = useUniqueId(`${name}-`);
 
@@ -25,6 +26,11 @@ function BootstrapFormTextarea(props) {
         disabled={disabled}
         {...otherProps}
       />
+      {
+        helpText
+          ? <small className="form-text text-muted">{helpText}</small>
+          : null
+      }
       {invalidFeedback && <div className="invalid-feedback">{invalidFeedback}</div>}
     </div>
   );
@@ -34,6 +40,7 @@ BootstrapFormTextarea.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
   hideLabel: PropTypes.bool,
+  helpText: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onTextChange: PropTypes.func,
@@ -45,6 +52,7 @@ BootstrapFormTextarea.defaultProps = {
   name: null,
   disabled: false,
   hideLabel: false,
+  helpText: null,
   onChange: null,
   onTextChange: null,
   invalidFeedback: null,

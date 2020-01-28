@@ -28,6 +28,7 @@ class Types::ConventionType < Types::BaseObject
   field :cms_layouts, [Types::CmsLayoutType], null: true
   field :cms_content_groups, [Types::CmsContentGroupType], null: false
   field :default_layout, Types::CmsLayoutType, null: true
+  field :departments, [Types::DepartmentType], null: false
   field :cms_navigation_items, [Types::CmsNavigationItemType], null: true
   field :pages, [Types::PageType], null: true
   field :rooms, [Types::RoomType], null: true
@@ -49,6 +50,7 @@ class Types::ConventionType < Types::BaseObject
     :cms_layouts,
     :cms_navigation_items,
     :default_layout,
+    :departments,
     :forms,
     :notification_templates,
     :organization,

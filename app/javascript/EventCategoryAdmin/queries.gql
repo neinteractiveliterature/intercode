@@ -2,6 +2,7 @@ fragment EventCategoryFields on EventCategory {
   id
   name
   team_member_name
+  proposal_description
   scheduling_ui
   default_color
   signed_up_color
@@ -10,6 +11,11 @@ fragment EventCategoryFields on EventCategory {
 
   events_paginated {
     total_entries
+  }
+
+  department {
+    id
+    name
   }
 
   event_form {
@@ -29,6 +35,11 @@ query EventCategoryAdminQuery {
     name
     ticket_name
     ticket_mode
+
+    departments {
+      id
+      name
+    }
 
     event_categories {
       id

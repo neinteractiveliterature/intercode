@@ -41,6 +41,7 @@ class CloneConventionService < CivilService::Service
         conventions: { source_convention.id => convention }
       }
       clone_cms_content(convention)
+      clone_departments(convention)
       clone_event_categories(convention)
       clone_rooms(convention)
       clone_ticket_types(convention)
@@ -123,11 +124,19 @@ class CloneConventionService < CivilService::Service
     end
   end
 
+  def clone_departments(convention)
+    @id_maps[:departments] = clone_with_id_map(
+      source_convention.departments,
+      convention.departments
+    )
+  end
+
   def clone_event_categories(convention)
     @id_maps[:event_categories] = clone_with_id_map(
       source_convention.event_categories,
       convention.event_categories
     ) do |event_category, cloned_event_category|
+      cloned_event_category.department = @id_maps[:departments][event_category.department_id]
       cloned_event_category.event_form = @id_maps[:forms][event_category.event_form_id]
       cloned_event_category.event_proposal_form = @id_maps[:forms][event_category.event_proposal_form_id]
     end

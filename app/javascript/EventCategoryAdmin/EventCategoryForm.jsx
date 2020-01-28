@@ -13,6 +13,7 @@ import { mutator, Transforms } from '../ComposableFormUtils';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
+import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 
 function autogenerateColors(eventCategory) {
   if (!eventCategory.default_color) {
@@ -37,7 +38,7 @@ function autogenerateColors(eventCategory) {
 }
 
 function EventCategoryForm({
-  value, onChange, forms, disabled, ticketName, ticketMode,
+  value, onChange, departments, forms, disabled, ticketName, ticketMode,
 }) {
   const valueMutator = mutator({
     getState: () => value,
@@ -45,6 +46,8 @@ function EventCategoryForm({
     transforms: {
       name: Transforms.identity,
       team_member_name: Transforms.identity,
+      proposal_description: Transforms.identity,
+      department: Transforms.id,
       scheduling_ui: Transforms.identity,
       default_color: Transforms.identity,
       signed_up_color: Transforms.identity,
@@ -73,6 +76,31 @@ function EventCategoryForm({
         helpText={`
           This is the word the site will use to refer to team members of this event, e.g.
           "GM", "facilitator", etc.
+        `}
+        disabled={disabled}
+      />
+
+      <SelectWithLabel
+        label="Department"
+        options={departments}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.name}
+        value={value.department}
+        onChange={valueMutator.department}
+        disabled={disabled}
+        isClearable
+      />
+
+      <BootstrapFormTextarea
+        name="proposal_description"
+        label="Proposal dialog description"
+        value={value.proposal_description || ''}
+        onTextChange={valueMutator.proposal_description}
+        helpText={`
+          When attendees propose an event and select this category, the proposal dialog will show
+          the text you write here.  Use this to describe what they can expect after proposing the
+          event.  For example: ”Your proposal will go to the Board Game Proposals Committee.  You‘ll
+          hear back within a week or two.“
         `}
         disabled={disabled}
       />
@@ -198,6 +226,8 @@ EventCategoryForm.propTypes = {
   value: PropTypes.shape({
     name: PropTypes.string,
     team_member_name: PropTypes.string,
+    proposal_description: PropTypes.string,
+    department: PropTypes.shape({}),
     scheduling_ui: PropTypes.string,
     default_color: PropTypes.string,
     signed_up_color: PropTypes.string,
@@ -210,6 +240,10 @@ EventCategoryForm.propTypes = {
   forms: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
+  })).isRequired,
+  departments: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
   })).isRequired,
   disabled: PropTypes.bool,
   ticketName: PropTypes.string.isRequired,

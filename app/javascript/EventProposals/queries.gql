@@ -101,10 +101,22 @@ query ProposeEventButtonQuery {
 
   convention {
     id
+
+    departments {
+      id
+      name
+      proposal_description
+    }
+
     event_categories {
       id
       name
       proposable
+      proposal_description
+
+      department {
+        id
+      }
     }
   }
 }
