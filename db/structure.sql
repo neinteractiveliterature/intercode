@@ -490,6 +490,39 @@ ALTER SEQUENCE public.conventions_id_seq OWNED BY public.conventions.id;
 
 
 --
+-- Name: departments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.departments (
+    id bigint NOT NULL,
+    convention_id bigint NOT NULL,
+    name text,
+    proposal_description text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.departments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.departments_id_seq OWNED BY public.departments.id;
+
+
+--
 -- Name: event_categories; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -506,7 +539,9 @@ CREATE TABLE public.event_categories (
     event_form_id bigint NOT NULL,
     event_proposal_form_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    department_id bigint,
+    proposal_description text
 );
 
 
@@ -1930,6 +1965,13 @@ ALTER TABLE ONLY public.conventions ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: departments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments ALTER COLUMN id SET DEFAULT nextval('public.departments_id_seq'::regclass);
+
+
+--
 -- Name: event_categories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2259,6 +2301,14 @@ ALTER TABLE ONLY public.cms_variables
 
 ALTER TABLE ONLY public.conventions
     ADD CONSTRAINT conventions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: departments departments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments
+    ADD CONSTRAINT departments_pkey PRIMARY KEY (id);
 
 
 --
@@ -2719,10 +2769,24 @@ CREATE INDEX index_conventions_on_user_con_profile_form_id ON public.conventions
 
 
 --
+-- Name: index_departments_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_departments_on_convention_id ON public.departments USING btree (convention_id);
+
+
+--
 -- Name: index_event_categories_on_convention_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_event_categories_on_convention_id ON public.event_categories USING btree (convention_id);
+
+
+--
+-- Name: index_event_categories_on_department_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_categories_on_department_id ON public.event_categories USING btree (department_id);
 
 
 --
@@ -3366,6 +3430,14 @@ ALTER TABLE ONLY public.root_sites
 
 
 --
+-- Name: departments fk_rails_2512c2101d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments
+    ADD CONSTRAINT fk_rails_2512c2101d FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
 -- Name: conventions fk_rails_253741ce10; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3718,6 +3790,14 @@ ALTER TABLE ONLY public.notification_destinations
 
 
 --
+-- Name: event_categories fk_rails_c3b33a1b7c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_categories
+    ADD CONSTRAINT fk_rails_c3b33a1b7c FOREIGN KEY (department_id) REFERENCES public.departments(id);
+
+
+--
 -- Name: permissions fk_rails_c526e10020; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4030,6 +4110,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191226202814'),
 ('20200121165316'),
 ('20200124155649'),
-('20200125150313');
+('20200125150313'),
+('20200128164623'),
+('20200128165352'),
+('20200128165503');
 
 

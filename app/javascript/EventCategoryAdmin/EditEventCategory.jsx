@@ -50,6 +50,7 @@ function EditEventCategory({ match, history }) {
       <EventCategoryForm
         value={eventCategory}
         onChange={setEventCategory}
+        departments={data.convention.departments}
         forms={data.convention.forms}
         ticketName={data.convention.ticket_name}
         ticketMode={data.convention.ticket_mode}
