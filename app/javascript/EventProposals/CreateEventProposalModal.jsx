@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, useMutation } from 'react-apollo-hooks';
@@ -7,17 +7,42 @@ import { CreateEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useAsyncFunction from '../useAsyncFunction';
+import { sortByLocaleString } from '../ValueUtils';
 
 function CreateEventProposalModal({
-  onCreate, cancel, visible, userEventProposals, proposableEventCategories,
+  onCreate, cancel, visible, userEventProposals, proposableEventCategories, departments,
 }) {
   const [cloneEventProposal, setCloneEventProposal] = useState(null);
-  const [eventCategory, setEventCategory] = useState(
-    proposableEventCategories.length > 1 ? null : proposableEventCategories[0],
+  const topLevelEventCategories = useMemo(
+    () => proposableEventCategories.filter((category) => !category.department),
+    [proposableEventCategories],
   );
+  const topLevelEntities = useMemo(
+    () => sortByLocaleString([...topLevelEventCategories, ...departments], (entity) => entity.name),
+    [departments, topLevelEventCategories],
+  );
+  const [department, setDepartment] = useState(
+    topLevelEntities.length > 1 ? null : departments[0],
+  );
+  const [eventCategory, setEventCategory] = useState(() => (
+    (department && department.event_categories.length === 1) ? department.event_categories[0] : null
+  ));
   const [createMutate] = useMutation(CreateEventProposal);
   const [createProposal, createError, createInProgress] = useAsyncFunction(createMutate);
   const apolloClient = useApolloClient();
+
+  const departmentEventCategories = useMemo(
+    () => (
+      department
+        ? sortByLocaleString(
+          proposableEventCategories.filter((category) => category.department
+            && category.department.id === department.id),
+          (category) => category.name,
+        )
+        : []
+    ),
+    [department, proposableEventCategories],
+  );
 
   const createClicked = async () => {
     const {
@@ -41,14 +66,55 @@ function CreateEventProposalModal({
       <div className="modal-body text-left">
         <SelectWithLabel
           label="What category of event would you like to propose?"
-          options={proposableEventCategories}
-          isClearable={proposableEventCategories.length > 1}
+          options={topLevelEntities}
+          isClearable={topLevelEntities.length > 1}
           isDisabled={createInProgress}
-          value={eventCategory}
-          getOptionValue={(option) => option.id}
+          value={
+            department || (eventCategory && eventCategory.department == null ? eventCategory : null)
+          }
+          getOptionValue={(option) => `${option.__typename}:${option.id}`}
           getOptionLabel={(option) => option.name}
-          onChange={(category) => { setEventCategory(category); }}
+          onChange={(entity) => {
+            if (!entity) {
+              setDepartment(null);
+              setEventCategory(null);
+            } else if (entity.__typename === 'Department') {
+              setDepartment(entity);
+            } else if (entity.__typename === 'EventCategory') {
+              setDepartment(null);
+              setEventCategory(entity);
+            }
+          }}
         />
+
+        {department && (
+          <>
+            {department.proposal_description && (
+              <div className="alert alert-info">
+                {department.proposal_description}
+              </div>
+            )}
+
+            <SelectWithLabel
+              label={`What subcategory of ${department.name} event would you like to propose?`}
+              options={departmentEventCategories}
+              isClearable
+              isDisabled={createInProgress}
+              value={eventCategory}
+              getOptionValue={(option) => option.id}
+              getOptionLabel={(option) => option.name}
+              onChange={(category) => { setEventCategory(category); }}
+            />
+          </>
+        )}
+
+        {eventCategory && eventCategory.proposal_description && (
+          <div className="alert alert-info">
+            {eventCategory.proposal_description}
+          </div>
+        )}
+
+        <hr />
 
         <SelectWithLabel
           label={
@@ -124,6 +190,11 @@ CreateEventProposalModal.propTypes = {
   onCreate: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
+  departments: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    proposal_description: PropTypes.string,
+  })).isRequired,
   userEventProposals: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,

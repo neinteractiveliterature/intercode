@@ -57,6 +57,7 @@ function ProposeEventButton({ className, caption }) {
         userEventProposals={data.myProfile.user.event_proposals}
         proposableEventCategories={data.convention.event_categories
           .filter((category) => category.proposable)}
+        departments={data.convention.departments}
       />
     </div>
   );
