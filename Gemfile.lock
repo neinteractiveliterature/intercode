@@ -53,7 +53,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_record-postgres-constraints (0.1.5)
+    active_record-postgres-constraints (0.2.0)
       pg
       rails (>= 5.0, <= 7.0)
     activejob (6.0.2.1)
@@ -280,7 +280,7 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.1009)
-    mimemagic (0.3.3)
+    mimemagic (0.3.4)
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
