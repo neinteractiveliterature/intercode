@@ -426,11 +426,10 @@ GEM
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
-    simplecov (0.17.1)
+    simplecov (0.18.1)
       docile (~> 1.1)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.2)
+      simplecov-html (~> 0.11.0)
+    simplecov-html (0.11.0)
     skylight (4.2.1)
       skylight-core (= 4.2.1)
     skylight-core (4.2.1)
