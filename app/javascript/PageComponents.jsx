@@ -24,6 +24,7 @@ const UnwrappedNonCMSPageComponents = {
   Cart: () => import(/* webpackChunkName: "store" */ './Store/Cart'),
   CmsAdmin: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'),
   ConventionAdmin: () => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'),
+  DepartmentAdmin: () => import(/* webpackChunkName: "department-admin" */ './DepartmentAdmin'),
   EditUser: () => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'),
   EventAdmin: () => import(/* webpackChunkName: "event-admin" */ './EventAdmin'),
   EventCategoryAdmin: () => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'),
