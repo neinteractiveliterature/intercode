@@ -47,6 +47,7 @@ function renderCommonRoutes() {
 
 function renderCommonInConventionRoutes({ signupMode }) {
   return [
+    <Route path="/admin_departments" component={PageComponents.DepartmentAdmin} key="adminDepartments" />,
     <Route path="/admin_events" component={PageComponents.EventAdmin} key="adminEvents" />,
     <Route path="/admin_forms" component={PageComponents.FormAdmin} key="adminForms" />,
     <Route path="/admin_notifications" component={PageComponents.NotificationAdmin} key="adminNotifications" />,
