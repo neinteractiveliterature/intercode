@@ -421,7 +421,7 @@ GEM
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     scheduled_value (1.2.2)
-    sequel (5.28.0)
+    sequel (5.29.0)
     shoryuken (5.0.3)
       aws-sdk-core (>= 2)
       concurrent-ruby
