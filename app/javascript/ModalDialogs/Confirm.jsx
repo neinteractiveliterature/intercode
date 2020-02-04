@@ -1,5 +1,5 @@
 import React, {
- useState, useContext, useMemo, useCallback
+  useState, useContext, useMemo, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';

@@ -11,5 +11,13 @@ class Types::UserType < Types::BaseObject
   field :event_proposals, [Types::EventProposalType], null: false
   field :user_con_profiles, [Types::UserConProfileType], null: false
 
-  association_loaders User, :event_proposals, :user_con_profiles
+  association_loaders User, :user_con_profiles
+
+  def event_proposals
+    AssociationLoader.new(User, :event_proposals).load(object).then do |event_proposals|
+      # avoid n+1 in the policy check
+      ::ActiveRecord::Associations::Preloader.new.preload(event_proposals, :owner)
+      event_proposals
+    end
+  end
 end

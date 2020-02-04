@@ -1,0 +1,23 @@
+#import "./queries.gql"
+
+mutation CreateDepartment($department: DepartmentInput!) {
+  createDepartment(input: { department: $department }) {
+    department {
+      ...AdminDepartmentFields
+    }
+  }
+}
+
+mutation UpdateDepartment($id: Int!, $department: DepartmentInput!) {
+  updateDepartment(input: { id: $id, department: $department }) {
+    department {
+      ...AdminDepartmentFields
+    }
+  }
+}
+
+mutation DeleteDepartment($id: Int!) {
+  deleteDepartment(input: { id: $id }) {
+    clientMutationId
+  }
+}
