@@ -28,6 +28,10 @@ function ConventionAdminNavigationSection() {
           label: 'Convention Settings',
           url: '/convention/edit',
         },
+        currentAbility.can_update_departments && {
+          label: 'Departments',
+          url: '/admin_departments',
+        },
         currentAbility.can_update_event_categories && siteMode !== 'single_event' && {
           label: 'Event Categories',
           url: '/event_categories',

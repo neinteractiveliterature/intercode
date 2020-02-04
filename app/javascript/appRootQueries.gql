@@ -10,6 +10,7 @@ query AppRootQuery($path: String!) {
     can_list_events
     can_read_user_con_profiles
     can_update_convention
+    can_update_departments
     can_update_event_categories
     can_read_event_proposals
     can_manage_runs

@@ -57,6 +57,12 @@ class Types::MutationType < Types::BaseObject
 
   field :updateConvention, mutation: Mutations::UpdateConvention
 
+  ### Department
+
+  field :createDepartment, mutation: Mutations::CreateDepartment
+  field :updateDepartment, mutation: Mutations::UpdateDepartment
+  field :deleteDepartment, mutation: Mutations::DeleteDepartment
+
   ### Event
 
   field :createEvent, mutation: Mutations::CreateEvent
