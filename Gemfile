@@ -16,7 +16,7 @@ gem 'with_advisory_lock'
 gem 'devise'
 gem 'pundit'
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'doorkeeper', '5.2.3'
+gem 'doorkeeper', '5.3.0'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
@@ -93,7 +93,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.10.1'
+gem 'oj', '~> 3.10.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

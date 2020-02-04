@@ -1,7 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function MultipleChoiceItemDisplay({ formItem, value }) {
+function castValue(value) {
+  if (value == null) {
+    return null;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => castValue(item));
+  }
+
+  return value.toString();
+}
+
+function MultipleChoiceItemDisplay({ formItem, value: uncastValue }) {
+  const value = castValue(uncastValue);
   const isValueOther = (v) => !(formItem.properties.choices.some((choice) => choice.value === v));
 
   if (Array.isArray(value)) {
