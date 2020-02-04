@@ -93,7 +93,11 @@ class Types::ConventionType < Types::BaseObject
         end
       end
     else
-      AssociationLoader.for(Convention, :event_categories).load(object)
+      AssociationLoader.for(Convention, :event_categories).load(object).then do |event_categories|
+        # reading #proposable? will attempt to n+1 these if we don't do this
+        ::ActiveRecord::Associations::Preloader.new.preload(event_categories, :event_proposal_form)
+        event_categories
+      end
     end
   end
 

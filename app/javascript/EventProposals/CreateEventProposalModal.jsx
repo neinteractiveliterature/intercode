@@ -80,6 +80,7 @@ function CreateEventProposalModal({
               setEventCategory(null);
             } else if (entity.__typename === 'Department') {
               setDepartment(entity);
+              setEventCategory(null);
             } else if (entity.__typename === 'EventCategory') {
               setDepartment(null);
               setEventCategory(entity);
