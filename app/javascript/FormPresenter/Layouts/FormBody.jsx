@@ -37,7 +37,7 @@ const FormBody = ({
   return (
     <div>
       {formItems.map((item) => {
-        const itemErrors = errors[item.identifier] || [];
+        const itemErrors = (errors || {})[item.identifier] || [];
         const errorsForDisplay = (itemErrors.length > 0 ? itemErrors.join(', ') : null);
 
         return (
