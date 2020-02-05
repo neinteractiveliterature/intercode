@@ -15,7 +15,19 @@ body_text: |-
   Now: {{ move_result.state }}
 body_sms: |-
   {%- assign run = signup.run -%}
-  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.  As a result, your signup is now {{ move_result.state }}.  (Previously, it was {{ move_result.prev_state }}.)
+  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.
+  {%- if move_result.state == 'confirmed' %} As a result, you have been removed from the waitlist and are signed up.
+  {%- else %} As a result, your signup is now {{ move_result.state }}.  (Previously, it was {{ move_result.prev_state }}.)
+  {%- endif %}
+
+  {%- if move_result.state == 'confirmed' %}
+
+  Please contact the {{ signup.run.event.team_member_name | pluralize }} as soon as possible to confirm your attendance and receive any event materials.
+  GMs: {{ signup.run.event.team_member_user_con_profiles | map: "name_without_nickname" | join: ", " }}
+  Email: {{ signup.run.event.email }}
+
+  If you can't make it after all, please withdraw so that others can have a chance to get in.  You can withdraw via the event page: {{ signup.run.event.url | absolute_url }}
+  {%- endif %}
 ---
 {% assign run = signup.run %}
 <h1>
