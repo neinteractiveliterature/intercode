@@ -185,7 +185,7 @@ exports[`TicketTypeForm matches snapshot 1`] = `
       id="maximum_event_provided_tickets-9"
       name="maximum_event_provided_tickets"
       type="number"
-      value="0"
+      value=""
     />
   </div>
   <fieldset>
