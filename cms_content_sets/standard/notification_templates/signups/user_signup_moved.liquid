@@ -9,10 +9,19 @@ body_text: |-
   {%- assign run = signup.run -%}
   {{ signup.user_con_profile.name_without_nickname }}: your signup for {% include 'run_description' %} is now {{ move_result.state }}
 
-  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.  As a result, the following change has been made to your signup:
+  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.
+  {%- if move_result.state == 'confirmed' %} As a result, you have been removed from the waitlist and are signed up.
+  {%- else %} As a result, your signup is now {{ move_result.state }}.  (Previously, it was {{ move_result.prev_state }}.)
+  {%- endif %}
 
-  Previously: {{ move_result.prev_state }}
-  Now: {{ move_result.state }}
+  {%- if move_result.state == 'confirmed' %}
+
+  Please contact the {{ signup.run.event.team_member_name | pluralize }} as soon as possible to confirm your attendance and receive any event materials.
+  GMs: {{ signup.run.event.team_member_user_con_profiles | map: "name_without_nickname" | join: ", " }}
+  Email: {{ signup.run.event.email }}
+
+  If you can't make it after all, please withdraw so that others can have a chance to get in.  You can withdraw via the event page: {{ signup.run.event.url | absolute_url }}
+  {%- endif %}
 body_sms: |-
   {%- assign run = signup.run -%}
   Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.
@@ -37,13 +46,19 @@ body_sms: |-
 </h1>
 
 <p>
-  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in
-  {% include 'run_description' %}.
-  As a result, the following change has been made to your signup:
+  Hi {{ signup.user_con_profile.name_without_nickname }}, a slot has opened in {% include 'run_description' %}.
+{%- if move_result.state == 'confirmed' %} As a result, you have been removed from the waitlist and are signed up.
+{%- else %} As a result, your signup is now {{ move_result.state }}.  (Previously, it was {{ move_result.prev_state }}.)
+{%- endif %}
 </p>
 
+{%- if move_result.state == 'confirmed' %}
+
 <p>
-  Previously: {{ move_result.prev_state }}
-  <br>
-  Now: {{ move_result.state }}
+  Please contact the {{ signup.run.event.team_member_name | pluralize }} as soon as possible to confirm your attendance and receive any event materials.<br>
+  GMs: {{ signup.run.event.team_member_user_con_profiles | map: "name_without_nickname" | join: ", " }}<br>
+  Email: <a href="mailto:{{ signup.run.event.email }}">{{ signup.run.event.email }}</a>
 </p>
+
+<p>If you can't make it after all, please withdraw so that others can have a chance to get in.  You can <a href="{{ signup.run.event.url | absolute_url }}">withdraw via the event page</a>.</p>
+{%- endif %}
