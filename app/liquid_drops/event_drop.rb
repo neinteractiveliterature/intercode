@@ -32,7 +32,7 @@ class EventDrop < Liquid::Drop
 
   # @return [Array<UserConProfileDrop>] The UserConProfiles of this event's team members
   def team_member_user_con_profiles
-    event.team_members.map(&:user_con_profile)
+    event.team_members.select(&:display?).map(&:user_con_profile)
   end
 
   # @return [String] The relative URL to use for linking to this event on this site
