@@ -18,9 +18,11 @@ body_text: |-
   {%- capture newline %}
   {% endcapture -%}
   {{ move_results | replace: "</li>", "\n" | strip_html | condense_whitespace | replace: "\n", newline }}
+  We've sent messages to newly confirmed attendees asking them to reach out to you at {{ run.event.email }} to confirm their attendance.
   {%- elsif prev_state == 'confirmed' -%}
   There were no signups that could be moved to fill the vacancy.
   {% endif %}
+
   As of this withdrawal, this event run has:
   {{ run.signup_count_description }}
 body_sms: |-
@@ -38,30 +40,33 @@ body_sms: |-
   {%- capture newline %}
   {% endcapture -%}
   {{ move_results | replace: "</li>", "\n" | strip_html | condense_whitespace | replace: "\n", newline }}
+  We've sent messages to newly confirmed attendees asking them to reach out to you at {{ run.event.email }} to confirm their attendance.
   {%- elsif prev_state == 'confirmed' -%}
   There were no signups that could be moved to fill the vacancy.
   {% endif %}
+
   As of this withdrawal, this event run has:
   {{ run.signup_count_description }}
 ---
 {%- assign run = signup.run -%}
-Withdrawal from {% include 'run_description' %}
+<h1>Withdrawal from {% include 'run_description' %}</h1>
 
-{{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
-{%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
-{%- else %} {{ prev_state }}.)
-{%- endif %}
+<p>
+  {{ signup.user_con_profile.name }} has withdrawn from {% include 'run_description' %}.  (Previously, they were
+  {%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+  {%- else %} {{ prev_state }}.)
+  {%- endif %}
+</p>
 
 {% if move_results.size > 0 -%}
-To fill the vacancy, the following signups were moved:
-{% capture move_results -%}
+  <p>To fill the vacancy, the following signups were moved:</p>
   {% include 'move_results_list' %}
-{%- endcapture -%}
-{%- capture newline %}
-{% endcapture -%}
-{{ move_results | replace: "</li>", "\n" | strip_html | condense_whitespace | replace: "\n", newline }}
+
+  <p>We've sent messages to newly confirmed attendees asking them to reach out to you at <a href="mailto:{{ run.event.email }}">{{ run.event.email }}</a> to confirm their attendance.</p>
 {%- elsif prev_state == 'confirmed' -%}
-There were no signups that could be moved to fill the vacancy.
+<p>There were no signups that could be moved to fill the vacancy.</p>
 {% endif %}
-As of this withdrawal, this event run has:
+
+<p>As of this withdrawal, this event run has:
 {{ run.signup_count_description | newline_to_br }}
+</p>
