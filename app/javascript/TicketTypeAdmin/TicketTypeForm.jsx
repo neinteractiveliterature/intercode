@@ -125,7 +125,7 @@ function TicketTypeForm({
         label={`Number of event-provided ${pluralize(ticketName)} of this type (per event)`}
         name="maximum_event_provided_tickets"
         type="number"
-        value={ticketType.maximum_event_provided_tickets.toString()}
+        value={(ticketType.maximum_event_provided_tickets || '').toString()}
         onTextChange={changeMaximumEventProvidedTickets}
       />
 
