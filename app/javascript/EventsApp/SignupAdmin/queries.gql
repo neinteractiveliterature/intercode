@@ -312,6 +312,7 @@ query UserConProfileSignupsQuery($id: Int!) {
   userConProfile(id: $id) {
     id
     name_without_nickname
+    ical_secret
 
     team_members {
       id

@@ -31,8 +31,11 @@ class UserConProfileDrop < Liquid::Drop
   #   @return [String] The user's name, not including nickname
   # @!method ticket
   #   @return [TicketDrop] The user's convention ticket, if present
+  # @!method ical_secret
+  #   @return [String] The user's iCal secret for this convention (used in the
+  #                    {% add_to_calendar_dropdown %} tag)
   delegate :bio_name, :email, :first_name, :gravatar_url, :id, :last_name,
-    :name, :name_inverted, :nickname, :name_without_nickname, :ticket,
+    :name, :name_inverted, :nickname, :name_without_nickname, :ticket, :ical_secret,
     to: :user_con_profile
 
   # @api

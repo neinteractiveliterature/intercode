@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Clipboard from 'react-clipboard.js';
 
-function CopyToClipboardButton({ copiedProps, ...otherProps }) {
+function CopyToClipboardButton({
+  copiedProps, defaultText, copiedText, ...otherProps
+}) {
   const [copied, setCopied] = useState(false);
 
   const onSuccess = () => {
@@ -22,17 +24,21 @@ function CopyToClipboardButton({ copiedProps, ...otherProps }) {
     >
       <i className="fa fa-copy" />
       {' '}
-      {copied ? 'Copied!' : 'Copy to clipboard'}
+      {copied ? (copiedText || 'Copied!') : (defaultText || 'Copy to clipboard')}
     </Clipboard>
   );
 }
 
 CopyToClipboardButton.propTypes = {
   copiedProps: PropTypes.shape({}),
+  defaultText: PropTypes.string,
+  copiedText: PropTypes.string,
 };
 
 CopyToClipboardButton.defaultProps = {
   copiedProps: {},
+  defaultText: null,
+  copiedText: null,
 };
 
 export default CopyToClipboardButton;
