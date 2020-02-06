@@ -12,6 +12,7 @@ import { WithdrawAllUserConProfileSignups } from './mutations.gql';
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
+import AddToCalendarDropdown from './AddToCalendarDropdown';
 
 function filterAndSortSignups(signups) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
@@ -104,7 +105,17 @@ function UserConProfileSignupsCard({ userConProfileId }) {
 
   return (
     <div className="card">
-      <div className="card-header">Signups</div>
+      <div className="card-header">
+        {data.userConProfile.ical_secret && (
+          <div className="float-right">
+            <AddToCalendarDropdown
+              icalSecret={data.userConProfile.ical_secret}
+              className="btn btn-outline-secondary btn-sm"
+            />
+          </div>
+        )}
+        Signups
+      </div>
       <ul className="list-group list-group-flush">
         {
           signups.length === 0

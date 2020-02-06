@@ -9,7 +9,7 @@ invariant: false
   <section class="card bg-info text-white my-4">
     <div class="card-header">My Schedule
       <div class="float-right">
-          <a class="btn btn-outline-light" target="_blank" href="https://calendar.google.com/calendar/r?cid={{user_con_profile.schedule_calendar_url | url_encode}}" title='Add to Google Calendar' data-toggle="tooltip" data-placement="top"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+        {% add_to_calendar_dropdown user_con_profile.ical_secret btn btn-outline-light %}
       </div>
     </div>
     <div style='max-height:499px; overflow-y:auto'>

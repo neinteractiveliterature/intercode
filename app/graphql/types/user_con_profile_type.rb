@@ -119,6 +119,7 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :best_call_time, String, null: true
   personal_info_field :preferred_contact, String, null: true
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
+  personal_info_field :ical_secret, String, null: true
 
   field :ticket, Types::TicketType, null: true
   field :ability, Types::AbilityType, null: true

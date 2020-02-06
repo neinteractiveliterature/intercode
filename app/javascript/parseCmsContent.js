@@ -1,6 +1,7 @@
 import { lazyWithBundleHashCheck } from './checkBundleHash';
 import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
 
+const AddToCalendarDropdown = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "my-profile" */ './EventsApp/SignupAdmin/AddToCalendarDropdown'));
 const EventAdminMenu = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'));
 const LongFormEventDetails = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'));
 const ProposeEventButton = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'));
@@ -10,6 +11,7 @@ const WithdrawMySignupButton = lazyWithBundleHashCheck(() => import(/* webpackCh
 
 export const CMS_COMPONENT_MAP = {
   ...DEFAULT_COMPONENT_MAP,
+  AddToCalendarDropdown,
   EventAdminMenu,
   LongFormEventDetails,
   ProposeEventButton,
