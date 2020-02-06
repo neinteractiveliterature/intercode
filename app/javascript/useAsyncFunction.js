@@ -7,7 +7,10 @@ export default function useAsyncFunction(func, { suppressError } = {}) {
   const [inProgress, setInProgress] = useState(false);
   const unmounted = useRef(false);
   useEffect(
-    () => () => { unmounted.current = true; },
+    () => {
+      unmounted.current = false;
+      return () => { unmounted.current = true; };
+    },
   );
 
   return [
