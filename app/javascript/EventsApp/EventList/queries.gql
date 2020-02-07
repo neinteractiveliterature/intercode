@@ -42,6 +42,8 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
             id
             last_name
             name_without_nickname
+            gravatar_enabled
+            gravatar_url
           }
         }
       }

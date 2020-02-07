@@ -12,6 +12,7 @@ import teamMembersForDisplay from '../teamMembersForDisplay';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
+import Gravatar from '../../Gravatar';
 
 function arrayToSentenceReact(array) {
   if (array.length < 2) {
@@ -92,12 +93,30 @@ const EventCard = ({
     [event],
   );
   const teamMemberNames = displayTeamMembers
-    .map((teamMember) => teamMember.user_con_profile.name_without_nickname).join(', ');
+    .map((teamMember) => (
+      <>
+        { teamMember.user_con_profile.gravatar_enabled && (
+          <>
+            <Gravatar
+              url={teamMember.user_con_profile.gravatar_url}
+              enabled={teamMember.user_con_profile.gravatar_enabled}
+              pixelSize={16}
+              imgClassName="align-baseline"
+            />
+            {' '}
+          </>
+        )}
+        {teamMember.user_con_profile.name_without_nickname}
+      </>
+    ));
+  const teamMemberList = teamMemberNames.length > 1
+    ? teamMemberNames.reduce((prev, curr) => [prev, ', ', curr])
+    : teamMemberNames;
 
-  if (teamMemberNames) {
+  if (teamMemberList.length > 0) {
     const teamMemberDescription = pluralizeWithCount(
       capitalize(event.event_category.team_member_name),
-      event.team_members.length,
+      displayTeamMembers.length,
       true,
     );
 
@@ -110,7 +129,7 @@ const EventCard = ({
             {':'}
           </strong>
           {' '}
-          {teamMemberNames}
+          {teamMemberList}
         </>
       ),
     });

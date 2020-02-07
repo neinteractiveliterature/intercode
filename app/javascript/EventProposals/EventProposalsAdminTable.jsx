@@ -114,16 +114,6 @@ StatusCell.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-function EventProposalOwnerCell({ original }) {
-  return <UserConProfileWithGravatarCell original={original.owner} />;
-}
-
-EventProposalOwnerCell.propTypes = {
-  original: PropTypes.shape({
-    owner: PropTypes.shape({}).isRequired,
-  }).isRequired,
-};
-
 function ExtraCell({ original }) {
   return (
     <Link to={`/admin_event_proposals/${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
@@ -192,8 +182,9 @@ const getPossibleColumns = (data) => [
   {
     Header: 'Submitted by',
     id: 'owner',
+    accessor: (eventProposal) => eventProposal.owner,
     Filter: FreeTextFilter,
-    Cell: EventProposalOwnerCell,
+    Cell: UserConProfileWithGravatarCell,
   },
   {
     Header: 'Capacity',
