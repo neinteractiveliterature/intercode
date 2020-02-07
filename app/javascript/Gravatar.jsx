@@ -16,7 +16,7 @@ function Gravatar({
     <img
       src={`${url}?s=${pixelSize * 2}`} // for retina displays
       alt=""
-      className={`${imgClassName || 'shadow'}`}
+      className={`${imgClassName || ''}`}
       style={{
         width: `${pixelSize}px`,
         height: `${pixelSize}px`,
