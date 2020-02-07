@@ -18,6 +18,7 @@ import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactT
 import TableHeader from '../Tables/TableHeader';
 import { UserConProfilesTableUserConProfilesQuery } from './queries.gql';
 import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
+import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
@@ -173,8 +174,8 @@ const getPossibleColumns = (data) => {
     {
       Header: 'Name',
       id: 'name',
-      accessor: (userConProfile) => userConProfile.name_inverted,
       Filter: FreeTextFilter,
+      Cell: UserConProfileWithGravatarCell,
     },
     {
       Header: 'First name',

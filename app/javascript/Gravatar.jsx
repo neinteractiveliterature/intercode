@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Gravatar({ url, enabled, pixelSize }) {
+function Gravatar({
+  url, enabled, pixelSize, imgClassName,
+}) {
   if (!url || !enabled) {
     return (
       <span className="d-inline-block" style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}>
@@ -14,13 +16,11 @@ function Gravatar({ url, enabled, pixelSize }) {
     <img
       src={`${url}?s=${pixelSize * 2}`} // for retina displays
       alt=""
-      className="border-secondary"
+      className={`${imgClassName || 'shadow'}`}
       style={{
         width: `${pixelSize}px`,
         height: `${pixelSize}px`,
         borderRadius: `${pixelSize / 2}px`,
-        borderStyle: 'solid',
-        borderWidth: `${pixelSize / 16}px`,
       }}
     />
   );
@@ -30,11 +30,13 @@ Gravatar.propTypes = {
   url: PropTypes.string,
   enabled: PropTypes.bool,
   pixelSize: PropTypes.number.isRequired,
+  imgClassName: PropTypes.string,
 };
 
 Gravatar.defaultProps = {
   url: null,
   enabled: true,
+  imgClassName: null,
 };
 
 export default Gravatar;

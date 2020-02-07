@@ -57,6 +57,8 @@ query EventProposalQueryWithOwner($eventProposalId: Int!) {
       id
       name
       email
+      gravatar_enabled
+      gravatar_url
     }
   }
 
@@ -161,6 +163,8 @@ query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposa
         owner {
           id
           name_inverted
+          gravatar_enabled
+          gravatar_url
         }
       }
     }

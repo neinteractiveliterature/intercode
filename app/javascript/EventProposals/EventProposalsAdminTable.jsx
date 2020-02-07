@@ -13,6 +13,7 @@ import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactT
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
+import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -113,6 +114,16 @@ StatusCell.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
+function EventProposalOwnerCell({ original }) {
+  return <UserConProfileWithGravatarCell original={original.owner} />;
+}
+
+EventProposalOwnerCell.propTypes = {
+  original: PropTypes.shape({
+    owner: PropTypes.shape({}).isRequired,
+  }).isRequired,
+};
+
 function ExtraCell({ original }) {
   return (
     <Link to={`/admin_event_proposals/${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
@@ -181,8 +192,8 @@ const getPossibleColumns = (data) => [
   {
     Header: 'Submitted by',
     id: 'owner',
-    accessor: (eventProposal) => eventProposal.owner.name_inverted,
     Filter: FreeTextFilter,
+    Cell: EventProposalOwnerCell,
   },
   {
     Header: 'Capacity',

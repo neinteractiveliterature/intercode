@@ -18,10 +18,10 @@ query MyProfileQuery {
     form_response_attrs_json
     can_have_bio
     gravatar_url
+    gravatar_enabled
     bio
     show_nickname_in_bio
     bio_name
     bio_html
-    gravatar_enabled
   }
 }
