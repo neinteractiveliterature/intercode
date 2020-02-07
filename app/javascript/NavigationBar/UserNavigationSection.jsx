@@ -65,7 +65,12 @@ function LoggedInDropdownTarget({ toggle }, ref) {
 
   return (
     <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} ref={ref} type="button">
-      <Gravatar url={myProfile.gravatar_url} enabled={myProfile.gravatar_enabled} pixelSize={16} />
+      <Gravatar
+        url={myProfile.gravatar_url}
+        enabled={myProfile.gravatar_enabled}
+        pixelSize={16}
+        imgClassName="align-baseline"
+      />
       {' '}
       {
         myProfile
