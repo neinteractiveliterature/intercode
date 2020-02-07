@@ -9,6 +9,7 @@ import { SignupSpySignupsQuery } from './queries.gql';
 import TableHeader from '../Tables/TableHeader';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
 import SignupStateCell from '../Tables/SignupStateCell';
+import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 
 const ChoiceCell = ({ value, original }) => {
   if (original.counted) {
@@ -42,9 +43,10 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: (signup) => signup.user_con_profile.name_inverted,
+    accessor: (signup) => signup.user_con_profile,
     sortable: false,
     filterable: false,
+    Cell: UserConProfileWithGravatarCell,
   },
   {
     Header: 'Event',

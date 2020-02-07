@@ -12,6 +12,7 @@ import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
+import Gravatar from '../../Gravatar';
 
 function isTeamMember(signup, teamMembers) {
   return teamMembers
@@ -80,18 +81,29 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
         })}
       >
         <td>
-          {signup.user_con_profile.name_inverted}
-          {
-            isTeamMember(signup, teamMembers)
-              ? (
-                <strong>
-                  {' ('}
-                  {humanize(underscore(teamMemberName))}
-                  {')'}
-                </strong>
-              )
-              : null
-          }
+          <div className="d-flex align-items-center">
+            <div className="mr-2">
+              <Gravatar
+                url={signup.user_con_profile.gravatar_url}
+                enabled={signup.user_con_profile.gravatar_enabled}
+                pixelSize={32}
+              />
+            </div>
+            <div>
+              {signup.user_con_profile.name_inverted}
+              {
+                isTeamMember(signup, teamMembers)
+                  ? (
+                    <strong>
+                      {' ('}
+                      {humanize(underscore(teamMemberName))}
+                      {')'}
+                    </strong>
+                  )
+                  : null
+              }
+            </div>
+          </div>
         </td>
         <td>
           {humanize(signup.state)}

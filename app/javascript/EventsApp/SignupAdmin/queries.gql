@@ -59,6 +59,8 @@ fragment SignupFields on Signup {
     evening_phone
     best_call_time
     preferred_contact
+    gravatar_enabled
+    gravatar_url
   }
 }
 
@@ -199,6 +201,8 @@ query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $per
             id
             name_inverted
             name_without_nickname
+            gravatar_enabled
+            gravatar_url
             email
             birth_date
           }
@@ -289,6 +293,8 @@ query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
           user_con_profile {
             id
             name_inverted
+            gravatar_enabled
+            gravatar_url
           }
         }
       }

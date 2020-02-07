@@ -18,6 +18,7 @@ import useModal from '../../ModalDialogs/useModal';
 import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
+import Gravatar from '../../Gravatar';
 
 function cityState(userConProfile) {
   return [
@@ -46,7 +47,7 @@ function getMakeCountedConfirmPrompt(signup) {
         towards attendee totals for
         {' '}
         {run.event.title}
-.
+        .
         {' '}
         {run.event.title}
         {' '}
@@ -141,8 +142,17 @@ function EditSignup({ id, teamMembersUrl }) {
 
     return (
       <div className="card mr-2">
-        <div className="card-header">
-          {userConProfile.name_without_nickname}
+        <div className="card-header d-flex align-items-center">
+          <div className="mr-2">
+            <Gravatar
+              url={userConProfile.gravatar_url}
+              enabled={userConProfile.gravatar_enabled}
+              pixelSize={32}
+            />
+          </div>
+          <div className="lead">
+            {userConProfile.name_without_nickname}
+          </div>
         </div>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">

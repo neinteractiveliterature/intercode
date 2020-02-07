@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 function ageRestrictionsValueIsComplete(value) {
   if (value && typeof value.age_restrictions_description === 'string') {
-    return value.age_restrictions.age_restrictions_description.trim() !== '';
+    return value.age_restrictions_description.trim() !== '';
   }
 
   return false;
