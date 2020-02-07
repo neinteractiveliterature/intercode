@@ -135,6 +135,8 @@ query SignupSpySignupsQuery($page: Int, $perPage: Int) {
         user_con_profile {
           id
           name_inverted
+          gravatar_enabled
+          gravatar_url
         }
       }
     }

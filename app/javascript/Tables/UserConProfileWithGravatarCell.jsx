@@ -3,22 +3,22 @@ import PropTypes from 'prop-types';
 
 import Gravatar from '../Gravatar';
 
-function UserConProfileWithGravatarCell({ original }) {
+function UserConProfileWithGravatarCell({ value }) {
   return (
     <>
       <Gravatar
-        url={original.gravatar_url}
-        enabled={original.gravatar_enabled}
+        url={value.gravatar_url}
+        enabled={value.gravatar_enabled}
         pixelSize={16}
       />
       {' '}
-      {original.name_inverted}
+      {value.name_inverted}
     </>
   );
 }
 
 UserConProfileWithGravatarCell.propTypes = {
-  original: PropTypes.shape({
+  value: PropTypes.shape({
     gravatar_enabled: PropTypes.bool,
     gravatar_url: PropTypes.string,
     name_inverted: PropTypes.string.isRequired,
@@ -26,4 +26,3 @@ UserConProfileWithGravatarCell.propTypes = {
 };
 
 export default UserConProfileWithGravatarCell;
-

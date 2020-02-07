@@ -18,6 +18,7 @@ import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
+import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
@@ -126,7 +127,7 @@ const getPossibleColumns = () => [
     id: 'id',
     accessor: 'id',
     filterable: false,
-    width: 50,
+    width: 65,
   },
   {
     Header: 'State',
@@ -139,8 +140,9 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: (signup) => signup.user_con_profile.name_inverted,
+    accessor: (signup) => signup.user_con_profile,
     Filter: FreeTextFilter,
+    Cell: UserConProfileWithGravatarCell,
   },
   {
     Header: 'Bucket',
