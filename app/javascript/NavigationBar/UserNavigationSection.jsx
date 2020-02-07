@@ -9,6 +9,7 @@ import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 import AppRootContext from '../AppRootContext';
 import NavigationItem from './NavigationItem';
 import SignOutNavigationItem from './SignOutNavigationItem';
+import Gravatar from '../Gravatar';
 
 function CurrentPendingOrderButton() {
   const { currentPendingOrder } = useContext(AppRootContext);
@@ -64,7 +65,7 @@ function LoggedInDropdownTarget({ toggle }, ref) {
 
   return (
     <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} ref={ref} type="button">
-      <i className="fa fa-user" />
+      <Gravatar url={myProfile.gravatar_url} enabled={myProfile.gravatar_enabled} pixelSize={16} />
       {' '}
       {
         myProfile

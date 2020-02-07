@@ -50,6 +50,8 @@ query AppRootQuery($path: String!) {
     name_without_nickname
     first_name
     last_name
+    gravatar_enabled
+    gravatar_url
     ticket {
       id
     }
