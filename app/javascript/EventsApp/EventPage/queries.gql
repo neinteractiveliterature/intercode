@@ -101,6 +101,8 @@ query EventPageQuery($eventId: Int!) {
       user_con_profile {
         id
         name_without_nickname
+        gravatar_enabled
+        gravatar_url
       }
     }
 

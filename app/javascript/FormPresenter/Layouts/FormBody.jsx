@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import FormItemInput from '../ItemInputs/FormItemInput';
-import { formResponseValueIsComplete } from '../../Models/FormItem';
+import { formResponseValueIsCompleteIfRequired } from '../../Models/FormItem';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 
 const FormBody = ({
@@ -57,7 +57,7 @@ const FormBody = ({
               valueInvalid={
                 item.identifier
                 && hasInteractedWithItem(item.identifier)
-                && !formResponseValueIsComplete(item, response[item.identifier])
+                && !formResponseValueIsCompleteIfRequired(item, response[item.identifier])
               }
               value={item.identifier ? response[item.identifier] : null}
               onChange={responseValueChanged}
