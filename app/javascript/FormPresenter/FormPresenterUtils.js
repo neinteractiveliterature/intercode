@@ -1,4 +1,4 @@
-import { formResponseValueIsComplete } from '../Models/FormItem';
+import { formResponseValueIsCompleteIfRequired } from '../Models/FormItem';
 
 export function getCurrentSection(form, currentSectionId) {
   if (!currentSectionId) {
@@ -9,7 +9,7 @@ export function getCurrentSection(form, currentSectionId) {
 
 export function getIncompleteItems(items, response) {
   return items.filter((item) => (
-    !formResponseValueIsComplete(item, response[item.identifier])
+    !formResponseValueIsCompleteIfRequired(item, response[item.identifier])
   ));
 }
 

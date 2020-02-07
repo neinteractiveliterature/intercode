@@ -1,5 +1,13 @@
 import PropTypes from 'prop-types';
 
+function ageRestrictionsValueIsComplete(value) {
+  if (value && typeof value.age_restrictions_description === 'string') {
+    return value.age_restrictions.age_restrictions_description.trim() !== '';
+  }
+
+  return false;
+}
+
 function eventEmailValueIsComplete(value) {
   if (!value) {
     return false;
@@ -66,11 +74,8 @@ function timespanValueIsComplete(value) {
 }
 
 export function formResponseValueIsComplete(formItem, value) {
-  if (!formItem.properties.required) {
-    return true;
-  }
-
   switch (formItem.item_type) {
+    case 'age_restrictions': return ageRestrictionsValueIsComplete(value);
     case 'event_email': return eventEmailValueIsComplete(value);
     case 'free_text': return freeTextValueIsComplete(value);
     case 'multiple_choice': return multipleChoiceValueIsComplete(value);
@@ -79,6 +84,14 @@ export function formResponseValueIsComplete(formItem, value) {
     case 'timespan': return timespanValueIsComplete(value);
     default: return true;
   }
+}
+
+export function formResponseValueIsCompleteIfRequired(formItem, value) {
+  if (!formItem.properties.required) {
+    return true;
+  }
+
+  return formResponseValueIsComplete(formItem, value);
 }
 
 export const FormItemPropType = PropTypes.shape({
