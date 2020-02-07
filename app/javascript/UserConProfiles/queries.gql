@@ -3,6 +3,8 @@ fragment UserConProfileFields on UserConProfile {
   name
   privileges
   form_response_attrs_json
+  gravatar_enabled
+  gravatar_url
 }
 
 fragment UserConProfileFormData on Convention {
@@ -107,6 +109,8 @@ query UserConProfileAdminQuery($id: Int!) {
     name
     name_without_nickname
     form_response_attrs_json
+    gravatar_enabled
+    gravatar_url
 
     ticket {
       id
@@ -181,6 +185,8 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
         privileges
         form_response_attrs_json
         order_summary
+        gravatar_enabled
+        gravatar_url
 
         user_id
 

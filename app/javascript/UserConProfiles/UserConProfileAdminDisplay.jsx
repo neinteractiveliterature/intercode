@@ -16,6 +16,7 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import Gravatar from '../Gravatar';
 
 function UserConProfileAdminDisplay({ userConProfileId }) {
   const history = useHistory();
@@ -153,7 +154,18 @@ function UserConProfileAdminDisplay({ userConProfileId }) {
   return (
     <div className="row">
       <div className="col-lg-9">
-        <h1>{data.userConProfile.name}</h1>
+        <header className="d-flex align-items-center mb-4">
+          <div className="mr-2">
+            <Gravatar
+              url={data.userConProfile.gravatar_url}
+              enabled={data.userConProfile.gravatar_enabled}
+              pixelSize={40}
+            />
+          </div>
+          <div>
+            <h1 className="mb-0">{data.userConProfile.name}</h1>
+          </div>
+        </header>
         <table className="table table-sm table-striped my-4">
           <tbody>
             <tr>

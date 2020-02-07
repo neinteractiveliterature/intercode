@@ -7,6 +7,7 @@ import { EventProposalQueryWithOwner } from './queries.gql';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import Gravatar from '../Gravatar';
 
 function EventProposalDisplay({ eventProposalId }) {
   const { data, error } = useQuerySuspended(EventProposalQueryWithOwner, {
@@ -55,13 +56,24 @@ function EventProposalDisplay({ eventProposalId }) {
             <strong>Submitted by</strong>
           </div>
           <div className="col-md-10">
-            {data.eventProposal.owner.name}
-            {' '}
+            <div className="d-flex align-items-center">
+              <div className="mr-2">
+                <Gravatar
+                  url={data.eventProposal.owner.gravatar_url}
+                  enabled={data.eventProposal.owner.gravatar_enabled}
+                  pixelSize={32}
+                />
+              </div>
+              <div>
+                {data.eventProposal.owner.name}
+                {' '}
                 (
-            <a href={`mailto:${data.eventProposal.owner.email}`}>
-              {data.eventProposal.owner.email}
-            </a>
+                <a href={`mailto:${data.eventProposal.owner.email}`}>
+                  {data.eventProposal.owner.email}
+                </a>
                 )
+              </div>
+            </div>
           </div>
         </div>
       </li>
