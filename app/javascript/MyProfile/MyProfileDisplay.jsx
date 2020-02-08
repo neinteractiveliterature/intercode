@@ -8,8 +8,8 @@ import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSi
 import Form from '../Models/Form';
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
-import BioDisplay from './BioDisplay';
 import usePageTitle from '../usePageTitle';
+import Gravatar from '../Gravatar';
 
 function MyProfileDisplay() {
   const { data, error } = useQuerySuspended(MyProfileQuery);
@@ -67,6 +67,40 @@ function MyProfileDisplay() {
             <dt className="col-md-3 mb-2">Email</dt>
             <dd className="col-md-9 mb-2">{data.myProfile.email}</dd>
 
+            <dt className="col-md-3 mb-2">Avatar</dt>
+            <dd className="col-md-9 mb-2">
+              <div className="d-flex align-items-center">
+                <div className="mr-2">
+                  <Gravatar
+                    url={data.myProfile.gravatar_url}
+                    enabled={data.myProfile.gravatar_enabled}
+                    pixelSize={32}
+                  />
+                </div>
+                <div className="font-italic">
+                  {data.myProfile.gravatar_enabled ? 'Gravatar enabled' : 'Gravatar disabled'}
+                </div>
+              </div>
+            </dd>
+
+            {
+              data.myProfile.can_have_bio && (
+                <>
+                  <dt className="col-md-3 mb-2">Bio</dt>
+                  <dd className="col-md-9 mb-2">
+                    <div className="card bg-light">
+                      <div className="card-body">
+                        <strong>{data.myProfile.bio_name}</strong>
+                        <br />
+                        { /* eslint-disable-next-line react/no-danger */}
+                        <div dangerouslySetInnerHTML={{ __html: data.myProfile.bio_html }} />
+                      </div>
+                    </div>
+                  </dd>
+                </>
+              )
+            }
+
             {formItems.map((item) => (
               <React.Fragment key={item.id}>
                 <dt className="col-md-3 mb-2"><AdminCaption formItem={item} /></dt>
@@ -86,14 +120,7 @@ function MyProfileDisplay() {
           </Link>
         </section>
 
-        {
-          data.myProfile.can_have_bio && (
-            <>
-              <hr className="mb-4" />
-              <BioDisplay userConProfile={data.myProfile} />
-            </>
-          )
-        }
+
       </div>
 
       <div className="col-lg-3">
