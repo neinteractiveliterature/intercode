@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import useUniqueId from '../useUniqueId';
+import HelpText from './HelpText';
 
 function BootstrapFormTextarea(props) {
   const {
@@ -26,11 +27,7 @@ function BootstrapFormTextarea(props) {
         disabled={disabled}
         {...otherProps}
       />
-      {
-        helpText
-          ? <small className="form-text text-muted">{helpText}</small>
-          : null
-      }
+      <HelpText>{helpText}</HelpText>
       {invalidFeedback && <div className="invalid-feedback">{invalidFeedback}</div>}
     </div>
   );
