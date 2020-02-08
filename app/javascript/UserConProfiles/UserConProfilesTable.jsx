@@ -174,6 +174,7 @@ const getPossibleColumns = (data) => {
     {
       Header: 'Name',
       id: 'name',
+      accessor: (userConProfile) => userConProfile,
       Filter: FreeTextFilter,
       Cell: UserConProfileWithGravatarCell,
     },
