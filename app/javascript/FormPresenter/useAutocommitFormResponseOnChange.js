@@ -11,4 +11,6 @@ export default function useAutocommitFormResponseOnChange(commit, response) {
     () => { debouncedCommit(response); },
     [debouncedCommit, response],
   );
+
+  return debouncedCommit;
 }

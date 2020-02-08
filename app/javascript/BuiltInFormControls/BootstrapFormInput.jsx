@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import useUniqueId from '../useUniqueId';
+import HelpText from './HelpText';
 
 function BootstrapFormInput(props) {
   const inputId = useUniqueId(`${props.name || 'input'}-`);
@@ -22,11 +23,7 @@ function BootstrapFormInput(props) {
         onChange={onChangeProp}
         {...otherProps}
       />
-      {
-        helpText
-          ? <small className="form-text text-muted">{helpText}</small>
-          : null
-      }
+      <HelpText>{helpText}</HelpText>
       {invalidFeedback && <div className="invalid-feedback">{invalidFeedback}</div>}
     </div>
   );
