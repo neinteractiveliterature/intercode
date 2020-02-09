@@ -116,9 +116,6 @@ group :development do
   # Doc generation
   gem 'yard'
 
-  # n+1 query profiling
-  gem 'bullet'
-
   # Ruby language server for LSP-compatible editors
   gem 'solargraph'
 end
