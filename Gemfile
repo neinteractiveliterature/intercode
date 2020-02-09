@@ -52,7 +52,7 @@ gem 'will_paginate'
 gem 'pg_search'
 
 # GraphQL server
-gem 'graphql', '>= 1.9.15'
+gem 'graphql', '>= 1.10.2'
 gem 'graphql-batch'
 gem 'apollo_upload_server', '2.0.0.beta.3'
 gem 'graphql-rails_logger', groups: [:development, :test]
