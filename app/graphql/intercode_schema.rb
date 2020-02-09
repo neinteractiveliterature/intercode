@@ -50,7 +50,7 @@ class IntercodeSchema < GraphQL::Schema
     raise GraphQL::ExecutionError.new(
       "Validation failed for #{err.record.class.name}: \
 #{err.record.errors.full_messages.join(', ')}",
-      options: {
+      extensions: {
         validationErrors: err.record.errors.as_json
       }
     )
@@ -66,18 +66,24 @@ class IntercodeSchema < GraphQL::Schema
   end
 
   rescue_from Liquid::SyntaxError do |err, _obj, _args, _ctx, _field|
-    raise GraphQL::ExecutionError, err.message
+    raise GraphQL::ExecutionError.new(
+      err.message, extensions: { backtrace: err.backtrace }
+    )
   end
 
   rescue_from CivilService::ServiceFailure do |err, _obj, _args, _ctx, _field|
     Rollbar.error(err)
-    raise GraphQL::ExecutionError, err.result.errors.full_messages.join(', ')
+    raise GraphQL::ExecutionError.new(
+      err.result.errors.full_messages.join(', '), extensions: { backtrace: err.backtrace }
+    )
   end
 
   # Catch-all for unhandled errors
   rescue_from StandardError do |err, _obj, _args, _ctx, _field|
     Rollbar.error(err)
-    raise GraphQL::ExecutionError, err.message
+    raise GraphQL::ExecutionError.new(
+      err.message, extensions: { backtrace: err.backtrace }
+    )
   end
 
   def self.resolve_type(_abstract_type, object, _context)

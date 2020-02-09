@@ -90,7 +90,7 @@ class CmsRenderingContext
         :div,
         '',
         'data-react-class' => 'AppRouter',
-        'data-react-props' => { alert: controller&.flash.alert }.to_json
+        'data-react-props' => { alert: controller&.flash&.alert }.to_json
       )
     )
   end

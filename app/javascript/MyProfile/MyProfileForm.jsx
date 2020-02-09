@@ -24,7 +24,7 @@ import Gravatar from '../Gravatar';
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
   const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateUserConProfile']));
-  const { validationErrors } = (updateError || {});
+  const { validationErrors } = ((updateError || {}).extensions || {});
   return validationErrors;
 }
 

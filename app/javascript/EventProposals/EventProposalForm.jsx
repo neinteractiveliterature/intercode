@@ -19,7 +19,7 @@ function parseResponseErrors(error) {
     return {};
   }
   const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateEventProposal']));
-  const { validationErrors } = (updateError || {});
+  const { validationErrors } = ((updateError || {}).extensions || {});
   return validationErrors;
 }
 
