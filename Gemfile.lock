@@ -120,9 +120,6 @@ GEM
     bootsnap (1.4.5-java)
       msgpack (~> 1.0)
     builder (3.2.4)
-    bullet (6.1.0)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.11)
     cadmus (0.7.0)
       liquid
       rails (>= 5.0.0)
@@ -482,7 +479,6 @@ GEM
     unf (0.1.4-java)
     unf_ext (0.0.7.6)
     unicode-display_width (1.6.1)
-    uniform_notifier (1.13.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     websocket-driver (0.7.1)
@@ -509,7 +505,6 @@ DEPENDENCIES
   aws-sdk-s3
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
-  bullet
   cadmus (~> 0.7.0)
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)

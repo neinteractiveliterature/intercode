@@ -70,13 +70,4 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.console = true
-    Bullet.rails_logger = false
-    Bullet.add_footer = false
-    Bullet.stacktrace_includes = %w[civil_service cadmus cadmus_files cadmus_navbar]
-    Bullet.stacktrace_excludes = []
-  end
 end
