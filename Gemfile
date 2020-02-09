@@ -86,7 +86,6 @@ gem 'parallel'
 gem 'skylight'
 gem 'icalendar'
 gem 'dalli'
-gem 'browser'
 gem 'platform-api'
 
 gem 'faker', group: 'development', require: false
