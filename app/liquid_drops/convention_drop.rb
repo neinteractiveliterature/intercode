@@ -40,8 +40,8 @@ class ConventionDrop < Liquid::Drop
   # @return [Array<RunAvailabilityDrop>] Run availabilities for this convention
   def run_availabilities
     runs = convention.runs.includes(event: :event_category).order(:starts_at)
-    presenters = RunAvailabilityPresenter.for_runs(runs).values
-    presenters.sort_by { |p| runs.index(p.run) }
+    presenters = RunAvailabilityPresenter.for_runs(runs)
+    runs.map { |r| presenters[r.id] }
   end
 
   # @return [Array<RunAvailabilityDrop>] Run availabilities for this convention with any slots
