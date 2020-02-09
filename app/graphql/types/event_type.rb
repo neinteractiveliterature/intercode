@@ -158,12 +158,12 @@ class Types::EventType < Types::BaseObject
   field :category, String, deprecation_reason: 'Please use event_category instead', null: false
 
   def category
-    object.event_category.name.underscore
+    event_category.then { |category| category.name.underscore }
   end
 
   field :team_member_name, String, deprecation_reason: 'Please use event_category.team_member_name instead', null: false
 
   def team_member_name
-    object.event_category.team_member_name
+    event_category.then { |category| category.team_member_name }
   end
 end
