@@ -5,7 +5,6 @@ class GraphqlController < ApplicationController
       pundit_user: :pundit_user,
       user_con_profile: :user_con_profile,
       convention: :convention,
-      cms_rendering_context: :cms_rendering_context,
       cadmus_renderer: :cadmus_renderer,
       current_pending_order: :current_pending_order,
       assumed_identity_from_profile: :assumed_identity_from_profile,
@@ -46,7 +45,7 @@ class GraphqlController < ApplicationController
 
   def execute
     ActiveRecord::Base.transaction do
-      result = execute_from_params(params)
+      result = clean_backtraces(execute_from_params(params))
       render json: result
 
       raise ActiveRecord::Rollback if result['errors'].present?
@@ -65,6 +64,20 @@ class GraphqlController < ApplicationController
       variables: variables,
       context: Context.new(self),
       operation_name: operation_name
+    )
+  end
+
+  def clean_backtraces(result)
+    return result unless result['errors'].present?
+    return result if Rails.configuration.consider_all_requests_local
+
+    result.merge(
+      'errors' => result['errors'].map do |error|
+        next error unless error['extensions'].present?
+        error.merge(
+          'extensions' => error['extensions'].except('backtrace')
+        )
+      end
     )
   end
 

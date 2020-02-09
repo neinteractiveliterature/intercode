@@ -1,6 +1,5 @@
 module ContextAccessors
   %i[
-    controller
     current_user
     pundit_user
     user_con_profile
@@ -27,7 +26,16 @@ module ContextAccessors
     Pundit.policy_scope(context[:pundit_user], scope)
   end
 
+  def cms_content_finder
+    @cms_content_finder ||= CmsContentHelpers::CmsContentFinder.new(context[:convention])
+  end
+
   def cms_rendering_context(path: nil)
-    controller.send(:cms_rendering_context, path: path)
+    cms_content_finder.cms_rendering_context(
+      path: path,
+      controller: context[:controller],
+      user: context[:user],
+      user_con_profile: context[:user_con_profile]
+    )
   end
 end

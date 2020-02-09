@@ -35,10 +35,72 @@ class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActionMailer::TestCase::ClearTestDeliveries
 
+  class TestGraphqlContext
+    def self.with_user_con_profile(user_con_profile, **attrs)
+      rendering_context = CmsRenderingContext.new(
+        cms_parent: user_con_profile&.convention, controller: nil
+      )
+
+      new(
+        user_con_profile: user_con_profile,
+        current_user: user_con_profile&.user,
+        pundit_user: AuthorizationInfo.cast(user_con_profile&.user),
+        convention: user_con_profile&.convention,
+        cms_rendering_context: rendering_context,
+        cadmus_renderer: rendering_context.cadmus_renderer,
+        verified_request: true,
+        **attrs
+      )
+    end
+
+    attr_reader :attrs
+    delegate :[], :[]=, :fetch, to: :attrs
+
+    def initialize(**attrs)
+      @attrs = attrs.with_indifferent_access
+    end
+
+    [:controller, *GraphqlController::Context::METHODS.keys].each do |key|
+      define_method key do
+        @attrs[key]
+      end
+    end
+  end
+
+  class GraphqlTestExecutionError < StandardError
+    attr_reader :result, :errors
+
+    def initialize(result)
+      @result = result
+      @errors = result['errors']
+      super(errors.map { |error| error['message'] }.join(', '))
+    end
+
+    def backtrace
+      error_with_backtrace = errors.find do |error|
+        error['extensions'] && error['extensions']['backtrace'].present?
+      end
+      return super unless error_with_backtrace
+
+      error_with_backtrace['extensions']['backtrace']
+    end
+  end
+
   before do
     DatabaseCleaner.start
   end
   after { DatabaseCleaner.clean }
+
+  def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **options)
+    context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
+    result = IntercodeSchema.execute(
+      query,
+      context: context,
+      **options
+    )
+    raise GraphqlTestExecutionError.new(result) if result['errors'].present?
+    result
+  end
 end
 
 class ActionController::TestCase
