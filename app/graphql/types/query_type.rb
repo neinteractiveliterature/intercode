@@ -315,7 +315,7 @@ class Types::QueryType < Types::BaseObject
     argument :event_key, String, required: true
     argument :content, String, required: true
 
-    authorize do |_value, context|
+    authorize do |_value, _args, context|
       Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
     end
   end
