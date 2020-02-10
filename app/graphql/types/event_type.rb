@@ -80,7 +80,7 @@ class Types::EventType < Types::BaseObject
   end
 
   field :provided_tickets, [Types::TicketType], null: false do
-    authorize do |value, context|
+    authorize do |value, _args, context|
       Pundit.policy(
         context[:pundit_user],
         Ticket.new(

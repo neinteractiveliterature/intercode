@@ -295,7 +295,7 @@ class Types::QueryType < Types::BaseObject
   field :preview_liquid, String, null: false do
     argument :content, String, required: true
 
-    authorize do |_value, context|
+    authorize do |_value, _args, context|
       # TODO maybe better permission for this?  Not sure, but for now I'm using view_reports as a
       # proxy for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary
       # Liquid drop data)"
