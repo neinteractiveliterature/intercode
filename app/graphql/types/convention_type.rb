@@ -126,7 +126,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :orders, Types::OrdersConnectionType, max_page_size: 1000, null: true, connection: true do
-    authorize do |value, context|
+    authorize do |value, _args, context|
       Pundit.policy(
         context[:pundit_user],
         Order.new(user_con_profile: UserConProfile.new(convention: value))
