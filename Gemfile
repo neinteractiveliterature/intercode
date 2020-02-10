@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 ruby '2.7.0'
 gem 'rails', '6.0.2.1'
 
+# Temporary measure: take the Rack 2.2.2 release early in order to fix issues with domains starting with digits
+gem 'rack', github: 'rack/rack', ref: 'ed16472273f5711f0b67d13f3806e3fcd0901e98'
+
 gem 'pg'
 gem 'puma'
 
