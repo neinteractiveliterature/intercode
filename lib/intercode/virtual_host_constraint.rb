@@ -14,6 +14,11 @@ module Intercode
       request = Rack::Request.new(env)
       unless request.path =~ %r{\A#{Rails.application.config.assets.prefix}/}
         env['intercode.convention'] ||= Convention.find_by(domain: request.host)
+        if env['intercode.convention']
+          Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to #{env['intercode.convention'].name}"
+        else
+          Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to root site"
+        end
       end
 
       @app.call env
