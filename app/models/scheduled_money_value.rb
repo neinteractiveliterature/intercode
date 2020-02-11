@@ -12,13 +12,15 @@ class ScheduledMoneyValue < ScheduledValue::ScheduledValue
       end
     end
 
-    def serializable_hash(options = {})
-      return nil unless value
-      super(
-        (options || {}).merge(except: :value)
-      ).merge(
+    def attributes
+      return super unless value
+      super.merge(
         value: { fractional: value.fractional, currency_code: value.currency.iso_code }
       )
+    end
+
+    def as_json(options = nil)
+      attributes
     end
 
     def to_s(format = nil, timezone = nil)

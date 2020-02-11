@@ -16,10 +16,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
   subject { PurchaseTicketService.new(user_con_profile, ticket_type, stripe_token) }
 
   it 'buys a ticket' do
-    assert_difference('Ticket.count', 1) do
-      result = subject.call
-      assert result.success?
-    end
+    assert_difference('Ticket.count', 1) { subject.call! }
   end
 
   describe 'there is a card issue' do
