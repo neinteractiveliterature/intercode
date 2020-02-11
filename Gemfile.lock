@@ -14,13 +14,6 @@ GIT
     htmldiff-lcs (0.0.1)
       diff-lcs
 
-GIT
-  remote: https://github.com/rack/rack.git
-  revision: ed16472273f5711f0b67d13f3806e3fcd0901e98
-  ref: ed16472273f5711f0b67d13f3806e3fcd0901e98
-  specs:
-    rack (2.3.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -355,6 +348,7 @@ GEM
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
+    rack (2.2.2)
     rack-mini-profiler (1.1.6)
       rack (>= 1.2.0)
     rack-test (1.1.0)
@@ -558,7 +552,6 @@ DEPENDENCIES
   pry-remote
   puma
   pundit
-  rack!
   rack-mini-profiler
   rails (= 6.0.2.1)
   rails-controller-testing
