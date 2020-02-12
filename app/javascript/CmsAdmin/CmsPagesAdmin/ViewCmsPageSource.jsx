@@ -1,18 +1,31 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { useParams } from 'react-router-dom';
 
 import CmsPageForm from './CmsPageForm';
 import { CmsPagesAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
-import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function ViewCmsPageSource({ match }) {
-  const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
-  const page = error ? null : data.cmsPages.find((p) => match.params.id === p.id.toString());
+function ViewCmsPageSource() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(CmsPagesAdminQuery);
+  const page = useMemo(
+    () => (
+      error || loading
+        ? null
+        : data.cmsPages.find((p) => id === p.id.toString())
+    ),
+    [data, error, loading, id],
+  );
 
-  usePageTitle(useValueUnless(() => `View “${page.name}” Source`, error));
+  usePageTitle(useValueUnless(() => `View “${page.name}” Source`, error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -27,16 +40,5 @@ function ViewCmsPageSource({ match }) {
     />
   );
 }
-
-ViewCmsPageSource.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default ViewCmsPageSource;

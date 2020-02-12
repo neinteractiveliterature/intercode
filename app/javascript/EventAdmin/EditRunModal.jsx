@@ -113,7 +113,7 @@ function EditRunModal({
 
   return (
     <div>
-      <Modal visible={run != null && !confirm.visible} dialogClassName="modal-lg">
+      <Modal visible={run != null && !confirm.visible} dialogClassName="modal-xl">
         <div className="modal-header">
           <h5 className="modal-title">{title}</h5>
         </div>

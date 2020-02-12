@@ -1,18 +1,17 @@
 import React, { useReducer } from 'react';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import buildPartialInput from './buildPartialInput';
 import { CmsPartialsAdminQuery } from './queries.gql';
 import { CreatePartial } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
 
-function NewCmsPartial({ history }) {
-  const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
+function NewCmsPartial() {
+  const history = useHistory();
   const [partial, dispatch] = useReducer(partialReducer, {});
   const [createPartial, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreatePartial, {
@@ -23,10 +22,6 @@ function NewCmsPartial({ history }) {
   );
 
   usePageTitle('New Partial');
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const formSubmitted = async (event) => {
     event.preventDefault();
@@ -44,8 +39,6 @@ function NewCmsPartial({ history }) {
         <CmsPartialForm
           partial={partial}
           dispatch={dispatch}
-          cmsPartials={data.cmsPartials}
-          cmsParent={data.cmsParent}
         />
 
         <ErrorDisplay graphQLError={createError} />
@@ -55,16 +48,11 @@ function NewCmsPartial({ history }) {
           className="btn btn-primary"
           value="Create partial"
           disabled={createInProgress}
+          aria-label="Create partial"
         />
       </form>
     </>
   );
 }
-
-NewCmsPartial.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewCmsPartial;
