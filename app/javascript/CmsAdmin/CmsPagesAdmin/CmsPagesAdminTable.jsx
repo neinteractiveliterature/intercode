@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPagesAdminQuery } from './queries.gql';
 import { DeletePage } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsPagesAdminTable() {
-  const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
+  const { data, loading, error } = useQuery(CmsPagesAdminQuery);
   const confirm = useConfirm();
   const deletePageMutate = useDeleteMutation(DeletePage, {
     query: CmsPagesAdminQuery,
@@ -20,18 +21,22 @@ function CmsPagesAdminTable() {
     idVariablePath: ['id'],
   });
 
-  usePageTitle(useValueUnless(() => 'CMS Pages', error));
+  usePageTitle(useValueUnless(() => 'CMS Pages', error || loading));
 
   const pagesSorted = useMemo(
     () => {
-      if (error) {
+      if (error || loading) {
         return [];
       }
 
       return sortByLocaleString(data.cmsPages, (page) => page.name);
     },
-    [data, error],
+    [data, loading, error],
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
