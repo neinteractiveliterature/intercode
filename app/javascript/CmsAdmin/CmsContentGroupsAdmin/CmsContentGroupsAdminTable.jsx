@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
 import { DeleteContentGroup } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsContentGroupsAdminTable() {
-  const { data, error } = useQuerySuspended(CmsContentGroupsAdminQuery);
+  const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
   const confirm = useConfirm();
   const deleteContentGroupMutate = useDeleteMutation(DeleteContentGroup, {
     query: CmsContentGroupsAdminQuery,
@@ -23,14 +24,18 @@ function CmsContentGroupsAdminTable() {
 
   const contentGroupsSorted = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return [];
       }
 
       return sortByLocaleString(data.cmsContentGroups, (contentGroup) => contentGroup.name);
     },
-    [data, error],
+    [data, loading, error],
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CmsGraphqlQueriesQuery } from './queries.gql';
@@ -8,24 +9,18 @@ import { UpdateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import useQuerySuspended from '../../useQuerySuspended';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 import 'graphiql/graphiql.css';
 
-function EditCmsGraphqlQuery({ match, history }) {
-  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
-  const initialQuery = error
-    ? null
-    : data.cmsGraphqlQueries.find((q) => q.id.toString() === match.params.id);
+function EditCmsGraphqlQueryForm({ initialQuery }) {
+  const history = useHistory();
   const [query, setQuery] = useState(initialQuery);
   const [updateMutate] = useMutation(UpdateCmsGraphqlQuery);
-  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
-  usePageTitle(`Editing “${initialQuery.identifier}”`);
-
   const saveClicked = async () => {
-    await update({
+    await updateMutate({
       variables: {
         id: query.id,
         query: {
@@ -40,21 +35,25 @@ function EditCmsGraphqlQuery({ match, history }) {
     history.push('/cms_graphql_queries');
   };
 
+  const [save, saveError, saveInProgress] = useAsyncFunction(saveClicked);
+
+  usePageTitle(`Editing “${initialQuery.identifier}”`);
+
   return (
     <>
       <h2 className="mb-4">Edit GraphQL query</h2>
 
       <div className="mb-4">
-        <CmsGraphqlQueryForm value={query} onChange={setQuery} />
+        <CmsGraphqlQueryForm value={query} readOnly={saveInProgress} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={updateError} />
+      <ErrorDisplay graphQLError={saveError} />
 
       <button
         type="button"
         className="btn btn-primary"
-        disabled={updateInProgress}
-        onClick={saveClicked}
+        disabled={saveInProgress}
+        onClick={save}
       >
         Save GraphQL query
       </button>
@@ -62,15 +61,29 @@ function EditCmsGraphqlQuery({ match, history }) {
   );
 }
 
-EditCmsGraphqlQuery.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+EditCmsGraphqlQueryForm.propTypes = {
+  initialQuery: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+function EditCmsGraphqlQuery() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
+  const initialQuery = useMemo(
+    () => (
+      error || loading
+        ? null
+        : data.cmsGraphqlQueries.find((q) => q.id.toString() === id)
+    ),
+    [data, loading, error, id],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  return <EditCmsGraphqlQueryForm initialQuery={initialQuery} />;
+}
 
 export default EditCmsGraphqlQuery;

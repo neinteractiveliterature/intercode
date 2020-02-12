@@ -1,15 +1,16 @@
 import React, { useState, useCallback } from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import AddVariableRow from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import { CmsVariablesQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsVariablesAdmin() {
-  const { data, error } = useQuerySuspended(CmsVariablesQuery);
+  const { data, loading, error } = useQuery(CmsVariablesQuery);
   const [addingVariables, setAddingVariables] = useState([]);
 
   const addVariable = useCallback(
@@ -43,6 +44,10 @@ function CmsVariablesAdmin() {
   );
 
   usePageTitle('CMS Variables');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

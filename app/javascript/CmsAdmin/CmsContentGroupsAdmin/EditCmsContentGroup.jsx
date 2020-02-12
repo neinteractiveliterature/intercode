@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useApolloClient } from 'react-apollo-hooks';
+import { useMutation, useApolloClient, useQuery } from 'react-apollo-hooks';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -8,24 +9,13 @@ import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import { UpdateContentGroup } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
-import useQuerySuspended from '../../useQuerySuspended';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function EditCmsContentGroup({ match: { params }, history }) {
-  const { data, error } = useQuerySuspended(CmsContentGroupsAdminQuery);
-  const initialContentGroup = useMemo(
-    () => {
-      if (error) {
-        return null;
-      }
-
-      return data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === params.id);
-    },
-    [data, error, params.id],
-  );
-  const [mutate] = useMutation(UpdateContentGroup);
-  const [updateCmsContentGroup, updateError, updateInProgress] = useAsyncFunction(mutate);
+function EditCmsContentGroupForm({ convention, initialContentGroup }) {
+  const history = useHistory();
+  const [updateCmsContentGroup] = useMutation(UpdateContentGroup);
   const [contentGroup, setContentGroup] = useState({
     name: '',
     contents: [],
@@ -34,12 +24,6 @@ function EditCmsContentGroup({ match: { params }, history }) {
   });
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
   const apolloClient = useApolloClient();
-
-  usePageTitle(`Editing “${(initialContentGroup || {}).name}”`);
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const formSubmitted = async (event) => {
     event.preventDefault();
@@ -65,8 +49,10 @@ function EditCmsContentGroup({ match: { params }, history }) {
     history.push('/cms_content_groups');
   };
 
+  const [submit, submitError, submitInProgress] = useAsyncFunction(formSubmitted);
+
   return (
-    <form onSubmit={formSubmitted}>
+    <form onSubmit={submit}>
       <h3 className="mb-4">
         Editing
         {' '}
@@ -76,34 +62,67 @@ function EditCmsContentGroup({ match: { params }, history }) {
       <CmsContentGroupFormFields
         contentGroup={contentGroup}
         setContentGroup={setContentGroup}
-        disabled={updateInProgress}
-        convention={data.convention}
+        disabled={submitInProgress}
+        convention={convention}
         permissionsChangeSet={permissionsChangeSet}
         addPermission={addPermission}
         removePermission={removePermission}
       />
 
-      <ErrorDisplay graphQLError={updateError} />
+      <ErrorDisplay graphQLError={submitError} />
 
       <input
         type="submit"
         value="Update content group"
         className="btn btn-primary"
-        disabled={updateInProgress}
+        disabled={submitInProgress}
+        aria-label="Update content group"
       />
     </form>
   );
 }
 
-EditCmsContentGroup.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
+EditCmsContentGroupForm.propTypes = {
+  convention: PropTypes.shape({}).isRequired,
+  initialContentGroup: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    permissions: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    })).isRequired,
   }).isRequired,
 };
+
+function EditCmsContentGroup() {
+  const params = useParams();
+  const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
+  const initialContentGroup = useMemo(
+    () => {
+      if (loading || error) {
+        return null;
+      }
+
+      return data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === params.id);
+    },
+    [data, loading, error, params.id],
+  );
+
+  usePageTitle(`Editing “${(initialContentGroup || {}).name}”`);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <EditCmsContentGroupForm
+      initialContentGroup={initialContentGroup}
+      convention={data.convention}
+    />
+  );
+}
 
 export default EditCmsContentGroup;
