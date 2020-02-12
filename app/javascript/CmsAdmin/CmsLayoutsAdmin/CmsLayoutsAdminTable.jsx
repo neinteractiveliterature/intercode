@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CmsLayoutsAdminQuery } from './queries.gql';
 import { DeleteLayout } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsLayoutsAdminTable() {
-  const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
+  const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
   const confirm = useConfirm();
   const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
     query: CmsLayoutsAdminQuery,
@@ -21,16 +22,20 @@ function CmsLayoutsAdminTable() {
 
   const layoutsSorted = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return [];
       }
 
       return sortByLocaleString(data.cmsLayouts, (layout) => layout.name);
     },
-    [data, error],
+    [data, loading, error],
   );
 
   usePageTitle('CMS Layouts');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

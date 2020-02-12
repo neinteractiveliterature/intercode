@@ -1,20 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useParams } from 'react-router-dom';
 
 import CmsLayoutForm from './CmsLayoutForm';
 import { CmsLayoutsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
-import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function ViewCmsLayoutSource({ match }) {
-  const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
-  const layout = error
+function ViewCmsLayoutSource() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
+  const layout = loading || error
     ? null
-    : data.cmsLayouts.find((p) => match.params.id === p.id.toString());
+    : data.cmsLayouts.find((l) => id === l.id.toString());
 
-  usePageTitle(useValueUnless(() => `View “${layout.name}” Source`, error));
+  usePageTitle(useValueUnless(() => `View “${layout.name}” Source`, loading || error));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -27,13 +33,5 @@ function ViewCmsLayoutSource({ match }) {
     />
   );
 }
-
-ViewCmsLayoutSource.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default ViewCmsLayoutSource;
