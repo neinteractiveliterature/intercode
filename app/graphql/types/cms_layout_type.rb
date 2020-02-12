@@ -13,11 +13,11 @@ class Types::CmsLayoutType < Types::BaseObject
   field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_update
-    ModelPermissionLoader.for(CmsLayout).load([pundit_user, :update, object.id])
+    ModelPermissionLoader.for(CmsLayout, [:parent]).load([pundit_user, :update, object.id])
   end
 
   def current_ability_can_delete
-    ModelPermissionLoader.for(CmsLayout).load([pundit_user, :destroy, object.id])
+    ModelPermissionLoader.for(CmsLayout, [:parent]).load([pundit_user, :destroy, object.id])
   end
 
   def content_html(path: nil)
