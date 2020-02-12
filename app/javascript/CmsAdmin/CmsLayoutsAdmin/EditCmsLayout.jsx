@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
 import buildLayoutInput from './buildLayoutInput';
 import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
@@ -8,25 +9,17 @@ import { CmsLayoutsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { UpdateLayout } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useQuerySuspended from '../../useQuerySuspended';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function EditCmsLayout({ match, history }) {
-  const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
-  const initialLayout = error
-    ? null
-    : data.cmsLayouts.find((p) => match.params.id === p.id.toString());
+function EditCmsLayoutForm({ initialLayout }) {
+  const history = useHistory();
   const [layout, dispatch] = useReducer(layoutReducer, initialLayout);
   const [updateMutate] = useMutation(UpdateLayout);
   const [updateLayout, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
-  usePageTitle(useValueUnless(() => `Editing “${initialLayout.name}”`, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(`Editing “${initialLayout.name}”`);
 
   const formSubmitted = async (event) => {
     event.preventDefault();
@@ -62,15 +55,29 @@ function EditCmsLayout({ match, history }) {
   );
 }
 
-EditCmsLayout.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+EditCmsLayoutForm.propTypes = {
+  initialLayout: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+function EditCmsLayout() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
+  const initialLayout = error || loading
+    ? null
+    : data.cmsLayouts.find((layout) => id === layout.id.toString());
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <EditCmsLayoutForm initialLayout={initialLayout} />;
+}
 
 export default EditCmsLayout;
