@@ -7,7 +7,7 @@ class Types::CmsFileType < Types::BaseObject
   field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_delete
-    ModelPermissionLoader.for(CmsFile).load([pundit_user, :destroy, object.id])
+    ModelPermissionLoader.for(CmsFile, [:parent]).load([pundit_user, :destroy, object.id])
   end
 
   %i[url content_type size].each do |file_field|
