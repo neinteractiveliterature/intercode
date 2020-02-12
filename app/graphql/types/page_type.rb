@@ -17,10 +17,10 @@ class Types::PageType < Types::BaseObject
   end
 
   def current_ability_can_update
-    ModelPermissionLoader.for(Page).load([pundit_user, :update, object.id])
+    ModelPermissionLoader.for(Page, [:parent]).load([pundit_user, :update, object.id])
   end
 
   def current_ability_can_delete
-    ModelPermissionLoader.for(Page).load([pundit_user, :destroy, object.id])
+    ModelPermissionLoader.for(Page, [:parent]).load([pundit_user, :destroy, object.id])
   end
 end
