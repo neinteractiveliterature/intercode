@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import { ConventionAdminConventionQuery } from './queries.gql';
 import ConventionForm from './ConventionForm';
 import ErrorDisplay from '../ErrorDisplay';
 import { UpdateConvention } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useQuerySuspended from '../useQuerySuspended';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function ConventionAdmin({ id, history }) {
-  const { data, error } = useQuerySuspended(ConventionAdminConventionQuery, { variables: { id } });
+function ConventionAdmin({ id }) {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(ConventionAdminConventionQuery, { variables: { id } });
   const [updateMutate] = useMutation(UpdateConvention);
   const [mutate, mutationError] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
@@ -63,6 +65,10 @@ function ConventionAdmin({ id, history }) {
     await apolloClient.resetStore();
     history.push('/');
   };
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
