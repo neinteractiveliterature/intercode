@@ -1,16 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CmsGraphqlQueriesQuery } from './queries.gql';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { DeleteCmsGraphqlQuery } from './mutations.gql';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import { useDeleteMutation } from '../../MutationUtils';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsGraphqlQueriesAdminTable() {
-  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
+  const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
   const deleteCmsGraphqlQuery = useDeleteMutation(DeleteCmsGraphqlQuery, {
     query: CmsGraphqlQueriesQuery,
     idVariablePath: ['id'],
@@ -19,6 +20,10 @@ function CmsGraphqlQueriesAdminTable() {
   const confirm = useConfirm();
 
   usePageTitle('CMS GraphQL Queries');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -50,8 +55,7 @@ function CmsGraphqlQueriesAdminTable() {
                   )
                   : (
                     <Link to={`/cms_graphql_queries/${query.id}/view_source`} className="btn btn-sm btn-outline-secondary mr-2">View source</Link>
-                  )
-                }
+                  )}
                 {query.current_ability_can_delete && (
                   <button
                     type="button"

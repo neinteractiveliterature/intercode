@@ -1,18 +1,20 @@
 import React, { useReducer } from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import buildLayoutInput from './buildLayoutInput';
 import { CmsLayoutsAdminQuery } from './queries.gql';
 import { CreateLayout } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
 import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function NewCmsLayout({ history }) {
-  const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
+function NewCmsLayout() {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
   const [layout, dispatch] = useReducer(layoutReducer, {});
   const [createLayout, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateLayout, {
@@ -23,6 +25,10 @@ function NewCmsLayout({ history }) {
   );
 
   usePageTitle('New Layout');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -55,16 +61,11 @@ function NewCmsLayout({ history }) {
           className="btn btn-primary"
           value="Create layout"
           disabled={createInProgress}
+          aria-label="Create layout"
         />
       </form>
     </>
   );
 }
-
-NewCmsLayout.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewCmsLayout;

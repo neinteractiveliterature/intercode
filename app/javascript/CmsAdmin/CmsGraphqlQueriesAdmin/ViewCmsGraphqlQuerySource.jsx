@@ -1,20 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CmsGraphqlQueriesQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
-import useQuerySuspended from '../../useQuerySuspended';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
+import ErrorDisplay from '../../ErrorDisplay';
 
 import 'graphiql/graphiql.css';
 
-function ViewCmsGraphqlQuerySource({ match }) {
-  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
-  const query = error
+function ViewCmsGraphqlQuerySource() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
+  const query = loading || error
     ? null
-    : data.cmsGraphqlQueries.find((q) => q.id.toString() === match.params.id);
+    : data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
 
-  usePageTitle(`View “${query.identifier}” Source`);
+  usePageTitle(`View “${(query || {}).identifier}” Source`);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   return (
     <>
@@ -26,13 +37,5 @@ function ViewCmsGraphqlQuerySource({ match }) {
     </>
   );
 }
-
-ViewCmsGraphqlQuerySource.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default ViewCmsGraphqlQuerySource;

@@ -1,6 +1,7 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useParams, useHistory } from 'react-router-dom';
 
 import buildPartialInput from './buildPartialInput';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
@@ -8,25 +9,16 @@ import { CmsPartialsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { UpdatePartial } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useQuerySuspended from '../../useQuerySuspended';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
-function EditCmsPartial({ match, history }) {
-  const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
-  const initialPartial = error
-    ? null
-    : data.cmsPartials.find((p) => match.params.id === p.id.toString());
+function EditCmsPartialForm({ initialPartial }) {
+  const history = useHistory();
   const [partial, dispatch] = useReducer(partialReducer, initialPartial);
   const [updateMutate] = useMutation(UpdatePartial);
   const [updatePartial, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
-  usePageTitle(useValueUnless(() => `Editing “${initialPartial.name}”`, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(`Editing “${initialPartial.name}”`);
 
   const formSubmitted = async (event) => {
     event.preventDefault();
@@ -62,15 +54,30 @@ function EditCmsPartial({ match, history }) {
   );
 }
 
-EditCmsPartial.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+EditCmsPartialForm.propTypes = {
+  initialPartial: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+function EditCmsPartial() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(CmsPartialsAdminQuery);
+  const initialPartial = useMemo(
+    () => (
+      loading || error
+        ? null
+        : data.cmsPartials.find((p) => id === p.id.toString())
+    ),
+    [data, id, loading, error],
+  );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <EditCmsPartialForm initialPartial={initialPartial} />;
+}
 
 export default EditCmsPartial;
