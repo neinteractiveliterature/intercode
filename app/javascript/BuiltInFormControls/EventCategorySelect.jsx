@@ -9,7 +9,7 @@ function EventCategorySelect({
 }) {
   const categoryOptions = eventCategories
     .map((category) => (
-      <option value={category.id} key={category.id}>{humanize(category.name)}</option>
+      <option value={category.id.toString()} key={category.id}>{humanize(category.name)}</option>
     ));
 
   return (
@@ -28,7 +28,11 @@ EventCategorySelect.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
+};
+
+EventCategorySelect.defaultProps = {
+  label: null,
 };
 
 export default EventCategorySelect;
