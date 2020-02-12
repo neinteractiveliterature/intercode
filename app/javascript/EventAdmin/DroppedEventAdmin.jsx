@@ -1,19 +1,23 @@
 import React from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
 import { RestoreDroppedEvent } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function DroppedEventAdmin() {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
   const [restoreDroppedEvent] = useMutation(RestoreDroppedEvent);
   const confirm = useConfirm();
 
   usePageTitle('Dropped Events');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay error={error} />;
