@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import { EditUserQuery } from './queries.gql';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -12,8 +13,8 @@ import ErrorDisplay from '../ErrorDisplay';
 import AccountFormContent from './AccountFormContent';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import UserFormFields from './UserFormFields';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
+import LoadingIndicator from '../LoadingIndicator';
 
 async function updateUser(
   authenticityToken, formState, password, passwordConfirmation, currentPassword,
@@ -130,9 +131,13 @@ EditUserForm.propTypes = {
 };
 
 function EditUser() {
-  const { data, error } = useQuerySuspended(EditUserQuery);
+  const { data, loading, error } = useQuery(EditUserQuery);
 
   usePageTitle('Update Your Account');
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

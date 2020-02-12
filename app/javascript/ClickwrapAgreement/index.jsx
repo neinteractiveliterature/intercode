@@ -1,19 +1,21 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useApolloClient } from 'react-apollo-hooks';
-import { Redirect } from 'react-router-dom';
+import { useMutation, useQuery, useApolloClient } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import { AcceptClickwrapAgreement } from './mutations.gql';
 import { ClickwrapAgreementQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import parseCmsContent from '../parseCmsContent';
+import LoadingIndicator from '../LoadingIndicator';
+import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
-function ClickwrapAgreement({ history }) {
-  const { data, error } = useQuerySuspended(ClickwrapAgreementQuery);
+function ClickwrapAgreement() {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(ClickwrapAgreementQuery);
   const [acceptMutate] = useMutation(AcceptClickwrapAgreement);
   const [accept, acceptError, acceptInProgress] = useAsyncFunction(acceptMutate);
   const { refresh } = useContext(AuthenticityTokensContext);
@@ -30,6 +32,10 @@ function ClickwrapAgreement({ history }) {
       throw err;
     }
   };
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphqlError={error} />;

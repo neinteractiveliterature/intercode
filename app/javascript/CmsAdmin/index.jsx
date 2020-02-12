@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import {
   NavLink, Switch, Route, Redirect,
 } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
 import { CmsAdminBaseQuery } from './queries.gql';
 import NavigationItemsAdmin from './NavigationItemsAdmin';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import CmsContentGroupsAdmin from './CmsContentGroupsAdmin';
 import CmsPagesAdmin from './CmsPagesAdmin';
@@ -16,6 +16,7 @@ import CmsLayoutsAdmin from './CmsLayoutsAdmin';
 import CmsPartialsAdmin from './CmsPartialsAdmin';
 import CmsFilesAdmin from './CmsFilesAdmin';
 import RootSiteAdmin from '../RootSiteAdmin';
+import LoadingIndicator from '../LoadingIndicator';
 
 function CmsAdminNavTab({ path, children }) {
   return (
@@ -31,7 +32,11 @@ CmsAdminNavTab.propTypes = {
 };
 
 function CmsAdmin() {
-  const { data, error } = useQuerySuspended(CmsAdminBaseQuery);
+  const { data, loading, error } = useQuery(CmsAdminBaseQuery);
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import { useQuery } from 'react-apollo-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
@@ -8,9 +9,9 @@ import { EventAdminEventsQuery } from '../EventAdmin/queries.gql';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
+import LoadingIndicator from '../LoadingIndicator';
 
 const roomPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
@@ -18,24 +19,24 @@ const roomPropType = PropTypes.shape({
 });
 
 function RunFormFields({ run, event, onChange }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const startsAt = useMemo(
-    () => (!error && run && run.starts_at
+    () => (!error && !loading && run && run.starts_at
       ? moment(run.starts_at).tz(data.convention.timezone_name)
       : null
     ),
-    [data, error, run],
+    [data, error, loading, run],
   );
   const conventionTimespan = useMemo(
-    () => (error ? null : timespanFromConvention(data.convention)),
-    [error, data],
+    () => (error || loading ? null : timespanFromConvention(data.convention)),
+    [error, loading, data],
   );
   const conventionDayTimespans = useMemo(
-    () => (error
+    () => (error || loading
       ? null
       : getConventionDayTimespans(conventionTimespan, data.convention.timezone_name)),
-    [conventionTimespan, data, error],
+    [conventionTimespan, data, error, loading],
   );
   const [day, setDay] = useState(startsAt
     ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt)).start
@@ -68,6 +69,10 @@ function RunFormFields({ run, event, onChange }) {
     },
     [onChange, startTime],
   );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

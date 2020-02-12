@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPartialsAdminQuery } from './queries.gql';
 import { DeletePartial } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsPartialsAdminTable() {
-  const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
+  const { data, loading, error } = useQuery(CmsPartialsAdminQuery);
   const confirm = useConfirm();
   const deletePartialMutate = useDeleteMutation(DeletePartial, {
     query: CmsPartialsAdminQuery,
@@ -23,14 +24,18 @@ function CmsPartialsAdminTable() {
 
   const partialsSorted = useMemo(
     () => {
-      if (error) {
+      if (error || loading) {
         return [];
       }
 
       return sortByLocaleString(data.cmsPartials, (partial) => partial.name);
     },
-    [data, error],
+    [data, loading, error],
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -59,7 +64,7 @@ function CmsPartialsAdminTable() {
                 {partial.current_ability_can_update
                   ? (
                     <Link to={`/cms_partials/${partial.id}/edit`} className="btn btn-secondary btn-sm">
-                    Edit
+                      Edit
                     </Link>
                   )
                   : (

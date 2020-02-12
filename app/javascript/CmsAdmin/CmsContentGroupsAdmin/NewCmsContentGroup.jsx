@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
 import { CreateContentGroup } from './mutations.gql';
@@ -8,12 +9,13 @@ import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import { useCreateMutation } from '../../MutationUtils';
-import useQuerySuspended from '../../useQuerySuspended';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function NewCmsContentGroup({ history }) {
-  const { data, error } = useQuerySuspended(CmsContentGroupsAdminQuery);
+function NewCmsContentGroup() {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
   const mutate = useCreateMutation(CreateContentGroup, {
     query: CmsContentGroupsAdminQuery,
     arrayPath: ['cmsContentGroups'],
@@ -28,6 +30,10 @@ function NewCmsContentGroup({ history }) {
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
 
   usePageTitle('New Content Group');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -72,15 +78,10 @@ function NewCmsContentGroup({ history }) {
         value="Create content group"
         className="btn btn-primary"
         disabled={createInProgress}
+        aria-label="Create content group"
       />
     </form>
   );
 }
-
-NewCmsContentGroup.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewCmsContentGroup;

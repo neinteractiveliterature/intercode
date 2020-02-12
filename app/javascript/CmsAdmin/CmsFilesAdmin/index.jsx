@@ -1,21 +1,21 @@
 import React, { useMemo } from 'react';
 import chunk from 'lodash-es/chunk';
 import bytes from 'bytes';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { CmsFilesAdminQuery } from './queries.gql';
 import { DeleteCmsFile, RenameCmsFile } from './mutations.gql';
 import FilePreview from './FilePreview';
 import FileUploadForm from './FileUploadForm';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useDeleteMutation } from '../../MutationUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function CmsFilesAdmin() {
-  const { data, error } = useQuerySuspended(CmsFilesAdminQuery);
+  const { data, loading, error } = useQuery(CmsFilesAdminQuery);
   const deleteFileMutate = useDeleteMutation(DeleteCmsFile, {
     query: CmsFilesAdminQuery,
     arrayPath: ['cmsFiles'],
@@ -28,17 +28,25 @@ function CmsFilesAdmin() {
 
   const fileChunks = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return [];
       }
 
       return chunk(data.cmsFiles, 4);
     },
-    [data, error],
+    [data, loading, error],
   );
 
   const deleteFile = (id) => deleteFileMutate({ variables: { id } });
   const renameFile = (id, filename) => renameFileMutate({ variables: { id, filename } });
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   return (
     <>

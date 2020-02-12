@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { pageReducer } from './CmsPageForm';
@@ -7,12 +8,13 @@ import { CmsPagesAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { CreatePage } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function NewCmsPage({ history }) {
-  const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
+function NewCmsPage() {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(CmsPagesAdminQuery);
   const [page, dispatch] = useReducer(pageReducer, {});
   const [createPage, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreatePage, {
@@ -23,6 +25,10 @@ function NewCmsPage({ history }) {
   );
 
   usePageTitle('New page');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -55,16 +61,11 @@ function NewCmsPage({ history }) {
           className="btn btn-primary"
           value="Create page"
           disabled={createInProgress}
+          aria-label="Create page"
         />
       </form>
     </>
   );
 }
-
-NewCmsPage.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewCmsPage;
