@@ -4,13 +4,13 @@ import React, {
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MomentPropTypes from 'react-moment-proptypes';
+import { useQuery } from 'react-apollo-hooks';
 
 import { ScheduleGridContext, useScheduleGridProvider } from '../EventsApp/ScheduleGrid/ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from '../EventsApp/ScheduleGrid/LayoutConstants';
 import useLayoutForTimespan from '../EventsApp/ScheduleGrid/useLayoutForTimespan';
 import Timespan from '../Timespan';
 import ScheduleGridHeaderBlock from '../EventsApp/ScheduleGrid/ScheduleGridHeaderBlock';
-import useQuerySuspended from '../useQuerySuspended';
 import { EventAdminEventsQuery } from './queries.gql';
 import { getConventionDayTimespans, timespanFromConvention } from '../TimespanUtils';
 import { getRunClassName, getRunStyle } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -115,11 +115,11 @@ ProspectiveRunScheduleEventRun.propTypes = {
 function ProspectiveRunSchedule({
   day, startTime, run, event,
 }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const conventionTimespan = useMemo(
-    () => (error ? null : timespanFromConvention(data.convention)),
-    [error, data],
+    () => ((error || loading) ? null : timespanFromConvention(data.convention)),
+    [error, loading, data],
   );
 
   const prospectiveRun = useMemo(
@@ -139,7 +139,7 @@ function ProspectiveRunSchedule({
 
   const eventsForSchedule = useMemo(
     () => {
-      if (error) {
+      if (error || loading) {
         return null;
       }
 
@@ -175,14 +175,14 @@ function ProspectiveRunSchedule({
 
       return effectiveEvents;
     },
-    [data.events, error, event, prospectiveRun, run.id],
+    [data, error, loading, event, prospectiveRun, run.id],
   );
 
   const conventionDayTimespans = useMemo(
-    () => (error
+    () => (error || loading
       ? null
       : getConventionDayTimespans(conventionTimespan, data.convention.timezone_name)),
-    [conventionTimespan, data.convention.timezone_name, error],
+    [conventionTimespan, data, error, loading],
   );
 
   const conventionDayTimespan = useMemo(

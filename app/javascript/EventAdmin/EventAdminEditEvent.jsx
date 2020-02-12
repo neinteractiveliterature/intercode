@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
@@ -11,20 +11,25 @@ import {
   UpdateMaximumEventProvidedTicketsOverride,
   DeleteMaximumEventProvidedTicketsOverride,
 } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import deserializeEvent from './deserializeEvent';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
-import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 import useUpdateEvent from './useUpdateEvent';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EventAdminEditEvent({ match, history }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+function EventAdminEditEventForm({ data }) {
+  const history = useHistory();
+  const { id: eventId } = useParams();
+  const initialEvent = useMemo(
+    () => deserializeEvent(data.events.find((e) => e.id.toString() === eventId)),
+    [data.events, eventId],
+  );
+
   const meptoMutations = useMEPTOMutations({
     createMutate: useMutation(CreateMaximumEventProvidedTicketsOverride)[0],
     updateMutate: useMutation(UpdateMaximumEventProvidedTicketsOverride)[0],
@@ -68,12 +73,6 @@ function EventAdminEditEvent({ match, history }) {
     },
   });
 
-  const eventId = match.params.id;
-  const initialEvent = useMemo(
-    () => (error ? null : deserializeEvent(data.events.find((e) => e.id.toString() === eventId))),
-    [data.events, error, eventId],
-  );
-
   const [run, setRun] = useState(initialEvent.runs[0] || {});
 
   const [eventFormWithCategorySelectionProps, {
@@ -90,11 +89,7 @@ function EventAdminEditEvent({ match, history }) {
     [event.id, dropEventMutate],
   );
 
-  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(`Editing “${event.title}”`);
 
   const donePath = data.convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory);
 
@@ -136,15 +131,35 @@ function EventAdminEditEvent({ match, history }) {
   );
 }
 
-EventAdminEditEvent.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+EventAdminEditEventForm.propTypes = {
+  data: PropTypes.shape({
+    currentAbility: PropTypes.shape({
+      can_override_maximum_event_provided_tickets: PropTypes.bool.isRequired,
+    }).isRequired,
+    convention: PropTypes.shape({
+      ticket_types: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      ticket_name: PropTypes.string.isRequired,
+      ticket_mode: PropTypes.string.isRequired,
+      site_mode: PropTypes.string.isRequired,
+    }).isRequired,
+    events: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    })).isRequired,
   }).isRequired,
 };
 
-export default withRouter(EventAdminEditEvent);
+function EventAdminEditEvent() {
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <EventAdminEditEventForm data={data} />;
+}
+
+export default EventAdminEditEvent;
