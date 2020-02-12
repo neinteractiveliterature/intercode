@@ -2,23 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
 import { EventAdminEventsQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useEventAdminCategory from './useEventAdminCategory';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function EventAdminRunsTable({ eventCategoryId }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, error, eventCategoryId);
 
-  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error));
+  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
