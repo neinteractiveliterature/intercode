@@ -1,26 +1,33 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import EventCapacityDisplay from './EventCapacityDisplay';
 import { EventPageQuery } from './queries.gql';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
-import useQuerySuspended from '../../useQuerySuspended';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import teamMembersForDisplay from '../teamMembersForDisplay';
 import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function ShortFormEventDetails({ eventId }) {
-  const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
 
-  const { shortFormItems, formResponse } = useSectionizedFormItems(error ? null : data.event);
+  const { shortFormItems, formResponse } = useSectionizedFormItems(
+    error || loading ? null : data.event,
+  );
 
   const displayTeamMembers = useMemo(
-    () => (error ? [] : teamMembersForDisplay(data.event)),
-    [data, error],
+    () => (error || loading ? [] : teamMembersForDisplay(data.event)),
+    [data, error, loading],
   );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

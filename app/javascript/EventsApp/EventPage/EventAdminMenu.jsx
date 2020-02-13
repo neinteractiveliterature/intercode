@@ -2,14 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
 import { EventPageQuery } from './queries.gql';
-import useQuerySuspended from '../../useQuerySuspended';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function EventAdminMenu({ eventId }) {
-  const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -2,28 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { EventAdminEventsQuery } from './queries.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
 import { DropEvent } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
 import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function SingleRunEventAdminList({ eventCategoryId }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, error, eventCategoryId);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const [eventCategory, sortedEvents] = useEventAdminCategory(
+    data, loading, error, eventCategoryId,
+  );
 
   const [drop] = useMutation(DropEvent);
   const confirm = useConfirm();
 
-  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error));
+  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

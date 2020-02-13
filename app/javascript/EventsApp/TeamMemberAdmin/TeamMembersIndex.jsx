@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   humanize, pluralize, titleize, underscore,
 } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 import { Link } from 'react-router-dom';
 
 import Checkmark from './Checkmark';
@@ -14,10 +15,10 @@ import { TeamMembersQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import useModal from '../../ModalDialogs/useModal';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import { useDeleteMutation } from '../../MutationUtils';
 import { DeleteTeamMember } from './mutations.gql';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function sortTeamMembers(teamMembers) {
   return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted);
@@ -80,32 +81,50 @@ function TeamMemberActionMenu({
 }
 
 TeamMemberActionMenu.propTypes = {
-  event: PropTypes.shape({}).isRequired,
-  convention: PropTypes.shape({}).isRequired,
-  teamMember: PropTypes.shape({}).isRequired,
+  event: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    event_category: PropTypes.shape({
+      can_provide_tickets: PropTypes.bool.isRequired,
+      team_member_name: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  convention: PropTypes.shape({
+    ticket_mode: PropTypes.string.isRequired,
+    ticket_name: PropTypes.string.isRequired,
+  }).isRequired,
+  teamMember: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    user_con_profile: PropTypes.shape({
+      name_without_nickname: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   openProvideTicketModal: PropTypes.func.isRequired,
   eventPath: PropTypes.string.isRequired,
 };
 
 function TeamMembersIndex({ eventId, eventPath }) {
-  const { data, error } = useQuerySuspended(TeamMembersQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
   const modal = useModal();
 
   const titleizedTeamMemberName = useMemo(
-    () => (error
+    () => (error || loading
       ? null
       : pluralize(titleize(underscore(data.event.event_category.team_member_name)))),
-    [error, data],
+    [error, loading, data],
   );
 
   const sortedTeamMembers = useMemo(
-    () => (error ? null : sortTeamMembers(data.event.team_members)),
-    [data, error],
+    () => (error || loading ? null : sortTeamMembers(data.event.team_members)),
+    [data, error, loading],
   );
 
   usePageTitle(
-    useValueUnless(() => `${titleizedTeamMemberName} - ${data.event.title}`, error),
+    useValueUnless(() => `${titleizedTeamMemberName} - ${data.event.title}`, error || loading),
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
