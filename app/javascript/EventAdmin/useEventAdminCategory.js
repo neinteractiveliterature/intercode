@@ -6,19 +6,19 @@ const getNormalizedEventTitle = (event) => event.title
   .replace(/[^A-Za-z0-9]/g, '')
   .toLocaleLowerCase();
 
-export default function useEventAdminCategory(data, error, eventCategoryId) {
+export default function useEventAdminCategory(data, loading, error, eventCategoryId) {
   const eventCategory = useMemo(
-    () => (error ? null : data.convention.event_categories.find((c) => c.id === eventCategoryId)),
-    [data, error, eventCategoryId],
+    () => (loading || error ? null : data.convention.event_categories.find((c) => c.id === eventCategoryId)),
+    [data, loading, error, eventCategoryId],
   );
   const filteredEvents = useMemo(
-    () => (error
+    () => (error || loading
       ? []
       : data.events.filter((event) => (
         event.event_category.id === eventCategoryId
         && event.status === 'active'
       ))),
-    [data, error, eventCategoryId],
+    [data, loading, error, eventCategoryId],
   );
   const sortedEvents = useMemo(
     () => sortByLocaleString(filteredEvents, getNormalizedEventTitle),

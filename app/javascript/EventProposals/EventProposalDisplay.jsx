@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
 
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import { EventProposalQueryWithOwner } from './queries.gql';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import Gravatar from '../Gravatar';
+import LoadingIndicator from '../LoadingIndicator';
 
 function EventProposalDisplay({ eventProposalId }) {
-  const { data, error } = useQuerySuspended(EventProposalQueryWithOwner, {
+  const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
     variables: { eventProposalId },
   });
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
