@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, Switch, Route } from 'react-router-dom';
+import {
+  Link, Switch, Route, useParams, useHistory,
+} from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
@@ -8,16 +11,21 @@ import EventProposalAdminDisplay from './EventProposalAdminDisplay';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQuery, EventProposalQueryWithOwner } from './queries.gql';
 import EventProposalsAdminTable from './EventProposalsAdminTable';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import EventProposalHistory from './EventProposalHistory';
+import LoadingIndicator from '../LoadingIndicator';
 
 function SingleProposalBreadcrumbs({ match }) {
-  const { data, error } = useQuerySuspended(EventProposalQueryWithOwner, {
-    variables: { eventProposalId: Number.parseInt(match.params.id, 10) },
+  const eventProposalId = Number.parseInt(useParams().id, 10);
+  const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
+    variables: { eventProposalId },
   });
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -60,22 +68,23 @@ SingleProposalBreadcrumbs.propTypes = {
   }).isRequired,
 };
 
-function AdminEditEventProposal({ match, history }) {
-  const eventProposalId = Number.parseInt(match.params.id, 10);
-  const { data, error } = useQuerySuspended(EventProposalQuery, { variables: { eventProposalId } });
+function AdminEditEventProposal() {
+  const history = useHistory();
+  const eventProposalId = Number.parseInt(useParams().id, 10);
+  const { data, loading, error } = useQuery(EventProposalQuery, { variables: { eventProposalId } });
 
   usePageTitle(
-    useValueUnless(() => `Editing “${data.eventProposal.title}”`, error),
+    useValueUnless(() => `Editing “${data.eventProposal.title}”`, loading || error),
   );
 
   return (
     <EventProposalForm
-      eventProposalId={Number.parseInt(match.params.id, 10)}
-      afterSubmit={() => { history.push(`/admin_event_proposals/${match.params.id}`); }}
+      eventProposalId={eventProposalId}
+      afterSubmit={() => { history.push(`/admin_event_proposals/${eventProposalId}`); }}
       exitButton={(
         <Link
           className="btn btn-outline-secondary mr-2"
-          to={`/admin_event_proposals/${match.params.id}`}
+          to={`/admin_event_proposals/${eventProposalId}`}
         >
           Return to proposal
         </Link>
@@ -83,17 +92,6 @@ function AdminEditEventProposal({ match, history }) {
     />
   );
 }
-
-AdminEditEventProposal.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 function EventProposalsAdmin() {
   return (
