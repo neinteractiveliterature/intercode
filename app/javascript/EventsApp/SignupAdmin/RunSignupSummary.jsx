@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
@@ -10,9 +11,9 @@ import RunHeader from './RunHeader';
 import { RunSignupSummaryQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import Gravatar from '../../Gravatar';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function isTeamMember(signup, teamMembers) {
   return teamMembers
@@ -46,17 +47,17 @@ function sortSignups(signups, teamMembers) {
 }
 
 function RunSignupSummary({ eventId, runId, eventPath }) {
-  const { data, error } = useQuerySuspended(RunSignupSummaryQuery, {
+  const { data, loading, error } = useQuery(RunSignupSummaryQuery, {
     variables: { eventId, runId },
   });
 
-  usePageTitle(useValueUnless(() => `Signup summary - ${data.event.title}`, error));
+  usePageTitle(useValueUnless(() => `Signup summary - ${data.event.title}`, error || loading));
 
   const sortedSignups = useMemo(
-    () => (error
+    () => (error || loading
       ? null
       : sortSignups(data.event.run.signups_paginated.entries, data.event.team_members)),
-    [data, error],
+    [data, error, loading],
   );
 
   const renderSignupRow = (signup, registrationPolicy, teamMembers, teamMemberName) => {
@@ -113,6 +114,10 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
       </tr>
     );
   };
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

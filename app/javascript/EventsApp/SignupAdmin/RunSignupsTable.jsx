@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
+import { useQuery } from 'react-apollo-hooks';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -14,11 +15,11 @@ import { RunSignupsTableSignupsQuery, SignupAdminEventQuery } from './queries.gq
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
@@ -181,7 +182,7 @@ const getPossibleColumns = () => [
 function RunSignupsTable({
   defaultVisibleColumns, eventId, exportUrl, runId, runPath, history,
 }) {
-  const { data, error } = useQuerySuspended(SignupAdminEventQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
 
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
@@ -196,7 +197,11 @@ function RunSignupsTable({
     variables: { eventId, runId },
   });
 
-  usePageTitle(useValueUnless(() => `Signups - ${data.event.title}`, error));
+  usePageTitle(useValueUnless(() => `Signups - ${data.event.title}`, error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

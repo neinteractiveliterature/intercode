@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, underscore, humanize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import { RunSignupsTableSignupsQuery } from './queries.gql';
-import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
+import LoadingIndicator from '../../LoadingIndicator';
+import ErrorDisplay from '../../ErrorDisplay';
 
 function getEmails({ data, includes }) {
   const teamMemberUserConProfileIds = data.event.team_members
@@ -42,7 +44,7 @@ function getEmails({ data, includes }) {
 
 function RunEmailList({ runId, eventId, separator }) {
   const [includes, setIncludes] = useState(['teamMembers', 'confirmed']);
-  const { data, error } = useQuerySuspended(RunSignupsTableSignupsQuery, {
+  const { data, loading, error } = useQuery(RunSignupsTableSignupsQuery, {
     variables: {
       runId,
       eventId,
@@ -57,8 +59,19 @@ function RunEmailList({ runId, eventId, separator }) {
   });
 
   usePageTitle(
-    useValueUnless(() => `Emails (${separator === '; ' ? 'semicolon-separated' : 'comma-separated'}) - ${data.event.title}`, error),
+    useValueUnless(
+      () => `Emails (${separator === '; ' ? 'semicolon-separated' : 'comma-separated'}) - ${data.event.title}`,
+      error || loading,
+    ),
   );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   return (
     <EmailList

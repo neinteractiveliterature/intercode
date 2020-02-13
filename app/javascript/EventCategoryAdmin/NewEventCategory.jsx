@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import { CreateEventCategory } from './mutations.gql';
 import { EventCategoryAdminQuery } from './queries.gql';
 import EventCategoryForm from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
-import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function NewEventCategory({ history }) {
-  const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
+function NewEventCategory() {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(EventCategoryAdminQuery);
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateEventCategory, {
       query: EventCategoryAdminQuery,
@@ -42,6 +44,10 @@ function NewEventCategory({ history }) {
   };
 
   usePageTitle('New Event Category');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -75,11 +81,5 @@ function NewEventCategory({ history }) {
     </>
   );
 }
-
-NewEventCategory.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewEventCategory;
