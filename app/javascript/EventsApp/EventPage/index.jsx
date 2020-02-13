@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
 import { EventPageQuery } from './queries.gql';
 import RunsSection from './RunsSection';
 import ErrorDisplay from '../../ErrorDisplay';
-import useQuerySuspended from '../../useQuerySuspended';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import ShortFormEventDetails from './ShortFormEventDetails';
@@ -14,15 +14,20 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function EventPage({ eventId, eventPath }) {
   const { myProfile } = useContext(AppRootContext);
-  const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
   const rateEvent = useRateEvent();
 
   usePageTitle(
-    useValueUnless(() => data.event.title, error),
+    useValueUnless(() => data.event.title, error || loading),
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

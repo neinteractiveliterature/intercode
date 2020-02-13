@@ -1,17 +1,24 @@
 import React, { useMemo } from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CommonConventionDataQuery } from '../queries.gql';
 import FakeEventRun from './FakeEventRun';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function CategoryLegend() {
-  const { data, error } = useQuerySuspended(CommonConventionDataQuery);
+  const { data, loading, error } = useQuery(CommonConventionDataQuery);
   const sortedEventCategories = useMemo(
-    () => (error ? null : sortByLocaleString(data.convention.event_categories, (c) => c.name)),
-    [error, data],
+    () => (error || loading
+      ? null
+      : sortByLocaleString(data.convention.event_categories, (c) => c.name)),
+    [error, loading, data],
   );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
