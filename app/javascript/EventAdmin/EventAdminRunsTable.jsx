@@ -17,7 +17,9 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function EventAdminRunsTable({ eventCategoryId }) {
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, error, eventCategoryId);
+  const [eventCategory, sortedEvents] = useEventAdminCategory(
+    data, loading, error, eventCategoryId,
+  );
 
   usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
 

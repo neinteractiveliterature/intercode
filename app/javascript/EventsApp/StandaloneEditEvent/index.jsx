@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Redirect } from 'react-router-dom';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { Redirect, useHistory } from 'react-router-dom';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
 
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
 import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';
@@ -19,21 +19,17 @@ import EditEvent from '../../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
-import useQuerySuspended from '../../useQuerySuspended';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function StandaloneEditEvent({ eventId, eventPath, history }) {
-  const queryOptions = { variables: { eventId } };
-  const { data, error } = useQuerySuspended(StandaloneEditEventQuery, queryOptions);
+function StandaloneEditEventForm({
+  initialEvent, eventPath, eventForm, convention, currentAbility,
+}) {
+  const history = useHistory();
+  const queryOptions = { variables: { eventId: initialEvent.id } };
   const apolloClient = useApolloClient();
 
-  const initialEvent = deserializeEvent(data.event);
-
-  usePageTitle(useValueUnless(() => `Editing “${initialEvent.title}”`, error));
-
   const [eventFormProps, { event, validateForm }] = useEventForm({
-    convention: data.convention,
-    initialEvent,
-    eventForm: deserializeForm(data.event.event_category.event_form),
+    convention, initialEvent, eventForm,
   });
 
   const [updateEventMutate] = useMutation(StandaloneUpdateEvent);
@@ -105,6 +101,66 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
     ),
   });
 
+  return (
+    <EditEvent
+      event={event}
+      validateForm={validateForm}
+      updateEvent={updateEvent}
+      onSave={() => { history.push(eventPath); }}
+    >
+      <EventForm {...eventFormProps}>
+        {currentAbility.can_override_maximum_event_provided_tickets
+          && convention.ticket_mode !== 'disabled'
+          && (
+            <MaximumEventProvidedTicketsOverrideEditor
+              {...meptoMutations}
+              ticketName={convention.ticket_name}
+              ticketTypes={convention.ticket_types}
+              overrides={event.maximum_event_provided_tickets_overrides}
+              eventId={event.id}
+            />
+          )}
+      </EventForm>
+    </EditEvent>
+  );
+}
+
+StandaloneEditEventForm.propTypes = {
+  eventPath: PropTypes.string.isRequired,
+  convention: PropTypes.shape({
+    ticket_mode: PropTypes.string.isRequired,
+    ticket_name: PropTypes.string.isRequired,
+    ticket_types: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  }).isRequired,
+  initialEvent: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+  currentAbility: PropTypes.shape({
+    can_override_maximum_event_provided_tickets: PropTypes.bool.isRequired,
+  }).isRequired,
+  eventForm: PropTypes.shape({}).isRequired,
+};
+
+function StandaloneEditEvent({ eventId, eventPath }) {
+  const queryOptions = { variables: { eventId } };
+  const { data, loading, error } = useQuery(StandaloneEditEventQuery, queryOptions);
+
+  const eventForm = useMemo(
+    () => (error || loading ? null : deserializeForm(data.event.event_category.event_form)),
+    [error, loading, data],
+  );
+
+  const initialEvent = useMemo(
+    () => (error || loading ? null : deserializeEvent(data.event)),
+    [error, loading, data],
+  );
+
+  usePageTitle(useValueUnless(() => `Editing “${initialEvent.title}”`, error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
@@ -114,35 +170,19 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
   }
 
   return (
-    <EditEvent
-      event={event}
-      validateForm={validateForm}
-      updateEvent={updateEvent}
-      onSave={() => { history.push(eventPath); }}
-    >
-      <EventForm {...eventFormProps}>
-        {data.currentAbility.can_override_maximum_event_provided_tickets
-          && data.convention.ticket_mode !== 'disabled'
-          && (
-            <MaximumEventProvidedTicketsOverrideEditor
-              {...meptoMutations}
-              ticketName={data.convention.ticket_name}
-              ticketTypes={data.convention.ticket_types}
-              overrides={data.event.maximum_event_provided_tickets_overrides}
-              eventId={data.event.id}
-            />
-          )}
-      </EventForm>
-    </EditEvent>
+    <StandaloneEditEventForm
+      initialEvent={initialEvent}
+      eventForm={eventForm}
+      convention={data.convention}
+      eventPath={eventPath}
+      currentAbility={data.currentAbility}
+    />
   );
 }
 
 StandaloneEditEvent.propTypes = {
   eventId: PropTypes.number.isRequired,
   eventPath: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(StandaloneEditEvent);
+export default StandaloneEditEvent;

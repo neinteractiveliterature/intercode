@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash-es/isEqual';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../ErrorDisplay';
@@ -10,8 +10,8 @@ import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import { UpdateEventProposal, SubmitEventProposal } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useQuerySuspended from '../useQuerySuspended';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -53,22 +53,16 @@ ExitButton.defaultProps = {
   exitButton: null,
 };
 
-function EventProposalForm({
-  eventProposalId, afterSubmit, exitButton,
+function EventProposalFormInner({
+  convention, initialEventProposal, form, afterSubmit, exitButton,
 }) {
-  const { data, error } = useQuerySuspended(EventProposalQuery, { variables: { eventProposalId } });
   const [updateMutate] = useMutation(UpdateEventProposal);
   const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const [updatePromise, setUpdatePromise] = useState(null);
   const [submitMutate] = useMutation(SubmitEventProposal);
   const [submitEventProposal, submitError, submitInProgress] = useAsyncFunction(submitMutate);
-
-  const { convention } = data;
-  const [eventProposal, setEventProposal] = useState(
-    deserializeFormResponseModel(data.eventProposal),
-  );
+  const [eventProposal, setEventProposal] = useState(initialEventProposal);
   const [responseErrors, setResponseErrors] = useState({});
-  const form = deserializeForm(data.eventProposal.event_category.event_proposal_form);
 
   const responseValuesChanged = useCallback(
     (newResponseValues) => {
@@ -145,23 +139,18 @@ function EventProposalForm({
     [eventProposal, formSubmitted, submitResponse, updatePromise],
   );
 
-  const formPresenterProps = {
-    form,
-    convention,
-    response: eventProposal.formResponseAttrs,
-    responseErrors,
-    error,
-    isSubmittingResponse: submitInProgress,
-    isUpdatingResponse: updateInProgress,
-    responseValuesChanged,
-    submitForm,
-  };
-
   return (
     <FormPresenterApp form={form}>
       <div>
         <FormPresenter
-          {...formPresenterProps}
+          form={form}
+          convention={convention}
+          response={eventProposal.formResponseAttrs}
+          responseErrors={responseErrors}
+          isSubmittingResponse={submitInProgress}
+          isUpdatingResponse={updateInProgress}
+          responseValuesChanged={responseValuesChanged}
+          submitForm={submitForm}
           exitButton={<ExitButton exitButton={exitButton} />}
           submitButton={{ caption: 'Submit proposal' }}
           footerContent={(
@@ -173,6 +162,53 @@ function EventProposalForm({
         <ErrorDisplay graphQLError={updateError || submitError} />
       </div>
     </FormPresenterApp>
+  );
+}
+
+EventProposalFormInner.propTypes = {
+  convention: PropTypes.shape({}).isRequired,
+  initialEventProposal: PropTypes.shape({}).isRequired,
+  form: PropTypes.shape({}).isRequired,
+  afterSubmit: PropTypes.func,
+  exitButton: PropTypes.node,
+};
+
+EventProposalFormInner.defaultProps = {
+  afterSubmit: null,
+  exitButton: null,
+};
+
+function EventProposalForm({ eventProposalId, afterSubmit, exitButton }) {
+  const { data, loading, error } = useQuery(EventProposalQuery, { variables: { eventProposalId } });
+
+  const initialEventProposal = useMemo(
+    () => (loading || error ? null : deserializeFormResponseModel(data.eventProposal)),
+    [loading, error, data],
+  );
+
+  const form = useMemo(
+    () => (loading || error
+      ? null
+      : deserializeForm(data.eventProposal.event_category.event_proposal_form)),
+    [loading, error, data],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <EventProposalFormInner
+      convention={data.convention}
+      initialEventProposal={initialEventProposal}
+      form={form}
+      afterSubmit={afterSubmit}
+      exitButton={exitButton}
+    />
   );
 }
 

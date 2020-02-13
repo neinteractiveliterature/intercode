@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import { EventPageQuery } from './queries.gql';
 import parsePageContent from '../../parsePageContent';
 import useSectionizedFormItems from './useSectionizedFormItems';
-import useQuerySuspended from '../../useQuerySuspended';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function LongFormEventDetails({ eventId }) {
-  const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
 
-  const { longFormItems, formResponse } = useSectionizedFormItems(error ? null : data.event);
+  const { longFormItems, formResponse } = useSectionizedFormItems(
+    error || loading ? null : data.event,
+  );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

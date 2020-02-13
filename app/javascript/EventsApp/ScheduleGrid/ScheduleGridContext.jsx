@@ -11,7 +11,6 @@ import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
 import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery } from './queries.gql';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
-import useQuerySuspended from '../../useQuerySuspended';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
@@ -179,7 +178,7 @@ export function ScheduleGridProvider({
 }) {
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
-  const { data, loading, error } = useQuerySuspended(ScheduleGridConventionDataQuery);
+  const { data, loading, error } = useQuery(ScheduleGridConventionDataQuery);
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(

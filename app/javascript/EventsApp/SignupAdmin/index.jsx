@@ -4,18 +4,23 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditSignup from './EditSignup';
 import SignupsIndex from './SignupsIndex';
 import { SignupAdminEventQuery } from './queries.gql';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function SignupAdmin({ runId, eventId, eventPath }) {
-  const { data, error } = useQuerySuspended(SignupAdminEventQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
   const runPath = `${eventPath}/runs/${runId}`;
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

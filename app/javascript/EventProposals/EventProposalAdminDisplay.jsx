@@ -1,20 +1,21 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { Link, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import { EventProposalQueryWithOwner, EventProposalAdminNotesQuery } from './queries.gql';
 import { UpdateEventProposalAdminNotes } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import LoadingIndicator from '../LoadingIndicator';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function EventProposalAdminNotes({ eventProposalId }) {
-  const { data, error } = useQuerySuspended(EventProposalAdminNotesQuery, {
+  const { data, loading, error } = useQuery(EventProposalAdminNotesQuery, {
     variables: { eventProposalId },
   });
 
@@ -42,6 +43,10 @@ function EventProposalAdminNotes({ eventProposalId }) {
     [eventProposalId, updateAdminNotesMutate],
   );
 
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
@@ -58,14 +63,18 @@ EventProposalAdminNotes.propTypes = {
   eventProposalId: PropTypes.number.isRequired,
 };
 
-function EventProposalAdminDisplay({ match }) {
-  const eventProposalId = Number.parseInt(match.params.id, 10);
-  const { data, error } = useQuerySuspended(EventProposalQueryWithOwner, {
+function EventProposalAdminDisplay() {
+  const eventProposalId = Number.parseInt(useParams().id, 10);
+  const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
     variables: { eventProposalId },
   });
   usePageTitle(
-    useValueUnless(() => data.eventProposal.title, error),
+    useValueUnless(() => data.eventProposal.title, error || loading),
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -140,13 +149,5 @@ function EventProposalAdminDisplay({ match }) {
     </>
   );
 }
-
-EventProposalAdminDisplay.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default EventProposalAdminDisplay;

@@ -1,17 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { EventCategoryAdminQuery } from './queries.gql';
 import EventCategoryRow from './EventCategoryRow';
 import { sortByLocaleString } from '../ValueUtils';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function EventCategoryIndex() {
-  const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
+  const { data, loading, error } = useQuery(EventCategoryAdminQuery);
 
   usePageTitle('Event Categories');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
