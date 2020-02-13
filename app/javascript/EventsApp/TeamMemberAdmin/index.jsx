@@ -2,17 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Link } from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';
 import TeamMembersIndex from './TeamMembersIndex';
 import { TeamMembersQuery } from './queries.gql';
-import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function TeamMemberAdmin({ eventId, eventPath }) {
-  const { data, error } = useQuerySuspended(TeamMembersQuery, { variables: { eventId } });
+  const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -1,28 +1,31 @@
 import React from 'react';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
-import { Redirect, useHistory, useRouteMatch } from 'react-router-dom';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import { DeleteEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function EditEventProposal() {
   const history = useHistory();
-  const match = useRouteMatch();
-  const eventProposalId = Number.parseInt(match.params.id, 10);
-  const { data, error } = useQuerySuspended(EventProposalQuery, { variables: { eventProposalId } });
+  const eventProposalId = Number.parseInt(useParams().id, 10);
+  const { data, loading, error } = useQuery(EventProposalQuery, { variables: { eventProposalId } });
   const [deleteProposal] = useMutation(DeleteEventProposal);
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
 
   usePageTitle(
-    useValueUnless(() => `Editing “${data.eventProposal.title}”`, error),
+    useValueUnless(() => `Editing “${data.eventProposal.title}”`, error || loading),
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
