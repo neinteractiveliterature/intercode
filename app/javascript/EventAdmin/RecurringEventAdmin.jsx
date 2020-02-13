@@ -2,22 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import EditRun from './EditRun';
 import RecurringEventSection from './RecurringEventSection';
 import { EventAdminEventsQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function RecurringEventAdmin({ eventCategoryId }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, error, eventCategoryId);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const [eventCategory, sortedEvents] = useEventAdminCategory(data, loading, error, eventCategoryId);
 
-  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error));
+  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
