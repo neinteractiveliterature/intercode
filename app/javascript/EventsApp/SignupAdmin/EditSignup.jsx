@@ -4,7 +4,7 @@ import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../../TimeUtils';
@@ -15,10 +15,10 @@ import ForceConfirmSignupModal from './ForceConfirmSignupModal';
 import Timespan from '../../Timespan';
 import { UpdateSignupCounted } from './mutations.gql';
 import useModal from '../../ModalDialogs/useModal';
-import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function cityState(userConProfile) {
   return [
@@ -112,14 +112,17 @@ function getToggleCountedConfirmPrompt(signup) {
 }
 
 function EditSignup({ id, teamMembersUrl }) {
-  const { data, error } = useQuerySuspended(AdminSignupQuery, { variables: { id } });
+  const { data, loading, error } = useQuery(AdminSignupQuery, { variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
   const [updateCountedMutate] = useMutation(UpdateSignupCounted);
   const confirm = useConfirm();
 
   usePageTitle(
-    useValueUnless(() => `Editing signup for “${data.signup.user_con_profile.name_without_nickname}” - ${data.signup.run.event.title}`, error),
+    useValueUnless(
+      () => `Editing signup for “${data.signup.user_con_profile.name_without_nickname}” - ${data.signup.run.event.title}`,
+      error || loading,
+    ),
   );
 
   const toggleCounted = useCallback(
@@ -134,6 +137,10 @@ function EditSignup({ id, teamMembersUrl }) {
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
   }
 
   const renderUserSection = () => {

@@ -1,32 +1,25 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import { EventCategoryAdminQuery } from './queries.gql';
 import EventCategoryForm from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
 import { UpdateEventCategory } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditEventCategory({ match, history }) {
-  const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
+function EditEventCategoryForm({ initialEventCategory, convention }) {
+  const history = useHistory();
   const [updateMutate] = useMutation(UpdateEventCategory);
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
-  const { id: eventCategoryId } = match.params;
-  const initialEventCategory = useMemo(
-    () => (error
-      ? null
-      : data.convention.event_categories.find((c) => c.id.toString() === eventCategoryId)),
-    [data, error, eventCategoryId],
-  );
   const [eventCategory, setEventCategory] = useState(initialEventCategory);
 
-  usePageTitle(useValueUnless(() => `Editing “${initialEventCategory.name}”`, error));
+  usePageTitle(`Editing “${initialEventCategory.name}”`);
 
   const updateClicked = async () => {
     await update({
@@ -39,10 +32,6 @@ function EditEventCategory({ match, history }) {
     history.push('/event_categories');
   };
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   return (
     <>
       <h1 className="mb-4">Edit event category</h1>
@@ -50,10 +39,10 @@ function EditEventCategory({ match, history }) {
       <EventCategoryForm
         value={eventCategory}
         onChange={setEventCategory}
-        departments={data.convention.departments}
-        forms={data.convention.forms}
-        ticketName={data.convention.ticket_name}
-        ticketMode={data.convention.ticket_mode}
+        departments={convention.departments}
+        forms={convention.forms}
+        ticketName={convention.ticket_name}
+        ticketMode={convention.ticket_mode}
         disabled={updateInProgress}
       />
 
@@ -71,15 +60,43 @@ function EditEventCategory({ match, history }) {
   );
 }
 
-EditEventCategory.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
+EditEventCategoryForm.propTypes = {
+  convention: PropTypes.shape({
+    departments: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    forms: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    ticket_name: PropTypes.string.isRequired,
+    ticket_mode: PropTypes.string.isRequired,
   }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  initialEventCategory: PropTypes.shape({
+    name: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+function EditEventCategory() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(EventCategoryAdminQuery);
+
+  const initialEventCategory = useMemo(
+    () => (error || loading
+      ? null
+      : data.convention.event_categories.find((c) => c.id.toString() === id)),
+    [data, error, loading, id],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <EditEventCategoryForm
+      initialEventCategory={initialEventCategory}
+      convention={data.convention}
+    />
+  );
+}
 
 export default EditEventCategory;
