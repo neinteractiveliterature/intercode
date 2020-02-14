@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import useQuerySuspended from '../useQuerySuspended';
 import { WhosFreeFormConventionQuery } from './queries.gql';
+import LoadingIndicator from '../LoadingIndicator';
 
 const momentToTimeObject = (momentValue) => {
   if (momentValue == null) {
@@ -27,7 +28,7 @@ function makeTimeOfDay(prevTime, day, newTime) {
 }
 
 function WhosFreeForm({ onSubmit }) {
-  const { data: { convention }, error } = useQuerySuspended(WhosFreeFormConventionQuery);
+  const { data, loading, error } = useQuery(WhosFreeFormConventionQuery);
   const [start, setStart] = useState(null);
   const [finish, setFinish] = useState(null);
   const [day, setDay] = useState(null);
@@ -82,9 +83,15 @@ function WhosFreeForm({ onSubmit }) {
     [onSubmit, start, finish],
   );
 
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
+
+  const { convention } = data;
 
   return (
     <div className="card bg-light mb-4">
