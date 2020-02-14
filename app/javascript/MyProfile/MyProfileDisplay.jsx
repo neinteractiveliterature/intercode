@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { MyProfileQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import Form from '../Models/Form';
@@ -10,24 +10,25 @@ import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function MyProfileDisplay() {
-  const { data, error } = useQuerySuspended(MyProfileQuery);
+  const { data, loading, error } = useQuery(MyProfileQuery);
 
   const form = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return null;
       }
 
       return Form.fromApiResponse(JSON.parse(data.convention.user_con_profile_form.form_api_json));
     },
-    [data, error],
+    [data, loading, error],
   );
 
   const formResponse = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return null;
       }
 
@@ -37,7 +38,7 @@ function MyProfileDisplay() {
 
       return JSON.parse(data.myProfile.form_response_attrs_json);
     },
-    [data, error],
+    [data, loading, error],
   );
 
   const formItems = useMemo(
@@ -52,6 +53,10 @@ function MyProfileDisplay() {
   );
 
   usePageTitle('My profile');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
