@@ -1,15 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash-es/isEqual';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import MD5 from 'md5.js';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 import { MyProfileQuery } from './queries.gql';
 import { UpdateUserConProfile } from '../UserConProfiles/mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
@@ -20,6 +19,7 @@ import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import Gravatar from '../Gravatar';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -28,15 +28,12 @@ function parseResponseErrors(error) {
   return validationErrors;
 }
 
-function MyProfileForm({ initialSetup }) {
-  const { data, error } = useQuerySuspended(MyProfileQuery);
+function MyProfileFormInner({
+  initialSetup, initialUserConProfile, convention, form,
+}) {
   const [updateMutate] = useMutation(UpdateUserConProfile);
   const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
   const [responseErrors, setResponseErrors] = useState({});
-
-  const {
-    userConProfile: initialUserConProfile, convention, form,
-  } = buildFormStateFromData(data.myProfile, data.convention);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
   const [response, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
@@ -99,22 +96,15 @@ function MyProfileForm({ initialSetup }) {
     [updateUserConProfile, userConProfile],
   );
 
-  usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   const formPresenterProps = {
     form,
     convention,
     response,
     responseErrors,
-    error,
     isSubmittingResponse: false,
     isUpdatingResponse: mutationInProgress,
     responseValuesChanged,
-    submitForm: () => {},
+    submitForm: () => { },
   };
 
   return (
@@ -220,6 +210,45 @@ function MyProfileForm({ initialSetup }) {
         {mutationInProgress && <span className="ml-2"><LoadingIndicator /></span>}
       </div>
     </>
+  );
+}
+
+MyProfileFormInner.propTypes = {
+  initialSetup: PropTypes.bool.isRequired,
+  initialUserConProfile: PropTypes.shape({
+    can_have_bio: PropTypes.bool,
+  }).isRequired,
+  convention: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  form: PropTypes.shape({}).isRequired,
+};
+
+function MyProfileForm({ initialSetup }) {
+  const { data, loading, error } = useQuery(MyProfileQuery);
+
+  const formState = useMemo(
+    () => (loading || error ? null : buildFormStateFromData(data.myProfile, data.convention)),
+    [loading, error, data],
+  );
+
+  usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <MyProfileFormInner
+      initialUserConProfile={formState.userConProfile}
+      convention={formState.convention}
+      form={formState.form}
+      initialSetup={initialSetup || false}
+    />
   );
 }
 

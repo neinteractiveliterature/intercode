@@ -24,7 +24,7 @@ function EventAdminRunsTable({ eventCategoryId }) {
   usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
 
   if (loading) {
-    return <PageLoadingIndicator />;
+    return <PageLoadingIndicator visible />;
   }
 
   if (error) {
