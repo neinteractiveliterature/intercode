@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposers from './EventProposers';
@@ -7,12 +8,16 @@ import { MailingListsMenuQuery } from './queries.gql';
 import TicketedAttendees from './TicketedAttendees';
 import TeamMembers from './TeamMembers';
 import UsersWithPendingBio from './UsersWithPendingBio';
-import useQuerySuspended from '../useQuerySuspended';
 import WaitlistMailingLists from './WaitlistMailingLists';
 import WhosFree from './WhosFree';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function MailingListsMenu() {
-  const { data, error } = useQuerySuspended(MailingListsMenuQuery);
+  const { data, loading, error } = useQuery(MailingListsMenuQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
