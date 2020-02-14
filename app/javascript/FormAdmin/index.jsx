@@ -1,15 +1,20 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import FormAdminIndex from './FormAdminIndex';
 import { FormAdminQuery } from './queries.gql';
 import FormJSONEditor from './FormJSONEditor';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function FormAdmin() {
-  const { data, error } = useQuerySuspended(FormAdminQuery);
+  const { data, loading, error } = useQuery(FormAdminQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

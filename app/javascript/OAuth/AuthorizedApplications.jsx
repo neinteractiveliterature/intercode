@@ -10,7 +10,7 @@ import { RevokeAuthorizedApplication } from './mutations.gql';
 import { useDeleteMutation } from '../MutationUtils';
 
 function AuthorizedApplications() {
-  const { data, loading, errors } = useQuery(OAuthAuthorizedApplicationsQuery);
+  const { data, loading, error } = useQuery(OAuthAuthorizedApplicationsQuery);
   const revokeAuthorizedApplication = useDeleteMutation(RevokeAuthorizedApplication, {
     query: OAuthAuthorizedApplicationsQuery,
     arrayPath: ['myAuthorizedApplications'],
@@ -20,10 +20,10 @@ function AuthorizedApplications() {
   const confirm = useConfirm();
 
   if (loading) {
-    return <PageLoadingIndicator />;
+    return <PageLoadingIndicator visible />;
   }
 
-  if (errors) {
+  if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
@@ -31,7 +31,7 @@ function AuthorizedApplications() {
     confirm({
       prompt: `Are you sure you want to revoke the authorization for ${authorizedApplication.name}?`,
       action: () => revokeAuthorizedApplication({ variables: { uid: authorizedApplication.uid } }),
-      renderError: (error) => <ErrorDisplay graphQLError={error} />,
+      renderError: (e) => <ErrorDisplay graphQLError={e} />,
     });
   };
 

@@ -1,16 +1,21 @@
 import React from 'react';
 import moment from 'moment-timezone';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { WaitlistMailingListsQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function WaitlistMailingLists() {
-  const { data, error } = useQuerySuspended(WaitlistMailingListsQuery);
+  const { data, loading, error } = useQuery(WaitlistMailingListsQuery);
 
   usePageTitle('Waitlists');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
