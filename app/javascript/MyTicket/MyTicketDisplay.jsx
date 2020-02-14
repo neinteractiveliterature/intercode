@@ -1,20 +1,25 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
+import { useQuery } from 'react-apollo-hooks';
 
 import { MyTicketDisplayQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
+import LoadingIndicator from '../LoadingIndicator';
 
 const dateFormat = 'dddd, MMMM D, YYYY [at] h:mma z';
 
 function MyTicketDisplay() {
-  const { data, error } = useQuerySuspended(MyTicketDisplayQuery);
+  const { data, loading, error } = useQuery(MyTicketDisplayQuery);
 
-  usePageTitle(useValueUnless(() => `My ${data.convention.ticket_name} receipt`, error));
+  usePageTitle(useValueUnless(() => `My ${data.convention.ticket_name} receipt`, error || loading));
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
