@@ -1,16 +1,23 @@
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { TicketedAttendeesQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function TicketedAttendees() {
-  const { data, error } = useQuerySuspended(TicketedAttendeesQuery);
+  const { data, loading, error } = useQuery(TicketedAttendeesQuery);
 
-  usePageTitle(useValueUnless(() => `All attendees with ${data.convention.ticket_name}`, error));
+  usePageTitle(useValueUnless(
+    () => `All attendees with ${data.convention.ticket_name}`, error || loading,
+  ));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

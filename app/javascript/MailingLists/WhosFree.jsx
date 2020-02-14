@@ -1,9 +1,9 @@
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
-import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
 import Timespan from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
@@ -12,9 +12,13 @@ import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
 
 function WhosFreeResults({ timespan }) {
-  const { data, error } = useQuerySuspended(WhosFreeQuery, {
+  const { data, loading, error } = useQuery(WhosFreeQuery, {
     variables: { start: timespan.start.toISOString(), finish: timespan.finish.toISOString() },
   });
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -45,11 +49,7 @@ function WhosFree() {
     <>
       <h1 className="mb-4">Who&rsquo;s free?</h1>
       <WhosFreeForm onSubmit={({ start, finish }) => setTimespan(new Timespan(start, finish))} />
-      {timespan && (
-        <Suspense fallback={<LoadingIndicator />}>
-          <WhosFreeResults timespan={timespan} />
-        </Suspense>
-      )}
+      {timespan && <WhosFreeResults timespan={timespan} />}
     </>
   );
 }
