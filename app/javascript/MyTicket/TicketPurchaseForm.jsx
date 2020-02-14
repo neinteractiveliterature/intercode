@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
@@ -15,23 +15,32 @@ import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import { PurchaseTicket } from './mutations.gql';
 import { TicketPurchaseFormQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useQuerySuspended from '../useQuerySuspended';
 import { findCurrentValue } from '../ScheduledValueUtils';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function TicketPurchaseForm({ stripe }) {
-  const { data, error: queryError } = useQuerySuspended(TicketPurchaseFormQuery);
-  const availableTicketTypes = (queryError
+  const { data, loading, error: queryError } = useQuery(TicketPurchaseFormQuery);
+  const availableTicketTypes = (queryError || loading
     ? []
     : data.convention.ticket_types.filter((ticketType) => ticketType.publicly_available));
-  const [ticketType, setTicketType] = useState(availableTicketTypes.length === 1
-    ? availableTicketTypes[0]
-    : null);
-  const [name, setName] = useState((data.myProfile || {}).name_without_nickname || '');
+  const [ticketType, setTicketType] = useState(null);
+  const [name, setName] = useState(((data || {}).myProfile || {}).name_without_nickname || '');
   const [ticket, setTicket] = useState(null);
   const [purchaseTicket] = useMutation(PurchaseTicket);
+
+  useEffect(
+    () => {
+      if (!loading) {
+        if (availableTicketTypes.length === 1) {
+          setTicketType(availableTicketTypes[0]);
+        }
+      }
+    },
+    [availableTicketTypes, loading],
+  );
 
   const [submitPayment, error, submitting] = useAsyncFunction(useCallback(
     async () => {
@@ -52,7 +61,11 @@ function TicketPurchaseForm({ stripe }) {
     [purchaseTicket, ticketType, name, stripe],
   ));
 
-  usePageTitle(useValueUnless(() => `Buy a ${data.convention.ticket_name}`, queryError));
+  usePageTitle(useValueUnless(() => `Buy a ${data.convention.ticket_name}`, queryError || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (queryError) {
     return <ErrorDisplay graphQLError={queryError} />;

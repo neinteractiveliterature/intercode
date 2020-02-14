@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteForm } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { FormAdminQuery } from './queries.gql';
 import { sortByLocaleString } from '../ValueUtils';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import { useDeleteMutation } from '../MutationUtils';
 import useModal from '../ModalDialogs/useModal';
 import NewFormModal from './NewFormModal';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function describeFormUsers(form) {
   return [
@@ -22,7 +23,7 @@ function describeFormUsers(form) {
 }
 
 function FormAdminIndex() {
-  const { data, error } = useQuerySuspended(FormAdminQuery);
+  const { data, loading, error } = useQuery(FormAdminQuery);
   const confirm = useConfirm();
   const deleteForm = useDeleteMutation(DeleteForm, {
     query: FormAdminQuery,
@@ -31,13 +32,17 @@ function FormAdminIndex() {
   });
   const newFormModal = useModal();
   const sortedForms = useMemo(
-    () => (error
+    () => (error || loading
       ? null
       : sortByLocaleString(data.convention.forms, (form) => form.title)),
-    [data, error],
+    [data, error, loading],
   );
 
   usePageTitle('Forms');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

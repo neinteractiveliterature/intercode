@@ -1,16 +1,21 @@
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventProposersQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function EventProposers() {
-  const { data, error } = useQuerySuspended(EventProposersQuery);
+  const { data, loading, error } = useQuery(EventProposersQuery);
 
-  usePageTitle('Event proposers', useValueUnless(() => data.convention, error));
+  usePageTitle('Event proposers', useValueUnless(() => data.convention, error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

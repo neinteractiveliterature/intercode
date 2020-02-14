@@ -1,15 +1,20 @@
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { UsersWithPendingBioQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function UsersWithPendingBio() {
-  const { data, error } = useQuerySuspended(UsersWithPendingBioQuery);
+  const { data, loading, error } = useQuery(UsersWithPendingBioQuery);
 
   usePageTitle('Users with pending bio');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

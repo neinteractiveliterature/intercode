@@ -194,7 +194,7 @@ function EventProposalForm({ eventProposalId, afterSubmit, exitButton }) {
   );
 
   if (loading) {
-    return <PageLoadingIndicator />;
+    return <PageLoadingIndicator visible />;
   }
 
   if (error) {
