@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
+import { Redirect } from 'react-router-dom';
 
 import { AcceptClickwrapAgreement } from './mutations.gql';
 import { ClickwrapAgreementQuery } from './queries.gql';
@@ -21,6 +22,10 @@ function ClickwrapAgreement({ history }) {
 
   if (error) {
     return <ErrorDisplay graphqlError={error} />;
+  }
+
+  if (!data.myProfile || data.myProfile.accepted_clickwrap_agreement) {
+    return <Redirect to="/" />;
   }
 
   const { convention } = data;

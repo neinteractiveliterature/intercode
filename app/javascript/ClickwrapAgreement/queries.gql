@@ -4,4 +4,9 @@ query ClickwrapAgreementQuery {
     name
     clickwrap_agreement_html
   }
+
+  myProfile {
+    id
+    accepted_clickwrap_agreement
+  }
 }
