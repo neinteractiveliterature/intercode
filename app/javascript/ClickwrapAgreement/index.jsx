@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useApolloClient } from 'react-apollo-hooks';
 import { Redirect } from 'react-router-dom';
 
 import { AcceptClickwrapAgreement } from './mutations.gql';
@@ -9,22 +9,40 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import parseCmsContent from '../parseCmsContent';
+import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
+import AuthenticityTokensContext from '../AuthenticityTokensContext';
 
 function ClickwrapAgreement({ history }) {
   const { data, error } = useQuerySuspended(ClickwrapAgreementQuery);
   const [acceptMutate] = useMutation(AcceptClickwrapAgreement);
   const [accept, acceptError, acceptInProgress] = useAsyncFunction(acceptMutate);
+  const authenticationModal = useContext(AuthenticationModalContext);
+  const { refresh } = useContext(AuthenticityTokensContext);
+  const apolloClient = useApolloClient();
 
   const acceptClicked = async () => {
-    await accept();
-    history.push('/my_profile/setup');
+    try {
+      await accept();
+      history.push('/my_profile/setup');
+    } catch (err) {
+      await refresh();
+      await apolloClient.resetStore();
+      throw err;
+    }
   };
 
   if (error) {
     return <ErrorDisplay graphqlError={error} />;
   }
 
-  if (!data.myProfile || data.myProfile.accepted_clickwrap_agreement) {
+  if (!data.myProfile) {
+    if (!authenticationModal.visible) {
+      authenticationModal.open({ currentView: 'signIn' });
+    }
+    return <></>;
+  }
+
+  if (data.myProfile.accepted_clickwrap_agreement) {
     return <Redirect to="/" />;
   }
 
