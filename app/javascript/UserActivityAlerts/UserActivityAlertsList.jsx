@@ -1,7 +1,7 @@
 import React from 'react';
 import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { UserActivityAlertsAdminQuery } from './queries.gql';

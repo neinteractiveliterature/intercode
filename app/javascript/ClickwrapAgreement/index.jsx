@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useQuery, useApolloClient } from 'react-apollo-hooks';
+import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
 import { useHistory, Redirect } from 'react-router-dom';
 
 import { AcceptClickwrapAgreement } from './mutations.gql';

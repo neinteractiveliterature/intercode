@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import intersection from 'lodash-es/intersection';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { CartQuery } from './queries.gql';
 import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';

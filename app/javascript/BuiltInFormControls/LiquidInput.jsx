@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import CodeInput from './CodeInput';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries.gql';
