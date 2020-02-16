@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { pluralize, capitalize } from 'inflected';
 import flatMap from 'lodash-es/flatMap';
 import sum from 'lodash-es/sum';
+import { useQuery } from 'react-apollo-hooks';
 
 import { EventProvidedTicketsQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString, titleSort } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function EventProvidedTicketsByEvent({ data }) {
   const sortedRows = titleSort(
@@ -83,21 +84,28 @@ EventProvidedTicketsByUser.propTypes = {
 };
 
 function EventProvidedTickets() {
-  const { data, error } = useQuerySuspended(EventProvidedTicketsQuery);
+  const { data, loading, error } = useQuery(EventProvidedTicketsQuery);
   const tabProps = useTabs([
     {
       id: 'by-event',
       name: 'By event',
-      renderContent: () => !error && <EventProvidedTicketsByEvent data={data} />,
+      renderContent: () => !loading && !error && <EventProvidedTicketsByEvent data={data} />,
     },
     {
       id: 'by-user',
       name: 'By user',
-      renderContent: () => !error && <EventProvidedTicketsByUser data={data} />,
+      renderContent: () => !loading && !error && <EventProvidedTicketsByUser data={data} />,
     },
   ]);
 
-  usePageTitle(useValueUnless(() => `Event-provided ${pluralize(data.convention.ticket_name)}`, error));
+  usePageTitle(useValueUnless(
+    () => `Event-provided ${pluralize(data.convention.ticket_name)}`,
+    error || loading,
+  ));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
