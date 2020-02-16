@@ -6,12 +6,13 @@ import groupBy from 'lodash-es/groupBy';
 import keyBy from 'lodash-es/keyBy';
 import sum from 'lodash-es/sum';
 import { capitalize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventsByChoiceQuery } from './queries.gql';
 import { titleSort } from '../ValueUtils';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function renderChoiceCounts(choiceData) {
   if (!choiceData) {
@@ -32,11 +33,11 @@ function renderChoiceCounts(choiceData) {
 }
 
 function EventsByChoice() {
-  const { data, error } = useQuerySuspended(EventsByChoiceQuery);
+  const { data, loading, error } = useQuery(EventsByChoiceQuery);
 
   const choiceColumns = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return 0;
       }
 
@@ -46,15 +47,15 @@ function EventsByChoice() {
 
       return Array.from({ length: max(choices) }, (element, index) => index + 1);
     },
-    [data, error],
+    [data, loading, error],
   );
 
   const filteredRows = useMemo(
-    () => (error
+    () => (loading || error
       ? []
       : data.convention.reports.events_by_choice.filter((row) => row.choice_counts.length > 0)
     ),
-    [data, error],
+    [data, loading, error],
   );
 
   const sortedRows = useMemo(
@@ -89,6 +90,10 @@ function EventsByChoice() {
   );
 
   usePageTitle('Events by choice');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
