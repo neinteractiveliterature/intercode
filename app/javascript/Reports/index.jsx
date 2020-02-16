@@ -1,20 +1,25 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
 import { ReportsMenuQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';
 import EventsByChoice from './EventsByChoice';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function ReportsMenu() {
-  const { data, error } = useQuerySuspended(ReportsMenuQuery);
+  const { data, loading, error } = useQuery(ReportsMenuQuery);
 
   usePageTitle('Reports');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

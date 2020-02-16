@@ -1,15 +1,19 @@
 import React from 'react';
 import sortBy from 'lodash-es/sortBy';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function renderOrganizationConventions(organization) {
-  const sortedConventions = sortBy(organization.conventions, [(convention) => convention.starts_at]);
+  const sortedConventions = sortBy(
+    organization.conventions,
+    [(convention) => convention.starts_at],
+  );
   sortedConventions.reverse();
 
   const conventionNames = sortedConventions.slice(0, 3).map((convention) => convention.name);
@@ -21,10 +25,11 @@ function renderOrganizationConventions(organization) {
 }
 
 function OrganizationIndex() {
-  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
+  const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
 
   usePageTitle('Organizations');
 
+  if (loading) return <PageLoadingIndicator visible />;
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   const sortedOrganizations = sortByLocaleString(
