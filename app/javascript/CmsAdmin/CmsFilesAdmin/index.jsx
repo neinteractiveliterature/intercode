@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import chunk from 'lodash-es/chunk';
 import bytes from 'bytes';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { CmsFilesAdminQuery } from './queries.gql';
 import { DeleteCmsFile, RenameCmsFile } from './mutations.gql';

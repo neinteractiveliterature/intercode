@@ -1,7 +1,7 @@
 import React from 'react';
 import sortBy from 'lodash-es/sortBy';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';

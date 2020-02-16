@@ -1,5 +1,5 @@
 import { useRef, useMemo, useEffect } from 'react';
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { createUploadLink } from 'apollo-upload-client';

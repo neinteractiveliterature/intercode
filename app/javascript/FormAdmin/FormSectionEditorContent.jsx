@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import { FormEditorContext } from './FormEditorContexts';
 import FormEditorItemPreview from './FormEditorItemPreview';

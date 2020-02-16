@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import { WithdrawMySignup } from './mutations.gql';
 import WithdrawSignupButton from './WithdrawSignupButton';

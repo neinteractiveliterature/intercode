@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { MyTicketDisplayQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';

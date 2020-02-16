@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import { DeleteEventProposal } from './mutations.gql';

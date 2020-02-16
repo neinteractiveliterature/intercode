@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   NavLink, Switch, Route, Redirect,
 } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';

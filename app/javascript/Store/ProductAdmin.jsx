@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import AdminProductCard from './AdminProductCard';
 import { AdminProductsQuery } from './queries.gql';

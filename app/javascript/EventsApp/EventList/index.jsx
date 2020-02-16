@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useCallback, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';

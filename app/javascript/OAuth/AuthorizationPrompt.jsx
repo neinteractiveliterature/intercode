@@ -1,5 +1,5 @@
 import React, { useMemo, useContext } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { useLocation } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';

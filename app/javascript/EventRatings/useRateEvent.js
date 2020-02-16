@@ -1,4 +1,4 @@
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { RateEvent } from './mutations.gql';
 
 export default function useRateEvent() {
