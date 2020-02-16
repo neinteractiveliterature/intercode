@@ -1,22 +1,22 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
 
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
 import { CreateSignupRunCardQuery } from './queries.gql';
 import { CreateUserSignup, WithdrawUserSignup } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import RunCard from '../EventsApp/EventPage/RunCard';
-import useQuerySuspended from '../useQuerySuspended';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useAlert } from '../ModalDialogs/Alert';
+import LoadingIndicator from '../LoadingIndicator';
 
 function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   const apolloClient = useApolloClient();
   const confirm = useConfirm();
   const alert = useAlert();
 
-  const { data, error } = useQuerySuspended(CreateSignupRunCardQuery, {
+  const { data, loading, error } = useQuery(CreateSignupRunCardQuery, {
     variables: { userConProfileId, eventId },
   });
 
@@ -45,24 +45,28 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   });
 
   const signupOptions = useMemo(
-    () => (error ? null : buildSignupOptions(data.event, data.userConProfile)),
-    [data, error],
+    () => (error || loading ? null : buildSignupOptions(data.event, data.userConProfile)),
+    [data, loading, error],
   );
 
   const mySignup = useMemo(
-    () => (error ? null : data.userConProfile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn')),
-    [data, error, runId],
+    () => (error || loading ? null : data.userConProfile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn')),
+    [data, error, loading, runId],
   );
 
   const myPendingSignupRequest = useMemo(
-    () => (error ? null : data.userConProfile.signup_requests.find((sr) => sr.target_run.id === runId && sr.state === 'pending')),
-    [data, error, runId],
+    () => (error || loading ? null : data.userConProfile.signup_requests.find((sr) => sr.target_run.id === runId && sr.state === 'pending')),
+    [data, error, loading, runId],
   );
 
   const run = useMemo(
-    () => (error ? null : data.event.runs.find((r) => r.id === runId)),
-    [data, error, runId],
+    () => (error || loading ? null : data.event.runs.find((r) => r.id === runId)),
+    [data, error, loading, runId],
   );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
