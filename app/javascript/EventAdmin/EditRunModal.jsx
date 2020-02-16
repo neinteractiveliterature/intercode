@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import {
   EventAdminEventsQuery, RunFields, EventFields, ConventionFields,

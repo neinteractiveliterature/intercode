@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import get from 'lodash/fp/get';
 import set from 'lodash/fp/set';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 export function createUpdater({
   query, variables, arrayPath, newObjectPath,

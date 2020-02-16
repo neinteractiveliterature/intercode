@@ -1,7 +1,7 @@
 import React from 'react';
 import flatten from 'lodash-es/flatten';
 import { humanize } from 'inflected';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { OrderSummaryQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';

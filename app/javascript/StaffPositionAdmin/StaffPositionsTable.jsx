@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash-es/groupBy';
 import flatMap from 'lodash-es/flatMap';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { DeleteStaffPosition } from './mutations.gql';

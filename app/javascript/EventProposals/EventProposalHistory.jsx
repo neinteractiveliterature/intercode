@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { EventProposalHistoryQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';

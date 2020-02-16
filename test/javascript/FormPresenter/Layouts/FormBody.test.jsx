@@ -19,7 +19,7 @@ describe('FormBody', () => {
     return render((
       <ItemInteractionTrackerContext.Provider
         value={{
-          hasInteractedWithItem: id => interactedItemIdsSet.has(id),
+          hasInteractedWithItem: (id) => interactedItemIdsSet.has(id),
           interactWithItem: () => { },
           interactedItemIds: interactedItemIdsSet,
         }}

@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useCallback } from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 
 import { CreateFormItem } from './mutations.gql';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditStaffPosition from './EditStaffPosition';

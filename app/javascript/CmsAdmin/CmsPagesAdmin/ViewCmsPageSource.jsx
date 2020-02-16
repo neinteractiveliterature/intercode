@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
 
 import CmsPageForm from './CmsPageForm';
