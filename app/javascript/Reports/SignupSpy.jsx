@@ -1,16 +1,17 @@
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import { SignupCountsByStateQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function SignupSpy() {
-  const { data, error } = useQuerySuspended(SignupCountsByStateQuery);
+  const { data, loading, error } = useQuery(SignupCountsByStateQuery);
 
   const getSignupCount = (state) => {
-    if (error) {
+    if (error || loading) {
       return 0;
     }
 
@@ -21,6 +22,10 @@ function SignupSpy() {
   };
 
   usePageTitle('Signup spy');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

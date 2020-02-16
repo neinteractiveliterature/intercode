@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import { Redirect, withRouter } from 'react-router-dom';
 
 import { CreateOrganizationRole } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function NewOrganizationRole({ organizationId, history }) {
-  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
+  const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const { renderForm, formState } = useOrganizationRoleForm({ name: '', users: [], permissions: [] });
   const [
     mutate, { error: mutationError, loading: mutationInProgress },
@@ -19,6 +19,7 @@ function NewOrganizationRole({ organizationId, history }) {
 
   usePageTitle('New organization role');
 
+  if (loading) return <PageLoadingIndicator visible />;
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   const organization = data.organizations.find((org) => org.id === organizationId);
