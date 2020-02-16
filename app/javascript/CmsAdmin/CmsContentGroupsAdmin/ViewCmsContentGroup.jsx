@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';

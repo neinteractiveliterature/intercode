@@ -24,10 +24,6 @@ function NewDepartment() {
         variables: {
           department: buildDepartmentInput(department),
         },
-        // TODO reevaluate if we need this; right now it seems like the new department
-        // doesn't show up on the index page but this could change once we're off
-        // react-apollo-hooks
-        refetchQueries: [{ query: DepartmentAdminQuery }],
       });
       history.push('/admin_departments');
     },

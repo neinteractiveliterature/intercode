@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { DepartmentAdminQuery } from './queries.gql';
 import { UpdateDepartment } from './mutations.gql';

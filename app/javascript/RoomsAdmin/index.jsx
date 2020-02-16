@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';

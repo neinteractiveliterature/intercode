@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
 import { timespanFromRun } from '../../TimespanUtils';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import EditRootSite from './EditRootSite';
 import { RootSiteAdminQuery } from './queries.gql';

@@ -2,8 +2,7 @@ import React, {
   Suspense, useMemo, useCallback, useRef, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
-import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { BrowserRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
@@ -73,22 +72,20 @@ export default (WrappedComponent) => {
           <LazyStripeContext.Provider value={lazyStripeProviderValue}>
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
               <ApolloProvider client={apolloClient}>
-                <ApolloHooksProvider client={apolloClient}>
-                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                    <>
-                      {!unauthenticatedError && (
-                        <Suspense fallback={<PageLoadingIndicator visible />}>
-                          <AlertProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <WrappedComponent {...otherProps} />
-                            </ErrorBoundary>
-                          </AlertProvider>
-                        </Suspense>
-                      )}
-                      <AuthenticationModal />
-                    </>
-                  </AuthenticationModalContext.Provider>
-                </ApolloHooksProvider>
+                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                  <>
+                    {!unauthenticatedError && (
+                      <Suspense fallback={<PageLoadingIndicator visible />}>
+                        <AlertProvider>
+                          <ErrorBoundary placement="replace" errorType="plain">
+                            <WrappedComponent {...otherProps} />
+                          </ErrorBoundary>
+                        </AlertProvider>
+                      </Suspense>
+                    )}
+                    <AuthenticationModal />
+                  </>
+                </AuthenticationModalContext.Provider>
               </ApolloProvider>
             </AuthenticityTokensContext.Provider>
           </LazyStripeContext.Provider>

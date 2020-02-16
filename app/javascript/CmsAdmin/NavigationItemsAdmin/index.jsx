@@ -1,6 +1,6 @@
 import React from 'react';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin/src';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import Client from './Client';
 import usePageTitle from '../../usePageTitle';

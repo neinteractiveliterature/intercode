@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { CmsLayoutsAdminQuery } from './queries.gql';
 import { DeleteLayout } from './mutations.gql';

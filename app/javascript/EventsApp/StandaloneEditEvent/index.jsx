@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
 import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';

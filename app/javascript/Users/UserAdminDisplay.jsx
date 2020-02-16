@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
 import reverse from 'lodash-es/reverse';
 import sortBy from 'lodash-es/sortBy';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { UserAdminQuery } from './queries.gql';

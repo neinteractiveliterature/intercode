@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import CreateEventProposalModal from './CreateEventProposalModal';
 import { ProposeEventButtonQuery } from './queries.gql';

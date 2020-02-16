@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { pluralize, capitalize } from 'inflected';
 import flatMap from 'lodash-es/flatMap';
 import sum from 'lodash-es/sum';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { EventProvidedTicketsQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';

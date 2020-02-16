@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation, useQuery } from 'react-apollo-hooks';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import { useHistory, useParams } from 'react-router-dom';
 
 import buildLayoutInput from './buildLayoutInput';
