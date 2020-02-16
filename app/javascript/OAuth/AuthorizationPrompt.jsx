@@ -1,15 +1,17 @@
 import React, { useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useLocation } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import { OAuthAuthorizationPromptQuery } from './queries.gql';
 import PermissionsPrompt from './PermissionsPrompt';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function AuthorizationPrompt({ location }) {
+function AuthorizationPrompt() {
+  const location = useLocation();
   const preAuthParamsJSON = useMemo(
     () => JSON.stringify(
       [...(new URLSearchParams(location.search))]
@@ -17,19 +19,19 @@ function AuthorizationPrompt({ location }) {
     ),
     [location.search],
   );
-  const { data, error } = useQuerySuspended(
+  const { data, loading, error } = useQuery(
     OAuthAuthorizationPromptQuery,
     { variables: { queryParams: preAuthParamsJSON } },
   );
   const preAuth = useMemo(
     () => {
-      if (error) {
+      if (error || loading) {
         return null;
       }
 
       return JSON.parse(data.oauthPreAuth);
     },
-    [data, error],
+    [data, loading, error],
   );
   const scopes = useMemo(
     () => {
@@ -58,6 +60,10 @@ function AuthorizationPrompt({ location }) {
   const authenticationModal = useContext(AuthenticationModalContext);
 
   usePageTitle('Authorization required');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -145,11 +151,5 @@ function AuthorizationPrompt({ location }) {
     </div>
   );
 }
-
-AuthorizationPrompt.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }).isRequired,
-};
 
 export default AuthorizationPrompt;
