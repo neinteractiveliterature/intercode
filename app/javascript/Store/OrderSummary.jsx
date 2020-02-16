@@ -1,11 +1,12 @@
 import React from 'react';
 import flatten from 'lodash-es/flatten';
 import { humanize } from 'inflected';
+import { useQuery } from 'react-apollo-hooks';
 
 import { OrderSummaryQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 const ORDER_STATUSES = ['paid', 'unpaid', 'cancelled'];
 
@@ -20,7 +21,7 @@ function statusClass(status) {
 
 function OrderSummary() {
   usePageTitle('Order summary');
-  const { data, error } = useQuerySuspended(OrderSummaryQuery);
+  const { data, loading, error } = useQuery(OrderSummaryQuery);
 
   const renderQuantityCell = (quantitiesByStatus, status) => {
     const { quantity } = quantitiesByStatus.find((qbs) => qbs.status === status);
@@ -74,6 +75,10 @@ function OrderSummary() {
       </tr>,
     ];
   };
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
