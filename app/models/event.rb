@@ -4,6 +4,7 @@ class Event < ApplicationRecord
   include FormResponse
   include OrderByTitle
   include PgSearch::Model
+  include ActionView::Helpers::SanitizeHelper
 
   STATUSES = Set.new(%w[active dropped])
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
@@ -18,6 +19,11 @@ class Event < ApplicationRecord
         tsvector_column: 'title_vector'
       }
     }
+  )
+
+  multisearchable(
+    against: [:title, :author, :organization, :description_stripped, :short_blurb_stripped],
+    additional_attributes: ->(event) { { convention_id: event.convention_id } }
   )
 
   register_form_response_attrs :title,
@@ -146,6 +152,14 @@ class Event < ApplicationRecord
 
   def form
     event_category.event_form
+  end
+
+  def description_stripped
+    strip_tags(description)
+  end
+
+  def short_blurb_stripped
+    strip_tags(short_blurb)
   end
 
   private
