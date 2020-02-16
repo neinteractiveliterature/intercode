@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import { Link, Redirect } from 'react-router-dom';
 import { titleize } from 'inflected';
 
@@ -10,9 +10,9 @@ import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import PermissionNames from '../../../config/permission_names.json';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 const OrganizationRolePermissions = PermissionNames.find((group) => group.role_type === 'OrganizationRole').permissions;
 function getOrganizationRolePermissionName(permissionName) {
@@ -21,16 +21,17 @@ function getOrganizationRolePermissionName(permissionName) {
 }
 
 function OrganizationDisplay({ organizationId }) {
-  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
+  const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const confirm = useConfirm();
   const [mutate] = useMutation(DeleteOrganizationRole);
   const organization = useMemo(
-    () => (error ? null : data.organizations.find((org) => org.id === organizationId)),
-    [data, error, organizationId],
+    () => (error || loading ? null : data.organizations.find((org) => org.id === organizationId)),
+    [data, error, loading, organizationId],
   );
 
-  usePageTitle(useValueUnless(() => organization.name, error));
+  usePageTitle(useValueUnless(() => organization.name, error || loading));
 
+  if (loading) return <PageLoadingIndicator visible />;
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   if (!organization.current_ability_can_manage_access) {
