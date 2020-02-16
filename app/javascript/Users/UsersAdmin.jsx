@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import UsersTable from './UsersTable';
 import UserAdminDisplay from './UserAdminDisplay';
 import { UserAdminQuery } from './queries.gql';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
-import useQuerySuspended from '../useQuerySuspended';
+import LoadingIndicator from '../LoadingIndicator';
 
 function UserBreadcrumbItem({ id }) {
-  const { data, error } = useQuerySuspended(UserAdminQuery, { variables: { id } });
+  const { data, loading, error } = useQuery(UserAdminQuery, { variables: { id } });
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return null;
