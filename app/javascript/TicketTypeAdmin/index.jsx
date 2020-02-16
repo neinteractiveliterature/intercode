@@ -1,15 +1,20 @@
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import EditTicketType from './EditTicketType';
 import NewTicketType from './NewTicketType';
 import TicketTypesList from './TicketTypesList';
 import { AdminTicketTypesQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function TicketTypeAdmin() {
-  const { data, error } = useQuerySuspended(AdminTicketTypesQuery);
+  const { data, loading, error } = useQuery(AdminTicketTypesQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -3,21 +3,26 @@ import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
 import reverse from 'lodash-es/reverse';
 import sortBy from 'lodash-es/sortBy';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
-import useQuerySuspended from '../useQuerySuspended';
 import { UserAdminQuery } from './queries.gql';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import LoadingIndicator from '../LoadingIndicator';
 
 function sortByConventionDate(profiles) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
 }
 
 function UserAdminDisplay({ userId }) {
-  const { data, error } = useQuerySuspended(UserAdminQuery, { variables: { id: userId } });
+  const { data, loading, error } = useQuery(UserAdminQuery, { variables: { id: userId } });
 
-  usePageTitle(useValueUnless(() => data.user.name, error));
+  usePageTitle(useValueUnless(() => data.user.name, error || loading));
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

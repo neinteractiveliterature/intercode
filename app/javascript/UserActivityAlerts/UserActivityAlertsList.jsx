@@ -1,11 +1,12 @@
 import React from 'react';
 import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { UserActivityAlertsAdminQuery } from './queries.gql';
 import usePageTitle from '../usePageTitle';
-import useQuerySuspended from '../useQuerySuspended';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function renderCriteriaList(criteria, defaultText) {
   if (criteria.length > 0) {
@@ -85,7 +86,11 @@ function renderAlertNotificationDestinations(userActivityAlert) {
 
 function UserActivityAlertsList() {
   usePageTitle('User activity alerts');
-  const { data, error } = useQuerySuspended(UserActivityAlertsAdminQuery);
+  const { data, loading, error } = useQuery(UserActivityAlertsAdminQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
