@@ -1,12 +1,13 @@
 import React from 'react';
 import { capitalize } from 'inflected';
 import isEqual from 'lodash-es/isEqual';
+import { useQuery } from 'react-apollo-hooks';
 
 import { AttendanceByPaymentAmountQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function describeRow(ticketType, paymentAmount) {
   if (paymentAmount.fractional > 0) {
@@ -36,9 +37,13 @@ function descriptionCell(ticketType, paymentAmount) {
 }
 
 function AttendanceByPaymentAmount() {
-  const { data, error } = useQuerySuspended(AttendanceByPaymentAmountQuery);
+  const { data, loading, error } = useQuery(AttendanceByPaymentAmountQuery);
 
   usePageTitle('Attendance by payment amount');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
