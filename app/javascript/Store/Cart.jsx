@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import intersection from 'lodash-es/intersection';
-import { withRouter } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { CartQuery } from './queries.gql';
 import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';
@@ -10,14 +9,15 @@ import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import OrderPaymentModal from './OrderPaymentModal';
-import useQuerySuspended from '../useQuerySuspended';
 import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function Cart({ history }) {
-  const { data, error } = useQuerySuspended(CartQuery);
+function Cart() {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(CartQuery);
   const [updateMutate] = useMutation(UpdateOrderEntry);
   const [deleteMutate] = useMutation(DeleteOrderEntry);
   const checkOutModal = useModal();
@@ -65,6 +65,10 @@ function Cart({ history }) {
 
   if (error) {
     return <ErrorDisplay error={error} />;
+  }
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
   }
 
   if (
@@ -175,10 +179,4 @@ function Cart({ history }) {
   );
 }
 
-Cart.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-export default withRouter(Cart);
+export default Cart;

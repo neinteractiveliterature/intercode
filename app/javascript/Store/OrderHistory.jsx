@@ -1,20 +1,25 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import intersection from 'lodash-es/intersection';
+import { useQuery } from 'react-apollo-hooks';
 
 import { OrderHistoryQuery } from './queries.gql';
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useModal from '../ModalDialogs/useModal';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function OrderHistory() {
-  const { data, error } = useQuerySuspended(OrderHistoryQuery);
+  const { data, loading, error } = useQuery(OrderHistoryQuery);
   const paymentModal = useModal();
 
   usePageTitle('My order history');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
