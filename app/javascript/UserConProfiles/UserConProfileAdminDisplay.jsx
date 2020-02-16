@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import fetch from 'unfetch';
 import { Link, useHistory } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserConProfile } from './mutations.gql';
@@ -12,29 +12,29 @@ import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import { UserConProfileAdminQuery } from './queries.gql';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import Gravatar from '../Gravatar';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function UserConProfileAdminDisplay({ userConProfileId }) {
   const history = useHistory();
-  const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
+  const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
   });
   const form = useMemo(
-    () => (error ? null : deserializeForm(data.convention.user_con_profile_form)),
-    [data, error],
+    () => (loading || error ? null : deserializeForm(data.convention.user_con_profile_form)),
+    [data, loading, error],
   );
   const formResponse = useMemo(
-    () => (error ? null : deserializeFormResponseModel(data.userConProfile)),
-    [data, error],
+    () => (loading || error ? null : deserializeFormResponseModel(data.userConProfile)),
+    [data, loading, error],
   );
   const confirm = useConfirm();
   const [deleteUserConProfile] = useMutation(DeleteUserConProfile);
 
-  usePageTitle(useValueUnless(() => data.userConProfile.name, error));
+  usePageTitle(useValueUnless(() => data.userConProfile.name, error || loading));
 
   const becomeUser = useCallback(
     async () => {
@@ -146,6 +146,10 @@ function UserConProfileAdminDisplay({ userConProfileId }) {
 
     return <UserConProfileSignupsCard userConProfileId={data.userConProfile.id} />;
   };
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

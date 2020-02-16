@@ -1,18 +1,19 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import TicketForm from './TicketForm';
 import { UpdateTicket } from './mutations.gql';
 import { UserConProfileAdminQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditTicket({ userConProfileId, history }) {
-  const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
+function EditTicket({ userConProfileId }) {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
   });
   const [updateTicket] = useMutation(UpdateTicket);
@@ -30,7 +31,14 @@ function EditTicket({ userConProfileId, history }) {
     [updateTicket, history, userConProfileId, data],
   );
 
-  usePageTitle(useValueUnless(() => `Editing ${data.convention.ticket_name} for ${data.userConProfile.name}`, error));
+  usePageTitle(useValueUnless(
+    () => `Editing ${data.convention.ticket_name} for ${data.userConProfile.name}`,
+    error || loading,
+  ));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -61,9 +69,6 @@ function EditTicket({ userConProfileId, history }) {
 
 EditTicket.propTypes = {
   userConProfileId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(EditTicket);
+export default EditTicket;
