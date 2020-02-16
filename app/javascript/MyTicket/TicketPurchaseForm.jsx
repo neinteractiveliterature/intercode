@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';

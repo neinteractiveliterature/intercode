@@ -4,7 +4,7 @@ import React, {
 import {
   Switch, Route, useLocation, useHistory,
 } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { AppRootQuery } from './appRootQueries.gql';
 import AppRouter from './AppRouter';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import fetch from 'unfetch';
 import { Link, useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserConProfile } from './mutations.gql';

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { capitalize } from 'inflected';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import { AdminTicketTypesQuery } from './queries.gql';
 import { DeleteTicketType } from './mutations.gql';

@@ -4,7 +4,7 @@ import MomentPropTypes from 'react-moment-proptypes';
 import {
   NavLink, Switch, Redirect, Route, withRouter,
 } from 'react-router-dom';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';

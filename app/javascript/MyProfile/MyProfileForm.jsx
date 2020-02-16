@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash-es/isEqual';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import MD5 from 'md5.js';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';

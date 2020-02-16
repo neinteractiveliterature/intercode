@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import AuthenticationModalContext from './AuthenticationModalContext';

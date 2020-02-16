@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import flatMap from 'lodash-es/flatMap';
 import keyBy from 'lodash-es/keyBy';
 import mapValues from 'lodash-es/mapValues';

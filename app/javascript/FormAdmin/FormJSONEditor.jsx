@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import CodeInput from '../BuiltInFormControls/CodeInput';

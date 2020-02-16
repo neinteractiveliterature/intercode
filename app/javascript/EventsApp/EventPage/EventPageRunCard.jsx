@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 
 import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations.gql';
 import { EventPageQuery } from './queries.gql';

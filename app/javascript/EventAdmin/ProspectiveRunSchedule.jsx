@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MomentPropTypes from 'react-moment-proptypes';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { ScheduleGridContext, useScheduleGridProvider } from '../EventsApp/ScheduleGrid/ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from '../EventsApp/ScheduleGrid/LayoutConstants';

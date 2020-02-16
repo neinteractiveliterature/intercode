@@ -1,7 +1,7 @@
 import React, { Suspense, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { parse } from 'graphql/language/parser';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';

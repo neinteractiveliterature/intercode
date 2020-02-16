@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 
-import { useMutation, useApolloClient } from 'react-apollo-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
