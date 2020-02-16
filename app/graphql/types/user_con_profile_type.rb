@@ -1,4 +1,10 @@
 class Types::UserConProfileType < Types::BaseObject
+  LEGACY_PHONE_DEPRECATION_REASON = (<<~TEXT).gsub(/\n/, ' ').strip
+  Daytime phone, evening phone, best time to call, and preferred contact method fields are
+  deprecated in favor of just using the mobile phone and/or email address.  For conventions that
+  used the deprecated fields, they will remain available in form_response_attrs_json.
+  TEXT
+
   # It should be safe to request these fields but they'll return nil if you're not authorized
   def self.personal_info_field(field_name, *args, **kwargs, &block)
     field(field_name, *args, **kwargs, &block)
@@ -114,10 +120,11 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :state, String, null: true
   personal_info_field :zipcode, String, null: true
   personal_info_field :country, String, null: true
-  personal_info_field :day_phone, String, null: true
-  personal_info_field :evening_phone, String, null: true
-  personal_info_field :best_call_time, String, null: true
-  personal_info_field :preferred_contact, String, null: true
+  personal_info_field :mobile_phone, String, null: true
+  personal_info_field :day_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :evening_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :best_call_time, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :preferred_contact, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
   personal_info_field :ical_secret, String, null: true
 

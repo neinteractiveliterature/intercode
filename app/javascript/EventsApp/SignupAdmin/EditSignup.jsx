@@ -168,25 +168,17 @@ function EditSignup({ id, teamMembersUrl }) {
             {' '}
             {ageAsOf(moment(userConProfile.birth_date), moment(signup.run.starts_at))}
           </li>
-          <li className="list-group-item">
-            Preferred contact method:
-            {' '}
-            {humanize(userConProfile.preferred_contact || '')}
-          </li>
-          <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'email' })}>
+          <li className={classNames('list-group-item')}>
             Email:
             {' '}
             <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
           </li>
-          <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'day_phone' })}>
-            Daytime phone:
+          <li className="list-group-item">
+            Phone:
             {' '}
-            <a href={`tel:${userConProfile.day_phone}`}>{userConProfile.day_phone}</a>
-          </li>
-          <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'evening_phone' })}>
-            Evening phone:
-            {' '}
-            <a href={`tel:${userConProfile.evening_phone}`}>{userConProfile.evening_phone}</a>
+            <a href={`tel:${userConProfile.mobile_phone}`}>
+              {userConProfile.mobile_phone}
+            </a>
           </li>
           <li className="list-group-item">
             {renderAddressItem(userConProfile)}
