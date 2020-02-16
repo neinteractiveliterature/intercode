@@ -55,10 +55,7 @@ fragment SignupFields on Signup {
     state
     zipcode
     country
-    day_phone
-    evening_phone
-    best_call_time
-    preferred_contact
+    mobile_phone
     gravatar_enabled
     gravatar_url
   }

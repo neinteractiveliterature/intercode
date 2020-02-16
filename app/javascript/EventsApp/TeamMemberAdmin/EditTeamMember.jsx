@@ -52,28 +52,11 @@ function EditTeamMember({
           </a>
         </dd>
 
-        <dt className="col-md-3">Daytime phone</dt>
+        <dt className="col-md-3">Mobile phone</dt>
         <dd className="col-md-9">
-          <a href={`tel:${teamMember.user_con_profile.day_phone}`}>
-            {teamMember.user_con_profile.day_phone}
+          <a href={`tel:${teamMember.user_con_profile.mobile_phone}`}>
+            {teamMember.user_con_profile.mobile_phone}
           </a>
-        </dd>
-
-        <dt className="col-md-3">Evening phone</dt>
-        <dd className="col-md-9">
-          <a href={`tel:${teamMember.user_con_profile.evening_phone}`}>
-            {teamMember.user_con_profile.evening_phone}
-          </a>
-        </dd>
-
-        <dt className="col-md-3">Best time to call</dt>
-        <dd className="col-md-9">
-          {teamMember.user_con_profile.best_call_time}
-        </dd>
-
-        <dt className="col-md-3">Preferred contact method</dt>
-        <dd className="col-md-9">
-          {humanize(teamMember.user_con_profile.preferred_contact || '')}
         </dd>
       </dl>
 
