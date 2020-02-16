@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { DepartmentAdminQuery } from './queries.gql';
 import { DeleteDepartment } from './mutations.gql';

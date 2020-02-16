@@ -6,7 +6,7 @@ import groupBy from 'lodash-es/groupBy';
 import keyBy from 'lodash-es/keyBy';
 import sum from 'lodash-es/sum';
 import { capitalize } from 'inflected';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventsByChoiceQuery } from './queries.gql';

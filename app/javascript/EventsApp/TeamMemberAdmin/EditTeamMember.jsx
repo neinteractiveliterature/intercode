@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { titleize, underscore } from 'inflected';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import ErrorDisplay from '../../ErrorDisplay';
