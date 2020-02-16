@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { EditUserQuery } from './queries.gql';
 import PasswordConfirmationInput from './PasswordConfirmationInput';

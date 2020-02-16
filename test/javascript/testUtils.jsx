@@ -1,8 +1,7 @@
 /* eslint-disable import/export */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { render, queries } from '@testing-library/react';
 
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';
@@ -15,13 +14,11 @@ function TestWrapper({ apolloClient, stripePublishableKey, children }) {
   );
   return (
     <ApolloProvider client={apolloClient}>
-      <ApolloHooksProvider client={apolloClient}>
-        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-          <Confirm>
-            {children}
-          </Confirm>
-        </LazyStripeContext.Provider>
-      </ApolloHooksProvider>
+      <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+        <Confirm>
+          {children}
+        </Confirm>
+      </LazyStripeContext.Provider>
     </ApolloProvider>
   );
 }

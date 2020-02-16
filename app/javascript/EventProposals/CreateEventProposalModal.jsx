@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 
 import { CreateEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';

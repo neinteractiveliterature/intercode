@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Redirect, withRouter } from 'react-router-dom';
 
 import { CreateOrganizationRole } from './mutations.gql';

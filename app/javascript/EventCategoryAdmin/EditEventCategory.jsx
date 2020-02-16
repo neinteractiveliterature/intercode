@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useHistory, useParams } from 'react-router-dom';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
