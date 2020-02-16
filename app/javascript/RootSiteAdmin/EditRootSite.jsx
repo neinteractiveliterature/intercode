@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
 import { RootSiteAdminQuery } from './queries.gql';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { UpdateRootSite } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function useDirtyState(initialState, setDirty) {
   const [value, setValue] = useState(initialState);
@@ -19,7 +19,7 @@ function useDirtyState(initialState, setDirty) {
 }
 
 function EditRootSite() {
-  const { data, error } = useQuerySuspended(RootSiteAdminQuery);
+  const { data, loading, error } = useQuery(RootSiteAdminQuery);
   const [updateMutate] = useMutation(UpdateRootSite);
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
@@ -30,14 +30,24 @@ function EditRootSite() {
     setEdited(true);
   };
 
-  const [siteName, setSiteName] = useDirtyState(error ? null : data.rootSite.site_name, setDirty);
-  const [defaultLayout, setDefaultLayout] = useDirtyState(
-    error ? null : data.rootSite.default_layout,
+  const [siteName, setSiteName] = useDirtyState(
+    error || loading ? null : data.rootSite.site_name,
     setDirty,
   );
-  const [rootPage, setRootPage] = useDirtyState(error ? null : data.rootSite.root_page, setDirty);
+  const [defaultLayout, setDefaultLayout] = useDirtyState(
+    error || loading ? null : data.rootSite.default_layout,
+    setDirty,
+  );
+  const [rootPage, setRootPage] = useDirtyState(
+    error || loading ? null : data.rootSite.root_page,
+    setDirty,
+  );
 
   usePageTitle('Root Site Settings');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -15,6 +15,8 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
+import { joinReact } from '../RenderingUtils';
+import Gravatar from '../Gravatar';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
@@ -97,7 +99,23 @@ function StaffPositionsTable({ staffPositions }) {
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
       <td>{staffPosition.visible ? (<i className="fa fa-check" />) : null}</td>
-      <td>{staffPosition.user_con_profiles.map((ucp) => ucp.name_without_nickname).join(', ')}</td>
+      <td>
+        {joinReact(
+          staffPosition.user_con_profiles.map((ucp) => (
+            <span key={ucp.id} className="text-nowrap">
+              <Gravatar
+                enabled={ucp.gravatar_enabled}
+                url={ucp.gravatar_url}
+                imgClassName="align-baseline"
+                pixelSize={16}
+              />
+              {' '}
+              {ucp.name_without_nickname}
+            </span>
+          )),
+          ', ',
+        )}
+      </td>
       <td>
         <ul className="list-unstyled">
           {describePermissions(staffPosition.permissions).map((description) => (
