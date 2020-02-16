@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditStaffPosition from './EditStaffPosition';
@@ -7,11 +8,15 @@ import EditStaffPositionPermissions from './EditStaffPositionPermissions';
 import NewStaffPosition from './NewStaffPosition';
 import { StaffPositionsQuery } from './queries.gql';
 import StaffPositionsTable from './StaffPositionsTable';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function StaffPositionAdmin() {
-  const { data, error } = useQuerySuspended(StaffPositionsQuery);
+  const { data, loading, error } = useQuery(StaffPositionsQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
