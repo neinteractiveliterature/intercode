@@ -1,6 +1,8 @@
 class Page < ApplicationRecord
+  include PgSearch::Model
   include Cadmus::Page
   include CmsReferences
+  include ActionView::Helpers::SanitizeHelper
 
   cadmus_page
   belongs_to :cms_layout, optional: true
@@ -11,6 +13,14 @@ class Page < ApplicationRecord
 
   before_commit :set_performance_metadata, on: [:create, :update]
   after_commit :touch_parent
+
+  multisearchable(
+    against: [:name, :content_for_search],
+    additional_attributes: ->(page) {
+      convention = page.parent.is_a?(Convention) ? page.parent : nil
+      { convention_id: convention&.id }
+    }
+  )
 
   def effective_cms_layout
     return cms_layout if cms_layout
@@ -31,6 +41,14 @@ class Page < ApplicationRecord
 
   def referenced_files_recursive
     (super + (effective_cms_layout&.referenced_files_recursive || [])).uniq
+  end
+
+  def content_for_search
+    convention = parent.is_a?(Convention) ? parent : nil
+    strip_tags(CmsContentFinder.new(convention).cms_rendering_context.render_page_content(self))
+  rescue => e
+    Rails.logger.debug e
+    ''
   end
 
   private
