@@ -215,7 +215,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def effective_cms_layout(path:)
-    CmsContentHelpers::CmsContentFinder.new(context[:convention]).effective_cms_layout(path)
+    CmsContentFinder.new(context[:convention]).effective_cms_layout(path)
   end
 
   def current_ability

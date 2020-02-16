@@ -27,7 +27,7 @@ module ContextAccessors
   end
 
   def cms_content_finder
-    @cms_content_finder ||= CmsContentHelpers::CmsContentFinder.new(context[:convention])
+    @cms_content_finder ||= CmsContentFinder.new(context[:convention])
   end
 
   def cms_rendering_context(path: nil)
