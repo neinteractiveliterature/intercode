@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
+import { useParams } from 'react-router-dom';
 
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrderFormProductQuery } from './queries.gql';
 import formatMoney from '../formatMoney';
@@ -10,14 +10,20 @@ import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import parseCmsContent from '../parseCmsContent';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function ProductPage({ match }) {
-  const { data, error } = useQuerySuspended(
+function ProductPage() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(
     OrderFormProductQuery,
-    { variables: { productId: Number.parseInt(match.params.id, 10) } },
+    { variables: { productId: Number.parseInt(id, 10) } },
   );
 
-  usePageTitle(useValueUnless(() => data.product.name, error));
+  usePageTitle(useValueUnless(() => data.product.name, error || loading));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -54,13 +60,5 @@ function ProductPage({ match }) {
     </>
   );
 }
-
-ProductPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default ProductPage;
