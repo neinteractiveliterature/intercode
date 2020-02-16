@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { humanize, titleize, underscore } from 'inflected';
+import { titleize, underscore } from 'inflected';
 import { useMutation } from 'react-apollo-hooks';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
