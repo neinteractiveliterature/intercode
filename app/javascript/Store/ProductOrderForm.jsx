@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { withRouter, useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
 import { CartQuery, OrderFormProductQuery } from './queries.gql';
@@ -10,11 +10,12 @@ import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
 import { Transforms, useTransformedState } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
-import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function ProductOrderForm({ productId, history }) {
-  const { data, error } = useQuerySuspended(OrderFormProductQuery, { variables: { productId } });
+function ProductOrderForm({ productId }) {
+  const history = useHistory();
+  const { data, loading, error } = useQuery(OrderFormProductQuery, { variables: { productId } });
   const [addOrderEntryToCurrentPendingOrder] = useMutation(
     AddOrderEntryToCurrentPendingOrder,
     { refetchQueries: [{ query: CartQuery }] },
@@ -25,14 +26,14 @@ function ProductOrderForm({ productId, history }) {
 
   const dataComplete = useMemo(
     () => (
-      !error
+      !error && !loading
       && (
         data.product.product_variants.length < 1
         || productVariantId != null
       )
       && quantity > 0
     ),
-    [data, error, productVariantId, quantity],
+    [data, error, loading, productVariantId, quantity],
   );
 
   const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
@@ -41,6 +42,14 @@ function ProductOrderForm({ productId, history }) {
     });
     history.push('/cart');
   });
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <PageLoadingIndicator visible />;
+  }
 
   const renderVariantSelect = () => {
     if (data.product.product_variants.length < 1) {
