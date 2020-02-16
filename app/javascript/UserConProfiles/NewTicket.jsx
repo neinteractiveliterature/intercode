@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { CreateTicket } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketForm from './TicketForm';
 import { UserConProfileAdminQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function NewTicket({ userConProfileId, history }) {
-  const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
+  const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
   });
   const [createTicket] = useMutation(CreateTicket, {
@@ -48,7 +48,14 @@ function NewTicket({ userConProfileId, history }) {
     [createTicket, history, userConProfileId],
   );
 
-  usePageTitle(useValueUnless(() => `New ${data.convention.ticket_name} for ${data.userConProfile.name}`, error));
+  usePageTitle(useValueUnless(
+    () => `New ${data.convention.ticket_name} for ${data.userConProfile.name}`,
+    loading || error,
+  ));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

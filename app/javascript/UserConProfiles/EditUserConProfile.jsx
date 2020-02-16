@@ -1,21 +1,19 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
+import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import ErrorDisplay from '../ErrorDisplay';
 import UserConProfileForm from './UserConProfileForm';
 import { UserConProfileQuery, UserConProfileAdminQuery } from './queries.gql';
 import { UpdateUserConProfile } from './mutations.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditUserConProfile({ history, id }) {
-  const { data, error } = useQuerySuspended(UserConProfileQuery, { variables: { id } });
-
+function EditUserConProfileForm({ data }) {
+  const history = useHistory();
   const {
     userConProfile: initialUserConProfile, convention, form,
   } = buildFormStateFromData(data.userConProfile, data.convention);
@@ -25,7 +23,7 @@ function EditUserConProfile({ history, id }) {
   const [mutate] = useMutation(UpdateUserConProfile, {
     update: useCallback(
       (cache, { data: { updateUserConProfile: { user_con_profile: updatedUserConProfile } } }) => {
-        const variables = { id };
+        const variables = { id: initialUserConProfile.id };
         const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
         cache.writeQuery({
           query: UserConProfileAdminQuery,
@@ -39,7 +37,7 @@ function EditUserConProfile({ history, id }) {
           },
         });
       },
-      [id],
+      [initialUserConProfile.id],
     ),
   });
 
@@ -63,11 +61,7 @@ function EditUserConProfile({ history, id }) {
     ),
   );
 
-  usePageTitle(useValueUnless(() => `Editing “${initialUserConProfile.name}”`, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(`Editing “${initialUserConProfile.name}”`);
 
   return (
     <div>
@@ -92,11 +86,29 @@ function EditUserConProfile({ history, id }) {
   );
 }
 
-EditUserConProfile.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+EditUserConProfileForm.propTypes = {
+  data: PropTypes.shape({
+    userConProfile: PropTypes.shape({}).isRequired,
+    convention: PropTypes.shape({}).isRequired,
   }).isRequired,
+};
+
+function EditUserConProfile({ id }) {
+  const { data, loading, error } = useQuery(UserConProfileQuery, { variables: { id } });
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <EditUserConProfileForm data={data} />;
+}
+
+EditUserConProfile.propTypes = {
   id: PropTypes.number.isRequired,
 };
 
-export default withRouter(EditUserConProfile);
+export default EditUserConProfile;
