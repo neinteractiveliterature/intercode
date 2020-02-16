@@ -1,30 +1,41 @@
 import React, { useState } from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { RoomsAdminQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useCreateMutation, useDeleteMutation } from '../MutationUtils';
 
 function RoomsAdmin() {
-  const { data, error } = useQuerySuspended(RoomsAdminQuery);
-  const [createMutate] = useMutation(CreateRoom);
+  const { data, loading, error } = useQuery(RoomsAdminQuery);
   const [updateMutate] = useMutation(UpdateRoom);
-  const [deleteMutate] = useMutation(DeleteRoom);
-  const [createRoom, createError] = useAsyncFunction(createMutate);
+  const [createRoom, createError] = useAsyncFunction(useCreateMutation(CreateRoom, {
+    query: RoomsAdminQuery,
+    arrayPath: ['convention', 'rooms'],
+    newObjectPath: ['createRoom', 'room'],
+  }));
   const [updateRoom, updateError] = useAsyncFunction(updateMutate);
-  const [deleteRoomMutate, deleteError] = useAsyncFunction(deleteMutate);
+  const [deleteRoom, deleteError] = useAsyncFunction(useDeleteMutation(DeleteRoom, {
+    query: RoomsAdminQuery,
+    arrayPath: ['convention', 'rooms'],
+    idVariablePath: ['input', 'id'],
+  }));
   const confirm = useConfirm();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
 
   usePageTitle('Rooms');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -38,11 +49,6 @@ function RoomsAdmin() {
     event.preventDefault();
     await createRoom({
       variables: { input: { room: { name: creatingRoomName } } },
-      update: (store, { data: { createRoom: { room: newRoom } } }) => {
-        const roomsData = store.readQuery({ query: RoomsAdminQuery });
-        roomsData.convention.rooms.push(newRoom);
-        store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
-      },
     });
     setCreatingRoomName('');
   };
@@ -53,14 +59,8 @@ function RoomsAdmin() {
     }
   };
 
-  const deleteRoom = (roomId) => deleteRoomMutate({
+  const deleteRoomConfirmed = (roomId) => deleteRoom({
     variables: { input: { id: roomId } },
-    update: (store) => {
-      const roomsData = store.readQuery({ query: RoomsAdminQuery });
-      const roomIndex = roomsData.convention.rooms.findIndex((room) => room.id === roomId);
-      roomsData.convention.rooms.splice(roomIndex, 1);
-      store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
-    },
   });
 
   const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name);
@@ -88,7 +88,7 @@ function RoomsAdmin() {
           title="Delete room"
           onClick={() => confirm({
             prompt: 'Are you sure you want to delete this room?',
-            action: () => deleteRoom(room.id),
+            action: () => deleteRoomConfirmed(room.id),
             renderError: (e) => <ErrorDisplay error={e} />,
           })}
           type="button"
