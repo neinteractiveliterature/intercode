@@ -1,7 +1,6 @@
 import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import flatMap from 'lodash-es/flatMap';
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 
@@ -13,17 +12,7 @@ import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import Gravatar from '../../Gravatar';
-
-function arrayToSentenceReact(array) {
-  if (array.length < 2) {
-    return array;
-  }
-
-  const head = array.slice(0, -1);
-  const tail = array[array.length - 1];
-
-  return [...flatMap(head, (item) => [item, ', ']), ' and ', tail];
-}
+import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
@@ -94,7 +83,7 @@ const EventCard = ({
   );
   const teamMemberNames = displayTeamMembers
     .map((teamMember) => (
-      <>
+      <React.Fragment key={teamMember.id}>
         { teamMember.user_con_profile.gravatar_enabled && (
           <>
             <Gravatar
@@ -107,11 +96,9 @@ const EventCard = ({
           </>
         )}
         {teamMember.user_con_profile.name_without_nickname}
-      </>
+      </React.Fragment>
     ));
-  const teamMemberList = teamMemberNames.length > 1
-    ? teamMemberNames.reduce((prev, curr) => [prev, ', ', curr])
-    : teamMemberNames;
+  const teamMemberList = joinReact(teamMemberNames, ', ');
 
   if (teamMemberList.length > 0) {
     const teamMemberDescription = pluralizeWithCount(
