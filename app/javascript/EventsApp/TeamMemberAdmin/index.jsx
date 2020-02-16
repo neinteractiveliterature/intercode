@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Link } from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditTeamMember from './EditTeamMember';

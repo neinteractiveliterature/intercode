@@ -4,7 +4,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';

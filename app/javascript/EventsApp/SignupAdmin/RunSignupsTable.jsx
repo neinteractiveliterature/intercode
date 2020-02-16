@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';

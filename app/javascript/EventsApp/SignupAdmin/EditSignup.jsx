@@ -4,7 +4,7 @@ import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../../TimeUtils';

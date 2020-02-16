@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 import { CommonConventionDataQuery } from '../queries.gql';
 import FakeEventRun from './FakeEventRun';

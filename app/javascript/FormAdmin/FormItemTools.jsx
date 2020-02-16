@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import Modal from 'react-bootstrap4-modal';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';

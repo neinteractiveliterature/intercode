@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 
 import buildLayoutInput from './buildLayoutInput';

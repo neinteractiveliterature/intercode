@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash-es/isEqual';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../ErrorDisplay';

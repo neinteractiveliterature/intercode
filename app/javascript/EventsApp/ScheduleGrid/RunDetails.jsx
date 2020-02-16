@@ -9,7 +9,7 @@ import buildEventUrl from '../buildEventUrl';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 const RunDetails = React.forwardRef(({
   popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData,
