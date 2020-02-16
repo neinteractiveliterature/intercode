@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditOrganizationRole from './EditOrganizationRole';
@@ -8,10 +9,14 @@ import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 import ErrorDisplay from '../ErrorDisplay';
-import useQuerySuspended from '../useQuerySuspended';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function OrganizationAdmin() {
-  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
+  const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
