@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-apollo-hooks';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
@@ -9,12 +10,12 @@ import ErrorDisplay from '../ErrorDisplay';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import { useCreateMutation } from '../MutationUtils';
 import useAsyncFunction from '../useAsyncFunction';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function NewUserActivityAlert({ history }) {
   usePageTitle('New user activity alert');
-  const { data, error } = useQuerySuspended(ConventionTicketNameQuery);
+  const { data, loading, error } = useQuery(ConventionTicketNameQuery);
 
   const [userActivityAlert, setUserActivityAlert] = useState({
     email: null,
@@ -24,7 +25,9 @@ function NewUserActivityAlert({ history }) {
     trigger_on_user_con_profile_create: true,
     notification_destinations: [],
   });
-  const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] = useChangeSet();
+  const [
+    notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination,
+  ] = useChangeSet();
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateUserActivityAlert, {
       query: UserActivityAlertsAdminQuery,
@@ -40,6 +43,10 @@ function NewUserActivityAlert({ history }) {
     }),
     [notificationDestinationChangeSet, userActivityAlert],
   );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
