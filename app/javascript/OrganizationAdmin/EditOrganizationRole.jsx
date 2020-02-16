@@ -1,39 +1,29 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
-import { Redirect, withRouter } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import { Redirect, withRouter, useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import { UpdateOrganizationRole } from './mutations.gql';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
-import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
-  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
-  const organization = data.organizations.find((org) => org.id === organizationId);
-  const initialOrganizationRole = organization.organization_roles
-    .find((role) => role.id === organizationRoleId);
+function EditOrganizationRoleForm({ initialOrganizationRole, organization }) {
+  const history = useHistory();
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
   const [
     mutate, { error: mutationError, loading: mutationInProgress },
   ] = useMutation(UpdateOrganizationRole);
 
-  usePageTitle(useValueUnless(() => `Editing “${initialOrganizationRole.name}”`, error));
-
-  if (error) return <ErrorDisplay graphQLError={error} />;
-  if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/organizations" />;
-  }
-
+  usePageTitle(`Editing “${initialOrganizationRole.name}”`);
   const updateOrganizationRole = async ({
     name, usersChangeSet, permissionsChangeSet,
   }) => {
     await mutate({
       variables: {
-        id: organizationRoleId,
+        id: initialOrganizationRole.id,
         name,
         addUserIds: usersChangeSet.getAddValues().map((user) => user.id),
         removeUserIds: usersChangeSet.getRemoveIds(),
@@ -44,7 +34,7 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
       },
     });
 
-    history.push(`/organizations/${organizationId}`);
+    history.push(`/organizations/${organization.id}`);
   };
 
   return (
@@ -70,12 +60,46 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
   );
 }
 
+EditOrganizationRoleForm.propTypes = {
+  organization: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+  initialOrganizationRole: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+function EditOrganizationRole({ organizationId, organizationRoleId }) {
+  const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
+  const organization = useMemo(
+    () => (error || loading ? null : data.organizations.find((org) => org.id === organizationId)),
+    [data, error, loading, organizationId],
+  );
+  const initialOrganizationRole = useMemo(
+    () => (organization
+      ? organization.organization_roles.find((role) => role.id === organizationRoleId)
+      : null),
+    [organization, organizationRoleId],
+  );
+
+  if (loading) return <PageLoadingIndicator visible />;
+  if (error) return <ErrorDisplay graphQLError={error} />;
+  if (!organization.current_ability_can_manage_access) {
+    return <Redirect to="/organizations" />;
+  }
+
+  return (
+    <EditOrganizationRoleForm
+      initialOrganizationRole={initialOrganizationRole}
+      organization={organization}
+    />
+  );
+}
+
 EditOrganizationRole.propTypes = {
   organizationId: PropTypes.number.isRequired,
   organizationRoleId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default withRouter(EditOrganizationRole);
