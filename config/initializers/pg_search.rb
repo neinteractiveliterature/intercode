@@ -6,7 +6,10 @@ PgSearch.multisearch_options = {
       highlight: {
         StartSel: '<mark>',
         StopSel: '</mark>',
+        MinWords: 10,
+        MaxWords: 15,
         MaxFragments: 3,
+        ShortWord: 0,
         FragmentDelimiter: '&hellip;'
       }
     }
