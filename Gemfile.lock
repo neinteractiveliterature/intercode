@@ -132,7 +132,7 @@ GEM
       acts_as_list
       cadmus
       rails (>= 5.0.0)
-    carrierwave (2.0.2)
+    carrierwave (2.1.0)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
       addressable (~> 2.6)
@@ -143,7 +143,7 @@ GEM
     civil_service (2.2.1)
       activemodel (>= 3.0.0)
     coderay (1.1.2)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     crass (1.0.6)
     dalli (2.7.10)
     dante (0.2.0)
@@ -188,8 +188,8 @@ GEM
       i18n (>= 1.6, < 2)
     faraday (1.0.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.11.3)
-    ffi (1.11.3-java)
+    ffi (1.12.2)
+    ffi (1.12.2-java)
     flamegraph (0.9.5)
     fog-aws (3.5.2)
       fog-core (~> 2.1)
@@ -508,7 +508,7 @@ DEPENDENCIES
   cadmus (~> 0.7.0)
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)
-  carrierwave (~> 2.0.2)
+  carrierwave (~> 2.1.0)
   civil_service (~> 2.2.1)
   dalli
   database_cleaner
