@@ -87,7 +87,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.0.1)
     ansi (1.5.0)
-    apollo_upload_server (2.0.0.beta.3)
+    apollo_upload_server (2.0.0)
       graphql (>= 1.8)
       rails (>= 4.2)
     ast (2.4.0)
@@ -312,9 +312,9 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.2)
     nio4r (2.5.2-java)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.7-java)
+    nokogiri (1.10.8-java)
     oj (3.10.2)
     orm_adapter (0.5.0)
     parallel (1.19.1)
@@ -501,7 +501,7 @@ PLATFORMS
 DEPENDENCIES
   active_record-postgres-constraints
   activerecord-session_store
-  apollo_upload_server (= 2.0.0.beta.3)
+  apollo_upload_server (= 2.0.0)
   aws-sdk-s3
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
