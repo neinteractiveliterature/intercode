@@ -39,7 +39,7 @@ const PopperDropdownContentWithOnClickOutside = onClickOutside(PopperDropdownCon
 
 function PopperDropdown({
   // eslint-disable-next-line react/prop-types
-  children, onToggle, placement, renderReference, style, visible,
+  children, onToggle, placement, renderReference, style, visible, modifiers,
 }, ref) {
   const [internalVisible, setInternalVisible] = useState(visible);
   useEffect(() => { setInternalVisible(visible); }, [visible]);
@@ -83,6 +83,7 @@ function PopperDropdown({
             placement={internalVisible ? effectivePlacement : 'invalid'}
             modifiers={{
               preventOverflow: { boundariesElement: popoverParent },
+              ...(modifiers || {}),
             }}
           >
             {({ ref: popperRef, style: popperStyle, ...otherProps }) => {
@@ -129,12 +130,14 @@ PopperDropdownWithRefForwarding.propTypes = {
   placement: PropTypes.string,
   renderReference: PropTypes.func.isRequired,
   visible: PropTypes.bool,
+  modifiers: PropTypes.shape({}),
 };
 
 PopperDropdownWithRefForwarding.defaultProps = {
   onToggle: null,
   placement: 'bottom-start',
   visible: null,
+  modifiers: {},
 };
 
 export default PopperDropdownWithRefForwarding;

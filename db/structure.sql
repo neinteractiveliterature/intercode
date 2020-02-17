@@ -1325,7 +1325,8 @@ CREATE TABLE public.pages (
     cms_layout_id bigint,
     admin_notes text,
     invariant boolean DEFAULT false NOT NULL,
-    skip_clickwrap_agreement boolean DEFAULT false NOT NULL
+    skip_clickwrap_agreement boolean DEFAULT false NOT NULL,
+    hidden_from_search boolean DEFAULT false NOT NULL
 );
 
 
@@ -1398,7 +1399,8 @@ CREATE TABLE public.pg_search_documents (
     searchable_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    content_vector tsvector
+    content_vector tsvector,
+    hidden_from_search boolean DEFAULT false NOT NULL
 );
 
 
@@ -3247,6 +3249,13 @@ CREATE INDEX index_pg_search_documents_on_convention_id ON public.pg_search_docu
 
 
 --
+-- Name: index_pg_search_documents_on_hidden_from_search; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pg_search_documents_on_hidden_from_search ON public.pg_search_documents USING btree (hidden_from_search);
+
+
+--
 -- Name: index_pg_search_documents_on_searchable_type_and_searchable_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4272,6 +4281,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200128165503'),
 ('20200216221143'),
 ('20200216222452'),
-('20200216222934');
+('20200216222934'),
+('20200217182622');
 
 
