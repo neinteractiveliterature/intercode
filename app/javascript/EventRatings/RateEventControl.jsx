@@ -86,7 +86,7 @@ function RateEventControl({ value, onChange, size }) {
 
             <RatingButton
               rating={-1}
-              onClick={() => onChange(1)}
+              onClick={() => onChange(-1)}
               size={size}
               tooltipContent="Hide event"
             />
