@@ -33,7 +33,7 @@ function SearchMenu(props) {
   return (
     <components.Menu {...props}>
       {props.children}
-      <div className="bg-light small p-1 text-muted">
+      <div className="bg-light small p-1 text-muted d-none d-md-block">
         <i className="fa fa-lightbulb-o" />
         {' '}
         Search anywhere:
@@ -97,8 +97,9 @@ function SiteSearch({ visible, close, setVisible }) {
       } else if (model.__typename === 'Event') {
         history.push(buildEventUrl(model));
       }
+      close();
     },
-    [history],
+    [history, close],
   );
 
   if (!visible) {
@@ -109,12 +110,17 @@ function SiteSearch({ visible, close, setVisible }) {
     <AsyncSelect
       autoFocus
       placeholder="Search"
+      className="site-search"
       onKeyDown={(event) => {
         if (event.key === 'Escape') {
           close();
         }
       }}
       styles={{
+        container: (baseProps) => ({
+          ...baseProps,
+          flexGrow: 1,
+        }),
         control: (baseProps) => ({
           ...baseProps,
           borderRadius: baseProps.minHeight / 2,
@@ -128,6 +134,7 @@ function SiteSearch({ visible, close, setVisible }) {
       }}
       loadOptions={loadOptions}
       onChange={optionSelected}
+      onBlur={close}
       formatOptionLabel={(entry) => (
         <>
           <div className="font-weight-bold mb-1">
