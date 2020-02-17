@@ -15,6 +15,7 @@ import NavigationSection from './NavigationSection';
 import useCollapse from './useCollapse';
 import EventsNavigationSection from './EventsNavigationSection';
 import AdminNavigationSection from './AdminNavigationSection';
+import SearchNavigationItem from './SearchNavigationItem';
 
 function NavigationBarContent({ navbarClasses, rootItems, location }) {
   const {
