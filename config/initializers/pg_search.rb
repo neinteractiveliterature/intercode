@@ -1,7 +1,7 @@
 PgSearch.multisearch_options = {
   using: {
     tsearch: {
-      dictionary: 'english',
+      dictionary: 'english_unaccent',
       tsvector_column: 'content_vector',
       highlight: {
         StartSel: '<mark>',
