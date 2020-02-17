@@ -74,6 +74,7 @@ function PopperDropdown({
           ref: popperRef,
           toggle: targetClicked,
           setVisible: setInternalVisible,
+          visible: internalVisible || false,
         })}
       </Reference>
       {ReactDOM.createPortal(

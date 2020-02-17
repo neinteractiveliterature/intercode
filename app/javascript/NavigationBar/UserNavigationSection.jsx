@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
 import PopperDropdown from '../UIComponents/PopperDropdown';
@@ -10,9 +10,13 @@ import AppRootContext from '../AppRootContext';
 import NavigationItem from './NavigationItem';
 import SignOutNavigationItem from './SignOutNavigationItem';
 import Gravatar from '../Gravatar';
+import SearchNavigationItem from './SearchNavigationItem';
+import CartContents from '../Store/CartContents';
 
 function CurrentPendingOrderButton() {
+  const location = useLocation();
   const { currentPendingOrder } = useContext(AppRootContext);
+  const dropdownRef = useAutoClosingDropdownRef(location);
 
   if (!currentPendingOrder) {
     return null;
@@ -28,18 +32,42 @@ function CurrentPendingOrderButton() {
 
   return (
     <li className="nav-item">
-      <Link to="/cart" className="btn btn-light mr-2" style={{ position: 'relative' }}>
-        <i className="fa fa-shopping-cart" title="My shopping cart" />
-        <div className="badge badge-pill badge-danger" style={{ position: 'absolute', right: '-9px', top: '-9px' }}>
-          {totalQuantity}
+      <PopperDropdown
+        ref={dropdownRef}
+        renderReference={({ ref, toggle }) => (
+          <button
+            ref={ref}
+            onClick={toggle}
+            type="button"
+            className="btn btn-link nav-link mr-2"
+            style={{ position: 'relative' }}
+          >
+            <i className="fa fa-shopping-cart" title="My shopping cart" />
+            <div className="badge badge-pill badge-danger" style={{ position: 'absolute', right: '-7px', top: '0' }}>
+              {totalQuantity}
+            </div>
+          </button>
+        )}
+        placement="bottom-end"
+        style={{ zIndex: 1100 }}
+      >
+        <div className="px-3 pt-3">
+          <h4 className="mb-2">My shopping cart</h4>
+          <CartContents
+            checkOutButton={(
+              <Link className="btn btn-primary mt-2" to="/cart">
+                Go to cart
+              </Link>
+            )}
+          />
         </div>
-      </Link>
+      </PopperDropdown>
     </li>
   );
 }
 
 // eslint-disable-next-line react/prop-types
-function LoggedInDropdownTarget({ toggle }, ref) {
+function LoggedInDropdownTarget({ toggle, visible }, ref) {
   const { currentUser, myProfile, assumedIdentityFromProfile } = useContext(AppRootContext);
 
   if (!currentUser) {
@@ -64,19 +92,13 @@ function LoggedInDropdownTarget({ toggle }, ref) {
   }
 
   return (
-    <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} ref={ref} type="button">
+    <button className="btn btn-link nav-link" onClick={toggle} ref={ref} type="button">
       <Gravatar
         url={(myProfile || {}).gravatar_url}
         enabled={(myProfile || {}).gravatar_enabled || false}
-        pixelSize={16}
-        imgClassName="align-baseline"
+        pixelSize={(myProfile || {}).gravatar_enabled ? 24 : 16}
+        imgClassName={visible ? 'glow-light' : ''}
       />
-      {' '}
-      {
-        myProfile
-          ? myProfile.name
-          : currentUser.name
-      }
     </button>
   );
 }
@@ -109,20 +131,22 @@ function RevertAssumedIdentityButton() {
   );
 }
 
-function UserNavigationSection({ location }) {
+function UserNavigationSection() {
+  const location = useLocation();
   const { conventionName, currentUser, myProfile } = useContext(AppRootContext);
   const dropdownRef = useAutoClosingDropdownRef(location);
 
   const renderLoggedInContent = () => (
     <>
+      <SearchNavigationItem />
       <CurrentPendingOrderButton />
       <li className="nav-item">
         <div className="btn-group" role="group">
           <div className="btn-group" role="group">
             <PopperDropdown
               ref={dropdownRef}
-              renderReference={({ ref, toggle }) => (
-                <RefForwardingLoggedInDropdownTarget ref={ref} toggle={toggle} />
+              renderReference={({ ref, toggle, visible }) => (
+                <RefForwardingLoggedInDropdownTarget ref={ref} toggle={toggle} visible={visible} />
               )}
               placement="bottom-end"
               style={{ zIndex: 1100 }}
@@ -168,6 +192,7 @@ function UserNavigationSection({ location }) {
 
   const renderLoggedOutContent = () => (
     <>
+      <SearchNavigationItem />
       <li className="nav-item login my-auto">
         <SignInButton className="btn btn-link nav-link" caption="Log in" />
       </li>
@@ -180,4 +205,4 @@ function UserNavigationSection({ location }) {
   return currentUser ? renderLoggedInContent() : renderLoggedOutContent();
 }
 
-export default withRouter(UserNavigationSection);
+export default UserNavigationSection;
