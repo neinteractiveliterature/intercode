@@ -11,6 +11,7 @@ class Types::PageType < Types::BaseObject
   field :cms_layout, Types::CmsLayoutType, null: true
   field :current_ability_can_update, Boolean, null: false
   field :current_ability_can_delete, Boolean, null: false
+  field :hidden_from_search, Boolean, null: false
 
   def content_html
     CmsPageContentLoader.for(cms_rendering_context).load(object)
