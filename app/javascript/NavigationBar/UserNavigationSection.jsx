@@ -10,7 +10,6 @@ import AppRootContext from '../AppRootContext';
 import NavigationItem from './NavigationItem';
 import SignOutNavigationItem from './SignOutNavigationItem';
 import Gravatar from '../Gravatar';
-import SearchNavigationItem from './SearchNavigationItem';
 import CartContents from '../Store/CartContents';
 
 function CurrentPendingOrderButton() {
@@ -136,7 +135,6 @@ function UserNavigationSection() {
 
   const renderLoggedInContent = () => (
     <>
-      <SearchNavigationItem />
       <CurrentPendingOrderButton />
       <li className="nav-item">
         <div className="btn-group" role="group">
@@ -190,7 +188,6 @@ function UserNavigationSection() {
 
   const renderLoggedOutContent = () => (
     <>
-      <SearchNavigationItem />
       <li className="nav-item login my-auto">
         <SignInButton className="btn btn-link nav-link" caption="Log in" />
       </li>

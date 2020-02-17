@@ -1,5 +1,5 @@
 import React, {
-  useContext, useMemo, useRef, useEffect,
+  useContext, useMemo, useRef, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -16,6 +16,7 @@ import useCollapse from './useCollapse';
 import EventsNavigationSection from './EventsNavigationSection';
 import AdminNavigationSection from './AdminNavigationSection';
 import SearchNavigationItem from './SearchNavigationItem';
+import NavigationBarContext from './NavigationBarContext';
 
 function NavigationBarContent({ navbarClasses, rootItems, location }) {
   const {
@@ -26,6 +27,8 @@ function NavigationBarContent({ navbarClasses, rootItems, location }) {
     collapsed, collapseProps, setCollapsed, toggleCollapsed,
   } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
+  const [hideBrand, setHideBrand] = useState(false);
+  const [hideNavItems, setHideNavItems] = useState(false);
 
   useEffect(
     () => {
@@ -35,58 +38,67 @@ function NavigationBarContent({ navbarClasses, rootItems, location }) {
   );
 
   return (
-    <nav className={classNames('navbar', navbarClasses)} role="navigation">
-      <div className="container">
-        <button
-          className="navbar-toggler navbar-toggler-right"
-          type="button"
-          onClick={toggleCollapsed}
-          aria-controls="navbarSupportedContent"
-          aria-expanded={!collapsed}
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-        <NavigationBrand item={{ label: conventionName || rootSiteName }} />
-        <div
-          id="navbarSupportedContent"
-          className={classNames('navbar-collapse', collapseClassName)}
-          ref={collapseRef}
-          {...otherCollapseProps}
-        >
-          <ul className="navbar-nav mr-auto">
-            {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
-              <TicketPurchaseNavigationItem />
-            )}
-            {conventionName && siteMode !== 'single_event' && (
-              <EventsNavigationSection />
-            )}
-            {rootItems.map((rootItem) => {
-              if (rootItem.sectionItems) {
-                return (
-                  <NavigationSection label={rootItem.title} key={rootItem.id}>
-                    {rootItem.sectionItems.map((sectionItem) => (
-                      <NavigationItem
-                        label={sectionItem.title}
-                        url={`/pages/${sectionItem.page.slug}`}
-                        key={sectionItem.id}
-                        inSection
-                      />
-                    ))}
-                  </NavigationSection>
-                );
-              }
+    <NavigationBarContext.Provider
+      value={{
+        setHideBrand, hideBrand, setHideNavItems, hideNavItems,
+      }}
+    >
+      <nav className={classNames('navbar', navbarClasses)} role="navigation">
+        <div className="container">
+          <NavigationBrand item={{ label: conventionName || rootSiteName }} />
+          {!hideNavItems && (
+            <div
+              id="navbarSupportedContent"
+              className={classNames('navbar-collapse', collapseClassName)}
+              ref={collapseRef}
+              {...otherCollapseProps}
+            >
+              <ul className="navbar-nav">
+                {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
+                  <TicketPurchaseNavigationItem />
+                )}
+                {conventionName && siteMode !== 'single_event' && (
+                  <EventsNavigationSection />
+                )}
+                {rootItems.map((rootItem) => {
+                  if (rootItem.sectionItems) {
+                    return (
+                      <NavigationSection label={rootItem.title} key={rootItem.id}>
+                        {rootItem.sectionItems.map((sectionItem) => (
+                          <NavigationItem
+                            label={sectionItem.title}
+                            url={`/pages/${sectionItem.page.slug}`}
+                            key={sectionItem.id}
+                            inSection
+                          />
+                        ))}
+                      </NavigationSection>
+                    );
+                  }
 
-              return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
-            })}
-            <AdminNavigationSection />
-          </ul>
+                  return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
+                })}
+                <AdminNavigationSection />
+              </ul>
+            </div>
+          )}
+          <SearchNavigationItem />
           <ul className="navbar-nav">
             <UserNavigationSection />
           </ul>
+          <button
+            className="navbar-toggler border-0"
+            type="button"
+            onClick={toggleCollapsed}
+            aria-controls="navbarSupportedContent"
+            aria-expanded={!collapsed}
+            aria-label="Toggle navigation"
+          >
+            <i className={collapsed ? 'fa fa-bars' : 'fa fa-times'} />
+          </button>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </NavigationBarContext.Provider>
   );
 }
 
