@@ -1,48 +1,39 @@
-import React from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 
-import PopperDropdown from '../UIComponents/PopperDropdown';
-import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 import SiteSearch from './SiteSearch';
-
+import NavigationBarContext from './NavigationBarContext';
 
 function SearchNavigationItem() {
-  const dropdownRef = useAutoClosingDropdownRef();
+  const [visible, setVisible] = useState(false);
+  const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);
+
+  const setVisibleWithHiding = useCallback(
+    (newVisible) => {
+      setVisible(newVisible);
+      setHideBrand(newVisible);
+      setHideNavItems(newVisible);
+    },
+    [setHideBrand, setHideNavItems],
+  );
+
   return (
-    <li className="nav-item">
-      <PopperDropdown
-        ref={dropdownRef}
-        renderReference={({ ref, toggle }) => (
-          <button className="btn btn-link nav-link" type="button" ref={ref} onClick={toggle}>
-            <i className="fa fa-search" />
-            <span className="sr-only">Search</span>
-          </button>
-        )}
-        style={{ zIndex: 1100 }}
-        modifiers={{
-          placeOverButton: {
-            enabled: true,
-            order: 750,
-            fn: (data) => {
-              const { popper, reference } = data.offsets;
-              popper.top = reference.top;
-              popper.left = reference.right - popper.width;
-              if (popper.left < 0) {
-                popper.left = reference.left;
-              }
-              return data;
-            },
-          },
-        }}
-      >
-        {({
-          ref, style, visible, setVisible,
-        }) => (
-          <div ref={ref} style={{ ...style, minWidth: '300px' }} className={visible ? '' : 'd-none'}>
-            <SiteSearch setVisible={setVisible} visible={visible} close={() => setVisible(false)} />
-          </div>
-        )}
-      </PopperDropdown>
-    </li>
+    <div className="navbar-nav flex-grow-1 justify-content-end mr-2">
+      {!visible && (
+        <button
+          className="btn btn-link nav-link text-right"
+          type="button"
+          onClick={() => setVisibleWithHiding(true)}
+        >
+          <i className="fa fa-search" />
+          <span className="sr-only">Search</span>
+        </button>
+      )}
+      <SiteSearch
+        setVisible={setVisibleWithHiding}
+        visible={visible}
+        close={() => setVisibleWithHiding(false)}
+      />
+    </div>
   );
 }
 
