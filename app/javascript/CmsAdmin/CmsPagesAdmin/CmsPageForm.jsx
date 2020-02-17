@@ -74,17 +74,18 @@ function CmsPageForm({
       </div>
 
       <BooleanInput
-        caption={(
-          <>
-            {'Skip clickwrap agreement '}
-            <small className="text-muted">
-              (if selected, this page will not check whether the user has accepted the site
-              clickwrap agreement)
-            </small>
-          </>
-        )}
+        caption="Skip clickwrap agreement"
+        helpText="If selected, this page will not check whether the user has accepted the site clickwrap agreement."
         value={page.skip_clickwrap_agreement || false}
         onChange={changeCallback('skip_clickwrap_agreement')}
+        disabled={readOnly}
+      />
+
+      <BooleanInput
+        caption="Hidden from search"
+        helpText="If selected, this page will not appear in site search results."
+        value={page.hidden_from_search || false}
+        onChange={changeCallback('hidden_from_search')}
         disabled={readOnly}
       />
 
@@ -118,6 +119,7 @@ CmsPageForm.propTypes = {
     admin_notes: PropTypes.string,
     slug: PropTypes.string,
     skip_clickwrap_agreement: PropTypes.bool,
+    hidden_from_search: PropTypes.bool,
     cms_layout: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
