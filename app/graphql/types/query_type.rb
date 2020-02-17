@@ -366,6 +366,14 @@ class Types::QueryType < Types::BaseObject
     RootSite.instance
   end
 
+  field :site_search, Types::SearchResultType, null: false do
+    argument :query, String, required: true
+  end
+
+  def site_search(query:)
+    SearchResult.convention_search(query, context[:convention]&.id)
+  end
+
   field :signup, Types::SignupType, null: false do
     argument :id, Integer, required: true
   end

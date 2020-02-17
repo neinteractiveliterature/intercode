@@ -22,8 +22,17 @@ class Event < ApplicationRecord
   )
 
   multisearchable(
-    against: [:title, :author, :organization, :description_for_search, :short_blurb_for_search],
-    additional_attributes: ->(event) { { convention_id: event.convention_id } }
+    against: [
+      :title,
+      :author,
+      :organization,
+      :team_members_for_search,
+      :description_for_search,
+      :short_blurb_for_search
+    ],
+    additional_attributes: ->(event) {
+      { convention_id: event.convention_id, hidden_from_search: event.status == 'dropped' }
+    }
   )
 
   register_form_response_attrs :title,
@@ -166,6 +175,10 @@ class Event < ApplicationRecord
   rescue => e
     Rails.logger.debug e
     ''
+  end
+
+  def team_members_for_search
+    team_members.visible.includes(:user_con_profile).map(&:name)
   end
 
   private

@@ -18,7 +18,7 @@ class Page < ApplicationRecord
     against: [:name, :content_for_search],
     additional_attributes: ->(page) {
       convention = page.parent.is_a?(Convention) ? page.parent : nil
-      { convention_id: convention&.id }
+      { convention_id: convention&.id, hidden_from_search: page.hidden_from_search }
     }
   )
 
