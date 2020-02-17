@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import NavigationBarContext from './NavigationBarContext';
 
 function NavigationBrand({ item }) {
+  const { hideBrand } = useContext(NavigationBarContext);
+
   return (
-    <Link to="/" className="navbar-brand">{item.label}</Link>
+    <Link to="/" className={classNames('navbar-brand', { 'd-none': hideBrand })}>{item.label}</Link>
   );
 }
 
