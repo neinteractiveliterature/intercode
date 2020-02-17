@@ -51,6 +51,71 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: english_unaccent; Type: TEXT SEARCH CONFIGURATION; Schema: public; Owner: -
+--
+
+CREATE TEXT SEARCH CONFIGURATION public.english_unaccent (
+    PARSER = pg_catalog."default" );
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR asciiword WITH english_stem;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR word WITH public.unaccent, english_stem;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR numword WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR email WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR url WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR host WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR sfloat WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR version WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR hword_numpart WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR hword_part WITH public.unaccent, english_stem;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR hword_asciipart WITH english_stem;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR numhword WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR asciihword WITH english_stem;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR hword WITH public.unaccent, english_stem;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR url_path WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR file WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR "float" WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR "int" WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.english_unaccent
+    ADD MAPPING FOR uint WITH simple;
+
+
+--
 -- Name: simple_unaccent; Type: TEXT SEARCH CONFIGURATION; Schema: public; Owner: -
 --
 
@@ -3437,7 +3502,7 @@ CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.eve
 -- Name: pg_search_documents tsvector_update_pg_search_documents_content; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('content_vector', 'public.simple_unaccent', 'content');
+CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
 
 
 --

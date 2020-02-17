@@ -22,7 +22,7 @@ class Event < ApplicationRecord
   )
 
   multisearchable(
-    against: [:title, :author, :organization, :description_stripped, :short_blurb_stripped],
+    against: [:title, :author, :organization, :description_for_search, :short_blurb_for_search],
     additional_attributes: ->(event) { { convention_id: event.convention_id } }
   )
 
@@ -154,12 +154,18 @@ class Event < ApplicationRecord
     event_category.event_form
   end
 
-  def description_stripped
-    strip_tags(description)
+  def description_for_search
+    strip_tags(MarkdownPresenter.new('').render(description))
+  rescue => e
+    Rails.logger.debug e
+    ''
   end
 
-  def short_blurb_stripped
-    strip_tags(short_blurb)
+  def short_blurb_for_search
+    strip_tags(MarkdownPresenter.new('').render(short_blurb))
+  rescue => e
+    Rails.logger.debug e
+    ''
   end
 
   private
