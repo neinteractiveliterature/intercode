@@ -10,6 +10,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { UpdatePartial } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function EditCmsPartialForm({ initialPartial }) {
   const history = useHistory();
@@ -75,6 +76,10 @@ function EditCmsPartial() {
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
   }
 
   return <EditCmsPartialForm initialPartial={initialPartial} />;
