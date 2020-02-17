@@ -400,7 +400,7 @@ GEM
       netrc (~> 0.8)
     reverse_markdown (1.4.0)
       nokogiri
-    rollbar (2.23.2)
+    rollbar (2.24.0)
     rollbar-shoryuken (1.0.1)
       aws-sdk-sqs (~> 1.20, <= 2.0)
       rollbar (~> 2.21, <= 3.0)
