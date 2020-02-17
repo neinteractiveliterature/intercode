@@ -1,0 +1,24 @@
+query SiteSearchQuery($query: String!) {
+  siteSearch(query: $query) {
+    total_entries
+    entries {
+      title
+      highlight
+      rank
+
+      model {
+        __typename
+
+        ...on Page {
+          id
+          slug
+        }
+
+        ...on Event {
+          id
+          title
+        }
+      }
+    }
+  }
+}

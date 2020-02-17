@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import {
   NavLink, Route, Switch, Redirect,
 } from 'react-router-dom';
@@ -28,7 +27,7 @@ const adminComponentsBySchedulingUi = {
   single_run: SingleRunEventAdminList,
 };
 
-function EventAdmin({ location }) {
+function EventAdmin() {
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const eventCategories = useMemo(
@@ -36,7 +35,7 @@ function EventAdmin({ location }) {
     [data, loading, error],
   );
 
-  const dropdownRef = useAutoClosingDropdownRef(location);
+  const dropdownRef = useAutoClosingDropdownRef();
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -118,9 +117,5 @@ function EventAdmin({ location }) {
     </>
   );
 }
-
-EventAdmin.propTypes = {
-  location: PropTypes.shape({}).isRequired,
-};
 
 export default EventAdmin;

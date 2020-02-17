@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 
-function NavigationSection({ children, label, location }) {
-  const dropdownRef = useAutoClosingDropdownRef(location);
+function NavigationSection({ children, label }) {
+  const dropdownRef = useAutoClosingDropdownRef();
 
   return (
     <PopperDropdown
@@ -26,7 +25,6 @@ function NavigationSection({ children, label, location }) {
 NavigationSection.propTypes = {
   children: PropTypes.node.isRequired,
   label: PropTypes.string.isRequired,
-  location: PropTypes.shape({}).isRequired,
 };
 
-export default withRouter(NavigationSection);
+export default NavigationSection;
