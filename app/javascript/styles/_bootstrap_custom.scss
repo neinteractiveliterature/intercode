@@ -12,5 +12,10 @@ $enable-responsive-font-sizes: true;
   margin-bottom: 16px;
 }
 
+// Reorder the navbar only when collapsing applies
+.navbar-collapse.show, .navbar-collapse.collapsing {
+  order: 1;
+}
+
 // Reset and dependencies
 @import "~bootstrap/scss/bootstrap";
