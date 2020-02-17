@@ -10,6 +10,7 @@ fragment CmsPageFields on Page {
   content
   admin_notes
   skip_clickwrap_agreement
+  hidden_from_search
   current_ability_can_update
   current_ability_can_delete
 
