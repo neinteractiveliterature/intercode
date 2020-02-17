@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
 import PopperDropdown from '../UIComponents/PopperDropdown';
@@ -14,9 +14,8 @@ import SearchNavigationItem from './SearchNavigationItem';
 import CartContents from '../Store/CartContents';
 
 function CurrentPendingOrderButton() {
-  const location = useLocation();
   const { currentPendingOrder } = useContext(AppRootContext);
-  const dropdownRef = useAutoClosingDropdownRef(location);
+  const dropdownRef = useAutoClosingDropdownRef();
 
   if (!currentPendingOrder) {
     return null;
@@ -132,9 +131,8 @@ function RevertAssumedIdentityButton() {
 }
 
 function UserNavigationSection() {
-  const location = useLocation();
   const { conventionName, currentUser, myProfile } = useContext(AppRootContext);
-  const dropdownRef = useAutoClosingDropdownRef(location);
+  const dropdownRef = useAutoClosingDropdownRef();
 
   const renderLoggedInContent = () => (
     <>
