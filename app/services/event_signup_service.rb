@@ -4,8 +4,8 @@ class EventSignupService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :whodunit,
-    :suppress_notifications, :allow_non_self_service_signups
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit,
+    :suppress_notifications, :allow_non_self_service_signups, :action
   delegate :event, to: :run
   delegate :convention, to: :event
 
@@ -23,7 +23,8 @@ class EventSignupService < CivilService::Service
 
   def initialize(
     user_con_profile, run, requested_bucket_key, whodunit,
-    skip_locking: false, suppress_notifications: false, allow_non_self_service_signups: false
+    skip_locking: false, suppress_notifications: false, allow_non_self_service_signups: false,
+    action: 'self_service_signup'
   )
     @user_con_profile = user_con_profile
     @run = run
@@ -32,6 +33,7 @@ class EventSignupService < CivilService::Service
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
     @allow_non_self_service_signups = allow_non_self_service_signups
+    @action = action
   end
 
   private
@@ -52,6 +54,8 @@ class EventSignupService < CivilService::Service
         state: signup_state,
         updated_by: whodunit
       )
+
+      signup.log_signup_change!(action: action)
     end
 
     notify_team_members(signup)

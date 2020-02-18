@@ -183,6 +183,10 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
       event.allow_registration_policy_change = true
       event.update!(registration_policy: new_registration_policy)
+
+      move_results.each do |move_result|
+        move_result.signup.log_signup_change!(action: 'change_registration_policy')
+      end
     end
 
     notify_move_results
