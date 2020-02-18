@@ -142,8 +142,17 @@ function SiteSearch({ visible, close, setVisible }) {
             {' '}
             {entry.title}
           </div>
-          { /* eslint-disable-next-line react/no-danger */}
-          <div className="small" dangerouslySetInnerHTML={{ __html: entry.highlight }} />
+          <div
+            className="small"
+            style={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden'
+            }}
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: entry.highlight }}
+          />
         </>
       )}
     />
