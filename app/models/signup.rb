@@ -8,6 +8,7 @@ class Signup < ApplicationRecord
   has_one :convention, through: :event
   has_one :signup_request, foreign_key: 'result_signup_id', dependent: :destroy
   belongs_to :updated_by, class_name: 'User', optional: true
+  has_many :signup_changes
 
   validates :state, inclusion: { in: STATES }
   validates :bucket_key, presence: { if: -> (signup) { signup.counted? && signup.confirmed? } }
@@ -58,6 +59,22 @@ class Signup < ApplicationRecord
     else
       'Too young'
     end
+  end
+
+  def log_signup_change!(**attrs)
+    save! unless persisted?
+    signup_changes.create!({
+      signup: self,
+      run_id: run_id,
+      user_con_profile_id: user_con_profile_id,
+      previous_signup_change: signup_changes.order(created_at: :desc).first,
+      updated_by_id: updated_by_id,
+      bucket_key: bucket_key,
+      requested_bucket_key: requested_bucket_key,
+      state: state,
+      counted: counted,
+      **attrs
+    })
   end
 
   private
