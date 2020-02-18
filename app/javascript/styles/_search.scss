@@ -1,0 +1,73 @@
+.search-input-control {
+  border-top-left-radius: $rounded-pill;
+  border-bottom-left-radius: $rounded-pill;
+  border-right: 0;
+}
+
+.search-input-addon .input-group-text {
+  border-top-right-radius: $rounded-pill;
+  border-bottom-right-radius: $rounded-pill;
+  background-color: white;
+  border-left: 0;
+}
+
+.site-search {
+  height: 38px;
+}
+
+@keyframes site-search-fade-and-expand {
+  0% { opacity: 0; flex: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 1; flex: 1; }
+}
+.site-search, .site-search-exit-done {
+  opacity: 0;
+  flex: 0;
+}
+.site-search-enter-active {
+  animation-name: site-search-fade-and-expand;
+  animation-duration: 400ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+.site-search-enter-done {
+  opacity: 1;
+  flex: 1;
+}
+.site-search-exit-active {
+  animation-name: site-search-fade-and-expand;
+  animation-duration: 400ms;
+  animation-direction: reverse;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+
+@keyframes site-search-navigation-button-fade {
+  0% { opacity: 0; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.site-search-navigation-button, .site-search-navigation-button-enter-done {
+  position: absolute;
+  right: 10px;
+  top: -3px;
+  opacity: 1;
+}
+@include media-breakpoint-up(md) {
+  .site-search-navigation-button, .site-search-navigation-button-enter-done {
+    right: 2px;
+  }
+}
+.site-search-navigation-button-enter-active, .site-search-navigation-button-exit-active {
+  animation-name: site-search-navigation-button-fade;
+  animation-duration: 400ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+.site-search-navigation-button-exit-active {
+  animation-direction: reverse;
+}
+.site-search-navigation-button-exit-done {
+  opacity: 0;
+}
