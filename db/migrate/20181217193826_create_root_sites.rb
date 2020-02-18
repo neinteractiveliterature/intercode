@@ -35,25 +35,27 @@ class CreateRootSites < ActiveRecord::Migration[5.2]
 
     reversible do |dir|
       dir.up do
-        [Page, CmsLayout].each(&:reset_column_information)
+        PgSearch.disable_multisearch do
+          [Page, CmsLayout].each(&:reset_column_information)
 
-        root_page = Page.find_or_create_by!(parent_id: nil, parent_type: nil, slug: 'root') do |p|
-          p.name = 'Main page'
-          p.content = ROOT_PAGE_CONTENT
+          root_page = Page.find_or_create_by!(parent_id: nil, parent_type: nil, slug: 'root') do |p|
+            p.name = 'Main page'
+            p.content = ROOT_PAGE_CONTENT
+          end
+
+          default_layout_path = File.expand_path(
+            'cms_content_sets/standard/layouts/Default.liquid',
+            Rails.root
+          )
+
+          default_layout_content = File.open(default_layout_path, 'r') { |f| f.read }
+
+          default_layout = CmsLayout.find_or_create_by!(parent_id: nil, parent_type: 'nil', name: 'Default') do |layout|
+            layout.content = default_layout_content
+          end
+
+          RootSite.create!(site_name: 'Intercode', root_page: root_page, default_layout: default_layout)
         end
-
-        default_layout_path = File.expand_path(
-          'cms_content_sets/standard/layouts/Default.liquid',
-          Rails.root
-        )
-
-        default_layout_content = File.open(default_layout_path, 'r') { |f| f.read }
-
-        default_layout = CmsLayout.find_or_create_by!(parent_id: nil, parent_type: 'nil', name: 'Default') do |layout|
-          layout.content = default_layout_content
-        end
-
-        RootSite.create!(site_name: 'Intercode', root_page: root_page, default_layout: default_layout)
       end
     end
   end
