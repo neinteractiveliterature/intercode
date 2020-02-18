@@ -1648,6 +1648,46 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
+-- Name: signup_changes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.signup_changes (
+    id bigint NOT NULL,
+    signup_id bigint NOT NULL,
+    run_id bigint NOT NULL,
+    user_con_profile_id bigint NOT NULL,
+    previous_signup_change_id bigint,
+    updated_by_id bigint,
+    bucket_key character varying,
+    requested_bucket_key character varying,
+    state character varying NOT NULL,
+    counted boolean,
+    action character varying NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: signup_changes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.signup_changes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: signup_changes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.signup_changes_id_seq OWNED BY public.signup_changes.id;
+
+
+--
 -- Name: signup_requests; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2283,6 +2323,13 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 
 
 --
+-- Name: signup_changes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes ALTER COLUMN id SET DEFAULT nextval('public.signup_changes_id_seq'::regclass);
+
+
+--
 -- Name: signup_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2663,6 +2710,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: signup_changes signup_changes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT signup_changes_pkey PRIMARY KEY (id);
 
 
 --
@@ -3347,6 +3402,41 @@ CREATE INDEX index_sessions_on_updated_at ON public.sessions USING btree (update
 
 
 --
+-- Name: index_signup_changes_on_previous_signup_change_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_previous_signup_change_id ON public.signup_changes USING btree (previous_signup_change_id);
+
+
+--
+-- Name: index_signup_changes_on_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_run_id ON public.signup_changes USING btree (run_id);
+
+
+--
+-- Name: index_signup_changes_on_signup_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_signup_id ON public.signup_changes USING btree (signup_id);
+
+
+--
+-- Name: index_signup_changes_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_updated_by_id ON public.signup_changes USING btree (updated_by_id);
+
+
+--
+-- Name: index_signup_changes_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_user_con_profile_id ON public.signup_changes USING btree (user_con_profile_id);
+
+
+--
 -- Name: index_signup_requests_on_replace_signup_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3659,6 +3749,14 @@ ALTER TABLE ONLY public.order_entries
 
 
 --
+-- Name: signup_changes fk_rails_43b5611a7a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_43b5611a7a FOREIGN KEY (signup_id) REFERENCES public.signups(id);
+
+
+--
 -- Name: conventions fk_rails_43f145c8c7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3760,6 +3858,14 @@ ALTER TABLE ONLY public.order_entries
 
 ALTER TABLE ONLY public.signups
     ADD CONSTRAINT fk_rails_797f99efdb FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: signup_changes fk_rails_79e46f1342; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_79e46f1342 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
 
 
 --
@@ -3883,6 +3989,14 @@ ALTER TABLE ONLY public.user_con_profiles
 
 
 --
+-- Name: signup_changes fk_rails_a4964a0bf5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_a4964a0bf5 FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
 -- Name: maximum_event_provided_tickets_overrides fk_rails_ab5f88b28a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3928,6 +4042,14 @@ ALTER TABLE ONLY public.staff_positions
 
 ALTER TABLE ONLY public.event_proposals
     ADD CONSTRAINT fk_rails_b3b51be8c8 FOREIGN KEY (owner_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: signup_changes fk_rails_b4441b36fa; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_b4441b36fa FOREIGN KEY (previous_signup_change_id) REFERENCES public.signup_changes(id);
 
 
 --
@@ -3984,6 +4106,14 @@ ALTER TABLE ONLY public.form_items
 
 ALTER TABLE ONLY public.conventions
     ADD CONSTRAINT fk_rails_d37c5f984d FOREIGN KEY (default_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: signup_changes fk_rails_d3af869d4f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_d3af869d4f FOREIGN KEY (run_id) REFERENCES public.runs(id);
 
 
 --
@@ -4282,6 +4412,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200216221143'),
 ('20200216222452'),
 ('20200216222934'),
-('20200217182622');
+('20200217182622'),
+('20200218010110');
 
 
