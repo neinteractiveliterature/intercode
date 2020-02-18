@@ -1,10 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { components } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useHistory } from 'react-router-dom';
 import { useApolloClient } from '@apollo/react-hooks';
+import { CSSTransition } from 'react-transition-group';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import { SiteSearchQuery } from './siteSearchQueries.gql';
@@ -52,9 +55,12 @@ SearchMenu.defaultProps = {
   children: null,
 };
 
-function SiteSearch({ visible, close, setVisible }) {
+function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
   const history = useHistory();
   const apolloClient = useApolloClient();
+  const selectRef = useRef();
+  const [inputValue, setInputValue] = useState('');
+  const [value, setValue] = useState(null);
 
   const keyDownListener = useCallback(
     (event) => {
@@ -63,6 +69,15 @@ function SiteSearch({ visible, close, setVisible }) {
         event.preventDefault();
         setVisible(true);
       }
+    },
+    [setVisible],
+  );
+
+  const close = useCallback(
+    () => {
+      setVisible(false);
+      setInputValue('');
+      setValue(null);
     },
     [setVisible],
   );
@@ -99,63 +114,93 @@ function SiteSearch({ visible, close, setVisible }) {
       }
       close();
     },
-    [history, close],
+    [close, history],
   );
 
-  if (!visible) {
-    return <div />;
-  }
+  const focusSelect = useCallback(
+    () => {
+      if (selectRef.current) {
+        selectRef.current.focus();
+      }
+    },
+    [],
+  );
+
+  const entered = useCallback(
+    () => {
+      focusSelect();
+      visibilityChangeComplete(true);
+    },
+    [focusSelect, visibilityChangeComplete],
+  );
+
+  const exited = useCallback(
+    () => {
+      visibilityChangeComplete(false);
+    },
+    [visibilityChangeComplete],
+  );
 
   return (
-    <AsyncSelect
-      autoFocus
-      placeholder="Search"
-      className="site-search"
-      onKeyDown={(event) => {
-        if (event.key === 'Escape') {
-          close();
-        }
-      }}
-      styles={{
-        container: (baseProps) => ({
-          ...baseProps,
-          flexGrow: 1,
-        }),
-        control: (baseProps) => ({
-          ...baseProps,
-          borderRadius: baseProps.minHeight / 2,
-          paddingLeft: baseProps.minHeight / 6,
-        }),
-        indicatorSeparator: () => { },
-      }}
-      components={{
-        DropdownIndicator: SearchDropdownIndicator,
-        Menu: SearchMenu,
-      }}
-      loadOptions={loadOptions}
-      onChange={optionSelected}
-      onBlur={close}
-      formatOptionLabel={(entry) => (
-        <>
-          <div className="font-weight-bold mb-1">
-            <i className={`fa ${getSearchableModelIcon(entry.model)}`} />
-            {' '}
-            {entry.title}
-          </div>
-          <div
-            className="small"
-            style={{
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 2,
-              overflow: 'hidden'
-            }}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: entry.highlight }}
-          />
-        </>
-      )}
-    />
+    <CSSTransition timeout={400} in={visible} classNames="site-search" onEntered={entered} onExited={exited}>
+      <AsyncSelect
+        ref={selectRef}
+        placeholder=""
+        className="site-search"
+        inputValue={inputValue}
+        value={value}
+        onInputChange={(newInputValue) => {
+          if (visible) {
+            setInputValue(newInputValue);
+          }
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            close();
+          }
+        }}
+        styles={{
+          control: (baseProps) => ({
+            ...baseProps,
+            borderRadius: baseProps.minHeight / 2,
+            paddingLeft: baseProps.minHeight / 6,
+          }),
+          indicatorSeparator: () => { },
+          indicatorsContainer: (baseProps) => ({
+            ...baseProps,
+            position: 'absolute',
+            right: '2px',
+          }),
+        }}
+        components={{
+          DropdownIndicator: SearchDropdownIndicator,
+          Menu: SearchMenu,
+        }}
+        loadOptions={loadOptions}
+        onChange={optionSelected}
+        onBlur={close}
+        formatOptionLabel={(entry) => (
+          <>
+            <div className="font-weight-bold mb-1">
+              <i className={`fa ${getSearchableModelIcon(entry.model)}`} />
+              {' '}
+              {entry.title}
+            </div>
+            <div
+              className="small"
+              style={{
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: 2,
+                overflow: 'hidden',
+              }}
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{ __html: entry.highlight }}
+            />
+          </>
+        )}
+      />
+    </CSSTransition>
   );
 }
 
