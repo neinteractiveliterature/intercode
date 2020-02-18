@@ -48,6 +48,7 @@ class EventVacancyFillService < CivilService::Service
     prev_bucket_key = signup_to_move.bucket_key
     prev_state = signup_to_move.state
     signup_to_move.update!(state: 'confirmed', bucket_key: bucket_key, counted: bucket.counted?)
+    signup_to_move.log_signup_change!(action: 'vacancy_fill')
     move_results << SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
 
     # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill

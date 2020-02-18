@@ -65,7 +65,8 @@ class AcceptSignupRequestService < CivilService::Service
       whodunit,
       skip_locking: true,
       allow_non_self_service_signups: true,
-      suppress_notifications: suppress_notifications
+      suppress_notifications: suppress_notifications,
+      action: 'accept_signup_request'
     ).call!
   end
 
