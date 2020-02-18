@@ -8,7 +8,7 @@ PgSearch.multisearch_options = {
         StopSel: '</mark>',
         MinWords: 10,
         MaxWords: 15,
-        MaxFragments: 3,
+        MaxFragments: 2,
         ShortWord: 0,
         FragmentDelimiter: '&hellip;'
       }
