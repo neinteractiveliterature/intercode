@@ -4,9 +4,11 @@ class AddInvariantToPages < ActiveRecord::Migration[5.2]
 
     reversible do |dir|
       dir.up do
-        Page.find_each do |page|
-          page.send(:set_performance_metadata)
-          page.save!
+        PgSearch.disable_multisearch do
+          Page.find_each do |page|
+            page.send(:set_performance_metadata)
+            page.save!
+          end
         end
       end
     end
