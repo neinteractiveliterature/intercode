@@ -11,14 +11,17 @@ class FormResponseChangeGroupPresenter
   end
 
   def html
-    cmd = "#{SCRIPT_PATH} #{Shellwords.escape(component_props.to_json)}"
-    stdout, stderr, status = Open3.capture3(cmd)
+    stdout, stderr, status = Open3.capture3(shell_command)
     unless status == 0
-      Rollbar.error "#{SCRIPT_PATH} returned error code #{status}", stdout: stdout, stderr: stderr, component_props: component_props
+      Rollbar.error "#{SCRIPT_PATH} returned error code #{status}", stdout: stdout, stderr: stderr, component_props: component_props.to_json
       return 'Sorry, an error occurred trying to render these changes.'
     end
 
     stdout.html_safe
+  end
+
+  def shell_command
+    "#{SCRIPT_PATH} #{Shellwords.escape(component_props.to_json)}"
   end
 
   def component_props
@@ -38,6 +41,7 @@ class FormResponseChangeGroupPresenter
 
   def change_props(change)
     {
+      'id' => change.id,
       'formItem' => form_item_props(change.response, change.field_identifier),
       'user_con_profile' => {
         'id' => change.user_con_profile.id,
