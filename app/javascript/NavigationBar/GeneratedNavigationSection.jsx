@@ -17,6 +17,7 @@ function GeneratedNavigationSection({ label, items }) {
             key={`${item.label}-${item.url}`}
             label={item.label}
             url={item.url}
+            icon={item.icon}
           />
         ))}
       </NavigationSection>
