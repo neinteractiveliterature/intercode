@@ -192,7 +192,7 @@ function UserNavigationSection() {
         ref={dropdownRef}
         renderReference={({ ref, toggle }) => (
           <button className="btn btn-link nav-link" onClick={toggle} ref={ref} type="button">
-            <i className="fa fa-sign-in" />
+            <i className="fa fa-user-circle" />
             <span className="sr-only">Log in or sign up</span>
           </button>
         )}
