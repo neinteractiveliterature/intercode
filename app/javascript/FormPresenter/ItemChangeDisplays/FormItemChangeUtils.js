@@ -56,8 +56,12 @@ export function buildChangeGroups(changes, form) {
 }
 
 export function getTimespanForChangeGroup(changeGroup) {
-  return new Timespan(
-    moment(changeGroup.changes[changeGroup.changes.length - 1].created_at),
-    moment(changeGroup.changes[0].updated_at),
-  );
+  const allTimestamps = [
+    ...changeGroup.changes.map((c) => moment(c.created_at)),
+    ...changeGroup.changes.map((c) => moment(c.updated_at)),
+  ];
+
+  allTimestamps.sort((a, b) => a.diff(b));
+
+  return new Timespan(allTimestamps[0], allTimestamps[allTimestamps.length - 1]);
 }

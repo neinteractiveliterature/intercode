@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeDisplay from './FormItemChangeDisplay';
 import TextDiffDisplay from './TextDiffDisplay';
-import { TimespanPropType } from '../../ScheduledValuePropTypes';
 import { getTimespanForChangeGroup } from './FormItemChangeUtils';
 
 function describeFormItem(item, itemIdentifier) {
