@@ -91,16 +91,6 @@ function SignInForm({ history }) {
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">Log in</div>
-          <div>
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              disabled={submitInProgress}
-              onClick={() => { setCurrentView('signUp'); }}
-            >
-              Sign up
-            </button>
-          </div>
         </div>
 
         <div className="modal-body">
@@ -131,7 +121,10 @@ function SignInForm({ history }) {
         </div>
 
         <div className="modal-footer bg-light">
-          <div className="flex-grow-1">
+          <div className="flex-grow-1 d-flex flex-column align-items-start">
+            <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signUp'); }}>
+              Sign up for an account
+            </button>
             <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('forgotPassword'); }}>
               Forgot your password?
             </button>
@@ -150,6 +143,7 @@ function SignInForm({ history }) {
               className="btn btn-primary"
               disabled={submitInProgress}
               value="Log in"
+              aria-label="Log in"
             />
           </div>
         </div>
