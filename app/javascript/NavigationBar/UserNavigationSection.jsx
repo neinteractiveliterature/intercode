@@ -188,12 +188,26 @@ function UserNavigationSection() {
 
   const renderLoggedOutContent = () => (
     <>
-      <li className="nav-item login my-auto">
-        <SignInButton className="btn btn-link nav-link" caption="Log in" />
-      </li>
-      <li className="nav-item my-auto">
-        <SignUpButton className="btn btn-primary nav-link py-1 text-white">Sign up</SignUpButton>
-      </li>
+      <PopperDropdown
+        ref={dropdownRef}
+        renderReference={({ ref, toggle, visible }) => (
+          <button className="btn btn-link nav-link" onClick={toggle} ref={ref} type="button">
+            <Gravatar
+              pixelSize={16}
+              imgClassName={visible ? 'glow-light' : ''}
+            />
+          </button>
+        )}
+        placement="bottom-end"
+        style={{ zIndex: 1100 }}
+      >
+        <li className="nav-item login my-auto">
+          <SignInButton className="btn btn-link dropdown-item" caption="Log in" />
+        </li>
+        <li className="nav-item my-auto">
+          <SignUpButton className="btn btn-link dropdown-item">Sign up</SignUpButton>
+        </li>
+      </PopperDropdown>
     </>
   );
 
