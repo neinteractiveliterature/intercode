@@ -13,7 +13,7 @@ export default function useCollapse(elementRef) {
   const [heightOverride, setHeightOverride] = useState(null);
 
   const toggleCollapsed = () => {
-    if (!collapsed) {
+    if (!collapsed && elementRef.current) {
       // set the height override early so we don't break CSS transitions by transitioning from auto
       setHeightOverride(elementRef.current.scrollHeight);
     }
@@ -30,6 +30,10 @@ export default function useCollapse(elementRef) {
 
   useLayoutEffect(
     () => {
+      if (!elementRef.current) {
+        return;
+      }
+
       if (collapsed !== prevCollapsed) {
         if (!collapsed) {
           // measure the height after the DOM has updated

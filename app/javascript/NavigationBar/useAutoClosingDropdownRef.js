@@ -1,9 +1,11 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 
 export default function useAutoClosingDropdownRef() {
   const location = useLocation();
   const dropdownRef = useRef(null);
+  const { visible: authenticationModalVisible } = useContext(AuthenticationModalContext);
 
   useEffect(
     () => {
@@ -11,7 +13,7 @@ export default function useAutoClosingDropdownRef() {
         dropdownRef.current.setVisible(false);
       }
     },
-    [location],
+    [location, authenticationModalVisible],
   );
 
   return dropdownRef;
