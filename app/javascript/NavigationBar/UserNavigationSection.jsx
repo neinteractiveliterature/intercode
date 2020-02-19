@@ -190,22 +190,38 @@ function UserNavigationSection() {
     <>
       <PopperDropdown
         ref={dropdownRef}
-        renderReference={({ ref, toggle, visible }) => (
+        renderReference={({ ref, toggle }) => (
           <button className="btn btn-link nav-link" onClick={toggle} ref={ref} type="button">
-            <Gravatar
-              pixelSize={16}
-              imgClassName={visible ? 'glow-light' : ''}
-            />
+            <i className="fa fa-sign-in" />
+            <span className="sr-only">Log in or sign up</span>
           </button>
         )}
         placement="bottom-end"
         style={{ zIndex: 1100 }}
       >
         <li className="nav-item login my-auto">
-          <SignInButton className="btn btn-link dropdown-item" caption="Log in" />
+          <SignInButton
+            className="btn btn-link dropdown-item"
+            caption={(
+              <>
+                <i className="fa fa-sign-in" />
+                {' '}
+                Log in
+              </>
+           )}
+          />
         </li>
         <li className="nav-item my-auto">
-          <SignUpButton className="btn btn-link dropdown-item">Sign up</SignUpButton>
+          <SignUpButton
+            className="btn btn-link dropdown-item"
+            caption={(
+              <>
+                <i className="fa fa-pencil-square-o" />
+                {' '}
+                Sign up
+              </>
+            )}
+          />
         </li>
       </PopperDropdown>
     </>
