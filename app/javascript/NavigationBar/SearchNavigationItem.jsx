@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useContext } from 'react';
+import { CSSTransition } from 'react-transition-group';
 
 import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
-import { CSSTransition } from 'react-transition-group';
 
 function SearchNavigationItem() {
   const [visible, setVisible] = useState(false);
-  const { hideNavItems, setHideBrand, setHideNavItems } = useContext(NavigationBarContext);
+  const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);
 
   const setVisibleWithHiding = useCallback(
     (newVisible) => {
