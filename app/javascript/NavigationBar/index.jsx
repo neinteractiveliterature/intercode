@@ -46,42 +46,40 @@ function NavigationBarContent({ navbarClasses, rootItems, location }) {
       <nav className={classNames('navbar', navbarClasses)} role="navigation">
         <div className="container">
           <NavigationBrand item={{ label: conventionName || rootSiteName }} />
-          {!hideNavItems && (
-            <div
-              id="navbarSupportedContent"
-              className={classNames('navbar-collapse', collapseClassName)}
-              ref={collapseRef}
-              {...otherCollapseProps}
-            >
-              <ul className="navbar-nav">
-                {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
-                  <TicketPurchaseNavigationItem />
-                )}
-                {conventionName && siteMode !== 'single_event' && (
-                  <EventsNavigationSection />
-                )}
-                {rootItems.map((rootItem) => {
-                  if (rootItem.sectionItems) {
-                    return (
-                      <NavigationSection label={rootItem.title} key={rootItem.id}>
-                        {rootItem.sectionItems.map((sectionItem) => (
-                          <NavigationItem
-                            label={sectionItem.title}
-                            url={`/pages/${sectionItem.page.slug}`}
-                            key={sectionItem.id}
-                            inSection
-                          />
-                        ))}
-                      </NavigationSection>
-                    );
-                  }
+          <div
+            id="navbarSupportedContent"
+            className={classNames('navbar-collapse', 'flex-grow-0', collapseClassName)}
+            ref={collapseRef}
+            {...otherCollapseProps}
+          >
+            <ul className={classNames('navbar-nav', { 'd-md-none': hideNavItems })}>
+              {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
+                <TicketPurchaseNavigationItem />
+              )}
+              {conventionName && siteMode !== 'single_event' && (
+                <EventsNavigationSection />
+              )}
+              {rootItems.map((rootItem) => {
+                if (rootItem.sectionItems) {
+                  return (
+                    <NavigationSection label={rootItem.title} key={rootItem.id}>
+                      {rootItem.sectionItems.map((sectionItem) => (
+                        <NavigationItem
+                          label={sectionItem.title}
+                          url={`/pages/${sectionItem.page.slug}`}
+                          key={sectionItem.id}
+                          inSection
+                        />
+                      ))}
+                    </NavigationSection>
+                  );
+                }
 
-                  return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
-                })}
-                <AdminNavigationSection />
-              </ul>
-            </div>
-          )}
+                return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
+              })}
+              <AdminNavigationSection />
+            </ul>
+          </div>
           <SearchNavigationItem />
           <ul className="navbar-nav">
             <UserNavigationSection />
