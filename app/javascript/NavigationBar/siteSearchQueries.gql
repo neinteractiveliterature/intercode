@@ -4,7 +4,6 @@ query SiteSearchQuery($query: String!) {
     entries {
       title
       highlight
-      rank
 
       model {
         __typename

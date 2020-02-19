@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useRef, useState, useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
 import { components } from 'react-select';
@@ -8,11 +8,22 @@ import debounce from 'debounce-promise';
 import { useHistory } from 'react-router-dom';
 import { useApolloClient } from '@apollo/react-hooks';
 import { CSSTransition } from 'react-transition-group';
+import {
+  Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer,
+} from 'js-search';
+import { stemmer } from 'porter-stemmer';
+import uuidv4 from 'uuid/v4';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import { SiteSearchQuery } from './siteSearchQueries.gql';
+import { useAdminNavigationItems } from './AdminNavigationSection';
+import { useEventsNavigationItems } from './EventsNavigationSection';
 
 function getSearchableModelIcon(model) {
+  if (model.__typename === 'NavigationItem') {
+    return model.icon || 'fa-file-text-o';
+  }
+
   if (model.__typename === 'Page') {
     return 'fa-file-text-o';
   }
@@ -61,6 +72,28 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
   const selectRef = useRef();
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState(null);
+  const adminNavigationItems = useAdminNavigationItems();
+  const eventsNavigationItems = useEventsNavigationItems();
+
+  const navigationItemsWithId = useMemo(
+    () => [...adminNavigationItems, ...eventsNavigationItems].map((item) => ({
+      id: uuidv4(),
+      ...item,
+    })),
+    [adminNavigationItems, eventsNavigationItems],
+  );
+
+  const navigationItemsSearchIndex = useMemo(
+    () => {
+      const search = new Search('id');
+      search.indexStrategy = new ExactWordIndexStrategy();
+      search.tokenizer = new StemmingTokenizer(stemmer, new SimpleTokenizer());
+      search.addIndex('label');
+      search.addDocuments(navigationItemsWithId);
+      return search;
+    },
+    [navigationItemsWithId],
+  );
 
   const keyDownListener = useCallback(
     (event) => {
@@ -96,7 +129,18 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
         const { data } = await apolloClient.query({
           query: SiteSearchQuery, variables: { query }, fetchPolicy: 'no-cache',
         });
-        return data.siteSearch.entries;
+        const navigationItemsResult = navigationItemsSearchIndex.search(query);
+        return [
+          ...navigationItemsResult.map((navigationItem) => ({
+            title: navigationItem.label,
+            highlight: '',
+            model: {
+              __typename: 'NavigationItem',
+              ...navigationItem,
+            },
+          })),
+          ...data.siteSearch.entries,
+        ];
       },
       200,
       { leading: false },
@@ -111,6 +155,8 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
         history.push(`/pages/${model.slug}`);
       } else if (model.__typename === 'Event') {
         history.push(buildEventUrl(model));
+      } else if (model.__typename === 'NavigationItem') {
+        history.push(model.url);
       }
       close();
     },
