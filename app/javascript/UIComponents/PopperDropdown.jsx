@@ -65,7 +65,6 @@ function PopperDropdown({
   };
 
   const effectivePlacement = placement || 'bottom-start';
-  const popoverParent = document.body;
 
   return (
     <Manager ref={managerNode}>
@@ -82,7 +81,7 @@ function PopperDropdown({
           <Popper
             placement={internalVisible ? effectivePlacement : 'invalid'}
             modifiers={{
-              preventOverflow: { boundariesElement: popoverParent },
+              preventOverflow: { boundariesElement: 'viewport' },
               ...(modifiers || {}),
             }}
           >
@@ -116,7 +115,7 @@ function PopperDropdown({
             }}
           </Popper>
         ),
-        popoverParent,
+        document.body,
       )}
     </Manager>
   );
