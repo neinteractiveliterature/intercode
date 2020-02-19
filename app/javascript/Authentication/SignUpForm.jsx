@@ -73,16 +73,6 @@ function SignUpForm() {
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">Sign up</div>
-          <div>
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              disabled={submitInProgress}
-              onClick={() => { setCurrentView('signIn'); }}
-            >
-              Log in
-            </button>
-          </div>
         </div>
 
         <div className="modal-body">
@@ -110,7 +100,10 @@ function SignUpForm() {
         </div>
 
         <div className="modal-footer bg-light">
-          <div className="flex-grow-1">
+          <div className="flex-grow-1 d-flex flex-column align-items-start">
+            <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signIn'); }}>
+              Log in to an existing account
+            </button>
             <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('forgotPassword'); }}>
               Forgot your password?
             </button>
