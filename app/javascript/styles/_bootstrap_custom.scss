@@ -17,5 +17,9 @@ $enable-responsive-font-sizes: true;
   order: 1;
 }
 
+.fixed-top {
+  width: 100vw; // Don't let page content blow out the sides of fixed UI
+}
+
 // Reset and dependencies
 @import "~bootstrap/scss/bootstrap";

@@ -50,16 +50,6 @@ function ForgotPasswordForm() {
       <form onSubmit={onSubmit}>
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">Forgot your password?</div>
-          <div>
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              disabled={resetPasswordInProgress}
-              onClick={() => { setCurrentView('signIn'); }}
-            >
-              Log in
-            </button>
-          </div>
         </div>
 
         <div className="modal-body">
@@ -97,6 +87,14 @@ function ForgotPasswordForm() {
         <ErrorDisplay stringError={(resetPasswordError || {}).message} />
 
         <div className="modal-footer bg-light">
+          <div className="flex-grow-1 d-flex flex-column align-items-start">
+            <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signUp'); }}>
+              Sign up for an account
+            </button>
+            <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('signIn'); }}>
+              Log in to an existing account
+            </button>
+          </div>
           <div>
             <button
               type="button"
@@ -112,6 +110,7 @@ function ForgotPasswordForm() {
                 className="btn btn-primary"
                 disabled={resetPasswordInProgress}
                 value="Send instructions"
+                aria-label="Send instructions"
               />
             )}
           </div>
