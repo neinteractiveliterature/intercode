@@ -47,12 +47,16 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       )
 
       # Try to put them in the bucket they're already in if possible
-      current_bucket = signup.bucket_key ? registration_policy.bucket_with_key(signup.bucket_key) : nil
-      destination_bucket = if current_bucket && !current_bucket.full?(new_signups_by_signup_id.values)
-        current_bucket
-      else
-        bucket_finder.find_bucket
-      end
+      current_bucket = (
+        signup.bucket_key ? registration_policy.bucket_with_key(signup.bucket_key) : nil
+      )
+      destination_bucket = (
+        if current_bucket && !current_bucket.full?(new_signups_by_signup_id.values)
+          current_bucket
+        else
+          bucket_finder.find_bucket
+        end
+      )
 
       if !destination_bucket
         if signup.confirmed?
@@ -267,8 +271,9 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   end
 
   def signups_by_run_id
-    @signups_by_run_id ||= all_signups.group_by(&:run_id)
-      .transform_values { |signups| signups.sort_by { |signup| [signup.confirmed? ? 0 : 1, signup.created_at] } }
+    @signups_by_run_id ||= all_signups.group_by(&:run_id).transform_values do |signups|
+      signups.sort_by { |signup| [signup.confirmed? ? 0 : 1, signup.created_at] }
+    end
   end
 
   def lock_all_runs(&block)

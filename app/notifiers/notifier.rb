@@ -141,7 +141,9 @@ class Notifier
       when UserConProfile then destination
       when StaffPosition then staff_position.user_con_profiles.to_a
       when nil then []
-      else raise InvalidArgument, "Don't know how to get a user con profile from a #{destination.class}"
+      else
+        raise InvalidArgument,
+          "Don't know how to get a user con profile from a #{destination.class}"
       end
     end
   end

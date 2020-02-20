@@ -9,7 +9,9 @@ class OrderEntryPolicy < ApplicationPolicy
 
   def manage?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_profile) { order.status == 'pending' && user && user.id == user_con_profile.user.id }
+      d.add(:manage_profile) do
+        order.status == 'pending' && user && user.id == user_con_profile.user.id
+      end
     end
 
     super

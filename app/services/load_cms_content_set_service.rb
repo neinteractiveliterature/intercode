@@ -35,7 +35,9 @@ class LoadCmsContentSetService < CivilService::Service
     content_set.all_form_contents_by_name.values.each do |content|
       form = case content['form_type']
       when 'user_con_profile'
-        convention.create_user_con_profile_form!(convention: convention, form_type: content['form_type'])
+        convention.create_user_con_profile_form!(
+          convention: convention, form_type: content['form_type']
+        )
       else
         convention.forms.create!(convention: convention, form_type: content['form_type'])
       end
