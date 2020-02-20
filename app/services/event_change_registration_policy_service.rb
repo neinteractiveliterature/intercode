@@ -137,9 +137,9 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       return unless logger
 
       bucket_counts = registration_policy.buckets.map do |bucket|
-        signup_count = new_signups_by_signup_id.values.select do |signup|
+        signup_count = new_signups_by_signup_id.values.count do |signup|
           signup.bucket_key == bucket.key && signup.counted?
-        end.size
+        end
         "#{bucket.key}: #{signup_count}/#{bucket.total_slots}"
       end
       log "Counts: [#{bucket_counts.join(' | ')}]"

@@ -20,7 +20,9 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
   def resolve(**args)
     ticket_type = convention.ticket_types.find(args[:ticket_type_id])
     existing_ticket = subject_profile.ticket
-    raise "#{subject_profile.name_without_nickname} has no #{convention.ticket_name}" unless existing_ticket
+    unless existing_ticket
+      raise "#{subject_profile.name_without_nickname} has no #{convention.ticket_name}"
+    end
 
     delete_result = DeleteTicketService.new(ticket: existing_ticket, refund: existing_ticket.charge_id.present?).call!
     subject_profile.reload

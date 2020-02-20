@@ -81,7 +81,7 @@ class PurchaseTicketService < CivilService::Service
   end
 
   def check_convention_is_not_over
-    return if Time.now < convention.ends_at
+    return if Time.zone.now < convention.ends_at
 
     errors.add :base, "#{convention.name} is over and is no longer selling tickets."
   end

@@ -81,9 +81,7 @@ class RegistrationPolicy::Bucket
     attributes == other.attributes
   end
 
-  def hash
-    attributes.hash
-  end
+  delegate :hash, to: :attributes
 
   def to_liquid
     RegistrationPolicy::BucketDrop.new(self)
