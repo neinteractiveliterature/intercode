@@ -21,7 +21,9 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       Tables::TableResultsPresenter::Field.new(:last_name, 'Last name'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
-      Tables::TableResultsPresenter::Field.new(:ticket_type, "#{convention.ticket_name.humanize} type"),
+      Tables::TableResultsPresenter::Field.new(
+        :ticket_type, "#{convention.ticket_name.humanize} type"
+      ),
       Tables::TableResultsPresenter::Field.new(:payment_amount, 'Payment amount'),
       Tables::TableResultsPresenter::Field.new(:is_team_member, 'Event team member?'),
       Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
@@ -36,11 +38,13 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   end
 
   def form_fields
-    @form_fields ||= convention.user_con_profile_form.form_items.select(&:identifier).map do |form_item|
-      Tables::TableResultsPresenter::Field.new(
-        form_item.identifier.to_sym,
-        form_item.properties['admin_description'] || form_item.identifier.humanize
-      )
+    @form_fields ||= begin
+      convention.user_con_profile_form.form_items.select(&:identifier).map do |form_item|
+        Tables::TableResultsPresenter::Field.new(
+          form_item.identifier.to_sym,
+          form_item.properties['admin_description'] || form_item.identifier.humanize
+        )
+      end
     end
   end
 
@@ -71,9 +75,13 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     when :payment_amount
       payment_amount_fractional = (value.to_f * 100.0).to_i
       if payment_amount_fractional == 0
-        scope.left_joins(:ticket).where('tickets.payment_amount_cents = 0 OR tickets.payment_amount_cents IS NULL')
+        scope.left_joins(:ticket).where(
+          'tickets.payment_amount_cents = 0 OR tickets.payment_amount_cents IS NULL'
+        )
       else
-        scope.left_joins(:ticket).where(tickets: { payment_amount_cents: payment_amount_fractional })
+        scope.left_joins(:ticket).where(
+          tickets: { payment_amount_cents: payment_amount_fractional }
+        )
       end
     when :ticket, :ticket_type
       ticket_type_ids = value.map do |id_value|
@@ -134,7 +142,12 @@ lower(user_con_profiles.first_name) #{direction}")
   end
 
   def csv_scope
-    scoped.includes(:user, :team_members, ticket: :ticket_type, orders: { order_entries: [:product, :product_variant] })
+    scoped.includes(
+      :user,
+      :team_members,
+      ticket: :ticket_type,
+      orders: { order_entries: [:product, :product_variant] }
+    )
   end
 
   def generate_csv_cell(field, user_con_profile)

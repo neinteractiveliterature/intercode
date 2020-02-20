@@ -47,7 +47,8 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
       )
     end
 
-    define_method "#{association_name}_ids_with_permission_in_convention" do |convention, *permissions|
+    ids_with_permission_in_convention_name = "#{association_name}_ids_with_permission_in_convention"
+    define_method ids_with_permission_in_convention_name do |convention, *permissions|
       permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type)
       return [] unless permission_sets.present?
 
@@ -109,7 +110,8 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
 
   def conventions_with_organization_permission(*permissions)
     Convention.where(
-      organization_id: user_organization_roles_with_permission(*permissions).select(:organization_id)
+      organization_id: user_organization_roles_with_permission(*permissions)
+        .select(:organization_id)
     )
   end
 

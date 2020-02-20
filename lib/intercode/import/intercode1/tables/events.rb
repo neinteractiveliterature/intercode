@@ -104,12 +104,9 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     end
 
     return title_plus_iteration if @con.events.where(title: title_plus_iteration).none?
+    raise "Too many iterations on title #{title}, giving up" if iteration >= 10
 
-    if iteration < 10
-      return find_unique_title(title, iteration + 1)
-    else
-      raise "Too many iterations on title #{title}, giving up"
-    end
+    find_unique_title(title, iteration + 1)
   end
 
   def event_status(row)

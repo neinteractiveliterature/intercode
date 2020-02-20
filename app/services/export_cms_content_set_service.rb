@@ -20,7 +20,9 @@ class ExportCmsContentSetService < CivilService::Service
     export_content_for_subdir('layouts', convention.cms_layouts, 'name', 'content')
     export_content_for_subdir('pages', convention.pages, 'slug', 'content')
     export_content_for_subdir('partials', convention.cms_partials, 'name', 'content')
-    export_content_for_subdir('notification_templates', convention.notification_templates, 'event_key', 'body_html')
+    export_content_for_subdir(
+      'notification_templates', convention.notification_templates, 'event_key', 'body_html'
+    )
     export_files
     export_form_content
 
@@ -65,7 +67,9 @@ class ExportCmsContentSetService < CivilService::Service
       filename = model.public_send(filename_attribute)
       path = File.expand_path("#{subdir}/#{filename}.liquid", content_set.root_path)
       frontmatter_attrs = frontmatter_for_content(model)
-      inherited_content = inherited_template_content_for(subdir, model.public_send(filename_attribute))
+      inherited_content = inherited_template_content_for(
+        subdir, model.public_send(filename_attribute)
+      )
       content = model.public_send(content_attribute)
       next if [content, frontmatter_attrs] == inherited_content
 
