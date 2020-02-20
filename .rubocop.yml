@@ -1,6 +1,10 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+
 AllCops:
   DisabledByDefault: true
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
   Exclude:
     - bin/bundle
     - bin/rails
@@ -20,26 +24,12 @@ Layout/AccessModifierIndentation:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#indent-public-private-protected'
   Enabled: true
 
-Layout/AlignArray:
+Layout/ArrayAlignment:
   Description: >-
                  Align the elements of an array literal if they span more than
                  one line.
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#align-multiline-arrays'
   Enabled: true
-
-Layout/AlignHash:
-  Description: >-
-                 Align the elements of a hash literal if they span more than
-                 one line.
-  Enabled: true
-
-Layout/AlignParameters:
-  Description: >-
-                 Align the parameters of a method call if they span more
-                 than one line.
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-double-indent'
-  Enabled: true
-  EnforcedStyle: with_fixed_indentation
 
 Layout/BlockAlignment:
   Description: 'Align block ends correctly.'
@@ -126,8 +116,26 @@ Layout/ExtraSpacing:
   Description: 'Do not use unnecessary spacing.'
   Enabled: true
 
-Layout/FirstArgument:
+Layout/FirstArgumentIndentation:
   Description: 'Checks the indentation of the first parameter in a method call.'
+  Enabled: true
+
+Layout/FirstArrayElementIndentation:
+  Description: >-
+                 Checks the indentation of the first element in an array
+                 literal.
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  Description: 'Checks the indentation of the first key in a hash literal.'
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  Description: >-
+                 Align the elements of a hash literal if they span more than
+                 one line.
   Enabled: true
 
 Layout/InitialIndentation:
@@ -139,18 +147,6 @@ Layout/IndentationConsistency:
   Description: 'Keep indentation straight.'
   Enabled: true
 
-Layout/IndentFirstArrayElement:
-  Description: >-
-                 Checks the indentation of the first element in an array
-                 literal.
-  Enabled: true
-  EnforcedStyle: consistent
-
-Layout/IndentFirstHashElement:
-  Description: 'Checks the indentation of the first key in a hash literal.'
-  Enabled: true
-  EnforcedStyle: consistent
-
 Layout/IndentationWidth:
   Description: 'Use 2 spaces for indentation.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
@@ -161,6 +157,12 @@ Layout/LeadingCommentSpace:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#hash-space'
   Enabled: true
 
+Layout/LineLength:
+  Description: 'Limit lines to 100 characters.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#80-character-limits'
+  Enabled: true
+  Max: 100
+
 Layout/MultilineBlockLayout:
   Description: 'Ensures newlines after multiline block do statements.'
   Enabled: true
@@ -170,6 +172,14 @@ Layout/MultilineOperationIndentation:
                  Checks indentation of binary operations that span more than
                  one line.
   Enabled: true
+
+Layout/ParameterAlignment:
+  Description: >-
+                 Align the parameters of a method call if they span more
+                 than one line.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-double-indent'
+  Enabled: true
+  EnforcedStyle: with_fixed_indentation
 
 # Disabling because of https://github.com/rubocop-hq/rubocop/issues/6918
 Layout/RescueEnsureAlignment:
@@ -287,7 +297,7 @@ Layout/Tab:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
   Enabled: true
 
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Description: 'Checks trailing blank lines and final newline.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#newline-eof'
   Enabled: true
@@ -367,11 +377,6 @@ Lint/FormatParameterMismatch:
   Description: 'The number of parameters to format/sprint must match the fields.'
   Enabled: true
 
-Lint/HandleExceptions:
-  Description: "Don't suppress exception."
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#dont-hide-exceptions'
-  Enabled: true
-
 Lint/LiteralAsCondition:
   Description: 'Checks of literals used in conditions.'
   Enabled: true
@@ -410,6 +415,11 @@ Lint/RedundantCopDisableDirective:
                  It must be explicitly disabled.
   Enabled: true
 
+Lint/RedundantStringCoercion:
+  Description: 'Checks for Object#to_s usage in string interpolation.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-to-s'
+  Enabled: true
+
 Lint/RequireParentheses:
   Description: >-
                  Use parentheses in the method call to avoid confusion
@@ -427,9 +437,9 @@ Lint/ShadowingOuterLocalVariable:
                  for block arguments or block local variables.
   Enabled: true
 
-Lint/StringConversionInInterpolation:
-  Description: 'Checks for Object#to_s usage in string interpolation.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-to-s'
+Lint/SuppressedException:
+  Description: "Don't suppress exception."
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#dont-hide-exceptions'
   Enabled: true
 
 Lint/UnderscorePrefixedVariableName:
@@ -502,12 +512,6 @@ Metrics/CyclomaticComplexity:
                  of test cases needed to validate a method.
   Enabled: true
 
-Metrics/LineLength:
-  Description: 'Limit lines to 100 characters.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#80-character-limits'
-  Enabled: true
-  Max: 100
-
 Metrics/MethodLength:
   Description: 'Avoid methods longer than 30 lines of code.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#short-methods'
@@ -571,7 +575,7 @@ Naming/PredicateName:
   Description: 'Check the names of predicate methods.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#bool-methods-qmark'
   Enabled: true
-  NamePrefixBlacklist:
+  ForbiddenPrefixes:
     - is_
 
 Naming/VariableName:
