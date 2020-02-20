@@ -2,9 +2,9 @@ class SearchResult
   class Entry
     attr_reader :document
     delegate :searchable, :pg_search_highlight, :pg_search_rank, to: :document
-    alias_method :model, :searchable
-    alias_method :highlight, :pg_search_highlight
-    alias_method :rank, :pg_search_rank
+    alias model searchable
+    alias highlight pg_search_highlight
+    alias rank pg_search_rank
 
     def initialize(document)
       @document = document
