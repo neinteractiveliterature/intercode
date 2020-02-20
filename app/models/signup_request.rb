@@ -8,8 +8,8 @@ class SignupRequest < ApplicationRecord
 
   validates :state, presence: true, inclusion: { in: Types::SignupRequestStateType.values.keys }
   validate :ensure_all_fields_point_at_the_same_convention
-  validates_presence_of :result_signup,
-    if: ->(signup_request) { signup_request.state == 'accepted' }
+  validates :result_signup,
+    presence: { if: ->(signup_request) { signup_request.state == 'accepted' } }
 
   def to_liquid
     SignupRequestDrop.new(self)

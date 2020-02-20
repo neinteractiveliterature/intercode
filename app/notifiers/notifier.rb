@@ -93,7 +93,7 @@ class Notifier
     return false unless sends_sms?
     return true if ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?
 
-    (convention.starts_at - 24.hours) <= Time.now && (convention.ends_at > Time.now)
+    (convention.starts_at - 24.hours) <= Time.zone.now && (convention.ends_at > Time.zone.now)
   end
 
   def sms_content

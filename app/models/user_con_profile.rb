@@ -94,9 +94,7 @@ class UserConProfile < ApplicationRecord
   end
 
   # @deprecated
-  def privileges
-    user.privileges
-  end
+  delegate :privileges, to: :user
 
   def is_team_member? # rubocop:disable Naming/PredicateName
     return true if team_members.loaded? && team_members.size > 0
@@ -172,6 +170,6 @@ class UserConProfile < ApplicationRecord
   end
 
   def touch_team_member_events
-    Event.where(id: team_members.select(:event_id)).update_all(updated_at: Time.now)
+    Event.where(id: team_members.select(:event_id)).update_all(updated_at: Time.zone.now)
   end
 end

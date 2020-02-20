@@ -69,10 +69,10 @@ class EventSignupService < CivilService::Service
   def signup_count_must_be_allowed
     return if team_member?
     return if signup_state == 'confirmed' && !counts_towards_total?
-    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
+    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.zone.now)
 
     case @max_signups_allowed
-    when 'not_now' then return # ConventionRegistrationFreeze will take care of this
+    when 'not_now' then nil # ConventionRegistrationFreeze will take care of this
     when 'not_yet' then errors.add :base, 'Signups are not allowed at this time.'
     else
       unless signup_count_allowed?(user_signup_count + 1)

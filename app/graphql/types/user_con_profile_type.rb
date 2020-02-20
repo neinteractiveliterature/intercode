@@ -1,5 +1,5 @@
 class Types::UserConProfileType < Types::BaseObject
-  LEGACY_PHONE_DEPRECATION_REASON = (<<~TEXT).gsub(/\n/, ' ').strip
+  LEGACY_PHONE_DEPRECATION_REASON = (<<~TEXT).tr("\n", ' ').strip
   Daytime phone, evening phone, best time to call, and preferred contact method fields are
   deprecated in favor of just using the mobile phone and/or email address.  For conventions that
   used the deprecated fields, they will remain available in form_response_attrs_json.

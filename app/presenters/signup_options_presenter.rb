@@ -33,9 +33,7 @@ class SignupOptionsPresenter
       false
     end
 
-    def counted?
-      bucket.counted?
-    end
+    delegate :counted?, to: :bucket
   end
 
   class NoPreferenceSignupOption
@@ -159,7 +157,7 @@ class SignupOptionsPresenter
     @no_preference_options ||= begin
       if !event.registration_policy.allow_no_preference_signups?
         []
-      elsif buckets.reject(&:slots_unlimited?).select(&:counted?).size <= 1
+      elsif buckets.reject(&:slots_unlimited?).count(&:counted?) <= 1
         []
       else
         [NoPreferenceSignupOption.new]

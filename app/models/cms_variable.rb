@@ -5,9 +5,9 @@ class CmsVariable < ApplicationRecord
   model_with_parent
   after_commit :touch_parent
 
-  validates_presence_of :key
-  validates_format_of :key, with: /\A[a-z]\w*\z/
-  validates_uniqueness_of :key, scope: [:parent_type, :parent_id]
+  validates :key, presence: true
+  validates :key, format: { with: /\A[a-z]\w*\z/ }
+  validates :key, uniqueness: { scope: [:parent_type, :parent_id] }
 
   serialize :value, JSON
 

@@ -119,7 +119,9 @@ class EventPolicy < ApplicationPolicy
     # The fast path where we can do simpler checks inside a single convention
     def resolve_for_single_convention(convention)
       return scope.all if convention.site_mode == 'single_event'
-      return scope.all if has_convention_permission?(convention, 'read_inactive_events', 'update_events')
+      if has_convention_permission?(convention, 'read_inactive_events', 'update_events')
+        return scope.all
+      end
       if has_schedule_release_permissions?(convention, convention.show_event_list)
         return scope.where(status: 'active')
       end

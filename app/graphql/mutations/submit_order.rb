@@ -9,7 +9,7 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
 
   def resolve(**args)
     if args[:payment_mode] == 'now'
-      order.update!(submitted_at: Time.now)
+      order.update!(submitted_at: Time.zone.now)
 
       service = PayOrderService.new(order, args[:stripe_token])
       result = service.call
@@ -20,7 +20,7 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
         raise err
       end
     else
-      order.update!(status: 'unpaid', submitted_at: Time.now)
+      order.update!(status: 'unpaid', submitted_at: Time.zone.now)
     end
 
     { order: order.reload }

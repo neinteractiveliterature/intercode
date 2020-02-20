@@ -12,5 +12,5 @@ class Form < ApplicationRecord
   has_many :user_con_profile_conventions,
     class_name: 'Convention', foreign_key: 'user_con_profile_form_id', dependent: :nullify
 
-  validates_inclusion_of :form_type, in: FORM_TYPE_CONFIG.keys
+  validates :form_type, inclusion: { in: FORM_TYPE_CONFIG.keys }
 end
