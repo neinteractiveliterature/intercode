@@ -9,7 +9,8 @@ class TeamMember < ApplicationRecord
   validates :user_con_profile, presence: true
   validates :user_con_profile_id, uniqueness: { scope: :event_id }
 
-  validates :receive_signup_email, inclusion: { in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase) }
+  validates :receive_signup_email,
+    inclusion: { in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase) }
 
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention

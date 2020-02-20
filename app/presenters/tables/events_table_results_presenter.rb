@@ -15,7 +15,9 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
 
   attr_reader :pundit_user, :convention
 
-  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
+  def initialize(
+    base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil
+  )
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @pundit_user = pundit_user

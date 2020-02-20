@@ -15,7 +15,9 @@ module CmsContentPolicy
         if oauth_scope?(:manage_conventions)
           model_name = self.class.name.split('::')[-2].gsub(/Policy\z/, '')
 
-          dw.add(parent_type: 'Convention', parent_id: conventions_with_permission('update_cms_content'))
+          dw.add(
+            parent_type: 'Convention', parent_id: conventions_with_permission('update_cms_content')
+          )
           dw.add(
             id: CmsContentGroupAssociation.where(
               content_type: model_name,
@@ -37,7 +39,7 @@ module CmsContentPolicy
         has_convention_permission?(convention, 'update_cms_content') ||
         (
           record.respond_to?(:cms_content_groups) &&
-          cms_content_group_ids_with_permission_in_convention(convention, 'update_content').any? do |id|
+          group_ids_with_update_content_in_convention.any? do |id|
             record.cms_content_group_ids.include?(id)
           end
         )
@@ -58,5 +60,9 @@ module CmsContentPolicy
     return record.parent if record.parent.is_a?(Convention)
 
     nil
+  end
+
+  def group_ids_with_update_content_in_convention
+    cms_content_group_ids_with_permission_in_convention(convention, 'update_content')
   end
 end

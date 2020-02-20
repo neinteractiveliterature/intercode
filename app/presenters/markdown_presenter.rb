@@ -1,5 +1,7 @@
 class MarkdownPresenter
-  ALLOWED_LIQUID_NODE_CLASSES = [String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube]
+  ALLOWED_LIQUID_NODE_CLASSES = [
+    String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube
+  ]
 
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::TextHelper
@@ -58,7 +60,9 @@ class MarkdownPresenter
     pipeline << markdown_renderer
     pipeline << sanitizer
     pipeline << liquid_renderer if sanitize_content
-    pipeline << ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '') }
+    pipeline << ->(content) {
+      content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '')
+    }
     pipeline << ->(content) { MarkdownPresenter.strip_single_p(content) } if strip_single_p
 
     pipeline

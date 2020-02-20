@@ -13,7 +13,10 @@ class FormResponseChangeGroupPresenter
   def html
     stdout, stderr, status = Open3.capture3(shell_command)
     unless status == 0
-      Rollbar.error "#{SCRIPT_PATH} returned error code #{status}", stdout: stdout, stderr: stderr, component_props: component_props.to_json
+      Rollbar.error(
+        "#{SCRIPT_PATH} returned error code #{status}",
+        stdout: stdout, stderr: stderr, component_props: component_props.to_json
+      )
       return 'Sorry, an error occurred trying to render these changes.'
     end
 

@@ -15,7 +15,10 @@ class Mutations::CancelOrder < Mutations::BaseMutation
       if charge.refunded
         refund = charge.refunds.first
       else
-        refund = Stripe::Refund.create({ charge: order.charge_id }, api_key: convention.stripe_secret_key)
+        refund = Stripe::Refund.create(
+          { charge: order.charge_id },
+          api_key: convention.stripe_secret_key
+        )
       end
     end
 
