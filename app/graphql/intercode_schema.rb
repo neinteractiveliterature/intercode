@@ -28,12 +28,12 @@ class IntercodeSchema < GraphQL::Schema
     end
 
     def to_h
-      super.merge({
-        "extensions" => {
-          "code" => code,
+      super.merge(
+        'extensions' => {
+          'code' => code,
           "current_user_id": current_user&.id
         }
-      })
+      )
     end
   end
 

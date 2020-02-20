@@ -104,7 +104,9 @@ class Types::QueryType < Types::BaseObject
 
     contents = scopes.flat_map do |scope|
       filtered_scope = scope
-      filtered_scope = filtered_scope.where('lower(name) like ?', "%#{name.downcase}%") if name.present?
+      if name.present?
+        filtered_scope = filtered_scope.where('lower(name) like ?', "%#{name.downcase}%")
+      end
 
       filtered_scope.limit(10).to_a
     end
@@ -114,9 +116,7 @@ class Types::QueryType < Types::BaseObject
 
   field :cms_content_groups, [Types::CmsContentGroupType], null: false
 
-  def cms_content_groups
-    cms_parent.cms_content_groups
-  end
+  delegate :cms_content_groups, to: :cms_parent
 
   field :cms_content_group, Types::CmsContentGroupType, null: false do
     argument :id, Int, required: true

@@ -19,7 +19,7 @@ class ScheduledMoneyValue < ScheduledValue::ScheduledValue
       )
     end
 
-    def as_json(options = nil)
+    def as_json(_options = nil)
       attributes
     end
 

@@ -45,13 +45,13 @@ class FormResponseChangeGroupPresenter
       'formItem' => form_item_props(change.response, change.field_identifier),
       'user_con_profile' => {
         'id' => change.user_con_profile.id,
-        'name_without_nickname' => change.user_con_profile.name_without_nickname,
+        'name_without_nickname' => change.user_con_profile.name_without_nickname
       },
       'field_identifier' => change.field_identifier,
       'previous_value' => change.previous_value,
       'new_value' => change.new_value,
       'created_at' => change.created_at,
-      'updated_at' => change.updated_at,
+      'updated_at' => change.updated_at
     }
   end
 

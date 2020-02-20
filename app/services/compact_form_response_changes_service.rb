@@ -40,7 +40,8 @@ class CompactFormResponseChangesService < CivilService::Service
   def compact_changes(response_id, raw_changes)
     compacted_changes = CompactingFormResponseChangesPresenter.new(raw_changes).compacted_changes
     compacted_changes.each do |change|
-      created_at, updated_at = change.created_at, change.updated_at
+      created_at = change.created_at
+      updated_at = change.updated_at
       change.save!
       change.update_columns(created_at: created_at, updated_at: updated_at)
     end

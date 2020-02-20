@@ -6,7 +6,7 @@ class TicketType < ApplicationRecord
   has_many :maximum_event_provided_tickets_overrides
 
   # Only allow letters, numbers, and underscores
-  validates_format_of :name, with: /\A\w+\z/, allow_blank: true
+  validates :name, format: { with: /\A\w+\z/, allow_blank: true }
 
   scope :publicly_available, -> { where(publicly_available: true) }
   scope :event_provided, -> { where('maximum_event_provided_tickets > 0') }
@@ -23,7 +23,7 @@ class TicketType < ApplicationRecord
   end
 
   def price
-    price_at(Time.now)
+    price_at(Time.zone.now)
   end
 
   def next_price_change_after(time)
@@ -31,7 +31,7 @@ class TicketType < ApplicationRecord
   end
 
   def next_price_change
-    next_price_change_after(Time.now)
+    next_price_change_after(Time.zone.now)
   end
 
   def next_price_after(time)
@@ -42,7 +42,7 @@ class TicketType < ApplicationRecord
   end
 
   def next_price
-    next_price_after(Time.now)
+    next_price_after(Time.zone.now)
   end
 
   def event_provided?

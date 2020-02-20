@@ -55,15 +55,15 @@ class Convention < ApplicationRecord
   validate :show_event_list_must_be_at_least_as_permissive_as_show_schedule
 
   def started?
-    starts_at && starts_at <= Time.now
+    starts_at && starts_at <= Time.zone.now
   end
 
   def ended?
-    ends_at && ends_at <= Time.now
+    ends_at && ends_at <= Time.zone.now
   end
 
   def registrations_frozen?
-    maximum_event_signups.value_at(Time.now) == 'not_now'
+    maximum_event_signups.value_at(Time.zone.now) == 'not_now'
   end
 
   def tickets_available_for_purchase?
@@ -71,7 +71,7 @@ class Convention < ApplicationRecord
     return false if ticket_mode == 'disabled'
 
     ticket_types.publicly_available.any? do |ticket_type|
-      ticket_type.pricing_schedule.has_value_at?(Time.now)
+      ticket_type.pricing_schedule.has_value_at?(Time.zone.now)
     end
   end
 

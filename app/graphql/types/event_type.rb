@@ -164,6 +164,6 @@ class Types::EventType < Types::BaseObject
   field :team_member_name, String, deprecation_reason: 'Please use event_category.team_member_name instead', null: false
 
   def team_member_name
-    event_category.then { |category| category.team_member_name }
+    event_category.then(&:team_member_name)
   end
 end
