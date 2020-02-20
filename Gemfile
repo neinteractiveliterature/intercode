@@ -118,6 +118,11 @@ group :development do
 
   # Ruby language server for LSP-compatible editors
   gem 'solargraph'
+
+  # Linting
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
 end
 
 group :development, :test do
