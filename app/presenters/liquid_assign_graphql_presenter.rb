@@ -15,10 +15,10 @@ class LiquidAssignGraphqlPresenter
   def drop_class_name
     case assign
     when ActiveSupport::SafeBuffer then 'String'
-    when Array then "Array<#{LiquidAssignGraphqlPresenter.new(nil, assign.first).drop_class_name}>"
+    when Array then "Array<#{recursive_drop_class_name(nil, assign.first)}>"
     when CmsVariable then 'CmsVariable'
-    when Hash then "Hash<#{LiquidAssignGraphqlPresenter.new(nil, assign.keys.first).drop_class_name}, #{LiquidAssignGraphqlPresenter.new(nil, assign.values.first).drop_class_name}>"
-    when Proc then LiquidAssignGraphqlPresenter.new(name, assign.call).drop_class_name
+    when Hash then hash_drop_class_name
+    when Proc then recursive_drop_class_name(name, assign.call)
     else assign.to_liquid.class.name
     end
   end
@@ -26,5 +26,17 @@ class LiquidAssignGraphqlPresenter
   def cms_variable_value_json
     return unless assign.is_a?(CmsVariable)
     JSON.dump(assign.value)
+  end
+
+  private
+
+  def hash_drop_class_name
+    key_class_name = recursive_drop_class_name(nil, assign.keys.first)
+    value_class_name = recursive_drop_class_name(nil, assign.values.first)
+    "Hash<#{key_class_name}, #{value_class_name}>"
+  end
+
+  def recursive_drop_class_name(name, value)
+    self.class.new(name, value).drop_class_name
   end
 end

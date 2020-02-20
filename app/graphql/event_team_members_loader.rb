@@ -6,7 +6,8 @@ class EventTeamMembersLoader < GraphQL::Batch::Loader
   end
 
   def perform(keys)
-    team_member_scope = TeamMember.includes(event: [:convention], user_con_profile: [:team_members, :convention])
+    team_member_scope = TeamMember
+      .includes(event: [:convention], user_con_profile: [:team_members, :convention])
       .where(event_id: keys.map(&:id))
 
     team_members_by_event_id = team_member_scope.to_a.group_by(&:event_id)

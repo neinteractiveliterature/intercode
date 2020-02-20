@@ -24,7 +24,9 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
       raise "#{subject_profile.name_without_nickname} has no #{convention.ticket_name}"
     end
 
-    delete_result = DeleteTicketService.new(ticket: existing_ticket, refund: existing_ticket.charge_id.present?).call!
+    delete_result = DeleteTicketService.new(
+      ticket: existing_ticket, refund: existing_ticket.charge_id.present?
+    ).call!
     subject_profile.reload
     result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!
 

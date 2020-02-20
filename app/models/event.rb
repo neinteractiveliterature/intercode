@@ -114,7 +114,9 @@ class Event < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
-  scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
+  scope :regular, -> {
+    where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id))
+  }
 
   scope :joins_rating_for_user_con_profile, ->(user_con_profile) do
     if user_con_profile

@@ -12,7 +12,8 @@ class FormItemPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope.where(
-        form_section_id: FormSectionPolicy::Scope.new(authorization_info, FormSection.all).select(:id)
+        form_section_id: FormSectionPolicy::Scope.new(authorization_info, FormSection.all)
+          .select(:id)
       )
     end
   end
