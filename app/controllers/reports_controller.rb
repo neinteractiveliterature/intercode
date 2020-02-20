@@ -23,7 +23,8 @@ class ReportsController < ApplicationController
 
   def events_by_time
     @runs = convention.runs.where(
-      event_id: convention.events.joins(:event_category).where.not(event_categories: { name: 'Filler event' }).active.select(:id)
+      event_id: convention.events.joins(:event_category)
+        .where.not(event_categories: { name: 'Filler event' }).active.select(:id)
     ).order(:starts_at).includes(:event, :rooms)
   end
 
@@ -81,6 +82,8 @@ class ReportsController < ApplicationController
   end
 
   def volunteer_event_category_ids
-    @volunteer_event_category_ids ||= convention.event_categories.where("name ilike '%volunteer%'").pluck(:id)
+    @volunteer_event_category_ids ||= convention.event_categories
+      .where("name ilike '%volunteer%'")
+      .pluck(:id)
   end
 end

@@ -134,7 +134,10 @@ class SignupCountPresenter
     return 1.0 if bucket.slots_unlimited?
     return 0.0 if bucket.total_slots == 0
 
-    (bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key)).to_f / bucket.total_slots.to_f
+    remaining_slots = (
+      bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key)
+    )
+    remaining_slots.to_f / bucket.total_slots.to_f
   end
 
   def has_waitlist?
@@ -156,9 +159,11 @@ class SignupCountPresenter
   end
 
   def signup_count(state: nil, bucket_key: nil, counted: nil)
-    bucket_key_and_counted_hashes = signup_count_by_state_and_bucket_key_and_counted.select do |state_key, _hash|
-      state.nil? || state == state_key
-    end.values
+    bucket_key_and_counted_hashes = begin
+      signup_count_by_state_and_bucket_key_and_counted.select do |state_key, _hash|
+        state.nil? || state == state_key
+      end.values
+    end
 
     counted_hashes = bucket_key_and_counted_hashes.flat_map do |hash|
       hash.select do |bucket_key_key, _hash|

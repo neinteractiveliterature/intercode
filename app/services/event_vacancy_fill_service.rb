@@ -11,7 +11,9 @@ class EventVacancyFillService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false)
+  def initialize(
+    run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false
+  )
     @run = run
     @bucket_key = bucket_key
     @skip_locking = skip_locking

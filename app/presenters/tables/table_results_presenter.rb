@@ -73,7 +73,11 @@ class Tables::TableResultsPresenter
     return scope unless sort.present?
 
     expanded_scope = sort.inject(scope) do |current_scope, sort_entry|
-      expand_scope_for_sort(current_scope, sort_entry[:field].to_sym, sort_entry[:desc] ? 'DESC' : 'ASC')
+      expand_scope_for_sort(
+        current_scope,
+        sort_entry[:field].to_sym,
+        sort_entry[:desc] ? 'DESC' : 'ASC'
+      )
     end
 
     expanded_scope.order(

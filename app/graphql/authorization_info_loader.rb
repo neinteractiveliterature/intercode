@@ -7,10 +7,12 @@ class AuthorizationInfoLoader < GraphQL::Batch::Loader
   end
 
   def perform(keys)
-    associated_records_loader = associated_records_loader(keys)
     users_with_keys(keys).each do |(key, user)|
       known_user_con_profiles = model.is_a?(UserConProfile) ? [model] : []
-      fulfill(key, AuthorizationInfo.new(user, nil, known_user_con_profiles: known_user_con_profiles))
+      fulfill(
+        key,
+        AuthorizationInfo.new(user, nil, known_user_con_profiles: known_user_con_profiles)
+      )
     end
     keys.each { |key| fulfill(key, nil) unless fulfilled?(key) }
   end
@@ -23,10 +25,6 @@ class AuthorizationInfoLoader < GraphQL::Batch::Loader
     else
       keys.map(&:id)
     end
-  end
-
-  def associated_records_loader(keys)
-    Ability::AssociatedRecordsLoader.new(user_ids(keys))
   end
 
   def users_with_keys(keys)
