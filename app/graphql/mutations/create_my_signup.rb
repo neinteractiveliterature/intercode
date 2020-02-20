@@ -26,9 +26,7 @@ class Mutations::CreateMySignup < Mutations::BaseMutation
       context[:current_user]
     ).call
 
-    if result.failure?
-      raise GraphQL::ExecutionError, result.errors.full_messages.join(', ')
-    end
+    raise GraphQL::ExecutionError, result.errors.full_messages.join(', ') if result.failure?
 
     { signup: result.signup }
   end

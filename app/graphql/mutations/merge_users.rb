@@ -12,8 +12,8 @@ class Mutations::MergeUsers < Mutations::BaseMutation
 
   def resolve(user_ids:, winning_user_id:, winning_user_con_profiles:)
     winning_profile_ids_by_convention_id = winning_user_con_profiles
-      .index_by { |winning_profile| winning_profile.convention_id }
-      .transform_values { |winning_profile| winning_profile.user_con_profile_id }
+      .index_by(&:convention_id)
+      .transform_values(&:user_con_profile_id)
 
     result = MergeUsersService.new(
       user_ids: user_ids,

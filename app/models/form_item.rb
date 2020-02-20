@@ -67,13 +67,14 @@ class FormItem < ApplicationRecord
   serialize :properties, JSON
   serialize :default_value, JSON
 
-  validates_presence_of :item_type
-  validates_inclusion_of :item_type, in: PROPERTIES_SCHEMA.keys.map(&:to_s)
+  validates :item_type, presence: true
+  validates :item_type, inclusion: { in: PROPERTIES_SCHEMA.keys.map(&:to_s) }
   validate :ensure_unique_identifier_across_form
-  validates_uniqueness_of :identifier,
+  validates :identifier, uniqueness: {
     allow_nil: true,
     conditions: -> { joins(:form_section) },
     scope: 'form_sections.form_id'
+  }
   validate :ensure_properties_match_schema
 
   private

@@ -48,7 +48,7 @@ class RefreshSslCertificateService < CivilService::Service
 
   def existing_certificate_needs_renewal?
     return true unless usable_endpoint && existing_certificate
-    Time.now >= (existing_certificate.not_after - 2.weeks)
+    Time.zone.now >= (existing_certificate.not_after - 2.weeks)
   rescue StandardError => e
     Rails.logger.warn(e)
     true

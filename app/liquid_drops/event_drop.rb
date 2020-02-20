@@ -65,9 +65,7 @@ class EventDrop < Liquid::Drop
 
   # @deprecated Please use event_category.team_member_name instead
   # @return [String] The name to use for "team members" in this event (e.g. "GM", "panelist")
-  def team_member_name
-    event_category.team_member_name
-  end
+  delegate :team_member_name, to: :event_category
 
   # @!method description
   #   @return [String] The description of this event, rendered to HTML

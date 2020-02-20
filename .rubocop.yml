@@ -119,6 +119,7 @@ Layout/ExtraSpacing:
 Layout/FirstArgumentIndentation:
   Description: 'Checks the indentation of the first parameter in a method call.'
   Enabled: true
+  EnforcedStyle: consistent
 
 Layout/FirstArrayElementIndentation:
   Description: >-
