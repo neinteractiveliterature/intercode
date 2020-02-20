@@ -15,7 +15,7 @@ engines:
         javascript:
           mass_threshold: 150
   eslint:
-    enabled: true
+    enabled: false
     config:
       config: .eslintrc.js
     channel: "eslint-4"
