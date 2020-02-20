@@ -35,6 +35,6 @@ class NotifyFormResponseChangesService < CivilService::Service
 
   def notify_changes(response_id, changes)
     send_mail.call(response_id, changes) if changes.any?
-    FormResponseChange.where(id: changes.map(&:id)).update_all(notified_at: Time.now)
+    FormResponseChange.where(id: changes.map(&:id)).update_all(notified_at: Time.zone.now)
   end
 end

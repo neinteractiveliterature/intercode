@@ -12,9 +12,7 @@ class Mutations::AcceptSignupRequest < Mutations::BaseMutation
       whodunit: current_user
     ).call
 
-    if result.failure?
-      raise GraphQL::ExecutionError, result.errors.full_messages.join(', ')
-    end
+    raise GraphQL::ExecutionError, result.errors.full_messages.join(', ') if result.failure?
 
     { signup: result.signup, signup_request: signup_request }
   end

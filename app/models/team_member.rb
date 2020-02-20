@@ -7,9 +7,9 @@ class TeamMember < ApplicationRecord
   # A team member is a user that exists, and is not already a member
   # of the team for this event
   validates :user_con_profile, presence: true
-  validates_uniqueness_of :user_con_profile_id, scope: :event_id
+  validates :user_con_profile_id, uniqueness: { scope: :event_id }
 
-  validates_inclusion_of :receive_signup_email, in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase)
+  validates :receive_signup_email, inclusion: { in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase) }
 
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
@@ -29,7 +29,7 @@ class TeamMember < ApplicationRecord
   end
 
   def receive_signup_email=(value)
-    write_attribute(:receive_signup_email, value&.downcase)
+    self[:receive_signup_email] = value&.downcase
   end
 
   def display_team_member

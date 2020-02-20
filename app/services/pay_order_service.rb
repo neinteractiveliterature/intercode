@@ -55,7 +55,7 @@ class PayOrderService < CivilService::Service
       payment_note: "Paid via Stripe on \
 #{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
       charge_id: charge.id,
-      paid_at: Time.at(charge.created)
+      paid_at: Time.zone.at(charge.created)
     )
   end
 
