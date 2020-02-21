@@ -48,7 +48,7 @@
     "bootstrap.native": "^2.0.27",
     "bytes": "^3.1.0",
     "cache-loader": "^4.1.0",
-    "cadmus-navbar-admin": "^2.0.0",
+    "cadmus-navbar-admin": "^3.0.0",
     "caniuse-lite": "^1.0.30001030",
     "classnames": "^2.2.6",
     "clipboard": "^2.0.1",
