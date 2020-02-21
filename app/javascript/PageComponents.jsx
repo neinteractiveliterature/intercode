@@ -1,5 +1,5 @@
 import React from 'react';
-import mapValues from 'lodash-es/mapValues';
+import mapValues from 'lodash/mapValues';
 
 import ClickwrapAgreement from './ClickwrapAgreement';
 import CmsPage from './CmsPage';

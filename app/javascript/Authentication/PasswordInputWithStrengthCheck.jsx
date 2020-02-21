@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import zxcvbn from 'zxcvbn';
-import pickBy from 'lodash-es/pickBy';
+import pickBy from 'lodash/pickBy';
 import classNames from 'classnames';
 
 import PopperDropdown from '../UIComponents/PopperDropdown';

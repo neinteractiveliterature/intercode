@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import uniq from 'lodash-es/uniq';
+import uniq from 'lodash/uniq';
 
 export default function useColumnSelection({
   alwaysVisibleColumns, defaultVisibleColumns, possibleColumns, history,

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import fetch from 'unfetch';
-import isEqual from 'lodash-es/isEqual';
+import isEqual from 'lodash/isEqual';
 
 const AuthenticityTokensContext = React.createContext({});
 

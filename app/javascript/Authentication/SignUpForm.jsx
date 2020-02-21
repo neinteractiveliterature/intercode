@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 // eslint-disable-next-line import/no-named-as-default
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -12,9 +12,12 @@ import AuthenticationModalContext from './AuthenticationModalContext';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields from './UserFormFields';
 import useUniqueId from '../useUniqueId';
-import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import LoadingIndicator from '../LoadingIndicator';
+
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'));
 
 async function signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue) {
   const formData = new FormData();
@@ -80,11 +83,13 @@ function SignUpForm() {
           <UserFormFields formState={formState} setFormState={setFormState} />
           <div className="form-group">
             <label htmlFor={passwordFieldId}>Password</label>
-            <PasswordInputWithStrengthCheck
-              id={passwordFieldId}
-              value={password}
-              onChange={setPassword}
-            />
+            <Suspense fallback={<LoadingIndicator />}>
+              <PasswordInputWithStrengthCheck
+                id={passwordFieldId}
+                value={password}
+                onChange={setPassword}
+              />
+            </Suspense>
           </div>
           <PasswordConfirmationInput
             password={password}

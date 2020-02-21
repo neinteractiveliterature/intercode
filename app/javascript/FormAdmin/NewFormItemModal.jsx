@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import flatMap from 'lodash-es/flatMap';
+import flatMap from 'lodash/flatMap';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
 

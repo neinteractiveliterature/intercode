@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import intersection from 'lodash-es/intersection';
+import intersection from 'lodash/intersection';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
