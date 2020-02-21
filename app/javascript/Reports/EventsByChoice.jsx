@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import flatMap from 'lodash-es/flatMap';
-import max from 'lodash-es/max';
-import mapValues from 'lodash-es/mapValues';
-import groupBy from 'lodash-es/groupBy';
-import keyBy from 'lodash-es/keyBy';
-import sum from 'lodash-es/sum';
+import flatMap from 'lodash/flatMap';
+import max from 'lodash/max';
+import mapValues from 'lodash/mapValues';
+import groupBy from 'lodash/groupBy';
+import keyBy from 'lodash/keyBy';
+import sum from 'lodash/sum';
 import { capitalize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 

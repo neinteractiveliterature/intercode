@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import debounce from 'lodash-es/debounce';
+import debounce from 'lodash/debounce';
 
 export default function useDebouncedState(initialValue, onChange, wait) {
   const [transientValue, setTransientValue] = useState(initialValue);

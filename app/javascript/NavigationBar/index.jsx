@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import sortBy from 'lodash-es/sortBy';
+import sortBy from 'lodash/sortBy';
 import { withRouter } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';

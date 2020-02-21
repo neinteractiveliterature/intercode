@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import flatMap from 'lodash-es/flatMap';
+import flatMap from 'lodash/flatMap';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
 import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';

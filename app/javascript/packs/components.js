@@ -1,6 +1,6 @@
 /* eslint-disable import/first, import/newline-after-import */
 
-import mapValues from 'lodash-es/mapValues';
+import mapValues from 'lodash/mapValues';
 
 import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';

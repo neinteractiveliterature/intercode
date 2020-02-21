@@ -1,4 +1,4 @@
-import flatMap from 'lodash-es/flatMap';
+import flatMap from 'lodash/flatMap';
 
 import PermissionNames from '../../../config/permission_names.json';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import flatten from 'lodash-es/flatten';
+import flatten from 'lodash/flatten';
 import { humanize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 

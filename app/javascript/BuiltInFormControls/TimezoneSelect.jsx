@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import moment from 'moment-timezone';
 import createFilterOptions from 'react-select-fast-filter-options';
-import memoize from 'lodash-es/memoize';
+import memoize from 'lodash/memoize';
 import useUniqueId from '../useUniqueId';
 
 const NOW = new Date().getTime();

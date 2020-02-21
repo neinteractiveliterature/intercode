@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import intersection from 'lodash-es/intersection';
+import intersection from 'lodash/intersection';
 import { useQuery } from '@apollo/react-hooks';
 
 import { OrderHistoryQuery } from './queries.gql';
