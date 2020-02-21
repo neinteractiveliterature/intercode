@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
-import isEqual from 'lodash-es/isEqual';
+import isEqual from 'lodash/isEqual';
 
 import FormItemTools from './FormItemTools';
 import FormItemEditorContent from './FormItemEditorContent';

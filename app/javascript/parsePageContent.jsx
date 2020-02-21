@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import camelCase from 'lodash-es/camelCase';
+import camelCase from 'lodash/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
-import reverse from 'lodash-es/reverse';
-import sortBy from 'lodash-es/sortBy';
+import reverse from 'lodash/reverse';
+import sortBy from 'lodash/sortBy';
 import { useQuery } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';

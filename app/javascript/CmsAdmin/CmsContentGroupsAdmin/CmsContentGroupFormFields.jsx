@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import uniqWith from 'lodash-es/uniqWith';
+import uniqWith from 'lodash/uniqWith';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';

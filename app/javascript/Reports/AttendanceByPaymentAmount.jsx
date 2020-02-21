@@ -1,6 +1,6 @@
 import React from 'react';
 import { capitalize } from 'inflected';
-import isEqual from 'lodash-es/isEqual';
+import isEqual from 'lodash/isEqual';
 import { useQuery } from '@apollo/react-hooks';
 
 import { AttendanceByPaymentAmountQuery } from './queries.gql';
