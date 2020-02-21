@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin/src';
 import { useApolloClient } from '@apollo/react-hooks';
 
@@ -7,7 +7,10 @@ import usePageTitle from '../../usePageTitle';
 
 const NavigationItemsAdmin = () => {
   const apolloClient = useApolloClient();
-  const navbarAdminClient = new Client(apolloClient);
+  const navbarAdminClient = useMemo(
+    () => new Client(apolloClient),
+    [apolloClient],
+  );
 
   usePageTitle('CMS Navigation');
 
