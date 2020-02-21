@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uniq from 'lodash-es/uniq';
+import uniq from 'lodash/uniq';
 import { humanize } from 'inflected';
 
 import ObjectDiffDisplay from './ObjectDiffDisplay';

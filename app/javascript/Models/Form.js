@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import keyBy from 'lodash-es/keyBy';
-import compact from 'lodash-es/compact';
-import flatMap from 'lodash-es/flatMap';
+import keyBy from 'lodash/keyBy';
+import compact from 'lodash/compact';
+import flatMap from 'lodash/flatMap';
 
 export default class Form {
   static propType = PropTypes.shape({

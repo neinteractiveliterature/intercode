@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import chunk from 'lodash-es/chunk';
+import chunk from 'lodash/chunk';
 import bytes from 'bytes';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 

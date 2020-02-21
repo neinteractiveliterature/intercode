@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import sortBy from 'lodash-es/sortBy';
+import sortBy from 'lodash/sortBy';
 
 import { normalizeTitle } from '../../../ValueUtils';
 

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import isEqual from 'lodash-es/isEqual';
+import isEqual from 'lodash/isEqual';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import MD5 from 'md5.js';
 

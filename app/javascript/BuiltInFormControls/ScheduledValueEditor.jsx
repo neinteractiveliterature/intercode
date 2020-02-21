@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import maxBy from 'lodash-es/maxBy';
+import maxBy from 'lodash/maxBy';
 import moment from 'moment-timezone';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRow, { scheduledValueTimespanIsValid } from './ScheduledValueTimespanRow';
