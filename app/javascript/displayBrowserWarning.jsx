@@ -2,7 +2,7 @@
 // React components, in case the browser is so old that it can't even load the components.
 
 import { detect } from 'detect-browser';
-import includes from 'lodash-es/includes';
+import includes from 'lodash/includes';
 
 const IOS_WEBVIEW_APP_HOSTS = {
   crios: 'Google Chrome on iOS',

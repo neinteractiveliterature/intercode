@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import sortBy from 'lodash-es/sortBy';
+import sortBy from 'lodash/sortBy';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { Transforms } from '../../ComposableFormUtils';

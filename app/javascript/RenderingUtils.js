@@ -1,4 +1,4 @@
-import flatMap from 'lodash-es/flatMap';
+import flatMap from 'lodash/flatMap';
 
 export function joinReact(array, separator) {
   if (array.length > 1) {

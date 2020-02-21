@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
-import isEqual from 'lodash-es/isEqual';
+import isEqual from 'lodash/isEqual';
 
 import PopperDropdown from '../../UIComponents/PopperDropdown';
 import AppRootContext from '../../AppRootContext';

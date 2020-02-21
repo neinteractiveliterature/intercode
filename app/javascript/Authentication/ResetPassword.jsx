@@ -1,12 +1,17 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {
+  useState, useContext, useMemo, Suspense,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import useUniqueId from '../useUniqueId';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import LoadingIndicator from '../LoadingIndicator';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
+
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'));
 
 async function changePassword(
   authenticityToken, resetPasswordToken, password, passwordConfirmation,
@@ -61,12 +66,14 @@ function ResetPassword({ location }) {
           <div className="card-body">
             <div className="form-group">
               <label htmlFor={passwordId}>Password</label>
-              <PasswordInputWithStrengthCheck
-                value={password}
-                onChange={setPassword}
-                id={passwordId}
-                disabled={changePasswordInProgress}
-              />
+              <Suspense fallback={<LoadingIndicator />}>
+                <PasswordInputWithStrengthCheck
+                  value={password}
+                  onChange={setPassword}
+                  id={passwordId}
+                  disabled={changePasswordInProgress}
+                />
+              </Suspense>
             </div>
             <PasswordConfirmationInput
               value={passwordConfirmation}
@@ -79,7 +86,12 @@ function ResetPassword({ location }) {
           </div>
 
           <div className="card-footer text-right">
-            <input type="submit" value="Set password" className="btn btn-primary" />
+            <input
+              type="submit"
+              value="Set password"
+              className="btn btn-primary"
+              aria-label="Set password"
+            />
           </div>
         </div>
       </form>

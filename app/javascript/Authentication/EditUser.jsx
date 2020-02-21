@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 
 import { EditUserQuery } from './queries.gql';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import useUniqueId from '../useUniqueId';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
@@ -15,6 +14,9 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import UserFormFields from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
+
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'));
 
 async function updateUser(
   authenticityToken, formState, password, passwordConfirmation, currentPassword,
@@ -85,11 +87,13 @@ function EditUserForm({ initialFormState }) {
           <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
           <div className="form-group">
             <label htmlFor={passwordFieldId}>Password</label>
-            <PasswordInputWithStrengthCheck
-              id={passwordFieldId}
-              value={password}
-              onChange={setPassword}
-            />
+            <Suspense fallback={<LoadingIndicator />}>
+              <PasswordInputWithStrengthCheck
+                id={passwordFieldId}
+                value={password}
+                onChange={setPassword}
+              />
+            </Suspense>
             <small className="form-text text-muted">
               Leave blank if you don&rsquo;t want to change it
             </small>
@@ -118,6 +122,7 @@ function EditUserForm({ initialFormState }) {
               className="btn btn-primary"
               disabled={updateUserInProgress}
               value="Update account"
+              aria-label="Update account"
             />
           </div>
         </div>

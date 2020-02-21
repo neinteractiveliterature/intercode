@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import groupBy from 'lodash-es/groupBy';
-import flatMap from 'lodash-es/flatMap';
+import groupBy from 'lodash/groupBy';
+import flatMap from 'lodash/flatMap';
 import { useMutation } from '@apollo/react-hooks';
 
 import Confirm from '../ModalDialogs/Confirm';
