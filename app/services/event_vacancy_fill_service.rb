@@ -76,14 +76,18 @@ class EventVacancyFillService < CivilService::Service
     #  || (signup.no_preference? && signup.anything? && move_results.empty?)
   end
 
-  def signup_can_fill_bucket_vacancy?(signup, bucket)
-    return false if signup.bucket&.not_counted? || signup.bucket&.slots_unlimited?
+  def signup_can_fill_bucket_vacancy?(signup, bucket_with_vacancy)
+    return false unless signup.bucket.nil? || counted_limited_bucket?(signup.bucket)
 
     (
-      (signup.no_preference? && bucket.slots_limited? && bucket.counted?) ||
-      signup.requested_bucket_key == bucket.key ||
-      bucket.anything?
+      (signup.no_preference? && counted_limited_bucket?(bucket_with_vacancy)) ||
+      signup.requested_bucket_key == bucket_with_vacancy.key ||
+      bucket_with_vacancy.anything?
     )
+  end
+
+  def counted_limited_bucket?(bucket)
+    bucket&.slots_limited? && bucket&.counted?
   end
 
   def all_signups_ordered
