@@ -121,10 +121,14 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :zipcode, String, null: true
   personal_info_field :country, String, null: true
   personal_info_field :mobile_phone, String, null: true
-  personal_info_field :day_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :evening_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :best_call_time, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :preferred_contact, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :day_phone, String, null: true,
+    deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :evening_phone, String, null: true,
+    deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :best_call_time, String, null: true,
+    deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :preferred_contact, String, null: true,
+    deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
   personal_info_field :ical_secret, String, null: true
 

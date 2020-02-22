@@ -116,7 +116,10 @@ class Types::AbilityType < Types::BaseObject
   field :can_read_orders, Boolean, null: false
 
   def can_read_orders
-    !!(convention && policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).read?)
+    !!(
+      convention &&
+      policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).read?
+    )
   end
 
   field :can_read_schedule, Boolean, null: false
@@ -182,7 +185,10 @@ class Types::AbilityType < Types::BaseObject
   field :can_manage_signups, Boolean, null: false
 
   def can_manage_signups
-    !!(convention && policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).manage?)
+    !!(
+      convention &&
+      policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).manage?
+    )
   end
 
   field :can_manage_staff_positions, Boolean, null: false
@@ -339,7 +345,8 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile)
+      .load([pundit_user, :update, args[:user_con_profile_id]])
   end
 
   field(
@@ -360,7 +367,8 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_delete_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :destroy, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile)
+      .load([pundit_user, :destroy, args[:user_con_profile_id]])
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
@@ -368,7 +376,8 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_become_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :become, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile)
+      .load([pundit_user, :become, args[:user_con_profile_id]])
   end
 
   field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
@@ -376,7 +385,8 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_withdraw_all_user_con_profile_signups(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile)
+      .load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
   end
 
   private

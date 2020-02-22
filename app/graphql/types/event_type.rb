@@ -56,7 +56,8 @@ class Types::EventType < Types::BaseObject
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], args[:exclude_conflicts], pundit_user).load(object)
+    EventRunsLoader.for(args[:start], args[:finish], args[:exclude_conflicts], pundit_user)
+      .load(object)
   end
 
   field :run, Types::RunType, null: false do
@@ -90,7 +91,8 @@ class Types::EventType < Types::BaseObject
       ).read?
     end
   end
-  field :can_provide_tickets, Boolean, deprecation_reason: 'Plaese use event_category.can_provide_tickets instead', null: false
+  field :can_provide_tickets, Boolean,
+    deprecation_reason: 'Please use event_category.can_provide_tickets instead', null: false
 
   def can_provide_tickets
     object.event_category.can_provide_tickets?
@@ -100,7 +102,8 @@ class Types::EventType < Types::BaseObject
   field :maximum_event_provided_tickets_overrides, [override_type], null: false
 
   def maximum_event_provided_tickets_overrides
-    AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(object).then do |meptos|
+    loader = AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides)
+    loader.load(object).then do |meptos|
       meptos.select { |mepto| policy(mepto).read? }
     end
   end
@@ -122,13 +125,15 @@ class Types::EventType < Types::BaseObject
   field :short_blurb_html, String, null: true
 
   def short_blurb_html
-    MarkdownLoader.for('event', 'No information provided').load([[object, 'short_blurb_html'], object.short_blurb])
+    MarkdownLoader.for('event', 'No information provided')
+      .load([[object, 'short_blurb_html'], object.short_blurb])
   end
 
   field :description_html, String, null: true
 
   def description_html
-    MarkdownLoader.for('event', 'No information provided').load([[object, 'description_html'], object.description])
+    MarkdownLoader.for('event', 'No information provided')
+      .load([[object, 'description_html'], object.description])
   end
 
   field :admin_notes, String, null: true do
@@ -161,7 +166,8 @@ class Types::EventType < Types::BaseObject
     event_category.then { |category| category.name.underscore }
   end
 
-  field :team_member_name, String, deprecation_reason: 'Please use event_category.team_member_name instead', null: false
+  field :team_member_name, String,
+    deprecation_reason: 'Please use event_category.team_member_name instead', null: false
 
   def team_member_name
     event_category.then(&:team_member_name)

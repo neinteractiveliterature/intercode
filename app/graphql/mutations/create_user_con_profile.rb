@@ -13,7 +13,10 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
       convention.user_con_profile_form.form_items
     )
 
-    most_recent_profile = user.user_con_profiles.joins(:convention).order(Arel.sql('conventions.starts_at DESC')).first
+    most_recent_profile = user.user_con_profiles.joins(:convention)
+      .order(Arel.sql('conventions.starts_at DESC'))
+      .first
+
     if most_recent_profile
       user_con_profile.assign_form_response_attributes(
         FormResponsePresenter.new(convention.user_con_profile_form, most_recent_profile).as_json
@@ -24,7 +27,9 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     user_con_profile_attrs.merge!(
       JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json'))
     )
-    user_con_profile.assign_attributes(user_con_profile_attrs.select { |_key, value| value.present? }.merge(needs_update: true))
+    user_con_profile.assign_attributes(
+      user_con_profile_attrs.select { |_key, value| value.present? }.merge(needs_update: true)
+    )
     user_con_profile.save!
 
     { user_con_profile: user_con_profile }

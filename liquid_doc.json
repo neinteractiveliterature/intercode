@@ -2828,7 +2828,7 @@
             {
               "tag_name": "return",
               "name": null,
-              "text": "The state of this signup request (e.g. pending, accepted, rejected, withdrawn)",
+              "text": "The state of this signup request (e.g. pending, accepted, rejected,\nwithdrawn)",
               "types": [
                 "String"
               ]
@@ -3661,6 +3661,20 @@
               "text": "The user's convention ticket, if present",
               "types": [
                 "TicketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ical_secret",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's iCal secret for this convention (used in the\n{% add_to_calendar_dropdown %} tag)",
+              "types": [
+                "String"
               ]
             }
           ]
@@ -4614,7 +4628,7 @@
       "methods": [
         {
           "name": "video_id",
-          "docstring": "Returns the value of attribute video_id",
+          "docstring": "Returns the value of attribute video_id.",
           "tags": [
 
           ]
@@ -4666,7 +4680,7 @@
       "methods": [
         {
           "name": "event_id_expression",
-          "docstring": "Returns the value of attribute event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression.",
           "tags": [
 
           ]
@@ -4744,7 +4758,7 @@
       "methods": [
         {
           "name": "event_id_expression",
-          "docstring": "Returns the value of attribute event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression.",
           "tags": [
 
           ]
@@ -4811,21 +4825,21 @@
       "methods": [
         {
           "name": "destination_variable",
-          "docstring": "Returns the value of attribute destination_variable",
+          "docstring": "Returns the value of attribute destination_variable.",
           "tags": [
 
           ]
         },
         {
           "name": "query_identifier",
-          "docstring": "Returns the value of attribute query_identifier",
+          "docstring": "Returns the value of attribute query_identifier.",
           "tags": [
 
           ]
         },
         {
           "name": "variable_defs",
-          "docstring": "Returns the value of attribute variable_defs",
+          "docstring": "Returns the value of attribute variable_defs.",
           "tags": [
 
           ]
@@ -4899,7 +4913,7 @@
       "methods": [
         {
           "name": "event_id_expression",
-          "docstring": "Returns the value of attribute event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression.",
           "tags": [
 
           ]
@@ -4914,6 +4928,91 @@
               "text": "a new instance of LongFormEventDetails",
               "types": [
                 "LongFormEventDetails"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render_react_component",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::AddToCalendarDropdown",
+      "superclasses": [
+        "Intercode::Liquid::Tags::AddToCalendarDropdown",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders an \"Add to Calendar\" dropdown menu for a user to subscribe to their personal con\nschedule.  The user's ical_secret must be provided.  The button CSS classes can be\ncustomized.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "Customizing the CSS class",
+          "text": "{% add_to_calendar_dropdown user_con_profile.ical_secret btn btn-primary %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "add_to_calendar_dropdown",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "ical_secret_expression",
+          "docstring": "Returns the value of attribute ical_secret_expression.",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "button_class",
+          "docstring": "Returns the value of attribute button_class.",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of AddToCalendarDropdown",
+              "types": [
+                "AddToCalendarDropdown"
               ]
             }
           ]
@@ -4977,7 +5076,7 @@
       "methods": [
         {
           "name": "event_id_expression",
-          "docstring": "Returns the value of attribute event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression.",
           "tags": [
 
           ]
@@ -5061,14 +5160,14 @@
       "methods": [
         {
           "name": "button_text",
-          "docstring": "Returns the value of attribute button_text",
+          "docstring": "Returns the value of attribute button_text.",
           "tags": [
 
           ]
         },
         {
           "name": "button_class",
-          "docstring": "Returns the value of attribute button_class",
+          "docstring": "Returns the value of attribute button_class.",
           "tags": [
 
           ]
@@ -5158,21 +5257,21 @@
       "methods": [
         {
           "name": "button_text",
-          "docstring": "Returns the value of attribute button_text",
+          "docstring": "Returns the value of attribute button_text.",
           "tags": [
 
           ]
         },
         {
           "name": "button_class",
-          "docstring": "Returns the value of attribute button_class",
+          "docstring": "Returns the value of attribute button_class.",
           "tags": [
 
           ]
         },
         {
           "name": "signup_variable_name",
-          "docstring": "Returns the value of attribute signup_variable_name",
+          "docstring": "Returns the value of attribute signup_variable_name.",
           "tags": [
 
           ]
