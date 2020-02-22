@@ -9,7 +9,7 @@ class SignupBucketFinder
     @allow_movement = allow_movement
   end
 
-  def find_bucket(priority_buckets: nil)
+  def find_bucket
     @actual_bucket ||= begin
       # try not to bump people out of their signup buckets...
       prioritized_buckets_with_capacity.first ||

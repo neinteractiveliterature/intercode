@@ -15,7 +15,7 @@ class ReportsController < ApplicationController
       format.csv do
         send_table_presenter_csv(
           Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention, pundit_user),
-          [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
+          [convention.name, 'Signups', Time.zone.today.iso8601].compact.join(' - ')
         )
       end
     end
