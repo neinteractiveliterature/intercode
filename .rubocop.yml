@@ -488,12 +488,14 @@ Lint/Void:
 
 ###################### Metrics ####################################
 
+# Disabling AbcSize because it counts every attr_reader call as a branch :(
+# https://github.com/rubocop-hq/rubocop/issues/3335
 Metrics/AbcSize:
   Description: >-
                  A calculated magnitude based on number of assignments,
                  branches, and conditions.
   Reference: 'http://c2.com/cgi/wiki?AbcMetric'
-  Enabled: true
+  Enabled: false
   Max: 20
 
 Metrics/BlockNesting:
