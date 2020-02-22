@@ -382,7 +382,8 @@ class Types::QueryType < Types::BaseObject
     convention.signups.find(args[:id])
   end
 
-  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false
+  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType,
+    camelize: false
 
   def users_paginated(**args)
     Tables::UsersTableResultsPresenter.new(
