@@ -10143,7 +10143,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Plaese use event_category.can_provide_tickets instead"
+              "deprecationReason": "Please use event_category.can_provide_tickets instead"
             },
             {
               "name": "category",
@@ -11332,6 +11332,20 @@
               "deprecationReason": null
             },
             {
+              "name": "form",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Form",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "form_response_attrs_json",
               "description": null,
               "args": [
@@ -11339,7 +11353,21 @@
               ],
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Json",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "form_response_attrs_json_with_rendered_markdown",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Json",
                 "ofType": null
               },
               "isDeprecated": false,

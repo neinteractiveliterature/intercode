@@ -188,7 +188,7 @@ class SignupOptionsPresenter
     @signup_options_for_event ||= if team_member?
       [TeamMemberSignupOption.new(event.team_member_name)]
     else
-      non_anything_buckets_count = buckets.reject(&:anything?).size
+      non_anything_buckets_count = buckets.count { |b| !b.anything? }
       buckets.each_with_index.map do |bucket, index|
         next if bucket.anything?
         BucketSignupOption.new(

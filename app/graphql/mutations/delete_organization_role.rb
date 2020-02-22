@@ -3,7 +3,7 @@ class Mutations::DeleteOrganizationRole < Mutations::BaseMutation
 
   load_and_authorize_model_with_id OrganizationRole, :id, :destroy
 
-  def resolve(id:)
+  def resolve(*)
     organization_role.destroy!
     {}
   end

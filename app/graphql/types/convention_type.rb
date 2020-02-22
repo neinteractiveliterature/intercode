@@ -41,8 +41,8 @@ class Types::ConventionType < Types::BaseObject
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end
-  field :tickets_available_for_purchase, Boolean, null: false,
-    method: :tickets_available_for_purchase?
+  field :tickets_available_for_purchase, Boolean,
+    null: false, method: :tickets_available_for_purchase?
   field :notification_templates, [Types::NotificationTemplateType], null: false
 
   association_loaders(

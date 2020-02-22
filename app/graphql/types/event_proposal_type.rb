@@ -1,4 +1,6 @@
 class Types::EventProposalType < Types::BaseObject
+  include FormResponseAttrsFields
+
   authorize_record
 
   field :id, Integer, null: false
@@ -21,13 +23,11 @@ class Types::EventProposalType < Types::BaseObject
 
   association_loaders EventProposal, :convention, :owner, :event, :event_category
 
-  field :form_response_attrs_json, String, null: true
+  field :form, Types::FormType, null: true
 
-  def form_response_attrs_json
+  def form
     AssociationLoader.for(EventProposal, :event_category).load(object).then do |event_category|
       AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category)
-    end.then do |event_proposal_form|
-      FormResponsePresenter.new(event_proposal_form, object).as_json.to_json
     end
   end
 
