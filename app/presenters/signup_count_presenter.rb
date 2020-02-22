@@ -82,9 +82,8 @@ class SignupCountPresenter
   end
 
   def bucket_descriptions(state)
+    counted_key = counted_key_for_state(state)
     signups_by_bucket_key = signup_count_by_state_and_bucket_key_and_counted[state]
-    counted_key = :counted
-    counted_key = :not_counted if state != 'confirmed' || registration_policy.only_uncounted?
 
     if buckets.size == 1
       [signups_by_bucket_key.values.first[counted_key].to_s]
@@ -103,6 +102,11 @@ class SignupCountPresenter
 
       bucket_texts
     end
+  end
+
+  def counted_key_for_state(state)
+    return :not_counted if state != 'confirmed' || registration_policy.only_uncounted?
+    :counted
   end
 
   def confirmed_count

@@ -57,20 +57,20 @@ and cannot be used for an event team"
     return unless team_mailing_list_name.present?
 
     [Event, EventProposal].each do |model_class|
-      scope = model_class.where(
-        team_mailing_list_name: team_mailing_list_name, convention_id: convention_id
-      )
-      scope = scope.where.not(id: id) if persisted? && is_a?(model_class)
-      scope = scope.where.not(event_id: id) if is_a?(Event) && model_class == EventProposal
-      if is_a?(EventProposal) && model_class == Event && event_id
-        scope = scope.where.not(id: event_id)
-      end
-
+      scope = other_models_for_team_mailing_list_conflicts(model_class)
+        .where(team_mailing_list_name: team_mailing_list_name)
       next unless scope.any?
 
       errors.add :team_mailing_list_name, "#{team_mailing_list_email} is already in use by another \
 event"
       break
     end
+  end
+
+  def other_models_for_team_mailing_list_conflicts(model_class)
+    scope = model_class.where(convention_id: convention_id)
+    scope = scope.where.not(id: id) if persisted? && is_a?(model_class)
+
+    scope
   end
 end

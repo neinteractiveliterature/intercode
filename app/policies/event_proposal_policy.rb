@@ -7,7 +7,7 @@ class EventProposalPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        (user && record.owner && record.owner.user_id == user.id) ||
+        user_is_owner? ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
           has_applicable_permission?(:read_pending_event_proposals)
@@ -39,17 +39,12 @@ class EventProposalPolicy < ApplicationPolicy
   def update?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        (
-          %w[draft proposed reviewing].include?(record.status) &&
-          user && record.owner.user_id == user.id
-        ) ||
+        %w[draft proposed reviewing].include?(record.status) && user_is_owner? ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
           has_applicable_permission?(:update_event_proposals)
         ) ||
-        (
-          record.event && team_member_for_event?(record.event)
-        )
+        team_member_for_accepted_proposal?
       end
     end
 
@@ -84,6 +79,14 @@ class EventProposalPolicy < ApplicationPolicy
   def has_applicable_permission?(*permissions)
     has_event_category_permission?(record.event_category, *permissions) ||
       has_convention_permission?(convention, *permissions)
+  end
+
+  def user_is_owner?
+    user && record.owner && record.owner.user_id == user.id
+  end
+
+  def team_member_for_accepted_proposal?
+    record.event && team_member_for_event?(record.event)
   end
 
   class Scope < Scope
