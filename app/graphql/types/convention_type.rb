@@ -41,7 +41,8 @@ class Types::ConventionType < Types::BaseObject
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end
-  field :tickets_available_for_purchase, Boolean, null: false, method: :tickets_available_for_purchase?
+  field :tickets_available_for_purchase, Boolean, null: false,
+    method: :tickets_available_for_purchase?
   field :notification_templates, [Types::NotificationTemplateType], null: false
 
   association_loaders(
@@ -139,7 +140,8 @@ class Types::ConventionType < Types::BaseObject
       .includes(order_entries: [:product, :product_variant])
   end
 
-  pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
+  pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType,
+    Types::EventProposalFiltersInputType
 
   def event_proposals_paginated(**args)
     Tables::EventProposalsTableResultsPresenter.for_convention(
@@ -195,7 +197,9 @@ class Types::ConventionType < Types::BaseObject
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType, null: false do
+  pagination_field(
+    :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType, null: false
+  ) do
     authorize_action :view_reports
   end
 
@@ -204,7 +208,8 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType, Types::UserConProfileFiltersInputType
+  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType,
+    Types::UserConProfileFiltersInputType
 
   def user_con_profiles_paginated(**args)
     Tables::UserConProfilesTableResultsPresenter.for_convention(

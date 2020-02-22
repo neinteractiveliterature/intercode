@@ -46,7 +46,9 @@ Use #object or #context_convention instead."
   end
 
   def event_provided_tickets
-    tickets = object.tickets.joins(:provided_by_event).where(events: { status: 'active' }).includes(:provided_by_event)
+    tickets = object.tickets.joins(:provided_by_event)
+      .where(events: { status: 'active' })
+      .includes(:provided_by_event)
     tickets.to_a.group_by(&:provided_by_event).map do |provided_by_event, event_tickets|
       {
         provided_by_event: provided_by_event,

@@ -19,7 +19,9 @@ class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
       organization_role.permissions.create!(permission.to_h)
     end
     organization_role.permissions.where(id: args[:remove_permission_ids]).destroy_all
-    organization_role.reload # not sure why, but if I don't do this it seems like permissions get returned twice
+
+    # not sure why, but if I don't do this it seems like permissions get returned twice
+    organization_role.reload
 
     { organization_role: organization_role }
   end

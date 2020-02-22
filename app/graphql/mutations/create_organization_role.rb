@@ -19,7 +19,9 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
     args[:permissions].each do |permission|
       new_role.permissions.create!(permission.to_h)
     end
-    new_role.reload # not sure why, but if I don't do this it seems like permissions get returned twice
+
+    # not sure why, but if I don't do this it seems like permissions get returned twice
+    new_role.reload
 
     { organization_role: new_role }
   end
