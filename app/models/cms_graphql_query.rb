@@ -20,8 +20,8 @@ class CmsGraphqlQuery < ApplicationRecord
     (parsed_query.static_errors + parsed_query.analysis_errors).each do |error|
       errors.add :query, error.message
     end
-    unless parsed_query.query?
-      errors.add :query, 'must be a GraphQL query (not a mutation or subscription)'
-    end
+
+    return if parsed_query.query?
+    errors.add :query, 'must be a GraphQL query (not a mutation or subscription)'
   end
 end

@@ -135,8 +135,7 @@ class Convention < ApplicationRecord
     show_event_list_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_event_list)
     show_schedule_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_schedule)
 
-    if show_event_list_permissivity < show_schedule_permissivity
-      errors.add(:show_event_list, 'must be at least as permissive as show_schedule')
-    end
+    return if show_event_list_permissivity >= show_schedule_permissivity
+    errors.add(:show_event_list, 'must be at least as permissive as show_schedule')
   end
 end
