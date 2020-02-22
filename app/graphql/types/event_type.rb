@@ -1,4 +1,6 @@
 class Types::EventType < Types::BaseObject
+  include FormResponseAttrsFields
+
   authorize_record
 
   field :id, Integer, null: false
@@ -25,27 +27,9 @@ class Types::EventType < Types::BaseObject
 
   association_loaders Event, :event_category, :team_members
 
-  field :form_response_attrs_json, Types::JSON, null: true
-
-  def form_response_attrs_json
+  def form
     AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
       AssociationLoader.for(EventCategory, :event_form).load(event_category)
-    end.then do |form|
-      AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
-        FormResponsePresenter.new(form, object).as_json
-      end
-    end
-  end
-
-  field :form_response_attrs_json_with_rendered_markdown, Types::JSON, null: true
-
-  def form_response_attrs_json_with_rendered_markdown
-    AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
-      AssociationLoader.for(EventCategory, :event_form).load(event_category)
-    end.then do |form|
-      AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
-        FormResponsePresenter.new(form, object).as_json_with_rendered_markdown('event', object, '')
-      end
     end
   end
 

@@ -1750,7 +1750,7 @@ type Event {
   age_restrictions: String
   author: String
   can_play_concurrently: Boolean
-  can_provide_tickets: Boolean! @deprecated(reason: "Plaese use event_category.can_provide_tickets instead")
+  can_provide_tickets: Boolean! @deprecated(reason: "Please use event_category.can_provide_tickets instead")
   category: String! @deprecated(reason: "Please use event_category instead")
   con_mail_destination: String
   content_warnings: String
@@ -1835,7 +1835,9 @@ type EventProposal {
   created_at: Date!
   event: Event
   event_category: EventCategory!
-  form_response_attrs_json: String
+  form: Form
+  form_response_attrs_json: Json
+  form_response_attrs_json_with_rendered_markdown: Json
   form_response_changes: [FormResponseChange!]!
   id: Int!
   length_seconds: Int

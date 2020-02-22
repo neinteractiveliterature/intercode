@@ -1,6 +1,6 @@
 class Mutations::SortCmsNavigationItems < Mutations::BaseMutation
-  argument :sort_items, [Mutations::UpdateCmsNavigationItem.input_type], required: true,
-    camelize: false
+  argument :sort_items, [Mutations::UpdateCmsNavigationItem.input_type],
+    required: true, camelize: false
 
   authorize_arbitrary_cms_model :cms_navigation_items, :update
 

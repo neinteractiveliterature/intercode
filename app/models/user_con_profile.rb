@@ -78,7 +78,7 @@ class UserConProfile < ApplicationRecord
   end
 
   def age
-    age_as_of Date.today
+    age_as_of Time.zone.today
   end
 
   def full_address

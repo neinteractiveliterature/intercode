@@ -34,7 +34,7 @@ module EventEmail
 
   def team_mailing_list_email
     "#{read_form_response_attribute(:team_mailing_list_name)}@" +
-    convention.event_mailing_list_domain.to_s
+      convention.event_mailing_list_domain.to_s
   end
 
   def reserved_team_mailing_list_names
