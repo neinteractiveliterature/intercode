@@ -1,4 +1,4 @@
-class Types::AbilityType < Types::BaseObject
+class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field :can_create_pages, Boolean, null: false
   def can_create_pages
     policy(Page.new(parent: convention)).create?
