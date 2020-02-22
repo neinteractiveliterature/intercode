@@ -150,6 +150,13 @@ class Event < ApplicationRecord
     end
   end
 
+  scope :with_runs_between, ->(convention, start, finish) do
+    run_scope = convention.runs
+    run_scope = run_scope.where('starts_at >= ?', start) if start
+    run_scope = run_scope.where('starts_at < ?', finish) if finish
+    where(id: run_scope.select(:event_id))
+  end
+
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
@@ -182,6 +189,11 @@ class Event < ApplicationRecord
 
   def team_members_for_search
     team_members.visible.includes(:user_con_profile).map(&:name)
+  end
+
+  def other_models_for_team_mailing_list_conflicts(model_class)
+    return super unless model_class == EventProposal
+    super.where.not(event_id: id)
   end
 
   private

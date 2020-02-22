@@ -43,6 +43,11 @@ class EventProposal < ApplicationRecord
     EventProposalDrop.new(self)
   end
 
+  def other_models_for_team_mailing_list_conflicts(model_class)
+    return super unless model_class == Event && event_id
+    super.where.not(id: event_id)
+  end
+
   private
 
   def length_fits_in_convention

@@ -1,4 +1,4 @@
-class Types::QueryType < Types::BaseObject
+class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field_class Types::BaseField # Camelize fields in this type
 
   # Add root-level fields here.
@@ -42,16 +42,11 @@ class Types::QueryType < Types::BaseObject
     events = events.active unless include_dropped
 
     if start || finish
-      if policy(Run.new(event: Event.new(convention: convention))).read?
-        run_scope = convention.runs
-        run_scope = run_scope.where('starts_at >= ?', start) if start
-        run_scope = run_scope.where('starts_at < ?', finish) if finish
-        events = events.where(id: run_scope.select(:event_id))
-      else
-        events = Event.none
-      end
+      return Event.none unless policy(Run.new(event: Event.new(convention: convention))).read?
+      events.with_runs_between(convention, start, finish)
+    else
+      events
     end
-    events
   end
 
   field :event_proposal, Types::EventProposalType, null: true do
