@@ -10,7 +10,8 @@ class SignupRequestDrop < Liquid::Drop
   # @!method user_con_profile
   #   @return [UserConProfileDrop] The profile of the person who made the request
   # @!method state
-  #   @return [String] The state of this signup request (e.g. pending, accepted, rejected, withdrawn)
+  #   @return [String] The state of this signup request (e.g. pending, accepted, rejected,
+  #                    withdrawn)
   # @!method result_signup
   #   @return [SignupDrop] The resulting signup, if the request was accepted
   delegate :id, :target_run, :user_con_profile, :state, :result_signup, to: :signup_request
