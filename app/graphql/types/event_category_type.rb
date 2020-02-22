@@ -13,7 +13,8 @@ class Types::EventCategoryType < Types::BaseObject
   field :signed_up_color, String, null: true, camelize: false
   field :can_provide_tickets, Boolean, null: false, camelize: false, method: :can_provide_tickets?
   field :proposable, Boolean, null: false, method: :proposable?
-  pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType, camelize: false
+  pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType,
+    camelize: false
 
   association_loaders EventCategory, :convention, :department, :event_form, :event_proposal_form
 
