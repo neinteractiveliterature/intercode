@@ -6,64 +6,50 @@ class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
     new(scope, filters, sort)
   end
 
-  def fields
-    [
-      Tables::TableResultsPresenter::Field.new(:user_name, 'User'),
-      Tables::TableResultsPresenter::Field.new(:status, 'Status'),
-      Tables::TableResultsPresenter::Field.new(:submitted_at, 'Submitted'),
-      Tables::TableResultsPresenter::Field.new(:describe_products, 'Products'),
-      Tables::TableResultsPresenter::Field.new(:total_price, 'Price')
-    ]
-  end
-
-  private
-
-  def apply_filter(scope, filter, value)
-    case filter
-    when :user_name
+  field :user_name, 'User' do
+    def apply_filter(scope, value)
       scope.joins(:user_con_profile)
         .where(
           "lower(user_con_profiles.last_name) like :value \
 OR lower(user_con_profiles.first_name) like :value",
           value: "%#{value.downcase}%"
         )
-    when :status
-      scope.where(status: value)
-    else
-      scope
     end
-  end
 
-  def expand_scope_for_sort(scope, sort_field, _direction)
-    case sort_field
-    when :user_name
+    def expand_scope_for_sort(scope, _direction)
       scope.joins(:user_con_profile)
-    when :total_price
-      scope.joins(:order_entries)
-    else
-      scope
+    end
+
+    def sql_order(direction)
+      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
+    end
+
+    def generate_csv_cell(order)
+      order.user_con_profile.name_without_nickname
     end
   end
 
-  def sql_order_for_sort_field(sort_field, direction)
-    case sort_field
-    when :user_name
-      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
-    else
-      super
+  field :status, 'Status' do
+    column_filter filter_on_blank: true
+  end
+
+  field :submitted_at, 'Submitted'
+
+  field :describe_products, 'Products' do
+    def generate_csv_cell(order)
+      order.order_entries.map(&:describe_products).join(', ')
     end
   end
+
+  field :total_price, 'Price' do
+    def generate_csv_cell(order)
+      order.total_price.format
+    end
+  end
+
+  private
 
   def csv_scope
     scoped.includes(:user_con_profile)
-  end
-
-  def generate_csv_cell(field, order)
-    case field.id
-    when :user_name then order.user_con_profile.name_without_nickname
-    when :describe_products then order.order_entries.map(&:describe_products).join(', ')
-    when :total_price then order.total_price.format
-    else order.public_send(field.id)
-    end
   end
 end

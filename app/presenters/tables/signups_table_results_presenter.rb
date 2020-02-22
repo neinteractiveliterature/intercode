@@ -21,6 +21,102 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
     )
   end
 
+  field :id, 'Seq'
+
+  field :state, 'State' do
+    column_filter
+  end
+
+  field :name, 'Name' do
+    def apply_filter(scope, value)
+      scope.joins(:user_con_profile)
+        .where(
+          "lower(user_con_profiles.last_name) like :value \
+OR lower(user_con_profiles.first_name) like :value",
+          value: "%#{value.downcase}%"
+        )
+    end
+
+    def expand_scope_for_sort(scope, _direction)
+      scope.joins(:user_con_profile)
+    end
+
+    def sql_order(direction)
+      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
+    end
+
+    def generate_csv_cell(signup)
+      signup.user_con_profile.name_inverted
+    end
+  end
+
+  field :event_title, 'Event' do
+    def generate_csv_cell(signup)
+      signup.run.event.title
+    end
+  end
+
+  field :bucket, 'Bucket' do
+    column_filter :bucket_key
+
+    def sql_order(direction)
+      "bucket_key #{direction}"
+    end
+
+    def generate_csv_cell(signup)
+      bucket = signup.bucket
+      requested_bucket = signup.requested_bucket
+
+      return "#{bucket.name} (no preference)" if bucket && !requested_bucket
+      if requested_bucket && bucket != requested_bucket
+        return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})"
+      end
+      bucket&.name
+    end
+  end
+
+  field :age_restrictions_check, 'Age check'
+
+  field :age, 'Age' do
+    delegate :pundit_user, to: :presenter
+
+    def expand_scope_for_sort(scope, _direction)
+      scope.joins(:user_con_profile)
+    end
+
+    def generate_csv_cell(signup)
+      return unless UserConProfilePolicy.new(pundit_user, signup.user_con_profile).read_birth_date?
+      signup.user_con_profile.age_as_of(signup.run.starts_at)
+    end
+  end
+
+  field :email, 'Email' do
+    def apply_filter(scope, value)
+      scope.joins(user_con_profile: :user)
+        .where('lower(users.email) like :value', value: "%#{value.downcase}%")
+    end
+
+    def expand_scope_for_sort(scope, _direction)
+      scope.joins(user_con_profile: :user)
+    end
+
+    def sql_order(direction)
+      "users.email #{direction}"
+    end
+
+    def generate_csv_cell(signup)
+      signup.user_con_profile.email
+    end
+  end
+
+  field :created_at, 'Timestamp'
+
+  field :choice, 'Choice' do
+    def generate_csv_cell(signup)
+      signup.counted? ? signup.choice : 'N/C'
+    end
+  end
+
   attr_reader :pundit_user
 
   def initialize(scope, pundit_user, *args)
@@ -28,95 +124,9 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
     super(scope, *args)
   end
 
-  def fields
-    [
-      Tables::TableResultsPresenter::Field.new(:id, 'Seq'),
-      Tables::TableResultsPresenter::Field.new(:state, 'State'),
-      Tables::TableResultsPresenter::Field.new(:name, 'Name'),
-      Tables::TableResultsPresenter::Field.new(:event_title, 'Event'),
-      Tables::TableResultsPresenter::Field.new(:bucket, 'Bucket'),
-      Tables::TableResultsPresenter::Field.new(:age_restrictions_check, 'Age check'),
-      Tables::TableResultsPresenter::Field.new(:age, 'Age'),
-      Tables::TableResultsPresenter::Field.new(:email, 'Email'),
-      Tables::TableResultsPresenter::Field.new(:created_at, 'Timestamp'),
-      Tables::TableResultsPresenter::Field.new(:choice, 'Choice')
-    ]
-  end
-
   private
-
-  def apply_filter(scope, filter, value)
-    case filter
-    when :name
-      scope.joins(:user_con_profile)
-        .where(
-          "lower(user_con_profiles.last_name) like :value \
-OR lower(user_con_profiles.first_name) like :value",
-          value: "%#{value.downcase}%"
-        )
-    when :email
-      scope.joins(user_con_profile: :user)
-        .where('lower(users.email) like :value', value: "%#{value.downcase}%")
-    when :state
-      value.present? ? scope.where(state: value) : scope
-    when :bucket
-      value.present? ? scope.where(bucket_key: value) : scope
-    else
-      scope
-    end
-  end
-
-  def expand_scope_for_sort(scope, sort_field, _direction)
-    case sort_field
-    when :name, :age
-      scope.joins(:user_con_profile)
-    when :email
-      scope.joins(user_con_profile: :user)
-    else
-      scope
-    end
-  end
-
-  def sql_order_for_sort_field(sort_field, direction)
-    case sort_field
-    when :name
-      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
-    when :email
-      "users.email #{direction}"
-    when :bucket
-      "bucket_key #{direction}"
-    else
-      super
-    end
-  end
 
   def csv_scope
     scoped.includes(user_con_profile: :user)
-  end
-
-  def generate_csv_cell(field, signup)
-    case field.id
-    when :name then signup.user_con_profile.name_inverted
-    when :bucket then describe_bucket(signup)
-    when :age
-      if UserConProfilePolicy.new(pundit_user, signup.user_con_profile).read_birth_date?
-        signup.user_con_profile.age_as_of(signup.run.starts_at)
-      end
-    when :email then signup.user_con_profile.email
-    when :event_title then signup.run.event.title
-    when :choice then signup.counted? ? signup.choice : 'N/C'
-    else signup.public_send(field.id)
-    end
-  end
-
-  def describe_bucket(signup)
-    bucket = signup.bucket
-    requested_bucket = signup.requested_bucket
-
-    return bucket.name if bucket && requested_bucket && bucket.name == requested_bucket.name
-    return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})" if requested_bucket
-    return "#{bucket.name} (no preference)" if bucket
-
-    ''
   end
 end

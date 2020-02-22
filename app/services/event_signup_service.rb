@@ -4,7 +4,7 @@ class EventSignupService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit,
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :whodunit,
     :suppress_notifications, :allow_non_self_service_signups
   delegate :event, to: :run
   delegate :convention, to: :event
@@ -66,12 +66,14 @@ class EventSignupService < CivilService::Service
     errors.add :base, "#{convention.name} does not allow self-service signups."
   end
 
-  def signup_count_must_be_allowed
-    return if team_member?
-    return if signup_state == 'confirmed' && !counts_towards_total?
-    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.zone.now)
+  def max_signups_allowed
+    @max_signups_allowed ||= convention.maximum_event_signups.value_at(Time.zone.now)
+  end
 
-    case @max_signups_allowed
+  def signup_count_must_be_allowed
+    return unless signup_count_check_required?
+
+    case max_signups_allowed
     when 'not_now' then nil # ConventionRegistrationFreeze will take care of this
     when 'not_yet' then errors.add :base, 'Signups are not allowed at this time.'
     else
@@ -81,6 +83,13 @@ class EventSignupService < CivilService::Service
 #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
       end
     end
+  end
+
+  def signup_count_check_required?
+    return false if team_member?
+    return false if signup_state == 'confirmed' && !counts_towards_total?
+
+    true
   end
 
   def must_not_have_conflicting_signups
