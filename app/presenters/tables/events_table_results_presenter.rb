@@ -13,40 +13,57 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     )
   end
 
-  attr_reader :pundit_user, :convention
-
-  def initialize(
-    base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil
-  )
-    super(base_scope, filters, sort, visible_field_ids)
-    @convention = convention
-    @pundit_user = pundit_user
+  field :category, 'Category' do
+    column_filter :event_category_id
   end
 
-  def fields
-    []
-  end
-
-  private
-
-  def apply_filter(scope, filter, value)
-    case filter
-    when :category
-      value.present? ? scope.where(event_category_id: value) : scope
-    when :title
+  field :title, 'Title' do
+    def apply_filter(scope, value)
       Names.string_search(scope, value, ['title'])
-    when :title_prefix
-      value.present? ? scope.title_prefix(value) : scope
-    when :my_rating
-      value.present? ? scope.with_rating_for_user_con_profile(user_con_profile, value) : scope
-    else
-      scope
+    end
+
+    # Weird hax: we're handling the actual sorting in expand_scope_for_sort
+    def expand_scope_for_sort(scope, direction)
+      scope.order_by_title(direction)
+    end
+
+    def sql_order(_direction)
+      nil
     end
   end
 
-  def expand_scope_for_sort(scope, sort_field, direction)
-    case sort_field
-    when :first_scheduled_run_start
+  field :title_prefix, 'Title prefix' do
+    def apply_filter(scope, value)
+      value.present? ? scope.title_prefix(value) : scope
+    end
+  end
+
+  field :my_rating, 'My rating' do
+    delegate :user_con_profile, :pundit_user, to: :presenter
+
+    def apply_filter(scope, value)
+      return scope unless value.present?
+      scope.with_rating_for_user_con_profile(user_con_profile, value)
+    end
+
+    # Weird hax: we're handling the actual sorting in expand_scope_for_sort
+    def expand_scope_for_sort(scope, direction)
+      if user_con_profile && !pundit_user.assumed_identity_from_profile
+        scope.order_by_rating_for_user_con_profile(user_con_profile, direction)
+      else
+        scope
+      end
+    end
+
+    def sql_order(_direction)
+      nil
+    end
+  end
+
+  field :first_scheduled_run_start, 'First scheduled run' do
+    delegate :pundit_user, :convention, to: :presenter
+
+    def expand_scope_for_sort(scope, _direction)
       Pundit.authorize(pundit_user, convention, :schedule?)
       scope.joins(<<~SQL)
         LEFT JOIN runs ON (
@@ -56,32 +73,33 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
           )
         )
       SQL
-    when :title
-      scope.order_by_title(direction)
-    when :my_rating
-      if user_con_profile && !pundit_user.assumed_identity_from_profile
-        scope.order_by_rating_for_user_con_profile(user_con_profile, direction)
-      else
-        scope
-      end
-    when :owner
-      scope.joins(:owner)
-    else
-      scope
+    end
+
+    def sql_order(direction)
+      "runs.starts_at #{direction}"
     end
   end
 
-  def sql_order_for_sort_field(sort_field, direction)
-    case sort_field
-    when :first_scheduled_run_start
-      "runs.starts_at #{direction}"
-    when :title, :my_rating
-      nil # we handle these in expand_scope_for_sort
-    when :owner
-      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
-    else
-      super
+  field :owner, 'Owner' do
+    def expand_scope_for_sort(scope, _direction)
+      scope.joins(:owner)
     end
+
+    def sql_order(direction)
+      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
+    end
+  end
+
+  field :created_at, 'Created at'
+
+  attr_reader :pundit_user, :convention
+
+  def initialize(
+    base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil
+  )
+    super(base_scope, filters, sort, visible_field_ids)
+    @convention = convention
+    @pundit_user = pundit_user
   end
 
   def user_con_profile

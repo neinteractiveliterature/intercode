@@ -11,6 +11,25 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
     )
   end
 
+  field :state, 'State' do
+    column_filter
+
+    def sql_order_for_sort_field(direction)
+      Arel.sql(<<~SQL)
+      (
+        CASE
+        WHEN state = 'pending' THEN 0
+        WHEN state = 'accepted' THEN 1
+        WHEN state = 'rejected' THEN 2
+        WHEN state = 'withdrawn' THEN 3
+        END
+      ) #{direction}
+      SQL
+    end
+  end
+
+  field :created_at, 'Created at'
+
   attr_reader :pundit_user, :convention
 
   def initialize(
@@ -19,38 +38,5 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @pundit_user = pundit_user
-  end
-
-  def fields
-    []
-  end
-
-  private
-
-  def apply_filter(scope, filter, value)
-    case filter
-    when :state
-      value.present? ? scope.where(state: value) : scope
-    else
-      scope
-    end
-  end
-
-  def sql_order_for_sort_field(sort_field, direction)
-    case sort_field
-    when :state
-      <<~SQL
-      (
-        CASE
-        WHEN state = 'pending' THEN 0
-        WHEN state = 'accepted' THEN 1
-        WHEN state = 'rejected' THEN 2
-        WHEN state = 'withdrawn' THEN 3
-        END
-      )
-      SQL
-    else
-      super
-    end
   end
 end
