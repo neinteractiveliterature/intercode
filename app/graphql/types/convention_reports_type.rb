@@ -57,7 +57,7 @@ Use #object or #context_convention instead."
     end
   end
 
-  def events_by_choice
+  def events_by_choice # rubocop:disable Metrics/MethodLength
     rows = ActiveRecord::Base.connection.select_rows <<~SQL
       SELECT event_id, state, choice, count(*) FROM (
         SELECT

@@ -24,7 +24,8 @@ class NotifierPreviewFactory
     end.to_h
   end
 
-  def synthesize_parameter_value(parameter_name)
+  # This is super not worth refactoring
+  def synthesize_parameter_value(parameter_name) # rubocop:disable Metrics/CyclomaticComplexity
     case parameter_name
     when :alert_user_con_profile then UserConProfile.new(convention: convention)
     when :changes then []
@@ -48,7 +49,8 @@ class NotifierPreviewFactory
     end
   end
 
-  def find_parameter_value(parameter_name)
+  # This is super not worth refactoring
+  def find_parameter_value(parameter_name) # rubocop:disable Metrics/CyclomaticComplexity
     case parameter_name
     when :alert_user_con_profile then convention.user_con_profiles.first
     when :changes
