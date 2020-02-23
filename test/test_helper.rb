@@ -86,6 +86,8 @@ class ActiveSupport::TestCase
     end
   end
 
+  parallelize(workers: 3)
+
   before do
     DatabaseCleaner.start
   end
