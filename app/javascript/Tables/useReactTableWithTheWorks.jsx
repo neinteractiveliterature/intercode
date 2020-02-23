@@ -16,7 +16,6 @@ export default function useReactTableWithTheWorks({
   getData,
   getPages,
   getPossibleColumns,
-  history,
   onPageChange,
   onPageSizeChange,
   onFilteredChange,
@@ -30,7 +29,7 @@ export default function useReactTableWithTheWorks({
     { onPageSizeChange },
   );
   const reactRouterReactTableProps = useReactRouterReactTable({
-    decodeFilterValue, encodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
+    decodeFilterValue, encodeFilterValue, onPageChange, onFilteredChange, onSortedChange,
   });
   const [graphQLReactTableProps, { queryResult, queryData }] = useGraphQLReactTable({
     getData,
@@ -54,7 +53,6 @@ export default function useReactTableWithTheWorks({
     alwaysVisibleColumns,
     defaultVisibleColumns,
     possibleColumns: possibleColumns || [],
-    history,
   });
 
   const reactTableProps = {

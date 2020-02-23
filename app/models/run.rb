@@ -2,6 +2,7 @@ class Run < ApplicationRecord
   belongs_to :event
   belongs_to :updated_by, class_name: 'User', optional: true
   has_many :signups, dependent: :destroy
+  has_many :signup_changes, dependent: :destroy
   has_many :signup_requests, foreign_key: 'target_run_id', dependent: :destroy
   has_and_belongs_to_many :rooms
 
