@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
 import { humanize } from 'inflected';
+import flatMap from 'lodash/flatMap';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import { SignupSpySignupChangesQuery } from './queries.gql';
-import TableHeader from '../Tables/TableHeader';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
 import SignupStateCell from '../Tables/SignupStateCell';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
+import ColumnSelector from '../Tables/ColumnSelector';
+import ReactTableExportButton from '../Tables/ExportButton';
 
 const ChoiceCell = ({ value, original }) => {
   if (original.counted) {
@@ -28,6 +30,32 @@ ChoiceCell.propTypes = {
 
 ChoiceCell.defaultProps = {
   value: null,
+};
+
+const SignupChangeCell = ({ value }) => {
+  return (
+    <>
+      {value.previous_signup_change
+        ? (
+          <>
+            <SignupStateCell value={value.previous_signup_change.state} strikeThrough/>
+            {' → '}
+          </>
+        )
+        : (value.action === 'unknown' && <span className="text-muted">unknown → </span>)}
+      <SignupStateCell value={value.state} />
+      {value.action !== 'unknown' && (
+        <>
+          <br />
+          <small className="text-muted">
+            via
+            {' '}
+            {humanize(value.action).toLowerCase()}
+          </small>
+        </>
+      )}
+    </>
+  );
 };
 
 const TimestampCell = ({ value }) => {
@@ -56,30 +84,12 @@ const getPossibleColumns = () => [
     filterable: false,
   },
   {
-    Header: 'Action',
-    id: 'action',
-    accessor: (signupChange) => humanize(signupChange.action),
-    width: 130,
-    filterable: false,
+    Header: 'Change',
+    id: 'change',
+    accessor: (signupChange) => signupChange,
     sortable: false,
-  },
-  {
-    Header: 'Previous state',
-    id: 'prev_state',
-    accessor: (signupChange) => signupChange.previous_signup_change?.state,
-    width: 130,
     filterable: false,
-    sortable: false,
-    Cell: SignupStateCell,
-  },
-  {
-    Header: 'State',
-    id: 'state',
-    accessor: 'state',
-    width: 130,
-    filterable: false,
-    sortable: false,
-    Cell: SignupStateCell,
+    Cell: SignupChangeCell,
   },
   {
     Header: 'Timestamp',
@@ -103,10 +113,10 @@ const getPossibleColumns = () => [
 
 function SignupSpyTableContent({ exportUrl }) {
   const [reactTableProps, {
-    tableHeaderProps, queryResult, queryData,
+    columnSelectionProps, queryResult, queryData, tableHeaderProps: { filtered, sorted },
   }] = useReactTableWithTheWorks({
     defaultVisibleColumns: [
-      'name', 'event_title', 'action', 'prev_state', 'state', 'created_at', 'choice',
+      'name', 'event_title', 'change', 'created_at', 'choice',
     ],
     getData: ({ data }) => data.convention.signup_changes_paginated.entries,
     getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
@@ -123,13 +133,26 @@ function SignupSpyTableContent({ exportUrl }) {
       >
         {(state, makeTable) => (
           <div className="mb-4">
-            <TableHeader
-              {...tableHeaderProps}
-              exportUrl={exportUrl}
-              renderLeftContent={() => (
-                <RefreshButton refreshData={queryResult.refetch} />
-              )}
-            />
+            <div className="d-flex">
+              <div className="flex-grow-1">
+                <ReactTableExportButton
+                  exportUrl={exportUrl}
+                  filtered={filtered}
+                  sorted={sorted}
+                  columns={flatMap(columnSelectionProps.visibleColumnIds, (columnId) => {
+                    if (columnId === 'change') {
+                      return ['action', 'prev_state', 'state'];
+                    }
+
+                    return columnId;
+                  })}
+                />
+                <RefreshButton refreshData={() => queryResult.refetch()} />
+              </div>
+              <div>
+                <ColumnSelector {...columnSelectionProps} />
+              </div>
+            </div>
             {makeTable()}
           </div>
         )}
