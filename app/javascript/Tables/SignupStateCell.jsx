@@ -8,7 +8,11 @@ const SignupStateCell = ({ value }) => (
 );
 
 SignupStateCell.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
+};
+
+SignupStateCell.defaultProps = {
+  value: null,
 };
 
 export default SignupStateCell;

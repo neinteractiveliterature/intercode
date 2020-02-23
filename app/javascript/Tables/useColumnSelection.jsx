@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
 import uniq from 'lodash/uniq';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function useColumnSelection({
-  alwaysVisibleColumns, defaultVisibleColumns, possibleColumns, history,
+  alwaysVisibleColumns, defaultVisibleColumns, possibleColumns,
 }) {
+  const history = useHistory();
+  const location = useLocation();
   const effectiveAlwaysVisibleColumns = alwaysVisibleColumns || [];
 
   const visibleColumnIds = useMemo(
     () => {
-      const params = new URLSearchParams(history.location.search);
+      const params = new URLSearchParams(location.search);
       if (params.get('columns')) {
         return uniq([...effectiveAlwaysVisibleColumns, ...params.get('columns').split(',')]);
       }
@@ -19,7 +22,7 @@ export default function useColumnSelection({
 
       return possibleColumns.map((column) => column.id);
     },
-    [defaultVisibleColumns, effectiveAlwaysVisibleColumns, history.location, possibleColumns],
+    [defaultVisibleColumns, effectiveAlwaysVisibleColumns, location, possibleColumns],
   );
 
   const visibleColumns = useMemo(

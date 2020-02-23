@@ -95,10 +95,10 @@ class Tables::TableResultsPresenter
     @field_classes ||= {}
   end
 
-  def self.field(id, csv_header, &block)
+  def self.field(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
     id_sym = id.to_sym
     raise "Field #{id_sym} already defined for #{self.class.name}" if field_classes[id_sym]
-    field_class = build_field_class(id_sym, csv_header, &block)
+    field_class = build_field_class(id_sym, csv_header, base, &block)
     field_classes[id_sym] = field_class
   end
 

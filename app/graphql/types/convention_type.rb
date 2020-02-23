@@ -198,13 +198,25 @@ class Types::ConventionType < Types::BaseObject
   end
 
   pagination_field(
-    :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType, null: false
+    :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType,
+    null: false, deprecation_reason: 'Use signup_changes_paginated instead'
   ) do
     authorize_action :view_reports
   end
 
   def signup_spy_paginated(**args)
     Tables::SignupsTableResultsPresenter.signup_spy_for_convention(object, pundit_user)
+      .paginate(page: args[:page], per_page: args[:per_page])
+  end
+
+  pagination_field(
+    :signup_changes_paginated, Types::SignupChangesPaginationType,
+    Types::SignupChangeFiltersInputType, null: false
+  )
+
+  def signup_changes_paginated(**args)
+    Tables::SignupChangesTableResultsPresenter
+      .for_convention(object, pundit_user, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
