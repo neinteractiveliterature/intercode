@@ -215,8 +215,16 @@ class Types::ConventionType < Types::BaseObject
   )
 
   def signup_changes_paginated(**args)
+    scope = SignupChangePolicy::Scope.new(
+      pundit_user,
+      convention.signup_changes.includes(
+        user_con_profile: [:convention, :team_members, :staff_positions],
+        run: { event: :convention }
+      )
+    ).resolve
+
     Tables::SignupChangesTableResultsPresenter
-      .for_convention(object, pundit_user, args[:filters].to_h, args[:sort])
+      .new(scope, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
