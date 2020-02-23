@@ -337,11 +337,12 @@ type Convention {
   root_page: Page
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
+  signup_changes_paginated(filters: SignupChangeFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupChangesPagination!
   signup_counts_by_state: [SignupCountByState!]!
   signup_mode: SignupMode!
   signup_requests_open: Boolean!
   signup_requests_paginated(filters: SignupRequestFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupRequestsPagination!
-  signup_spy_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupsPagination!
+  signup_spy_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupsPagination! @deprecated(reason: "Use signup_changes_paginated instead")
   site_mode: SiteMode!
   staff_positions: [StaffPosition!]
   starts_at: Date
@@ -2920,6 +2921,44 @@ type Signup {
   updated_at: Date!
   user_con_profile: UserConProfile!
   waitlist_position: Int
+}
+
+type SignupChange {
+  action: SignupChangeAction!
+  bucket_key: String
+  counted: Boolean!
+  created_at: Date!
+  id: Int!
+  previous_signup_change: SignupChange
+  run: Run!
+  signup: Signup!
+  state: SignupState!
+  updated_at: Date!
+  user_con_profile: UserConProfile!
+}
+
+enum SignupChangeAction {
+  accept_signup_request
+  admin_create_signup
+  change_registration_policy
+  self_service_signup
+  unknown
+  vacancy_fill
+  withdraw
+}
+
+input SignupChangeFiltersInput {
+  bucket: [String!]
+  name: String
+  state: [String!]
+}
+
+type SignupChangesPagination implements PaginationInterface {
+  current_page: Int!
+  entries: [SignupChange!]!
+  per_page: Int!
+  total_entries: Int!
+  total_pages: Int!
 }
 
 type SignupCountByState {
