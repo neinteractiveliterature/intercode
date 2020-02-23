@@ -20,17 +20,6 @@ else
   )
 end
 
-# TODO once DatabaseCleaner actually releases a gem version with the url whitelist feature,
-# switch to this, until then we need to just turn off the safeguard so it will work with Docker
-# environments
-#
-# DatabaseCleaner.url_whitelist = [
-#   'postgres://postgres@postgres/intercode_development',
-#   'mysql2://root:mysql@mysql/intercode_development'
-# ]
-DatabaseCleaner.allow_remote_database_url = true
-DatabaseCleaner.strategy = :transaction
-
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActionMailer::TestCase::ClearTestDeliveries
@@ -86,12 +75,7 @@ class ActiveSupport::TestCase
     end
   end
 
-  parallelize(workers: 3)
-
-  before do
-    DatabaseCleaner.start
-  end
-  after { DatabaseCleaner.clean }
+  parallelize(workers: Parallel.processor_count)
 
   def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **options)
     context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
