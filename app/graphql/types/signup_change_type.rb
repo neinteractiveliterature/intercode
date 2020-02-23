@@ -13,7 +13,24 @@ class Types::SignupChangeType < Types::BaseObject
   field :created_at, Types::DateType, null: false, camelize: false
   field :updated_at, Types::DateType, null: false, camelize: false
 
-  association_loaders SignupChange, :previous_signup_change, :signup, :run, :user_con_profile
+  association_loaders SignupChange, :previous_signup_change, :run, :user_con_profile
+
+  # Ugly AF, but it gets us everything the policy wants
+  def signup
+    AssociationLoader.for(SignupChange, :signup).load(object).then do |signup|
+      run_promise = AssociationLoader.for(Signup, :run).load(signup).then do |run|
+        AssociationLoader.for(Run, :event).load(run).then do |event|
+          AssociationLoader.for(Event, :convention).load(event)
+        end
+      end
+
+      Promise.all([
+        run_promise, AssociationLoader.for(Signup, :user_con_profile).load(signup)
+      ]).then do |_results|
+        signup
+      end
+    end
+  end
 
   # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
   # you can't actually read it

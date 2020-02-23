@@ -97,13 +97,15 @@ class UserConProfile < ApplicationRecord
   delegate :privileges, to: :user
 
   def is_team_member? # rubocop:disable Naming/PredicateName
-    return true if team_members.loaded? && team_members.size > 0
+    return team_members.size > 0 if team_members.loaded?
     self.class.is_team_member.where(id: id).any?
   end
 
   def can_have_bio?
-    return true if team_members.loaded? && team_members.size > 0
-    return true if staff_positions.loaded? && staff_positions.size > 0
+    if team_members.loaded? && staff_positions.loaded?
+      return team_members.size > 0 || staff_positions.size > 0
+    end
+
     self.class.is_team_member.where(id: id).any?
   end
 

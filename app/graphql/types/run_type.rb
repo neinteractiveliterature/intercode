@@ -5,7 +5,11 @@ class Types::RunType < Types::BaseObject
   field :event, Types::EventType, null: true
 
   def event
-    RecordLoader.for(Event).load(object.event_id)
+    AssociationLoader.for(Run, :event).load(object).then do |event|
+      AssociationLoader.for(Event, :convention).load(event).then do |_convention|
+        event
+      end
+    end
   end
 
   field :starts_at, Types::DateType, null: true

@@ -6,11 +6,11 @@ class SignupChangePolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
+      d.add(:read_conventions) do
+        has_convention_permission?(convention, 'read_signup_details')
+      end
       d.add(:read_events) do
         (signed_up_for_run?(run) && !event.private_signup_list?) || team_member_for_event?(event)
-      end
-      d.add(:read_conventions) do
-        has_convention_permission?(convention, 'read_signups')
       end
     end
 
