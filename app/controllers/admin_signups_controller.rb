@@ -22,6 +22,17 @@ class AdminSignupsController < ApplicationController
     ->(run) { "#{run.event.title} (run #{run.id})" }
   ]
 
+  # Find a filename that will be unique across all runs, using a variety of filename generation
+  # strategies
+  def self.unique_filename(event, run, suffix)
+    filename_generator = PRIORITIZED_FILENAME_GENERATORS.find do |generator|
+      filenames = event.runs.map { |r| generator.call(r) }
+      filenames.uniq.size == filenames.size
+    end
+
+    "#{filename_generator.call(run)} #{suffix}"
+  end
+
   include SendCsv
 
   def export
@@ -39,22 +50,9 @@ class AdminSignupsController < ApplicationController
             params[:sort],
             params[:columns]
           ),
-          unique_filename(event, run)
+          AdminSignupsController.unique_filename(event, run, 'Signups')
         )
       end
     end
-  end
-
-  private
-
-  # Find a filename that will be unique across all runs, using a variety of filename generation
-  # strategies
-  def unique_filename(event, run)
-    filename_generator = PRIORITIZED_FILENAME_GENERATORS.find do |generator|
-      filenames = event.runs.map { |r| generator.call(r) }
-      filenames.uniq.size == filenames.size
-    end
-
-    "#{filename_generator.call(run)} Signups"
   end
 end
