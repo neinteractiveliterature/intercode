@@ -28,7 +28,8 @@ class Mutations::CreateUserSignup < Mutations::BaseMutation
       should_have_requested_bucket_key ? args[:requested_bucket_key] : nil,
       context[:current_user],
       suppress_notifications: args[:suppress_notifications],
-      allow_non_self_service_signups: true
+      allow_non_self_service_signups: true,
+      action: 'admin_create_signup'
     ).call
 
     raise GraphQL::ExecutionError, result.errors.full_messages.join(', ') if result.failure?
