@@ -106,7 +106,7 @@ class UserConProfile < ApplicationRecord
       return team_members.size > 0 || staff_positions.size > 0
     end
 
-    self.class.is_team_member.where(id: id).any?
+    team_members.any? || staff_positions.any?
   end
 
   def email=(email)
