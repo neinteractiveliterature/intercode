@@ -22,6 +22,7 @@ class Convention < ApplicationRecord
   has_many :event_categories, dependent: :destroy
   has_many :runs, through: :events
   has_many :signups, through: :runs
+  has_many :signup_changes, through: :runs
   has_many :signup_requests, through: :runs
   has_many :rooms, dependent: :destroy
   has_many :ticket_types, dependent: :destroy

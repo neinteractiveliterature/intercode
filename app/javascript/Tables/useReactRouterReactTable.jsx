@@ -1,8 +1,10 @@
 import { useCallback, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 
 export default function useReactRouterReactTable({
-  encodeFilterValue, decodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
+  encodeFilterValue, decodeFilterValue, onPageChange, onFilteredChange, onSortedChange,
 }) {
+  const history = useHistory();
   const encode = encodeFilterValue || ((field, value) => value);
   const decode = decodeFilterValue || ((field, value) => value);
 

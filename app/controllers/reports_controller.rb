@@ -13,9 +13,22 @@ class ReportsController < ApplicationController
   def export_signup_spy
     respond_to do |format|
       format.csv do
+        scope = SignupChangePolicy::Scope.new(
+          pundit_user,
+          convention.signup_changes.includes([
+            :user_con_profile,
+            run: :event,
+            signup: { user_con_profile: :signups }
+          ])
+        )
         send_table_presenter_csv(
-          Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention, pundit_user),
-          [convention.name, 'Signups', Time.zone.today.iso8601].compact.join(' - ')
+          Tables::SignupChangesTableResultsPresenter.new(
+            scope.resolve,
+            params[:filters]&.to_unsafe_h,
+            [{ field: 'created_at', desc: true }],
+            params[:columns]
+          ),
+          [convention.name, 'Signup Changelog', Time.zone.today.iso8601].compact.join(' - ')
         )
       end
     end

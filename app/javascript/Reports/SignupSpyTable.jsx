@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
+import { humanize } from 'inflected';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
-import { SignupSpySignupsQuery } from './queries.gql';
+import { SignupSpySignupChangesQuery } from './queries.gql';
 import TableHeader from '../Tables/TableHeader';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
 import SignupStateCell from '../Tables/SignupStateCell';
@@ -43,7 +43,7 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: (signup) => signup.user_con_profile,
+    accessor: (signupChange) => signupChange.user_con_profile,
     sortable: false,
     filterable: false,
     Cell: UserConProfileWithGravatarCell,
@@ -51,9 +51,26 @@ const getPossibleColumns = () => [
   {
     Header: 'Event',
     id: 'event_title',
-    accessor: (signup) => signup.run.event.title,
+    accessor: (signupChange) => signupChange.run.event.title,
     sortable: false,
     filterable: false,
+  },
+  {
+    Header: 'Action',
+    id: 'action',
+    accessor: (signupChange) => humanize(signupChange.action),
+    width: 130,
+    filterable: false,
+    sortable: false,
+  },
+  {
+    Header: 'Previous state',
+    id: 'prev_state',
+    accessor: (signupChange) => signupChange.previous_signup_change?.state,
+    width: 130,
+    filterable: false,
+    sortable: false,
+    Cell: SignupStateCell,
   },
   {
     Header: 'State',
@@ -77,23 +94,24 @@ const getPossibleColumns = () => [
     Header: 'Choice',
     id: 'choice',
     width: 100,
-    accessor: 'choice',
+    accessor: (signupChange) => signupChange.signup.choice,
     sortable: false,
     filterable: false,
     Cell: ChoiceCell,
   },
 ];
 
-function SignupSpyTableContent({ exportUrl, history }) {
+function SignupSpyTableContent({ exportUrl }) {
   const [reactTableProps, {
     tableHeaderProps, queryResult, queryData,
   }] = useReactTableWithTheWorks({
-    defaultVisibleColumns: ['name', 'event_title', 'state', 'created_at', 'choice'],
-    getData: ({ data }) => data.convention.signup_spy_paginated.entries,
-    getPages: ({ data }) => data.convention.signup_spy_paginated.total_pages,
+    defaultVisibleColumns: [
+      'name', 'event_title', 'action', 'prev_state', 'state', 'created_at', 'choice',
+    ],
+    getData: ({ data }) => data.convention.signup_changes_paginated.entries,
+    getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
     getPossibleColumns,
-    history,
-    query: SignupSpySignupsQuery,
+    query: SignupSpySignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
   });
 
@@ -122,7 +140,6 @@ function SignupSpyTableContent({ exportUrl, history }) {
 
 SignupSpyTableContent.propTypes = {
   exportUrl: PropTypes.string.isRequired,
-  history: PropTypes.shape({}).isRequired,
 };
 
-export default withRouter(SignupSpyTableContent);
+export default SignupSpyTableContent;
