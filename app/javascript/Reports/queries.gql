@@ -105,12 +105,12 @@ query SignupCountsByStateQuery {
   }
 }
 
-query SignupSpySignupsQuery($page: Int, $perPage: Int) {
+query SignupSpySignupChangesQuery($page: Int, $perPage: Int) {
   convention {
     id
     timezone_name
 
-    signup_spy_paginated(page: $page, per_page: $perPage, sort: [{ field: "created_at", desc: true }]) {
+    signup_changes_paginated(page: $page, per_page: $perPage, sort: [{ field: "created_at", desc: true }]) {
       total_entries
       total_pages
       current_page
@@ -120,8 +120,19 @@ query SignupSpySignupsQuery($page: Int, $perPage: Int) {
         id
         state
         counted
-        choice
+        action
         created_at
+
+        previous_signup_change {
+          id
+          state
+          counted
+        }
+
+        signup {
+          id
+          choice
+        }
 
         run {
           id
