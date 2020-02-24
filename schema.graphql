@@ -2948,9 +2948,9 @@ enum SignupChangeAction {
 }
 
 input SignupChangeFiltersInput {
-  bucket: [String!]
+  action: [String!]
+  event_title: String
   name: String
-  state: [String!]
 }
 
 type SignupChangesPagination implements PaginationInterface {

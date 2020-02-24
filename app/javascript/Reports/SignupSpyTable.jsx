@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
@@ -14,9 +14,14 @@ import ColumnSelector from '../Tables/ColumnSelector';
 import ReactTableExportButton from '../Tables/ExportButton';
 import { formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
+import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
+import EnumTypes from '../enumTypes.json';
+import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 
-const FILTER_CODECS = buildFieldFilterCodecs({});
+const FILTER_CODECS = buildFieldFilterCodecs({
+  action: FilterCodecs.stringArray,
+});
+const ACTIONS = EnumTypes.SignupChangeAction.enumValues.map((value) => value.name);
 
 const ChoiceCell = ({ value, original }) => {
   if (original.counted) {
@@ -99,6 +104,23 @@ BucketChangeCell.propTypes = {
   }).isRequired,
 };
 
+const ChangeActionFilter = ({ filter, onChange, ...props }) => {
+  const choices = useMemo(
+    () => ACTIONS.map((action) => ({ value: action, label: humanize(action) })),
+    [],
+  );
+
+  return (
+    <ChoiceSetFilter
+      name="event_category"
+      choices={choices}
+      onChange={onChange}
+      filter={filter}
+      multiple
+    />
+  );
+};
+
 const TimestampCell = ({ value }) => {
   const data = useContext(QueryDataContext);
   const timestamp = moment.tz(value, data.convention.timezone_name);
@@ -135,11 +157,12 @@ const getPossibleColumns = () => [
   },
   {
     Header: 'Change',
-    id: 'change',
+    id: 'action',
     accessor: (signupChange) => signupChange,
     sortable: false,
-    filterable: false,
+    filterable: true,
     Cell: SignupChangeCell,
+    Filter: ChangeActionFilter,
   },
   {
     Header: 'Bucket',
@@ -176,7 +199,7 @@ function SignupSpyTableContent({ exportUrl }) {
   }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
-      'name', 'event_title', 'change', 'bucket_change', 'created_at', 'choice',
+      'name', 'event_title', 'action', 'bucket_change', 'created_at', 'choice',
     ],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data }) => data.convention.signup_changes_paginated.entries,
@@ -191,6 +214,7 @@ function SignupSpyTableContent({ exportUrl }) {
       <ReactTable
         {...reactTableProps}
         className="-striped -highlight"
+        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       >
         {(state, makeTable) => (
           <div className="mb-4">
@@ -201,7 +225,7 @@ function SignupSpyTableContent({ exportUrl }) {
                   filtered={filtered}
                   sorted={sorted}
                   columns={flatMap(columnSelectionProps.visibleColumnIds, (columnId) => {
-                    if (columnId === 'change') {
+                    if (columnId === 'action') {
                       return ['action', 'prev_state', 'state'];
                     }
 

@@ -1,0 +1,443 @@
+{
+  "CmsContentTypeIndicator": {
+    "kind": "ENUM",
+    "name": "CmsContentTypeIndicator",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "Page",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "CmsPartial",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "CmsLayout",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "FormType": {
+    "kind": "ENUM",
+    "name": "FormType",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "event",
+        "description": "Event form",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "event_proposal",
+        "description": "Event proposal form",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "user_con_profile",
+        "description": "User profile form",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "PaymentMode": {
+    "kind": "ENUM",
+    "name": "PaymentMode",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "now",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "later",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "PermissionedModelTypeIndicator": {
+    "kind": "ENUM",
+    "name": "PermissionedModelTypeIndicator",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "CmsContentGroup",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "Convention",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "EventCategory",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "PermissionedRoleTypeIndicator": {
+    "kind": "ENUM",
+    "name": "PermissionedRoleTypeIndicator",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "StaffPosition",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "OrganizationRole",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "ReceiveSignupEmail": {
+    "kind": "ENUM",
+    "name": "ReceiveSignupEmail",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "ALL_SIGNUPS",
+        "description": "Receive email for all signup activity",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "NON_WAITLIST_SIGNUPS",
+        "description": "Receive email for signup activity affecting confirmed signups",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "NO",
+        "description": "Do not receive signup email",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "RefundStatus": {
+    "kind": "ENUM",
+    "name": "RefundStatus",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "NOT_REFUNDED",
+        "description": "No refund was attempted",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "REFUNDED",
+        "description": "A refund was successfully provided",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "ALREADY_REFUNDED",
+        "description": "A refund was requested, but the charge had already been refunded",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "SchedulingUi": {
+    "kind": "ENUM",
+    "name": "SchedulingUi",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "regular",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "recurring",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "single_run",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "ShowSchedule": {
+    "kind": "ENUM",
+    "name": "ShowSchedule",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "no",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "priv",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "gms",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "yes",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "SignupChangeAction": {
+    "kind": "ENUM",
+    "name": "SignupChangeAction",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "self_service_signup",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "admin_create_signup",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "accept_signup_request",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "change_registration_policy",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "vacancy_fill",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "withdraw",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "unknown",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "SignupMode": {
+    "kind": "ENUM",
+    "name": "SignupMode",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "self_service",
+        "description": "Attendees can sign themselves up for events",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "moderated",
+        "description": "Attendees can request signups and signup changes but con staff must approve them",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "SignupRequestState": {
+    "kind": "ENUM",
+    "name": "SignupRequestState",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "pending",
+        "description": "The request has not yet been reviewed by a moderator",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "accepted",
+        "description": "The request has been accepted and the requester has been signed up (see the result_signup field for the actual signup)",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "rejected",
+        "description": "The request has been rejected and the requester has not been signed up",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "withdrawn",
+        "description": "The requester withdrew their request before it was accepted or rejected",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "SignupState": {
+    "kind": "ENUM",
+    "name": "SignupState",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "confirmed",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "waitlisted",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "withdrawn",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "SiteMode": {
+    "kind": "ENUM",
+    "name": "SiteMode",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "convention",
+        "description": "Site behaves as a convention with multiple events",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "single_event",
+        "description": "Site behaves as a single standalone event",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
+  "TicketMode": {
+    "kind": "ENUM",
+    "name": "TicketMode",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "disabled",
+        "description": "Tickets are neither sold nor required in this convention",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "required_for_signup",
+        "description": "A valid ticket is required to sign up for events in this convention",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  }
+}

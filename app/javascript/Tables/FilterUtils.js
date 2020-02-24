@@ -1,7 +1,7 @@
 import { Transforms } from '../ComposableFormUtils';
 
 export function encodeStringArray(value) {
-  const encoded = value.join(',');
+  const encoded = (value || []).join(',');
   if (encoded.length === 0) {
     return null;
   }
@@ -9,7 +9,7 @@ export function encodeStringArray(value) {
 }
 
 export function decodeStringArray(value) {
-  const decoded = value.split(',').filter((decodedValue) => decodedValue.length > 0);
+  const decoded = (value || '').split(',').filter((decodedValue) => decodedValue.length > 0);
   if (decoded.length === 0) {
     return null;
   }

@@ -8,7 +8,7 @@ tool 'update_schema' do
 
   def run
     sh 'bin/rake graphql:schema:dump'
-    sh 'yarn run graphql:build_fragment_types'
+    sh 'yarn run graphql:build_type_data'
 
     return unless publish
     Dir.mktmpdir do |dir|
