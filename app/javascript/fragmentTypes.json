@@ -1,1 +1,332 @@
-{"__schema":{"queryType":{"name":"Query"},"mutationType":{"name":"Mutation"},"subscriptionType":null,"types":[{"kind":"UNION","name":"CmsContent","description":null,"fields":null,"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"CmsLayout","ofType":null},{"kind":"OBJECT","name":"CmsPartial","ofType":null},{"kind":"OBJECT","name":"Page","ofType":null}]},{"kind":"UNION","name":"CmsParent","description":null,"fields":null,"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"Convention","ofType":null},{"kind":"OBJECT","name":"RootSite","ofType":null}]},{"kind":"UNION","name":"NotificationSource","description":null,"fields":null,"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"UserActivityAlert","ofType":null}]},{"kind":"INTERFACE","name":"PaginationInterface","description":null,"fields":[{"name":"current_page","description":null,"args":[],"type":{"kind":"NON_NULL","name":null,"ofType":{"kind":"SCALAR","name":"Int","ofType":null}},"isDeprecated":false,"deprecationReason":null},{"name":"per_page","description":null,"args":[],"type":{"kind":"NON_NULL","name":null,"ofType":{"kind":"SCALAR","name":"Int","ofType":null}},"isDeprecated":false,"deprecationReason":null},{"name":"total_entries","description":null,"args":[],"type":{"kind":"NON_NULL","name":null,"ofType":{"kind":"SCALAR","name":"Int","ofType":null}},"isDeprecated":false,"deprecationReason":null},{"name":"total_pages","description":null,"args":[],"type":{"kind":"NON_NULL","name":null,"ofType":{"kind":"SCALAR","name":"Int","ofType":null}},"isDeprecated":false,"deprecationReason":null}],"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"EventProposalsPagination","ofType":null},{"kind":"OBJECT","name":"EventsPagination","ofType":null},{"kind":"OBJECT","name":"OrdersPagination","ofType":null},{"kind":"OBJECT","name":"SignupChangesPagination","ofType":null},{"kind":"OBJECT","name":"SignupRequestsPagination","ofType":null},{"kind":"OBJECT","name":"SignupsPagination","ofType":null},{"kind":"OBJECT","name":"UserConProfilesPagination","ofType":null},{"kind":"OBJECT","name":"UsersPagination","ofType":null}]},{"kind":"UNION","name":"PermissionedModel","description":null,"fields":null,"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"CmsContentGroup","ofType":null},{"kind":"OBJECT","name":"Convention","ofType":null},{"kind":"OBJECT","name":"EventCategory","ofType":null}]},{"kind":"UNION","name":"PermissionedRole","description":null,"fields":null,"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"OrganizationRole","ofType":null},{"kind":"OBJECT","name":"StaffPosition","ofType":null}]},{"kind":"UNION","name":"SearchableModel","description":null,"fields":null,"inputFields":null,"interfaces":null,"enumValues":null,"possibleTypes":[{"kind":"OBJECT","name":"Event","ofType":null},{"kind":"OBJECT","name":"Page","ofType":null}]}],"directives":[{"name":"include","description":"Directs the executor to include this field or fragment only when the `if` argument is true.","locations":["FIELD","FRAGMENT_SPREAD","INLINE_FRAGMENT"],"args":[{"name":"if","description":"Included when true.","type":{"kind":"NON_NULL","name":null,"ofType":{"kind":"SCALAR","name":"Boolean","ofType":null}},"defaultValue":null}]},{"name":"skip","description":"Directs the executor to skip this field or fragment when the `if` argument is true.","locations":["FIELD","FRAGMENT_SPREAD","INLINE_FRAGMENT"],"args":[{"name":"if","description":"Skipped when true.","type":{"kind":"NON_NULL","name":null,"ofType":{"kind":"SCALAR","name":"Boolean","ofType":null}},"defaultValue":null}]},{"name":"deprecated","description":"Marks an element of a GraphQL schema as no longer supported.","locations":["FIELD_DEFINITION","ENUM_VALUE"],"args":[{"name":"reason","description":"Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/).","type":{"kind":"SCALAR","name":"String","ofType":null},"defaultValue":"\"No longer supported\""}]}]}}
+{
+  "__schema": {
+    "queryType": {
+      "name": "Query"
+    },
+    "mutationType": {
+      "name": "Mutation"
+    },
+    "subscriptionType": null,
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "CmsContent",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "CmsLayout",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "CmsPartial",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Page",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "CmsParent",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Convention",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "RootSite",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "NotificationSource",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "UserActivityAlert",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "PaginationInterface",
+        "description": null,
+        "fields": [
+          {
+            "name": "current_page",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "per_page",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "total_entries",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "total_pages",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "EventProposalsPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "EventsPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "OrdersPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "SignupChangesPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "SignupRequestsPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "SignupsPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "UserConProfilesPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "UsersPagination",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "PermissionedModel",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "CmsContentGroup",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Convention",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "EventCategory",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "PermissionedRole",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "OrganizationRole",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "StaffPosition",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "SearchableModel",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Event",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Page",
+            "ofType": null
+          }
+        ]
+      }
+    ],
+    "directives": [
+      {
+        "name": "include",
+        "description": "Directs the executor to include this field or fragment only when the `if` argument is true.",
+        "locations": [
+          "FIELD",
+          "FRAGMENT_SPREAD",
+          "INLINE_FRAGMENT"
+        ],
+        "args": [
+          {
+            "name": "if",
+            "description": "Included when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ]
+      },
+      {
+        "name": "skip",
+        "description": "Directs the executor to skip this field or fragment when the `if` argument is true.",
+        "locations": [
+          "FIELD",
+          "FRAGMENT_SPREAD",
+          "INLINE_FRAGMENT"
+        ],
+        "args": [
+          {
+            "name": "if",
+            "description": "Skipped when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ]
+      },
+      {
+        "name": "deprecated",
+        "description": "Marks an element of a GraphQL schema as no longer supported.",
+        "locations": [
+          "FIELD_DEFINITION",
+          "ENUM_VALUE"
+        ],
+        "args": [
+          {
+            "name": "reason",
+            "description": "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/).",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": "\"No longer supported\""
+          }
+        ]
+      }
+    ]
+  }
+}
