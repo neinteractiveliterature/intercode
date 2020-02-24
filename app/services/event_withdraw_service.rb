@@ -30,7 +30,7 @@ class EventWithdrawService < CivilService::Service
 
   def inner_call
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
-      signup.update!(state: 'withdrawn', updated_by: whodunit)
+      signup.update!(state: 'withdrawn', bucket_key: nil, counted: false, updated_by: whodunit)
       signup.log_signup_change!(action: 'withdraw')
 
       move_result = move_signups(signup, prev_state, prev_bucket_key)
