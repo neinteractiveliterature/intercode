@@ -21,6 +21,14 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
     )
   end
 
+  def self.format_bucket(bucket, requested_bucket)
+    return "#{bucket.name} (no preference)" if bucket && !requested_bucket
+    if requested_bucket && bucket != requested_bucket
+      return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})"
+    end
+    bucket&.name
+  end
+
   field :id, 'Seq'
 
   field :state, 'State' do
@@ -51,6 +59,16 @@ OR lower(user_con_profiles.first_name) like :value",
   end
 
   field :event_title, 'Event' do
+    def apply_filter(scope, value)
+      run_scope = Run.where(id: scope.select(:run_id))
+      event_scope = Names.string_search(
+        Event.where(id: run_scope.select(:event_id)),
+        value,
+        ['title']
+      )
+      scope.joins(:run).where(runs: { event_id: event_scope.select(:id) })
+    end
+
     def generate_csv_cell(signup)
       signup.run.event.title
     end
@@ -64,14 +82,7 @@ OR lower(user_con_profiles.first_name) like :value",
     end
 
     def generate_csv_cell(signup)
-      bucket = signup.bucket
-      requested_bucket = signup.requested_bucket
-
-      return "#{bucket.name} (no preference)" if bucket && !requested_bucket
-      if requested_bucket && bucket != requested_bucket
-        return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})"
-      end
-      bucket&.name
+      Tables::SignupsTableResultsPresenter.format_bucket(signup.bucket, signup.requested_bucket)
     end
   end
 
