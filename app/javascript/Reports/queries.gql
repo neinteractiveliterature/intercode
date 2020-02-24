@@ -105,12 +105,12 @@ query SignupCountsByStateQuery {
   }
 }
 
-query SignupSpySignupChangesQuery($page: Int, $perPage: Int) {
+query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int) {
   convention {
     id
     timezone_name
 
-    signup_changes_paginated(page: $page, per_page: $perPage, sort: [{ field: "created_at", desc: true }]) {
+    signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: [{ field: "created_at", desc: true }]) {
       total_entries
       total_pages
       current_page
@@ -120,6 +120,7 @@ query SignupSpySignupChangesQuery($page: Int, $perPage: Int) {
         id
         state
         counted
+        bucket_key
         action
         created_at
 
@@ -127,6 +128,7 @@ query SignupSpySignupChangesQuery($page: Int, $perPage: Int) {
           id
           state
           counted
+          bucket_key
         }
 
         signup {
@@ -140,6 +142,26 @@ query SignupSpySignupChangesQuery($page: Int, $perPage: Int) {
           event {
             id
             title
+
+            event_category {
+              id
+              team_member_name
+            }
+
+            registration_policy {
+              buckets {
+                key
+                name
+                anything
+              }
+            }
+
+            team_members {
+              id
+              user_con_profile {
+                id
+              }
+            }
           }
         }
 

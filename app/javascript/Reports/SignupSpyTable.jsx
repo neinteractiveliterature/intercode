@@ -12,6 +12,11 @@ import SignupStateCell from '../Tables/SignupStateCell';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import ColumnSelector from '../Tables/ColumnSelector';
 import ReactTableExportButton from '../Tables/ExportButton';
+import { formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
+import FreeTextFilter from '../Tables/FreeTextFilter';
+import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
+
+const FILTER_CODECS = buildFieldFilterCodecs({});
 
 const ChoiceCell = ({ value, original }) => {
   if (original.counted) {
@@ -32,35 +37,78 @@ ChoiceCell.defaultProps = {
   value: null,
 };
 
-const SignupChangeCell = ({ value }) => {
+const SignupChangeCell = ({ value }) => (
+  <>
+    {value.previous_signup_change
+      ? (
+        <>
+          <SignupStateCell value={value.previous_signup_change.state} strikeThrough />
+          {' → '}
+        </>
+      )
+      : (value.action === 'unknown' && <span className="text-muted">unknown → </span>)}
+    <SignupStateCell value={value.state} />
+    {value.action !== 'unknown' && (
+      <>
+        <br />
+        <small className="text-muted">
+          via
+          {' '}
+          {humanize(value.action).toLowerCase()}
+        </small>
+      </>
+    )}
+  </>
+);
+
+SignupChangeCell.propTypes = {
+  value: PropTypes.shape({
+    action: PropTypes.string.isRequired,
+    previous_signup_change: PropTypes.shape({
+      state: PropTypes.string,
+    }),
+    state: PropTypes.string,
+  }).isRequired,
+};
+
+const BucketChangeCell = ({ value }) => {
+  const oldBucket = value.previous_signup_change
+    ? formatBucket(value.previous_signup_change, value.run.event)
+    : null;
+  const newBucket = formatBucket(value, value.run.event);
+
   return (
     <>
-      {value.previous_signup_change
-        ? (
-          <>
-            <SignupStateCell value={value.previous_signup_change.state} strikeThrough/>
-            {' → '}
-          </>
-        )
-        : (value.action === 'unknown' && <span className="text-muted">unknown → </span>)}
-      <SignupStateCell value={value.state} />
-      {value.action !== 'unknown' && (
+      {(oldBucket && oldBucket !== newBucket) && (
         <>
+          <s>{oldBucket}</s>
           <br />
-          <small className="text-muted">
-            via
-            {' '}
-            {humanize(value.action).toLowerCase()}
-          </small>
         </>
       )}
+      {newBucket}
     </>
   );
 };
 
+BucketChangeCell.propTypes = {
+  value: PropTypes.shape({
+    previous_signup_change: PropTypes.shape({}),
+    run: PropTypes.shape({
+      event: PropTypes.shape({}).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
 const TimestampCell = ({ value }) => {
   const data = useContext(QueryDataContext);
-  return moment.tz(value, data.convention.timezone_name).format('MMM D, YYYY [at] h:mm:ssa');
+  const timestamp = moment.tz(value, data.convention.timezone_name);
+  return (
+    <>
+      {timestamp.format('MMM D, YYYY')}
+      <br />
+      {timestamp.format('h:mm:ssa')}
+    </>
+  );
 };
 
 TimestampCell.propTypes = {
@@ -73,15 +121,17 @@ const getPossibleColumns = () => [
     id: 'name',
     accessor: (signupChange) => signupChange.user_con_profile,
     sortable: false,
-    filterable: false,
+    filterable: true,
     Cell: UserConProfileWithGravatarCell,
+    Filter: FreeTextFilter,
   },
   {
     Header: 'Event',
     id: 'event_title',
     accessor: (signupChange) => signupChange.run.event.title,
     sortable: false,
-    filterable: false,
+    filterable: true,
+    Filter: FreeTextFilter,
   },
   {
     Header: 'Change',
@@ -92,11 +142,20 @@ const getPossibleColumns = () => [
     Cell: SignupChangeCell,
   },
   {
+    Header: 'Bucket',
+    id: 'bucket_change',
+    accessor: (signupChange) => signupChange,
+    sortable: false,
+    filterable: false,
+    Cell: BucketChangeCell,
+  },
+  {
     Header: 'Timestamp',
     id: 'created_at',
     accessor: 'created_at',
     sortable: false,
     filterable: false,
+    width: 130,
     // eslint-disable-next-line react/prop-types
     Cell: ({ value }) => <TimestampCell value={value} />,
   },
@@ -115,9 +174,11 @@ function SignupSpyTableContent({ exportUrl }) {
   const [reactTableProps, {
     columnSelectionProps, queryResult, queryData, tableHeaderProps: { filtered, sorted },
   }] = useReactTableWithTheWorks({
+    decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
-      'name', 'event_title', 'change', 'created_at', 'choice',
+      'name', 'event_title', 'change', 'bucket_change', 'created_at', 'choice',
     ],
+    encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data }) => data.convention.signup_changes_paginated.entries,
     getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
     getPossibleColumns,
@@ -142,6 +203,10 @@ function SignupSpyTableContent({ exportUrl }) {
                   columns={flatMap(columnSelectionProps.visibleColumnIds, (columnId) => {
                     if (columnId === 'change') {
                       return ['action', 'prev_state', 'state'];
+                    }
+
+                    if (columnId === 'bucket_change') {
+                      return ['prev_bucket', 'bucket'];
                     }
 
                     return columnId;
