@@ -1,7 +1,7 @@
 import React, {
   useState, useContext, useMemo, Suspense,
 } from 'react';
-import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useUniqueId from '../useUniqueId';
@@ -36,7 +36,8 @@ async function changePassword(
   }
 }
 
-function ResetPassword({ location }) {
+function ResetPassword() {
+  const location = useLocation();
   const resetPasswordToken = useMemo(
     () => new URLSearchParams(location.search).get('reset_password_token'),
     [location.search],
@@ -98,11 +99,5 @@ function ResetPassword({ location }) {
     </>
   );
 }
-
-ResetPassword.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }).isRequired,
-};
 
 export default ResetPassword;

@@ -84,7 +84,6 @@ function CmsPage({ slug, rootPage }) {
               <div className="page-admin-dropdown">
                 <Suspense fallback={<></>}>
                   <PageAdminDropdown
-                    history={history}
                     pageId={data.cmsPage.id}
                     showEdit={data.cmsPage.current_ability_can_update}
                     showDelete={data.cmsPage.current_ability_can_delete}
