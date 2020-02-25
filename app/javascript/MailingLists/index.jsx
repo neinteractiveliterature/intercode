@@ -60,13 +60,13 @@ function MailingListsMenu() {
 function MailingLists() {
   return (
     <Switch>
-      <Route path="/mailing_lists/ticketed_attendees" component={TicketedAttendees} />
-      <Route path="/mailing_lists/event_proposers" component={EventProposers} />
-      <Route path="/mailing_lists/team_members" component={TeamMembers} />
-      <Route path="/mailing_lists/users_with_pending_bio" component={UsersWithPendingBio} />
-      <Route path="/mailing_lists/waitlists" component={WaitlistMailingLists} />
-      <Route path="/mailing_lists/whos_free" component={WhosFree} />
-      <Route path="/mailing_lists/" component={MailingListsMenu} />
+      <Route path="/mailing_lists/ticketed_attendees"><TicketedAttendees /></Route>
+      <Route path="/mailing_lists/event_proposers"><EventProposers /></Route>
+      <Route path="/mailing_lists/team_members"><TeamMembers /></Route>
+      <Route path="/mailing_lists/users_with_pending_bio"><UsersWithPendingBio /></Route>
+      <Route path="/mailing_lists/waitlists"><WaitlistMailingLists /></Route>
+      <Route path="/mailing_lists/whos_free"><WhosFree /></Route>
+      <Route path="/mailing_lists/"><MailingListsMenu /></Route>
     </Switch>
   );
 }

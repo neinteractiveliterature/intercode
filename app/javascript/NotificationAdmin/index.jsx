@@ -7,8 +7,8 @@ import NotificationConfiguration from './NotificationConfiguration';
 function NotificationAdmin() {
   return (
     <Switch>
-      <Route path="/admin_notifications/:category/:event" component={NotificationConfiguration} />
-      <Route path="/admin_notifications" component={NotificationAdminIndex} />
+      <Route path="/admin_notifications/:category/:event"><NotificationConfiguration /></Route>
+      <Route path="/admin_notifications"><NotificationAdminIndex /></Route>
     </Switch>
   );
 }

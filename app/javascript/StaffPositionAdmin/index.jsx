@@ -52,7 +52,7 @@ function StaffPositionAdmin() {
       </nav>
 
       <Switch>
-        <Route path="/staff_positions/new" component={NewStaffPosition} />
+        <Route path="/staff_positions/new"><NewStaffPosition /></Route>
         <Route
           path="/staff_positions/:id/edit"
           render={({ match: { params: { id } } }) => (

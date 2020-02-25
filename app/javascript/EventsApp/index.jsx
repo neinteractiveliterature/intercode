@@ -106,7 +106,7 @@ function EventsApp() {
           );
         }}
       />
-      {siteMode !== 'single_event' && <Route path="/events" component={EventList} />}
+      {siteMode !== 'single_event' && <Route path="/events"><EventList /></Route>}
     </Switch>
   );
 }

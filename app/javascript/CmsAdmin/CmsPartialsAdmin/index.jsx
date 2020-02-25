@@ -9,10 +9,10 @@ import ViewCmsPartialSource from './ViewCmsPartialSource';
 function CmsPartialsAdmin() {
   return (
     <Switch>
-      <Route path="/cms_partials/:id/edit" component={EditCmsPartial} />
-      <Route path="/cms_partials/:id/view_source" component={ViewCmsPartialSource} />
-      <Route path="/cms_partials/new" component={NewCmsPartial} />
-      <Route path="/cms_partials" component={CmsPartialsAdminTable} />
+      <Route path="/cms_partials/:id/edit"><EditCmsPartial /></Route>
+      <Route path="/cms_partials/:id/view_source"><ViewCmsPartialSource /></Route>
+      <Route path="/cms_partials/new"><NewCmsPartial /></Route>
+      <Route path="/cms_partials"><CmsPartialsAdminTable /></Route>
     </Switch>
   );
 }

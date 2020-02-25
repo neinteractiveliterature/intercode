@@ -7,8 +7,8 @@ import TicketPurchaseForm from './TicketPurchaseForm';
 function MyTicket() {
   return (
     <Switch>
-      <Route path="/ticket/new" component={TicketPurchaseForm} />
-      <Route path="/ticket" component={MyTicketDisplay} />
+      <Route path="/ticket/new"><TicketPurchaseForm /></Route>
+      <Route path="/ticket"><MyTicketDisplay /></Route>
     </Switch>
   );
 }

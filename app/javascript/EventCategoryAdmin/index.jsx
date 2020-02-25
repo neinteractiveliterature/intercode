@@ -28,9 +28,9 @@ function EventCategoryAdmin() {
       </ol>
 
       <Switch>
-        <Route path="/event_categories/new" component={NewEventCategory} />
-        <Route path="/event_categories/:id/edit" component={EditEventCategory} />
-        <Route path="/event_categories" component={EventCategoryIndex} />
+        <Route path="/event_categories/new"><NewEventCategory /></Route>
+        <Route path="/event_categories/:id/edit"><EditEventCategory /></Route>
+        <Route path="/event_categories"><EventCategoryIndex /></Route>
       </Switch>
     </>
   );

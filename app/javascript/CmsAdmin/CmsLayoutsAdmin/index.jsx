@@ -9,10 +9,10 @@ import ViewCmsLayoutSource from './ViewCmsLayoutSource';
 function CmsLayoutsAdmin() {
   return (
     <Switch>
-      <Route path="/cms_layouts/:id/edit" component={EditCmsLayout} />
-      <Route path="/cms_layouts/:id/view_source" component={ViewCmsLayoutSource} />
-      <Route path="/cms_layouts/new" component={NewCmsLayout} />
-      <Route path="/cms_layouts" component={CmsLayoutsAdminTable} />
+      <Route path="/cms_layouts/:id/edit"><EditCmsLayout /></Route>
+      <Route path="/cms_layouts/:id/view_source"><ViewCmsLayoutSource /></Route>
+      <Route path="/cms_layouts/new"><NewCmsLayout /></Route>
+      <Route path="/cms_layouts"><CmsLayoutsAdminTable /></Route>
     </Switch>
   );
 }
