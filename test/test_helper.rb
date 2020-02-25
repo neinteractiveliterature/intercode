@@ -8,7 +8,10 @@ require 'rails/test_help'
 require 'minitest/reporters'
 if ENV['CI'].present?
   Minitest::Reporters.use!(
-    [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::HtmlReporter.new],
+    [
+      Minitest::Reporters::SpecReporter.new,
+      Minitest::Reporters::HtmlReporter.new(output_filename: 'minitest-report.html')
+    ],
     ENV,
     Minitest.backtrace_filter
   )
