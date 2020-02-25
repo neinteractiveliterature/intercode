@@ -60,11 +60,11 @@ jobs:
         -v $(pwd)/test/html_reports:/usr/src/intercode/test/html_reports
         web
         test/travis-complete.sh
-    - name: Archive Minitest HTML report
+    - name: Archive HTML test reports
       uses: actions/upload-artifact@v1
       with:
-        name: minitest-report
-        path: test/html_reports/index.html
+        name: test-reports
+        path: test/html_reports
 
     # Build and publish the production image if on master
     - name: Log into Docker Hub
