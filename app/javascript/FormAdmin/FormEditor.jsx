@@ -121,14 +121,8 @@ function FormEditor() {
         }}
       >
         <Switch>
-          <Route
-            path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"
-            component={FormItemEditorLayout}
-          />
-          <Route
-            path="/admin_forms/:id/edit/section/:sectionId"
-            component={FormSectionEditorLayout}
-          />
+          <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"><FormItemEditorLayout /></Route>
+          <Route path="/admin_forms/:id/edit/section/:sectionId"><FormSectionEditorLayout /></Route>
         </Switch>
       </FormEditorContext.Provider>
     </div>

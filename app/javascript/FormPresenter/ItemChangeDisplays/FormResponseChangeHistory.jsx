@@ -44,16 +44,9 @@ function FormResponseChangeHistory({
       <div className="col-md-9">
         <Switch>
           {changeGroups.map((changeGroup) => (
-            <Route
-              key={changeGroup.id}
-              path={`${basePath}/${changeGroup.id}`}
-              render={() => (
-                <FormItemChangeGroup
-                  convention={convention}
-                  changeGroup={changeGroup}
-                />
-              )}
-            />
+            <Route key={changeGroup.id} path={`${basePath}/${changeGroup.id}`}>
+              <FormItemChangeGroup convention={convention} changeGroup={changeGroup} />
+            </Route>
           ))}
           <Redirect to={`${basePath}/${changeGroups[0].id}`} />
         </Switch>

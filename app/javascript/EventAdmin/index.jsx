@@ -100,16 +100,15 @@ function EventAdmin() {
 
       <Switch>
         <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`}><NewEvent /></Route>
-        {eventCategories.map((eventCategory) => (
-          <Route
-            key={eventCategory.id}
-            path={buildEventCategoryUrl(eventCategory)}
-            render={(routeProps) => {
-              const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
-              return <AdminComponent {...routeProps} eventCategoryId={eventCategory.id} />;
-            }}
-          />
-        ))}
+        {eventCategories.map((eventCategory) => {
+          const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
+
+          return (
+            <Route key={eventCategory.id} path={buildEventCategoryUrl(eventCategory)}>
+              <AdminComponent eventCategoryId={eventCategory.id} />
+            </Route>
+          );
+        })}
         <Route path="/admin_events/:id/edit"><EventAdminEditEvent /></Route>
         <Route path="/admin_events/dropped_events"><DroppedEventAdmin /></Route>
         <Redirect to={buildEventCategoryUrl(eventCategories[0])} />
