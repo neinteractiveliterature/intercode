@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
@@ -70,7 +70,10 @@ EditOrganizationRoleForm.propTypes = {
   }).isRequired,
 };
 
-function EditOrganizationRole({ organizationId, organizationRoleId }) {
+function EditOrganizationRole() {
+  const params = useParams();
+  const organizationId = Number.parseInt(params.organizationId, 10);
+  const organizationRoleId = Number.parseInt(params.organizationRoleId, 10);
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const organization = useMemo(
     () => (error || loading ? null : data.organizations.find((org) => org.id === organizationId)),
@@ -96,10 +99,5 @@ function EditOrganizationRole({ organizationId, organizationRoleId }) {
     />
   );
 }
-
-EditOrganizationRole.propTypes = {
-  organizationId: PropTypes.number.isRequired,
-  organizationRoleId: PropTypes.number.isRequired,
-};
 
 export default EditOrganizationRole;

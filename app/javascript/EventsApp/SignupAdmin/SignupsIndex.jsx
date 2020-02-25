@@ -35,48 +35,28 @@ function SignupsIndex({
         </li>
       </ul>
       <Switch>
-        <Route
-          path={`${runPath}/admin_signups/emails/comma`}
-          render={() => (
-            <RunEmailList
-              runId={runId}
-              eventId={eventId}
-              separator=", "
-            />
-          )}
-        />
-        <Route
-          path={`${runPath}/admin_signups/emails/semicolon`}
-          render={() => (
-            <>
-              <div className="alert alert-warning mb-2">
-                <strong>Note:</strong>
-                {' '}
-                Most email apps use comma-separated address lists.  Only Outlook uses
-                semicolon-separated address lists.  If you&apos;re not using Outlook, try
-                comma-separated first.
-              </div>
-              <RunEmailList
-                runId={runId}
-                eventId={eventId}
-                separator="; "
-              />
-            </>
-          )}
-        />
-        <Route
-          path={`${runPath}/admin_signups`}
-          exact
-          render={() => (
-            <RunSignupsTable
-              runId={runId}
-              eventId={eventId}
-              exportUrl={exportSignupsUrl}
-              runPath={runPath}
-              defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
-            />
-          )}
-        />
+        <Route path={`${runPath}/admin_signups/emails/comma`}>
+          <RunEmailList runId={runId} eventId={eventId} separator=", " />
+        </Route>
+        <Route path={`${runPath}/admin_signups/emails/semicolon`}>
+          <div className="alert alert-warning mb-2">
+            <strong>Note:</strong>
+            {' '}
+            Most email apps use comma-separated address lists.  Only Outlook uses
+            semicolon-separated address lists.  If you&rsquo;re not using Outlook, try
+            comma-separated first.
+          </div>
+          <RunEmailList runId={runId} eventId={eventId} separator="; " />
+        </Route>
+        <Route path={`${runPath}/admin_signups`} exact>
+          <RunSignupsTable
+            runId={runId}
+            eventId={eventId}
+            exportUrl={exportSignupsUrl}
+            runPath={runPath}
+            defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
+          />
+        </Route>
         <Redirect to={`${runPath}/admin_signups`} />
       </Switch>
     </>

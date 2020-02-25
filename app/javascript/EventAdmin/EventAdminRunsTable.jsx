@@ -57,18 +57,12 @@ function EventAdminRunsTable({ eventCategoryId }) {
         </tbody>
       </table>
 
-      <Route
-        path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
-        render={(props) => (
-          <EditRun {...props} events={data.events} convention={data.convention} />
-        )}
-      />
-      <Route
-        path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}
-        render={(props) => (
-          <EditRun {...props} events={data.events} convention={data.convention} />
-        )}
-      />
+      <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
+        <EditRun events={data.events} convention={data.convention} />
+      </Route>
+      <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}>
+        <EditRun events={data.events} convention={data.convention} />
+      </Route>
     </div>
   );
 }

@@ -34,13 +34,12 @@ function AssignDoc({ assign, prefix = null }) {
               <Route
                 path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}\\.${escapeRegExp(assignName)}(\\..*)?`}
                 key={method.name}
-                render={() => (
-                  <AssignDoc
-                    assign={{ name: assignName, drop_class_name: returnClassName }}
-                    prefix={buildMemberPrefix(assign.name, prefix)}
-                  />
-                )}
-              />
+              >
+                <AssignDoc
+                  assign={{ name: assignName, drop_class_name: returnClassName }}
+                  prefix={buildMemberPrefix(assign.name, prefix)}
+                />
+              </Route>
             );
           }
 

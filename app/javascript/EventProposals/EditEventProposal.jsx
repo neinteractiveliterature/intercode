@@ -1,6 +1,8 @@
 import React from 'react';
 import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
+import {
+  Redirect, useHistory, useParams, Link,
+} from 'react-router-dom';
 
 import { DeleteEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -70,7 +72,11 @@ function EditEventProposal() {
       <EventProposalForm
         eventProposalId={eventProposalId}
         afterSubmit={() => history.push('/pages/new-proposal')}
-        exitButton={{ caption: 'Return to proposals page', url: '/pages/new-proposal' }}
+        exitButton={(
+          <Link className="btn btn-outline-secondary mr-2" to="/pages/new-proposal">
+            Return to proposals page
+          </Link>
+        )}
       />
     </>
   );

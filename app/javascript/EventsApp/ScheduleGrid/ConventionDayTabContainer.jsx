@@ -106,9 +106,10 @@ function ConventionDayTabContainer({
         {conventionDayTimespans.map((timespan) => (
           <Route
             path={`${basename}/${timespan.start.format('dddd').toLowerCase()}`}
-            render={() => children(timespan)}
             key={timespan.start.toISOString()}
-          />
+          >
+            {children(timespan)}
+          </Route>
         ))}
         <Redirect to={`${basename}/${conventionDayTimespans[0].start.format('dddd').toLowerCase()}`} />
       </Switch>
