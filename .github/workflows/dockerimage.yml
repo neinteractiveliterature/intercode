@@ -1,13 +1,6 @@
 name: Docker Image CI
 
-on:
-  pull_request:
-    branches:
-      - master
-      - post-intercon-t
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   build:
