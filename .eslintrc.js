@@ -32,7 +32,7 @@ module.exports = {
   ],
 
   rules: {
-    'babel/camelcase': 1,
+    'babel/camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
     'camelcase': 'off',
     'jest/no-disabled-tests': "warn",
     'jest/no-focused-tests': "error",

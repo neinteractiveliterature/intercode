@@ -8,6 +8,7 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   output: {
     ...environment.output,
+    crossOriginLoading: 'anonymous',
     pathinfo: true,
     publicPath: 'http://localhost:3035/packs/',
   },
