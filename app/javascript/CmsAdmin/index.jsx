@@ -66,17 +66,17 @@ function CmsAdmin() {
       <br />
 
       <Switch>
-        <Route path="/cms_pages" component={CmsPagesAdmin} />
-        <Route path="/cms_partials" component={CmsPartialsAdmin} />
-        <Route path="/cms_files" component={CmsFilesAdmin} />
+        <Route path="/cms_pages"><CmsPagesAdmin /></Route>
+        <Route path="/cms_partials"><CmsPartialsAdmin /></Route>
+        <Route path="/cms_files"><CmsFilesAdmin /></Route>
         {data.currentAbility.can_create_cms_navigation_items
-          ? <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
+          ? <Route path="/cms_navigation_items"><NavigationItemsAdmin /></Route>
           : <Route path="/cms_navigation_items" render={() => <Redirect to="/cms_pages" />} />}
-        <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
-        <Route path="/cms_variables" component={CmsVariablesAdmin} />
-        <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />
-        <Route path="/cms_content_groups" component={CmsContentGroupsAdmin} />
-        <Route path="/root_site" component={RootSiteAdmin} />
+        <Route path="/cms_layouts"><CmsLayoutsAdmin /></Route>
+        <Route path="/cms_variables"><CmsVariablesAdmin /></Route>
+        <Route path="/cms_graphql_queries"><CmsGraphqlQueriesAdmin /></Route>
+        <Route path="/cms_content_groups"><CmsContentGroupsAdmin /></Route>
+        <Route path="/root_site"><RootSiteAdmin /></Route>
       </Switch>
     </>
   );

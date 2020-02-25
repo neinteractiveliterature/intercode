@@ -9,10 +9,10 @@ import ViewCmsContentGroup from './ViewCmsContentGroup';
 function CmsContentGroupsAdmin() {
   return (
     <Switch>
-      <Route path="/cms_content_groups/:id/edit" component={EditCmsContentGroup} />
-      <Route path="/cms_content_groups/new" component={NewCmsContentGroup} />
-      <Route path="/cms_content_groups/:id" component={ViewCmsContentGroup} />
-      <Route path="/cms_content_groups" component={CmsContentGroupsAdminTable} />
+      <Route path="/cms_content_groups/:id/edit"><EditCmsContentGroup /></Route>
+      <Route path="/cms_content_groups/new"><NewCmsContentGroup /></Route>
+      <Route path="/cms_content_groups/:id"><ViewCmsContentGroup /></Route>
+      <Route path="/cms_content_groups"><CmsContentGroupsAdminTable /></Route>
     </Switch>
   );
 }

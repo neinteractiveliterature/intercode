@@ -88,15 +88,15 @@ function EventProposalsAdmin() {
             Event proposals
           </RouteActivatedBreadcrumbItem>
 
-          <Route path="/admin_event_proposals/:id" component={SingleProposalBreadcrumbs} />
+          <Route path="/admin_event_proposals/:id"><SingleProposalBreadcrumbs /></Route>
         </ol>
       </nav>
 
       <Switch>
-        <Route path="/admin_event_proposals/:id/history" component={EventProposalHistory} />
-        <Route path="/admin_event_proposals/:id/edit" component={AdminEditEventProposal} />
-        <Route path="/admin_event_proposals/:id" component={EventProposalAdminDisplay} />
-        <Route component={EventProposalsAdminTable} />
+        <Route path="/admin_event_proposals/:id/history"><EventProposalHistory /></Route>
+        <Route path="/admin_event_proposals/:id/edit"><AdminEditEventProposal /></Route>
+        <Route path="/admin_event_proposals/:id"><EventProposalAdminDisplay /></Route>
+        <Route ><EventProposalsAdminTable /></Route>
       </Switch>
     </>
   );

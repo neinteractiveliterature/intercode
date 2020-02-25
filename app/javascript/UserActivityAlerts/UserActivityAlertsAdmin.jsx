@@ -29,9 +29,9 @@ const UserActivityAlertsAdmin = () => (
     </nav>
 
     <Switch>
-      <Route path="/user_activity_alerts/new" component={NewUserActivityAlert} />
+      <Route path="/user_activity_alerts/new"><NewUserActivityAlert /></Route>
       <Route path="/user_activity_alerts/:id/edit"><EditUserActivityAlert /></Route>
-      <Route path="/user_activity_alerts" exact component={UserActivityAlertsList} />
+      <Route path="/user_activity_alerts" exact><UserActivityAlertsList /></Route>
       <Redirect to="/user_activity_alerts" />
     </Switch>
   </>
