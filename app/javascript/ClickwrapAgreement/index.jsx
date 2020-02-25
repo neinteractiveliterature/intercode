@@ -9,16 +9,16 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import parseCmsContent from '../parseCmsContent';
-import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
+import useLoginRequired from '../Authentication/useLoginRequired';
 
 function ClickwrapAgreement({ history }) {
   const { data, error } = useQuerySuspended(ClickwrapAgreementQuery);
   const [acceptMutate] = useMutation(AcceptClickwrapAgreement);
   const [accept, acceptError, acceptInProgress] = useAsyncFunction(acceptMutate);
-  const authenticationModal = useContext(AuthenticationModalContext);
   const { refresh } = useContext(AuthenticityTokensContext);
   const apolloClient = useApolloClient();
+  const loginRequired = useLoginRequired();
 
   const acceptClicked = async () => {
     try {
@@ -35,14 +35,12 @@ function ClickwrapAgreement({ history }) {
     return <ErrorDisplay graphqlError={error} />;
   }
 
-  if (!data.myProfile) {
-    if (!authenticationModal.visible) {
-      authenticationModal.open({ currentView: 'signIn' });
-    }
+  if (loginRequired) {
     return <></>;
   }
 
-  if (data.myProfile.accepted_clickwrap_agreement) {
+  // eslint-disable-next-line camelcase
+  if (data.myProfile?.accepted_clickwrap_agreement) {
     return <Redirect to="/" />;
   }
 

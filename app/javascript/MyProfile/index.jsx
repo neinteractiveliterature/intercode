@@ -3,8 +3,15 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import MyProfileDisplay from './MyProfileDisplay';
 import MyProfileForm from './MyProfileForm';
+import useLoginRequired from '../Authentication/useLoginRequired';
 
 function MyProfile() {
+  const loginRequired = useLoginRequired();
+
+  if (loginRequired) {
+    return <></>;
+  }
+
   return (
     <Switch>
       <Route path="/my_profile/edit_bio">
