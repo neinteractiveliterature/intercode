@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, Redirect, withRouter,
+  Switch, Route, Redirect, useLocation,
 } from 'react-router-dom';
 
 import PageLoadingIndicator from './PageLoadingIndicator';
@@ -105,7 +105,8 @@ function renderRootSiteRoutes() {
   ];
 }
 
-function AppRouter({ alert, location }) {
+function AppRouter({ alert }) {
+  const location = useLocation();
   const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
 
@@ -149,13 +150,10 @@ function AppRouter({ alert, location }) {
 
 AppRouter.propTypes = {
   alert: PropTypes.string,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
 };
 
 AppRouter.defaultProps = {
   alert: null,
 };
 
-export default withRouter(AppRouter);
+export default AppRouter;

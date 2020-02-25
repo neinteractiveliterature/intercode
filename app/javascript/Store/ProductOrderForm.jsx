@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
@@ -167,9 +167,6 @@ function ProductOrderForm({ productId }) {
 
 ProductOrderForm.propTypes = {
   productId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(ProductOrderForm);
+export default ProductOrderForm;

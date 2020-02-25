@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
@@ -307,7 +307,8 @@ const getPossibleColumns = (data) => {
   return columns;
 };
 
-function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
+function UserConProfilesTable({ defaultVisibleColumns, exportUrl }) {
+  const history = useHistory();
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
@@ -315,7 +316,6 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
     getData: ({ data }) => data.convention.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data.convention.user_con_profiles_paginated.total_pages,
     getPossibleColumns,
-    history,
     query: UserConProfilesTableUserConProfilesQuery,
     storageKeyPrefix: 'userConProfiles',
   });
@@ -368,14 +368,10 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
 UserConProfilesTable.propTypes = {
   defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string),
   exportUrl: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 UserConProfilesTable.defaultProps = {
   defaultVisibleColumns: null,
 };
 
-export default withRouter(UserConProfilesTable);
+export default UserConProfilesTable;

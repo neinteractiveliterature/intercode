@@ -1,9 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { useQuery } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -180,8 +180,9 @@ const getPossibleColumns = () => [
 ];
 
 function RunSignupsTable({
-  defaultVisibleColumns, eventId, exportUrl, runId, runPath, history,
+  defaultVisibleColumns, eventId, exportUrl, runId, runPath,
 }) {
+  const history = useHistory();
   const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
 
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
@@ -191,7 +192,6 @@ function RunSignupsTable({
     getData: ({ data: tableData }) => tableData.event.run.signups_paginated.entries,
     getPages: ({ data: tableData }) => tableData.event.run.signups_paginated.total_pages,
     getPossibleColumns,
-    history,
     query: RunSignupsTableSignupsQuery,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId, runId },
@@ -234,10 +234,6 @@ RunSignupsTable.propTypes = {
   exportUrl: PropTypes.string.isRequired,
   runId: PropTypes.number.isRequired,
   runPath: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(RunSignupsTable);
+export default RunSignupsTable;

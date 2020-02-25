@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-
 import { useHistory } from 'react-router-dom';
+
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -141,9 +141,6 @@ function EditUserActivityAlert({ userActivityAlertId }) {
 
 EditUserActivityAlert.propTypes = {
   userActivityAlertId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default EditUserActivityAlert;

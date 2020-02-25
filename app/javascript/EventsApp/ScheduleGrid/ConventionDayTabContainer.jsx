@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
 import {
-  NavLink, Switch, Redirect, Route, withRouter,
+  NavLink, Switch, Redirect, Route, useLocation,
 } from 'react-router-dom';
 import { useApolloClient } from '@apollo/react-hooks';
 
@@ -10,9 +10,8 @@ import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
 import { ScheduleGridCombinedQuery } from './queries.gql';
 
-function ConventionDayTab({
-  basename, timespan, prefetchTimespan, location,
-}) {
+function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
+  const location = useLocation();
   const prefetchProps = (
     prefetchTimespan
       ? ({
@@ -46,16 +45,11 @@ ConventionDayTab.propTypes = {
     start: MomentPropTypes.momentObj.isRequired,
   }).isRequired,
   prefetchTimespan: PropTypes.func,
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }).isRequired,
 };
 
 ConventionDayTab.defaultProps = {
   prefetchTimespan: null,
 };
-
-const ConventionDayTabWithRouter = withRouter(ConventionDayTab);
 
 function ConventionDayTabContainer({
   basename, conventionTimespan, timezoneName, prefetchTimespan, children, showExtendedCounts,
@@ -95,7 +89,7 @@ function ConventionDayTabContainer({
       <div className="d-flex flex-wrap">
         <ul className="nav nav-tabs flex-grow-1">
           {conventionDayTimespans.map((timespan) => (
-            <ConventionDayTabWithRouter
+            <ConventionDayTab
               basename={basename}
               timespan={timespan}
               prefetchTimespan={prefetchTimespan}

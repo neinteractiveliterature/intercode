@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Redirect, withRouter, useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
@@ -102,4 +102,4 @@ EditOrganizationRole.propTypes = {
   organizationRoleId: PropTypes.number.isRequired,
 };
 
-export default withRouter(EditOrganizationRole);
+export default EditOrganizationRole;

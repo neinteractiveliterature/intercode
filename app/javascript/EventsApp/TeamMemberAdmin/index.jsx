@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, Link } from 'react-router-dom';
+import {
+  Switch, Route, Link, useRouteMatch,
+} from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -14,6 +16,19 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function TeamMemberAdmin({ eventId, eventPath }) {
   const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
+  const teamMemberMatch = useRouteMatch(`${eventPath}/team_members/:teamMemberId(\\d+)`);
+
+  const teamMember = useMemo(
+    () => {
+      if (loading || error || !teamMemberMatch) {
+        return null;
+      }
+
+      return data.event.team_members
+        .find((tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId);
+    },
+    [data, error, loading, teamMemberMatch],
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -54,39 +69,21 @@ function TeamMemberAdmin({ eventId, eventPath }) {
             to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
             hideUnlessMatch
           >
-            {({ match }) => event.team_members
-              .find((teamMember) => teamMember.id.toString() === match.params.teamMemberId)
-              .user_con_profile
-              .name_without_nickname}
+            { /* eslint-disable-next-line camelcase */ }
+            {teamMember?.user_con_profile?.name_without_nickname || ''}
           </BreadcrumbItemWithRoute>
         </ol>
       </nav>
       <Switch>
-        <Route
-          path={`${eventPath}/team_members/new`}
-          render={({ history }) => (
-            <NewTeamMember
-              event={event}
-              eventPath={eventPath}
-              history={history}
-            />
-          )}
-        />
-        <Route
-          path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-          render={({ match, history }) => (
-            <EditTeamMember
-              event={event}
-              eventPath={eventPath}
-              teamMemberId={Number.parseInt(match.params.teamMemberId, 10)}
-              history={history}
-            />
-          )}
-        />
-        <Route
-          path={`${eventPath}/team_members`}
-          render={() => <TeamMembersIndex eventId={eventId} eventPath={eventPath} />}
-        />
+        <Route path={`${eventPath}/team_members/new`}>
+          <NewTeamMember event={event} eventPath={eventPath} />
+        </Route>
+        <Route path={`${eventPath}/team_members/:teamMemberId(\\d+)`}>
+          <EditTeamMember event={event} eventPath={eventPath} />
+        </Route>
+        <Route path={`${eventPath}/team_members`}>
+          <TeamMembersIndex eventId={eventId} eventPath={eventPath} />
+        </Route>
       </Switch>
     </>
   );

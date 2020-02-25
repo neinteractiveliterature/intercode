@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import { CmsGraphqlQueriesQuery } from './queries.gql';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
@@ -7,11 +7,12 @@ import { CreateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-
-import 'graphiql/graphiql.css';
 import { useCreateMutation } from '../../MutationUtils';
 
-function NewCmsGraphqlQuery({ history }) {
+import 'graphiql/graphiql.css';
+
+function NewCmsGraphqlQuery() {
+  const history = useHistory();
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateCmsGraphqlQuery, {
@@ -58,11 +59,5 @@ function NewCmsGraphqlQuery({ history }) {
     </>
   );
 }
-
-NewCmsGraphqlQuery.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewCmsGraphqlQuery;
