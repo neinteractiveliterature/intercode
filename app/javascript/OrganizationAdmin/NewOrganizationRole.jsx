@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import { CreateOrganizationRole } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -10,7 +9,8 @@ import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function NewOrganizationRole({ organizationId }) {
+function NewOrganizationRole() {
+  const organizationId = Number.parseInt(useParams().organizationId, 10);
   const history = useHistory();
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const { renderForm, formState } = useOrganizationRoleForm({ name: '', users: [], permissions: [] });
@@ -86,9 +86,5 @@ function NewOrganizationRole({ organizationId }) {
     </>
   );
 }
-
-NewOrganizationRole.propTypes = {
-  organizationId: PropTypes.number.isRequired,
-};
 
 export default NewOrganizationRole;

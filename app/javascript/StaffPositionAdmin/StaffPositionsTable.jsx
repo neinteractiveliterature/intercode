@@ -1,15 +1,13 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { DeleteStaffPosition } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
-import StaffPositionPropType from './StaffPositionPropType';
 import { StaffPositionsQuery } from './queries.gql';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -17,6 +15,7 @@ import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import { joinReact } from '../RenderingUtils';
 import Gravatar from '../Gravatar';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
@@ -80,23 +79,41 @@ function describePermissions(permissions) {
   });
 }
 
-function StaffPositionsTable({ staffPositions }) {
+function StaffPositionsTable() {
+  const { data, loading, error } = useQuery(StaffPositionsQuery);
+
   const [deleteMutate] = useMutation(DeleteStaffPosition);
   const deleteStaffPosition = useCallback(
     (id) => deleteMutate({
       variables: { input: { id } },
       update: (proxy) => {
-        const data = proxy.readQuery({ query: StaffPositionsQuery });
-        data.convention.staff_positions = data.convention.staff_positions.filter((
-          (staffPosition) => staffPosition.id !== id
-        ));
-        proxy.writeQuery({ query: StaffPositionsQuery, data });
+        const storeData = proxy.readQuery({ query: StaffPositionsQuery });
+        proxy.writeQuery({
+          query: StaffPositionsQuery,
+          data: {
+            ...storeData,
+            convention: {
+              ...storeData.convention,
+              staff_positions: storeData.convention.staff_positions.filter((
+                (staffPosition) => staffPosition.id !== id
+              )),
+            },
+          },
+        });
       },
     }),
     [deleteMutate],
   );
 
   usePageTitle('Staff positions');
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   const renderRow = (staffPosition) => (
     <tr key={staffPosition.id}>
@@ -152,7 +169,7 @@ function StaffPositionsTable({ staffPositions }) {
                 onClick={() => confirm({
                   prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
                   action: () => deleteStaffPosition(staffPosition.id),
-                  renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                  renderError: (e) => <ErrorDisplay graphQLError={e} />,
                 })}
               >
                 Delete
@@ -164,6 +181,7 @@ function StaffPositionsTable({ staffPositions }) {
     </tr>
   );
 
+  const staffPositions = data.convention.staff_positions;
   const sortedStaffPositions = sortByLocaleString(staffPositions, (position) => position.name);
 
   return (
@@ -191,9 +209,5 @@ function StaffPositionsTable({ staffPositions }) {
     </div>
   );
 }
-
-StaffPositionsTable.propTypes = {
-  staffPositions: PropTypes.arrayOf(StaffPositionPropType).isRequired,
-};
 
 export default StaffPositionsTable;

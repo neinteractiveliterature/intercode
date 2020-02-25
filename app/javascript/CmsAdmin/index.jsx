@@ -71,7 +71,7 @@ function CmsAdmin() {
         <Route path="/cms_files"><CmsFilesAdmin /></Route>
         {data.currentAbility.can_create_cms_navigation_items
           ? <Route path="/cms_navigation_items"><NavigationItemsAdmin /></Route>
-          : <Route path="/cms_navigation_items" render={() => <Redirect to="/cms_pages" />} />}
+          : <Route path="/cms_navigation_items"><Redirect to="/cms_pages" /></Route>}
         <Route path="/cms_layouts"><CmsLayoutsAdmin /></Route>
         <Route path="/cms_variables"><CmsVariablesAdmin /></Route>
         <Route path="/cms_graphql_queries"><CmsGraphqlQueriesAdmin /></Route>

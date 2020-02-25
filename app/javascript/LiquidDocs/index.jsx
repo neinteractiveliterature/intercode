@@ -82,11 +82,10 @@ function LiquidDocs() {
         {sortedTags.map((liquidTag) => (
           <Route
             path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`}
-            render={() => (
-              <LiquidTagDoc liquidTag={liquidTag} />
-            )}
             key={`route-${liquidTag.name}`}
-          />
+          >
+            <LiquidTagDoc liquidTag={liquidTag} />
+          </Route>
         ))}
 
         <Route path="/liquid_docs" exact>

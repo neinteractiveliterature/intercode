@@ -68,14 +68,7 @@ function StaffPositionAdmin() {
             />
           )}
         />
-        <Route
-          path="/staff_positions"
-          render={() => (
-            <StaffPositionsTable
-              staffPositions={data.convention.staff_positions}
-            />
-          )}
-        />
+        <Route path="/staff_positions"><StaffPositionsTable /></Route>
         <Redirect to="/staff_positions" />
       </Switch>
     </>

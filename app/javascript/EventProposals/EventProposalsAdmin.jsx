@@ -96,7 +96,7 @@ function EventProposalsAdmin() {
         <Route path="/admin_event_proposals/:id/history"><EventProposalHistory /></Route>
         <Route path="/admin_event_proposals/:id/edit"><AdminEditEventProposal /></Route>
         <Route path="/admin_event_proposals/:id"><EventProposalAdminDisplay /></Route>
-        <Route ><EventProposalsAdminTable /></Route>
+        <Route path="/admin_event_proposals"><EventProposalsAdminTable /></Route>
       </Switch>
     </>
   );

@@ -2,6 +2,7 @@ import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { Link } from 'react-router-dom';
 
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../ErrorDisplay';
@@ -30,12 +31,9 @@ function ExitButton({ exitButton }) {
 
   if (exitButton.caption && exitButton.url) {
     return (
-      <a
-        className="btn btn-outline-secondary mr-2"
-        href={exitButton.url}
-      >
+      <Link className="btn btn-outline-secondary mr-2" to={exitButton.url}>
         {exitButton.caption}
-      </a>
+      </Link>
     );
   }
 
@@ -151,7 +149,7 @@ function EventProposalFormInner({
           isUpdatingResponse={updateInProgress}
           responseValuesChanged={responseValuesChanged}
           submitForm={submitForm}
-          exitButton={<ExitButton exitButton={exitButton} />}
+          exitButton={exitButton}
           submitButton={{ caption: 'Submit proposal' }}
           footerContent={(
             <div className="text-right">
