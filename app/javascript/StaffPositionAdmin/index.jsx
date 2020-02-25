@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditStaffPosition from './EditStaffPosition';
 import EditStaffPositionPermissions from './EditStaffPositionPermissions';
 import NewStaffPosition from './NewStaffPosition';
@@ -11,6 +10,7 @@ import StaffPositionsTable from './StaffPositionsTable';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function StaffPositionAdmin() {
   const { data, loading, error } = useQuery(StaffPositionsQuery);
@@ -30,21 +30,16 @@ function StaffPositionAdmin() {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItemWithRoute
-            path="/staff_positions"
+          <RouteActivatedBreadcrumbItem
+            matchProps={{ path: '/staff_positions', exact: true }}
             to="/staff_positions"
-            exact
           >
             Staff positions
-          </BreadcrumbItemWithRoute>
+          </RouteActivatedBreadcrumbItem>
 
-          <BreadcrumbItemWithRoute
-            path="/staff_positions/new"
-            to="/staff_positions/new"
-            hideUnlessMatch
-          >
-            New staff position
-          </BreadcrumbItemWithRoute>
+          <Route path="/staff_positions/new">
+            <BreadcrumbItem active>New staff position</BreadcrumbItem>
+          </Route>
 
           <Route path="/staff_positions/:id/edit">
             <BreadcrumbItem active>Edit settings</BreadcrumbItem>

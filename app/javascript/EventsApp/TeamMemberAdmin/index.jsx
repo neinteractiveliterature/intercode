@@ -1,18 +1,17 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Switch, Route, Link, useRouteMatch,
-} from 'react-router-dom';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 
-import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';
 import TeamMembersIndex from './TeamMembersIndex';
 import { TeamMembersQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
+import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function TeamMemberAdmin({ eventId, eventPath }) {
   const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
@@ -44,33 +43,26 @@ function TeamMemberAdmin({ eventId, eventPath }) {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to={eventPath}>
-              {event.title}
-            </Link>
-          </li>
-          <BreadcrumbItemWithRoute
-            path={`${eventPath}/team_members`}
+          <BreadcrumbItem active={false} to={eventPath}>
+            {event.title}
+          </BreadcrumbItem>
+          <RouteActivatedBreadcrumbItem
+            matchProps={{ path: `${eventPath}/team_members`, exact: true }}
             to={`${eventPath}/team_members`}
-            exact
           >
             {pluralize(humanize(underscore(event.event_category.team_member_name)))}
-          </BreadcrumbItemWithRoute>
-          <BreadcrumbItemWithRoute
-            path={`${eventPath}/team_members/new`}
-            to={`${eventPath}/team_members/new`}
-            hideUnlessMatch
-          >
-            {'Add '}
-            {event.event_category.team_member_name}
-          </BreadcrumbItemWithRoute>
-          <BreadcrumbItemWithRoute
-            path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-            to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-            hideUnlessMatch
-          >
-            {teamMember?.user_con_profile?.name_without_nickname || ''}
-          </BreadcrumbItemWithRoute>
+          </RouteActivatedBreadcrumbItem>
+          <Route path={`${eventPath}/team_members/new`}>
+            <BreadcrumbItem active>
+              {'Add '}
+              {event.event_category.team_member_name}
+            </BreadcrumbItem>
+          </Route>
+          <Route path={`${eventPath}/team_members/:teamMemberId(\\d+)`}>
+            <BreadcrumbItem active>
+              {teamMember?.user_con_profile?.name_without_nickname || ''}
+            </BreadcrumbItem>
+          </Route>
         </ol>
       </nav>
       <Switch>

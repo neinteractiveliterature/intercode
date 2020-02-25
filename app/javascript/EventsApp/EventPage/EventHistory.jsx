@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
-import { Link } from 'react-router-dom';
 
 import { EventHistoryQuery } from './queries.gql';
 import Form from '../../Models/Form';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
-import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
+import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age', 'age_restrictions_description',
@@ -53,18 +53,13 @@ function EventHistory({ eventId, eventPath }) {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to={eventPath}>
-              {data.event.title}
-            </Link>
-          </li>
-          <BreadcrumbItemWithRoute
-            path={`${eventPath}/history`}
+          <BreadcrumbItem to={eventPath} active={false}>{data.event.title}</BreadcrumbItem>
+          <RouteActivatedBreadcrumbItem
+            matchProps={{ path: `${eventPath}/history`, exact: true }}
             to={`${eventPath}/history`}
-            exact
           >
             History
-          </BreadcrumbItemWithRoute>
+          </RouteActivatedBreadcrumbItem>
         </ol>
       </nav>
 
