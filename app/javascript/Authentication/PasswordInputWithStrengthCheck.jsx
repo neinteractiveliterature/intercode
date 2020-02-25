@@ -1,6 +1,5 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import zxcvbn from 'zxcvbn';
 import pickBy from 'lodash/pickBy';
 import classNames from 'classnames';
@@ -61,7 +60,6 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     ),
     [passwordStrengthResult],
   );
-  const helpContainer = useRef();
 
   const { score } = passwordStrengthResult || { score: 0 };
   const scoreProgressClasses = {
@@ -140,28 +138,24 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
               arrowProps,
               ref,
               style,
-            }) => (helpContainer.current
-              ? ReactDOM.createPortal(
-                (
-                  <div
-                    className={classNames(
-                      'card',
-                      'popover',
-                      `bs-popover-${placement}`,
-                      { 'd-none': !visible || !hasFeedback },
-                    )}
-                    ref={ref}
-                    style={style}
-                    data-placement={placement}
-                  >
-                    <div className="card-body">
-                      <PasswordFeedback result={passwordStrengthResult} />
-                    </div>
-                    <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
-                  </div>
-                ),
-                helpContainer.current,
-              ) : <></>)}
+            }) => (
+              <div
+                className={classNames(
+                  'card',
+                  'popover',
+                  `bs-popover-${placement}`,
+                  { 'd-none': !visible || !hasFeedback },
+                )}
+                ref={ref}
+                style={style}
+                data-placement={placement}
+              >
+                <div className="card-body">
+                  <PasswordFeedback result={passwordStrengthResult} />
+                </div>
+                <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
+              </div>
+            )}
           </PopperDropdown>
         </div>
         <div
@@ -181,7 +175,6 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
           />
         </div>
       </div>
-      <div ref={helpContainer} />
     </>
   );
 }
