@@ -4,9 +4,12 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_global
 
+.DS_Store
+
 # Ignore build artifacts
 /bin/manifest.json
 /bin/renderFormResponseChangeGroup
+/test/html_reports
 
 # Ignore bundler config
 /.bundle
