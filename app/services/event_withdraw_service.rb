@@ -5,7 +5,7 @@ class EventWithdrawService < CivilService::Service
   self.result_class = Result
 
   attr_reader :signup, :whodunit, :suppress_notifications, :allow_non_self_service_signups,
-    :move_results, :prev_bucket_key, :prev_state
+    :move_results, :prev_bucket_key, :prev_state, :prev_counted
   delegate :run, to: :signup
   delegate :event, to: :run
   delegate :convention, to: :event
@@ -24,6 +24,7 @@ class EventWithdrawService < CivilService::Service
     @move_results = []
     @prev_state = signup.state
     @prev_bucket_key = signup.bucket_key
+    @prev_counted = signup.counted?
   end
 
   private
@@ -33,7 +34,7 @@ class EventWithdrawService < CivilService::Service
       signup.update!(state: 'withdrawn', bucket_key: nil, counted: false, updated_by: whodunit)
       signup.log_signup_change!(action: 'withdraw')
 
-      move_result = move_signups(signup, prev_state, prev_bucket_key)
+      move_result = move_signups(signup, prev_state, prev_bucket_key, prev_counted)
       return move_result if move_result.failure?
     end
 
@@ -53,8 +54,8 @@ class EventWithdrawService < CivilService::Service
     ).deliver_later(wait: 5.seconds)
   end
 
-  def move_signups(signup, prev_state, prev_bucket_key)
-    return success unless signup.counted? && prev_state == 'confirmed'
+  def move_signups(signup, prev_state, prev_bucket_key, prev_counted)
+    return success unless prev_counted && prev_state == 'confirmed'
 
     vacancy_fill_result = fill_vacancy(prev_bucket_key)
     return failure(vacancy_fill_result.errors) if vacancy_fill_result.failure?
