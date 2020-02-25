@@ -9,10 +9,10 @@ import ViewCmsGraphqlQuerySource from './ViewCmsGraphqlQuerySource';
 function CmsGraphqlQueriesAdmin() {
   return (
     <Switch>
-      <Route path="/cms_graphql_queries/:id/edit" component={EditCmsGraphqlQuery} />
-      <Route path="/cms_graphql_queries/:id/view_source" component={ViewCmsGraphqlQuerySource} />
-      <Route path="/cms_graphql_queries/new" component={NewCmsGraphqlQuery} />
-      <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdminTable} />
+      <Route path="/cms_graphql_queries/:id/edit"><EditCmsGraphqlQuery /></Route>
+      <Route path="/cms_graphql_queries/:id/view_source"><ViewCmsGraphqlQuerySource /></Route>
+      <Route path="/cms_graphql_queries/new"><NewCmsGraphqlQuery /></Route>
+      <Route path="/cms_graphql_queries"><CmsGraphqlQueriesAdminTable /></Route>
     </Switch>
   );
 }

@@ -92,11 +92,11 @@ function ReportsMenu() {
 function Reports() {
   return (
     <Switch>
-      <Route path="/reports/attendance_by_payment_amount" component={AttendanceByPaymentAmount} />
-      <Route path="/reports/event_provided_tickets" component={EventProvidedTickets} />
-      <Route path="/reports/events_by_choice" component={EventsByChoice} />
-      <Route path="/reports/signup_spy" component={SignupSpy} />
-      <Route path="/reports" component={ReportsMenu} />
+      <Route path="/reports/attendance_by_payment_amount"><AttendanceByPaymentAmount /></Route>
+      <Route path="/reports/event_provided_tickets"><EventProvidedTickets /></Route>
+      <Route path="/reports/events_by_choice"><EventsByChoice /></Route>
+      <Route path="/reports/signup_spy"><SignupSpy /></Route>
+      <Route path="/reports"><ReportsMenu /></Route>
     </Switch>
   );
 }

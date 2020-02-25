@@ -34,7 +34,7 @@ function UserConProfilesAdmin() {
 
   return (
     <Switch>
-      <Route path="/user_con_profiles/new" component={AttendeesPage} />
+      <Route path="/user_con_profiles/new"><AttendeesPage /></Route>
       <Route
         path="/user_con_profiles/:id/admin_ticket/new"
         render={({ match }) => (
@@ -57,7 +57,7 @@ function UserConProfilesAdmin() {
           <UserConProfileAdminDisplay userConProfileId={Number.parseInt(match.params.id, 10)} />
         )}
       />
-      <Route component={AttendeesPage} />
+      <Route ><AttendeesPage /></Route>
     </Switch>
   );
 }

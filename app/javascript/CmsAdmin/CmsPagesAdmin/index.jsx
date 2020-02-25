@@ -9,10 +9,10 @@ import ViewCmsPageSource from './ViewCmsPageSource';
 function CmsPagesAdmin() {
   return (
     <Switch>
-      <Route path="/cms_pages/:id/edit" component={EditCmsPage} />
-      <Route path="/cms_pages/:id/view_source" component={ViewCmsPageSource} />
-      <Route path="/cms_pages/new" component={NewCmsPage} />
-      <Route path="/cms_pages" component={CmsPagesAdminTable} />
+      <Route path="/cms_pages/:id/edit"><EditCmsPage /></Route>
+      <Route path="/cms_pages/:id/view_source"><ViewCmsPageSource /></Route>
+      <Route path="/cms_pages/new"><NewCmsPage /></Route>
+      <Route path="/cms_pages"><CmsPagesAdminTable /></Route>
     </Switch>
   );
 }

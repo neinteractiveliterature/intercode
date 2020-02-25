@@ -23,9 +23,9 @@ function StoreAdmin() {
       </ul>
 
       <Switch>
-        <Route path="/admin_store/products" component={ProductAdmin} />
+        <Route path="/admin_store/products"><ProductAdmin /></Route>
         <Route path="/admin_store/orders" render={() => <OrderAdmin exportUrl="/admin_store/orders/export.csv" />} />
-        <Route path="/admin_store/order_summary" component={OrderSummary} />
+        <Route path="/admin_store/order_summary"><OrderSummary /></Route>
         <Redirect to="/admin_store/products" />
       </Switch>
     </>
