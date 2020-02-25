@@ -131,18 +131,15 @@ function AppRoot() {
   return (
     <AppRootContext.Provider value={appRootContextValue}>
       <Switch>
-        <Route
-          path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"
-          component={PageComponents.FormEditor}
-        />
-        <Route
-          path="/admin_forms/:id/edit/section/:sectionId"
-          component={PageComponents.FormEditor}
-        />
-        <Route
-          path="/admin_forms/:id/edit"
-          component={PageComponents.FormEditor}
-        />
+        <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
+          <PageComponents.FormEditor />
+        </Route>
+        <Route path="/admin_forms/:id/edit/section/:sectionId">
+          <PageComponents.FormEditor />
+        </Route>
+        <Route path="/admin_forms/:id/edit">
+          <PageComponents.FormEditor />
+        </Route>
         <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
       </Switch>
     </AppRootContext.Provider>

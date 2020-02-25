@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Switch, Route, Redirect, useLocation,
+  Switch, Route, Redirect, useLocation, useParams,
 } from 'react-router-dom';
 
 import PageLoadingIndicator from './PageLoadingIndicator';
@@ -12,36 +12,28 @@ import PageComponents from './PageComponents';
 import { reloadOnBundleHashMismatch } from './checkBundleHash';
 import FourOhFourPage from './FourOhFourPage';
 
+function CmsPageBySlug() {
+  const { slug } = useParams();
+  return <PageComponents.CmsPage slug={slug} />;
+}
+
 function renderCommonRoutes() {
   return [
-    <Route path="/cms_pages" component={PageComponents.CmsAdmin} key="cmsPages" />,
-    <Route path="/cms_partials" component={PageComponents.CmsAdmin} key="cmsPartials" />,
-    <Route path="/cms_files" component={PageComponents.CmsAdmin} key="cmsFiles" />,
-    <Route path="/cms_navigation_items" component={PageComponents.CmsAdmin} key="cmsNavigationItems" />,
-    <Route path="/cms_layouts" component={PageComponents.CmsAdmin} key="cmsLayouts" />,
-    <Route path="/cms_variables" component={PageComponents.CmsAdmin} key="cmsVariables" />,
-    <Route path="/cms_graphql_queries" component={PageComponents.CmsAdmin} key="cmsGraphqlQueries" />,
-    <Route path="/cms_content_groups" component={PageComponents.CmsAdmin} key="cmsContentGroups" />,
-    <Route path="/oauth/applications-embed" component={PageComponents.OAuthApplications} key="oauthApplications" />,
-    <Route path="/oauth/authorize" component={PageComponents.OAuthAuthorizationPrompt} key="oauthAuthorization" />,
-    <Route path="/oauth/authorized_applications" component={PageComponents.AuthorizedApplications} key="oauthAuthorizedApplications" />,
-    <Route path="/users/edit" component={PageComponents.EditUser} key="editUser" />,
-    <Route path="/users/password/edit" component={PageComponents.ResetPassword} key="resetPassword" />,
-    <Route
-      path="/pages/:slug([a-zA-Z0-9\-/]+)"
-      render={(routeProps) => (
-        <PageComponents.CmsPage {...routeProps} slug={routeProps.match.params.slug} />
-      )}
-      key="cmsPage"
-    />,
-    <Route
-      path="/"
-      exact
-      render={(routeProps) => (
-        <PageComponents.CmsPage {...routeProps} rootPage />
-      )}
-      key="cmsRootPage"
-    />,
+    <Route path="/cms_pages" key="cmsPages"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_partials" key="cmsPartials"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_files" key="cmsFiles"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_navigation_items" key="cmsNavigationItems"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_layouts" key="cmsLayouts"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_variables" key="cmsVariables"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_graphql_queries" key="cmsGraphqlQueries"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/cms_content_groups" key="cmsContentGroups"><PageComponents.CmsAdmin /></Route>,
+    <Route path="/oauth/applications-embed" key="oauthApplications"><PageComponents.OAuthApplications /></Route>,
+    <Route path="/oauth/authorize" key="oauthAuthorization"><PageComponents.OAuthAuthorizationPrompt /></Route>,
+    <Route path="/oauth/authorized_applications" key="oauthAuthorizedApplications"><PageComponents.AuthorizedApplications /></Route>,
+    <Route path="/users/edit" key="editUser"><PageComponents.EditUser /></Route>,
+    <Route path="/users/password/edit" key="resetPassword"><PageComponents.ResetPassword /></Route>,
+    <Route path="/pages/:slug([a-zA-Z0-9\-/]+)" key="cmsPage"><CmsPageBySlug /></Route>,
+    <Route path="/" exact key="cmsRootPage"><PageComponents.CmsPage rootPage /></Route>,
   ];
 }
 
