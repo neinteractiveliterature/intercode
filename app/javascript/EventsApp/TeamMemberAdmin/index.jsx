@@ -69,7 +69,6 @@ function TeamMemberAdmin({ eventId, eventPath }) {
             to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
             hideUnlessMatch
           >
-            { /* eslint-disable-next-line camelcase */ }
             {teamMember?.user_con_profile?.name_without_nickname || ''}
           </BreadcrumbItemWithRoute>
         </ol>

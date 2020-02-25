@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
@@ -10,18 +10,46 @@ import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import LoadingIndicator from '../LoadingIndicator';
 
-function OrganizationAdmin() {
+function OrganizationWithIdBreadcrumbs() {
+  const match = useRouteMatch();
+  const { id } = useParams();
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <BreadcrumbItem active><LoadingIndicator /></BreadcrumbItem>;
   }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  const organization = data.organizations.find((org) => org.id.toString() === id);
+
+  return (
+    <>
+      <BreadcrumbItem to={`/organizations/${id}`} active={match.isExact}>
+        {organization.name}
+      </BreadcrumbItem>
+
+      <Route path="/organizations/:id/roles/new">
+        <BreadcrumbItem active>
+          New organization role
+        </BreadcrumbItem>
+      </Route>
+
+      <Route path="/organizations/:id/roles/:roleId/edit">
+        <BreadcrumbItem active>
+          Edit organization role
+        </BreadcrumbItem>
+      </Route>
+    </>
+  );
+}
+
+function OrganizationAdmin() {
   return (
     <>
       <ol className="breadcrumb">
@@ -33,40 +61,9 @@ function OrganizationAdmin() {
           Organizations
         </BreadcrumbItemWithRoute>
 
-        <Route
-          path="/organizations/:id"
-          render={({ match: { params: { id } } }) => {
-            const organization = data.organizations.find((org) => org.id.toString() === id);
-
-            return (
-              <>
-                <BreadcrumbItemWithRoute
-                  path="/organizations/:id"
-                  to={({ match: { params } }) => `/organizations/${params.id}`}
-                  active={({ match }) => match.isExact}
-                >
-                  {organization.name}
-                </BreadcrumbItemWithRoute>
-
-                <BreadcrumbItemWithRoute
-                  path="/organizations/:id/roles/new"
-                  to={({ match: { params } }) => `/organizations/${params.id}/roles/new`}
-                  hideUnlessMatch
-                >
-                  New organization role
-                </BreadcrumbItemWithRoute>
-
-                <BreadcrumbItemWithRoute
-                  path="/organizations/:id/roles/:roleId/edit"
-                  to={({ match: { params } }) => `/organizations/${params.id}/roles/${params.roleId}/edit`}
-                  hideUnlessMatch
-                >
-                  Edit organization role
-                </BreadcrumbItemWithRoute>
-              </>
-            );
-          }}
-        />
+        <Route path="/organizations/:id">
+          <OrganizationWithIdBreadcrumbs />
+        </Route>
       </ol>
 
       <Switch>

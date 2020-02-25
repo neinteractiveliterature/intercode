@@ -67,13 +67,16 @@ function describePermissions(permissions) {
   const permissionsByModel = groupBy(permissions, ({ model }) => [model.__typename, model.id]);
   return Object.entries(permissionsByModel).map(([, modelPermissions]) => {
     const { model } = modelPermissions[0];
-    return (
-      <>
-        {describePermissionModel(model)}
-        {': '}
-        {describePermissionAbilities(modelPermissions)}
-      </>
-    );
+    return ({
+      key: `${model.__typename}-${model.id}`,
+      description: (
+        <>
+          {describePermissionModel(model)}
+          {': '}
+          {describePermissionAbilities(modelPermissions)}
+        </>
+      ),
+    });
   });
 }
 
@@ -118,8 +121,8 @@ function StaffPositionsTable({ staffPositions }) {
       </td>
       <td>
         <ul className="list-unstyled">
-          {describePermissions(staffPosition.permissions).map((description) => (
-            <li key={description}>
+          {describePermissions(staffPosition.permissions).map(({ key, description }) => (
+            <li key={key}>
               {description}
             </li>
           ))}
