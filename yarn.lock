@@ -3663,10 +3663,10 @@ csstype@^2.5.7:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.5.tgz#1cd1dff742ebf4d7c991470ae71e12bb6751e034"
   integrity sha512-JsTaiksRsel5n7XwqPAfB0l3TFKdpjW/kgAELf9vrb5adGA7UCPLajKK5s3nFrcFm3Rkyp/Qkgl73ENc1UY3cA==
 
-csv-string@^3.1.7:
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/csv-string/-/csv-string-3.1.7.tgz#0a04994e22d0f971eb8d0b6020a88da0ccb9e207"
-  integrity sha512-36J9ILEVYQ/z7BbnPMW2MqfxA6TF84Xye4hcSTH/dXin5Uuh2ouSqBk5A//75Y+Bv3z7APjK0BINNmxVN1mXpA==
+csv-string@^3.1.8:
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/csv-string/-/csv-string-3.1.8.tgz#732ac993420a505471106aab00ab0183ba194fc2"
+  integrity sha512-5Mwdju/gmAhAyJu0WBG+v0GgaQrlSVVg9qrywcgADegyne2NwrdDAOIQ+CpalgwkodrhqcP55juua924psyRpQ==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
