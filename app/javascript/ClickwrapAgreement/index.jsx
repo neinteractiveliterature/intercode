@@ -9,7 +9,6 @@ import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import parseCmsContent from '../parseCmsContent';
 import LoadingIndicator from '../LoadingIndicator';
-import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
@@ -45,7 +44,6 @@ function ClickwrapAgreement() {
     return <></>;
   }
 
-  // eslint-disable-next-line camelcase
   if (data.myProfile?.accepted_clickwrap_agreement) {
     return <Redirect to="/" />;
   }
