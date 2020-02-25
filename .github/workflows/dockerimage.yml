@@ -60,8 +60,14 @@ jobs:
         -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
         -e CI=true
+        -v ./test/html_reports:/usr/src/intercode/test/html_reports
         web
         test/travis-complete.sh
+    - name: Archive Minitest HTML report
+      uses: actions/upload-artifact@v1
+      with:
+        name: minitest-report
+        path: test/html_reports/index.html
 
     # Build and publish the production image if on master
     - name: Log into Docker Hub
