@@ -10,6 +10,7 @@ import { StaffPositionsQuery } from './queries.gql';
 import StaffPositionsTable from './StaffPositionsTable';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 
 function StaffPositionAdmin() {
   const { data, loading, error } = useQuery(StaffPositionsQuery);
@@ -45,21 +46,13 @@ function StaffPositionAdmin() {
             New staff position
           </BreadcrumbItemWithRoute>
 
-          <BreadcrumbItemWithRoute
-            path="/staff_positions/:id/edit"
-            to={({ match }) => `/${match.params.id}/edit`}
-            hideUnlessMatch
-          >
-            Edit settings
-          </BreadcrumbItemWithRoute>
+          <Route path="/staff_positions/:id/edit">
+            <BreadcrumbItem active>Edit settings</BreadcrumbItem>
+          </Route>
 
-          <BreadcrumbItemWithRoute
-            path="/staff_positions/:id/edit_permissions"
-            to={({ match }) => `/${match.params.id}/edit_permissions`}
-            hideUnlessMatch
-          >
-            Edit permissions
-          </BreadcrumbItemWithRoute>
+          <Route path="/staff_positions/:id/edit_permissions">
+            <BreadcrumbItem active>Edit permissions</BreadcrumbItem>
+          </Route>
         </ol>
       </nav>
 

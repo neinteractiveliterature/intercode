@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
+import {
+  Switch, Route, useRouteMatch, useParams,
+} from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import UsersTable from './UsersTable';
@@ -8,12 +9,14 @@ import UserAdminDisplay from './UserAdminDisplay';
 import { UserAdminQuery } from './queries.gql';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import LoadingIndicator from '../LoadingIndicator';
+import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 
-function UserBreadcrumbItem({ id }) {
+function UserBreadcrumbItem() {
+  const id = Number.parseInt(useParams().id, 10);
   const { data, loading, error } = useQuery(UserAdminQuery, { variables: { id } });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <BreadcrumbItem active><LoadingIndicator /></BreadcrumbItem>;
   }
 
   if (error) {
@@ -27,28 +30,19 @@ function UserBreadcrumbItem({ id }) {
   );
 }
 
-UserBreadcrumbItem.propTypes = {
-  id: PropTypes.number.isRequired,
-};
-
 function UsersAdmin() {
+  const rootMatch = useRouteMatch({ path: '/users', exact: true });
+
   return (
     <>
       <ol className="breadcrumb">
-        <BreadcrumbItemWithRoute
-          path="/users"
-          to="/users"
-          active={({ match }) => match.isExact}
-        >
+        <BreadcrumbItem to="/users" active={!!rootMatch}>
           Users
-        </BreadcrumbItemWithRoute>
+        </BreadcrumbItem>
 
-        <Route
-          path="/users/:id"
-          render={({ match: { params: { id } } }) => (
-            <UserBreadcrumbItem id={Number.parseInt(id, 10)} />
-          )}
-        />
+        <Route path="/users/:id">
+          <UserBreadcrumbItem />
+        </Route>
       </ol>
 
       <Switch>
