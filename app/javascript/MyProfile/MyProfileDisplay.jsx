@@ -31,6 +31,10 @@ function MyProfileDisplay() {
         return null;
       }
 
+      if (!data.myProfile) {
+        return null;
+      }
+
       return JSON.parse(data.myProfile.form_response_attrs_json);
     },
     [data, error],
