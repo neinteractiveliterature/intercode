@@ -102,9 +102,6 @@ function AddAttendeeModal({ conventionName, visible }) {
 
 AddAttendeeModal.propTypes = {
   conventionName: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
   visible: PropTypes.bool.isRequired,
 };
 

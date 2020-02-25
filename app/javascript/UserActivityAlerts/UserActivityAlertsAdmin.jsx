@@ -30,15 +30,7 @@ const UserActivityAlertsAdmin = () => (
 
     <Switch>
       <Route path="/user_activity_alerts/new" component={NewUserActivityAlert} />
-      <Route
-        path="/user_activity_alerts/:id/edit"
-        render={({ match, history }) => (
-          <EditUserActivityAlert
-            userActivityAlertId={Number.parseInt(match.params.id, 10)}
-            history={history}
-          />
-        )}
-      />
+      <Route path="/user_activity_alerts/:id/edit"><EditUserActivityAlert /></Route>
       <Route path="/user_activity_alerts" exact component={UserActivityAlertsList} />
       <Redirect to="/user_activity_alerts" />
     </Switch>

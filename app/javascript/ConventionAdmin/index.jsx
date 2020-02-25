@@ -92,9 +92,6 @@ function ConventionAdmin({ id }) {
 
 ConventionAdmin.propTypes = {
   id: PropTypes.number,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 ConventionAdmin.defaultProps = {
