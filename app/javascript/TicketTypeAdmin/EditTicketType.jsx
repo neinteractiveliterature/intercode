@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
@@ -11,9 +11,8 @@ import { UpdateTicketType } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
-function EditTicketType({
-  initialTicketType, ticketName, timezoneName, history,
-}) {
+function EditTicketType({ initialTicketType, ticketName, timezoneName }) {
+  const history = useHistory();
   usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState(initialTicketType);
   const [mutate] = useMutation(UpdateTicketType);
@@ -61,9 +60,6 @@ EditTicketType.propTypes = {
   initialTicketType: TicketTypePropType.isRequired,
   ticketName: PropTypes.string.isRequired,
   timezoneName: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(EditTicketType);
+export default EditTicketType;

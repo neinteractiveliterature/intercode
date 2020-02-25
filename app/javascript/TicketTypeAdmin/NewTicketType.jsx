@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
 import { AdminTicketTypesQuery } from './queries.gql';
@@ -11,7 +11,8 @@ import TicketTypeForm from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
-function NewTicketType({ ticketName, timezoneName, history }) {
+function NewTicketType({ ticketName, timezoneName }) {
+  const history = useHistory();
   usePageTitle(`New ${ticketName} type`);
 
   const [ticketType, setTicketType] = useState({
@@ -71,9 +72,6 @@ function NewTicketType({ ticketName, timezoneName, history }) {
 NewTicketType.propTypes = {
   ticketName: PropTypes.string.isRequired,
   timezoneName: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(NewTicketType);
+export default NewTicketType;

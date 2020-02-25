@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
@@ -8,9 +8,8 @@ import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
 
-function PageAdminDropdown({
-  showEdit, showDelete, pageId, history,
-}) {
+function PageAdminDropdown({ showEdit, showDelete, pageId }) {
+  const history = useHistory();
   const confirm = useConfirm();
   const [deletePage] = useMutation(DeletePage);
 
@@ -64,9 +63,6 @@ PageAdminDropdown.propTypes = {
   showEdit: PropTypes.bool.isRequired,
   showDelete: PropTypes.bool.isRequired,
   pageId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default PageAdminDropdown;

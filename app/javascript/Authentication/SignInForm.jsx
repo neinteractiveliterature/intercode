@@ -1,9 +1,8 @@
 /* global Rollbar */
 
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import fetch from 'unfetch';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -42,7 +41,8 @@ async function signIn(authenticityToken, email, password, rememberMe) {
   return response.url;
 }
 
-function SignInForm({ history }) {
+function SignInForm() {
+  const history = useHistory();
   const {
     close: closeModal, setCurrentView, afterSignInPath,
     unauthenticatedError, setUnauthenticatedError,
@@ -152,10 +152,4 @@ function SignInForm({ history }) {
   );
 }
 
-SignInForm.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-export default withRouter(SignInForm);
+export default SignInForm;

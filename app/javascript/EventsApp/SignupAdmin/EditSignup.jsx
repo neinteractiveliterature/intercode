@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { AdminSignupQuery } from './queries.gql';
@@ -111,7 +111,8 @@ function getToggleCountedConfirmPrompt(signup) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-function EditSignup({ id, teamMembersUrl }) {
+function EditSignup({ teamMembersUrl }) {
+  const id = Number.parseInt(useParams().id, 10);
   const { data, loading, error } = useQuery(AdminSignupQuery, { variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
@@ -366,7 +367,6 @@ function EditSignup({ id, teamMembersUrl }) {
 }
 
 EditSignup.propTypes = {
-  id: PropTypes.number.isRequired,
   teamMembersUrl: PropTypes.string.isRequired,
 };
 

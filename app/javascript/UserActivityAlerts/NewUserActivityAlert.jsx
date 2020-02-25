@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
@@ -13,7 +13,8 @@ import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function NewUserActivityAlert({ history }) {
+function NewUserActivityAlert() {
+  const history = useHistory();
   usePageTitle('New user activity alert');
   const { data, loading, error } = useQuery(ConventionTicketNameQuery);
 
@@ -97,11 +98,5 @@ function NewUserActivityAlert({ history }) {
     </>
   );
 }
-
-NewUserActivityAlert.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default NewUserActivityAlert;
