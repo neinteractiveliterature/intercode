@@ -2,12 +2,13 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import FormAdminIndex from './FormAdminIndex';
 import { FormAdminQuery } from './queries.gql';
 import FormJSONEditor from './FormJSONEditor';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function FormAdmin() {
   const { data, loading, error } = useQuery(FormAdminQuery);
@@ -24,21 +25,16 @@ function FormAdmin() {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItemWithRoute
-            path="/admin_forms/"
+          <RouteActivatedBreadcrumbItem
+            matchProps={{ path: '/admin_forms', exact: true }}
             to="/admin_forms"
-            exact
           >
             Forms
-          </BreadcrumbItemWithRoute>
+          </RouteActivatedBreadcrumbItem>
 
-          <BreadcrumbItemWithRoute
-            path="/admin_forms/edit_advanced"
-            to="/admin_forms/edit_advanced"
-            hideUnlessMatch
-          >
-            Edit form (advanced)
-          </BreadcrumbItemWithRoute>
+          <Route path="/admin_forms/edit_advanced">
+            <BreadcrumbItem active>Edit form (advanced)</BreadcrumbItem>
+          </Route>
         </ol>
       </nav>
 

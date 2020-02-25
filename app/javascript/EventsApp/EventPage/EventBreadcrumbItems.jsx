@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link, useHistory } from 'react-router-dom';
 
-import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import { getConventionDayTimespans, timespanFromConvention } from '../../TimespanUtils';
+import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function findRunFromHash(runs, hash) {
   if (!hash) {
@@ -57,13 +57,9 @@ function EventBreadcrumbItems({
             )
         }
       </li>
-      <BreadcrumbItemWithRoute
-        path={eventPath}
-        to={eventPath}
-        exact
-      >
+      <RouteActivatedBreadcrumbItem matchProps={{ path: eventPath, exact: true }} to={eventPath}>
         {event.title}
-      </BreadcrumbItemWithRoute>
+      </RouteActivatedBreadcrumbItem>
     </>
   );
 }

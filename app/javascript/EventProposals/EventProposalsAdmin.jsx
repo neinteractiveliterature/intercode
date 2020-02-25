@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  Link, Switch, Route, useParams, useHistory, useRouteMatch,
+  Link, Switch, Route, useParams, useHistory,
 } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
-import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EventProposalAdminDisplay from './EventProposalAdminDisplay';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQuery, EventProposalQueryWithOwner } from './queries.gql';
@@ -15,6 +14,7 @@ import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import EventProposalHistory from './EventProposalHistory';
 import LoadingIndicator from '../LoadingIndicator';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function SingleProposalBreadcrumbs() {
   const params = useParams();
@@ -33,13 +33,12 @@ function SingleProposalBreadcrumbs() {
 
   return (
     <>
-      <BreadcrumbItemWithRoute
-        path="/admin_event_proposals/:id"
+      <RouteActivatedBreadcrumbItem
+        matchProps={{ path: '/admin_event_proposals/:id', exact: true }}
         to={`/admin_event_proposals/${params.id}`}
-        exact
       >
         {data.eventProposal.title}
-      </BreadcrumbItemWithRoute>
+      </RouteActivatedBreadcrumbItem>
 
       <Route path="/admin_event_proposals/:id/edit">
         <BreadcrumbItem active>Edit</BreadcrumbItem>
@@ -78,17 +77,16 @@ function AdminEditEventProposal() {
 }
 
 function EventProposalsAdmin() {
-  const rootMatch = useRouteMatch({ path: '/admin_event_proposals', exact: true });
   return (
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItem
+          <RouteActivatedBreadcrumbItem
+            matchProps={{ path: '/admin_event_proposals', exact: true }}
             to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
-            active={!!rootMatch}
           >
             Event proposals
-          </BreadcrumbItem>
+          </RouteActivatedBreadcrumbItem>
 
           <Route path="/admin_event_proposals/:id" component={SingleProposalBreadcrumbs} />
         </ol>
