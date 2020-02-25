@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
@@ -112,7 +112,8 @@ EditUserActivityAlertForm.propTypes = {
   convention: PropTypes.shape({}).isRequired,
 };
 
-function EditUserActivityAlert({ userActivityAlertId }) {
+function EditUserActivityAlert() {
+  const userActivityAlertId = Number.parseInt(useParams().id, 10);
   usePageTitle('Editing user activity alert');
 
   const { data, loading, error } = useQuery(UserActivityAlertQuery, {
@@ -138,9 +139,5 @@ function EditUserActivityAlert({ userActivityAlertId }) {
     />
   );
 }
-
-EditUserActivityAlert.propTypes = {
-  userActivityAlertId: PropTypes.number.isRequired,
-};
 
 export default EditUserActivityAlert;
