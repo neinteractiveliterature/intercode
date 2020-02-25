@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -15,9 +16,9 @@ import parseCmsContent from '../parseCmsContent';
 
 const PageAdminDropdown = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
-function CmsPage({
-  slug, rootPage, history, location,
-}) {
+function CmsPage({ slug, rootPage }) {
+  const history = useHistory();
+  const location = useLocation();
   const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
   const content = useMemo(
     () => {
@@ -104,12 +105,6 @@ function CmsPage({
 CmsPage.propTypes = {
   slug: PropTypes.string,
   rootPage: PropTypes.bool,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 CmsPage.defaultProps = {

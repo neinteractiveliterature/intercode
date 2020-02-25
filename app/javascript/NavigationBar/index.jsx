@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sortBy from 'lodash/sortBy';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
 import NavigationBrand from './NavigationBrand';
@@ -18,7 +18,8 @@ import AdminNavigationSection from './AdminNavigationSection';
 import SearchNavigationItem from './SearchNavigationItem';
 import NavigationBarContext from './NavigationBarContext';
 
-function NavigationBarContent({ navbarClasses, rootItems, location }) {
+function NavigationBarContent({ navbarClasses, rootItems }) {
+  const location = useLocation();
   const {
     conventionName, rootSiteName, siteMode, ticketsAvailableForPurchase,
   } = useContext(AppRootContext);
@@ -103,12 +104,9 @@ function NavigationBarContent({ navbarClasses, rootItems, location }) {
 NavigationBarContent.propTypes = {
   navbarClasses: PropTypes.string.isRequired,
   rootItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
 };
 
-const MemoizedNavigationBarContent = withRouter(React.memo(NavigationBarContent));
+const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
 
 function NavigationBar({ navbarClasses }) {
   const { cmsNavigationItems } = useContext(AppRootContext);

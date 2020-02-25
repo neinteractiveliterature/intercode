@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { capitalize } from 'inflected';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -67,9 +67,8 @@ function renderPricingSchedule(ticketType, timezoneName) {
   return <ul className="mb-0">{timespanItems}</ul>;
 }
 
-function TicketTypesList({
-  ticketTypes, history, ticketName, timezoneName,
-}) {
+function TicketTypesList({ ticketTypes, ticketName, timezoneName }) {
+  const history = useHistory();
   usePageTitle(`${capitalize(ticketName)} types`);
 
   const confirm = useConfirm();
@@ -177,11 +176,8 @@ function TicketTypesList({
 
 TicketTypesList.propTypes = {
   ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
   ticketName: PropTypes.string.isRequired,
   timezoneName: PropTypes.string.isRequired,
 };
 
-export default withRouter(TicketTypesList);
+export default TicketTypesList;

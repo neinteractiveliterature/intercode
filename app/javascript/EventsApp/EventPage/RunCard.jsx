@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import RunCapacityGraph from './RunCapacityGraph';
@@ -14,9 +14,10 @@ import WithdrawSignupButton from './WithdrawSignupButton';
 import LoadingIndicator from '../../LoadingIndicator';
 
 function RunCard({
-  run, event, history, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
+  run, event, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
   showViewSignups, createSignup, withdrawSignup, withdrawPendingSignupRequest,
 }) {
+  const history = useHistory();
   const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef(null);
   useEffect(() => {
@@ -200,11 +201,6 @@ RunCard.propTypes = {
   event: PropTypes.shape({
     id: PropTypes.number.isRequired,
   }).isRequired,
-  history: PropTypes.shape({
-    location: PropTypes.shape({
-      hash: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
   signupOptions: PropTypes.shape({
     mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -231,4 +227,4 @@ RunCard.defaultProps = {
   showViewSignups: false,
 };
 
-export default withRouter(RunCard);
+export default RunCard;

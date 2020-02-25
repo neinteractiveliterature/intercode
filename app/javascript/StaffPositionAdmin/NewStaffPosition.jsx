@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
 import { CreateStaffPosition } from './mutations.gql';
@@ -10,7 +9,8 @@ import { StaffPositionsQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
-function NewStaffPosition({ history }) {
+function NewStaffPosition() {
+  const history = useHistory();
   const [createMutate] = useMutation(CreateStaffPosition, {
     update: (proxy, { data: { createStaffPosition: { staff_position: newStaffPosition } } }) => {
       const data = proxy.readQuery({ query: StaffPositionsQuery });
@@ -64,10 +64,4 @@ function NewStaffPosition({ history }) {
   );
 }
 
-NewStaffPosition.propTypes = {
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-export default withRouter(NewStaffPosition);
+export default NewStaffPosition;

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
 import { useHistory, Redirect } from 'react-router-dom';
 
@@ -87,11 +86,5 @@ function ClickwrapAgreement() {
     </>
   );
 }
-
-ClickwrapAgreement.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default ClickwrapAgreement;

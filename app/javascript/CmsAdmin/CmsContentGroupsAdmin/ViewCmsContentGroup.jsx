@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
+import { useRouteMatch } from 'react-router-dom';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -8,7 +8,8 @@ import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 
-function ViewCmsContentGroup({ match: { params } }) {
+function ViewCmsContentGroup() {
+  const { params } = useRouteMatch();
   const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
   const contentGroup = useMemo(
     () => {
@@ -43,13 +44,5 @@ function ViewCmsContentGroup({ match: { params } }) {
     </>
   );
 }
-
-ViewCmsContentGroup.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default ViewCmsContentGroup;

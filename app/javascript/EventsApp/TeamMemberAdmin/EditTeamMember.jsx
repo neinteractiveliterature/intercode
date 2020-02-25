@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { titleize, underscore } from 'inflected';
 import { useMutation } from '@apollo/react-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -10,9 +11,9 @@ import { UpdateTeamMember } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 
-function EditTeamMember({
-  event, eventPath, teamMemberId, history,
-}) {
+function EditTeamMember({ event, eventPath }) {
+  const teamMemberId = Number.parseInt(useParams().teamMemberId, 10);
+  const history = useHistory();
   const [teamMember, setTeamMember] = useState(
     event.team_members.find((tm) => tm.id === teamMemberId),
   );
@@ -96,14 +97,7 @@ EditTeamMember.propTypes = {
       id: PropTypes.number.isRequired,
     })).isRequired,
   }).isRequired,
-  convention: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
   eventPath: PropTypes.string.isRequired,
-  teamMemberId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default EditTeamMember;

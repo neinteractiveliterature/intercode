@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ReactTable from 'react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
@@ -89,7 +89,8 @@ const getPossibleColumns = () => [
   },
 ];
 
-function UsersTable({ exportUrl, history }) {
+function UsersTable({ exportUrl }) {
+  const history = useHistory();
   const [checkedUserIds, setCheckedUserIds] = useState(new Set());
   const mergeModal = useModal();
   usePageTitle('Users');
@@ -102,7 +103,6 @@ function UsersTable({ exportUrl, history }) {
     getData: ({ data }) => data.users_paginated.entries,
     getPages: ({ data }) => data.users_paginated.total_pages,
     getPossibleColumns,
-    history,
     storageKeyPrefix: 'users',
     onFilteredChange: () => { setCheckedUserIds(new Set()); },
     query: UsersTableUsersQuery,
@@ -165,9 +165,6 @@ function UsersTable({ exportUrl, history }) {
 
 UsersTable.propTypes = {
   exportUrl: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(UsersTable);
+export default UsersTable;

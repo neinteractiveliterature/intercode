@@ -1,13 +1,15 @@
-import { useCallback, useContext } from 'react';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useCallback } from 'react';
+// import { useHistory } from 'react-router-dom';
+// import { useApolloClient } from '@apollo/react-hooks';
 
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
-import AuthenticationModalContext from './AuthenticationModalContext';
+// import AuthenticityTokensContext from '../AuthenticityTokensContext';
+// import AuthenticationModalContext from './AuthenticationModalContext';
 
-export default function useAfterSessionChange(history) {
-  const apolloClient = useApolloClient();
-  const { refresh } = useContext(AuthenticityTokensContext);
-  const { close: closeModal, setUnauthenticatedError } = useContext(AuthenticationModalContext);
+export default function useAfterSessionChange() {
+  // const history = useHistory();
+  // const apolloClient = useApolloClient();
+  // const { refresh } = useContext(AuthenticityTokensContext);
+  // const { close: closeModal, setUnauthenticatedError } = useContext(AuthenticationModalContext);
 
   const afterSessionChange = useCallback(
     async (destPath) => {

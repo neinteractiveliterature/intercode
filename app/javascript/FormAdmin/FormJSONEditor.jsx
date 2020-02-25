@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import CodeInput from '../BuiltInFormControls/CodeInput';
@@ -20,7 +21,8 @@ function formDataFromJSON(json) {
   };
 }
 
-function FormJSONEditor({ initialForm, history }) {
+function FormJSONEditor({ initialForm }) {
+  const history = useHistory();
   const initialFormData = useMemo(
     () => formDataFromJSON(initialForm.export_json),
     [initialForm.export_json],
@@ -116,9 +118,6 @@ FormJSONEditor.propTypes = {
   initialForm: PropTypes.shape({
     id: PropTypes.number,
     export_json: PropTypes.string.isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
   }).isRequired,
 };
 

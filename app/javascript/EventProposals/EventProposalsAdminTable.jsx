@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ReactTable from 'react-table';
 
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
@@ -242,7 +242,8 @@ const getPossibleColumns = (data) => [
   },
 ];
 
-function EventProposalsAdminTable({ history }) {
+function EventProposalsAdminTable() {
+  const history = useHistory();
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: ['event_category', 'title', 'owner', 'total_slots', 'length_seconds', 'status', 'submitted_at', 'updated_at'],
@@ -251,7 +252,6 @@ function EventProposalsAdminTable({ history }) {
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages,
     getPossibleColumns,
-    history,
     query: EventProposalsAdminQuery,
     storageKeyPrefix: 'eventProposalsAdmin',
   });
@@ -281,11 +281,4 @@ function EventProposalsAdminTable({ history }) {
   );
 }
 
-EventProposalsAdminTable.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-export default withRouter(EventProposalsAdminTable);
+export default EventProposalsAdminTable;
