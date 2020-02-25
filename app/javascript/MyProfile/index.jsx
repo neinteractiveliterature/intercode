@@ -17,9 +17,9 @@ function MyProfile() {
       <Route path="/my_profile/edit_bio">
         <Redirect to="/my_profile/edit" />
       </Route>
-      <Route path="/my_profile/edit" component={MyProfileForm} />
+      <Route path="/my_profile/edit"><MyProfileForm /></Route>
       <Route path="/my_profile/setup" render={() => <MyProfileForm initialSetup />} />
-      <Route path="/my_profile" component={MyProfileDisplay} />
+      <Route path="/my_profile"><MyProfileDisplay /></Route>
     </Switch>
   );
 }

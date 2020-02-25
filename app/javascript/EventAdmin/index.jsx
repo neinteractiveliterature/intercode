@@ -53,7 +53,7 @@ function EventAdmin() {
     if (data.events.length === 0) {
       return (
         <Switch>
-          <Route path="/admin_events/new" component={NewEvent} />
+          <Route path="/admin_events/new"><NewEvent /></Route>
           <Redirect to="/admin_events/new" />
         </Switch>
       );
@@ -61,7 +61,7 @@ function EventAdmin() {
 
     return (
       <Switch>
-        <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
+        <Route path="/admin_events/:id/edit"><EventAdminEditEvent /></Route>
         <Redirect to={`/admin_events/${data.events[0].id}/edit`} />
       </Switch>
     );
@@ -99,7 +99,7 @@ function EventAdmin() {
       </ul>
 
       <Switch>
-        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`} component={NewEvent} />
+        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`}><NewEvent /></Route>
         {eventCategories.map((eventCategory) => (
           <Route
             key={eventCategory.id}
@@ -110,8 +110,8 @@ function EventAdmin() {
             }}
           />
         ))}
-        <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
-        <Route path="/admin_events/dropped_events" component={DroppedEventAdmin} />
+        <Route path="/admin_events/:id/edit"><EventAdminEditEvent /></Route>
+        <Route path="/admin_events/dropped_events"><DroppedEventAdmin /></Route>
         <Redirect to={buildEventCategoryUrl(eventCategories[0])} />
       </Switch>
     </>

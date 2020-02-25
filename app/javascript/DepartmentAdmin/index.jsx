@@ -8,9 +8,9 @@ import NewDepartment from './NewDepartment';
 function DepartmentAdmin() {
   return (
     <Switch>
-      <Route path="/admin_departments/:id/edit" component={EditDepartment} />
-      <Route path="/admin_departments/new" component={NewDepartment} />
-      <Route path="/admin_departments" component={DepartmentAdminIndex} />
+      <Route path="/admin_departments/:id/edit"><EditDepartment /></Route>
+      <Route path="/admin_departments/new"><NewDepartment /></Route>
+      <Route path="/admin_departments"><DepartmentAdminIndex /></Route>
     </Switch>
   );
 }
