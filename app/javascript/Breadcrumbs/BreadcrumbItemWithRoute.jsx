@@ -1,57 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
+import { Route, useRouteMatch } from 'react-router-dom';
 
 import BreadcrumbItem from './BreadcrumbItem';
 
 function BreadcrumbItemWithRoute({
   active, hideUnlessMatch, path, exact, to, children,
 }) {
-  const buildActive = (routeProps) => {
-    if (active) {
-      return active(routeProps);
-    }
+  const match = useRouteMatch({ path, exact });
 
-    return routeProps.match != null;
-  };
-
-  const buildToString = (routeProps) => {
-    if (typeof to === 'string') {
-      return to;
-    }
-
-    return to(routeProps);
-  };
-
-  const renderBreadcrumbItem = (routeProps) => (
-    <BreadcrumbItem
-      to={buildToString(routeProps)}
-      active={buildActive(routeProps)}
-    >
-      {
-        typeof children === 'function'
-          ? children(routeProps)
-          : children
-      }
+  const item = (
+    <BreadcrumbItem to={to} active={active ?? !!match}>
+      {children}
     </BreadcrumbItem>
   );
 
-  const routeRenderingProps = {};
   if (hideUnlessMatch) {
-    routeRenderingProps.render = renderBreadcrumbItem;
-  } else {
-    routeRenderingProps.children = renderBreadcrumbItem;
+    return <Route path={path} exact={exact}>{item}</Route>;
   }
 
-  return <Route path={path} exact={exact} {...routeRenderingProps} />;
+  return item;
 }
 
 BreadcrumbItemWithRoute.propTypes = {
-  active: PropTypes.func,
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  active: PropTypes.bool,
+  children: PropTypes.node.isRequired,
   exact: PropTypes.bool,
   path: PropTypes.string.isRequired,
-  to: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+  to: PropTypes.string.isRequired,
   hideUnlessMatch: PropTypes.bool,
 };
 

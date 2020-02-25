@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Link, Switch, Route, useParams, useHistory,
+  Link, Switch, Route, useParams, useHistory, useRouteMatch,
 } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -24,7 +24,7 @@ function SingleProposalBreadcrumbs() {
   });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <BreadcrumbItem active><LoadingIndicator /></BreadcrumbItem>;
   }
 
   if (error) {
@@ -40,22 +40,14 @@ function SingleProposalBreadcrumbs() {
       >
         {data.eventProposal.title}
       </BreadcrumbItemWithRoute>
-      <Route
-        path="/admin_event_proposals/:id/edit"
-        render={() => (
-          <BreadcrumbItem to={`/admin_event_proposals/${params.id}/edit`} active>
-            Edit
-          </BreadcrumbItem>
-        )}
-      />
-      <Route
-        path="/admin_event_proposals/:id/history"
-        render={() => (
-          <BreadcrumbItem to={`/admin_event_proposals/${params.id}/history`} active>
-            History
-          </BreadcrumbItem>
-        )}
-      />
+
+      <Route path="/admin_event_proposals/:id/edit">
+        <BreadcrumbItem active>Edit</BreadcrumbItem>
+      </Route>
+
+      <Route path="/admin_event_proposals/:id/history">
+        <BreadcrumbItem active>History</BreadcrumbItem>
+      </Route>
     </>
   );
 }
@@ -86,17 +78,17 @@ function AdminEditEventProposal() {
 }
 
 function EventProposalsAdmin() {
+  const rootMatch = useRouteMatch({ path: '/admin_event_proposals', exact: true });
   return (
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItemWithRoute
-            path="/admin_event_proposals"
+          <BreadcrumbItem
             to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
-            active={({ location }) => location.pathname === '/admin_event_proposals'}
+            active={!!rootMatch}
           >
             Event proposals
-          </BreadcrumbItemWithRoute>
+          </BreadcrumbItem>
 
           <Route path="/admin_event_proposals/:id" component={SingleProposalBreadcrumbs} />
         </ol>
