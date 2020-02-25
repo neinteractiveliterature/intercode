@@ -1,17 +1,18 @@
 import React from 'react';
-import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Switch, Route, useParams, useRouteMatch,
+} from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditOrganizationRole from './EditOrganizationRole';
 import NewOrganizationRole from './NewOrganizationRole';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 import ErrorDisplay from '../ErrorDisplay';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import LoadingIndicator from '../LoadingIndicator';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function OrganizationWithIdBreadcrumbs() {
   const match = useRouteMatch();
@@ -53,13 +54,12 @@ function OrganizationAdmin() {
   return (
     <>
       <ol className="breadcrumb">
-        <BreadcrumbItemWithRoute
+        <RouteActivatedBreadcrumbItem
+          matchProps={{ path: '/organizations', exact: true }}
           to="/organizations"
-          path="/organizations"
-          exact
         >
           Organizations
-        </BreadcrumbItemWithRoute>
+        </RouteActivatedBreadcrumbItem>
 
         <Route path="/organizations/:id">
           <OrganizationWithIdBreadcrumbs />

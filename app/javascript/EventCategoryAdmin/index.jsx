@@ -1,40 +1,30 @@
 import React from 'react';
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
-import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditEventCategory from './EditEventCategory';
 import EventCategoryIndex from './EventCategoryIndex';
 import NewEventCategory from './NewEventCategory';
+import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function EventCategoryAdmin() {
-  const params = useParams();
-
   return (
     <>
       <ol className="breadcrumb">
-        <BreadcrumbItemWithRoute
+        <RouteActivatedBreadcrumbItem
+          matchProps={{ path: '/event_categories', exact: true }}
           to="/event_categories"
-          path="/event_categories"
-          exact
         >
           Event categories
-        </BreadcrumbItemWithRoute>
+        </RouteActivatedBreadcrumbItem>
 
-        <BreadcrumbItemWithRoute
-          path="/event_categories/new"
-          to="/event_categories/new"
-          hideUnlessMatch
-        >
-          New event category
-        </BreadcrumbItemWithRoute>
+        <Route path="/event_categories/new">
+          <BreadcrumbItem active>New event category</BreadcrumbItem>
+        </Route>
 
-        <BreadcrumbItemWithRoute
-          path="/event_categories/:id/edit"
-          to={`/event_categories/${params.id}/edit`}
-          hideUnlessMatch
-        >
-          Edit event category
-        </BreadcrumbItemWithRoute>
+        <Route path="/event_categories/:id/edit">
+          <BreadcrumbItem active>Edit event category</BreadcrumbItem>
+        </Route>
       </ol>
 
       <Switch>

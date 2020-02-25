@@ -1,15 +1,13 @@
 import React from 'react';
-import {
-  Switch, Route, useRouteMatch, useParams,
-} from 'react-router-dom';
+import { Switch, Route, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import UsersTable from './UsersTable';
 import UserAdminDisplay from './UserAdminDisplay';
 import { UserAdminQuery } from './queries.gql';
-import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import LoadingIndicator from '../LoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 
 function UserBreadcrumbItem() {
   const id = Number.parseInt(useParams().id, 10);
@@ -24,21 +22,17 @@ function UserBreadcrumbItem() {
   }
 
   return (
-    <BreadcrumbItemWithRoute path="/users/:id" to={`/users/${id}`}>
-      {data.user.name}
-    </BreadcrumbItemWithRoute>
+    <BreadcrumbItem active>{data.user.name}</BreadcrumbItem>
   );
 }
 
 function UsersAdmin() {
-  const rootMatch = useRouteMatch({ path: '/users', exact: true });
-
   return (
     <>
       <ol className="breadcrumb">
-        <BreadcrumbItem to="/users" active={!!rootMatch}>
+        <RouteActivatedBreadcrumbItem matchProps={{ path: '/users', exact: true }} to="/users">
           Users
-        </BreadcrumbItem>
+        </RouteActivatedBreadcrumbItem>
 
         <Route path="/users/:id">
           <UserBreadcrumbItem />
