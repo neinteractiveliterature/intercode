@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import { titleize } from 'inflected';
 
 import { DeleteOrganizationRole } from './mutations.gql';
@@ -20,7 +19,8 @@ function getOrganizationRolePermissionName(permissionName) {
   return (permission || {}).name;
 }
 
-function OrganizationDisplay({ organizationId }) {
+function OrganizationDisplay() {
+  const organizationId = Number.parseInt(useParams().organizationId, 10);
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const confirm = useConfirm();
   const [mutate] = useMutation(DeleteOrganizationRole);
@@ -125,9 +125,5 @@ function OrganizationDisplay({ organizationId }) {
     </>
   );
 }
-
-OrganizationDisplay.propTypes = {
-  organizationId: PropTypes.number.isRequired,
-};
 
 export default OrganizationDisplay;

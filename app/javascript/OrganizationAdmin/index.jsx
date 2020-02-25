@@ -67,28 +67,12 @@ function OrganizationAdmin() {
       </ol>
 
       <Switch>
-        <Route
-          path="/organizations/:organizationId/roles/new"
-          render={({ match: { params: { organizationId } } }) => (
-            <NewOrganizationRole organizationId={Number.parseInt(organizationId, 10)} />
-          )}
-        />
-        <Route
-          path="/organizations/:organizationId/roles/:organizationRoleId/edit"
-          render={({ match: { params: { organizationId, organizationRoleId } } }) => (
-            <EditOrganizationRole
-              organizationId={Number.parseInt(organizationId, 10)}
-              organizationRoleId={Number.parseInt(organizationRoleId, 10)}
-            />
-          )}
-        />
-        <Route
-          path="/organizations/:id"
-          render={({ match: { params: { id } } }) => (
-            <OrganizationDisplay organizationId={Number.parseInt(id, 10)} />
-          )}
-        />
-        <Route path="/organizations" render={() => <OrganizationIndex />} />
+        <Route path="/organizations/:organizationId/roles/new"><NewOrganizationRole /></Route>
+        <Route path="/organizations/:organizationId/roles/:organizationRoleId/edit">
+          <EditOrganizationRole />
+        </Route>
+        <Route path="/organizations/:id"><OrganizationDisplay /></Route>
+        <Route path="/organizations"><OrganizationIndex /></Route>
       </Switch>
     </>
   );

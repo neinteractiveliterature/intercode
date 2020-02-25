@@ -72,7 +72,7 @@ function renderConventionModeRoutes({ signupMode }) {
     <Route path="/admin_event_proposals" key="adminEventProposals"><PageComponents.EventProposalsAdmin /></Route>,
     <Route path="/event_categories" key="eventCategories"><PageComponents.EventCategoryAdmin /></Route>,
     <Route path="/event_proposals/:id/edit" key="editEventProposal"><PageComponents.EditEventProposal /></Route>,
-    <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} key="eventProposals" />,
+    <Route path="/event_proposals" key="eventProposals"><Redirect to="/pages/new-proposal" /></Route>,
     ...renderCommonInConventionRoutes({ signupMode }),
   ];
 }

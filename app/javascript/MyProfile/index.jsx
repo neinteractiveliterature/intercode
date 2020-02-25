@@ -18,7 +18,7 @@ function MyProfile() {
         <Redirect to="/my_profile/edit" />
       </Route>
       <Route path="/my_profile/edit"><MyProfileForm /></Route>
-      <Route path="/my_profile/setup" render={() => <MyProfileForm initialSetup />} />
+      <Route path="/my_profile/setup"><MyProfileForm initialSetup /></Route>
       <Route path="/my_profile"><MyProfileDisplay /></Route>
     </Switch>
   );

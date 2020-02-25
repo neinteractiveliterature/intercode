@@ -22,15 +22,12 @@ function TicketTypeAdmin() {
 
   return (
     <Switch>
-      <Route
-        path="/ticket_types/new"
-        render={() => (
-          <NewTicketType
-            timezoneName={data.convention.timezone_name}
-            ticketName={data.convention.ticket_name}
-          />
-        )}
-      />
+      <Route path="/ticket_types/new">
+        <NewTicketType
+          timezoneName={data.convention.timezone_name}
+          ticketName={data.convention.ticket_name}
+        />
+      </Route>
       <Route
         path="/ticket_types/:id/edit"
         render={({ match: { params: { id } } }) => {
@@ -46,17 +43,14 @@ function TicketTypeAdmin() {
           );
         }}
       />
-      <Route
-        path="/ticket_types/"
-        render={() => (
-          <TicketTypesList
-            ticketTypes={data.convention.ticket_types}
-            ticketName={data.convention.ticket_name}
-            timezoneName={data.convention.timezone_name}
-          />
-        )}
-      />
-      <Redirect to="/" />
+      <Route path="/ticket_types">
+        <TicketTypesList
+          ticketTypes={data.convention.ticket_types}
+          ticketName={data.convention.ticket_name}
+          timezoneName={data.convention.timezone_name}
+        />
+      </Route>
+      <Redirect to="/ticket_types" />
     </Switch>
   );
 }
