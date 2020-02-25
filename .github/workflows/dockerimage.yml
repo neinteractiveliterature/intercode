@@ -62,6 +62,7 @@ jobs:
         test/travis-complete.sh
     - name: Archive HTML test reports
       uses: actions/upload-artifact@v1
+      if: always()
       with:
         name: test-reports
         path: test/html_reports
