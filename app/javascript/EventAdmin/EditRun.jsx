@@ -1,14 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import EditRunModal from './EditRunModal';
 import { ConventionFields, EventFields } from './queries.gql';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 
-function EditRun({
-  match, convention, events, history,
-}) {
+function EditRun({ convention, events }) {
+  const match = useRouteMatch();
+  const history = useHistory();
   const event = useMemo(
     () => {
       if (!match) {
@@ -70,22 +71,8 @@ function EditRun({
 }
 
 EditRun.propTypes = {
-  match: PropTypes.shape({
-    path: PropTypes.string,
-    params: PropTypes.shape({
-      eventId: PropTypes.string.isRequired,
-      runId: PropTypes.string.isRequired,
-    }).isRequired,
-  }),
   convention: propType(ConventionFields).isRequired,
   events: PropTypes.arrayOf(propType(EventFields)).isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-EditRun.defaultProps = {
-  match: null,
 };
 
 export default EditRun;

@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
@@ -10,7 +9,8 @@ import { UpdateStaffPosition } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
-function EditStaffPosition({ initialStaffPosition, history }) {
+function EditStaffPosition({ initialStaffPosition }) {
+  const history = useHistory();
   const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
   const [updateMutate] = useMutation(UpdateStaffPosition);
   const [mutate, error, requestInProgress] = useAsyncFunction(updateMutate);
@@ -60,9 +60,6 @@ function EditStaffPosition({ initialStaffPosition, history }) {
 
 EditStaffPosition.propTypes = {
   initialStaffPosition: StaffPositionPropType.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(EditStaffPosition);
+export default EditStaffPosition;

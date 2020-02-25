@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useParams } from 'react-router-dom';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditEventCategory from './EditEventCategory';
@@ -7,6 +7,8 @@ import EventCategoryIndex from './EventCategoryIndex';
 import NewEventCategory from './NewEventCategory';
 
 function EventCategoryAdmin() {
+  const params = useParams();
+
   return (
     <>
       <ol className="breadcrumb">
@@ -28,7 +30,7 @@ function EventCategoryAdmin() {
 
         <BreadcrumbItemWithRoute
           path="/event_categories/:id/edit"
-          to={({ match: { params } }) => `/${params.id}/edit`}
+          to={`/event_categories/${params.id}/edit`}
           hideUnlessMatch
         >
           Edit event category

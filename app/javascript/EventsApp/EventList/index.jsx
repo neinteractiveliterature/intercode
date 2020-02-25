@@ -1,7 +1,6 @@
 import React, {
   useState, useEffect, useCallback, useContext,
 } from 'react';
-import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
@@ -54,10 +53,10 @@ const fetchMoreEvents = async (fetchMore, page) => {
   }
 };
 
-function EventList({ history }) {
+function EventList() {
   const {
     sorted, filtered, onSortedChange, onFilteredChange,
-  } = useReactRouterReactTable({ history, ...filterCodecs });
+  } = useReactRouterReactTable({ ...filterCodecs });
   const { myProfile } = useContext(AppRootContext);
   const defaultSort = (myProfile
     ? [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }]
@@ -236,9 +235,5 @@ function EventList({ history }) {
     </>
   );
 }
-
-EventList.propTypes = {
-  history: PropTypes.shape({}).isRequired,
-};
 
 export default EventList;

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Link, Switch, Route, useParams, useHistory,
 } from 'react-router-dom';
@@ -17,8 +16,9 @@ import useValueUnless from '../useValueUnless';
 import EventProposalHistory from './EventProposalHistory';
 import LoadingIndicator from '../LoadingIndicator';
 
-function SingleProposalBreadcrumbs({ match }) {
-  const eventProposalId = Number.parseInt(useParams().id, 10);
+function SingleProposalBreadcrumbs() {
+  const params = useParams();
+  const eventProposalId = Number.parseInt(params.id, 10);
   const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
     variables: { eventProposalId },
   });
@@ -35,7 +35,7 @@ function SingleProposalBreadcrumbs({ match }) {
     <>
       <BreadcrumbItemWithRoute
         path="/admin_event_proposals/:id"
-        to={`/admin_event_proposals/${match.params.id}`}
+        to={`/admin_event_proposals/${params.id}`}
         exact
       >
         {data.eventProposal.title}
@@ -43,7 +43,7 @@ function SingleProposalBreadcrumbs({ match }) {
       <Route
         path="/admin_event_proposals/:id/edit"
         render={() => (
-          <BreadcrumbItem to={`/${match.params.id}/edit`} active>
+          <BreadcrumbItem to={`/admin_event_proposals/${params.id}/edit`} active>
             Edit
           </BreadcrumbItem>
         )}
@@ -51,7 +51,7 @@ function SingleProposalBreadcrumbs({ match }) {
       <Route
         path="/admin_event_proposals/:id/history"
         render={() => (
-          <BreadcrumbItem to={`/${match.params.id}/history`} active>
+          <BreadcrumbItem to={`/admin_event_proposals/${params.id}/history`} active>
             History
           </BreadcrumbItem>
         )}
@@ -59,14 +59,6 @@ function SingleProposalBreadcrumbs({ match }) {
     </>
   );
 }
-
-SingleProposalBreadcrumbs.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 function AdminEditEventProposal() {
   const history = useHistory();

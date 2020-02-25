@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { UpdateStaffPositionPermissions } from './mutations.gql';
@@ -17,9 +17,8 @@ const CmsContentGroupPermissionNames = getPermissionNamesForModelType('CmsConten
 const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
 const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
 
-function EditStaffPositionPermissions({
-  staffPosition, convention, history,
-}) {
+function EditStaffPositionPermissions({ staffPosition, convention }) {
+  const history = useHistory();
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
   const [mutationInProgress, setMutationInProgress] = useState(false);
@@ -158,9 +157,6 @@ EditStaffPositionPermissions.propTypes = {
       name: PropTypes.string.isRequired,
     })).isRequired,
   }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(EditStaffPositionPermissions);
+export default EditStaffPositionPermissions;

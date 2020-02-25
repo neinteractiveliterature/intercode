@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
@@ -97,7 +96,7 @@ const getPossibleColumns = () => [
   },
 ];
 
-function OrderAdmin({ exportUrl, history }) {
+function OrderAdmin({ exportUrl }) {
   const { timezoneName } = useContext(AppRootContext);
   const [editingOrderId, setEditingOrderId] = useState(null);
   usePageTitle('Orders');
@@ -106,7 +105,6 @@ function OrderAdmin({ exportUrl, history }) {
     getData: ({ data }) => data.convention.orders_paginated.entries,
     getPages: ({ data }) => data.convention.orders_paginated.total_pages,
     getPossibleColumns,
-    history,
     storageKeyPrefix: 'orderAdmin',
     query: AdminOrdersQuery,
   });
@@ -152,7 +150,6 @@ function OrderAdmin({ exportUrl, history }) {
 
 OrderAdmin.propTypes = {
   exportUrl: PropTypes.string.isRequired,
-  history: PropTypes.shape({}).isRequired,
 };
 
-export default withRouter(OrderAdmin);
+export default OrderAdmin;

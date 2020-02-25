@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import CategoryLegend from './CategoryLegend';
 import FullnessLegend from './FullnessLegend';
@@ -24,9 +24,10 @@ const DEFAULT_PERSONAL_FILTERS = [
   { id: 'hide_conflicts', value: false },
 ];
 
-function ScheduleGridApp({ configKey, history, location }) {
+function ScheduleGridApp({ configKey }) {
+  const location = useLocation();
   const { myProfile } = useContext(AppRootContext);
-  const { filtered, onFilteredChange } = useReactRouterReactTable({ history, ...filterCodecs });
+  const { filtered, onFilteredChange } = useReactRouterReactTable({ ...filterCodecs });
   const config = ScheduleGridConfig.get(configKey);
   const storageKey = `schedule:${configKey}:personalFilters`;
 
@@ -133,10 +134,6 @@ function ScheduleGridApp({ configKey, history, location }) {
 
 ScheduleGridApp.propTypes = {
   configKey: PropTypes.string.isRequired,
-  history: PropTypes.shape({}).isRequired,
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }).isRequired,
 };
 
-export default withRouter(ScheduleGridApp);
+export default ScheduleGridApp;

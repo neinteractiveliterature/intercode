@@ -23,11 +23,12 @@ function BreadcrumbItem({ active, children, to }) {
 BreadcrumbItem.propTypes = {
   active: PropTypes.bool,
   children: PropTypes.node.isRequired,
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
 };
 
 BreadcrumbItem.defaultProps = {
   active: false,
+  to: null,
 };
 
 export default BreadcrumbItem;

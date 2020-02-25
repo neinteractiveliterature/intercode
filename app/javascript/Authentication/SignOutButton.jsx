@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'unfetch';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAfterSessionChange from './useAfterSessionChange';
@@ -22,7 +22,8 @@ async function signOut(authenticityToken) {
   }
 }
 
-function SignOutButton({ className, caption, history }) {
+function SignOutButton({ className, caption }) {
+  const history = useHistory();
   const { signOut: authenticityToken } = useContext(AuthenticityTokensContext);
   const afterSessionChange = useAfterSessionChange(history);
 
@@ -42,9 +43,6 @@ function SignOutButton({ className, caption, history }) {
 SignOutButton.propTypes = {
   className: PropTypes.string,
   caption: PropTypes.string,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 SignOutButton.defaultProps = {
@@ -52,4 +50,4 @@ SignOutButton.defaultProps = {
   caption: 'Log out',
 };
 
-export default withRouter(SignOutButton);
+export default SignOutButton;

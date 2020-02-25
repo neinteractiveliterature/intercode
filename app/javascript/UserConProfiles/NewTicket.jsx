@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { CreateTicket } from './mutations.gql';
@@ -11,7 +11,8 @@ import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function NewTicket({ userConProfileId, history }) {
+function NewTicket({ userConProfileId }) {
+  const history = useHistory();
   const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
   });
@@ -94,9 +95,6 @@ function NewTicket({ userConProfileId, history }) {
 
 NewTicket.propTypes = {
   userConProfileId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default withRouter(NewTicket);
+export default NewTicket;

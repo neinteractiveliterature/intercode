@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize, underscore } from 'inflected';
+import { useHistory } from 'react-router-dom';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import { CreateTeamMember } from './mutations.gql';
@@ -13,9 +14,8 @@ import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 
-function NewTeamMember({
-  event, eventPath, history,
-}) {
+function NewTeamMember({ event, eventPath }) {
+  const history = useHistory();
   const [teamMember, setTeamMember] = useState({
     user_con_profile: null,
     display_team_member: true,
@@ -126,14 +126,9 @@ NewTeamMember.propTypes = {
     team_members: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
     })).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
   }).isRequired,
   eventPath: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default NewTeamMember;
