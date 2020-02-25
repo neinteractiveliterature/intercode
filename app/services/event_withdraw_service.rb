@@ -34,7 +34,7 @@ class EventWithdrawService < CivilService::Service
       signup.update!(state: 'withdrawn', bucket_key: nil, counted: false, updated_by: whodunit)
       signup.log_signup_change!(action: 'withdraw')
 
-      move_result = move_signups(signup, prev_state, prev_bucket_key, prev_counted)
+      move_result = move_signups(prev_state, prev_bucket_key, prev_counted)
       return move_result if move_result.failure?
     end
 
@@ -54,7 +54,7 @@ class EventWithdrawService < CivilService::Service
     ).deliver_later(wait: 5.seconds)
   end
 
-  def move_signups(signup, prev_state, prev_bucket_key, prev_counted)
+  def move_signups(prev_state, prev_bucket_key, prev_counted)
     return success unless prev_counted && prev_state == 'confirmed'
 
     vacancy_fill_result = fill_vacancy(prev_bucket_key)
