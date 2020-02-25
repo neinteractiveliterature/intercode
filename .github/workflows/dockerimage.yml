@@ -53,7 +53,7 @@ jobs:
         -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
         -e CI=true
-        -v ./test/html_reports:/usr/src/intercode/test/html_reports
+        -v $(pwd)/test/html_reports:/usr/src/intercode/test/html_reports
         web
         test/travis-complete.sh
     - name: Archive Minitest HTML report
