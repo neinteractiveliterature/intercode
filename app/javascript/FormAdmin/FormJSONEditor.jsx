@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/react-hooks';
-import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import CodeInput from '../BuiltInFormControls/CodeInput';
@@ -12,6 +12,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function formDataFromJSON(json) {
   const { title, sections } = JSON.parse(json);
@@ -21,7 +22,7 @@ function formDataFromJSON(json) {
   };
 }
 
-function FormJSONEditor({ initialForm }) {
+function FormJSONEditorForm({ initialForm }) {
   const history = useHistory();
   const initialFormData = useMemo(
     () => formDataFromJSON(initialForm.export_json),
@@ -114,11 +115,37 @@ function FormJSONEditor({ initialForm }) {
   );
 }
 
-FormJSONEditor.propTypes = {
+FormJSONEditorForm.propTypes = {
   initialForm: PropTypes.shape({
     id: PropTypes.number,
     export_json: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+function FormJSONEditor() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(FormAdminQuery);
+
+  const initialForm = useMemo(
+    () => {
+      if (loading || error) {
+        return null;
+      }
+
+      return data.convention.forms.find((form) => form.id.toString(10) === id);
+    },
+    [data, loading, error, id],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <FormJSONEditorForm initialForm={initialForm} />;
+}
 
 export default FormJSONEditor;
