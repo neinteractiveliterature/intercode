@@ -27,7 +27,7 @@
     "@babel/preset-flow": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/register": "^7.8.6",
-    "@juggle/resize-observer": "^2.5.0",
+    "@juggle/resize-observer": "^3.0.2",
     "@rails/ujs": "^6.0.2",
     "@rails/webpacker": "^4.2.2",
     "@testing-library/react": "^9.4.1",
