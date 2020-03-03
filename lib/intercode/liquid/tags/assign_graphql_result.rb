@@ -36,11 +36,17 @@ module Intercode
             context[variable_name]
           end
 
-          result = cms_graphql_query.execute(
-            context: GraphqlController::Context.new(
+          graphql_context = if context.registers['controller']
+            GraphqlController::Context.new(
               context.registers['controller'],
               query_from_liquid: true
-            ),
+            )
+          else
+            context.registers.with_indifferent_access
+          end
+
+          result = cms_graphql_query.execute(
+            context: graphql_context,
             variables: variables
           )
           hash_result = result.to_h
