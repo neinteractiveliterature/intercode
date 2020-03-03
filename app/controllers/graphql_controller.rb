@@ -9,7 +9,7 @@ class GraphqlController < ApplicationController
       current_pending_order: :current_pending_order,
       assumed_identity_from_profile: :assumed_identity_from_profile,
       verified_request: :verified_request?
-    }.transform_values { |method_name| GraphqlController.instance_method(method_name) }
+    }.transform_values { |method_name| ApplicationController.instance_method(method_name) }
 
     def initialize(controller, **values)
       @controller = controller
