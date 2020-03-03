@@ -28,21 +28,7 @@ function TicketTypeAdmin() {
           ticketName={data.convention.ticket_name}
         />
       </Route>
-      <Route
-        path="/ticket_types/:id/edit"
-        render={({ match: { params: { id } } }) => {
-          const ticketType = data.convention.ticket_types
-            .find((tt) => tt.id.toString(10) === id);
-
-          return (
-            <EditTicketType
-              initialTicketType={ticketType}
-              timezoneName={data.convention.timezone_name}
-              ticketName={data.convention.ticket_name}
-            />
-          );
-        }}
-      />
+      <Route path="/ticket_types/:id/edit"><EditTicketType /></Route>
       <Route path="/ticket_types">
         <TicketTypesList
           ticketTypes={data.convention.ticket_types}

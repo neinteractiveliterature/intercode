@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/react-hooks';
-import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { UpdateStaffPositionPermissions } from './mutations.gql';
+import { StaffPositionsQuery } from './queries.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
@@ -12,12 +13,13 @@ import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
 import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 const CmsContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
 const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
 
-function EditStaffPositionPermissions({ staffPosition, convention }) {
+function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
   const history = useHistory();
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
@@ -134,7 +136,7 @@ function EditStaffPositionPermissions({ staffPosition, convention }) {
   );
 }
 
-EditStaffPositionPermissions.propTypes = {
+EditStaffPositionPermissionsForm.propTypes = {
   staffPosition: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
@@ -158,5 +160,32 @@ EditStaffPositionPermissions.propTypes = {
     })).isRequired,
   }).isRequired,
 };
+
+function EditStaffPositionPermissions() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(StaffPositionsQuery);
+
+  const convention = useMemo(
+    () => (loading || error ? null : data.convention),
+    [loading, error, data],
+  );
+
+  const staffPosition = useMemo(
+    () => (convention
+      ? convention.staff_positions.find((sp) => sp.id.toString(10) === id)
+      : null),
+    [convention, id],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <EditStaffPositionPermissionsForm staffPosition={staffPosition} convention={convention} />;
+}
 
 export default EditStaffPositionPermissions;

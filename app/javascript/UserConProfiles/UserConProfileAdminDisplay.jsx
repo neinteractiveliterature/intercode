@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import fetch from 'unfetch';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -18,7 +17,8 @@ import useValueUnless from '../useValueUnless';
 import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function UserConProfileAdminDisplay({ userConProfileId }) {
+function UserConProfileAdminDisplay() {
+  const userConProfileId = Number.parseInt(useParams().id, 10);
   const history = useHistory();
   const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
@@ -202,9 +202,5 @@ function UserConProfileAdminDisplay({ userConProfileId }) {
     </div>
   );
 }
-
-UserConProfileAdminDisplay.propTypes = {
-  userConProfileId: PropTypes.number.isRequired,
-};
 
 export default UserConProfileAdminDisplay;

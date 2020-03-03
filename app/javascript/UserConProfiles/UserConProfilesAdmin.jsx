@@ -35,29 +35,11 @@ function UserConProfilesAdmin() {
   return (
     <Switch>
       <Route path="/user_con_profiles/new"><AttendeesPage /></Route>
-      <Route
-        path="/user_con_profiles/:id/admin_ticket/new"
-        render={({ match }) => (
-          <NewTicket userConProfileId={Number.parseInt(match.params.id, 10)} />
-        )}
-      />
-      <Route
-        path="/user_con_profiles/:id/admin_ticket/edit"
-        render={({ match }) => (
-          <EditTicket userConProfileId={Number.parseInt(match.params.id, 10)} />
-        )}
-      />
-      <Route
-        path="/user_con_profiles/:id/edit"
-        render={({ match }) => <EditUserConProfile id={Number.parseInt(match.params.id, 10)} />}
-      />
-      <Route
-        path="/user_con_profiles/:id"
-        render={({ match }) => (
-          <UserConProfileAdminDisplay userConProfileId={Number.parseInt(match.params.id, 10)} />
-        )}
-      />
-      <Route ><AttendeesPage /></Route>
+      <Route path="/user_con_profiles/:id/admin_ticket/new"><NewTicket /></Route>
+      <Route path="/user_con_profiles/:id/admin_ticket/edit"><EditTicket /></Route>
+      <Route path="/user_con_profiles/:id/edit"><EditUserConProfile /></Route>
+      <Route path="/user_con_profiles/:id"><UserConProfileAdminDisplay /></Route>
+      <Route><AttendeesPage /></Route>
     </Switch>
   );
 }
