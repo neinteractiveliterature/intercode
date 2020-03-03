@@ -30,7 +30,6 @@ fragment DetailedUserFields on User {
 
   user_con_profiles {
     id
-    privileges
 
     convention {
       id
@@ -38,15 +37,12 @@ fragment DetailedUserFields on User {
       domain
       starts_at
       ticket_name
+      timezone_name
     }
 
-    signups {
+    staff_positions {
       id
-      state
-    }
-
-    ticket {
-      id
+      name
     }
   }
 }
