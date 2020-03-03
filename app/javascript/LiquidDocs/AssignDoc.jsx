@@ -47,59 +47,53 @@ function AssignDoc({ assign, prefix = null }) {
         })
       }
 
-      <Route
-        path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}`}
-        exact
-        render={() => (
-          <>
-            <nav aria-label="breadcrumb mb-4">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link to={`/liquid_docs${location.search}`}>Documentation home</Link>
+      <Route path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}`} exact>
+        <nav aria-label="breadcrumb mb-4">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to={`/liquid_docs${location.search}`}>Documentation home</Link>
+            </li>
+            {
+              prefixParts.map((part, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <li className="breadcrumb-item text-nowrap" key={i}>
+                  <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}${location.search}`}>
+                    {part}
+                  </Link>
                 </li>
-                {
-                  prefixParts.map((part, i) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <li className="breadcrumb-item text-nowrap" key={i}>
-                      <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}${location.search}`}>
-                        {part}
-                      </Link>
-                    </li>
-                  ))
-                }
-                <li className="breadcrumb-item active" aria-current="page">{assign.name}</li>
-              </ol>
-            </nav>
+              ))
+            }
+            <li className="breadcrumb-item active" aria-current="page">{assign.name}</li>
+          </ol>
+        </nav>
 
-            <section id={assignClass.name} className="card my-4">
-              <div className="card-header">
-                <AssignDocHeader assign={assign} prefix={prefix} />
-              </div>
+        <section id={assignClass.name} className="card my-4">
+          <div className="card-header">
+            <AssignDocHeader assign={assign} prefix={prefix} />
+          </div>
 
-              {
-                assign.cms_variable_value_json
-                  ? (
-                    <div className="card-body">
-                      <h4>Value</h4>
-                      <code>{assign.cms_variable_value_json}</code>
-                    </div>
-                  )
-                  : null
-              }
+          {
+            assign.cms_variable_value_json
+              ? (
+                <div className="card-body">
+                  <h4>Value</h4>
+                  <code>{assign.cms_variable_value_json}</code>
+                </div>
+              )
+              : null
+          }
 
-              <ul className="list-group list-group-flush">
-                {sortedMethods.map((method) => (
-                  <MethodDoc
-                    method={method}
-                    prefix={buildMemberPrefix(assign.name, prefix)}
-                    key={method.name}
-                  />
-                ))}
-              </ul>
-            </section>
-          </>
-        )}
-      />
+          <ul className="list-group list-group-flush">
+            {sortedMethods.map((method) => (
+              <MethodDoc
+                method={method}
+                prefix={buildMemberPrefix(assign.name, prefix)}
+                key={method.name}
+              />
+            ))}
+          </ul>
+        </section>
+      </Route>
     </Switch>
   );
 }
@@ -108,6 +102,7 @@ AssignDoc.propTypes = {
   assign: PropTypes.shape({
     name: PropTypes.string.isRequired,
     drop_class_name: PropTypes.string.isRequired,
+    cms_variable_value_json: PropTypes.string,
   }).isRequired,
   prefix: PropTypes.string,
 };

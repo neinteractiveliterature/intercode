@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useHistory, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
+import { AdminTicketTypesQuery } from './queries.gql';
 import buildTicketTypeInput from './buildTicketTypeInput';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
@@ -10,8 +11,9 @@ import TicketTypePropType from './TicketTypePropType';
 import { UpdateTicketType } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditTicketType({ initialTicketType, ticketName, timezoneName }) {
+function EditTicketTypeForm({ initialTicketType, ticketName, timezoneName }) {
   const history = useHistory();
   usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState(initialTicketType);
@@ -56,10 +58,41 @@ function EditTicketType({ initialTicketType, ticketName, timezoneName }) {
   );
 }
 
-EditTicketType.propTypes = {
+EditTicketTypeForm.propTypes = {
   initialTicketType: TicketTypePropType.isRequired,
   ticketName: PropTypes.string.isRequired,
   timezoneName: PropTypes.string.isRequired,
 };
+
+function EditTicketType() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(AdminTicketTypesQuery);
+
+  const convention = useMemo(
+    () => (loading || error ? null : data.convention),
+    [data, error, loading],
+  );
+
+  const initialTicketType = useMemo(
+    () => (convention ? convention.ticket_types.find((tt) => tt.id.toString(10) === id) : null),
+    [convention, id],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <EditTicketTypeForm
+      initialTicketType={initialTicketType}
+      timezoneName={convention.timezone_name}
+      ticketName={convention.ticket_name}
+    />
+  );
+}
 
 export default EditTicketType;
