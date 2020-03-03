@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { CreateTicket } from './mutations.gql';
@@ -11,7 +10,8 @@ import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function NewTicket({ userConProfileId }) {
+function NewTicket() {
+  const userConProfileId = Number.parseInt(useParams().id, 10);
   const history = useHistory();
   const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
@@ -92,9 +92,5 @@ function NewTicket({ userConProfileId }) {
     </>
   );
 }
-
-NewTicket.propTypes = {
-  userConProfileId: PropTypes.number.isRequired,
-};
 
 export default NewTicket;

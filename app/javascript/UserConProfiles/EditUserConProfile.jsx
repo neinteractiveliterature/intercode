@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import buildFormStateFromData from './buildFormStateFromData';
@@ -93,7 +93,8 @@ EditUserConProfileForm.propTypes = {
   }).isRequired,
 };
 
-function EditUserConProfile({ id }) {
+function EditUserConProfile() {
+  const id = Number.parseInt(useParams().id, 10);
   const { data, loading, error } = useQuery(UserConProfileQuery, { variables: { id } });
 
   if (loading) {
@@ -106,9 +107,5 @@ function EditUserConProfile({ id }) {
 
   return <EditUserConProfileForm data={data} />;
 }
-
-EditUserConProfile.propTypes = {
-  id: PropTypes.number.isRequired,
-};
 
 export default EditUserConProfile;

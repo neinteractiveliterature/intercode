@@ -1,19 +1,21 @@
-import React, { useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { useHistory, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
-import StaffPositionPropType from './StaffPositionPropType';
 import { UpdateStaffPosition } from './mutations.gql';
+import { StaffPositionsQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditStaffPosition({ initialStaffPosition }) {
+function EditStaffPositionForm({ initialStaffPosition }) {
   const history = useHistory();
   const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
   const [updateMutate] = useMutation(UpdateStaffPosition);
-  const [mutate, error, requestInProgress] = useAsyncFunction(updateMutate);
+  const [mutate, updateError, requestInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(`Editing “${initialStaffPosition.name}”`);
 
@@ -50,7 +52,7 @@ function EditStaffPosition({ initialStaffPosition }) {
         staffPosition={staffPosition}
         onChange={setStaffPosition}
       />
-      <ErrorDisplay graphQLError={error} />
+      <ErrorDisplay graphQLError={updateError} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={requestInProgress}>
         Save changes
       </button>
@@ -58,8 +60,32 @@ function EditStaffPosition({ initialStaffPosition }) {
   );
 }
 
-EditStaffPosition.propTypes = {
-  initialStaffPosition: StaffPositionPropType.isRequired,
+EditStaffPositionForm.propTypes = {
+  initialStaffPosition: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
+
+function EditStaffPosition() {
+  const { id } = useParams();
+  const { data, loading, error } = useQuery(StaffPositionsQuery);
+
+  const initialStaffPosition = useMemo(
+    () => (loading || error
+      ? null
+      : data.convention.staff_positions.find((sp) => sp.id.toString(10) === id)),
+    [loading, error, data, id],
+  );
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <EditStaffPositionForm initialStaffPosition={initialStaffPosition} />;
+}
 
 export default EditStaffPosition;

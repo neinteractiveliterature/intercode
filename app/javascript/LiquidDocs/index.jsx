@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import {
+  Switch, Route, Redirect, useLocation,
+} from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import AssignDoc from './AssignDoc';

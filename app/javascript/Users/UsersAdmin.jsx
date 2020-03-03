@@ -40,7 +40,7 @@ function UsersAdmin() {
       </ol>
 
       <Switch>
-        <Route path="/users/:id" render={({ match: { params: { id } } }) => <UserAdminDisplay userId={Number.parseInt(id, 10)} />} />
+        <Route path="/users/:id"><UserAdminDisplay /></Route>
         <Route path="/users"><UsersTable exportUrl="/users/export.csv" /></Route>
       </Switch>
     </>
