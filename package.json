@@ -51,7 +51,7 @@
     "cadmus-navbar-admin": "^3.0.0",
     "caniuse-lite": "^1.0.30001031",
     "classnames": "^2.2.6",
-    "clipboard": "^2.0.1",
+    "clipboard": "^2.0.5",
     "codemirror": "^5.52.0",
     "compression-webpack-plugin": "^3.1.0",
     "core-js": "^3.6.4",
