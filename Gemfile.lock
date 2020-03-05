@@ -311,9 +311,9 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.2)
     nio4r (2.5.2-java)
-    nokogiri (1.10.8)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.8-java)
+    nokogiri (1.10.9-java)
     oj (3.10.5)
     orm_adapter (0.5.0)
     parallel (1.19.1)
@@ -474,7 +474,7 @@ GEM
     thread_safe (0.3.6-java)
     tilt (2.0.10)
     tins (1.20.2)
-    twilio-ruby (5.31.5)
+    twilio-ruby (5.31.6)
       faraday (~> 1.0.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -578,7 +578,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
-  twilio-ruby (~> 5.31.5)
+  twilio-ruby (~> 5.31.6)
   whenever
   will_paginate
   with_advisory_lock
