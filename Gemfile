@@ -73,7 +73,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.31.5'
+gem 'twilio-ruby', '~> 5.31.6'
 gem 'phonelib'
 
 # Background workers and scheduling
