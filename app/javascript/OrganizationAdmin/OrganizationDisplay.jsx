@@ -20,7 +20,7 @@ function getOrganizationRolePermissionName(permissionName) {
 }
 
 function OrganizationDisplay() {
-  const organizationId = Number.parseInt(useParams().organizationId, 10);
+  const organizationId = Number.parseInt(useParams().id, 10);
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const confirm = useConfirm();
   const [mutate] = useMutation(DeleteOrganizationRole);
