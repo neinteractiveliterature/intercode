@@ -13,6 +13,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import useLoginRequired from '../Authentication/useLoginRequired';
 
 function OrganizationWithIdBreadcrumbs() {
   const match = useRouteMatch();
@@ -51,6 +52,9 @@ function OrganizationWithIdBreadcrumbs() {
 }
 
 function OrganizationAdmin() {
+  const loginRequired = useLoginRequired();
+  if (loginRequired) return <></>;
+
   return (
     <>
       <ol className="breadcrumb">
