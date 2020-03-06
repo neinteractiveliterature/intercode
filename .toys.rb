@@ -65,6 +65,25 @@ run load_production_database bin/load_production_database #{file}"
   end
 end
 
+tool 'build_sanitized_db' do
+  desc 'Build a sanitized database from the existing dev database'
+  include :exec, exit_on_nonzero_status: true
+
+  def run
+    puts 'Copying dev database for sanitization'
+    sh 'dropdb -U postgres --if-exists intercode_sanitized_tmp'
+    sh 'createdb -U postgres -T intercode_development intercode_sanitized_tmp'
+
+    sh './bin/rails sanitize_db DEVELOPMENT_DATABASE_URL=postgres://postgres@localhost/intercode_sanitized_tmp'
+
+    puts 'Creating pgdump file'
+    sh "pg_dump -Fc -d intercode_sanitized_tmp -f intercode_sanitized_#{Time.now.strftime('%Y-%m-%d')}.pgdump"
+
+    puts 'Dropping temporary database'
+    sh 'dropdb -U postgres intercode_sanitized_tmp'
+  end
+end
+
 tool 'cleanup_branches' do
   desc 'Clean up local branches that were deleted or merged in origin'
   include :exec, exit_on_nonzero_status: true
