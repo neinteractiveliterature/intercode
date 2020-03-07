@@ -21,20 +21,28 @@ module ProfileSetupWorkflow
   end
 
   def copy_most_recent_profile_attributes(destination_profile)
-    return unless most_recent_profile
+    return unless profiles_by_recency.any?
 
-    destination_profile.assign_form_response_attributes(
-      FormResponsePresenter.new(convention.user_con_profile_form, most_recent_profile).as_json
-    )
+    this_convention_profile_fields = convention.user_con_profile_form.form_items.pluck(:identifier)
+
+    profiles_by_recency.each do |profile|
+      destination_profile.assign_form_response_attributes(
+        FormResponsePresenter.new(profile.convention.user_con_profile_form, profile)
+          .as_json
+          .slice(*this_convention_profile_fields)
+      )
+      destination_profile.assign_attributes(
+        gravatar_enabled: profile.gravatar_enabled
+      )
+    end
   end
 
-  def most_recent_profile
+  def profiles_by_recency
     return nil unless convention.organization_id
 
-    @most_recent_profile ||= current_user.user_con_profiles.joins(:convention)
+    @profiles_by_recency ||= current_user.user_con_profiles.joins(:convention)
       .where(conventions: { organization_id: convention.organization_id })
-      .order(Arel.sql('conventions.starts_at DESC'))
-      .first
+      .order(Arel.sql('user_con_profiles.updated_at'))
   end
 
   def redirect_if_user_con_profile_needs_update
