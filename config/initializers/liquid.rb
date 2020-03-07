@@ -21,3 +21,26 @@ class Money::Currency
     Money::CurrencyDrop.new(self)
   end
 end
+
+# Patching Liquid::Utils to use ActiveSupport time zone
+module Liquid::Utils
+  def self.to_date(obj)
+    return obj if obj.respond_to?(:strftime)
+
+    if obj.is_a?(String)
+      return nil if obj.empty?
+      obj = obj.downcase
+    end
+
+    case obj
+    when 'now'.freeze, 'today'.freeze
+      Time.zone.now
+    when /\A\d+\z/, Integer
+      Time.zone.at(obj.to_i)
+    when String
+      Time.zone.parse(obj)
+    end
+  rescue ::ArgumentError
+    nil
+  end
+end
