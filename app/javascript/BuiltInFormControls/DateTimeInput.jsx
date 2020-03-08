@@ -111,7 +111,6 @@ function DateTimeInput({
         value={value}
         timezoneName={timezoneName}
         onChange={onChange}
-        id={id}
         {...otherProps}
       />
     </div>
