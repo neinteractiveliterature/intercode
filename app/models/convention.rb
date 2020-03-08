@@ -3,6 +3,8 @@ class Convention < ApplicationRecord
   SITE_MODES = %w[convention single_event]
   SIGNUP_MODES = %w[self_service moderated]
 
+  before_destroy :nullify_associated_content
+
   belongs_to :updated_by, class_name: 'User', optional: true
   belongs_to :organization, optional: true
 
@@ -138,5 +140,9 @@ class Convention < ApplicationRecord
 
     return if show_event_list_permissivity >= show_schedule_permissivity
     errors.add(:show_event_list, 'must be at least as permissive as show_schedule')
+  end
+
+  def nullify_associated_content
+    update!(root_page: nil, default_layout: nil, user_con_profile_form: nil)
   end
 end

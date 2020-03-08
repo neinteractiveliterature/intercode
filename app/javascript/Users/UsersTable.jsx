@@ -34,6 +34,7 @@ function CheckboxCell({ original }) {
         }
         setCheckedUserIds(newCheckedUserIds);
       }}
+      aria-label={`${original.first_name} ${original.last_name}`}
     />
   );
 }
@@ -41,6 +42,8 @@ function CheckboxCell({ original }) {
 CheckboxCell.propTypes = {
   original: PropTypes.shape({
     id: PropTypes.number.isRequired,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
   }).isRequired,
 };
 

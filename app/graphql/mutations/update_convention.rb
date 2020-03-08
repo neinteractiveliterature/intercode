@@ -1,4 +1,6 @@
 class Mutations::UpdateConvention < Mutations::BaseMutation
+  include ScheduledValueInputs
+
   field :convention, Types::ConventionType, null: false
 
   argument :id, Integer, required: false
@@ -14,29 +16,11 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
       'maximum_event_signups' => process_scheduled_value_input(
         args[:convention].maximum_event_signups
       ),
-      'updated_by' => user_con_profile.user
+      'updated_by' => current_user
     )
 
     @convention.update!(convention_data)
 
     { convention: @convention }
-  end
-
-  private
-
-  def process_scheduled_value_input(input_data)
-    timespans_data = input_data[:timespans].map do |timespan|
-      value = (timespan[:string_value] if timespan[:string_value])
-
-      {
-        start: timespan[:start],
-        finish: timespan[:finish],
-        value: value
-      }
-    end
-
-    {
-      timespans: timespans_data
-    }
   end
 end

@@ -55,6 +55,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Convention
 
+  field :createConvention, mutation: Mutations::CreateConvention
   field :updateConvention, mutation: Mutations::UpdateConvention
 
   ### Department

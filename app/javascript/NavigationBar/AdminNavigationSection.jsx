@@ -117,6 +117,11 @@ function useRootSiteAdminNavigationItems() {
 
   const items = useMemo(
     () => [
+      currentAbility.can_manage_conventions && {
+        label: 'Conventions',
+        url: '/conventions?sort.starts_at=desc',
+        icon: 'fa-rocket',
+      },
       currentAbility.can_read_organizations && {
         label: 'Organizations',
         url: '/organizations',
