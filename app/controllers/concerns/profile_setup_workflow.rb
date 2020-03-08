@@ -26,10 +26,10 @@ module ProfileSetupWorkflow
     this_convention_profile_fields = convention.user_con_profile_form.form_items.pluck(:identifier)
 
     profiles_by_recency.each do |profile|
+      profile_attrs = FormResponsePresenter.new(profile.convention.user_con_profile_form, profile)
+        .as_json
       destination_profile.assign_form_response_attributes(
-        FormResponsePresenter.new(profile.convention.user_con_profile_form, profile)
-          .as_json
-          .slice(*this_convention_profile_fields)
+        profile_attrs.slice(*this_convention_profile_fields)
       )
       destination_profile.assign_attributes(
         gravatar_enabled: profile.gravatar_enabled
@@ -42,7 +42,7 @@ module ProfileSetupWorkflow
 
     @profiles_by_recency ||= current_user.user_con_profiles.joins(:convention)
       .where(conventions: { organization_id: convention.organization_id })
-      .order(Arel.sql('user_con_profiles.updated_at'))
+      .order(Arel.sql('conventions.starts_at'))
   end
 
   def redirect_if_user_con_profile_needs_update
