@@ -4,14 +4,17 @@ import moment from 'moment-timezone';
 import { render, fireEvent, queries } from '../testUtils';
 import TimeSelect from '../../../app/javascript/BuiltInFormControls/TimeSelect';
 
+const START_TIME = '2017-01-01T00:00:00Z';
+const FINISH_TIME = '2017-01-02T00:00:00Z';
+
 describe('TimeSelect', () => {
   const renderTimeSelect = (props) => render((
     <TimeSelect
       value={{}}
       onChange={() => {}}
       timespan={{
-        start: moment.tz('2017-01-01T00:00:00Z', 'UTC'),
-        finish: moment.tz('2017-01-02T00:00:00Z', 'UTC'),
+        start: moment.tz(START_TIME, 'UTC'),
+        finish: moment.tz(FINISH_TIME, 'UTC'),
       }}
       {...props}
     />
@@ -23,7 +26,7 @@ describe('TimeSelect', () => {
     const hourOptions = queries.getAllByRole(hourSelect, 'option');
     expect(hourOptions.map((option) => option.innerHTML)).toEqual([
       '',
-      ...([...Array(24).keys()].map((hour) => moment().set({ hour }).format('ha'))),
+      ...([...Array(24).keys()].map((hour) => moment(START_TIME).set({ hour }).format('ha'))),
     ]);
     const minuteSelect = getByLabelText(/Minute/);
     const minuteOptions = queries.getAllByRole(minuteSelect, 'option');
@@ -43,9 +46,9 @@ describe('TimeSelect', () => {
     const hourOptions = queries.getAllByRole(hourSelect, 'option');
     expect(hourOptions.map((option) => option.innerHTML)).toEqual([
       '',
-      ...([...Array(24).keys()].map((hour) => moment().set({ hour }).format('ha'))),
-      ...([...Array(24).keys()].map((hour) => `${moment().set({ hour }).format('ha')} (+1 day)`)),
-      ...([...Array(24).keys()].map((hour) => `${moment().set({ hour }).format('ha')} (+2 days)`)),
+      ...([...Array(24).keys()].map((hour) => moment(START_TIME).set({ hour }).format('ha'))),
+      ...([...Array(24).keys()].map((hour) => `${moment(START_TIME).set({ hour }).format('ha')} (+1 day)`)),
+      ...([...Array(24).keys()].map((hour) => `${moment(START_TIME).set({ hour }).format('ha')} (+2 days)`)),
     ]);
   });
 
