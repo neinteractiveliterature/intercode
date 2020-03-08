@@ -22,6 +22,18 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     Convention.all.to_a
   end
 
+  pagination_field :conventions_paginated,
+    Types::ConventionsPaginationType, Types::ConventionFiltersInputType,
+    camelize: false
+
+  def conventions_paginated(**args)
+    Tables::ConventionsTableResultsPresenter.new(
+      policy_scope(Convention.all),
+      args[:filters].to_h,
+      args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
   field :event, Types::EventType, null: true do
     argument :id, Integer, required: true
   end

@@ -70,11 +70,15 @@ class CloneConventionService < CivilService::Service
 
   def clone_cms_files(convention)
     Rails.logger.info('Cloning files')
+    clonable_files = source_convention.cms_files.select do |cms_file|
+      cms_file.file.cache_stored_file!
+      cms_file.file.cached?
+    end
+
     @id_maps[:cms_files] = clone_with_id_map(
-      source_convention.cms_files,
+      CmsFile.where(id: clonable_files.map(&:id)),
       convention.cms_files
     ) do |file, cloned_file|
-      file.file.cache_stored_file!
       cloned_file.file = file.file
     end
   end

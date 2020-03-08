@@ -44,8 +44,12 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     PagePolicy::ManageScope.new(pundit_user, cms_parent.pages).resolve.any?
   end
 
-  field :can_update_convention, Boolean, null: false
+  field :can_manage_conventions, Boolean, null: false
+  def can_manage_conventions
+    policy(Convention.new).manage?
+  end
 
+  field :can_update_convention, Boolean, null: false
   def can_update_convention
     !!(convention && convention_policy.update?)
   end

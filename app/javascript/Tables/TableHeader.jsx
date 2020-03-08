@@ -8,14 +8,16 @@ function TableHeader({
   columnSelectionProps, exportUrl, filtered, renderLeftContent, renderRightContent, sorted,
 }) {
   return (
-    <div className="d-flex">
+    <div className="d-flex mb-2">
       <div className="flex-grow-1">
-        <ExportButton
-          exportUrl={exportUrl}
-          filtered={filtered}
-          sorted={sorted}
-          columns={columnSelectionProps.visibleColumnIds}
-        />
+        {exportUrl && (
+          <ExportButton
+            exportUrl={exportUrl}
+            filtered={filtered}
+            sorted={sorted}
+            columns={columnSelectionProps.visibleColumnIds}
+          />
+        )}
         {(renderLeftContent || (() => null))()}
       </div>
       <div>
@@ -30,7 +32,7 @@ TableHeader.propTypes = {
   columnSelectionProps: PropTypes.shape({
     visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
-  exportUrl: PropTypes.string.isRequired,
+  exportUrl: PropTypes.string,
   filtered: PropTypes.arrayOf(PropTypes.shape({})),
   renderLeftContent: PropTypes.func,
   renderRightContent: PropTypes.func,
@@ -38,6 +40,7 @@ TableHeader.propTypes = {
 };
 
 TableHeader.defaultProps = {
+  exportUrl: null,
   filtered: null,
   renderLeftContent: null,
   renderRightContent: null,

@@ -1,0 +1,58 @@
+query RootSiteConventionsAdminTableQuery($page: Int, $filters: ConventionFiltersInput, $sort: [SortInput!]) {
+  conventions_paginated(page: $page, filters: $filters, sort: $sort) {
+    total_entries
+    total_pages
+
+    entries {
+      id
+      name
+      starts_at
+      ends_at
+      timezone_name
+
+      organization {
+        id
+        name
+      }
+    }
+  }
+}
+
+fragment ConventionDisplayFields on Convention {
+  id
+  name
+  starts_at
+  ends_at
+  timezone_name
+  domain
+  site_mode
+  ticket_mode
+  show_event_list
+  show_schedule
+
+  maximum_event_signups {
+    timespans {
+      start
+      finish
+      value
+    }
+  }
+
+  organization {
+    id
+    name
+  }
+}
+
+query ConventionDisplayQuery($id: Int!) {
+  convention(id: $id) {
+    ...ConventionDisplayFields
+  }
+}
+
+query NewConventionModalQuery {
+  organizations {
+    id
+    name
+  }
+}
