@@ -76,7 +76,9 @@ function ConventionAdmin({ id }) {
 
   return (
     <div className="mb-4">
-      <ConventionFormHeader convention={data.convention} />
+      <div className="mb-4">
+        <ConventionFormHeader convention={data.convention} compact />
+      </div>
 
       <ConventionForm
         initialConvention={{ ...data.convention }}

@@ -11,6 +11,27 @@ class Tables::TableResultsPresenter
       end
     end
 
+    def self.ilike_column_filter(column_name = nil, association_name: nil)
+      define_method :apply_filter do |scope, value|
+        return scope if value.blank?
+
+        association = scope.model.reflect_on_association(association_name) if association_name
+
+        table_name_quoted = if association
+          scope.connection.quote_table_name(association.klass.table_name)
+        else
+          scope.connection.quote_table_name(scope.model.table_name)
+        end
+        column_name_quoted = scope.connection.quote_column_name(column_name || id)
+
+        joined_scope = association_name ? scope.joins(association_name) : scope
+        joined_scope.where(
+          "lower(#{table_name_quoted}.#{column_name_quoted}) like :value",
+          value: "%#{value.downcase}%"
+        )
+      end
+    end
+
     def initialize(presenter)
       @presenter = presenter
     end

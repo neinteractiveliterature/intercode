@@ -68,7 +68,7 @@ function ReactTableExportButton({
   );
 
   return (
-    <a className="btn btn-outline-primary mb-2" href={href}>
+    <a className="btn btn-outline-primary" href={href}>
       <i className="fa fa-file-excel-o" />
       {' '}
       Export CSV

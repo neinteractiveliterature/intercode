@@ -18,9 +18,7 @@ function parseDateTimeValues(valueString, timezoneName) {
   };
 }
 
-function DateTimeInput({
-  value, timezoneName, onChange, id,
-}) {
+function useDateTimeState(value, timezoneName, onChange) {
   const { date, time } = useMemo(
     () => parseDateTimeValues(value, timezoneName),
     [timezoneName, value],
@@ -36,27 +34,85 @@ function DateTimeInput({
     onChange(momentValue.toISOString());
   };
 
+  return { date, time, dateTimeValuesChanged };
+}
+
+export function DateInput({
+  value, timezoneName, onChange, ...otherProps
+}) {
+  const { date, time, dateTimeValuesChanged } = useDateTimeState(value, timezoneName, onChange);
   const dateChanged = (event) => dateTimeValuesChanged(event.target.value, time);
+
+  return (
+    <input
+      type="date"
+      className="form-control mr-1"
+      value={date || ''}
+      onChange={dateChanged}
+      pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+      aria-label="Date"
+      {...otherProps}
+    />
+  );
+}
+
+DateInput.propTypes = {
+  value: PropTypes.string,
+  timezoneName: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+DateInput.defaultProps = {
+  value: null,
+};
+
+export function TimeInput({
+  value, timezoneName, onChange, ...otherProps
+}) {
+  const { date, time, dateTimeValuesChanged } = useDateTimeState(value, timezoneName, onChange);
   const timeChanged = (event) => dateTimeValuesChanged(date, event.target.value);
 
   return (
+    <input
+      type="time"
+      className="form-control"
+      value={time || ''}
+      onChange={timeChanged}
+      pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+      aria-label="Time"
+      {...otherProps}
+    />
+  );
+}
+
+TimeInput.propTypes = {
+  value: PropTypes.string,
+  timezoneName: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+TimeInput.defaultProps = {
+  value: null,
+};
+
+function DateTimeInput({
+  value, timezoneName, onChange, id, ...otherProps
+}) {
+  return (
     <div className="d-flex">
-      <input
-        type="date"
-        className="form-control mr-1"
-        value={date || ''}
-        onChange={dateChanged}
-        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+      <DateInput
+        value={value}
+        timezoneName={timezoneName}
+        onChange={onChange}
         id={id}
-        aria-label="Date"
+        {...otherProps}
       />
-      <input
-        type="time"
-        className="form-control"
-        value={time || ''}
-        onChange={timeChanged}
-        pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
-        aria-label="Time"
+      <TimeInput
+        value={value}
+        timezoneName={timezoneName}
+        onChange={onChange}
+        id={id}
+        {...otherProps}
       />
     </div>
   );

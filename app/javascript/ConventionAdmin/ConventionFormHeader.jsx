@@ -53,7 +53,7 @@ function describeConventionTiming(startsAt, endsAt, timezoneName) {
   return `${isMultiDay ? 'ends' : 'is'} today`;
 }
 
-function ConventionFormHeader({ convention }) {
+function ConventionFormHeader({ convention, compact }) {
   const conventionTiming = useMemo(
     () => describeConventionTiming(
       convention.starts_at,
@@ -68,8 +68,20 @@ function ConventionFormHeader({ convention }) {
     [convention.maximum_event_signups],
   );
 
+  const metadata = [
+    ...(
+      convention.site_mode === 'single_event'
+        ? [{ label: 'Site mode', value: 'Single event' }]
+        : [
+          { label: 'Event list', value: describeEventVisibility(convention.show_event_list) },
+          { label: 'Schedule', value: describeEventVisibility(convention.show_schedule) },
+        ]
+    ),
+    { label: 'Signups', value: signupsDescription },
+  ];
+
   return (
-    <header className="mb-4">
+    <header>
       <h1>
         {convention.name}
         {' '}
@@ -77,35 +89,37 @@ function ConventionFormHeader({ convention }) {
           {conventionTiming}
         </span>
       </h1>
-      <div className="row">
-        {
-          convention.site_mode === 'single_event'
-            ? (
-              <div className="col-md-8">
-                <strong>Single event</strong>
+      {compact
+        ? (
+          <div className="row">
+            {metadata.map(({ label, value }) => (
+              <div className="col-md-4" key={label}>
+                {value
+                  ? (
+                    <>
+                      <strong>
+                        {label}
+                        :
+                      </strong>
+                      {' '}
+                      {value}
+                    </>
+                  )
+                  : <strong>{label}</strong>}
               </div>
-            )
-            : (
-              <>
-                <div className="col-md-4">
-                  <strong>Event list:</strong>
-                  {' '}
-                  {describeEventVisibility(convention.show_event_list)}
-                </div>
-                <div className="col-md-4">
-                  <strong>Schedule:</strong>
-                  {' '}
-                  {describeEventVisibility(convention.show_schedule)}
-                </div>
-              </>
-            )
-        }
-        <div className="col-md-4">
-          <strong>Signups:</strong>
-          {' '}
-          {signupsDescription}
-        </div>
-      </div>
+            ))}
+          </div>
+        )
+        : (
+          <dl className="row mb-0">
+            {metadata.map(({ label, value }) => (
+              <React.Fragment key={label}>
+                <dt className="col-md-3">{label}</dt>
+                <dd className="col-md-9">{value}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+        )}
     </header>
   );
 }
@@ -127,10 +141,16 @@ ConventionFormHeader.propTypes = {
       })).isRequired,
     }).isRequired,
   }).isRequired,
+  compact: PropTypes.bool,
+};
+
+ConventionFormHeader.defaultProps = {
+  compact: false,
 };
 
 export default React.memo(ConventionFormHeader, (prevProps, nextProps) => (
-  prevProps.convention.name === nextProps.convention.name
+  prevProps.compact === nextProps.compact
+  && prevProps.convention.name === nextProps.convention.name
   && prevProps.convention.starts_at === nextProps.convention.starts_at
   && prevProps.convention.ends_at === nextProps.convention.ends_at
   && prevProps.convention.timezone_name === nextProps.convention.timezone_name
