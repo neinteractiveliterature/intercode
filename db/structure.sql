@@ -52,6 +52,164 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: current_scheduled_value(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.current_scheduled_value(scheduled_value jsonb) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT current_scheduled_value_timespan(scheduled_value)->'value'
+  $$;
+
+
+--
+-- Name: current_scheduled_value_timespan(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.current_scheduled_value_timespan(scheduled_value jsonb) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT scheduled_value_timespan_at(scheduled_value, now()::timestamp)
+  $$;
+
+
+--
+-- Name: next_scheduled_value(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.next_scheduled_value(scheduled_value jsonb) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT next_scheduled_value_timespan(scheduled_value)->'value'
+  $$;
+
+
+--
+-- Name: next_scheduled_value_at(jsonb, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.next_scheduled_value_at(scheduled_value jsonb, target_time timestamp without time zone) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT next_scheduled_value_timespan_at(scheduled_value, target_time)->'value'
+  $$;
+
+
+--
+-- Name: next_scheduled_value_change(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.next_scheduled_value_change(scheduled_value jsonb) RETURNS timestamp without time zone
+    LANGUAGE sql
+    AS $$
+    SELECT (next_scheduled_value_timespan(scheduled_value)->>'start')::timestamp
+  $$;
+
+
+--
+-- Name: next_scheduled_value_change_at(jsonb, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.next_scheduled_value_change_at(scheduled_value jsonb, target_time timestamp without time zone) RETURNS timestamp without time zone
+    LANGUAGE sql
+    AS $$
+    SELECT (next_scheduled_value_timespan_at(scheduled_value, target_time)->>'start')::timestamp
+  $$;
+
+
+--
+-- Name: next_scheduled_value_timespan(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.next_scheduled_value_timespan(scheduled_value jsonb) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT next_scheduled_value_timespan_at(scheduled_value, now()::timestamp)
+  $$;
+
+
+--
+-- Name: next_scheduled_value_timespan_at(jsonb, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.next_scheduled_value_timespan_at(scheduled_value jsonb, target_time timestamp without time zone) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT to_jsonb(timespan) FROM (
+      SELECT * FROM scheduled_value_timespans(scheduled_value) timespans
+      WHERE timespan_index = (scheduled_value_timespan_at(scheduled_value, target_time)->>'timespan_index')::bigint + 1
+      LIMIT 1
+    ) timespan
+  $$;
+
+
+--
+-- Name: scheduled_value_at(jsonb, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.scheduled_value_at(scheduled_value jsonb, target_time timestamp without time zone) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT scheduled_value_timespan_at(scheduled_value, target_time)->'value'
+  $$;
+
+
+--
+-- Name: scheduled_value_timespan_at(jsonb, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.scheduled_value_timespan_at(scheduled_value jsonb, target_time timestamp without time zone) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT to_jsonb(timespan) FROM (
+      SELECT * FROM scheduled_value_timespans(scheduled_value) timespans
+      WHERE
+        (start IS NULL AND finish > target_time)
+        OR (start <= target_time AND finish > target_time)
+        OR (start <= target_time AND finish IS NULL)
+        OR (start IS NULL AND finish IS NULL)
+      LIMIT 1
+    ) timespan
+  $$;
+
+
+--
+-- Name: scheduled_value_timespans(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.scheduled_value_timespans(scheduled_value jsonb) RETURNS TABLE(timespan_index bigint, start timestamp without time zone, finish timestamp without time zone, value jsonb)
+    LANGUAGE sql
+    AS $$
+    SELECT
+      row_number() over() AS timespan_index,
+      (timespan->>'start')::timestamp AS start,
+      (timespan->>'finish')::timestamp AS finish,
+      timespan->'value' AS value
+    FROM (
+      SELECT jsonb_array_elements(scheduled_value->'timespans') AS timespan
+    ) timespans
+    ORDER BY (CASE WHEN timespan->>'start' IS NULL THEN 0 ELSE 1 END), (timespan->>'start')::timestamp
+  $$;
+
+
+--
+-- Name: scheduled_value_timestamps(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.scheduled_value_timestamps(scheduled_value jsonb) RETURNS TABLE(start timestamp without time zone, finish timestamp without time zone, value text)
+    LANGUAGE sql
+    AS $$
+    SELECT
+      (timespan->>'start')::timestamp AS start,
+      (timespan->>'finish')::timestamp AS finish,
+      timespan->>'value' AS value
+    FROM (
+      SELECT jsonb_array_elements(scheduled_value->'timespans') AS timespan
+    ) timespans
+  $$;
+
+
+--
 -- Name: english_unaccent; Type: TEXT SEARCH CONFIGURATION; Schema: public; Owner: -
 --
 
@@ -4415,6 +4573,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200216222934'),
 ('20200217182622'),
 ('20200218010110'),
-('20200309152308');
+('20200309152308'),
+('20200309160404');
 
 
