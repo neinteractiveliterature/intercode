@@ -7,7 +7,6 @@ class Product < ApplicationRecord
 
   mount_uploader :image, ProductImageUploader
   monetize :price_cents, with_model_currency: :price_currency, allow_nil: true
-  serialize :payment_options, JSON
 
   validate :ensure_valid_payment_options
 

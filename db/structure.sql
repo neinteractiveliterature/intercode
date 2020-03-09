@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -487,7 +488,7 @@ CREATE TABLE public.cms_variables (
     id bigint NOT NULL,
     parent_id bigint,
     key character varying(100) NOT NULL,
-    value text,
+    value jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     parent_type character varying
@@ -530,7 +531,7 @@ CREATE TABLE public.conventions (
     name character varying,
     domain character varying NOT NULL,
     timezone_name character varying,
-    maximum_event_signups text,
+    maximum_event_signups jsonb,
     maximum_tickets integer,
     default_layout_id bigint,
     user_con_profile_form_id bigint,
@@ -657,12 +658,12 @@ CREATE TABLE public.event_proposals (
     length_seconds integer,
     description text,
     short_blurb text,
-    registration_policy text,
+    registration_policy jsonb,
     can_play_concurrently boolean,
-    additional_info text,
+    additional_info jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    timeblock_preferences text,
+    timeblock_preferences jsonb,
     submitted_at timestamp without time zone,
     admin_notes text,
     reminded_at timestamp without time zone,
@@ -745,11 +746,11 @@ CREATE TABLE public.events (
     convention_id integer,
     owner_id integer,
     status character varying DEFAULT 'active'::character varying NOT NULL,
-    registration_policy text,
+    registration_policy jsonb,
     participant_communications text,
     age_restrictions_description text,
     content_warnings text,
-    additional_info text,
+    additional_info jsonb,
     admin_notes text,
     team_mailing_list_name text,
     private_signup_list boolean DEFAULT false NOT NULL,
@@ -788,11 +789,11 @@ CREATE TABLE public.form_items (
     "position" integer,
     identifier text,
     item_type text,
-    properties text,
+    properties jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     admin_description text,
-    default_value text,
+    default_value jsonb,
     public_description text
 );
 
@@ -824,8 +825,8 @@ CREATE TABLE public.form_response_changes (
     id bigint NOT NULL,
     user_con_profile_id bigint NOT NULL,
     field_identifier character varying NOT NULL,
-    previous_value text,
-    new_value text,
+    previous_value jsonb,
+    new_value jsonb,
     notified_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1475,7 +1476,7 @@ CREATE TABLE public.products (
     price_currency character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_options text
+    payment_options jsonb
 );
 
 
@@ -1851,7 +1852,7 @@ CREATE TABLE public.ticket_types (
     convention_id integer,
     name text,
     description text,
-    pricing_schedule text,
+    pricing_schedule jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     publicly_available boolean DEFAULT true NOT NULL,
@@ -1980,7 +1981,7 @@ CREATE TABLE public.user_con_profiles (
     bio text,
     show_nickname_in_bio boolean,
     address text,
-    additional_info text,
+    additional_info jsonb,
     receive_whos_free_emails boolean DEFAULT true NOT NULL,
     gravatar_enabled boolean DEFAULT false NOT NULL,
     ical_secret text NOT NULL,
@@ -4413,6 +4414,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200216222452'),
 ('20200216222934'),
 ('20200217182622'),
-('20200218010110');
+('20200218010110'),
+('20200309152308');
 
 

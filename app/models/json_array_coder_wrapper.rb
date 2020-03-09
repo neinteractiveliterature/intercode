@@ -6,7 +6,7 @@ class JSONArrayCoderWrapper
   end
 
   def dump(array)
-    array.to_json
+    array.map(&:as_json)
   end
 
   def load(json)

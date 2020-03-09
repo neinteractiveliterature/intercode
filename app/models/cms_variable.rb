@@ -9,8 +9,6 @@ class CmsVariable < ApplicationRecord
   validates :key, format: { with: /\A[a-z]\w*\z/ }
   validates :key, uniqueness: { scope: [:parent_type, :parent_id] }
 
-  serialize :value, JSON
-
   # @api
   def to_liquid
     value
