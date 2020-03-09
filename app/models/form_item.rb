@@ -64,9 +64,6 @@ class FormItem < ApplicationRecord
   has_one :form, through: :form_section
   acts_as_list scope: :form_section
 
-  serialize :properties, JSON
-  serialize :default_value, JSON
-
   validates :item_type, presence: true
   validates :item_type, inclusion: { in: PROPERTIES_SCHEMA.keys.map(&:to_s) }
   validate :ensure_unique_identifier_across_form
