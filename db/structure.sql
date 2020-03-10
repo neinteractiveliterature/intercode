@@ -52,6 +52,74 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: anything_bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.anything_bucket_keys(registration_policy jsonb) RETURNS text[]
+    LANGUAGE sql
+    AS $$
+    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
+    WHERE anything = 't'
+  $$;
+
+
+--
+-- Name: bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.bucket_keys(registration_policy jsonb) RETURNS text[]
+    LANGUAGE sql
+    AS $$
+    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
+  $$;
+
+
+--
+-- Name: bucket_minimum_slots(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.bucket_minimum_slots(registration_policy jsonb, bucket_key text) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT (registration_bucket(registration_policy, bucket_key)->>'minimum_slots')::bigint
+  $$;
+
+
+--
+-- Name: bucket_preferred_slots(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.bucket_preferred_slots(registration_policy jsonb, bucket_key text) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT (registration_bucket(registration_policy, bucket_key)->>'preferred_slots')::bigint
+  $$;
+
+
+--
+-- Name: bucket_total_slots(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.bucket_total_slots(registration_policy jsonb, bucket_key text) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT (registration_bucket(registration_policy, bucket_key)->>'total_slots')::bigint
+  $$;
+
+
+--
+-- Name: counted_bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.counted_bucket_keys(registration_policy jsonb) RETURNS text[]
+    LANGUAGE sql
+    AS $$
+    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 'f'
+  $$;
+
+
+--
 -- Name: current_scheduled_value(jsonb); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -70,6 +138,41 @@ CREATE FUNCTION public.current_scheduled_value_timespan(scheduled_value jsonb) R
     LANGUAGE sql
     AS $$
     SELECT scheduled_value_timespan_at(scheduled_value, now()::timestamp)
+  $$;
+
+
+--
+-- Name: minimum_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.minimum_all_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(minimum_slots), 0) FROM registration_policy_buckets(registration_policy)
+  $$;
+
+
+--
+-- Name: minimum_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.minimum_counted_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(minimum_slots), 0) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 'f'
+  $$;
+
+
+--
+-- Name: minimum_not_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.minimum_not_counted_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(minimum_slots), 0) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 't'
   $$;
 
 
@@ -144,6 +247,92 @@ CREATE FUNCTION public.next_scheduled_value_timespan_at(scheduled_value jsonb, t
 
 
 --
+-- Name: not_counted_bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.not_counted_bucket_keys(registration_policy jsonb) RETURNS text[]
+    LANGUAGE sql
+    AS $$
+    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 't'
+  $$;
+
+
+--
+-- Name: preferred_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.preferred_all_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(preferred_slots), 0) FROM registration_policy_buckets(registration_policy)
+  $$;
+
+
+--
+-- Name: preferred_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.preferred_counted_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(preferred_slots), 0) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 'f'
+  $$;
+
+
+--
+-- Name: preferred_not_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.preferred_not_counted_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(preferred_slots), 0) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 't'
+  $$;
+
+
+--
+-- Name: registration_bucket(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.registration_bucket(registration_policy jsonb, bucket_key text) RETURNS jsonb
+    LANGUAGE sql
+    AS $$
+    SELECT to_jsonb(bucket) FROM (
+      SELECT * FROM registration_policy_buckets(registration_policy)
+      WHERE key = bucket_key
+      LIMIT 1
+    ) bucket
+  $$;
+
+
+--
+-- Name: registration_policy_buckets(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.registration_policy_buckets(registration_policy jsonb) RETURNS TABLE(bucket_index bigint, key text, name text, description text, minimum_slots integer, preferred_slots integer, total_slots integer, anything boolean, not_counted boolean, expose_attendees boolean)
+    LANGUAGE sql
+    AS $$
+    SELECT
+      row_number() over() AS bucket_index,
+      bucket->>'key' AS key,
+      bucket->>'name' AS name,
+      bucket->>'description' AS description,
+      (bucket->>'minimum_slots')::int AS minimum_slots,
+      (bucket->>'preferred_slots')::int AS preferred_slots,
+      (bucket->>'total_slots')::int AS total_slots,
+      (bucket->>'anything' IS NOT NULL AND bucket->>'anything' = 'true') AS anything,
+      (bucket->>'not_counted' IS NOT NULL AND bucket->>'not_counted' = 'true') AS not_counted,
+      (bucket->>'expose_attendees' IS NOT NULL AND bucket->>'expose_attendees' = 'true') AS expose_attendees
+    FROM (
+      SELECT jsonb_array_elements(registration_policy->'buckets') AS bucket
+    ) buckets
+  $$;
+
+
+--
 -- Name: scheduled_value_at(jsonb, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -206,6 +395,41 @@ CREATE FUNCTION public.scheduled_value_timestamps(scheduled_value jsonb) RETURNS
     FROM (
       SELECT jsonb_array_elements(scheduled_value->'timespans') AS timespan
     ) timespans
+  $$;
+
+
+--
+-- Name: total_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.total_all_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(total_slots), 0) FROM registration_policy_buckets(registration_policy)
+  $$;
+
+
+--
+-- Name: total_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.total_counted_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(total_slots), 0) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 'f'
+  $$;
+
+
+--
+-- Name: total_not_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.total_not_counted_slots(registration_policy jsonb) RETURNS bigint
+    LANGUAGE sql
+    AS $$
+    SELECT COALESCE(SUM(total_slots), 0) FROM registration_policy_buckets(registration_policy)
+    WHERE not_counted = 't'
   $$;
 
 
@@ -4574,6 +4798,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200217182622'),
 ('20200218010110'),
 ('20200309152308'),
-('20200309160404');
+('20200309160404'),
+('20200309201446');
 
 
