@@ -26,7 +26,7 @@
               <a href="{{ event_proposal.edit_url }}" class="btn btn-primary btn-sm">
                 Continue
               </a>
-            {% elsif event_proposal.status == 'proposed' or event_proposal.status == 'reviewing' or event_proposal.status == 'accepted' %}
+            {% elsif event_proposal.status == 'proposed' or event_proposal.status == 'reviewing' or event_proposal.status == 'tentative_accept' %}
               <a href="{{ event_proposal.edit_url }}" class="btn btn-secondary btn-sm">
                 Edit
               </a>

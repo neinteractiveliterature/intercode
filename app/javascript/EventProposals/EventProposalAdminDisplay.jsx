@@ -13,6 +13,7 @@ import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import LoadingIndicator from '../LoadingIndicator';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { humanize } from 'inflected';
 
 function EventProposalAdminNotes({ eventProposalId }) {
   const { data, loading, error } = useQuery(EventProposalAdminNotesQuery, {
@@ -105,7 +106,7 @@ function EventProposalAdminDisplay() {
             : (
               <div>
                 <strong>Status: </strong>
-                {data.eventProposal.status}
+                {humanize(data.eventProposal.status)}
               </div>
             )
         }

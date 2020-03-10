@@ -35,6 +35,7 @@ function formatCapacity(registrationPolicy) {
 const STATUS_OPTIONS = [
   { value: 'proposed', label: 'Proposed', badgeClass: 'badge-light' },
   { value: 'reviewing', label: 'Reviewing', badgeClass: 'badge-info' },
+  { value: 'tentative_accept', label: 'Tentative accept', badgeClass: 'badge-primary' },
   { value: 'accepted', label: 'Accepted', badgeClass: 'badge-success' },
   { value: 'rejected', label: 'Rejected', badgeClass: 'badge-danger' },
   { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'badge-warning' },
@@ -103,9 +104,10 @@ StatusFilter.defaultProps = {
 };
 
 function StatusCell({ value }) {
+  const statusOption = STATUS_OPTIONS.find((option) => option.value === value) || {};
   return (
-    <div className={`badge ${(STATUS_OPTIONS.find((option) => option.value === value) || {}).badgeClass}`}>
-      {value}
+    <div className={`badge ${statusOption.badgeClass}`}>
+      {statusOption.label || value}
     </div>
   );
 }
@@ -207,7 +209,7 @@ const getPossibleColumns = (data) => [
     Header: 'Status',
     id: 'status',
     accessor: 'status',
-    width: 80,
+    width: 85,
     Filter: StatusFilter,
     Cell: StatusCell,
   },

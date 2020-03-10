@@ -78,14 +78,14 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
       end
     end
 
-    %w[draft proposed reviewing].each do |status|
+    %w[draft proposed reviewing tentative_accept].each do |status|
       it "lets users update their own #{status} proposals" do
         event_proposal.update!(status: status)
         assert EventProposalPolicy.new(event_proposal.owner.user, event_proposal).update?
       end
     end
 
-    (EventProposal::STATUSES - %w[draft proposed reviewing]).each do |status|
+    (EventProposal::STATUSES - %w[draft proposed reviewing tentative_accept]).each do |status|
       it "does not let users update their own #{status} proposals" do
         event_proposal.update!(status: status)
         refute EventProposalPolicy.new(event_proposal.owner.user, event_proposal).update?
