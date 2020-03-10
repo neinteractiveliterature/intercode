@@ -63,8 +63,9 @@ gem 'graphiql-rails', group: :development
 # models
 gem 'active_record-postgres-constraints'
 
-# Mailgun (for managing email aliases automatically)
+# Email stuff
 gem 'mailgun-ruby'
+gem 'aws-sdk-rails'
 
 # Markdown
 gem 'redcarpet'

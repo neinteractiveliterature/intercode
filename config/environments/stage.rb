@@ -64,6 +64,7 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
+  config.action_mailer.delivery_method = :ses
   config.action_mailer.default_url_options = { host: 'stage.interconlarp.org' }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -79,14 +80,3 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
-
-ActionMailer::Base.smtp_settings = {
-  user_name: ENV['SENDGRID_USERNAME'],
-  password: ENV['SENDGRID_PASSWORD'],
-  domain: 'stage.interconlarp.org',
-  address: 'smtp.sendgrid.net',
-  port: 587,
-  authentication: :plain,
-  enable_starttls_auto: true
-}
-ActionMailer::Base.delivery_method = :smtp
