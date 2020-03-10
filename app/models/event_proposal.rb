@@ -4,7 +4,7 @@ class EventProposal < ApplicationRecord
   include FormResponse
   include OrderByTitle
 
-  STATUSES = Set.new(%w[draft proposed reviewing accepted rejected withdrawn])
+  STATUSES = Set.new(%w[draft proposed reviewing tentative_accept accepted rejected withdrawn])
 
   register_form_response_attrs :title,
     :email,
