@@ -382,23 +382,6 @@ CREATE FUNCTION public.scheduled_value_timespans(scheduled_value jsonb) RETURNS 
 
 
 --
--- Name: scheduled_value_timestamps(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.scheduled_value_timestamps(scheduled_value jsonb) RETURNS TABLE(start timestamp without time zone, finish timestamp without time zone, value text)
-    LANGUAGE sql
-    AS $$
-    SELECT
-      (timespan->>'start')::timestamp AS start,
-      (timespan->>'finish')::timestamp AS finish,
-      timespan->>'value' AS value
-    FROM (
-      SELECT jsonb_array_elements(scheduled_value->'timespans') AS timespan
-    ) timespans
-  $$;
-
-
---
 -- Name: total_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
 --
 
