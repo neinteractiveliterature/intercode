@@ -83,6 +83,7 @@ user_con_profiles.first_name #{direction}")
 
     def sql_order(direction)
       Arel.sql("(status IN ('proposed', 'reviewing')) #{invert_sort_direction direction}, \
+(status IN ('tentative_accept')) #{invert_sort_direction direction}, \
 status #{direction}")
     end
   end

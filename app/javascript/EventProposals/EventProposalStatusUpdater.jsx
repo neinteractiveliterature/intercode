@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
+import { humanize } from 'inflected';
 
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
@@ -13,6 +14,7 @@ import useAsyncFunction from '../useAsyncFunction';
 const STATUSES = [
   { key: 'proposed', transitionLabel: 'Update', buttonClass: 'btn-primary' },
   { key: 'reviewing', transitionLabel: 'Update', buttonClass: 'btn-primary' },
+  { key: 'tentative_accept', transitionLabel: 'Accept tentatively', buttonClass: 'btn-primary' },
   { key: 'accepted', transitionLabel: 'Accept', buttonClass: 'btn-success' },
   {
     key: 'rejected', transitionLabel: 'Reject', buttonClass: 'btn-danger', offerDropEvent: true,
@@ -51,9 +53,9 @@ function EventProposalStatusUpdater({ eventProposal }) {
 
   return (
     <div>
-      Status:
+      <strong>Status:</strong>
       {' '}
-      {eventProposal.status}
+      {humanize(eventProposal.status)}
       {' '}
       <button type="button" className="btn btn-sm btn-primary" onClick={openModal}>
         Change
@@ -68,8 +70,8 @@ function EventProposalStatusUpdater({ eventProposal }) {
         <div className="modal-body">
           <MultipleChoiceInput
             caption="New status"
-            choices={['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map((s) => ({
-              label: s, value: s,
+            choices={['proposed', 'reviewing', 'tentative_accept', 'accepted', 'rejected', 'withdrawn'].map((s) => ({
+              label: humanize(s), value: s,
             }))}
             value={status}
             onChange={(newStatus) => { setStatus(newStatus); setDropEvent(false); }}

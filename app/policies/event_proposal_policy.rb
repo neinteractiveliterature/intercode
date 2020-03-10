@@ -39,7 +39,7 @@ class EventProposalPolicy < ApplicationPolicy
   def update?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        %w[draft proposed reviewing].include?(record.status) && user_is_owner? ||
+        %w[draft proposed reviewing tentative_accept].include?(record.status) && user_is_owner? ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
           has_applicable_permission?(:update_event_proposals)
