@@ -439,9 +439,9 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (4.2.2)
-      skylight-core (= 4.2.2)
-    skylight-core (4.2.2)
+    skylight (4.2.3)
+      skylight-core (= 4.2.3)
+    skylight-core (4.2.3)
       activesupport (>= 4.2.0)
     slop (3.6.0)
     solargraph (0.38.5)
@@ -504,7 +504,7 @@ GEM
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
     yard (0.9.24)
-    zeitwerk (2.2.2)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   java
