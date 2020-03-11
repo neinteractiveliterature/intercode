@@ -12,6 +12,7 @@ Intercode::Application.routes.draw do
     sessions: 'sessions'
   }
   get '/authenticity_tokens', to: 'authenticity_tokens#show'
+  post '/sns_notifications', to: 'sns_notifications#create'
 
   # CMS stuff
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
