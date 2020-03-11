@@ -66,6 +66,7 @@ gem 'active_record-postgres-constraints'
 # Email stuff
 gem 'mailgun-ruby'
 gem 'aws-sdk-rails'
+gem 'aws-sdk-sns'
 
 # Markdown
 gem 'redcarpet'

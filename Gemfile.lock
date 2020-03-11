@@ -111,6 +111,9 @@ GEM
     aws-sdk-ses (1.28.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
+    aws-sdk-sns (1.22.0)
+      aws-sdk-core (~> 3, >= 3.71.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-sqs (1.23.1)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
@@ -516,6 +519,7 @@ DEPENDENCIES
   apollo_upload_server (= 2.0.1)
   aws-sdk-rails
   aws-sdk-s3
+  aws-sdk-sns
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
   cadmus (~> 0.7.0)
