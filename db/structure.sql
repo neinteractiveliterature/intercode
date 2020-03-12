@@ -967,6 +967,38 @@ ALTER SEQUENCE public.departments_id_seq OWNED BY public.departments.id;
 
 
 --
+-- Name: email_routes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.email_routes (
+    id bigint NOT NULL,
+    receiver_address text NOT NULL,
+    forward_addresses text[] NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: email_routes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.email_routes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: email_routes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.email_routes_id_seq OWNED BY public.email_routes.id;
+
+
+--
 -- Name: event_categories; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2493,6 +2525,13 @@ ALTER TABLE ONLY public.departments ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: email_routes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.email_routes ALTER COLUMN id SET DEFAULT nextval('public.email_routes_id_seq'::regclass);
+
+
+--
 -- Name: event_categories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2844,6 +2883,14 @@ ALTER TABLE ONLY public.conventions
 
 ALTER TABLE ONLY public.departments
     ADD CONSTRAINT departments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: email_routes email_routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.email_routes
+    ADD CONSTRAINT email_routes_pkey PRIMARY KEY (id);
 
 
 --
@@ -3324,6 +3371,13 @@ CREATE INDEX index_conventions_on_user_con_profile_form_id ON public.conventions
 --
 
 CREATE INDEX index_departments_on_convention_id ON public.departments USING btree (convention_id);
+
+
+--
+-- Name: index_email_routes_on_receiver_address; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_email_routes_on_receiver_address ON public.email_routes USING btree (receiver_address);
 
 
 --
@@ -4782,6 +4836,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200218010110'),
 ('20200309152308'),
 ('20200309160404'),
-('20200309201446');
+('20200309201446'),
+('20200312181248');
 
 
