@@ -106,20 +106,15 @@ class ReceiveEmailService < CivilService::Service
 
     self.class.ses_client.send_bounce({
       original_message_id: message['mail']['messageId'],
-      bounce_sender: "Mail Delivery Subsystem <noreply@#{mailer_host}",
+      bounce_sender: "Mail Delivery Subsystem <noreply@#{mailer_host}>",
       message_dsn: {
-        reporting_mta: "dns ; #{mailer_host}",
+        reporting_mta: "dns; #{mailer_host}",
         arrival_date: Time.now,
       },
       bounced_recipient_info_list: [
         {
           recipient: recipient.to_s,
-          bounce_type: "DoesNotExist",
-          recipient_dsn_fields: {
-            action: "failed",
-            status: "5.1.1", # Permanent failure: Bad destination mailbox address
-            last_attempt_date: Time.now,
-          },
+          bounce_type: "DoesNotExist"
         },
       ],
     })
