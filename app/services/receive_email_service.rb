@@ -29,7 +29,8 @@ class ReceiveEmailService < CivilService::Service
       if route
         forward_email(recipient, route.forward_addresses)
       else
-        Rails.logger.warn("Could not find matching route for #{recipient}")
+        Rails.logger.warn("Could not find matching route for #{recipient}, sending bounce")
+        send_bounce(recipient)
       end
     end
 
@@ -97,6 +98,28 @@ class ReceiveEmailService < CivilService::Service
       raw_message: {
         data: forward_message.to_s
       }
+    })
+  end
+
+  def send_bounce(recipient)
+    client.send_bounce({
+      original_message_id: message['mail']['messageId'],
+      bounce_sender: "Mail Delivery Subsystem <noreply@#{ENV['INTERCODE_DOMAIN']}",
+      message_dsn: {
+        reporting_mta: "dns ; #{ENV['INTERCODE_DOMAIN']}",
+        arrival_date: Time.now,
+      },
+      bounced_recipient_info_list: [
+        {
+          recipient: recipient.to_s,
+          bounce_type: "DoesNotExist",
+          recipient_dsn_fields: {
+            action: "failed",
+            status: "5.1.1", # Permanent failure: Bad destination mailbox address
+            last_attempt_date: Time.now,
+          },
+        },
+      ],
     })
   end
 end
