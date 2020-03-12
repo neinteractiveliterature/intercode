@@ -12,12 +12,23 @@ class SnsNotificationsController < ApplicationController
       confirm_subscription ? (head :ok) : (head :bad_request)
     when 'Notification'
       message = JSON.parse(message_body['Message'])
-      Rails.logger.info(message.to_json)
+      handle_message(message)
       head :ok
     end
   end
 
   private
+
+  def handle_message
+    case message['notificationType']
+    when 'Received'
+      ReceiveEmailService.new(message: message).call!
+    else
+      warning_message = "Unhandled SNS notificationType: #{message['notificationType']}"
+      Rails.logger.warn(warning_message)
+      Rollbar.warn(warning_message, message: message)
+    end
+  end
 
   def verify_request_authenticity
     head :unauthorized if raw_post.blank? || !message_verifier.authentic?(raw_post)
