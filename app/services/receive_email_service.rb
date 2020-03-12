@@ -102,11 +102,13 @@ class ReceiveEmailService < CivilService::Service
   end
 
   def send_bounce(recipient)
+    mailer_host = Rails.application.config.action_mailer.default_url_options[:host]
+
     self.class.ses_client.send_bounce({
       original_message_id: message['mail']['messageId'],
-      bounce_sender: "Mail Delivery Subsystem <noreply@#{ENV['INTERCODE_DOMAIN']}",
+      bounce_sender: "Mail Delivery Subsystem <noreply@#{mailer_host}",
       message_dsn: {
-        reporting_mta: "dns ; #{ENV['INTERCODE_DOMAIN']}",
+        reporting_mta: "dns ; #{mailer_host}",
         arrival_date: Time.now,
       },
       bounced_recipient_info_list: [
