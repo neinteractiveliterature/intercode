@@ -19,7 +19,7 @@ class SnsNotificationsController < ApplicationController
 
   private
 
-  def handle_message
+  def handle_message(message)
     case message['notificationType']
     when 'Received'
       ReceiveEmailService.new(message: message).call!
