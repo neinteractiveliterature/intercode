@@ -102,7 +102,7 @@ class ReceiveEmailService < CivilService::Service
   end
 
   def send_bounce(recipient)
-    client.send_bounce({
+    self.class.ses_client.send_bounce({
       original_message_id: message['mail']['messageId'],
       bounce_sender: "Mail Delivery Subsystem <noreply@#{ENV['INTERCODE_DOMAIN']}",
       message_dsn: {
