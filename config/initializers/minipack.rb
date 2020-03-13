@@ -6,7 +6,7 @@ Minipack.configuration do |c|
 
   # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = if Rails.env.development?
-    'http://localhost:3035/packs/manifest.json'
+    'http://localhost:3135/packs/manifest.json'
   else
     Rails.root.join('public', 'packs', 'manifest.json')
   end
