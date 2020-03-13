@@ -5,6 +5,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :name, String, required: false
   argument :domain, String, required: false
   argument :event_mailing_list_domain, String, required: false, camelize: false
+  argument :email_from, String, required: false, camelize: false
   argument :timezone_name, String, required: false, camelize: false
   argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false

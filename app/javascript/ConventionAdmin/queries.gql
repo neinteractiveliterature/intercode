@@ -5,6 +5,7 @@ fragment ConventionAdminConventionFields on Convention {
   ends_at
   name
   domain
+  email_from
   event_mailing_list_domain
   timezone_name
   show_schedule
