@@ -2171,7 +2171,9 @@ CREATE TABLE public.staff_positions (
     email text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    visible boolean
+    visible boolean,
+    cc_addresses text[] DEFAULT '{}'::text[] NOT NULL,
+    email_aliases text[] DEFAULT '{}'::text[] NOT NULL
 );
 
 
@@ -4839,6 +4841,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200309160404'),
 ('20200309201446'),
 ('20200312181248'),
-('20200313042743');
+('20200313042743'),
+('20200313212415');
 
 
