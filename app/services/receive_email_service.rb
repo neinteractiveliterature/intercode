@@ -49,9 +49,12 @@ class ReceiveEmailService < CivilService::Service
 
     if convention
       staff_positions = convention.staff_positions.includes(user_con_profiles: :user).select do |sp|
-        EmailRoute.normalize_address(sp.email) == address
+        destinations = [sp.email, *sp.email_aliases].map do |dest|
+          EmailRoute.normalize_address(dest)
+        end
+        destinations.include?(address)
       end
-      return staff_positions.flat_map { |sp| sp.user_con_profiles.map(&:email) }
+      return staff_positions.flat_map { |sp| sp.user_con_profiles.map(&:email) + sp.cc_addresses }
     end
 
     route = EmailRoute.find_by(receiver_address: address)
