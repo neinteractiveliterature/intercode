@@ -4,6 +4,7 @@ class StaffPosition < ApplicationRecord
   has_many :permissions, dependent: :destroy
 
   validates :name, presence: true
+  validate :ensure_email_domain_matches_convention
 
   scope :visible, -> { where(visible: true) }
 

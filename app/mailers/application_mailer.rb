@@ -2,7 +2,8 @@ class ApplicationMailer < ActionMailer::Base
   include AbsoluteUrls
 
   default(
-    from: "intercode@#{Rails.application.config.action_mailer.default_url_options.try(:[], :host)}"
+    from: "intercode@#{Rails.application.config.action_mailer.default_url_options.try(:[], :host)}",
+    'X-SES-CONFIGURATION-SET' => 'default'
   )
 
   layout 'mailer'

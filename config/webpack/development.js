@@ -10,11 +10,11 @@ module.exports = {
     ...environment.output,
     crossOriginLoading: 'anonymous',
     pathinfo: true,
-    publicPath: 'http://localhost:3035/packs/',
+    publicPath: 'http://localhost:3135/packs/',
   },
   plugins: [
     ...environment.plugins,
-    new DashboardPlugin({ port: 3035 }),
+    new DashboardPlugin({ port: 3135 }),
   ],
   devServer: {
     clientLogLevel: 'none',
