@@ -9,12 +9,6 @@ class ApplicationMailer < ActionMailer::Base
 
   protected
 
-  def from_address_for_convention(convention)
-    address = Mail::Address.new("noreply@#{convention.domain}")
-    address.display_name = convention.name
-    address.format
-  end
-
   def use_convention_timezone(convention, &block)
     timezone = convention&.timezone
 
@@ -49,7 +43,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def default_headers_from_notifier(notifier)
     {
-      from: from_address_for_convention(notifier.convention),
+      from: notifier.convention.email_from,
       to: emails_for_destinations(notifier.destinations)
     }
   end

@@ -16,14 +16,27 @@ function ConventionFormWebsiteSection({
   convention, dispatch, cmsLayouts, pages, disabled,
 }) {
   const [
-    changeEventMailingListDomain, changeDefaultLayout, changeRootPage, changeClickwrapAgreement,
+    changeEventMailingListDomain,
+    changeEmailFrom,
+    changeDefaultLayout,
+    changeRootPage,
+    changeClickwrapAgreement,
   ] = useChangeDispatchers(
     dispatch,
-    ['event_mailing_list_domain', 'default_layout', 'root_page', 'clickwrap_agreement'],
+    ['event_mailing_list_domain', 'email_from', 'default_layout', 'root_page', 'clickwrap_agreement'],
   );
 
   return (
     <>
+      <BootstrapFormInput
+        name="email_from"
+        label="Email from"
+        value={convention.email_from || ''}
+        helpText="Site-generated emails will come from this address."
+        onTextChange={changeEmailFrom}
+        disabled={disabled}
+      />
+
       <BootstrapFormInput
         name="event_mailing_list_domain"
         label="Event mailing list domain name"
@@ -86,6 +99,7 @@ ConventionFormWebsiteSection.propTypes = {
       id: PropTypes.number.isRequired,
     }),
     clickwrap_agreement: PropTypes.string,
+    email_from: PropTypes.string,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   cmsLayouts: PropTypes.arrayOf(PropTypes.shape({

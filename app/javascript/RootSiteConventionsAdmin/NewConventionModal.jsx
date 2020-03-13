@@ -79,6 +79,7 @@ function NewConventionModal({ visible, close, cloneConvention }) {
         convention: {
           name: convention.name,
           domain: convention.domain,
+          email_from: convention.email_from,
           starts_at: convention.starts_at,
           ends_at: convention.ends_at,
           timezone_name: convention.timezone_name,
@@ -116,6 +117,12 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           label="Domain name"
           value={convention.domain}
           onTextChange={conventionSetter('domain')}
+        />
+
+        <BootstrapFormInput
+          label="Email from"
+          value={convention.email_from}
+          onTextChange={conventionSetter('email_from')}
         />
 
         <OrganizationSelect

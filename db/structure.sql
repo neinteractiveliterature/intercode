@@ -910,7 +910,8 @@ CREATE TABLE public.conventions (
     ticket_mode character varying DEFAULT 'disabled'::character varying NOT NULL,
     site_mode character varying DEFAULT 'convention'::character varying NOT NULL,
     signup_mode character varying DEFAULT 'self_service'::character varying NOT NULL,
-    signup_requests_open boolean DEFAULT false NOT NULL
+    signup_requests_open boolean DEFAULT false NOT NULL,
+    email_from text NOT NULL
 );
 
 
@@ -4837,6 +4838,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200309152308'),
 ('20200309160404'),
 ('20200309201446'),
-('20200312181248');
+('20200312181248'),
+('20200313042743');
 
 
