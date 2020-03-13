@@ -45,20 +45,39 @@ class ReceiveEmailService < CivilService::Service
 
   def forward_addresses_for_recipient(recipient)
     address = EmailRoute.normalize_address(recipient)
-    convention = Convention.find_by(domain: Mail::Address.new(address).domain)
 
-    if convention
-      staff_positions = convention.staff_positions.includes(user_con_profiles: :user).select do |sp|
-        destinations = [sp.email, *sp.email_aliases].map do |dest|
-          EmailRoute.normalize_address(dest)
-        end
-        destinations.include?(address)
-      end
+    staff_positions = staff_positions_for_recipient(address)
+    if staff_positions.any?
       return staff_positions.flat_map { |sp| sp.user_con_profiles.map(&:email) + sp.cc_addresses }
+    end
+
+    team_members = team_members_for_recipient(address)
+    if team_members.any?
+      return team_members.flat_map { |tm| tm.user_con_profile.email }
     end
 
     route = EmailRoute.find_by(receiver_address: address)
     route&.forward_addresses
+  end
+
+  def staff_positions_for_recipient(address)
+    convention = Convention.find_by(domain: Mail::Address.new(address).domain)
+    return [] unless convention
+
+    convention.staff_positions.includes(user_con_profiles: :user).select do |sp|
+      destinations = [sp.email, *sp.email_aliases].map do |dest|
+        EmailRoute.normalize_address(dest)
+      end
+      destinations.include?(address)
+    end
+  end
+
+  def team_members_for_recipient(address)
+    convention = Convention.find_by(event_mailing_list_domain: Mail::Address.new(address).domain)
+    return [] unless convention
+
+    events = convention.events.where(team_mailing_list_name: Mail::Address.new(address).local)
+    TeamMember.where(event_id: events.select(:id)).includes(user_con_profile: :user).to_a
   end
 
   def transform_email_for_forwarding(original_recipient, new_recipients)
