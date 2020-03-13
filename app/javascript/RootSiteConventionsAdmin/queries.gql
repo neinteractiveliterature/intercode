@@ -29,6 +29,7 @@ fragment ConventionDisplayFields on Convention {
   ticket_mode
   show_event_list
   show_schedule
+  email_from
 
   maximum_event_signups {
     timespans {

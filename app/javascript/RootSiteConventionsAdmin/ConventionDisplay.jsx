@@ -60,6 +60,9 @@ function ConventionDisplay() {
         <dd className="col-md-9">
           <a href={conventionUrl.toString()}>{conventionUrl.toString()}</a>
         </dd>
+
+        <dt className="col-md-3">Email from</dt>
+        <dd className="col-md-9">{convention.email_from}</dd>
       </dl>
 
       <div>
