@@ -66,6 +66,7 @@ query AppRootQuery($path: String!) {
   convention {
     id
     name
+    domain
     accepting_proposals
     site_mode
     signup_mode

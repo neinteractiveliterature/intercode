@@ -5,6 +5,7 @@ const AppRootContext = React.createContext({
   cmsNavigationItems: [],
   conventionAcceptingProposals: null,
   conventionName: null,
+  conventionDomain: null,
   currentAbility: {},
   currentPendingOrder: null,
   currentUser: null,
