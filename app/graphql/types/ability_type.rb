@@ -54,6 +54,11 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     !!(convention && convention_policy.update?)
   end
 
+  field :can_manage_email_routes, Boolean, null: false
+  def can_manage_email_routes
+    policy(EmailRoute.new).manage?
+  end
+
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets

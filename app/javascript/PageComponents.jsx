@@ -46,6 +46,7 @@ const UnwrappedNonCMSPageComponents = {
   ResetPassword: () => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'),
   RoomsAdmin: () => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'),
   RootSiteConventionsAdmin: () => import(/* webpackChunkName: "root-site-conventions-admin" */ './RootSiteConventionsAdmin'),
+  RootSiteEmailRoutesAdmin: () => import(/* webpackChunkName: "root-site-email-routes-admin" */ './RootSiteEmailRoutesAdmin'),
   SignupModeration: () => import(/* webpackChunkName: "signup-moderation" */ './SignupModeration'),
   StaffPositionAdmin: () => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'),
   StoreAdmin: () => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'),
