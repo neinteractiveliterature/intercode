@@ -109,11 +109,13 @@ Doorkeeper.configure do
     :read_events,
     :read_conventions,
     :read_organizations,
+    :read_email_routing,
     :manage_profile,
     :manage_signups,
     :manage_events,
     :manage_conventions,
-    :manage_organizations
+    :manage_organizations,
+    :manage_email_routing
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then

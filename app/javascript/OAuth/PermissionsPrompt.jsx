@@ -34,11 +34,13 @@ const SCOPE_DESCRIPTIONS = {
   read_events: 'Access data about the events and event proposals you manage',
   read_conventions: 'Access privileged data about the conventions you manage (e.g. user profiles)',
   read_organizations: 'Access privileged data about organizations on the site',
+  read_email_routing: 'Read sitewide email routing rules',
   manage_profile: 'Update your personal profile data',
   manage_signups: 'Sign you up and withdraw you from events',
   manage_events: 'Update events and event proposals you manage',
   manage_conventions: 'Update conventions you manage',
   manage_organizations: 'Update privileged data about organizations on the site',
+  manage_email_routing: 'Update sitewide email routing rules',
 };
 
 function PermissionsPrompt({ scopeNames }) {
