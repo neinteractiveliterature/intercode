@@ -68,6 +68,7 @@ function AppRoot() {
       cmsNavigationItems: data.cmsNavigationItems,
       conventionAcceptingProposals: (data.convention || {}).accepting_proposals,
       conventionName: (data.convention || {}).name,
+      conventionDomain: (data.convention || {}).domain,
       currentAbility: data.currentAbility,
       currentPendingOrder: data.currentPendingOrder,
       currentUser: data.currentUser,

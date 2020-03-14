@@ -7,18 +7,7 @@ import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import useModal from '../ModalDialogs/useModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-
-function DisclosureTriangle({ expanded }) {
-  if (expanded) {
-    return '▼';
-  }
-
-  return '▶';
-}
-
-DisclosureTriangle.propTypes = {
-  expanded: PropTypes.bool.isRequired,
-};
+import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 
 function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
   const conventionDays = getConventionDayTimespans(
