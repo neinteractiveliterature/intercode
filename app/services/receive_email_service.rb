@@ -65,6 +65,7 @@ class ReceiveEmailService < CivilService::Service
     return [] unless convention
 
     convention.staff_positions.includes(user_con_profiles: :user).select do |sp|
+      full_email_aliases = sp.email_aliases.map { |ea| "#{ea}@#{convention.domain}" }
       destinations = [sp.email, *sp.email_aliases].map do |dest|
         EmailRoute.normalize_address(dest)
       end

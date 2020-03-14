@@ -10,6 +10,7 @@ import { StaffPositionsQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import buildStaffPositionInput from './buildStaffPositionInput';
 
 function EditStaffPositionForm({ initialStaffPosition }) {
   const history = useHistory();
@@ -25,14 +26,7 @@ function EditStaffPositionForm({ initialStaffPosition }) {
         variables: {
           input: {
             id: staffPosition.id,
-            staff_position: {
-              name: staffPosition.name,
-              email: staffPosition.email,
-              visible: staffPosition.visible,
-              user_con_profile_ids: (staffPosition.user_con_profiles || []).map((
-                (userConProfile) => userConProfile.id
-              )),
-            },
+            staff_position: buildStaffPositionInput(staffPosition),
           },
         },
       });

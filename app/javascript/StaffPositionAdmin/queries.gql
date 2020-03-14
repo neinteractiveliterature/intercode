@@ -5,6 +5,8 @@ fragment StaffPositionFields on StaffPosition {
   name
   email
   visible
+  email_aliases
+  cc_addresses
 
   user_con_profiles {
     id

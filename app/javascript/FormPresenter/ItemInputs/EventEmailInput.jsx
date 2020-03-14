@@ -6,12 +6,12 @@ import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { mutator, Transforms } from '../../ComposableFormUtils';
 import RequiredIndicator from './RequiredIndicator';
-import useUniqueId from '../../useUniqueId';
+import EmailAliasInput from '../../BuiltInFormControls/EmailAliasInput';
+import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
 
 function EventEmailInput({
   convention, value, formItem, onChange, onInteract, valueInvalid,
 }) {
-  const inputId = useUniqueId('team-mailing-list-name-');
   const [emailBehavior, setEmailBehavior] = useState(() => {
     const teamMailingListName = (value || {}).team_mailing_list_name;
     return (
@@ -69,29 +69,25 @@ function EventEmailInput({
   const renderEmailInput = () => {
     if (emailBehavior === 'team_mailing_list') {
       return (
-        <div className="form-group">
-          <label htmlFor={inputId}>
-            Mailing list address
-            <RequiredIndicator formItem={formItem} />
-          </label>
-          <div className="input-group">
-            <input
-              id={inputId}
-              className="form-control"
+        <FormGroupWithLabel
+          name="team-mailing-list-name"
+          label={(
+            <>
+              Mailing list address
+              <RequiredIndicator formItem={formItem} />
+            </>
+          )}
+        >
+          {(id) => (
+            <EmailAliasInput
               value={(value || {}).team_mailing_list_name}
-              onChange={(event) => {
-                valueMutator.team_mailing_list_name(event.target.value);
-              }}
+              onTextChange={valueMutator.team_mailing_list_name}
+              id={id}
               aria-label="Mailing list address (portion before @ sign)"
+              domain={convention.event_mailing_list_domain}
             />
-            <div className="input-group-append">
-              <span className="input-group-text">
-                @
-                {convention.event_mailing_list_domain}
-              </span>
-            </div>
-          </div>
-        </div>
+          )}
+        </FormGroupWithLabel>
       );
     }
 
