@@ -27,6 +27,7 @@ FactoryBot.define do
 
     after(:build) do |convention|
       convention.user_con_profile_form ||= convention.build_user_con_profile_form(form_type: 'user_con_profile')
+      convention.email_from ||= "noreply@#{convention.domain}"
     end
 
     trait :with_notification_templates do
