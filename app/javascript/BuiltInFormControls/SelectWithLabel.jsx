@@ -4,9 +4,9 @@ import Select from 'react-select';
 
 import FormGroupWithLabel from './FormGroupWithLabel';
 
-function SelectWithLabel({ label, ...otherProps }) {
+function SelectWithLabel({ label, helpText, ...otherProps }) {
   return (
-    <FormGroupWithLabel label={label} name={otherProps.name}>
+    <FormGroupWithLabel label={label} name={otherProps.name} helpText={helpText}>
       {(id) => <Select inputId={id} {...otherProps} />}
     </FormGroupWithLabel>
   );
@@ -14,6 +14,11 @@ function SelectWithLabel({ label, ...otherProps }) {
 
 SelectWithLabel.propTypes = {
   label: PropTypes.string.isRequired,
+  helpText: PropTypes.node,
+};
+
+SelectWithLabel.defaultProps = {
+  helpText: null,
 };
 
 export default SelectWithLabel;
