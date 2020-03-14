@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 
 import { AddAttendeeUsersQuery } from './queries.gql';
 import { CreateUserConProfile } from './mutations.gql';
@@ -13,6 +13,7 @@ import useAsyncFunction from '../useAsyncFunction';
 
 function AddAttendeeModal({ conventionName, visible }) {
   const history = useHistory();
+  const apolloClient = useApolloClient();
   const [user, setUser] = useState(null);
   const [userConProfile, setUserConProfile] = useState(null);
   const [createUserConProfileMutate] = useMutation(CreateUserConProfile);
@@ -45,6 +46,7 @@ function AddAttendeeModal({ conventionName, visible }) {
         },
       },
     });
+    await apolloClient.resetStore();
     close();
   };
 

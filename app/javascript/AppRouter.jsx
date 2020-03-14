@@ -86,6 +86,7 @@ function renderSingleEventModeRoutes({ signupMode }) {
 function renderRootSiteRoutes() {
   return [
     <Route path="/conventions" key="conventions"><PageComponents.RootSiteConventionsAdmin /></Route>,
+    <Route path="/email_routes" key="emailRoutes"><PageComponents.RootSiteEmailRoutesAdmin /></Route>,
     <Route path="/organizations" key="organizations"><PageComponents.OrganizationAdmin /></Route>,
     <Route path="/root_site" key="rootSite"><PageComponents.CmsAdmin /></Route>,
 

@@ -16,10 +16,4 @@ class EmailRoute < ApplicationRecord
   def receiver_address=(address)
     self[:receiver_address] = EmailRoute.normalize_address(address)
   end
-
-  def forward_addresses=(addresses)
-    self[:forward_addresses] = addresses.map do |address|
-      EmailRoute.normalize_address(address)
-    end
-  end
 end

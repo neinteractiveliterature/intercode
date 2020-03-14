@@ -1,0 +1,16 @@
+fragment EmailRouteFields on EmailRoute {
+  id
+  receiver_address
+  forward_addresses
+}
+
+query RootSiteEmailRoutesAdminTableQuery($page: Int, $filters: EmailRouteFiltersInput, $sort: [SortInput!]) {
+  email_routes_paginated(page: $page, filters: $filters, sort: $sort) {
+    total_entries
+    total_pages
+
+    entries {
+      ...EmailRouteFields
+    }
+  }
+}
