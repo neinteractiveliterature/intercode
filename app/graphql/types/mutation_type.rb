@@ -64,6 +64,12 @@ class Types::MutationType < Types::BaseObject
   field :updateDepartment, mutation: Mutations::UpdateDepartment
   field :deleteDepartment, mutation: Mutations::DeleteDepartment
 
+  ### EmailRoute
+
+  field :createEmailRoute, mutation: Mutations::CreateEmailRoute
+  field :updateEmailRoute, mutation: Mutations::UpdateEmailRoute
+  field :deleteEmailRoute, mutation: Mutations::DeleteEmailRoute
+
   ### Event
 
   field :createEvent, mutation: Mutations::CreateEvent

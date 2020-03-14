@@ -122,6 +122,11 @@ function useRootSiteAdminNavigationItems() {
         url: '/conventions?sort.starts_at=desc',
         icon: 'fa-rocket',
       },
+      currentAbility.can_manage_email_routes && {
+        label: 'Email routes',
+        url: '/email_routes?sort.receiver_address=asc',
+        icon: 'fa-envelope-o',
+      },
       currentAbility.can_read_organizations && {
         label: 'Organizations',
         url: '/organizations',

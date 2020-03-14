@@ -1,0 +1,23 @@
+#import './queries.gql'
+
+mutation CreateEmailRoute($emailRoute: EmailRouteInput!) {
+  createEmailRoute(input: { email_route: $emailRoute }) {
+    email_route {
+      ...EmailRouteFields
+    }
+  }
+}
+
+mutation UpdateEmailRoute($id: Int!, $emailRoute: EmailRouteInput!) {
+  updateEmailRoute(input: { id: $id, email_route: $emailRoute }) {
+    email_route {
+      ...EmailRouteFields
+    }
+  }
+}
+
+mutation DeleteEmailRoute($id: Int!) {
+  deleteEmailRoute(input: { id: $id }) {
+    clientMutationId
+  }
+}

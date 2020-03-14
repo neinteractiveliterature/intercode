@@ -34,6 +34,18 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
+  pagination_field :email_routes_paginated,
+    Types::EmailRoutesPaginationType, Types::EmailRouteFiltersInputType,
+    camelize: false
+
+  def email_routes_paginated(**args)
+    Tables::EmailRoutesTableResultsPresenter.new(
+      policy_scope(EmailRoute.all),
+      args[:filters].to_h,
+      args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
   field :event, Types::EventType, null: true do
     argument :id, Integer, required: true
   end
