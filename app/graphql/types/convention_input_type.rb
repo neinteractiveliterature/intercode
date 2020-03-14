@@ -6,6 +6,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :domain, String, required: false
   argument :event_mailing_list_domain, String, required: false, camelize: false
   argument :email_from, String, required: false, camelize: false
+  argument :email_mode, Types::EmailModeType, required: false, camelize: false
   argument :timezone_name, String, required: false, camelize: false
   argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false
@@ -17,6 +18,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :ticket_mode, Types::TicketModeType, required: false, camelize: false
   argument :root_page_id, Integer, required: false, camelize: false
   argument :default_layout_id, Integer, required: false, camelize: false
+  argument :catch_all_staff_position_id, Integer, required: false, camelize: false
   argument :stripe_publishable_key, String, required: false, camelize: false
   argument :stripe_secret_key, String, required: false, camelize: false
   argument :clickwrap_agreement, String, required: false, camelize: false

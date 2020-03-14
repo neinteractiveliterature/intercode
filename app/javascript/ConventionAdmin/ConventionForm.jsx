@@ -10,6 +10,7 @@ import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 import { scheduledValueReducer } from '../BuiltInFormControls/ScheduledValueEditor';
+import ConventionFormEmailSection from './ConventionFormEmailSection';
 
 const conventionFormTransforms = {
   starts_at: Transforms.datetime,
@@ -72,6 +73,16 @@ function ConventionForm({
       ),
     },
     {
+      id: 'email',
+      name: 'Email',
+      renderContent: () => (
+        <ConventionFormEmailSection
+          {...commonProps}
+          staffPositions={initialConvention.staff_positions}
+        />
+      ),
+    },
+    {
       id: 'payments',
       name: 'Payments',
       renderContent: () => (
@@ -108,7 +119,9 @@ function ConventionForm({
 }
 
 ConventionForm.propTypes = {
-  initialConvention: PropTypes.shape({}).isRequired,
+  initialConvention: PropTypes.shape({
+    masked_stripe_secret_key: PropTypes.string,
+  }).isRequired,
   cmsLayouts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   pages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   saveConvention: PropTypes.func.isRequired,

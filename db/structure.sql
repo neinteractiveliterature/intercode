@@ -911,7 +911,9 @@ CREATE TABLE public.conventions (
     site_mode character varying DEFAULT 'convention'::character varying NOT NULL,
     signup_mode character varying DEFAULT 'self_service'::character varying NOT NULL,
     signup_requests_open boolean DEFAULT false NOT NULL,
-    email_from text NOT NULL
+    email_from text NOT NULL,
+    catch_all_staff_position_id bigint,
+    email_mode character varying DEFAULT 'forward'::character varying NOT NULL
 );
 
 
@@ -3335,6 +3337,13 @@ CREATE UNIQUE INDEX index_cms_variables_on_parent_id_and_key ON public.cms_varia
 
 
 --
+-- Name: index_conventions_on_catch_all_staff_position_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_conventions_on_catch_all_staff_position_id ON public.conventions USING btree (catch_all_staff_position_id);
+
+
+--
 -- Name: index_conventions_on_default_layout_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4500,6 +4509,14 @@ ALTER TABLE ONLY public.notification_destinations
 
 
 --
+-- Name: conventions fk_rails_ba7dd15da0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT fk_rails_ba7dd15da0 FOREIGN KEY (catch_all_staff_position_id) REFERENCES public.staff_positions(id);
+
+
+--
 -- Name: event_categories fk_rails_c3b33a1b7c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4842,6 +4859,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200309201446'),
 ('20200312181248'),
 ('20200313042743'),
-('20200313212415');
+('20200313212415'),
+('20200314164542');
 
 

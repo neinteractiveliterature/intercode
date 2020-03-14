@@ -9,6 +9,7 @@ class Types::ConventionType < Types::BaseObject
   field :domain, String, null: true
   field :event_mailing_list_domain, String, null: true
   field :email_from, String, null: false
+  field :email_mode, Types::EmailModeType, null: false
   field :timezone_name, String, null: true
   field :show_schedule, Types::ShowScheduleType, null: true
   field :show_event_list, Types::ShowScheduleType, null: true
@@ -35,6 +36,7 @@ class Types::ConventionType < Types::BaseObject
   field :rooms, [Types::RoomType], null: true
   field :root_page, Types::PageType, null: true
   field :staff_positions, [Types::StaffPositionType], null: true
+  field :catch_all_staff_position, Types::StaffPositionType, null: true
   field :ticket_types, [Types::TicketTypeType], null: true
   field :organization, Types::OrganizationType, null: true
   field :products, [Types::ProductType], null: true
@@ -48,6 +50,7 @@ class Types::ConventionType < Types::BaseObject
 
   association_loaders(
     Convention,
+    :catch_all_staff_position,
     :cms_content_groups,
     :cms_layouts,
     :cms_navigation_items,

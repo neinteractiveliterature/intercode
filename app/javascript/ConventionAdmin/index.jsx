@@ -32,6 +32,7 @@ function ConventionAdmin({ id }) {
             name: convention.name,
             domain: convention.domain,
             email_from: convention.email_from,
+            email_mode: convention.email_mode,
             event_mailing_list_domain: convention.event_mailing_list_domain,
             timezone_name: convention.timezone_name,
             show_schedule: convention.show_schedule,
@@ -51,6 +52,7 @@ function ConventionAdmin({ id }) {
             },
             default_layout_id: (convention.default_layout || {}).id,
             root_page_id: (convention.root_page || {}).id,
+            catch_all_staff_position_id: (convention.catch_all_staff_position || {}).id,
             stripe_publishable_key: convention.stripe_publishable_key,
             ...(
               convention.stripe_secret_key
