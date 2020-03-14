@@ -15,7 +15,7 @@ jobs:
         with:
           cmd: install
       - run: gem install --no-document unicode-display_width -v 1.6.1
-      - run: gem install --no-document pronto pronto-rubocop pronto-eslint-npm
+      - run: gem install --no-document pronto pronto-rubocop pronto-eslint_npm
       - run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
           PRONTO_GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           pronto run -f github_status github_pr
