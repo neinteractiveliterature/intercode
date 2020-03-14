@@ -6,6 +6,7 @@ fragment ConventionAdminConventionFields on Convention {
   name
   domain
   email_from
+  email_mode
   event_mailing_list_domain
   timezone_name
   show_schedule
@@ -44,6 +45,16 @@ fragment ConventionAdminConventionFields on Convention {
   }
 
   pages {
+    id
+    name
+  }
+
+  staff_positions {
+    id
+    name
+  }
+
+  catch_all_staff_position {
     id
     name
   }

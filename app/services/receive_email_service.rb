@@ -47,12 +47,12 @@ class ReceiveEmailService < CivilService::Service
     address = EmailRoute.normalize_address(recipient)
 
     staff_positions = staff_positions_for_recipient(address)
-    if staff_positions.any?
+    if staff_positions
       return staff_positions.flat_map { |sp| sp.user_con_profiles.map(&:email) + sp.cc_addresses }
     end
 
     team_members = team_members_for_recipient(address)
-    if team_members.any?
+    if team_members
       return team_members.flat_map { |tm| tm.user_con_profile.email }
     end
 
@@ -62,20 +62,27 @@ class ReceiveEmailService < CivilService::Service
 
   def staff_positions_for_recipient(address)
     convention = Convention.find_by(domain: Mail::Address.new(address).domain)
-    return [] unless convention
+    return nil unless convention
 
-    convention.staff_positions.includes(user_con_profiles: :user).select do |sp|
+    if convention.email_mode == 'staff_emails_to_catch_all'
+      return [convention.catch_all_staff_position].compact
+    end
+
+    matched_positions = convention.staff_positions.includes(user_con_profiles: :user).select do |sp|
       full_email_aliases = sp.email_aliases.map { |ea| "#{ea}@#{convention.domain}" }
-      destinations = [sp.email, *sp.email_aliases].map do |dest|
+      destinations = [sp.email, *full_email_aliases].map do |dest|
         EmailRoute.normalize_address(dest)
       end
       destinations.include?(address)
     end
+    return matched_positions if matched_positions.any?
+
+    [convention.catch_all_staff_position].compact
   end
 
   def team_members_for_recipient(address)
     convention = Convention.find_by(event_mailing_list_domain: Mail::Address.new(address).domain)
-    return [] unless convention
+    return nil unless convention
 
     events = convention.events.where(team_mailing_list_name: Mail::Address.new(address).local)
     TeamMember.where(event_id: events.select(:id)).includes(user_con_profile: :user).to_a
