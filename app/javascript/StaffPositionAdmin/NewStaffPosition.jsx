@@ -25,6 +25,8 @@ function NewStaffPosition() {
     name: '',
     email: '',
     user_con_profiles: [],
+    cc_addresses: [],
+    email_aliases: [],
   });
 
   const saveClicked = useCallback(
