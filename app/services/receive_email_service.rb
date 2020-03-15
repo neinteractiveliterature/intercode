@@ -52,9 +52,7 @@ class ReceiveEmailService < CivilService::Service
     end
 
     team_members = team_members_for_recipient(address)
-    if team_members
-      return team_members.flat_map { |tm| tm.user_con_profile.email }
-    end
+    return team_members.flat_map { |tm| tm.user_con_profile.email } if team_members
 
     route = EmailRoute.find_by(receiver_address: address)
     route&.forward_addresses
