@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - run: git fetch --depth=1 +origin/master
+      - run: git fetch --prune --unshallow
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
