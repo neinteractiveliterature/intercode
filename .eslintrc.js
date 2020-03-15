@@ -79,11 +79,13 @@ module.exports = {
   },
 
   settings: {
-    'import/resolver': {
-      'webpack': {
-        config: path.resolve(__dirname, './config/webpack/environment.js'),
-      },
-    },
+    // This is making eslint hang rather than exit :(
+    //
+    // 'import/resolver': {
+    //   'webpack': {
+    //     config: path.resolve(__dirname, './config/webpack/environment.js'),
+    //   },
+    // },
     'import/ignore': [
       'test/javascript/testUtils.js',
     ],
