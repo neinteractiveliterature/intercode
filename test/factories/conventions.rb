@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :convention do
     name { 'TestCon' }
     sequence(:domain) { |n| "testcon#{n}.example.com" }
-    timezone_name { 'US/Eastern' }
+    timezone_name { 'UTC' }
     show_schedule { 'yes' }
     show_event_list { 'yes' }
     accepting_proposals { false }
@@ -20,8 +20,8 @@ FactoryBot.define do
         ]
       )
     end
-    starts_at { Time.new(2016, 10, 28, 18, 0, 0) }
-    ends_at { Time.new(2016, 10, 30, 18, 0, 0) }
+    starts_at { Time.utc(2016, 10, 28, 18, 0, 0) }
+    ends_at { Time.utc(2016, 10, 30, 18, 0, 0) }
     stripe_publishable_key { "pk_test_#{Devise.friendly_token}" }
     stripe_secret_key { "sk_test_#{Devise.friendly_token}" }
 

@@ -7,16 +7,17 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       name: 'CopyCon',
       domain: 'copycon.example.com',
       maximum_event_signups: ScheduledValue::ScheduledValue.always('unlimited'),
-      starts_at: Time.new(2018, 10, 28, 18, 0, 0),
-      ends_at: Time.new(2018, 10, 30, 18, 0, 0)
+      starts_at: Time.utc(2018, 10, 28, 18, 0, 0),
+      ends_at: Time.utc(2018, 10, 30, 18, 0, 0),
+      email_from: 'noreply@copycon.example.com'
     }
   end
   let(:service) { CloneConventionService.new(source_convention: convention, new_convention_attributes: new_convention_attributes) }
 
   it 'clones only some convention attributes' do
     convention.update!(
-      starts_at: Time.now,
-      ends_at: 3.days.from_now,
+      starts_at: Time.now.utc,
+      ends_at: 3.days.after(Time.now.utc),
       show_schedule: 'yes',
       accepting_proposals: true,
       maximum_tickets: 500,
@@ -29,8 +30,8 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     result = service.call
     assert result.success?
 
-    assert_equal Time.new(2018, 10, 28, 18, 0, 0), result.convention.starts_at
-    assert_equal Time.new(2018, 10, 30, 18, 0, 0), result.convention.ends_at
+    assert_equal Time.utc(2018, 10, 28, 18, 0, 0), result.convention.starts_at
+    assert_equal Time.utc(2018, 10, 30, 18, 0, 0), result.convention.ends_at
     assert_equal 'no', result.convention.show_schedule
     refute result.convention.accepting_proposals
     assert_equal 500, result.convention.maximum_tickets
