@@ -55,11 +55,6 @@ ENV NODE_ENV test
 USER root
 RUN apk add --no-cache postgresql-client
 
-RUN mv public/packs public/packs-test \
-  && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
-  && chmod +x ./cc-test-reporter \
-  && ./cc-test-reporter before-build
-
 # Unfortunately all the previous stuff is going to have run yarn install with NODE_ENV=production
 # and we need it to be test for this
 # RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \

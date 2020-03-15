@@ -1,8 +1,7 @@
 # Intercode 2
 
 [![Build Status](https://github.com/neinteractiveliterature/intercode/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/neinteractiveliterature/intercode/actions?workflow=Docker+Image+CI)
-[![Code Climate](https://codeclimate.com/github/neinteractiveliterature/intercode/badges/gpa.svg)](https://codeclimate.com/github/neinteractiveliterature/intercode)
-[![Test Coverage](https://codeclimate.com/github/neinteractiveliterature/intercode/badges/coverage.svg)](https://codeclimate.com/github/neinteractiveliterature/intercode/coverage)
+[![Automated Code Review](https://github.com/neinteractiveliterature/intercode/workflows/Pronto/badge.svg)](https://github.com/neinteractiveliterature/intercode/actions?workflow=Pronto)
 
 Intercode is a web application that:
 
