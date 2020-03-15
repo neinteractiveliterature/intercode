@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { useChangeDispatchers } from '../ComposableFormUtils';
-import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 
@@ -75,9 +74,13 @@ ConventionFormEmailSection.propTypes = {
   convention: PropTypes.shape({
     event_mailing_list_domain: PropTypes.string,
     email_from: PropTypes.string,
+    catch_all_staff_position: PropTypes.shape({}),
+    domain: PropTypes.string.isRequired,
+    email_mode: PropTypes.string.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  staffPositions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 ConventionFormEmailSection.defaultProps = {

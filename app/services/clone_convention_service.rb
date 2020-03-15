@@ -205,10 +205,9 @@ class CloneConventionService < CivilService::Service
       end
     end
 
-    if source_convention.catch_all_staff_position
-      convention.update!(catch_all_staff_position:
-        @id_maps[:staff_positions][source_convention.catch_all_staff_position_id])
-    end
+    return unless source_convention.catch_all_staff_position
+    convention.update!(catch_all_staff_position:
+      @id_maps[:staff_positions][source_convention.catch_all_staff_position_id])
   end
 
   def clone_store_content(convention)

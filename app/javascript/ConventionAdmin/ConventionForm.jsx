@@ -121,6 +121,7 @@ function ConventionForm({
 ConventionForm.propTypes = {
   initialConvention: PropTypes.shape({
     masked_stripe_secret_key: PropTypes.string,
+    staff_positions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
   cmsLayouts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   pages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
