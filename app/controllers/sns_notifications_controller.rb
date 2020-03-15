@@ -22,7 +22,7 @@ class SnsNotificationsController < ApplicationController
   def handle_message(message)
     case message['notificationType']
     when 'Received'
-      ReceiveEmailService.new(message: message).call!
+      ReceiveSnsEmailDeliveryService.new(message: message).call!
     else
       warning_message = "Unhandled SNS notificationType: #{message['notificationType']}"
       Rails.logger.warn(warning_message)
