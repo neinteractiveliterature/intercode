@@ -11,8 +11,10 @@ import UsersWithPendingBio from './UsersWithPendingBio';
 import WaitlistMailingLists from './WaitlistMailingLists';
 import WhosFree from './WhosFree';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function MailingListsMenu() {
+  const authorizationWarning = useAuthorizationRequired('can_read_any_mailing_list');
   const { data, loading, error } = useQuery(MailingListsMenuQuery);
 
   if (loading) {
@@ -22,6 +24,8 @@ function MailingListsMenu() {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
+
+  if (authorizationWarning) return authorizationWarning;
 
   return (
     <>

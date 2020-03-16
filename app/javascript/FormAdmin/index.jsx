@@ -5,8 +5,12 @@ import FormAdminIndex from './FormAdminIndex';
 import FormJSONEditor from './FormJSONEditor';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function FormAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_forms');
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <nav aria-label="breadcrumb">

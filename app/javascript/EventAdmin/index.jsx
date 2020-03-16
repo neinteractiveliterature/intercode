@@ -18,6 +18,7 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAutoClosingDropdownRef from '../NavigationBar/useAutoClosingDropdownRef';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
@@ -28,6 +29,7 @@ const adminComponentsBySchedulingUi = {
 };
 
 function EventAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_runs');
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const eventCategories = useMemo(
@@ -45,9 +47,7 @@ function EventAdmin() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  if (!data.currentAbility.can_manage_runs) {
-    return <Redirect to="/" />;
-  }
+  if (authorizationWarning) return authorizationWarning;
 
   if (data.convention.site_mode === 'single_event') {
     if (data.events.length === 0) {

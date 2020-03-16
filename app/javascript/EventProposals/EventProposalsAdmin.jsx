@@ -15,6 +15,7 @@ import useValueUnless from '../useValueUnless';
 import EventProposalHistory from './EventProposalHistory';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function SingleProposalBreadcrumbs() {
   const params = useParams();
@@ -77,6 +78,10 @@ function AdminEditEventProposal() {
 }
 
 function EventProposalsAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
+
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <nav aria-label="breadcrumb">

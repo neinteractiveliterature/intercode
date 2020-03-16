@@ -11,6 +11,7 @@ import EventProvidedTickets from './EventProvidedTickets';
 import EventsByChoice from './EventsByChoice';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function ReportsMenu() {
   const { data, loading, error } = useQuery(ReportsMenuQuery);
@@ -90,6 +91,9 @@ function ReportsMenu() {
 }
 
 function Reports() {
+  const authorizationWarning = useAuthorizationRequired('can_read_reports');
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <Switch>
       <Route path="/reports/attendance_by_payment_amount"><AttendanceByPaymentAmount /></Route>
