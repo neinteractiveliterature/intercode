@@ -26,6 +26,7 @@ module.exports = {
   setupFilesAfterEnv: [
     './test/javascript/setupTests.js',
   ],
+  testEnvironment: 'jest-environment-jsdom-sixteen',
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
     '^.+\\.(js)x?$': './test/javascript/transform.js',
