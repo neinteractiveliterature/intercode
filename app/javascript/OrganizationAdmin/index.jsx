@@ -13,7 +13,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import useLoginRequired from '../Authentication/useLoginRequired';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function OrganizationWithIdBreadcrumbs() {
   const match = useRouteMatch();
@@ -52,8 +52,8 @@ function OrganizationWithIdBreadcrumbs() {
 }
 
 function OrganizationAdmin() {
-  const loginRequired = useLoginRequired();
-  if (loginRequired) return <></>;
+  const authorizationWarning = useAuthorizationRequired('can_read_organizations');
+  if (authorizationWarning) return authorizationWarning;
 
   return (
     <>

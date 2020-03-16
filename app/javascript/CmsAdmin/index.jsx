@@ -17,6 +17,7 @@ import CmsPartialsAdmin from './CmsPartialsAdmin';
 import CmsFilesAdmin from './CmsFilesAdmin';
 import RootSiteAdmin from '../RootSiteAdmin';
 import LoadingIndicator from '../LoadingIndicator';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function CmsAdminNavTab({ path, children }) {
   return (
@@ -32,6 +33,7 @@ CmsAdminNavTab.propTypes = {
 };
 
 function CmsAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
   const { data, loading, error } = useQuery(CmsAdminBaseQuery);
 
   if (loading) {
@@ -41,6 +43,8 @@ function CmsAdmin() {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
+
+  if (authorizationWarning) return authorizationWarning;
 
   return (
     <>

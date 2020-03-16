@@ -6,8 +6,13 @@ import EventCategoryIndex from './EventCategoryIndex';
 import NewEventCategory from './NewEventCategory';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function EventCategoryAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_update_event_categories');
+
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <ol className="breadcrumb">

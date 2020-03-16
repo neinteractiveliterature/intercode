@@ -25,6 +25,8 @@ describe('ConventionForm', () => {
     ticket_name: 'ticket',
     default_layout_id: null,
     root_page_id: null,
+    staff_positions: [],
+    email_mode: 'forward',
   };
 
   const renderConventionForm = (props, initialConventionProps) => render(

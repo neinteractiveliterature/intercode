@@ -8,9 +8,11 @@ import TicketTypesList from './TicketTypesList';
 import { AdminTicketTypesQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function TicketTypeAdmin() {
   const { data, loading, error } = useQuery(AdminTicketTypesQuery);
+  const authorizationWarning = useAuthorizationRequired('can_manage_ticket_types');
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -19,6 +21,8 @@ function TicketTypeAdmin() {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
+
+  if (authorizationWarning) return authorizationWarning;
 
   return (
     <Switch>
