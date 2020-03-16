@@ -30,7 +30,11 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def recipients
-    @recipients ||= Array(common_header('To')).map { |recipient| Mail::Address.new(recipient) }
+    @recipients ||= [
+      *Array(common_header('To') || []),
+      *Array(common_header('CC') || []),
+      *Array(common_header('BCC') || [])
+    ].map { |recipient| Mail::Address.new(recipient) }
   end
 
   def header(name)
