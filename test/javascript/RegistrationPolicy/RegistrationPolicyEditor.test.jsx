@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  act, wait, render, fireEvent,
+  act, render, fireEvent, waitFor,
 } from '../testUtils';
 import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
@@ -71,7 +71,7 @@ describe('RegistrationPolicyEditor', () => {
     fireEvent.click(getByText('Add regular bucket'));
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(2);
-    expect(newPolicy.buckets.map(bucket => bucket.anything)).toEqual([false, false]);
+    expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, false]);
   });
 
   test('add flex bucket', () => {
@@ -79,7 +79,7 @@ describe('RegistrationPolicyEditor', () => {
     fireEvent.click(getByText('Add flex bucket'));
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(2);
-    expect(newPolicy.buckets.map(bucket => bucket.anything)).toEqual([false, true]);
+    expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, true]);
   });
 
   test('delete bucket', async () => {
@@ -87,7 +87,7 @@ describe('RegistrationPolicyEditor', () => {
     fireEvent.click(getByText('Delete bucket'));
     await act(async () => {
       fireEvent.click(getByText('OK'));
-      await wait();
+      await waitFor(() => {}); // TODO figure out a way to use waitForElementToBeRemoved here
     });
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(0);
@@ -101,8 +101,8 @@ describe('RegistrationPolicyEditor', () => {
   });
 
   describe('with presets', () => {
-    const preset = defaultPresets.find(aPreset => aPreset.name === 'Limited slots by gender (classic Intercon-style)');
-    const presetBuckets = preset.policy.buckets.map(presetBucket => ({
+    const preset = defaultPresets.find((aPreset) => aPreset.name === 'Limited slots by gender (classic Intercon-style)');
+    const presetBuckets = preset.policy.buckets.map((presetBucket) => ({
       ...defaultRegistrationPolicyBucket,
       ...presetBucket,
     }));
@@ -111,7 +111,7 @@ describe('RegistrationPolicyEditor', () => {
       const { getByRole, queryAllByRole } = renderRegistrationPolicyEditor(
         { presets: defaultPresets }, [],
       );
-      expect(getByRole('listbox')).toBeTruthy();
+      expect(getByRole('combobox')).toBeTruthy();
       expect(queryAllByRole('option')).toHaveLength(7); // number of presets + blank + custom
     });
 
@@ -120,12 +120,12 @@ describe('RegistrationPolicyEditor', () => {
         { presets: defaultPresets },
         presetBuckets,
       );
-      expect(getByRole('listbox')).toHaveValue(preset.name);
+      expect(getByRole('combobox')).toHaveValue(preset.name);
     });
 
     test('pre-selects "custom" when the buckets do not match any preset', () => {
       const { getByRole } = renderRegistrationPolicyEditor({ presets: defaultPresets });
-      expect(getByRole('listbox')).toHaveValue('_custom');
+      expect(getByRole('combobox')).toHaveValue('_custom');
     });
 
     test('locks name and description for matching buckets when in a preset', () => {
@@ -161,10 +161,10 @@ describe('RegistrationPolicyEditor', () => {
 
     test('switching to a preset', () => {
       const { getByRole } = renderRegistrationPolicyEditor({ presets: defaultPresets });
-      fireEvent.change(getByRole('listbox'), { target: { value: preset.name } });
+      fireEvent.change(getByRole('combobox'), { target: { value: preset.name } });
       const newPolicy = onChange.mock.calls[0][0];
-      expect(newPolicy.buckets.map(bucket => bucket.name))
-        .toEqual(presetBuckets.map(bucket => bucket.name));
+      expect(newPolicy.buckets.map((bucket) => bucket.name))
+        .toEqual(presetBuckets.map((bucket) => bucket.name));
     });
   });
 });
