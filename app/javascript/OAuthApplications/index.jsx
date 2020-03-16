@@ -1,10 +1,15 @@
 import React from 'react';
 import usePageTitle from '../usePageTitle';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function OAuthApplications() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_oauth_applications');
+
   // cop-out?  maybe.
 
   usePageTitle('OAuth2 applications');
+
+  if (authorizationWarning) return authorizationWarning;
 
   return (
     <iframe
