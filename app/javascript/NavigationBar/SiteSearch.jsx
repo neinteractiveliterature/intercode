@@ -12,7 +12,7 @@ import {
   Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer,
 } from 'js-search';
 import { stemmer } from 'porter-stemmer';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import { SiteSearchQuery } from './siteSearchQueries.gql';
