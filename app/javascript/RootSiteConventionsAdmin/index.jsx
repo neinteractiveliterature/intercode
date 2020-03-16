@@ -7,6 +7,7 @@ import ConventionDisplay from './ConventionDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import { useConventionQueryFromIdParam } from './conventionQueryHooks';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function ConventionBreadcrumb() {
   const { data, loading, error } = useConventionQueryFromIdParam();
@@ -18,6 +19,9 @@ function ConventionBreadcrumb() {
 }
 
 function RootSiteConventionsAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_conventions');
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <ol className="breadcrumb">

@@ -12,8 +12,10 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useCreateMutation, useDeleteMutation } from '../MutationUtils';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function RoomsAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const { data, loading, error } = useQuery(RoomsAdminQuery);
   const [updateMutate] = useMutation(UpdateRoom);
   const [createRoom, createError] = useAsyncFunction(useCreateMutation(CreateRoom, {
@@ -40,6 +42,8 @@ function RoomsAdmin() {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
+
+  if (authorizationWarning) return authorizationWarning;
 
   const roomNameDidChange = (id, name) => updateRoom({
     variables: { input: { id, room: { name } } },

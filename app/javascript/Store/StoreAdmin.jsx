@@ -5,8 +5,12 @@ import {
 import OrderAdmin from './OrderAdmin';
 import OrderSummary from './OrderSummary';
 import ProductAdmin from './ProductAdmin';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function StoreAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_read_orders');
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <h1 className="mb-4">Store administration</h1>

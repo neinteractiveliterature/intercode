@@ -10,6 +10,7 @@ import usePageTitle from '../usePageTitle';
 import useModal from '../ModalDialogs/useModal';
 import NewEmailRouteModal from './NewEmailRouteModal';
 import EditEmailRouteModal from './EditEmailRouteModal';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
@@ -30,6 +31,8 @@ const getPossibleColumns = () => [
 ];
 
 function RootSiteEmailRoutesAdminTable() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
+
   const newEmailRouteModal = useModal();
   const editEmailRouteModal = useModal();
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
@@ -43,6 +46,8 @@ function RootSiteEmailRoutesAdminTable() {
     query: RootSiteEmailRoutesAdminTableQuery,
   });
   usePageTitle('Email routes');
+
+  if (authorizationWarning) return authorizationWarning;
 
   return (
     <div className="mb-4">

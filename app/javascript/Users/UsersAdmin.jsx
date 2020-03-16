@@ -8,6 +8,7 @@ import { UserAdminQuery } from './queries.gql';
 import LoadingIndicator from '../LoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function UserBreadcrumbItem() {
   const id = Number.parseInt(useParams().id, 10);
@@ -27,6 +28,9 @@ function UserBreadcrumbItem() {
 }
 
 function UsersAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_read_users');
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <ol className="breadcrumb">

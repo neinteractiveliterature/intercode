@@ -7,8 +7,12 @@ import NewStaffPosition from './NewStaffPosition';
 import StaffPositionsTable from './StaffPositionsTable';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function StaffPositionAdmin() {
+  const authorizationWarning = useAuthorizationRequired('can_manage_staff_positions');
+  if (authorizationWarning) return authorizationWarning;
+
   return (
     <>
       <nav aria-label="breadcrumb">

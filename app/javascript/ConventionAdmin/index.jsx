@@ -11,6 +11,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function ConventionAdmin({ id }) {
   const history = useHistory();
@@ -18,8 +19,11 @@ function ConventionAdmin({ id }) {
   const [updateMutate] = useMutation(UpdateConvention);
   const [mutate, mutationError] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
+  const authorizationWarning = useAuthorizationRequired('can_update_convention');
 
   usePageTitle('Convention Settings');
+
+  if (authorizationWarning) return authorizationWarning;
 
   const saveConvention = async (convention) => {
     await mutate({
