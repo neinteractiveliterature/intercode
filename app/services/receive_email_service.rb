@@ -83,10 +83,11 @@ class ReceiveEmailService < CivilService::Service
     return nil unless convention
 
     events = convention.events.select do |event|
+      next unless event.team_mailing_list_name.present?
       full_alias = "#{event.team_mailing_list_name}@#{convention.event_mailing_list_domain}"
       EmailRoute.normalize_address(full_alias) == address
     end
-    TeamMember.where(event_id: events.select(:id)).includes(user_con_profile: :user).to_a
+    TeamMember.where(event_id: events.map(&:id)).includes(user_con_profile: :user).to_a
   end
 
   def transform_email_for_forwarding(original_recipient, new_recipients)
