@@ -54,6 +54,20 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     context[:convention].events.active.find(args[:id])
   end
 
+  field :run, Types::RunType, null: true do
+    argument :id, Integer, required: true
+  end
+
+  def run(**args)
+    Run.where(event_id: context[:convention].events.active.select(:id)).find(args[:id])
+  end
+
+  field :runs, [Types::RunType], null: true
+
+  def runs
+    Run.where(event_id: context[:convention].events.active.select(:id))
+  end
+
   field :events, [Types::EventType, null: true], null: true do
     argument :extended_counts, Boolean, required: false
     argument :include_dropped, Boolean, required: false
