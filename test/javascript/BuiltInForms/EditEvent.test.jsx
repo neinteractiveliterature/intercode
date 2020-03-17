@@ -5,7 +5,7 @@ import * as formMockData from '../EventAdmin/formMockData';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
 import {
-  render, fireEvent, wait, act,
+  render, fireEvent, waitFor, act,
 } from '../testUtils';
 
 const defaultProps = {
@@ -55,9 +55,8 @@ describe('EditEvent', () => {
       const { getByText, getByLabelText } = renderEditEvent({ updateEvent, onSave });
       await act(async () => {
         fireEvent.click(getByText('Save event'));
-        await wait();
+        await waitFor(() => expect(getByLabelText('Title*')).toHaveClass('is-invalid'));
       });
-      expect(getByLabelText('Title*')).toHaveClass('is-invalid');
       expect(updateEvent).not.toHaveBeenCalled();
       expect(onSave).not.toHaveBeenCalled();
     });
@@ -75,9 +74,8 @@ describe('EditEvent', () => {
       });
       await act(async () => {
         fireEvent.click(getByText('Save event'));
-        await wait();
+        await waitFor(() => expect(updateEvent).toHaveBeenCalled());
       });
-      expect(updateEvent).toHaveBeenCalled();
       expect(onSave).toHaveBeenCalled();
     });
 
@@ -94,10 +92,9 @@ describe('EditEvent', () => {
       });
       await act(async () => {
         fireEvent.click(getByText('Save event'));
-        await wait();
+        await waitFor(() => expect(getByText('blahhhh')).toBeVisible());
       });
       expect(updateEvent).toHaveBeenCalled();
-      expect(getByText('blahhhh')).toBeVisible();
       expect(onSave).not.toHaveBeenCalled();
     });
   });
@@ -135,9 +132,9 @@ describe('EditEvent', () => {
       const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
         fireEvent.click(getByText('Drop event'));
-        await wait(() => expect(getByText('OK')).toBeVisible());
+        await waitFor(() => expect(getByText('OK')).toBeVisible());
         fireEvent.click(getByText('OK'));
-        await wait();
+        await waitFor(() => expect(getByText('OK')).not.toBeVisible());
       });
       expect(dropEvent).toHaveBeenCalled();
       expect(onDrop).toHaveBeenCalled();
@@ -149,9 +146,9 @@ describe('EditEvent', () => {
       const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
         fireEvent.click(getByText('Drop event'));
-        await wait(() => expect(getByText('Cancel')).toBeVisible());
+        await waitFor(() => expect(getByText('Cancel')).toBeVisible());
         fireEvent.click(getByText('Cancel'));
-        await wait(() => expect(getByText('Cancel')).not.toBeVisible());
+        await waitFor(() => expect(getByText('Cancel')).not.toBeVisible());
       });
       expect(dropEvent).not.toHaveBeenCalled();
       expect(onDrop).not.toHaveBeenCalled();
@@ -163,9 +160,9 @@ describe('EditEvent', () => {
       const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
         fireEvent.click(getByText('Drop event'));
-        await wait(() => expect(getByText('OK')).toBeVisible());
+        await waitFor(() => expect(getByText('OK')).toBeVisible());
         fireEvent.click(getByText('OK'));
-        await wait(() => expect(dropEvent).toHaveBeenCalled());
+        await waitFor(() => expect(dropEvent).toHaveBeenCalled());
       });
       expect(getByText('fooey')).toBeVisible();
       expect(onDrop).not.toHaveBeenCalled();

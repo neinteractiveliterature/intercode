@@ -1,9 +1,8 @@
 import React from 'react';
-import { ConfirmModal } from 'react-bootstrap4-modal';
 
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 import {
-  render, act, fireEvent, wait,
+  render, act, fireEvent, waitFor, waitForElementToBeRemoved,
 } from '../testUtils';
 
 describe('RegistrationBucketRow', () => {
@@ -138,9 +137,9 @@ describe('RegistrationBucketRow', () => {
     const { getByText } = renderRegistrationBucketRow();
     await act(async () => {
       fireEvent.click(getByText('Delete bucket'));
-      await wait();
+      await waitFor(() => expect(getByText('OK')).toBeVisible());
       fireEvent.click(getByText('OK'));
-      await wait();
+      await waitFor(() => expect(getByText('OK')).not.toBeVisible());
     });
     expect(onDelete.mock.calls[0][0]).toEqual('testBucket');
   });
@@ -149,9 +148,9 @@ describe('RegistrationBucketRow', () => {
     const { getByText } = renderRegistrationBucketRow();
     await act(async () => {
       fireEvent.click(getByText('Delete bucket'));
-      await wait();
+      await waitFor(() => expect(getByText('Cancel')).toBeVisible());
       fireEvent.click(getByText('Cancel'));
-      await wait();
+      await waitFor(() => expect(getByText('Cancel')).not.toBeVisible());
     });
     expect(onDelete.mock.calls).toHaveLength(0);
   });
