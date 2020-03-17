@@ -74,7 +74,7 @@
     "html-to-react": "^1.4.2",
     "hypernova": "^2.5.0",
     "inflected": "^2.0.3",
-    "js-search": "^1.4.3",
+    "js-search": "^2.0.0",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "lodash-webpack-plugin": "^0.11.5",
