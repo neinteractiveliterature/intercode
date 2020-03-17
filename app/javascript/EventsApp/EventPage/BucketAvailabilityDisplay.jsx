@@ -5,9 +5,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { ResizeObserver as ResizeObserverPonyfill } from '@juggle/resize-observer';
-
-const ResizeObserver = window.ResizeObserver || ResizeObserverPonyfill;
+import { ResizeObserver } from '@juggle/resize-observer';
 
 function BucketAvailabilityDisplay({
   className, signupCount, remainingCapacity, compact,
@@ -28,7 +26,7 @@ function BucketAvailabilityDisplay({
       } else {
         resizeObserverRef.current = new ResizeObserver((entries) => {
           window.requestAnimationFrame(() => {
-            setContainerWidth(entries[0].contentRect);
+            setContainerWidth(entries[0].contentBoxSize[0].inlineSize);
           });
         });
         resizeObserverRef.current.observe(element);
