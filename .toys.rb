@@ -156,3 +156,17 @@ tool 'update_liquid_doc_json' do
     end
   end
 end
+
+tool 'download_email' do
+  desc 'Download and decrypt an email from the S3 inbox'
+  required_arg :message_id
+
+  def run
+    require_relative 'config/environment'
+
+    puts ReceiveSnsEmailDeliveryService.s3_client.get_object(
+      bucket: 'intercode-inbox',
+      key: message_id
+    ).body.read
+  end
+end
