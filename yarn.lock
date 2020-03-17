@@ -1314,10 +1314,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@juggle/resize-observer@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-2.5.0.tgz#dbe3ebfa7b46b465dc85677ca23b15e854225a99"
-  integrity sha512-Nmkeaj5LalJeciRVEqi9Uxi61r0LvGc2yhUCykhXuft9fMyb/6VkZbwJ+UmUl8bk2k6qhwd1qJw6S2YJ0joXlA==
+"@juggle/resize-observer@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.1.1.tgz#ade32049ae8e6cd692ef5d760aa4fdbe0db356e2"
+  integrity sha512-zo+xWLZ0FNY4hhFLHyvJ+fOzWUKGkK0wQDdiLkJU6daXvQDEohh9p5rvGl5GpkXAr2Zx6WMRstl8Ulu/QTRKww==
 
 "@most/multicast@^1.2.5":
   version "1.3.0"
