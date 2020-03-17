@@ -331,7 +331,7 @@ query UserConProfileSignupsQuery($id: Int!) {
   }
 }
 
-query RunSignupChangesQuery($runId: Int!, $filters: SignupChangeFiltersInput, $page: Int, $perPage: Int) {
+query RunSignupChangesQuery($runId: Int!, $filters: SignupChangeFiltersInput, $sort: [SortInput!], $page: Int, $perPage: Int) {
   convention {
     id
     timezone_name
@@ -343,7 +343,7 @@ query RunSignupChangesQuery($runId: Int!, $filters: SignupChangeFiltersInput, $p
       title
     }
 
-    signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: [{ field: "created_at", desc: true }]) {
+    signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
       total_entries
       total_pages
       current_page

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
@@ -91,5 +92,9 @@ function RunSignupChangesTable({ runId }) {
     </QueryDataContext.Provider>
   );
 }
+
+RunSignupChangesTable.propTypes = {
+  runId: PropTypes.number.isRequired,
+};
 
 export default RunSignupChangesTable;
