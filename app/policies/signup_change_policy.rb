@@ -10,7 +10,7 @@ class SignupChangePolicy < ApplicationPolicy
         has_convention_permission?(convention, 'read_signup_details')
       end
       d.add(:read_events) do
-        (signed_up_for_run?(run) && !event.private_signup_list?) || team_member_for_event?(event)
+        team_member_for_event?(event)
       end
     end
 
@@ -33,10 +33,6 @@ class SignupChangePolicy < ApplicationPolicy
 
         if oauth_scope?(:read_events)
           dw.add(run: Run.where(event: events_where_team_member))
-          dw.add(run: Run.where(
-            id: runs_where_signed_up,
-            event: Event.where(private_signup_list: false)
-          ))
         end
 
         if oauth_scope?(:read_conventions)
