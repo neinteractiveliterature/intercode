@@ -105,4 +105,23 @@ class Types::RunType < Types::BaseObject
     Tables::SignupsTableResultsPresenter.new(scope, pundit_user, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])
   end
+
+  pagination_field(
+    :signup_changes_paginated, Types::SignupChangesPaginationType,
+    Types::SignupChangeFiltersInputType, null: false
+  )
+
+  def signup_changes_paginated(**args)
+    scope = SignupChangePolicy::Scope.new(
+      pundit_user,
+      object.signup_changes.includes(
+        user_con_profile: [:convention, :team_members, :staff_positions],
+        run: { event: :convention }
+      )
+    ).resolve
+
+    Tables::SignupChangesTableResultsPresenter
+      .new(scope, args[:filters].to_h, args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
+  end
 end

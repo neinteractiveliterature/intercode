@@ -5,15 +5,20 @@ import {
   Switch,
   Route,
   Redirect,
+  useRouteMatch,
 } from 'react-router-dom';
 
 import RunEmailList from './RunEmailList';
 import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
+import RunSignupChangesTable from './RunSignupChangesTable';
 
 function SignupsIndex({
   runId, eventId, runPath, exportSignupsUrl,
 }) {
+  const signupsTabMatch = useRouteMatch({ path: `${runPath}/admin_signups`, exact: true });
+  const signupChangesTabMatch = useRouteMatch({ path: `${runPath}/admin_signups/signup_changes` });
+
   return (
     <>
       <RunHeader runId={runId} eventId={eventId} />
@@ -21,10 +26,19 @@ function SignupsIndex({
         <li className="nav-item">
           <NavLink
             to={`${runPath}/admin_signups/?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
-            isActive={(match, location) => !location.pathname.endsWith('/comma') && !location.pathname.endsWith('/semicolon')}
+            isActive={() => signupsTabMatch != null}
             className="nav-link"
           >
             Signups
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink
+            to={`${runPath}/admin_signups/signup_changes?sort.created_at=asc`}
+            isActive={() => signupChangesTabMatch != null}
+            className="nav-link"
+          >
+            Change history
           </NavLink>
         </li>
         <li className="nav-item">
@@ -47,6 +61,9 @@ function SignupsIndex({
             comma-separated first.
           </div>
           <RunEmailList runId={runId} eventId={eventId} separator="; " />
+        </Route>
+        <Route path={`${runPath}/admin_signups/signup_changes`} exact>
+          <RunSignupChangesTable runId={runId} />
         </Route>
         <Route path={`${runPath}/admin_signups`} exact>
           <RunSignupsTable
