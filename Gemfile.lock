@@ -114,7 +114,7 @@ GEM
     aws-sdk-sns (1.22.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-sqs (1.23.1)
+    aws-sdk-sqs (1.24.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.1)
