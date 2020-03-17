@@ -180,7 +180,7 @@ const getPossibleColumns = () => [
 ];
 
 function RunSignupsTable({
-  defaultVisibleColumns, eventId, exportUrl, runId, runPath,
+  defaultVisibleColumns, eventId, runId, runPath,
 }) {
   const history = useHistory();
   const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
@@ -210,7 +210,7 @@ function RunSignupsTable({
   return (
     <QueryDataContext.Provider value={queryData}>
       <div className="mb-4">
-        <TableHeader {...tableHeaderProps} exportUrl={exportUrl} />
+        <TableHeader {...tableHeaderProps} exportUrl={`/csv_exports/run_signups?run_id=${runId}`} />
         <ReactTable
           {...reactTableProps}
 
@@ -231,7 +231,6 @@ function RunSignupsTable({
 RunSignupsTable.propTypes = {
   defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   eventId: PropTypes.number.isRequired,
-  exportUrl: PropTypes.string.isRequired,
   runId: PropTypes.number.isRequired,
   runPath: PropTypes.string.isRequired,
 };

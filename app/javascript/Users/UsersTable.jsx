@@ -92,7 +92,7 @@ const getPossibleColumns = () => [
   },
 ];
 
-function UsersTable({ exportUrl }) {
+function UsersTable() {
   const history = useHistory();
   const [checkedUserIds, setCheckedUserIds] = useState(new Set());
   const mergeModal = useModal();
@@ -118,7 +118,7 @@ function UsersTable({ exportUrl }) {
 
         <TableHeader
           {...tableHeaderProps}
-          exportUrl={exportUrl}
+          exportUrl="/csv_exports/users"
           renderLeftContent={() => (
             <div className="ml-2 mb-2 d-inline-block align-top">
               <MultiUserActionsDropdown
@@ -165,9 +165,5 @@ function UsersTable({ exportUrl }) {
     </CheckedUserIdsContext.Provider>
   );
 }
-
-UsersTable.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
-};
 
 export default UsersTable;

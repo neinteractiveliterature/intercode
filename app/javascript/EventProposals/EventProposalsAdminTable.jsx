@@ -264,7 +264,7 @@ function EventProposalsAdminTable() {
     <QueryDataContext.Provider value={queryData}>
       <h1 className="mb-4">Event Proposals</h1>
       <div className="mb-4">
-        <TableHeader {...tableHeaderProps} exportUrl="/admin_event_proposals/export.csv" />
+        <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/event_proposals" />
 
         <ReactTable
           {...reactTableProps}

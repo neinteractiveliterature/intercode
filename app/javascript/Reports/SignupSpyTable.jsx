@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import flatMap from 'lodash/flatMap';
 
@@ -77,7 +76,7 @@ const getPossibleColumns = () => [
   },
 ];
 
-function SignupSpyTableContent({ exportUrl }) {
+function SignupSpyTable() {
   const [reactTableProps, {
     columnSelectionProps, queryResult, queryData, tableHeaderProps: { filtered, sorted },
   }] = useReactTableWithTheWorks({
@@ -102,10 +101,10 @@ function SignupSpyTableContent({ exportUrl }) {
       >
         {(state, makeTable) => (
           <div className="mb-4">
-            <div className="d-flex">
+            <div className="d-flex mb-2">
               <div className="flex-grow-1">
                 <ReactTableExportButton
-                  exportUrl={exportUrl}
+                  exportUrl="/csv_exports/signup_changes"
                   filtered={filtered}
                   sorted={sorted}
                   columns={flatMap(columnSelectionProps.visibleColumnIds, (columnId) => {
@@ -134,8 +133,4 @@ function SignupSpyTableContent({ exportUrl }) {
   );
 }
 
-SignupSpyTableContent.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
-};
-
-export default SignupSpyTableContent;
+export default SignupSpyTable;

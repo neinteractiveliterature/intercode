@@ -14,7 +14,7 @@ import RunSignupsTable from './RunSignupsTable';
 import RunSignupChangesTable from './RunSignupChangesTable';
 
 function SignupsIndex({
-  runId, eventId, runPath, exportSignupsUrl,
+  runId, eventId, runPath,
 }) {
   const signupsTabMatch = useRouteMatch({ path: `${runPath}/admin_signups`, exact: true });
   const signupChangesTabMatch = useRouteMatch({ path: `${runPath}/admin_signups/signup_changes` });
@@ -69,7 +69,6 @@ function SignupsIndex({
           <RunSignupsTable
             runId={runId}
             eventId={eventId}
-            exportUrl={exportSignupsUrl}
             runPath={runPath}
             defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
           />
@@ -83,7 +82,6 @@ function SignupsIndex({
 SignupsIndex.propTypes = {
   runId: PropTypes.number.isRequired,
   eventId: PropTypes.number.isRequired,
-  exportSignupsUrl: PropTypes.string.isRequired,
   runPath: PropTypes.string.isRequired,
 };
 

@@ -10,30 +10,6 @@ class ReportsController < ApplicationController
   def index
   end
 
-  def export_signup_spy
-    respond_to do |format|
-      format.csv do
-        scope = SignupChangePolicy::Scope.new(
-          pundit_user,
-          convention.signup_changes.includes([
-            :user_con_profile,
-            run: :event,
-            signup: { user_con_profile: :signups }
-          ])
-        )
-        send_table_presenter_csv(
-          Tables::SignupChangesTableResultsPresenter.new(
-            scope.resolve,
-            params[:filters]&.to_unsafe_h,
-            [{ field: 'created_at', desc: true }],
-            params[:columns]
-          ),
-          [convention.name, 'Signup Changelog', Time.zone.today.iso8601].compact.join(' - ')
-        )
-      end
-    end
-  end
-
   def events_by_time
     @runs = convention.runs.where(
       event_id: convention.events.joins(:event_category)
