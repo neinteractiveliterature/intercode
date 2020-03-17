@@ -3,9 +3,9 @@ class ReceiveEmailService < CivilService::Service
     @ses_client ||= Aws::SES::Client.new
   end
 
-  attr_reader :recipients, :load_email
+  attr_reader :recipients, :load_email, :message_id
 
-  def initialize(recipients:, load_email:)
+  def initialize(recipients:, load_email:, message_id: nil)
     @recipients = recipients.map do |recipient|
       case recipient
       when Mail::Address then recipient
@@ -13,6 +13,7 @@ class ReceiveEmailService < CivilService::Service
       end
     end
     @load_email = load_email
+    @message_id = message_id
   end
 
   private
@@ -102,9 +103,10 @@ class ReceiveEmailService < CivilService::Service
     forward_message.reply_to = email.from
     forward_message.from = from_addresses.map(&:to_s)
     forward_message.to = new_recipients
-    forward_message.header['Return-Path'] = nil
+    forward_message.header['Return-Path'] = "bounces@#{mailer_host}"
     forward_message.header['DKIM-Signature'] = nil
     forward_message.header['X-SES-CONFIGURATION-SET'] = 'default'
+    forward_message.header['X-Intercode-Message-ID'] = message_id
 
     forward_message
   end
@@ -119,22 +121,24 @@ class ReceiveEmailService < CivilService::Service
     })
   end
 
-  def send_bounce(recipient)
-    mailer_host = Rails.application.config.action_mailer.default_url_options[:host]
+  def mailer_host
+    Rails.application.config.action_mailer.default_url_options[:host]
+  end
 
+  def send_bounce(recipient)
     self.class.ses_client.send_bounce({
-      original_message_id: message['mail']['messageId'],
+      original_message_id: message_id,
       bounce_sender: "Mail Delivery Subsystem <noreply@#{mailer_host}>",
       message_dsn: {
         reporting_mta: "dns; #{mailer_host}",
-        arrival_date: Time.now,
+        arrival_date: Time.zone.now
       },
       bounced_recipient_info_list: [
         {
           recipient: recipient.to_s,
-          bounce_type: "DoesNotExist"
-        },
-      ],
+          bounce_type: 'DoesNotExist'
+        }
+      ]
     })
   end
 end

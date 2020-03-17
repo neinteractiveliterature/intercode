@@ -25,7 +25,8 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   def inner_call
     ReceiveEmailService.new(
       recipients: recipients,
-      load_email: -> { email }
+      load_email: -> { email },
+      message_id: message['mail']['messageId']
     ).call
   end
 
