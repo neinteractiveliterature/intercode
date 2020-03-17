@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 
 import {
-  act, wait, render, fireEvent,
+  act, waitFor, render, fireEvent,
 } from '../testUtils';
 import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
 
@@ -91,9 +91,8 @@ describe('ConventionForm', () => {
 
     await act(async () => {
       fireEvent.click(getByText('Save settings'), { selector: 'button' });
-      await wait();
+      await waitFor(() => expect(saveConvention).toHaveBeenCalledTimes(1));
     });
-    expect(saveConvention).toHaveBeenCalledTimes(1);
     expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention);
   });
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  render, fireEvent, act, wait,
+  render, fireEvent, act, waitFor,
 } from '../testUtils';
 import GraphQLAsyncSelect from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
 
@@ -39,7 +39,7 @@ describe('GraphQLAsyncSelect', () => {
     const selectInput = getByRole('textbox');
     await act(async () => {
       fireEvent.change(selectInput, { target: { value: 'gab' } });
-      await wait();
+      await waitFor(() => queryAllByText('Gabriel Knight'));
     });
     expect(queryAllByText('Gabriel Knight')).toHaveLength(1);
   });
