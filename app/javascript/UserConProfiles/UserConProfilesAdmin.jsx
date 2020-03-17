@@ -16,7 +16,6 @@ function AttendeesPage() {
     <>
       <h1 className="mb-4">Attendees</h1>
       <UserConProfilesTable
-        exportUrl="/user_con_profiles/export.csv"
         defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']}
       />
     </>

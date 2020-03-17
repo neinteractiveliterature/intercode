@@ -28,7 +28,7 @@ function StoreAdmin() {
 
       <Switch>
         <Route path="/admin_store/products"><ProductAdmin /></Route>
-        <Route path="/admin_store/orders"><OrderAdmin exportUrl="/admin_store/orders/export.csv" /></Route>
+        <Route path="/admin_store/orders"><OrderAdmin /></Route>
         <Route path="/admin_store/order_summary"><OrderSummary /></Route>
         <Redirect to="/admin_store/products" />
       </Switch>

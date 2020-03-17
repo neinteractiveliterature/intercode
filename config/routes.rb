@@ -19,22 +19,8 @@ Intercode::Application.routes.draw do
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
-    resources :events, only: [] do
-      resources :runs, only: [] do
-        get 'admin_signups/export' => 'admin_signups#export', as: :export_admin_signups
-      end
-    end
-
-    get(
-      'admin_event_proposals/export' => 'admin_event_proposals#export',
-      as: :export_admin_event_proposals
-    )
-
-    get 'admin_store/orders/export' => 'admin_orders#export', as: :export_admin_orders
-
     resources :user_con_profiles, only: [] do
       collection do
-        get :export
         post :revert_become
       end
 
@@ -44,7 +30,6 @@ Intercode::Application.routes.draw do
     end
 
     namespace :reports do
-      get :export_signup_spy
       get :events_by_time
       get :per_event
       get :per_user
@@ -54,9 +39,17 @@ Intercode::Application.routes.draw do
     end
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
+
+    namespace :csv_exports do
+      get :event_proposals
+      get :orders
+      get :run_signups
+      get :signup_changes
+      get :user_con_profiles
+    end
   end
 
-  get 'users/export' => 'users#export', as: :export_users
+  get 'csv_exports/users' => 'csv_exports#users'
   get 'bundle_hash' => 'bundle_hash#show'
 
   get '/(*extra)' => 'single_page_app#root', as: :root, constraints: {
