@@ -67,6 +67,21 @@ class CsvExportsController < ApplicationController
     )
   end
 
+  def run_signup_changes
+    run = convention.runs.includes(:event).find(params[:run_id])
+    authorize SignupChange.new(run: run), :read?
+
+    send_table_presenter_csv(
+      Tables::SignupChangesTableResultsPresenter.new(
+        run.signup_changes,
+        params[:filters]&.to_unsafe_h,
+        params[:sort],
+        params[:columns]
+      ),
+      RunSignupsFilenameFinder.new.unique_filename(run.event, run, 'Signup change history')
+    )
+  end
+
   def run_signups
     run = convention.runs.includes(:event).find(params[:run_id])
     authorize Signup.new(run: run), :read?
@@ -84,17 +99,16 @@ class CsvExportsController < ApplicationController
   end
 
   def signup_changes
-    scope = SignupChangePolicy::Scope.new(
-      pundit_user,
-      convention.signup_changes.includes([
-        :user_con_profile,
-        run: :event,
-        signup: { user_con_profile: :signups }
-      ])
-    )
     send_table_presenter_csv(
       Tables::SignupChangesTableResultsPresenter.new(
-        scope.resolve,
+        SignupChangePolicy::Scope.new(
+          pundit_user,
+          convention.signup_changes.includes([
+            :user_con_profile,
+            run: :event,
+            signup: { user_con_profile: :signups }
+          ])
+        ).resolve,
         params[:filters]&.to_unsafe_h,
         [{ field: 'created_at', desc: true }],
         params[:columns]

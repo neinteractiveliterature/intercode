@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import flatMap from 'lodash/flatMap';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import { SignupSpySignupChangesQuery } from './queries.gql';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
-import ColumnSelector from '../Tables/ColumnSelector';
-import ReactTableExportButton from '../Tables/ExportButton';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import TimestampCell from '../Tables/TimestampCell';
@@ -15,6 +12,8 @@ import SignupChangeActionFilter from '../Tables/SignupChangeActionFilter';
 import SignupChoiceCell from '../Tables/SignupChoiceCell';
 import SignupChangeCell from '../Tables/SignupChangeCell';
 import BucketChangeCell from '../Tables/BucketChangeCell';
+import TableHeader from '../Tables/TableHeader';
+import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -78,7 +77,7 @@ const getPossibleColumns = () => [
 
 function SignupSpyTable() {
   const [reactTableProps, {
-    columnSelectionProps, queryResult, queryData, tableHeaderProps: { filtered, sorted },
+    columnSelectionProps, queryResult, queryData, tableHeaderProps,
   }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
@@ -92,6 +91,8 @@ function SignupSpyTable() {
     storageKeyPrefix: 'signupSpy',
   });
 
+  const { filtered, sorted } = tableHeaderProps;
+
   return (
     <QueryDataContext.Provider value={queryData}>
       <ReactTable
@@ -101,30 +102,20 @@ function SignupSpyTable() {
       >
         {(state, makeTable) => (
           <div className="mb-4">
-            <div className="d-flex mb-2">
-              <div className="flex-grow-1">
-                <ReactTableExportButton
+            <TableHeader
+              {...tableHeaderProps}
+              renderLeftContent={() => (
+                <RefreshButton refreshData={() => queryResult.refetch()} />
+              )}
+              exportButton={(
+                <SignupChangesTableExportButton
                   exportUrl="/csv_exports/signup_changes"
                   filtered={filtered}
                   sorted={sorted}
-                  columns={flatMap(columnSelectionProps.visibleColumnIds, (columnId) => {
-                    if (columnId === 'action') {
-                      return ['action', 'prev_state', 'state'];
-                    }
-
-                    if (columnId === 'bucket_change') {
-                      return ['prev_bucket', 'bucket'];
-                    }
-
-                    return columnId;
-                  })}
+                  visibleColumnIds={columnSelectionProps.visibleColumnIds}
                 />
-                <RefreshButton refreshData={() => queryResult.refetch()} />
-              </div>
-              <div>
-                <ColumnSelector {...columnSelectionProps} />
-              </div>
-            </div>
+              )}
+            />
             {makeTable()}
           </div>
         )}

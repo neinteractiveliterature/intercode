@@ -14,6 +14,7 @@ import BucketChangeCell from '../../Tables/BucketChangeCell';
 import TableHeader from '../../Tables/TableHeader';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
+import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -59,7 +60,7 @@ const getPossibleColumns = () => [
 ];
 
 function RunSignupChangesTable({ runId }) {
-  const [reactTableProps, { queryData, tableHeaderProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, { queryData, tableHeaderProps, columnSelectionProps }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
       'name', 'action', 'bucket_change', 'created_at',
@@ -84,7 +85,17 @@ function RunSignupChangesTable({ runId }) {
       >
         {(state, makeTable) => (
           <div className="mb-4">
-            <TableHeader {...tableHeaderProps} />
+            <TableHeader
+              {...tableHeaderProps}
+              exportButton={(
+                <SignupChangesTableExportButton
+                  exportUrl={`/csv_exports/run_signup_changes?run_id=${runId}`}
+                  filtered={tableHeaderProps.filtered}
+                  sorted={tableHeaderProps.sorted}
+                  visibleColumnIds={columnSelectionProps.visibleColumnIds}
+                />
+              )}
+            />
             {makeTable()}
           </div>
         )}
