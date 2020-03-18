@@ -45,7 +45,7 @@ function UsersAdmin() {
 
       <Switch>
         <Route path="/users/:id"><UserAdminDisplay /></Route>
-        <Route path="/users"><UsersTable exportUrl="/users/export.csv" /></Route>
+        <Route path="/users"><UsersTable /></Route>
       </Switch>
     </>
   );

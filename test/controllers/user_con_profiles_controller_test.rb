@@ -18,8 +18,5 @@ describe UserConProfilesController do
     user_con_profile
   end
 
-  test 'should get export' do
-    get :export, format: :csv
-    assert_response :success
-  end
+  # TODO write tests for become/revert_become
 end
