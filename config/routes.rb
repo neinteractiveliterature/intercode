@@ -43,6 +43,7 @@ Intercode::Application.routes.draw do
     namespace :csv_exports do
       get :event_proposals
       get :orders
+      get :run_signup_changes
       get :run_signups
       get :signup_changes
       get :user_con_profiles
