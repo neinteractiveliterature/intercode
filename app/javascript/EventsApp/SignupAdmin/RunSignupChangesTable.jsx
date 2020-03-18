@@ -60,7 +60,9 @@ const getPossibleColumns = () => [
 ];
 
 function RunSignupChangesTable({ runId }) {
-  const [reactTableProps, { queryData, tableHeaderProps, columnSelectionProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, {
+    queryData, tableHeaderProps, columnSelectionProps,
+  }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
       'name', 'action', 'bucket_change', 'created_at',
