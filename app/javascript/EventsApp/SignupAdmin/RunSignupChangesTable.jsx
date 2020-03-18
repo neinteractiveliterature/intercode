@@ -1,19 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 
-import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
-import { SignupSpySignupChangesQuery } from './queries.gql';
-import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
-import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
-import FreeTextFilter from '../Tables/FreeTextFilter';
-import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
-import TimestampCell from '../Tables/TimestampCell';
-import SignupChangeActionFilter from '../Tables/SignupChangeActionFilter';
-import SignupChoiceCell from '../Tables/SignupChoiceCell';
-import SignupChangeCell from '../Tables/SignupChangeCell';
-import BucketChangeCell from '../Tables/BucketChangeCell';
-import TableHeader from '../Tables/TableHeader';
-import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
+import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
+import { RunSignupChangesQuery } from './queries.gql';
+import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
+import FreeTextFilter from '../../Tables/FreeTextFilter';
+import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
+import TimestampCell from '../../Tables/TimestampCell';
+import SignupChangeActionFilter from '../../Tables/SignupChangeActionFilter';
+import SignupChangeCell from '../../Tables/SignupChangeCell';
+import BucketChangeCell from '../../Tables/BucketChangeCell';
+import TableHeader from '../../Tables/TableHeader';
+import usePageTitle from '../../usePageTitle';
+import useValueUnless from '../../useValueUnless';
+import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -27,14 +28,6 @@ const getPossibleColumns = () => [
     sortable: false,
     filterable: true,
     Cell: UserConProfileWithGravatarCell,
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Event',
-    id: 'event_title',
-    accessor: (signupChange) => signupChange.run.event.title,
-    sortable: false,
-    filterable: true,
     Filter: FreeTextFilter,
   },
   {
@@ -64,34 +57,26 @@ const getPossibleColumns = () => [
     // eslint-disable-next-line react/prop-types
     Cell: ({ value }) => <TimestampCell value={value} />,
   },
-  {
-    Header: 'Choice',
-    id: 'choice',
-    width: 100,
-    accessor: (signupChange) => signupChange.signup.choice,
-    sortable: false,
-    filterable: false,
-    Cell: SignupChoiceCell,
-  },
 ];
 
-function SignupSpyTable() {
+function RunSignupChangesTable({ runId }) {
   const [reactTableProps, {
-    columnSelectionProps, queryResult, queryData, tableHeaderProps,
+    queryData, tableHeaderProps, columnSelectionProps,
   }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
-      'name', 'event_title', 'action', 'bucket_change', 'created_at', 'choice',
+      'name', 'action', 'bucket_change', 'created_at',
     ],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data.convention.signup_changes_paginated.entries,
-    getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
+    getData: ({ data }) => data.run.signup_changes_paginated.entries,
+    getPages: ({ data }) => data.run.signup_changes_paginated.total_pages,
     getPossibleColumns,
-    query: SignupSpySignupChangesQuery,
+    query: RunSignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
+    variables: { runId },
   });
 
-  const { filtered, sorted } = tableHeaderProps;
+  usePageTitle(useValueUnless(() => `Signup change history - ${queryData.run.event.title}`, !queryData));
 
   return (
     <QueryDataContext.Provider value={queryData}>
@@ -104,14 +89,11 @@ function SignupSpyTable() {
           <div className="mb-4">
             <TableHeader
               {...tableHeaderProps}
-              renderLeftContent={() => (
-                <RefreshButton refreshData={() => queryResult.refetch()} />
-              )}
               exportButton={(
                 <SignupChangesTableExportButton
-                  exportUrl="/csv_exports/signup_changes"
-                  filtered={filtered}
-                  sorted={sorted}
+                  exportUrl={`/csv_exports/run_signup_changes?run_id=${runId}`}
+                  filtered={tableHeaderProps.filtered}
+                  sorted={tableHeaderProps.sorted}
                   visibleColumnIds={columnSelectionProps.visibleColumnIds}
                 />
               )}
@@ -124,4 +106,8 @@ function SignupSpyTable() {
   );
 }
 
-export default SignupSpyTable;
+RunSignupChangesTable.propTypes = {
+  runId: PropTypes.number.isRequired,
+};
+
+export default RunSignupChangesTable;

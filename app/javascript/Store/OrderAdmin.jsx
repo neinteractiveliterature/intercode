@@ -96,7 +96,7 @@ const getPossibleColumns = () => [
   },
 ];
 
-function OrderAdmin({ exportUrl }) {
+function OrderAdmin() {
   const { timezoneName } = useContext(AppRootContext);
   const [editingOrderId, setEditingOrderId] = useState(null);
   usePageTitle('Orders');
@@ -123,7 +123,7 @@ function OrderAdmin({ exportUrl }) {
   return (
     <QueryDataContext.Provider value={queryData}>
       <div className="mb-4">
-        <TableHeader {...tableHeaderProps} exportUrl={exportUrl} />
+        <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/orders" />
 
         <ReactTable
           {...reactTableProps}
@@ -147,9 +147,5 @@ function OrderAdmin({ exportUrl }) {
     </QueryDataContext.Provider>
   );
 }
-
-OrderAdmin.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
-};
 
 export default OrderAdmin;

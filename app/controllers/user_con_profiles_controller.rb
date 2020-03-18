@@ -32,23 +32,6 @@ back to your normal identity (since you already are your normal identity).")
     redirect_to root_url
   end
 
-  def export
-    respond_to do |format|
-      format.csv do
-        send_table_presenter_csv(
-          Tables::UserConProfilesTableResultsPresenter.for_convention(
-            convention,
-            pundit_user,
-            params[:filters]&.to_unsafe_h,
-            params[:sort],
-            params[:columns]
-          ),
-          "#{convention.name} Attendees"
-        )
-      end
-    end
-  end
-
   private
 
   # Only allow people who can update arbitrary user con profiles for this convention to access this

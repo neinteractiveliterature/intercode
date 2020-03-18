@@ -55,7 +55,6 @@ function SignupAdmin({ runId, eventId, eventPath }) {
             runId={runId}
             eventId={eventId}
             runPath={runPath}
-            exportSignupsUrl={`${runPath}/admin_signups/export.csv`}
           />
         </Route>
       </Switch>

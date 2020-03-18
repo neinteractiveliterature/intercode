@@ -54,9 +54,13 @@ function getExportUrl(baseUrl, { filtered, sorted, columns }) {
     ),
   };
 
-  const queryString = dataToQueryString(queryParams);
+  const url = new URL(baseUrl, window.location.href);
+  const search = new URLSearchParams(url.search);
+  new URLSearchParams(dataToQueryString(queryParams))
+    .forEach((value, key) => search.append(key, value));
+  url.search = search;
 
-  return `${baseUrl}?${queryString}`;
+  return url.toString();
 }
 
 function ReactTableExportButton({

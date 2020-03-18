@@ -61,7 +61,7 @@ function SignupSpy() {
           </ul>
         </li>
       </ul>
-      <SignupSpyTable exportUrl="/reports/export_signup_spy.csv" />
+      <SignupSpyTable />
     </>
   );
 }

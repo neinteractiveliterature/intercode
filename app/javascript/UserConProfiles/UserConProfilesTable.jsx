@@ -307,7 +307,7 @@ const getPossibleColumns = (data) => {
   return columns;
 };
 
-function UserConProfilesTable({ defaultVisibleColumns, exportUrl }) {
+function UserConProfilesTable({ defaultVisibleColumns }) {
   const history = useHistory();
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
@@ -325,7 +325,7 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl }) {
       <div className="mb-4">
         <TableHeader
           {...tableHeaderProps}
-          exportUrl={exportUrl}
+          exportUrl="/csv_exports/user_con_profiles"
           renderLeftContent={() => (
             queryData && (queryData.currentAbility || {}).can_create_user_con_profiles
               ? (
@@ -367,7 +367,6 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl }) {
 
 UserConProfilesTable.propTypes = {
   defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string),
-  exportUrl: PropTypes.string.isRequired,
 };
 
 UserConProfilesTable.defaultProps = {
