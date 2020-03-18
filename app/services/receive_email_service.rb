@@ -103,8 +103,13 @@ class ReceiveEmailService < CivilService::Service
     forward_message.reply_to = email.from
     forward_message.from = from_addresses.map(&:to_s)
     forward_message.to = new_recipients
+    forward_message.header['X-Intercode-Original-Return-Path'] = forward_message.header['Return-Path']
     forward_message.header['Return-Path'] = "bounces@#{mailer_host}"
-    forward_message.header['DKIM-Signature'] = nil
+    forward_message.header['X-Intercode-Original-Sender'] = forward_message.header['Sender']
+    forward_message.header['Sender'] = nil
+    forward_message.header['X-Intercode-Original-Source'] = forward_message.header['Source']
+    forward_message.header['Source'] = nil
+    forward_message.header['DKIM-Signature'] = nil # SES will re-sign the message for us
     forward_message.header['X-SES-CONFIGURATION-SET'] = 'default'
     forward_message.header['X-Intercode-Message-ID'] = message_id
 
