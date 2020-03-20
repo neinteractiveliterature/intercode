@@ -25,9 +25,11 @@ class ReceiveEmailService < CivilService::Service
       if forward_addresses
         Rails.logger.debug("Forwarding mail for #{recipient} -> #{forward_addresses.join(', ')}")
         forward_email(recipient, forward_addresses)
-      else
+      elsif intercode_address?(recipient)
         Rails.logger.warn("Could not find matching route for #{recipient}, sending bounce")
         send_bounce(recipient)
+      else
+        Rails.logger.debug("#{recipient} is not an Intercode address, ignoring")
       end
     end
 
@@ -42,6 +44,17 @@ class ReceiveEmailService < CivilService::Service
       else Mail.read_from_string(email)
       end
     end
+  end
+
+  def intercode_address?(address)
+    intercode_domains.include?(Mail::Address.new(EmailRoute.normalize_address(address)).domain)
+  end
+
+  def intercode_domains
+    @intercode_domains ||= Set.new([
+      *EmailRoute.pluck(:receiver_address).map { |addr| Mail::Address.new(addr).domain },
+      *Convention.pluck(:domain, :event_mailing_list_domain).flatten
+    ].compact)
   end
 
   def forward_addresses_for_recipient(recipient)
