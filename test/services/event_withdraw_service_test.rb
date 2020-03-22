@@ -131,6 +131,23 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       assert_equal bucket_key, waitlist_signup.reload.bucket_key
     end
 
+    it 'does not try to fill an overfilled bucket' do
+      extra_signup = create(
+        :signup,
+        run: the_run, state: 'confirmed', bucket_key: bucket_key, requested_bucket_key: bucket_key
+      )
+      waitlist_signup
+
+      result = subject.call
+      assert result.success?
+      assert signup.reload.withdrawn?
+
+      assert_equal 0, result.move_results.size
+
+      assert_nil waitlist_signup.reload.bucket_key
+      assert_equal bucket_key, extra_signup.reload.bucket_key
+    end
+
     it 'does not move confirmed signups unless necessary' do
       anything_signup
       waitlist_signup

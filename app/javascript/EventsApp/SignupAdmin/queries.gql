@@ -222,6 +222,7 @@ query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
 
     registration_policy {
       total_slots
+      slots_limited
 
       buckets {
         name
