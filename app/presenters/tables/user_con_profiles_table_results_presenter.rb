@@ -154,14 +154,14 @@ lower(user_con_profiles.first_name) #{direction}")
   field :is_team_member, 'Event team member?' do
     def apply_filter(scope, value)
       if value
-        scope.where(id: TeamMember.select(:user_con_profile_id))
+        scope.where(id: TeamMember.for_active_events.select(:user_con_profile_id))
       else
-        scope.where.not(id: TeamMember.select(:user_con_profile_id))
+        scope.where.not(id: TeamMember.for_active_events.select(:user_con_profile_id))
       end
     end
 
     def generate_csv_cell(user_con_profile)
-      user_con_profile.team_members.any? ? 'yes' : 'no'
+      user_con_profile.team_members.for_active_events.any? ? 'yes' : 'no'
     end
   end
 
