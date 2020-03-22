@@ -12,6 +12,9 @@ import { timespanFromConvention, timespanFromRun, getConventionDayTimespans } fr
 import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries.gql';
 import { CreateMultipleRuns } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
+import ProspectiveRunSchedule from './ProspectiveRunSchedule';
+import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
+import RoomSelect from '../BuiltInFormControls/RoomSelect';
 
 function ScheduleMultipleRunsModal({
   convention, event, visible, onCancel, onFinish,
@@ -21,6 +24,7 @@ function ScheduleMultipleRunsModal({
   const [day, setDay] = useState(null);
   const [start, setStart] = useState({ hour: null, minute: null });
   const [finish, setFinish] = useState({ hour: null, minute: null });
+  const [rooms, setRooms] = useState([]);
   const conventionTimespan = useMemo(
     () => timespanFromConvention(convention),
     [convention],
@@ -60,9 +64,12 @@ function ScheduleMultipleRunsModal({
         return [];
       }
 
-      return timespan.getTimespansWithin(convention.timezone_name, 'hour');
+      return timespan.getTimespansWithin(
+        convention.timezone_name,
+        { unit: 'second', duration: event.length_seconds },
+      );
     },
-    [timespan, convention.timezone_name],
+    [timespan, convention.timezone_name, event.length_seconds],
   );
 
   const existingRunTimespans = useMemo(
@@ -71,9 +78,12 @@ function ScheduleMultipleRunsModal({
   );
 
   const nonConflictingTimespansWithinRange = useMemo(
-    () => timespansWithinRange.filter((runTimespan) => (
-      !existingRunTimespans.some((existingTimespan) => existingTimespan.overlapsTimespan(runTimespan))
-    )),
+    () => timespansWithinRange.filter(
+      (runTimespan) => !(
+        existingRunTimespans
+          .some((existingTimespan) => existingTimespan.overlapsTimespan(runTimespan))
+      ),
+    ),
     [timespansWithinRange, existingRunTimespans],
   );
 
@@ -81,14 +91,12 @@ function ScheduleMultipleRunsModal({
     async () => {
       const runs = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
         starts_at: nonConflictingTimespan.start.toISOString(),
+        room_ids: rooms.map((room) => room.id),
       }));
 
       await createMultipleRuns({
         variables: {
-          input: {
-            event_id: event.id,
-            runs,
-          },
+          input: { event_id: event.id, runs },
         },
         update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
           const eventsData = store.readQuery({ query: EventAdminEventsQuery });
@@ -99,7 +107,7 @@ function ScheduleMultipleRunsModal({
       });
       onFinish();
     },
-    [createMultipleRuns, event, nonConflictingTimespansWithinRange, onFinish],
+    [createMultipleRuns, event, rooms, nonConflictingTimespansWithinRange, onFinish],
   );
 
   const renderTimeSelects = () => {
@@ -163,7 +171,7 @@ function ScheduleMultipleRunsModal({
 
   return (
     <div>
-      <Modal visible={visible}>
+      <Modal visible={visible} dialogClassName="modal-xl">
         <div className="modal-header">
           <h5 className="modal-title">
             Schedule runs of
@@ -180,6 +188,33 @@ function ScheduleMultipleRunsModal({
 
           {renderTimeSelects()}
           {renderRunPreview()}
+
+          <FormGroupWithLabel label="Room(s)">
+            {(id) => (
+              <RoomSelect
+                id={id}
+                label="Room(s)"
+                name="room_ids"
+                rooms={convention.rooms}
+                isMulti
+                value={rooms}
+                onChange={setRooms}
+              />
+            )}
+          </FormGroupWithLabel>
+
+          <ProspectiveRunSchedule
+            day={day}
+            runs={nonConflictingTimespansWithinRange.map((t) => ({
+              starts_at: t.start.toISOString(),
+              rooms,
+            }))}
+            event={{
+              ...event,
+              id: (event.id || -1),
+              runs: (event.runs || []),
+            }}
+          />
 
           <ErrorDisplay graphQLError={createError} />
         </div>
