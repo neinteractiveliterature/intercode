@@ -27,7 +27,8 @@ export function describeOrdinality(ordinality) {
 }
 
 function getDayStarts(convention) {
-  return timespanFromConvention(convention).getTimeHopsWithin(convention.timezone_name, 'day');
+  return timespanFromConvention(convention)
+    .getTimeHopsWithin(convention.timezone_name, { unit: 'day' });
 }
 
 function getAllPossibleTimeblocks(convention, formItem) {

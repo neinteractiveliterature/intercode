@@ -16,8 +16,10 @@ export function timespanFromRun(convention, event, run) {
 export function getConventionDayTimespans(conventionTimespan, timezoneName) {
   return conventionTimespan.getTimespansWithin(
     timezoneName,
-    'day',
-    moment.duration(6, 'hours'), // start convention days at 6:00am
+    {
+      unit: 'day',
+      offset: moment.duration(6, 'hours'), // start convention days at 6:00am
+    },
   );
 }
 
