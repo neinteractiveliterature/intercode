@@ -13,6 +13,11 @@ import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
+import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
+
+const fieldFilterCodecs = buildFieldFilterCodecs({
+  status: FilterCodecs.stringArray,
+});
 
 const StatusFilter = ({ filter, onChange }) => (
   <ChoiceSetFilter
@@ -21,11 +26,10 @@ const StatusFilter = ({ filter, onChange }) => (
       { label: 'Paid', value: 'paid' },
       { label: 'Unpaid', value: 'unpaid' },
       { label: 'Cancelled', value: 'cancelled' },
-      { label: 'Any', value: '' },
     ]}
     onChange={onChange}
     filter={filter}
-    multiple={false}
+    multiple
   />
 );
 
@@ -107,6 +111,8 @@ function OrderAdmin() {
     getPossibleColumns,
     storageKeyPrefix: 'orderAdmin',
     query: AdminOrdersQuery,
+    decodeFilterValue: fieldFilterCodecs.decodeFilterValue,
+    encodeFilterValue: fieldFilterCodecs.encodeFilterValue,
   });
 
   const closeOrderModal = () => { setEditingOrderId(null); };
