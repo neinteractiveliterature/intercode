@@ -1555,6 +1555,34 @@
           ]
         },
         {
+          "name": "organization",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The organization running this convention",
+              "types": [
+                "OrganizationDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "canceled",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the convention is canceled",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
           "name": "started",
           "docstring": "",
           "tags": [
