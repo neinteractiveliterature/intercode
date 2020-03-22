@@ -56,6 +56,11 @@ class EventWithdrawService < CivilService::Service
 
   def move_signups(prev_state, prev_bucket_key, prev_counted)
     return success unless prev_counted && prev_state == 'confirmed'
+    if prev_bucket_key
+      # Don't fill vacancies in a previously-overfilled bucket
+      prev_bucket = signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)
+      return success if prev_bucket&.full?(signup.run.signups)
+    end
 
     vacancy_fill_result = fill_vacancy(prev_bucket_key)
     return failure(vacancy_fill_result.errors) if vacancy_fill_result.failure?
