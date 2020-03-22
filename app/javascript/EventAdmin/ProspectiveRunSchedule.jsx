@@ -15,6 +15,7 @@ import { EventAdminEventsQuery } from './queries.gql';
 import { getConventionDayTimespans, timespanFromConvention } from '../TimespanUtils';
 import { getRunClassName, getRunStyle } from '../EventsApp/ScheduleGrid/StylingUtils';
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
+import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 
 const SCHEDULE_GRID_CONFIG = {
   key: 'con_schedule_by_room',
@@ -53,6 +54,19 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
     [schedule, run],
   );
 
+  const runStyle = useMemo(
+    () => getRunStyle({
+      event,
+      eventCategory: convention.event_categories.find((c) => c.id === event.event_category.id),
+      signupStatus: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'confirmed' : null),
+      config: SCHEDULE_GRID_CONFIG,
+      signupCountData: FAKE_SIGNUP_COUNT_DATA,
+      runDimensions,
+      layoutResult,
+    }),
+    [convention, runDimensions, layoutResult, event, run],
+  );
+
   useEffect(
     () => {
       if (run.id === PROSPECTIVE_RUN_ID_PREFIX && runRef.current) {
@@ -74,25 +88,21 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
         signupStatus: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'confirmed' : null),
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
+        unlimited: !event.registration_policy.slots_limited,
       })}
       style={{
-        ...getRunStyle({
-          event,
-          eventCategory: convention.event_categories.find((c) => c.id === event.event_category.id),
-          signupStatus: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'confirmed' : null),
-          config: SCHEDULE_GRID_CONFIG,
-          signupCountData: FAKE_SIGNUP_COUNT_DATA,
-          runDimensions,
-          layoutResult,
-        }),
+        ...runStyle,
         borderStyle: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'dashed' : 'auto'),
         fontWeight: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'bold' : 'auto'),
       }}
     >
-      <div className="d-flex">
-        <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {event.title}
-        </div>
+      <div className="schedule-grid-event-content">
+        <AvailabilityBar
+          availabilityFraction={0}
+          runStyle={runStyle}
+          unlimited={!event.registration_policy.slots_limited}
+        />
+        {event.title}
       </div>
     </div>
   );

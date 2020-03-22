@@ -93,6 +93,7 @@ fragment EventFields on Event {
       slots_limited
       anything
     }
+    slots_limited
     prevent_no_preference_signups
   }
 
