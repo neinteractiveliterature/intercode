@@ -47,6 +47,7 @@ class Types::ConventionType < Types::BaseObject
   field :tickets_available_for_purchase, Boolean,
     null: false, method: :tickets_available_for_purchase?
   field :notification_templates, [Types::NotificationTemplateType], null: false
+  field :canceled, Boolean, null: false
 
   association_loaders(
     Convention,
