@@ -322,23 +322,27 @@ describe('Timespan', () => {
   describe('getTimeHopsWithin', () => {
     it('errors on infinite timespans', () => {
       [beginningOfTime, endOfTime, infiniteTimespan].forEach((timespan) => {
-        expect(() => timespan.getTimeHopsWithin('UTC', 'hour', 0)).toThrow('infinite');
+        expect(() => timespan.getTimeHopsWithin('UTC', { unit: 'hour' })).toThrow('infinite');
       });
     });
 
     it('handles different units', () => {
-      expect(defaultTimespan.getTimeHopsWithin('UTC', 'day', 0)).toHaveLength(1);
-      expect(defaultTimespan.getTimeHopsWithin('UTC', 'hour', 0)).toHaveLength(24);
-      expect(defaultTimespan.getTimeHopsWithin('UTC', 'minute', 0)).toHaveLength(24 * 60);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })).toHaveLength(1);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour' })).toHaveLength(24);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'minute' })).toHaveLength(24 * 60);
+    });
+
+    it('handles durations', () => {
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(12);
     });
 
     it('returns moment objects with the correct time zone', () => {
-      expect(defaultTimespan.getTimeHopsWithin('UTC', 'day', 0)[0].utcOffset()).toEqual(0);
-      expect(defaultTimespan.getTimeHopsWithin('America/New_York', 'day', 0)[0].utcOffset()).toEqual(-5 * 60);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })[0].utcOffset()).toEqual(0);
+      expect(defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].utcOffset()).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', 'hour', moment.duration(2, 'hours'));
+      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
       expect(hopsWithOffset).toHaveLength(24);
       expect(hopsWithOffset[0].hour()).toEqual(2);
     });
@@ -347,23 +351,27 @@ describe('Timespan', () => {
   describe('getTimespansWithin', () => {
     it('errors on infinite timespans', () => {
       [beginningOfTime, endOfTime, infiniteTimespan].forEach((timespan) => {
-        expect(() => timespan.getTimespansWithin('UTC', 'hour', 0)).toThrow('infinite');
+        expect(() => timespan.getTimespansWithin('UTC', { unit: 'hour' })).toThrow('infinite');
       });
     });
 
     it('handles different units', () => {
-      expect(defaultTimespan.getTimespansWithin('UTC', 'day', 0)).toHaveLength(1);
-      expect(defaultTimespan.getTimespansWithin('UTC', 'hour', 0)).toHaveLength(24);
-      expect(defaultTimespan.getTimespansWithin('UTC', 'minute', 0)).toHaveLength(24 * 60);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })).toHaveLength(1);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'hour' })).toHaveLength(24);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'minute' })).toHaveLength(24 * 60);
+    });
+
+    it('handles durations', () => {
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(12);
     });
 
     it('returns timespans with the correct time zone', () => {
-      expect(defaultTimespan.getTimespansWithin('UTC', 'day', 0)[0].start.utcOffset()).toEqual(0);
-      expect(defaultTimespan.getTimespansWithin('America/New_York', 'day', 0)[0].start.utcOffset()).toEqual(-5 * 60);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.utcOffset()).toEqual(0);
+      expect(defaultTimespan.getTimespansWithin('America/New_York', { unit: 'day' })[0].start.utcOffset()).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', 'hour', moment.duration(2, 'hours'));
+      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
       expect(hopsWithOffset).toHaveLength(24);
       expect(hopsWithOffset[0].start.hour()).toEqual(2);
     });

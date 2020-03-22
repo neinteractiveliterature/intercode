@@ -8,10 +8,11 @@ import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import { EventAdminEventsQuery } from '../EventAdmin/queries.gql';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
-import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import ErrorDisplay from '../ErrorDisplay';
 import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
 import LoadingIndicator from '../LoadingIndicator';
+import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
+import RoomSelect from '../BuiltInFormControls/RoomSelect';
 
 const roomPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
@@ -107,12 +108,6 @@ function RunFormFields({ run, event, onChange }) {
     );
   };
 
-  const eventForSchedule = {
-    ...event,
-    id: (event.id || -1),
-    runs: (event.runs || []),
-  };
-
   return (
     <div>
       <ConventionDaySelect
@@ -122,25 +117,28 @@ function RunFormFields({ run, event, onChange }) {
       />
       {renderTimeSelect()}
 
-      <SelectWithLabel
-        label="Room(s)"
-        name="room_ids"
-        options={data.convention.rooms}
-        getOptionValue={(room) => room.id}
-        getOptionLabel={(room) => room.name}
-        isMulti
-        styles={{
-          menu: (provided) => ({ ...provided, zIndex: 25 }),
-        }}
-        value={run.rooms}
-        onChange={(rooms) => onChange((prevRun) => ({ ...prevRun, rooms }))}
-      />
+      <FormGroupWithLabel label="Room(s)">
+        {(id) => (
+          <RoomSelect
+            id={id}
+            label="Room(s)"
+            name="room_ids"
+            rooms={data.convention.rooms}
+            isMulti
+            value={run.rooms}
+            onChange={(rooms) => onChange((prevRun) => ({ ...prevRun, rooms }))}
+          />
+        )}
+      </FormGroupWithLabel>
 
       <ProspectiveRunSchedule
         day={day}
-        startTime={startTime}
-        run={run}
-        event={eventForSchedule}
+        runs={[run]}
+        event={{
+          ...event,
+          id: (event.id || -1),
+          runs: (event.runs || []),
+        }}
       />
 
       <BootstrapFormInput
@@ -171,7 +169,9 @@ RunFormFields.propTypes = {
     rooms: PropTypes.arrayOf(roomPropType).isRequired,
   }).isRequired,
   event: PropTypes.shape({
+    id: PropTypes.number,
     length_seconds: PropTypes.number.isRequired,
+    runs: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   convention: PropTypes.shape({
     starts_at: PropTypes.string.isRequired,

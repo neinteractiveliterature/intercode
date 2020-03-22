@@ -165,7 +165,7 @@ class Timespan {
     return `${start} - ${finish}`;
   }
 
-  getTimeHopsWithin(timezoneName, unit, offset) {
+  getTimeHopsWithin(timezoneName, { unit, offset = 0, duration = 1 }) {
     if (!this.isFinite()) {
       throw new Error(`getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
     }
@@ -178,18 +178,18 @@ class Timespan {
         timeHop.add(offset);
       }
       timeBlocks.push(timeHop);
-      now.add(1, unit);
+      now.add(duration, unit);
     }
 
     return timeBlocks;
   }
 
-  getTimespansWithin(timezoneName, unit, offset) {
+  getTimespansWithin(timezoneName, { unit, offset = 0, duration = 1 }) {
     if (!this.isFinite()) {
       throw new Error(`getTimespansWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
     }
 
-    const timeHops = this.getTimeHopsWithin(timezoneName, unit, offset);
+    const timeHops = this.getTimeHopsWithin(timezoneName, { unit, offset, duration });
     return timeHops.map((timeHop, i) => {
       if (i < timeHops.length - 1) {
         return new Timespan(timeHop, timeHops[i + 1]).intersection(this);
@@ -198,11 +198,11 @@ class Timespan {
       if (offset) {
         return new Timespan(
           timeHop,
-          timeHop.clone().subtract(offset).add(1, unit).add(offset),
+          timeHop.clone().subtract(offset).add(duration, unit).add(offset),
         ).intersection(this);
       }
 
-      return new Timespan(timeHop, timeHop.clone().add(1, unit)).intersection(this);
+      return new Timespan(timeHop, timeHop.clone().add(duration, unit)).intersection(this);
     });
   }
 

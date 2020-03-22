@@ -36,10 +36,27 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     return unless id
 
     template_proposal = find_template_proposal(id)
+    compatible_items = compatible_items_from_template(
+      template_proposal.event_category.event_proposal_form,
+      event_proposal.event_category.event_proposal_form
+    )
     clone_attributes = template_proposal.read_form_response_attributes_for_form_items(
-      event_proposal.event_category.event_proposal_form.form_items
-    ).except('event_email')
+      compatible_items
+    )
     event_proposal.assign_form_response_attributes(clone_attributes)
+  end
+
+  def compatible_items_from_template(template_form, proposal_form)
+    template_form.form_items.select do |template_item|
+      next false if template_item.identifier == 'event_email' # never copy event email
+
+      proposal_form_item = proposal_form.form_items.find do |item|
+        item.identifier == template_item.identifier
+      end
+      next false unless proposal_form_item
+
+      proposal_form_item.item_type == template_item.item_type
+    end
   end
 
   def find_template_proposal(id)

@@ -15,6 +15,7 @@ import { EventAdminEventsQuery } from './queries.gql';
 import { getConventionDayTimespans, timespanFromConvention } from '../TimespanUtils';
 import { getRunClassName, getRunStyle } from '../EventsApp/ScheduleGrid/StylingUtils';
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
+import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 
 const SCHEDULE_GRID_CONFIG = {
   key: 'con_schedule_by_room',
@@ -32,7 +33,7 @@ const FAKE_SIGNUP_COUNT_DATA = {
   runFull: () => false,
 };
 
-const PROSPECTIVE_RUN_ID = 'prospective-run';
+const PROSPECTIVE_RUN_ID_PREFIX = 'prospective-run-';
 
 function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResult }) {
   const { schedule } = useContext(ScheduleGridContext);
@@ -53,9 +54,22 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
     [schedule, run],
   );
 
+  const runStyle = useMemo(
+    () => getRunStyle({
+      event,
+      eventCategory: convention.event_categories.find((c) => c.id === event.event_category.id),
+      signupStatus: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'confirmed' : null),
+      config: SCHEDULE_GRID_CONFIG,
+      signupCountData: FAKE_SIGNUP_COUNT_DATA,
+      runDimensions,
+      layoutResult,
+    }),
+    [convention, runDimensions, layoutResult, event, run],
+  );
+
   useEffect(
     () => {
-      if (run.id === PROSPECTIVE_RUN_ID && runRef.current) {
+      if (run.id === PROSPECTIVE_RUN_ID_PREFIX && runRef.current) {
         runRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
     },
@@ -71,28 +85,24 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
       ref={runRef}
       className={getRunClassName({
         event,
-        signupStatus: (run.id === PROSPECTIVE_RUN_ID ? 'confirmed' : null),
+        signupStatus: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'confirmed' : null),
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
+        unlimited: !event.registration_policy.slots_limited,
       })}
       style={{
-        ...getRunStyle({
-          event,
-          eventCategory: convention.event_categories.find((c) => c.id === event.event_category.id),
-          signupStatus: (run.id === PROSPECTIVE_RUN_ID ? 'confirmed' : null),
-          config: SCHEDULE_GRID_CONFIG,
-          signupCountData: FAKE_SIGNUP_COUNT_DATA,
-          runDimensions,
-          layoutResult,
-        }),
-        borderStyle: (run.id === PROSPECTIVE_RUN_ID ? 'dashed' : 'auto'),
-        fontWeight: (run.id === PROSPECTIVE_RUN_ID ? 'bold' : 'auto'),
+        ...runStyle,
+        borderStyle: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'dashed' : 'auto'),
+        fontWeight: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'bold' : 'auto'),
       }}
     >
-      <div className="d-flex">
-        <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {event.title}
-        </div>
+      <div className="schedule-grid-event-content">
+        <AvailabilityBar
+          availabilityFraction={0}
+          runStyle={runStyle}
+          unlimited={!event.registration_policy.slots_limited}
+        />
+        {event.title}
       </div>
     </div>
   );
@@ -113,7 +123,7 @@ ProspectiveRunScheduleEventRun.propTypes = {
 };
 
 function ProspectiveRunSchedule({
-  day, startTime, run, event,
+  day, runs, event,
 }) {
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
@@ -122,19 +132,13 @@ function ProspectiveRunSchedule({
     [error, loading, data],
   );
 
-  const prospectiveRun = useMemo(
-    () => {
-      if (!startTime) {
-        return null;
-      }
-
-      return {
-        id: PROSPECTIVE_RUN_ID,
-        starts_at: startTime.toISOString(),
-        rooms: run.rooms,
-      };
-    },
-    [run, startTime],
+  const prospectiveRuns = useMemo(
+    () => runs.map((run, index) => ({
+      id: `${PROSPECTIVE_RUN_ID_PREFIX}-${index}`,
+      starts_at: run.starts_at,
+      rooms: run.rooms,
+    })),
+    [runs],
   );
 
   const eventsForSchedule = useMemo(
@@ -147,7 +151,7 @@ function ProspectiveRunSchedule({
         if (e.id === event.id) {
           return {
             ...e,
-            runs: [...e.runs.filter((r) => run.id !== r.id)],
+            runs: [...e.runs.filter((r) => runs.find((run) => run.id === r.id) == null)],
           };
         }
 
@@ -160,12 +164,12 @@ function ProspectiveRunSchedule({
           : [...filteredEvents, event]
       );
 
-      if (prospectiveRun) {
+      if (prospectiveRuns) {
         return effectiveEvents.map((e) => {
           if (e.id === event.id) {
             return {
               ...e,
-              runs: [...e.runs, prospectiveRun],
+              runs: [...e.runs, ...prospectiveRuns],
             };
           }
 
@@ -175,7 +179,7 @@ function ProspectiveRunSchedule({
 
       return effectiveEvents;
     },
-    [data, error, loading, event, prospectiveRun, run.id],
+    [data, error, loading, event, prospectiveRuns, runs],
   );
 
   const conventionDayTimespans = useMemo(
@@ -240,10 +244,9 @@ function ProspectiveRunSchedule({
 
 ProspectiveRunSchedule.propTypes = {
   day: MomentPropTypes.momentObj.isRequired,
-  startTime: MomentPropTypes.momentObj.isRequired,
-  run: PropTypes.shape({
+  runs: PropTypes.arrayOf(PropTypes.shape({
     rooms: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
+  })).isRequired,
   event: PropTypes.shape({
     id: PropTypes.number.isRequired,
   }).isRequired,

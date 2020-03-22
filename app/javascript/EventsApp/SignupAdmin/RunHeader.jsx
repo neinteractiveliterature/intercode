@@ -35,11 +35,13 @@ function RunHeader({ eventId, runId }) {
       </h3>
 
       <ul className="list-inline">
-        <li className="list-inline-item">
-          Max signups:
-          {' '}
-          {data.event.registration_policy.total_slots}
-        </li>
+        {data.event.registration_policy.slots_limited && (
+          <li className="list-inline-item">
+            Max signups:
+            {' '}
+            {data.event.registration_policy.total_slots}
+          </li>
+        )}
 
         {
           data.event.registration_policy.buckets.length > 1

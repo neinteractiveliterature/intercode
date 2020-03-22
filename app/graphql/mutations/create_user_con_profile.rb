@@ -8,6 +8,14 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
 
   def resolve(**args)
     user = User.find(args[:user_id])
+    existing_profile = convention.user_con_profiles.find_by(user_id: user.id)
+    if existing_profile
+      raise(
+        GraphQL::ExecutionError,
+        "#{existing_profile.name} is already an attendee of #{convention.name}"
+      )
+    end
+
     user_con_profile = convention.user_con_profiles.new(user: user)
     user_con_profile.assign_default_values_from_form_items(
       convention.user_con_profile_form.form_items

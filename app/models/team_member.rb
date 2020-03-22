@@ -22,6 +22,7 @@ class TeamMember < ApplicationRecord
   delegate :name, to: :user_con_profile
 
   scope :visible, -> { where(display: true) }
+  scope :for_active_events, -> { joins(:event).where(events: { status: 'active' }) }
 
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string
