@@ -4,6 +4,7 @@ const AppRootContext = React.createContext({
   assumedIdentityFromProfile: null,
   cmsNavigationItems: [],
   conventionAcceptingProposals: null,
+  conventionCanceled: false,
   conventionName: null,
   conventionDomain: null,
   currentAbility: {},

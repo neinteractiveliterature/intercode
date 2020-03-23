@@ -23,6 +23,7 @@ fragment ConventionDisplayFields on Convention {
   name
   starts_at
   ends_at
+  canceled
   timezone_name
   domain
   site_mode

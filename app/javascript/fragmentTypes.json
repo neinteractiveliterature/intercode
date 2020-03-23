@@ -147,6 +147,16 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
+            "name": "ConventionsPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "EmailRoutesPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
             "name": "EventProposalsPagination",
             "ofType": null
           },

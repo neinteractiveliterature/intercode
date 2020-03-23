@@ -21,7 +21,7 @@ import NavigationBarContext from './NavigationBarContext';
 function NavigationBarContent({ navbarClasses, rootItems }) {
   const location = useLocation();
   const {
-    conventionName, rootSiteName, siteMode, ticketsAvailableForPurchase,
+    conventionName, conventionCanceled, rootSiteName, siteMode, ticketsAvailableForPurchase,
   } = useContext(AppRootContext);
   const collapseRef = useRef();
   const {
@@ -44,7 +44,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
         setHideBrand, hideBrand, setHideNavItems, hideNavItems,
       }}
     >
-      <nav className={classNames('navbar', navbarClasses)} role="navigation">
+      <nav className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })} role="navigation">
         <div className="container">
           <NavigationBrand item={{ label: conventionName || rootSiteName }} />
           <div
@@ -96,6 +96,17 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
             <i className={collapsed ? 'fa fa-bars' : 'fa fa-times'} />
           </button>
         </div>
+        {conventionCanceled && (
+          <div className="navbar-convention-canceled-notice">
+            <div className="container">
+              <div className="text-center flex-grow-1">
+                {conventionName}
+                {' '}
+                is canceled.
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
     </NavigationBarContext.Provider>
   );

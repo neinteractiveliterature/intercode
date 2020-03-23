@@ -69,6 +69,7 @@ query AppRootQuery($path: String!) {
     name
     domain
     accepting_proposals
+    canceled
     site_mode
     signup_mode
     ticket_mode
