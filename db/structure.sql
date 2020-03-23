@@ -548,7 +548,7 @@ ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -4027,14 +4027,14 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 -- Name: events tsvector_update_event_title; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('title_vector', 'public.simple_unaccent', 'title');
+CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'public.simple_unaccent', 'title');
 
 
 --
 -- Name: pg_search_documents tsvector_update_pg_search_documents_content; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
+CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
 
 
 --

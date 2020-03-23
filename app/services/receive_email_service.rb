@@ -11,7 +11,7 @@ class ReceiveEmailService < CivilService::Service
       when Mail::Address then recipient
       else Mail::Address.new(recipient)
       end
-    end
+    end.compact
     @load_email = load_email
     @message_id = message_id
   end
