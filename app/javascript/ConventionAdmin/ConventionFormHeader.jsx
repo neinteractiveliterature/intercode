@@ -32,7 +32,11 @@ function describeMaximumEventSignups(scheduledValue) {
   return currentOption[1];
 }
 
-function describeConventionTiming(startsAt, endsAt, timezoneName) {
+function describeConventionTiming(startsAt, endsAt, timezoneName, canceled) {
+  if (canceled) {
+    return 'is canceled';
+  }
+
   const now = moment.tz({}, timezoneName).startOf('day');
   const conventionStart = moment.tz(startsAt, timezoneName).startOf('day');
   const conventionEnd = moment.tz(endsAt, timezoneName).startOf('day');
@@ -59,8 +63,9 @@ function ConventionFormHeader({ convention, compact }) {
       convention.starts_at,
       convention.ends_at,
       convention.timezone_name,
+      convention.canceled,
     ),
-    [convention.starts_at, convention.ends_at, convention.timezone_name],
+    [convention.starts_at, convention.ends_at, convention.timezone_name, convention.canceled],
   );
 
   const signupsDescription = useMemo(
@@ -129,6 +134,7 @@ ConventionFormHeader.propTypes = {
     name: PropTypes.string.isRequired,
     starts_at: PropTypes.string.isRequired,
     ends_at: PropTypes.string.isRequired,
+    canceled: PropTypes.bool.isRequired,
     timezone_name: PropTypes.string.isRequired,
     show_event_list: PropTypes.string.isRequired,
     show_schedule: PropTypes.string.isRequired,
@@ -153,6 +159,7 @@ export default React.memo(ConventionFormHeader, (prevProps, nextProps) => (
   && prevProps.convention.name === nextProps.convention.name
   && prevProps.convention.starts_at === nextProps.convention.starts_at
   && prevProps.convention.ends_at === nextProps.convention.ends_at
+  && prevProps.convention.canceled === nextProps.convention.canceled
   && prevProps.convention.timezone_name === nextProps.convention.timezone_name
   && prevProps.convention.show_event_list === nextProps.convention.show_event_list
   && prevProps.convention.show_schedule === nextProps.convention.show_schedule

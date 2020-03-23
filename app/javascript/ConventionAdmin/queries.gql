@@ -3,6 +3,7 @@ fragment ConventionAdminConventionFields on Convention {
   accepting_proposals
   starts_at
   ends_at
+  canceled
   name
   domain
   email_from
