@@ -28,6 +28,29 @@
     ],
     "possibleTypes": null
   },
+  "EmailMode": {
+    "kind": "ENUM",
+    "name": "EmailMode",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "forward",
+        "description": "Forward received emails to staff positions as configured",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "staff_emails_to_catch_all",
+        "description": "Forward all received staff emails to catch-all staff position",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
   "FormType": {
     "kind": "ENUM",
     "name": "FormType",

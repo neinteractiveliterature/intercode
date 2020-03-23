@@ -17,3 +17,11 @@ mutation CreateConvention(
     }
   }
 }
+
+mutation SetConventionCanceled($id: Int!, $canceled: Boolean!) {
+  setConventionCanceled(input: { id: $id, canceled: $canceled }) {
+    convention {
+      ...ConventionDisplayFields
+    }
+  }
+}

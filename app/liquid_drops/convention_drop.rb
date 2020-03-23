@@ -21,10 +21,13 @@ class ConventionDrop < Liquid::Drop
   # @!method ticket_mode
   #   @return [String] How tickets are handled in this convention (possible values are 'disabled'
   #                    and 'required_for_signup')
-  # #!method organization
+  # @!method organization
   #   @return [OrganizationDrop] The organization running this convention
+  # @!method canceled
+  #   @return [Boolean] Whether or not the convention is canceled
   delegate :id, :name, :started?, :ended?, :event_mailing_list_domain, :accepting_proposals,
-    :show_schedule, :show_event_list, :ticket_name, :organization, :ticket_mode, to: :convention
+    :show_schedule, :show_event_list, :ticket_name, :organization, :ticket_mode, :canceled,
+    to: :convention
 
   # @return [Boolean] Whether or not the convention has already started
   alias started started?

@@ -105,3 +105,12 @@ table.no-top-border thead th {
   grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
+
+.navbar-convention-canceled-notice {
+  background-color: #f41;
+  color: white;
+
+  // defeat the default navbar padding
+  margin-left: -16px;
+  margin-right: -16px;
+}
