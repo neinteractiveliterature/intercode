@@ -29,8 +29,6 @@
     "@babel/preset-react": "^7.9.1",
     "@babel/register": "^7.8.6",
     "@juggle/resize-observer": "^3.1.2",
-    "@rails/ujs": "^6.0.2",
-    "@rails/webpacker": "^4.2.2",
     "@testing-library/react": "^10.0.1",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
@@ -132,7 +130,6 @@
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^4.2.2",
     "webpack-shell-plugin": "^0.5.0",
-    "webpacker-react": "^0.3.2",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
