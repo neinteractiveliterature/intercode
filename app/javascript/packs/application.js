@@ -7,10 +7,9 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import Rails from '@rails/ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
-
-import WebpackerReact from 'webpacker-react';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import '../styles/application.scss';
 import 'react-table/react-table.css';
@@ -18,6 +17,15 @@ import '../inflections';
 
 import components from './components';
 
-WebpackerReact.setup(components);
+// adapted from webpacker-react
+function mountReactComponents() {
+  const toMount = document.querySelectorAll('[data-react-class]');
+  toMount.forEach((element) => {
+    const component = components[element.getAttribute('data-react-class')];
+    const props = JSON.parse((element.attributes['data-react-props'] || { value: '{}' }).value);
+    const reactElement = React.createElement(component, props);
+    ReactDOM.render(reactElement, element);
+  });
+}
 
-Rails.start();
+document.addEventListener('DOMContentLoaded', mountReactComponents);
