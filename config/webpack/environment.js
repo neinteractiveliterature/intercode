@@ -8,7 +8,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const getStyleRule = require('./getStyleRule');
 const threadLoader = require('thread-loader');
 
-const CACHE_PATH = 'tmp/cache/webpacker';
+const CACHE_PATH = 'tmp/cache/webpack';
 
 threadLoader.warmup({
   // pool options, like passed to loader options
@@ -21,12 +21,6 @@ threadLoader.warmup({
   'sass-loader',
   'graphql-tag/loader'
 ]);
-
-// I got really fed up with Webpacker's config management.  It reinvents a whole lot of wheels.
-//
-// So, I'm just using Webpacker's config module to read the stuff out of config/webpacker.yml and
-// handle it correctly, as well as Webpacker's getStyleRule utility, and then writing our own
-// Webpack config based on it.
 
 module.exports = {
   entry: {

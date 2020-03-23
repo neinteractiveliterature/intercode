@@ -1,1 +1,1 @@
-formation: release=0,web=1,webpacker=1,shoryuken=0
+formation: release=0,web=1,webpack=1,shoryuken=0
