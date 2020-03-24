@@ -125,7 +125,7 @@
     "unfetch": "^4.1.0",
     "union-value": "2.0.1",
     "uuid": "^7.0.2",
-    "webpack": "^4.42.0",
+    "webpack": "^4.42.1",
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^4.2.2",
