@@ -5,6 +5,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { capitalize } from 'inflected';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
@@ -78,31 +79,38 @@ function TicketPurchaseForm({ stripe }) {
   const disabled = (!ticketType || submitting);
 
   const renderTicketTypeSelect = () => (
-    <div className="d-flex">
+    <div className="btn-group-vertical btn-group-toggle w-100" role="group" aria-label={`${capitalize(data.convention.ticket_name)} type`}>
       {availableTicketTypes.map((type) => {
         const { pricing_schedule: pricingSchedule, id, description } = type;
         const currentPrice = findCurrentValue(pricingSchedule);
         return (
-          <button
+          <label
             className={classNames(
-              'btn text-left',
+              'btn text-left btn-outline-primary',
               {
-                'btn-outline-primary': (ticketType || {}).id !== id,
-                'btn-primary': (ticketType || {}).id === id,
+                active: ticketType?.id === id,
               },
             )}
-            type="button"
             onClick={() => { setTicketType(type); }}
           >
-            <div className="d-flex align-items-center">
-              <div>
+            <input
+              type="radio"
+              name="ticket_type"
+              checked={ticketType?.id === id}
+              onChange={() => { setTicketType(type); }}
+              aria-labelledby={`ticket-type-label-${id}`}
+            />
+            <div className="d-flex align-items-center" id={`ticket-type-label-${id}`}>
+              <div className="flex-grow-1">
                 <strong>{description}</strong>
-                <br />
+                {' '}
+                &mdash;
+                {' '}
                 {formatMoney(currentPrice)}
               </div>
               <Checkmark value={(ticketType || {}).id === id} className="ml-2" />
             </div>
-          </button>
+          </label>
         );
       })}
     </div>
