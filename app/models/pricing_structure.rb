@@ -38,6 +38,10 @@ class PricingStructure
     end
   end
 
+  def to_liquid
+    PricingStructureDrop.new(self)
+  end
+
   private
 
   def coder_for_strategy

@@ -155,6 +155,29 @@
     ],
     "possibleTypes": null
   },
+  "PricingStrategy": {
+    "kind": "ENUM",
+    "name": "PricingStrategy",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "fixed",
+        "description": "Fixed price",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "scheduled_value",
+        "description": "Price that changes over time",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
   "ReceiveSignupEmail": {
     "kind": "ENUM",
     "name": "ReceiveSignupEmail",

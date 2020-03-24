@@ -20096,6 +20096,144 @@
           "possibleTypes": null
         },
         {
+          "kind": "ENUM",
+          "name": "PricingStrategy",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "fixed",
+              "description": "Fixed price",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "scheduled_value",
+              "description": "Price that changes over time",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PricingStructure",
+          "description": null,
+          "fields": [
+            {
+              "name": "pricing_strategy",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PricingStrategy",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "value",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "PricingStructureValue",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PricingStructureInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "pricing_strategy",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PricingStrategy",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "fixed_value",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "MoneyInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "scheduled_value",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ScheduledMoneyValueInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "PricingStructureValue",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Money",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "ScheduledMoneyValue",
+              "ofType": null
+            }
+          ]
+        },
+        {
           "kind": "OBJECT",
           "name": "Product",
           "description": null,
@@ -20255,6 +20393,20 @@
                   "ofType": null
                 }
               },
+              "isDeprecated": true,
+              "deprecationReason": "Use pricing_structure instead"
+            },
+            {
+              "name": "pricing_structure",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "PricingStructure",
+                "ofType": null
+              },
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -20339,11 +20491,11 @@
               "defaultValue": null
             },
             {
-              "name": "price",
+              "name": "pricingStructure",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "MoneyInput",
+                "name": "PricingStructureInput",
                 "ofType": null
               },
               "defaultValue": null
@@ -20523,6 +20675,20 @@
                 "name": "Money",
                 "ofType": null
               },
+              "isDeprecated": true,
+              "deprecationReason": "Use override_pricing_structure instead"
+            },
+            {
+              "name": "override_pricing_structure",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "PricingStructure",
+                "ofType": null
+              },
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -20613,11 +20779,11 @@
               "defaultValue": null
             },
             {
-              "name": "override_price",
+              "name": "override_pricing_structure",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "MoneyInput",
+                "name": "PricingStructureInput",
                 "ofType": null
               },
               "defaultValue": null

@@ -12,13 +12,15 @@ class OrderEntry < ApplicationRecord
   validate :product_variant_must_belong_to_product
 
   before_save do |order_entry|
+    price_args = { time: Time.zone.now }
+
     if order_entry.product_variant
       order_entry.price_per_item = (
-        order_entry.product_variant.override_price ||
-        order_entry.product.price
+        order_entry.product_variant.override_pricing_structure.price(**price_args) ||
+        order_entry.product.pricing_structure.price(**price_args)
       )
     else
-      order_entry.price_per_item = order_entry.product.price
+      order_entry.price_per_item = order_entry.product.pricing_structure.price(**price_args)
     end
   end
 

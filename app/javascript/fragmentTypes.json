@@ -246,6 +246,27 @@
       },
       {
         "kind": "UNION",
+        "name": "PricingStructureValue",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Money",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ScheduledMoneyValue",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
         "name": "SearchableModel",
         "description": null,
         "fields": null,
