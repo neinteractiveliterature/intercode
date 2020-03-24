@@ -6,7 +6,7 @@ class Product < ApplicationRecord
   has_many :order_entries, dependent: :destroy
 
   mount_uploader :image, ProductImageUploader
-  monetize :price_cents, with_model_currency: :price_currency, allow_nil: true
+  serialize :pricing_structure, ActiveModelCoder.new('PricingStructure')
 
   validate :ensure_valid_payment_options
 

@@ -1835,11 +1835,10 @@ CREATE TABLE public.product_variants (
     name text,
     description text,
     image character varying,
-    override_price_cents integer,
-    override_price_currency character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    "position" integer
+    "position" integer,
+    override_pricing_structure jsonb
 );
 
 
@@ -1873,11 +1872,10 @@ CREATE TABLE public.products (
     name text,
     description text,
     image character varying,
-    price_cents integer,
-    price_currency character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_options jsonb
+    payment_options jsonb,
+    pricing_structure jsonb NOT NULL
 );
 
 
@@ -4862,6 +4860,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200313042743'),
 ('20200313212415'),
 ('20200314164542'),
-('20200322234518');
+('20200322234518'),
+('20200324163822');
 
 
