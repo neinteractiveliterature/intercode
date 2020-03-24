@@ -7,7 +7,12 @@ class ProductVariantDrop < Liquid::Drop
   #   @return [String] The name of this variant
   # @!method product
   #   @return [ProductDrop] The product this is a variant of
-  delegate :name, :product, to: :product_variant
+  # @!method override_pricing_structure
+  #   @return [PricingStructure] The pricing structure override for this variant, if present.  If
+  #                              this is null, this variant will use the product's overall pricing
+  #                              structure.  If it's present, this variant will use the override
+  #                              pricing structure instead.
+  delegate :name, :product, :override_pricing_structure, to: :product_variant
 
   # @api
   def initialize(product_variant)
@@ -23,10 +28,5 @@ class ProductVariantDrop < Liquid::Drop
   def image_url
     return unless product_variant.image
     product_variant.image.url
-  end
-
-  # @return [String] The price of this variant
-  def price
-    product_variant.price.format
   end
 end

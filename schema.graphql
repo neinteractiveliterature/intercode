@@ -2615,6 +2615,31 @@ enum PermissionedRoleTypeIndicator {
   StaffPosition
 }
 
+enum PricingStrategy {
+  """
+  Fixed price
+  """
+  fixed
+
+  """
+  Price that changes over time
+  """
+  scheduled_value
+}
+
+type PricingStructure {
+  pricing_strategy: PricingStrategy!
+  value: PricingStructureValue!
+}
+
+input PricingStructureInput {
+  fixed_value: MoneyInput
+  pricing_strategy: PricingStrategy!
+  scheduled_value: ScheduledMoneyValueInput
+}
+
+union PricingStructureValue = Money | ScheduledMoneyValue
+
 type Product {
   available: Boolean!
   description: String
@@ -2624,7 +2649,8 @@ type Product {
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
   payment_options: [String]!
-  price: Money!
+  price: Money! @deprecated(reason: "Use pricing_structure instead")
+  pricing_structure: PricingStructure
   product_variants: [ProductVariant!]!
 }
 
@@ -2635,7 +2661,7 @@ input ProductInput {
   image: Upload
   name: String
   payment_options: [String!]
-  price: MoneyInput
+  pricingStructure: PricingStructureInput
   product_variants: [ProductVariantInput!]
 }
 
@@ -2646,7 +2672,8 @@ type ProductVariant {
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
-  override_price: Money
+  override_price: Money @deprecated(reason: "Use override_pricing_structure instead")
+  override_pricing_structure: PricingStructure
   position: Int
   product: Product!
 }
@@ -2656,7 +2683,7 @@ input ProductVariantInput {
   id: Int
   image: Upload
   name: String
-  override_price: MoneyInput
+  override_pricing_structure: PricingStructureInput
 }
 
 """

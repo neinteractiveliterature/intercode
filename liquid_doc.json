@@ -1328,6 +1328,20 @@
           ]
         },
         {
+          "name": "pricing_structure",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The pricing structure for this product",
+              "types": [
+                "PricingStructure"
+              ]
+            }
+          ]
+        },
+        {
           "name": "initialize",
           "docstring": "",
           "tags": [
@@ -1379,6 +1393,12 @@
           "name": "price",
           "docstring": "",
           "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Price is now controlled through the pricing_structure field",
+              "types": null
+            },
             {
               "tag_name": "return",
               "name": null,
@@ -3129,6 +3149,20 @@
           ]
         },
         {
+          "name": "override_pricing_structure",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The pricing structure override for this variant, if present.  If\nthis is null, this variant will use the product's overall pricing\nstructure.  If it's present, this variant will use the override\npricing structure instead.",
+              "types": [
+                "PricingStructure"
+              ]
+            }
+          ]
+        },
+        {
           "name": "initialize",
           "docstring": "",
           "tags": [
@@ -3170,20 +3204,6 @@
               "tag_name": "return",
               "name": null,
               "text": "The URL of this variant's image, if present",
-              "types": [
-                "String"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "price",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "The price of this variant",
               "types": [
                 "String"
               ]
@@ -3840,6 +3860,79 @@
               "name": null,
               "text": "",
               "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PricingStructureDrop",
+      "superclasses": [
+        "PricingStructureDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A pricing structure for a product, which can follow one of a variety of pricing strategies\n(e.g. fixed price, scheduled price changes, etc.)",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "pricing_structure",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "pricing_strategy",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The strategy used by this pricing structure",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of PricingStructureDrop",
+              "types": [
+                "PricingStructureDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The current default price of this pricing structure",
+              "types": [
+                "String"
+              ]
             }
           ]
         }
