@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import useSortable from '../useSortable';
+import PricingStructureInput from './PricingStructureInput';
 
 function AdminProductVariantEditRow({
   variant, updater, deleteVariant, moveVariant, index,
@@ -39,12 +39,10 @@ function AdminProductVariantEditRow({
         />
       </td>
       <td>
-        <InPlaceEditor
-          value={variant.override_price ? `${formatMoney(variant.override_price, false)}` : ''}
-          onChange={updater.override_price}
-        >
-          {variant.override_price ? formatMoney(variant.override_price) : null}
-        </InPlaceEditor>
+        <PricingStructureInput
+          value={variant.override_pricing_structure || {}}
+          onChange={updater.override_pricing_structure}
+        />
       </td>
       <td>
         <button

@@ -7,10 +7,13 @@ import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import useModal from '../ModalDialogs/useModal';
+import EditPricingStructureModal, { PricingStructureModalContext } from './EditPricingStructureModal';
 
 function ProductAdmin() {
   const { data, loading, error } = useQuery(AdminProductsQuery);
   const [newProducts, setNewProducts] = useState([]);
+  const pricingStructureModal = useModal();
 
   usePageTitle('Products');
 
@@ -54,24 +57,33 @@ function ProductAdmin() {
     .map(renderProduct);
 
   return (
-    <div>
-      {products}
-      <div className="my-4">
-        {
-          data.currentAbility.can_update_products
-            ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={newProductClicked}
-              >
-                New product
-              </button>
-            )
-            : null
-        }
+    <PricingStructureModalContext.Provider value={pricingStructureModal}>
+      <div>
+        {products}
+        <div className="my-4">
+          {
+            data.currentAbility.can_update_products
+              ? (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={newProductClicked}
+                >
+                  New product
+                </button>
+              )
+              : null
+          }
+        </div>
       </div>
-    </div>
+
+      <EditPricingStructureModal
+        visible={pricingStructureModal.visible}
+        value={pricingStructureModal.state?.value}
+        onChange={pricingStructureModal.state?.onChange}
+        close={pricingStructureModal.close}
+      />
+    </PricingStructureModalContext.Provider>
   );
 }
 

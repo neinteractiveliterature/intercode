@@ -1,3 +1,32 @@
+fragment PricingStructureFields on PricingStructure {
+  pricing_strategy
+
+  price {
+    fractional
+    currency_code
+  }
+
+  value {
+    __typename
+
+    ...on Money {
+      fractional
+      currency_code
+    }
+
+    ...on ScheduledMoneyValue {
+      timespans {
+        start
+        finish
+        value {
+          fractional
+          currency_code
+        }
+      }
+    }
+  }
+}
+
 fragment AdminOrderFieldsFragment on Order {
   id
   status
@@ -30,9 +59,8 @@ fragment AdminProductFields on Product {
   available
   payment_options
 
-  price {
-    fractional
-    currency_code
+  pricing_structure {
+    ...PricingStructureFields
   }
 
   product_variants {
@@ -42,9 +70,8 @@ fragment AdminProductFields on Product {
     image_url
     position
 
-    override_price {
-      fractional
-      currency_code
+    override_pricing_structure {
+      ...PricingStructureFields
     }
   }
 }
@@ -240,8 +267,9 @@ query OrderFormProductQuery($productId: Int!) {
   product(id: $productId) {
     id
     image_url
-    price {
-      fractional
+    name
+    pricing_structure {
+      ...PricingStructureFields
     }
     description_html
 
@@ -249,8 +277,8 @@ query OrderFormProductQuery($productId: Int!) {
       id
       name
       position
-      override_price {
-        fractional
+      override_pricing_structure {
+        ...PricingStructureFields
       }
     }
   }
