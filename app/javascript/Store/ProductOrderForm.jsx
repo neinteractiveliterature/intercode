@@ -58,13 +58,15 @@ function ProductOrderForm({ productId }) {
 
     const variants = sortProductVariants(data.product.product_variants);
     const options = variants.map((variant) => {
-      const { id, name, override_price: overridePrice } = variant;
+      const { id, name, override_pricing_structure: overridePricingStructure } = variant;
+      const { price } = data.product.pricing_structure;
+      const overridePrice = overridePricingStructure?.price;
 
       let overridePriceDescription = '';
-      if (overridePrice && overridePrice.fractional !== data.product.price.fractional) {
+      if (overridePrice && overridePrice.fractional !== price.fractional) {
         const diff = {
-          ...data.product.price,
-          fractional: overridePrice.fractional - data.product.price.fractional,
+          ...price,
+          fractional: overridePrice.fractional - price.fractional,
         };
         const sign = Math.sign(diff.fractional) < 0 ? '-' : '+';
         overridePriceDescription = ` (${sign}${formatMoney(diff)})`;
@@ -109,19 +111,19 @@ function ProductOrderForm({ productId }) {
       return null;
     }
 
-    let pricePerItem = data.product.price.fractional;
+    let pricePerItem = data.product.pricing_structure.price.fractional;
     if (productVariantId) {
       const productVariant = data.product.product_variants
         .find((variant) => variant.id === productVariantId);
 
-      if (productVariant.override_price != null) {
-        pricePerItem = productVariant.override_price.fractional;
+      if (productVariant.override_pricing_structure != null) {
+        pricePerItem = productVariant.override_pricing_structure.price.fractional;
       }
     }
 
     const totalPrice = {
       fractional: pricePerItem * quantity,
-      currency_code: data.product.price.currency_code,
+      currency_code: data.product.pricing_structure.price.currency_code,
     };
 
     return (

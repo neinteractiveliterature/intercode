@@ -9,15 +9,15 @@ import AdminProductVariantsTable from './AdminProductVariantsTable';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import { CreateProduct, DeleteProduct, UpdateProduct } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import formatMoney from '../formatMoney';
-import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import sortProductVariants from './sortProductVariants';
-import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
 import useUniqueId from '../useUniqueId';
+import { describeAdminPricingStructure } from './describePricingStructure';
+import PricingStructureInput from './PricingStructureInput';
 
 function duplicateProductForEditing(product) {
   return {
@@ -50,7 +50,7 @@ function AdminProductCard({
       description: Transforms.identity,
       name: Transforms.identity,
       payment_options: Transforms.identity,
-      price: parseMoneyOrNull,
+      pricing_structure: Transforms.identity,
       product_variants: Transforms.identity,
     },
   });
@@ -111,22 +111,12 @@ function AdminProductCard({
       available: editingProduct.available,
       description: editingProduct.description,
       payment_options: editingProduct.payment_options,
-      price: {
-        fractional: editingProduct.price.fractional,
-        currency_code: editingProduct.price.currency_code,
-      },
+      pricing_structure: editingProduct.pricing_structure,
       product_variants: sortProductVariants(editingProduct.product_variants).map((variant) => ({
         id: variant.id,
         name: variant.name,
         description: variant.description,
-        override_price: (
-          variant.override_price
-            ? {
-              fractional: variant.override_price.fractional,
-              currency_code: variant.override_price.currency_code,
-            }
-            : null
-        ),
+        override_pricing_structure: variant.override_pricing_structure,
       })),
       delete_variant_ids: editingProduct.delete_variant_ids,
       ...imageInput,
@@ -374,14 +364,10 @@ function AdminProductCard({
       return (
         <div className="d-flex">
           <strong className="mr-1">Base price:</strong>
-          <InPlaceEditor
-            name="price"
-            label="Base price"
-            value={`${formatMoney(editingProduct.price, false)}`}
-            onChange={editingProductMutator.price}
-          >
-            {formatMoney(editingProduct.price)}
-          </InPlaceEditor>
+          <PricingStructureInput
+            value={editingProduct.pricing_structure}
+            onChange={editingProductMutator.pricing_structure}
+          />
         </div>
       );
     }
@@ -390,7 +376,8 @@ function AdminProductCard({
       <p>
         <strong>
           Base price:
-          {formatMoney(product.price)}
+          {' '}
+          {describeAdminPricingStructure(product.pricing_structure)}
         </strong>
       </p>
     );

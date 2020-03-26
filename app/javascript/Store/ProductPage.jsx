@@ -4,13 +4,13 @@ import { useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrderFormProductQuery } from './queries.gql';
-import formatMoney from '../formatMoney';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import parseCmsContent from '../parseCmsContent';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { describeUserPricingStructure } from './describePricingStructure';
 
 function ProductPage() {
   const { id } = useParams();
@@ -41,7 +41,7 @@ function ProductPage() {
 
       <div className="mb-4">
         <h1>{product.name}</h1>
-        <div className="lead">{formatMoney(product.price)}</div>
+        <div className="lead">{describeUserPricingStructure(product.pricing_structure)}</div>
       </div>
 
       {product.image_url && (
