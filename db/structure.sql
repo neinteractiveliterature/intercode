@@ -1875,7 +1875,8 @@ CREATE TABLE public.products (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     payment_options jsonb,
-    pricing_structure jsonb NOT NULL
+    pricing_structure jsonb NOT NULL,
+    provides_ticket_type_id bigint
 );
 
 
@@ -2253,10 +2254,8 @@ CREATE TABLE public.ticket_types (
     convention_id integer,
     name text,
     description text,
-    pricing_schedule jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    publicly_available boolean DEFAULT true NOT NULL,
     counts_towards_convention_maximum boolean DEFAULT true NOT NULL,
     maximum_event_provided_tickets integer DEFAULT 0 NOT NULL,
     allows_event_signups boolean DEFAULT true NOT NULL
@@ -3763,6 +3762,13 @@ CREATE INDEX index_products_on_convention_id ON public.products USING btree (con
 
 
 --
+-- Name: index_products_on_provides_ticket_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_provides_ticket_type_id ON public.products USING btree (provides_ticket_type_id);
+
+
+--
 -- Name: index_rooms_on_convention_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4556,6 +4562,14 @@ ALTER TABLE ONLY public.signup_changes
 
 
 --
+-- Name: products fk_rails_d7453c5d85; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_rails_d7453c5d85 FOREIGN KEY (provides_ticket_type_id) REFERENCES public.ticket_types(id);
+
+
+--
 -- Name: rooms fk_rails_d7f8465d1c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4861,6 +4875,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200313212415'),
 ('20200314164542'),
 ('20200322234518'),
-('20200324163822');
+('20200324163822'),
+('20200328204324');
 
 

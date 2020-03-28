@@ -4,6 +4,7 @@ class Product < ApplicationRecord
   belongs_to :convention
   has_many :product_variants, dependent: :destroy
   has_many :order_entries, dependent: :destroy
+  belongs_to :provides_ticket_type, class_name: 'TicketType', optional: true
 
   mount_uploader :image, ProductImageUploader
   serialize :pricing_structure, ActiveModelCoder.new('PricingStructure')
@@ -11,6 +12,7 @@ class Product < ApplicationRecord
   validate :ensure_valid_payment_options
 
   scope :available, -> { where(available: true) }
+  scope :ticket_providing, -> { where.not(provides_ticket_type_id: nil) }
 
   def to_param
     "#{id}-#{name.parameterize}"
