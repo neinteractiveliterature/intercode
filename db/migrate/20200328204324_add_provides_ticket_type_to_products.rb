@@ -16,11 +16,15 @@ class AddProvidesTicketTypeToProducts < ActiveRecord::Migration[6.0]
     Product.reset_column_information
     TicketType.reset_column_information
 
-    TicketType.where(publicly_available: true).includes(:convention).find_each do |ticket_type|
+    TicketType.includes(:convention).find_each do |ticket_type|
+      pricing_schedule = ScheduledMoneyValue.new(
+        timespans: (ticket_type.pricing_schedule || {}).stringify_keys['timespans'] || []
+      )
+      next if pricing_schedule.timespans.empty?
+
       say_with_time(
         "Converting #{ticket_type.convention.name} #{ticket_type.description} to product"
       ) do
-        pricing_schedule = ticket_type.pricing_schedule
         structure = if pricing_schedule.covers_all_time? && pricing_schedule.timespans.size == 1
           PricingStructure.new(
             pricing_strategy: 'fixed', value: pricing_schedule.value_at(Time.zone.now)
@@ -31,7 +35,7 @@ class AddProvidesTicketTypeToProducts < ActiveRecord::Migration[6.0]
 
         ticket_type.providing_products.create!(
           convention: ticket_type.convention,
-          available: true,
+          available: ticket_type.publicly_available,
           name: ticket_type.description,
           description: "#{ticket_type.description} for #{ticket_type.convention.name}",
           payment_options: ['stripe'],
@@ -49,7 +53,9 @@ class AddProvidesTicketTypeToProducts < ActiveRecord::Migration[6.0]
     # true one by one
     TicketType.update_all(publicly_available: false)
 
-    Product.ticket_providing.includes(:provides_ticket_type, :convention).find_each do |product|
+    Product.ticket_providing.includes(
+      :provides_ticket_type, :convention
+    ).find_each do |product|
       say_with_time "Converting #{product.convention.name} #{product.name} to ticket type fields" do
         pricing_schedule = case product.pricing_structure.pricing_strategy
         when 'fixed' then ScheduledMoneyValue.always(product.pricing_structure.value)
@@ -57,7 +63,7 @@ class AddProvidesTicketTypeToProducts < ActiveRecord::Migration[6.0]
         end
 
         product.provides_ticket_type.update!(
-          publicly_available: true,
+          publicly_available: product.available,
           pricing_schedule: pricing_schedule
         )
 

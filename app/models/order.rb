@@ -2,7 +2,7 @@ class Order < ApplicationRecord
   STATUSES = %w[pending unpaid paid cancelled]
 
   belongs_to :user_con_profile
-  has_many :order_entries
+  has_many :order_entries, dependent: :destroy
   validates :status, inclusion: { in: STATUSES }
 
   scope :pending, -> { where(status: 'pending') }

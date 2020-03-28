@@ -2289,13 +2289,10 @@ CREATE TABLE public.tickets (
     id integer NOT NULL,
     user_con_profile_id integer,
     ticket_type_id integer,
-    charge_id character varying,
-    payment_amount_cents integer,
-    payment_amount_currency character varying,
-    payment_note text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    provided_by_event_id integer
+    provided_by_event_id integer,
+    order_entry_id bigint
 );
 
 
@@ -3965,10 +3962,10 @@ CREATE INDEX index_ticket_types_on_convention_id ON public.ticket_types USING bt
 
 
 --
--- Name: index_tickets_on_charge_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_tickets_on_order_entry_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tickets_on_charge_id ON public.tickets USING btree (charge_id);
+CREATE INDEX index_tickets_on_order_entry_id ON public.tickets USING btree (order_entry_id);
 
 
 --
@@ -4618,6 +4615,14 @@ ALTER TABLE ONLY public.signup_requests
 
 
 --
+-- Name: tickets fk_rails_f029f4cf01; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_f029f4cf01 FOREIGN KEY (order_entry_id) REFERENCES public.order_entries(id);
+
+
+--
 -- Name: ticket_types fk_rails_f0519904ee; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4876,6 +4881,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200314164542'),
 ('20200322234518'),
 ('20200324163822'),
-('20200328204324');
+('20200328204324'),
+('20200328214143');
 
 
