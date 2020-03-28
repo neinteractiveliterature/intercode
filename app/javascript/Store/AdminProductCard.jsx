@@ -18,6 +18,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import useUniqueId from '../useUniqueId';
 import { describeAdminPricingStructure } from './describePricingStructure';
 import PricingStructureInput from './PricingStructureInput';
+import buildProductInput from './buildProductInput';
 
 function duplicateProductForEditing(product) {
   return {
@@ -105,22 +106,7 @@ function AdminProductCard({
   };
 
   const saveProduct = async () => {
-    const imageInput = editingProduct.image ? { image: editingProduct.image } : {};
-    const productInput = {
-      name: editingProduct.name,
-      available: editingProduct.available,
-      description: editingProduct.description,
-      payment_options: editingProduct.payment_options,
-      pricing_structure: editingProduct.pricing_structure,
-      product_variants: sortProductVariants(editingProduct.product_variants).map((variant) => ({
-        id: variant.id,
-        name: variant.name,
-        description: variant.description,
-        override_pricing_structure: variant.override_pricing_structure,
-      })),
-      delete_variant_ids: editingProduct.delete_variant_ids,
-      ...imageInput,
-    };
+    const productInput = buildProductInput(editingProduct);
 
     if (editingProduct.id) {
       await updateProduct({

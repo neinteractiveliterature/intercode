@@ -13,7 +13,7 @@ function PricingStructureInput({ value, onChange }) {
       <button
         type="button"
         className="btn btn-link py-0"
-        onClick={() => pricingStructureModal.open({ value, onChange })}
+        onClick={() => pricingStructureModal.open({ value: (value || {}), onChange })}
       >
         <i className="fa fa-pencil" />
         <span className="sr-only">Edit</span>
