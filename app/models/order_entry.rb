@@ -2,6 +2,7 @@ class OrderEntry < ApplicationRecord
   belongs_to :order
   belongs_to :product
   belongs_to :product_variant, optional: true
+  has_many :tickets, dependent: :nullify
 
   monetize :price_per_item_cents, with_model_currency: :price_per_item_currency, allow_nil: true
 
@@ -11,16 +12,18 @@ class OrderEntry < ApplicationRecord
   validates :product_variant_id, uniqueness: { scope: [:order_id, :product_id] }
   validate :product_variant_must_belong_to_product
 
-  before_save do |order_entry|
-    price_args = { time: Time.zone.now }
+  before_create do |order_entry|
+    unless order_entry.price_per_item.present?
+      price_args = { time: order_entry.order&.paid_at || Time.zone.now }
 
-    if order_entry.product_variant
-      order_entry.price_per_item = (
-        order_entry.product_variant.override_pricing_structure.price(**price_args) ||
-        order_entry.product.pricing_structure.price(**price_args)
-      )
-    else
-      order_entry.price_per_item = order_entry.product.pricing_structure.price(**price_args)
+      if order_entry.product_variant
+        order_entry.price_per_item = (
+          order_entry.product_variant.override_pricing_structure.price(**price_args) ||
+          order_entry.product.pricing_structure.price(**price_args)
+        )
+      else
+        order_entry.price_per_item = order_entry.product.pricing_structure.price(**price_args)
+      end
     end
   end
 
