@@ -1,7 +1,7 @@
 ---
 name: Cost
 ---
-<h1>Pricing</h1>
+<h1 class='my-3'>Convention Pricing</h1>
 
 {% if convention.ended %}
   <div class="alert alert-warning">
@@ -9,30 +9,33 @@ name: Cost
   </div>
 {% endif %}
 
-<div class="d-flex flex-wrap">
-  {% for ticket_type in convention.ticket_types %}
-    {% if ticket_type.publicly_available %}
-      <section class="card m-2" style="display: inline-block; min-width: 300px;">
-        <div class="card-header">
-          {{ ticket_type.description }}
-        </div>
-        <div class="card-body">
-          <p>
-            Current price: {{ ticket_type.price }}
-            {% if ticket_type.next_price_change %}
-              <br>{{ ticket_type.next_price }} starting {{ ticket_type.next_price_change }}
-            {% endif %}
-          </p>
+<div class="row">
+  <div class="col-md-6">
+    {% for product in convention.available_products %}
+      {% if product.provides_ticket_type %}
+        {% assign price_schedule = product.pricing_structure.scheduled_value %}
+        <section class="card" >
+          <div class="card-header">
+            {{ product.name }}
+          </div>
+          <div class="card-body">
+            <p>
+              Current price: {{ product.pricing_structure.price.format }}
+              {% if price_schedule and price_schedule.next_value_change %}
+                <br>{{ price_schedule.next_value.format }} starting {{ price_schedule.next_value_change | date: "%b %d, %Y"}}
+              {% endif %}
+            </p>
 
-          <ul class="list-unstyled">
-            {% for timespan in ticket_type.pricing_schedule.timespans %}
-              <li>
-                <small><strong>{{ timespan.value }}</strong> {{ timespan.short_description_without_value }}</small>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </section>
-    {% endif %}
-  {% endfor %}
+            <ul class="list-unstyled">
+              {% for timespan in price_schedule.timespans %}
+                <li>
+                  <small><strong>{{ timespan.value }}</strong> {{ timespan.short_description_without_value }}</small>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </section>
+      {% endif %}
+    {% endfor %}
+  </div>
 </div>
