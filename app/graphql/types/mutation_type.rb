@@ -214,7 +214,6 @@ class Types::MutationType < Types::BaseObject
   field :createTicket, mutation: Mutations::CreateTicket
   field :updateTicket, mutation: Mutations::UpdateTicket
   field :deleteTicket, mutation: Mutations::DeleteTicket
-  field :purchaseTicket, mutation: Mutations::PurchaseTicket
   field :provideEventTicket, mutation: Mutations::ProvideEventTicket
   field :convertTicketToEventProvided, mutation: Mutations::ConvertTicketToEventProvided
 

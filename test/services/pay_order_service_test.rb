@@ -1,19 +1,20 @@
 require 'test_helper'
 
-class PurchaseTicketServiceTest < ActiveSupport::TestCase
+class PayOrderServiceTest < ActiveSupport::TestCase
   let(:convention) do
     create(:convention, :with_notification_templates,
       starts_at: 2.days.from_now, ends_at: 4.days.from_now)
   end
   let(:user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:ticket_type) { create(:paid_ticket_type, convention: convention) }
+  let(:order) { create(:order, user_con_profile: user_con_profile) }
   let(:stripe_helper) { StripeMock.create_test_helper }
   let(:stripe_token) { stripe_helper.generate_card_token }
 
   before { StripeMock.start }
   after { StripeMock.stop }
 
-  subject { PurchaseTicketService.new(user_con_profile, ticket_type, stripe_token) }
+  subject { PayOrderService.new(order, stripe_token) }
 
   it 'buys a ticket' do
     assert_difference('Ticket.count', 1) { subject.call! }
