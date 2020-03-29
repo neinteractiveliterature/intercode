@@ -1115,20 +1115,6 @@
           ]
         },
         {
-          "name": "charge_id",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "The ID of the charge in the underlying payment processing system",
-              "types": [
-                "String"
-              ]
-            }
-          ]
-        },
-        {
           "name": "provided_by_event",
           "docstring": "",
           "tags": [
@@ -1138,20 +1124,6 @@
               "text": "The event that provided this ticket, if applicable",
               "types": [
                 "EventDrop"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "payment_amount",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "The amount the person paid for the ticket",
-              "types": [
-                "MoneyDrop"
               ]
             }
           ]
@@ -1259,6 +1231,46 @@
               ]
             }
           ]
+        },
+        {
+          "name": "charge_id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Use order_entry for payment fields",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The ID of the charge in the underlying payment processing system",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "payment_amount",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Use order_entry for payment fields",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The amount the person paid for the ticket",
+              "types": [
+                "MoneyDrop"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1328,15 +1340,15 @@
           ]
         },
         {
-          "name": "pricing_structure",
+          "name": "provides_ticket_type",
           "docstring": "",
           "tags": [
             {
               "tag_name": "return",
               "name": null,
-              "text": "The pricing structure for this product",
+              "text": "The ticket type that this product will provide when purchased",
               "types": [
-                "PricingStructure"
+                "TicketTypeDrop"
               ]
             }
           ]
@@ -1371,6 +1383,20 @@
               "text": "The description of the product, as HTML",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "pricing_structure",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The pricing structure for this product",
+              "types": [
+                "PricingStructureDrop"
               ]
             }
           ]
@@ -2018,6 +2044,20 @@
           ]
         },
         {
+          "name": "order",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The order this entry is part of",
+              "types": [
+                "OrderDrop"
+              ]
+            }
+          ]
+        },
+        {
           "name": "price",
           "docstring": "",
           "tags": [
@@ -2189,34 +2229,6 @@
           ]
         },
         {
-          "name": "next_price_change",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "When the price of this ticket type will next change, if there is\nan upcoming price change",
-              "types": [
-                "ActiveSupport::Time"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "publicly_available",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "Whether this ticket type is publicly available for purchase",
-              "types": [
-                "Boolean"
-              ]
-            }
-          ]
-        },
-        {
           "name": "maximum_event_provided_tickets",
           "docstring": "",
           "tags": [
@@ -2226,6 +2238,20 @@
               "text": "The default number of tickets of this type events are allowed to provide",
               "types": [
                 "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "providing_products",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Products that provide this type of ticket",
+              "types": [
+                "Array<ProductDrop>"
               ]
             }
           ]
@@ -2255,6 +2281,12 @@
           "docstring": "",
           "tags": [
             {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Tickets are now provided through products",
+              "types": null
+            },
+            {
               "tag_name": "return",
               "name": null,
               "text": "The pricing schedule for this ticket type",
@@ -2265,9 +2297,35 @@
           ]
         },
         {
+          "name": "publicly_available",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Tickets are now provided through products",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether this ticket type is publicly available for purchase",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
           "name": "price",
           "docstring": "",
           "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Tickets are now provided through products.  Please use the pricing_structure object\nin the ticket type's providing product to get this information.",
+              "types": null
+            },
             {
               "tag_name": "return",
               "name": null,
@@ -2283,11 +2341,37 @@
           "docstring": "",
           "tags": [
             {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Tickets are now provided through products.  Please use the pricing_structure object\nin the ticket type's providing product to get this information.",
+              "types": null
+            },
+            {
               "tag_name": "return",
               "name": null,
               "text": "The price this ticket type will next change to, if there is an upcoming change",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "next_price_change",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Tickets are now provided through products.  Please use the pricing_structure object\nin the ticket type's providing product to get this information.",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the price of this ticket type will next change, if there is\nan upcoming price change",
+              "types": [
+                "ActiveSupport::Time"
               ]
             }
           ]
@@ -3157,7 +3241,7 @@
               "name": null,
               "text": "The pricing structure override for this variant, if present.  If\nthis is null, this variant will use the product's overall pricing\nstructure.  If it's present, this variant will use the override\npricing structure instead.",
               "types": [
-                "PricingStructure"
+                "PricingStructureDrop"
               ]
             }
           ]
@@ -3889,6 +3973,18 @@
           ]
         },
         {
+          "name": "timezone",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
           "name": "pricing_strategy",
           "docstring": "",
           "tags": [
@@ -3898,6 +3994,20 @@
               "text": "The strategy used by this pricing structure",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The current default price of this pricing structure",
+              "types": [
+                "MoneyDrop"
               ]
             }
           ]
@@ -3923,15 +4033,29 @@
           ]
         },
         {
-          "name": "price",
+          "name": "fixed_value",
           "docstring": "",
           "tags": [
             {
               "tag_name": "return",
               "name": null,
-              "text": "The current default price of this pricing structure",
+              "text": "The scheduled value associated with this pricing structure, if any",
               "types": [
-                "String"
+                "MoneyDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "scheduled_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The scheduled value associated with this pricing structure, if any",
+              "types": [
+                "ScheduledValueDrop"
               ]
             }
           ]

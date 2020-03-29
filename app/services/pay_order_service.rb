@@ -5,6 +5,7 @@ class PayOrderService < CivilService::Service
   self.result_class = Result
 
   validate :check_order_status
+  validate :check_ticket_provider_validity
 
   attr_reader :order, :stripe_token
 
@@ -27,6 +28,7 @@ class PayOrderService < CivilService::Service
     Orders::PurchasedNotifier.new(order: order).deliver_now
 
     provide_tickets
+
     success
   end
 
@@ -69,10 +71,13 @@ class PayOrderService < CivilService::Service
     @convention ||= order.user_con_profile.convention
   end
 
-  def provide_tickets
-    order.order_entries.each do |order_entry|
-      next unless order_entry.product.provides_ticket_type
-      ProvideOrderEntryTicketService.new(order_entry).call!
+  def ticket_providers
+    @ticket_providers ||= order.order_entries.flat_map do |order_entry|
+      if order_entry.product.provides_ticket_type
+        [ProvideOrderEntryTicketService.new(order_entry)]
+      else
+        []
+      end
     end
   end
 
@@ -80,5 +85,12 @@ class PayOrderService < CivilService::Service
     return if order.status == 'pending' || order.status == 'unpaid'
 
     errors.add(:base, "This order is already #{order.status}.")
+  end
+
+  def check_ticket_provider_validity
+    ticket_providers.each do |provider|
+      next if provider.valid?
+      errors.merge!(provider.errors)
+    end
   end
 end
