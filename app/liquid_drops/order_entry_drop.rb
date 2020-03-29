@@ -5,6 +5,8 @@ class OrderEntryDrop < Liquid::Drop
 
   # @!method id
   #   @return [Integer] The numeric database id of this order entry
+  # @!method order
+  #   @return [OrderDrop] The order this entry is part of
   # @!method price
   #   @return [MoneyDrop] The total price of this entry (price_per_item * quantity)
   # @!method price_per_item
@@ -17,7 +19,8 @@ class OrderEntryDrop < Liquid::Drop
   #   @return [ProductVariantDrop] The product variant that was ordered, if applicable
   # @!method describe_products
   #   @return [String] A text description of the product(s) ordered in this entry
-  delegate :id, :price, :price_per_item, :quantity, :product, :product_variant, :describe_products,
+  delegate :id, :order, :price, :price_per_item, :quantity, :product,
+    :product_variant, :describe_products,
     to: :order_entry
 
   # @api
