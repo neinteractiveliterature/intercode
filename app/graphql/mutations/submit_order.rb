@@ -17,7 +17,7 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
       if result.failure?
         err = CivilService::ServiceFailure.new(service, result)
         raise GraphQL::ExecutionError, err.message if result.card_error
-        raise err
+        raise err, err.message, err.backtrace
       end
     else
       order.update!(status: 'unpaid', submitted_at: Time.zone.now)

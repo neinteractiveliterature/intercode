@@ -139,7 +139,7 @@ function ProductOrderForm({ productId }) {
     <div className="card bg-light">
       <div className="card-body">
         {renderVariantSelect()}
-        {renderQuantity()}
+        {(!data.product.provides_ticket_type) && renderQuantity()}
         <div className="row align-items-baseline">
           <div className="col-6">
             {renderTotalAmount()}

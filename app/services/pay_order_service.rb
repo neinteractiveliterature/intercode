@@ -25,6 +25,8 @@ class PayOrderService < CivilService::Service
 
     update_order(charge)
     Orders::PurchasedNotifier.new(order: order).deliver_now
+
+    provide_tickets
     success
   end
 
@@ -65,6 +67,13 @@ class PayOrderService < CivilService::Service
 
   def convention
     @convention ||= order.user_con_profile.convention
+  end
+
+  def provide_tickets
+    order.order_entries.each do |order_entry|
+      next unless order_entry.product.provides_ticket_type
+      ProvideOrderEntryTicketService.new(order_entry).call!
+    end
   end
 
   def check_order_status
