@@ -5,8 +5,9 @@ class Types::ProductType < Types::BaseObject
   field :name, String, null: false
   field :description, String, null: true
   field :description_html, String, null: true
+  field :provides_ticket_type, Types::TicketTypeType, null: true
 
-  association_loaders Product, :product_variants
+  association_loaders Product, :product_variants, :provides_ticket_type
 
   def description_html
     return unless object.description_template

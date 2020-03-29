@@ -12,9 +12,9 @@ class ProductDrop < Liquid::Drop
   # @!method payment_options
   #   @return [Array<String>] The purchase methods allowed for this product (e.g. stripe,
   #                           pay_at_convention)
-  # @!method pricing_structure
-  #   @return [PricingStructure] The pricing structure for this product
-  delegate :available, :name, :payment_options, :pricing_structure, to: :product
+  # @!method provides_ticket_type
+  #   @return [TicketTypeDrop] The ticket type that this product will provide when purchased
+  delegate :available, :name, :payment_options, :provides_ticket_type, to: :product
 
   # @api
   def initialize(product)
@@ -24,6 +24,11 @@ class ProductDrop < Liquid::Drop
   # @return [String] The description of the product, as HTML
   def description
     product.description_template&.render(self)
+  end
+
+  # @return [PricingStructureDrop] The pricing structure for this product
+  def pricing_structure
+    PricingStructureDrop.new(product.pricing_structure, product.convention.timezone)
   end
 
   # @return [String] The URL of the product image, if present

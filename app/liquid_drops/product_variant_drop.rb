@@ -29,4 +29,15 @@ class ProductVariantDrop < Liquid::Drop
     return unless product_variant.image
     product_variant.image.url
   end
+
+  # @return [PricingStructureDrop] The pricing structure override for this variant, if present.  If
+  #                                this is null, this variant will use the product's overall pricing
+  #                                structure.  If it's present, this variant will use the override
+  #                                pricing structure instead.
+  def override_pricing_structure
+    PricingStructureDrop.new(
+      product_variant.override_pricing_structure,
+      product.convention.timezone
+    )
+  end
 end

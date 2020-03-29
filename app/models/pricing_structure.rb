@@ -39,7 +39,7 @@ class PricingStructure
   end
 
   def to_liquid
-    PricingStructureDrop.new(self)
+    PricingStructureDrop.new(self, Time.zone)
   end
 
   private
