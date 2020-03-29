@@ -27,7 +27,7 @@ class PayOrderService < CivilService::Service
     update_order(charge)
     Orders::PurchasedNotifier.new(order: order).deliver_now
 
-    provide_tickets
+    ticket_providers.each(&:call!)
 
     success
   end
