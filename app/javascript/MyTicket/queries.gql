@@ -1,8 +1,19 @@
+#import '../Store/pricingStructureFields.gql'
+
 query TicketPurchaseFormQuery {
   convention {
     id
     name
     ticket_name
+
+    products(only_ticket_providing: true, only_available: true) {
+      id
+      name
+
+      pricing_structure {
+        ...PricingStructureFields
+      }
+    }
 
     ticket_types {
       id

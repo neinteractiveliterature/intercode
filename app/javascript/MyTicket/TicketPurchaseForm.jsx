@@ -1,66 +1,35 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap4-modal';
-import { CardElement, injectStripe } from 'react-stripe-elements';
+import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { capitalize } from 'inflected';
 
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
-import formatMoney from '../formatMoney';
-import { LazyStripeElementsWrapper } from '../LazyStripe';
-import LoadingIndicator from '../LoadingIndicator';
-import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
-import { PurchaseTicket } from './mutations.gql';
 import { TicketPurchaseFormQuery } from './queries.gql';
-import useAsyncFunction from '../useAsyncFunction';
-import { findCurrentValue } from '../ScheduledValueUtils';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { describeUserPricingStructure } from '../Store/describePricingStructure';
+import ProductOrderForm from '../Store/ProductOrderForm';
 
-function TicketPurchaseForm({ stripe }) {
+function TicketPurchaseForm() {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error: queryError } = useQuery(TicketPurchaseFormQuery);
-  const availableTicketTypes = (queryError || loading
-    ? []
-    : data.convention.ticket_types.filter((ticketType) => ticketType.publicly_available));
-  const [ticketType, setTicketType] = useState(null);
-  const [name, setName] = useState(((data || {}).myProfile || {}).name_without_nickname || '');
-  const [ticket, setTicket] = useState(null);
-  const [purchaseTicket] = useMutation(PurchaseTicket);
+  const availableProducts = (queryError || loading ? [] : data.convention.products);
+  const [product, setProduct] = useState(null);
 
   useEffect(
     () => {
       if (!loading) {
-        if (availableTicketTypes.length === 1) {
-          setTicketType(availableTicketTypes[0]);
+        if (availableProducts.length === 1) {
+          setProduct(availableProducts[0]);
         }
       }
     },
-    [availableTicketTypes, loading],
+    [availableProducts, loading],
   );
-
-  const [submitPayment, error, submitting] = useAsyncFunction(useCallback(
-    async () => {
-      const { token, error: stripeError } = await stripe.createToken({ name });
-
-      if (stripeError) {
-        throw stripeError;
-      }
-
-      const purchaseResponse = await purchaseTicket({
-        variables: {
-          ticketTypeId: ticketType.id,
-          stripeToken: token.id,
-        },
-      });
-      setTicket(purchaseResponse.data.purchaseTicket.ticket);
-    },
-    [purchaseTicket, ticketType, name, stripe],
-  ));
 
   usePageTitle(useValueUnless(() => `Buy a ${data.convention.ticket_name}`, queryError || loading));
 
@@ -76,89 +45,40 @@ function TicketPurchaseForm({ stripe }) {
     return <Redirect to="/" />;
   }
 
-  const disabled = (!ticketType || submitting);
-
-  const renderTicketTypeSelect = () => (
+  const renderProductSelect = () => (
     <div className="btn-group-vertical btn-group-toggle w-100" role="group" aria-label={`${capitalize(data.convention.ticket_name)} type`}>
-      {availableTicketTypes.map((type) => {
-        const { pricing_schedule: pricingSchedule, id, description } = type;
-        const currentPrice = findCurrentValue(pricingSchedule);
+      {availableProducts.map((availableProduct) => {
+        const { pricing_structure: pricingStructure, id, name: productName } = availableProduct;
         return (
           <label
             className={classNames(
               'btn text-left btn-outline-primary',
               {
-                active: ticketType?.id === id,
+                active: product?.id === id,
               },
             )}
-            onClick={() => { setTicketType(type); }}
+            onClick={() => { setProduct(availableProduct); }}
           >
             <input
               type="radio"
-              name="ticket_type"
-              checked={ticketType?.id === id}
-              onChange={() => { setTicketType(type); }}
-              aria-labelledby={`ticket-type-label-${id}`}
+              name="product"
+              checked={product?.id === id}
+              onChange={() => { setProduct(availableProduct); }}
+              aria-labelledby={`product-label-${id}`}
             />
-            <div className="d-flex align-items-center" id={`ticket-type-label-${id}`}>
+            <div className="d-flex align-items-center" id={`product-label-${id}`}>
               <div className="flex-grow-1">
-                <strong>{description}</strong>
+                <strong>{productName}</strong>
                 {' '}
                 &mdash;
                 {' '}
-                {formatMoney(currentPrice)}
+                {describeUserPricingStructure(pricingStructure, timezoneName)}
               </div>
-              <Checkmark value={(ticketType || {}).id === id} className="ml-2" />
+              <Checkmark value={(product || {}).id === id} className="ml-2" />
             </div>
           </label>
         );
       })}
-    </div>
-  );
-
-  const renderPaymentSection = () => (
-    <div>
-      <hr />
-      <ErrorDisplay graphQLError={error} />
-
-      <BootstrapFormInput
-        name="name"
-        label="Name"
-        value={name}
-        onTextChange={setName}
-      />
-
-      <div>
-        <CardElement
-          className="form-control mb-4"
-          disabled={disabled || submitting}
-          style={{
-            base: {
-              lineHeight: 1.5,
-              fontSize: '16px',
-            },
-          }}
-        />
-
-        <div className="d-flex justify-content-end align-items-center">
-          <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
-          <button
-            className="btn btn-primary"
-            onClick={submitPayment}
-            disabled={disabled}
-            type="submit"
-          >
-            {`Buy ${data.convention.ticket_name} for `}
-            {formatMoney(findCurrentValue(ticketType.pricing_schedule))}
-            {submitting && (
-              <>
-                {' '}
-                <LoadingIndicator />
-              </>
-            )}
-          </button>
-        </div>
-      </div>
     </div>
   );
 
@@ -173,41 +93,14 @@ function TicketPurchaseForm({ stripe }) {
         {' '}
         {data.convention.name}
       </h1>
-      {renderTicketTypeSelect()}
-      {ticketType && renderPaymentSection()}
-      <Modal visible={ticket != null}>
-        <div className="modal-header"><h3>Thank you!</h3></div>
-        <div className="modal-body">
-          {
-            ticket
-              ? (
-                <div>
-                  Your purchase of a
-                  {' '}
-                  {ticket.ticket_type.description}
-                  {' '}
-                  for
-                  {' '}
-                  {formatMoney(ticket.payment_amount)}
-                  {' '}
-                  was successful.  We&apos;ve emailed you a receipt.
-                </div>
-              )
-              : null
-          }
+      {renderProductSelect()}
+      {product && (
+        <div className="mt-4">
+          <ProductOrderForm productId={product.id} />
         </div>
-        <div className="modal-footer">
-          <a className="btn btn-primary" href="/">OK</a>
-        </div>
-      </Modal>
+      )}
     </>
   );
 }
 
-TicketPurchaseForm.propTypes = {
-  stripe: PropTypes.shape({
-    createToken: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-export default LazyStripeElementsWrapper(injectStripe(TicketPurchaseForm));
+export default TicketPurchaseForm;
