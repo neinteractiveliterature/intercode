@@ -60,8 +60,10 @@ function TicketAdminControls({ convention, userConProfile }) {
 
   const buttons = [];
   const { currentAbility } = data;
+  const { ticket } = userConProfile;
+  const chargeId = ticket?.order_entry?.order?.charge_id;
 
-  if (userConProfile.ticket && currentAbility.can_update_ticket) {
+  if (ticket && currentAbility.can_update_ticket) {
     buttons.push(
       <Link to={`/user_con_profiles/${userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
         Edit
@@ -71,7 +73,7 @@ function TicketAdminControls({ convention, userConProfile }) {
     );
 
     if (currentAbility.can_delete_ticket) {
-      if (!userConProfile.ticket.provided_by_event) {
+      if (!ticket.provided_by_event) {
         buttons.push(
           <>
             <button
@@ -92,7 +94,7 @@ function TicketAdminControls({ convention, userConProfile }) {
         );
       }
 
-      if (userConProfile.ticket.charge_id) {
+      if (chargeId) {
         buttons.push(
           <button
             className="btn btn-warning mr-2"
@@ -197,13 +199,13 @@ function TicketAdminSection({ convention, userConProfile }) {
         )}
 
         <dt className="col-md-3">Paid</dt>
-        <dd className="col-md-9">{formatMoney(ticket.payment_amount) || '0'}</dd>
+        <dd className="col-md-9">{formatMoney(ticket.order_entry?.price_per_item) || '0'}</dd>
 
         <dt className="col-md-3">Transaction ID</dt>
-        <dd className="col-md-9">{ticket.charge_id}</dd>
+        <dd className="col-md-9">{ticket.order_entry?.order?.charge_id}</dd>
 
         <dt className="col-md-3">Payment note</dt>
-        <dd className="col-md-9">{ticket.payment_note}</dd>
+        <dd className="col-md-9">{ticket.order_entry?.order?.payment_note}</dd>
 
         <dt className="col-md-3">Created</dt>
         <dd className="col-md-9">

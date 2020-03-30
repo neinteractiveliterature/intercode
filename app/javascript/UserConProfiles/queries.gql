@@ -46,14 +46,22 @@ query MyProfileQuery {
 
 fragment UserConProfileAdminTicketFields on Ticket {
   id
-  charge_id
-  payment_note
   created_at
   updated_at
 
-  payment_amount {
-    fractional
-    currency_code
+  order_entry {
+    id
+
+    order {
+      id
+      charge_id
+      payment_note
+    }
+
+    price_per_item {
+      fractional
+      currency_code
+    }
   }
 
   ticket_type {
@@ -198,9 +206,11 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
           id
           updated_at
 
-          payment_amount {
-            fractional
-            currency_code
+          order_entry {
+            price_per_item {
+              fractional
+              currency_code
+            }
           }
 
           ticket_type {
