@@ -53,7 +53,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_record-postgres-constraints (0.2.0)
+    active_record-postgres-constraints (0.2.1)
       pg
       rails (>= 5.0, <= 7.0)
     activejob (6.0.2.2)
