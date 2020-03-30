@@ -35,7 +35,7 @@
     "apollo-link": "^1.2.11",
     "apollo-link-error": "^1.1.12",
     "apollo-link-http": "^1.5.16",
-    "apollo-upload-client": "^12.1.0",
+    "apollo-upload-client": "^13.0.0",
     "array-to-sentence": "^2.0.0",
     "autoprefixer": "^9.7.5",
     "babel-loader": "^8.1.0",
