@@ -32,7 +32,7 @@ gem 'cadmus_navbar', '~> 0.1.0'
 gem 'liquid-md5'
 
 # Extracted from this app!  Values that change over time based on a schedule
-gem 'scheduled_value', '~> 1.2.2'
+gem 'scheduled_value', '~> 1.3.0'
 
 # Also extracted from this app!  Service objects for Rails apps
 gem 'civil_service', '~> 2.2.1'
