@@ -30,7 +30,7 @@ class Types::TicketTypeType < Types::BaseObject
   end
 
   field :pricing_schedule, Types::ScheduledMoneyValueType,
-    null: true, deprecation_reason: 'Tickets are now provided through products'
+    null: false, deprecation_reason: 'Tickets are now provided through products'
   def pricing_schedule
     pricing_schedule_for_ticket_type(object)
   end

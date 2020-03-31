@@ -1,0 +1,22 @@
+fragment AdminOrderFieldsFragment on Order {
+  id
+  status
+  submitted_at
+  charge_id
+  payment_note
+
+  user_con_profile {
+    id
+    name_without_nickname
+  }
+
+  total_price {
+    fractional
+    currency_code
+  }
+
+  order_entries {
+    id
+    describe_products
+  }
+}
