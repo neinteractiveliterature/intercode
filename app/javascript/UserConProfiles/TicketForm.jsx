@@ -2,54 +2,34 @@ import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize } from 'inflected';
 
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import AdminOrderModal from '../Store/AdminOrderModal';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import ErrorDisplay from '../ErrorDisplay';
 import EventSelect from '../BuiltInFormControls/EventSelect';
 import sortTicketTypes from '../TicketTypeAdmin/sortTicketTypes';
 import useAsyncFunction from '../useAsyncFunction';
-import { useTransformedState, Transforms } from '../ComposableFormUtils';
-import useUniqueId from '../useUniqueId';
+import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
+import useModal from '../ModalDialogs/useModal';
+import formatMoney from '../formatMoney';
 
 function TicketForm({
   initialTicket, convention, onSubmit, submitCaption,
 }) {
-  const [ticketTypeId, setTicketTypeId] = useState((initialTicket.ticket_type || {}).id);
-  const [paymentAmount, setPaymentAmount] = useTransformedState(
-    initialTicket.payment_amount.fractional / 100.0,
-    Transforms.float,
-  );
-  const [paymentNote, setPaymentNote] = useState(initialTicket.payment_note);
+  const orderModal = useModal();
+  const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);
   const [providedByEvent, setProvidedByEvent] = useState(initialTicket.provided_by_event);
 
   const sortedTicketTypes = useMemo(
     () => sortTicketTypes(convention.ticket_types),
     [convention.ticket_types],
   );
-  const paymentAmountInputId = useUniqueId('payment-amount-');
-  const eventSelectId = useUniqueId('provided-by-event-');
-
-  const paymentAmountInput = useMemo(
-    () => {
-      if (paymentAmount == null) {
-        return null;
-      }
-      return {
-        fractional: Math.floor(paymentAmount * 100),
-        currency_code: 'USD',
-      };
-    },
-    [paymentAmount],
-  );
 
   const ticketInput = useMemo(
     () => ({
       ticket_type_id: Number.parseInt(ticketTypeId, 10),
-      payment_amount: paymentAmountInput,
-      payment_note: paymentNote,
-      provided_by_event_id: (providedByEvent || {}).id,
+      provided_by_event_id: providedByEvent?.id,
     }),
-    [paymentAmountInput, paymentNote, providedByEvent, ticketTypeId],
+    [providedByEvent, ticketTypeId],
   );
 
   const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
@@ -69,54 +49,62 @@ function TicketForm({
         value={ticketTypeId}
         onValueChange={setTicketTypeId}
       >
-        <option />
+        <option aria-label="Blank placeholder option" />
         {sortedTicketTypes.map(({ id, description }) => (
           <option value={id} key={id}>{description}</option>
         ))}
       </BootstrapFormSelect>
 
-      <div className="form-group">
-        <label htmlFor={paymentAmountInputId}>
-          Payment amount
-        </label>
-        <div className="input-group">
-          <div className="input-group-prepend">
-            <span className="input-group-text">
-              $
-            </span>
-          </div>
-          <input
-            id={paymentAmountInputId}
-            className="form-control"
-            type="number"
-            step="0.01"
-            value={paymentAmount}
-            onChange={(event) => { setPaymentAmount(event.target.value); }}
+      <FormGroupWithLabel label="Provided by event (if applicable)">
+        {(id) => (
+          <EventSelect
+            inputId={id}
+            value={providedByEvent}
+            onChange={setProvidedByEvent}
           />
+        )}
+      </FormGroupWithLabel>
+
+      <div className="card mb-4">
+        <div className="card-header">Order information</div>
+
+        <div className="card-body">
+          {initialTicket.order_entry
+            ? (
+              <>
+                <dl className="row">
+                  <dt className="col-md-3">Order ID</dt>
+                  <dd className="col-md-9">{initialTicket.order_entry.order.id}</dd>
+
+                  <dt className="col-md-3">
+                    {capitalize(convention.ticket_name)}
+                    {' '}
+                    price
+                  </dt>
+                  <dd className="col-md-9">
+                    {formatMoney(initialTicket.order_entry.price_per_item)}
+                  </dd>
+                </dl>
+
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() => orderModal.open({ order: initialTicket.order_entry.order })}
+                  type="button"
+                >
+                  Edit order
+                </button>
+              </>
+            )
+            : 'No associated order'}
         </div>
       </div>
-
-      <BootstrapFormInput
-        label="Payment note"
-        value={paymentNote}
-        onTextChange={setPaymentNote}
-      />
-
-      <div className="form-group">
-        <label htmlFor={eventSelectId}>
-          Provided by event (if applicable)
-        </label>
-        <EventSelect
-          inputId={eventSelectId}
-          value={providedByEvent}
-          onChange={setProvidedByEvent}
-        />
-      </div>
+      <AdminOrderModal order={orderModal.state?.order} closeModal={orderModal.close} />
 
       <ErrorDisplay graphQLError={submitError} />
 
       <input
         type="submit"
+        aria-label={submitCaption}
         value={submitCaption}
         className="btn btn-primary"
         disabled={submitInProgress}
@@ -134,10 +122,6 @@ TicketForm.propTypes = {
     ticket_type: PropTypes.shape({
       id: PropTypes.number.isRequired,
     }),
-    payment_amount: PropTypes.shape({
-      fractional: PropTypes.number.isRequired,
-    }).isRequired,
-    payment_note: PropTypes.string.isRequired,
     provided_by_event: PropTypes.shape({
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,

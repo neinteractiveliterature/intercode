@@ -8,7 +8,7 @@ module DeprecatedTicketApiCompat
       .select(&:available)
       .map(&:pricing_structure)
       .first
-    return nil unless pricing_structure
+    return ScheduledMoneyValue.new(timespans: []) unless pricing_structure
 
     coerce_pricing_structure_to_scheduled_value(pricing_structure)
   end

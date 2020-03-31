@@ -1,3 +1,5 @@
+#import '../Store/orderFields.gql'
+
 fragment UserConProfileFields on UserConProfile {
   id
   name
@@ -53,9 +55,7 @@ fragment UserConProfileAdminTicketFields on Ticket {
     id
 
     order {
-      id
-      charge_id
-      payment_note
+      ...AdminOrderFieldsFragment
     }
 
     price_per_item {
