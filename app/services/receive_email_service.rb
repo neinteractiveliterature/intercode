@@ -153,7 +153,7 @@ class ReceiveEmailService < CivilService::Service
       },
       bounced_recipient_info_list: [
         {
-          recipient: recipient.to_s,
+          recipient: recipient.address,
           bounce_type: 'DoesNotExist'
         }
       ]
