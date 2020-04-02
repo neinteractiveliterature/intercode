@@ -111,7 +111,7 @@
     "react-router-dom": "^5.1.2",
     "react-select": "^3.1.0",
     "react-select-fast-filter-options": "^0.2.3",
-    "react-stripe-elements": "^6.1.0",
+    "react-stripe-elements": "^6.1.1",
     "react-table": "6.10.3",
     "react-transition-group": "^4.3.0",
     "react-waypoint": "^9.0.2",
