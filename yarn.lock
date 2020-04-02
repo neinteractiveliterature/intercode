@@ -9862,10 +9862,10 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
-react-stripe-elements@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-6.1.0.tgz#487ba92eca05b58c5b005058c055793e97fe28ff"
-  integrity sha512-AyZw2Qx6VmHlrlpjLKiX7qRbUj+ncwixCThx+SgBq9hdEhCxIPUdX0QMcPAttY3HK8soL/cZaY1oe2SPTMLNcQ==
+react-stripe-elements@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-6.1.1.tgz#94fca1afc5d9497d9443020b7aed0527e1174893"
+  integrity sha512-/ZIYuv3bjeDnCSruKL7TMh+C+Ltrz/p0o1jyveLXeG4pSyB5Dv+ybehfx0dIZV4Kd0jXTDc86GU7eCHBzmeLgQ==
   dependencies:
     prop-types "15.7.2"
 
