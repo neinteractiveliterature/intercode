@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import formatMoney from '../formatMoney';
 import { parseFloatOrNull } from '../ComposableFormUtils';
 
-function MoneyInput({ value, onChange, id }) {
+const MoneyInput = React.forwardRef(({
+  value, onChange, appendContent, inputGroupClassName, ...inputProps
+}, ref) => {
   const [inputValue, setInputValue] = useState(formatMoney(value, false));
   const inputChanged = (event) => {
     const newValue = event.target.value;
@@ -19,7 +21,7 @@ function MoneyInput({ value, onChange, id }) {
   };
 
   return (
-    <div className="input-group">
+    <div className={inputGroupClassName || 'input-group'}>
       <div className="input-group-prepend">
         <span className="input-group-text">$</span>
       </div>
@@ -29,11 +31,15 @@ function MoneyInput({ value, onChange, id }) {
         className="form-control"
         value={inputValue}
         onChange={inputChanged}
-        id={id}
+        ref={ref}
+        {...inputProps}
       />
+      {appendContent && (
+        <div className="input-group-append">{appendContent}</div>
+      )}
     </div>
   );
-}
+});
 
 MoneyInput.propTypes = {
   value: PropTypes.shape({
@@ -41,12 +47,14 @@ MoneyInput.propTypes = {
     currency_code: PropTypes.string.isRequired,
   }),
   onChange: PropTypes.func.isRequired,
-  id: PropTypes.string,
+  appendContent: PropTypes.node,
+  inputGroupClassName: PropTypes.string,
 };
 
 MoneyInput.defaultProps = {
   value: null,
-  id: null,
+  appendContent: null,
+  inputGroupClassName: null,
 };
 
 export default MoneyInput;
