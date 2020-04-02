@@ -33,8 +33,11 @@ function AdminProductVariantEditRow({
           className="d-flex align-items-start"
           value={variant.description || ''}
           onChange={updater.description}
-          renderInput={({ value, onChange }) => (
-            <LiquidInput value={value} onChange={onChange} className="col" />
+          renderInput={({ buttons, inputProps: { value, onChange } }) => (
+            <>
+              <LiquidInput value={value} onChange={onChange} className="col" />
+              {buttons}
+            </>
           )}
         />
       </td>

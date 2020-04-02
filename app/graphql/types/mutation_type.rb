@@ -134,6 +134,7 @@ class Types::MutationType < Types::BaseObject
   ### OrderEntry
 
   field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder
+  field :createOrderEntry, mutation: Mutations::CreateOrderEntry
   field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry
   field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry
 

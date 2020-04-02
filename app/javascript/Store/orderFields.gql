@@ -15,8 +15,29 @@ fragment AdminOrderFieldsFragment on Order {
     currency_code
   }
 
+  payment_amount {
+    fractional
+    currency_code
+  }
+
   order_entries {
     id
+    quantity
     describe_products
+
+    product {
+      id
+      name
+    }
+
+    product_variant {
+      id
+      name
+    }
+
+    price_per_item {
+      fractional
+      currency_code
+    }
   }
 }

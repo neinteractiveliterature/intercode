@@ -5,12 +5,13 @@ import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import { useMutation } from '@apollo/react-hooks';
 
-import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { MarkOrderPaid, AdminUpdateOrder, CancelOrder } from './mutations.gql';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
+import AdminOrderEntriesTable from './AdminOrderEntriesTable';
+import InPlaceMoneyEditor from './InPlaceMoneyEditor';
 
 function AdminOrderModal({ order, closeModal }) {
   const { timezoneName } = useContext(AppRootContext);
@@ -120,25 +121,29 @@ function AdminOrderModal({ order, closeModal }) {
       return null;
     }
 
-    const items = order.order_entries.map((orderEntry) => (
-      <li key={orderEntry.id}>
-        {orderEntry.describe_products}
-      </li>
-    ));
-
     return (
       <div>
         <dl className="row m-0">
           <dt className="col-md-3">Customer name</dt>
           <dd className="col-md-9">{order.user_con_profile.name_without_nickname}</dd>
 
-          <dt className="col-md-3">Products</dt>
+          <dt className="col-md-3">Payment amount</dt>
           <dd className="col-md-9">
-            <ul className="list-unstyled m-0">{items}</ul>
+            <InPlaceMoneyEditor
+              value={order.payment_amount}
+              onChange={(value) => updateOrder({
+                variables: {
+                  id: order.id,
+                  order: {
+                    payment_amount: {
+                      fractional: value.fractional,
+                      currency_code: value.currency_code,
+                    },
+                  },
+                },
+              })}
+            />
           </dd>
-
-          <dt className="col-md-3">Total price</dt>
-          <dd className="col-md-9">{formatMoney(order.total_price)}</dd>
 
           <dt className="col-md-3">Order status</dt>
           <dd className="col-md-9">
@@ -159,22 +164,31 @@ function AdminOrderModal({ order, closeModal }) {
           <dd className="col-md-9">
             <InPlaceEditor
               value={order.payment_note || ''}
-              renderInput={({ onChange, ...inputProps }) => (
-                <textarea
-                  className="form-control col mr-1"
-                  onChange={(event) => { onChange(event.target.value); }}
-                  {...inputProps}
-                />
+              renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
+                <>
+                  <textarea
+                    className="form-control col mr-1"
+                    onChange={(event) => { onChange(event.target.value); }}
+                    {...inputProps}
+                  />
+                  {buttons}
+                </>
               )}
               onChange={(value) => updateOrder({
                 variables: {
-                  orderId: order.id,
-                  paymentNote: value,
+                  id: order.id,
+                  order: {
+                    payment_note: value,
+                  },
                 },
               })}
             />
           </dd>
         </dl>
+
+        <section className="mt-4">
+          <AdminOrderEntriesTable order={order} />
+        </section>
       </div>
     );
   };
@@ -210,6 +224,7 @@ AdminOrderModal.propTypes = {
       id: PropTypes.number.isRequired,
     })).isRequired,
     total_price: PropTypes.shape({}),
+    payment_amount: PropTypes.shape({}),
     paid_at: PropTypes.string,
     payment_note: PropTypes.string,
   }),
