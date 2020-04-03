@@ -9,8 +9,8 @@ mutation MarkOrderPaid($orderId: Int!) {
   }
 }
 
-mutation CancelOrder($orderId: Int!) {
-  cancelOrder(input: { id: $orderId }) {
+mutation CancelOrder($orderId: Int!, $skipRefund: Boolean) {
+  cancelOrder(input: { id: $orderId, skip_refund: $skipRefund }) {
     order {
       id
       ...AdminOrderFieldsFragment

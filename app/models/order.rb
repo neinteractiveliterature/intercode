@@ -4,6 +4,7 @@ class Order < ApplicationRecord
   belongs_to :user_con_profile
   has_many :order_entries, dependent: :destroy
   validates :status, inclusion: { in: STATUSES }
+  has_many :tickets, through: :order_entries
 
   scope :pending, -> { where(status: 'pending') }
   scope :completed, -> { where(status: %w[unpaid paid]) }
