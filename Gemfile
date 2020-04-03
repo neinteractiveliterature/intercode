@@ -35,7 +35,7 @@ gem 'liquid-md5'
 gem 'scheduled_value', '~> 1.3.0'
 
 # Also extracted from this app!  Service objects for Rails apps
-gem 'civil_service', '~> 2.2.1'
+gem 'civil_service', '~> 2.3.0'
 
 # File uploading
 gem 'carrierwave', '~> 2.1.0'
@@ -75,7 +75,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.32.0'
+gem 'twilio-ruby', '~> 5.33.0'
 gem 'phonelib'
 
 # Background workers and scheduling
