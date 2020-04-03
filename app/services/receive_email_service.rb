@@ -105,16 +105,17 @@ class ReceiveEmailService < CivilService::Service
   end
 
   def transform_email_for_forwarding(original_recipient, new_recipients)
-    from_addresses = email.from.map do |from|
-      address = Mail::Address.new(from)
+    from_addresses = email.from.map { |from| EmailRoute.parse_address(from) }.compact
+
+    transformed_from_addresses = from_addresses.map do |address|
       address.display_name = "#{address.display_name || address.address} via #{original_recipient.address}"
       address.address = original_recipient.address
       address
     end
 
     forward_message = email.dup
-    forward_message.reply_to = email.from
-    forward_message.from = from_addresses.map(&:to_s)
+    forward_message.reply_to = from_addresses.map(&:to_s)
+    forward_message.from = transformed_from_addresses.map(&:to_s)
     forward_message.to = new_recipients
     forward_message.header['X-Intercode-Original-Return-Path'] = forward_message.header['Return-Path']
     forward_message.header['Return-Path'] = "bounces@#{mailer_host}"

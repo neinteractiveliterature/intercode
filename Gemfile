@@ -35,7 +35,7 @@ gem 'liquid-md5'
 gem 'scheduled_value', '~> 1.3.0'
 
 # Also extracted from this app!  Service objects for Rails apps
-gem 'civil_service', '~> 2.2.1'
+gem 'civil_service', '~> 2.3.0'
 
 # File uploading
 gem 'carrierwave', '~> 2.1.0'
