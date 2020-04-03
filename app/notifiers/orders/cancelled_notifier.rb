@@ -4,7 +4,7 @@ class Orders::CancelledNotifier < Notifier
   def initialize(order:, refund_id:)
     @order = order
     @refund_id = refund_id
-    super(convention: order.user_con_profile.convention, event_key: 'orders/purchased')
+    super(convention: order.user_con_profile.convention, event_key: 'orders/cancelled')
   end
 
   def liquid_assigns
