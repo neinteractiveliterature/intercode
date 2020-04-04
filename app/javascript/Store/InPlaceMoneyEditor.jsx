@@ -5,11 +5,13 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import MoneyInput from './MoneyInput';
 import formatMoney from '../formatMoney';
 
-function InPlaceMoneyEditor({ value, ...props }) {
+function InPlaceMoneyEditor({ value, children, ...props }) {
   return (
     <InPlaceEditor
       value={value}
-      renderInput={({ commitEditing, cancelEditing, inputProps }) => (
+      renderInput={({
+        commitEditing, cancelEditing, inputProps, committing,
+      }) => (
         <MoneyInput
           {...inputProps}
           inputGroupClassName="input-group input-group-sm"
@@ -21,6 +23,7 @@ function InPlaceMoneyEditor({ value, ...props }) {
                 className="btn btn-sm btn-outline-secondary"
                 onClick={cancelEditing}
                 aria-label="Cancel editing"
+                disabled={committing}
               >
                 <i className="fa fa-times" />
               </button>
@@ -29,6 +32,7 @@ function InPlaceMoneyEditor({ value, ...props }) {
                 className="btn btn-sm btn-primary"
                 onClick={commitEditing}
                 aria-label="Commit changes"
+                disabled={committing}
               >
                 <i className="fa fa-check" />
               </button>
@@ -38,17 +42,19 @@ function InPlaceMoneyEditor({ value, ...props }) {
       )}
       {...props}
     >
-      {formatMoney(value)}
+      {children ?? formatMoney(value)}
     </InPlaceEditor>
   );
 }
 
 InPlaceMoneyEditor.propTypes = {
   value: PropTypes.shape({}),
+  children: PropTypes.node,
 };
 
 InPlaceMoneyEditor.defaultProps = {
   value: null,
+  children: null,
 };
 
 export default InPlaceMoneyEditor;

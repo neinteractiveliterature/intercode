@@ -1,10 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
-import AdminOrderModal from './AdminOrderModal';
 import { AdminOrdersQuery } from './queries.gql';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -12,8 +11,10 @@ import MoneyCell from '../Tables/MoneyCell';
 import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../usePageTitle';
-import AppRootContext from '../AppRootContext';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
+import useModal from '../ModalDialogs/useModal';
+import EditOrderModal from './EditOrderModal';
+import NewOrderModal from './NewOrderModal';
 
 const fieldFilterCodecs = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -91,9 +92,9 @@ const getPossibleColumns = () => [
     Cell: ArrayToSentenceCell,
   },
   {
-    Header: 'Price',
-    id: 'total_price',
-    accessor: 'total_price',
+    Header: 'Payment amount',
+    id: 'payment_amount',
+    accessor: 'payment_amount',
     filterable: false,
     sortable: false,
     Cell: MoneyCell,
@@ -101,7 +102,7 @@ const getPossibleColumns = () => [
 ];
 
 function OrderAdmin() {
-  const { timezoneName } = useContext(AppRootContext);
+  const newOrderModal = useModal();
   const [editingOrderId, setEditingOrderId] = useState(null);
   usePageTitle('Orders');
 
@@ -115,21 +116,30 @@ function OrderAdmin() {
     encodeFilterValue: fieldFilterCodecs.encodeFilterValue,
   });
 
-  const closeOrderModal = () => { setEditingOrderId(null); };
-
-  const renderEditModal = () => (
-    <AdminOrderModal
-      order={queryData
-        && queryData.convention.orders_paginated.entries.find((o) => o.id === editingOrderId)}
-      closeModal={closeOrderModal}
-      timezoneName={timezoneName}
-    />
+  // memo to my future self if I get the bright idea to rip this out again:
+  // if we don't do it this way, the order doesn't update in the EditOrderModal after it changes
+  const editingOrder = useMemo(
+    () => (editingOrderId
+      && queryData?.convention?.orders_paginated?.entries?.
+        find((order) => order.id === editingOrderId)
+    ),
+    [queryData, editingOrderId],
   );
 
   return (
     <QueryDataContext.Provider value={queryData}>
       <div className="mb-4">
-        <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/orders" />
+        <TableHeader
+          {...tableHeaderProps}
+          exportUrl="/csv_exports/orders"
+          renderLeftContent={() => queryData?.currentAbility?.can_create_orders && (
+            <button type="button" className="btn btn-outline-primary ml-2" onClick={newOrderModal.open}>
+              <i className="fa fa-plus" />
+              {' '}
+              New order
+            </button>
+          )}
+        />
 
         <ReactTable
           {...reactTableProps}
@@ -137,7 +147,7 @@ function OrderAdmin() {
           className="-striped -highlight"
           getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
           getTrProps={(state, rowInfo) => {
-            if (((queryData || {}).currentAbility || {}).can_update_orders) {
+            if (queryData?.currentAbility?.can_update_orders) {
               return {
                 style: { cursor: 'pointer' },
                 onClick: () => { setEditingOrderId(rowInfo.original.id); },
@@ -148,7 +158,8 @@ function OrderAdmin() {
           }}
         />
 
-        {renderEditModal()}
+        <NewOrderModal visible={newOrderModal.visible} close={newOrderModal.close} />
+        <EditOrderModal order={editingOrder} closeModal={() => setEditingOrderId(null)} />
       </div>
     </QueryDataContext.Provider>
   );

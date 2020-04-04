@@ -1,18 +1,23 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import { useMutation } from '@apollo/react-hooks';
 import classNames from 'classnames';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { MarkOrderPaid, AdminUpdateOrder, CancelOrder } from './mutations.gql';
+import { MarkOrderPaid, CancelOrder } from './mutations.gql';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
-import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import InPlaceMoneyEditor from './InPlaceMoneyEditor';
+import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
+import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
+import EnumTypes from '../enumTypes.json';
+
+const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
+  .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
+  .filter((choice) => choice.value !== 'pending');
 
 function CancelOrderButton({ order, skipRefund }) {
   const [cancelOrder] = useMutation(CancelOrder);
@@ -31,7 +36,7 @@ function CancelOrderButton({ order, skipRefund }) {
         <p>
           This will issue a refund back to
           {' '}
-          {order.user_con_profile.name_without_nickname}
+          {order.user_con_profile?.name_without_nickname}
           &apos;s payment card.
         </p>
       </div>
@@ -57,7 +62,7 @@ function CancelOrderButton({ order, skipRefund }) {
               Because there is
               no Stripe charge associated with this order,
               {' '}
-              {order.user_con_profile.name_without_nickname}
+              {order.user_con_profile?.name_without_nickname}
               {' '}
               will not automatically
               receive a refund, so they will have to be refunded manually.
@@ -136,7 +141,7 @@ function OrderActions({ order }) {
   }
 
   if (order.status === 'unpaid' || order.status === 'paid') {
-    buttons.push(<CancelOrderButton order={order} key="cancel" />);
+    buttons.push(<CancelOrderButton order={order} key="cancel" skipRefund={false} />);
 
     if (order.charge_id) {
       buttons.push(<CancelOrderButton order={order} skipRefund key="cancelWithoutRefund" />);
@@ -146,112 +151,90 @@ function OrderActions({ order }) {
   return buttons;
 }
 
-function AdminOrderModal({ order, closeModal }) {
+function AdminOrderModal({ order, updateOrder }) {
   const { timezoneName } = useContext(AppRootContext);
-  const confirm = useConfirm();
-  const [updateOrder] = useMutation(AdminUpdateOrder);
-
-  const renderBody = () => {
-    if (order == null) {
-      return null;
-    }
-
-    return (
-      <div>
-        <dl className="row m-0">
-          <dt className="col-md-3">Customer name</dt>
-          <dd className="col-md-9">{order.user_con_profile.name_without_nickname}</dd>
-
-          <dt className="col-md-3">Payment amount</dt>
-          <dd className="col-md-9">
-            <InPlaceMoneyEditor
-              value={order.payment_amount}
-              onChange={(value) => updateOrder({
-                variables: {
-                  id: order.id,
-                  order: {
-                    payment_amount: {
-                      fractional: value.fractional,
-                      currency_code: value.currency_code,
-                    },
-                  },
-                },
-              })}
-            />
-          </dd>
-
-          <dt className="col-md-3">Order status</dt>
-          <dd className="col-md-9">
-            <ul className="list-inline m-0">
-              <li className="list-inline-item">
-                {humanize(order.status)}
-                {(
-                  order.paid_at
-                    ? `on ${moment(order.paid_at).tz(timezoneName).format('ddd, MMM D, YYYY {at} h:mma')}`
-                    : null
-                )}
-              </li>
-              <li className="list-inline-item">
-                <OrderActions order={order} />
-              </li>
-            </ul>
-          </dd>
-
-          <dt className="col-md-3">Payment note</dt>
-          <dd className="col-md-9">
-            <InPlaceEditor
-              value={order.payment_note || ''}
-              renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
-                <>
-                  <textarea
-                    className="form-control col mr-1"
-                    onChange={(event) => { onChange(event.target.value); }}
-                    {...inputProps}
-                  />
-                  {buttons}
-                </>
-              )}
-              onChange={(value) => updateOrder({
-                variables: {
-                  id: order.id,
-                  order: {
-                    payment_note: value,
-                  },
-                },
-              })}
-            />
-          </dd>
-        </dl>
-
-        <section className="mt-4">
-          <AdminOrderEntriesTable order={order} />
-        </section>
-      </div>
-    );
-  };
 
   return (
-    <Modal
-      visible={order != null && !confirm.visible}
-      dialogClassName="modal-lg"
-    >
-      <div className="modal-header">
-        Order #
-        {(order || {}).id}
-      </div>
-      <div className="modal-body">
-        {renderBody()}
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-primary" onClick={closeModal}>Close</button>
-      </div>
-    </Modal>
+    <div>
+      <dl className="row m-0">
+        <dt className="col-md-3">Customer name</dt>
+        <dd className="col-md-9">
+          {order.id
+            ? order.user_con_profile?.name_without_nickname
+            : (
+              <UserConProfileSelect
+                value={order.user_con_profile}
+                onChange={(value) => updateOrder({ user_con_profile: value })}
+              />
+            )}
+        </dd>
+
+        <dt className="col-md-3">Payment amount</dt>
+        <dd className="col-md-9">
+          <InPlaceMoneyEditor
+            value={order.payment_amount}
+            onChange={(value) => updateOrder({
+              payment_amount: {
+                fractional: value.fractional,
+                currency_code: value.currency_code,
+              },
+            })}
+          />
+        </dd>
+
+        <dt className="col-md-3">Order status</dt>
+        <dd className="col-md-9">
+          {order.id
+            ? (
+              <ul className="list-inline m-0">
+                <li className="list-inline-item">
+                  {humanize(order.status)}
+                  {(
+                    order.paid_at
+                      ? `on ${moment(order.paid_at).tz(timezoneName).format('ddd, MMM D, YYYY {at} h:mma')}`
+                      : null
+                  )}
+                </li>
+                <li className="list-inline-item">
+                  <OrderActions order={order} />
+                </li>
+              </ul>
+            )
+            : (
+              <ChoiceSet
+                choices={ORDER_STATUS_CHOICES}
+                value={order.status}
+                onChange={(status) => updateOrder({ status })}
+                choiceClassName="form-check-inline"
+              />
+            )}
+        </dd>
+
+        <dt className="col-md-3">Payment note</dt>
+        <dd className="col-md-9">
+          <InPlaceEditor
+            value={order.payment_note || ''}
+            renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
+              <>
+                <textarea
+                  className="form-control col mr-1"
+                  onChange={(event) => { onChange(event.target.value); }}
+                  {...inputProps}
+                />
+                {buttons}
+              </>
+            )}
+            onChange={(value) => updateOrder({ payment_note: value })}
+          />
+        </dd>
+      </dl>
+    </div>
   );
 }
 
 AdminOrderModal.propTypes = {
   order: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.number,
     status: PropTypes.string.isRequired,
     charge_id: PropTypes.string,
     user_con_profile: PropTypes.shape({
@@ -264,12 +247,8 @@ AdminOrderModal.propTypes = {
     payment_amount: PropTypes.shape({}),
     paid_at: PropTypes.string,
     payment_note: PropTypes.string,
-  }),
-  closeModal: PropTypes.func.isRequired,
-};
-
-AdminOrderModal.defaultProps = {
-  order: null,
+  }).isRequired,
+  updateOrder: PropTypes.func.isRequired,
 };
 
 export default AdminOrderModal;

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
@@ -59,7 +59,7 @@ function EditTicket() {
 
       <TicketForm
         convention={convention}
-        initialTicket={userConProfile.ticket}
+        initialTicket={{ ...userConProfile.ticket, user_con_profile: userConProfile }}
         onSubmit={onSubmit}
         submitCaption={`Save ${convention.ticket_name}`}
       />

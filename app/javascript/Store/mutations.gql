@@ -18,6 +18,22 @@ mutation CancelOrder($orderId: Int!, $skipRefund: Boolean) {
   }
 }
 
+mutation CreateOrder(
+  $userConProfileId: Int!, $order: OrderInput!, $status: OrderStatus!, $orderEntries: [OrderEntryInput!]
+) {
+  createOrder(input: {
+    user_con_profile_id: $userConProfileId,
+    order: $order,
+    status: $status,
+    order_entries: $orderEntries
+  }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
 mutation AdminUpdateOrder($id: Int!, $order: OrderInput!) {
   updateOrder(input: { id: $id, order: $order }) {
     order {

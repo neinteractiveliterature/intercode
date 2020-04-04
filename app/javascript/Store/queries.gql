@@ -1,31 +1,6 @@
+#import './adminProductFields.gql'
 #import './pricingStructureFields.gql'
 #import './orderFields.gql'
-
-fragment AdminProductFields on Product {
-  id
-  name
-  description
-  description_html
-  image_url
-  available
-  payment_options
-
-  pricing_structure {
-    ...PricingStructureFields
-  }
-
-  product_variants {
-    id
-    name
-    description
-    image_url
-    position
-
-    override_pricing_structure {
-      ...PricingStructureFields
-    }
-  }
-}
 
 fragment OrderEntryFields on OrderEntry {
   id
@@ -58,6 +33,7 @@ fragment OrderEntryFields on OrderEntry {
 
 query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
   currentAbility {
+    can_create_orders
     can_update_orders
   }
 
