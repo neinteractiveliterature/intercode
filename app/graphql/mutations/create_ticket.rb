@@ -12,9 +12,7 @@ class Mutations::CreateTicket < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    ticket_attrs = args[:ticket].to_h
-    ticket_attrs[:payment_amount] = MoneyHelper.coerce_money_input(ticket_attrs[:payment_amount])
-    ticket = ticket_profile.create_ticket!(ticket_attrs)
+    ticket = ticket_profile.create_ticket!(args[:ticket].to_h)
 
     { ticket: ticket }
   end

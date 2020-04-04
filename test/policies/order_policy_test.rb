@@ -36,7 +36,7 @@ class OrderPolicyTest < ActiveSupport::TestCase
       end
     end
 
-    (Order::STATUSES - %w[pending unpaid]).each do |status|
+    (Types::OrderStatusType.values.keys - %w[pending unpaid]).each do |status|
       it "does not let me submit my own #{status} orders" do
         order.update!(status: status)
         refute OrderPolicy.new(order_user, order).submit?

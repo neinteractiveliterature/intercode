@@ -60,10 +60,22 @@ function InPlaceEditorInputWrapper({
 
   const buttons = (
     <>
-      <button type="button" className="btn btn-secondary btn-sm mr-1" onClick={cancel} aria-label="Cancel editing">
+      <button
+        type="button"
+        className="btn btn-secondary btn-sm mr-1"
+        onClick={cancel}
+        aria-label="Cancel editing"
+        disabled={committing}
+      >
         <i className="fa fa-times" />
       </button>
-      <button type="button" className="btn btn-primary btn-sm" onClick={commitEditing} aria-label="Commit changes">
+      <button
+        type="button"
+        className="btn btn-primary btn-sm"
+        onClick={commitEditing}
+        aria-label="Commit changes"
+        disabled={committing}
+      >
         <i className="fa fa-check" />
       </button>
     </>
@@ -76,6 +88,7 @@ function InPlaceEditorInputWrapper({
       onKeyDown: keyDownInInput,
       ref: inputRef,
       disabled: committing,
+      committing,
     },
     commitEditing,
     cancelEditing: cancel,
@@ -90,6 +103,19 @@ function InPlaceEditorInputWrapper({
     <DefaultInPlaceEditorInput {...wrappedComponentProps} />
   );
 }
+
+InPlaceEditorInputWrapper.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  initialValue: PropTypes.any,
+  commit: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
+  inputRef: PropTypes.shape({}).isRequired,
+  renderInput: PropTypes.func.isRequired,
+};
+
+InPlaceEditorInputWrapper.defaultProps = {
+  initialValue: null,
+};
 
 function InPlaceEditor({
   children, className, onChange, renderInput, value,

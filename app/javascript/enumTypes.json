@@ -80,6 +80,41 @@
     ],
     "possibleTypes": null
   },
+  "OrderStatus": {
+    "kind": "ENUM",
+    "name": "OrderStatus",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "pending",
+        "description": "Order has not yet been submitted",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "unpaid",
+        "description": "Order is submitted but not yet paid",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "paid",
+        "description": "Order has been submitted and paid",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "cancelled",
+        "description": "Order has been cancelled",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
   "PaymentMode": {
     "kind": "ENUM",
     "name": "PaymentMode",

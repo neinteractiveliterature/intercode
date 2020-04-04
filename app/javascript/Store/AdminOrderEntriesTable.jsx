@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/react-hooks';
 import Select from 'react-select';
 
-import { AdminCreateOrderEntry, AdminDeleteOrderEntry, AdminUpdateOrderEntry } from './mutations.gql';
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { parseIntOrNull } from '../ComposableFormUtils';
@@ -14,14 +12,13 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import ProductSelect from '../BuiltInFormControls/ProductSelect';
 import useAsyncFunction from '../useAsyncFunction';
 
-function AdminOrderEntriesTable({ order }) {
+function AdminOrderEntriesTable({
+  order, createOrderEntry, updateOrderEntry, deleteOrderEntry,
+}) {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState(null);
-  const [createOrderEntryMutate] = useMutation(AdminCreateOrderEntry);
-  const [updateOrderEntry] = useMutation(AdminUpdateOrderEntry);
-  const [deleteOrderEntry] = useMutation(AdminDeleteOrderEntry);
-  const [createOrderEntry, createError, createInProgress] = useAsyncFunction(
-    createOrderEntryMutate,
+  const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(
+    createOrderEntry,
   );
 
   const setAddingItemProduct = (product) => {
@@ -42,22 +39,7 @@ function AdminOrderEntriesTable({ order }) {
   };
 
   const saveAddingItem = async () => {
-    await createOrderEntry({
-      variables: {
-        input: {
-          order_id: order.id,
-          order_entry: {
-            product_id: addingItem.product?.id,
-            product_variant_id: addingItem.product_variant?.id,
-            quantity: addingItem.quantity,
-            price_per_item: {
-              fractional: addingItem.price_per_item?.fractional,
-              currency_code: addingItem.price_per_item?.currency_code,
-            },
-          },
-        },
-      },
-    });
+    createOrderEntryAsync(addingItem);
     setAddingItem(null);
   };
 
@@ -73,7 +55,7 @@ function AdminOrderEntriesTable({ order }) {
       </thead>
       <tbody>
         {order.order_entries.map((orderEntry) => (
-          <tr key={orderEntry.id}>
+          <tr key={orderEntry.id || orderEntry.generatedId}>
             <td>
               {orderEntry.product.name}
               {orderEntry.product_variant && ` (${orderEntry.product_variant.name})`}
@@ -81,32 +63,17 @@ function AdminOrderEntriesTable({ order }) {
             <td>
               <InPlaceEditor
                 value={orderEntry.quantity.toString()}
-                onChange={(newValue) => updateOrderEntry({
-                  variables: {
-                    input: {
-                      id: orderEntry.id,
-                      order_entry: {
-                        quantity: parseIntOrNull(newValue),
-                      },
-                    },
-                  },
-                })}
+                onChange={(newValue) => updateOrderEntry(orderEntry,
+                  { quantity: parseIntOrNull(newValue) })}
               />
             </td>
             <td>
               <InPlaceMoneyEditor
                 value={orderEntry.price_per_item}
-                onChange={(value) => updateOrderEntry({
-                  variables: {
-                    input: {
-                      id: orderEntry.id,
-                      order_entry: {
-                        price_per_item: {
-                          fractional: value.fractional,
-                          currency_code: value.currency_code,
-                        },
-                      },
-                    },
+                onChange={(value) => updateOrderEntry(orderEntry, {
+                  price_per_item: {
+                    fractional: value.fractional,
+                    currency_code: value.currency_code,
                   },
                 })}
               >
@@ -123,7 +90,7 @@ function AdminOrderEntriesTable({ order }) {
                   prompt: `Are you sure you want to delete
                     ${pluralizeWithCount(orderEntry.product.name, orderEntry.quantity)} from the
                     order?  This cannot be undone.`,
-                  action: () => deleteOrderEntry({ variables: { input: { id: orderEntry.id } } }),
+                  action: () => deleteOrderEntry(orderEntry),
                   renderError: (error) => <ErrorDisplay graphQLError={error} />,
                 })}
               >
@@ -223,6 +190,9 @@ AdminOrderEntriesTable.propTypes = {
     order_entries: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     total_price: PropTypes.shape({}).isRequired,
   }).isRequired,
+  createOrderEntry: PropTypes.func.isRequired,
+  updateOrderEntry: PropTypes.func.isRequired,
+  deleteOrderEntry: PropTypes.func.isRequired,
 };
 
 export default AdminOrderEntriesTable;

@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize } from 'inflected';
 
-import AdminOrderModal from '../Store/AdminOrderModal';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import ErrorDisplay from '../ErrorDisplay';
 import EventSelect from '../BuiltInFormControls/EventSelect';
@@ -11,13 +10,31 @@ import useAsyncFunction from '../useAsyncFunction';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import useModal from '../ModalDialogs/useModal';
 import formatMoney from '../formatMoney';
+import EditOrderModal from '../Store/EditOrderModal';
+import NewOrderModal from '../Store/NewOrderModal';
+import AppRootContext from '../AppRootContext';
 
 function TicketForm({
   initialTicket, convention, onSubmit, submitCaption,
 }) {
-  const orderModal = useModal();
+  const { myProfile } = useContext(AppRootContext);
+  const editOrderModal = useModal();
+  const newOrderModal = useModal();
   const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);
   const [providedByEvent, setProvidedByEvent] = useState(initialTicket.provided_by_event);
+
+  const providingProduct = useMemo(
+    () => {
+      if (!initialTicket.id) {
+        return null;
+      }
+
+      const ticketType = convention.ticket_types
+        .find((tt) => tt.id === initialTicket.ticket_type.id);
+      return (ticketType.providing_products ?? [])[0];
+    },
+    [initialTicket, convention],
+  );
 
   const sortedTicketTypes = useMemo(
     () => sortTicketTypes(convention.ticket_types),
@@ -88,17 +105,48 @@ function TicketForm({
 
                 <button
                   className="btn btn-outline-primary"
-                  onClick={() => orderModal.open({ order: initialTicket.order_entry.order })}
+                  onClick={() => editOrderModal.open({ order: initialTicket.order_entry.order })}
                   type="button"
                 >
                   Edit order
                 </button>
               </>
             )
-            : 'No associated order'}
+            : (providingProduct && (
+              <button
+                className="btn btn-outline-primary"
+                onClick={newOrderModal.open}
+                type="button"
+              >
+                Add order
+              </button>
+            ))}
         </div>
       </div>
-      <AdminOrderModal order={orderModal.state?.order} closeModal={orderModal.close} />
+
+      {providingProduct && (
+        <NewOrderModal
+          visible={newOrderModal.visible}
+          close={newOrderModal.close}
+          initialOrder={{
+            user_con_profile: initialTicket.user_con_profile,
+            payment_amount: providingProduct.pricing_structure.price,
+            status: 'paid',
+            payment_note: `Entered manually by ${myProfile.name_without_nickname}`,
+            order_entries: [
+              {
+                generatedId: 'ticket',
+                product: providingProduct,
+                product_variant: null,
+                quantity: 1,
+                price_per_item: providingProduct.pricing_structure.price,
+                ticket_id: initialTicket.id,
+              },
+            ],
+          }}
+        />
+      )}
+      <EditOrderModal order={editOrderModal.state?.order} closeModal={editOrderModal.close} />
 
       <ErrorDisplay graphQLError={submitError} />
 

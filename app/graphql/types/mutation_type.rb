@@ -141,6 +141,7 @@ class Types::MutationType < Types::BaseObject
   ### Order
 
   field :submitOrder, mutation: Mutations::SubmitOrder
+  field :createOrder, mutation: Mutations::CreateOrder
   field :markOrderPaid, mutation: Mutations::MarkOrderPaid
   field :updateOrder, mutation: Mutations::UpdateOrder
   field :cancelOrder, mutation: Mutations::CancelOrder

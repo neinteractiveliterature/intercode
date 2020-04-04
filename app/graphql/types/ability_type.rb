@@ -131,6 +131,15 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     )
   end
 
+  field :can_create_orders, Boolean, null: false
+
+  def can_create_orders
+    !!(
+      convention &&
+      policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).create?
+    )
+  end
+
   field :can_read_schedule, Boolean, null: false
 
   def can_read_schedule
