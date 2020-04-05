@@ -109,7 +109,10 @@ function TicketForm({
         </div>
       </div>
 
-      <EditOrderModal order={editOrderModal.state?.order} closeModal={editOrderModal.close} />
+      <EditOrderModal
+        order={editOrderModal.visible ? initialTicket.order_entry.order : null}
+        closeModal={editOrderModal.close}
+      />
 
       <ErrorDisplay graphQLError={submitError} />
 

@@ -6,6 +6,15 @@ class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
     new(scope, filters, sort)
   end
 
+  field :id, 'ID' do
+    def apply_filter(scope, value)
+      id = value.to_i
+      return scope if id == 0
+
+      scope.where(id: id)
+    end
+  end
+
   field :user_name, 'User' do
     def apply_filter(scope, value)
       scope.joins(:user_con_profile)

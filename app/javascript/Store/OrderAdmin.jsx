@@ -65,6 +65,13 @@ SubmittedAtCell.defaultProps = {
 
 const getPossibleColumns = () => [
   {
+    Header: 'ID',
+    id: 'id',
+    accessor: 'id',
+    Filter: FreeTextFilter,
+    width: 100,
+  },
+  {
     Header: 'User',
     id: 'user_name',
     accessor: (order) => order.user_con_profile.name_without_nickname,

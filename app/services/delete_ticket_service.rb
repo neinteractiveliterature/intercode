@@ -1,14 +1,17 @@
 class DeleteTicketService < CivilService::Service
+  include SplitTicketOrder
+
   class Result < CivilService::Result
     attr_accessor :refund_status
   end
   self.result_class = Result
 
-  attr_reader :ticket, :refund
+  attr_reader :ticket, :refund, :whodunit
 
-  def initialize(ticket:, refund:)
+  def initialize(ticket:, refund:, whodunit:)
     @ticket = ticket
     @refund = refund
+    @whodunit = whodunit
   end
 
   private
@@ -16,18 +19,22 @@ class DeleteTicketService < CivilService::Service
   def inner_call
     refund_status = :not_refunded
 
-    if refund
-      raise 'Ticket cannot be refunded because there is no Stripe charge ID' unless ticket.charge_id
-      charge = Stripe::Charge.retrieve(ticket.charge_id, api_key: convention.stripe_secret_key)
-      if charge.refunded
-        refund_status = :already_refunded
-      else
-        Stripe::Refund.create({ charge: ticket.charge_id }, api_key: convention.stripe_secret_key)
-        refund_status = :refunded
-      end
+    if refund && !ticket.order_entry
+      raise 'Ticket cannot be refunded because there is no associated order'
     end
 
-    ticket.destroy!
+    if ticket.order_entry
+      if ticket.order_entry.quantity > 1 || ticket.order_entry.order.order_entries.size > 1
+        split_ticket_to_new_order(ticket, 'ticket deletion')
+      end
+
+      # Canceling the order will automatically destroy the ticket
+      CancelOrderService.new(
+        order: ticket.order_entry.order, whodunit: whodunit, skip_refund: !refund
+      ).call!
+    else
+      ticket.destroy!
+    end
 
     success(refund_status: refund_status)
   end

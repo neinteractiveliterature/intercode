@@ -30,7 +30,7 @@ function NewOrderModal({ visible, close, initialOrder }) {
   useEffect(
     () => {
       if (!visible) {
-        setOrder(initialOrder);
+        setOrder(initialOrder || BLANK_ORDER);
       }
     },
     [visible, initialOrder],
