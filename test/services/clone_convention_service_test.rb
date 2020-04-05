@@ -70,22 +70,25 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones ticket types' do
-    create(
-      :paid_ticket_type,
-      convention: convention,
-      pricing_schedule: ScheduledMoneyValue.new(
-        timespans: [
-          { start: Time.utc(2016, 1, 1, 0, 0, 0), finish: Time.utc(2016, 6, 1, 0, 0, 0), value: Money.new(2500, 'USD') },
-          { start: Time.utc(2016, 6, 1, 0, 0, 0), finish: Time.utc(2016, 10, 1, 0, 0, 0), value: Money.new(3500, 'USD') },
-          { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') }
-        ]
+    ticket_type = create(:paid_ticket_type, convention: convention)
+    ticket_type.providing_products.first.update!(
+      pricing_structure: PricingStructure.new(
+        pricing_strategy: 'scheduled_value',
+        value: ScheduledMoneyValue.new(
+          timespans: [
+            { start: Time.utc(2016, 1, 1, 0, 0, 0), finish: Time.utc(2016, 6, 1, 0, 0, 0), value: Money.new(2500, 'USD') },
+            { start: Time.utc(2016, 6, 1, 0, 0, 0), finish: Time.utc(2016, 10, 1, 0, 0, 0), value: Money.new(3500, 'USD') },
+            { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') }
+          ]
+        )
       )
     )
     result = service.call
     result.convention.reload
     assert result.success?
 
-    cloned_pricing_schedule = result.convention.ticket_types.first.pricing_schedule
+    cloned_pricing_schedule = result.convention.ticket_types.first
+      .providing_products.first.pricing_structure.value
     assert_equal Time.utc(2017, 12, 31, 0, 0, 0), cloned_pricing_schedule.timespans.first.start
   end
 

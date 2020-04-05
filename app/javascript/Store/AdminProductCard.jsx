@@ -11,7 +11,6 @@ import { CreateProduct, DeleteProduct, UpdateProduct } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import sortProductVariants from './sortProductVariants';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
@@ -424,10 +423,7 @@ AdminProductCard.propTypes = {
     description_html: PropTypes.string.isRequired,
     image_url: PropTypes.string,
     payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
-    price: PropTypes.shape({
-      fractional: PropTypes.number.isRequired,
-      currency_code: PropTypes.string.isRequired,
-    }),
+    pricing_structure: PropTypes.shape({}),
     product_variants: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
