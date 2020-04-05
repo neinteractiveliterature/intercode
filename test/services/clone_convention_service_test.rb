@@ -12,7 +12,12 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       email_from: 'noreply@copycon.example.com'
     }
   end
-  let(:service) { CloneConventionService.new(source_convention: convention, new_convention_attributes: new_convention_attributes) }
+  let(:service) do
+    CloneConventionService.new(
+      source_convention: convention,
+      new_convention_attributes: new_convention_attributes
+    )
+  end
 
   it 'clones only some convention attributes' do
     convention.update!(
@@ -39,7 +44,10 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal 'America/Chicago', result.convention.timezone_name
     assert_equal 'pk_test_12345', result.convention.stripe_publishable_key
     assert_equal 'sk_test_12345', result.convention.stripe_secret_key
-    assert_equal 'I agree to abide by the {{ convention.name }} code of conduct.', result.convention.clickwrap_agreement
+    assert_equal(
+      'I agree to abide by the {{ convention.name }} code of conduct.',
+      result.convention.clickwrap_agreement
+    )
   end
 
   it 'clones CMS content' do
@@ -76,9 +84,21 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
         pricing_strategy: 'scheduled_value',
         value: ScheduledMoneyValue.new(
           timespans: [
-            { start: Time.utc(2016, 1, 1, 0, 0, 0), finish: Time.utc(2016, 6, 1, 0, 0, 0), value: Money.new(2500, 'USD') },
-            { start: Time.utc(2016, 6, 1, 0, 0, 0), finish: Time.utc(2016, 10, 1, 0, 0, 0), value: Money.new(3500, 'USD') },
-            { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') }
+            {
+              start: Time.utc(2016, 1, 1, 0, 0, 0),
+              finish: Time.utc(2016, 6, 1, 0, 0, 0),
+              value: Money.new(2500, 'USD')
+            },
+            {
+              start: Time.utc(2016, 6, 1, 0, 0, 0),
+              finish: Time.utc(2016, 10, 1, 0, 0, 0),
+              value: Money.new(3500, 'USD')
+            },
+            {
+              start: Time.utc(2016, 10, 1, 0, 0, 0),
+              finish: Time.utc(2016, 10, 26, 0, 0, 0),
+              value: Money.new(4500, 'USD')
+            }
           ]
         )
       )
@@ -105,7 +125,10 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal 1, result.convention.staff_positions.count
     assert_equal staff_position.name, result.convention.staff_positions.first.name
     assert result.convention.staff_positions.first.permissions.first.model
-    refute_equal staff_position.permissions.first.model, result.convention.staff_positions.first.permissions.first.model
+    refute_equal(
+      staff_position.permissions.first.model,
+      result.convention.staff_positions.first.permissions.first.model
+    )
   end
 
   it 'clones store content' do
@@ -117,7 +140,10 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     result.convention.reload
     assert result.success?
     assert_equal 2, result.convention.products.count
-    assert_equal 5, ProductVariant.joins(:product).where(products: { convention_id: result.convention.id }).count
+    assert_equal(
+      5,
+      ProductVariant.joins(:product).where(products: { convention_id: result.convention.id }).count
+    )
   end
 
   it 'clones user activity alerts' do
