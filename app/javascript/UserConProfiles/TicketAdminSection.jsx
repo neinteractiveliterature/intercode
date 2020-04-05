@@ -15,6 +15,7 @@ import {
 } from './queries.gql';
 import LoadingIndicator from '../LoadingIndicator';
 import useModal from '../ModalDialogs/useModal';
+import AddOrderToTicketButton from './AddOrderToTicketButton';
 
 function TicketAdminControls({ convention, userConProfile }) {
   const query = userConProfile.ticket
@@ -62,6 +63,16 @@ function TicketAdminControls({ convention, userConProfile }) {
   const { currentAbility } = data;
   const { ticket } = userConProfile;
   const chargeId = ticket?.order_entry?.order?.charge_id;
+
+  if (ticket && !ticket.order_entry) {
+    buttons.push(
+      <AddOrderToTicketButton
+        convention={convention}
+        ticket={ticket}
+        userConProfile={userConProfile}
+      />,
+    );
+  }
 
   if (ticket && currentAbility.can_update_ticket) {
     buttons.push(
