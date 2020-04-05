@@ -27,6 +27,10 @@ module.exports = {
     './test/javascript/setupTests.js',
   ],
   testEnvironment: 'jest-environment-jsdom-sixteen',
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules',
+    '<rootDir>/config',
+  ],
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
     '^.+\\.(js)x?$': './test/javascript/transform.js',

@@ -29,21 +29,18 @@ function ConventionFormBillingSection({
         <CommitableInput
           value={convention.stripe_publishable_key || ''}
           onChange={changeStripePublishableKey}
-          renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
-            <>
-              <input
-                id="stripe_publishable_key"
-                {...inputProps}
-                onChange={(event) => onChange(event.target.value)}
-                className={classNames(
-                  inputProps.className,
-                  'text-monospace',
-                  { 'bg-warning-light': inputProps.onFocus != null },
-                )}
-                disabled={disabled}
-              />
-              {buttons}
-            </>
+          renderInput={({ onChange, ...inputProps }) => (
+            <input
+              id="stripe_publishable_key"
+              {...inputProps}
+              onChange={(event) => onChange(event.target.value)}
+              className={classNames(
+                inputProps.className,
+                'text-monospace',
+                { 'bg-warning-light': inputProps.onFocus != null },
+              )}
+              disabled={disabled}
+            />
           )}
         />
       </div>
@@ -53,26 +50,23 @@ function ConventionFormBillingSection({
         <CommitableInput
           value={convention.stripe_secret_key || ''}
           onChange={changeStripeSecretKey}
-          renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
-            <>
-              <input
-                id="stripe_secret_key"
-                {...inputProps}
-                onChange={(event) => onChange(event.target.value)}
-                className={classNames(
-                  inputProps.className,
-                  'text-monospace',
-                  { 'bg-warning-light': inputProps.onFocus != null },
-                )}
-                value={
-                  inputProps.onFocus
-                    ? (inputProps.value || maskedStripeSecretKey)
-                    : inputProps.value
-                }
-                disabled={disabled}
-              />
-              {buttons}
-            </>
+          renderInput={({ onChange, ...inputProps }) => (
+            <input
+              id="stripe_secret_key"
+              {...inputProps}
+              onChange={(event) => onChange(event.target.value)}
+              className={classNames(
+                inputProps.className,
+                'text-monospace',
+                { 'bg-warning-light': inputProps.onFocus != null },
+              )}
+              value={
+                inputProps.onFocus
+                  ? (inputProps.value || maskedStripeSecretKey)
+                  : inputProps.value
+              }
+              disabled={disabled}
+            />
           )}
         />
       </div>
