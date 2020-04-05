@@ -5,7 +5,9 @@ import NewOrderModal from '../Store/NewOrderModal';
 import useModal from '../ModalDialogs/useModal';
 import AppRootContext from '../AppRootContext';
 
-function AddOrderToTicketButton({ ticket, userConProfile, convention }) {
+function AddOrderToTicketButton({
+  ticket, userConProfile, convention, className,
+}) {
   const newOrderModal = useModal();
   const { myProfile } = useContext(AppRootContext);
 
@@ -28,7 +30,7 @@ function AddOrderToTicketButton({ ticket, userConProfile, convention }) {
   return (
     <>
       <button
-        className="btn btn-outline-primary"
+        className={className || 'btn btn-outline-primary'}
         onClick={newOrderModal.open}
         type="button"
       >
@@ -59,6 +61,7 @@ function AddOrderToTicketButton({ ticket, userConProfile, convention }) {
 }
 
 AddOrderToTicketButton.propTypes = {
+  className: PropTypes.string,
   ticket: PropTypes.shape({
     id: PropTypes.number,
     ticket_type: PropTypes.shape({
@@ -69,6 +72,10 @@ AddOrderToTicketButton.propTypes = {
     ticket_types: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
   userConProfile: PropTypes.shape({}).isRequired,
+};
+
+AddOrderToTicketButton.defaultProps = {
+  className: null,
 };
 
 export default AddOrderToTicketButton;

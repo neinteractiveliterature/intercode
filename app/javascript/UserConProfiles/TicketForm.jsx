@@ -47,7 +47,7 @@ function TicketForm({
     <form onSubmit={submitForm}>
       <BootstrapFormSelect
         label={`${capitalize(convention.ticket_name)} type`}
-        value={ticketTypeId}
+        value={ticketTypeId ?? ''}
         onValueChange={setTicketTypeId}
       >
         <option aria-label="Blank placeholder option" />
@@ -102,6 +102,7 @@ function TicketForm({
                 ticket={initialTicket}
                 userConProfile={initialTicket.user_con_profile}
                 convention={convention}
+                className="btn btn-outline-success"
               />
               )
             )}

@@ -140,7 +140,7 @@ function NewOrderModal({ visible, close, initialOrder }) {
 
 NewOrderModal.propTypes = {
   visible: PropTypes.bool.isRequired,
-  close: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
   initialOrder: PropTypes.shape({}),
 };
 

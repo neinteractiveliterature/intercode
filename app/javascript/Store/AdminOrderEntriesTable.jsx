@@ -188,7 +188,7 @@ function AdminOrderEntriesTable({
 AdminOrderEntriesTable.propTypes = {
   order: PropTypes.shape({
     order_entries: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    total_price: PropTypes.shape({}).isRequired,
+    total_price: PropTypes.shape({}),
   }).isRequired,
   createOrderEntry: PropTypes.func.isRequired,
   updateOrderEntry: PropTypes.func.isRequired,

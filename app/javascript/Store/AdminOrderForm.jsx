@@ -151,7 +151,7 @@ function OrderActions({ order }) {
   return buttons;
 }
 
-function AdminOrderModal({ order, updateOrder }) {
+function AdminOrderForm({ order, updateOrder }) {
   const { timezoneName } = useContext(AppRootContext);
 
   return (
@@ -232,7 +232,7 @@ function AdminOrderModal({ order, updateOrder }) {
   );
 }
 
-AdminOrderModal.propTypes = {
+AdminOrderForm.propTypes = {
   order: PropTypes.shape({
     id: PropTypes.number,
     status: PropTypes.string.isRequired,
@@ -241,7 +241,7 @@ AdminOrderModal.propTypes = {
       name_without_nickname: PropTypes.string.isRequired,
     }).isRequired,
     order_entries: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.number,
     })).isRequired,
     total_price: PropTypes.shape({}),
     payment_amount: PropTypes.shape({}),
@@ -251,4 +251,4 @@ AdminOrderModal.propTypes = {
   updateOrder: PropTypes.func.isRequired,
 };
 
-export default AdminOrderModal;
+export default AdminOrderForm;
