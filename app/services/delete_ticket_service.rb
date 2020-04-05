@@ -6,26 +6,23 @@ class DeleteTicketService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :ticket, :refund, :whodunit
+  validate :refund_must_be_possible_if_requested
 
-  def initialize(ticket:, refund:, whodunit:)
+  attr_reader :ticket, :refund, :whodunit, :operation_name
+
+  def initialize(ticket:, refund:, whodunit:, operation_name: nil)
     @ticket = ticket
     @refund = refund
     @whodunit = whodunit
+    @operation_name = operation_name
   end
 
   private
 
   def inner_call
-    refund_status = :not_refunded
-
-    if refund && !ticket.order_entry
-      raise 'Ticket cannot be refunded because there is no associated order'
-    end
-
     if ticket.order_entry
       if ticket.order_entry.quantity > 1 || ticket.order_entry.order.order_entries.size > 1
-        split_ticket_to_new_order(ticket, 'ticket deletion')
+        split_ticket_to_new_order(ticket, operation_name || 'ticket deletion')
       end
 
       # Canceling the order will automatically destroy the ticket
@@ -34,12 +31,18 @@ class DeleteTicketService < CivilService::Service
       ).call!
     else
       ticket.destroy!
+      success(refund_status: :not_refunded)
     end
-
-    success(refund_status: refund_status)
   end
 
   def convention
     @convention ||= ticket.convention
+  end
+
+  def refund_must_be_possible_if_requested
+    return unless refund
+    return if ticket.order_entry
+
+    errors.add :base, 'Ticket cannot be refunded because there is no associated order'
   end
 end

@@ -25,7 +25,10 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
     end
 
     delete_result = DeleteTicketService.new(
-      ticket: existing_ticket, refund: existing_ticket.charge_id.present?
+      ticket: existing_ticket,
+      whodunit: user_con_profile,
+      refund: existing_ticket.order_entry.present?,
+      operation_name: 'conversion to event-provided ticket'
     ).call!
     subject_profile.reload
     result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!
