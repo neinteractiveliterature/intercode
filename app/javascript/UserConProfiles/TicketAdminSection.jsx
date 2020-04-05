@@ -70,6 +70,7 @@ function TicketAdminControls({ convention, userConProfile }) {
         convention={convention}
         ticket={ticket}
         userConProfile={userConProfile}
+        className="btn btn-success"
       />,
     );
   }

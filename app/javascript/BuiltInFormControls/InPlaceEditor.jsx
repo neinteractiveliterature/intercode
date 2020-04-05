@@ -2,6 +2,7 @@ import React, {
   useState, useRef, useLayoutEffect, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
+import useIsMounted from '../useIsMounted';
 
 const DefaultInPlaceEditorInput = React.forwardRef((
   { inputProps: { value, onChange, ...inputProps }, buttons }, ref,
@@ -32,13 +33,16 @@ function InPlaceEditorInputWrapper({
 }) {
   const [value, setValue] = useState(initialValue);
   const [committing, setCommitting] = useState(false);
+  const isMounted = useIsMounted();
 
   const commitEditing = async (event) => {
     event.preventDefault();
     try {
       await commit(value);
     } finally {
-      setCommitting(false);
+      if (isMounted.current) {
+        setCommitting(false);
+      }
     }
   };
 

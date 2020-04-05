@@ -1,17 +1,10 @@
-import {
-  useState, useCallback, useEffect, useRef,
-} from 'react';
+import { useState, useCallback } from 'react';
+import useIsMounted from './useIsMounted';
 
 export default function useAsyncFunction(func, { suppressError } = {}) {
   const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
-  const unmounted = useRef(false);
-  useEffect(
-    () => {
-      unmounted.current = false;
-      return () => { unmounted.current = true; };
-    },
-  );
+  const isMounted = useIsMounted();
 
   return [
     useCallback(
@@ -21,7 +14,7 @@ export default function useAsyncFunction(func, { suppressError } = {}) {
         try {
           return await func(...args);
         } catch (e) {
-          if (!unmounted.current) {
+          if (isMounted.current) {
             setError(e);
           }
           if (!suppressError) {
@@ -29,12 +22,12 @@ export default function useAsyncFunction(func, { suppressError } = {}) {
           }
           return null;
         } finally {
-          if (!unmounted.current) {
+          if (isMounted.current) {
             setInProgress(false);
           }
         }
       },
-      [func, suppressError],
+      [func, suppressError, isMounted],
     ),
     error,
     inProgress,
