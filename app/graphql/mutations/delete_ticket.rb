@@ -8,7 +8,7 @@ class Mutations::DeleteTicket < Mutations::BaseMutation
 
   def resolve(**args)
     ticket = convention.tickets.find(args[:id])
-    DeleteTicketService.new(ticket: ticket, refund: args[:refund]).call!
+    DeleteTicketService.new(ticket: ticket, refund: args[:refund], whodunit: user_con_profile).call!
 
     { ticket: ticket }
   end
