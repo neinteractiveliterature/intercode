@@ -72,16 +72,13 @@ AdminProductVariantEditRow.propTypes = {
     generatedId: PropTypes.number,
     name: PropTypes.string,
     description: PropTypes.string,
-    override_price: PropTypes.shape({
-      fractional: PropTypes.number,
-      currency_code: PropTypes.number,
-    }),
+    override_pricing_structure: PropTypes.shape({}),
   }).isRequired,
   deleteVariant: PropTypes.func.isRequired,
   updater: PropTypes.shape({
     name: PropTypes.func.isRequired,
     description: PropTypes.func.isRequired,
-    override_price: PropTypes.func.isRequired,
+    override_pricing_structure: PropTypes.func.isRequired,
   }).isRequired,
   moveVariant: PropTypes.func.isRequired,
 };
