@@ -121,6 +121,10 @@ group :development do
   # Ruby language server for LSP-compatible editors
   gem 'solargraph'
 
+  # Debugging
+  gem 'ruby-debug-ide'
+  gem 'debase'
+
   # Linting
   gem 'rubocop'
   gem 'rubocop-performance'
