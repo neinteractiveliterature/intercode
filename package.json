@@ -174,7 +174,8 @@
     "graphqldoc:generate": "graphqldoc -s schema.graphql",
     "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
     "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
-    "start": "webpack-dashboard -- webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
+    "start": "webpack-dashboard --port 3136 -- yarn run start:no-dashboard",
+    "start:no-dashboard": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },

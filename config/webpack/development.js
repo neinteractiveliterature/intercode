@@ -14,7 +14,7 @@ module.exports = {
   },
   plugins: [
     ...environment.plugins,
-    new DashboardPlugin({ port: 3135 }),
+    new DashboardPlugin({ port: 3136 }),
   ],
   devServer: {
     clientLogLevel: 'none',
