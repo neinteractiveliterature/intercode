@@ -50,12 +50,14 @@ TicketStatusCell.defaultProps = {
 };
 
 function TicketPaymentAmountCell({ value }) {
-  return formatMoney((value || {}).payment_amount);
+  return formatMoney(value?.order_entry?.price_per_item);
 }
 
 TicketPaymentAmountCell.propTypes = {
   value: PropTypes.shape({
-    payment_amount: PropTypes.shape({}),
+    order_entry: PropTypes.shape({
+      price_per_item: PropTypes.shape({}),
+    }),
   }),
 };
 

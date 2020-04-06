@@ -1,38 +1,48 @@
 class DeleteTicketService < CivilService::Service
+  include SplitTicketOrder
+
   class Result < CivilService::Result
     attr_accessor :refund_status
   end
   self.result_class = Result
 
-  attr_reader :ticket, :refund
+  validate :refund_must_be_possible_if_requested
 
-  def initialize(ticket:, refund:)
+  attr_reader :ticket, :refund, :whodunit, :operation_name
+
+  def initialize(ticket:, refund:, whodunit:, operation_name: nil)
     @ticket = ticket
     @refund = refund
+    @whodunit = whodunit
+    @operation_name = operation_name
   end
 
   private
 
   def inner_call
-    refund_status = :not_refunded
-
-    if refund
-      raise 'Ticket cannot be refunded because there is no Stripe charge ID' unless ticket.charge_id
-      charge = Stripe::Charge.retrieve(ticket.charge_id, api_key: convention.stripe_secret_key)
-      if charge.refunded
-        refund_status = :already_refunded
-      else
-        Stripe::Refund.create({ charge: ticket.charge_id }, api_key: convention.stripe_secret_key)
-        refund_status = :refunded
+    if ticket.order_entry
+      if ticket.order_entry.quantity > 1 || ticket.order_entry.order.order_entries.size > 1
+        split_ticket_to_new_order(ticket, operation_name || 'ticket deletion')
       end
+
+      # Canceling the order will automatically destroy the ticket
+      CancelOrderService.new(
+        order: ticket.order_entry.order, whodunit: whodunit, skip_refund: !refund
+      ).call!
+    else
+      ticket.destroy!
+      success(refund_status: :not_refunded)
     end
-
-    ticket.destroy!
-
-    success(refund_status: refund_status)
   end
 
   def convention
     @convention ||= ticket.convention
+  end
+
+  def refund_must_be_possible_if_requested
+    return unless refund
+    return if ticket.order_entry
+
+    errors.add :base, 'Ticket cannot be refunded because there is no associated order'
   end
 end

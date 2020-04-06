@@ -33,8 +33,7 @@ class ProvideEventTicketService < CivilService::Service
 
       ticket = event.provided_tickets.create!(
         ticket_type: ticket_type,
-        user_con_profile: user_con_profile,
-        payment_amount: Money.new(0, 'USD')
+        user_con_profile: user_con_profile
       )
     end
 

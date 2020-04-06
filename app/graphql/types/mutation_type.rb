@@ -134,12 +134,14 @@ class Types::MutationType < Types::BaseObject
   ### OrderEntry
 
   field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder
+  field :createOrderEntry, mutation: Mutations::CreateOrderEntry
   field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry
   field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry
 
   ### Order
 
   field :submitOrder, mutation: Mutations::SubmitOrder
+  field :createOrder, mutation: Mutations::CreateOrder
   field :markOrderPaid, mutation: Mutations::MarkOrderPaid
   field :updateOrder, mutation: Mutations::UpdateOrder
   field :cancelOrder, mutation: Mutations::CancelOrder
@@ -214,7 +216,6 @@ class Types::MutationType < Types::BaseObject
   field :createTicket, mutation: Mutations::CreateTicket
   field :updateTicket, mutation: Mutations::UpdateTicket
   field :deleteTicket, mutation: Mutations::DeleteTicket
-  field :purchaseTicket, mutation: Mutations::PurchaseTicket
   field :provideEventTicket, mutation: Mutations::ProvideEventTicket
   field :convertTicketToEventProvided, mutation: Mutations::ConvertTicketToEventProvided
 

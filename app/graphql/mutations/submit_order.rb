@@ -8,19 +8,15 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
   load_and_authorize_model_with_id Order, :id, :submit
 
   def resolve(**args)
-    if args[:payment_mode] == 'now'
-      order.update!(submitted_at: Time.zone.now)
+    service = SubmitOrderService.new(
+      order, payment_mode: args[:payment_mode], stripe_token: args[:stripe_token]
+    )
+    result = service.call
 
-      service = PayOrderService.new(order, args[:stripe_token])
-      result = service.call
-
-      if result.failure?
-        err = CivilService::ServiceFailure.new(service, result)
-        raise GraphQL::ExecutionError, err.message if result.card_error
-        raise err
-      end
-    else
-      order.update!(status: 'unpaid', submitted_at: Time.zone.now)
+    if result.failure?
+      err = result.exception || CivilService::ServiceFailure.new(service, result)
+      raise GraphQL::ExecutionError, err.message if result.card_error
+      raise err, err.message, err.backtrace
     end
 
     { order: order.reload }

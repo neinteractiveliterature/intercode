@@ -1835,11 +1835,10 @@ CREATE TABLE public.product_variants (
     name text,
     description text,
     image character varying,
-    override_price_cents integer,
-    override_price_currency character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    "position" integer
+    "position" integer,
+    override_pricing_structure jsonb
 );
 
 
@@ -1873,11 +1872,11 @@ CREATE TABLE public.products (
     name text,
     description text,
     image character varying,
-    price_cents integer,
-    price_currency character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_options jsonb
+    payment_options jsonb,
+    pricing_structure jsonb NOT NULL,
+    provides_ticket_type_id bigint
 );
 
 
@@ -2255,10 +2254,8 @@ CREATE TABLE public.ticket_types (
     convention_id integer,
     name text,
     description text,
-    pricing_schedule jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    publicly_available boolean DEFAULT true NOT NULL,
     counts_towards_convention_maximum boolean DEFAULT true NOT NULL,
     maximum_event_provided_tickets integer DEFAULT 0 NOT NULL,
     allows_event_signups boolean DEFAULT true NOT NULL
@@ -2292,13 +2289,10 @@ CREATE TABLE public.tickets (
     id integer NOT NULL,
     user_con_profile_id integer,
     ticket_type_id integer,
-    charge_id character varying,
-    payment_amount_cents integer,
-    payment_amount_currency character varying,
-    payment_note text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    provided_by_event_id integer
+    provided_by_event_id integer,
+    order_entry_id bigint
 );
 
 
@@ -3765,6 +3759,13 @@ CREATE INDEX index_products_on_convention_id ON public.products USING btree (con
 
 
 --
+-- Name: index_products_on_provides_ticket_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_provides_ticket_type_id ON public.products USING btree (provides_ticket_type_id);
+
+
+--
 -- Name: index_rooms_on_convention_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3961,10 +3962,10 @@ CREATE INDEX index_ticket_types_on_convention_id ON public.ticket_types USING bt
 
 
 --
--- Name: index_tickets_on_charge_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_tickets_on_order_entry_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tickets_on_charge_id ON public.tickets USING btree (charge_id);
+CREATE INDEX index_tickets_on_order_entry_id ON public.tickets USING btree (order_entry_id);
 
 
 --
@@ -4558,6 +4559,14 @@ ALTER TABLE ONLY public.signup_changes
 
 
 --
+-- Name: products fk_rails_d7453c5d85; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_rails_d7453c5d85 FOREIGN KEY (provides_ticket_type_id) REFERENCES public.ticket_types(id);
+
+
+--
 -- Name: rooms fk_rails_d7f8465d1c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4603,6 +4612,14 @@ ALTER TABLE ONLY public.permissions
 
 ALTER TABLE ONLY public.signup_requests
     ADD CONSTRAINT fk_rails_efbea103cd FOREIGN KEY (result_signup_id) REFERENCES public.signups(id);
+
+
+--
+-- Name: tickets fk_rails_f029f4cf01; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_f029f4cf01 FOREIGN KEY (order_entry_id) REFERENCES public.order_entries(id);
 
 
 --
@@ -4862,6 +4879,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200313042743'),
 ('20200313212415'),
 ('20200314164542'),
-('20200322234518');
+('20200322234518'),
+('20200324163822'),
+('20200328204324'),
+('20200328214143');
 
 

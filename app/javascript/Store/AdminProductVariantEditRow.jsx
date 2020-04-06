@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import useSortable from '../useSortable';
+import PricingStructureInput from './PricingStructureInput';
 
 function AdminProductVariantEditRow({
   variant, updater, deleteVariant, moveVariant, index,
@@ -33,18 +33,19 @@ function AdminProductVariantEditRow({
           className="d-flex align-items-start"
           value={variant.description || ''}
           onChange={updater.description}
-          renderInput={({ value, onChange }) => (
-            <LiquidInput value={value} onChange={onChange} className="col" />
+          renderInput={({ buttons, inputProps: { value, onChange } }) => (
+            <>
+              <LiquidInput value={value} onChange={onChange} className="col" />
+              {buttons}
+            </>
           )}
         />
       </td>
       <td>
-        <InPlaceEditor
-          value={variant.override_price ? `${formatMoney(variant.override_price, false)}` : ''}
-          onChange={updater.override_price}
-        >
-          {variant.override_price ? formatMoney(variant.override_price) : null}
-        </InPlaceEditor>
+        <PricingStructureInput
+          value={variant.override_pricing_structure || {}}
+          onChange={updater.override_pricing_structure}
+        />
       </td>
       <td>
         <button
@@ -71,16 +72,13 @@ AdminProductVariantEditRow.propTypes = {
     generatedId: PropTypes.number,
     name: PropTypes.string,
     description: PropTypes.string,
-    override_price: PropTypes.shape({
-      fractional: PropTypes.number,
-      currency_code: PropTypes.number,
-    }),
+    override_pricing_structure: PropTypes.shape({}),
   }).isRequired,
   deleteVariant: PropTypes.func.isRequired,
   updater: PropTypes.shape({
     name: PropTypes.func.isRequired,
     description: PropTypes.func.isRequired,
-    override_price: PropTypes.func.isRequired,
+    override_pricing_structure: PropTypes.func.isRequired,
   }).isRequired,
   moveVariant: PropTypes.func.isRequired,
 };

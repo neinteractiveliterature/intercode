@@ -8,7 +8,7 @@ describe TicketDrop do
   let(:ticket_drop) { TicketDrop.new(ticket) }
   let(:ticket_type) { ticket.ticket_type }
 
-  %w[user_con_profile provided_by_event payment_amount ticket_type].each do |field|
+  %w[user_con_profile provided_by_event ticket_type].each do |field|
     it "returns the #{field} of the ticket" do
       assert_equal ticket.public_send(field), ticket_drop.public_send(field)
     end

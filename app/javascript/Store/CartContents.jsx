@@ -35,7 +35,7 @@ function CartContents({ removeFromCart, changeQuantity, checkOutButton }) {
         }
       </td>
       <td>
-        {changeQuantity
+        {changeQuantity && !entry.product.provides_ticket_type
           ? (
             <InPlaceEditor
               value={entry.quantity.toString()}

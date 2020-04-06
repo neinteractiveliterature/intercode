@@ -17,6 +17,14 @@ class OrderEntryPolicy < ApplicationPolicy
     super
   end
 
+  def change_price?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:manage_conventions) { has_convention_permission?(convention, 'update_orders') }
+    end
+
+    site_admin_manage?
+  end
+
   class Scope < Scope
     def resolve
       scope.where(order_id: OrderPolicy::Scope.new(authorization_info, Order.all).resolve)

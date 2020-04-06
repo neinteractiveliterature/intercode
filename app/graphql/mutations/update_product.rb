@@ -1,4 +1,6 @@
 class Mutations::UpdateProduct < Mutations::BaseMutation
+  include ProductMutationHelper
+
   field :product, Types::ProductType, null: false
 
   argument :id, Integer, required: true
@@ -15,9 +17,11 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
 
   def resolve(**args)
     product_fields = args[:product].to_h.deep_symbolize_keys
-    product_fields[:price] = MoneyHelper.coerce_money_input(product_fields[:price])
+    product_fields[:pricing_structure] = coerce_pricing_structure_input(
+      product_fields[:pricing_structure]
+    )
 
-    ProductMutationHelper.create_or_update_variants(
+    create_or_update_variants(
       product,
       product_fields.delete(:product_variants)
     )

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Preview } from 'react-dnd-multi-backend';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
-import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
 import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
+import { describeAdminPricingStructure } from './describePricingStructure';
 
 const variantMatches = (a, b) => (
   (a.generatedId && b.generatedId === a.generatedId)
@@ -141,7 +141,7 @@ function AdminProductVariantsTable({
         {
           name: Transforms.identity,
           description: Transforms.identity,
-          override_price: parseMoneyOrNull,
+          override_pricing_structure: Transforms.identity,
         },
       );
 
@@ -163,7 +163,7 @@ function AdminProductVariantsTable({
         <td />
         <td>{variant.name}</td>
         <td>{variant.description}</td>
-        <td>{variant.override_price ? formatMoney(variant.override_price) : null}</td>
+        <td>{describeAdminPricingStructure(variant.override_pricing_structure)}</td>
         <td />
       </tr>
     );
