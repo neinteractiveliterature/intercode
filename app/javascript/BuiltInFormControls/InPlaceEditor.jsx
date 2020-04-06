@@ -5,7 +5,11 @@ import PropTypes from 'prop-types';
 import useIsMounted from '../useIsMounted';
 
 const DefaultInPlaceEditorInput = React.forwardRef((
-  { inputProps: { value, onChange, ...inputProps }, buttons }, ref,
+  {
+    inputProps: {
+      value, onChange, committing, disabled, ...inputProps
+    }, buttons,
+  }, ref,
 ) => (
   <>
     <input
@@ -15,6 +19,7 @@ const DefaultInPlaceEditorInput = React.forwardRef((
       {...inputProps}
       ref={ref}
       onChange={(event) => { onChange(event.target.value); }}
+      disabled={disabled || committing}
     />
     {buttons}
   </>
@@ -24,6 +29,8 @@ DefaultInPlaceEditorInput.propTypes = {
   inputProps: PropTypes.shape({
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string,
+    disabled: PropTypes.bool,
+    committing: PropTypes.bool,
   }).isRequired,
   buttons: PropTypes.node.isRequired,
 };
@@ -114,11 +121,12 @@ InPlaceEditorInputWrapper.propTypes = {
   commit: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   inputRef: PropTypes.shape({}).isRequired,
-  renderInput: PropTypes.func.isRequired,
+  renderInput: PropTypes.func,
 };
 
 InPlaceEditorInputWrapper.defaultProps = {
   initialValue: null,
+  renderInput: null,
 };
 
 function InPlaceEditor({
