@@ -86,8 +86,8 @@
     "payment": "^2.3.0",
     "popper.js": "^1.16.1",
     "porter-stemmer": "^0.9.1",
+    "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
-    "postcss-smart-import": "^0.7.6",
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
     "query-string": "^5.1.1",
@@ -174,7 +174,7 @@
     "graphqldoc:generate": "graphqldoc -s schema.graphql",
     "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
     "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
-    "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
+    "start": "webpack-dashboard -- webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
