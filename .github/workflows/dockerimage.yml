@@ -48,7 +48,7 @@ jobs:
         --target test
         --tag local-test
         --load
-    - name: Run tests
+    - name: Run Ruby tests
       env:
         DOCKER_CLI_EXPERIMENTAL: enabled
       run: docker-compose -f docker-compose.test.yml run
@@ -58,7 +58,19 @@ jobs:
         -e CI=true
         -v $(pwd)/test/html_reports:/usr/src/intercode/test/html_reports
         web
-        test/travis-complete.sh
+        test/docker-ruby-test.sh
+    - name: Run JavaScript tests
+      env:
+        DOCKER_CLI_EXPERIMENTAL: enabled
+      if: always()
+      run: docker-compose -f docker-compose.test.yml run
+        -e GIT_COMMIT_SHA=${GITHUB_SHA} -e GIT_BRANCH=${GITHUB_REF}
+        -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
+        -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
+        -e CI=true
+        -v $(pwd)/test/html_reports:/usr/src/intercode/test/html_reports
+        web
+        yarn run test
     - name: Archive HTML test reports
       uses: actions/upload-artifact@v1
       if: always()
