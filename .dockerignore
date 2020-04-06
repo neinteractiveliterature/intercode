@@ -5,7 +5,6 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Scripts that run in CI but outside the container
-/test/docker-*.sh
 /.travis.yml
 /.github/workflows/*
 
