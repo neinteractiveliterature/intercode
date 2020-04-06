@@ -31,6 +31,7 @@ function MyTicketDisplay() {
 
   const { convention, myProfile } = data;
   const { ticket } = myProfile;
+  const paymentAmount = ticket?.order_entry?.price_per_item;
 
   return (
     <>
@@ -47,7 +48,7 @@ function MyTicketDisplay() {
           <div className="d-flex">
             <div className="lead flex-grow-1">{myProfile.name_without_nickname}</div>
             <div className="lead font-weight-bold">
-              {ticket.payment_amount && ticket.payment_amount.fractional > 0 ? 'Paid' : 'Comp'}
+              {paymentAmount && paymentAmount.fractional > 0 ? 'Paid' : 'Comp'}
             </div>
           </div>
         </div>
@@ -60,11 +61,11 @@ function MyTicketDisplay() {
               </>
             )}
             <dt className="col-md-3">Paid</dt>
-            <dd className="col-md-9">{formatMoney(ticket.payment_amount) || '0'}</dd>
-            {ticket.charge_id && (
+            <dd className="col-md-9">{formatMoney(paymentAmount) || '0'}</dd>
+            {ticket.order_entry?.order?.charge_id && (
               <>
                 <dt className="col-md-3">Transaction ID</dt>
-                <dd className="col-md-9">{ticket.charge_id}</dd>
+                <dd className="col-md-9">{ticket.order_entry?.order?.charge_id}</dd>
               </>
             )}
             <dt className="col-md-3">Created</dt>

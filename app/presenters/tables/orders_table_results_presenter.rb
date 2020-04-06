@@ -6,6 +6,15 @@ class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
     new(scope, filters, sort)
   end
 
+  field :id, 'ID' do
+    def apply_filter(scope, value)
+      id = value.to_i
+      return scope if id == 0
+
+      scope.where(id: id)
+    end
+  end
+
   field :user_name, 'User' do
     def apply_filter(scope, value)
       scope.joins(:user_con_profile)
@@ -38,6 +47,12 @@ OR lower(user_con_profiles.first_name) like :value",
   field :describe_products, 'Products' do
     def generate_csv_cell(order)
       order.order_entries.map(&:describe_products).join(', ')
+    end
+  end
+
+  field :payment_amount, 'Payment amount' do
+    def generate_csv_cell(order)
+      order.payment_amount.format
     end
   end
 

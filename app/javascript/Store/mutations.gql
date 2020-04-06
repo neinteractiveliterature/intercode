@@ -9,8 +9,8 @@ mutation MarkOrderPaid($orderId: Int!) {
   }
 }
 
-mutation CancelOrder($orderId: Int!) {
-  cancelOrder(input: { id: $orderId }) {
+mutation CancelOrder($orderId: Int!, $skipRefund: Boolean) {
+  cancelOrder(input: { id: $orderId, skip_refund: $skipRefund }) {
     order {
       id
       ...AdminOrderFieldsFragment
@@ -18,8 +18,24 @@ mutation CancelOrder($orderId: Int!) {
   }
 }
 
-mutation AdminUpdateOrder($orderId: Int!, $paymentNote: String) {
-  updateOrder(input: { id: $orderId, order: { payment_note: $paymentNote } }) {
+mutation CreateOrder(
+  $userConProfileId: Int!, $order: OrderInput!, $status: OrderStatus!, $orderEntries: [OrderEntryInput!]
+) {
+  createOrder(input: {
+    user_con_profile_id: $userConProfileId,
+    order: $order,
+    status: $status,
+    order_entries: $orderEntries
+  }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation AdminUpdateOrder($id: Int!, $order: OrderInput!) {
+  updateOrder(input: { id: $id, order: $order }) {
     order {
       id
       ...AdminOrderFieldsFragment
@@ -54,6 +70,34 @@ mutation DeleteProduct($id: Int!) {
   }
 }
 
+mutation AdminCreateOrderEntry($input: CreateOrderEntryInput!) {
+  createOrderEntry(input: $input) {
+    order_entry {
+      id
+      ...OrderEntryFields
+
+      order {
+        id
+        ...AdminOrderFieldsFragment
+      }
+    }
+  }
+}
+
+mutation AdminUpdateOrderEntry($input: UpdateOrderEntryInput!) {
+  updateOrderEntry(input: $input) {
+    order_entry {
+      id
+      ...OrderEntryFields
+
+      order {
+        id
+        ...AdminOrderFieldsFragment
+      }
+    }
+  }
+}
+
 mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
   updateOrderEntry(input: $input) {
     order_entry {
@@ -67,6 +111,19 @@ mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
   deleteOrderEntry(input: $input) {
     order_entry {
       id
+    }
+  }
+}
+
+mutation AdminDeleteOrderEntry($input: DeleteOrderEntryInput!) {
+  deleteOrderEntry(input: $input) {
+    order_entry {
+      id
+
+      order {
+        id
+        ...AdminOrderFieldsFragment
+      }
     }
   }
 }

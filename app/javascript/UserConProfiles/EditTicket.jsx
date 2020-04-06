@@ -59,7 +59,7 @@ function EditTicket() {
 
       <TicketForm
         convention={convention}
-        initialTicket={userConProfile.ticket}
+        initialTicket={{ ...userConProfile.ticket, user_con_profile: userConProfile }}
         onSubmit={onSubmit}
         submitCaption={`Save ${convention.ticket_name}`}
       />

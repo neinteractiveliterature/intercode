@@ -76,8 +76,8 @@ class Convention < ApplicationRecord
     return false if ended?
     return false if ticket_mode == 'disabled'
 
-    ticket_types.publicly_available.any? do |ticket_type|
-      ticket_type.pricing_schedule.has_value_at?(Time.zone.now)
+    products.ticket_providing.available.any? do |product|
+      product.pricing_structure.price(time: Time.zone.now)
     end
   end
 

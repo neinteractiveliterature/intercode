@@ -78,8 +78,6 @@ class ActiveSupport::TestCase
     end
   end
 
-  parallelize(workers: Parallel.processor_count)
-
   def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **options)
     context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
     result = IntercodeSchema.execute(

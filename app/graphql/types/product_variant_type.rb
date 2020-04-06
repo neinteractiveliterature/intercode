@@ -19,12 +19,18 @@ class Types::ProductVariantType < Types::BaseObject
     object.image&.url
   end
 
-  field :override_price, Types::MoneyType, null: true
+  field :override_price, Types::MoneyType,
+    null: true, deprecation_reason: 'Use override_pricing_structure instead'
+  field :override_pricing_structure, Types::PricingStructureType, null: true
   field :position, Integer, null: true
 
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 
   def order_quantities_by_status
     OrderQuantityByStatusLoader.for(ProductVariant).load(object)
+  end
+
+  def override_price
+    object.override_pricing_structure&.price
   end
 end

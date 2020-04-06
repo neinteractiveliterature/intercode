@@ -26,7 +26,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     status_parts << ticket.ticket_type.name.humanize
 
     if include_payment_amount
-      payment_amount = ticket.payment_amount
+      payment_amount = ticket.order_entry&.price_per_item
       status_parts << humanized_money_with_symbol(payment_amount) if payment_amount.try(:>, 0)
     end
 
@@ -95,11 +95,11 @@ lower(user_con_profiles.first_name) #{direction}")
     end
 
     def expand_scope_for_sort(scope, _direction)
-      scope.joins(ticket: :ticket_type)
+      scope.left_joins(ticket: [:ticket_type, :order_entry])
     end
 
     def sql_order(direction)
-      Arel.sql("ticket_types.name #{direction}, tickets.payment_amount_cents #{direction}")
+      Arel.sql("ticket_types.name #{direction}, order_entries.price_per_item_cents #{direction}")
     end
 
     def generate_csv_cell(user_con_profile)
@@ -135,19 +135,19 @@ lower(user_con_profiles.first_name) #{direction}")
     def apply_filter(scope, value)
       payment_amount_fractional = (value.to_f * 100.0).to_i
       if payment_amount_fractional == 0
-        scope.left_joins(:ticket).where(
-          'tickets.payment_amount_cents = 0 OR tickets.payment_amount_cents IS NULL'
+        scope.left_joins(ticket: :order_entry).where(
+          'order_entries.price_per_item_cents = 0 OR order_entries.price_per_item_cents IS NULL'
         )
       else
-        scope.left_joins(:ticket).where(
-          tickets: { payment_amount_cents: payment_amount_fractional }
+        scope.left_joins(ticket: :order_entry).where(
+          order_entries: { price_per_item_cents: payment_amount_fractional }
         )
       end
     end
 
     def generate_csv_cell(user_con_profile)
-      return nil unless user_con_profile.ticket&.payment_amount_cents
-      user_con_profile.ticket.payment_amount_cents / 100.0
+      return nil unless user_con_profile.ticket&.order_entry&.price_per_item_cents
+      user_con_profile.ticket.order_entry.price_per_item_cents / 100.0
     end
   end
 

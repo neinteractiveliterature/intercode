@@ -12,7 +12,9 @@ class ProductDrop < Liquid::Drop
   # @!method payment_options
   #   @return [Array<String>] The purchase methods allowed for this product (e.g. stripe,
   #                           pay_at_convention)
-  delegate :available, :name, :payment_options, to: :product
+  # @!method provides_ticket_type
+  #   @return [TicketTypeDrop] The ticket type that this product will provide when purchased
+  delegate :available, :name, :payment_options, :provides_ticket_type, to: :product
 
   # @api
   def initialize(product)
@@ -24,6 +26,11 @@ class ProductDrop < Liquid::Drop
     product.description_template&.render(self)
   end
 
+  # @return [PricingStructureDrop] The pricing structure for this product
+  def pricing_structure
+    PricingStructureDrop.new(product.pricing_structure, product.convention.timezone)
+  end
+
   # @return [String] The URL of the product image, if present
   def image_url
     return unless product.image
@@ -31,8 +38,9 @@ class ProductDrop < Liquid::Drop
   end
 
   # @return [String] The base price for the product
+  # @deprecated Price is now controlled through the pricing_structure field
   def price
-    product.price.format
+    product.pricing_structure.price.format
   end
 
   # @return [Array<ProductVariantDrop>] Any variants of this product

@@ -37,7 +37,7 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
       end
     end
 
-    (Order::STATUSES - %w[pending]).each do |status|
+    (Types::OrderStatusType.values.keys - %w[pending]).each do |status|
       it "does not let me manage entries in my own #{status} orders" do
         order.update!(status: status)
         refute OrderEntryPolicy.new(order_user, order_entry).manage?

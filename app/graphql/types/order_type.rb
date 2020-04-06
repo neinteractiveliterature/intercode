@@ -3,7 +3,7 @@ class Types::OrderType < Types::BaseObject
 
   field :id, Integer, null: true
   field :user_con_profile, Types::UserConProfileType, null: false
-  field :status, String, null: false
+  field :status, Types::OrderStatusType, null: false
   field :total_price, Types::MoneyType, null: false
   field :payment_amount, Types::MoneyType, null: true
   field :payment_note, String, null: true

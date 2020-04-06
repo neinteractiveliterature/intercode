@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrderFormProductQuery } from './queries.gql';
-import formatMoney from '../formatMoney';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import parseCmsContent from '../parseCmsContent';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { describeUserPricingStructure } from './describePricingStructure';
+import AppRootContext from '../AppRootContext';
 
 function ProductPage() {
+  const { timezoneName } = useContext(AppRootContext);
   const { id } = useParams();
   const { data, loading, error } = useQuery(
     OrderFormProductQuery,
@@ -41,7 +43,7 @@ function ProductPage() {
 
       <div className="mb-4">
         <h1>{product.name}</h1>
-        <div className="lead">{formatMoney(product.price)}</div>
+        <div className="lead">{describeUserPricingStructure(product.pricing_structure, timezoneName)}</div>
       </div>
 
       {product.image_url && (

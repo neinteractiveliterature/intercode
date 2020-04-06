@@ -1,27 +1,25 @@
 import { useCallback } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 
-import { CartQuery, OrderHistoryQuery } from './queries.gql';
 import { SubmitOrder } from './mutations.gql';
 
 export default function useSubmitOrder(stripe) {
-  const [mutate] = useMutation(SubmitOrder, {
-    refetchQueries: [
-      { query: CartQuery },
-      { query: OrderHistoryQuery },
-    ],
-  });
+  const apolloClient = useApolloClient();
+  const [mutate] = useMutation(SubmitOrder);
   const submitOrder = useCallback(
-    (orderId, paymentMode, stripeToken) => mutate({
-      variables: {
-        input: {
-          id: orderId,
-          payment_mode: paymentMode,
-          stripe_token: stripeToken,
+    async (orderId, paymentMode, stripeToken) => {
+      await mutate({
+        variables: {
+          input: {
+            id: orderId,
+            payment_mode: paymentMode,
+            stripe_token: stripeToken,
+          },
         },
-      },
-    }),
-    [mutate],
+      });
+      await apolloClient.resetStore();
+    },
+    [mutate, apolloClient],
   );
 
   const submitCheckOutViaStripe = useCallback(

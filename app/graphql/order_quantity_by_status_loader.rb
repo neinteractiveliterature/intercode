@@ -42,7 +42,7 @@ class OrderQuantityByStatusLoader < GraphQL::Batch::Loader
   end
 
   def empty_results_by_status
-    (Order::STATUSES - ['pending'])
+    (Types::OrderStatusType.values.keys - ['pending'])
       .map { |status| { status: status, quantity: 0 } }
       .index_by { |result| result[:status] }
   end

@@ -1,53 +1,6 @@
-fragment AdminOrderFieldsFragment on Order {
-  id
-  status
-  submitted_at
-  charge_id
-  payment_note
-
-  user_con_profile {
-    id
-    name_without_nickname
-  }
-
-  total_price {
-    fractional
-    currency_code
-  }
-
-  order_entries {
-    id
-    describe_products
-  }
-}
-
-fragment AdminProductFields on Product {
-  id
-  name
-  description
-  description_html
-  image_url
-  available
-  payment_options
-
-  price {
-    fractional
-    currency_code
-  }
-
-  product_variants {
-    id
-    name
-    description
-    image_url
-    position
-
-    override_price {
-      fractional
-      currency_code
-    }
-  }
-}
+#import './adminProductFields.gql'
+#import './pricingStructureFields.gql'
+#import './orderFields.gql'
 
 fragment OrderEntryFields on OrderEntry {
   id
@@ -57,6 +10,9 @@ fragment OrderEntryFields on OrderEntry {
     id
     name
     payment_options
+    provides_ticket_type {
+      id
+    }
   }
 
   product_variant {
@@ -77,6 +33,7 @@ fragment OrderEntryFields on OrderEntry {
 
 query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
   currentAbility {
+    can_create_orders
     can_update_orders
   }
 
@@ -240,17 +197,21 @@ query OrderFormProductQuery($productId: Int!) {
   product(id: $productId) {
     id
     image_url
-    price {
-      fractional
+    name
+    pricing_structure {
+      ...PricingStructureFields
     }
     description_html
+    provides_ticket_type {
+      id
+    }
 
     product_variants {
       id
       name
       position
-      override_price {
-        fractional
+      override_pricing_structure {
+        ...PricingStructureFields
       }
     }
   }

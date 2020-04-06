@@ -39,7 +39,6 @@ class Types::ConventionType < Types::BaseObject
   field :catch_all_staff_position, Types::StaffPositionType, null: true
   field :ticket_types, [Types::TicketTypeType], null: true
   field :organization, Types::OrganizationType, null: true
-  field :products, [Types::ProductType], null: true
   field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: true
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
@@ -61,7 +60,6 @@ class Types::ConventionType < Types::BaseObject
     :notification_templates,
     :organization,
     :pages,
-    :products,
     :rooms,
     :root_page,
     :staff_positions,
@@ -105,6 +103,21 @@ class Types::ConventionType < Types::BaseObject
         event_categories
       end
     end
+  end
+
+  field :products, [Types::ProductType], null: true do
+    argument :only_ticket_providing, Boolean, required: false, camelize: false
+    argument :only_available, Boolean, required: false, camelize: false
+  end
+  def products(only_ticket_providing: false, only_available: false)
+    if !only_ticket_providing && !only_available
+      return AssociationLoader.for(Convention, :products).load(object)
+    end
+
+    scope = convention.products
+    scope = scope.ticket_providing if only_ticket_providing
+    scope = scope.available if only_available
+    scope.to_a
   end
 
   field :privilege_names, [String],

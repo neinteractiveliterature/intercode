@@ -5,11 +5,16 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
   require_user_con_profile
 
   def resolve(order_entry:)
+    product = convention.products.find(order_entry.product_id)
+    unless product.available?
+      raise GraphQL::ExecutionError, "#{product.name} is not publicly available"
+    end
+
     order = current_pending_order
     order ||= user_con_profile.orders.create!(status: 'pending')
 
     new_order_entry = order.order_entries.find_or_initialize_by(
-      product_id: order_entry.product_id,
+      product: product,
       product_variant_id: order_entry.product_variant_id
     ) do |entry|
       entry.quantity = 0

@@ -1,3 +1,6 @@
+#import '../Store/adminProductFields.gql'
+#import '../Store/orderFields.gql'
+
 fragment UserConProfileFields on UserConProfile {
   id
   name
@@ -46,14 +49,20 @@ query MyProfileQuery {
 
 fragment UserConProfileAdminTicketFields on Ticket {
   id
-  charge_id
-  payment_note
   created_at
   updated_at
 
-  payment_amount {
-    fractional
-    currency_code
+  order_entry {
+    id
+
+    order {
+      ...AdminOrderFieldsFragment
+    }
+
+    price_per_item {
+      fractional
+      currency_code
+    }
   }
 
   ticket_type {
@@ -99,6 +108,10 @@ query UserConProfileAdminQuery($id: Int!) {
       name
       publicly_available
       maximum_event_provided_tickets
+
+      providing_products {
+        ...AdminProductFields
+      }
     }
   }
 
@@ -198,9 +211,11 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
           id
           updated_at
 
-          payment_amount {
-            fractional
-            currency_code
+          order_entry {
+            price_per_item {
+              fractional
+              currency_code
+            }
           }
 
           ticket_type {

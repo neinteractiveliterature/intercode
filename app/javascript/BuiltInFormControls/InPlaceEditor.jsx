@@ -2,12 +2,137 @@ import React, {
   useState, useRef, useLayoutEffect, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
+import useIsMounted from '../useIsMounted';
+
+const DefaultInPlaceEditorInput = React.forwardRef((
+  {
+    inputProps: {
+      value, onChange, committing, disabled, ...inputProps
+    }, buttons,
+  }, ref,
+) => (
+  <>
+    <input
+      type="text"
+      className="form-control form-control-sm mr-1"
+      value={value || ''}
+      {...inputProps}
+      ref={ref}
+      onChange={(event) => { onChange(event.target.value); }}
+      disabled={disabled || committing}
+    />
+    {buttons}
+  </>
+));
+
+DefaultInPlaceEditorInput.propTypes = {
+  inputProps: PropTypes.shape({
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.string,
+    disabled: PropTypes.bool,
+    committing: PropTypes.bool,
+  }).isRequired,
+  buttons: PropTypes.node.isRequired,
+};
+
+function InPlaceEditorInputWrapper({
+  initialValue, commit, cancel, inputRef, renderInput,
+}) {
+  const [value, setValue] = useState(initialValue);
+  const [committing, setCommitting] = useState(false);
+  const isMounted = useIsMounted();
+
+  const commitEditing = async (event) => {
+    event.preventDefault();
+    try {
+      await commit(value);
+    } finally {
+      if (isMounted.current) {
+        setCommitting(false);
+      }
+    }
+  };
+
+  const keyDownInInput = (event) => {
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        cancel(event);
+        break;
+
+      case 'Enter':
+        event.preventDefault();
+        commitEditing(event);
+        break;
+
+      default:
+    }
+  };
+
+  const buttons = (
+    <>
+      <button
+        type="button"
+        className="btn btn-secondary btn-sm mr-1"
+        onClick={cancel}
+        aria-label="Cancel editing"
+        disabled={committing}
+      >
+        <i className="fa fa-times" />
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary btn-sm"
+        onClick={commitEditing}
+        aria-label="Commit changes"
+        disabled={committing}
+      >
+        <i className="fa fa-check" />
+      </button>
+    </>
+  );
+
+  const wrappedComponentProps = {
+    inputProps: {
+      value,
+      onChange: setValue,
+      onKeyDown: keyDownInInput,
+      ref: inputRef,
+      disabled: committing,
+      committing,
+    },
+    commitEditing,
+    cancelEditing: cancel,
+    buttons,
+  };
+
+  if (renderInput) {
+    return renderInput(wrappedComponentProps);
+  }
+
+  return (
+    <DefaultInPlaceEditorInput {...wrappedComponentProps} />
+  );
+}
+
+InPlaceEditorInputWrapper.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  initialValue: PropTypes.any,
+  commit: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
+  inputRef: PropTypes.shape({}).isRequired,
+  renderInput: PropTypes.func,
+};
+
+InPlaceEditorInputWrapper.defaultProps = {
+  initialValue: null,
+  renderInput: null,
+};
 
 function InPlaceEditor({
   children, className, onChange, renderInput, value,
 }) {
   const [editing, setEditing] = useState(false);
-  const [editingValue, setEditingValue] = useState('');
   const inputRef = useRef();
 
   useLayoutEffect(
@@ -23,75 +148,42 @@ function InPlaceEditor({
     (event) => {
       event.preventDefault();
       setEditing(true);
-      setEditingValue(value);
     },
-    [value],
+    [],
   );
 
   const cancelEditing = useCallback(
     (event) => {
       event.preventDefault();
       setEditing(false);
-      setEditingValue(undefined);
     },
     [],
   );
 
-  const commitEditing = (event) => {
-    event.preventDefault();
-    onChange(editingValue);
-    setEditing(false);
-    setEditingValue(undefined);
-  };
-
-  const keyDownInInput = (event) => {
-    switch (event.key) {
-      case 'Escape':
-        event.preventDefault();
-        cancelEditing(event);
-        break;
-
-      case 'Enter':
-        event.preventDefault();
-        commitEditing(event);
-        break;
-
-      default:
-    }
-  };
-
-  const renderInputInternal = () => {
-    const inputProps = {
-      value: editingValue,
-      onChange: setEditingValue,
-      onKeyDown: keyDownInInput,
-      ref: inputRef,
-    };
-
-    if (renderInput) {
-      return renderInput(inputProps);
-    }
-
-    return (
-      <input
-        type="text"
-        className="form-control form-control-sm mr-1"
-        {...inputProps}
-        onChange={(event) => { inputProps.onChange(event.target.value); }}
-      />
-    );
-  };
+  const commitEditing = useCallback(
+    async (newValue) => {
+      const onChangeReturn = onChange(newValue);
+      if (onChangeReturn?.then) {
+        await onChangeReturn.then(() => {
+          setEditing(false);
+        });
+      } else {
+        setEditing(false);
+      }
+    },
+    [onChange],
+  );
 
   if (editing) {
     return (
       <div className={className || 'form-inline align-items-start'}>
-        {renderInputInternal()}
-        <button type="button" className="btn btn-secondary btn-sm mr-1" onClick={cancelEditing} aria-label="Cancel editing">
-          <i className="fa fa-times" />
-        </button>
-        <button type="button" className="btn btn-primary btn-sm" onClick={commitEditing} aria-label="Commit changes">
-          <i className="fa fa-check" />
-        </button>
+        <InPlaceEditorInputWrapper
+          commit={commitEditing}
+          cancel={cancelEditing}
+          initialValue={value}
+          inputRef={inputRef}
+          renderInput={renderInput}
+        />
       </div>
     );
   }
@@ -107,7 +199,8 @@ function InPlaceEditor({
 }
 
 InPlaceEditor.propTypes = {
-  value: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  value: PropTypes.any.isRequired,
   onChange: PropTypes.func.isRequired,
   children: PropTypes.node,
   renderInput: PropTypes.func,

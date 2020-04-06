@@ -3,9 +3,6 @@
 FactoryBot.define do
   factory :ticket do
     user_con_profile
-    payment_amount_cents { 1 }
-    payment_amount_currency { 'USD' }
-    payment_note { 'MyText' }
 
     after(:build) do |ticket|
       unless ticket.ticket_type

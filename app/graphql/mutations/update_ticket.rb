@@ -8,7 +8,6 @@ class Mutations::UpdateTicket < Mutations::BaseMutation
 
   def resolve(**args)
     ticket_attrs = args[:ticket].to_h
-    ticket_attrs[:payment_amount] = MoneyHelper.coerce_money_input(ticket_attrs[:payment_amount])
     ticket.update!(ticket_attrs)
 
     { ticket: ticket }

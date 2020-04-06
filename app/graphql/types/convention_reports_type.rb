@@ -22,10 +22,10 @@ Use #object or #context_convention instead."
 
   def ticket_count_by_type_and_payment_amount
     @ticket_count_by_type_and_payment_amount ||= begin
-      grouped_count_data = object.tickets.group(
+      grouped_count_data = object.tickets.left_joins(:order_entry).group(
         :ticket_type_id,
-        'COALESCE(payment_amount_cents, 0)',
-        "COALESCE(payment_amount_currency, 'USD')"
+        'COALESCE(price_per_item_cents, 0)',
+        "COALESCE(price_per_item_currency, 'USD')"
       ).count
 
       grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
