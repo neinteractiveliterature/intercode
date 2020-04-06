@@ -162,6 +162,9 @@
     "webpack-dashboard": "^3.2.0",
     "webpack-dev-server": "^3.10.3"
   },
+  "resolutions": {
+    "**/**/kind-of": ">= 6.0.3"
+  },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
