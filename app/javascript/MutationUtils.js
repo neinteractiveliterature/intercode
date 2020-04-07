@@ -18,6 +18,24 @@ export function createUpdater({
   };
 }
 
+export function deleteUpdater({
+  query, queryVariables, arrayPath, idAttribute, id,
+}) {
+  return (store) => {
+    const data = store.readQuery({ query, variables: queryVariables });
+    store.writeQuery({
+      query,
+      variables: queryVariables,
+      data: set(
+        arrayPath,
+        get(arrayPath, data)
+          .filter((object) => object[idAttribute || 'id'] !== id),
+        data,
+      ),
+    });
+  };
+}
+
 export function useCreateMutation(mutation, {
   query, queryVariables: variables, arrayPath, newObjectPath, ...options
 }) {
@@ -39,20 +57,14 @@ export function useDeleteMutation(mutation, {
     (mutateOptions) => {
       const mutateVariables = (mutateOptions || {}).variables || variables;
       const id = get(idVariablePath, mutateVariables);
+      if (typeof id === 'undefined') {
+        throw new Error(`id expected at path ${idVariablePath.join('.')} but undefined found instead`);
+      }
+
       return mutate({
-        update: (store) => {
-          const data = store.readQuery({ query, variables: queryVariables });
-          store.writeQuery({
-            query,
-            variables: queryVariables,
-            data: set(
-              arrayPath,
-              get(arrayPath, data)
-                .filter((object) => object[idAttribute || 'id'] !== id),
-              data,
-            ),
-          });
-        },
+        update: deleteUpdater({
+          query, queryVariables, arrayPath, idAttribute, id,
+        }),
         ...mutateOptions,
       });
     },

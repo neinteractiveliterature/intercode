@@ -4,7 +4,6 @@ fragment TicketTypeAdmin_TicketTypeFields on TicketType {
   id
   name
   description
-  publicly_available
   counts_towards_convention_maximum
   allows_event_signups
   maximum_event_provided_tickets

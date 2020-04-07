@@ -28,7 +28,6 @@ function TicketTypeAdmin() {
     <Switch>
       <Route path="/ticket_types/new">
         <NewTicketType
-          timezoneName={data.convention.timezone_name}
           ticketName={data.convention.ticket_name}
         />
       </Route>
@@ -37,7 +36,6 @@ function TicketTypeAdmin() {
         <TicketTypesList
           ticketTypes={data.convention.ticket_types}
           ticketName={data.convention.ticket_name}
-          timezoneName={data.convention.timezone_name}
         />
       </Route>
       <Redirect to="/ticket_types" />

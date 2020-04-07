@@ -11,7 +11,7 @@ import TicketTypeForm from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
-function NewTicketType({ ticketName, timezoneName }) {
+function NewTicketType({ ticketName }) {
   const history = useHistory();
   usePageTitle(`New ${ticketName} type`);
 
@@ -60,7 +60,6 @@ function NewTicketType({ ticketName, timezoneName }) {
       <TicketTypeForm
         ticketType={ticketType}
         ticketName={ticketName}
-        timezone={timezoneName}
         onChange={setTicketType}
       />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>Save</button>
@@ -71,7 +70,6 @@ function NewTicketType({ ticketName, timezoneName }) {
 
 NewTicketType.propTypes = {
   ticketName: PropTypes.string.isRequired,
-  timezoneName: PropTypes.string.isRequired,
 };
 
 export default NewTicketType;
