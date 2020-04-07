@@ -1,3 +1,5 @@
+#import "../Store/pricingStructureFields.gql"
+
 fragment TicketTypeAdmin_TicketTypeFields on TicketType {
   id
   name
@@ -15,6 +17,16 @@ fragment TicketTypeAdmin_TicketTypeFields on TicketType {
         fractional
         currency_code
       }
+    }
+  }
+
+  providing_products {
+    id
+    name
+    available
+
+    pricing_structure {
+      ...PricingStructureFields
     }
   }
 }

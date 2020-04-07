@@ -32,7 +32,7 @@ function AdminProductCard({ currentAbility, startEditing, product }) {
   };
 
   return (
-    <div className="mb-4 card bg-light">
+    <div className="mb-4 card bg-light" id={`product-${product.id}`}>
       <div className="card-header">
         <div className="row align-items-center">
           <div className="col">
