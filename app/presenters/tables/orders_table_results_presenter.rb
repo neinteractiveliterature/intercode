@@ -52,7 +52,7 @@ OR lower(user_con_profiles.first_name) like :value",
 
   field :payment_amount, 'Payment amount' do
     def generate_csv_cell(order)
-      order.payment_amount.format
+      order.payment_amount&.format
     end
   end
 
