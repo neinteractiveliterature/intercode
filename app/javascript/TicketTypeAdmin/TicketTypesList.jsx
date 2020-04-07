@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { capitalize } from 'inflected';
-import { useMutation } from '@apollo/react-hooks';
 
 import { AdminTicketTypesQuery } from './queries.gql';
 import { DeleteTicketType } from './mutations.gql';
@@ -13,9 +12,10 @@ import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { describeAdminPricingStructure } from '../Store/describePricingStructure';
+import { useDeleteMutation } from '../MutationUtils';
 
 function cardClassForTicketType(ticketType) {
-  if (ticketType.publicly_available) {
+  if (ticketType.providing_products.filter((product) => product.available).length > 0) {
     return '';
   }
 
@@ -40,27 +40,14 @@ function describeTicketTypeOptions(ticketType, ticketName) {
 }
 
 function TicketTypesList({ ticketTypes, ticketName }) {
-  const history = useHistory();
   usePageTitle(`${capitalize(ticketName)} types`);
 
   const confirm = useConfirm();
-  const [deleteMutate] = useMutation(DeleteTicketType);
-  const deleteTicketType = useCallback(
-    async (id) => {
-      await deleteMutate({
-        variables: { input: { id } },
-        update: (proxy) => {
-          const data = proxy.readQuery({ query: AdminTicketTypesQuery });
-          data.convention.ticket_types = data.convention.ticket_types.filter((
-            (ticketType) => ticketType.id !== id
-          ));
-          proxy.writeQuery({ query: AdminTicketTypesQuery, data });
-        },
-      });
-      history.replace('/');
-    },
-    [deleteMutate, history],
-  );
+  const deleteTicketType = useDeleteMutation(DeleteTicketType, {
+    query: AdminTicketTypesQuery,
+    idVariablePath: ['input', 'id'],
+    arrayPath: ['convention', 'ticket_types'],
+  });
 
   const renderTicketTypeDisplay = (ticketType) => (
     <div className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
@@ -81,7 +68,7 @@ function TicketTypesList({ ticketTypes, ticketName }) {
               className="btn btn-danger btn-sm mx-1"
               onClick={() => confirm({
                 prompt: `Are you sure you want to delete the ticket type “${ticketType.description}”?`,
-                action: () => deleteTicketType(ticketType.id),
+                action: () => deleteTicketType({ variables: { input: { id: ticketType.id } } }),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })}
             >
