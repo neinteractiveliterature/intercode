@@ -4,7 +4,7 @@ import { Preview } from 'react-dnd-multi-backend';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import sortProductVariants from './sortProductVariants';
-import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import { describeAdminPricingStructure } from './describePricingStructure';
 
 const variantMatches = (a, b) => (

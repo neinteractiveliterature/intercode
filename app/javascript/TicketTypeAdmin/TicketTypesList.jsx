@@ -1,22 +1,21 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { capitalize } from 'inflected';
-import { useMutation } from '@apollo/react-hooks';
 
 import { AdminTicketTypesQuery } from './queries.gql';
 import { DeleteTicketType } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypePropType from './TicketTypePropType';
-import Timespan from '../Timespan';
-import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
+import { describeAdminPricingStructure } from '../Store/describePricingStructure';
+import { useDeleteMutation } from '../MutationUtils';
 
 function cardClassForTicketType(ticketType) {
-  if (ticketType.publicly_available) {
+  if (ticketType.providing_products.filter((product) => product.available).length > 0) {
     return '';
   }
 
@@ -33,65 +32,25 @@ function describeTicketTypeOptions(ticketType, ticketName) {
     eventProvidedDescription = `events can provide up to ${pluralizeWithCount(ticketName, ticketType.maximum_event_provided_tickets)}`;
   }
 
-  if (ticketType.publicly_available) {
-    if (eventProvidedDescription != null) {
-      return `Available for purchase by the general public and ${eventProvidedDescription}`;
-    }
-
-    return 'Available for purchase by the general public';
-  }
-
   if (eventProvidedDescription != null) {
     return capitalize(eventProvidedDescription);
   }
 
-  return 'Private ticket type (cannot be purchased through the web)';
+  return null;
 }
 
-function renderPricingSchedule(ticketType, timezoneName) {
-  const timespanItems = ticketType.pricing_schedule.timespans.map((timespan, i) => {
-    const dollarValue = formatMoney(timespan.value);
-    const timespanDescription = Timespan.fromStrings(timespan.start, timespan.finish)
-      .humanizeInTimezone(timezoneName, 'MMMM D, YYYY');
-
-    return (
-      // eslint-disable-next-line react/no-array-index-key
-      <li key={i}>
-        {dollarValue}
-        {' '}
-        {timespanDescription}
-      </li>
-    );
-  });
-
-  return <ul className="mb-0">{timespanItems}</ul>;
-}
-
-function TicketTypesList({ ticketTypes, ticketName, timezoneName }) {
-  const history = useHistory();
+function TicketTypesList({ ticketTypes, ticketName }) {
   usePageTitle(`${capitalize(ticketName)} types`);
 
   const confirm = useConfirm();
-  const [deleteMutate] = useMutation(DeleteTicketType);
-  const deleteTicketType = useCallback(
-    async (id) => {
-      await deleteMutate({
-        variables: { input: { id } },
-        update: (proxy) => {
-          const data = proxy.readQuery({ query: AdminTicketTypesQuery });
-          data.convention.ticket_types = data.convention.ticket_types.filter((
-            (ticketType) => ticketType.id !== id
-          ));
-          proxy.writeQuery({ query: AdminTicketTypesQuery, data });
-        },
-      });
-      history.replace('/');
-    },
-    [deleteMutate, history],
-  );
+  const deleteTicketType = useDeleteMutation(DeleteTicketType, {
+    query: AdminTicketTypesQuery,
+    idVariablePath: ['input', 'id'],
+    arrayPath: ['convention', 'ticket_types'],
+  });
 
   const renderTicketTypeDisplay = (ticketType) => (
-    <div className={`card my-4 ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
+    <div className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
       <div className="card-header">
         <div className="row">
           <div className="col-md-8">
@@ -109,7 +68,7 @@ function TicketTypesList({ ticketTypes, ticketName, timezoneName }) {
               className="btn btn-danger btn-sm mx-1"
               onClick={() => confirm({
                 prompt: `Are you sure you want to delete the ticket type “${ticketType.description}”?`,
-                action: () => deleteTicketType(ticketType.id),
+                action: () => deleteTicketType({ variables: { input: { id: ticketType.id } } }),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })}
             >
@@ -123,27 +82,42 @@ function TicketTypesList({ ticketTypes, ticketName, timezoneName }) {
           </div>
         </div>
 
-        <p className="mb-0">
-          <small>
-            <em>
-              {describeTicketTypeOptions(ticketType, ticketName)}
-              {
-                ticketType.counts_towards_convention_maximum
-                  ? null
-                  : [<br key="line-break" />, 'Does not count towards convention maximum']
-              }
-              {
-                ticketType.allows_event_signups
-                  ? null
-                  : [<br key="line-break" />, 'Does not allow event signups']
-              }
-            </em>
-          </small>
-        </p>
+        <div className="small font-italic">
+          {describeTicketTypeOptions(ticketType, ticketName)}
+          {
+            !ticketType.counts_towards_convention_maximum && (
+              <div>Does not count towards convention maximum</div>
+            )
+          }
+          {
+            !ticketType.allows_event_signups && (
+              <div>Does not allow event signups</div>
+            )
+          }
+        </div>
       </div>
 
-      <div className="card-body">
-        {renderPricingSchedule(ticketType, timezoneName)}
+      <div className="card-body bg-white text-body">
+        <p><strong>Providing products:</strong></p>
+        {ticketType.providing_products.length > 0
+          ? (
+            <ul className="list-unstyled mb-0">
+              {ticketType.providing_products.map((product) => (
+                <li key={product.id}>
+                  <Link to={`/admin_store/products#product-${product.id}`}>
+                    {product.name}
+                  </Link>
+                  {' '}
+                  {product.available ? '(available for purchase)' : '(not available for purchase)'}
+                  {' '}
+                  &mdash;
+                  {' '}
+                  {describeAdminPricingStructure(product.pricing_structure)}
+                </li>
+              ))}
+            </ul>
+          )
+          : `No products provide this ${ticketName} type`}
       </div>
     </div>
   );
@@ -177,7 +151,6 @@ function TicketTypesList({ ticketTypes, ticketName, timezoneName }) {
 TicketTypesList.propTypes = {
   ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
   ticketName: PropTypes.string.isRequired,
-  timezoneName: PropTypes.string.isRequired,
 };
 
 export default TicketTypesList;

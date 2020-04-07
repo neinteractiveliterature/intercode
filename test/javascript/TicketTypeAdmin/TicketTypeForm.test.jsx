@@ -8,15 +8,10 @@ test('TicketTypeForm matches snapshot', () => {
     ticketType={{
       name: '',
       description: '',
-      pricing_schedule: {
-        timespans: [],
-      },
-      publicly_available: true,
       maximum_event_provided_tickets: 0,
       counts_towards_convention_maximum: true,
     }}
     ticketName="banana"
-    timezone="UTC"
     onChange={() => {}}
   />);
 
