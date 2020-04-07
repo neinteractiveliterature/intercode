@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import AdminProductCard from './AdminProductCard';
@@ -10,6 +10,7 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useModal from '../../ModalDialogs/useModal';
 import EditPricingStructureModal, { PricingStructureModalContext } from '../EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
+import scrollToLocationHash from '../../scrollToLocationHash';
 
 function ProductAdmin() {
   const { data, loading, error } = useQuery(AdminProductsQuery);
@@ -34,6 +35,15 @@ function ProductAdmin() {
 
   const removeNewProduct = (product) => setNewProducts((prevNewProducts) => prevNewProducts
     .filter((newProduct) => newProduct.generatedId !== product.generatedId));
+
+  useEffect(
+    () => {
+      if (!loading && !error) {
+        scrollToLocationHash();
+      }
+    },
+    [loading, error],
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
