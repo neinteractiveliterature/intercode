@@ -41,52 +41,6 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     <legend
       class="col-form-label"
     >
-      Publicly available for purchase?
-    </legend>
-    <div>
-      <div
-        class="form-check form-check-inline"
-      >
-        <label
-          class="form-check-label"
-          for="publicly_available-3"
-        >
-          <input
-            checked=""
-            class="form-check-input"
-            id="publicly_available-3"
-            name="publicly_available"
-            type="radio"
-            value="true"
-          />
-           Yes
-        </label>
-      </div>
-      <div
-        class="form-check form-check-inline"
-      >
-        <label
-          class="form-check-label"
-          for="publicly_available-4"
-        >
-          <input
-            class="form-check-input"
-            id="publicly_available-4"
-            name="publicly_available"
-            type="radio"
-            value="false"
-          />
-           No
-        </label>
-      </div>
-    </div>
-  </fieldset>
-  <fieldset
-    class="form-group"
-  >
-    <legend
-      class="col-form-label"
-    >
       Allows event signups?
     </legend>
     <div>
@@ -95,11 +49,11 @@ exports[`TicketTypeForm matches snapshot 1`] = `
       >
         <label
           class="form-check-label"
-          for="allows_event_signups-5"
+          for="allows_event_signups-3"
         >
           <input
             class="form-check-input"
-            id="allows_event_signups-5"
+            id="allows_event_signups-3"
             name="allows_event_signups"
             type="radio"
             value="true"
@@ -112,11 +66,11 @@ exports[`TicketTypeForm matches snapshot 1`] = `
       >
         <label
           class="form-check-label"
-          for="allows_event_signups-6"
+          for="allows_event_signups-4"
         >
           <input
             class="form-check-input"
-            id="allows_event_signups-6"
+            id="allows_event_signups-4"
             name="allows_event_signups"
             type="radio"
             value="false"
@@ -140,12 +94,12 @@ exports[`TicketTypeForm matches snapshot 1`] = `
       >
         <label
           class="form-check-label"
-          for="counts_towards_convention_maximum-7"
+          for="counts_towards_convention_maximum-5"
         >
           <input
             checked=""
             class="form-check-input"
-            id="counts_towards_convention_maximum-7"
+            id="counts_towards_convention_maximum-5"
             name="counts_towards_convention_maximum"
             type="radio"
             value="true"
@@ -158,11 +112,11 @@ exports[`TicketTypeForm matches snapshot 1`] = `
       >
         <label
           class="form-check-label"
-          for="counts_towards_convention_maximum-8"
+          for="counts_towards_convention_maximum-6"
         >
           <input
             class="form-check-input"
-            id="counts_towards_convention_maximum-8"
+            id="counts_towards_convention_maximum-6"
             name="counts_towards_convention_maximum"
             type="radio"
             value="false"
@@ -176,40 +130,17 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     class="form-group"
   >
     <label
-      for="maximum_event_provided_tickets-9"
+      for="maximum_event_provided_tickets-7"
     >
       Number of event-provided bananas of this type (per event)
     </label>
     <input
       class="form-control"
-      id="maximum_event_provided_tickets-9"
+      id="maximum_event_provided_tickets-7"
       name="maximum_event_provided_tickets"
       type="number"
       value=""
     />
   </div>
-  <fieldset>
-    <p>
-      Pricing schedule
-    </p>
-    <table
-      class="table table-striped"
-    >
-      <tbody>
-        <tr>
-          <td
-            colspan="4"
-          >
-            <button
-              class="btn btn-link"
-              type="button"
-            >
-              Add row
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </fieldset>
 </div>
 `;

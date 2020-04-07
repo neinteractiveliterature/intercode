@@ -10,6 +10,7 @@ class Product < ApplicationRecord
   serialize :pricing_structure, ActiveModelCoder.new('PricingStructure')
 
   validate :ensure_valid_payment_options
+  validate :ensure_ticket_providing_products_cannot_have_variants
 
   scope :available, -> { where(available: true) }
   scope :ticket_providing, -> { where.not(provides_ticket_type_id: nil) }
@@ -42,5 +43,13 @@ class Product < ApplicationRecord
       #{invalid_payment_options.to_sentence} are not recognized.  Valid payment options are
       #{PAYMENT_OPTIONS.to_sentence}.
     EOF
+  end
+
+  def ensure_ticket_providing_products_cannot_have_variants
+    return unless provides_ticket_type
+    return unless product_variants.any?
+
+    ticket_name = convention&.ticket_name&.capitalize || 'Ticket'
+    errors.add :base, "#{ticket_name}-providing products cannot have variants"
   end
 end

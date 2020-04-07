@@ -61,6 +61,10 @@ query AdminProductsQuery {
       id
       ...AdminProductFields
     }
+    ticket_types {
+      id
+      description
+    }
   }
 
   currentAbility {

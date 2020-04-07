@@ -13,7 +13,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function EditTicketTypeForm({ initialTicketType, ticketName, timezoneName }) {
+function EditTicketTypeForm({ initialTicketType, ticketName }) {
   const history = useHistory();
   usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState(initialTicketType);
@@ -47,7 +47,6 @@ function EditTicketTypeForm({ initialTicketType, ticketName, timezoneName }) {
       <TicketTypeForm
         ticketType={ticketType}
         ticketName={ticketName}
-        timezone={timezoneName}
         onChange={setTicketType}
       />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
@@ -61,7 +60,6 @@ function EditTicketTypeForm({ initialTicketType, ticketName, timezoneName }) {
 EditTicketTypeForm.propTypes = {
   initialTicketType: TicketTypePropType.isRequired,
   ticketName: PropTypes.string.isRequired,
-  timezoneName: PropTypes.string.isRequired,
 };
 
 function EditTicketType() {
