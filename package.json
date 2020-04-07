@@ -37,7 +37,7 @@
     "apollo-link-http": "^1.5.16",
     "apollo-upload-client": "^13.0.0",
     "array-to-sentence": "^2.0.0",
-    "autoprefixer": "^9.7.5",
+    "autoprefixer": "^9.7.6",
     "babel-loader": "^8.1.0",
     "babel-plugin-dynamic-import-node": "^2.3.0",
     "babel-plugin-graphql-tag": "^2.5.0",
