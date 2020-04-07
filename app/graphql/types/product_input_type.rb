@@ -7,4 +7,5 @@ class Types::ProductInputType < Types::BaseInputObject
   argument :product_variants, [Types::ProductVariantInputType], required: false, camelize: false
   argument :payment_options, [String], required: false, camelize: false
   argument :delete_variant_ids, [Integer], required: false, camelize: false
+  argument :provides_ticket_type_id, Integer, required: false, camelize: false
 end

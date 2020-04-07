@@ -50,6 +50,7 @@ export default function buildProductInput(product) {
       override_pricing_structure: buildPricingStructureInput(variant.override_pricing_structure),
     })),
     delete_variant_ids: product.delete_variant_ids,
+    provides_ticket_type_id: product.provides_ticket_type?.id || null,
     ...imageInput,
   };
 }

@@ -24,4 +24,9 @@ fragment AdminProductFields on Product {
       ...PricingStructureFields
     }
   }
+
+  provides_ticket_type {
+    id
+    description
+  }
 }
