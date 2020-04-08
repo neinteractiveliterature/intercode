@@ -15,12 +15,16 @@ Rollbar.configure do |config|
     File.read(capistrano_revision_path).strip
   end
 
+  # Mask the least significant bits of the IP
+  config.anonymize_user_ip = true
+
   if ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'] && !Rails.env.test?
     config.js_enabled = true
     config.js_options = {
       accessToken: ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'],
       captureUncaught: true,
       captureUnhandledRejections: true,
+      captureIp: 'anonymous',
       payload: {
         environment: Rails.env.to_s,
         client: {
@@ -39,8 +43,10 @@ Rollbar.configure do |config|
   # `username`, and `email` methods to fetch those properties. To customize:
   # config.person_method = "my_current_user"
   # config.person_id_method = "my_id"
-  # config.person_username_method = "my_username"
-  # config.person_email_method = "my_email"
+
+  # Disable sending PII to Rollbar; only send person ID
+  config.person_username_method = nil
+  config.person_email_method = nil
 
   # If you want to attach custom data to all exception and message reports,
   # provide a lambda like the following. It should return a hash.
