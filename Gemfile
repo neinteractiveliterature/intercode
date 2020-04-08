@@ -83,6 +83,9 @@ gem 'shoryuken'
 gem 'aws-sdk-sqs'
 gem 'whenever'
 
+# Privacy-respecting metrics
+gem 'ahoy_matey'
+
 # Miscellany
 gem 'parallel'
 gem 'skylight'
