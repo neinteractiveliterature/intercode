@@ -1,5 +1,5 @@
 class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[6.0]
-  def change
+  def change # rubocop:disable MethodLength
     create_table :ahoy_visits do |t|
       t.string :visit_token
       t.string :visitor_token
