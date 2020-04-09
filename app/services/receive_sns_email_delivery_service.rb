@@ -33,7 +33,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     ReceiveEmailService.new(
       recipients: recipients,
       load_email: -> { email },
-      message_id: message['mail']['messageId']
+      message_id: message_id
     ).call
   end
 
@@ -43,6 +43,10 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
       *Array(common_header('CC') || []),
       *Array(common_header('BCC') || [])
     ].map { |recipient| Mail::Address.new(recipient) }
+  end
+
+  def message_id
+    message['mail']['messageId']
   end
 
   def header(name)
