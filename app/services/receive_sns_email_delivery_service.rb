@@ -23,6 +23,13 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   private
 
   def inner_call
+    if failing_score?
+      logger.warn(
+        "Dropping message #{message_id} because it failed checks: #{score_by_verdict.to_json}"
+      )
+      return success
+    end
+
     ReceiveEmailService.new(
       recipients: recipients,
       load_email: -> { email },
@@ -58,6 +65,33 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
 
   def receipt_action
     message['receipt']['action']
+  end
+
+  def verdicts
+    @verdicts ||= %i[dkim dmarc spam spf virus].each_with_object({}) do |verdict_type, hash|
+      verdict_object = message['receipt']["#{verdict_type}Verdict"]
+      hash[verdict_type] = verdict_object ? verdict_object['status'] : 'MISSING'
+    end
+  end
+
+  def score_by_verdict
+    @score_by_verdict ||= verdicts.each_with_object({}) do |(verdict_type, verdict), hash|
+      score = case
+      when verdict_type == :virus && verdict == 'FAIL' then 2
+      when verdict == 'FAIL' then 1
+      else 0
+      end
+
+      hash[verdict_type] = score
+    end
+  end
+
+  def total_score
+    @total_score ||= score_by_verdict.values.sum
+  end
+
+  def failing_score?
+    total_score >= 2
   end
 
   def raw_email
