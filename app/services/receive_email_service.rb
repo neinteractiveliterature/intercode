@@ -106,9 +106,17 @@ class ReceiveEmailService < CivilService::Service
 
   def transform_email_for_forwarding(original_recipient, new_recipients)
     from_addresses = email.from.map { |from| EmailRoute.parse_address(from) }.compact
+    if from_addresses.empty?
+      Rails.logger.warn(
+        "Dropping message #{message_id} because it has no parseable From: addresses.  Original \
+  header: #{email.from}"
+      )
+      return nil
+    end
 
     transformed_from_addresses = from_addresses.map do |address|
-      address.display_name = "#{address.display_name || address.address} via #{original_recipient.address}"
+      display_name = address.display_name || address.address
+      address.display_name = "#{display_name} via #{original_recipient.address}"
       address.address = original_recipient.address
       address
     end
@@ -117,7 +125,9 @@ class ReceiveEmailService < CivilService::Service
     forward_message.reply_to = from_addresses.map(&:to_s)
     forward_message.from = transformed_from_addresses.map(&:to_s)
     forward_message.to = new_recipients
-    forward_message.header['X-Intercode-Original-Return-Path'] = forward_message.header['Return-Path']
+    forward_message.header['X-Intercode-Original-Return-Path'] = (
+      forward_message.header['Return-Path']
+    )
     forward_message.header['Return-Path'] = "bounces@#{mailer_host}"
     forward_message.header['X-Intercode-Original-Sender'] = forward_message.header['Sender']
     forward_message.header['Sender'] = nil
@@ -132,6 +142,7 @@ class ReceiveEmailService < CivilService::Service
 
   def forward_email(original_recipient, new_recipients)
     forward_message = transform_email_for_forwarding(original_recipient, new_recipients)
+    return unless forward_message
 
     self.class.ses_client.send_raw_email({
       raw_message: {
