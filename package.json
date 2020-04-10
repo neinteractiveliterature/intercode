@@ -102,7 +102,7 @@
     "react-dnd-touch-backend": "^9.5.1",
     "react-dom": "^16.13.1",
     "react-google-recaptcha": "^2.0.1",
-    "react-helmet": "^5.2.1",
+    "react-helmet": "^6.0.0",
     "react-html-id": "^0.1.5",
     "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-moment-proptypes": "^1.7.0",
