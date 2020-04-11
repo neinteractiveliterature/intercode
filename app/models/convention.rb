@@ -18,6 +18,7 @@ class Convention < ApplicationRecord
   has_many :cms_files, as: :parent, dependent: :destroy
   has_many :cms_graphql_queries, as: :parent, dependent: :destroy
   has_many :cms_variables, as: :parent, dependent: :destroy
+  has_many :coupons, dependent: :destroy
   has_many :departments, dependent: :destroy
   has_many :notification_templates, dependent: :destroy
   has_many :user_con_profiles, dependent: :destroy
