@@ -10,7 +10,7 @@ import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
-function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
+export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) {
   const authenticityTokenRef = useRef(authenticityToken);
   useEffect(
     () => { authenticityTokenRef.current = authenticityToken; },
@@ -52,6 +52,12 @@ function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
     ]),
     [AuthLink, ErrorHandlerLink],
   );
+
+  return link;
+}
+
+function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
+  const link = useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef);
 
   const client = useMemo(
     () => new ApolloClient({

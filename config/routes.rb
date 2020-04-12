@@ -3,7 +3,8 @@ require 'intercode/virtual_host_constraint'
 Intercode::Application.routes.draw do
   use_doorkeeper_openid_connect
   use_doorkeeper
-  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql' if Rails.env.development?
+
+  get '/graphiql' => 'graphiql#show' if Rails.env.development?
 
   post '/graphql', to: 'graphql#execute'
   devise_for :users, controllers: {

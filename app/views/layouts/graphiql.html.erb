@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GraphiQL</title>
+    <%= stylesheet_bundle_tag 'dev-mode-graphiql', media: 'all' %>
+    <%= javascript_bundle_tag 'dev-mode-graphiql', defer: true %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
