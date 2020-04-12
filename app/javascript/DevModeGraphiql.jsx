@@ -8,7 +8,7 @@ import { useIntercodeApolloLink } from './useIntercodeApolloClient';
 import mountReactComponents from './mountReactComponents';
 
 import 'graphiql/graphiql.css';
-import './styles/dev-mode-graphiql.css';
+import './styles/dev-mode-graphiql.scss';
 
 function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } }) {
   const onUnauthenticated = useRef(() => {});
@@ -23,7 +23,7 @@ function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } })
     [link],
   );
 
-  return <GraphiQL fetcher={fetcher} />;
+  return <GraphiQL fetcher={fetcher} editorTheme="intercode" />;
 }
 
 DevModeGraphiql.propTypes = {

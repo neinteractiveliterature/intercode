@@ -1,2 +1,2 @@
-module GraphiQLHelper
+module GraphiqlHelper
 end
