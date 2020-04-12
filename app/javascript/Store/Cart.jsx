@@ -111,6 +111,7 @@ function Cart() {
               .map((entry) => entry.product.payment_options),
           )
         }
+        totalPrice={data.currentPendingOrder?.total_price ?? { fractional: 0 }}
       />
     </div>
   );

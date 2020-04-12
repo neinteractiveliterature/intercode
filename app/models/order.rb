@@ -4,6 +4,7 @@ class Order < ApplicationRecord
   validates :status, presence: true, inclusion: { in: Types::OrderStatusType.values.keys }
   has_many :tickets, through: :order_entries
   has_many :coupon_applications, dependent: :destroy
+  has_many :coupons, through: :coupon_applications
 
   scope :pending, -> { where(status: 'pending') }
   scope :completed, -> { where(status: %w[unpaid paid]) }
@@ -16,31 +17,12 @@ class Order < ApplicationRecord
   end
 
   def total_price
-    price_before_discounts = total_price_before_discounts
-
-    price = price_before_discounts.dup
-    coupon_applications.includes(:coupon).find_each do |coupon_application|
-      price -= coupon_discount_amount(price_before_discounts, coupon_application.coupon)
+    apps = coupon_applications.includes(:coupon)
+    total_after_discounts = apps.inject(total_price_before_discounts) do |price, app|
+      price - app.discount
     end
 
-    price
-  end
-
-  def coupon_discount_amount(price_before_discounts, coupon)
-    if coupon.fixed_amount
-      coupon.fixed_amount
-    elsif coupon.percent_discount
-      # always calculate markdown from the grand total so coupon application order doesn't matter
-      price_before_discounts * (coupon.percent_discount / 100.0)
-    elsif coupon.provides_product_id
-      order_entries_for_product = order_entries.select do |entry|
-        entry.product_id == coupon.provides_product_id
-      end
-
-      order_entries_for_product.map(&:price_per_item).max || Money.new(0, 'USD')
-    else
-      Money.new(0, 'USD')
-    end
+    [total_after_discounts, Money.new(0, 'USD')].max
   end
 
   def to_liquid
