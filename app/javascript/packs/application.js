@@ -8,24 +8,12 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import 'bootstrap.native/dist/bootstrap-native-v4';
-import React from 'react';
-import ReactDOM from 'react-dom';
 
 import '../styles/application.scss';
 import 'react-table/react-table.css';
 import '../inflections';
 
 import components from './components';
+import mountReactComponents from '../mountReactComponents';
 
-// adapted from webpacker-react
-function mountReactComponents() {
-  const toMount = document.querySelectorAll('[data-react-class]');
-  toMount.forEach((element) => {
-    const component = components[element.getAttribute('data-react-class')];
-    const props = JSON.parse((element.attributes['data-react-props'] || { value: '{}' }).value);
-    const reactElement = React.createElement(component, props);
-    ReactDOM.render(reactElement, element);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', mountReactComponents);
+document.addEventListener('DOMContentLoaded', () => { mountReactComponents(components); });

@@ -1,0 +1,2 @@
+module GraphiQLHelper
+end
