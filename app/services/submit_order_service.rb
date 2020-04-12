@@ -3,6 +3,7 @@ class SubmitOrderService < CivilService::Service
 
   validate :ensure_not_buying_duplicate_ticket
   validate :ensure_only_one_ticket
+  validate :ensure_coupons_usable
 
   attr_reader :order, :payment_mode, :stripe_token
   delegate :user_con_profile, to: :order
@@ -42,5 +43,14 @@ class SubmitOrderService < CivilService::Service
     ticket_quantity = ticket_providing_order_entries.sum(&:quantity)
     return unless ticket_quantity > 1
     errors.add :base, "You can’t buy more than one #{convention.ticket_name}"
+  end
+
+  def ensure_coupons_usable
+    order.coupons.each do |coupon|
+      errors.add :base, "Coupon #{coupon.code} is expired" if coupon.expired?
+      if coupon.usage_limit_reached?
+        errors.add :base, "Coupon #{coupon.code} has been used up already"
+      end
+    end
   end
 end

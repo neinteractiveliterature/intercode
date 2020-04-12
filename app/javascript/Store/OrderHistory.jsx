@@ -148,7 +148,7 @@ function OrderHistory() {
             visible={paymentModal.visible}
             onCancel={paymentModal.close}
             initialName={data.myProfile.name_without_nickname}
-            orderId={(paymentModal.state || { order: { id: 0 } }).order.id}
+            orderId={paymentModal.state?.order?.id ?? 0}
             onComplete={paymentModal.close}
             paymentOptions={
               paymentModal.state
@@ -158,6 +158,7 @@ function OrderHistory() {
                 ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
                 : []
             }
+            totalPrice={paymentModal.state?.order?.total_price ?? { fractional: 0 }}
           />
         </ul>
       </>

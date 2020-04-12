@@ -11,9 +11,10 @@ import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import { LazyStripeElementsWrapper } from '../LazyStripe';
 import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
+import formatMoney from '../formatMoney';
 
 function OrderPaymentModal({
-  visible, onCancel, onComplete, initialName, orderId, paymentOptions, stripe,
+  visible, onCancel, onComplete, initialName, orderId, paymentOptions, stripe, totalPrice,
 }) {
   const [paymentMode, setPaymentMode] = useState(
     paymentOptions.includes('pay_at_convention') ? null : 'now',
@@ -36,6 +37,10 @@ function OrderPaymentModal({
   const renderCheckOutModalContent = () => {
     if (!visible) {
       return null;
+    }
+
+    if (totalPrice.fractional === 0) {
+      return <div className="modal-body">Your order is free.</div>;
     }
 
     let paymentModeSelect = null;
@@ -82,7 +87,7 @@ function OrderPaymentModal({
         <div className="d-flex align-items-center">
           <div className="col">
             {
-              paymentMode === 'now'
+              paymentMode === 'now' && totalPrice.fractional !== 0
                 ? (
                   <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
                 ) : null
@@ -102,7 +107,9 @@ function OrderPaymentModal({
             onClick={submitCheckOut}
             disabled={disabled}
           >
-            Submit
+            {totalPrice.fractional === 0
+              ? 'Submit order (free)'
+              : `Pay ${formatMoney(totalPrice)}`}
           </button>
         </div>
       </div>
@@ -120,6 +127,9 @@ OrderPaymentModal.propTypes = {
   stripe: PropTypes.shape({
     createToken: PropTypes.func.isRequired,
   }),
+  totalPrice: PropTypes.shape({
+    fractional: PropTypes.number,
+  }).isRequired,
 };
 
 OrderPaymentModal.defaultProps = {
