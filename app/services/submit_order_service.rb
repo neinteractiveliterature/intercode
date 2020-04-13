@@ -4,6 +4,7 @@ class SubmitOrderService < CivilService::Service
   validate :ensure_not_buying_duplicate_ticket
   validate :ensure_only_one_ticket
   validate :ensure_coupons_usable
+  validate :ensure_free_order_is_actually_free
 
   attr_reader :order, :payment_mode, :stripe_token
   delegate :user_con_profile, to: :order
@@ -18,10 +19,12 @@ class SubmitOrderService < CivilService::Service
   private
 
   def inner_call
-    if args[:payment_mode] == 'now'
+    if payment_mode == 'now'
       order.update!(submitted_at: Time.zone.now)
-
-      PayOrderService.new(order, args[:stripe_token])
+      PayOrderService.new(order, stripe_token).call!
+    elsif payment_mode == 'free'
+      order.update!(status: 'paid', submitted_at: Time.zone.now)
+      success
     else
       order.update!(status: 'unpaid', submitted_at: Time.zone.now)
       success
@@ -52,5 +55,10 @@ class SubmitOrderService < CivilService::Service
         errors.add :base, "Coupon #{coupon.code} has been used up already"
       end
     end
+  end
+
+  def ensure_free_order_is_actually_free
+    return unless payment_mode == 'free' && order.total_price.cents != 0
+    errors.add :base, 'Cannot use free payment mode on an order that costs money'
   end
 end
