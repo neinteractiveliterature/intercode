@@ -40,16 +40,14 @@ table.no-top-border thead th {
   cursor: pointer;
 }
 
-.CodeMirror {
-  height: auto !important;
-}
+.intercode-code-input {
+  .CodeMirror {
+    height: auto !important;
+  }
 
-.CodeMirror-scroll {
-  max-height: 80vh;
-  min-height: 10rem;
-
-  .cms-editor & {
-    min-height: 20rem;
+  .CodeMirror-scroll {
+    max-height: 80vh;
+    min-height: 10rem;
   }
 }
 

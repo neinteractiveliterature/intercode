@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import GraphiQL from 'graphiql';
 import { parse } from 'graphql';
@@ -11,8 +11,7 @@ import 'graphiql/graphiql.css';
 import './styles/dev-mode-graphiql.scss';
 
 function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } }) {
-  const onUnauthenticated = useRef(() => {});
-  const link = useIntercodeApolloLink(authenticityToken, onUnauthenticated);
+  const link = useIntercodeApolloLink(authenticityToken);
 
   const fetcher = useCallback(
     (operation) => {

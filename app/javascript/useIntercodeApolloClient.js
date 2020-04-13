@@ -37,7 +37,9 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
     () => onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
         if (graphQLErrors.some((err) => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
-          onUnauthenticatedRef.current();
+          if (onUnauthenticatedRef?.current) {
+            onUnauthenticatedRef.current();
+          }
         }
       }
     }),

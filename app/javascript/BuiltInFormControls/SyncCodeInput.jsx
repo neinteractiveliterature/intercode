@@ -159,7 +159,7 @@ function SyncCodeInput({
     <div className={className}>
       <div
         className={classNames(
-          `form-control p-0 codemirror-height-${lines || 10}`,
+          `form-control p-0 intercode-code-input codemirror-height-${lines || 10}`,
           formControlClassName,
         )}
         style={{ overflow: 'hidden' }}
