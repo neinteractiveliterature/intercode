@@ -24,10 +24,11 @@ function OrderPaymentModal({
   const submitOrder = useSubmitOrder(stripe);
   const [submitCheckOut, error, submitting] = useAsyncFunction(useCallback(
     async () => {
-      await submitOrder(orderId, paymentMode, paymentDetails);
+      const actualPaymentMode = (totalPrice.fractional === 0 ? 'free' : paymentMode);
+      await submitOrder(orderId, actualPaymentMode, paymentDetails);
       onComplete();
     },
-    [onComplete, paymentMode, submitOrder, orderId, paymentDetails],
+    [onComplete, paymentMode, submitOrder, orderId, paymentDetails, totalPrice],
   ));
 
   const disabled = !paymentMode || submitting || (

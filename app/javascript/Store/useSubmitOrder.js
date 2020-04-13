@@ -34,7 +34,7 @@ export default function useSubmitOrder(stripe) {
     [stripe, submitOrder],
   );
 
-  const submitPayLaterCheckOut = useCallback(
+  const submitCheckOutWithoutStripe = useCallback(
     (orderId, paymentMode) => submitOrder(orderId, paymentMode),
     [submitOrder],
   );
@@ -43,10 +43,10 @@ export default function useSubmitOrder(stripe) {
     async (orderId, paymentMode, paymentDetails) => {
       if (paymentMode === 'now') {
         await submitCheckOutViaStripe(orderId, paymentMode, paymentDetails);
-      } else if (paymentMode === 'later') {
-        await submitPayLaterCheckOut(orderId, paymentMode);
+      } else {
+        await submitCheckOutWithoutStripe(orderId, paymentMode);
       }
     },
-    [submitCheckOutViaStripe, submitPayLaterCheckOut],
+    [submitCheckOutViaStripe, submitCheckOutWithoutStripe],
   );
 }
