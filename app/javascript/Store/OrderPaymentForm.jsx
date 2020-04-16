@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardElement } from 'react-stripe-elements';
+import { CardElement } from '@stripe/react-stripe-js';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
