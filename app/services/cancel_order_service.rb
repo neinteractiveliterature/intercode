@@ -26,8 +26,6 @@ class CancelOrderService < CivilService::Service
       action << 'unpaid'
     end
 
-    convention = order.user_con_profile.convention
-
     order.update!(
       status: 'cancelled',
       payment_note: [
@@ -65,5 +63,9 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
     return unless order.status == 'cancelled'
 
     errors.add(:order, 'is already cancelled')
+  end
+
+  def convention
+    @convention ||= order.user_con_profile.convention
   end
 end

@@ -1,27 +1,26 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { injectStripe } from 'react-stripe-elements';
 
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import OrderPaymentForm from './OrderPaymentForm';
 import paymentDetailsComplete from './paymentDetailsComplete';
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
-import { LazyStripeElementsWrapper } from '../LazyStripe';
+import { LazyStripeElementsContainer } from '../LazyStripe';
 import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 
-function OrderPaymentModal({
-  visible, onCancel, onComplete, initialName, orderId, paymentOptions, stripe, totalPrice,
+function OrderPaymentModalContents({
+  onCancel, onComplete, initialName, orderId, paymentOptions, totalPrice,
 }) {
   const [paymentMode, setPaymentMode] = useState(
     paymentOptions.includes('pay_at_convention') ? null : 'now',
   );
   const [paymentDetails, setPaymentDetails] = useState({ name: initialName || '' });
 
-  const submitOrder = useSubmitOrder(stripe);
+  const submitOrder = useSubmitOrder();
   const [submitCheckOut, error, submitting] = useAsyncFunction(useCallback(
     async () => {
       const actualPaymentMode = (totalPrice.fractional === 0 ? 'free' : paymentMode);
@@ -36,10 +35,6 @@ function OrderPaymentModal({
   );
 
   const renderCheckOutModalContent = () => {
-    if (!visible) {
-      return null;
-    }
-
     if (totalPrice.fractional === 0) {
       return <div className="modal-body">Your order is free.</div>;
     }
@@ -81,7 +76,7 @@ function OrderPaymentModal({
   };
 
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
+    <>
       <div className="modal-header lead">Checkout</div>
       {renderCheckOutModalContent()}
       <div className="modal-footer">
@@ -114,6 +109,42 @@ function OrderPaymentModal({
           </button>
         </div>
       </div>
+    </>
+  );
+}
+
+OrderPaymentModalContents.propTypes = {
+  onCancel: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+  initialName: PropTypes.string,
+  orderId: PropTypes.number.isRequired,
+  paymentOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  totalPrice: PropTypes.shape({
+    fractional: PropTypes.number,
+  }).isRequired,
+};
+
+OrderPaymentModalContents.defaultProps = {
+  initialName: '',
+};
+
+function OrderPaymentModal({
+  visible, onCancel, onComplete, initialName, orderId, paymentOptions, totalPrice,
+}) {
+  return (
+    <Modal visible={visible} dialogClassName="modal-lg">
+      {visible && (
+        <LazyStripeElementsContainer>
+          <OrderPaymentModalContents
+            onCancel={onCancel}
+            onComplete={onComplete}
+            initialName={initialName}
+            orderId={orderId}
+            paymentOptions={paymentOptions}
+            totalPrice={totalPrice}
+          />
+        </LazyStripeElementsContainer>
+      )}
     </Modal>
   );
 }
@@ -125,9 +156,6 @@ OrderPaymentModal.propTypes = {
   initialName: PropTypes.string,
   orderId: PropTypes.number.isRequired,
   paymentOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
-  stripe: PropTypes.shape({
-    createToken: PropTypes.func.isRequired,
-  }),
   totalPrice: PropTypes.shape({
     fractional: PropTypes.number,
   }).isRequired,
@@ -135,7 +163,6 @@ OrderPaymentModal.propTypes = {
 
 OrderPaymentModal.defaultProps = {
   initialName: '',
-  stripe: null, // injectStripe is going to inject it soon after page load
 };
 
-export default LazyStripeElementsWrapper(injectStripe(OrderPaymentModal));
+export default OrderPaymentModal;
