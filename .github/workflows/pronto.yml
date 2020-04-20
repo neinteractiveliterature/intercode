@@ -9,12 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: git fetch --prune --unshallow
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
+      - uses: ruby/setup-ruby@v1
       - uses: actions/setup-node@v1
         with:
           node-version: '12.14.0'
+      - run: gem info
       - run: gem install --no-document unicode-display_width -v 1.6.1
       - run: gem install --no-document pronto pronto-rubocop pronto-eslint_npm rubocop-performance rubocop-rails
       - run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
