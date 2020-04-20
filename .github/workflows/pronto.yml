@@ -9,12 +9,18 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: git fetch --prune --unshallow
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
+      - uses: actions/setup-node@v1
         with:
-          ruby-version: '2.7'
-      - uses: borales/actions-yarn@v2.0.0
+          node-version: '12.14.0'
+      - name: Set up cache
+        uses: actions/cache@v1
         with:
-          cmd: install
+          path: /home/runner/.rubies/ruby-2.7.0/lib/ruby/gems/2.7.0
+          key: ${{ runner.os }}-pronto-gems-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pronto-gems-${{ github.ref }}-
+            ${{ runner.os }}-pronto-gems-
       - run: gem install --no-document unicode-display_width -v 1.6.1
       - run: gem install --no-document pronto pronto-rubocop pronto-eslint_npm rubocop-performance rubocop-rails
       - run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
