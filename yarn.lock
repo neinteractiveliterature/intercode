@@ -3978,10 +3978,10 @@ csstype@^2.6.7:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.9.tgz#05141d0cd557a56b8891394c1911c40c8a98d098"
   integrity sha512-xz39Sb4+OaTsULgUERcCk+TJj8ylkL4aSVDQiX/ksxbELSqwkgt4d4RD7fovIdgJGSuNYqwZEiVjYY5l0ask+Q==
 
-csv-string@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/csv-string/-/csv-string-3.2.0.tgz#d034b62dfcd10b95ff7e584401d15355805673bd"
-  integrity sha512-JN3iAuFJ+r7+CwF6UtP3U8ryorRkQp8NT+9VufeiRV+Xyv+Q8HPPBHGm4LAq7YihTQYmUnIeYy5CPQ8Y2GhMkg==
+csv-string@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/csv-string/-/csv-string-4.0.1.tgz#1fb4a88c869badad056d55247f57336e1e748b00"
+  integrity sha512-nCdK+EWDbqLvZ2MmVQhHTmidMEsHbK3ncgTJb4oguNRpkmH5OOr+KkDRB4nqsVrJ7oK0AdO1QEsBp0+z7KBtGQ==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
