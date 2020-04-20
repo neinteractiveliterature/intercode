@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12.14.0'
-      - name: Set up cache
+      - name: Set up gem cache
         uses: actions/cache@v1
         with:
           path: /home/runner/.rubies/ruby-2.7.0/lib/ruby/gems/2.7.0
@@ -21,8 +21,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pronto-gems-${{ github.ref }}-
             ${{ runner.os }}-pronto-gems-
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Set up yarn cache
+        uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - run: gem install --no-document unicode-display_width -v 1.6.1
       - run: gem install --no-document pronto pronto-rubocop pronto-eslint_npm rubocop-performance rubocop-rails
+      - run: yarn install
       - run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
           PRONTO_GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           pronto run -f github_status github_pr_review
