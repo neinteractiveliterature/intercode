@@ -37,12 +37,12 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     ).call
   end
 
+  # Only use the actual recipient of this email according to SES.  If there are multiple recipients
+  # that go to Intercode, we get separate SNS notifications for each of them.
   def recipients
-    @recipients ||= [
-      *Array(common_header('To') || []),
-      *Array(common_header('CC') || []),
-      *Array(common_header('BCC') || [])
-    ].map { |recipient| Mail::Address.new(recipient) }
+    @recipients ||= message['receipt']['recipients'].map do |recipient|
+      Mail::Address.new(recipient)
+    end
   end
 
   def message_id
