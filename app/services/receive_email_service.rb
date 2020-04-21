@@ -114,7 +114,8 @@ class ReceiveEmailService < CivilService::Service
       return nil
     end
 
-    transformed_from_addresses = from_addresses.map do |address|
+    transformed_from_addresses = from_addresses.map do |from_address|
+      address = from_address.dup
       display_name = address.display_name || address.address
       address.display_name = "#{display_name} via #{original_recipient.address}"
       address.address = original_recipient.address
@@ -125,6 +126,8 @@ class ReceiveEmailService < CivilService::Service
     forward_message.reply_to = from_addresses.map(&:to_s)
     forward_message.from = transformed_from_addresses.map(&:to_s)
     forward_message.to = new_recipients
+    forward_message.cc = nil
+    forward_message.bcc = nil
     forward_message.header['X-Intercode-Original-Return-Path'] = (
       forward_message.header['Return-Path']
     )
