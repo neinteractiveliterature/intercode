@@ -39,13 +39,13 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   end
 
   def self.load_and_authorize_model_with_id(
-    model_class, id_field, action, message: 'Unauthorized mutation'
+    model_class, id_field, action, message: 'Unauthorized mutation', argument_name: nil
   )
     field_name = model_class.name.underscore
     attr_reader field_name
 
     define_method :authorized? do |args|
-      model = model_class.find_by!(id_field => args[id_field])
+      model = model_class.find_by!(id_field => args[argument_name || id_field])
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
     end
