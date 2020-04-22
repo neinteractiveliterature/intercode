@@ -42,30 +42,34 @@ fragment AdminOrderFieldsFragment on Order {
   }
 }
 
+fragment CouponApplicationFields on CouponApplication {
+  id
+
+  discount {
+    fractional
+    currency_code
+  }
+
+  coupon {
+    id
+    code
+    fixed_amount {
+      fractional
+      currency_code
+    }
+    percent_discount
+    provides_product {
+      id
+      name
+    }
+  }
+}
+
 fragment CartOrderFields on Order {
   id
 
   coupon_applications {
-    id
-
-    discount {
-      fractional
-      currency_code
-    }
-
-    coupon {
-      id
-      code
-      fixed_amount {
-        fractional
-        currency_code
-      }
-      percent_discount
-      provides_product {
-        id
-        name
-      }
-    }
+    ...CouponApplicationFields
   }
 
   total_price_before_discounts {

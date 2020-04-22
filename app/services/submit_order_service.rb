@@ -5,6 +5,7 @@ class SubmitOrderService < CivilService::Service
   validate :ensure_only_one_ticket
   validate :ensure_coupons_usable
   validate :ensure_free_order_is_actually_free
+  validate :check_ticket_provider_validity
 
   attr_reader :order, :payment_mode, :stripe_token
   delegate :user_con_profile, to: :order
@@ -24,11 +25,12 @@ class SubmitOrderService < CivilService::Service
       PayOrderService.new(order, stripe_token).call!
     elsif payment_mode == 'free'
       order.update!(status: 'paid', submitted_at: Time.zone.now)
-      success
     else
       order.update!(status: 'unpaid', submitted_at: Time.zone.now)
-      success
     end
+
+    ticket_providers.each(&:call!)
+    success
   end
 
   def ticket_providing_order_entries
@@ -60,5 +62,28 @@ class SubmitOrderService < CivilService::Service
   def ensure_free_order_is_actually_free
     return unless payment_mode == 'free' && order.total_price.cents != 0
     errors.add :base, 'Cannot use free payment mode on an order that costs money'
+  end
+
+  def ticket_providers
+    return [] if payment_mode == 'unpaid'
+
+    @ticket_providers ||= order.order_entries.flat_map do |order_entry|
+      if order_entry.product.provides_ticket_type
+        [
+          ProvideOrderEntryTicketService.new(
+            order_entry, suppress_notifications: (payment_mode == 'now')
+          )
+        ]
+      else
+        []
+      end
+    end
+  end
+
+  def check_ticket_provider_validity
+    ticket_providers.each do |provider|
+      next if provider.valid?
+      errors.merge!(provider.errors)
+    end
   end
 end
