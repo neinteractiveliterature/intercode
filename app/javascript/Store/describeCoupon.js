@@ -5,6 +5,9 @@ export default function describeCoupon(coupon) {
     return `1 free ${coupon.provides_product.name}`;
   }
   if (coupon.percent_discount) {
+    if (coupon.percent_discount % 1.0 === 0.0) {
+      return `${Math.floor(coupon.percent_discount)}% off`;
+    }
     return `${coupon.percent_discount}% off`;
   }
   if (coupon.fixed_amount) {

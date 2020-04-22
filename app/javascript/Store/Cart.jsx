@@ -4,7 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { CartQuery } from './queries.gql';
-import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';
+import {
+  DeleteOrderEntry, UpdateOrderEntry, CreateCouponApplication, DeleteCouponApplication,
+} from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import OrderPaymentModal from './OrderPaymentModal';
 import useModal from '../ModalDialogs/useModal';
@@ -19,6 +21,8 @@ function Cart() {
   const { data, loading, error } = useQuery(CartQuery);
   const [updateMutate] = useMutation(UpdateOrderEntry);
   const [deleteMutate] = useMutation(DeleteOrderEntry);
+  const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
+  const [deleteCouponApplicationMutate] = useMutation(DeleteCouponApplication);
   const checkOutModal = useModal();
   const confirm = useConfirm();
 
@@ -60,6 +64,23 @@ function Cart() {
     [deleteOrderEntry, updateOrderEntry],
   ));
 
+  const createCouponApplication = useCallback(
+    (couponCode) => createCouponApplicationMutate({
+      variables: {
+        orderId: data.currentPendingOrder?.id,
+        couponCode,
+      },
+    }),
+    [createCouponApplicationMutate, data],
+  );
+
+  const deleteCouponApplication = useCallback(
+    (couponApplication) => deleteCouponApplicationMutate({
+      variables: { id: couponApplication.id },
+    }),
+    [deleteCouponApplicationMutate],
+  );
+
   const checkOutComplete = () => { history.push('/order_history'); };
 
   if (error) {
@@ -97,6 +118,8 @@ function Cart() {
             Check out
           </button>
         )}
+        createCouponApplication={createCouponApplication}
+        deleteCouponApplication={deleteCouponApplication}
       />
 
       <OrderPaymentModal

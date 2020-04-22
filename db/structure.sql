@@ -3422,6 +3422,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: coupon_codes_unique_per_convention_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX coupon_codes_unique_per_convention_idx ON public.coupons USING btree (convention_id, lower(code));
+
+
+--
 -- Name: idx_max_event_provided_tickets_on_event_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5210,6 +5217,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200328214143'),
 ('20200408160310'),
 ('20200411155258'),
-('20200411161111');
+('20200411161111'),
+('20200422160237');
 
 

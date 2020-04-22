@@ -3,6 +3,9 @@ class CouponApplication < ApplicationRecord
   belongs_to :order
 
   scope :active, -> { where(order: Order.completed) }
+  validates :coupon_id, uniqueness: {
+    scope: :order_id, message: 'has already been applied to this order'
+  }
 
   def discount
     if coupon.fixed_amount

@@ -152,3 +152,25 @@ mutation AddOrderEntryToCurrentPendingOrder($productId: Int!, $productVariantId:
     }
   }
 }
+
+mutation CreateCouponApplication($orderId: Int!, $couponCode: String!) {
+  createCouponApplication(input: { order_id: $orderId, coupon_code: $couponCode }) {
+    coupon_application {
+      id
+      order {
+        ...CartOrderFields
+      }
+    }
+  }
+}
+
+mutation DeleteCouponApplication($id: Int!) {
+  deleteCouponApplication(input: { id: $id }) {
+    coupon_application {
+      id
+      order {
+        ...CartOrderFields
+      }
+    }
+  }
+}

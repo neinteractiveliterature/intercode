@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -8,10 +8,63 @@ import LoadingIndicator from '../LoadingIndicator';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import formatMoney from '../formatMoney';
 import describeCoupon from './describeCoupon';
+import useAsyncFunction from '../useAsyncFunction';
+import useUniqueId from '../useUniqueId';
+import { useConfirm } from '../ModalDialogs/Confirm';
+
+function ApplyCouponRow({ createCouponApplication }) {
+  const [couponCode, setCouponCode] = useState('');
+  const couponCodeInputId = useUniqueId('coupon-code-');
+  const [applyCoupon, applyError, applyInProgress] = useAsyncFunction(createCouponApplication);
+
+  const applyClicked = async () => {
+    await applyCoupon(couponCode);
+    setCouponCode('');
+  };
+
+  const keyDownInCodeInput = (event) => {
+    if (event.keyCode === 13 || event.keyCode === 32) {
+      event.preventDefault();
+      applyClicked();
+    }
+  };
+
+  return (
+    <tr className="bg-light">
+      <td colSpan={4}>
+        <label htmlFor={couponCodeInputId}>Apply coupon:</label>
+        <input
+          type="text"
+          className="form-control form-control-sm col-4 d-inline-block ml-2"
+          value={couponCode}
+          id={couponCodeInputId}
+          onChange={(event) => { setCouponCode(event.target.value); }}
+          onKeyDown={keyDownInCodeInput}
+          disabled={applyInProgress}
+          aria-label="Coupon code"
+        />
+        <button
+          className="btn btn-sm btn-outline-primary ml-2"
+          type="button"
+          onClick={applyClicked}
+          disabled={applyInProgress}
+        >
+          Apply
+        </button>
+        <ErrorDisplay graphQLError={applyError} />
+      </td>
+    </tr>
+  );
+}
+
+ApplyCouponRow.propTypes = {
+  createCouponApplication: PropTypes.func.isRequired,
+};
 
 function CartContents({
-  removeFromCart, removeCouponApplication, changeQuantity, checkOutButton,
+  removeFromCart, createCouponApplication, deleteCouponApplication, changeQuantity, checkOutButton,
 }) {
+  const confirm = useConfirm();
   const { data, loading, error } = useQuery(CartQuery);
 
   if (error) {
@@ -102,11 +155,15 @@ function CartContents({
                     {formatMoney(app.discount)}
                   </td>
                   <td>
-                    {removeCouponApplication && (
+                    {deleteCouponApplication && (
                       <button
                         type="button"
                         className="btn btn-outline-danger"
-                        onClick={() => { removeCouponApplication(app); }}
+                        onClick={() => confirm({
+                          prompt: 'Are you sure you want to remove this coupon?',
+                          action: () => deleteCouponApplication(app),
+                          renderError: (err) => <ErrorDisplay graphQLError={err} />,
+                        })}
                       >
                         <i className="fa fa-trash-o" />
                         <span className="sr-only">Remove from cart</span>
@@ -116,6 +173,9 @@ function CartContents({
                 </tr>
               ))}
             </>
+          )}
+          {createCouponApplication && (
+            <ApplyCouponRow createCouponApplication={createCouponApplication} />
           )}
           <tr className="bg-warning-light">
             <td colSpan="2">
@@ -146,14 +206,16 @@ function CartContents({
 
 CartContents.propTypes = {
   removeFromCart: PropTypes.func,
-  removeCouponApplication: PropTypes.func,
+  createCouponApplication: PropTypes.func,
+  deleteCouponApplication: PropTypes.func,
   changeQuantity: PropTypes.func,
   checkOutButton: PropTypes.node,
 };
 
 CartContents.defaultProps = {
   removeFromCart: null,
-  removeCouponApplication: null,
+  createCouponApplication: null,
+  deleteCouponApplication: null,
   changeQuantity: null,
   checkOutButton: null,
 };
