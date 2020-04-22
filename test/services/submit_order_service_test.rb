@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PayOrderServiceTest < ActiveSupport::TestCase
+class SubmitOrderServiceTest < ActiveSupport::TestCase
   let(:convention) do
     create(:convention, :with_notification_templates,
       starts_at: 2.days.from_now, ends_at: 4.days.from_now)
@@ -13,7 +13,7 @@ class PayOrderServiceTest < ActiveSupport::TestCase
   before { StripeMock.start }
   after { StripeMock.stop }
 
-  subject { PayOrderService.new(order, stripe_token) }
+  subject { SubmitOrderService.new(order, payment_mode: 'now', stripe_token: stripe_token) }
 
   describe 'ticket-providing products' do
     let(:ticket_type) { create(:paid_ticket_type, convention: convention) }

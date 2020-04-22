@@ -132,6 +132,10 @@ query OrderHistoryQuery {
         currency_code
       }
 
+      coupon_applications {
+        ...CouponApplicationFields
+      }
+
       order_entries {
         id
         quantity

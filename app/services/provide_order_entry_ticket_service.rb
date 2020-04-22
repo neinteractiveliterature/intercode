@@ -9,20 +9,21 @@ class ProvideOrderEntryTicketService < CivilService::Service
   validate :check_convention_is_not_over
   validate :check_convention_maximum
 
-  attr_reader :order_entry
+  attr_reader :order_entry, :suppress_notifications
   delegate :product, :order, to: :order_entry
   delegate :user_con_profile, to: :order
   delegate :convention, to: :user_con_profile
 
-  def initialize(order_entry)
+  def initialize(order_entry, suppress_notifications: false)
     @order_entry = order_entry
+    @suppress_notifications = suppress_notifications
   end
 
   private
 
   def inner_call
     ticket = create_ticket
-    Tickets::PurchasedNotifier.new(ticket: ticket).deliver_now
+    Tickets::PurchasedNotifier.new(ticket: ticket).deliver_now unless suppress_notifications
     success(ticket: ticket)
   end
 
