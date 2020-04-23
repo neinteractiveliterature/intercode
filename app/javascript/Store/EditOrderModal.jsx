@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap4-modal';
 import AdminOrderForm from './AdminOrderForm';
 import {
   AdminUpdateOrder, AdminCreateOrderEntry, AdminUpdateOrderEntry, AdminDeleteOrderEntry,
+  CreateCouponApplication, DeleteCouponApplication,
 } from './mutations.gql';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
@@ -16,6 +17,8 @@ function EditOrderModal({ order, closeModal }) {
   const [createOrderEntryMutate] = useMutation(AdminCreateOrderEntry);
   const [updateOrderEntryMutate] = useMutation(AdminUpdateOrderEntry);
   const [deleteOrderEntryMutate] = useMutation(AdminDeleteOrderEntry);
+  const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
+  const [deleteCouponApplicationMutate] = useMutation(DeleteCouponApplication);
 
   const updateOrder = useCallback(
     (attributes) => updateMutate({
@@ -64,6 +67,23 @@ function EditOrderModal({ order, closeModal }) {
     [deleteOrderEntryMutate],
   );
 
+  const createCouponApplication = useCallback(
+    (couponCode) => createCouponApplicationMutate({
+      variables: {
+        orderId: order?.id,
+        couponCode,
+      },
+    }),
+    [createCouponApplicationMutate, order],
+  );
+
+  const deleteCouponApplication = useCallback(
+    (couponApplication) => deleteCouponApplicationMutate({
+      variables: { id: couponApplication.id },
+    }),
+    [deleteCouponApplicationMutate],
+  );
+
   return (
     <Modal
       visible={order != null && !confirm.visible}
@@ -84,6 +104,8 @@ function EditOrderModal({ order, closeModal }) {
                 createOrderEntry={createOrderEntry}
                 updateOrderEntry={updateOrderEntry}
                 deleteOrderEntry={deleteOrderEntry}
+                createCouponApplication={createCouponApplication}
+                deleteCouponApplication={deleteCouponApplication}
               />
             </section>
           </>
