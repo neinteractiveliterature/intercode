@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
 
 import AdminOrderForm from './AdminOrderForm';
-import { CreateOrder } from './mutations.gql';
+import { CreateOrder, CreateCouponApplication } from './mutations.gql';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import useAsyncFunction from '../useAsyncFunction';
@@ -19,12 +19,14 @@ const BLANK_ORDER = {
   payment_note: '',
   status: 'paid',
   order_entries: [],
+  coupon_applications: [],
 };
 
 function NewOrderModal({ visible, close, initialOrder }) {
   const confirm = useConfirm();
   const [order, setOrder] = useState(initialOrder || BLANK_ORDER);
   const [createMutate] = useMutation(CreateOrder);
+  const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
   const apolloClient = useApolloClient();
 
   useEffect(
@@ -36,29 +38,36 @@ function NewOrderModal({ visible, close, initialOrder }) {
     [visible, initialOrder],
   );
 
-  const createOrder = () => createMutate({
-    variables: {
-      userConProfileId: order.user_con_profile?.id,
-      order: {
-        payment_amount: {
-          fractional: order.payment_amount?.fractional,
-          currency_code: order.payment_amount?.currency_code,
+  const createOrder = async () => {
+    const { data: { createOrder: { order: { id: orderId } } } } = await createMutate({
+      variables: {
+        userConProfileId: order.user_con_profile?.id,
+        order: {
+          payment_amount: {
+            fractional: order.payment_amount?.fractional,
+            currency_code: order.payment_amount?.currency_code,
+          },
+          payment_note: order.payment_note,
         },
-        payment_note: order.payment_note,
+        status: order.status,
+        orderEntries: order.order_entries.map((orderEntry) => ({
+          product_id: orderEntry.product?.id,
+          product_variant_id: orderEntry.product_variant?.id,
+          quantity: orderEntry.quantity,
+          price_per_item: {
+            fractional: orderEntry.price_per_item.fractional,
+            currency_code: orderEntry.price_per_item.currency_code,
+          },
+          ticket_id: orderEntry.ticket_id,
+        })),
       },
-      status: order.status,
-      orderEntries: order.order_entries.map((orderEntry) => ({
-        product_id: orderEntry.product?.id,
-        product_variant_id: orderEntry.product_variant?.id,
-        quantity: orderEntry.quantity,
-        price_per_item: {
-          fractional: orderEntry.price_per_item.fractional,
-          currency_code: orderEntry.price_per_item.currency_code,
-        },
-        ticket_id: orderEntry.ticket_id,
-      })),
-    },
-  });
+    });
+    await Promise.all(order.coupon_applications.map((application) => createCouponApplicationMutate({
+      variables: {
+        orderId, couponCode: application.coupon.code,
+      },
+    })));
+  };
   const [createOrderAsync, createOrderError, createOrderInProgress] = useAsyncFunction(createOrder);
 
   const createClicked = async () => {
@@ -94,6 +103,20 @@ function NewOrderModal({ visible, close, initialOrder }) {
       .filter((entry) => entry.generatedId !== orderEntry.generatedId),
   }));
 
+  const createCouponApplication = (couponCode) => setOrder((prevOrder) => ({
+    ...prevOrder,
+    coupon_applications: [
+      ...prevOrder.coupon_applications,
+      { coupon: { code: couponCode } },
+    ],
+  }));
+
+  const deleteCouponApplication = (couponApplication) => setOrder((prevOrder) => ({
+    ...prevOrder,
+    order_entries: prevOrder.coupon_applications
+      .filter((application) => application.coupon.code !== couponApplication.coupon.code),
+  }));
+
   return (
     <Modal
       visible={visible && !confirm.visible}
@@ -111,6 +134,8 @@ function NewOrderModal({ visible, close, initialOrder }) {
             createOrderEntry={createOrderEntry}
             updateOrderEntry={updateOrderEntry}
             deleteOrderEntry={deleteOrderEntry}
+            createCouponApplication={createCouponApplication}
+            deleteCouponApplication={deleteCouponApplication}
           />
         </section>
 

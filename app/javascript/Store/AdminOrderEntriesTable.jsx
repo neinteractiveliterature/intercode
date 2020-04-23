@@ -11,15 +11,23 @@ import ErrorDisplay from '../ErrorDisplay';
 import pluralizeWithCount from '../pluralizeWithCount';
 import ProductSelect from '../BuiltInFormControls/ProductSelect';
 import useAsyncFunction from '../useAsyncFunction';
+import ApplyCouponControl from './ApplyCouponControl';
 
 function AdminOrderEntriesTable({
   order, createOrderEntry, updateOrderEntry, deleteOrderEntry,
+  createCouponApplication, deleteCouponApplication,
 }) {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(null);
   const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(
     createOrderEntry,
   );
+
+  const applyCoupon = async (...args) => {
+    await createCouponApplication(...args);
+    setApplyingCoupon(false);
+  };
 
   const setAddingItemProduct = (product) => {
     setAddingItem((prevAddingItem) => ({
@@ -99,10 +107,37 @@ function AdminOrderEntriesTable({
             </td>
           </tr>
         ))}
+        {order.coupon_applications.map((couponApplication) => (
+          <tr key={couponApplication.id} className="bg-light">
+            <td colSpan={2}>
+              <em>{'Coupon code: '}</em>
+              <code>{couponApplication.coupon.code}</code>
+            </td>
+            <td className="font-italic">
+              -
+              {formatMoney(couponApplication.discount)}
+            </td>
+            <td>
+              <button
+                className="btn btn-outline-danger btn-sm"
+                type="button"
+                aria-label="Delete item"
+                onClick={() => confirm({
+                  prompt: `Are you sure you want to delete this coupon from the order?  This
+                    cannot be undone.`,
+                  action: () => deleteCouponApplication(couponApplication),
+                  renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                })}
+              >
+                <i className="fa fa-trash-o" />
+              </button>
+            </td>
+          </tr>
+        ))}
       </tbody>
       <tfoot>
         {addingItem && (
-          <tr>
+          <tr className="bg-success-light">
             <td>
               <ProductSelect
                 value={addingItem.product}
@@ -158,17 +193,33 @@ function AdminOrderEntriesTable({
             <td colSpan={4}><ErrorDisplay graphQLError={createError} /></td>
           </tr>
         )}
-        <tr className="font-italic">
+        {applyingCoupon && (
+          <tr className="bg-success-light">
+            <td colSpan={4}>
+              <ApplyCouponControl createCouponApplication={applyCoupon} />
+            </td>
+          </tr>
+        )}
+        <tr className="font-italic bg-warning-light">
           <td>
             {!addingItem && (
               <button
-                className="btn btn-sm btn-outline-primary"
+                className="btn btn-sm btn-outline-primary mr-2"
                 type="button"
                 onClick={() => setAddingItem({
                   product: null, product_variant: null, quantity: 1, price_per_item: null,
                 })}
               >
                 Add item(s)
+              </button>
+            )}
+            {!applyingCoupon && (
+              <button
+                className="btn btn-sm btn-outline-primary"
+                type="button"
+                onClick={() => setApplyingCoupon(true)}
+              >
+                Add coupon
               </button>
             )}
           </td>
@@ -189,10 +240,13 @@ AdminOrderEntriesTable.propTypes = {
   order: PropTypes.shape({
     order_entries: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     total_price: PropTypes.shape({}),
+    coupon_applications: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
   createOrderEntry: PropTypes.func.isRequired,
   updateOrderEntry: PropTypes.func.isRequired,
   deleteOrderEntry: PropTypes.func.isRequired,
+  createCouponApplication: PropTypes.func.isRequired,
+  deleteCouponApplication: PropTypes.func.isRequired,
 };
 
 export default AdminOrderEntriesTable;

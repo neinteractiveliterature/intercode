@@ -20,6 +20,10 @@ fragment AdminOrderFieldsFragment on Order {
     currency_code
   }
 
+  coupon_applications {
+    ...CouponApplicationFields
+  }
+
   order_entries {
     id
     quantity
