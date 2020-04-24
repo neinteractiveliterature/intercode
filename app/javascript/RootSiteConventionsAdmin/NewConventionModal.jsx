@@ -75,7 +75,7 @@ function NewConventionModal({ visible, close, cloneConvention }) {
       variables: {
         cloneConventionId: cloneConvention?.id,
         organizationId: convention.organization?.id,
-        cmsContentSetName: cmsContentSet.name,
+        cmsContentSetName: cmsContentSet?.name,
         convention: {
           name: convention.name,
           domain: convention.domain,
