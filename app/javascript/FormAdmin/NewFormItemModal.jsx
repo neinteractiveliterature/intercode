@@ -20,13 +20,15 @@ const customItemTypes = Object.keys(FormItemDefaultProperties).filter(
   (itemType) => itemType !== 'static_text',
 );
 
-const standardItemProperties = (standardItem) => {
+const NO_CAPTION_ITEM_TYPES = ['event_email', 'registration_policy'];
+
+const standardItemProperties = (standardItem, itemType) => {
   if (!standardItem) {
     return {};
   }
 
   return {
-    caption: standardItem.description,
+    ...(NO_CAPTION_ITEM_TYPES.includes(itemType) ? {} : { caption: standardItem.description }),
     ...(standardItem.default_properties || {}),
   };
 };
@@ -103,7 +105,7 @@ function NewFormItemModal({ visible, close, createFormItem }) {
       public_description: (standardItem || {}).public_description,
       properties: {
         ...newFormItem.properties,
-        ...standardItemProperties(standardItem),
+        ...standardItemProperties(standardItem, itemType),
       },
     });
     close();
