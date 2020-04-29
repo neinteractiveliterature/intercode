@@ -119,7 +119,7 @@
     "rollbar-sourcemap-webpack-plugin": "^2.10.1",
     "sass-loader": "^8.0.2",
     "source-map-support": "^0.5.18",
-    "style-loader": "^1.2.0",
+    "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^2.3.6",
     "thread-loader": "^2.1.3",
     "tinycolor2": "^1.4.1",
