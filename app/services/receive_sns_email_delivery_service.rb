@@ -97,10 +97,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def from_addresses
-    @from_addresses ||= begin
-      address_list = Mail::AddressList.new(common_header('From'))
-      address_list.addresses.map { |addr| EmailRoute.normalize_address(addr) }
-    end
+    @from_addresses ||= common_header('From').map { |addr| EmailRoute.normalize_address(addr) }
   end
 
   def score_threshold
