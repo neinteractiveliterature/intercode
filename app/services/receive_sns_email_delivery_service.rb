@@ -30,11 +30,13 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
       return success
     end
 
-    ReceiveEmailService.new(
-      recipients: recipients,
-      load_email: -> { email },
-      message_id: message_id
-    ).call
+    Rollbar.scoped(context: { recipients: recipients, message_id: message_id }) do
+      ReceiveEmailService.new(
+        recipients: recipients,
+        load_email: -> { email },
+        message_id: message_id
+      ).call
+    end
   end
 
   # Only use the actual recipient of this email according to SES.  If there are multiple recipients
