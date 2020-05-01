@@ -65,3 +65,6 @@ cookbooks
 
 # Hello vscode users
 /.vscode
+
+# Emails I downloaded for debugging
+/*.eml
