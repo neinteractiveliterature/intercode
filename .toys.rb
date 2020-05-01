@@ -164,9 +164,14 @@ tool 'download_email' do
   def run
     require_relative 'config/environment'
 
-    puts ReceiveSnsEmailDeliveryService.s3_client.get_object(
+    ENV['AWS_PROFILE'] = 'neil'
+    ENV['AWS_REGION'] = 'us-east-1'
+    message = ReceiveSnsEmailDeliveryService.s3_client.get_object(
       bucket: 'intercode-inbox',
       key: message_id
     ).body.read
+    File.open("#{message_id}.eml", 'w') do |file|
+      file.write message
+    end
   end
 end
