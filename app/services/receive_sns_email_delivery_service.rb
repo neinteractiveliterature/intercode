@@ -96,8 +96,27 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     @total_score ||= score_by_verdict.values.sum
   end
 
+  def from_addresses
+    @from_addresses ||= begin
+      address_list = Mail::AddressList.new(common_header('From'))
+      address_list.addresses.map { |addr| EmailRoute.normalize_address(addr) }
+    end
+  end
+
+  def score_threshold
+    return 1 unless from_addresses.size == 1
+    existing_user = User.find_by(email: from_addresses.first)
+    return 1 unless existing_user
+
+    if existing_user.tickets.count > 1
+      2
+    else
+      1
+    end
+  end
+
   def failing_score?
-    total_score >= 2
+    total_score >= score_threshold
   end
 
   def raw_email
