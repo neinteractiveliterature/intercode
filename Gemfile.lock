@@ -521,7 +521,7 @@ GEM
     will_paginate (3.3.0)
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
-    yard (0.9.24)
+    yard (0.9.25)
     zeitwerk (2.3.0)
 
 PLATFORMS
