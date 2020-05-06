@@ -63,3 +63,7 @@ export function ageAsOf(birthDate, date) {
 
   return (date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1));
 }
+
+export function timezoneNameForConvention(convention) {
+  return convention?.timezone_name;
+}

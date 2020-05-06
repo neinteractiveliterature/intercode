@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
@@ -15,6 +15,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
+import AppRootContext from '../AppRootContext';
 
 function ScheduleMultipleRunsModal({
   convention, event, visible, onCancel, onFinish,
@@ -25,13 +26,14 @@ function ScheduleMultipleRunsModal({
   const [start, setStart] = useState({ hour: null, minute: null });
   const [finish, setFinish] = useState({ hour: null, minute: null });
   const [rooms, setRooms] = useState([]);
+  const { timezoneName } = useContext(AppRootContext);
   const conventionTimespan = useMemo(
     () => timespanFromConvention(convention),
     [convention],
   );
   const conventionDayTimespans = useMemo(
-    () => getConventionDayTimespans(conventionTimespan, convention.timezone_name),
-    [convention.timezone_name, conventionTimespan],
+    () => getConventionDayTimespans(conventionTimespan, timezoneName),
+    [timezoneName, conventionTimespan],
   );
   const conventionDayTimespan = useMemo(
     () => (day ? conventionDayTimespans.find((cdt) => cdt.includesTime(day)) : null),
@@ -65,11 +67,11 @@ function ScheduleMultipleRunsModal({
       }
 
       return timespan.getTimespansWithin(
-        convention.timezone_name,
+        timezoneName,
         { unit: 'second', duration: event.length_seconds },
       );
     },
-    [timespan, convention.timezone_name, event.length_seconds],
+    [timespan, timezoneName, event.length_seconds],
   );
 
   const existingRunTimespans = useMemo(
