@@ -15,6 +15,7 @@ import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
+import { timezoneNameForConvention } from './TimeUtils';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
@@ -81,7 +82,7 @@ function AppRoot() {
       ticketName: data.convention?.ticket_name,
       ticketTypes: data.convention?.ticket_types,
       ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
-      timezoneName: data.convention?.timezone_name,
+      timezoneName: timezoneNameForConvention(data.convention),
     }),
     [data],
   );

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link, useHistory } from 'react-router-dom';
 
 import { getConventionDayTimespans, timespanFromConvention } from '../../TimespanUtils';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import AppRootContext from '../../AppRootContext';
 
 function findRunFromHash(runs, hash) {
   if (!hash) {
@@ -14,16 +15,16 @@ function findRunFromHash(runs, hash) {
   return runs.find((run) => `#run-${run.id}` === hash);
 }
 
-function getConventionDayStart(event, run, convention) {
+function getConventionDayStart(event, run, convention, timezoneName) {
   const conventionTimespan = timespanFromConvention(convention);
   if (!run) {
     return conventionTimespan.start;
   }
 
-  const runStart = moment.tz(run.starts_at, convention.timezone_name);
+  const runStart = moment.tz(run.starts_at, timezoneName);
   const conventionDayTimespans = getConventionDayTimespans(
     conventionTimespan,
-    convention.timezone_name,
+    timezoneName,
   );
   const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(runStart));
   return (conventionDay || conventionTimespan).start;
@@ -32,9 +33,10 @@ function getConventionDayStart(event, run, convention) {
 function EventBreadcrumbItems({
   event, convention, currentAbility, eventPath,
 }) {
+  const { timezoneName } = useContext(AppRootContext);
   const history = useHistory();
   const runToLink = findRunFromHash(event.runs, history.location.hash) || event.runs[0];
-  const conventionDayStart = getConventionDayStart(event, runToLink, convention);
+  const conventionDayStart = getConventionDayStart(event, runToLink, convention, timezoneName);
 
   return (
     <>

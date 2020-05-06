@@ -2,11 +2,25 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
-import { QueryDataContext } from './useReactTableWithTheWorks';
+import AppRootContext from '../AppRootContext';
+
+export function SingleLineTimestampCell({ value }) {
+  const { timezoneName } = useContext(AppRootContext);
+  const timestamp = moment.tz(value, timezoneName);
+  return (
+    <>
+      {timestamp.format('YYYY-MM-DD HH:mm')}
+    </>
+  );
+}
+
+SingleLineTimestampCell.propTypes = {
+  value: PropTypes.string.isRequired,
+};
 
 function TimestampCell({ value }) {
-  const data = useContext(QueryDataContext);
-  const timestamp = moment.tz(value, data.convention.timezone_name);
+  const { timezoneName } = useContext(AppRootContext);
+  const timestamp = moment.tz(value, timezoneName);
   return (
     <>
       {timestamp.format('MMM D, YYYY')}

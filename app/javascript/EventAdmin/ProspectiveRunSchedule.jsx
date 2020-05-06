@@ -16,6 +16,7 @@ import { getConventionDayTimespans, timespanFromConvention } from '../TimespanUt
 import { getRunClassName, getRunStyle } from '../EventsApp/ScheduleGrid/StylingUtils';
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
 import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
+import AppRootContext from '../AppRootContext';
 
 const SCHEDULE_GRID_CONFIG = {
   key: 'con_schedule_by_room',
@@ -125,6 +126,7 @@ ProspectiveRunScheduleEventRun.propTypes = {
 function ProspectiveRunSchedule({
   day, runs, event,
 }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const conventionTimespan = useMemo(
@@ -183,10 +185,10 @@ function ProspectiveRunSchedule({
   );
 
   const conventionDayTimespans = useMemo(
-    () => (error || loading
+    () => (conventionTimespan
       ? null
-      : getConventionDayTimespans(conventionTimespan, data.convention.timezone_name)),
-    [conventionTimespan, data, error, loading],
+      : getConventionDayTimespans(conventionTimespan, timezoneName)),
+    [conventionTimespan, timezoneName],
   );
 
   const conventionDayTimespan = useMemo(

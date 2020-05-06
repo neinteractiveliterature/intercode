@@ -1,4 +1,6 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, {
+  useMemo, useState, useEffect, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
@@ -13,6 +15,7 @@ import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
 import LoadingIndicator from '../LoadingIndicator';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
+import AppRootContext from '../AppRootContext';
 
 const roomPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
@@ -20,24 +23,25 @@ const roomPropType = PropTypes.shape({
 });
 
 function RunFormFields({ run, event, onChange }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const startsAt = useMemo(
     () => (!error && !loading && run && run.starts_at
-      ? moment(run.starts_at).tz(data.convention.timezone_name)
+      ? moment(run.starts_at).tz(timezoneName)
       : null
     ),
-    [data, error, loading, run],
+    [timezoneName, error, loading, run],
   );
   const conventionTimespan = useMemo(
     () => (error || loading ? null : timespanFromConvention(data.convention)),
     [error, loading, data],
   );
   const conventionDayTimespans = useMemo(
-    () => (error || loading
+    () => (conventionTimespan
       ? null
-      : getConventionDayTimespans(conventionTimespan, data.convention.timezone_name)),
-    [conventionTimespan, data, error, loading],
+      : getConventionDayTimespans(conventionTimespan, timezoneName)),
+    [conventionTimespan, timezoneName],
   );
   const [day, setDay] = useState(startsAt
     ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt)).start
@@ -176,7 +180,6 @@ RunFormFields.propTypes = {
   convention: PropTypes.shape({
     starts_at: PropTypes.string.isRequired,
     ends_at: PropTypes.string.isRequired,
-    timezone_name: PropTypes.string.isRequired,
     rooms: PropTypes.arrayOf(roomPropType).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,

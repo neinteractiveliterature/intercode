@@ -14,6 +14,7 @@ import { timespanFromConvention, getConventionDayTimespans } from '../../Timespa
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
+import AppRootContext from '../../AppRootContext';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect().os);
 
@@ -32,6 +33,7 @@ const ScheduleGridFiltersContext = React.createContext({
 });
 
 export function useScheduleGridProvider(config, convention, events, myRatingFilter, hideConflicts) {
+  const { timezoneName } = useContext(AppRootContext);
   const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
 
   const isRunDetailsVisible = useMemo(
@@ -42,12 +44,14 @@ export function useScheduleGridProvider(config, convention, events, myRatingFilt
   const schedule = useMemo(
     () => {
       if (config && convention && events) {
-        return new Schedule(config, convention, events, myRatingFilter, hideConflicts);
+        return new Schedule({
+          config, convention, events, myRatingFilter, hideConflicts, timezoneName,
+        });
       }
 
       return {};
     },
-    [config, convention, events, hideConflicts, myRatingFilter],
+    [config, convention, events, hideConflicts, myRatingFilter, timezoneName],
   );
 
   const toggleRunDetailsVisibility = useCallback(
@@ -176,6 +180,7 @@ ScheduleGridProviderTabContent.propTypes = {
 export function ScheduleGridProvider({
   config, children, myRatingFilter, hideConflicts,
 }) {
+  const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
   const { data, loading, error } = useQuery(ScheduleGridConventionDataQuery);
@@ -203,7 +208,7 @@ export function ScheduleGridProvider({
       convention && conventionTimespan.isFinite()
         ? getConventionDayTimespans(
           conventionTimespan,
-          convention.timezone_name,
+          timezoneName,
         )
         : []
     ),
@@ -236,7 +241,6 @@ export function ScheduleGridProvider({
       <ConventionDayTabContainer
         basename={config.basename}
         conventionTimespan={conventionTimespan}
-        timezoneName={convention.timezone_name}
         prefetchTimespan={prefetchTimespan}
       >
         {(timespan) => (
@@ -267,4 +271,3 @@ ScheduleGridProvider.defaultProps = {
   myRatingFilter: null,
   hideConflicts: false,
 };
-
