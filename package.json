@@ -112,7 +112,7 @@
     "react-select-fast-filter-options": "^0.2.3",
     "react-stripe-elements": "^6.1.2",
     "react-table": "6.10.3",
-    "react-transition-group": "^4.3.0",
+    "react-transition-group": "^4.4.0",
     "react-waypoint": "^9.0.2",
     "require-from-string": "^2.0.2",
     "resolve-url-loader": "^3.1.1",
