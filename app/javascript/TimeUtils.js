@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 import { onlyOneIsNull } from './ValueUtils';
 
 export const timeIsOnTheHour = (time) => (
@@ -65,5 +67,9 @@ export function ageAsOf(birthDate, date) {
 }
 
 export function timezoneNameForConvention(convention) {
+  if (convention.timezone_mode === 'local') {
+    return DateTime.local().zoneName;
+  }
+
   return convention?.timezone_name;
 }
