@@ -119,7 +119,12 @@ class Convention < ApplicationRecord
   def timezone_name_must_be_valid
     return unless timezone_name.present?
 
-    errors.add(:timezone_name, 'must refer to a valid POSIX timezone') unless timezone
+    tz = timezone
+    errors.add(:timezone_name, 'must refer to a valid IANA timezone') unless tz
+    if tz && tz.tzinfo.canonical_identifier != tz.tzinfo.identifier
+      errors.add(:timezone_name, "must refer to a canonical IANA timezone \
+(in this case, probably #{tz.tzinfo.canonical_identifier})")
+    end
   end
 
   def site_mode_must_be_possible

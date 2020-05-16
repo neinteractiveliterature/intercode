@@ -10,6 +10,7 @@ class Types::ConventionType < Types::BaseObject
   field :event_mailing_list_domain, String, null: true
   field :email_from, String, null: false
   field :email_mode, Types::EmailModeType, null: false
+  field :location, Types::JSON, null: true
   field :timezone_name, String, null: true
   field :show_schedule, Types::ShowScheduleType, null: true
   field :show_event_list, Types::ShowScheduleType, null: true

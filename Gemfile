@@ -92,6 +92,7 @@ gem 'skylight'
 gem 'icalendar'
 gem 'dalli'
 gem 'platform-api'
+gem 'tzinfo-data'
 
 gem 'faker', group: 'development', require: false
 

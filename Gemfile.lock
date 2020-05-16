@@ -504,6 +504,8 @@ GEM
       nokogiri (>= 1.6, < 2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2020.1)
+      tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
     unf (0.1.4-java)
@@ -608,6 +610,7 @@ DEPENDENCIES
   stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
   twilio-ruby (~> 5.34.0)
+  tzinfo-data
   whenever
   will_paginate
   with_advisory_lock
