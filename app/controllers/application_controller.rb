@@ -51,7 +51,8 @@ class ApplicationController < ActionController::Base
     {
       authenticityTokens: authenticity_token_props,
       recaptchaSiteKey: Recaptcha.configuration.site_key,
-      stripePublishableKey: convention&.stripe_publishable_key
+      stripePublishableKey: convention&.stripe_publishable_key,
+      mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN']
     }
   end
   helper_method :app_component_props

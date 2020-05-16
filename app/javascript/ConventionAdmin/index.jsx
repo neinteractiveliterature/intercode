@@ -38,6 +38,7 @@ function ConventionAdmin({ id }) {
             email_from: convention.email_from,
             email_mode: convention.email_mode,
             event_mailing_list_domain: convention.event_mailing_list_domain,
+            location: convention.location,
             timezone_name: convention.timezone_name,
             show_schedule: convention.show_schedule,
             show_event_list: convention.show_event_list,
