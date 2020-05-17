@@ -39,8 +39,8 @@ function RunFormFields({ run, event, onChange }) {
   );
   const conventionDayTimespans = useMemo(
     () => (conventionTimespan
-      ? null
-      : getConventionDayTimespans(conventionTimespan, timezoneName)),
+      ? getConventionDayTimespans(conventionTimespan, timezoneName)
+      : null),
     [conventionTimespan, timezoneName],
   );
   const [day, setDay] = useState(startsAt

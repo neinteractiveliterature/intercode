@@ -11,15 +11,17 @@ import LocationSelect from '../Maps/LocationSelect';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import MapboxMap from '../Maps/MapboxMap';
 import MapboxContext from '../MapboxContext';
+import EnumTypes from '../enumTypes.json';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
   const { mapboxAccessToken } = useContext(MapboxContext);
   const [
     changeName, changeSiteMode, changeDomain, changeTimezoneName, changeStartsAt, changeEndsAt,
-    changeLocation,
+    changeLocation, changeTimezoneMode,
   ] = useChangeDispatchers(
     dispatch,
-    ['name', 'site_mode', 'domain', 'timezone_name', 'starts_at', 'ends_at', 'location'],
+    ['name', 'site_mode', 'domain', 'timezone_name', 'starts_at', 'ends_at', 'location', 'timezone_mode'],
   );
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
@@ -32,7 +34,7 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
       <label htmlFor={inputId}>{label}</label>
       <DateTimeInput
         value={convention[name]}
-        timezoneName={convention.timezone_name}
+        timezoneName={timezoneNameForConvention(convention)}
         onChange={onChange}
         id={inputId}
         disabled={disabled}
@@ -93,35 +95,50 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
         disabled={disabled}
       />
 
-      <FormGroupWithLabel label="Location">
-        {(id) => (
-          <>
-            <LocationSelect
-              inputId={id}
-              value={conventionLocation}
-              onChange={setLocation}
-              disabled={disabled}
-              isClearable
-            />
-            {conventionLocation && (
-              <div className="mt-2">
-                <MapboxMap
-                  center={conventionLocation.center}
-                  markerLocation={conventionLocation.center}
-                />
-              </div>
-            )}
-          </>
-        )}
-      </FormGroupWithLabel>
-
-      <TimezoneSelect
-        name="timezone_name"
-        label="Time zone"
-        value={convention.timezone_name}
-        onChange={changeTimezoneName}
+      <MultipleChoiceInput
+        caption="Date and time display mode"
+        choices={EnumTypes.TimezoneMode.enumValues.map((enumValue) => ({
+          value: enumValue.name,
+          label: enumValue.description,
+        }))}
+        value={convention.timezone_mode}
+        onChange={changeTimezoneMode}
         disabled={disabled}
       />
+
+      {convention.timezone_mode !== 'user_local' && (
+        <>
+          <FormGroupWithLabel label="Location">
+            {(id) => (
+              <>
+                <LocationSelect
+                  inputId={id}
+                  value={conventionLocation}
+                  onChange={setLocation}
+                  disabled={disabled}
+                  isClearable
+                />
+                {conventionLocation && (
+                  <div className="mt-2">
+                    <MapboxMap
+                      center={conventionLocation.center}
+                      markerLocation={conventionLocation.center}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </FormGroupWithLabel>
+
+          <TimezoneSelect
+            name="timezone_name"
+            label="Time zone"
+            value={convention.timezone_name}
+            onChange={changeTimezoneName}
+            disabled={disabled}
+          />
+        </>
+      )}
 
       <div className="row form-group">
         {startEndFields}
@@ -136,6 +153,7 @@ ConventionFormGeneralSection.propTypes = {
     domain: PropTypes.string,
     location: PropTypes.string,
     timezone_name: PropTypes.string,
+    timezone_mode: PropTypes.string,
     site_mode: PropTypes.string,
     starts_at: PropTypes.string,
     ends_at: PropTypes.string,

@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useState } from 'react';
+import React, { useMemo, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 
@@ -85,7 +85,7 @@ function DateTimeInput({
   value, timezoneName, onChange, id, ...otherProps
 }) {
   const dateTime = useMemo(
-    () => DateTime.fromISO(value, { zone: timezoneName }),
+    () => DateTime.fromISO(value).setZone(timezoneName),
     [value, timezoneName],
   );
   const [date, setDate] = useState(() => dateTime.toISODate());
@@ -94,6 +94,16 @@ function DateTimeInput({
   }));
   const { timezoneName: appTimezoneName } = useContext(AppRootContext);
   const showZone = dateTime?.zoneName && dateTime.zoneName !== appTimezoneName;
+
+  useEffect(
+    () => {
+      if (dateTime.isValid) {
+        setDate(dateTime.toISODate());
+        setTime(dateTime.toISOTime({ suppressMilliseconds: true, includeOffset: false }));
+      }
+    },
+    [dateTime],
+  );
 
   const dateChanged = (newDate) => {
     setDate(newDate);

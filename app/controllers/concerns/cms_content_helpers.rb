@@ -16,7 +16,8 @@ module CmsContentHelpers
       path: effective_path,
       controller: self,
       user: current_user,
-      user_con_profile: user_con_profile
+      user_con_profile: user_con_profile,
+      timezone: timezone_for_request
     )
   end
 end

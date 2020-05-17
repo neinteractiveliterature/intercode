@@ -40,6 +40,7 @@ function ConventionAdmin({ id }) {
             event_mailing_list_domain: convention.event_mailing_list_domain,
             location: convention.location,
             timezone_name: convention.timezone_name,
+            timezone_mode: convention.timezone_mode,
             show_schedule: convention.show_schedule,
             show_event_list: convention.show_event_list,
             maximum_tickets: convention.maximum_tickets,
