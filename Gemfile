@@ -16,7 +16,7 @@ gem 'with_advisory_lock'
 gem 'devise'
 gem 'pundit'
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'doorkeeper', '5.3.2'
+gem 'doorkeeper', '5.4.0'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
@@ -75,7 +75,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.34.0'
+gem 'twilio-ruby', '~> 5.34.1'
 gem 'phonelib'
 
 # Background workers and scheduling
