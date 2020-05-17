@@ -4,10 +4,21 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { IANAZone } from 'luxon';
-import lunr from 'lunr';
+import { Search, TfIdfSearchIndex } from 'js-search';
 
 import timezoneSelectData from './timezoneSelectData.json';
 import useUniqueId from '../useUniqueId';
+
+class BoostableTfIdfSearchIndex extends TfIdfSearchIndex {
+  _createCalculateTfIdf() {
+    const baseTfIdf = super._createCalculateTfIdf();
+    return (tokens, document, documents) => {
+      return (
+        baseTfIdf(tokens, document, documents) * (document.$boost ?? 1.0)
+      );
+    };
+  }
+}
 
 const NOW = new Date().getTime();
 
@@ -26,7 +37,15 @@ function getFormattedOffset(zoneName) {
 
 function TimezoneSelect(props) {
   const searchIndex = useMemo(
-    () => lunr.Index.load(timezoneSelectData.index),
+    () => {
+      const search = new Search('name');
+      search.searchIndex = new BoostableTfIdfSearchIndex('name');
+      search.addIndex('nameKeywords');
+      search.addIndex('shortOffsetNames');
+      search.addIndex('longOffsetNames');
+      search.addDocuments(Object.values(timezoneSelectData.zones));
+      return search;
+    },
     [],
   );
 
@@ -35,16 +54,7 @@ function TimezoneSelect(props) {
       return [];
     }
 
-    const terms = inputValue.split(' ');
-    const filtered = searchIndex.query((query) => {
-      terms.forEach((term) => {
-        query.term(term, { fields: ['shortOffsetNames'], boost: 5 });
-        query.term(term, { fields: ['longOffsetNames'], boost: 2, wildcard: lunr.Query.wildcard.TRAILING });
-        query.term(term, { fields: ['name'], wildcard: lunr.Query.wildcard.TRAILING });
-      });
-    })
-      .slice(0, 50)
-      .map((result) => timezoneSelectData.zones[result.ref]);
+    const filtered = searchIndex.search(inputValue).slice(0, 50);
     return filtered;
   };
 
