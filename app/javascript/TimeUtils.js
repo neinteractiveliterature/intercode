@@ -67,9 +67,9 @@ export function ageAsOf(birthDate, date) {
 }
 
 export function timezoneNameForConvention(convention) {
-  if (convention.timezone_mode === 'local') {
-    return DateTime.local().zoneName;
+  if (convention?.timezone_mode === 'convention_local') {
+    return convention.timezone_name;
   }
 
-  return convention?.timezone_name;
+  return DateTime.local().zoneName;
 }

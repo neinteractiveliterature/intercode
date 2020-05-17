@@ -3,6 +3,7 @@ class Convention < ApplicationRecord
   SITE_MODES = %w[convention single_event]
   SIGNUP_MODES = %w[self_service moderated]
   EMAIL_MODES = %w[forward staff_emails_to_catch_all]
+  TIMEZONE_MODES = %w[convention_local user_local]
 
   before_destroy :nullify_associated_content
 

@@ -186,8 +186,8 @@ function ProspectiveRunSchedule({
 
   const conventionDayTimespans = useMemo(
     () => (conventionTimespan
-      ? null
-      : getConventionDayTimespans(conventionTimespan, timezoneName)),
+      ? getConventionDayTimespans(conventionTimespan, timezoneName)
+      : null),
     [conventionTimespan, timezoneName],
   );
 

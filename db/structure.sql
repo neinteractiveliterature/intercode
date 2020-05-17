@@ -1001,7 +1001,8 @@ CREATE TABLE public.conventions (
     catch_all_staff_position_id bigint,
     email_mode character varying DEFAULT 'forward'::character varying NOT NULL,
     canceled boolean DEFAULT false NOT NULL,
-    location jsonb
+    location jsonb,
+    timezone_mode character varying NOT NULL
 );
 
 
@@ -5030,6 +5031,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200328214143'),
 ('20200408160310'),
 ('20200515153931'),
-('20200516164805');
+('20200516164805'),
+('20200517155823');
 
 
