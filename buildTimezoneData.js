@@ -37,13 +37,26 @@ function getAllOffsetNames(zoneName) {
   };
 }
 
+const getBoostForTimezone = (zoneName) => {
+  if (BOOST_ZONES.has(zoneName)) {
+    return 2.0;
+  }
+
+  const slashes = zoneName.match(/\//g) || [];
+  if (slashes.length !== 1) {
+    return 0.5;
+  }
+
+  return 1.0;
+};
+
 const timezoneOptions = Object.keys(tzdata.zones)
   .filter((zoneName) => IANAZone.isValidZone(zoneName))
   .filter((zoneName) => typeof tzdata.zones[zoneName] !== 'string')
   .map((zoneName) => ({
     name: zoneName,
     nameKeywords: zoneName.replace(/[/_]/g, ' '),
-    $boost: BOOST_ZONES.has(zoneName) ? 2.0 : 1.0,
+    $boost: getBoostForTimezone(zoneName),
     ...getAllOffsetNames(zoneName),
   }));
 
