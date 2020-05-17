@@ -1,10 +1,16 @@
 const tzdata = require('tzdata');
 const fs = require('fs');
-const lunr = require('lunr');
 const keyBy = require('lodash/keyBy');
 const { DateTime, IANAZone } = require('luxon');
 
 const DAY_STEP = 90;
+
+const BOOST_ZONES = new Set([
+  'America/New_York',
+  'America/Chicago',
+  'America/Denver',
+  'America/Los_Angeles',
+]);
 
 function getAllOffsetNames(zoneName) {
   // hackkkkkkk alert: iterate through all days in the past year and find all offset names
@@ -33,26 +39,18 @@ function getAllOffsetNames(zoneName) {
 
 const timezoneOptions = Object.keys(tzdata.zones)
   .filter((zoneName) => IANAZone.isValidZone(zoneName))
+  .filter((zoneName) => typeof tzdata.zones[zoneName] !== 'string')
   .map((zoneName) => ({
     name: zoneName,
+    nameKeywords: zoneName.replace(/[/_]/g, ' '),
+    $boost: BOOST_ZONES.has(zoneName) ? 2.0 : 1.0,
     ...getAllOffsetNames(zoneName),
   }));
-
-const index = lunr(function buildIndex() {
-  this.ref('name');
-  this.field('name');
-  this.field('shortOffsetNames');
-  this.field('longOffsetNames');
-
-  timezoneOptions.forEach(function processDocument(doc) {
-    this.add(doc);
-  }, this);
-});
 
 fs.writeFile(
   './app/javascript/BuiltInFormControls/timezoneSelectData.json',
   JSON.stringify(
-    { zones: keyBy(timezoneOptions, (zone) => zone.name), index },
+    { zones: keyBy(timezoneOptions, (zone) => zone.name) },
     null,
     2,
   ),
