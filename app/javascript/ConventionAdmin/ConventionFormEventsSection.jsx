@@ -1,11 +1,11 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { useChangeDispatchers } from '../ComposableFormUtils';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
-import AppRootContext from '../AppRootContext';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
@@ -35,7 +35,7 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
 };
 
 function ConventionFormEventsSection({ convention, dispatch, disabled }) {
-  const { timezoneName } = useContext(AppRootContext);
+  const timezoneName = timezoneNameForConvention(convention);
   const [
     changeSignupMode,
     changeSignupRequestsOpen,

@@ -11,12 +11,11 @@ import useUniqueId from '../useUniqueId';
 
 class BoostableTfIdfSearchIndex extends TfIdfSearchIndex {
   _createCalculateTfIdf() {
+    // eslint-disable-next-line no-underscore-dangle
     const baseTfIdf = super._createCalculateTfIdf();
-    return (tokens, document, documents) => {
-      return (
-        baseTfIdf(tokens, document, documents) * (document.$boost ?? 1.0)
-      );
-    };
+    return (tokens, document, documents) => (
+      baseTfIdf(tokens, document, documents) * (document.$boost ?? 1.0)
+    );
   }
 }
 

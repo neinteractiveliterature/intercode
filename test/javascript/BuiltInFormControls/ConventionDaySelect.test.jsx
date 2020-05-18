@@ -3,20 +3,24 @@ import moment from 'moment';
 
 import { render, fireEvent } from '../testUtils';
 import ConventionDaySelect from '../../../app/javascript/BuiltInFormControls/ConventionDaySelect';
+import AppRootContext from '../../../app/javascript/AppRootContext';
 
 describe('ConventionDaySelect', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderConventionDaySelect = (props) => render(<ConventionDaySelect
-    convention={{
-      starts_at: '2017-01-01T00:00:00.000Z',
-      ends_at: '2017-01-04T00:00:00.000Z',
-      timezone_name: 'UTC',
-    }}
-    onChange={onChange}
-    {...props}
-  />);
+  const renderConventionDaySelect = (props) => render(
+    <AppRootContext.Provider value={{ timezoneName: 'Etc/UTC' }}>
+      <ConventionDaySelect
+        convention={{
+          starts_at: '2017-01-01T00:00:00.000Z',
+          ends_at: '2017-01-04T00:00:00.000Z',
+        }}
+        onChange={onChange}
+        {...props}
+      />
+    </AppRootContext.Provider>,
+  );
 
   test('it renders an option for each convention day', () => {
     const { getAllByRole } = renderConventionDaySelect();
