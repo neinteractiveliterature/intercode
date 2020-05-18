@@ -302,8 +302,8 @@ GEM
     minipack (0.3.5)
       actionview
       railties (>= 4.2)
-    minitest (5.14.0)
-    minitest-focus (1.1.2)
+    minitest (5.14.1)
+    minitest-focus (1.2.0)
       minitest (>= 4, < 6)
     minitest-reporters (1.4.2)
       ansi
