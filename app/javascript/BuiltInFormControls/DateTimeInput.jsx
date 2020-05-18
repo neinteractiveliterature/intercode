@@ -1,4 +1,6 @@
-import React, { useMemo, useContext, useState, useEffect } from 'react';
+import React, {
+  useMemo, useContext, useState, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 

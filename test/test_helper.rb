@@ -30,7 +30,9 @@ class ActiveSupport::TestCase
   class TestGraphqlContext
     def self.with_user_con_profile(user_con_profile, **attrs)
       rendering_context = CmsRenderingContext.new(
-        cms_parent: user_con_profile&.convention, controller: nil, timezone: ActiveSupport::TimeZone['UTC']
+        cms_parent: user_con_profile&.convention,
+        controller: nil,
+        timezone: ActiveSupport::TimeZone['UTC']
       )
 
       new(
@@ -41,6 +43,7 @@ class ActiveSupport::TestCase
         cms_rendering_context: rendering_context,
         cadmus_renderer: rendering_context.cadmus_renderer,
         verified_request: true,
+        timezone_for_request: ActiveSupport::TimeZone['UTC'],
         **attrs
       )
     end

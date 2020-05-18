@@ -1,7 +1,7 @@
 class SignupRequests::NewSignupRequestNotifier < Notifier
   attr_reader :signup_request
 
-  def initialize(signup_request:, timezone:)
+  def initialize(signup_request:)
     @signup_request = signup_request
     super(
       convention: signup_request.target_run.event.convention,

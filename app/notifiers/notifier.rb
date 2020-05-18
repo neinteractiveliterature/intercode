@@ -18,12 +18,10 @@ class Notifier
   end
 
   def self.use_timezone(timezone)
-    begin
-      Thread.current['notifier_timezone'] = timezone
-      yield
-    ensure
-      Thread.current['notifier_timezone'] = nil
-    end
+    Thread.current['notifier_timezone'] = timezone
+    yield
+  ensure
+    Thread.current['notifier_timezone'] = nil
   end
 
   attr_reader :event_key, :convention

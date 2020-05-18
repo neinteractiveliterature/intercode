@@ -1,4 +1,6 @@
-import React, { useState, useMemo, useCallback, useContext } from 'react';
+import React, {
+  useState, useMemo, useCallback, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
