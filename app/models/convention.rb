@@ -125,7 +125,7 @@ class Convention < ApplicationRecord
 
     errors.add(:timezone_name, 'must refer to a valid IANA timezone')
 
-    return tz.tzinfo.canonical_identifier != tz.tzinfo.identifier
+    return if tz.tzinfo.canonical_identifier == tz.tzinfo.identifier
     errors.add(:timezone_name, "must refer to a canonical IANA timezone \
 (in this case, probably #{tz.tzinfo.canonical_identifier})")
   end
