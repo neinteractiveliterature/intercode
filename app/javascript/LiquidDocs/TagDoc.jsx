@@ -50,7 +50,7 @@ const ReturnTagWithClassDoc = ({
     </p>
     <div className="d-flex align-items-start">
       <div className="h3 mr-1">
-          ↳
+        ↳
       </div>
       <AssignDocLink
         assign={{ name: assignName, drop_class_name: returnClassName }}

@@ -5,6 +5,7 @@ import { useChangeDispatchers } from '../ComposableFormUtils';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
@@ -27,13 +28,14 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
 
   return (
     <select className="form-control custom-select" value={value} onChange={processChangeEvent}>
-      <option />
+      <option aria-label="Blank placeholder option" />
       {options}
     </select>
   );
 };
 
 function ConventionFormEventsSection({ convention, dispatch, disabled }) {
+  const timezoneName = timezoneNameForConvention(convention);
   const [
     changeSignupMode,
     changeSignupRequestsOpen,
@@ -113,7 +115,7 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         <ScheduledValueEditor
           scheduledValue={convention.maximum_event_signups}
           dispatch={dispatchMaximumEventSignups}
-          timezone={convention.timezone_name}
+          timezone={timezoneName}
           buildValueInput={buildMaximumEventSignupsInput}
           disabled={disabled}
         />
@@ -134,6 +136,9 @@ ConventionFormEventsSection.propTypes = {
         value: PropTypes.string.isRequired,
       }).isRequired).isRequired,
     }).isRequired,
+    site_mode: PropTypes.oneOf(['convention', 'single_event']).isRequired,
+    signup_mode: PropTypes.oneOf(['self_service', 'moderated']).isRequired,
+    signup_requests_open: PropTypes.bool,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

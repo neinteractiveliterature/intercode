@@ -7,8 +7,10 @@ import Timespan from '../../Timespan';
 import { timespanFromConvention } from '../../TimespanUtils';
 import { TimeblockPropType } from '../../FormPresenter/TimeblockTypes';
 import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
+import AppRootContext from '../../AppRootContext';
 
 function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { convention } = useContext(FormEditorContext);
   const { formItem, setFormItem } = useContext(FormItemEditorContext);
 
@@ -51,7 +53,7 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
 
   const choices = useMemo(
     () => columns.map((column) => {
-      const dayStart = moment.tz(column.dayStart, convention.timezone_name);
+      const dayStart = moment.tz(column.dayStart, timezoneName);
       const timespan = new Timespan(
         moment(dayStart).add(timeblock.start),
         moment(dayStart).add(timeblock.finish),
@@ -63,7 +65,7 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
         disabled: !timespan.overlapsTimespan(conventionTimespan),
       };
     }),
-    [columns, convention.timezone_name, conventionTimespan, timeblock.finish, timeblock.start],
+    [columns, timezoneName, conventionTimespan, timeblock.finish, timeblock.start],
   );
 
   const inclusionDates = useMemo(

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,7 @@ import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import AddToCalendarDropdown from './AddToCalendarDropdown';
+import AppRootContext from '../../AppRootContext';
 
 function filterAndSortSignups(signups) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
@@ -22,6 +23,7 @@ function filterAndSortSignups(signups) {
 }
 
 function UserConProfileSignupsCard({ userConProfileId }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, error, loading } = useQuery(UserConProfileSignupsQuery, {
     variables: { id: userConProfileId },
   });
@@ -70,7 +72,7 @@ function UserConProfileSignupsCard({ userConProfileId }) {
         <li>
           <small>
             {timespanFromRun(convention, signup.run.event, signup.run)
-              .humanizeInTimezone(convention.timezone_name)}
+              .humanizeInTimezone(timezoneName)}
           </small>
         </li>
         <li>

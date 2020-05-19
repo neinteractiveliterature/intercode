@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
@@ -9,8 +9,10 @@ import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import Timespan from '../Timespan';
 import { UpdateEventAdminNotes } from './mutations.gql';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
+import AppRootContext from '../AppRootContext';
 
 function EventAdminRow({ event, convention }) {
+  const { timezoneName } = useContext(AppRootContext);
   const [updateEventAdminNotes] = useMutation(UpdateEventAdminNotes);
   const [expanded, setExpanded] = useState(false);
 
@@ -37,7 +39,7 @@ function EventAdminRow({ event, convention }) {
 
     const runMetadata = [
       titleSuffix,
-      <li key="timespan">{timespan.humanizeInTimezone(convention.timezone_name)}</li>,
+      <li key="timespan">{timespan.humanizeInTimezone(timezoneName)}</li>,
       <li key="rooms">{run.rooms.map((room) => room.name).sort().join(', ')}</li>,
       scheduleNote,
     ];

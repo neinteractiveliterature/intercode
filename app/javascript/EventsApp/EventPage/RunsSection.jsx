@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
@@ -9,6 +9,7 @@ import RunCapacityGraph from './RunCapacityGraph';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventPageRunCard from './EventPageRunCard';
 import LoadingIndicator from '../../LoadingIndicator';
+import AppRootContext from '../../AppRootContext';
 
 function FakeRun({ event }) {
   const blankSignupCountsByBucketKeyAndCounted = buildBlankSignupCountsFromRegistrationPolicy(
@@ -42,17 +43,18 @@ FakeRun.propTypes = {
 };
 
 function RunsSection({ eventId }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
 
   const sortedRuns = useMemo(
     () => (error || loading
       ? null
       : [...data.event.runs].sort((a, b) => (
-        moment.tz(a.starts_at, data.convention.timezone_name).valueOf()
-        - moment.tz(b.starts_at, data.convention.timezone_name).valueOf()
+        moment.tz(a.starts_at, timezoneName).valueOf()
+        - moment.tz(b.starts_at, timezoneName).valueOf()
       ))
     ),
-    [data, error, loading],
+    [data, error, loading, timezoneName],
   );
 
   if (loading) {

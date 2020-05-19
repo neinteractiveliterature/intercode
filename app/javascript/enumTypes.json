@@ -520,5 +520,28 @@
       }
     ],
     "possibleTypes": null
+  },
+  "TimezoneMode": {
+    "kind": "ENUM",
+    "name": "TimezoneMode",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "convention_local",
+        "description": "Display dates and times using convention’s local time zone",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "user_local",
+        "description": "Display dates and times using user’s local time zone",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
   }
 }

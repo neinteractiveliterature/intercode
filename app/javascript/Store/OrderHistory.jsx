@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment-timezone';
 import intersection from 'lodash/intersection';
 import { useQuery } from '@apollo/react-hooks';
@@ -10,8 +10,10 @@ import ErrorDisplay from '../ErrorDisplay';
 import useModal from '../ModalDialogs/useModal';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import AppRootContext from '../AppRootContext';
 
 function OrderHistory() {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(OrderHistoryQuery);
   const paymentModal = useModal();
 
@@ -104,7 +106,7 @@ function OrderHistory() {
 
   const renderOrder = (order) => {
     const renderedOrderEntries = order.order_entries.map((entry) => renderOrderEntry(entry));
-    const submittedTime = moment(order.submitted_at).tz(data.convention.timezone_name);
+    const submittedTime = moment(order.submitted_at).tz(timezoneName);
 
     return (
       <li key={order.id} className="card mb-4">

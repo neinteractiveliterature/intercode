@@ -14,6 +14,7 @@ import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
+import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -219,9 +220,7 @@ const getPossibleColumns = (data) => [
     accessor: 'submitted_at',
     width: 150,
     filterable: false,
-    Cell: ({ value }) => (
-      moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
-    ),
+    Cell: SingleLineTimestampCell,
   },
   {
     Header: 'Updated',
@@ -229,9 +228,7 @@ const getPossibleColumns = (data) => [
     accessor: 'updated_at',
     width: 150,
     filterable: false,
-    Cell: ({ value }) => (
-      moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
-    ),
+    Cell: SingleLineTimestampCell,
   },
   {
     Header: '',

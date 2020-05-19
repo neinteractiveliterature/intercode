@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
@@ -8,11 +8,13 @@ import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUt
 import useModal from '../ModalDialogs/useModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
+import AppRootContext from '../AppRootContext';
 
 function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
+  const { timezoneName } = useContext(AppRootContext);
   const conventionDays = getConventionDayTimespans(
     timespanFromConvention(convention),
-    convention.timezone_name,
+    timezoneName,
   );
 
   const runLists = conventionDays.map((conventionDay) => {
@@ -23,7 +25,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
     dayRuns.sort((a, b) => moment(a.starts_at).diff(moment(b.starts_at)));
 
     const runItems = dayRuns.map((run) => {
-      const runStart = moment(run.starts_at).tz(convention.timezone_name);
+      const runStart = moment(run.starts_at).tz(timezoneName);
       let format = 'h:mma';
       if (runStart.day() !== conventionDay.start.day()) {
         format = 'ddd h:mma';

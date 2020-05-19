@@ -3,6 +3,7 @@ class Convention < ApplicationRecord
   SITE_MODES = %w[convention single_event]
   SIGNUP_MODES = %w[self_service moderated]
   EMAIL_MODES = %w[forward staff_emails_to_catch_all]
+  TIMEZONE_MODES = %w[convention_local user_local]
 
   before_destroy :nullify_associated_content
 
@@ -108,6 +109,10 @@ class Convention < ApplicationRecord
     "#{stripe_secret_key[0..7]}...#{stripe_secret_key[-4..-1]}"
   end
 
+  def timespan
+    ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
+  end
+
   private
 
   def maximum_event_signups_must_cover_all_time
@@ -119,7 +124,14 @@ class Convention < ApplicationRecord
   def timezone_name_must_be_valid
     return unless timezone_name.present?
 
-    errors.add(:timezone_name, 'must refer to a valid POSIX timezone') unless timezone
+    tz = timezone
+    return unless tz
+
+    errors.add(:timezone_name, 'must refer to a valid IANA timezone')
+
+    return if tz.tzinfo.canonical_identifier == tz.tzinfo.identifier
+    errors.add(:timezone_name, "must refer to a canonical IANA timezone \
+(in this case, probably #{tz.tzinfo.canonical_identifier})")
   end
 
   def site_mode_must_be_possible
