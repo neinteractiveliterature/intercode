@@ -37,7 +37,9 @@ class FormResponseChangeGroupPresenter
         'id' => convention.id,
         'starts_at' => convention.starts_at,
         'ends_at' => convention.ends_at,
-        'timezone_name' => convention.timezone_name
+        # force JS timezone helpers to use the request timezone
+        'timezone_name' => Notifier.current_timezone,
+        'timezone_mode' => 'convention_local'
       }
     }
   end

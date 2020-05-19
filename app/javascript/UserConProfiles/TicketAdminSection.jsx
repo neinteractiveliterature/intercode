@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
@@ -16,6 +16,7 @@ import {
 import LoadingIndicator from '../LoadingIndicator';
 import useModal from '../ModalDialogs/useModal';
 import AddOrderToTicketButton from './AddOrderToTicketButton';
+import AppRootContext from '../AppRootContext';
 
 function TicketAdminControls({ convention, userConProfile }) {
   const query = userConProfile.ticket
@@ -187,6 +188,8 @@ function TicketAdminControls({ convention, userConProfile }) {
 }
 
 function TicketAdminSection({ convention, userConProfile }) {
+  const { timezoneName } = useContext(AppRootContext);
+
   const renderTicketData = (ticket) => {
     if (!ticket) {
       return (
@@ -221,12 +224,12 @@ function TicketAdminSection({ convention, userConProfile }) {
 
         <dt className="col-md-3">Created</dt>
         <dd className="col-md-9">
-          {moment.tz(ticket.created_at, convention.timezone_name).format('MMMM D, YYYY h:mma z')}
+          {moment.tz(ticket.created_at, timezoneName).format('MMMM D, YYYY h:mma z')}
         </dd>
 
         <dt className="col-md-3">Last updated</dt>
         <dd className="col-md-9">
-          {moment.tz(ticket.updated_at, convention.timezone_name).format('MMMM D, YYYY h:mma z')}
+          {moment.tz(ticket.updated_at, timezoneName).format('MMMM D, YYYY h:mma z')}
         </dd>
       </dl>
     );

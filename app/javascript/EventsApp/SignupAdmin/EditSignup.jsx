@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
@@ -19,6 +19,7 @@ import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import AppRootContext from '../../AppRootContext';
 
 function cityState(userConProfile) {
   return [
@@ -112,6 +113,7 @@ function getToggleCountedConfirmPrompt(signup) {
 }
 
 function EditSignup({ teamMembersUrl }) {
+  const { timezoneName } = useContext(AppRootContext);
   const id = Number.parseInt(useParams().id, 10);
   const { data, loading, error } = useQuery(AdminSignupQuery, { variables: { id } });
   const changeBucketModal = useModal();
@@ -261,7 +263,7 @@ function EditSignup({ teamMembersUrl }) {
         <div className="card-header">
           {run.event.title}
           <br />
-          {timespan.humanizeInTimezone(data.convention.timezone_name)}
+          {timespan.humanizeInTimezone(timezoneName)}
           <br />
           {run.rooms.map((room) => room.name).sort().join(', ')}
         </div>

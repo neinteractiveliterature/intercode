@@ -3,12 +3,13 @@ class CmsRenderingContext
   include Cadmus::Renderable
   include ApplicationHelper
   include ActionView::Helpers::TagHelper
-  attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files
+  attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
 
-  def initialize(cms_parent:, controller:, assigns: {})
+  def initialize(cms_parent:, controller:, timezone:, assigns: {})
     @cms_parent = cms_parent
     @controller = controller
     @assigns = assigns
+    @timezone = timezone
     @cached_partials = {}
     @cached_files = {}
   end
@@ -112,7 +113,8 @@ class CmsRenderingContext
       'controller' => controller,
       :cached_partials => cached_partials,
       :cached_files => cached_files,
-      :file_system => Cadmus::PartialFileSystem.new(convention)
+      :file_system => Cadmus::PartialFileSystem.new(convention),
+      :timezone => timezone
     )
   end
 

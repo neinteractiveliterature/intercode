@@ -41,9 +41,9 @@ tool 'pull_production_db' do
     pull_options = (
       include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"'
     )
-    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:10.4 \
-pg_dump #{pull_options} -v -x --no-owner -Fc \"#{database_url}\" \
--f /out/intercode_production.pgdump"
+    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:12.2 \
+pg_dump #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
+-f /out/intercode_production.sql"
 
     exec_tool("load_production_db #{docker_compose ? '--docker-compose' : ''}")
   end
@@ -52,7 +52,7 @@ end
 tool 'load_production_db' do
   desc 'Load a production pgdump into development'
   include :exec, exit_on_nonzero_status: true
-  flag :file, default: 'intercode_production.pgdump'
+  flag :file, default: 'intercode_production.sql'
   flag :docker_compose
 
   def run
@@ -132,7 +132,9 @@ tool 'update_liquid_doc_json' do
 
     {
       classes: classes.map { |klass| serialize_class(klass) },
-      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
+      filter_methods: filters_module.meths
+        .select { |meth| meth.visibility == :public }
+        .map { |meth| serialize_method(meth) }
     }
   end
 

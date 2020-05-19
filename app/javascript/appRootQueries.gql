@@ -74,6 +74,7 @@ query AppRootQuery($path: String!) {
     signup_mode
     ticket_mode
     timezone_name
+    timezone_mode
     clickwrap_agreement
     tickets_available_for_purchase
     ticket_name

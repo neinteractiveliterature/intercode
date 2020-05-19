@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render } from '../testUtils';
-import TimezoneSelect, { loadOptions } from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
+import { render, fireEvent, waitFor } from '../testUtils';
+import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
 describe('TimezoneSelect', () => {
   const renderComponent = (overrideProps) => render((
@@ -17,15 +17,14 @@ describe('TimezoneSelect', () => {
     expect(getAllByText(/Timezone/)).toHaveLength(1);
   });
 
-  test('option filtering', () => {
-    const options = loadOptions('');
-    expect(options.length).toBeGreaterThan(0);
+  test('option filtering', async () => {
+    const { getByRole, getByText } = renderComponent();
+    const input = getByRole('textbox');
 
-    const utcOptions = loadOptions('UTC');
-    // we also get Etc/UTC back in the list and can't necessarily expect UTC first
-    expect(utcOptions.map((option) => option.label)).toContain('[UTC-00:00] UTC');
+    fireEvent.change(input, { target: { value: 'coordinated' } });
+    await waitFor(() => expect(getByText(/Etc\/UTC/)).toBeTruthy());
 
-    const kolkataOptions = loadOptions('Asia/Kolkata');
-    expect(kolkataOptions[0].label).toEqual('[UTC+05:30] Asia/Kolkata');
+    fireEvent.change(input, { target: { value: 'kolkata' } });
+    await waitFor(() => expect(getByText(/Asia\/Kolkata/)).toBeTruthy());
   });
 });

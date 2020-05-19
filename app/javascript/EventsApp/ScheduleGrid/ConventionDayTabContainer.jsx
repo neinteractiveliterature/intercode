@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
 import {
@@ -9,6 +9,7 @@ import { useApolloClient } from '@apollo/react-hooks';
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
 import { ScheduleGridCombinedQuery } from './queries.gql';
+import AppRootContext from '../../AppRootContext';
 
 function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
   const location = useLocation();
@@ -52,8 +53,9 @@ ConventionDayTab.defaultProps = {
 };
 
 function ConventionDayTabContainer({
-  basename, conventionTimespan, timezoneName, prefetchTimespan, children, showExtendedCounts,
+  basename, conventionTimespan, prefetchTimespan, children, showExtendedCounts,
 }) {
+  const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();
   const refreshData = useCallback(
     () => client.query({
@@ -124,7 +126,6 @@ ConventionDayTabContainer.propTypes = {
     finish: MomentPropTypes.momentObj.isRequired,
     isFinite: PropTypes.func.isRequired,
   }).isRequired,
-  timezoneName: PropTypes.string.isRequired,
   prefetchTimespan: PropTypes.func,
   children: PropTypes.func.isRequired,
   showExtendedCounts: PropTypes.bool,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
@@ -15,8 +15,10 @@ import useEventAdminCategory from './useEventAdminCategory';
 import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import AppRootContext from '../AppRootContext';
 
 function SingleRunEventAdminList({ eventCategoryId }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
   const [eventCategory, sortedEvents] = useEventAdminCategory(
     data, loading, error, eventCategoryId,
@@ -53,7 +55,7 @@ function SingleRunEventAdminList({ eventCategoryId }) {
           </span>
         </th>
         <td>
-          {timespan && timespan.humanizeInTimezone(data.convention.timezone_name)}
+          {timespan && timespan.humanizeInTimezone(timezoneName)}
         </td>
         <td>
           <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>

@@ -1000,7 +1000,9 @@ CREATE TABLE public.conventions (
     email_from text NOT NULL,
     catch_all_staff_position_id bigint,
     email_mode character varying DEFAULT 'forward'::character varying NOT NULL,
-    canceled boolean DEFAULT false NOT NULL
+    canceled boolean DEFAULT false NOT NULL,
+    location jsonb,
+    timezone_mode character varying NOT NULL
 );
 
 
@@ -4183,20 +4185,6 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
--- Name: events tsvector_update_event_title; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'public.simple_unaccent', 'title');
-
-
---
--- Name: pg_search_documents tsvector_update_pg_search_documents_content; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
-
-
---
 -- Name: signup_requests fk_rails_008590ab32; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5041,6 +5029,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200324163822'),
 ('20200328204324'),
 ('20200328214143'),
-('20200408160310');
+('20200408160310'),
+('20200515153931'),
+('20200516164805'),
+('20200517155823');
 
 

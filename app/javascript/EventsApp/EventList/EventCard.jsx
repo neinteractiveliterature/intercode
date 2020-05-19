@@ -70,8 +70,9 @@ function teamIsAllAuthors(author, teamMembers) {
 }
 
 const EventCard = ({
-  event, timezoneName, sorted, canReadSchedule,
+  event, sorted, canReadSchedule,
 }) => {
+  const { timezoneName } = useContext(AppRootContext);
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
@@ -227,7 +228,6 @@ EventCard.propTypes = {
     team_members: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     created_at: PropTypes.string.isRequired,
   }).isRequired,
-  timezoneName: PropTypes.string.isRequired,
   sorted: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     desc: PropTypes.bool.isRequired,

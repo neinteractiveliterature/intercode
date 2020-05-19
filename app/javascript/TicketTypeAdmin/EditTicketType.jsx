@@ -87,7 +87,6 @@ function EditTicketType() {
   return (
     <EditTicketTypeForm
       initialTicketType={initialTicketType}
-      timezoneName={convention.timezone_name}
       ticketName={convention.ticket_name}
     />
   );

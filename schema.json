@@ -3617,6 +3617,20 @@
               "deprecationReason": null
             },
             {
+              "name": "location",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Json",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "mail_privilege_names",
               "description": null,
               "args": [
@@ -4461,6 +4475,24 @@
               "deprecationReason": null
             },
             {
+              "name": "timezone_mode",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "TimezoneMode",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "timezone_name",
               "description": null,
               "args": [
@@ -4746,11 +4778,31 @@
               "defaultValue": null
             },
             {
+              "name": "location",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Json",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "timezone_name",
               "description": null,
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "timezone_mode",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "TimezoneMode",
                 "ofType": null
               },
               "defaultValue": null
@@ -19074,6 +19126,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "ticket_id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -19086,6 +19148,16 @@
           "description": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "user_name",
               "description": null,
@@ -20937,6 +21009,16 @@
                     "ofType": null
                   }
                 }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "provides_ticket_type_id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -27056,13 +27138,9 @@
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "OrderEntry",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "OrderEntry",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -27781,6 +27859,29 @@
           ],
           "interfaces": null,
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "TimezoneMode",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "convention_local",
+              "description": "Display dates and times using convention’s local time zone",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_local",
+              "description": "Display dates and times using user’s local time zone",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {

@@ -13,6 +13,17 @@ class Notifier
     end
   end.to_h
 
+  def self.current_timezone
+    Thread.current['notifier_timezone']
+  end
+
+  def self.use_timezone(timezone)
+    Thread.current['notifier_timezone'] = timezone
+    yield
+  ensure
+    Thread.current['notifier_timezone'] = nil
+  end
+
   attr_reader :event_key, :convention
 
   def initialize(convention:, event_key:)
@@ -23,7 +34,7 @@ class Notifier
   def render
     notification_template = convention.notification_templates.find_by!(event_key: event_key)
 
-    use_convention_timezone(convention) do
+    Time.use_zone(Notifier.current_timezone) do
       {
         subject: notification_template.subject_template,
         body_html: notification_template.body_html_template,
@@ -57,7 +68,10 @@ class Notifier
 
   def cadmus_renderer
     @cadmus_renderer ||= CmsRenderingContext.new(
-      cms_parent: convention, controller: nil, assigns: { 'convention' => convention }
+      cms_parent: convention,
+      controller: nil,
+      timezone: Notifier.current_timezone,
+      assigns: { 'convention' => convention }
     ).cadmus_renderer
   end
 
@@ -67,16 +81,6 @@ class Notifier
   end
 
   private
-
-  def use_convention_timezone(convention, &block)
-    timezone = convention&.timezone
-
-    if timezone
-      Time.use_zone(timezone, &block)
-    else
-      yield
-    end
-  end
 
   def sms_jobs
     return [] unless should_deliver_sms?

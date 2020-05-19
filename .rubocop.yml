@@ -148,6 +148,12 @@ Layout/IndentationConsistency:
   Description: 'Keep indentation straight.'
   Enabled: true
 
+Layout/IndentationStyle:
+  Description: 'No hard tabs.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
+  EnforcedStyle: spaces
+  Enabled: true
+
 Layout/IndentationWidth:
   Description: 'Use 2 spaces for indentation.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
@@ -291,11 +297,6 @@ Layout/SpaceInsideRangeLiteral:
 Layout/SpaceInsideStringInterpolation:
   Description: 'Checks for padding/surrounding spaces inside string interpolation.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#string-interpolation'
-  Enabled: true
-
-Layout/Tab:
-  Description: 'No hard tabs.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
   Enabled: true
 
 Layout/TrailingEmptyLines:
