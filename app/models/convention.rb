@@ -125,9 +125,10 @@ class Convention < ApplicationRecord
     return unless timezone_name.present?
 
     tz = timezone
-    return unless tz
-
-    errors.add(:timezone_name, 'must refer to a valid IANA timezone')
+    unless tz
+      errors.add(:timezone_name, 'must refer to a valid IANA timezone')
+      return
+    end
 
     return if tz.tzinfo.canonical_identifier == tz.tzinfo.identifier
     errors.add(:timezone_name, "must refer to a canonical IANA timezone \
