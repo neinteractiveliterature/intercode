@@ -164,6 +164,11 @@ class ConventionDrop < Liquid::Drop
     ScheduledValueDrop.new(convention.maximum_event_signups, @context.registers[:timezone])
   end
 
+  # @return [ScheduledValue::TimespanDrop] The time span of the convention
+  def timespan
+    ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
+  end
+
   # @return [ActiveSupport::TimeWithZone] The time at which this convention starts
   def starts_at
     @starts_at ||= convention.starts_at&.in_time_zone(@context.registers[:timezone])

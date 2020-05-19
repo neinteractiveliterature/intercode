@@ -109,6 +109,10 @@ class Convention < ApplicationRecord
     "#{stripe_secret_key[0..7]}...#{stripe_secret_key[-4..-1]}"
   end
 
+  def timespan
+    ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
+  end
+
   private
 
   def maximum_event_signups_must_cover_all_time
