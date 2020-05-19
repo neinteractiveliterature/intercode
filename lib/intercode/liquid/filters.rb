@@ -148,10 +148,12 @@ module Intercode
       #                               local timezone (if one exists).
       # @return String
       # @example Formatting a timespan using an explicit time zone, while the user is in that zone
-      #   {{ convention.timespan | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
+      #   {{ convention.timespan
+      #     | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
       #     "Saturday, July 11 from 10:00am to 11:59pm EDT"
       # @example Formatting a time using an explicit time zone, while the user is not in that zone
-      #   {{ convention.timespan | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
+      #   {{ convention.timespan
+      #     | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
       #     "Saturday, July 11 from 10:00am to 11:59pm EDT (7:00am to 8:59pm PDT)"
       # @example Using the convention's time zone implicitly
       #   {{ convention.timespan | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z" }} =>
@@ -193,12 +195,10 @@ module Intercode
         b_arr = b.split(delimiter)
 
         while i < a_arr.length && i < b_arr.length
-          if a_arr[i] == b_arr[i]
-            prefix << a_arr[i]
-            i += 1
-          else
-            return prefix.join(delimiter)
-          end
+          return prefix.join(delimiter) unless a_arr[i] == b_arr[i]
+
+          prefix << a_arr[i]
+          i += 1
         end
 
         prefix.join(delimiter)
