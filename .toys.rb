@@ -132,7 +132,9 @@ tool 'update_liquid_doc_json' do
 
     {
       classes: classes.map { |klass| serialize_class(klass) },
-      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
+      filter_methods: filters_module.meths
+        .select { |meth| meth.visibility == :public }
+        .map { |meth| serialize_method(meth) }
     }
   end
 
