@@ -22,6 +22,12 @@ class Money::Currency
   end
 end
 
+class ScheduledValue::Timespan
+  def to_liquid
+    ScheduledValue::TimespanDrop.new(self)
+  end
+end
+
 # Patching Liquid::Utils to use ActiveSupport time zone
 module Liquid::Utils
   def self.to_date(obj)
