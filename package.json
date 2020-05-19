@@ -153,7 +153,7 @@
     "eslint-plugin-react-hooks": "^2.5.1",
     "jest": "^25.5.4",
     "jest-environment-jsdom-sixteen": "^1.0.3",
-    "jest-html-reporter": "^3.1.0",
+    "jest-html-reporter": "^3.1.2",
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
