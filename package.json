@@ -160,7 +160,6 @@
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "react-test-renderer": "^16.13.1",
-    "webpack-dashboard": "^3.2.0",
     "webpack-dev-server": "^3.11.0"
   },
   "resolutions": {
@@ -176,8 +175,7 @@
     "graphqldoc:generate": "graphqldoc -s schema.graphql",
     "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
     "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
-    "start": "webpack-dashboard --port 3136 -- yarn run start:no-dashboard",
-    "start:no-dashboard": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
+    "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
