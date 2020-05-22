@@ -14,17 +14,24 @@ import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
+import { AuthorizationWrapper } from '../Authentication/useAuthorizationRequired';
 
 function renderScheduleRoutes() {
   return [
     <Route path="/events/schedule" key="conSchedule">
-      <ScheduleGridApp configKey="con_schedule" />
+      <AuthorizationWrapper abilities={['can_read_schedule']}>
+        <ScheduleGridApp configKey="con_schedule" />
+      </AuthorizationWrapper>
     </Route>,
     <Route path="/events/schedule_by_room" key="conScheduleByRoom">
-      <ScheduleGridApp configKey="con_schedule_by_room" />
+      <AuthorizationWrapper abilities={['can_read_schedule']}>
+        <ScheduleGridApp configKey="con_schedule_by_room" />
+      </AuthorizationWrapper>
     </Route>,
     <Route path="/events/schedule_with_counts" key="scheduleWithCounts">
-      <ScheduleGridApp configKey="schedule_with_counts" />
+      <AuthorizationWrapper abilities={['can_read_schedule_with_counts']}>
+        <ScheduleGridApp configKey="schedule_with_counts" />
+      </AuthorizationWrapper>
     </Route>,
   ];
 }

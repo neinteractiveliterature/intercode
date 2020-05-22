@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import { DateTime } from 'luxon';
 
 import CategoryLegend from './CategoryLegend';
 import FullnessLegend from './FullnessLegend';
@@ -26,7 +27,7 @@ const DEFAULT_PERSONAL_FILTERS = [
 
 function ScheduleGridApp({ configKey }) {
   const location = useLocation();
-  const { myProfile } = useContext(AppRootContext);
+  const { myProfile, timezoneName } = useContext(AppRootContext);
   const { filtered, onFilteredChange } = useReactRouterReactTable({ ...filterCodecs });
   const config = ScheduleGridConfig.get(configKey);
   const storageKey = `schedule:${configKey}:personalFilters`;
@@ -105,6 +106,12 @@ function ScheduleGridApp({ configKey }) {
               </div>
             )}
             <ScheduleGrid timespan={timespan} />
+            <div className="font-italic">
+              All times displayed in
+              {' '}
+              {DateTime.fromISO(timespan.start.toISOString()).setZone(timezoneName).offsetNameLong}
+              .
+            </div>
           </div>
         )}
       </ScheduleGridProvider>

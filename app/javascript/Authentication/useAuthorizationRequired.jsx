@@ -23,3 +23,13 @@ export default function useAuthorizationRequired(...abilities) {
 
   return false;
 }
+
+export function AuthorizationWrapper({ abilities, children }) {
+  const authorizationRequired = useAuthorizationRequired(abilities);
+
+  if (authorizationRequired) {
+    return authorizationRequired;
+  }
+
+  return children;
+}

@@ -168,7 +168,7 @@ module Intercode
           timespan_in_zone.strip
         else
           timespan_in_user_zone = describe_timespan(input, format, @context.registers[:timezone])
-          _, deduped_user = remove_common_middle(timespan_in_zone, timespan_in_user_zone)
+          _, deduped_user = remove_common_middle(timespan_in_zone, timespan_in_user_zone, ' ')
           "#{timespan_in_zone.strip} (#{deduped_user.strip})"
         end
       end
@@ -208,7 +208,7 @@ module Intercode
         common_prefix(a.reverse, b.reverse, delimiter).reverse
       end
 
-      def remove_common_middle(a, b, delimiter = ' ')
+      def remove_common_middle(a, b, delimiter = '')
         prefix = common_prefix(a, b, delimiter)
         suffix = common_suffix(a, b, delimiter)
         prefix_regex = /\A#{Regexp.escape(prefix)}/
@@ -230,7 +230,7 @@ module Intercode
           'indefinitely'
         end
 
-        deduped_start, deduped_finish = remove_common_middle(start, finish)
+        deduped_start, deduped_finish = remove_common_middle(start, finish, ' ')
         [deduped_start, deduped_finish].join(timespan.finish ? ' to ' : ' ')
       end
     end
