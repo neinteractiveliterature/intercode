@@ -372,7 +372,7 @@ describe('Timespan', () => {
 
     it('handles offset', () => {
       const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
-      expect(hopsWithOffset).toHaveLength(24);
+      expect(hopsWithOffset).toHaveLength(22);
       expect(hopsWithOffset[0].start.hour()).toEqual(2);
     });
   });
