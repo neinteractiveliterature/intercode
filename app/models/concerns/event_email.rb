@@ -6,7 +6,6 @@ module EventEmail
   included do
     validate :team_mailing_list_name_must_not_be_taken
     validate :team_mailing_list_name_must_not_be_reserved
-    validate :cannot_use_mailing_list_domain_manually
   end
 
   def event_email
@@ -38,11 +37,6 @@ module EventEmail
       convention.event_mailing_list_domain.to_s
   end
 
-  def event_mailing_list_domain_suffix
-    return nil unless convention.event_mailing_list_domain.present?
-    "@#{convention.event_mailing_list_domain}"
-  end
-
   def reserved_team_mailing_list_names
     convention.staff_positions.map do |staff_position|
       next unless staff_position.email
@@ -71,16 +65,6 @@ and cannot be used for an event team"
 event (#{scope.map(&:title).to_sentence})"
       break
     end
-  end
-
-  def cannot_use_mailing_list_domain_manually
-    return unless event_mailing_list_domain_suffix
-    return unless event_email
-    return if event_email[:team_mailing_list_name]
-    return unless event_email[:email].end_with?(event_mailing_list_domain_suffix)
-
-    errors.add :event_email, "Cannot use the @#{convention.event_mailing_list_domain} domain \
-without setting “Have the convention create and manage a team mailing list for me”"
   end
 
   def other_models_for_team_mailing_list_conflicts(model_class)
