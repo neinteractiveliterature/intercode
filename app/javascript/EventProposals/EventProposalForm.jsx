@@ -78,6 +78,7 @@ function EventProposalFormInner({
   const commitResponse = useCallback(
     async (proposal) => {
       try {
+        setResponseErrors({});
         const promise = updateEventProposal({
           variables: {
             input: {

@@ -31,6 +31,9 @@ function EventEmailInput({
       userDidInteract();
       if (emailBehavior === 'team_mailing_list') {
         onChange({
+          // always send something Ruby will consider truthy if the email behavior is to use
+          // a team mailing list
+          team_mailing_list_name: '',
           ...state,
           email: (state.team_mailing_list_name && state.team_mailing_list_name.trim() !== '')
             ? `${state.team_mailing_list_name}@${convention.event_mailing_list_domain}`
@@ -53,13 +56,16 @@ function EventEmailInput({
     setEmailBehavior(newBehavior);
     if (newBehavior === 'team_mailing_list' && convention.event_mailing_list_domain) {
       onChange({
+        // always send something Ruby will consider truthy if the email behavior is to use
+        // a team mailing list
+        team_mailing_list_name: '',
         ...(value || {}),
         con_mail_destination: 'event_email',
       });
     } else {
       onChange({
         ...(value || {}),
-        con_mail_destination: emailBehavior,
+        con_mail_destination: newBehavior,
         team_mailing_list_name: null,
       });
     }

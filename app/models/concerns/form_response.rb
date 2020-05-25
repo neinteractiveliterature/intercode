@@ -1,7 +1,7 @@
 module FormResponse
   extend ActiveSupport::Concern
 
-  included do |base|
+  included do
     has_many :form_response_changes, as: :response
   end
 
