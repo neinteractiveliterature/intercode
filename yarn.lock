@@ -4182,6 +4182,15 @@ dnd-core@^10.0.2:
     "@react-dnd/invariant" "^2.0.0"
     redux "^4.0.4"
 
+dnd-core@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-11.1.0.tgz#b118720b209a95b1279cb3fd58d5b3e178c80f83"
+  integrity sha512-4cl6nzqGSCypN7knZFLeK8cE7FH+iI9WcTs31IMbJsNe5orCBaUuxd5p9qSQwUDePj5qHpq5dPgKo7gEOaEhfg==
+  dependencies:
+    "@react-dnd/asap" "^4.0.0"
+    "@react-dnd/invariant" "^2.0.0"
+    redux "^4.0.4"
+
 dnd-core@^9.5.1:
   version "9.5.1"
   resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-9.5.1.tgz#e9ec02d33529b68fa528865704d40ac4b14f2baf"
@@ -9712,6 +9721,16 @@ react-dnd@^10.0.2:
     "@react-dnd/shallowequal" "^2.0.0"
     "@types/hoist-non-react-statics" "^3.3.1"
     dnd-core "^10.0.2"
+    hoist-non-react-statics "^3.3.0"
+
+react-dnd@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-11.1.0.tgz#a8f819aa43d2d902ee8352fc0841407336ab6341"
+  integrity sha512-2hWSDr9/ZMCnnWGQAN1x5hMZGo1K3y4Vina7DxDLICPQebvXHZxt/aeJ6f+ycsoIHCUqacKnABTyeFiWhpigUQ==
+  dependencies:
+    "@react-dnd/shallowequal" "^2.0.0"
+    "@types/hoist-non-react-statics" "^3.3.1"
+    dnd-core "^11.1.0"
     hoist-non-react-statics "^3.3.0"
 
 react-dom@^16.13.1:
