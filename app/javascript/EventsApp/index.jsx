@@ -14,24 +14,24 @@ import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
-import { AuthorizationWrapper } from '../Authentication/useAuthorizationRequired';
+import { NoLoginAuthorizationWrapper } from '../Authentication/useAuthorizationRequired';
 
 function renderScheduleRoutes() {
   return [
     <Route path="/events/schedule" key="conSchedule">
-      <AuthorizationWrapper abilities={['can_read_schedule']}>
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>
         <ScheduleGridApp configKey="con_schedule" />
-      </AuthorizationWrapper>
+      </NoLoginAuthorizationWrapper>
     </Route>,
     <Route path="/events/schedule_by_room" key="conScheduleByRoom">
-      <AuthorizationWrapper abilities={['can_read_schedule']}>
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>
         <ScheduleGridApp configKey="con_schedule_by_room" />
-      </AuthorizationWrapper>
+      </NoLoginAuthorizationWrapper>
     </Route>,
     <Route path="/events/schedule_with_counts" key="scheduleWithCounts">
-      <AuthorizationWrapper abilities={['can_read_schedule_with_counts']}>
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule_with_counts']}>
         <ScheduleGridApp configKey="schedule_with_counts" />
-      </AuthorizationWrapper>
+      </NoLoginAuthorizationWrapper>
     </Route>,
   ];
 }
