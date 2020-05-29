@@ -2017,6 +2017,18 @@
               "types": null
             }
           ]
+        },
+        {
+          "name": "effective_timezone",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
         }
       ]
     },
