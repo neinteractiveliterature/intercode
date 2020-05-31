@@ -30,7 +30,11 @@ function EditCmsLayoutForm({ initialLayout }) {
       },
     });
     await apolloClient.resetStore();
-    history.push('/cms_layouts');
+    if (history.length > 1) {
+      history.goBack();
+    } else {
+      history.push('/cms_layouts');
+    }
   };
 
   return (

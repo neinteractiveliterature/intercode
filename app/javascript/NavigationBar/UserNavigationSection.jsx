@@ -8,9 +8,10 @@ import SignUpButton from '../Authentication/SignUpButton';
 import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 import AppRootContext from '../AppRootContext';
 import NavigationItem from './NavigationItem';
-import SignOutNavigationItem from './SignOutNavigationItem';
 import Gravatar from '../Gravatar';
 import CartContents from '../Store/CartContents';
+import MenuIcon from './MenuIcon';
+import SignOutButton from '../Authentication/SignOutButton';
 
 function CurrentPendingOrderButton() {
   const { currentPendingOrder } = useContext(AppRootContext);
@@ -152,6 +153,7 @@ function UserNavigationSection() {
                   inSection
                   label="My Account"
                   url="/users/edit"
+                  icon="fa-address-card"
                 />
               )}
               {myProfile && (
@@ -159,6 +161,7 @@ function UserNavigationSection() {
                   inSection
                   label={`My ${conventionName} Profile`}
                   url="/my_profile"
+                  icon="fa-user-circle"
                 />
               )}
               {myProfile && (
@@ -166,6 +169,7 @@ function UserNavigationSection() {
                   inSection
                   label="My Order History"
                   url="/order_history"
+                  icon="fa-shopping-bag"
                 />
               )}
               {currentUser && (
@@ -173,10 +177,19 @@ function UserNavigationSection() {
                   inSection
                   label="Authorized Applications"
                   url="/oauth/authorized_applications"
+                  icon="fa-lock"
                 />
               )}
               {currentUser && (
-                <SignOutNavigationItem item={{ label: 'Log Out' }} />
+                <SignOutButton
+                  className="dropdown-item"
+                  caption={(
+                    <>
+                      <MenuIcon icon="fa-sign-out" />
+                      Log out
+                    </>
+                  )}
+                />
               )}
             </PopperDropdown>
           </div>
@@ -204,8 +217,7 @@ function UserNavigationSection() {
             className="btn btn-link dropdown-item"
             caption={(
               <>
-                <i className="fa fa-sign-in" />
-                {' '}
+                <MenuIcon icon="fa-sign-in" />
                 Log in
               </>
            )}
@@ -216,8 +228,7 @@ function UserNavigationSection() {
             className="btn btn-link dropdown-item"
             caption={(
               <>
-                <i className="fa fa-pencil-square-o" />
-                {' '}
+                <MenuIcon icon="fa-pencil-square-o" />
                 Sign up
               </>
             )}
