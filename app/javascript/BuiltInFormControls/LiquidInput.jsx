@@ -92,6 +92,12 @@ function AddFileModal({ visible, fileChosen, close }) {
   );
 }
 
+AddFileModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  fileChosen: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+};
+
 function LiquidInput(props) {
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');
