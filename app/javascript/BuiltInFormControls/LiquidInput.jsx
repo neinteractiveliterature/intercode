@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useApolloClient, useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useApolloClient, useLazyQuery } from '@apollo/react-hooks';
 import Modal from 'react-bootstrap4-modal';
 
 import { CmsFilesAdminQuery } from '../CmsAdmin/CmsFilesAdmin/queries.gql';
