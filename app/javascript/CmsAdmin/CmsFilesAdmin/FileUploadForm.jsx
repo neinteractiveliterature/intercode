@@ -8,7 +8,7 @@ import { useCreateMutation } from '../../MutationUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 
-function FileUploadForm() {
+function FileUploadForm({ onUpload }) {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputId = useUniqueId('file-');
@@ -48,7 +48,11 @@ function FileUploadForm() {
 
   const uploadFormSubmitted = async (event) => {
     event.preventDefault();
-    await createMutate({ variables: { file } });
+    event.stopPropagation();
+    const response = await createMutate({ variables: { file } });
+    if (onUpload) {
+      onUpload(response.data.createCmsFile.cms_file);
+    }
     clearFile();
   };
 
