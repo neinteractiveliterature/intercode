@@ -18,11 +18,15 @@ import CmsFilesAdmin from './CmsFilesAdmin';
 import RootSiteAdmin from '../RootSiteAdmin';
 import LoadingIndicator from '../LoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import MenuIcon from '../NavigationBar/MenuIcon';
 
-function CmsAdminNavTab({ path, children }) {
+function CmsAdminNavTab({ path, children, icon }) {
   return (
     <li className="nav-item">
-      <NavLink to={path} className="nav-link" role="presentation">{children}</NavLink>
+      <NavLink to={path} className="nav-link" role="presentation">
+        {icon && <MenuIcon icon={icon} />}
+        {children}
+      </NavLink>
     </li>
   );
 }
@@ -30,6 +34,11 @@ function CmsAdminNavTab({ path, children }) {
 CmsAdminNavTab.propTypes = {
   path: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  icon: PropTypes.string,
+};
+
+CmsAdminNavTab.defaultProps = {
+  icon: null,
 };
 
 function CmsAdmin() {
@@ -51,18 +60,18 @@ function CmsAdmin() {
       <h1>CMS</h1>
 
       <ul className="nav nav-tabs" role="tablist">
-        <CmsAdminNavTab path="/cms_pages">Pages</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_partials">Partials</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_files">Files</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_pages" icon="fa-file-text-o">Pages</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_partials" icon="fa-paperclip">Partials</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_files" icon="fa-file-image-o">Files</CmsAdminNavTab>
         {data.currentAbility.can_create_cms_navigation_items
-          && <CmsAdminNavTab path="/cms_navigation_items">Navigation</CmsAdminNavTab>}
-        <CmsAdminNavTab path="/cms_layouts">Layouts</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_variables">Variables</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_graphql_queries">GraphQL queries</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_content_groups">Content groups</CmsAdminNavTab>
+          && <CmsAdminNavTab path="/cms_navigation_items" icon="fa-map-o">Navigation</CmsAdminNavTab>}
+        <CmsAdminNavTab path="/cms_layouts" icon="fa-columns">Layouts</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_variables" icon="fa-list">Variables</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_graphql_queries" icon="fa-code">GraphQL queries</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_content_groups" icon="fa-group">Content groups</CmsAdminNavTab>
         {
           !data.convention && (
-            <CmsAdminNavTab path="/root_site">Root site settings</CmsAdminNavTab>
+            <CmsAdminNavTab path="/root_site" icon="fa-cogs">Root site settings</CmsAdminNavTab>
           )
         }
       </ul>

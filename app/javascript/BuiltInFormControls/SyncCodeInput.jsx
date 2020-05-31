@@ -28,7 +28,7 @@ import '../Codemirror/LiquidMultiplexModes';
 function SyncCodeInput({
   onBlur, onChange, value, getPreviewContent, mode, disabled, codeMirrorOptions, extraNavControls,
   className, lines, formControlClassName, editorWrapperClassName, children,
-  renderPreview,
+  renderPreview, ...props
 }) {
   const [previewing, setPreviewing] = useState(false);
   const [previewContent, setPreviewContent] = useState(null);
@@ -119,6 +119,7 @@ function SyncCodeInput({
         }}
         {...eventHandlers}
         onBeforeChange={onBeforeChange}
+        {...props}
       />
     );
   };

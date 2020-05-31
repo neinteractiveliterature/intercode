@@ -54,7 +54,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
           ? (
             <>
               <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">
-                <MenuIcon icon="fa-file-code-o" />
+                <MenuIcon icon="fa-file-text-o" />
                 Edit page
               </Link>
               <Link to={`/cms_layouts/${layoutId}/edit`} className="dropdown-item">
@@ -74,7 +74,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
           : (
             <>
               <Link to={`/cms_pages/${pageId}/view_source`} className="dropdown-item">
-                <MenuIcon icon="fa-file-code-o" />
+                <MenuIcon icon="fa-file-text-o" />
                 View page source
               </Link>
               <Link to={`/cms_layouts/${layoutId}/view_source`} className="dropdown-item">
