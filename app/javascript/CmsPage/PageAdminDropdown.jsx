@@ -1,17 +1,20 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
+import { PageAdminDropdownQuery } from './queries.gql';
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from '../UIComponents/PopperDropdown';
-import { useConfirm } from '../ModalDialogs/Confirm';
+import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
+import MenuIcon from '../NavigationBar/MenuIcon';
 
 function PageAdminDropdown({ showEdit, showDelete, pageId }) {
   const history = useHistory();
-  const confirm = useConfirm();
+  const confirm = useGraphQLConfirm();
   const [deletePage] = useMutation(DeletePage);
+  const { data, loading, error } = useQuery(PageAdminDropdownQuery, { variables: { id: pageId } });
 
   const deleteConfirmed = useCallback(
     async () => {
@@ -20,6 +23,18 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
     },
     [deletePage, pageId, history],
   );
+
+  if (loading) {
+    return null;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const layoutId = data.cmsPage.cms_layout
+    ? data.cmsPage.cms_layout.id
+    : data.cmsParent.default_layout.id;
 
   return (
     <div>
@@ -36,9 +51,50 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
         placement="bottom-end"
       >
         {showEdit
-          ? <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">Edit page</Link>
-          : <Link to={`/cms_pages/${pageId}/view_source`} className="dropdown-item">View page source</Link>}
-        <Link to="/cms_pages" className="dropdown-item">View all pages</Link>
+          ? (
+            <>
+              <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">
+                <MenuIcon icon="fa-file-code-o" />
+                Edit page
+              </Link>
+              <Link to={`/cms_layouts/${layoutId}/edit`} className="dropdown-item">
+                <MenuIcon icon="fa-columns" />
+                Edit layout
+              </Link>
+              {data.cmsPage.referenced_partials.map((partial) => (
+                <Link to={`/cms_partials/${partial.id}/edit`} className="dropdown-item">
+                  <MenuIcon icon="fa-paperclip" />
+                  Edit partial “
+                  {partial.name}
+                  ”
+                </Link>
+              ))}
+            </>
+          )
+          : (
+            <>
+              <Link to={`/cms_pages/${pageId}/view_source`} className="dropdown-item">
+                <MenuIcon icon="fa-file-code-o" />
+                View page source
+              </Link>
+              <Link to={`/cms_layouts/${layoutId}/view_source`} className="dropdown-item">
+                <MenuIcon icon="fa-columns" />
+                View layout source
+              </Link>
+              {data.cmsPage.referenced_partials.map((partial) => (
+                <Link to={`/cms_partials/${partial.id}/view_source`} className="dropdown-item">
+                  <MenuIcon icon="fa-paperclip" />
+                  View partial “
+                  {partial.name}
+                  ”
+                </Link>
+              ))}
+            </>
+          )}
+        <Link to="/cms_pages" className="dropdown-item">
+          <MenuIcon icon="fa-files-o" />
+          View all pages
+        </Link>
         {
           showDelete ? (
             <button
@@ -46,10 +102,10 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
               onClick={() => confirm({
                 action: deleteConfirmed,
                 prompt: 'Are you sure you want to delete this page?',
-                renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })}
               type="button"
             >
+              <MenuIcon icon="fa-trash-o" colorClass="text-danger" />
               Delete page
             </button>
           ) : null
