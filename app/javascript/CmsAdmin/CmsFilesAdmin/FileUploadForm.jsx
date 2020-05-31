@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 import { CmsFilesAdminQuery } from './queries.gql';
 import { CreateCmsFile } from './mutations.gql';
@@ -108,5 +109,13 @@ function FileUploadForm({ onUpload }) {
     </div>
   );
 }
+
+FileUploadForm.propTypes = {
+  onUpload: PropTypes.func,
+};
+
+FileUploadForm.defaultProps = {
+  onUpload: null,
+};
 
 export default FileUploadForm;
