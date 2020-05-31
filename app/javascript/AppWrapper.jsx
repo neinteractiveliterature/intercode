@@ -4,8 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { BrowserRouter } from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
+import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
@@ -71,7 +70,7 @@ export default (WrappedComponent) => {
 
     return (
       <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <DndProvider options={HTML5toTouch}>
           <LazyStripeContext.Provider value={lazyStripeProviderValue}>
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
               <MapboxContext.Provider value={mapboxContextValue}>
