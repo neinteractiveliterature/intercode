@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useQuery, useLazyQuery } from '@apollo/react-hooks';
 import Modal from 'react-bootstrap4-modal';
 
 import { CmsFilesAdminQuery } from '../CmsAdmin/CmsFilesAdmin/queries.gql';
@@ -15,14 +15,25 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 
 function AddFileModal({ visible, fileChosen, close }) {
-  const { data, loading, error } = useQuery(CmsFilesAdminQuery);
+  const [loadData, {
+    called, data, loading, error,
+  }] = useLazyQuery(CmsFilesAdminQuery);
   const [file, setFile] = useState(null);
 
   const uploadedFile = (newFile) => {
     setFile(newFile);
   };
 
-  if (loading) {
+  useEffect(
+    () => {
+      if (visible && !called) {
+        loadData();
+      }
+    },
+    [visible, called, loadData],
+  );
+
+  if (!called || loading) {
     return <></>;
   }
 
