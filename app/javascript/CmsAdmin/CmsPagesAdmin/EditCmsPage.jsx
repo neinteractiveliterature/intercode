@@ -30,7 +30,11 @@ function EditCmsPageForm({ initialPage, cmsLayouts, cmsParent }) {
       },
     });
     await apolloClient.resetStore();
-    history.push('/cms_pages');
+    if (history.length > 1) {
+      history.goBack();
+    } else {
+      history.push('/cms_pages');
+    }
   };
 
   return (

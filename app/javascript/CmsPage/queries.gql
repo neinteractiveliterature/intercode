@@ -23,3 +23,37 @@ query CmsPageQuery($slug: String, $rootPage: Boolean) {
     skip_clickwrap_agreement
   }
 }
+
+query PageAdminDropdownQuery($id: Int!) {
+  cmsParent {
+    ...on Convention {
+      id
+
+      default_layout {
+        id
+        name
+      }
+    }
+
+    ...on RootSite {
+      id
+
+      default_layout {
+        id
+        name
+      }
+    }
+  }
+
+  cmsPage(id: $id) {
+    cms_layout {
+      id
+      name
+    }
+
+    referenced_partials {
+      id
+      name
+    }
+  }
+}

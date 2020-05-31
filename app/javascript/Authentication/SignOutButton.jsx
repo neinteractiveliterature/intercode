@@ -42,7 +42,7 @@ function SignOutButton({ className, caption }) {
 
 SignOutButton.propTypes = {
   className: PropTypes.string,
-  caption: PropTypes.string,
+  caption: PropTypes.node,
 };
 
 SignOutButton.defaultProps = {
