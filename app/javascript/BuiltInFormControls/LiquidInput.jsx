@@ -55,6 +55,9 @@ function AddFileModal({ visible, fileChosen, close }) {
                     </div>
                   </div>
                 )}
+                styles={{
+                  menu: (provided) => ({ ...provided, zIndex: 25 }),
+                }}
               />
               {data.currentAbility.can_create_cms_files && (
                 <FileUploadForm onUpload={uploadedFile} />
