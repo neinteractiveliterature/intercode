@@ -7,3 +7,5 @@ set -e
 
 echo "Setting up Intercode"
 RAILS_ENV=development bin/rake db:create db:migrate db:test:prepare
+
+bin/rails test
