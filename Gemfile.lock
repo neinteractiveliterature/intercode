@@ -597,7 +597,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop
+  rubocop (= 0.84)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide

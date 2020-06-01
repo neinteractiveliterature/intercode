@@ -15,6 +15,7 @@ class Types::ConventionType < Types::BaseObject
   field :timezone_mode, Types::TimezoneModeType, null: false
   field :show_schedule, Types::ShowScheduleType, null: true
   field :show_event_list, Types::ShowScheduleType, null: true
+  field :hidden, Boolean, null: false
   field :maximum_tickets, Integer, null: true
   field :maximum_event_signups, Types::ScheduledValueType, null: true
   field :signup_mode, Types::SignupModeType, null: false
