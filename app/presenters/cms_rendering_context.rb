@@ -100,7 +100,7 @@ class CmsRenderingContext
   # example, you'll be able to do {% for convention in conventions %} in a page template.
   def liquid_assigns
     cms_variables.merge(
-      'conventions' => -> { Convention.all.to_a },
+      'conventions' => -> { Convention.where(hidden: false).to_a },
       'organizations' => -> { Organization.all.to_a }
     ).merge(assigns)
   end

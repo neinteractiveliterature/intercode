@@ -31,6 +31,16 @@ class UserActivityAlertTest < ActiveSupport::TestCase
     end
   end
 
+  describe 'with no filters' do
+    let(:alert) { create(:user_activity_alert) }
+    let(:convention) { alert.convention }
+
+    it 'matches any user' do
+      user = create(:user)
+      assert alert.matches?(create_profile(user, convention))
+    end
+  end
+
   describe 'user matching' do
     let(:bowser) do
       create(
