@@ -12,7 +12,7 @@ class Mutations::CreateUserActivityAlert < Mutations::BaseMutation
     alert = context[:convention].user_activity_alerts.create!(user_activity_alert.to_h)
 
     notification_destinations.each do |notification_destination|
-      alert.notification_destination.create!(notification_destination.to_h)
+      alert.notification_destinations.create!(notification_destination.to_h)
     end
 
     { user_activity_alert: alert.reload }

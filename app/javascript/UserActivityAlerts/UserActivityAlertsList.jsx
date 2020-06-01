@@ -49,7 +49,7 @@ function renderAlertMatches(userActivityAlert) {
     );
   }
 
-  return renderCriteriaList(matches, 'No match criteria');
+  return renderCriteriaList(matches, 'No filters (match all users)');
 }
 
 function renderAlertTriggers(convention, userActivityAlert) {
