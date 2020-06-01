@@ -16,7 +16,8 @@ class UserActivityAlert < ApplicationRecord
   end
 
   def matches?(user_con_profile)
-    matches_user?(user_con_profile) ||
+    no_filters? ||
+      matches_user?(user_con_profile) ||
       matches_name?(user_con_profile) ||
       matches_email?(user_con_profile)
   end
@@ -42,6 +43,10 @@ class UserActivityAlert < ApplicationRecord
 
     # UserConProfile doesn't have its own email field; it delegates to User
     normalize_email(user_con_profile.email) == normalize_email(email)
+  end
+
+  def no_filters?
+    partial_name.blank? && email.blank? && !user
   end
 
   def destination_user_con_profiles

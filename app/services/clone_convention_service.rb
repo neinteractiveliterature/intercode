@@ -20,6 +20,7 @@ class CloneConventionService < CivilService::Service
       stripe_publishable_key
       stripe_secret_key
       clickwrap_agreement
+      hidden
     ])).merge(new_convention_attributes.symbolize_keys)
   end
 

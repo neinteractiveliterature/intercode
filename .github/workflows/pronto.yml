@@ -34,6 +34,7 @@ jobs:
             ${{ runner.os }}-pronto-yarn-${{ github.ref }}-
             ${{ runner.os }}-pronto-yarn-
       - run: gem install --no-document unicode-display_width -v 1.6.1
+      - run: gem install --no-document rubocop -v 0.84
       - run: gem install --no-document pronto pronto-rubocop pronto-eslint_npm rubocop-performance rubocop-rails
       - run: yarn install
       - run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
