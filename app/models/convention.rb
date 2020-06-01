@@ -48,7 +48,8 @@ class Convention < ApplicationRecord
 
   validates :name, presence: true
   validates :domain, presence: true, uniqueness: true
-  validates :timezone_name, presence: true
+  validates :timezone_name,
+    presence: true, unless: ->(convention) { convention.timezone_mode == 'user_local' }
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
   validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
