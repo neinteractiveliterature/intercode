@@ -1002,7 +1002,8 @@ CREATE TABLE public.conventions (
     email_mode character varying DEFAULT 'forward'::character varying NOT NULL,
     canceled boolean DEFAULT false NOT NULL,
     location jsonb,
-    timezone_mode character varying NOT NULL
+    timezone_mode character varying NOT NULL,
+    hidden boolean DEFAULT false NOT NULL
 );
 
 
@@ -5032,6 +5033,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200408160310'),
 ('20200515153931'),
 ('20200516164805'),
-('20200517155823');
+('20200517155823'),
+('20200601160341');
 
 

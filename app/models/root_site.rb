@@ -37,4 +37,14 @@ class RootSite < ApplicationRecord
   def cms_graphql_queries
     CmsGraphqlQuery.global
   end
+
+  def host
+    Rails.application.config.action_mailer.default_url_options[:host]
+  end
+
+  def url
+    Rails.application.routes.url_helpers.root_url(
+      Rails.application.config.action_mailer.default_url_options
+    )
+  end
 end
