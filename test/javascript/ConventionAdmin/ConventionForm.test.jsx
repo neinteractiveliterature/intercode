@@ -19,6 +19,7 @@ describe('ConventionForm', () => {
     accepting_proposals: false,
     show_schedule: 'no',
     show_event_list: 'no',
+    hidden: false,
     maximum_event_signups: {
       timespans: [
         { start: null, finish: null, value: 'unlimited' },
@@ -35,6 +36,7 @@ describe('ConventionForm', () => {
   const renderConventionForm = (props, initialConventionProps) => render(
     <ConventionForm
       initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
+      rootSite={{ url: 'https://example.com', id: 'singleton' }}
       saveConvention={() => {}}
       cmsLayouts={[]}
       pages={[]}
