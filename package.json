@@ -43,7 +43,7 @@
     "babel-plugin-graphql-tag": "^2.5.0",
     "babel-plugin-lodash": "^3.3.4",
     "bootstrap": "^4.5.0",
-    "bootstrap.native": "^2.0.27",
+    "bootstrap.native": "^3.0.4",
     "bytes": "^3.1.0",
     "cache-loader": "^4.1.0",
     "cadmus-navbar-admin": "^4.0.0",
