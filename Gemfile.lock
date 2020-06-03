@@ -97,19 +97,19 @@ GEM
       rails (>= 4.2)
     ast (2.4.0)
     aws-eventstream (1.1.0)
-    aws-partitions (1.322.0)
-    aws-sdk-core (3.97.0)
+    aws-partitions (1.323.0)
+    aws-sdk-core (3.97.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.32.0)
+    aws-sdk-kms (1.33.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-rails (3.1.0)
       aws-sdk-ses (~> 1)
       railties (>= 5.2.0)
-    aws-sdk-s3 (1.67.0)
+    aws-sdk-s3 (1.67.1)
       aws-sdk-core (~> 3, >= 3.96.1)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -410,6 +410,7 @@ GEM
     recaptcha (5.5.0)
       json
     redcarpet (3.5.0)
+    regexp_parser (1.7.0)
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -426,10 +427,11 @@ GEM
       rollbar (~> 2.21, <= 3.0)
       shoryuken (>= 4.0, <= 5.1)
     rouge (3.11.0)
-    rubocop (0.84.0)
+    rubocop (0.85.0)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.7)
       rexml
       rubocop-ast (>= 0.0.3)
       ruby-progressbar (~> 1.7)
@@ -450,7 +452,7 @@ GEM
     safely_block (0.3.0)
       errbase (>= 0.1.1)
     scheduled_value (1.3.0)
-    sequel (5.32.0)
+    sequel (5.33.0)
     shoryuken (5.0.4)
       aws-sdk-core (>= 2)
       concurrent-ruby
@@ -597,7 +599,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 0.84)
+  rubocop (= 0.85.0)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide
