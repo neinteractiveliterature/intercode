@@ -97,14 +97,16 @@ class EventSignupService < CivilService::Service
   end
 
   def must_not_have_conflicting_signups
-    return unless !event.can_play_concurrently? && concurrent_signups.any?
-    confirmed_titles = concurrent_signups.select(&:confirmed?).map { |signup| signup.event.title }
-    waitlisted_titles = concurrent_signups.select(&:waitlisted?).map { |signup| signup.event.title }
+    return unless !event.can_play_concurrently? && conflicting_signups.any?
+    confirmed_titles = conflicting_signups.select(&:confirmed?).map { |signup| signup.event.title }
+    waitlisted_titles = conflicting_signups.select(&:waitlisted?).map do |signup|
+      signup.event.title
+    end
     conflict_descriptions = [
       confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
       waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
     ].compact.join(' and ')
-    verb = (concurrent_signups.size > 1) ? 'conflict' : 'conflicts'
+    verb = (conflicting_signups.size > 1) ? 'conflict' : 'conflicts'
     errors.add :base,
       "You are already #{conflict_descriptions}, which #{verb} \
 with #{event.title}."
@@ -213,6 +215,18 @@ sign up for events."
     @concurrent_signups ||= other_signups_including_not_counted.select do |signup|
       other_run = signup.run
       !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
+    end
+  end
+
+  def conflicting_signups
+    @conflicting_signups ||= begin
+      if team_member?
+        # You can be a team member for multiple events at once, as long as you're not also a
+        # regular participant in anything that disallows concurrent signups
+        concurrent_signups.reject(&:team_member?)
+      else
+        concurrent_signups
+      end
     end
   end
 
