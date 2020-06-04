@@ -99,7 +99,9 @@ class EventSignupService < CivilService::Service
   def must_not_have_conflicting_signups
     return unless !event.can_play_concurrently? && conflicting_signups.any?
     confirmed_titles = conflicting_signups.select(&:confirmed?).map { |signup| signup.event.title }
-    waitlisted_titles = conflicting_signups.select(&:waitlisted?).map { |signup| signup.event.title }
+    waitlisted_titles = conflicting_signups.select(&:waitlisted?).map do |signup|
+      signup.event.title
+    end
     conflict_descriptions = [
       confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
       waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
