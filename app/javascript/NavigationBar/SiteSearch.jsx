@@ -32,6 +32,10 @@ function getSearchableModelIcon(model) {
     return 'fa-ticket';
   }
 
+  if (model.__typename === 'UserConProfile') {
+    return 'fa-user-circle';
+  }
+
   return 'fa-square';
 }
 
@@ -157,6 +161,8 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
         history.push(buildEventUrl(model));
       } else if (model.__typename === 'NavigationItem') {
         history.push(model.url);
+      } else if (model.__typename === 'UserConProfile') {
+        history.push(`/user_con_profiles/${model.id}`);
       }
       close();
     },
@@ -249,5 +255,11 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
     </CSSTransition>
   );
 }
+
+SiteSearch.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  setVisible: PropTypes.func.isRequired,
+  visibilityChangeComplete: PropTypes.func.isRequired,
+};
 
 export default SiteSearch;
