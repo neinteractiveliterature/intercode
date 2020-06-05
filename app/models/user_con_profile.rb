@@ -1,4 +1,5 @@
 class UserConProfile < ApplicationRecord
+  include PgSearch::Model
   include FormResponse
   include Names
 
@@ -32,6 +33,13 @@ class UserConProfile < ApplicationRecord
     where(id: has_staff_position.select(:id))
       .or(where(id: is_team_member.select(:id)))
   }
+
+  multisearchable(
+    against: [:name_without_nickname, :nickname, :email],
+    additional_attributes: ->(user_con_profile) {
+      { convention_id: user_con_profile.convention_id }
+    }
+  )
 
   register_form_response_attrs :first_name,
     :last_name,
