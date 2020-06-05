@@ -25,12 +25,12 @@ class SearchResult
   end
 
   def self.convention_search(query, convention_id, pundit_user, limit: 10)
-    convention = Convention.find(convention_id)
     scope = PgSearch.multisearch(query)
       .where(convention_id: convention_id)
       .includes(:searchable)
 
-    unless Pundit.policy(pundit_user, convention).view_attendees?
+    convention = convention_id && Convention.find(convention_id)
+    unless convention && Pundit.policy(pundit_user, convention).view_attendees?
       scope = scope.where.not(searchable_type: 'UserConProfile')
     end
 
