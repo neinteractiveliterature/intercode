@@ -117,7 +117,7 @@
     "react-waypoint": "^9.0.2",
     "require-from-string": "^2.0.2",
     "resolve-url-loader": "^3.1.1",
-    "rollbar-sourcemap-webpack-plugin": "^2.11.0",
+    "rollbar-sourcemap-webpack-plugin": "^2.11.1",
     "sass-loader": "^8.0.2",
     "source-map-support": "^0.5.19",
     "style-loader": "^1.2.1",
