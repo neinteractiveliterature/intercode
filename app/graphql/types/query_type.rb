@@ -404,7 +404,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   end
 
   def site_search(query:)
-    SearchResult.convention_search(query, context[:convention]&.id)
+    SearchResult.convention_search(query, context[:convention]&.id, pundit_user)
   end
 
   field :signup, Types::SignupType, null: false do
