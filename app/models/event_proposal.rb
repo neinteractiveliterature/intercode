@@ -2,7 +2,9 @@ class EventProposal < ApplicationRecord
   include AgeRestrictions
   include EventEmail
   include FormResponse
+  include MarkdownIndexing
   include OrderByTitle
+  include PgSearch::Model
 
   STATUSES = Set.new(%w[draft proposed reviewing tentative_accept accepted rejected withdrawn])
 
@@ -39,6 +41,26 @@ class EventProposal < ApplicationRecord
   validates :status, inclusion: { in: STATUSES }
   validate :length_fits_in_convention
 
+  indexable_markdown_field(:description_for_search) { description }
+  indexable_markdown_field(:short_blurb_for_search) { short_blurb }
+
+  multisearchable(
+    against: [
+      :title,
+      :authors_for_search,
+      :organization_for_search,
+      :owner_for_search,
+      :description_for_search,
+      :short_blurb_for_search
+    ],
+    additional_attributes: ->(proposal) {
+      {
+        convention_id: proposal.convention_id,
+        hidden_from_search: %w[accepted rejected withdrawn].include?(proposal.status)
+      }
+    }
+  )
+
   def to_liquid
     EventProposalDrop.new(self)
   end
@@ -53,5 +75,17 @@ class EventProposal < ApplicationRecord
   def length_fits_in_convention
     return unless length_seconds && length_seconds > convention.length_seconds
     errors.add :length_seconds, "Event cannot be longer than #{convention.name}"
+  end
+
+  def authors_for_search
+    read_form_response_attribute(:authors)
+  end
+
+  def organization_for_search
+    read_form_response_attribute(:organization)
+  end
+
+  def owner_for_search
+    owner&.name
   end
 end

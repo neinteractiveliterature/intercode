@@ -281,6 +281,11 @@
           },
           {
             "kind": "OBJECT",
+            "name": "EventProposal",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
             "name": "Page",
             "ofType": null
           },

@@ -18,6 +18,11 @@ query SiteSearchQuery($query: String!) {
           title
         }
 
+        ...on EventProposal {
+          id
+          title
+        }
+
         ...on UserConProfile {
           id
         }
