@@ -2,9 +2,9 @@ class Event < ApplicationRecord
   include AgeRestrictions
   include EventEmail
   include FormResponse
+  include MarkdownIndexing
   include OrderByTitle
   include PgSearch::Model
-  include ActionView::Helpers::SanitizeHelper
 
   STATUSES = Set.new(%w[active dropped])
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
@@ -20,6 +20,9 @@ class Event < ApplicationRecord
       }
     }
   )
+
+  indexable_markdown_field(:description_for_search) { description }
+  indexable_markdown_field(:short_blurb_for_search) { short_blurb }
 
   multisearchable(
     against: [
@@ -171,20 +174,6 @@ class Event < ApplicationRecord
 
   def form
     event_category.event_form
-  end
-
-  def description_for_search
-    strip_tags(MarkdownPresenter.new('').render(description))
-  rescue => e
-    Rails.logger.debug e
-    ''
-  end
-
-  def short_blurb_for_search
-    strip_tags(MarkdownPresenter.new('').render(short_blurb))
-  rescue => e
-    Rails.logger.debug e
-    ''
   end
 
   def team_members_for_search

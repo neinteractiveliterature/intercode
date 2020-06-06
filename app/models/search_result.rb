@@ -16,7 +16,7 @@ class SearchResult
 
     def title
       case model
-      when Event then model.title
+      when Event, EventProposal then model.title
       when Page then model.name
       when UserConProfile then model.name_without_nickname
       else "#{model_type} #{model.id}"
@@ -30,8 +30,10 @@ class SearchResult
       .includes(:searchable)
 
     convention = convention_id && Convention.find(convention_id)
-    unless convention && Pundit.policy(pundit_user, convention).view_attendees?
-      scope = scope.where.not(searchable_type: 'UserConProfile')
+    con_policy = convention && Pundit.policy(pundit_user, convention)
+    scope = scope.where.not(searchable_type: 'UserConProfile') unless con_policy&.view_attendees?
+    unless con_policy&.view_event_proposals?
+      scope = scope.where.not(searchable_type: 'EventProposal')
     end
 
     new(scope, limit)
