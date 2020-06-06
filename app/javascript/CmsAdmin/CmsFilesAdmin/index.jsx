@@ -13,6 +13,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
 
 function CmsFilesAdmin() {
   const { data, loading, error } = useQuery(CmsFilesAdminQuery);
@@ -32,7 +33,7 @@ function CmsFilesAdmin() {
         return [];
       }
 
-      return chunk(data.cmsFiles, 4);
+      return chunk(data.cmsFiles, 3);
     },
     [data, loading, error],
   );
@@ -76,6 +77,11 @@ function CmsFilesAdmin() {
                     onChange={(filename) => renameFile(cmsFile.id, filename)}
                   />
                 </small>
+                <CopyToClipboardButton
+                  className="btn btn-sm btn-outline-primary"
+                  defaultText="Copy CMS embed code"
+                  data-clipboard-text={`{% file_url ${cmsFile.filename} %}`}
+                />
               </div>
               <div className="card-body text-center py-2">
                 <a href={cmsFile.url}>

@@ -9,6 +9,19 @@ function MethodDoc({ method, prefix = null }) {
     return null;
   }
 
+  const sortedTags = method.tags.sort((a, b) => {
+    // examples go last
+    if (a.tag_name === 'example' && b.tag_name !== 'example') {
+      return 1;
+    }
+
+    if (b.tag_name === 'example' && a.tag_name !== 'example') {
+      return -1;
+    }
+
+    return 0;
+  });
+
   return (
     <li key={method.name} className="list-group-item">
       <p>
@@ -17,13 +30,11 @@ function MethodDoc({ method, prefix = null }) {
         </code>
       </p>
 
-      <p className="mb-0">
-        {method.docstring}
-      </p>
+      {method.docstring && (<p>{method.docstring}</p>)}
 
       <ul className="list-unstyled">
         {
-          method.tags.map((tag, i) => (
+          sortedTags.map((tag, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} method={method} prefix={prefix} />
           ))
@@ -39,6 +50,7 @@ MethodDoc.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.shape({
       tag_name: PropTypes.string,
     })).isRequired,
+    docstring: PropTypes.string,
   }).isRequired,
   prefix: PropTypes.string,
 };

@@ -8,6 +8,7 @@ import Timespan from '../../Timespan';
 import useSortable from '../../useSortable';
 import { FuzzyTimePropType } from '../../FormPresenter/TimeblockTypes';
 import { FormEditorContext } from '../FormEditorContexts';
+import AppRootContext from '../../AppRootContext';
 
 function useTimeblockPropertyUpdater(onChange, generatedId, property) {
   return useCallback(
@@ -22,8 +23,7 @@ function useTimeblockPropertyUpdater(onChange, generatedId, property) {
 function TimeblockPreferenceEditorTimeblockRow({
   timeblock, index, onChange, deleteTimeblock, moveTimeblock,
 }) {
-  const { convention } = useContext(FormEditorContext);
-  const timezoneName = convention.timezone_name;
+  const { timezoneName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const startChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'start');
   const finishChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'finish');

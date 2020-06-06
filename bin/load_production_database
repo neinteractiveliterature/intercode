@@ -14,7 +14,7 @@ fi
 echo 'Loading database into local Postgres'
 dropdb $PG_OPTIONS -U postgres -w --if-exists intercode_production_tmp
 createdb $PG_OPTIONS -U postgres -w intercode_production_tmp
-pg_restore $PG_OPTIONS -c --if-exists -U postgres -w --no-owner -j4 -d intercode_production_tmp "$1"
+cat "$1" | psql $PG_OPTIONS -U postgres -w -d intercode_production_tmp
 
 echo 'Changing convention domains and names for development'
 echo "UPDATE staff_positions SET email = regexp_replace(email, '@.*', '@' || regexp_replace(lower(conventions.name), '[^a-z0-9]', '', 'g') || '.intercode.test') FROM conventions WHERE staff_positions.convention_id = conventions.id;" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp

@@ -3,6 +3,7 @@ import flatMap from 'lodash/flatMap';
 
 import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 export function describeTimeblock(timeblock) {
   const start = moment().startOf('day').set(timeblock.start);
@@ -28,7 +29,7 @@ export function describeOrdinality(ordinality) {
 
 function getDayStarts(convention) {
   return timespanFromConvention(convention)
-    .getTimeHopsWithin(convention.timezone_name, { unit: 'day' });
+    .getTimeHopsWithin(timezoneNameForConvention(convention), { unit: 'day' });
 }
 
 function getAllPossibleTimeblocks(convention, formItem) {
@@ -62,7 +63,7 @@ function isTimeblockValid(convention, formItem, timeblock) {
   }
 
   const timeblockOmitted = formItem.properties.omit_timeblocks.some((omission) => {
-    const omissionDate = moment.tz(omission.date, convention.timezone_name).startOf('day');
+    const omissionDate = moment.tz(omission.date, timezoneNameForConvention(convention)).startOf('day');
     const dayStart = moment(timeblock.timespan.start).startOf('day');
     return (omission.label === timeblock.label && omissionDate.isSame(dayStart));
   });

@@ -18,15 +18,21 @@ class SearchResult
       case model
       when Event then model.title
       when Page then model.name
+      when UserConProfile then model.name_without_nickname
       else "#{model_type} #{model.id}"
       end
     end
   end
 
-  def self.convention_search(query, convention_id, limit: 10)
+  def self.convention_search(query, convention_id, pundit_user, limit: 10)
     scope = PgSearch.multisearch(query)
       .where(convention_id: convention_id)
       .includes(:searchable)
+
+    convention = convention_id && Convention.find(convention_id)
+    unless convention && Pundit.policy(pundit_user, convention).view_attendees?
+      scope = scope.where.not(searchable_type: 'UserConProfile')
+    end
 
     new(scope, limit)
   end

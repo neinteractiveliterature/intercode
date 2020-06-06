@@ -26,7 +26,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: crazy-max/ghaction-docker-buildx@v1
       with:
-        version: latest
+        buildx-version: latest
 
     # Do the actual build
     - name: Build the "local-build-production" Docker image

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useChangeDispatchers } from '../ComposableFormUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
+import BooleanInput from '../BuiltInFormControls/BooleanInput';
 
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
 // dropdown menu so that the text in the CodeMirror doesn't cover it
@@ -12,15 +13,16 @@ const selectStyles = {
 };
 
 function ConventionFormWebsiteSection({
-  convention, dispatch, cmsLayouts, pages, disabled,
+  convention, rootSite, dispatch, cmsLayouts, pages, disabled,
 }) {
   const [
     changeDefaultLayout,
     changeRootPage,
     changeClickwrapAgreement,
+    changeHidden,
   ] = useChangeDispatchers(
     dispatch,
-    ['default_layout', 'root_page', 'clickwrap_agreement'],
+    ['default_layout', 'root_page', 'clickwrap_agreement', 'hidden'],
   );
 
   return (
@@ -51,6 +53,19 @@ function ConventionFormWebsiteSection({
         disabled={disabled}
       />
 
+      <BooleanInput
+        caption={(
+          <>
+            Hide convention from public list on
+            {' '}
+            <a href={rootSite.url} target="_blank" rel="noreferrer">{rootSite.url}</a>
+            ?
+          </>
+        )}
+        value={convention.hidden}
+        onChange={changeHidden}
+      />
+
       <fieldset className="mb-4">
         <legend className="col-form-label">
           Clickwrap agreement (if present, all users will be prompted to accept this agreement
@@ -79,6 +94,7 @@ ConventionFormWebsiteSection.propTypes = {
     }),
     clickwrap_agreement: PropTypes.string,
     email_from: PropTypes.string,
+    hidden: PropTypes.bool.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
@@ -89,6 +105,9 @@ ConventionFormWebsiteSection.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired).isRequired,
+  rootSite: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }).isRequired,
   disabled: PropTypes.bool,
 };
 

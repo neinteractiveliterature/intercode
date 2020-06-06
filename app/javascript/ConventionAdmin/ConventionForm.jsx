@@ -40,7 +40,7 @@ function conventionFormReducer(state, action) {
 }
 
 function ConventionForm({
-  initialConvention, cmsLayouts, pages, saveConvention,
+  initialConvention, cmsLayouts, pages, saveConvention, rootSite,
 }) {
   const [convention, dispatch] = useReducer(conventionFormReducer, initialConvention);
   const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
@@ -69,6 +69,7 @@ function ConventionForm({
           {...commonProps}
           cmsLayouts={cmsLayouts}
           pages={pages}
+          rootSite={rootSite}
         />
       ),
     },
@@ -125,6 +126,7 @@ ConventionForm.propTypes = {
   }).isRequired,
   cmsLayouts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   pages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  rootSite: PropTypes.shape({}).isRequired,
   saveConvention: PropTypes.func.isRequired,
 };
 

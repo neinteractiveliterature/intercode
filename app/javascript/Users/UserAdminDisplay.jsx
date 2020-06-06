@@ -11,6 +11,7 @@ import { UserAdminQuery } from './queries.gql';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import LoadingIndicator from '../LoadingIndicator';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 function sortByConventionDate(profiles) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -81,7 +82,7 @@ function UserAdminDisplay() {
                             {' '}
                             <small>
                               (
-                              {moment.tz(profile.convention.starts_at, profile.convention.timezone_name).format('YYYY')}
+                              {moment.tz(profile.convention.starts_at, timezoneNameForConvention(profile.convention)).format('YYYY')}
                               )
                             </small>
                           </a>

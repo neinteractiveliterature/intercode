@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :user_con_profiles
   has_many :event_proposals, through: :user_con_profiles
   has_many :user_activity_alerts, dependent: :nullify
+  has_many :tickets, through: :user_con_profiles
   has_and_belongs_to_many :organization_roles
 
   attr_accessor :reset_password_mail_options

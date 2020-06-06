@@ -203,7 +203,7 @@ class Timespan {
       }
 
       return new Timespan(timeHop, timeHop.clone().add(duration, unit)).intersection(this);
-    });
+    }).filter((timespan) => timespan != null);
   }
 
   clone() {

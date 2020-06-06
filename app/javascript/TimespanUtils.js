@@ -1,13 +1,16 @@
 import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 import Timespan from './Timespan';
+import { timezoneNameForConvention } from './TimeUtils';
+import { removeCommonStringMiddle } from './ValueUtils';
 
 export function timespanFromConvention(convention) {
   return Timespan.fromStrings(convention.starts_at, convention.ends_at)
-    .tz(convention.timezone_name);
+    .tz(timezoneNameForConvention(convention));
 }
 
 export function timespanFromRun(convention, event, run) {
-  const start = moment(run.starts_at).tz(convention.timezone_name);
+  const start = moment(run.starts_at).tz(timezoneNameForConvention(convention));
   const finish = start.clone().add(event.length_seconds, 'seconds');
 
   return new Timespan(start, finish);
@@ -32,4 +35,21 @@ export function getMemoizationKeyForTimespan(timespan) {
     timespan.start ? timespan.start.toISOString() : '',
     timespan.finish ? timespan.finish.toISOString() : '',
   ].join('/');
+}
+
+export function describeInterval(timespan, formatDateTime, timeZone) {
+  const start = (
+    timespan.start
+      ? formatDateTime(DateTime.fromISO(timespan.start.toISOString()).setZone(timeZone))
+      : 'anytime'
+  );
+
+  const finish = (
+    timespan.finish
+      ? formatDateTime(DateTime.fromISO(timespan.finish.toISOString()).setZone(timeZone))
+      : 'indefinitely'
+  );
+
+  const [dedupedStart, dedupedFinish] = removeCommonStringMiddle(start, finish);
+  return [dedupedStart, dedupedFinish].join(timespan.finish ? ' to ' : ' ');
 }

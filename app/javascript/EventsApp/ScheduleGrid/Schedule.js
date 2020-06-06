@@ -19,10 +19,12 @@ function expandTimespanToNearestHour(timespan) {
 }
 
 export default class Schedule {
-  constructor(config, convention, events, myRatingFilter, hideConflicts) {
+  constructor({
+    config, convention, events, myRatingFilter, hideConflicts, timezoneName,
+  }) {
     this.config = config;
 
-    this.timezoneName = convention.timezone_name;
+    this.timezoneName = timezoneName;
 
     this.eventsById = new Map(events.map((event) => [event.id, event]));
     this.runsById = new Map(events.map((event) => (

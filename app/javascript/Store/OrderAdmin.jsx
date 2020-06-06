@@ -15,6 +15,7 @@ import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import useModal from '../ModalDialogs/useModal';
 import EditOrderModal from './EditOrderModal';
 import NewOrderModal from './NewOrderModal';
+import AppRootContext from '../AppRootContext';
 
 const fieldFilterCodecs = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -46,13 +47,13 @@ StatusFilter.defaultProps = {
 };
 
 const SubmittedAtCell = ({ value }) => {
-  const data = useContext(QueryDataContext);
+  const { timezoneName } = useContext(AppRootContext);
 
   if (!value) {
     return '';
   }
 
-  return moment(value).tz(data.convention.timezone_name).format('MMM D, YYYY h:mma');
+  return moment(value).tz(timezoneName).format('MMM D, YYYY h:mma');
 };
 
 SubmittedAtCell.propTypes = {

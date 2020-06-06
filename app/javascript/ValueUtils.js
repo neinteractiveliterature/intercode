@@ -1,3 +1,5 @@
+import escapeRegExp from 'lodash/escapeRegExp';
+
 export const onlyOneIsNull = (a, b) => (
   (a == null && b != null)
   || (a != null && b == null)
@@ -41,4 +43,43 @@ export function titleSort(list, transform) {
     list,
     (element) => normalizeTitle((transform || ((e) => e))(element)),
   );
+}
+
+export function findCommonArrayPrefix(a, b) {
+  let i = 0;
+  const prefix = [];
+
+  while (i < a.length && i < b.length) {
+    if (a[i] !== b[i]) {
+      break;
+    }
+
+    prefix.push(a[i]);
+    i += 1;
+  }
+
+  return prefix;
+}
+
+export function findCommonStringPrefix(a, b, delimiter = '') {
+  const aArray = a.split(delimiter);
+  const bArray = b.split(delimiter);
+
+  return findCommonArrayPrefix(aArray, bArray).join(delimiter);
+}
+
+export function findCommonStringSuffix(a, b, delimiter = '') {
+  const aArray = a.split(delimiter).reverse();
+  const bArray = b.split(delimiter).reverse();
+
+  return findCommonArrayPrefix(aArray, bArray).reverse().join(delimiter);
+}
+
+export function removeCommonStringMiddle(a, b, delimiter = '') {
+  const prefix = findCommonStringPrefix(a, b, delimiter);
+  const suffix = findCommonStringSuffix(a, b, delimiter);
+  const prefixRegExp = new RegExp(`^${escapeRegExp(prefix)}`);
+  const suffixRegExp = new RegExp(`${escapeRegExp(suffix)}$`);
+
+  return [a.replace(suffixRegExp, '').trim(), b.replace(prefixRegExp, '').trim()];
 }

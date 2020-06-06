@@ -33,7 +33,9 @@ function iconForContentType(contentType) {
   }
 }
 
-function FilePreview({ url, contentType, filename }) {
+function FilePreview({
+  url, contentType, filename, size,
+}) {
   if (!contentType) {
     return null;
   }
@@ -47,7 +49,7 @@ function FilePreview({ url, contentType, filename }) {
       <img
         src={url}
         className="img-responsive"
-        style={{ maxWidth: '100px', maxHeight: '100px' }}
+        style={{ maxWidth: size, maxHeight: size }}
         alt={filename}
       />
     );
@@ -56,7 +58,7 @@ function FilePreview({ url, contentType, filename }) {
   return (
     <i
       className={`fa fa-${iconForContentType(contentType)}`}
-      style={{ fontSize: '100px' }}
+      style={{ fontSize: size }}
       aria-hidden
     />
   );
@@ -66,12 +68,14 @@ FilePreview.propTypes = {
   contentType: PropTypes.string,
   url: PropTypes.string,
   filename: PropTypes.string,
+  size: PropTypes.string,
 };
 
 FilePreview.defaultProps = {
   contentType: null,
   url: null,
   filename: null,
+  size: '100px',
 };
 
 export default FilePreview;

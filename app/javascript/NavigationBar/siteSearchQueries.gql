@@ -17,6 +17,10 @@ query SiteSearchQuery($query: String!) {
           id
           title
         }
+
+        ...on UserConProfile {
+          id
+        }
       }
     }
   }

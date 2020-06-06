@@ -3,12 +3,13 @@ class CmsRenderingContext
   include Cadmus::Renderable
   include ApplicationHelper
   include ActionView::Helpers::TagHelper
-  attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files
+  attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
 
-  def initialize(cms_parent:, controller:, assigns: {})
+  def initialize(cms_parent:, controller:, timezone:, assigns: {})
     @cms_parent = cms_parent
     @controller = controller
     @assigns = assigns
+    @timezone = timezone
     @cached_partials = {}
     @cached_files = {}
   end
@@ -96,10 +97,10 @@ class CmsRenderingContext
   end
 
   # These variables will automatically be made available to Cadmus CMS content.  For
-  # example, you'll be able to do {{ user.name }} in a page template.
+  # example, you'll be able to do {% for convention in conventions %} in a page template.
   def liquid_assigns
     cms_variables.merge(
-      'conventions' => -> { Convention.all.to_a },
+      'conventions' => -> { Convention.where(hidden: false).to_a },
       'organizations' => -> { Organization.all.to_a }
     ).merge(assigns)
   end
@@ -112,7 +113,8 @@ class CmsRenderingContext
       'controller' => controller,
       :cached_partials => cached_partials,
       :cached_files => cached_files,
-      :file_system => Cadmus::PartialFileSystem.new(convention)
+      :file_system => Cadmus::PartialFileSystem.new(convention),
+      :timezone => timezone
     )
   end
 

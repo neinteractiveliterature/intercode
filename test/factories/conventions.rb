@@ -5,6 +5,7 @@ FactoryBot.define do
     name { 'TestCon' }
     sequence(:domain) { |n| "testcon#{n}.example.com" }
     timezone_name { 'UTC' }
+    timezone_mode { 'convention_local' }
     show_schedule { 'yes' }
     show_event_list { 'yes' }
     accepting_proposals { false }

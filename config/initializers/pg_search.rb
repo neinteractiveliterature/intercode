@@ -11,7 +11,8 @@ PgSearch.multisearch_options = {
         MaxFragments: 2,
         ShortWord: 0,
         FragmentDelimiter: '&hellip;'
-      }
+      },
+      normalization: 1
     }
   },
   ignoring: :accents

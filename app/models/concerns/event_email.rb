@@ -49,7 +49,7 @@ module EventEmail
     return unless team_mailing_list_name.present?
     return unless reserved_team_mailing_list_names.include?(team_mailing_list_name)
 
-    errors.add :team_mailing_list_name, "#{team_mailing_list_email} is a reserved email address \
+    errors.add :event_email, "#{team_mailing_list_email} is a reserved email address \
 and cannot be used for an event team"
   end
 
@@ -61,8 +61,8 @@ and cannot be used for an event team"
         .where(team_mailing_list_name: team_mailing_list_name)
       next unless scope.any?
 
-      errors.add :team_mailing_list_name, "#{team_mailing_list_email} is already in use by another \
-event"
+      errors.add :event_email, "#{team_mailing_list_email} is already in use by another \
+event (#{scope.map(&:title).to_sentence})"
       break
     end
   end

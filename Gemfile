@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.7.0'
-gem 'rails', '6.0.2.2'
+gem 'rails', '6.0.3.1'
 
 gem 'pg'
 gem 'puma'
@@ -16,7 +16,7 @@ gem 'with_advisory_lock'
 gem 'devise'
 gem 'pundit'
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'doorkeeper', '5.3.1'
+gem 'doorkeeper', '5.4.0'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
@@ -74,7 +74,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.33.1'
+gem 'twilio-ruby', '~> 5.36.0'
 gem 'phonelib'
 
 # Background workers and scheduling
@@ -91,6 +91,7 @@ gem 'skylight'
 gem 'icalendar'
 gem 'dalli'
 gem 'platform-api'
+gem 'tzinfo-data'
 
 gem 'faker', group: 'development', require: false
 
@@ -128,7 +129,7 @@ group :development do
   gem 'debase'
 
   # Linting
-  gem 'rubocop'
+  gem 'rubocop', '0.85.0' # 0.85 seems to break pronto-rubocop :(
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end

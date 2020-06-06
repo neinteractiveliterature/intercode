@@ -9,9 +9,12 @@ fragment ConventionAdminConventionFields on Convention {
   email_from
   email_mode
   event_mailing_list_domain
+  location
   timezone_name
+  timezone_mode
   show_schedule
   show_event_list
+  hidden
   maximum_tickets
   ticket_name
   stripe_publishable_key
@@ -65,5 +68,10 @@ query ConventionAdminConventionQuery($id: Int) {
   convention(id: $id) {
     id
     ...ConventionAdminConventionFields
+  }
+
+  rootSite {
+    id
+    url
   }
 }
