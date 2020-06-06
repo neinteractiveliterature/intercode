@@ -36,6 +36,10 @@ function getSearchableModelIcon(model) {
     return 'fa-user-circle';
   }
 
+  if (model.__typename === 'EventProposal') {
+    return 'fa-gift';
+  }
+
   return 'fa-square';
 }
 
@@ -163,6 +167,8 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
         history.push(model.url);
       } else if (model.__typename === 'UserConProfile') {
         history.push(`/user_con_profiles/${model.id}`);
+      } else if (model.__typename === 'EventProposal') {
+        history.push(`/admin_event_proposals/${model.id}`);
       }
       close();
     },
