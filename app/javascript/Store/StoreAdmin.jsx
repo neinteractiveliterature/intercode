@@ -2,6 +2,8 @@ import React from 'react';
 import {
   NavLink, Redirect, Route, Switch,
 } from 'react-router-dom';
+
+import CouponAdmin from './CouponAdmin';
 import OrderAdmin from './OrderAdmin';
 import OrderSummary from './OrderSummary';
 import ProductAdmin from './ProductAdmin';
@@ -19,6 +21,9 @@ function StoreAdmin() {
           <NavLink className="nav-link" to="/admin_store/products">Products</NavLink>
         </li>
         <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_store/coupons">Coupons</NavLink>
+        </li>
+        <li className="nav-item">
           <NavLink className="nav-link" to="/admin_store/orders">Orders</NavLink>
         </li>
         <li className="nav-item">
@@ -28,6 +33,7 @@ function StoreAdmin() {
 
       <Switch>
         <Route path="/admin_store/products"><ProductAdmin /></Route>
+        <Route path="/admin_store/coupons"><CouponAdmin /></Route>
         <Route path="/admin_store/orders"><OrderAdmin /></Route>
         <Route path="/admin_store/order_summary"><OrderSummary /></Route>
         <Redirect to="/admin_store/products" />

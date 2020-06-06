@@ -123,6 +123,21 @@ class Types::ConventionType < Types::BaseObject
     scope.to_a
   end
 
+  field :coupons, [Types::CouponType], null: true do
+    argument :only_available, Boolean, required: false, camelize: false
+  end
+  def coupons(only_available: false)
+    loader = AssociationLoader.for(Convention, :coupons).load(object)
+
+    if only_available
+      loader.then do |coupons|
+        coupons.reject { |coupon| coupon.expired? || coupon.usage_limit_reached? }
+      end
+    else
+      loader
+    end
+  end
+
   field :privilege_names, [String],
     null: false,
     deprecation_reason: 'Privileges have gone away in favor of permissions'
