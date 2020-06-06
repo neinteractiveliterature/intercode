@@ -283,6 +283,11 @@
             "kind": "OBJECT",
             "name": "Page",
             "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "UserConProfile",
+            "ofType": null
           }
         ]
       }

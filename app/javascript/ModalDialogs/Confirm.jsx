@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
 import useModal from './useModal';
+import ErrorDisplay from '../ErrorDisplay';
 
 const ConfirmContext = React.createContext(() => {});
 
@@ -80,6 +81,26 @@ Confirm.propTypes = {
 export function useConfirm() {
   const confirm = useContext(ConfirmContext);
   return confirm;
+}
+
+export function useGraphQLConfirm() {
+  const confirm = useConfirm();
+  const defaultRenderError = useCallback(
+    (error) => <ErrorDisplay graphQLError={error} />,
+    [],
+  );
+  const augmentedConfirmWithDefaults = useMemo(
+    () => {
+      const confirmWithDefaults = (options, ...args) => confirm(
+        { renderError: defaultRenderError, ...options },
+        ...args,
+      );
+      confirmWithDefaults.visible = confirm.visible;
+      return confirmWithDefaults;
+    },
+    [confirm, defaultRenderError],
+  );
+  return augmentedConfirmWithDefaults;
 }
 
 function ConfirmTrigger({ children }) {

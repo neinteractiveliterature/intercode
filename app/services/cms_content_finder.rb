@@ -31,11 +31,14 @@ class CmsContentFinder
     end
   end
 
-  def cms_rendering_context(path: nil, controller: nil, user: nil, user_con_profile: nil)
+  def cms_rendering_context(
+    path: nil, controller: nil, user: nil, user_con_profile: nil, timezone: nil
+  )
     @cms_rendering_contexts_by_path = {}
     @cms_rendering_contexts_by_path[path] ||= CmsRenderingContext.new(
       cms_parent: convention || RootSite.instance,
       controller: controller,
+      timezone: timezone,
       assigns: {
         'user' => user,
         'convention' => convention,

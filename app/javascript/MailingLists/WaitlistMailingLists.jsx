@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -7,8 +7,10 @@ import { WaitlistMailingListsQuery } from './queries.gql';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import AppRootContext from '../AppRootContext';
 
 function WaitlistMailingLists() {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(WaitlistMailingListsQuery);
 
   usePageTitle('Waitlists');
@@ -26,7 +28,7 @@ function WaitlistMailingLists() {
       <h1 className="mb-4">Mail to waitlists</h1>
 
       {data.convention.mailing_lists.waitlists.map((waitlistResult) => {
-        const runTime = moment.tz(waitlistResult.run.starts_at, data.convention.timezone_name)
+        const runTime = moment.tz(waitlistResult.run.starts_at, timezoneName)
           .format('ddd h:mma');
 
         return (

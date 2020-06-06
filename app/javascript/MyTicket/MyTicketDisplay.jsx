@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
@@ -9,10 +9,12 @@ import formatMoney from '../formatMoney';
 import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
+import AppRootContext from '../AppRootContext';
 
 const dateFormat = 'dddd, MMMM D, YYYY [at] h:mma z';
 
 function MyTicketDisplay() {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(MyTicketDisplayQuery);
 
   usePageTitle(useValueUnless(() => `My ${data.convention.ticket_name} receipt`, error || loading));
@@ -70,11 +72,11 @@ function MyTicketDisplay() {
             )}
             <dt className="col-md-3">Created</dt>
             <dd className="col-md-9">
-              {moment.tz(ticket.created_at, convention.timezone_name).format(dateFormat)}
+              {moment.tz(ticket.created_at, timezoneName).format(dateFormat)}
             </dd>
             <dt className="col-md-3">Last updated</dt>
             <dd className="col-md-9">
-              {moment.tz(ticket.updated_at, convention.timezone_name).format(dateFormat)}
+              {moment.tz(ticket.updated_at, timezoneName).format(dateFormat)}
             </dd>
           </dl>
         </div>
@@ -88,7 +90,5 @@ function MyTicketDisplay() {
     </>
   );
 }
-
-// .strftime('%B %e, %Y %l:%M %p %Z')
 
 export default MyTicketDisplay;

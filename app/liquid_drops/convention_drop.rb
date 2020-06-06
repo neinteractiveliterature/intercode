@@ -161,17 +161,22 @@ class ConventionDrop < Liquid::Drop
 
   # @return [ScheduledValueDrop] The schedule of maximum event signups for this convention
   def maximum_event_signups
-    ScheduledValueDrop.new(convention.maximum_event_signups, convention.timezone)
+    ScheduledValueDrop.new(convention.maximum_event_signups, effective_timezone)
+  end
+
+  # @return [ScheduledValue::TimespanDrop] The time span of the convention
+  def timespan
+    ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
   end
 
   # @return [ActiveSupport::TimeWithZone] The time at which this convention starts
   def starts_at
-    @starts_at ||= convention.starts_at&.in_time_zone(convention.timezone)
+    @starts_at ||= convention.starts_at&.in_time_zone(effective_timezone)
   end
 
   # @return [ActiveSupport::TimeWithZone] The time at which this convention ends
   def ends_at
-    @ends_at ||= convention.ends_at&.in_time_zone(convention.timezone)
+    @ends_at ||= convention.ends_at&.in_time_zone(effective_timezone)
   end
 
   # @return String The root URL for this convention
@@ -184,5 +189,12 @@ class ConventionDrop < Liquid::Drop
     hostname << ":#{port}" if port && port != default_port
 
     "#{protocol}://#{hostname}"
+  end
+
+  private
+
+  # @api
+  def effective_timezone
+    (@context&.registers || {})[:timezone] || Time.zone
   end
 end

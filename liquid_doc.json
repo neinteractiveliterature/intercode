@@ -1965,6 +1965,20 @@
           ]
         },
         {
+          "name": "timespan",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time span of the convention",
+              "types": [
+                "ScheduledValue::TimespanDrop"
+              ]
+            }
+          ]
+        },
+        {
           "name": "starts_at",
           "docstring": "",
           "tags": [
@@ -2000,6 +2014,18 @@
               "tag_name": "return",
               "name": null,
               "text": "String The root URL for this convention",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "effective_timezone",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
               "types": null
             }
           ]
@@ -4608,6 +4634,79 @@
       ]
     },
     {
+      "name": "ScheduledValue::TimespanDrop",
+      "superclasses": [
+        "ScheduledValue::TimespanDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A range of time.  Both \"start\" and \"finish\" are optional; omitting either of them will lead to\nan infinite-length timespan.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "timespan",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "start",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The start of the timespan (or null if it has no start)",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "finish",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The end of the timespan (or null if it has no end)",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of TimespanDrop",
+              "types": [
+                "TimespanDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "RegistrationPolicy::BucketDrop",
       "superclasses": [
         "RegistrationPolicy::BucketDrop",
@@ -5771,6 +5870,114 @@
       "docstring": "Converts all whitespace in a string to single spaces, and strips whitespace off the\nbeginning and end.",
       "tags": [
 
+      ]
+    },
+    {
+      "name": "date_with_local_time",
+      "docstring": "Given a time object, format it in the given timezone, translating to the user's local\ntime if it isn't the same.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "Formatting a time using an explicit time zone, while the user is in that zone",
+          "text": "{{ convention.starts_at | date_with_local_time: \"%l:%M%P %Z\", \"America/New_York\" }} =>\n  \"7:00pm EDT\"",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Formatting a time using an explicit time zone, while the user is not in that zone",
+          "text": "{{ convention.starts_at | date_with_local_time: \"%l:%M%P %Z\", \"America/New_York\" }} =>\n  \"7:00pm EDT (4:00pm PDT)\"",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Using the convention's time zone implicitly",
+          "text": "{{ convention.starts_at | date_with_local_time: \"%l:%M%P %Z\" }} => \"7:00pm EDT\"",
+          "types": null
+        },
+        {
+          "tag_name": "param",
+          "name": "input",
+          "text": "A time object",
+          "types": [
+            "ActiveSupport::TimeWithZone"
+          ]
+        },
+        {
+          "tag_name": "param",
+          "name": "format",
+          "text": "A time formatting string, like the one the built-in Liquid \"date\"\nfilter uses (see http://strftime.net for examples).  We recommend\nincluding \"%Z\" in this string in order to have an explicit time zone\nspecifier.",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "param",
+          "name": "timezone_name",
+          "text": "An IANA timezone name to use for the default format.  If\nnot given, this filter will try to use the convention's\nlocal timezone (if one exists).",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "return",
+          "name": null,
+          "text": "String",
+          "types": null
+        }
+      ]
+    },
+    {
+      "name": "timespan_with_local_time",
+      "docstring": "Given a timespan, format it in the given timezone, translating to the user's local\ntime if it isn't the same.  Automatically removes duplicate verbiage in the middle (e.g.\nday of week, time zone, etc.)",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "Formatting a timespan using an explicit time zone, while the user is in that zone",
+          "text": "{{ convention.timespan\n  | timespan_with_local_time: \"%A, %B %e from %l:%M%P %Z\", \"America/New_York\" }} =>\n  \"Saturday, July 11 from 10:00am to 11:59pm EDT\"",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Formatting a time using an explicit time zone, while the user is not in that zone",
+          "text": "{{ convention.timespan\n  | timespan_with_local_time: \"%A, %B %e from %l:%M%P %Z\", \"America/New_York\" }} =>\n  \"Saturday, July 11 from 10:00am to 11:59pm EDT (7:00am to 8:59pm PDT)\"",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Using the convention's time zone implicitly",
+          "text": "{{ convention.timespan | timespan_with_local_time: \"%A, %B %e from %l:%M%P %Z\" }} =>\n  \"Saturday, July 11 from 10:00am to 11:59pm EDT\"",
+          "types": null
+        },
+        {
+          "tag_name": "param",
+          "name": "input",
+          "text": "A timespan",
+          "types": [
+            "ScheduledValue::TimespanDrop"
+          ]
+        },
+        {
+          "tag_name": "param",
+          "name": "format",
+          "text": "A time formatting string, like the one the built-in Liquid \"date\"\nfilter uses (see http://strftime.net for examples).  We recommend\nincluding \"%Z\" in this string in order to have an explicit time zone\nspecifier.",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "param",
+          "name": "timezone_name",
+          "text": "An IANA timezone name to use for the default format.  If\nnot given, this filter will try to use the convention's\nlocal timezone (if one exists).",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "return",
+          "name": null,
+          "text": "String",
+          "types": null
+        }
       ]
     }
   ]

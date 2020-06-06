@@ -41,9 +41,9 @@ tool 'pull_production_db' do
     pull_options = (
       include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"'
     )
-    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:10.4 \
-pg_dump #{pull_options} -v -x --no-owner -Fc \"#{database_url}\" \
--f /out/intercode_production.pgdump"
+    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:12.2 \
+pg_dump #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
+-f /out/intercode_production.sql"
 
     exec_tool("load_production_db #{docker_compose ? '--docker-compose' : ''}")
   end
@@ -52,7 +52,7 @@ end
 tool 'load_production_db' do
   desc 'Load a production pgdump into development'
   include :exec, exit_on_nonzero_status: true
-  flag :file, default: 'intercode_production.pgdump'
+  flag :file, default: 'intercode_production.sql'
   flag :docker_compose
 
   def run
@@ -81,6 +81,28 @@ tool 'build_sanitized_db' do
 
     puts 'Dropping temporary database'
     sh 'dropdb -U postgres intercode_sanitized_tmp'
+  end
+end
+
+tool 'pull_uploads' do
+  desc 'Pull uploaded files down from production'
+  include :bundler
+
+  def run
+    require_relative 'config/environment'
+
+    CmsFile.find_each do |cms_file|
+      file = cms_file.file
+      dest_path = file.path
+      next if File.exist?(dest_path)
+
+      prod_url = URI("https://uploads.neilhosting.net/#{file.store_path}#{file.identifier}")
+      puts "Downloading #{prod_url}"
+      FileUtils.mkdir_p(File.dirname(dest_path))
+      File.open(dest_path, 'wb') do |outfile|
+        outfile.write(Net::HTTP.get(prod_url))
+      end
+    end
   end
 end
 
@@ -132,7 +154,9 @@ tool 'update_liquid_doc_json' do
 
     {
       classes: classes.map { |klass| serialize_class(klass) },
-      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
+      filter_methods: filters_module.meths
+        .select { |meth| meth.visibility == :public }
+        .map { |meth| serialize_method(meth) }
     }
   end
 
@@ -164,9 +188,14 @@ tool 'download_email' do
   def run
     require_relative 'config/environment'
 
-    puts ReceiveSnsEmailDeliveryService.s3_client.get_object(
+    ENV['AWS_PROFILE'] = 'neil'
+    ENV['AWS_REGION'] = 'us-east-1'
+    message = ReceiveSnsEmailDeliveryService.s3_client.get_object(
       bucket: 'intercode-inbox',
       key: message_id
     ).body.read
+    File.open("#{message_id}.eml", 'w') do |file|
+      file.write message
+    end
   end
 end

@@ -14,17 +14,24 @@ import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
+import { NoLoginAuthorizationWrapper } from '../Authentication/useAuthorizationRequired';
 
 function renderScheduleRoutes() {
   return [
     <Route path="/events/schedule" key="conSchedule">
-      <ScheduleGridApp configKey="con_schedule" />
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>
+        <ScheduleGridApp configKey="con_schedule" />
+      </NoLoginAuthorizationWrapper>
     </Route>,
     <Route path="/events/schedule_by_room" key="conScheduleByRoom">
-      <ScheduleGridApp configKey="con_schedule_by_room" />
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>
+        <ScheduleGridApp configKey="con_schedule_by_room" />
+      </NoLoginAuthorizationWrapper>
     </Route>,
     <Route path="/events/schedule_with_counts" key="scheduleWithCounts">
-      <ScheduleGridApp configKey="schedule_with_counts" />
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule_with_counts']}>
+        <ScheduleGridApp configKey="schedule_with_counts" />
+      </NoLoginAuthorizationWrapper>
     </Route>,
   ];
 }

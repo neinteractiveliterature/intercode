@@ -40,7 +40,11 @@ class Page < ApplicationRecord
   end
 
   def referenced_files_recursive
-    (super + (effective_cms_layout&.referenced_files_recursive || [])).uniq
+    [
+      *super,
+      *referenced_partials_recursive.flat_map(&:referenced_files_recursive),
+      *(effective_cms_layout&.referenced_files_recursive || [])
+    ].uniq
   end
 
   def content_for_search

@@ -51,7 +51,8 @@ class ApplicationController < ActionController::Base
     {
       authenticityTokens: authenticity_token_props,
       recaptchaSiteKey: Recaptcha.configuration.site_key,
-      stripePublishableKey: convention&.stripe_publishable_key
+      stripePublishableKey: convention&.stripe_publishable_key,
+      mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN']
     }
   end
   helper_method :app_component_props
@@ -139,11 +140,19 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_pending_order
 
-  def use_convention_timezone(&block)
-    timezone = convention&.timezone
+  def timezone_for_request
+    @timezone_for_request ||= if convention&.timezone_mode == 'convention_local'
+      convention.timezone
+    elsif request.headers['X-Intercode-User-Timezone'].present?
+      ActiveSupport::TimeZone[request.headers['X-Intercode-User-Timezone']]
+    end
+  end
 
-    if timezone
-      Time.use_zone(timezone, &block)
+  def use_convention_timezone(&block)
+    if timezone_for_request
+      Notifier.use_timezone(timezone_for_request) do
+        Time.use_zone(timezone_for_request, &block)
+      end
     else
       yield
     end

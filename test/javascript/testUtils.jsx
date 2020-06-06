@@ -1,44 +1,45 @@
 /* eslint-disable import/export */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { MockedProvider } from '@apollo/react-testing';
 import { render, queries } from '@testing-library/react';
 
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
 
-function TestWrapper({ apolloClient, stripePublishableKey, children }) {
+function TestWrapper({ apolloMocks, stripePublishableKey, children }) {
   const lazyStripeProviderValue = useMemo(
     () => ({ publishableKey: stripePublishableKey }),
     [stripePublishableKey],
   );
   return (
-    <ApolloProvider client={apolloClient}>
+    <MockedProvider mocks={apolloMocks}>
       <LazyStripeContext.Provider value={lazyStripeProviderValue}>
         <Confirm>
           {children}
         </Confirm>
       </LazyStripeContext.Provider>
-    </ApolloProvider>
+    </MockedProvider>
   );
 }
 
 TestWrapper.propTypes = {
   children: PropTypes.node.isRequired,
-  apolloClient: PropTypes.shape({}).isRequired,
+  apolloMocks: PropTypes.arrayOf(PropTypes.shape({})),
   stripePublishableKey: PropTypes.string,
 };
 
 TestWrapper.defaultProps = {
   stripePublishableKey: null,
+  apolloMocks: null,
 };
 
 function customRender(ui, options = {}) {
-  const { apolloClient, stripePublishableKey, ...otherOptions } = options;
+  const { apolloMocks, stripePublishableKey, ...otherOptions } = options;
   return render(ui, {
     wrapper: (wrapperProps) => (
       <TestWrapper
-        apolloClient={apolloClient || { query: () => {} }}
+        apolloMocks={apolloMocks}
         stripePublishableKey={stripePublishableKey}
         {...wrapperProps}
       />

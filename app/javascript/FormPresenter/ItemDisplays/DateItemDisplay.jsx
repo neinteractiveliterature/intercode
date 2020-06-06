@@ -1,24 +1,23 @@
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import AppRootContext from '../../AppRootContext';
 
 export function describeDate(value, timezoneName) {
   return moment.tz(value, timezoneName).format('dddd, MMMM D, YYYY');
 }
 
-function DateItemDisplay({ convention, value }) {
+function DateItemDisplay({ value }) {
+  const { timezoneName } = useContext(AppRootContext);
   const formattedDate = useMemo(
-    () => describeDate(value, convention.timezone_name),
-    [convention.timezone_name, value],
+    () => describeDate(value, timezoneName),
+    [timezoneName, value],
   );
 
   return formattedDate;
 }
 
 DateItemDisplay.propTypes = {
-  convention: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
   value: PropTypes.string.isRequired,
 };
 

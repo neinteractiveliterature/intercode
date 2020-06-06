@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import RunCapacityGraph from './RunCapacityGraph';
@@ -12,12 +12,14 @@ import AppRootContext from '../../AppRootContext';
 import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 import LoadingIndicator from '../../LoadingIndicator';
+import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
 
 function RunCard({
   run, event, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
   showViewSignups, createSignup, withdrawSignup, withdrawPendingSignupRequest,
 }) {
   const history = useHistory();
+  const location = useLocation();
   const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef(null);
   useEffect(() => {
@@ -26,12 +28,17 @@ function RunCard({
     }
   }, [history.location.hash, run.id]);
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup);
+  const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
       return (
-        <a
-          href={`/users/sign_in?user_return_to=${window.location.href}`}
+        <button
+          type="button"
+          onClick={() => {
+            setAfterSignInPath(location.pathname);
+            openAuthenticationModal({ currentView: 'signIn' });
+          }}
           className="btn btn-outline-primary"
           style={{ whiteSpace: 'normal' }}
         >
@@ -40,7 +47,7 @@ function RunCard({
           to sign up for
           <br />
           <em>{event.title}</em>
-        </a>
+        </button>
       );
     }
 

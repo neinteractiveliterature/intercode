@@ -30,7 +30,11 @@ function EditCmsPartialForm({ initialPartial }) {
       },
     });
     await apolloClient.resetStore();
-    history.push('/cms_partials');
+    if (history.length > 1) {
+      history.goBack();
+    } else {
+      history.push('/cms_partials');
+    }
   };
 
   return (

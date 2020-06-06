@@ -1,0 +1,4397 @@
+{
+  "zones": {
+    "Africa/Algiers": {
+      "name": "Africa/Algiers",
+      "nameKeywords": "Africa Algiers",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Standard Time"
+      ]
+    },
+    "Atlantic/Cape_Verde": {
+      "name": "Atlantic/Cape_Verde",
+      "nameKeywords": "Atlantic Cape Verde",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-1"
+      ],
+      "longOffsetNames": [
+        "Cape Verde Standard Time"
+      ]
+    },
+    "Africa/Ndjamena": {
+      "name": "Africa/Ndjamena",
+      "nameKeywords": "Africa Ndjamena",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "West Africa Standard Time"
+      ]
+    },
+    "Africa/Abidjan": {
+      "name": "Africa/Abidjan",
+      "nameKeywords": "Africa Abidjan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "Africa/Cairo": {
+      "name": "Africa/Cairo",
+      "nameKeywords": "Africa Cairo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Standard Time"
+      ]
+    },
+    "Africa/Accra": {
+      "name": "Africa/Accra",
+      "nameKeywords": "Africa Accra",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "Africa/Bissau": {
+      "name": "Africa/Bissau",
+      "nameKeywords": "Africa Bissau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "Africa/Nairobi": {
+      "name": "Africa/Nairobi",
+      "nameKeywords": "Africa Nairobi",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "East Africa Time"
+      ]
+    },
+    "Africa/Monrovia": {
+      "name": "Africa/Monrovia",
+      "nameKeywords": "Africa Monrovia",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "Africa/Tripoli": {
+      "name": "Africa/Tripoli",
+      "nameKeywords": "Africa Tripoli",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Standard Time"
+      ]
+    },
+    "Indian/Mauritius": {
+      "name": "Indian/Mauritius",
+      "nameKeywords": "Indian Mauritius",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Mauritius Standard Time"
+      ]
+    },
+    "Africa/Casablanca": {
+      "name": "Africa/Casablanca",
+      "nameKeywords": "Africa Casablanca",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "GMT",
+        "GMT+01:00"
+      ]
+    },
+    "Africa/El_Aaiun": {
+      "name": "Africa/El_Aaiun",
+      "nameKeywords": "Africa El Aaiun",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "GMT",
+        "GMT+01:00"
+      ]
+    },
+    "Africa/Maputo": {
+      "name": "Africa/Maputo",
+      "nameKeywords": "Africa Maputo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Central Africa Time"
+      ]
+    },
+    "Africa/Windhoek": {
+      "name": "Africa/Windhoek",
+      "nameKeywords": "Africa Windhoek",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Central Africa Time"
+      ]
+    },
+    "Africa/Lagos": {
+      "name": "Africa/Lagos",
+      "nameKeywords": "Africa Lagos",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "West Africa Standard Time"
+      ]
+    },
+    "Indian/Reunion": {
+      "name": "Indian/Reunion",
+      "nameKeywords": "Indian Reunion",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Réunion Time"
+      ]
+    },
+    "Africa/Sao_Tome": {
+      "name": "Africa/Sao_Tome",
+      "nameKeywords": "Africa Sao Tome",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "Indian/Mahe": {
+      "name": "Indian/Mahe",
+      "nameKeywords": "Indian Mahe",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Seychelles Time"
+      ]
+    },
+    "Africa/Johannesburg": {
+      "name": "Africa/Johannesburg",
+      "nameKeywords": "Africa Johannesburg",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "South Africa Standard Time"
+      ]
+    },
+    "Africa/Khartoum": {
+      "name": "Africa/Khartoum",
+      "nameKeywords": "Africa Khartoum",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Central Africa Time"
+      ]
+    },
+    "Africa/Juba": {
+      "name": "Africa/Juba",
+      "nameKeywords": "Africa Juba",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "East Africa Time"
+      ]
+    },
+    "Africa/Tunis": {
+      "name": "Africa/Tunis",
+      "nameKeywords": "Africa Tunis",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Standard Time"
+      ]
+    },
+    "Antarctica/Casey": {
+      "name": "Antarctica/Casey",
+      "nameKeywords": "Antarctica Casey",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Australian Western Standard Time"
+      ]
+    },
+    "Antarctica/Davis": {
+      "name": "Antarctica/Davis",
+      "nameKeywords": "Antarctica Davis",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Davis Time"
+      ]
+    },
+    "Antarctica/Mawson": {
+      "name": "Antarctica/Mawson",
+      "nameKeywords": "Antarctica Mawson",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Mawson Time"
+      ]
+    },
+    "Indian/Kerguelen": {
+      "name": "Indian/Kerguelen",
+      "nameKeywords": "Indian Kerguelen",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "French Southern & Antarctic Time"
+      ]
+    },
+    "Antarctica/Syowa": {
+      "name": "Antarctica/Syowa",
+      "nameKeywords": "Antarctica Syowa",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Syowa Time"
+      ]
+    },
+    "Antarctica/Troll": {
+      "name": "Antarctica/Troll",
+      "nameKeywords": "Antarctica Troll",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "GMT+02:00",
+        "Greenwich Mean Time"
+      ]
+    },
+    "Antarctica/Vostok": {
+      "name": "Antarctica/Vostok",
+      "nameKeywords": "Antarctica Vostok",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "Vostok Time"
+      ]
+    },
+    "Antarctica/Rothera": {
+      "name": "Antarctica/Rothera",
+      "nameKeywords": "Antarctica Rothera",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Rothera Time"
+      ]
+    },
+    "Asia/Kabul": {
+      "name": "Asia/Kabul",
+      "nameKeywords": "Asia Kabul",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4:30"
+      ],
+      "longOffsetNames": [
+        "Afghanistan Time"
+      ]
+    },
+    "Asia/Yerevan": {
+      "name": "Asia/Yerevan",
+      "nameKeywords": "Asia Yerevan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Armenia Standard Time"
+      ]
+    },
+    "Asia/Baku": {
+      "name": "Asia/Baku",
+      "nameKeywords": "Asia Baku",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Azerbaijan Standard Time"
+      ]
+    },
+    "Asia/Dhaka": {
+      "name": "Asia/Dhaka",
+      "nameKeywords": "Asia Dhaka",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "Bangladesh Standard Time"
+      ]
+    },
+    "Asia/Thimphu": {
+      "name": "Asia/Thimphu",
+      "nameKeywords": "Asia Thimphu",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "Bhutan Time"
+      ]
+    },
+    "Indian/Chagos": {
+      "name": "Indian/Chagos",
+      "nameKeywords": "Indian Chagos",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "Indian Ocean Time"
+      ]
+    },
+    "Asia/Brunei": {
+      "name": "Asia/Brunei",
+      "nameKeywords": "Asia Brunei",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Brunei Darussalam Time"
+      ]
+    },
+    "Asia/Yangon": {
+      "name": "Asia/Yangon",
+      "nameKeywords": "Asia Yangon",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6:30"
+      ],
+      "longOffsetNames": [
+        "Myanmar Time"
+      ]
+    },
+    "Asia/Shanghai": {
+      "name": "Asia/Shanghai",
+      "nameKeywords": "Asia Shanghai",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "China Standard Time"
+      ]
+    },
+    "Asia/Urumqi": {
+      "name": "Asia/Urumqi",
+      "nameKeywords": "Asia Urumqi",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "GMT+06:00"
+      ]
+    },
+    "Asia/Hong_Kong": {
+      "name": "Asia/Hong_Kong",
+      "nameKeywords": "Asia Hong Kong",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Hong Kong Standard Time"
+      ]
+    },
+    "Asia/Taipei": {
+      "name": "Asia/Taipei",
+      "nameKeywords": "Asia Taipei",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Taipei Standard Time"
+      ]
+    },
+    "Asia/Macau": {
+      "name": "Asia/Macau",
+      "nameKeywords": "Asia Macau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "China Standard Time"
+      ]
+    },
+    "Asia/Nicosia": {
+      "name": "Asia/Nicosia",
+      "nameKeywords": "Asia Nicosia",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Asia/Famagusta": {
+      "name": "Asia/Famagusta",
+      "nameKeywords": "Asia Famagusta",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "GMT+03:00",
+        "GMT+02:00"
+      ]
+    },
+    "Asia/Tbilisi": {
+      "name": "Asia/Tbilisi",
+      "nameKeywords": "Asia Tbilisi",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Georgia Standard Time"
+      ]
+    },
+    "Asia/Dili": {
+      "name": "Asia/Dili",
+      "nameKeywords": "Asia Dili",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "East Timor Time"
+      ]
+    },
+    "Asia/Kolkata": {
+      "name": "Asia/Kolkata",
+      "nameKeywords": "Asia Kolkata",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5:30"
+      ],
+      "longOffsetNames": [
+        "India Standard Time"
+      ]
+    },
+    "Asia/Jakarta": {
+      "name": "Asia/Jakarta",
+      "nameKeywords": "Asia Jakarta",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Western Indonesia Time"
+      ]
+    },
+    "Asia/Pontianak": {
+      "name": "Asia/Pontianak",
+      "nameKeywords": "Asia Pontianak",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Western Indonesia Time"
+      ]
+    },
+    "Asia/Makassar": {
+      "name": "Asia/Makassar",
+      "nameKeywords": "Asia Makassar",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Central Indonesia Time"
+      ]
+    },
+    "Asia/Jayapura": {
+      "name": "Asia/Jayapura",
+      "nameKeywords": "Asia Jayapura",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Eastern Indonesia Time"
+      ]
+    },
+    "Asia/Tehran": {
+      "name": "Asia/Tehran",
+      "nameKeywords": "Asia Tehran",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4:30",
+        "GMT+3:30"
+      ],
+      "longOffsetNames": [
+        "Iran Daylight Time",
+        "Iran Standard Time"
+      ]
+    },
+    "Asia/Baghdad": {
+      "name": "Asia/Baghdad",
+      "nameKeywords": "Asia Baghdad",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Arabian Standard Time"
+      ]
+    },
+    "Asia/Jerusalem": {
+      "name": "Asia/Jerusalem",
+      "nameKeywords": "Asia Jerusalem",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Israel Daylight Time",
+        "Israel Standard Time"
+      ]
+    },
+    "Asia/Tokyo": {
+      "name": "Asia/Tokyo",
+      "nameKeywords": "Asia Tokyo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Japan Standard Time"
+      ]
+    },
+    "Asia/Amman": {
+      "name": "Asia/Amman",
+      "nameKeywords": "Asia Amman",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Asia/Almaty": {
+      "name": "Asia/Almaty",
+      "nameKeywords": "Asia Almaty",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "East Kazakhstan Time"
+      ]
+    },
+    "Asia/Qyzylorda": {
+      "name": "Asia/Qyzylorda",
+      "nameKeywords": "Asia Qyzylorda",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "West Kazakhstan Time"
+      ]
+    },
+    "Asia/Qostanay": {
+      "name": "Asia/Qostanay",
+      "nameKeywords": "Asia Qostanay",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "East Kazakhstan Time"
+      ]
+    },
+    "Asia/Aqtobe": {
+      "name": "Asia/Aqtobe",
+      "nameKeywords": "Asia Aqtobe",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "West Kazakhstan Time"
+      ]
+    },
+    "Asia/Aqtau": {
+      "name": "Asia/Aqtau",
+      "nameKeywords": "Asia Aqtau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "West Kazakhstan Time"
+      ]
+    },
+    "Asia/Atyrau": {
+      "name": "Asia/Atyrau",
+      "nameKeywords": "Asia Atyrau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "West Kazakhstan Time"
+      ]
+    },
+    "Asia/Oral": {
+      "name": "Asia/Oral",
+      "nameKeywords": "Asia Oral",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "West Kazakhstan Time"
+      ]
+    },
+    "Asia/Bishkek": {
+      "name": "Asia/Bishkek",
+      "nameKeywords": "Asia Bishkek",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "Kyrgyzstan Time"
+      ]
+    },
+    "Asia/Seoul": {
+      "name": "Asia/Seoul",
+      "nameKeywords": "Asia Seoul",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Korean Standard Time"
+      ]
+    },
+    "Asia/Pyongyang": {
+      "name": "Asia/Pyongyang",
+      "nameKeywords": "Asia Pyongyang",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Korean Standard Time"
+      ]
+    },
+    "Asia/Beirut": {
+      "name": "Asia/Beirut",
+      "nameKeywords": "Asia Beirut",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Asia/Kuala_Lumpur": {
+      "name": "Asia/Kuala_Lumpur",
+      "nameKeywords": "Asia Kuala Lumpur",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Malaysia Time"
+      ]
+    },
+    "Asia/Kuching": {
+      "name": "Asia/Kuching",
+      "nameKeywords": "Asia Kuching",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Malaysia Time"
+      ]
+    },
+    "Indian/Maldives": {
+      "name": "Indian/Maldives",
+      "nameKeywords": "Indian Maldives",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Maldives Time"
+      ]
+    },
+    "Asia/Hovd": {
+      "name": "Asia/Hovd",
+      "nameKeywords": "Asia Hovd",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Hovd Standard Time"
+      ]
+    },
+    "Asia/Ulaanbaatar": {
+      "name": "Asia/Ulaanbaatar",
+      "nameKeywords": "Asia Ulaanbaatar",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Ulaanbaatar Standard Time"
+      ]
+    },
+    "Asia/Choibalsan": {
+      "name": "Asia/Choibalsan",
+      "nameKeywords": "Asia Choibalsan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Choibalsan Standard Time"
+      ]
+    },
+    "Asia/Kathmandu": {
+      "name": "Asia/Kathmandu",
+      "nameKeywords": "Asia Kathmandu",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5:45"
+      ],
+      "longOffsetNames": [
+        "Nepal Time"
+      ]
+    },
+    "Asia/Karachi": {
+      "name": "Asia/Karachi",
+      "nameKeywords": "Asia Karachi",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Pakistan Standard Time"
+      ]
+    },
+    "Asia/Gaza": {
+      "name": "Asia/Gaza",
+      "nameKeywords": "Asia Gaza",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Asia/Hebron": {
+      "name": "Asia/Hebron",
+      "nameKeywords": "Asia Hebron",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Asia/Manila": {
+      "name": "Asia/Manila",
+      "nameKeywords": "Asia Manila",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Philippine Standard Time"
+      ]
+    },
+    "Asia/Qatar": {
+      "name": "Asia/Qatar",
+      "nameKeywords": "Asia Qatar",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Arabian Standard Time"
+      ]
+    },
+    "Asia/Riyadh": {
+      "name": "Asia/Riyadh",
+      "nameKeywords": "Asia Riyadh",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Arabian Standard Time"
+      ]
+    },
+    "Asia/Singapore": {
+      "name": "Asia/Singapore",
+      "nameKeywords": "Asia Singapore",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Singapore Standard Time"
+      ]
+    },
+    "Asia/Colombo": {
+      "name": "Asia/Colombo",
+      "nameKeywords": "Asia Colombo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5:30"
+      ],
+      "longOffsetNames": [
+        "India Standard Time"
+      ]
+    },
+    "Asia/Damascus": {
+      "name": "Asia/Damascus",
+      "nameKeywords": "Asia Damascus",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Asia/Dushanbe": {
+      "name": "Asia/Dushanbe",
+      "nameKeywords": "Asia Dushanbe",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Tajikistan Time"
+      ]
+    },
+    "Asia/Bangkok": {
+      "name": "Asia/Bangkok",
+      "nameKeywords": "Asia Bangkok",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Indochina Time"
+      ]
+    },
+    "Asia/Ashgabat": {
+      "name": "Asia/Ashgabat",
+      "nameKeywords": "Asia Ashgabat",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Turkmenistan Standard Time"
+      ]
+    },
+    "Asia/Dubai": {
+      "name": "Asia/Dubai",
+      "nameKeywords": "Asia Dubai",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Gulf Standard Time"
+      ]
+    },
+    "Asia/Samarkand": {
+      "name": "Asia/Samarkand",
+      "nameKeywords": "Asia Samarkand",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Uzbekistan Standard Time"
+      ]
+    },
+    "Asia/Tashkent": {
+      "name": "Asia/Tashkent",
+      "nameKeywords": "Asia Tashkent",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Uzbekistan Standard Time"
+      ]
+    },
+    "Asia/Ho_Chi_Minh": {
+      "name": "Asia/Ho_Chi_Minh",
+      "nameKeywords": "Asia Ho Chi Minh",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Indochina Time"
+      ]
+    },
+    "Australia/Darwin": {
+      "name": "Australia/Darwin",
+      "nameKeywords": "Australia Darwin",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9:30"
+      ],
+      "longOffsetNames": [
+        "Australian Central Standard Time"
+      ]
+    },
+    "Australia/Perth": {
+      "name": "Australia/Perth",
+      "nameKeywords": "Australia Perth",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Australian Western Standard Time"
+      ]
+    },
+    "Australia/Eucla": {
+      "name": "Australia/Eucla",
+      "nameKeywords": "Australia Eucla",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8:45"
+      ],
+      "longOffsetNames": [
+        "Australian Central Western Standard Time"
+      ]
+    },
+    "Australia/Brisbane": {
+      "name": "Australia/Brisbane",
+      "nameKeywords": "Australia Brisbane",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Australian Eastern Standard Time"
+      ]
+    },
+    "Australia/Lindeman": {
+      "name": "Australia/Lindeman",
+      "nameKeywords": "Australia Lindeman",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Australian Eastern Standard Time"
+      ]
+    },
+    "Australia/Adelaide": {
+      "name": "Australia/Adelaide",
+      "nameKeywords": "Australia Adelaide",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9:30",
+        "GMT+10:30"
+      ],
+      "longOffsetNames": [
+        "Australian Central Standard Time",
+        "Australian Central Daylight Time"
+      ]
+    },
+    "Australia/Hobart": {
+      "name": "Australia/Hobart",
+      "nameKeywords": "Australia Hobart",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10",
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Australian Eastern Standard Time",
+        "Australian Eastern Daylight Time"
+      ]
+    },
+    "Australia/Currie": {
+      "name": "Australia/Currie",
+      "nameKeywords": "Australia Currie",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10",
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Australian Eastern Standard Time",
+        "Australian Eastern Daylight Time"
+      ]
+    },
+    "Australia/Melbourne": {
+      "name": "Australia/Melbourne",
+      "nameKeywords": "Australia Melbourne",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10",
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Australian Eastern Standard Time",
+        "Australian Eastern Daylight Time"
+      ]
+    },
+    "Australia/Sydney": {
+      "name": "Australia/Sydney",
+      "nameKeywords": "Australia Sydney",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10",
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Australian Eastern Standard Time",
+        "Australian Eastern Daylight Time"
+      ]
+    },
+    "Australia/Broken_Hill": {
+      "name": "Australia/Broken_Hill",
+      "nameKeywords": "Australia Broken Hill",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9:30",
+        "GMT+10:30"
+      ],
+      "longOffsetNames": [
+        "Australian Central Standard Time",
+        "Australian Central Daylight Time"
+      ]
+    },
+    "Australia/Lord_Howe": {
+      "name": "Australia/Lord_Howe",
+      "nameKeywords": "Australia Lord Howe",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10:30",
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Lord Howe Standard Time",
+        "Lord Howe Daylight Time"
+      ]
+    },
+    "Antarctica/Macquarie": {
+      "name": "Antarctica/Macquarie",
+      "nameKeywords": "Antarctica Macquarie",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Macquarie Island Time"
+      ]
+    },
+    "Indian/Christmas": {
+      "name": "Indian/Christmas",
+      "nameKeywords": "Indian Christmas",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Christmas Island Time"
+      ]
+    },
+    "Indian/Cocos": {
+      "name": "Indian/Cocos",
+      "nameKeywords": "Indian Cocos",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6:30"
+      ],
+      "longOffsetNames": [
+        "Cocos Islands Time"
+      ]
+    },
+    "Pacific/Fiji": {
+      "name": "Pacific/Fiji",
+      "nameKeywords": "Pacific Fiji",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12",
+        "GMT+13"
+      ],
+      "longOffsetNames": [
+        "Fiji Standard Time",
+        "Fiji Summer Time"
+      ]
+    },
+    "Pacific/Gambier": {
+      "name": "Pacific/Gambier",
+      "nameKeywords": "Pacific Gambier",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-9"
+      ],
+      "longOffsetNames": [
+        "Gambier Time"
+      ]
+    },
+    "Pacific/Marquesas": {
+      "name": "Pacific/Marquesas",
+      "nameKeywords": "Pacific Marquesas",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-9:30"
+      ],
+      "longOffsetNames": [
+        "Marquesas Time"
+      ]
+    },
+    "Pacific/Tahiti": {
+      "name": "Pacific/Tahiti",
+      "nameKeywords": "Pacific Tahiti",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-10"
+      ],
+      "longOffsetNames": [
+        "Tahiti Time"
+      ]
+    },
+    "Pacific/Guam": {
+      "name": "Pacific/Guam",
+      "nameKeywords": "Pacific Guam",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Chamorro Standard Time"
+      ]
+    },
+    "Pacific/Tarawa": {
+      "name": "Pacific/Tarawa",
+      "nameKeywords": "Pacific Tarawa",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Gilbert Islands Time"
+      ]
+    },
+    "Pacific/Enderbury": {
+      "name": "Pacific/Enderbury",
+      "nameKeywords": "Pacific Enderbury",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+13"
+      ],
+      "longOffsetNames": [
+        "Phoenix Islands Time"
+      ]
+    },
+    "Pacific/Kiritimati": {
+      "name": "Pacific/Kiritimati",
+      "nameKeywords": "Pacific Kiritimati",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+14"
+      ],
+      "longOffsetNames": [
+        "Line Islands Time"
+      ]
+    },
+    "Pacific/Majuro": {
+      "name": "Pacific/Majuro",
+      "nameKeywords": "Pacific Majuro",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Marshall Islands Time"
+      ]
+    },
+    "Pacific/Kwajalein": {
+      "name": "Pacific/Kwajalein",
+      "nameKeywords": "Pacific Kwajalein",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Marshall Islands Time"
+      ]
+    },
+    "Pacific/Chuuk": {
+      "name": "Pacific/Chuuk",
+      "nameKeywords": "Pacific Chuuk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Chuuk Time"
+      ]
+    },
+    "Pacific/Pohnpei": {
+      "name": "Pacific/Pohnpei",
+      "nameKeywords": "Pacific Pohnpei",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Ponape Time"
+      ]
+    },
+    "Pacific/Kosrae": {
+      "name": "Pacific/Kosrae",
+      "nameKeywords": "Pacific Kosrae",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Kosrae Time"
+      ]
+    },
+    "Pacific/Nauru": {
+      "name": "Pacific/Nauru",
+      "nameKeywords": "Pacific Nauru",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Nauru Time"
+      ]
+    },
+    "Pacific/Noumea": {
+      "name": "Pacific/Noumea",
+      "nameKeywords": "Pacific Noumea",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "New Caledonia Standard Time"
+      ]
+    },
+    "Pacific/Auckland": {
+      "name": "Pacific/Auckland",
+      "nameKeywords": "Pacific Auckland",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12",
+        "GMT+13"
+      ],
+      "longOffsetNames": [
+        "New Zealand Standard Time",
+        "New Zealand Daylight Time"
+      ]
+    },
+    "Pacific/Chatham": {
+      "name": "Pacific/Chatham",
+      "nameKeywords": "Pacific Chatham",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12:45",
+        "GMT+13:45"
+      ],
+      "longOffsetNames": [
+        "Chatham Standard Time",
+        "Chatham Daylight Time"
+      ]
+    },
+    "Pacific/Rarotonga": {
+      "name": "Pacific/Rarotonga",
+      "nameKeywords": "Pacific Rarotonga",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-10"
+      ],
+      "longOffsetNames": [
+        "Cook Islands Standard Time"
+      ]
+    },
+    "Pacific/Niue": {
+      "name": "Pacific/Niue",
+      "nameKeywords": "Pacific Niue",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-11"
+      ],
+      "longOffsetNames": [
+        "Niue Time"
+      ]
+    },
+    "Pacific/Norfolk": {
+      "name": "Pacific/Norfolk",
+      "nameKeywords": "Pacific Norfolk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Norfolk Island Time"
+      ]
+    },
+    "Pacific/Palau": {
+      "name": "Pacific/Palau",
+      "nameKeywords": "Pacific Palau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Palau Time"
+      ]
+    },
+    "Pacific/Port_Moresby": {
+      "name": "Pacific/Port_Moresby",
+      "nameKeywords": "Pacific Port Moresby",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Papua New Guinea Time"
+      ]
+    },
+    "Pacific/Bougainville": {
+      "name": "Pacific/Bougainville",
+      "nameKeywords": "Pacific Bougainville",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "GMT+11:00"
+      ]
+    },
+    "Pacific/Pitcairn": {
+      "name": "Pacific/Pitcairn",
+      "nameKeywords": "Pacific Pitcairn",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-8"
+      ],
+      "longOffsetNames": [
+        "Pitcairn Time"
+      ]
+    },
+    "Pacific/Pago_Pago": {
+      "name": "Pacific/Pago_Pago",
+      "nameKeywords": "Pacific Pago Pago",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-11"
+      ],
+      "longOffsetNames": [
+        "Samoa Standard Time"
+      ]
+    },
+    "Pacific/Apia": {
+      "name": "Pacific/Apia",
+      "nameKeywords": "Pacific Apia",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+13",
+        "GMT+14"
+      ],
+      "longOffsetNames": [
+        "Apia Standard Time",
+        "Apia Daylight Time"
+      ]
+    },
+    "Pacific/Guadalcanal": {
+      "name": "Pacific/Guadalcanal",
+      "nameKeywords": "Pacific Guadalcanal",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Solomon Islands Time"
+      ]
+    },
+    "Pacific/Fakaofo": {
+      "name": "Pacific/Fakaofo",
+      "nameKeywords": "Pacific Fakaofo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+13"
+      ],
+      "longOffsetNames": [
+        "Tokelau Time"
+      ]
+    },
+    "Pacific/Tongatapu": {
+      "name": "Pacific/Tongatapu",
+      "nameKeywords": "Pacific Tongatapu",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+13"
+      ],
+      "longOffsetNames": [
+        "Tonga Standard Time"
+      ]
+    },
+    "Pacific/Funafuti": {
+      "name": "Pacific/Funafuti",
+      "nameKeywords": "Pacific Funafuti",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Tuvalu Time"
+      ]
+    },
+    "Pacific/Wake": {
+      "name": "Pacific/Wake",
+      "nameKeywords": "Pacific Wake",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Wake Island Time"
+      ]
+    },
+    "Pacific/Efate": {
+      "name": "Pacific/Efate",
+      "nameKeywords": "Pacific Efate",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Vanuatu Standard Time"
+      ]
+    },
+    "Pacific/Wallis": {
+      "name": "Pacific/Wallis",
+      "nameKeywords": "Pacific Wallis",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Wallis & Futuna Time"
+      ]
+    },
+    "Etc/GMT": {
+      "name": "Etc/GMT",
+      "nameKeywords": "Etc GMT",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC"
+      ],
+      "longOffsetNames": [
+        "Coordinated Universal Time"
+      ]
+    },
+    "Etc/UTC": {
+      "name": "Etc/UTC",
+      "nameKeywords": "Etc UTC",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC"
+      ],
+      "longOffsetNames": [
+        "Coordinated Universal Time"
+      ]
+    },
+    "Etc/GMT-14": {
+      "name": "Etc/GMT-14",
+      "nameKeywords": "Etc GMT-14",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+14"
+      ],
+      "longOffsetNames": [
+        "UTC+14"
+      ]
+    },
+    "Etc/GMT-13": {
+      "name": "Etc/GMT-13",
+      "nameKeywords": "Etc GMT-13",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+13"
+      ],
+      "longOffsetNames": [
+        "UTC+13"
+      ]
+    },
+    "Etc/GMT-12": {
+      "name": "Etc/GMT-12",
+      "nameKeywords": "Etc GMT-12",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+12"
+      ],
+      "longOffsetNames": [
+        "UTC+12"
+      ]
+    },
+    "Etc/GMT-11": {
+      "name": "Etc/GMT-11",
+      "nameKeywords": "Etc GMT-11",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+11"
+      ],
+      "longOffsetNames": [
+        "UTC+11"
+      ]
+    },
+    "Etc/GMT-10": {
+      "name": "Etc/GMT-10",
+      "nameKeywords": "Etc GMT-10",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+10"
+      ],
+      "longOffsetNames": [
+        "UTC+10"
+      ]
+    },
+    "Etc/GMT-9": {
+      "name": "Etc/GMT-9",
+      "nameKeywords": "Etc GMT-9",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+9"
+      ],
+      "longOffsetNames": [
+        "UTC+9"
+      ]
+    },
+    "Etc/GMT-8": {
+      "name": "Etc/GMT-8",
+      "nameKeywords": "Etc GMT-8",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+8"
+      ],
+      "longOffsetNames": [
+        "UTC+8"
+      ]
+    },
+    "Etc/GMT-7": {
+      "name": "Etc/GMT-7",
+      "nameKeywords": "Etc GMT-7",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+7"
+      ],
+      "longOffsetNames": [
+        "UTC+7"
+      ]
+    },
+    "Etc/GMT-6": {
+      "name": "Etc/GMT-6",
+      "nameKeywords": "Etc GMT-6",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+6"
+      ],
+      "longOffsetNames": [
+        "UTC+6"
+      ]
+    },
+    "Etc/GMT-5": {
+      "name": "Etc/GMT-5",
+      "nameKeywords": "Etc GMT-5",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+5"
+      ],
+      "longOffsetNames": [
+        "UTC+5"
+      ]
+    },
+    "Etc/GMT-4": {
+      "name": "Etc/GMT-4",
+      "nameKeywords": "Etc GMT-4",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+4"
+      ],
+      "longOffsetNames": [
+        "UTC+4"
+      ]
+    },
+    "Etc/GMT-3": {
+      "name": "Etc/GMT-3",
+      "nameKeywords": "Etc GMT-3",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+3"
+      ],
+      "longOffsetNames": [
+        "UTC+3"
+      ]
+    },
+    "Etc/GMT-2": {
+      "name": "Etc/GMT-2",
+      "nameKeywords": "Etc GMT-2",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+2"
+      ],
+      "longOffsetNames": [
+        "UTC+2"
+      ]
+    },
+    "Etc/GMT-1": {
+      "name": "Etc/GMT-1",
+      "nameKeywords": "Etc GMT-1",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC+1"
+      ],
+      "longOffsetNames": [
+        "UTC+1"
+      ]
+    },
+    "Etc/GMT+1": {
+      "name": "Etc/GMT+1",
+      "nameKeywords": "Etc GMT+1",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-1"
+      ],
+      "longOffsetNames": [
+        "UTC-1"
+      ]
+    },
+    "Etc/GMT+2": {
+      "name": "Etc/GMT+2",
+      "nameKeywords": "Etc GMT+2",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-2"
+      ],
+      "longOffsetNames": [
+        "UTC-2"
+      ]
+    },
+    "Etc/GMT+3": {
+      "name": "Etc/GMT+3",
+      "nameKeywords": "Etc GMT+3",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-3"
+      ],
+      "longOffsetNames": [
+        "UTC-3"
+      ]
+    },
+    "Etc/GMT+4": {
+      "name": "Etc/GMT+4",
+      "nameKeywords": "Etc GMT+4",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-4"
+      ],
+      "longOffsetNames": [
+        "UTC-4"
+      ]
+    },
+    "Etc/GMT+5": {
+      "name": "Etc/GMT+5",
+      "nameKeywords": "Etc GMT+5",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-5"
+      ],
+      "longOffsetNames": [
+        "UTC-5"
+      ]
+    },
+    "Etc/GMT+6": {
+      "name": "Etc/GMT+6",
+      "nameKeywords": "Etc GMT+6",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-6"
+      ],
+      "longOffsetNames": [
+        "UTC-6"
+      ]
+    },
+    "Etc/GMT+7": {
+      "name": "Etc/GMT+7",
+      "nameKeywords": "Etc GMT+7",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-7"
+      ],
+      "longOffsetNames": [
+        "UTC-7"
+      ]
+    },
+    "Etc/GMT+8": {
+      "name": "Etc/GMT+8",
+      "nameKeywords": "Etc GMT+8",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-8"
+      ],
+      "longOffsetNames": [
+        "UTC-8"
+      ]
+    },
+    "Etc/GMT+9": {
+      "name": "Etc/GMT+9",
+      "nameKeywords": "Etc GMT+9",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-9"
+      ],
+      "longOffsetNames": [
+        "UTC-9"
+      ]
+    },
+    "Etc/GMT+10": {
+      "name": "Etc/GMT+10",
+      "nameKeywords": "Etc GMT+10",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-10"
+      ],
+      "longOffsetNames": [
+        "UTC-10"
+      ]
+    },
+    "Etc/GMT+11": {
+      "name": "Etc/GMT+11",
+      "nameKeywords": "Etc GMT+11",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-11"
+      ],
+      "longOffsetNames": [
+        "UTC-11"
+      ]
+    },
+    "Etc/GMT+12": {
+      "name": "Etc/GMT+12",
+      "nameKeywords": "Etc GMT+12",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "UTC-12"
+      ],
+      "longOffsetNames": [
+        "UTC-12"
+      ]
+    },
+    "Europe/London": {
+      "name": "Europe/London",
+      "nameKeywords": "Europe London",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "British Summer Time",
+        "Greenwich Mean Time"
+      ]
+    },
+    "Europe/Dublin": {
+      "name": "Europe/Dublin",
+      "nameKeywords": "Europe Dublin",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Irish Standard Time",
+        "Greenwich Mean Time"
+      ]
+    },
+    "Europe/Tirane": {
+      "name": "Europe/Tirane",
+      "nameKeywords": "Europe Tirane",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Andorra": {
+      "name": "Europe/Andorra",
+      "nameKeywords": "Europe Andorra",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Vienna": {
+      "name": "Europe/Vienna",
+      "nameKeywords": "Europe Vienna",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Minsk": {
+      "name": "Europe/Minsk",
+      "nameKeywords": "Europe Minsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Moscow Standard Time"
+      ]
+    },
+    "Europe/Brussels": {
+      "name": "Europe/Brussels",
+      "nameKeywords": "Europe Brussels",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Sofia": {
+      "name": "Europe/Sofia",
+      "nameKeywords": "Europe Sofia",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Prague": {
+      "name": "Europe/Prague",
+      "nameKeywords": "Europe Prague",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Copenhagen": {
+      "name": "Europe/Copenhagen",
+      "nameKeywords": "Europe Copenhagen",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Atlantic/Faroe": {
+      "name": "Atlantic/Faroe",
+      "nameKeywords": "Atlantic Faroe",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Western European Summer Time",
+        "Western European Standard Time"
+      ]
+    },
+    "America/Danmarkshavn": {
+      "name": "America/Danmarkshavn",
+      "nameKeywords": "America Danmarkshavn",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "America/Scoresbysund": {
+      "name": "America/Scoresbysund",
+      "nameKeywords": "America Scoresbysund",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT",
+        "GMT-1"
+      ],
+      "longOffsetNames": [
+        "East Greenland Summer Time",
+        "East Greenland Standard Time"
+      ]
+    },
+    "America/Thule": {
+      "name": "America/Thule",
+      "nameKeywords": "America Thule",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "ADT",
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Daylight Time",
+        "Atlantic Standard Time"
+      ]
+    },
+    "Europe/Tallinn": {
+      "name": "Europe/Tallinn",
+      "nameKeywords": "Europe Tallinn",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Helsinki": {
+      "name": "Europe/Helsinki",
+      "nameKeywords": "Europe Helsinki",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Paris": {
+      "name": "Europe/Paris",
+      "nameKeywords": "Europe Paris",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Berlin": {
+      "name": "Europe/Berlin",
+      "nameKeywords": "Europe Berlin",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Gibraltar": {
+      "name": "Europe/Gibraltar",
+      "nameKeywords": "Europe Gibraltar",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Athens": {
+      "name": "Europe/Athens",
+      "nameKeywords": "Europe Athens",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Budapest": {
+      "name": "Europe/Budapest",
+      "nameKeywords": "Europe Budapest",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Atlantic/Reykjavik": {
+      "name": "Atlantic/Reykjavik",
+      "nameKeywords": "Atlantic Reykjavik",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Greenwich Mean Time"
+      ]
+    },
+    "Europe/Rome": {
+      "name": "Europe/Rome",
+      "nameKeywords": "Europe Rome",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Riga": {
+      "name": "Europe/Riga",
+      "nameKeywords": "Europe Riga",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Vilnius": {
+      "name": "Europe/Vilnius",
+      "nameKeywords": "Europe Vilnius",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Luxembourg": {
+      "name": "Europe/Luxembourg",
+      "nameKeywords": "Europe Luxembourg",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Malta": {
+      "name": "Europe/Malta",
+      "nameKeywords": "Europe Malta",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Chisinau": {
+      "name": "Europe/Chisinau",
+      "nameKeywords": "Europe Chisinau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Monaco": {
+      "name": "Europe/Monaco",
+      "nameKeywords": "Europe Monaco",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Amsterdam": {
+      "name": "Europe/Amsterdam",
+      "nameKeywords": "Europe Amsterdam",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Oslo": {
+      "name": "Europe/Oslo",
+      "nameKeywords": "Europe Oslo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Warsaw": {
+      "name": "Europe/Warsaw",
+      "nameKeywords": "Europe Warsaw",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Lisbon": {
+      "name": "Europe/Lisbon",
+      "nameKeywords": "Europe Lisbon",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Western European Summer Time",
+        "Western European Standard Time"
+      ]
+    },
+    "Atlantic/Azores": {
+      "name": "Atlantic/Azores",
+      "nameKeywords": "Atlantic Azores",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT",
+        "GMT-1"
+      ],
+      "longOffsetNames": [
+        "Azores Summer Time",
+        "Azores Standard Time"
+      ]
+    },
+    "Atlantic/Madeira": {
+      "name": "Atlantic/Madeira",
+      "nameKeywords": "Atlantic Madeira",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Western European Summer Time",
+        "Western European Standard Time"
+      ]
+    },
+    "Europe/Bucharest": {
+      "name": "Europe/Bucharest",
+      "nameKeywords": "Europe Bucharest",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Kaliningrad": {
+      "name": "Europe/Kaliningrad",
+      "nameKeywords": "Europe Kaliningrad",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Moscow": {
+      "name": "Europe/Moscow",
+      "nameKeywords": "Europe Moscow",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Moscow Standard Time"
+      ]
+    },
+    "Europe/Simferopol": {
+      "name": "Europe/Simferopol",
+      "nameKeywords": "Europe Simferopol",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "Moscow Standard Time"
+      ]
+    },
+    "Europe/Astrakhan": {
+      "name": "Europe/Astrakhan",
+      "nameKeywords": "Europe Astrakhan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "GMT+04:00"
+      ]
+    },
+    "Europe/Volgograd": {
+      "name": "Europe/Volgograd",
+      "nameKeywords": "Europe Volgograd",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Volgograd Standard Time"
+      ]
+    },
+    "Europe/Saratov": {
+      "name": "Europe/Saratov",
+      "nameKeywords": "Europe Saratov",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "GMT+04:00"
+      ]
+    },
+    "Europe/Kirov": {
+      "name": "Europe/Kirov",
+      "nameKeywords": "Europe Kirov",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "GMT+03:00"
+      ]
+    },
+    "Europe/Samara": {
+      "name": "Europe/Samara",
+      "nameKeywords": "Europe Samara",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "Samara Standard Time"
+      ]
+    },
+    "Europe/Ulyanovsk": {
+      "name": "Europe/Ulyanovsk",
+      "nameKeywords": "Europe Ulyanovsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+4"
+      ],
+      "longOffsetNames": [
+        "GMT+04:00"
+      ]
+    },
+    "Asia/Yekaterinburg": {
+      "name": "Asia/Yekaterinburg",
+      "nameKeywords": "Asia Yekaterinburg",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+5"
+      ],
+      "longOffsetNames": [
+        "Yekaterinburg Standard Time"
+      ]
+    },
+    "Asia/Omsk": {
+      "name": "Asia/Omsk",
+      "nameKeywords": "Asia Omsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+6"
+      ],
+      "longOffsetNames": [
+        "Omsk Standard Time"
+      ]
+    },
+    "Asia/Barnaul": {
+      "name": "Asia/Barnaul",
+      "nameKeywords": "Asia Barnaul",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "GMT+07:00"
+      ]
+    },
+    "Asia/Novosibirsk": {
+      "name": "Asia/Novosibirsk",
+      "nameKeywords": "Asia Novosibirsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Novosibirsk Standard Time"
+      ]
+    },
+    "Asia/Tomsk": {
+      "name": "Asia/Tomsk",
+      "nameKeywords": "Asia Tomsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "GMT+07:00"
+      ]
+    },
+    "Asia/Novokuznetsk": {
+      "name": "Asia/Novokuznetsk",
+      "nameKeywords": "Asia Novokuznetsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Krasnoyarsk Standard Time"
+      ]
+    },
+    "Asia/Krasnoyarsk": {
+      "name": "Asia/Krasnoyarsk",
+      "nameKeywords": "Asia Krasnoyarsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+7"
+      ],
+      "longOffsetNames": [
+        "Krasnoyarsk Standard Time"
+      ]
+    },
+    "Asia/Irkutsk": {
+      "name": "Asia/Irkutsk",
+      "nameKeywords": "Asia Irkutsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+8"
+      ],
+      "longOffsetNames": [
+        "Irkutsk Standard Time"
+      ]
+    },
+    "Asia/Chita": {
+      "name": "Asia/Chita",
+      "nameKeywords": "Asia Chita",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Yakutsk Standard Time"
+      ]
+    },
+    "Asia/Yakutsk": {
+      "name": "Asia/Yakutsk",
+      "nameKeywords": "Asia Yakutsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Yakutsk Standard Time"
+      ]
+    },
+    "Asia/Vladivostok": {
+      "name": "Asia/Vladivostok",
+      "nameKeywords": "Asia Vladivostok",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Vladivostok Standard Time"
+      ]
+    },
+    "Asia/Khandyga": {
+      "name": "Asia/Khandyga",
+      "nameKeywords": "Asia Khandyga",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+9"
+      ],
+      "longOffsetNames": [
+        "Yakutsk Standard Time"
+      ]
+    },
+    "Asia/Sakhalin": {
+      "name": "Asia/Sakhalin",
+      "nameKeywords": "Asia Sakhalin",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Sakhalin Standard Time"
+      ]
+    },
+    "Asia/Magadan": {
+      "name": "Asia/Magadan",
+      "nameKeywords": "Asia Magadan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "Magadan Standard Time"
+      ]
+    },
+    "Asia/Srednekolymsk": {
+      "name": "Asia/Srednekolymsk",
+      "nameKeywords": "Asia Srednekolymsk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+11"
+      ],
+      "longOffsetNames": [
+        "GMT+11:00"
+      ]
+    },
+    "Asia/Ust-Nera": {
+      "name": "Asia/Ust-Nera",
+      "nameKeywords": "Asia Ust-Nera",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+10"
+      ],
+      "longOffsetNames": [
+        "Vladivostok Standard Time"
+      ]
+    },
+    "Asia/Kamchatka": {
+      "name": "Asia/Kamchatka",
+      "nameKeywords": "Asia Kamchatka",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Petropavlovsk-Kamchatski Standard Time"
+      ]
+    },
+    "Asia/Anadyr": {
+      "name": "Asia/Anadyr",
+      "nameKeywords": "Asia Anadyr",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+12"
+      ],
+      "longOffsetNames": [
+        "Anadyr Standard Time"
+      ]
+    },
+    "Europe/Belgrade": {
+      "name": "Europe/Belgrade",
+      "nameKeywords": "Europe Belgrade",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Madrid": {
+      "name": "Europe/Madrid",
+      "nameKeywords": "Europe Madrid",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Africa/Ceuta": {
+      "name": "Africa/Ceuta",
+      "nameKeywords": "Africa Ceuta",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Atlantic/Canary": {
+      "name": "Atlantic/Canary",
+      "nameKeywords": "Atlantic Canary",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+1",
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "Western European Summer Time",
+        "Western European Standard Time"
+      ]
+    },
+    "Europe/Stockholm": {
+      "name": "Europe/Stockholm",
+      "nameKeywords": "Europe Stockholm",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Zurich": {
+      "name": "Europe/Zurich",
+      "nameKeywords": "Europe Zurich",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+2",
+        "GMT+1"
+      ],
+      "longOffsetNames": [
+        "Central European Summer Time",
+        "Central European Standard Time"
+      ]
+    },
+    "Europe/Istanbul": {
+      "name": "Europe/Istanbul",
+      "nameKeywords": "Europe Istanbul",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3"
+      ],
+      "longOffsetNames": [
+        "GMT+03:00"
+      ]
+    },
+    "Europe/Kiev": {
+      "name": "Europe/Kiev",
+      "nameKeywords": "Europe Kiev",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Uzhgorod": {
+      "name": "Europe/Uzhgorod",
+      "nameKeywords": "Europe Uzhgorod",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Europe/Zaporozhye": {
+      "name": "Europe/Zaporozhye",
+      "nameKeywords": "Europe Zaporozhye",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT+3",
+        "GMT+2"
+      ],
+      "longOffsetNames": [
+        "Eastern European Summer Time",
+        "Eastern European Standard Time"
+      ]
+    },
+    "Factory": {
+      "name": "Factory",
+      "nameKeywords": "Factory",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT"
+      ],
+      "longOffsetNames": [
+        "GMT"
+      ]
+    },
+    "America/New_York": {
+      "name": "America/New_York",
+      "nameKeywords": "America New York",
+      "$boost": 2,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Chicago": {
+      "name": "America/Chicago",
+      "nameKeywords": "America Chicago",
+      "$boost": 2,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/North_Dakota/Center": {
+      "name": "America/North_Dakota/Center",
+      "nameKeywords": "America North Dakota Center",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/North_Dakota/New_Salem": {
+      "name": "America/North_Dakota/New_Salem",
+      "nameKeywords": "America North Dakota New Salem",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/North_Dakota/Beulah": {
+      "name": "America/North_Dakota/Beulah",
+      "nameKeywords": "America North Dakota Beulah",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Denver": {
+      "name": "America/Denver",
+      "nameKeywords": "America Denver",
+      "$boost": 2,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Los_Angeles": {
+      "name": "America/Los_Angeles",
+      "nameKeywords": "America Los Angeles",
+      "$boost": 2,
+      "shortOffsetNames": [
+        "PDT",
+        "PST"
+      ],
+      "longOffsetNames": [
+        "Pacific Daylight Time",
+        "Pacific Standard Time"
+      ]
+    },
+    "America/Juneau": {
+      "name": "America/Juneau",
+      "nameKeywords": "America Juneau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AKDT",
+        "AKST"
+      ],
+      "longOffsetNames": [
+        "Alaska Daylight Time",
+        "Alaska Standard Time"
+      ]
+    },
+    "America/Sitka": {
+      "name": "America/Sitka",
+      "nameKeywords": "America Sitka",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AKDT",
+        "AKST"
+      ],
+      "longOffsetNames": [
+        "Alaska Daylight Time",
+        "Alaska Standard Time"
+      ]
+    },
+    "America/Metlakatla": {
+      "name": "America/Metlakatla",
+      "nameKeywords": "America Metlakatla",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AKDT",
+        "AKST"
+      ],
+      "longOffsetNames": [
+        "Alaska Daylight Time",
+        "Alaska Standard Time"
+      ]
+    },
+    "America/Yakutat": {
+      "name": "America/Yakutat",
+      "nameKeywords": "America Yakutat",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AKDT",
+        "AKST"
+      ],
+      "longOffsetNames": [
+        "Alaska Daylight Time",
+        "Alaska Standard Time"
+      ]
+    },
+    "America/Anchorage": {
+      "name": "America/Anchorage",
+      "nameKeywords": "America Anchorage",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AKDT",
+        "AKST"
+      ],
+      "longOffsetNames": [
+        "Alaska Daylight Time",
+        "Alaska Standard Time"
+      ]
+    },
+    "America/Nome": {
+      "name": "America/Nome",
+      "nameKeywords": "America Nome",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AKDT",
+        "AKST"
+      ],
+      "longOffsetNames": [
+        "Alaska Daylight Time",
+        "Alaska Standard Time"
+      ]
+    },
+    "America/Adak": {
+      "name": "America/Adak",
+      "nameKeywords": "America Adak",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "HADT",
+        "HAST"
+      ],
+      "longOffsetNames": [
+        "Hawaii-Aleutian Daylight Time",
+        "Hawaii-Aleutian Standard Time"
+      ]
+    },
+    "Pacific/Honolulu": {
+      "name": "Pacific/Honolulu",
+      "nameKeywords": "Pacific Honolulu",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "HST"
+      ],
+      "longOffsetNames": [
+        "Hawaii-Aleutian Standard Time"
+      ]
+    },
+    "America/Phoenix": {
+      "name": "America/Phoenix",
+      "nameKeywords": "America Phoenix",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Boise": {
+      "name": "America/Boise",
+      "nameKeywords": "America Boise",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Indiana/Indianapolis": {
+      "name": "America/Indiana/Indianapolis",
+      "nameKeywords": "America Indiana Indianapolis",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Indiana/Marengo": {
+      "name": "America/Indiana/Marengo",
+      "nameKeywords": "America Indiana Marengo",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Indiana/Vincennes": {
+      "name": "America/Indiana/Vincennes",
+      "nameKeywords": "America Indiana Vincennes",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Indiana/Tell_City": {
+      "name": "America/Indiana/Tell_City",
+      "nameKeywords": "America Indiana Tell City",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Indiana/Petersburg": {
+      "name": "America/Indiana/Petersburg",
+      "nameKeywords": "America Indiana Petersburg",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Indiana/Knox": {
+      "name": "America/Indiana/Knox",
+      "nameKeywords": "America Indiana Knox",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Indiana/Winamac": {
+      "name": "America/Indiana/Winamac",
+      "nameKeywords": "America Indiana Winamac",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Indiana/Vevay": {
+      "name": "America/Indiana/Vevay",
+      "nameKeywords": "America Indiana Vevay",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Kentucky/Louisville": {
+      "name": "America/Kentucky/Louisville",
+      "nameKeywords": "America Kentucky Louisville",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Kentucky/Monticello": {
+      "name": "America/Kentucky/Monticello",
+      "nameKeywords": "America Kentucky Monticello",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Detroit": {
+      "name": "America/Detroit",
+      "nameKeywords": "America Detroit",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Menominee": {
+      "name": "America/Menominee",
+      "nameKeywords": "America Menominee",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/St_Johns": {
+      "name": "America/St_Johns",
+      "nameKeywords": "America St Johns",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-2:30",
+        "GMT-3:30"
+      ],
+      "longOffsetNames": [
+        "Newfoundland Daylight Time",
+        "Newfoundland Standard Time"
+      ]
+    },
+    "America/Goose_Bay": {
+      "name": "America/Goose_Bay",
+      "nameKeywords": "America Goose Bay",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "ADT",
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Daylight Time",
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Halifax": {
+      "name": "America/Halifax",
+      "nameKeywords": "America Halifax",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "ADT",
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Daylight Time",
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Glace_Bay": {
+      "name": "America/Glace_Bay",
+      "nameKeywords": "America Glace Bay",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "ADT",
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Daylight Time",
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Moncton": {
+      "name": "America/Moncton",
+      "nameKeywords": "America Moncton",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "ADT",
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Daylight Time",
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Blanc-Sablon": {
+      "name": "America/Blanc-Sablon",
+      "nameKeywords": "America Blanc-Sablon",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Toronto": {
+      "name": "America/Toronto",
+      "nameKeywords": "America Toronto",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Thunder_Bay": {
+      "name": "America/Thunder_Bay",
+      "nameKeywords": "America Thunder Bay",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Nipigon": {
+      "name": "America/Nipigon",
+      "nameKeywords": "America Nipigon",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Rainy_River": {
+      "name": "America/Rainy_River",
+      "nameKeywords": "America Rainy River",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Atikokan": {
+      "name": "America/Atikokan",
+      "nameKeywords": "America Atikokan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Winnipeg": {
+      "name": "America/Winnipeg",
+      "nameKeywords": "America Winnipeg",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Regina": {
+      "name": "America/Regina",
+      "nameKeywords": "America Regina",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Swift_Current": {
+      "name": "America/Swift_Current",
+      "nameKeywords": "America Swift Current",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Edmonton": {
+      "name": "America/Edmonton",
+      "nameKeywords": "America Edmonton",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Vancouver": {
+      "name": "America/Vancouver",
+      "nameKeywords": "America Vancouver",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "PDT",
+        "PST"
+      ],
+      "longOffsetNames": [
+        "Pacific Daylight Time",
+        "Pacific Standard Time"
+      ]
+    },
+    "America/Dawson_Creek": {
+      "name": "America/Dawson_Creek",
+      "nameKeywords": "America Dawson Creek",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Fort_Nelson": {
+      "name": "America/Fort_Nelson",
+      "nameKeywords": "America Fort Nelson",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Creston": {
+      "name": "America/Creston",
+      "nameKeywords": "America Creston",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Pangnirtung": {
+      "name": "America/Pangnirtung",
+      "nameKeywords": "America Pangnirtung",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Iqaluit": {
+      "name": "America/Iqaluit",
+      "nameKeywords": "America Iqaluit",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Resolute": {
+      "name": "America/Resolute",
+      "nameKeywords": "America Resolute",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Rankin_Inlet": {
+      "name": "America/Rankin_Inlet",
+      "nameKeywords": "America Rankin Inlet",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Cambridge_Bay": {
+      "name": "America/Cambridge_Bay",
+      "nameKeywords": "America Cambridge Bay",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Yellowknife": {
+      "name": "America/Yellowknife",
+      "nameKeywords": "America Yellowknife",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Inuvik": {
+      "name": "America/Inuvik",
+      "nameKeywords": "America Inuvik",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Whitehorse": {
+      "name": "America/Whitehorse",
+      "nameKeywords": "America Whitehorse",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "PDT",
+        "PST"
+      ],
+      "longOffsetNames": [
+        "Pacific Daylight Time",
+        "Pacific Standard Time"
+      ]
+    },
+    "America/Dawson": {
+      "name": "America/Dawson",
+      "nameKeywords": "America Dawson",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "PDT",
+        "PST"
+      ],
+      "longOffsetNames": [
+        "Pacific Daylight Time",
+        "Pacific Standard Time"
+      ]
+    },
+    "America/Cancun": {
+      "name": "America/Cancun",
+      "nameKeywords": "America Cancun",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Merida": {
+      "name": "America/Merida",
+      "nameKeywords": "America Merida",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Matamoros": {
+      "name": "America/Matamoros",
+      "nameKeywords": "America Matamoros",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Monterrey": {
+      "name": "America/Monterrey",
+      "nameKeywords": "America Monterrey",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Mexico_City": {
+      "name": "America/Mexico_City",
+      "nameKeywords": "America Mexico City",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Ojinaga": {
+      "name": "America/Ojinaga",
+      "nameKeywords": "America Ojinaga",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "MDT",
+        "MST"
+      ],
+      "longOffsetNames": [
+        "Mountain Daylight Time",
+        "Mountain Standard Time"
+      ]
+    },
+    "America/Chihuahua": {
+      "name": "America/Chihuahua",
+      "nameKeywords": "America Chihuahua",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-6",
+        "GMT-7"
+      ],
+      "longOffsetNames": [
+        "Mexican Pacific Daylight Time",
+        "Mexican Pacific Standard Time"
+      ]
+    },
+    "America/Hermosillo": {
+      "name": "America/Hermosillo",
+      "nameKeywords": "America Hermosillo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-7"
+      ],
+      "longOffsetNames": [
+        "Mexican Pacific Standard Time"
+      ]
+    },
+    "America/Mazatlan": {
+      "name": "America/Mazatlan",
+      "nameKeywords": "America Mazatlan",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-6",
+        "GMT-7"
+      ],
+      "longOffsetNames": [
+        "Mexican Pacific Daylight Time",
+        "Mexican Pacific Standard Time"
+      ]
+    },
+    "America/Bahia_Banderas": {
+      "name": "America/Bahia_Banderas",
+      "nameKeywords": "America Bahia Banderas",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CDT",
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Daylight Time",
+        "Central Standard Time"
+      ]
+    },
+    "America/Tijuana": {
+      "name": "America/Tijuana",
+      "nameKeywords": "America Tijuana",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "PDT",
+        "PST"
+      ],
+      "longOffsetNames": [
+        "Pacific Daylight Time",
+        "Pacific Standard Time"
+      ]
+    },
+    "America/Nassau": {
+      "name": "America/Nassau",
+      "nameKeywords": "America Nassau",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Barbados": {
+      "name": "America/Barbados",
+      "nameKeywords": "America Barbados",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Belize": {
+      "name": "America/Belize",
+      "nameKeywords": "America Belize",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "Atlantic/Bermuda": {
+      "name": "Atlantic/Bermuda",
+      "nameKeywords": "Atlantic Bermuda",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "ADT",
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Daylight Time",
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Costa_Rica": {
+      "name": "America/Costa_Rica",
+      "nameKeywords": "America Costa Rica",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Havana": {
+      "name": "America/Havana",
+      "nameKeywords": "America Havana",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4",
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Cuba Daylight Time",
+        "Cuba Standard Time"
+      ]
+    },
+    "America/Santo_Domingo": {
+      "name": "America/Santo_Domingo",
+      "nameKeywords": "America Santo Domingo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/El_Salvador": {
+      "name": "America/El_Salvador",
+      "nameKeywords": "America El Salvador",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Guatemala": {
+      "name": "America/Guatemala",
+      "nameKeywords": "America Guatemala",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Port-au-Prince": {
+      "name": "America/Port-au-Prince",
+      "nameKeywords": "America Port-au-Prince",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Tegucigalpa": {
+      "name": "America/Tegucigalpa",
+      "nameKeywords": "America Tegucigalpa",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Jamaica": {
+      "name": "America/Jamaica",
+      "nameKeywords": "America Jamaica",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Martinique": {
+      "name": "America/Martinique",
+      "nameKeywords": "America Martinique",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Managua": {
+      "name": "America/Managua",
+      "nameKeywords": "America Managua",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "CST"
+      ],
+      "longOffsetNames": [
+        "Central Standard Time"
+      ]
+    },
+    "America/Panama": {
+      "name": "America/Panama",
+      "nameKeywords": "America Panama",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Puerto_Rico": {
+      "name": "America/Puerto_Rico",
+      "nameKeywords": "America Puerto Rico",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Miquelon": {
+      "name": "America/Miquelon",
+      "nameKeywords": "America Miquelon",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-2",
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "St. Pierre & Miquelon Daylight Time",
+        "St. Pierre & Miquelon Standard Time"
+      ]
+    },
+    "America/Grand_Turk": {
+      "name": "America/Grand_Turk",
+      "nameKeywords": "America Grand Turk",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "EDT",
+        "EST"
+      ],
+      "longOffsetNames": [
+        "Eastern Daylight Time",
+        "Eastern Standard Time"
+      ]
+    },
+    "America/Argentina/Buenos_Aires": {
+      "name": "America/Argentina/Buenos_Aires",
+      "nameKeywords": "America Argentina Buenos Aires",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Cordoba": {
+      "name": "America/Argentina/Cordoba",
+      "nameKeywords": "America Argentina Cordoba",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Salta": {
+      "name": "America/Argentina/Salta",
+      "nameKeywords": "America Argentina Salta",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Tucuman": {
+      "name": "America/Argentina/Tucuman",
+      "nameKeywords": "America Argentina Tucuman",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/La_Rioja": {
+      "name": "America/Argentina/La_Rioja",
+      "nameKeywords": "America Argentina La Rioja",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/San_Juan": {
+      "name": "America/Argentina/San_Juan",
+      "nameKeywords": "America Argentina San Juan",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Jujuy": {
+      "name": "America/Argentina/Jujuy",
+      "nameKeywords": "America Argentina Jujuy",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Catamarca": {
+      "name": "America/Argentina/Catamarca",
+      "nameKeywords": "America Argentina Catamarca",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Mendoza": {
+      "name": "America/Argentina/Mendoza",
+      "nameKeywords": "America Argentina Mendoza",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/San_Luis": {
+      "name": "America/Argentina/San_Luis",
+      "nameKeywords": "America Argentina San Luis",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Western Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Rio_Gallegos": {
+      "name": "America/Argentina/Rio_Gallegos",
+      "nameKeywords": "America Argentina Rio Gallegos",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/Argentina/Ushuaia": {
+      "name": "America/Argentina/Ushuaia",
+      "nameKeywords": "America Argentina Ushuaia",
+      "$boost": 0.5,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Argentina Standard Time"
+      ]
+    },
+    "America/La_Paz": {
+      "name": "America/La_Paz",
+      "nameKeywords": "America La Paz",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4"
+      ],
+      "longOffsetNames": [
+        "Bolivia Time"
+      ]
+    },
+    "America/Noronha": {
+      "name": "America/Noronha",
+      "nameKeywords": "America Noronha",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-2"
+      ],
+      "longOffsetNames": [
+        "Fernando de Noronha Standard Time"
+      ]
+    },
+    "America/Belem": {
+      "name": "America/Belem",
+      "nameKeywords": "America Belem",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Santarem": {
+      "name": "America/Santarem",
+      "nameKeywords": "America Santarem",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Fortaleza": {
+      "name": "America/Fortaleza",
+      "nameKeywords": "America Fortaleza",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Recife": {
+      "name": "America/Recife",
+      "nameKeywords": "America Recife",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Araguaina": {
+      "name": "America/Araguaina",
+      "nameKeywords": "America Araguaina",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Maceio": {
+      "name": "America/Maceio",
+      "nameKeywords": "America Maceio",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Bahia": {
+      "name": "America/Bahia",
+      "nameKeywords": "America Bahia",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time"
+      ]
+    },
+    "America/Sao_Paulo": {
+      "name": "America/Sao_Paulo",
+      "nameKeywords": "America Sao Paulo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3",
+        "GMT-2"
+      ],
+      "longOffsetNames": [
+        "Brasilia Standard Time",
+        "Brasilia Summer Time"
+      ]
+    },
+    "America/Campo_Grande": {
+      "name": "America/Campo_Grande",
+      "nameKeywords": "America Campo Grande",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4",
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Amazon Standard Time",
+        "Amazon Summer Time"
+      ]
+    },
+    "America/Cuiaba": {
+      "name": "America/Cuiaba",
+      "nameKeywords": "America Cuiaba",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4",
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Amazon Standard Time",
+        "Amazon Summer Time"
+      ]
+    },
+    "America/Porto_Velho": {
+      "name": "America/Porto_Velho",
+      "nameKeywords": "America Porto Velho",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4"
+      ],
+      "longOffsetNames": [
+        "Amazon Standard Time"
+      ]
+    },
+    "America/Boa_Vista": {
+      "name": "America/Boa_Vista",
+      "nameKeywords": "America Boa Vista",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4"
+      ],
+      "longOffsetNames": [
+        "Amazon Standard Time"
+      ]
+    },
+    "America/Manaus": {
+      "name": "America/Manaus",
+      "nameKeywords": "America Manaus",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4"
+      ],
+      "longOffsetNames": [
+        "Amazon Standard Time"
+      ]
+    },
+    "America/Eirunepe": {
+      "name": "America/Eirunepe",
+      "nameKeywords": "America Eirunepe",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Acre Standard Time"
+      ]
+    },
+    "America/Rio_Branco": {
+      "name": "America/Rio_Branco",
+      "nameKeywords": "America Rio Branco",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Acre Standard Time"
+      ]
+    },
+    "America/Santiago": {
+      "name": "America/Santiago",
+      "nameKeywords": "America Santiago",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4",
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Chile Standard Time",
+        "Chile Summer Time"
+      ]
+    },
+    "America/Punta_Arenas": {
+      "name": "America/Punta_Arenas",
+      "nameKeywords": "America Punta Arenas",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "GMT-03:00"
+      ]
+    },
+    "Pacific/Easter": {
+      "name": "Pacific/Easter",
+      "nameKeywords": "Pacific Easter",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-6",
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Easter Island Standard Time",
+        "Easter Island Summer Time"
+      ]
+    },
+    "Antarctica/Palmer": {
+      "name": "Antarctica/Palmer",
+      "nameKeywords": "Antarctica Palmer",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "GMT-03:00"
+      ]
+    },
+    "America/Bogota": {
+      "name": "America/Bogota",
+      "nameKeywords": "America Bogota",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Colombia Standard Time"
+      ]
+    },
+    "America/Curacao": {
+      "name": "America/Curacao",
+      "nameKeywords": "America Curacao",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Guayaquil": {
+      "name": "America/Guayaquil",
+      "nameKeywords": "America Guayaquil",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Ecuador Time"
+      ]
+    },
+    "Pacific/Galapagos": {
+      "name": "Pacific/Galapagos",
+      "nameKeywords": "Pacific Galapagos",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-6"
+      ],
+      "longOffsetNames": [
+        "Galapagos Time"
+      ]
+    },
+    "Atlantic/Stanley": {
+      "name": "Atlantic/Stanley",
+      "nameKeywords": "Atlantic Stanley",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Falkland Islands Standard Time"
+      ]
+    },
+    "America/Cayenne": {
+      "name": "America/Cayenne",
+      "nameKeywords": "America Cayenne",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "French Guiana Time"
+      ]
+    },
+    "America/Guyana": {
+      "name": "America/Guyana",
+      "nameKeywords": "America Guyana",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4"
+      ],
+      "longOffsetNames": [
+        "Guyana Time"
+      ]
+    },
+    "America/Asuncion": {
+      "name": "America/Asuncion",
+      "nameKeywords": "America Asuncion",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4",
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Paraguay Standard Time",
+        "Paraguay Summer Time"
+      ]
+    },
+    "America/Lima": {
+      "name": "America/Lima",
+      "nameKeywords": "America Lima",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-5"
+      ],
+      "longOffsetNames": [
+        "Peru Standard Time"
+      ]
+    },
+    "Atlantic/South_Georgia": {
+      "name": "Atlantic/South_Georgia",
+      "nameKeywords": "Atlantic South Georgia",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-2"
+      ],
+      "longOffsetNames": [
+        "South Georgia Time"
+      ]
+    },
+    "America/Paramaribo": {
+      "name": "America/Paramaribo",
+      "nameKeywords": "America Paramaribo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Suriname Time"
+      ]
+    },
+    "America/Port_of_Spain": {
+      "name": "America/Port_of_Spain",
+      "nameKeywords": "America Port of Spain",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "AST"
+      ],
+      "longOffsetNames": [
+        "Atlantic Standard Time"
+      ]
+    },
+    "America/Montevideo": {
+      "name": "America/Montevideo",
+      "nameKeywords": "America Montevideo",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-3"
+      ],
+      "longOffsetNames": [
+        "Uruguay Standard Time"
+      ]
+    },
+    "America/Caracas": {
+      "name": "America/Caracas",
+      "nameKeywords": "America Caracas",
+      "$boost": 1,
+      "shortOffsetNames": [
+        "GMT-4"
+      ],
+      "longOffsetNames": [
+        "Venezuela Time"
+      ]
+    }
+  }
+}

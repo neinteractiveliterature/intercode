@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { timespanFromRun } from '../TimespanUtils';
 import { sortByLocaleString } from '../ValueUtils';
+import AppRootContext from '../AppRootContext';
 
-function RunSelect({ event, timezoneName, ...otherProps }) {
+function RunSelect({ event, ...otherProps }) {
+  const { timezoneName } = useContext(AppRootContext);
   return (
     <Select
       options={event ? event.runs : []}
@@ -57,7 +59,6 @@ RunSelect.propTypes = {
       title_suffix: PropTypes.string,
     })).isRequired,
   }),
-  timezoneName: PropTypes.string.isRequired,
 };
 
 RunSelect.defaultProps = {

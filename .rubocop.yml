@@ -151,8 +151,8 @@ Layout/IndentationConsistency:
 Layout/IndentationStyle:
   Description: 'No hard tabs.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
-  Enabled: true
   EnforcedStyle: spaces
+  Enabled: true
 
 Layout/IndentationWidth:
   Description: 'Use 2 spaces for indentation.'

@@ -8,6 +8,7 @@ module ContextAccessors
     current_pending_order
     assumed_identity_from_profile
     verified_request
+    timezone_for_request
   ].each do |context_attribute|
     define_method context_attribute do
       context[context_attribute]
@@ -35,7 +36,8 @@ module ContextAccessors
       path: path,
       controller: context[:controller],
       user: context[:user],
-      user_con_profile: context[:user_con_profile]
+      user_con_profile: context[:user_con_profile],
+      timezone: context[:timezone_for_request]
     )
   end
 end

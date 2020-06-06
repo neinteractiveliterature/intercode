@@ -4,8 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { BrowserRouter } from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
+import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
@@ -17,10 +16,11 @@ import PageLoadingIndicator from './PageLoadingIndicator';
 import { AlertProvider } from './ModalDialogs/Alert';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
 import ErrorBoundary from './ErrorBoundary';
+import MapboxContext, { useMapboxContext } from './MapboxContext';
 
 export default (WrappedComponent) => {
   function Wrapper({
-    authenticityTokens, recaptchaSiteKey, stripePublishableKey, ...otherProps
+    authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps
   }) {
     const confirm = useConfirm();
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
@@ -57,6 +57,8 @@ export default (WrappedComponent) => {
       [confirm],
     );
 
+    const mapboxContextValue = useMapboxContext({ mapboxAccessToken });
+
     if (!apolloClient) {
       // we need one render cycle to initialize the client
       return <></>;
@@ -64,13 +66,14 @@ export default (WrappedComponent) => {
 
     return (
       <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <DndProvider options={HTML5toTouch}>
           <LazyStripeContext.Provider value={{ publishableKey: stripePublishableKey }}>
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-              <ApolloProvider client={apolloClient}>
-                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                  <>
-                    {!unauthenticatedError && (
+              <MapboxContext.Provider value={mapboxContextValue}>
+                <ApolloProvider client={apolloClient}>
+                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                    <>
+                      {!unauthenticatedError && (
                       <Suspense fallback={<PageLoadingIndicator visible />}>
                         <AlertProvider>
                           <ErrorBoundary placement="replace" errorType="plain">
@@ -78,11 +81,12 @@ export default (WrappedComponent) => {
                           </ErrorBoundary>
                         </AlertProvider>
                       </Suspense>
-                    )}
-                    <AuthenticationModal />
-                  </>
-                </AuthenticationModalContext.Provider>
-              </ApolloProvider>
+                      )}
+                      <AuthenticationModal />
+                    </>
+                  </AuthenticationModalContext.Provider>
+                </ApolloProvider>
+              </MapboxContext.Provider>
             </AuthenticityTokensContext.Provider>
           </LazyStripeContext.Provider>
         </DndProvider>
@@ -94,6 +98,7 @@ export default (WrappedComponent) => {
     authenticityTokens: PropTypes.shape({
       graphql: PropTypes.string.isRequired,
     }).isRequired,
+    mapboxAccessToken: PropTypes.string.isRequired,
     recaptchaSiteKey: PropTypes.string.isRequired,
     stripePublishableKey: PropTypes.string,
   };

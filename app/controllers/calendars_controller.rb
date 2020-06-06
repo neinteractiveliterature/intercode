@@ -17,7 +17,7 @@ class CalendarsController < ApplicationController
   def build_user_schedule_calendar(user_con_profile)
     cal = Icalendar::Calendar.new
     cal.x_wr_calname = "#{convention.name} Schedule for #{user_con_profile.name_without_nickname}"
-    tzid = convention.timezone_name
+    tzid = convention.timezone_name || 'Etc/UTC'
     set_timezone_metadata(cal, tzid)
 
     signups = user_con_profile.signups.where.not(state: 'withdrawn').includes(run: :event)
@@ -37,8 +37,8 @@ class CalendarsController < ApplicationController
   end
 
   def set_event_properties_from_signup(event, signup, tzid)
-    event.dtstart = Icalendar::Values::DateTime.new(signup.run.starts_at, 'tzid' => tzid)
-    event.dtend = Icalendar::Values::DateTime.new(signup.run.ends_at, 'tzid' => tzid)
+    event.dtstart = Icalendar::Values::DateTime.new(signup.run.starts_at.in_time_zone(tzid), 'tzid' => tzid)
+    event.dtend = Icalendar::Values::DateTime.new(signup.run.ends_at.in_time_zone(tzid), 'tzid' => tzid)
     event.summary = event_summary_from_signup(signup)
     event.location = event_location_from_signup(signup)
     event.description = signup.event.short_blurb

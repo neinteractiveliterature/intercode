@@ -28,7 +28,7 @@ function FormItemDisplay({
     case 'age_restrictions':
       return <AgeRestrictionsDisplay {...commonProps} />;
     case 'date':
-      return <DateItemDisplay {...commonProps} convention={convention} />;
+      return <DateItemDisplay {...commonProps} />;
     case 'event_email':
       return <EventEmailDisplay {...commonProps} convention={convention} />;
     case 'free_text':

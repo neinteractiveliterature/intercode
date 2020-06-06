@@ -30,11 +30,13 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
       return success
     end
 
-    ReceiveEmailService.new(
-      recipients: recipients,
-      load_email: -> { email },
-      message_id: message_id
-    ).call
+    Rollbar.scoped(context: { recipients: recipients, message_id: message_id }) do
+      ReceiveEmailService.new(
+        recipients: recipients,
+        load_email: -> { email },
+        message_id: message_id
+      ).call
+    end
   end
 
   # Only use the actual recipient of this email according to SES.  If there are multiple recipients
@@ -94,8 +96,24 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     @total_score ||= score_by_verdict.values.sum
   end
 
+  def from_addresses
+    @from_addresses ||= common_header('From').map { |addr| EmailRoute.normalize_address(addr) }
+  end
+
+  def score_threshold
+    return 1 unless from_addresses.size == 1
+    existing_user = User.find_by(email: from_addresses.first)
+    return 1 unless existing_user
+
+    if existing_user.tickets.count > 1
+      2
+    else
+      1
+    end
+  end
+
   def failing_score?
-    total_score >= 2
+    total_score >= score_threshold
   end
 
   def raw_email

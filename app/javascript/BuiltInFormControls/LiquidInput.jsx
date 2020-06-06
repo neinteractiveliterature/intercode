@@ -1,16 +1,124 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient, useLazyQuery } from '@apollo/react-hooks';
+import Modal from 'react-bootstrap4-modal';
 
+import { CmsFilesAdminQuery } from '../CmsAdmin/CmsFilesAdmin/queries.gql';
 import CodeInput from './CodeInput';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries.gql';
+import MenuIcon from '../NavigationBar/MenuIcon';
+import useModal from '../ModalDialogs/useModal';
+import ErrorDisplay from '../ErrorDisplay';
+import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
+import SelectWithLabel from './SelectWithLabel';
+import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
+
+function AddFileModal({ visible, fileChosen, close }) {
+  const [loadData, {
+    called, data, loading, error,
+  }] = useLazyQuery(CmsFilesAdminQuery);
+  const [file, setFile] = useState(null);
+
+  const uploadedFile = (newFile) => {
+    setFile(newFile);
+  };
+
+  useEffect(
+    () => {
+      if (visible && !called) {
+        loadData();
+      }
+    },
+    [visible, called, loadData],
+  );
+
+  if (!called || loading) {
+    return <></>;
+  }
+
+  return (
+    <Modal visible={visible} dialogClassName="modal-lg">
+      <div className="modal-header">Add file</div>
+      <div className="modal-body">
+        {error
+          ? <ErrorDisplay graphQLError={error} />
+          : (
+            <>
+              <SelectWithLabel
+                label="Choose existing file"
+                options={data.cmsFiles}
+                getOptionLabel={(f) => f.filename}
+                getOptionValue={(f) => f.filename}
+                value={file}
+                onChange={setFile}
+                formatOptionLabel={(f) => (
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">
+                      <FilePreview
+                        url={f.url}
+                        contentType={f.content_type}
+                        size="2em"
+                      />
+                    </div>
+                    <div>
+                      {f.filename}
+                    </div>
+                  </div>
+                )}
+                styles={{
+                  menu: (provided) => ({ ...provided, zIndex: 25 }),
+                }}
+              />
+              {data.currentAbility.can_create_cms_files && (
+                <FileUploadForm onUpload={uploadedFile} />
+              )}
+              {file && (
+                <div className="card mt-2">
+                  <div className="card-header">Preview</div>
+                  <div className="card-body">
+                    <FilePreview
+                      url={file.url}
+                      contentType={file.content_type}
+                      filename={file.filename}
+                    />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+      </div>
+      <div className="modal-footer">
+        <button className="btn btn-secondary" type="button" onClick={close}>Cancel</button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={file == null}
+          onClick={() => {
+            fileChosen(file);
+            close();
+          }}
+        >
+          Add
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+AddFileModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  fileChosen: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+};
 
 function LiquidInput(props) {
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');
   const client = useApolloClient();
   const { notifierEventKey } = props;
+  const editorRef = useRef(null);
+  const addFileModal = useModal();
 
   const docTabClicked = (event, tab) => {
     event.preventDefault();
@@ -25,6 +133,11 @@ function LiquidInput(props) {
     });
 
     return response.data.previewLiquid;
+  };
+
+  const addFile = (file) => {
+    editorRef.current.replaceSelection(`{% file_url ${file.filename} %}`, 'start');
+    editorRef.current.focus();
   };
 
   const renderDocs = () => {
@@ -91,28 +204,48 @@ function LiquidInput(props) {
   };
 
   return (
-    <CodeInput
-      {...props}
-      mode="liquid-html"
-      getPreviewContent={getPreviewContent}
-      extraNavControls={(
-        <li className="flex-grow-1 d-flex justify-content-end">
-          <div className="nav-item">
-            <button
-              type="button"
-              className="btn btn-link nav-link py-0 px-2"
-              onClick={(e) => { e.preventDefault(); setShowingDocs(true); }}
-            >
-              <i className="fa fa-question-circle" />
-              {' '}
-              Help
-            </button>
-          </div>
-        </li>
-      )}
-    >
-      {renderDocs()}
-    </CodeInput>
+    <>
+      <CodeInput
+        {...props}
+        mode="liquid-html"
+        getPreviewContent={getPreviewContent}
+        editorDidMount={(editor) => { editorRef.current = editor; }}
+        extraNavControls={(
+          <>
+            <li className="nav-item">
+              <button
+                type="button"
+                className="btn btn-link nav-link px-2 py-0"
+                onClick={addFileModal.open}
+              >
+                <MenuIcon icon="fa-file-image-o" colorClass="" />
+                Add file…
+              </button>
+            </li>
+            <li className="flex-grow-1 d-flex justify-content-end">
+              <div className="nav-item">
+                <button
+                  type="button"
+                  className="btn btn-link nav-link py-0 px-2"
+                  onClick={(e) => { e.preventDefault(); setShowingDocs(true); }}
+                >
+                  <i className="fa fa-question-circle" />
+                  {' '}
+                  Help
+                </button>
+              </div>
+            </li>
+          </>
+        )}
+      >
+        {renderDocs()}
+      </CodeInput>
+      <AddFileModal
+        visible={addFileModal.visible}
+        close={addFileModal.close}
+        fileChosen={addFile}
+      />
+    </>
   );
 }
 

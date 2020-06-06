@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Waypoint } from 'react-waypoint';
@@ -6,17 +6,19 @@ import { Waypoint } from 'react-waypoint';
 import EventCard from './EventCard';
 import getSortedRuns from './getSortedRuns';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
+import AppRootContext from '../../AppRootContext';
 
 function EventListEvents({
   convention, eventsPaginated, sorted, canReadSchedule, fetchMoreIfNeeded,
 }) {
+  const { timezoneName } = useContext(AppRootContext);
   let previousConventionDay = null;
   let conventionDayTimespans = [];
   const conventionTimespan = timespanFromConvention(convention);
   if (conventionTimespan.isFinite()) {
     conventionDayTimespans = getConventionDayTimespans(
       conventionTimespan,
-      convention.timezone_name,
+      timezoneName,
     );
   }
 
@@ -26,7 +28,7 @@ function EventListEvents({
       const runs = getSortedRuns(event);
       if (runs.length > 0) {
         const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(
-          moment.tz(runs[0].starts_at, convention.timezone_name),
+          moment.tz(runs[0].starts_at, timezoneName),
         ));
         if (
           conventionDay
@@ -48,7 +50,6 @@ function EventListEvents({
         <EventCard
           event={event}
           sorted={sorted}
-          timezoneName={convention.timezone_name}
           canReadSchedule={canReadSchedule}
         />
       </React.Fragment>

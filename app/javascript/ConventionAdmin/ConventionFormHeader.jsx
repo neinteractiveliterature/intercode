@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { findCurrentValue } from '../ScheduledValueUtils';
 import { MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './ConventionFormEventsSection';
 import pluralizeWithCount from '../pluralizeWithCount';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 function describeEventVisibility(visibility) {
   switch (visibility) {
@@ -62,10 +63,10 @@ function ConventionFormHeader({ convention, compact }) {
     () => describeConventionTiming(
       convention.starts_at,
       convention.ends_at,
-      convention.timezone_name,
+      timezoneNameForConvention(convention),
       convention.canceled,
     ),
-    [convention.starts_at, convention.ends_at, convention.timezone_name, convention.canceled],
+    [convention],
   );
 
   const signupsDescription = useMemo(

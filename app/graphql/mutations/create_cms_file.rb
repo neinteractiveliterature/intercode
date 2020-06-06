@@ -6,6 +6,7 @@ class Mutations::CreateCmsFile < Mutations::BaseMutation
 
   def resolve(file:)
     cms_file = cms_parent.cms_files.create!(file: file)
+    cms_file.file.store! # force store early so we can get the URL
     { cms_file: cms_file }
   end
 end

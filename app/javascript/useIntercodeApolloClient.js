@@ -5,6 +5,7 @@ import { onError } from 'apollo-link-error';
 import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import fetch from 'unfetch';
+import { DateTime } from 'luxon';
 
 import introspectionQueryResultData from './fragmentTypes.json';
 
@@ -33,6 +34,22 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
     [],
   );
 
+  const AddTimezoneLink = useMemo(
+    () => (operation, next) => {
+      const localTime = DateTime.local();
+      operation.setContext((context) => ({
+        ...context,
+        headers: {
+          ...context.headers,
+          'X-Intercode-User-Timezone': localTime.zoneName,
+        },
+      }));
+
+      return next(operation);
+    },
+    [],
+  );
+
   const ErrorHandlerLink = useMemo(
     () => onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
@@ -49,10 +66,11 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
   const link = useMemo(
     () => ApolloLink.from([
       AuthLink,
+      AddTimezoneLink,
       ErrorHandlerLink,
       createUploadLink({ uri: '/graphql', fetch }),
     ]),
-    [AuthLink, ErrorHandlerLink],
+    [AuthLink, AddTimezoneLink, ErrorHandlerLink],
   );
 
   return link;

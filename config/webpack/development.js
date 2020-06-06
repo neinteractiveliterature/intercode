@@ -1,5 +1,4 @@
 const environment = require('./environment');
-const DashboardPlugin = require("webpack-dashboard/plugin");
 
 module.exports = {
   ...environment,
@@ -16,10 +15,6 @@ module.exports = {
     pathinfo: true,
     publicPath: 'http://localhost:3135/packs/',
   },
-  plugins: [
-    ...environment.plugins,
-    new DashboardPlugin({ port: 3136 }),
-  ],
   devServer: {
     clientLogLevel: 'none',
     contentBase: environment.output.path,

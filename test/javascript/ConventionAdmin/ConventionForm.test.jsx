@@ -12,10 +12,14 @@ describe('ConventionForm', () => {
     ends_at: '',
     name: '',
     domain: '',
-    timezone_name: '',
+    timezone_name: 'America/New_York',
+    timezone_mode: 'convention_local',
+    site_mode: 'convention',
+    signup_mode: 'self_service',
     accepting_proposals: false,
     show_schedule: 'no',
     show_event_list: 'no',
+    hidden: false,
     maximum_event_signups: {
       timespans: [
         { start: null, finish: null, value: 'unlimited' },
@@ -32,6 +36,7 @@ describe('ConventionForm', () => {
   const renderConventionForm = (props, initialConventionProps) => render(
     <ConventionForm
       initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
+      rootSite={{ url: 'https://example.com', id: 'singleton' }}
       saveConvention={() => {}}
       cmsLayouts={[]}
       pages={[]}
@@ -42,11 +47,12 @@ describe('ConventionForm', () => {
   test('it renders the given values', () => {
     const now = moment.tz('2019-04-18T18:34:04.283Z', 'UTC').toISOString();
     const { getByLabelText, getByText, getMultipleChoiceInput } = renderConventionForm({}, {
+      ...defaultInitialConvention,
       starts_at: now,
       ends_at: now,
       name: 'myName',
       domain: 'myDomain',
-      timezone_name: 'UTC',
+      timezone_name: 'Etc/UTC',
       accepting_proposals: true,
       show_schedule: 'gms',
       maximum_event_signups: {
@@ -62,7 +68,7 @@ describe('ConventionForm', () => {
     expect(getByLabelText('Convention ends').value).toEqual('2019-04-18');
     expect(getByLabelText('Name').value).toEqual('myName');
     expect(getByLabelText('Convention domain name').value).toEqual('myDomain');
-    expect(getByLabelText('Time zone').closest('.form-group')).toHaveTextContent('Time zone[UTC-00:00] UTC');
+    expect(getByLabelText('Time zone').closest('.form-group')).toHaveTextContent('Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)');
 
     fireEvent.click(getByText('Events'));
 

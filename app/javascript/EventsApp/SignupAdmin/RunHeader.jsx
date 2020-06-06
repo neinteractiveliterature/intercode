@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -6,8 +6,10 @@ import { RunHeaderRunInfoQuery } from './queries.gql';
 import { timespanFromRun } from '../../TimespanUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
+import AppRootContext from '../../AppRootContext';
 
 function RunHeader({ eventId, runId }) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(RunHeaderRunInfoQuery, {
     variables: { runId, eventId },
   });
@@ -31,7 +33,7 @@ function RunHeader({ eventId, runId }) {
 
       <h3 className="mt-0">
         {timespanFromRun(data.convention, data.event, data.event.run)
-          .humanizeInTimezone(data.convention.timezone_name)}
+          .humanizeInTimezone(timezoneName)}
       </h3>
 
       <ul className="list-inline">

@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
@@ -9,7 +10,6 @@ import buildEventUrl from '../buildEventUrl';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { useApolloClient } from '@apollo/react-hooks';
 
 const RunDetails = React.forwardRef(({
   popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData,
@@ -167,6 +167,8 @@ RunDetails.propTypes = {
     ref: PropTypes.any.isRequired,
   }).isRequired,
   event: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    my_rating: PropTypes.number,
     title: PropTypes.string.isRequired,
     short_blurb_html: PropTypes.string,
   }).isRequired,

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
+import { DateTime } from 'luxon';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { timespanFromConvention } from '../TimespanUtils';
@@ -17,10 +18,13 @@ import { CreateConvention } from './mutations.gql';
 import LoadingIndicator from '../LoadingIndicator';
 import useAsyncFunction from '../useAsyncFunction';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
+import EnumTypes from '../enumTypes.json';
 
 const DEFAULT_PROPS = {
   name: '',
   domain: '',
+  timezone_mode: 'convention_local',
 };
 
 const CMS_CONTENT_SET_OPTIONS = [
@@ -50,6 +54,14 @@ function NewConventionModal({ visible, close, cloneConvention }) {
     (value) => setConvention((prevConvention) => ({ ...prevConvention, [fieldName]: value }))
   );
 
+  const setTimezoneMode = (timezoneMode) => {
+    setConvention((prevConvention) => ({
+      ...prevConvention,
+      timezone_mode: timezoneMode,
+      timezone_name: (timezoneMode === 'user_local' ? null : prevConvention.timezone_name),
+    }));
+  };
+
   const setStartsAt = (newStartsAt) => {
     if (
       cloneConventionTimespan?.isFinite()
@@ -75,7 +87,7 @@ function NewConventionModal({ visible, close, cloneConvention }) {
       variables: {
         cloneConventionId: cloneConvention?.id,
         organizationId: convention.organization?.id,
-        cmsContentSetName: cmsContentSet.name,
+        cmsContentSetName: cmsContentSet?.name,
         convention: {
           name: convention.name,
           domain: convention.domain,
@@ -83,12 +95,15 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           starts_at: convention.starts_at,
           ends_at: convention.ends_at,
           timezone_name: convention.timezone_name,
+          timezone_mode: convention.timezone_mode,
         },
       },
     });
 
     history.push(`/conventions/${result.data.createConvention.convention.id}`);
   };
+
+  const timezoneNameForInputs = convention.timezone_name ?? DateTime.local().zoneName;
 
   const [createClicked, createError, createInProgress] = useAsyncFunction(create);
 
@@ -132,19 +147,32 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           isClearable
         />
 
-        <TimezoneSelect
-          label="Time zone"
-          value={convention.timezone_name}
-          onChange={conventionSetter('timezone_name')}
+        <MultipleChoiceInput
+          caption="Date and time display mode"
+          choices={EnumTypes.TimezoneMode.enumValues.map((enumValue) => ({
+            value: enumValue.name,
+            label: enumValue.description,
+          }))}
+          value={convention.timezone_mode}
+          onChange={setTimezoneMode}
         />
+
+        {convention.timezone_mode === 'convention_local' && (
+          <TimezoneSelect
+            label="Time zone"
+            value={convention.timezone_name}
+            onChange={conventionSetter('timezone_name')}
+          />
+        )}
 
         <FormGroupWithLabel label="Starts at">
           {(id) => (
             <DateTimeInput
               value={convention.starts_at}
-              timezoneName={convention.timezone_name}
+              timezoneName={timezoneNameForInputs}
               onChange={setStartsAt}
               id={id}
+              alwaysShowTimezone
             />
           )}
         </FormGroupWithLabel>
@@ -153,9 +181,10 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           {(id) => (
             <DateTimeInput
               value={convention.ends_at}
-              timezoneName={convention.timezone_name}
+              timezoneName={timezoneNameForInputs}
               onChange={conventionSetter('ends_at')}
               id={id}
+              alwaysShowTimezone
             />
           )}
         </FormGroupWithLabel>

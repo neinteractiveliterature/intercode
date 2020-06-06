@@ -101,6 +101,138 @@ module Intercode
         return nil unless input
         input.strip.gsub(/\s+/, ' ')
       end
+
+      # Given a time object, format it in the given timezone, translating to the user's local
+      # time if it isn't the same.
+      # @param input [ActiveSupport::TimeWithZone] A time object
+      # @param format [String] A time formatting string, like the one the built-in Liquid "date"
+      #                        filter uses (see http://strftime.net for examples).  We recommend
+      #                        including "%Z" in this string in order to have an explicit time zone
+      #                        specifier.
+      # @param timezone_name [String] An IANA timezone name to use for the default format.  If
+      #                               not given, this filter will try to use the convention's
+      #                               local timezone (if one exists).
+      # @return String
+      # @example Formatting a time using an explicit time zone, while the user is in that zone
+      #   {{ convention.starts_at | date_with_local_time: "%l:%M%P %Z", "America/New_York" }} =>
+      #     "7:00pm EDT"
+      # @example Formatting a time using an explicit time zone, while the user is not in that zone
+      #   {{ convention.starts_at | date_with_local_time: "%l:%M%P %Z", "America/New_York" }} =>
+      #     "7:00pm EDT (4:00pm PDT)"
+      # @example Using the convention's time zone implicitly
+      #   {{ convention.starts_at | date_with_local_time: "%l:%M%P %Z" }} => "7:00pm EDT"
+      def date_with_local_time(input, format, timezone_name = nil)
+        return nil unless input
+
+        effective_timezone = find_effective_timezone(timezone_name)
+        time_in_zone = input.in_time_zone(effective_timezone).strftime(format)
+
+        if timezones_match?(effective_timezone, @context.registers[:timezone])
+          time_in_zone
+        else
+          time_in_user_zone = input.in_time_zone(@context.registers[:timezone]).strftime(format)
+          "#{time_in_zone.strip} (#{time_in_user_zone.strip})"
+        end
+      end
+
+      # Given a timespan, format it in the given timezone, translating to the user's local
+      # time if it isn't the same.  Automatically removes duplicate verbiage in the middle (e.g.
+      # day of week, time zone, etc.)
+      # @param input [ScheduledValue::TimespanDrop] A timespan
+      # @param format [String] A time formatting string, like the one the built-in Liquid "date"
+      #                        filter uses (see http://strftime.net for examples).  We recommend
+      #                        including "%Z" in this string in order to have an explicit time zone
+      #                        specifier.
+      # @param timezone_name [String] An IANA timezone name to use for the default format.  If
+      #                               not given, this filter will try to use the convention's
+      #                               local timezone (if one exists).
+      # @return String
+      # @example Formatting a timespan using an explicit time zone, while the user is in that zone
+      #   {{ convention.timespan
+      #     | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
+      #     "Saturday, July 11 from 10:00am to 11:59pm EDT"
+      # @example Formatting a time using an explicit time zone, while the user is not in that zone
+      #   {{ convention.timespan
+      #     | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
+      #     "Saturday, July 11 from 10:00am to 11:59pm EDT (7:00am to 8:59pm PDT)"
+      # @example Using the convention's time zone implicitly
+      #   {{ convention.timespan | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z" }} =>
+      #     "Saturday, July 11 from 10:00am to 11:59pm EDT"
+      def timespan_with_local_time(input, format, timezone_name = nil)
+        return nil unless input
+
+        effective_timezone = find_effective_timezone(timezone_name)
+        timespan_in_zone = describe_timespan(input, format, effective_timezone)
+
+        if timezones_match?(effective_timezone, @context.registers[:timezone])
+          timespan_in_zone.strip
+        else
+          timespan_in_user_zone = describe_timespan(input, format, @context.registers[:timezone])
+          _, deduped_user = remove_common_middle(timespan_in_zone, timespan_in_user_zone, ' ')
+          "#{timespan_in_zone.strip} (#{deduped_user.strip})"
+        end
+      end
+
+      private
+
+      def find_effective_timezone(timezone_name = nil)
+        effective_timezone_name = (
+          timezone_name.presence || @context.registers['convention'].timezone_name
+        )
+        ActiveSupport::TimeZone[effective_timezone_name]
+      end
+
+      def timezones_match?(a, b)
+        now = Time.zone.now
+        zone_strings = [a, b].map { |zone| now.in_time_zone(zone).strftime('%Z') }
+        zone_strings[0] == zone_strings[1]
+      end
+
+      def common_prefix(a, b, delimiter = '')
+        i = 0
+        prefix = []
+        a_arr = a.split(delimiter)
+        b_arr = b.split(delimiter)
+
+        while i < a_arr.length && i < b_arr.length
+          return prefix.join(delimiter) unless a_arr[i] == b_arr[i]
+
+          prefix << a_arr[i]
+          i += 1
+        end
+
+        prefix.join(delimiter)
+      end
+
+      def common_suffix(a, b, delimiter = '')
+        common_prefix(a.reverse, b.reverse, delimiter).reverse
+      end
+
+      def remove_common_middle(a, b, delimiter = '')
+        prefix = common_prefix(a, b, delimiter)
+        suffix = common_suffix(a, b, delimiter)
+        prefix_regex = /\A#{Regexp.escape(prefix)}/
+        suffix_regex = /#{Regexp.escape(suffix)}\z/
+
+        [a.sub(suffix_regex, '').strip, b.sub(prefix_regex, '').strip]
+      end
+
+      def describe_timespan(timespan, format, timezone)
+        start = if timespan.start
+          timespan.start.in_time_zone(timezone).strftime(format)
+        else
+          'anytime'
+        end
+
+        finish = if timespan.finish
+          timespan.finish.in_time_zone(timezone).strftime(format)
+        else
+          'indefinitely'
+        end
+
+        deduped_start, deduped_finish = remove_common_middle(start, finish, ' ')
+        [deduped_start, deduped_finish].join(timespan.finish ? ' to ' : ' ')
+      end
     end
   end
 end

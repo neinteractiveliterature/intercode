@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import intersection from 'lodash/intersection';
@@ -11,6 +11,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import useModal from '../ModalDialogs/useModal';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import AppRootContext from '../AppRootContext';
 
 function OrderHistoryOrderEntry({ orderEntry }) {
   const productVariant = orderEntry.product_variant || {};
@@ -142,7 +143,8 @@ OrderHistoryOrderStatus.propTypes = {
 };
 
 function OrderHistoryOrder({ order, convention, paymentModal }) {
-  const submittedTime = moment(order.submitted_at).tz(convention.timezone_name);
+  const { timezoneName } = useContext(AppRootContext);
+  const submittedTime = moment(order.submitted_at).tz(timezoneName);
 
   return (
     <li key={order.id} className="card mb-4">
