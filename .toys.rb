@@ -84,6 +84,28 @@ tool 'build_sanitized_db' do
   end
 end
 
+tool 'pull_uploads' do
+  desc 'Pull uploaded files down from production'
+  include :bundler
+
+  def run
+    require_relative 'config/environment'
+
+    CmsFile.find_each do |cms_file|
+      file = cms_file.file
+      dest_path = file.path
+      next if File.exist?(dest_path)
+
+      prod_url = URI("https://uploads.neilhosting.net/#{file.store_path}#{file.identifier}")
+      puts "Downloading #{prod_url}"
+      FileUtils.mkdir_p(File.dirname(dest_path))
+      File.open(dest_path, 'wb') do |outfile|
+        outfile.write(Net::HTTP.get(prod_url))
+      end
+    end
+  end
+end
+
 tool 'cleanup_branches' do
   desc 'Clean up local branches that were deleted or merged in origin'
   include :exec, exit_on_nonzero_status: true
