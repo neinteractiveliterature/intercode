@@ -1,4 +1,5 @@
 #import './adminProductFields.gql'
+#import './couponFields.gql'
 #import './pricingStructureFields.gql'
 #import './orderFields.gql'
 
@@ -216,6 +217,17 @@ query OrderFormProductQuery($productId: Int!) {
       override_pricing_structure {
         ...PricingStructureFields
       }
+    }
+  }
+}
+
+query AdminCouponsQuery {
+  convention {
+    id
+    coupons {
+      ...CouponFields
+      usage_limit
+      expires_at
     }
   }
 }

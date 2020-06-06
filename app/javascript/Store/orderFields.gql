@@ -1,3 +1,5 @@
+#import './couponFields.gql'
+
 fragment AdminOrderFieldsFragment on Order {
   id
   status
@@ -55,17 +57,7 @@ fragment CouponApplicationFields on CouponApplication {
   }
 
   coupon {
-    id
-    code
-    fixed_amount {
-      fractional
-      currency_code
-    }
-    percent_discount
-    provides_product {
-      id
-      name
-    }
+    ...CouponFields
   }
 }
 
