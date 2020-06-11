@@ -60,7 +60,7 @@
     "debounce-promise": "^3.1.2",
     "detect-browser": "^5.1.0",
     "diff": "^4.0.2",
-    "exports-loader": "^0.7.0",
+    "exports-loader": "^1.0.0",
     "fast-diff": "^1.2.0",
     "file-loader": "^6.0.0",
     "file-saver": "^2.0.2",
