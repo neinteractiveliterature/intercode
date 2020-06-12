@@ -504,7 +504,7 @@ GEM
     thread_safe (0.3.6-java)
     tilt (2.0.10)
     tins (1.20.2)
-    twilio-ruby (5.36.0)
+    twilio-ruby (5.37.0)
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -615,7 +615,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
-  twilio-ruby (~> 5.36.0)
+  twilio-ruby (~> 5.37.0)
   tzinfo-data
   whenever
   will_paginate
