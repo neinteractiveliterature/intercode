@@ -40,4 +40,4 @@ jobs:
       - run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
           PRONTO_GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           pronto run -f github_status github_pr_review
-          -c origin/master
+          -c origin/main

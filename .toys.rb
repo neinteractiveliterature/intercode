@@ -112,7 +112,7 @@ tool 'cleanup_branches' do
 
   def run
     sh 'git fetch origin --prune'
-    sh 'git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d'
+    sh 'git branch --merged | egrep -v "(^\*|main)" | xargs git branch -d'
   end
 end
 
