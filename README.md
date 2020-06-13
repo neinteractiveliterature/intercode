@@ -68,7 +68,7 @@ To contact the Intercode 2 project team, you can:
 
 # Code of Conduct
 
-Participants in the Intercode project are expected to follow the Contributor Covenant.  For details, [see CODE_OF_CONDUCT.md](https://github.com/neinteractiveliterature/intercode/blob/master/CODE_OF_CONDUCT.md).
+Participants in the Intercode project are expected to follow the Contributor Covenant.  For details, [see CODE_OF_CONDUCT.md](https://github.com/neinteractiveliterature/intercode/blob/main/CODE_OF_CONDUCT.md).
 
 # License
 
