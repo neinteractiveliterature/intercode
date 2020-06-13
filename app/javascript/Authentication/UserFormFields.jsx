@@ -1,8 +1,9 @@
 import React from 'react';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import useStatePropertyUpdater from '../useStatePropertyUpdater';
 
 function UserFormFields({ formState, setFormState, showNameWarning }) {
-  const setFormField = (field) => (value) => setFormState((state) => ({ ...state, [field]: value }));
+  const setFormField = useStatePropertyUpdater(setFormState);
 
   return (
     <>
