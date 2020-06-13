@@ -8,6 +8,9 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import MoneyInput from './MoneyInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import ProductSelect from '../BuiltInFormControls/ProductSelect';
+import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
+import HelpText from '../BuiltInFormControls/HelpText';
+import { parseIntOrNull } from '../ComposableFormUtils';
 
 const DISCOUNT_MODE_CHOICES = [
   { label: 'Fixed amount discount', value: 'fixed_amount' },
@@ -97,6 +100,27 @@ function CouponForm({ value, onChange }) {
           )}
         </FormGroupWithLabel>
       )}
+
+      <FormGroupWithLabel label="Expiration date">
+        {(id) => (
+          <>
+            <DateTimeInput
+              id={id}
+              value={value.expires_at}
+              onChange={setCouponField('expires_at')}
+            />
+            <HelpText>If blank, coupon never expires.</HelpText>
+          </>
+        )}
+      </FormGroupWithLabel>
+
+      <BootstrapFormInput
+        label="Usage limit"
+        value={value.usage_limit}
+        type="number"
+        onTextChange={(newLimit) => setCouponField('usage_limit')(parseIntOrNull(newLimit))}
+        helpText="If blank, coupon can be used an unlimited number of times."
+      />
     </>
   );
 }
