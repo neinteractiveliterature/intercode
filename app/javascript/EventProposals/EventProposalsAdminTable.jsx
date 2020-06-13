@@ -1,6 +1,5 @@
 import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { Link, useHistory } from 'react-router-dom';
 import ReactTable from 'react-table';
 
@@ -167,7 +166,7 @@ EventCategoryFilter.defaultProps = {
   filter: null,
 };
 
-const getPossibleColumns = (data) => [
+const getPossibleColumns = () => [
   {
     Header: 'Category',
     id: 'event_category',
