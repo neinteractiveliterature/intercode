@@ -158,7 +158,12 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal 1, result.convention.user_activity_alerts.first.notification_destinations.count
   end
 
-  it 'clones coupons' do
-    raise 'TODO clone coupons'
+  it 'does not clone coupons' do
+    create(:coupon, convention: convention)
+
+    result = service.call
+    result.convention.reload
+    assert result.success?
+    assert_equal 0, result.convention.coupons.count
   end
 end
