@@ -8,5 +8,14 @@ class Tables::CouponsTableResultsPresenter < Tables::TableResultsPresenter
     ilike_column_filter
   end
 
-  field :created_at, 'Created at'
+  field :fixed_amount, 'Fixed amount discount'
+  field :percent_discount, 'Percent discount'
+  field :provides_product, 'Provides product' do
+    def generate_csv_cell(coupon)
+      coupon.provides_product&.name
+    end
+  end
+
+  field :usage_limit, 'Usage limit'
+  field :expires_at, 'Expires at'
 end

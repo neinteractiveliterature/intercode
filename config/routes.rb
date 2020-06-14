@@ -42,6 +42,7 @@ Intercode::Application.routes.draw do
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
 
     namespace :csv_exports do
+      get :coupons
       get :event_proposals
       get :orders
       get :run_signup_changes

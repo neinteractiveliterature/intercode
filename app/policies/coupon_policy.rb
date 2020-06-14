@@ -9,6 +9,7 @@ class CouponPolicy < ApplicationPolicy
       d.add(:read_conventions) { has_convention_permission?(convention, 'update_products') }
       d.add(:read_profile) do
         user && CouponApplication.joins(order: :user_con_profile).where(
+          coupon_id: record.id,
           user_con_profiles: { user_id: user.id }
         ).any?
       end

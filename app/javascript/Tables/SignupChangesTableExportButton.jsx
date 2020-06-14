@@ -1,42 +1,26 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import flatMap from 'lodash/flatMap';
+import React from 'react';
 
-import ReactTableExportButton from './ExportButton';
+import ReactTableExportButtonWithColumnTransform from './ReactTableExportButtonWithColumnTransform';
 
-function SignupChangesTableExportButton({
-  exportUrl, filtered, sorted, visibleColumnIds,
-}) {
-  const columns = useMemo(
-    () => flatMap(visibleColumnIds, (columnId) => {
-      if (columnId === 'action') {
-        return ['action', 'prev_state', 'state'];
-      }
+const transformColumnIdForExport = (columnId) => {
+  if (columnId === 'action') {
+    return ['action', 'prev_state', 'state'];
+  }
 
-      if (columnId === 'bucket_change') {
-        return ['prev_bucket', 'bucket'];
-      }
+  if (columnId === 'bucket_change') {
+    return ['prev_bucket', 'bucket'];
+  }
 
-      return columnId;
-    }),
-    [visibleColumnIds],
-  );
+  return columnId;
+};
 
+function SignupChangesTableExportButton({ ...props }) {
   return (
-    <ReactTableExportButton
-      exportUrl={exportUrl}
-      filtered={filtered}
-      sorted={sorted}
-      columns={columns}
+    <ReactTableExportButtonWithColumnTransform
+      {...props}
+      columnTransform={transformColumnIdForExport}
     />
   );
 }
-
-SignupChangesTableExportButton.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
-  filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
 
 export default SignupChangesTableExportButton;

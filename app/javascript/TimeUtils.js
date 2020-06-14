@@ -1,6 +1,8 @@
+import { useContext, useMemo } from 'react';
 import { DateTime } from 'luxon';
 
 import { onlyOneIsNull } from './ValueUtils';
+import AppRootContext from './AppRootContext';
 
 export const timeIsOnTheHour = (time) => (
   time.millisecond() === 0 && time.second() === 0 && time.minute() === 0
@@ -72,4 +74,14 @@ export function timezoneNameForConvention(convention) {
   }
 
   return DateTime.local().zoneName;
+}
+
+export function useISODateTimeInAppZone(isoValue) {
+  const { timezoneName } = useContext(AppRootContext);
+  const timestamp = useMemo(
+    () => DateTime.fromISO(isoValue).setZone(timezoneName),
+    [isoValue, timezoneName],
+  );
+
+  return timestamp;
 }
