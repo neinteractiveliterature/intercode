@@ -1,4 +1,5 @@
 #import './adminProductFields.gql'
+#import './couponFields.gql'
 #import './pricingStructureFields.gql'
 #import './orderFields.gql'
 
@@ -96,12 +97,7 @@ query CartQuery {
   }
 
   currentPendingOrder {
-    id
-
-    order_entries {
-      id
-      ...OrderEntryFields
-    }
+    ...CartOrderFields
   }
 }
 
@@ -135,6 +131,10 @@ query OrderHistoryQuery {
       payment_amount {
         fractional
         currency_code
+      }
+
+      coupon_applications {
+        ...CouponApplicationFields
       }
 
       order_entries {

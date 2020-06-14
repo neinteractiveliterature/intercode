@@ -1,5 +1,5 @@
 import React, {
-  Suspense, useMemo, useCallback, useRef, useEffect,
+  Suspense, useCallback, useRef, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -23,10 +23,6 @@ export default (WrappedComponent) => {
     authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps
   }) {
     const confirm = useConfirm();
-    const lazyStripeProviderValue = useMemo(
-      () => ({ publishableKey: stripePublishableKey }),
-      [stripePublishableKey],
-    );
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
     const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
     const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
@@ -71,7 +67,7 @@ export default (WrappedComponent) => {
     return (
       <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
         <DndProvider options={HTML5toTouch}>
-          <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+          <LazyStripeContext.Provider value={{ publishableKey: stripePublishableKey }}>
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
               <MapboxContext.Provider value={mapboxContextValue}>
                 <ApolloProvider client={apolloClient}>

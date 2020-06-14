@@ -5,13 +5,13 @@ import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';
 
 function FormGroupWithLabel({
-  children, label, name, helpText,
+  children, label, name, helpText, className, labelClassName,
 }) {
   const id = useUniqueId(`${name || 'input'}-`);
 
   return (
-    <div className="form-group">
-      <label htmlFor={id}>
+    <div className={className ?? 'form-group'}>
+      <label htmlFor={id} className={labelClassName}>
         {label}
       </label>
       {children(id)}
@@ -21,6 +21,8 @@ function FormGroupWithLabel({
 }
 
 FormGroupWithLabel.propTypes = {
+  className: PropTypes.string,
+  labelClassName: PropTypes.string,
   children: PropTypes.func.isRequired,
   label: PropTypes.node.isRequired,
   name: PropTypes.string,
@@ -28,6 +30,8 @@ FormGroupWithLabel.propTypes = {
 };
 
 FormGroupWithLabel.defaultProps = {
+  className: null,
+  labelClassName: null,
   name: null,
   helpText: null,
 };

@@ -7,8 +7,14 @@ import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import formatMoney from '../formatMoney';
+import describeCoupon from './describeCoupon';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import ApplyCouponControl from './ApplyCouponControl';
 
-function CartContents({ removeFromCart, changeQuantity, checkOutButton }) {
+function CartContents({
+  removeFromCart, createCouponApplication, deleteCouponApplication, changeQuantity, checkOutButton,
+}) {
+  const confirm = useConfirm();
   const { data, loading, error } = useQuery(CartQuery);
 
   if (error) {
@@ -60,56 +66,110 @@ function CartContents({ removeFromCart, changeQuantity, checkOutButton }) {
     </tr>
   ));
 
-  const totalPrice = data.currentPendingOrder.order_entries
-    .map((entry) => entry.price.fractional)
-    .reduce((total, entryPrice) => total + entryPrice, 0);
-
-  const currencyCode = (
-    data.currentPendingOrder.order_entries[0] || { currency_code: 'USD' }
-  ).currency_code;
-
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-      <tfoot>
-        <tr>
-          <td colSpan="2">
-            <strong>Total</strong>
-          </td>
-          <td colSpan="2">
-            <strong>
-              {formatMoney({ fractional: totalPrice, currency_code: currencyCode })}
-            </strong>
-            {checkOutButton && (
-              <>
-                <br />
-                {checkOutButton}
-              </>
-            )}
-          </td>
-          <td />
-        </tr>
-      </tfoot>
-    </table>
+    <div className="mb-2">
+      <table className="table mb-0">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+        <tfoot>
+          {data.currentPendingOrder.coupon_applications.length > 0 && (
+            <>
+              <tr className="bg-light">
+                <td colSpan="2">
+                  <em>Total before coupons</em>
+                </td>
+                <td colSpan="2">
+                  <em>
+                    {formatMoney(data.currentPendingOrder.total_price_before_discounts)}
+                  </em>
+                </td>
+              </tr>
+              {data.currentPendingOrder.coupon_applications.map((app) => (
+                <tr key={app.id} className="bg-light">
+                  <td colSpan="2">
+                    Coupon code:
+                    {' '}
+                    <code>{app.coupon.code}</code>
+                    <br />
+                    <small>{describeCoupon(app.coupon)}</small>
+                  </td>
+                  <td className="text-danger">
+                    -
+                    {formatMoney(app.discount)}
+                  </td>
+                  <td>
+                    {deleteCouponApplication && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger"
+                        onClick={() => confirm({
+                          prompt: 'Are you sure you want to remove this coupon?',
+                          action: () => deleteCouponApplication(app),
+                          renderError: (err) => <ErrorDisplay graphQLError={err} />,
+                        })}
+                      >
+                        <i className="fa fa-trash-o" />
+                        <span className="sr-only">Remove from cart</span>
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </>
+          )}
+          {createCouponApplication && (
+            <tr className="bg-light">
+              <td colSpan={4}>
+                <ApplyCouponControl createCouponApplication={createCouponApplication} />
+              </td>
+            </tr>
+          )}
+          <tr className="bg-warning-light">
+            <td colSpan="2">
+              <strong>
+                {data.currentPendingOrder.coupon_applications.length > 0
+                  ? 'Grand total'
+                  : 'Total'}
+              </strong>
+            </td>
+            <td colSpan="2">
+              <strong>
+                {formatMoney(data.currentPendingOrder.total_price)}
+              </strong>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      {
+        checkOutButton && (
+          <div className="text-right">
+            {checkOutButton}
+          </div>
+        )
+      }
+    </div>
   );
 }
 
 CartContents.propTypes = {
   removeFromCart: PropTypes.func,
+  createCouponApplication: PropTypes.func,
+  deleteCouponApplication: PropTypes.func,
   changeQuantity: PropTypes.func,
   checkOutButton: PropTypes.node,
 };
 
 CartContents.defaultProps = {
   removeFromCart: null,
+  createCouponApplication: null,
+  deleteCouponApplication: null,
   changeQuantity: null,
   checkOutButton: null,
 };

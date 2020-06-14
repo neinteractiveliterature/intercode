@@ -1027,6 +1027,76 @@ ALTER SEQUENCE public.conventions_id_seq OWNED BY public.conventions.id;
 
 
 --
+-- Name: coupon_applications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.coupon_applications (
+    id bigint NOT NULL,
+    coupon_id bigint NOT NULL,
+    order_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: coupon_applications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.coupon_applications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: coupon_applications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.coupon_applications_id_seq OWNED BY public.coupon_applications.id;
+
+
+--
+-- Name: coupons; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.coupons (
+    id bigint NOT NULL,
+    convention_id bigint NOT NULL,
+    code text NOT NULL,
+    provides_product_id bigint,
+    fixed_amount_cents integer,
+    fixed_amount_currency character varying,
+    percent_discount numeric,
+    usage_limit integer,
+    expires_at timestamp without time zone,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: coupons_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.coupons_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: coupons_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.coupons_id_seq OWNED BY public.coupons.id;
+
+
+--
 -- Name: departments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2621,6 +2691,20 @@ ALTER TABLE ONLY public.conventions ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: coupon_applications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupon_applications ALTER COLUMN id SET DEFAULT nextval('public.coupon_applications_id_seq'::regclass);
+
+
+--
+-- Name: coupons id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupons ALTER COLUMN id SET DEFAULT nextval('public.coupons_id_seq'::regclass);
+
+
+--
 -- Name: departments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2997,6 +3081,22 @@ ALTER TABLE ONLY public.conventions
 
 
 --
+-- Name: coupon_applications coupon_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupon_applications
+    ADD CONSTRAINT coupon_applications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: coupons coupons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupons
+    ADD CONSTRAINT coupons_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: departments departments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3325,6 +3425,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: coupon_codes_unique_per_convention_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX coupon_codes_unique_per_convention_idx ON public.coupons USING btree (convention_id, lower(code));
+
+
+--
 -- Name: idx_max_event_provided_tickets_on_event_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3532,6 +3639,41 @@ CREATE INDEX index_conventions_on_updated_by_id ON public.conventions USING btre
 --
 
 CREATE INDEX index_conventions_on_user_con_profile_form_id ON public.conventions USING btree (user_con_profile_form_id);
+
+
+--
+-- Name: index_coupon_applications_on_coupon_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_coupon_applications_on_coupon_id ON public.coupon_applications USING btree (coupon_id);
+
+
+--
+-- Name: index_coupon_applications_on_order_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_coupon_applications_on_order_id ON public.coupon_applications USING btree (order_id);
+
+
+--
+-- Name: index_coupons_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_coupons_on_convention_id ON public.coupons USING btree (convention_id);
+
+
+--
+-- Name: index_coupons_on_convention_id_and_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_coupons_on_convention_id_and_code ON public.coupons USING btree (convention_id, code);
+
+
+--
+-- Name: index_coupons_on_provides_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_coupons_on_provides_product_id ON public.coupons USING btree (provides_product_id);
 
 
 --
@@ -4210,6 +4352,14 @@ ALTER TABLE ONLY public.runs
 
 
 --
+-- Name: coupon_applications fk_rails_090dd3a726; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupon_applications
+    ADD CONSTRAINT fk_rails_090dd3a726 FOREIGN KEY (coupon_id) REFERENCES public.coupons(id);
+
+
+--
 -- Name: pages fk_rails_0bbdd8c678; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4490,6 +4640,14 @@ ALTER TABLE ONLY public.tickets
 
 
 --
+-- Name: coupons fk_rails_8ebaf85448; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupons
+    ADD CONSTRAINT fk_rails_8ebaf85448 FOREIGN KEY (provides_product_id) REFERENCES public.products(id);
+
+
+--
 -- Name: orders fk_rails_8f422d0898; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4527,6 +4685,14 @@ ALTER TABLE ONLY public.cms_navigation_items
 
 ALTER TABLE ONLY public.notification_templates
     ADD CONSTRAINT fk_rails_946c790439 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: coupon_applications fk_rails_9478621569; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupon_applications
+    ADD CONSTRAINT fk_rails_9478621569 FOREIGN KEY (order_id) REFERENCES public.orders(id);
 
 
 --
@@ -4591,6 +4757,14 @@ ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides
 
 ALTER TABLE ONLY public.rooms_runs
     ADD CONSTRAINT fk_rails_abc40e1f4b FOREIGN KEY (room_id) REFERENCES public.rooms(id);
+
+
+--
+-- Name: coupons fk_rails_aec5bfc3d1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.coupons
+    ADD CONSTRAINT fk_rails_aec5bfc3d1 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
 
 
 --
@@ -5031,6 +5205,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200328204324'),
 ('20200328214143'),
 ('20200408160310'),
+('20200411155258'),
+('20200411161111'),
+('20200422160237'),
 ('20200515153931'),
 ('20200516164805'),
 ('20200517155823'),

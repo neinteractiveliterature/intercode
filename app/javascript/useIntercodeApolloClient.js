@@ -11,7 +11,7 @@ import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
-function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
+export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) {
   const authenticityTokenRef = useRef(authenticityToken);
   useEffect(
     () => { authenticityTokenRef.current = authenticityToken; },
@@ -54,7 +54,9 @@ function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
     () => onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
         if (graphQLErrors.some((err) => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
-          onUnauthenticatedRef.current();
+          if (onUnauthenticatedRef?.current) {
+            onUnauthenticatedRef.current();
+          }
         }
       }
     }),
@@ -70,6 +72,12 @@ function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
     ]),
     [AuthLink, AddTimezoneLink, ErrorHandlerLink],
   );
+
+  return link;
+}
+
+function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
+  const link = useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef);
 
   const client = useMemo(
     () => new ApolloClient({
