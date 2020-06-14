@@ -1,8 +1,5 @@
 import sortProductVariants from './sortProductVariants';
-
-function buildMoneyInput(money) {
-  return { fractional: money.fractional, currency_code: money.currency_code };
-}
+import buildMoneyInput from './buildMoneyInput';
 
 function buildPricingStructureInput(pricingStructure) {
   if (!pricingStructure) {

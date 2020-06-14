@@ -1,16 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap4-modal';
 
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import useStatePropertyUpdater from '../useStatePropertyUpdater';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import MoneyInput from './MoneyInput';
-import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
-import ProductSelect from '../BuiltInFormControls/ProductSelect';
-import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
-import HelpText from '../BuiltInFormControls/HelpText';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
+import useStatePropertyUpdater from '../../useStatePropertyUpdater';
+import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
+import MoneyInput from '../MoneyInput';
+import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
+import ProductSelect from '../../BuiltInFormControls/ProductSelect';
+import DateTimeInput from '../../BuiltInFormControls/DateTimeInput';
+import HelpText from '../../BuiltInFormControls/HelpText';
+import { parseIntOrNull } from '../../ComposableFormUtils';
 
 const DISCOUNT_MODE_CHOICES = [
   { label: 'Fixed amount discount', value: 'fixed_amount' },
@@ -49,7 +48,7 @@ function CouponForm({ value, onChange }) {
     <>
       <BootstrapFormInput
         label="Coupon code"
-        value={value.code}
+        value={value.code || ''}
         onTextChange={setCouponField('code')}
         helpText="If you leave this blank, a random coupon code will be generated automatically."
       />
@@ -116,7 +115,7 @@ function CouponForm({ value, onChange }) {
 
       <BootstrapFormInput
         label="Usage limit"
-        value={value.usage_limit}
+        value={value.usage_limit || ''}
         type="number"
         onTextChange={(newLimit) => setCouponField('usage_limit')(parseIntOrNull(newLimit))}
         helpText="If blank, coupon can be used an unlimited number of times."
@@ -125,32 +124,16 @@ function CouponForm({ value, onChange }) {
   );
 }
 
-function NewCouponModal({ visible, close }) {
-  const [coupon, setCoupon] = useState({
-    code: '',
-    fixed_amount: null,
-    percent_discount: null,
-    provides_product: null,
-    usage_limit: null,
-    expires_at: null,
-  });
-
-  return (
-    <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">New coupon</div>
-      <div className="modal-body">
-        <CouponForm value={coupon} onChange={setCoupon} />
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={close}>Cancel</button>
-      </div>
-    </Modal>
-  );
-}
-
-NewCouponModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
+CouponForm.propTypes = {
+  value: PropTypes.shape({
+    code: PropTypes.string,
+    fixed_amount: PropTypes.shape({}),
+    percent_discount: PropTypes.number,
+    provides_product: PropTypes.shape({}),
+    expires_at: PropTypes.string,
+    usage_limit: PropTypes.number,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-export default NewCouponModal;
+export default CouponForm;

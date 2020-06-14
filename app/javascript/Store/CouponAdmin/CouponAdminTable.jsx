@@ -2,20 +2,30 @@ import React from 'react';
 import ReactTable from 'react-table';
 
 import { AdminCouponsQuery } from './queries.gql';
-import describeCoupon from './describeCoupon';
-import pluralizeWithCount from '../pluralizeWithCount';
-import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
-import { SingleLineTimestampCell } from '../Tables/TimestampCell';
-import TableHeader from '../Tables/TableHeader';
-import useModal from '../ModalDialogs/useModal';
+import describeCoupon from '../describeCoupon';
+import pluralizeWithCount from '../../pluralizeWithCount';
+import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
+import { SingleLineTimestampCell } from '../../Tables/TimestampCell';
+import TableHeader from '../../Tables/TableHeader';
+import useModal from '../../ModalDialogs/useModal';
 import NewCouponModal from './NewCouponModal';
+import EditCouponModal from './EditCouponModal';
+import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';
+
+const transformColumnIdForExport = (columnId) => {
+  if (columnId === 'effect') {
+    return ['fixed_amount', 'percent_discount', 'provides_product'];
+  }
+
+  return columnId;
+};
 
 const getPossibleColumns = () => [
   {
     Header: 'Code',
     id: 'code',
     accessor: 'code',
-    width: 100,
+    width: 250,
   },
   {
     Header: 'Effect',
@@ -28,12 +38,13 @@ const getPossibleColumns = () => [
   {
     Header: 'Usage limit',
     id: 'usage_limit',
-    accessor: (coupon) => coupon,
+    accessor: 'usage_limit',
     filterable: false,
     sortable: false,
-    Cell: (coupon) => (coupon.usage_limit
-      ? `${pluralizeWithCount('use', coupon.usage_limit)}`
-      : 'Unlimited uses'),
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ value }) => (value
+      ? `${pluralizeWithCount('use', value)}`
+      : <em>Unlimited uses</em>),
   },
   {
     Header: 'Expiration date',
@@ -44,11 +55,11 @@ const getPossibleColumns = () => [
   },
 ];
 
-function CouponAdmin() {
+function CouponAdminTable() {
   const newCouponModal = useModal();
   const editCouponModal = useModal();
 
-  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, { tableHeaderProps, columnSelectionProps }] = useReactTableWithTheWorks({
     getData: ({ data }) => data.convention.coupons_paginated.entries,
     getPages: ({ data }) => data.convention.coupons_paginated.total_pages,
     getPossibleColumns,
@@ -60,7 +71,6 @@ function CouponAdmin() {
     <>
       <TableHeader
         {...tableHeaderProps}
-        exportUrl="/csv_exports/coupons"
         renderLeftContent={() => (
           <button
             type="button"
@@ -71,6 +81,15 @@ function CouponAdmin() {
             {' '}
             New coupon
           </button>
+        )}
+        exportButton={(
+          <ReactTableExportButtonWithColumnTransform
+            exportUrl="/csv_exports/coupons"
+            filtered={tableHeaderProps.filtered}
+            sorted={tableHeaderProps.sorted}
+            visibleColumnIds={columnSelectionProps.visibleColumnIds}
+            columnTransform={transformColumnIdForExport}
+          />
         )}
       />
 
@@ -89,8 +108,14 @@ function CouponAdmin() {
         visible={newCouponModal.visible}
         close={newCouponModal.close}
       />
+
+      <EditCouponModal
+        initialCoupon={editCouponModal.state?.initialCoupon}
+        visible={editCouponModal.visible}
+        close={editCouponModal.close}
+      />
     </>
   );
 }
 
-export default CouponAdmin;
+export default CouponAdminTable;

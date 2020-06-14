@@ -3,7 +3,7 @@ import {
   NavLink, Redirect, Route, Switch,
 } from 'react-router-dom';
 
-import CouponAdmin from './CouponAdmin';
+import CouponAdminTable from './CouponAdmin/CouponAdminTable';
 import OrderAdmin from './OrderAdmin';
 import OrderSummary from './OrderSummary';
 import ProductAdmin from './ProductAdmin';
@@ -33,7 +33,7 @@ function StoreAdmin() {
 
       <Switch>
         <Route path="/admin_store/products"><ProductAdmin /></Route>
-        <Route path="/admin_store/coupons"><CouponAdmin /></Route>
+        <Route path="/admin_store/coupons"><CouponAdminTable /></Route>
         <Route path="/admin_store/orders"><OrderAdmin /></Route>
         <Route path="/admin_store/order_summary"><OrderSummary /></Route>
         <Redirect to="/admin_store/products" />
