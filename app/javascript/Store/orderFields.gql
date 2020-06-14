@@ -1,3 +1,5 @@
+#import './couponFields.gql'
+
 fragment AdminOrderFieldsFragment on Order {
   id
   status
@@ -20,6 +22,10 @@ fragment AdminOrderFieldsFragment on Order {
     currency_code
   }
 
+  coupon_applications {
+    ...CouponApplicationFields
+  }
+
   order_entries {
     id
     quantity
@@ -39,5 +45,41 @@ fragment AdminOrderFieldsFragment on Order {
       fractional
       currency_code
     }
+  }
+}
+
+fragment CouponApplicationFields on CouponApplication {
+  id
+
+  discount {
+    fractional
+    currency_code
+  }
+
+  coupon {
+    ...CouponFields
+  }
+}
+
+fragment CartOrderFields on Order {
+  id
+
+  coupon_applications {
+    ...CouponApplicationFields
+  }
+
+  total_price_before_discounts {
+    fractional
+    currency_code
+  }
+
+  total_price {
+    fractional
+    currency_code
+  }
+
+  order_entries {
+    id
+    ...OrderEntryFields
   }
 }

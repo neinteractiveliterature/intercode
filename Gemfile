@@ -56,7 +56,6 @@ gem 'graphql', '>= 1.10.2'
 gem 'graphql-batch'
 gem 'apollo_upload_server', '2.0.1'
 gem 'graphql-rails_logger', groups: [:development, :test]
-gem 'graphiql-rails', group: :development
 
 # Not super happy about this, but an ActiveRecord extension to allow us to use PostgreSQL check
 # constraints.  This is used in the Permission model to enforce the exclusive arc of all the related

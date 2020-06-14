@@ -86,17 +86,20 @@ TimeInput.defaultProps = {
 function DateTimeInput({
   value, timezoneName, onChange, id, alwaysShowTimezone, ...otherProps
 }) {
+  const { timezoneName: appTimezoneName } = useContext(AppRootContext);
+  const effectiveTimezoneName = timezoneName || appTimezoneName;
   const dateTime = useMemo(
-    () => DateTime.fromISO(value).setZone(timezoneName),
-    [value, timezoneName],
+    () => DateTime.fromISO(value).setZone(effectiveTimezoneName),
+    [value, effectiveTimezoneName],
   );
   const [date, setDate] = useState(() => dateTime.toISODate());
   const [time, setTime] = useState(() => dateTime.toISOTime({
     suppressMilliseconds: true, includeOffset: false,
   }));
-  const { timezoneName: appTimezoneName } = useContext(AppRootContext);
+  const userTimezoneName = DateTime.local().zoneName;
   const showZone = alwaysShowTimezone || (
-    dateTime?.zoneName && dateTime.zoneName !== appTimezoneName
+    effectiveTimezoneName !== appTimezoneName
+    || effectiveTimezoneName !== userTimezoneName
   );
 
   useEffect(
@@ -111,7 +114,7 @@ function DateTimeInput({
 
   const dateChanged = (newDate) => {
     setDate(newDate);
-    const newValue = dateTimeToISO(newDate, time, timezoneName);
+    const newValue = dateTimeToISO(newDate, time, effectiveTimezoneName);
     if (newValue) {
       onChange(newValue);
     }
@@ -119,7 +122,7 @@ function DateTimeInput({
 
   const timeChanged = (newTime) => {
     setTime(newTime);
-    const newValue = dateTimeToISO(date, newTime, timezoneName);
+    const newValue = dateTimeToISO(date, newTime, effectiveTimezoneName);
     if (newValue) {
       onChange(newValue);
     }
@@ -140,7 +143,8 @@ function DateTimeInput({
       />
       {showZone && (
         <span className="ml-2">
-          {dateTime.offsetNameShort ?? DateTime.fromObject({ zone: timezoneName }).offsetNameShort}
+          {dateTime.offsetNameShort ?? DateTime
+            .fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
         </span>
       )}
     </div>
@@ -149,7 +153,7 @@ function DateTimeInput({
 
 DateTimeInput.propTypes = {
   value: PropTypes.string,
-  timezoneName: PropTypes.string.isRequired,
+  timezoneName: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   id: PropTypes.string,
   alwaysShowTimezone: PropTypes.bool,
@@ -158,6 +162,7 @@ DateTimeInput.propTypes = {
 DateTimeInput.defaultProps = {
   value: null,
   id: null,
+  timezoneName: null,
   alwaysShowTimezone: false,
 };
 

@@ -21,6 +21,10 @@ class OrderPolicy < ApplicationPolicy
     super
   end
 
+  def manage_coupons?
+    manage? || submit?
+  end
+
   def submit?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_profile) do

@@ -1,0 +1,2 @@
+module GraphiqlHelper
+end

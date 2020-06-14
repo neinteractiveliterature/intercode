@@ -5,6 +5,10 @@ module.exports = {
   mode: 'development',
   cache: true,
   devtool: 'cheap-module-source-map',
+  entry: {
+    ...environment.entry,
+    'dev-mode-graphiql': './app/javascript/DevModeGraphiql',
+  },
   output: {
     ...environment.output,
     crossOriginLoading: 'anonymous',

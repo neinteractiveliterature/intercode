@@ -1,0 +1,25 @@
+#import './queries.gql'
+
+mutation CreateCoupon($coupon: CouponInput!) {
+  createCoupon(input: { coupon: $coupon }) {
+    coupon {
+      id
+      ...AdminCouponFields
+    }
+  }
+}
+
+mutation UpdateCoupon($id: Int!, $coupon: CouponInput!) {
+  updateCoupon(input: { id: $id, coupon: $coupon }) {
+    coupon {
+      id
+      ...AdminCouponFields
+    }
+  }
+}
+
+mutation DeleteCoupon($id: Int!) {
+  deleteCoupon(input: { id: $id }) {
+    clientMutationId
+  }
+}

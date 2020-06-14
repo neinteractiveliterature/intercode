@@ -37,6 +37,21 @@ class CsvExportsController < ApplicationController
 
   include SendCsv
 
+  def coupons
+    authorize convention.coupons.new, :read?
+
+    send_table_presenter_csv(
+      Tables::CouponsTableResultsPresenter.for_convention(
+        convention: convention,
+        pundit_user: pundit_user,
+        filters: params[:filters]&.to_unsafe_h,
+        sort: params[:sort],
+        visible_field_ids: params[:columns]
+      ),
+      "#{convention.name} Coupons"
+    )
+  end
+
   def event_proposals
     # Even if the user can manage some event proposals (i.e. their own), only
     # allow access to this action if they can manage arbitrary ones in this con

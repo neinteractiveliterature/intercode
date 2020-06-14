@@ -123,6 +123,18 @@ class Types::ConventionType < Types::BaseObject
     scope.to_a
   end
 
+  pagination_field :coupons_paginated, Types::CouponsPaginationType,
+    Types::CouponFiltersInputType, null: false
+
+  def coupons_paginated(**args)
+    Tables::CouponsTableResultsPresenter.for_convention(
+      convention: object,
+      pundit_user: pundit_user,
+      filters: args[:filters].to_h,
+      sort: args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
   field :privilege_names, [String],
     null: false,
     deprecation_reason: 'Privileges have gone away in favor of permissions'

@@ -1,15 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
-import AppRootContext from '../AppRootContext';
+import { useISODateTimeInAppZone } from '../TimeUtils';
 
 export function SingleLineTimestampCell({ value }) {
-  const { timezoneName } = useContext(AppRootContext);
-  const timestamp = moment.tz(value, timezoneName);
+  const timestamp = useISODateTimeInAppZone(value);
+
+  if (!timestamp.isValid) {
+    return null;
+  }
+
   return (
     <>
-      {timestamp.format('YYYY-MM-DD HH:mm')}
+      {timestamp.toFormat('yyyy-MM-dd HH:mm')}
     </>
   );
 }
@@ -19,13 +23,17 @@ SingleLineTimestampCell.propTypes = {
 };
 
 function TimestampCell({ value }) {
-  const { timezoneName } = useContext(AppRootContext);
-  const timestamp = moment.tz(value, timezoneName);
+  const timestamp = useISODateTimeInAppZone(value);
+
+  if (!timestamp.isValid) {
+    return null;
+  }
+
   return (
     <>
-      {timestamp.format('MMM D, YYYY')}
+      {timestamp.toLocaleString(DateTime.DATE_MED)}
       <br />
-      {timestamp.format('h:mm:ssa')}
+      {timestamp.toFormat('h:mm:ssa').toLowerCase()}
     </>
   );
 }

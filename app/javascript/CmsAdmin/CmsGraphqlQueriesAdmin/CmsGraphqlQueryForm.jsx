@@ -1,18 +1,20 @@
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { parse } from 'graphql/language/parser';
-import { useApolloClient } from '@apollo/react-hooks';
+import { execute } from 'apollo-link';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';
 import { mutator, Transforms } from '../../ComposableFormUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../../checkBundleHash';
+import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
+import AuthenticityTokensContext from '../../AuthenticityTokensContext';
 
 const GraphiQL = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
 
 function CmsGraphqlQueryForm({ value, onChange, readOnly }) {
-  const client = useApolloClient();
+  const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
   const valueMutator = onChange && mutator({
     getState: () => value,
     setState: onChange,
@@ -22,12 +24,15 @@ function CmsGraphqlQueryForm({ value, onChange, readOnly }) {
       query: Transforms.identity,
     },
   });
-  const fetcher = useMemo(
-    () => ({ query, ...otherParams }) => client.query({
-      query: parse(query),
-      ...otherParams,
-    }),
-    [client],
+  const link = useIntercodeApolloLink(authenticityToken);
+
+  const fetcher = useCallback(
+    (operation) => {
+      // eslint-disable-next-line no-param-reassign
+      operation.query = parse(operation.query);
+      return execute(link, operation);
+    },
+    [link],
   );
 
   return (
@@ -56,6 +61,7 @@ function CmsGraphqlQueryForm({ value, onChange, readOnly }) {
             onEditQuery={valueMutator && valueMutator.query}
             fetcher={fetcher}
             readOnly={readOnly}
+            editorTheme="intercode"
           />
         </Suspense>
       </div>
