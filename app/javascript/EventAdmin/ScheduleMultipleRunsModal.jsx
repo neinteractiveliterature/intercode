@@ -70,7 +70,7 @@ function ScheduleMultipleRunsModal({
 
       return timespan.getTimespansWithin(
         timezoneName,
-        { unit: 'second', duration: event.length_seconds },
+        { unit: 'second', duration: { seconds: event.length_seconds } },
       );
     },
     [timespan, timezoneName, event.length_seconds],

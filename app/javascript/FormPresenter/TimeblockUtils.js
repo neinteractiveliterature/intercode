@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import flatMap from 'lodash/flatMap';
+import { Duration } from 'luxon';
 
 import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';
@@ -29,7 +30,10 @@ export function describeOrdinality(ordinality) {
 
 function getDayStarts(convention) {
   return timespanFromConvention(convention)
-    .getTimeHopsWithin(timezoneNameForConvention(convention), { unit: 'day' });
+    .getTimeHopsWithin(timezoneNameForConvention(convention), {
+      unit: 'day',
+      duration: Duration.fromObject({ days: 1 }),
+    });
 }
 
 function getAllPossibleTimeblocks(convention, formItem) {
@@ -81,12 +85,13 @@ export function getValidTimeblockColumns(convention, formItem) {
   return getDayStarts(convention)
     .map((dayStart) => {
       const possibleTimeblocksForDayStart = allPossibleTimeblocks
-        .filter((timeblock) => dayStart.isSame(timeblock.dayStart));
+        .filter((timeblock) => +dayStart === timeblock.dayStart);
 
       return {
         dayStart,
         cells: possibleTimeblocksForDayStart
-          .map((timeblock) => (isTimeblockValid(convention, formItem, timeblock) ? timeblock : null)),
+          .map((timeblock) => (isTimeblockValid(convention, formItem, timeblock)
+            ? timeblock : null)),
       };
     })
     .filter((column) => column.cells.some((cell) => cell != null));

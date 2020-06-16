@@ -83,8 +83,12 @@ class ScheduleBlock {
           return -1;
         }
 
-        const eventAOverlappingRunCount = this.getRunCountInTimespan(eventA, b.timespan.expand(1, 'hour'));
-        const eventBOverlappingRunCount = this.getRunCountInTimespan(eventB, a.timespan.expand(1, 'hour'));
+        const eventAOverlappingRunCount = this.getRunCountInTimespan(
+          eventA, b.timespan.expand({ hours: 1 }),
+        );
+        const eventBOverlappingRunCount = this.getRunCountInTimespan(
+          eventB, a.timespan.expand({ hours: 1 }),
+        );
         const runCountDiff = eventBOverlappingRunCount - eventAOverlappingRunCount;
 
         if (runCountDiff === 0) {

@@ -1,11 +1,11 @@
 import React from 'react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 import { render, fireEvent } from '../testUtils';
 import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRowDatepicker';
 
 describe('ScheduledValueTimespanRowDatepicker', () => {
-  const timespan = { nonsense: moment.tz('1970-01-01T01:02:03', 'UTC').toISOString(true) };
+  const timespan = { nonsense: DateTime.fromISO('1970-01-01T01:02:03Z').setZone('Etc/UTC').toISO({ includeOffset: true }) };
 
   const renderScheduledValueTimespanRowDatepicker = (props) => render(
     <ScheduledValueTimespanRowDatepicker

@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 
 import { render, fireEvent } from '../testUtils';
 import ConventionDaySelect from '../../../app/javascript/BuiltInFormControls/ConventionDaySelect';
@@ -25,14 +24,14 @@ describe('ConventionDaySelect', () => {
   test('it renders an option for each convention day', () => {
     const { getAllByRole } = renderConventionDaySelect();
     expect(getAllByRole('radio').map((input) => input.value)).toEqual([
-      '2017-01-01T06:00:00.000Z',
-      '2017-01-02T06:00:00.000Z',
-      '2017-01-03T06:00:00.000Z',
+      '2017-01-01T06:00:00.000+00:00',
+      '2017-01-02T06:00:00.000+00:00',
+      '2017-01-03T06:00:00.000+00:00',
     ]);
   });
 
   test('the value is selected', () => {
-    const { getByLabelText } = renderConventionDaySelect({ value: moment('2017-01-02T06:00:00.000Z') });
+    const { getByLabelText } = renderConventionDaySelect({ value: '2017-01-02T06:00:00.000Z' });
     expect(getByLabelText('Sunday')).not.toBeChecked();
     expect(getByLabelText('Monday')).toBeChecked();
     expect(getByLabelText('Tuesday')).not.toBeChecked();
@@ -42,6 +41,6 @@ describe('ConventionDaySelect', () => {
     const { getByLabelText } = renderConventionDaySelect();
     fireEvent.click(getByLabelText('Tuesday'));
     expect(onChange.mock.calls).toHaveLength(1);
-    expect(onChange.mock.calls[0][0].date()).toEqual(3);
+    expect(onChange.mock.calls[0][0]).toEqual('2017-01-03T06:00:00.000+00:00');
   });
 });

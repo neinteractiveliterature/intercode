@@ -1,4 +1,3 @@
-import moment from 'moment-timezone';
 import { DateTime } from 'luxon';
 import Timespan from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
@@ -6,12 +5,12 @@ import { removeCommonStringMiddle } from './ValueUtils';
 
 export function timespanFromConvention(convention) {
   return Timespan.fromStrings(convention.starts_at, convention.ends_at)
-    .tz(timezoneNameForConvention(convention));
+    .setZone(timezoneNameForConvention(convention));
 }
 
 export function timespanFromRun(convention, event, run) {
-  const start = moment(run.starts_at).tz(timezoneNameForConvention(convention));
-  const finish = start.clone().add(event.length_seconds, 'seconds');
+  const start = DateTime.fromISO(run.starts_at).setZone(timezoneNameForConvention(convention));
+  const finish = start.plus({ seconds: event.length_seconds });
 
   return new Timespan(start, finish);
 }
@@ -21,7 +20,7 @@ export function getConventionDayTimespans(conventionTimespan, timezoneName) {
     timezoneName,
     {
       unit: 'day',
-      offset: moment.duration(6, 'hours'), // start convention days at 6:00am
+      offset: { hours: 6 }, // start convention days at 6:00am
     },
   );
 }

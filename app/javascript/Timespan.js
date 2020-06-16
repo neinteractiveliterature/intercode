@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import {
   compareTimesAscending,
   compareTimesDescending,
@@ -170,44 +170,52 @@ class Timespan {
     return `${start} - ${finish}`;
   }
 
-  getTimeHopsWithin(timezoneName, { unit, offset = 0, duration = 1 }) {
+  getTimeHopsWithin(timezoneName, { unit, offset = null, duration = null }) {
     if (!this.isFinite()) {
       throw new Error(`getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
     }
 
-    const timeBlocks = [];
-    const now = this.start.setZone(timezoneName).startOf(unit);
-    while (now <= this.finish) {
+    // Luxon currently allows singular or plural object keys, even though it's not documented
+    // This might change in the future so if this breaks let's revisit this
+    const effectiveDuration = duration ?? Duration.fromObject({ [unit]: 1 });
+    const timeHops = [];
+    let now = this.start.setZone(timezoneName).startOf(unit);
+    while (now < this.finish) {
       let timeHop = now;
       if (offset) {
         timeHop = timeHop.plus(offset);
       }
-      timeBlocks.push(timeHop);
-      now.plus(duration, unit);
+      timeHops.push(timeHop);
+      now = now.plus(effectiveDuration);
     }
 
-    return timeBlocks;
+    return timeHops;
   }
 
-  getTimespansWithin(timezoneName, { unit, offset = 0, duration = 1 }) {
+  getTimespansWithin(timezoneName, { unit, offset = 0, duration = null }) {
     if (!this.isFinite()) {
       throw new Error(`getTimespansWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
     }
 
-    const timeHops = this.getTimeHopsWithin(timezoneName, { unit, offset, duration });
+    // Luxon currently allows singular or plural object keys, even though it's not documented
+    // This might change in the future so if this breaks let's revisit this
+    const effectiveDuration = duration ?? Duration.fromObject({ [unit]: 1 });
+    const timeHops = this.getTimeHopsWithin(timezoneName,
+      { unit, offset, duration: effectiveDuration });
     return timeHops.map((timeHop, i) => {
       if (i < timeHops.length - 1) {
-        return new Timespan(timeHop, timeHops[i + 1]).intersection(this);
+        return new Timespan(timeHop, timeHops[i + 1]).intersection(this.setZone(timezoneName));
       }
 
       if (offset) {
         return new Timespan(
           timeHop,
-          timeHop.minus(offset).plus(duration, unit).plus(offset),
+          timeHop.minus(offset).plus(effectiveDuration).plus(offset),
         ).intersection(this);
       }
 
-      return new Timespan(timeHop, timeHop.plus(duration, unit)).intersection(this);
+      return new Timespan(timeHop, timeHop.plus(effectiveDuration))
+        .intersection(this.setZone(timezoneName));
     }).filter((timespan) => timespan != null);
   }
 

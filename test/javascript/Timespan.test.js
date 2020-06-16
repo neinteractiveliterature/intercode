@@ -94,8 +94,8 @@ describe('Timespan', () => {
   describe('includesTimespan', () => {
     it('includes a strict subset of itself', () => {
       const timespan = defaultTimespan.clone();
-      timespan.start = timespan.start.plus(1, 'second');
-      timespan.finish = timespan.finish.minus(1, 'second');
+      timespan.start = timespan.start.plus({ seconds: 1 });
+      timespan.finish = timespan.finish.minus({ seconds: 1 });
 
       expect(defaultTimespan.includesTimespan(timespan)).toBeTruthy();
     });
@@ -106,10 +106,10 @@ describe('Timespan', () => {
 
     it('does not include timespans that have parts outside itself', () => {
       const slightlyBefore = defaultTimespan.clone();
-      slightlyBefore.start = slightlyBefore.start.minus(1, 'second');
+      slightlyBefore.start = slightlyBefore.start.minus({ seconds: 1 });
 
       const slightlyAfter = defaultTimespan.clone();
-      slightlyAfter.finish = slightlyAfter.finish.plus(1, 'second');
+      slightlyAfter.finish = slightlyAfter.finish.plus({ seconds: 1 });
 
       expect(defaultTimespan.includesTimespan(slightlyBefore)).toBeFalsy();
       expect(defaultTimespan.includesTimespan(slightlyAfter)).toBeFalsy();
@@ -117,12 +117,12 @@ describe('Timespan', () => {
 
     it('does not overlap timespans that are entirely outside itself', () => {
       const entirelyBefore = defaultTimespan.clone();
-      entirelyBefore.start = entirelyBefore.start.minus(1, 'day');
-      entirelyBefore.finish = entirelyBefore.finish.minus(1, 'day');
+      entirelyBefore.start = entirelyBefore.start.minus({ days: 1 });
+      entirelyBefore.finish = entirelyBefore.finish.minus({ days: 1 });
 
       const entirelyAfter = defaultTimespan.clone();
-      entirelyAfter.start = entirelyAfter.start.plus(1, 'day');
-      entirelyAfter.finish = entirelyAfter.finish.plus(1, 'day');
+      entirelyAfter.start = entirelyAfter.start.plus({ days: 1 });
+      entirelyAfter.finish = entirelyAfter.finish.plus({ days: 1 });
 
       expect(defaultTimespan.includesTimespan(entirelyBefore)).toBeFalsy();
       expect(defaultTimespan.includesTimespan(entirelyAfter)).toBeFalsy();
@@ -143,8 +143,8 @@ describe('Timespan', () => {
   describe('overlapsTimespan', () => {
     it('overlaps a strict subset of itself', () => {
       const timespan = defaultTimespan.clone();
-      timespan.start = timespan.start.plus(1, 'second');
-      timespan.finish = timespan.finish.minus(1, 'second');
+      timespan.start = timespan.start.plus({ seconds: 1 });
+      timespan.finish = timespan.finish.minus({ seconds: 1 });
 
       expect(defaultTimespan.overlapsTimespan(timespan)).toBeTruthy();
     });
@@ -155,10 +155,10 @@ describe('Timespan', () => {
 
     it('overlaps timespans that have parts outside itself', () => {
       const slightlyBefore = defaultTimespan.clone();
-      slightlyBefore.start = slightlyBefore.start.minus(1, 'second');
+      slightlyBefore.start = slightlyBefore.start.minus({ seconds: 1 });
 
       const slightlyAfter = defaultTimespan.clone();
-      slightlyAfter.finish = slightlyAfter.finish.plus(1, 'second');
+      slightlyAfter.finish = slightlyAfter.finish.plus({ seconds: 1 });
 
       expect(defaultTimespan.overlapsTimespan(slightlyBefore)).toBeTruthy();
       expect(defaultTimespan.overlapsTimespan(slightlyAfter)).toBeTruthy();
@@ -166,12 +166,12 @@ describe('Timespan', () => {
 
     it('does not overlap timespans that are entirely outside itself', () => {
       const entirelyBefore = defaultTimespan.clone();
-      entirelyBefore.start = entirelyBefore.start.minus(1, 'day');
-      entirelyBefore.finish = entirelyBefore.finish.minus(1, 'day');
+      entirelyBefore.start = entirelyBefore.start.minus({ days: 1 });
+      entirelyBefore.finish = entirelyBefore.finish.minus({ days: 1 });
 
       const entirelyAfter = defaultTimespan.clone();
-      entirelyAfter.start = entirelyAfter.start.plus(1, 'day');
-      entirelyAfter.finish = entirelyAfter.finish.plus(1, 'day');
+      entirelyAfter.start = entirelyAfter.start.plus({ days: 1 });
+      entirelyAfter.finish = entirelyAfter.finish.plus({ days: 1 });
 
       expect(defaultTimespan.overlapsTimespan(entirelyBefore)).toBeFalsy();
       expect(defaultTimespan.overlapsTimespan(entirelyAfter)).toBeFalsy();
@@ -203,10 +203,10 @@ describe('Timespan', () => {
 
     it('compares different times', () => {
       const differentStart = defaultTimespan.clone();
-      differentStart.start = differentStart.start.minus(1, 'day');
+      differentStart.start = differentStart.start.minus({ days: 1 });
 
       const differentFinish = defaultTimespan.clone();
-      differentFinish.finish = differentFinish.finish.plus(1, 'day');
+      differentFinish.finish = differentFinish.finish.plus({ days: 1 });
 
       expect(defaultTimespan.isSame(differentStart)).toBeFalsy();
       expect(defaultTimespan.isSame(differentFinish)).toBeFalsy();
@@ -216,8 +216,8 @@ describe('Timespan', () => {
   describe('intersection', () => {
     it('returns just the overlapping subset', () => {
       const somewhatLater = defaultTimespan.clone();
-      somewhatLater.start = somewhatLater.start.plus(6, 'hours');
-      somewhatLater.finish = somewhatLater.finish.plus(6, 'hours');
+      somewhatLater.start = somewhatLater.start.plus({ hours: 6 });
+      somewhatLater.finish = somewhatLater.finish.plus({ hours: 6 });
 
       const intersection = defaultTimespan.intersection(somewhatLater);
       const inverseIntersection = somewhatLater.intersection(defaultTimespan);
@@ -229,7 +229,7 @@ describe('Timespan', () => {
     it('returns null if there is no overlap', () => {
       const considerablyLater = defaultTimespan.clone();
       considerablyLater.start = considerablyLater.finish;
-      considerablyLater.finish = considerablyLater.start.plus(24, 'hours');
+      considerablyLater.finish = considerablyLater.start.plus({ hours: 24 });
 
       expect(defaultTimespan.intersection(considerablyLater)).toBeNull();
       expect(considerablyLater.intersection(defaultTimespan)).toBeNull();
@@ -249,8 +249,8 @@ describe('Timespan', () => {
   describe('union', () => {
     it('returns the superset', () => {
       const somewhatLater = defaultTimespan.clone();
-      somewhatLater.start = somewhatLater.start.plus(6, 'hours');
-      somewhatLater.finish = somewhatLater.finish.plus(6, 'hours');
+      somewhatLater.start = somewhatLater.start.plus({ hours: 6 });
+      somewhatLater.finish = somewhatLater.finish.plus({ hours: 6 });
 
       const union = defaultTimespan.union(somewhatLater);
       const inverseUnion = somewhatLater.union(defaultTimespan);
@@ -337,18 +337,18 @@ describe('Timespan', () => {
     });
 
     it('handles durations', () => {
-      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(12);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', duration: { hours: 2 } })).toHaveLength(12);
     });
 
     it('returns moment objects with the correct time zone', () => {
-      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })[0].utcOffset()).toEqual(0);
-      expect(defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].utcOffset()).toEqual(-5 * 60);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })[0].offset).toEqual(0);
+      expect(defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].offset).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
+      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', offset: { hours: 2 } });
       expect(hopsWithOffset).toHaveLength(24);
-      expect(hopsWithOffset[0].hour()).toEqual(2);
+      expect(hopsWithOffset[0].hour).toEqual(2);
     });
   });
 
@@ -366,18 +366,18 @@ describe('Timespan', () => {
     });
 
     it('handles durations', () => {
-      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(12);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', duration: { hours: 2 } })).toHaveLength(12);
     });
 
     it('returns timespans with the correct time zone', () => {
-      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.utcOffset()).toEqual(0);
-      expect(defaultTimespan.getTimespansWithin('America/New_York', { unit: 'day' })[0].start.utcOffset()).toEqual(-5 * 60);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.offset).toEqual(0);
+      expect(defaultTimespan.getTimespansWithin('America/New_York', { unit: 'day' })[0].start.offset).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
+      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', offset: { hours: 2 } });
       expect(hopsWithOffset).toHaveLength(22);
-      expect(hopsWithOffset[0].start.hour()).toEqual(2);
+      expect(hopsWithOffset[0].start.hour).toEqual(2);
     });
   });
 
@@ -386,12 +386,6 @@ describe('Timespan', () => {
       const cloned = defaultTimespan.clone();
       expect(cloned).not.toBe(defaultTimespan);
       expect(cloned.isSame(defaultTimespan)).toBeTruthy();
-    });
-
-    it('clones the members too', () => {
-      const cloned = defaultTimespan.clone();
-      expect(cloned.start).not.toBe(defaultTimespan.start);
-      expect(cloned.finish).not.toBe(defaultTimespan.finish);
     });
   });
 });

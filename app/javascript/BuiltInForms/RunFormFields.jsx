@@ -4,6 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
+import { DateTime } from 'luxon';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
@@ -47,10 +48,10 @@ function RunFormFields({ run, event, onChange }) {
     ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt)).start
     : null);
   const [hour, setHour] = useState(startsAt && day
-    ? startsAt.diff(day.clone().startOf('day'), 'hours')
+    ? startsAt.diff(day.startOf('day'), 'hours').hours
     : null);
   const [minute, setMinute] = useState(startsAt && (hour != null)
-    ? startsAt.diff(day.clone().startOf('day').add(hour, 'hours'), 'minutes')
+    ? startsAt.diff(day.startOf('day').plus({ hours: hour }), 'minutes').minutes
     : null);
   const startTime = useMemo(
     () => {
@@ -58,7 +59,7 @@ function RunFormFields({ run, event, onChange }) {
         return null;
       }
 
-      return day.clone().set({
+      return day.set({
         hour,
         minute,
       });
@@ -69,7 +70,7 @@ function RunFormFields({ run, event, onChange }) {
   useEffect(
     () => {
       onChange(
-        (prevRun) => ({ ...prevRun, starts_at: (startTime ? startTime.toISOString() : null) }),
+        (prevRun) => ({ ...prevRun, starts_at: (startTime ? startTime.toISO() : null) }),
       );
     },
     [onChange, startTime],
@@ -105,7 +106,7 @@ function RunFormFields({ run, event, onChange }) {
         >
           {
             startTime
-            && `- ${startTime.clone().add(event.length_seconds, 'seconds').format('H:mm')}`
+            && `- ${startTime.plus({ seconds: event.length_seconds }).toFormat('H:mm')}`
           }
         </TimeSelect>
       </fieldset>
@@ -117,7 +118,7 @@ function RunFormFields({ run, event, onChange }) {
       <ConventionDaySelect
         convention={data.convention}
         value={day}
-        onChange={setDay}
+        onChange={(newValue) => setDay(DateTime.fromISO(newValue).setZone(timezoneName))}
       />
       {renderTimeSelect()}
 

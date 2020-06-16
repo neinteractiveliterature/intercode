@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
-import MomentPropTypes from 'react-moment-proptypes';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
+
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import AppRootContext from '../AppRootContext';
 
@@ -20,25 +20,30 @@ function ConventionDaySelect({ convention, value, onChange }) {
   const inputChange = useCallback(
     (event) => {
       const newDayString = event.target.value;
-      onChange(moment(newDayString).tz(timezoneName));
+      onChange(newDayString);
     },
-    [onChange, timezoneName],
+    [onChange],
+  );
+
+  const valueDateTime = useMemo(
+    () => (value ? DateTime.fromISO(value).setZone(timezoneName) : null),
+    [value, timezoneName],
   );
 
   const options = conventionDays.map((day) => (
-    <div className="form-check form-check-inline" key={day.toISOString()}>
+    <div className="form-check form-check-inline" key={day.toISO()}>
       <label className="form-check-label">
         <input
           className="form-check-input"
           type="radio"
           name="day"
-          value={day.toISOString()}
-          checked={day.isSame(value)}
+          value={day.toISO()}
+          checked={+day === +valueDateTime}
           onChange={inputChange}
-          aria-label={day.format('dddd')}
+          aria-label={day.toFormat('EEEE')}
         />
         {' '}
-        {day.format('dddd')}
+        {day.toFormat('EEEE')}
       </label>
     </div>
   ));
@@ -56,7 +61,7 @@ ConventionDaySelect.propTypes = {
     starts_at: PropTypes.string.isRequired,
     ends_at: PropTypes.string.isRequired,
   }).isRequired,
-  value: MomentPropTypes.momentObj,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 

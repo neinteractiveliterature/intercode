@@ -1,7 +1,6 @@
 import { Settings } from 'luxon';
 import * as TimespanUtils from '../../app/javascript/TimespanUtils';
 
-
 describe('user_local timezone mode', () => {
   let originalDefaultZoneName;
 
@@ -18,8 +17,8 @@ describe('user_local timezone mode', () => {
       timezone_mode: 'user_local',
     });
 
-    expect(timespan.start.hour()).toEqual(3);
-    expect(timespan.finish.hour()).toEqual(12);
+    expect(timespan.start.hour).toEqual(3);
+    expect(timespan.finish.hour).toEqual(12);
   });
 
   test('timespanFromRun figures out the end time correctly', () => {
@@ -29,8 +28,8 @@ describe('user_local timezone mode', () => {
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
 
-    expect(timespan.start.hour()).toEqual(3);
-    expect(timespan.finish.hour()).toEqual(4);
+    expect(timespan.start.hour).toEqual(3);
+    expect(timespan.finish.hour).toEqual(4);
   });
 });
 
@@ -43,8 +42,8 @@ describe('convention_local timezone mode', () => {
       timezone_mode: 'convention_local',
     });
 
-    expect(timespan.start.hour()).toEqual(4);
-    expect(timespan.finish.hour()).toEqual(13);
+    expect(timespan.start.hour).toEqual(4);
+    expect(timespan.finish.hour).toEqual(13);
   });
 
   test('timespanFromRun figures out the end time correctly', () => {
@@ -54,7 +53,7 @@ describe('convention_local timezone mode', () => {
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
 
-    expect(timespan.start.hour()).toEqual(4);
-    expect(timespan.finish.hour()).toEqual(5);
+    expect(timespan.start.hour).toEqual(4);
+    expect(timespan.finish.hour).toEqual(5);
   });
 });
