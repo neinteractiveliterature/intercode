@@ -20,8 +20,7 @@ const transforms = {
     intField: Transforms.integer,
     booleanField: Transforms.booleanString,
     datetimeField: Transforms.datetime,
-    datetimeEasternField: Transforms.datetimeWithTimezone('US/Eastern'),
-    datetimeForceEasternField: Transforms.datetimeWithForcedTimezone('US/Eastern'),
+    datetimeEasternField: Transforms.datetimeWithTimezone('America/New_York'),
     selectMultipleField: Transforms.multiValue,
     objectField: Transforms.identity,
   },
@@ -53,7 +52,7 @@ describe('state change calculators', () => {
     expect(stateChangeCalculator.gizmo.datetimeField(
       state,
       '2017-01-01T17:00:00.000Z',
-    ).gizmo.datetimeField).toEqual('2017-01-01T17:00:00.000Z');
+    ).gizmo.datetimeField).toEqual('2017-01-01T17:00:00.000+00:00');
   });
 
   test('it changes state properly for a timezoned datetime field', () => {
@@ -61,13 +60,6 @@ describe('state change calculators', () => {
       state,
       '2017-01-01T17:00:00.000Z',
     ).gizmo.datetimeEasternField).toEqual('2017-01-01T12:00:00.000-05:00');
-  });
-
-  test('it changes state properly for a forced-timezone datetime field', () => {
-    expect(stateChangeCalculator.gizmo.datetimeForceEasternField(
-      state,
-      '2017-01-01T17:00:00.000Z',
-    ).gizmo.datetimeForceEasternField).toEqual('2017-01-01T17:00:00.000-05:00');
   });
 
   test('it changes state properly for a select multiple field', () => {

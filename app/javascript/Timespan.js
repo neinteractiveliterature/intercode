@@ -1,22 +1,23 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 import {
   compareTimesAscending,
   compareTimesDescending,
   humanizeTime,
   timesAreSameOrBothNull,
+  lowercaseMeridiem,
 } from './TimeUtils';
 import { chooseAmong, preferNull } from './ValueUtils';
 
 class Timespan {
   static fromStrings(start, finish) {
     return new Timespan(
-      (start != null ? moment(start) : null),
-      (finish != null ? moment(finish) : null),
+      (start != null ? DateTime.fromISO(start) : null),
+      (finish != null ? DateTime.fromISO(finish) : null),
     );
   }
 
   constructor(start, finish) {
-    if (start && finish && start.isAfter(finish)) {
+    if (start && finish && start > finish) {
       throw new Error('Start cannot be after finish');
     }
 
@@ -24,11 +25,15 @@ class Timespan {
     this.finish = finish;
   }
 
-  tz(timezoneName) {
+  setZone(timezoneName) {
     return new Timespan(
-      (this.start != null ? this.start.tz(timezoneName) : null),
-      (this.finish != null ? this.finish.tz(timezoneName) : null),
+      (this.start != null ? this.start.setZone(timezoneName) : null),
+      (this.finish != null ? this.finish.setZone(timezoneName) : null),
     );
+  }
+
+  tz(timezoneName) {
+    return this.setZone(timezoneName);
   }
 
   isFinite() {
@@ -37,22 +42,22 @@ class Timespan {
 
   includesTime(time) {
     return (
-      (this.start == null || this.start.isSameOrBefore(time))
-      && (this.finish == null || this.finish.isAfter(time))
+      (this.start == null || this.start <= time)
+      && (this.finish == null || this.finish > time)
     );
   }
 
   includesTimespan(other) {
     return (
-      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start)))
-      && (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
+      (this.start == null || (other.start != null && this.start <= other.start))
+      && (this.finish == null || (other.finish != null && this.finish >= other.finish))
     );
   }
 
   overlapsTimespan(other) {
     return (
-      (this.start == null || other.finish == null || this.start.isBefore(other.finish))
-      && (this.finish == null || other.start == null || other.start.isBefore(this.finish))
+      (this.start == null || other.finish == null || this.start < other.finish)
+      && (this.finish == null || other.start == null || other.start < this.finish)
     );
   }
 
@@ -83,7 +88,7 @@ class Timespan {
 
   expandStart(...args) {
     return new Timespan(
-      this.start.clone().subtract(...args),
+      this.start.minus(...args),
       this.finish,
     );
   }
@@ -91,14 +96,14 @@ class Timespan {
   expandFinish(...args) {
     return new Timespan(
       this.start,
-      this.finish.clone().add(...args),
+      this.finish.plus(...args),
     );
   }
 
   expand(...args) {
     return new Timespan(
-      this.start.clone().subtract(...args),
-      this.finish.clone().add(...args),
+      this.start.minus(...args),
+      this.finish.plus(...args),
     );
   }
 
@@ -109,7 +114,7 @@ class Timespan {
       return null;
     }
 
-    return this.finish.diff(this.start, unit);
+    return this.finish.diff(this.start, unit)[unit];
   }
 
   humanizeStartInTimezone(timezoneName, format) {
@@ -117,9 +122,9 @@ class Timespan {
       return 'anytime';
     }
 
-    const start = this.start.tz(timezoneName);
+    const start = this.start.setZone(timezoneName);
     if (format != null) {
-      return start.format(format);
+      return lowercaseMeridiem(start.toFormat(format));
     }
 
     return humanizeTime(start, true);
@@ -130,17 +135,17 @@ class Timespan {
       return 'indefinitely';
     }
 
-    const finish = this.finish.tz(timezoneName);
+    const finish = this.finish.setZone(timezoneName);
     if (format != null) {
-      return finish.format(format);
+      return lowercaseMeridiem(finish.toFormat(format));
     }
 
     if (this.start == null) {
       return humanizeTime(finish, true);
     }
 
-    const start = this.start.tz(timezoneName);
-    const includeDayInFinish = (finish.date() !== start.date());
+    const start = this.start.setZone(timezoneName);
+    const includeDayInFinish = (finish.day !== start.day);
 
     return humanizeTime(finish, includeDayInFinish);
   }
@@ -153,7 +158,7 @@ class Timespan {
     const start = this.humanizeStartInTimezone(timezoneName, startFormat);
     const finish = this.humanizeFinishInTimezone(
       timezoneName,
-      this.start == null || this.finish == null || this.finish.date() !== this.start.date()
+      this.start == null || this.finish == null || this.finish.day !== this.start.day
         ? startFormat
         : finishFormat || startFormat,
     );
@@ -171,14 +176,14 @@ class Timespan {
     }
 
     const timeBlocks = [];
-    const now = this.start.clone().tz(timezoneName).startOf(unit);
-    while (now.isBefore(this.finish)) {
-      const timeHop = now.clone();
+    const now = this.start.setZone(timezoneName).startOf(unit);
+    while (now <= this.finish) {
+      let timeHop = now;
       if (offset) {
-        timeHop.add(offset);
+        timeHop = timeHop.plus(offset);
       }
       timeBlocks.push(timeHop);
-      now.add(duration, unit);
+      now.plus(duration, unit);
     }
 
     return timeBlocks;
@@ -198,18 +203,18 @@ class Timespan {
       if (offset) {
         return new Timespan(
           timeHop,
-          timeHop.clone().subtract(offset).add(duration, unit).add(offset),
+          timeHop.minus(offset).plus(duration, unit).plus(offset),
         ).intersection(this);
       }
 
-      return new Timespan(timeHop, timeHop.clone().add(duration, unit)).intersection(this);
+      return new Timespan(timeHop, timeHop.plus(duration, unit)).intersection(this);
     }).filter((timespan) => timespan != null);
   }
 
   clone() {
     return new Timespan(
-      (this.start != null ? this.start.clone() : null),
-      (this.finish != null ? this.finish.clone() : null),
+      (this.start != null ? this.start : null),
+      (this.finish != null ? this.finish : null),
     );
   }
 }

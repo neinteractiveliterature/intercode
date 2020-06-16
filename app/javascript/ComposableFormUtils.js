@@ -1,5 +1,5 @@
-import moment from 'moment-timezone';
 import { useState, useMemo } from 'react';
+import { DateTime } from 'luxon';
 
 export function parseIntOrNull(stringValue) {
   const intValue = parseInt(stringValue, 10);
@@ -30,29 +30,14 @@ export function parseMoneyOrNull(value) {
   };
 }
 
-export function forceTimezoneForDatetimeValue(value, timezoneName) {
-  if (value == null) {
-    return value;
-  }
-
-  if (typeof value === 'string') {
-    const valueWithoutTimezone = value.replace(/(Z|[+-]\d\d(:\d\d)?)$/, '');
-    return forceTimezoneForDatetimeValue(moment(valueWithoutTimezone), timezoneName);
-  }
-
-  // it's hopefully a moment
-  const valueInTimezone = moment.tz(value.toObject(), timezoneName);
-  return valueInTimezone.toISOString(true);
-}
-
 export function convertDatetimeValue(value, timezoneName = null) {
   if (value == null) {
     return value;
   }
 
-  const momentValue = timezoneName ? moment.tz(value, timezoneName) : moment(value);
-  if (momentValue.isValid()) {
-    return momentValue.toISOString(!!timezoneName);
+  const dateTime = DateTime.fromISO(value, { zone: timezoneName ?? 'Etc/UTC' });
+  if (dateTime.isValid) {
+    return dateTime.toISO();
   }
 
   return null;
@@ -76,12 +61,6 @@ export const Transforms = {
     return namedFunction(
       (value) => convertDatetimeValue(value, timezoneName),
       `datetimeWithTimezone('${timezoneName}')`,
-    );
-  },
-  datetimeWithForcedTimezone(timezoneName) {
-    return namedFunction(
-      (value) => forceTimezoneForDatetimeValue(value, timezoneName),
-      `datetimeWithForcedTimezone('${timezoneName}')`,
     );
   },
   negate(func) { return namedFunction((value) => !func(value), 'negate'); },
