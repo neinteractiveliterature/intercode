@@ -200,7 +200,7 @@ class Event < ApplicationRecord
     return unless event_category.single_run? && status == 'active'
     return if runs.size <= 1
 
-    errors.add(:base, "#{category_obj.key.humanize} events must have no more than one run")
+    errors.add(:base, "#{event_category.name} events must have no more than one run")
   end
 
   def registration_policy_cannot_change
