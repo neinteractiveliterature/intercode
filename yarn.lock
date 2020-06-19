@@ -3172,10 +3172,13 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
 
-bootstrap.native@^2.0.27:
-  version "2.0.27"
-  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.27.tgz#c0978d372cde1bd9f06d015985e99ae7af44f816"
-  integrity sha512-gv2eN4zXHOLN/oPotTxb8CJr9Dk0xlM9YURyHCWjq1Lyt2I669bri/Bp8b0HPOKX7JqRVh+Sk/VwEe0OcQN2fw==
+bootstrap.native@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-3.0.8.tgz#cbfc9162190753b76a4fe963f323b5ab133baa05"
+  integrity sha512-WuakoOdWqah2+l4GiDmEA5FRDbEhppknAYclsgZsvi6KICZv9ISvKbl1GmUpL8RRKt+ePYLZ+oJ7n3DnNcDIIA==
+  dependencies:
+    minifill "^0.0.8"
+    shorter-js "^0.1.0"
 
 bootstrap@^4.5.0:
   version "4.5.0"
@@ -8113,6 +8116,11 @@ mini-css-extract-plugin@^0.9.0:
     schema-utils "^1.0.0"
     webpack-sources "^1.1.0"
 
+minifill@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/minifill/-/minifill-0.0.8.tgz#c6ecef302bee672352986d89257b3c18fc7a9ce5"
+  integrity sha512-DOw02Fev6xB40wyie/YJtnIhY0eI+iQ7aBQlSVkOy5OKlFAxob6uG301uvJyMT7F1OeMGfbDexOTabL3uLid1g==
+
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
@@ -11128,6 +11136,11 @@ shellwords@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
+
+shorter-js@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/shorter-js/-/shorter-js-0.1.0.tgz#a9bb528cf240710b899b3d4b38662744eac2b67a"
+  integrity sha512-JI9+jaV5+9+Zq61ccs1aQ8WWvDx9jQLXgfRt8WQh5nhVw+BGlqORSHJQKOraQ0qQ4NfbYvuwlRPgxW5VXd8n3w==
 
 side-channel@^1.0.2:
   version "1.0.2"
