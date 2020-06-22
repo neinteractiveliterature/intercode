@@ -129,7 +129,7 @@ group :development do
   gem 'debase'
 
   # Linting
-  gem 'rubocop', '0.85.1' # 0.85 seems to break pronto-rubocop :(
+  gem 'rubocop', '0.86.0' # 0.85 seems to break pronto-rubocop :(
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
