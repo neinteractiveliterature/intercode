@@ -197,7 +197,7 @@ GEM
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
     excon (0.73.0)
-    factory_bot (6.0.0)
+    factory_bot (6.0.2)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.0.0)
       factory_bot (~> 6.0.0)
