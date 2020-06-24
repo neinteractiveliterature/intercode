@@ -1899,10 +1899,10 @@
     "@styled-system/core" "^5.1.2"
     "@styled-system/css" "^5.1.5"
 
-"@testing-library/dom@^7.17.0":
-  version "7.17.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.17.1.tgz#7ea1512dbba858940ee39e82652055d367b94cb5"
-  integrity sha512-gmORZyxqqMAM3TVOXQftgGxqISiCN7hQHAVtV26OqESB8x8SKbX0tlX4+VvagLi1WMK2TLd9MWUJfuHHN7fPQg==
+"@testing-library/dom@^7.17.1":
+  version "7.17.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.17.2.tgz#d062e41336b885107bca8ffc7022eaf37cccaee1"
+  integrity sha512-TQAoIzoI9g64oNVJ+13i4cCh/DQp/n7fJOyMqlFB1oQVusPtSgiPImyb52CwtvPO7J0Im0+/4YcmxU9a+cVxxw==
   dependencies:
     "@babel/runtime" "^7.10.3"
     aria-query "^4.2.2"
@@ -1932,13 +1932,13 @@
     "@babel/runtime" "^7.5.4"
     "@types/testing-library__react-hooks" "^3.0.0"
 
-"@testing-library/react@^10.4.0":
-  version "10.4.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.4.0.tgz#d95302ddd256bc3ebd0b99c445bb236e4d9bbf36"
-  integrity sha512-koZCPOzH5fFXN3MPeQx6iT9o47U5y7zpyiEZlG3xP+XSApdHQfsx/PrsmTiPfrEjU/1DSaX75arjMcdkbnT04A==
+"@testing-library/react@^10.4.2":
+  version "10.4.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.4.2.tgz#9f1ee0051a516469d4afaf350d2a467ac19cd57f"
+  integrity sha512-srhsdY+Mq2xhjE/ha8xh0U9YJSCNYbOhzPsUiNvxy4bgltB87PjuxDtkWMWwWJOIkngyJaMgoJuHm13EOq4V0Q==
   dependencies:
     "@babel/runtime" "^7.10.3"
-    "@testing-library/dom" "^7.17.0"
+    "@testing-library/dom" "^7.17.1"
 
 "@theme-ui/color-modes@^0.3.1":
   version "0.3.1"
