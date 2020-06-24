@@ -153,7 +153,7 @@
     "eslint-plugin-jest": "^23.17.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "^2.5.1",
+    "eslint-plugin-react-hooks": "^4.0.4",
     "jest": "^26.1.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-html-reporter": "^3.1.3",
