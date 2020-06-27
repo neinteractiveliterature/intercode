@@ -21,7 +21,7 @@ module ProfileSetupWorkflow
   end
 
   def copy_most_recent_profile_attributes(destination_profile)
-    return unless profiles_by_recency.any?
+    return unless profiles_by_recency&.any?
 
     this_convention_profile_fields = convention.user_con_profile_form.form_items.pluck(:identifier)
 
