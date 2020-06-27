@@ -152,6 +152,11 @@
           },
           {
             "kind": "OBJECT",
+            "name": "CouponsPagination",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
             "name": "EmailRoutesPagination",
             "ofType": null
           },

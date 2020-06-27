@@ -13,8 +13,8 @@ class Types::EventType < Types::BaseObject
   field :participant_communications, String, null: true
   field :age_restrictions, String, null: true
   field :content_warnings, String, null: true
-  field :length_seconds, Integer, null: true
-  field :can_play_concurrently, Boolean, null: true
+  field :length_seconds, Integer, null: false
+  field :can_play_concurrently, Boolean, null: false
   field :con_mail_destination, String, null: true
   field :description, String, null: true
   field :short_blurb, String, null: true
