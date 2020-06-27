@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { EventFieldsFragment, RunFieldsFragment, MaximumEventProvidedTicketsOverrideFieldsFragment } from '../graphqlQueries.generated';
+import { EventFieldsFragment, RunFieldsFragment, MaximumEventProvidedTicketsOverrideFieldsFragment } from './queries.generated';
 import gql from 'graphql-tag';
-import { EventFieldsFragmentDoc, RunFieldsFragmentDoc, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from '../graphqlQueries.generated';
+import { EventFieldsFragmentDoc, RunFieldsFragmentDoc, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };

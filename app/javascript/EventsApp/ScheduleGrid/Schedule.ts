@@ -6,8 +6,9 @@ import {
   timespanFromConvention, RunForTimespanUtils, ConventionForTimespanUtils,
 } from '../../TimespanUtils';
 import Timespan, { FiniteTimespan } from '../../Timespan';
-import { SignupState, SignupRequestState, ScheduleGridEventFragmentFragment } from '../../graphqlQueries';
+import { ScheduleGridEventFragmentFragment } from './queries.generated';
 import ScheduleGridConfig, { isCategoryMatchRule, isCatchAllMatchRule } from './ScheduleGridConfig';
+import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
 
 function expandTimespanToNearestHour(timespan: FiniteTimespan): FiniteTimespan {
   const start = timespan.start.set({ minute: 0, second: 0, millisecond: 0 });

@@ -1,4 +1,8 @@
-export default function getCapacityThresholds(registrationPolicy) {
+import { ScheduleGridEventFragmentFragment } from '../../graphqlQueries.generated';
+
+export default function getCapacityThresholds(
+  registrationPolicy: NonNullable<ScheduleGridEventFragmentFragment['registration_policy']>,
+) {
   if (registrationPolicy.only_uncounted) {
     return {
       total_slots: registrationPolicy.total_slots_including_not_counted,

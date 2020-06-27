@@ -5,7 +5,7 @@ import { normalizeTitle } from '../../../ValueUtils';
 import Timespan, { FiniteTimespan } from '../../../Timespan';
 import EventRun from './EventRun';
 import type Schedule from '../Schedule';
-import { ScheduleGridEventFragmentFragment } from '../../../graphqlQueries';
+import { ScheduleGridEventFragmentFragment } from '../queries.generated';
 
 class ScheduleBlock {
   id: string;

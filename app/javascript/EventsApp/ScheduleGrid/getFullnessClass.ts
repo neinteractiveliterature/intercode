@@ -1,6 +1,14 @@
 import getCapacityThresholds from './getCapacityThresholds';
+import SignupCountData from '../SignupCountData';
+import { ScheduleGridEventFragmentFragment } from '../../graphqlQueries.generated';
 
-export default function getFullnessClass(event, signupCountData) {
+export default function getFullnessClass(
+  event: ScheduleGridEventFragmentFragment, signupCountData: SignupCountData,
+) {
+  if (!event.registration_policy) {
+    return 'event-fullness-not-applicable';
+  }
+
   if (!event.registration_policy.slots_limited) {
     return 'event-fullness-unlimited';
   }

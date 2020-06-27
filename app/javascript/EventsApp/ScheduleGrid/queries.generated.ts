@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../../graphqlQueries.generated';
+import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../queries.generated';
 import gql from 'graphql-tag';
-import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../../graphqlQueries.generated';
+import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };

@@ -3046,15 +3046,15 @@ enum RefundStatus {
 
 type RegistrationPolicy {
   buckets: [RegistrationPolicyBucket!]!
-  minimum_slots: Int
-  minimum_slots_including_not_counted: Int
+  minimum_slots: Int!
+  minimum_slots_including_not_counted: Int!
   only_uncounted: Boolean
-  preferred_slots: Int
-  preferred_slots_including_not_counted: Int
+  preferred_slots: Int!
+  preferred_slots_including_not_counted: Int!
   prevent_no_preference_signups: Boolean!
   slots_limited: Boolean
-  total_slots: Int
-  total_slots_including_not_counted: Int
+  total_slots: Int!
+  total_slots_including_not_counted: Int!
 }
 
 type RegistrationPolicyBucket {

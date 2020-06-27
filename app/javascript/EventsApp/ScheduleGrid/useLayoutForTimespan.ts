@@ -2,8 +2,10 @@
 import { useMemo } from 'react';
 
 import { getMemoizationKeyForTimespan } from '../../TimespanUtils';
+import Schedule from './Schedule';
+import { FiniteTimespan } from '../../Timespan';
 
-export default function useLayoutForTimespan(schedule, timespan) {
+export default function useLayoutForTimespan(schedule: Schedule, timespan: FiniteTimespan) {
   const timespanKey = getMemoizationKeyForTimespan(timespan);
 
   const minTimespan = useMemo(
@@ -13,9 +15,11 @@ export default function useLayoutForTimespan(schedule, timespan) {
       }
 
       const min = timespan.clone();
-      min.start.add(3, 'hours'); // start grid at 9am unless something is earlier
-      min.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
-      if (min.start.isAfter(min.finish)) {
+      // start grid at 9am unless something is earlier
+      min.start = min.start.plus({ hours: 3 });
+      // end grid at midnight unless something is earlier
+      min.finish = min.finish.minus({ hours: 6 });
+      if (min.start > min.finish) {
         return timespan;
       }
       return min;

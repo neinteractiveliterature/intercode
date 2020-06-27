@@ -3475,15 +3475,15 @@ export enum RefundStatus {
 export type RegistrationPolicy = {
   __typename?: 'RegistrationPolicy';
   buckets: Array<RegistrationPolicyBucket>;
-  minimum_slots?: Maybe<Scalars['Int']>;
-  minimum_slots_including_not_counted?: Maybe<Scalars['Int']>;
+  minimum_slots: Scalars['Int'];
+  minimum_slots_including_not_counted: Scalars['Int'];
   only_uncounted?: Maybe<Scalars['Boolean']>;
-  preferred_slots?: Maybe<Scalars['Int']>;
-  preferred_slots_including_not_counted?: Maybe<Scalars['Int']>;
+  preferred_slots: Scalars['Int'];
+  preferred_slots_including_not_counted: Scalars['Int'];
   prevent_no_preference_signups: Scalars['Boolean'];
   slots_limited?: Maybe<Scalars['Boolean']>;
-  total_slots?: Maybe<Scalars['Int']>;
-  total_slots_including_not_counted?: Maybe<Scalars['Int']>;
+  total_slots: Scalars['Int'];
+  total_slots_including_not_counted: Scalars['Int'];
 };
 
 export type RegistrationPolicyBucket = {
