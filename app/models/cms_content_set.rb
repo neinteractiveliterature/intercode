@@ -134,7 +134,10 @@ class CmsContentSet
     return [] unless metadata[:inherit]
 
     @inherit_content_sets ||= begin
-      metadata[:inherit].map { |content_set_name| CmsContentSet.new(name: content_set_name) }
+      metadata[:inherit].flat_map do |content_set_name|
+        content_set = CmsContentSet.new(name: content_set_name)
+        [content_set, *content_set.inherit_content_sets]
+      end
     end
   end
 
