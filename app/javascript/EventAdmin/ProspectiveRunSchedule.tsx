@@ -13,10 +13,10 @@ import Timespan from '../Timespan';
 import ScheduleGridHeaderBlock from '../EventsApp/ScheduleGrid/ScheduleGridHeaderBlock';
 import { getConventionDayTimespans, timespanFromConvention } from '../TimespanUtils';
 import { getRunClassName, getRunStyle } from '../EventsApp/ScheduleGrid/StylingUtils';
-import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
+import ScheduleBlockDisplay from '../EventsApp/ScheduleGrid/ScheduleBlockDisplay';
 import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
-import { useEventAdminEventsQueryQuery, RunFieldsFragment, EventFieldsFragment } from '../graphqlQueries';
+import { useEventAdminEventsQueryQuery, RunFieldsFragment, EventFieldsFragment } from './queries.generated';
 
 const SCHEDULE_GRID_CONFIG = {
   key: 'con_schedule_by_room',
@@ -231,7 +231,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
           </div>
           {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
             <div className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={scheduleBlock.id}>
-              <ScheduleBlock
+              <ScheduleBlockDisplay
                 scheduleBlock={scheduleBlock}
                 rowHeader={options.rowHeader}
                 renderEventRun={({ layoutResult, runDimensions }) => (

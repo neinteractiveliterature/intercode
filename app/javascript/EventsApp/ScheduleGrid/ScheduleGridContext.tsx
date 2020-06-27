@@ -14,7 +14,11 @@ import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import { FiniteTimespan } from '../../Timespan';
-import { useScheduleGridEventsQueryQuery, useScheduleGridConventionDataQueryQuery, ScheduleGridEventFragmentFragment } from '../../graphqlQueries';
+import {
+  useScheduleGridEventsQueryQuery,
+  useScheduleGridConventionDataQueryQuery,
+  ScheduleGridEventFragmentFragment,
+} from './queries.generated';
 import { ScheduleGridEventsQuery } from './queries';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');

@@ -1,6 +1,6 @@
 import flatMap from 'lodash/flatMap';
 import sum from 'lodash/sum';
-import { SignupState } from '../graphqlQueries';
+import { SignupState } from '../graphqlTypes.generated';
 
 type SignupCountDataRow = {
   state: SignupState,

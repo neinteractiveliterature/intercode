@@ -6,7 +6,7 @@ import { useApolloClient } from '@apollo/react-hooks';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
-import { ScheduleGridCombinedQueryDocument, ScheduleGridCombinedQueryQuery } from '../../graphqlQueries';
+import { ScheduleGridCombinedQueryDocument, ScheduleGridCombinedQueryQuery } from './queries.generated';
 import AppRootContext from '../../AppRootContext';
 import Timespan from '../../Timespan';
 

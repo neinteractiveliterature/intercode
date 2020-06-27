@@ -1,6 +1,7 @@
 import EventRun from './PCSG/EventRun';
+// eslint-disable-next-line import/no-cycle
 import ScheduleBlock from './PCSG/ScheduleBlock';
-import ScheduleGridLayout from './ScheduleGridLayout';
+import ScheduleGridLayout, { ScheduleBlockWithOptions } from './ScheduleGridLayout';
 import {
   timespanFromConvention, RunForTimespanUtils, ConventionForTimespanUtils,
 } from '../../TimespanUtils';
@@ -49,6 +50,7 @@ interface RunForScheduleWithCachedEventId extends RunForSchedule {
 type EventRunGroup = {
   id: string,
   eventRuns: EventRun[],
+  rowHeader?: string,
 };
 
 export type ScheduleConstructorParams = {
@@ -187,29 +189,30 @@ export default class Schedule {
             eventRunsByRoom.set(roomName, []);
           }
 
-          eventRunsByRoom.set(roomName, [...eventRunsByRoom.get(roomName), eventRun]);
+          eventRunsByRoom.set(roomName, [...(eventRunsByRoom.get(roomName) ?? []), eventRun]);
         });
 
         return eventRunsByRoom;
       },
-      new Map(),
+      new Map<string, EventRun[]>(),
     );
 
     const roomNames = [...runsByRoomMap.keys()]
-      .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' }));
+      .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
 
-    return roomNames.map((roomName) => ({
+    return roomNames.map<EventRunGroup>((roomName) => ({
       id: roomName,
       rowHeader: roomName,
-      eventRuns: runsByRoomMap.get(roomName),
+      eventRuns: runsByRoomMap.get(roomName) ?? [],
     }));
   };
 
-  buildScheduleBlocksFromGroups = (groups, actualTimespan) => {
-    const blocks = groups
-      .map(({ eventRuns, id, ...props }) => [
+  buildScheduleBlocksFromGroups = (groups: EventRunGroup[], actualTimespan: FiniteTimespan) => {
+    const blocks = groups.map<ScheduleBlockWithOptions>(
+      ({ eventRuns, id, ...props }) => [
         new ScheduleBlock(id, actualTimespan, eventRuns, this), props,
-      ]);
+      ],
+    );
 
     if (this.config.filterEmptyGroups) {
       return blocks.filter((scheduleBlock) => scheduleBlock[0].eventRuns.length > 0);
@@ -218,7 +221,7 @@ export default class Schedule {
     return blocks;
   };
 
-  buildLayoutForTimespanRange = (minTimespan, maxTimespan) => {
+  buildLayoutForTimespanRange = (minTimespan: FiniteTimespan, maxTimespan: FiniteTimespan) => {
     const eventRuns = this.getEventRunsOverlapping(maxTimespan);
     const actualTimespan = expandTimespanToNearestHour(eventRuns.reduce(
       (currentMaxTimespan, eventRun) => currentMaxTimespan.expandedToFit(eventRun.timespan),
@@ -238,10 +241,13 @@ export default class Schedule {
     );
   };
 
-  buildLayoutForConventionDayTimespan = (conventionDayTimespan) => {
+  buildLayoutForConventionDayTimespan = (conventionDayTimespan: FiniteTimespan) => {
     const minTimespan = conventionDayTimespan.clone();
-    minTimespan.start.add(3, 'hours'); // start grid at 9am unless something is earlier
-    minTimespan.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
+
+    // start grid at 9am unless something is earlier
+    minTimespan.start = minTimespan.start.plus({ hours: 3 });
+    // end grid at midnight unless something is earlier
+    minTimespan.finish = minTimespan.finish.minus({ hours: 6 });
 
     return this.buildLayoutForTimespanRange(minTimespan, conventionDayTimespan);
   };

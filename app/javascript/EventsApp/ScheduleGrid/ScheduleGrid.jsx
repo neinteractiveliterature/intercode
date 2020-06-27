@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { DateTime } from 'luxon';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 import ScheduleGridHeaderBlock from './ScheduleGridHeaderBlock';
-import ScheduleBlock from './ScheduleBlock';
+import ScheduleBlockDisplay from './ScheduleBlockDisplay';
 import usePageTitle from '../../usePageTitle';
 import useLayoutForTimespan from './useLayoutForTimespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
@@ -31,7 +30,7 @@ function ScheduleGrid({ timespan }) {
         </div>
         {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
           <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={scheduleBlock.id}>
-            <ScheduleBlock
+            <ScheduleBlockDisplay
               scheduleBlock={scheduleBlock}
               rowHeader={options.rowHeader}
               renderEventRun={({ layoutResult, runDimensions }) => (

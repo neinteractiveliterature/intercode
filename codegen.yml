@@ -2,13 +2,19 @@ overwrite: true
 schema: "schema.graphql"
 documents: "./app/javascript/**/*.ts"
 generates:
-  app/javascript/graphqlQueries.ts:
+  app/javascript/graphqlTypes.generated.ts:
     plugins:
       - add: '/* eslint-disable */'
       - typescript
+  app/javascript/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: graphqlTypes.generated.ts
+    plugins:
+      - add: '/* eslint-disable */'
       - typescript-operations
       - typescript-react-apollo
-      # - typescript-graphql-files-modules
     config:
       withComponent: false
       withHOC: false

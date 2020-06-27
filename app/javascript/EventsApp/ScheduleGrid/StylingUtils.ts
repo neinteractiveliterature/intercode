@@ -2,11 +2,12 @@ import classNames from 'classnames';
 
 import getFullnessClass from './getFullnessClass';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
-import { SignupState, SignupRequestState, ScheduleGridEventFragmentFragment } from '../../graphqlQueries';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import RunDimensions from './PCSG/RunDimensions';
 import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
+import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
+import { ScheduleGridEventFragmentFragment } from './queries.generated';
 
 export function userSignupStatus(
   run: {

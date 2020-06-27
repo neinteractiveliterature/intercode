@@ -15,14 +15,13 @@ import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
-
 import {
   ConventionFieldsFragment,
   EventFieldsFragment,
   RoomFieldsFragment,
-  useCreateMultipleRunsMutation,
   EventAdminEventsQueryQuery,
-} from '../graphqlQueries';
+} from './queries.generated';
+import { useCreateMultipleRunsMutation } from './mutations.generated';
 import { lowercaseMeridiem } from '../TimeUtils';
 
 type ScheduleMultipleRunsModalProps = {

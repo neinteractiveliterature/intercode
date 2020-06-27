@@ -1,8 +1,9 @@
 /* eslint-disable */
-import * as Types from '../../@types/graphql';
+import * as Types from '../../graphqlTypes.generated';
 
-import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../queries.gql.d';
-import * as Operations from './queries';
+import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../../graphqlQueries.generated';
+import gql from 'graphql-tag';
+import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../../graphqlQueries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
@@ -49,11 +50,11 @@ export type ScheduleGridEventsQueryQueryVariables = Exact<{
 
 export type ScheduleGridEventsQueryQuery = (
   { __typename?: 'Query' }
-  & { events?: Types.Maybe<Array<Types.Maybe<(
+  & { events: Array<(
     { __typename?: 'Event' }
     & Pick<Types.Event, 'id'>
     & ScheduleGridEventFragmentFragment
-  )>>> }
+  )> }
 );
 
 export type ScheduleGridCombinedQueryQueryVariables = Exact<{
@@ -69,14 +70,65 @@ export type ScheduleGridCombinedQueryQuery = (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
     & CommonConventionDataFragment
-  )>, events?: Types.Maybe<Array<Types.Maybe<(
+  )>, events: Array<(
     { __typename?: 'Event' }
     & Pick<Types.Event, 'id'>
     & ScheduleGridEventFragmentFragment
-  )>>> }
+  )> }
 );
 
-
+export const ScheduleGridEventFragmentFragmentDoc = gql`
+    fragment ScheduleGridEventFragment on Event {
+  id
+  title
+  length_seconds
+  short_blurb_html
+  my_rating
+  can_play_concurrently
+  event_category {
+    id
+    name
+    default_color
+    signed_up_color
+    full_color
+  }
+  registration_policy {
+    slots_limited
+    only_uncounted
+    total_slots
+    total_slots_including_not_counted
+    preferred_slots
+    preferred_slots_including_not_counted
+    minimum_slots
+    minimum_slots_including_not_counted
+    buckets {
+      key
+      not_counted
+      total_slots
+      slots_limited
+    }
+  }
+  runs(start: $start, finish: $finish) {
+    id
+    starts_at
+    schedule_note
+    title_suffix
+    ...RunBasicSignupData
+    confirmed_signup_count @include(if: $extendedCounts)
+    not_counted_signup_count @include(if: $extendedCounts)
+    room_names
+  }
+}
+    ${RunBasicSignupDataFragmentDoc}`;
+export const ScheduleGridConventionDataQueryDocument = gql`
+    query ScheduleGridConventionDataQuery {
+  convention {
+    id
+    pre_schedule_content_html
+    ...CommonConventionData
+  }
+}
+    ${CommonConventionDataFragmentDoc}`;
 
 /**
  * __useScheduleGridConventionDataQueryQuery__
@@ -94,14 +146,22 @@ export type ScheduleGridCombinedQueryQuery = (
  * });
  */
 export function useScheduleGridConventionDataQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>(Operations.ScheduleGridConventionDataQuery, baseOptions);
+        return ApolloReactHooks.useQuery<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>(ScheduleGridConventionDataQueryDocument, baseOptions);
       }
 export function useScheduleGridConventionDataQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>(Operations.ScheduleGridConventionDataQuery, baseOptions);
+          return ApolloReactHooks.useLazyQuery<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>(ScheduleGridConventionDataQueryDocument, baseOptions);
         }
 export type ScheduleGridConventionDataQueryQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryQuery>;
 export type ScheduleGridConventionDataQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryLazyQuery>;
 export type ScheduleGridConventionDataQueryQueryResult = ApolloReactCommon.QueryResult<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>;
+export const ScheduleGridEventsQueryDocument = gql`
+    query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    id
+    ...ScheduleGridEventFragment
+  }
+}
+    ${ScheduleGridEventFragmentFragmentDoc}`;
 
 /**
  * __useScheduleGridEventsQueryQuery__
@@ -122,14 +182,28 @@ export type ScheduleGridConventionDataQueryQueryResult = ApolloReactCommon.Query
  * });
  */
 export function useScheduleGridEventsQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(Operations.ScheduleGridEventsQuery, baseOptions);
+        return ApolloReactHooks.useQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(ScheduleGridEventsQueryDocument, baseOptions);
       }
 export function useScheduleGridEventsQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(Operations.ScheduleGridEventsQuery, baseOptions);
+          return ApolloReactHooks.useLazyQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(ScheduleGridEventsQueryDocument, baseOptions);
         }
 export type ScheduleGridEventsQueryQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryQuery>;
 export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryLazyQuery>;
 export type ScheduleGridEventsQueryQueryResult = ApolloReactCommon.QueryResult<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>;
+export const ScheduleGridCombinedQueryDocument = gql`
+    query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  convention {
+    id
+    pre_schedule_content_html
+    ...CommonConventionData
+  }
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    id
+    ...ScheduleGridEventFragment
+  }
+}
+    ${CommonConventionDataFragmentDoc}
+${ScheduleGridEventFragmentFragmentDoc}`;
 
 /**
  * __useScheduleGridCombinedQueryQuery__
@@ -150,10 +224,10 @@ export type ScheduleGridEventsQueryQueryResult = ApolloReactCommon.QueryResult<S
  * });
  */
 export function useScheduleGridCombinedQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(Operations.ScheduleGridCombinedQuery, baseOptions);
+        return ApolloReactHooks.useQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(ScheduleGridCombinedQueryDocument, baseOptions);
       }
 export function useScheduleGridCombinedQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(Operations.ScheduleGridCombinedQuery, baseOptions);
+          return ApolloReactHooks.useLazyQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(ScheduleGridCombinedQueryDocument, baseOptions);
         }
 export type ScheduleGridCombinedQueryQueryHookResult = ReturnType<typeof useScheduleGridCombinedQueryQuery>;
 export type ScheduleGridCombinedQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridCombinedQueryLazyQuery>;

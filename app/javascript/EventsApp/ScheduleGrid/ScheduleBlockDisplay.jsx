@@ -5,7 +5,7 @@ import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWithoutSpanning';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
 
-function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }) {
+function ScheduleBlockDisplay({ scheduleBlock, rowHeader, renderEventRun }) {
   const layoutResult = useMemo(
     () => computeRunDimensionsWithoutSpanning(scheduleBlock),
     [scheduleBlock],
@@ -33,7 +33,7 @@ function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }) {
   );
 }
 
-ScheduleBlock.propTypes = {
+ScheduleBlockDisplay.propTypes = {
   scheduleBlock: PropTypes.shape({
     timespan: PropTypes.shape({
       getLength: PropTypes.func.isRequired,
@@ -43,8 +43,8 @@ ScheduleBlock.propTypes = {
   renderEventRun: PropTypes.func.isRequired,
 };
 
-ScheduleBlock.defaultProps = {
+ScheduleBlockDisplay.defaultProps = {
   rowHeader: null,
 };
 
-export default ScheduleBlock;
+export default ScheduleBlockDisplay;
