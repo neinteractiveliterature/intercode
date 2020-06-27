@@ -68,7 +68,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     Run.where(event_id: context[:convention].events.active.select(:id))
   end
 
-  field :events, [Types::EventType, null: true], null: true do
+  field :events, [Types::EventType], null: false do
     argument :extended_counts, Boolean, required: false
     argument :include_dropped, Boolean, required: false
     argument :start, Types::DateType, required: false
@@ -95,10 +95,10 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     convention.event_proposals.find(args[:id])
   end
 
-  field :my_signups, [Types::SignupType], null: true, camelize: false
+  field :my_signups, [Types::SignupType], null: false, camelize: false
 
   def my_signups
-    context[:user_con_profile].signups
+    context[:user_con_profile]&.signups || []
   end
 
   field :my_profile, Types::UserConProfileType, null: true

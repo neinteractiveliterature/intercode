@@ -1,18 +1,40 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import Select from 'react-select';
+
 import { timespanFromRun } from '../TimespanUtils';
 import { sortByLocaleString } from '../ValueUtils';
 import AppRootContext from '../AppRootContext';
 
-function RunSelect({ event, ...otherProps }) {
+type RoomForRunSelectProps = {
+  name: string,
+};
+
+type RunForRunSelectProps = {
+  id: number,
+  rooms: RoomForRunSelectProps[],
+  starts_at: string,
+  title_suffix?: string,
+};
+
+type RunSelectProps = {
+  event?: {
+    length_seconds: number,
+    runs: RunForRunSelectProps[],
+  },
+};
+
+function RunSelect({ event, ...otherProps }: RunSelectProps) {
   const { timezoneName } = useContext(AppRootContext);
+  if (!event) {
+    return null;
+  }
+
   return (
     <Select
-      options={event ? event.runs : []}
-      getOptionValue={(r) => r.id}
+      options={event.runs}
+      getOptionValue={(r) => r.id.toString()}
       formatOptionLabel={(r) => {
-        const timespan = timespanFromRun({ timezone_name: timezoneName }, event, r);
+        const timespan = timespanFromRun(timezoneName, event, r);
         const timeDescription = timespan.humanizeInTimezone(timezoneName);
         const roomsDescription = sortByLocaleString(r.rooms || [], (room) => room.name)
           .map((room) => room.name)
@@ -46,23 +68,5 @@ function RunSelect({ event, ...otherProps }) {
     />
   );
 }
-
-RunSelect.propTypes = {
-  event: PropTypes.shape({
-    length_seconds: PropTypes.number.isRequired,
-    runs: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      rooms: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      })),
-      starts_at: PropTypes.string.isRequired,
-      title_suffix: PropTypes.string,
-    })).isRequired,
-  }),
-};
-
-RunSelect.defaultProps = {
-  event: null,
-};
 
 export default RunSelect;

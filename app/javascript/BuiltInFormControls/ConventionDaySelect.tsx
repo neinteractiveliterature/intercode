@@ -1,11 +1,18 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import AppRootContext from '../AppRootContext';
 
-function ConventionDaySelect({ convention, value, onChange }) {
+import type { ConventionForTimespanUtils } from '../TimespanUtils';
+
+export type ConventionDaySelectProps = {
+  convention: ConventionForTimespanUtils,
+  value?: string | null,
+  onChange: (string) => void,
+};
+
+function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps) {
   const { timezoneName } = useContext(AppRootContext);
   const conventionTimespan = useMemo(
     () => timespanFromConvention(convention),
@@ -38,7 +45,7 @@ function ConventionDaySelect({ convention, value, onChange }) {
           type="radio"
           name="day"
           value={day.toISO()}
-          checked={+day === +valueDateTime}
+          checked={valueDateTime != null && +day === +valueDateTime}
           onChange={inputChange}
           aria-label={day.toFormat('EEEE')}
         />
@@ -55,18 +62,5 @@ function ConventionDaySelect({ convention, value, onChange }) {
     </fieldset>
   );
 }
-
-ConventionDaySelect.propTypes = {
-  convention: PropTypes.shape({
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-  }).isRequired,
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-};
-
-ConventionDaySelect.defaultProps = {
-  value: null,
-};
 
 export default ConventionDaySelect;

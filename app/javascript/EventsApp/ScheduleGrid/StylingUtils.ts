@@ -2,8 +2,18 @@ import classNames from 'classnames';
 
 import getFullnessClass from './getFullnessClass';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
+import { SignupState, SignupRequestState, ScheduleGridEventFragmentFragment } from '../../graphqlQueries';
+import ScheduleGridConfig from './ScheduleGridConfig';
+import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
+import RunDimensions from './PCSG/RunDimensions';
+import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
 
-export function userSignupStatus(run) {
+export function userSignupStatus(
+  run: {
+    my_signups: { state: SignupState }[],
+    my_signup_requests: { state: SignupRequestState }[],
+  },
+) {
   if (run.my_signups.some((signup) => signup.state === 'confirmed')) {
     return 'confirmed';
   }
@@ -19,9 +29,20 @@ export function userSignupStatus(run) {
   return null;
 }
 
+export type GetRunClassNameOptions = {
+  event: {
+    fake?: boolean,
+    registration_policy: ScheduleGridEventFragmentFragment['registration_policy'],
+  },
+  signupStatus?: SignupState,
+  config: ScheduleGridConfig,
+  signupCountData: SignupCountData,
+  unlimited: boolean,
+};
+
 export function getRunClassName({
   event, signupStatus, config, signupCountData, unlimited,
-}) {
+}: GetRunClassNameOptions) {
   return classNames(
     'schedule-grid-event',
     'small',
@@ -38,6 +59,7 @@ export function getRunClassName({
       ),
       full: (
         config.classifyEventsBy !== 'fullness'
+        && event.registration_policy
         && signupCountData.runFull(event)
         && signupStatus == null
       ),
@@ -47,7 +69,14 @@ export function getRunClassName({
   );
 }
 
-export function getRunPositioningStyles({ runDimensions, layoutResult }) {
+export type GetRunPositioningStylesOptions = {
+  runDimensions: RunDimensions,
+  layoutResult: ScheduleLayoutResult,
+};
+
+export function getRunPositioningStyles(
+  { runDimensions, layoutResult }: GetRunPositioningStylesOptions,
+) {
   return {
     top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
     height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
@@ -58,7 +87,20 @@ export function getRunPositioningStyles({ runDimensions, layoutResult }) {
   };
 }
 
-export function getEventCategoryStyles({ eventCategory, variant }) {
+export type EventStyleVariant = 'default' | 'signed_up' | 'full';
+
+type GetEventCategoryStylesOptions = {
+  eventCategory: {
+    default_color: string,
+    signed_up_color: string,
+    full_color: string,
+  },
+  variant: EventStyleVariant,
+};
+
+export function getEventCategoryStyles(
+  { eventCategory, variant }: GetEventCategoryStylesOptions,
+) {
   const color = eventCategory[`${variant}_color`];
 
   if (color) {
@@ -75,11 +117,19 @@ export function getEventCategoryStyles({ eventCategory, variant }) {
   return {};
 }
 
+type GetRunClassificationStylesOptions = {
+  config: ScheduleGridConfig,
+  eventCategory: GetEventCategoryStylesOptions['eventCategory'],
+  signupCountData: SignupCountData,
+  event: EventForSignupCountData,
+  signupStatus?: SignupState | null,
+};
+
 export function getRunClassificationStyles({
   config, eventCategory, signupCountData, event, signupStatus,
-}) {
+}: GetRunClassificationStylesOptions) {
   if (config.classifyEventsBy === 'category') {
-    let variant = 'default';
+    let variant: EventStyleVariant = 'default';
     if (signupStatus != null) {
       variant = 'signed_up';
     } else if (signupCountData.runFull(event)) {
@@ -92,9 +142,16 @@ export function getRunClassificationStyles({
   return {};
 }
 
+export type GetRunStyleOptions = GetRunClassificationStylesOptions
+& GetRunPositioningStylesOptions
+& {
+  disableDetailsPopup: boolean,
+};
+
 export function getRunStyle({
-  event, eventCategory, signupStatus, config, signupCountData, runDimensions, layoutResult, disableDetailsPopup,
-}) {
+  event, eventCategory, signupStatus, config, signupCountData, runDimensions,
+  layoutResult, disableDetailsPopup,
+}: GetRunStyleOptions) {
   return {
     cursor: (disableDetailsPopup ? null : 'pointer'),
     ...getRunPositioningStyles({ runDimensions, layoutResult }),

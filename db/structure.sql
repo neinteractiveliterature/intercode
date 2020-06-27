@@ -10,20 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -548,7 +534,7 @@ ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ahoy_events; Type: TABLE; Schema: public; Owner: -
@@ -2138,7 +2124,7 @@ ALTER SEQUENCE public.root_sites_id_seq OWNED BY public.root_sites.id;
 CREATE TABLE public.runs (
     id integer NOT NULL,
     event_id integer,
-    starts_at timestamp without time zone,
+    starts_at timestamp without time zone NOT NULL,
     title_suffix character varying,
     schedule_note text,
     updated_by_id integer,
@@ -4328,6 +4314,20 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
+-- Name: events tsvector_update_event_title; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('title_vector', 'public.simple_unaccent', 'title');
+
+
+--
+-- Name: pg_search_documents tsvector_update_pg_search_documents_content; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
+
+
+--
 -- Name: signup_requests fk_rails_008590ab32; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5211,6 +5211,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200515153931'),
 ('20200516164805'),
 ('20200517155823'),
-('20200601160341');
+('20200601160341'),
+('20200626154532');
 
 

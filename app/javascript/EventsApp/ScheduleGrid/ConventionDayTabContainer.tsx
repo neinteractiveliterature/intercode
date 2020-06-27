@@ -1,6 +1,4 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
-import MomentPropTypes from 'react-moment-proptypes';
 import {
   NavLink, Switch, Redirect, Route, useLocation,
 } from 'react-router-dom';
@@ -8,10 +6,21 @@ import { useApolloClient } from '@apollo/react-hooks';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
-import { ScheduleGridCombinedQuery } from './queries.gql';
+import { ScheduleGridCombinedQueryDocument, ScheduleGridCombinedQueryQuery } from '../../graphqlQueries';
 import AppRootContext from '../../AppRootContext';
+import Timespan from '../../Timespan';
 
-function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
+import type { FiniteTimespan } from '../../Timespan';
+
+type ConventionDayTabProps = {
+  basename: string,
+  timespan: FiniteTimespan,
+  prefetchTimespan: (timespan: Timespan) => void | null,
+};
+
+function ConventionDayTab(
+  { basename, timespan, prefetchTimespan }: ConventionDayTabProps,
+): JSX.Element {
   const location = useLocation();
   const prefetchProps = (
     prefetchTimespan
@@ -25,41 +34,37 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
   return (
     <li className="nav-item">
       <NavLink
-        to={`${basename}/${timespan.start.format('dddd').toLowerCase()}${location.search}`}
+        to={`${basename}/${timespan.start.toFormat('EEEE').toLowerCase()}${location.search}`}
         className="nav-link"
         {...prefetchProps}
       >
         <span className="d-inline d-md-none">
-          {timespan.start.format('ddd')}
+          {timespan.start.toFormat('EEE')}
         </span>
         <span className="d-none d-md-inline">
-          {timespan.start.format('dddd')}
+          {timespan.start.toFormat('EEEE')}
         </span>
       </NavLink>
     </li>
   );
 }
 
-ConventionDayTab.propTypes = {
-  basename: PropTypes.string.isRequired,
-  timespan: PropTypes.shape({
-    start: MomentPropTypes.momentObj.isRequired,
-  }).isRequired,
-  prefetchTimespan: PropTypes.func,
-};
-
-ConventionDayTab.defaultProps = {
-  prefetchTimespan: null,
+export type ConventionDayTabContainerProps = {
+  basename: string,
+  conventionTimespan: Timespan | null,
+  prefetchTimespan: (Timespan) => any,
+  children: (Timespan) => JSX.Element,
+  showExtendedCounts?: boolean,
 };
 
 function ConventionDayTabContainer({
   basename, conventionTimespan, prefetchTimespan, children, showExtendedCounts,
-}) {
+}: ConventionDayTabContainerProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();
   const refreshData = useCallback(
-    () => client.query({
-      query: ScheduleGridCombinedQuery,
+    () => client.query<ScheduleGridCombinedQueryQuery>({
+      query: ScheduleGridCombinedQueryDocument,
       variables: { extendedCounts: showExtendedCounts || false },
       fetchPolicy: 'network-only',
     }),
@@ -68,7 +73,7 @@ function ConventionDayTabContainer({
 
   const conventionDayTimespans = useMemo(
     () => (
-      conventionTimespan.isFinite()
+      conventionTimespan?.isFinite()
         ? getConventionDayTimespans(
           conventionTimespan,
           timezoneName,
@@ -78,7 +83,7 @@ function ConventionDayTabContainer({
     [conventionTimespan, timezoneName],
   );
 
-  if (!conventionTimespan.isFinite()) {
+  if (!conventionTimespan?.isFinite()) {
     return (
       <div className="alert alert-warning">
         Convention start/end dates have not yet been set.
@@ -95,7 +100,7 @@ function ConventionDayTabContainer({
               basename={basename}
               timespan={timespan}
               prefetchTimespan={prefetchTimespan}
-              key={timespan.start.toISOString()}
+              key={timespan.start.toISO()}
             />
           ))}
         </ul>
@@ -107,33 +112,16 @@ function ConventionDayTabContainer({
       <Switch>
         {conventionDayTimespans.map((timespan) => (
           <Route
-            path={`${basename}/${timespan.start.format('dddd').toLowerCase()}`}
-            key={timespan.start.toISOString()}
+            path={`${basename}/${timespan.start.toFormat('EEEE').toLowerCase()}`}
+            key={timespan.start.toISO()}
           >
             {children(timespan)}
           </Route>
         ))}
-        <Redirect to={`${basename}/${conventionDayTimespans[0].start.format('dddd').toLowerCase()}`} />
+        <Redirect to={`${basename}/${conventionDayTimespans[0].start.toFormat('EEEE').toLowerCase()}`} />
       </Switch>
     </div>
   );
 }
-
-ConventionDayTabContainer.propTypes = {
-  basename: PropTypes.string.isRequired,
-  conventionTimespan: PropTypes.shape({
-    start: MomentPropTypes.momentObj.isRequired,
-    finish: MomentPropTypes.momentObj.isRequired,
-    isFinite: PropTypes.func.isRequired,
-  }).isRequired,
-  prefetchTimespan: PropTypes.func,
-  children: PropTypes.func.isRequired,
-  showExtendedCounts: PropTypes.bool,
-};
-
-ConventionDayTabContainer.defaultProps = {
-  prefetchTimespan: null,
-  showExtendedCounts: false,
-};
 
 export default ConventionDayTabContainer;

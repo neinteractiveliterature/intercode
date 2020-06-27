@@ -12,27 +12,29 @@ module.exports = {
   },
 
   extends: [
-    "airbnb",
+    'airbnb-typescript',
   ],
 
-  parser: "babel-eslint",
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 6,
     ecmaFeatures: {
       jsx: true,
     },
+    project: './tsconfig.json',
   },
 
   plugins: [
-    'babel',
+    // 'babel',
     'jest',
     'graphql',
     'react-hooks',
+    '@typescript-eslint',
   ],
 
   rules: {
-    'babel/camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
+    // 'babel/camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
     'camelcase': 'off',
     'jest/no-disabled-tests': "warn",
     'jest/no-focused-tests': "error",
@@ -73,19 +75,21 @@ module.exports = {
         ],
       },
     ],
-    "no-restricted-imports": ['error', 'graphql-tag'],
+    // "no-restricted-imports": ['error', 'graphql-tag'],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    'import/named': 'off',
+    'import/namespace': 'off',
+    'import/default': 'off',
+    'import/no-named-as-default-member': 'off',
   },
 
   settings: {
-    // This is making eslint hang rather than exit :(
-    //
-    // 'import/resolver': {
-    //   'webpack': {
-    //     config: path.resolve(__dirname, './config/webpack/environment.js'),
-    //   },
-    // },
+    'import/resolver': {
+      "typescript": {
+        "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+      },
+    },
     'import/ignore': [
       'test/javascript/testUtils.js',
     ],

@@ -1,33 +1,47 @@
 import React, {
-  useState, useMemo, useCallback, useContext,
+  useState, useMemo, useCallback, useContext, ReactNode,
 } from 'react';
-import PropTypes from 'prop-types';
-import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { DateTime, DateObjectUnits } from 'luxon';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import { timespanFromConvention, timespanFromRun, getConventionDayTimespans } from '../TimespanUtils';
-import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries.gql';
-import { CreateMultipleRuns } from './mutations.gql';
+import { EventAdminEventsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
 
+import {
+  ConventionFieldsFragment,
+  EventFieldsFragment,
+  RoomFieldsFragment,
+  useCreateMultipleRunsMutation,
+  EventAdminEventsQueryQuery,
+} from '../graphqlQueries';
+import { lowercaseMeridiem } from '../TimeUtils';
+
+type ScheduleMultipleRunsModalProps = {
+  convention: ConventionFieldsFragment,
+  event: EventFieldsFragment,
+  visible: boolean,
+  onCancel: () => void,
+  onFinish: () => void,
+};
+
 function ScheduleMultipleRunsModal({
   convention, event, visible, onCancel, onFinish,
-}) {
-  const [createMutate] = useMutation(CreateMultipleRuns);
+}: ScheduleMultipleRunsModalProps) {
+  const [createMutate] = useCreateMultipleRunsMutation();
   const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(createMutate);
-  const [day, setDay] = useState(null);
-  const [start, setStart] = useState({ hour: null, minute: null });
-  const [finish, setFinish] = useState({ hour: null, minute: null });
-  const [rooms, setRooms] = useState([]);
+  const [day, setDay] = useState<DateTime | null>(null);
+  const [start, setStart] = useState<DateObjectUnits>({});
+  const [finish, setFinish] = useState<DateObjectUnits>({});
+  const [rooms, setRooms] = useState<RoomFieldsFragment[]>([]);
   const { timezoneName } = useContext(AppRootContext);
   const conventionTimespan = useMemo(
     () => timespanFromConvention(convention),
@@ -42,24 +56,20 @@ function ScheduleMultipleRunsModal({
     [conventionDayTimespans, day],
   );
 
-  const dataComplete = useMemo(
-    () => (
-      day
-      && start.hour != null && start.minute != null
-      && finish.hour != null && finish.minute != null
-    ),
-    [day, start, finish],
-  );
-
   const timespan = useMemo(
     () => {
-      if (!dataComplete) {
+      const dataComplete = (
+        start.hour != null && start.minute != null
+        && finish.hour != null && finish.minute != null
+      );
+
+      if (day == null || !dataComplete) {
         return null;
       }
 
-      return new Timespan(day.clone().set(start), day.clone().set(finish));
+      return new Timespan(day.set(start), day.set(finish));
     },
-    [dataComplete, day, start, finish],
+    [day, start, finish],
   );
 
   const timespansWithinRange = useMemo(
@@ -70,15 +80,21 @@ function ScheduleMultipleRunsModal({
 
       return timespan.getTimespansWithin(
         timezoneName,
-        { unit: 'second', duration: { seconds: event.length_seconds } },
+        { unit: 'second', duration: { seconds: event.length_seconds ?? undefined } },
       );
     },
     [timespan, timezoneName, event.length_seconds],
   );
 
   const existingRunTimespans = useMemo(
-    () => event.runs.map((run) => timespanFromRun(convention, event, run)),
-    [event, convention],
+    () => {
+      if (event.length_seconds == null) {
+        return [];
+      }
+
+      return event.runs.map((run) => timespanFromRun(timezoneName, event, run));
+    },
+    [event, timezoneName],
   );
 
   const nonConflictingTimespansWithinRange = useMemo(
@@ -94,7 +110,7 @@ function ScheduleMultipleRunsModal({
   const scheduleRuns = useCallback(
     async () => {
       const runs = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
-        starts_at: nonConflictingTimespan.start.toISOString(),
+        starts_at: nonConflictingTimespan.start.toISO(),
         room_ids: rooms.map((room) => room.id),
       }));
 
@@ -102,10 +118,18 @@ function ScheduleMultipleRunsModal({
         variables: {
           input: { event_id: event.id, runs },
         },
-        update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
-          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
+        update: (store, { data }) => {
+          const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+            query: EventAdminEventsQuery,
+          });
+          if (eventsData == null) {
+            return;
+          }
+
           const eventData = eventsData.events.find((e) => e.id === event.id);
-          eventData.runs = [...eventData.runs, ...newRuns];
+          if (eventData != null) {
+            eventData.runs = [...eventData.runs, ...(data?.createMultipleRuns?.runs ?? [])];
+          }
           store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
       });
@@ -115,13 +139,13 @@ function ScheduleMultipleRunsModal({
   );
 
   const renderTimeSelects = () => {
-    if (!day) {
+    if (!day || !conventionDayTimespan) {
       return null;
     }
 
     const timespanForFinish = new Timespan(
       conventionDayTimespan.start,
-      conventionDayTimespan.finish.clone().add(1, 'hour'),
+      conventionDayTimespan.finish.plus({ hours: 1 }),
     );
 
     return (
@@ -148,7 +172,7 @@ function ScheduleMultipleRunsModal({
     const nonConflictingTimespans = nonConflictingTimespansWithinRange;
 
     const runTimespanItems = runTimespans.map((runTimespan) => {
-      let description = runTimespan.start.format('h:mma');
+      let description: ReactNode = lowercaseMeridiem(runTimespan.start.toFormat('h:mma'));
       const runConflicts = (
         nonConflictingTimespans
           .find((nonConflictingTimespan) => nonConflictingTimespan.isSame(runTimespan)) == null
@@ -159,7 +183,7 @@ function ScheduleMultipleRunsModal({
       }
 
       return (
-        <li key={runTimespan.start.toISOString()} className="list-inline-item">
+        <li key={runTimespan.start.toISO()} className="list-inline-item">
           {description}
         </li>
       );
@@ -186,7 +210,7 @@ function ScheduleMultipleRunsModal({
         <div className="modal-body">
           <ConventionDaySelect
             convention={convention}
-            value={day}
+            value={day?.toISO()}
             onChange={setDay}
           />
 
@@ -210,7 +234,7 @@ function ScheduleMultipleRunsModal({
           <ProspectiveRunSchedule
             day={day}
             runs={nonConflictingTimespansWithinRange.map((t) => ({
-              starts_at: t.start.toISOString(),
+              starts_at: t.start.toISO(),
               rooms,
             }))}
             event={{
@@ -251,13 +275,5 @@ function ScheduleMultipleRunsModal({
     </div>
   );
 }
-
-ScheduleMultipleRunsModal.propTypes = {
-  convention: propType(ConventionFields).isRequired,
-  event: propType(EventFields).isRequired,
-  visible: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onFinish: PropTypes.func.isRequired,
-};
 
 export default ScheduleMultipleRunsModal;

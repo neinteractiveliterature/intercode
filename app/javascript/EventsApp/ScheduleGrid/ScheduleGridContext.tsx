@@ -1,47 +1,85 @@
 import React, {
-  Suspense, useState, useMemo, useCallback, useContext, useEffect,
+  Suspense, useState, useMemo, useCallback, useContext, useEffect, ReactNode,
 } from 'react';
-import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
-import ConfigPropType from './ConfigPropType';
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
-import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery } from './queries.gql';
-import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../../TimespanUtils';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
+import ScheduleGridConfig from './ScheduleGridConfig';
+import { FiniteTimespan } from '../../Timespan';
+import { useScheduleGridEventsQueryQuery, useScheduleGridConventionDataQueryQuery, ScheduleGridEventFragmentFragment } from '../../graphqlQueries';
+import { ScheduleGridEventsQuery } from './queries';
 
-const IS_MOBILE = ['iOS', 'Android OS'].includes(detect().os);
+const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
-export const ScheduleGridContext = React.createContext({
-  schedule: {},
-  config: {},
-  convention: {},
+export type ScheduleGridContextValue = {
+  schedule: Schedule,
+  config: ScheduleGridConfig,
+  convention: ConventionForTimespanUtils,
+  isRunDetailsVisible: (runId: number) => boolean,
+  visibleRunDetailsIds: Set<number>,
+  toggleRunDetailsVisibility: (runId: number) => void,
+};
+
+const skeletonScheduleGridConfig = new ScheduleGridConfig({
+  basename: 'skeleton',
+  key: 'skeleton',
+  title: 'Skeleton config',
+  classifyEventsBy: 'category',
+  groupEventsBy: 'category',
+});
+
+const skeletonSchedule = new Schedule({
+  config: skeletonScheduleGridConfig,
+  convention: { timezone_mode: 'user_local' },
+  events: [],
+  timezoneName: 'Etc/UTC',
+});
+
+export const ScheduleGridContext = React.createContext<ScheduleGridContextValue>({
+  schedule: skeletonSchedule,
+  config: skeletonScheduleGridConfig,
+  convention: {
+    timezone_mode: 'user_local',
+  },
   isRunDetailsVisible: () => false,
   visibleRunDetailsIds: new Set(),
   toggleRunDetailsVisibility: () => {},
 });
 
-const ScheduleGridFiltersContext = React.createContext({
-  myRatingFilter: null,
+export type ScheduleGridFiltersContextValue = {
+  myRatingFilter?: number[],
+  hideConflicts: boolean,
+};
+
+const ScheduleGridFiltersContext = React.createContext<ScheduleGridFiltersContextValue>({
+  myRatingFilter: undefined,
   hideConflicts: false,
 });
 
-export function useScheduleGridProvider(config, convention, events, myRatingFilter, hideConflicts) {
+export function useScheduleGridProvider(
+  config: ScheduleGridConfig,
+  convention: ConventionForTimespanUtils,
+  events: ScheduleGridEventFragmentFragment[],
+  myRatingFilter?: number[],
+  hideConflicts?: boolean,
+) {
   const { timezoneName } = useContext(AppRootContext);
-  const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
+  const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set<number>());
 
   const isRunDetailsVisible = useMemo(
-    () => (runId) => visibleRunDetailsIds.has(runId),
+    () => (runId: number) => visibleRunDetailsIds.has(runId),
     [visibleRunDetailsIds],
   );
 
-  const schedule = useMemo(
+  const schedule: Schedule = useMemo(
     () => {
       if (config && convention && events) {
         return new Schedule({
@@ -49,14 +87,18 @@ export function useScheduleGridProvider(config, convention, events, myRatingFilt
         });
       }
 
-      return {};
+      return skeletonSchedule;
     },
     [config, convention, events, hideConflicts, myRatingFilter, timezoneName],
   );
 
   const toggleRunDetailsVisibility = useCallback(
-    (runId) => {
-      let newVisibility;
+    (runId: number) => {
+      if (!schedule) {
+        return false;
+      }
+
+      let newVisibility: boolean = false;
 
       setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
         const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
@@ -68,8 +110,9 @@ export function useScheduleGridProvider(config, convention, events, myRatingFilt
         }
 
         const runTimespan = schedule.getRunTimespan(runId);
-        const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
-          .map((eventRun) => eventRun.runId);
+        const concurrentRunIds = runTimespan
+          ? schedule.getEventRunsOverlapping(runTimespan).map((eventRun) => eventRun.runId)
+          : [];
 
         concurrentRunIds.forEach((concurrentRunId) => {
           newVisibleRunDetailsIds.delete(concurrentRunId);
@@ -95,7 +138,11 @@ export function useScheduleGridProvider(config, convention, events, myRatingFilt
   };
 }
 
-function LoadingOverlay({ loading }) {
+export type LoadingOverlayProps = {
+  loading?: boolean,
+};
+
+function LoadingOverlay({ loading }: LoadingOverlayProps) {
   if (!loading) {
     return null;
   }
@@ -112,27 +159,27 @@ function LoadingOverlay({ loading }) {
   );
 }
 
-LoadingOverlay.propTypes = {
-  loading: PropTypes.bool,
-};
-
-LoadingOverlay.defaultProps = {
-  loading: false,
-};
-
-function getEventsQueryVariables(timespan, showExtendedCounts) {
+function getEventsQueryVariables(timespan: FiniteTimespan, showExtendedCounts?: boolean) {
   return {
-    start: timespan.start.toISOString(),
-    finish: timespan.finish.toISOString(),
-    extendedCounts: showExtendedCounts || false,
+    start: timespan.start.toISO(),
+    finish: timespan.finish.toISO(),
+    extendedCounts: showExtendedCounts ?? false,
   };
 }
 
+type ScheduleGridProviderTabContentProps = {
+  config: ScheduleGridConfig,
+  convention: ConventionForTimespanUtils,
+  children: (timespan: FiniteTimespan) => ReactNode,
+  timespan: FiniteTimespan,
+  afterLoaded: () => any,
+};
+
 function ScheduleGridProviderTabContent({
   config, convention, children, timespan, afterLoaded,
-}) {
+}: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
-  const { data, error, loading } = useQuery(ScheduleGridEventsQuery, {
+  const { data, error, loading } = useScheduleGridEventsQueryQuery({
     variables: {
       ...getEventsQueryVariables(timespan, config.showExtendedCounts),
     },
@@ -141,7 +188,7 @@ function ScheduleGridProviderTabContent({
   const providerValue = useScheduleGridProvider(
     config,
     convention,
-    (cachedData || {}).events || [],
+    cachedData?.events || [],
     myRatingFilter,
     hideConflicts,
   );
@@ -169,34 +216,31 @@ function ScheduleGridProviderTabContent({
   );
 }
 
-ScheduleGridProviderTabContent.propTypes = {
-  config: ConfigPropType.isRequired,
-  children: PropTypes.func.isRequired,
-  timespan: PropTypes.shape({}).isRequired,
-  convention: PropTypes.shape({}).isRequired,
-  afterLoaded: PropTypes.func.isRequired,
+export type ScheduleGridProviderProps = {
+  config: ScheduleGridConfig,
+  children: ScheduleGridProviderTabContentProps['children'],
+  myRatingFilter?: number[],
+  hideConflicts?: boolean,
 };
 
 export function ScheduleGridProvider({
   config, children, myRatingFilter, hideConflicts,
-}) {
+}: ScheduleGridProviderProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const filtersContextValue = { myRatingFilter, hideConflicts };
+  const filtersContextValue = { myRatingFilter, hideConflicts: hideConflicts ?? false };
   const prefetchAll = IS_MOBILE;
-  const { data, loading, error } = useQuery(ScheduleGridConventionDataQuery);
+  const { data, loading, error } = useScheduleGridConventionDataQueryQuery();
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(
-    (timespan) => client.query({
+    (timespan: FiniteTimespan) => client.query({
       query: ScheduleGridEventsQuery,
-      variables: {
-        ...getEventsQueryVariables(timespan, config.showExtendedCounts),
-      },
+      variables: getEventsQueryVariables(timespan, config.showExtendedCounts),
     }),
     [client, config.showExtendedCounts],
   );
 
-  const convention = (loading || error) ? null : data.convention;
+  const convention = (loading || error || !data) ? null : data.convention;
 
   const conventionTimespan = useMemo(
     () => (convention ? timespanFromConvention(convention) : null),
@@ -205,14 +249,14 @@ export function ScheduleGridProvider({
 
   const conventionDayTimespans = useMemo(
     () => (
-      convention && conventionTimespan.isFinite()
+      conventionTimespan?.isFinite()
         ? getConventionDayTimespans(
           conventionTimespan,
           timezoneName,
         )
         : []
     ),
-    [convention, conventionTimespan],
+    [conventionTimespan, timezoneName],
   );
 
   const afterTabLoaded = useCallback(
@@ -232,9 +276,13 @@ export function ScheduleGridProvider({
     return <ScheduleGridSkeleton />;
   }
 
+  if (!convention) {
+    return <ErrorDisplay stringError="Convention not found" />;
+  }
+
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
-      {convention.pre_schedule_content_html && (
+      {convention?.pre_schedule_content_html && (
         // eslint-disable-next-line react/no-danger
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
@@ -259,15 +307,3 @@ export function ScheduleGridProvider({
     </ScheduleGridFiltersContext.Provider>
   );
 }
-
-ScheduleGridProvider.propTypes = {
-  config: ConfigPropType.isRequired,
-  children: PropTypes.func.isRequired,
-  myRatingFilter: PropTypes.arrayOf(PropTypes.number),
-  hideConflicts: PropTypes.bool,
-};
-
-ScheduleGridProvider.defaultProps = {
-  myRatingFilter: null,
-  hideConflicts: false,
-};

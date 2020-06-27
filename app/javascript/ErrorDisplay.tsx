@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import PropTypes from 'prop-types';
+import { ApolloError } from 'apollo-client';
 
-const ErrorDisplay = ({ stringError, graphQLError }) => {
-  let displayContents = null;
+export type ErrorDisplayProps = {
+  stringError?: string | null,
+  graphQLError?: ApolloError | null,
+};
+
+const ErrorDisplay = ({ stringError, graphQLError }: ErrorDisplayProps) => {
+  let displayContents: ReactNode = null;
 
   if (graphQLError) {
     try {

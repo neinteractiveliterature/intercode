@@ -1,14 +1,29 @@
 import { useState, useCallback } from 'react';
 import useIsMounted from './useIsMounted';
 
-export default function useAsyncFunction(func, { suppressError } = {}) {
-  const [error, setError] = useState(null);
-  const [inProgress, setInProgress] = useState(false);
+export type UseAsyncFunctionOptions = {
+  suppressError?: boolean,
+};
+
+export type WrappedAsyncFunction<T, A extends any[]> = (...args: A) => Promise<T | null>;
+
+export type UseAsyncFunctionReturn<T, A extends any[]> = [
+  WrappedAsyncFunction<T, A>,
+  Error | null,
+  boolean,
+  () => void,
+];
+
+export default function useAsyncFunction<T, A extends any[]>(
+  func: (...args: A) => Promise<T>, { suppressError }: UseAsyncFunctionOptions = {},
+): UseAsyncFunctionReturn<T, A> {
+  const [error, setError] = useState<Error | null>(null);
+  const [inProgress, setInProgress] = useState<boolean>(false);
   const isMounted = useIsMounted();
 
   return [
     useCallback(
-      async (...args) => {
+      async (...args: A) => {
         setError(null);
         setInProgress(true);
         try {

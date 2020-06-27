@@ -4,19 +4,19 @@ import React, {
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MomentPropTypes from 'react-moment-proptypes';
-import { useQuery } from '@apollo/react-hooks';
+import { DateTime } from 'luxon';
 
 import { ScheduleGridContext, useScheduleGridProvider } from '../EventsApp/ScheduleGrid/ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from '../EventsApp/ScheduleGrid/LayoutConstants';
 import useLayoutForTimespan from '../EventsApp/ScheduleGrid/useLayoutForTimespan';
 import Timespan from '../Timespan';
 import ScheduleGridHeaderBlock from '../EventsApp/ScheduleGrid/ScheduleGridHeaderBlock';
-import { EventAdminEventsQuery } from './queries.gql';
 import { getConventionDayTimespans, timespanFromConvention } from '../TimespanUtils';
 import { getRunClassName, getRunStyle } from '../EventsApp/ScheduleGrid/StylingUtils';
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
 import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
+import { useEventAdminEventsQueryQuery, RunFieldsFragment, EventFieldsFragment } from '../graphqlQueries';
 
 const SCHEDULE_GRID_CONFIG = {
   key: 'con_schedule_by_room',
@@ -123,14 +123,20 @@ ProspectiveRunScheduleEventRun.propTypes = {
   layoutResult: PropTypes.shape({}).isRequired,
 };
 
-function ProspectiveRunSchedule({
-  day, runs, event,
-}) {
+export type ProspectiveRunScheduleProps = {
+  day: DateTime,
+  runs: RunFieldsFragment[],
+  event: EventFieldsFragment,
+};
+
+function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   const conventionTimespan = useMemo(
-    () => ((error || loading) ? null : timespanFromConvention(data.convention)),
+    () => ((error || loading || data?.convention == null)
+      ? null
+      : timespanFromConvention(data.convention)),
     [error, loading, data],
   );
 
@@ -145,7 +151,7 @@ function ProspectiveRunSchedule({
 
   const eventsForSchedule = useMemo(
     () => {
-      if (error || loading) {
+      if (error || loading || data?.events == null) {
         return null;
       }
 
@@ -196,8 +202,8 @@ function ProspectiveRunSchedule({
       if (!day) {
         return null;
       }
-      const dayTimespan = new Timespan(day, day.clone().endOf('day'));
-      return conventionDayTimespans.find((cdt) => cdt.overlapsTimespan(dayTimespan));
+      const dayTimespan = new Timespan(day, day.endOf('day'));
+      return (conventionDayTimespans ?? []).find((cdt) => cdt.overlapsTimespan(dayTimespan));
     },
     [conventionDayTimespans, day],
   );

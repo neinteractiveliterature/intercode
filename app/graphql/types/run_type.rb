@@ -12,16 +12,16 @@ class Types::RunType < Types::BaseObject
     end
   end
 
-  field :starts_at, Types::DateType, null: true
-  field :ends_at, Types::DateType, null: true
+  field :starts_at, Types::DateType, null: false
+  field :ends_at, Types::DateType, null: false
   field :title_suffix, String, null: true
   field :schedule_note, String, null: true
 
-  field :rooms, [Types::RoomType, null: true], null: true
+  field :rooms, [Types::RoomType], null: false
 
   association_loaders Run, :rooms
 
-  field :room_names, [String, null: true], null: true
+  field :room_names, [String], null: false
 
   def room_names
     RunRoomNamesLoader.for.load(object)
@@ -72,7 +72,7 @@ class Types::RunType < Types::BaseObject
     SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)
   end
 
-  field :my_signups, [Types::SignupType, null: true], null: true
+  field :my_signups, [Types::SignupType], null: false
 
   def my_signups
     return [] unless context[:user_con_profile]

@@ -1,5 +1,12 @@
+import EventRun from './EventRun';
+import { FiniteTimespan } from '../../../Timespan';
+
 class ColumnReservation {
-  constructor(eventRun, timespan) {
+  timespan: FiniteTimespan;
+
+  eventRuns: EventRun[];
+
+  constructor(eventRun: EventRun, timespan: FiniteTimespan) {
     this.timespan = timespan || eventRun.timespan;
     this.eventRuns = [eventRun];
   }

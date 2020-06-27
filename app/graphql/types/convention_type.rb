@@ -5,7 +5,7 @@ class Types::ConventionType < Types::BaseObject
   field :updated_at, Types::DateType, null: true
   field :starts_at, Types::DateType, null: true
   field :ends_at, Types::DateType, null: true
-  field :name, String, null: true
+  field :name, String, null: false
   field :domain, String, null: true
   field :event_mailing_list_domain, String, null: true
   field :email_from, String, null: false

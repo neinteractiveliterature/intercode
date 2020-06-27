@@ -35,18 +35,6 @@ query UserConProfileQuery($id: Int!) {
   }
 }
 
-query MyProfileQuery {
-  convention {
-    id
-    ...UserConProfileFormData
-  }
-
-  myProfile {
-    id
-    ...UserConProfileFields
-  }
-}
-
 fragment UserConProfileAdminTicketFields on Ticket {
   id
   created_at

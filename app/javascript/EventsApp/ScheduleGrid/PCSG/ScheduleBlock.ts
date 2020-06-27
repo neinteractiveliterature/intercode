@@ -1,26 +1,44 @@
-import moment from 'moment-timezone';
 import sortBy from 'lodash/sortBy';
+import { Duration } from 'luxon';
 
 import { normalizeTitle } from '../../../ValueUtils';
+import Timespan, { FiniteTimespan } from '../../../Timespan';
+import EventRun from './EventRun';
+import type Schedule from '../Schedule';
+import { ScheduleGridEventFragmentFragment } from '../../../graphqlQueries';
 
 class ScheduleBlock {
-  constructor(id, timespan, eventRuns, schedule) {
+  id: string;
+
+  timespan: FiniteTimespan;
+
+  eventRuns: EventRun[];
+
+  schedule: Schedule;
+
+  hiddenEventRunsInTimespan: EventRun[];
+
+  hiddenEventsFakeEventRun: EventRun | null;
+
+  interval: Duration;
+
+  constructor(id: string, timespan: FiniteTimespan, eventRuns: EventRun[], schedule: Schedule) {
     this.id = id;
     this.eventRuns = [];
     this.timespan = timespan;
     this.hiddenEventRunsInTimespan = [];
     this.hiddenEventsFakeEventRun = null;
-    this.interval = moment.duration(1, 'hour');
+    this.interval = Duration.fromObject({ hours: 1 });
     this.schedule = schedule;
 
     const sortedEventRuns = sortBy(
       eventRuns,
-      (eventRun) => eventRun.timespan.start.toDate().getTime(),
+      (eventRun) => eventRun.timespan.start.valueOf(),
     );
     sortedEventRuns.forEach((eventRun) => { this.addEventRun(eventRun); });
   }
 
-  addEventRun(eventRun) {
+  addEventRun(eventRun: EventRun) {
     let eventRunToAdd = eventRun;
 
     if (!this.schedule.shouldShowRun(eventRun.runId)) {
@@ -30,8 +48,8 @@ class ScheduleBlock {
       ) {
         this.hiddenEventRunsInTimespan.push(eventRun);
         const run = this.schedule.getRun(this.hiddenEventsFakeEventRun.runId);
-        const event = this.schedule.getEvent(run.event_id);
-        event.title = `+ ${this.hiddenEventRunsInTimespan.length} not shown`;
+        const event = this.schedule.getEvent(run!.event_id);
+        event!.title = `+ ${this.hiddenEventRunsInTimespan.length} not shown`;
         this.hiddenEventsFakeEventRun.timespan = this.hiddenEventsFakeEventRun.timespan
           .expandedToFit(eventRun.timespan);
 
@@ -52,7 +70,7 @@ class ScheduleBlock {
     this.timespan = this.timespan.expandedToFit(eventRunToAdd.timespan);
   }
 
-  getRunCountInTimespan(event, timespan) {
+  getRunCountInTimespan(event: ScheduleGridEventFragmentFragment, timespan: Timespan) {
     return event.runs
       .filter((run) => {
         const eventRun = this.eventRuns.find((er) => er.runId === run.id);
@@ -69,12 +87,12 @@ class ScheduleBlock {
     return [...this.eventRuns].sort((a, b) => {
       const timeDiff = a.timespan.start.diff(b.timespan.start);
 
-      if (timeDiff === 0) {
+      if (timeDiff.valueOf() === 0) {
         // use number of overlapping runs as a tiebreaker (more runs first)
-        const runA = this.schedule.getRun(a.runId);
-        const runB = this.schedule.getRun(b.runId);
-        const eventA = this.schedule.getEvent(runA.event_id);
-        const eventB = this.schedule.getEvent(runB.event_id);
+        const runA = this.schedule.getRun(a.runId)!;
+        const runB = this.schedule.getRun(b.runId)!;
+        const eventA = this.schedule.getEvent(runA.event_id)!;
+        const eventB = this.schedule.getEvent(runB.event_id)!;
         if (eventA.fake && !eventB.fake) {
           return 1;
         }

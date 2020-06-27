@@ -1,4 +1,8 @@
+import { DateTime } from 'luxon';
+
 import ColumnReservation from './ColumnReservation';
+import { FiniteTimespan } from '../../../Timespan';
+import EventRun from './EventRun';
 
 // helper function for sorting columns - should help eliminate holes
 // in the schedule by allowing events to span columns if possible
@@ -7,7 +11,7 @@ import ColumnReservation from './ColumnReservation';
 // in case of two reservations starting at the same time, reservations that end
 // later go first.
 // finally, reservations with fewer events go first.
-function compareReservationsForSort(a, b) {
+function compareReservationsForSort(a?: ColumnReservation | null, b?: ColumnReservation | null) {
   if (a == null && b == null) {
     return 0;
   }
@@ -20,18 +24,22 @@ function compareReservationsForSort(a, b) {
     return -1;
   }
 
-  if (!a.timespan.start.isSame(b.timespan.start)) {
-    return a.timespan.start.diff(b.timespan.start);
+  if (+a.timespan.start !== +b.timespan.start) {
+    return a.timespan.start.diff(b.timespan.start).valueOf();
   }
 
-  if (!a.timespan.finish.isSame(b.timespan.finish)) {
-    return b.timespan.finish.diff(a.timespan.finish);
+  if (+a.timespan.finish !== +b.timespan.finish) {
+    return b.timespan.finish.diff(a.timespan.finish).valueOf();
   }
 
   return a.eventRuns.length - b.eventRuns.length;
 }
 
 class ColumnReservationSet {
+  reservations: (ColumnReservation | null)[];
+
+  columnNumberByRunId: Map<number, number>;
+
   constructor() {
     this.clear();
   }
@@ -41,9 +49,10 @@ class ColumnReservationSet {
     this.columnNumberByRunId = new Map();
   }
 
-  reserve(columnNumber, eventRun, timespan) {
-    if (this.reservations[columnNumber] != null) {
-      this.reservations[columnNumber].addEventRun(eventRun, timespan);
+  reserve(columnNumber: number, eventRun: EventRun, timespan: FiniteTimespan) {
+    const existingReservation = this.reservations[columnNumber];
+    if (existingReservation != null) {
+      existingReservation.addEventRun(eventRun, timespan);
     } else {
       this.reservations[columnNumber] = new ColumnReservation(eventRun, timespan);
     }
@@ -51,7 +60,7 @@ class ColumnReservationSet {
     this.columnNumberByRunId.set(eventRun.runId, columnNumber);
   }
 
-  getReservationForColumn(columnNumber) {
+  getReservationForColumn(columnNumber: number) {
     return this.reservations[columnNumber];
   }
 
@@ -72,14 +81,14 @@ class ColumnReservationSet {
     return reservedColumnNumbers[reservedColumnNumbers.length - 1];
   }
 
-  expire(cutoff) {
+  expire(cutoff: DateTime) {
     this.getReservedColumnNumbers().forEach((columnNumber) => {
       const reservation = this.reservations[columnNumber];
       if (reservation == null) {
         return;
       }
 
-      if (reservation.timespan.finish.isSameOrBefore(cutoff)) {
+      if (reservation.timespan.finish <= cutoff) {
         this.reservations[columnNumber] = null;
       }
     });

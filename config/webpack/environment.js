@@ -6,21 +6,21 @@ const WebpackAssetsManifest = require('webpack-assets-manifest');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const getStyleRule = require('./getStyleRule');
-const threadLoader = require('thread-loader');
+// const threadLoader = require('thread-loader');
 
 const CACHE_PATH = 'tmp/cache/webpack';
 
-threadLoader.warmup({
-  // pool options, like passed to loader options
-  // must match loader options to boot the correct pool
-}, [
-  // modules to load
-  // can be any module, i. e.
-  'babel-loader',
-  '@babel/preset-env',
-  'sass-loader',
-  'graphql-tag/loader'
-]);
+// threadLoader.warmup({
+//   // pool options, like passed to loader options
+//   // must match loader options to boot the correct pool
+// }, [
+//   // modules to load
+//   // can be any module, i. e.
+//   'babel-loader',
+//   '@babel/preset-env',
+//   'sass-loader',
+//   'graphql-tag/loader'
+// ]);
 
 module.exports = {
   entry: {
@@ -61,11 +61,11 @@ module.exports = {
           options: { sourceMap: true },
         },
       ]),
-      {
-        use: {
-          loader: 'thread-loader'
-        },
-      },
+      // {
+      //   use: {
+      //     loader: 'thread-loader'
+      //   },
+      // },
       {
         test: /displayBrowserWarning\.jsx$/,
         use: [
@@ -112,7 +112,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(mjs|js|jsx)?(\.erb)?$/,
+        test: /\.(mjs|js|jsx|ts|tsx)?(\.erb)?$/,
         exclude: /node_modules/,
         use: [
           {
@@ -138,6 +138,7 @@ module.exports = {
   resolve: {
     extensions: [
       '.js', '.jsx',
+      '.ts', '.tsx',
       '.sass', '.scss',
       '.css', '.png',
       '.svg', '.gif',
