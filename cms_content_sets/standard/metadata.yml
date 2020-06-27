@@ -1,3 +1,5 @@
+inherit:
+- base
 default_layout_name: Default
 root_page_slug: root
 navigation_items:
