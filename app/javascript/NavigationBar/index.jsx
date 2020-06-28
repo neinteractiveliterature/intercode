@@ -61,7 +61,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
                 <EventsNavigationSection />
               )}
               {rootItems.map((rootItem) => {
-                if (rootItem.__typename === 'CmsNavigationSection') {
+                if (rootItem.sectionItems && rootItem.sectionItems.length > 0) {
                   return (
                     <NavigationSection label={rootItem.title} key={rootItem.id}>
                       {rootItem.sectionItems.map((sectionItem) => (
