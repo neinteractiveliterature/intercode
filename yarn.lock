@@ -2162,9 +2162,9 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "16.9.35"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.35.tgz#a0830d172e8aadd9bd41709ba2281a3124bbd368"
-  integrity sha512-q0n0SsWcGc8nDqH2GJfWQWUOmZSJhXV64CjVN5SvcNti3TdEaA3AH0D8DwNmMdzjMAC/78tB8nAZIlV8yTz+zQ==
+  version "16.9.41"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.41.tgz#925137ee4d2ff406a0ecf29e8e9237390844002e"
+  integrity sha512-6cFei7F7L4wwuM+IND/Q2cV1koQUvJ8iSV+Gwn0c3kvABZ691g7sp3hfEQHOUBJtccl1gPi+EyNjMIl9nGA0ug==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -3441,9 +3441,9 @@ cache-loader@^4.1.0:
     schema-utils "^2.0.0"
 
 cadmus-navbar-admin@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/cadmus-navbar-admin/-/cadmus-navbar-admin-4.0.0.tgz#34a07ed2d2e67f2430c1b5942bd6f72d89fac807"
-  integrity sha512-Jg2sxgfyKJqiFfSUYRG0VjClINKAk1yyrDUd+E0WUPWgW8L6umobeZDMzvZ4X1V3/G7qEz2R7dA4yxa7hI9+Vg==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/cadmus-navbar-admin/-/cadmus-navbar-admin-4.1.0.tgz#9013402bd533bd71c2105871673b37b6a7b534c3"
+  integrity sha512-c3RY14okos/ovsnPqxaxpr9N7U/C+qfBQTCASQoV0l0v1S4Qa5lQdg80aXv0b4zCSdCvaNAC5m1xYZ0d9jFe+g==
   dependencies:
     classnames "^2.2.5"
     lodash "^4.17.15"
@@ -10167,15 +10167,7 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
-react-bootstrap4-modal@^1.2.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.2.tgz#1ad3fab03a8bc4a55c32955b2fedb4b36c4f2398"
-  integrity sha512-eDBOMZCySVBtMErpnS3z/NKTJYxZ5XJWJXZgheHBqlAREaQx7OGxlIg9ncw4LwBpkiY9B73Vq6QHCVVCDrFGeA==
-  dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.5.10"
-
-react-bootstrap4-modal@^1.7.2:
+react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.2:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.4.tgz#44eb4d70fd65c87eed3dd3b0c6ca1419f57755ec"
   integrity sha512-053wPtyVkc5XzrqRERu7bpN1WbHkPsqql8zFyO1ePuX3RVDFFuuGb7Tezucr2EfgUiGIaOwVdpzIW1bGGUGBzQ==
