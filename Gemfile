@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.7.0'
-gem 'rails', '6.0.3.1'
+gem 'rails', '6.0.3.2'
 
 gem 'pg'
 gem 'puma'
@@ -74,7 +74,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.37.0'
+gem 'twilio-ruby', '~> 5.38.0'
 gem 'phonelib'
 
 # Background workers and scheduling
@@ -129,7 +129,7 @@ group :development do
   gem 'debase'
 
   # Linting
-  gem 'rubocop', '0.85.1' # 0.85 seems to break pronto-rubocop :(
+  gem 'rubocop', '0.86.0' # 0.85 seems to break pronto-rubocop :(
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end

@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 import MenuIcon from './MenuIcon';
 
 function NavigationItem({
-  label, url, inSection, icon,
+  label, url, inSection, icon, iconColorClass,
 }) {
   const labelContent = (
     <>
-      <MenuIcon icon={icon || 'fa-file-text-o'} />
+      <MenuIcon icon={icon || 'fa-file-text-o'} colorClass={iconColorClass} />
       {label}
     </>
   );
@@ -30,10 +30,12 @@ NavigationItem.propTypes = {
   url: PropTypes.string.isRequired,
   inSection: PropTypes.bool.isRequired,
   icon: PropTypes.string,
+  iconColorClass: PropTypes.string,
 };
 
 NavigationItem.defaultProps = {
   icon: null,
+  iconColorClass: undefined,
 };
 
 export default NavigationItem;
