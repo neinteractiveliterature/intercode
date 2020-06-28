@@ -61,7 +61,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
                 <EventsNavigationSection />
               )}
               {rootItems.map((rootItem) => {
-                if (rootItem.sectionItems) {
+                if (rootItem.__typename === 'CmsNavigationSection') {
                   return (
                     <NavigationSection label={rootItem.title} key={rootItem.id}>
                       {rootItem.sectionItems.map((sectionItem) => (
@@ -76,7 +76,14 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
                   );
                 }
 
-                return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
+                return (
+                  <NavigationItem
+                    label={rootItem.title}
+                    url={`/pages/${rootItem.page.slug}`}
+                    key={rootItem.id}
+                    iconColorClass="" /* don't override the nav-link color in the root bar */
+                  />
+                );
               })}
               <AdminNavigationSection />
             </ul>
