@@ -25,7 +25,7 @@
     "@babel/plugin-transform-regenerator": "^7.10.1",
     "@babel/polyfill": "^7.10.1",
     "@babel/preset-env": "^7.10.3",
-    "@babel/preset-flow": "^7.10.1",
+    "@babel/preset-flow": "^7.10.4",
     "@babel/preset-react": "^7.10.1",
     "@babel/register": "^7.10.4",
     "@juggle/resize-observer": "^3.2.0",
