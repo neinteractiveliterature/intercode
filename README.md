@@ -46,7 +46,7 @@ This is the classic Rails development setup, and should work for Mac and Linux u
   2. Set up your local database: `bin/rails db:create db:migrate`
   3. Install JavaScript packages: `yarn install`
   4. Start up the Intercode server: `bin/rails server`
-  5. Start up the Webpack server: `bin/webpack-dev-server`
+  5. Start up the Webpack server: `yarn run start`
 9. You should now be able to go to http://intercode.test:3000 and see the app running!
 
 ## Testing production builds
