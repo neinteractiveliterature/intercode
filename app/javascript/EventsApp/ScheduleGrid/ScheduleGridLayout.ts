@@ -4,6 +4,7 @@ import ScheduleBlock from './PCSG/ScheduleBlock';
 
 export type ScheduleBlockWithOptions = [ScheduleBlock, {
   rowHeader?: string,
+  flexGrow?: string,
 }];
 
 export default class ScheduleGridLayout {

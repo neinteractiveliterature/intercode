@@ -3,7 +3,8 @@ import SignupCountData from '../SignupCountData';
 import { ScheduleGridEventFragmentFragment } from '../../graphqlQueries.generated';
 
 export default function getFullnessClass(
-  event: ScheduleGridEventFragmentFragment, signupCountData: SignupCountData,
+  event: ScheduleGridEventFragmentFragment,
+  signupCountData: Pick<SignupCountData, 'getNotCountedConfirmedSignupCount' | 'getConfirmedLimitedSignupCount'>,
 ) {
   if (!event.registration_policy) {
     return 'event-fullness-not-applicable';

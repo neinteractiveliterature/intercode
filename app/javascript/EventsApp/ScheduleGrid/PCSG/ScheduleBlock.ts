@@ -111,11 +111,15 @@ class ScheduleBlock {
 
         if (runCountDiff === 0) {
           // finally, use event title as a tiebreaker
-          const titleDiff = normalizeTitle(eventA.title).localeCompare(normalizeTitle(eventB.title), { sensitivity: 'base' });
+          const titleDiff = normalizeTitle(eventA.title ?? '').localeCompare(
+            normalizeTitle(eventB.title ?? ''),
+            undefined,
+            { sensitivity: 'base' },
+          );
 
           if (titleDiff === 0) {
             // as a tiebreaker, sort longer events first
-            const lengthDiff = b.timespan.finish.diff(a.timespan.finish);
+            const lengthDiff = b.timespan.finish.diff(a.timespan.finish).valueOf();
 
             return lengthDiff;
           }
@@ -126,7 +130,7 @@ class ScheduleBlock {
         return runCountDiff;
       }
 
-      return timeDiff;
+      return timeDiff.valueOf();
     });
   }
 }

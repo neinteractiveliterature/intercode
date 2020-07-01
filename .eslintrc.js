@@ -84,6 +84,15 @@ module.exports = {
     'import/no-named-as-default-member': 'off',
   },
 
+  'overrides': [
+    {
+      'files': ['**/*.tsx'],
+      'rules': {
+        'react/prop-types': 'off'
+      }
+    }
+  ],
+
   settings: {
     'import/resolver': {
       "typescript": {

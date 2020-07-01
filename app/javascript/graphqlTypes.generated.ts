@@ -3593,7 +3593,7 @@ export type Run = {
   confirmed_signup_count?: Maybe<Scalars['Int']>;
   current_ability_can_signup_summary_run: Scalars['Boolean'];
   ends_at: Scalars['Date'];
-  event?: Maybe<Event>;
+  event: Event;
   id: Scalars['Int'];
   my_signup_requests: Array<SignupRequest>;
   my_signups: Array<Signup>;

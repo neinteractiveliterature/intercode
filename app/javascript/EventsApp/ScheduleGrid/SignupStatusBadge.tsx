@@ -1,21 +1,22 @@
 import React from 'react';
 import EventRatingIcon from '../../EventRatings/EventRatingIcon';
+import { SignupStatus } from './StylingUtils';
 
 export type SignupStatusBadgeProps = {
-  signupStatus?: 'confirmed' | 'waitlisted' | 'request_pending' | null,
+  signupStatus?: SignupStatus | null,
   myRating?: number | null,
 };
 
 function SignupStatusBadge({ signupStatus, myRating }: SignupStatusBadgeProps) {
-  if (signupStatus === 'confirmed') {
+  if (signupStatus === SignupStatus.Confirmed) {
     return <i className="fa fa-user-circle mr-1" title="Confirmed signup" />;
   }
 
-  if (signupStatus === 'waitlisted') {
+  if (signupStatus === SignupStatus.Waitlisted) {
     return <i className="fa fa-hourglass-half mr-1" title="Waitlisted" />;
   }
 
-  if (signupStatus === 'request_pending') {
+  if (signupStatus === SignupStatus.RequestPending) {
     return <i className="fa fa-pause-circle mr-1" title="Signup request pending" />;
   }
 

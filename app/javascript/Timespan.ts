@@ -7,7 +7,7 @@ import {
   timesAreSameOrBothNull,
   lowercaseMeridiem,
 } from './TimeUtils';
-import { chooseAmong, preferNull } from './ValueUtils';
+import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
 
 type DurationLike = Duration | number | DurationObject;
 
@@ -16,10 +16,6 @@ export type TimeHopOptions = {
   offset?: DurationLike | null,
   duration?: DurationLike | null
 };
-
-function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
-  return value !== null && value !== undefined;
-}
 
 export interface FiniteTimespan extends Timespan {
   start: DateTime;
@@ -151,7 +147,7 @@ class Timespan {
       return null;
     }
 
-    return this.finish.diff(this.start, unit)[unit];
+    return this.finish.diff(this.start, unit).as(unit);
   }
 
   humanizeStartInTimezone(timezoneName: string, format?: string): string {

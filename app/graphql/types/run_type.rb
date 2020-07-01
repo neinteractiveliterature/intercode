@@ -2,7 +2,7 @@ class Types::RunType < Types::BaseObject
   authorize_record
 
   field :id, Integer, null: false
-  field :event, Types::EventType, null: true
+  field :event, Types::EventType, null: false
 
   def event
     AssociationLoader.for(Run, :event).load(object).then do |event|

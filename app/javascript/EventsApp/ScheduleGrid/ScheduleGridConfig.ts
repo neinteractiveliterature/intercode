@@ -10,6 +10,7 @@ export type ScheduleGridMatchRule = ScheduleGridCategoryMatchRule | ScheduleGrid
 export type ScheduleGridCategoryGroupConfig = {
   id: string,
   match: [ScheduleGridCatchAllMatchRule] | ScheduleGridCategoryMatchRule[],
+  flexGrow?: boolean,
 };
 
 export function isCatchAllMatchRule(
@@ -25,7 +26,8 @@ export function isCategoryMatchRule(
 }
 
 export type ScheduleGridLegendConfig = {
-
+  type: 'category' | 'fullness' | 'text',
+  text?: string,
 };
 
 export type ScheduleGridConfigData = {
@@ -40,6 +42,7 @@ export type ScheduleGridConfigData = {
   showPersonalFilters?: boolean,
   categoryGroups?: ScheduleGridCategoryGroupConfig[],
   filterEmptyGroups?: boolean,
+  legends?: ScheduleGridLegendConfig[],
 };
 
 class ScheduleGridConfig {
@@ -64,6 +67,8 @@ class ScheduleGridConfig {
   categoryGroups: ScheduleGridCategoryGroupConfig[];
 
   filterEmptyGroups?: boolean;
+
+  legends?: ScheduleGridLegendConfig[];
 
   static allConfigs = (configData as ScheduleGridConfigData[])
     .map((props) => new ScheduleGridConfig(props));

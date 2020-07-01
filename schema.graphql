@@ -3188,7 +3188,7 @@ type Run {
   confirmed_signup_count: Int
   current_ability_can_signup_summary_run: Boolean!
   ends_at: Date!
-  event: Event
+  event: Event!
   id: Int!
   my_signup_requests: [SignupRequest!]!
   my_signups: [Signup!]!

@@ -52,8 +52,8 @@ function ConventionDayTab(
 export type ConventionDayTabContainerProps = {
   basename: string,
   conventionTimespan: Timespan | null,
-  prefetchTimespan: (Timespan) => any,
-  children: (Timespan) => JSX.Element,
+  prefetchTimespan: (timespan: Timespan) => any,
+  children: (timespan: FiniteTimespan) => JSX.Element,
   showExtendedCounts?: boolean,
 };
 
@@ -80,6 +80,8 @@ function ConventionDayTabContainer({
         )
         : []
     ),
+    // https://github.com/facebook/react/issues/18985; looks like 4.0.4 didn't fix this
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [conventionTimespan, timezoneName],
   );
 

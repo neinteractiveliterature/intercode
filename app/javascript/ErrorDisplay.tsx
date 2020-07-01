@@ -4,15 +4,19 @@ import { ApolloError } from 'apollo-client';
 
 export type ErrorDisplayProps = {
   stringError?: string | null,
-  graphQLError?: ApolloError | null,
+  graphQLError?: Error | null,
 };
+
+function isApolloError(error: Error): error is ApolloError {
+  return 'graphQLErrors' in error;
+}
 
 const ErrorDisplay = ({ stringError, graphQLError }: ErrorDisplayProps) => {
   let displayContents: ReactNode = null;
 
   if (graphQLError) {
     try {
-      if (graphQLError.graphQLErrors.length > 0) {
+      if (isApolloError(graphQLError) && graphQLError.graphQLErrors.length > 0) {
         const errorMessages = graphQLError.graphQLErrors.map((error, i) => (
           // eslint-disable-next-line react/no-array-index-key
           <li key={i}>{error.message}</li>

@@ -3,7 +3,7 @@ import EventRun from './PCSG/EventRun';
 import ScheduleBlock from './PCSG/ScheduleBlock';
 import ScheduleGridLayout, { ScheduleBlockWithOptions } from './ScheduleGridLayout';
 import {
-  timespanFromConvention, RunForTimespanUtils, ConventionForTimespanUtils,
+  timespanFromConvention, ConventionForTimespanUtils,
 } from '../../TimespanUtils';
 import Timespan, { FiniteTimespan } from '../../Timespan';
 import { ScheduleGridEventFragmentFragment } from './queries.generated';
@@ -30,18 +30,16 @@ export interface SignupRequestForSchedule {
   state: SignupRequestState;
 }
 
-export interface RunForSchedule extends RunForTimespanUtils {
-  id: number;
-  my_signups: SignupForSchedule[];
-  my_signup_requests: SignupRequestForSchedule[];
-  room_names?: string[];
+export interface RunForSchedule extends NonNullable<ScheduleGridEventFragmentFragment['runs'][0]> {
   rooms?: {
     name: string,
   }[];
+  disableDetailsPopup?: boolean;
 }
 
 export interface EventForSchedule extends ScheduleGridEventFragmentFragment {
   fake?: boolean;
+  displayTitle?: string;
 }
 
 interface RunForScheduleWithCachedEventId extends RunForSchedule {
@@ -305,7 +303,7 @@ export default class Schedule {
       starts_at: timespan.start.toISO(),
     };
 
-    const fakeEvent = {
+    const fakeEvent: EventForSchedule = {
       id: fakeEventRunId,
       title,
       displayTitle,
@@ -318,9 +316,13 @@ export default class Schedule {
       },
       registration_policy: {
         buckets: [],
+        minimum_slots: 0,
+        minimum_slots_including_not_counted: 0,
+        preferred_slots: 0,
+        preferred_slots_including_not_counted: 0,
         total_slots: 0,
+        total_slots_including_not_counted: 0,
         slots_limited: true,
-        prevent_no_preference_signups: false,
       },
       runs: [fakeRun],
       can_play_concurrently: true,

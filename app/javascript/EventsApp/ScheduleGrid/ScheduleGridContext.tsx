@@ -260,6 +260,7 @@ export function ScheduleGridProvider({
         )
         : []
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [conventionTimespan, timezoneName],
   );
 

@@ -13,9 +13,11 @@
     "typeRoots": [
       "node_modules/@types",
       "app/javascript/@types",
-    ]
+    ],
+    "lib": ["DOM"]
   },
   "include": [
-    "./app/javascript/"
+    "./app/javascript/",
+    ".eslintrc.js"
   ]
 }

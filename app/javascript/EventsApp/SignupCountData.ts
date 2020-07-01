@@ -15,13 +15,15 @@ export type SignupCountDataFilter = {
   counted?: boolean | boolean[],
 };
 
+export type SignupCountsByBucketKeyAndCounted = {
+  [bucketKey: string]: {
+    counted?: number,
+    not_counted?: number,
+  },
+};
+
 type SignupCountsByStateAndBucketKeyAndCounted = {
-  [S in SignupState]: {
-    [bucketKey: string]: {
-      counted?: number,
-      not_counted?: number,
-    },
-  }
+  [S in SignupState]: SignupCountsByBucketKeyAndCounted
 };
 
 export type EventForSignupCountData = {

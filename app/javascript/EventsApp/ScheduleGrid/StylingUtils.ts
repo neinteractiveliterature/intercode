@@ -8,36 +8,41 @@ import RunDimensions from './PCSG/RunDimensions';
 import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
 import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
 import { ScheduleGridEventFragmentFragment } from './queries.generated';
+import { CSSProperties } from 'react';
+
+export enum SignupStatus {
+  Confirmed = 'confirmed',
+  Waitlisted = 'waitlisted',
+  Withdrawn = 'withdrawn',
+  RequestPending = 'request_pending',
+}
 
 export function userSignupStatus(
   run: {
     my_signups: { state: SignupState }[],
     my_signup_requests: { state: SignupRequestState }[],
   },
-) {
+): SignupStatus | undefined {
   if (run.my_signups.some((signup) => signup.state === 'confirmed')) {
-    return 'confirmed';
+    return SignupStatus.Confirmed;
   }
 
   if (run.my_signups.some((signup) => signup.state === 'waitlisted')) {
-    return 'waitlisted';
+    return SignupStatus.Waitlisted;
   }
 
   if (run.my_signup_requests.some((signupRequest) => signupRequest.state === 'pending')) {
-    return 'request_pending';
+    return SignupStatus.RequestPending;
   }
 
-  return null;
+  return undefined;
 }
 
 export type GetRunClassNameOptions = {
-  event: {
-    fake?: boolean,
-    registration_policy: ScheduleGridEventFragmentFragment['registration_policy'],
-  },
-  signupStatus?: SignupState,
-  config: ScheduleGridConfig,
-  signupCountData: SignupCountData,
+  event: ScheduleGridEventFragmentFragment & { fake?: boolean },
+  signupStatus?: SignupStatus,
+  config: Pick<ScheduleGridConfig, 'classifyEventsBy' | 'showSignedUp'>,
+  signupCountData: Pick<SignupCountData, 'runFull' | 'getConfirmedLimitedSignupCount' | 'getNotCountedConfirmedSignupCount'>,
   unlimited: boolean,
 };
 
@@ -85,45 +90,45 @@ export function getRunPositioningStyles(
     width: `${runDimensions.timeSpan}%`,
     position: 'absolute',
     zIndex: runDimensions.laneIndex,
-  };
+  } as CSSProperties;
 }
 
 export type EventStyleVariant = 'default' | 'signed_up' | 'full';
 
-type GetEventCategoryStylesOptions = {
+export type GetEventCategoryStylesOptions = {
   eventCategory: {
-    default_color: string,
-    signed_up_color: string,
-    full_color: string,
+    default_color?: string | null,
+    signed_up_color?: string | null,
+    full_color?: string | null,
   },
   variant: EventStyleVariant,
 };
 
 export function getEventCategoryStyles(
   { eventCategory, variant }: GetEventCategoryStylesOptions,
-) {
+): Partial<Pick<CSSStyleDeclaration, 'backgroundColor' | 'borderColor'>> {
   const color = eventCategory[`${variant}_color`];
 
   if (color) {
     if (variant === 'signed_up') {
-      return { backgroundColor: color, borderColor: color };
+      return { backgroundColor: color ?? undefined, borderColor: color ?? undefined };
     }
 
     return {
-      backgroundColor: color,
-      borderColor: eventCategory.signed_up_color,
+      backgroundColor: color ?? undefined,
+      borderColor: eventCategory.signed_up_color ?? undefined,
     };
   }
 
   return {};
 }
 
-type GetRunClassificationStylesOptions = {
-  config: ScheduleGridConfig,
+export type GetRunClassificationStylesOptions = {
+  config: Pick<ScheduleGridConfig, 'classifyEventsBy'>,
   eventCategory: GetEventCategoryStylesOptions['eventCategory'],
-  signupCountData: SignupCountData,
+  signupCountData: Pick<SignupCountData, 'runFull'>,
   event: EventForSignupCountData,
-  signupStatus?: SignupState | null,
+  signupStatus?: SignupStatus | null,
 };
 
 export function getRunClassificationStyles({
@@ -154,7 +159,7 @@ export function getRunStyle({
   layoutResult, disableDetailsPopup,
 }: GetRunStyleOptions) {
   return {
-    cursor: (disableDetailsPopup ? null : 'pointer'),
+    cursor: (disableDetailsPopup ? undefined : 'pointer'),
     ...getRunPositioningStyles({ runDimensions, layoutResult }),
     ...getRunClassificationStyles({
       event, eventCategory, signupStatus, config, signupCountData,
