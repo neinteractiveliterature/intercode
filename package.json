@@ -95,7 +95,7 @@
     "prop-types": "^15.7.2",
     "query-string": "^5.1.1",
     "react": "^16.13.1",
-    "react-bootstrap4-modal": "^1.7.2",
+    "react-bootstrap4-modal": "^1.7.5",
     "react-clipboard.js": "^2.0.16",
     "react-codemirror2": "^7.2.1",
     "react-color": "^2.18.1",
