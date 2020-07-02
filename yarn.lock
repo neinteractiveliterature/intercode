@@ -2270,7 +2270,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
+"@types/react@*", "@types/react@^16.9.41":
   version "16.9.41"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.41.tgz#925137ee4d2ff406a0ecf29e8e9237390844002e"
   integrity sha512-6cFei7F7L4wwuM+IND/Q2cV1koQUvJ8iSV+Gwn0c3kvABZ691g7sp3hfEQHOUBJtccl1gPi+EyNjMIl9nGA0ug==
@@ -10277,11 +10277,12 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
-react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.2:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.4.tgz#44eb4d70fd65c87eed3dd3b0c6ca1419f57755ec"
-  integrity sha512-053wPtyVkc5XzrqRERu7bpN1WbHkPsqql8zFyO1ePuX3RVDFFuuGb7Tezucr2EfgUiGIaOwVdpzIW1bGGUGBzQ==
+react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.5.tgz#7f2412efea76c888aeb8a69c7fd76c0ec106238b"
+  integrity sha512-GsX5Qzux9T75CT7t9Jgl/9ow3xQ6z3rWcZC2B8AM+1Ze2/YhvMEt4PpgFJTRck0/2pvHIpjUCTLoYRq4yzES1A==
   dependencies:
+    "@types/react" "^16.9.41"
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
