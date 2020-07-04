@@ -314,7 +314,7 @@ type Convention {
   mail_privilege_names: [String!]! @deprecated(reason: "Mail privileges have gone away in favor of permissions")
   mailing_lists: MailingLists!
   masked_stripe_secret_key: String
-  maximum_event_signups: ScheduledValue
+  maximum_event_signups: ScheduledValue!
   maximum_tickets: Int
   name: String!
   notification_templates: [NotificationTemplate!]!
@@ -348,8 +348,8 @@ type Convention {
   reports: ConventionReports!
   rooms: [Room!]
   root_page: Page
-  show_event_list: ShowSchedule
-  show_schedule: ShowSchedule
+  show_event_list: ShowSchedule!
+  show_schedule: ShowSchedule!
   signup_changes_paginated(filters: SignupChangeFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupChangesPagination!
   signup_counts_by_state: [SignupCountByState!]!
   signup_mode: SignupMode!

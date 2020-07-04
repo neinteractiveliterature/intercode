@@ -13,11 +13,11 @@ class Types::ConventionType < Types::BaseObject
   field :location, Types::JSON, null: true
   field :timezone_name, String, null: true
   field :timezone_mode, Types::TimezoneModeType, null: false
-  field :show_schedule, Types::ShowScheduleType, null: true
-  field :show_event_list, Types::ShowScheduleType, null: true
+  field :show_schedule, Types::ShowScheduleType, null: false
+  field :show_event_list, Types::ShowScheduleType, null: false
   field :hidden, Boolean, null: false
   field :maximum_tickets, Integer, null: true
-  field :maximum_event_signups, Types::ScheduledValueType, null: true
+  field :maximum_event_signups, Types::ScheduledValueType, null: false
   field :signup_mode, Types::SignupModeType, null: false
   field :signup_requests_open, Boolean, null: false
   field :site_mode, Types::SiteModeType, null: false

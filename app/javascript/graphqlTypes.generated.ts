@@ -412,7 +412,7 @@ export type Convention = {
   mail_privilege_names: Array<Scalars['String']>;
   mailing_lists: MailingLists;
   masked_stripe_secret_key?: Maybe<Scalars['String']>;
-  maximum_event_signups?: Maybe<ScheduledValue>;
+  maximum_event_signups: ScheduledValue;
   maximum_tickets?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
   notification_templates: Array<NotificationTemplate>;
@@ -427,8 +427,8 @@ export type Convention = {
   reports: ConventionReports;
   rooms?: Maybe<Array<Room>>;
   root_page?: Maybe<Page>;
-  show_event_list?: Maybe<ShowSchedule>;
-  show_schedule?: Maybe<ShowSchedule>;
+  show_event_list: ShowSchedule;
+  show_schedule: ShowSchedule;
   signup_changes_paginated: SignupChangesPagination;
   signup_counts_by_state: Array<SignupCountByState>;
   signup_mode: SignupMode;

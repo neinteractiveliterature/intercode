@@ -30,12 +30,15 @@ export function parseMoneyOrNull(value) {
   };
 }
 
-export function convertDatetimeValue(value: string, timezoneName?: string) {
+export function convertDatetimeValue(value?: DateTime | string | null, timezoneName?: string) {
   if (value == null) {
     return value;
   }
 
-  const dateTime = DateTime.fromISO(value, { zone: timezoneName ?? 'Etc/UTC' });
+  const dateTime = (
+    DateTime.isDateTime(value) ? value : DateTime.fromISO(value)
+  ).setZone(timezoneName ?? 'Etc/UTC');
+
   if (dateTime.isValid) {
     return dateTime.toISO();
   }
