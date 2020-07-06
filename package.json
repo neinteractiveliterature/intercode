@@ -144,7 +144,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
-    "eslint": "^7.3.1",
+    "eslint": "^7.4.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-import-resolver-webpack": "^0.12.2",
     "eslint-plugin-babel": "^5.3.1",
