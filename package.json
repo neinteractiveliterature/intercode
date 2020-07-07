@@ -68,7 +68,7 @@
     "font-awesome": "^4.7.0",
     "glob": "^7.1.6",
     "graphiql": "^1.0.3",
-    "graphql": "^14.6.0",
+    "graphql": "^14.7.0",
     "graphql-anywhere": "^4.2.7",
     "graphql-tag": "^2.10.3",
     "html-to-react": "^1.4.3",
