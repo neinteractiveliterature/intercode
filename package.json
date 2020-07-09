@@ -70,7 +70,7 @@
     "graphiql": "^1.0.3",
     "graphql": "^14.7.0",
     "graphql-anywhere": "^4.2.7",
-    "graphql-tag": "^2.10.3",
+    "graphql-tag": "^2.10.4",
     "html-to-react": "^1.4.3",
     "hypernova": "^2.5.0",
     "inflected": "^2.0.3",
