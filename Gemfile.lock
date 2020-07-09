@@ -197,10 +197,10 @@ GEM
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
     excon (0.75.0)
-    factory_bot (6.0.2)
+    factory_bot (6.1.0)
       activesupport (>= 5.0.0)
-    factory_bot_rails (6.0.0)
-      factory_bot (~> 6.0.0)
+    factory_bot_rails (6.1.0)
+      factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
     faker (2.13.0)
       i18n (>= 1.6, < 2)
@@ -527,7 +527,7 @@ GEM
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
     yard (0.9.25)
-    zeitwerk (2.3.0)
+    zeitwerk (2.3.1)
 
 PLATFORMS
   java
