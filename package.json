@@ -76,7 +76,7 @@
     "inflected": "^2.0.3",
     "js-search": "^2.0.0",
     "js-yaml": "^3.14.0",
-    "lodash": "^4.17.17",
+    "lodash": "^4.17.19",
     "lodash-webpack-plugin": "^0.11.5",
     "luxon": "^1.24.1",
     "mapbox-gl": "^1.11.1",
