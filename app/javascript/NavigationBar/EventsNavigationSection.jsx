@@ -43,9 +43,10 @@ export function useEventsNavigationItems() {
 }
 
 function EventsNavigationSection() {
+  const { t } = useTranslation();
   const items = useEventsNavigationItems();
 
-  return <GeneratedNavigationSection label="Events" items={items} />;
+  return <GeneratedNavigationSection label={t('navigation.headers.events')} items={items} />;
 }
 
 export default EventsNavigationSection;
