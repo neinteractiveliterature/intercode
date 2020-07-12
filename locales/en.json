@@ -2,22 +2,80 @@
   "admin": {
     "convention": {
       "language": {
-        "label": "Site language",
         "en": "English",
-        "es": "Spanish (translation in progress)"
+        "es": "Spanish (translation in progress)",
+        "label": "Site language"
       }
     }
   },
+  "alerts": {
+    "conventionCanceled": "{{ conventionName }} is canceled."
+  },
   "navigation": {
+    "admin": {
+      "attendees": "Attendees",
+      "conventions": "Conventions",
+      "conventionSettings": "Convention Settings",
+      "departments": "Departments",
+      "emailRoutes": "Email routes",
+      "eventCategories": "Event Categories",
+      "eventProposals": "Event Proposals",
+      "events": "Event Scheduling",
+      "forms": "Forms",
+      "mailingLists": "Mailing Lists",
+      "notifications": "Notifications",
+      "oauth2Applications": "OAuth2 Applications",
+      "organizations": "Organizations",
+      "reports": "Reports",
+      "rooms": "Rooms",
+      "signupModeration": "Signup Moderation",
+      "siteContent": "Site Content",
+      "staffPositions": "Staff Positions",
+      "store": "Store",
+      "ticketTypes": "{{ ticketName }} Types",
+      "userActivityAlerts": "User Activity Alerts",
+      "users": "Users"
+    },
+    "assumedIdentity": {
+      "revert": "Revert<1> to {{ name }}</1>"
+    },
+    "authentication": {
+      "logIn": "Log in",
+      "signUp": "Sign up"
+    },
     "events": {
-      "schedule": "Con Schedule",
-      "scheduleByRoom": "Con Schedule by Room",
       "eventsList": "List of Events",
       "newProposal": "Propose an Event",
+      "schedule": "Con Schedule",
+      "scheduleByRoom": "Con Schedule by Room",
       "scheduleWithCounts": "Schedule With Counts"
     },
     "headers": {
-      "events": "Events"
+      "admin": "Admin",
+      "authentication": "Log in or sign up",
+      "events": "Events",
+      "user": "User options"
+    },
+    "myShoppingCart": {
+      "buttonText": "My shopping cart",
+      "goToCart": "Go to cart"
+    },
+    "search": {
+      "buttonText": "Search",
+      "searchAnywhereKeyCombo": "Ctrl-/",
+      "searchAnywhereText": "Search anywhere:"
+    },
+    "ticketPurchase": {
+      "ctaLong": "Buy a {{ ticketName }}!",
+      "ctaShort": "{{ ticketName }}!"
+    },
+    "toggle": "Toggle navigation",
+    "user": {
+      "authorizedApplications": "Authorized Applications",
+      "logOut": "Log out",
+      "myAccount": "My Account",
+      "myOrderHistory": "My Order History",
+      "myProfile": "My {{ conventionName }} Profile"
     }
   }
 }

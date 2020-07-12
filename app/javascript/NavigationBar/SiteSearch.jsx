@@ -13,6 +13,7 @@ import {
 } from 'js-search';
 import { stemmer } from 'porter-stemmer';
 import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import { SiteSearchQuery } from './siteSearchQueries.gql';
@@ -52,15 +53,20 @@ function SearchDropdownIndicator(props) {
 }
 
 function SearchMenu(props) {
+  const { t } = useTranslation();
+
   return (
     <components.Menu {...props}>
       {props.children}
       <div className="bg-light small p-1 text-muted d-none d-md-block">
         <i className="fa fa-lightbulb-o" />
         {' '}
+        {t('navigation.search.searchAnywhereText', 'Search anywhere:')}
         Search anywhere:
         {' '}
-        <span className="bg-white text-monospace border rounded px-1">Ctrl-/</span>
+        <span className="bg-white text-monospace border rounded px-1">
+          {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
+        </span>
       </div>
     </components.Menu>
   );
