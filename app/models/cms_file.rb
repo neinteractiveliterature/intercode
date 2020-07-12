@@ -12,7 +12,7 @@ class CmsFile < ApplicationRecord
     new_path = File.join(File.dirname(file.path), filename)
 
     if EnvironmentBasedUploader.use_fog?
-      resource = AWS::S3::Resource.new
+      resource = Aws::S3::Resource.new
       bucket = resource.bucket(CmsFileUploader.fog_directory)
       object = bucket.object(file.path)
       object.move_to(bucket: bucket_name, key: new_path)
