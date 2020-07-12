@@ -6,9 +6,68 @@
         "es": "Español (trabajo en progreso, aún no está listo para usar)",
         "label": "Lenguaje del sitio"
       }
+    },
+    "userConProfiles": {
+      "addAttendee": {
+        "addButtonText": "",
+        "buttonText": "",
+        "dataCopyingNote": "",
+        "header": "",
+        "text": ""
+      },
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "isAttending": "",
+      "isTeamMember": "",
+      "lastName": "",
+      "name": "",
+      "orderSummary": "",
+      "paymentAmount": "",
+      "privileges": "",
+      "ticketStatusChangedAt": "",
+      "ticketType": "",
+      "userId": ""
     }
   },
+  "alerts": {
+    "conventionCanceled": ""
+  },
+  "buttons": {
+    "cancel": ""
+  },
   "navigation": {
+    "admin": {
+      "attendees": "",
+      "conventions": "",
+      "conventionSettings": "",
+      "departments": "",
+      "emailRoutes": "",
+      "eventCategories": "",
+      "eventProposals": "",
+      "events": "",
+      "forms": "",
+      "mailingLists": "",
+      "notifications": "",
+      "oauth2Applications": "",
+      "organizations": "",
+      "reports": "",
+      "rooms": "",
+      "signupModeration": "",
+      "siteContent": "",
+      "staffPositions": "",
+      "store": "",
+      "ticketTypes": "",
+      "userActivityAlerts": "",
+      "users": ""
+    },
+    "assumedIdentity": {
+      "revert": ""
+    },
+    "authentication": {
+      "logIn": "",
+      "signUp": ""
+    },
     "events": {
       "eventsList": "Lista de Actividades",
       "newProposal": "Proponer a una Actividad",
@@ -17,7 +76,45 @@
       "scheduleWithCounts": "Horario con Sumas"
     },
     "headers": {
-      "events": "Actividades"
+      "admin": "",
+      "authentication": "",
+      "events": "Actividades",
+      "user": ""
+    },
+    "myShoppingCart": {
+      "buttonText": "",
+      "goToCart": ""
+    },
+    "search": {
+      "buttonText": "",
+      "searchAnywhereKeyCombo": "",
+      "searchAnywhereText": ""
+    },
+    "ticketPurchase": {
+      "ctaLong": "",
+      "ctaShort": ""
+    },
+    "toggle": "",
+    "user": {
+      "authorizedApplications": "",
+      "logOut": "",
+      "myAccount": "",
+      "myOrderHistory": "",
+      "myProfile": ""
+    }
+  },
+  "tables": {
+    "choiceSetFilter": {
+      "anyText": ""
+    },
+    "exportCSV": {
+      "buttonText": ""
+    },
+    "privileges": {
+      "siteAdmin": ""
+    },
+    "ticketStatus": {
+      "unpaid": ""
     }
   }
 }
