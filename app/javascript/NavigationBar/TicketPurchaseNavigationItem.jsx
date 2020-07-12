@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 
 function TicketPurchaseNavigationItem() {
+  const { t } = useTranslation();
   const { myProfile, ticketName, ticketTypes } = useContext(AppRootContext);
 
   if (!ticketTypes) {
@@ -23,14 +25,10 @@ function TicketPurchaseNavigationItem() {
     <li className="nav-item my-auto">
       <Link to="/ticket/new" className="btn btn-sm btn-primary">
         <span className="d-inline d-md-none d-lg-inline">
-          Buy a
-          {' '}
-          {ticketName}
-          !
+          {t('navigation.ticketPurchase.ctaLong', 'Buy a {{ ticketName }}!', { ticketName })}
         </span>
         <span className="d-none d-md-inline d-lg-none">
-          {humanize(ticketName)}
-          !
+          {t('navigation.ticketPurchase.ctaShort', '{{ ticketName }}!', { ticketName: humanize(ticketName) })}
         </span>
       </Link>
     </li>
