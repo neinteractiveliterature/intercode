@@ -7,6 +7,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :event_mailing_list_domain, String, required: false, camelize: false
   argument :email_from, String, required: false, camelize: false
   argument :email_mode, Types::EmailModeType, required: false, camelize: false
+  argument :language, String, required: false
   argument :location, Types::JSON, required: false
   argument :timezone_name, String, required: false, camelize: false
   argument :timezone_mode, Types::TimezoneModeType, required: false, camelize: false

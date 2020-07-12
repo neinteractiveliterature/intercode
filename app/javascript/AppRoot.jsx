@@ -16,6 +16,7 @@ import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
+import i18n from './setupI18Next';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
@@ -74,6 +75,7 @@ function AppRoot() {
       currentAbility: data.currentAbility,
       currentPendingOrder: data.currentPendingOrder,
       currentUser: data.currentUser,
+      language: data.convention?.language ?? 'en',
       myProfile: data.myProfile,
       rootSiteName: data.rootSite?.site_name,
       siteMode: data.convention?.site_mode,
@@ -117,6 +119,15 @@ function AppRoot() {
       }
     },
     [data, error, history, loading, location],
+  );
+
+  useEffect(
+    () => {
+      if (appRootContextValue?.language) {
+        i18n.changeLanguage(appRootContextValue.language);
+      }
+    },
+    [appRootContextValue?.language],
   );
 
   if (layoutChanged) {

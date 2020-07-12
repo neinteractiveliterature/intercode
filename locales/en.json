@@ -1,0 +1,20 @@
+{
+  "admin": {
+    "convention": {
+      "language": {
+        "label": "Site language",
+        "en": "English",
+        "es": "Spanish (translation in progress)"
+      }
+    }
+  },
+  "navigation": {
+    "events": {
+      "schedule": "Con Schedule",
+      "scheduleByRoom": "Con Schedule by Room",
+      "eventsList": "List of Events",
+      "newProposal": "Propose an Event",
+      "scheduleWithCounts": "Schedule With Counts"
+    }
+  }
+}

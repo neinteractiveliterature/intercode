@@ -1,0 +1,20 @@
+{
+  "admin": {
+    "convention": {
+      "language": {
+        "label": "Lenguaje del sitio",
+        "en": "Inglés",
+        "es": "Español (traducción en progreso)"
+      }
+    }
+  },
+  "navigation": {
+    "events": {
+      "schedule": "Horario de la Convención",
+      "scheduleByRoom": "Horario por Cuarto",
+      "eventsList": "Lista de Actividades",
+      "newProposal": "Proponer a una Actividad",
+      "scheduleWithCounts": "Horario con Sumas"
+    }
+  }
+}

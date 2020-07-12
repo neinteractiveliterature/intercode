@@ -10,6 +10,7 @@ fragment ConventionAdminConventionFields on Convention {
   email_mode
   event_mailing_list_domain
   location
+  language
   timezone_name
   timezone_mode
   show_schedule
