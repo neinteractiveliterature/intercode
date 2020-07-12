@@ -6,10 +6,35 @@
         "es": "Spanish (translation in progress)",
         "label": "Site language"
       }
+    },
+    "userConProfiles": {
+      "addAttendee": {
+        "addButtonText": "Add",
+        "buttonText": "Add attendee",
+        "dataCopyingNote": "Profile data will be copied from user’s latest convention profile.",
+        "header": "Add attendee",
+        "text": ""
+      },
+      "email": "Email",
+      "firstName": "First name",
+      "id": "ID",
+      "isAttending": "Attending?",
+      "isTeamMember": "Event team member?",
+      "lastName": "Last name",
+      "name": "Name",
+      "orderSummary": "Order summary",
+      "paymentAmount": "Payment amount",
+      "privileges": "Privileges",
+      "ticketStatusChangedAt": "{{ ticketName }} status changed",
+      "ticketType": "{{ ticketName }} type",
+      "userId": "User ID"
     }
   },
   "alerts": {
     "conventionCanceled": "{{ conventionName }} is canceled."
+  },
+  "buttons": {
+    "cancel": "Cancel"
   },
   "navigation": {
     "admin": {
@@ -76,6 +101,20 @@
       "myAccount": "My Account",
       "myOrderHistory": "My Order History",
       "myProfile": "My {{ conventionName }} Profile"
+    }
+  },
+  "tables": {
+    "choiceSetFilter": {
+      "anyText": "Any"
+    },
+    "exportCSV": {
+      "buttonText": "Export CSV"
+    },
+    "privileges": {
+      "siteAdmin": "Global admin"
+    },
+    "ticketStatus": {
+      "unpaid": "Unpaid"
     }
   }
 }

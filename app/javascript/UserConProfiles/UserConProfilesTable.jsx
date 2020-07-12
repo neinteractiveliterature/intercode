@@ -4,6 +4,7 @@ import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
+import { useTranslation } from 'react-i18next';
 
 import AddAttendeeModal from './AddAttendeeModal';
 import BooleanCell from '../Tables/BooleanCell';
@@ -30,8 +31,10 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
 });
 
 function TicketStatusCell({ value }) {
+  const { t } = useTranslation();
+
   if (!value) {
-    return 'Unpaid';
+    return t('tables.ticketStatus.unpaid', 'Unpaid');
   }
 
   return humanize(value.ticket_type.name);
@@ -84,11 +87,12 @@ TicketStatusWithPaymentAmountCell.defaultProps = {
 };
 
 const TicketTypeFilter = ({ filter, onChange }) => {
+  const { t } = useTranslation();
   const data = useContext(QueryDataContext);
   const choices = useMemo(
     () => (data
       ? [
-        { label: 'Unpaid', value: 'none' },
+        { label: t('tables.ticketStatus.unpaid', 'Unpaid'), value: 'none' },
         ...(data.convention.ticket_types
           .map((ticketType) => ({
             label: humanize(ticketType.name),
@@ -97,7 +101,7 @@ const TicketTypeFilter = ({ filter, onChange }) => {
       ]
       : []
     ),
-    [data],
+    [data, t],
   );
 
   return (
@@ -121,10 +125,13 @@ TicketTypeFilter.defaultProps = {
 };
 
 const privilegeNames = {
-  site_admin: 'Global admin',
+  site_admin: (t) => t('tables.privileges.siteAdmin', 'Global admin'),
 };
 
-const PrivilegesCell = ({ value }) => [...value].map((priv) => privilegeNames[priv]).sort().join(', ');
+const PrivilegesCell = ({ value }) => {
+  const { t } = useTranslation();
+  return [...value].map((priv) => privilegeNames[priv](t)).sort().join(', ');
+};
 
 PrivilegesCell.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
@@ -153,12 +160,12 @@ PrivilegesFilter.defaultProps = {
   filter: null,
 };
 
-const getPossibleColumns = (data) => {
+const getPossibleColumns = (data, t) => {
   const form = deserializeForm(data.convention.user_con_profile_form);
 
   const columns = [
     {
-      Header: 'ID',
+      Header: t('admin.userConProfiles.id', 'ID'),
       id: 'id',
       accessor: 'id',
       filterable: false,
@@ -166,7 +173,7 @@ const getPossibleColumns = (data) => {
       width: 70,
     },
     {
-      Header: 'User ID',
+      Header: t('admin.userConProfiles.userId', 'User ID'),
       id: 'user_id',
       accessor: (userConProfile) => userConProfile.user_id,
       filterable: false,
@@ -174,26 +181,26 @@ const getPossibleColumns = (data) => {
       width: 70,
     },
     {
-      Header: 'Name',
+      Header: t('admin.userConProfiles.name', 'Name'),
       id: 'name',
       accessor: (userConProfile) => userConProfile,
       Filter: FreeTextFilter,
       Cell: UserConProfileWithGravatarCell,
     },
     {
-      Header: 'First name',
+      Header: t('admin.userConProfiles.firstName', 'First name'),
       id: 'first_name',
       accessor: 'first_name',
       Filter: FreeTextFilter,
     },
     {
-      Header: 'Last name',
+      Header: t('admin.userConProfiles.lastName', 'Last name'),
       id: 'last_name',
       accessor: 'last_name',
       Filter: FreeTextFilter,
     },
     {
-      Header: 'Email',
+      Header: t('admin.userConProfiles.email', 'Email'),
       id: 'email',
       accessor: 'email',
       Cell: EmailCell,
@@ -212,7 +219,11 @@ const getPossibleColumns = (data) => {
             Filter: TicketTypeFilter,
           },
           {
-            Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
+            Header: t(
+              'admin.userConProfiles.ticketType',
+              '{{ ticketName }} type',
+              { ticketName: humanize(data.convention.ticket_name || 'ticket') },
+            ),
             id: 'ticket_type',
             accessor: 'ticket',
             width: 150,
@@ -220,7 +231,7 @@ const getPossibleColumns = (data) => {
             Filter: TicketTypeFilter,
           },
           {
-            Header: 'Payment amount',
+            Header: t('admin.userConProfiles.paymentAmount', 'Payment amount'),
             id: 'payment_amount',
             accessor: 'ticket',
             width: 150,
@@ -230,7 +241,7 @@ const getPossibleColumns = (data) => {
         ]
     ),
     {
-      Header: 'Event team member?',
+      Header: t('admin.userConProfiles.isTeamMember', 'Event team member?'),
       id: 'is_team_member',
       accessor: (userConProfile) => userConProfile.team_members.length > 0,
       width: 150,
@@ -239,7 +250,7 @@ const getPossibleColumns = (data) => {
       Filter: BooleanChoiceSetFilter,
     },
     {
-      Header: 'Attending?',
+      Header: t('admin.userConProfiles.isAttending', 'Attending?'),
       id: 'attending',
       accessor: 'ticket',
       width: 150,
@@ -252,7 +263,11 @@ const getPossibleColumns = (data) => {
         ? []
         : [
           {
-            Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
+            Header: t(
+              'admin.userConProfiles.ticketStatusChangedAt',
+              '{{ ticketName }} status changed',
+              { ticketName: humanize(data.convention.ticket_name || 'ticket') },
+            ),
             id: 'ticket_updated_at',
             accessor: (userConProfile) => (
               userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null
@@ -263,14 +278,15 @@ const getPossibleColumns = (data) => {
         ]
     ),
     {
-      Header: 'Privileges',
+      Header: t('admin.userConProfiles.privileges', 'Privileges'),
       id: 'privileges',
       accessor: 'privileges',
-      Cell: PrivilegesCell,
+      // eslint-disable-next-line react/prop-types
+      Cell: ({ value }) => <PrivilegesCell value={value} />,
       Filter: PrivilegesFilter,
     },
     {
-      Header: 'Order summary',
+      Header: t('admin.userConProfiles.orderSummary', 'Order summary'),
       id: 'order_summary',
       accessor: 'order_summary',
       filterable: false,
@@ -310,14 +326,19 @@ const getPossibleColumns = (data) => {
 };
 
 function UserConProfilesTable({ defaultVisibleColumns }) {
+  const { t } = useTranslation();
   const history = useHistory();
+  const getPossibleColumnsWithTranslation = useMemo(
+    () => (data) => getPossibleColumns(data, t),
+    [t],
+  );
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.convention.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data.convention.user_con_profiles_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: getPossibleColumnsWithTranslation,
     query: UserConProfilesTableUserConProfilesQuery,
     storageKeyPrefix: 'userConProfiles',
   });
@@ -334,7 +355,7 @@ function UserConProfilesTable({ defaultVisibleColumns }) {
                 <Link to="/user_con_profiles/new" className="btn btn-primary ml-2 mb-2">
                   <i className="fa fa-plus" />
                   {' '}
-                  Add attendee
+                  {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
                 </Link>
               )
               : null

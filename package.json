@@ -178,7 +178,7 @@
     "graphdoc:generate": "graphdoc -s schema.graphql",
     "graphqldoc:generate": "graphqldoc -s schema.graphql",
     "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
-    "i18next:parse": "i18next 'app/**/*.{js,jsx}' -c i18next-parser.config.js",
+    "i18next:parse": "i18next -c i18next-parser.config.js",
     "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
     "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
     "test": "jest --testPathPattern=test/javascript --coverage",

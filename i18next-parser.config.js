@@ -8,7 +8,7 @@ module.exports = {
   defaultNamespace: 'translation',
   // Default namespace used in your i18next config
 
-  // defaultValue: '',
+  defaultValue: null,
   // Default value to give to empty keys
 
   indentation: 2,
@@ -44,7 +44,7 @@ module.exports = {
   lineEnding: 'auto',
   // Control the line ending. See options at https://github.com/ryanve/eol
 
-  locales: ['en', 'es'],
+  locales: ['en'],
   // An array of the locales in your applications
 
   namespaceSeparator: ':',
@@ -59,7 +59,9 @@ module.exports = {
   // Supports JSON (.json) and YAML (.yml) file formats
   // Where to write the locale files relative to process.cwd()
 
-  input: undefined,
+  input: [
+    'app/javascript/**/*.{js,jsx,ts,tsx}',
+  ],
   // An array of globs that describe where to look for source files
   // relative to the location of the configuration file
 
