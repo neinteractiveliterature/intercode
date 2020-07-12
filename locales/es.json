@@ -15,6 +15,9 @@
       "eventsList": "Lista de Actividades",
       "newProposal": "Proponer a una Actividad",
       "scheduleWithCounts": "Horario con Sumas"
+    },
+    "headers": {
+      "events": "Actividades"
     }
   }
 }

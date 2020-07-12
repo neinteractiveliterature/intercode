@@ -15,6 +15,9 @@
       "eventsList": "List of Events",
       "newProposal": "Propose an Event",
       "scheduleWithCounts": "Schedule With Counts"
+    },
+    "headers": {
+      "events": "Events"
     }
   }
 }
