@@ -1,6 +1,5 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
@@ -14,9 +13,9 @@ import MapboxMap from '../Maps/MapboxMap';
 import MapboxContext from '../MapboxContext';
 import EnumTypes from '../enumTypes.json';
 import { timezoneNameForConvention } from '../TimeUtils';
+import ConventionLanguageInput from './ConventionLanguageInput';
 
 function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
-  const { t } = useTranslation();
   const { mapboxAccessToken } = useContext(MapboxContext);
   const [
     changeName, changeSiteMode, changeDomain, changeTimezoneName, changeStartsAt, changeEndsAt,
@@ -90,18 +89,7 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
         disabled={disabled}
       />
 
-      <MultipleChoiceInput
-        caption={t('admin.convention.language.label')}
-        choices={[
-          {
-            value: 'en',
-            label: t('admin.convention.language.en'),
-          },
-          {
-            value: 'es',
-            label: t('admin.convention.language.es'),
-          },
-        ]}
+      <ConventionLanguageInput
         value={convention.language}
         onChange={changeLanguage}
         disabled={disabled}
