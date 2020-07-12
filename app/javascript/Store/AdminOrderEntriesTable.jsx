@@ -107,7 +107,7 @@ function AdminOrderEntriesTable({
             </td>
           </tr>
         ))}
-        {order.coupon_applications.map((couponApplication) => (
+        {(order.coupon_applications ?? []).map((couponApplication) => (
           <tr key={couponApplication.id} className="bg-light">
             <td colSpan={2}>
               <em>{'Coupon code: '}</em>
