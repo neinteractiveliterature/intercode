@@ -1,40 +1,42 @@
 import React, { useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 import GeneratedNavigationSection from './GeneratedNavigationSection';
 
 export function useEventsNavigationItems() {
+  const { t } = useTranslation();
   const { conventionAcceptingProposals, currentAbility } = useContext(AppRootContext);
 
   const items = useMemo(
     () => [
       currentAbility.can_read_schedule && {
-        label: 'Con Schedule',
+        label: t('navigation.events.schedule'),
         url: '/events/schedule',
         icon: 'fa-calendar',
       },
       currentAbility.can_read_schedule && {
-        label: 'Con Schedule by Room',
+        label: t('navigation.events.scheduleByRoom'),
         url: '/events/schedule_by_room',
         icon: 'fa-calendar-o',
       },
       currentAbility.can_list_events && {
-        label: 'List of Events',
+        label: t('navigation.events.eventsList'),
         url: '/events',
         icon: 'fa-list',
       },
       conventionAcceptingProposals && {
-        label: 'Propose an Event',
+        label: t('navigation.events.newProposal'),
         url: '/pages/new-proposal',
         icon: 'fa-gift',
       },
       currentAbility.can_read_schedule_with_counts && {
-        label: 'Schedule With Counts',
+        label: t('navigation.events.scheduleWithCounts'),
         url: '/events/schedule_with_counts',
         icon: 'fa-calendar-check-o',
       },
     ],
-    [currentAbility, conventionAcceptingProposals],
+    [currentAbility, conventionAcceptingProposals, t],
   );
 
   return items;
