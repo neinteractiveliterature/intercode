@@ -1,120 +1,176 @@
 {
-    "admin": {
-        "convention": {
-            "language": {
-                "en": "English",
-                "es": "Spanish (work in progress, not ready to use yet)",
-                "label": "Site language"
-            }
-        },
-        "userConProfiles": {
-            "addAttendee": {
-                "addButtonText": "Add",
-                "buttonText": "Add attendee",
-                "dataCopyingNote": "Profile data will be copied from user’s latest convention profile.",
-                "header": "Add attendee",
-                "text": "Choose a user to add as an attendee for {{ conventionName }}.  This person must already be a user in the site database in order to be added."
-            },
-            "email": "Email",
-            "firstName": "First name",
-            "id": "ID",
-            "isAttending": "Attending?",
-            "isTeamMember": "Event team member?",
-            "lastName": "Last name",
-            "name": "Name",
-            "orderSummary": "Order summary",
-            "paymentAmount": "Payment amount",
-            "privileges": "Privileges",
-            "ticketStatusChangedAt": "{{ ticketName }} status changed",
-            "ticketType": "{{ ticketName }} type",
-            "userId": "User ID"
-        }
+  "admin": {
+    "convention": {
+      "language": {
+        "en": "English",
+        "es": "Spanish (work in progress, not ready to use yet)",
+        "label": "Site language"
+      }
     },
-    "alerts": {
-        "conventionCanceled": "{{ conventionName }} is canceled."
-    },
-    "buttons": {
-        "cancel": "Cancel"
-    },
-    "navigation": {
-        "admin": {
-            "attendees": "Attendees",
-            "conventions": "Conventions",
-            "conventionSettings": "Convention Settings",
-            "departments": "Departments",
-            "emailRoutes": "Email routes",
-            "eventCategories": "Event Categories",
-            "eventProposals": "Event Proposals",
-            "events": "Event Scheduling",
-            "forms": "Forms",
-            "mailingLists": "Mailing Lists",
-            "notifications": "Notifications",
-            "oauth2Applications": "OAuth2 Applications",
-            "organizations": "Organizations",
-            "reports": "Reports",
-            "rooms": "Rooms",
-            "signupModeration": "Signup Moderation",
-            "siteContent": "Site Content",
-            "staffPositions": "Staff Positions",
-            "store": "Store",
-            "ticketTypes": "{{ ticketName }} Types",
-            "userActivityAlerts": "User Activity Alerts",
-            "users": "Users"
-        },
-        "assumedIdentity": {
-            "revert": "Revert<1> to {{ name }}</1>"
-        },
-        "authentication": {
-            "logIn": "Log in",
-            "signUp": "Sign up"
-        },
-        "events": {
-            "eventsList": "List of Events",
-            "newProposal": "Propose an Event",
-            "schedule": "Con Schedule",
-            "scheduleByRoom": "Con Schedule by Room",
-            "scheduleWithCounts": "Schedule With Counts"
-        },
-        "headers": {
-            "admin": "Admin",
-            "authentication": "Log in or sign up",
-            "events": "Events",
-            "user": "User options"
-        },
-        "myShoppingCart": {
-            "buttonText": "My shopping cart",
-            "goToCart": "Go to cart"
-        },
-        "search": {
-            "buttonText": "Search",
-            "searchAnywhereKeyCombo": "Ctrl-/",
-            "searchAnywhereText": "Search anywhere:"
-        },
-        "ticketPurchase": {
-            "ctaLong": "Buy a {{ ticketName }}!",
-            "ctaShort": "{{ ticketName }}!"
-        },
-        "toggle": "Toggle navigation",
-        "user": {
-            "authorizedApplications": "Authorized Applications",
-            "logOut": "Log out",
-            "myAccount": "My Account",
-            "myOrderHistory": "My Order History",
-            "myProfile": "My {{ conventionName }} Profile"
-        }
-    },
-    "tables": {
-        "choiceSetFilter": {
-            "anyText": "Any"
-        },
-        "exportCSV": {
-            "buttonText": "Export CSV"
-        },
-        "privileges": {
-            "siteAdmin": "Global admin"
-        },
-        "ticketStatus": {
-            "unpaid": "Unpaid"
-        }
+    "userConProfiles": {
+      "addAttendee": {
+        "addButtonText": "Add",
+        "buttonText": "Add attendee",
+        "dataCopyingNote": "Profile data will be copied from user’s latest convention profile.",
+        "header": "Add attendee",
+        "text": "Choose a user to add as an attendee for {{ conventionName }}.  This person must already be a user in the site database in order to be added."
+      },
+      "email": "Email",
+      "firstName": "First name",
+      "id": "ID",
+      "isAttending": "Attending?",
+      "isTeamMember": "Event team member?",
+      "lastName": "Last name",
+      "name": "Name",
+      "orderSummary": "Order summary",
+      "paymentAmount": "Payment amount",
+      "privileges": "Privileges",
+      "ticketStatusChangedAt": "{{ ticketName }} status changed",
+      "ticketType": "{{ ticketName }} type",
+      "userId": "User ID"
     }
+  },
+  "alerts": {
+    "conventionCanceled": "{{ conventionName }} is canceled."
+  },
+  "buttons": {
+    "cancel": "Cancel",
+    "refresh": "Refresh"
+  },
+  "events": {
+    "runCapacity": {
+      "slotCount": "{{ count }} slot",
+      "slotCount_plural": "{{ count }} slots",
+      "slotRemainingCount": "{{ filledCount }} of {{ count }} slot filled",
+      "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled",
+      "unlimitedSimple": "unlimited",
+      "unlimitedWithCount": "unlimited ({{ signupCount }} signed up)",
+      "zeroCapacity": "0 slots"
+    }
+  },
+  "navigation": {
+    "admin": {
+      "attendees": "Attendees",
+      "conventions": "Conventions",
+      "conventionSettings": "Convention Settings",
+      "departments": "Departments",
+      "emailRoutes": "Email routes",
+      "eventCategories": "Event Categories",
+      "eventProposals": "Event Proposals",
+      "events": "Event Scheduling",
+      "forms": "Forms",
+      "mailingLists": "Mailing Lists",
+      "notifications": "Notifications",
+      "oauth2Applications": "OAuth2 Applications",
+      "organizations": "Organizations",
+      "reports": "Reports",
+      "rooms": "Rooms",
+      "signupModeration": "Signup Moderation",
+      "siteContent": "Site Content",
+      "staffPositions": "Staff Positions",
+      "store": "Store",
+      "ticketTypes": "{{ ticketName }} Types",
+      "userActivityAlerts": "User Activity Alerts",
+      "users": "Users"
+    },
+    "assumedIdentity": {
+      "revert": "Revert<1> to {{ name }}</1>"
+    },
+    "authentication": {
+      "logIn": "Log in",
+      "signUp": "Sign up"
+    },
+    "events": {
+      "eventsList": "List of Events",
+      "newProposal": "Propose an Event",
+      "schedule": "Con Schedule",
+      "scheduleByRoom": "Con Schedule by Room",
+      "scheduleWithCounts": "Schedule With Counts"
+    },
+    "headers": {
+      "admin": "Admin",
+      "authentication": "Log in or sign up",
+      "events": "Events",
+      "user": "User options"
+    },
+    "myShoppingCart": {
+      "buttonText": "My shopping cart",
+      "goToCart": "Go to cart"
+    },
+    "search": {
+      "buttonText": "Search",
+      "searchAnywhereKeyCombo": "Ctrl-/",
+      "searchAnywhereText": "Search anywhere:"
+    },
+    "ticketPurchase": {
+      "ctaLong": "Buy a {{ ticketName }}!",
+      "ctaShort": "{{ ticketName }}!"
+    },
+    "toggle": "Toggle navigation",
+    "user": {
+      "authorizedApplications": "Authorized Applications",
+      "logOut": "Log out",
+      "myAccount": "My Account",
+      "myOrderHistory": "My Order History",
+      "myProfile": "My {{ conventionName }} Profile"
+    }
+  },
+  "schedule": {
+    "legends": {
+      "attendeeCounts": {
+        "confirmed": "confirmed signups",
+        "confirmedAbbreviation": "conf",
+        "minPreferredMax": "min/preferred/max",
+        "nocount": "non-counted signups (usually staff or NPCs)",
+        "nocountAbbreviation": "nocount",
+        "title": "Attendee counts",
+        "totals": "Total: [total of above 3 numbers]",
+        "waitlisted": "waitlisted signups",
+        "waitlistedAbbreviation": "waitlist"
+      },
+      "eventCategories": {
+        "title": "Event categories"
+      },
+      "eventFullness": {
+        "belowMinimum": "Below minimum",
+        "full": "Full",
+        "minimum": "Reached minimum",
+        "preferred": "Reached preferred",
+        "title": "Event fullness colors",
+        "unlimited": "Unlimited capacity"
+      },
+      "signupStatus": {
+        "title": "Signup status"
+      },
+      "slotAvailability": {
+        "fullyAvailable": "100% slots available",
+        "halfAvailable": "50% slots available",
+        "noAvailability": "Full",
+        "title": "Slot availability",
+        "unlimited": "Unlimited slots"
+      }
+    },
+    "timezoneMessage": "All times displayed in {{ offsetName }}."
+  },
+  "signups": {
+    "states": {
+      "confirmed": "Confirmed",
+      "notSignedUp": "Not signed up",
+      "waitlisted": "Waitlisted"
+    }
+  },
+  "tables": {
+    "choiceSetFilter": {
+      "anyText": "Any"
+    },
+    "exportCSV": {
+      "buttonText": "Export CSV"
+    },
+    "privileges": {
+      "siteAdmin": "Global admin"
+    },
+    "ticketStatus": {
+      "unpaid": "Unpaid"
+    }
+  }
 }

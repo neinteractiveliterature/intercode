@@ -1,5 +1,20 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import mapValues from 'lodash/mapValues';
+import pickBy from 'lodash/pickBy';
+
+function filterEmptyStrings(obj) {
+  return mapValues(
+    pickBy(obj, (value) => value !== ''),
+    (value) => {
+      if (typeof value === 'object' && value != null) {
+        return filterEmptyStrings(value);
+      }
+
+      return value;
+    },
+  );
+}
 
 const PromiseI18nextBackend = {
   type: 'backend',
@@ -14,7 +29,7 @@ const PromiseI18nextBackend = {
     }
 
     loader()
-      .then((resources) => callback(null, resources))
+      .then((resources) => callback(null, filterEmptyStrings(resources)))
       .catch((error) => callback(error, null));
   },
 };
