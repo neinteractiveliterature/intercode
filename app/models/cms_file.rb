@@ -15,7 +15,7 @@ class CmsFile < ApplicationRecord
       resource = Aws::S3::Resource.new
       bucket = resource.bucket(CmsFileUploader.fog_directory)
       object = bucket.object(file.path)
-      object.move_to(bucket: bucket_name, key: new_path)
+      object.move_to(bucket: bucket.name, key: new_path)
     else
       File.rename(file.path, new_path)
     end
