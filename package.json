@@ -3,6 +3,22 @@
     "node": ">= 8.4.0",
     "yarn": ">=0.25.2"
   },
+  "scripts": {
+    "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
+    "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
+    "build": "webpack --config config/webpack/production.js",
+    "build:cli": "webpack --config config/webpack/cliUtils.js",
+    "build:timezone_data": "node ./buildTimezoneData.js",
+    "graphdoc:generate": "graphdoc -s schema.graphql",
+    "graphql:codegen": "graphql-codegen --config codegen.yml",
+    "graphqldoc:generate": "graphqldoc -s schema.graphql",
+    "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
+    "i18next:parse": "i18next -c i18next-parser-english.config.js && i18next -c i18next-parser-non-english.config.js",
+    "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
+    "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
+    "test": "jest --testPathPattern=test/javascript --coverage",
+    "test:watch": "jest --watch --testPathPattern=test/javascript"
+  },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
     "@babel/core": "^7.10.4",
@@ -141,13 +157,25 @@
   },
   "devDependencies": {
     "@apollo/react-testing": "^3.1.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@graphql-codegen/cli": "^1.17.0",
+    "@graphql-codegen/fragment-matcher": "^1.17.0",
+    "@graphql-codegen/introspection": "^1.17.0",
+    "@graphql-codegen/near-operation-file-preset": "^1.17.0",
+    "@graphql-codegen/typescript": "^1.17.0",
+    "@graphql-codegen/typescript-operations": "^1.17.0",
+    "@graphql-codegen/typescript-react-apollo": "^1.17.0",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react-hooks": "^3.3.0",
+    "@typescript-eslint/eslint-plugin": "^3.6.0",
+    "@typescript-eslint/parser": "^3.6.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
     "eslint": "^7.4.0",
     "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-typescript": "^8.0.2",
+    "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-import-resolver-webpack": "^0.12.2",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-graphql": "^4.0.0",
@@ -164,25 +192,11 @@
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "react-test-renderer": "^16.13.1",
+    "typescript": "^3.9.6",
     "webpack-dev-server": "^3.11.0"
   },
   "resolutions": {
     "**/**/kind-of": ">= 6.0.3"
-  },
-  "scripts": {
-    "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
-    "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
-    "build": "webpack --config config/webpack/production.js",
-    "build:cli": "webpack --config config/webpack/cliUtils.js",
-    "build:timezone_data": "node ./buildTimezoneData.js",
-    "graphdoc:generate": "graphdoc -s schema.graphql",
-    "graphqldoc:generate": "graphqldoc -s schema.graphql",
-    "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
-    "i18next:parse": "i18next -c i18next-parser-english.config.js && i18next -c i18next-parser-non-english.config.js",
-    "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
-    "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
-    "test": "jest --testPathPattern=test/javascript --coverage",
-    "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
