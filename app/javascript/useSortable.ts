@@ -1,7 +1,17 @@
-import { useCallback, useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import {
+  useCallback, useRef, RefObject, MutableRefObject,
+} from 'react';
+import {
+  useDrag, useDrop, DragSourceOptions, DragElementWrapper,
+} from 'react-dnd';
 
-export function useSortHover(ref, index, moveItem) {
+export type MoveItemFunction = (dragIndex: number, hoverIndex: number) => void;
+
+export function useSortHover<T extends HTMLElement>(
+  ref: RefObject<T | undefined>,
+  index: number,
+  moveItem: MoveItemFunction,
+) {
   return useCallback(
     (item, monitor) => {
       if (!ref.current) {
@@ -48,8 +58,16 @@ export function useSortHover(ref, index, moveItem) {
   );
 }
 
-export default function useSortable(index, moveItem, itemType) {
-  const ref = useRef();
+export default function useSortable<T extends HTMLElement>(
+  index: number,
+  moveItem: MoveItemFunction,
+  itemType: string,
+): [
+    MutableRefObject<T | null>,
+    DragElementWrapper<DragSourceOptions>,
+    { isDragging: boolean }
+  ] {
+  const ref = useRef<T>(null);
   const [{ isDragging }, drag, preview] = useDrag({
     item: { index, type: itemType },
     collect: (monitor) => ({
@@ -63,7 +81,7 @@ export default function useSortable(index, moveItem, itemType) {
   return [ref, drag, { isDragging }];
 }
 
-export function buildOptimisticArrayForMove(items, dragIndex, hoverIndex) {
+export function buildOptimisticArrayForMove<T>(items: T[], dragIndex: number, hoverIndex: number) {
   const draggedItem = items[dragIndex];
   const optimisticItems = [...items];
   optimisticItems.splice(dragIndex, 1);
