@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Manager, Reference, Popper } from 'react-popper';
+import { useTranslation } from 'react-i18next';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 
@@ -17,6 +18,7 @@ const ValueType = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
 function ChoiceSetFilter({
   choices: rawChoices, filter, filterCodec, multiple, onChange, renderHeaderCaption, ...otherProps
 }) {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(true);
 
   const filterValue = useMemo(
@@ -72,6 +74,8 @@ function ChoiceSetFilter({
       return <span className="mr-2">{renderHeaderCaption(filterValue)}</span>;
     }
 
+    const anyText = t('tables.choiceSetFilter.anyText', 'Any');
+
     if (Array.isArray(filterValue)) {
       if (filterValue.length > 0) {
         return filterValue.map(
@@ -82,11 +86,11 @@ function ChoiceSetFilter({
         ).map(({ label }) => <span key={label} className="mr-2">{label}</span>);
       }
 
-      return <span className="mr-2">Any</span>;
+      return <span className="mr-2">{anyText}</span>;
     }
 
     const choice = choices.find((c) => c.value === filterValue) || { label: filterValue };
-    return <span className="mr-2">{choice.label || 'Any'}</span>;
+    return <span className="mr-2">{choice.label || anyText}</span>;
   };
 
   const renderHeader = () => (

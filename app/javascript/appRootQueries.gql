@@ -70,6 +70,7 @@ query AppRootQuery($path: String!) {
     domain
     accepting_proposals
     canceled
+    language
     site_mode
     signup_mode
     ticket_mode

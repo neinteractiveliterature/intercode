@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import QueryString from 'query-string';
+import { useTranslation } from 'react-i18next';
 
 import {
   reactTableFiltersToTableResultsFilters,
@@ -66,6 +67,7 @@ function getExportUrl(baseUrl, { filtered, sorted, columns }) {
 function ReactTableExportButton({
   exportUrl, filtered, sorted, columns,
 }) {
+  const { t } = useTranslation();
   const href = useMemo(
     () => getExportUrl(exportUrl, { filtered, sorted, columns }),
     [columns, exportUrl, filtered, sorted],
@@ -75,7 +77,7 @@ function ReactTableExportButton({
     <a className="btn btn-outline-primary" href={href}>
       <i className="fa fa-file-excel-o" />
       {' '}
-      Export CSV
+      {t('tables.exportCSV.buttonText', 'Export CSV')}
     </a>
   );
 }
