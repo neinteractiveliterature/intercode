@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { CommonConventionDataQuery } from '../queries.gql';
 import FakeEventRun from './FakeEventRun';
@@ -8,6 +9,7 @@ import { sortByLocaleString } from '../../ValueUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 
 function CategoryLegend() {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(CommonConventionDataQuery);
   const sortedEventCategories = useMemo(
     () => (error || loading
@@ -31,7 +33,7 @@ function CategoryLegend() {
       <div className="col-md-6 col-lg-4 mb-4">
         <div className="card bg-light">
           <div className="card-header">
-            Event categories
+            {t('schedule.legends.eventCategories.title', 'Event categories')}
           </div>
 
           <div className="card-body">
@@ -47,24 +49,24 @@ function CategoryLegend() {
       <div className="col-md-6 col-lg-4 mb-4">
         <div className="card bg-light">
           <div className="card-header">
-            Slot availability
+            {t('schedule.legends.slotAvailability.title', 'Slot availability')}
           </div>
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} availability={1}>
-              100% slots available
+              {t('schedule.legends.slotAvailability.fullyAvailable', '100% slots available')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} availability={0.5}>
-              50% slots available
+              {t('schedule.legends.slotAvailability.halfAvailable', '50% slots available')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} runFull availability={0}>
-              Full
+              {t('schedule.legends.slotAvailability.noAvailability', 'Full')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} unlimited>
-              Unlimited slots
+              {t('schedule.legends.slotAvailability.unlimited', 'Unlimited slots')}
             </FakeEventRun>
           </div>
         </div>
@@ -73,24 +75,24 @@ function CategoryLegend() {
       <div className="col-md-6 col-lg-4 mb-4">
         <div className="card bg-light">
           <div className="card-header">
-            Signup status
+            {t('schedule.legends.signupStatus.title', 'Signup status')}
           </div>
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} signupStatus="confirmed">
               <i className="fa fa-user-circle" />
               {' '}
-              Confirmed
+              {t('signups.states.confirmed', 'Confirmed')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} signupStatus="waitlisted">
               <i className="fa fa-hourglass-half" />
               {' '}
-              Waitlisted
+              {t('signups.states.waitlisted', 'Waitlisted')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory}>
-              Not signed up
+              {t('signups.states.notSignedUp', 'Not signed up')}
             </FakeEventRun>
           </div>
         </div>

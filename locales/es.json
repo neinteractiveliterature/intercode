@@ -34,7 +34,17 @@
     "conventionCanceled": ""
   },
   "buttons": {
-    "cancel": ""
+    "cancel": "",
+    "refresh": ""
+  },
+  "events": {
+    "runCapacity": {
+      "slotCount": "",
+      "slotRemainingCount": "",
+      "unlimitedSimple": "",
+      "unlimitedWithCount": "",
+      "zeroCapacity": ""
+    }
   },
   "navigation": {
     "admin": {
@@ -101,6 +111,50 @@
       "myAccount": "",
       "myOrderHistory": "",
       "myProfile": ""
+    }
+  },
+  "schedule": {
+    "legends": {
+      "attendeeCounts": {
+        "confirmed": "",
+        "confirmedAbbreviation": "",
+        "minPreferredMax": "",
+        "nocount": "",
+        "nocountAbbreviation": "",
+        "title": "",
+        "totals": "",
+        "waitlisted": "",
+        "waitlistedAbbreviation": ""
+      },
+      "eventCategories": {
+        "title": ""
+      },
+      "eventFullness": {
+        "belowMinimum": "",
+        "full": "",
+        "minimum": "",
+        "preferred": "",
+        "title": "",
+        "unlimited": ""
+      },
+      "signupStatus": {
+        "title": ""
+      },
+      "slotAvailability": {
+        "fullyAvailable": "",
+        "halfAvailable": "",
+        "noAvailability": "",
+        "title": "",
+        "unlimited": ""
+      }
+    },
+    "timezoneMessage": ""
+  },
+  "signups": {
+    "states": {
+      "confirmed": "",
+      "notSignedUp": "",
+      "waitlisted": ""
     }
   },
   "tables": {

@@ -5,6 +5,8 @@ import {
   Switch, Route, useLocation, useHistory,
 } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import moment from 'moment-timezone';
+import { Settings } from 'luxon';
 
 import { AppRootQuery } from './appRootQueries.gql';
 import AppRouter from './AppRouter';
@@ -125,9 +127,16 @@ function AppRoot() {
     () => {
       if (appRootContextValue?.language) {
         i18n.changeLanguage(appRootContextValue.language);
+        Settings.locale = appRootContextValue.language;
+
+        if (appRootContextValue.language === 'es') {
+          import('moment/locale/es').then(() => moment.locale('es'));
+        } else {
+          moment.locale('en');
+        }
       }
     },
-    [appRootContextValue?.language],
+    [appRootContextValue],
   );
 
   if (layoutChanged) {
