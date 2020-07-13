@@ -3,172 +3,174 @@
     "convention": {
       "language": {
         "en": "Inglés",
-        "es": "Español (trabajo en progreso, aún no está listo para usar)",
-        "label": "Lenguaje del sitio"
+        "es": "Español (trabajo en progreso, no al 100%)",
+        "label": "Idioma de la página"
       }
     },
     "userConProfiles": {
       "addAttendee": {
-        "addButtonText": "",
-        "buttonText": "",
-        "dataCopyingNote": "",
-        "header": "",
-        "text": ""
+        "addButtonText": "Añadir",
+        "buttonText": "Añadir participante",
+        "dataCopyingNote": "La información del perfil será copiada del último perfil de jornada del usuario.",
+        "header": "Añadir participante",
+        "text": "Elige un usuario a añadir como participante de {{ conventionName }}.  La persona debe ser un usuario de la base de datos para poder ser añadida."
       },
-      "email": "",
-      "firstName": "",
-      "id": "",
-      "isAttending": "",
-      "isTeamMember": "",
-      "lastName": "",
-      "name": "",
-      "orderSummary": "",
-      "paymentAmount": "",
-      "privileges": "",
-      "ticketStatusChangedAt": "",
-      "ticketType": "",
-      "userId": ""
+      "email": "Email",
+      "firstName": "Nombre de pila",
+      "id": "ID",
+      "isAttending": "¿Participará?",
+      "isTeamMember": "¿Forma parte de la Organización del Evento?",
+      "lastName": "Apellidos",
+      "name": "Nombre",
+      "orderSummary": "Resumen del pedido",
+      "paymentAmount": "Cantidad a pagar",
+      "privileges": "Privilegios",
+      "ticketStatusChangedAt": "Estado de {{ ticketName }} cambiado",
+      "ticketType": "Tipo de {{ ticketName }}",
+      "userId": "Identificador de usuario"
     }
   },
   "alerts": {
-    "conventionCanceled": ""
+    "conventionCanceled": "{{ conventionName }} ha sido cancelada."
   },
   "buttons": {
-    "cancel": "",
-    "refresh": ""
+    "cancel": "Cancelar",
+    "refresh": "Actualizar"
   },
   "events": {
     "runCapacity": {
-      "slotCount": "",
-      "slotRemainingCount": "",
-      "unlimitedSimple": "",
-      "unlimitedWithCount": "",
-      "zeroCapacity": ""
+      "slotCount": "plaza {{ count }}",
+      "slotCount_plural": "{{ count }} plazas",
+      "slotRemainingCount": "Plaza {{ filledCount }} de {{ count }} ocupada",
+      "slotRemainingCount_plural": "{{ filledCount }} de {{ count }} plazas ocupadas",
+      "unlimitedSimple": "ilimitadas",
+      "unlimitedWithCount": "({{ signupCount }} inscritas (capacidad ilimitada)",
+      "zeroCapacity": "plazas agotadas"
     }
   },
   "navigation": {
     "admin": {
-      "attendees": "",
-      "conventions": "",
-      "conventionSettings": "",
-      "departments": "",
-      "emailRoutes": "",
-      "eventCategories": "",
-      "eventProposals": "",
-      "events": "",
-      "forms": "",
-      "mailingLists": "",
-      "notifications": "",
-      "oauth2Applications": "",
-      "organizations": "",
-      "reports": "",
-      "rooms": "",
-      "signupModeration": "",
-      "siteContent": "",
-      "staffPositions": "",
-      "store": "",
-      "ticketTypes": "",
-      "userActivityAlerts": "",
-      "users": ""
+      "attendees": "Participantes",
+      "conventions": "Convenciones",
+      "conventionSettings": "Configuración de la convención",
+      "departments": "Departmentos",
+      "emailRoutes": "Rutas de Email",
+      "eventCategories": "Categorias de actividades",
+      "eventProposals": "Propuestas de actividades",
+      "events": "Agenda de actividades",
+      "forms": "Formularios",
+      "mailingLists": "Listas de correo",
+      "notifications": "Notificaciones",
+      "oauth2Applications": "Aplicaciones OAuth2",
+      "organizations": "Organizaciones",
+      "reports": "Informes",
+      "rooms": "Salas",
+      "signupModeration": "Control de inscripciones",
+      "siteContent": "Contenido de la página",
+      "staffPositions": "Organigrama de organización",
+      "store": "Tienda",
+      "ticketTypes": "Tipo de {{ ticketName }}",
+      "userActivityAlerts": "Alertas de actividad de usuario",
+      "users": "Usuarios"
     },
     "assumedIdentity": {
-      "revert": ""
+      "revert": "Revertir<1> a {{ name }}</1>"
     },
     "authentication": {
-      "logIn": "",
-      "signUp": ""
+      "logIn": "Iniciar Sesión",
+      "signUp": "Inscripción"
     },
     "events": {
-      "eventsList": "Lista de Actividades",
-      "newProposal": "Proponer a una Actividad",
-      "schedule": "Horario de la Convención",
-      "scheduleByRoom": "Horario por Cuarto",
-      "scheduleWithCounts": "Horario con Sumas"
+      "eventsList": "Listado de actividades",
+      "newProposal": "Proponer actividad",
+      "schedule": "Agenda de las jornadas",
+      "scheduleByRoom": "Agenda de las jornadas por habitación",
+      "scheduleWithCounts": "Agenda con cifras"
     },
     "headers": {
-      "admin": "",
-      "authentication": "",
+      "admin": "Admin",
+      "authentication": "Iniciar sesión o Inscripción",
       "events": "Actividades",
-      "user": ""
+      "user": "Opciones de usuario"
     },
     "myShoppingCart": {
-      "buttonText": "",
-      "goToCart": ""
+      "buttonText": "Carrito de la compra",
+      "goToCart": "Ir al carrito"
     },
     "search": {
-      "buttonText": "",
-      "searchAnywhereKeyCombo": "",
-      "searchAnywhereText": ""
+      "buttonText": "Buscar",
+      "searchAnywhereKeyCombo": "Ctrl-/",
+      "searchAnywhereText": "Buscar en cualquier sitio:"
     },
     "ticketPurchase": {
-      "ctaLong": "",
-      "ctaShort": ""
+      "ctaLong": "Comprar un {{ ticketName }}!",
+      "ctaShort": "{{ ticketName }}!"
     },
-    "toggle": "",
+    "toggle": "Cambiar navegación",
     "user": {
-      "authorizedApplications": "",
-      "logOut": "",
-      "myAccount": "",
-      "myOrderHistory": "",
-      "myProfile": ""
+      "authorizedApplications": "Aplicaciones autorizadas",
+      "logOut": "Salir",
+      "myAccount": "Mi cuenta",
+      "myOrderHistory": "Historial de pedidos",
+      "myProfile": "Mi perfil de {{ conventionName }}"
     }
   },
   "schedule": {
     "legends": {
       "attendeeCounts": {
-        "confirmed": "",
-        "confirmedAbbreviation": "",
-        "minPreferredMax": "",
-        "nocount": "",
-        "nocountAbbreviation": "",
-        "title": "",
-        "totals": "",
-        "waitlisted": "",
-        "waitlistedAbbreviation": ""
+        "confirmed": "inscripciones confirmadas",
+        "confirmedAbbreviation": "conf",
+        "minPreferredMax": "min/preferido/max",
+        "nocount": "inscripciones no contabilizadas (staff y PNJ's generalmente)",
+        "nocountAbbreviation": "nocont",
+        "title": "Participantes contades",
+        "totals": "Total: [suma de la tres números superiores]",
+        "waitlisted": "inscritas en lista de espera",
+        "waitlistedAbbreviation": "lista de espera"
       },
       "eventCategories": {
-        "title": ""
+        "title": "Categorías de actividades"
       },
       "eventFullness": {
-        "belowMinimum": "",
-        "full": "",
-        "minimum": "",
-        "preferred": "",
-        "title": "",
-        "unlimited": ""
+        "belowMinimum": "Por debajo del mínimo",
+        "full": "Llena",
+        "minimum": "Mínimo alcanzado",
+        "preferred": "Número preferido alcanzado",
+        "title": "Colores de evento lleno",
+        "unlimited": "Capacidad ilimitada"
       },
       "signupStatus": {
-        "title": ""
+        "title": "Estado de la inscripción"
       },
       "slotAvailability": {
-        "fullyAvailable": "",
-        "halfAvailable": "",
-        "noAvailability": "",
-        "title": "",
-        "unlimited": ""
+        "fullyAvailable": "100% plazas disponibles",
+        "halfAvailable": "50% plazas disponibles",
+        "noAvailability": "Llena",
+        "title": "Disponibilidad de plazas",
+        "unlimited": "Plazas ilimitadas"
       }
     },
-    "timezoneMessage": ""
+    "timezoneMessage": "Todos los horarios mostrados en zona horaria {{ offsetName }}."
   },
   "signups": {
     "states": {
-      "confirmed": "",
-      "notSignedUp": "",
-      "waitlisted": ""
+      "confirmed": "Confirmado",
+      "notSignedUp": "No inscrita",
+      "waitlisted": "En lista de espera"
     }
   },
   "tables": {
     "choiceSetFilter": {
-      "anyText": ""
+      "anyText": "Cualquiera"
     },
     "exportCSV": {
-      "buttonText": ""
+      "buttonText": "Exportar CSV"
     },
     "privileges": {
-      "siteAdmin": ""
+      "siteAdmin": "Admin Global"
     },
     "ticketStatus": {
-      "unpaid": ""
+      "unpaid": "No pagado"
     }
   }
 }
