@@ -20,6 +20,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import EnumTypes from '../enumTypes.json';
+import ConventionLanguageInput from '../ConventionAdmin/ConventionLanguageInput';
 
 const DEFAULT_PROPS = {
   name: '',
@@ -92,6 +93,7 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           name: convention.name,
           domain: convention.domain,
           email_from: convention.email_from,
+          language: convention.language,
           starts_at: convention.starts_at,
           ends_at: convention.ends_at,
           timezone_name: convention.timezone_name,
@@ -145,6 +147,11 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           value={convention.organization}
           onChange={conventionSetter('organization')}
           isClearable
+        />
+
+        <ConventionLanguageInput
+          value={convention.language}
+          onChange={conventionSetter('language')}
         />
 
         <MultipleChoiceInput

@@ -12,6 +12,7 @@ class CloneConventionService < CivilService::Service
       show_schedule: 'no',
       accepting_proposals: false
     }.merge(source_convention.attributes.symbolize_keys.slice(*%i[
+      language
       maximum_tickets
       ticket_name
       ticket_mode

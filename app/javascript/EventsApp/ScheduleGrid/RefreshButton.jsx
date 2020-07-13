@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+
 import useAsyncFunction from '../../useAsyncFunction';
 
 function RefreshButton({ refreshData }) {
+  const { t } = useTranslation();
   const [refreshAsync, , refreshInProgress] = useAsyncFunction(refreshData);
 
   return (
@@ -14,7 +17,10 @@ function RefreshButton({ refreshData }) {
       onClick={refreshAsync}
     >
       <i className={classNames('fa fa-refresh', { 'fa-spin': refreshInProgress })} />
-      <span className="d-none d-md-inline"> Refresh</span>
+      <span className="d-none d-md-inline">
+        {' '}
+        {t('buttons.refresh', 'Refresh')}
+      </span>
     </button>
   );
 }

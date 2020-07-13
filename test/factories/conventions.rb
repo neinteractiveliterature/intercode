@@ -9,6 +9,7 @@ FactoryBot.define do
     show_schedule { 'yes' }
     show_event_list { 'yes' }
     accepting_proposals { false }
+    language { 'en' }
     updated_by { nil }
     maximum_event_signups do
       ScheduledValue::ScheduledValue.new(

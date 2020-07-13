@@ -1,36 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
-import pluralizeWithCount from '../../pluralizeWithCount';
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 
-function describeCapacity(bucket, signupCount, signupsAvailable) {
+function describeCapacity(bucket, signupCount, signupsAvailable, t) {
   if (!bucket.slots_limited) {
     if (!signupsAvailable) {
-      return 'unlimited';
+      return t('events.runCapacity.unlimitedSimple', 'unlimited');
     }
 
-    return `unlimited (${signupCount} signed up)`;
+    return t('events.runCapacity.unlimitedWithCount', 'unlimited ({{ signupCount }} signed up)', { signupCount });
   }
 
   if (bucket.total_slots == null) {
-    return '0 slots';
+    return t('events.runCapacity.zeroCapacity', '0 slots');
   }
 
   const remainingCapacity = bucket.total_slots - signupCount;
 
   if (!signupsAvailable && remainingCapacity === bucket.total_slots) {
-    return pluralizeWithCount('slot', remainingCapacity);
+    return t('events.runCapacity.slotCount', '{{ count }} slots', { count: remainingCapacity });
   }
 
   const displayCount = signupCount > bucket.total_slots ? bucket.total_slots : signupCount;
 
-  return `${displayCount} of ${pluralizeWithCount('slot', bucket.total_slots)} filled`;
+  return t(
+    'events.runCapacity.slotRemainingCount',
+    '{{ filledCount }} of {{ count }} slots filled',
+    { count: bucket.total_slots, filledCount: displayCount },
+  );
 }
 
 function RunCapacityGraphBucket({
   bucket, signupCountData, signupsAvailable, bucketIndex,
 }) {
+  const { t } = useTranslation();
   const capacity = bucket.total_slots;
 
   if (capacity < 1 && bucket.slots_limited) {
@@ -44,7 +49,7 @@ function RunCapacityGraphBucket({
     <div className="bucket-capacity">
       {bucket.name}
       {' - '}
-      {describeCapacity(bucket, signupCount, signupsAvailable)}
+      {describeCapacity(bucket, signupCount, signupsAvailable, t)}
       <BucketAvailabilityDisplay
         className={`text-bucket-color-${(bucketIndex % 9) + 1}`}
         signupCount={signupCount}

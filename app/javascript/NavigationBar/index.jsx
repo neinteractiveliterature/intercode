@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sortBy from 'lodash/sortBy';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 import NavigationBrand from './NavigationBrand';
@@ -19,6 +20,7 @@ import SearchNavigationItem from './SearchNavigationItem';
 import NavigationBarContext from './NavigationBarContext';
 
 function NavigationBarContent({ navbarClasses, rootItems }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const {
     conventionName, conventionCanceled, rootSiteName, siteMode, ticketsAvailableForPurchase,
@@ -98,7 +100,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
             onClick={toggleCollapsed}
             aria-controls="navbarSupportedContent"
             aria-expanded={!collapsed}
-            aria-label="Toggle navigation"
+            aria-label={t('navigation.toggle', 'Toggle navigation')}
           >
             <i className={collapsed ? 'fa fa-bars' : 'fa fa-times'} />
           </button>
@@ -107,9 +109,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
           <div className="navbar-convention-canceled-notice">
             <div className="container">
               <div className="text-center flex-grow-1">
-                {conventionName}
-                {' '}
-                is canceled.
+                {t('alerts.conventionCanceled', '{{ conventionName }} is canceled.', { conventionName })}
               </div>
             </div>
           </div>

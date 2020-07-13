@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useContext } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { useTranslation } from 'react-i18next';
 
 import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
 
 function SearchNavigationItem() {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);
 
@@ -43,7 +45,7 @@ function SearchNavigationItem() {
           onClick={() => setVisibleWithHiding(true)}
         >
           <i className="fa fa-search" />
-          <span className="sr-only">Search</span>
+          <span className="sr-only">{t('navigation.search.buttonText', 'Search')}</span>
         </button>
       </CSSTransition>
     </div>

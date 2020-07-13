@@ -13,15 +13,17 @@ import MapboxMap from '../Maps/MapboxMap';
 import MapboxContext from '../MapboxContext';
 import EnumTypes from '../enumTypes.json';
 import { timezoneNameForConvention } from '../TimeUtils';
+import ConventionLanguageInput from './ConventionLanguageInput';
 
 function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
   const { mapboxAccessToken } = useContext(MapboxContext);
   const [
     changeName, changeSiteMode, changeDomain, changeTimezoneName, changeStartsAt, changeEndsAt,
-    changeLocation, changeTimezoneMode,
+    changeLocation, changeTimezoneMode, changeLanguage,
   ] = useChangeDispatchers(
     dispatch,
-    ['name', 'site_mode', 'domain', 'timezone_name', 'starts_at', 'ends_at', 'location', 'timezone_mode'],
+    ['name', 'site_mode', 'domain', 'timezone_name', 'starts_at', 'ends_at', 'location',
+      'timezone_mode', 'language'],
   );
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
@@ -84,6 +86,12 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
         ]}
         value={convention.site_mode}
         onChange={changeSiteMode}
+        disabled={disabled}
+      />
+
+      <ConventionLanguageInput
+        value={convention.language}
+        onChange={changeLanguage}
         disabled={disabled}
       />
 
@@ -151,6 +159,7 @@ ConventionFormGeneralSection.propTypes = {
   convention: PropTypes.shape({
     name: PropTypes.string,
     domain: PropTypes.string,
+    language: PropTypes.string,
     location: PropTypes.string,
     timezone_name: PropTypes.string,
     timezone_mode: PropTypes.string,

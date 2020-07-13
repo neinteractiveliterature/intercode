@@ -1,0 +1,174 @@
+{
+  "admin": {
+    "convention": {
+      "language": {
+        "en": "Inglés",
+        "es": "Español (trabajo en progreso, aún no está listo para usar)",
+        "label": "Lenguaje del sitio"
+      }
+    },
+    "userConProfiles": {
+      "addAttendee": {
+        "addButtonText": "",
+        "buttonText": "",
+        "dataCopyingNote": "",
+        "header": "",
+        "text": ""
+      },
+      "email": "",
+      "firstName": "",
+      "id": "",
+      "isAttending": "",
+      "isTeamMember": "",
+      "lastName": "",
+      "name": "",
+      "orderSummary": "",
+      "paymentAmount": "",
+      "privileges": "",
+      "ticketStatusChangedAt": "",
+      "ticketType": "",
+      "userId": ""
+    }
+  },
+  "alerts": {
+    "conventionCanceled": ""
+  },
+  "buttons": {
+    "cancel": "",
+    "refresh": ""
+  },
+  "events": {
+    "runCapacity": {
+      "slotCount": "",
+      "slotRemainingCount": "",
+      "unlimitedSimple": "",
+      "unlimitedWithCount": "",
+      "zeroCapacity": ""
+    }
+  },
+  "navigation": {
+    "admin": {
+      "attendees": "",
+      "conventions": "",
+      "conventionSettings": "",
+      "departments": "",
+      "emailRoutes": "",
+      "eventCategories": "",
+      "eventProposals": "",
+      "events": "",
+      "forms": "",
+      "mailingLists": "",
+      "notifications": "",
+      "oauth2Applications": "",
+      "organizations": "",
+      "reports": "",
+      "rooms": "",
+      "signupModeration": "",
+      "siteContent": "",
+      "staffPositions": "",
+      "store": "",
+      "ticketTypes": "",
+      "userActivityAlerts": "",
+      "users": ""
+    },
+    "assumedIdentity": {
+      "revert": ""
+    },
+    "authentication": {
+      "logIn": "",
+      "signUp": ""
+    },
+    "events": {
+      "eventsList": "Lista de Actividades",
+      "newProposal": "Proponer a una Actividad",
+      "schedule": "Horario de la Convención",
+      "scheduleByRoom": "Horario por Cuarto",
+      "scheduleWithCounts": "Horario con Sumas"
+    },
+    "headers": {
+      "admin": "",
+      "authentication": "",
+      "events": "Actividades",
+      "user": ""
+    },
+    "myShoppingCart": {
+      "buttonText": "",
+      "goToCart": ""
+    },
+    "search": {
+      "buttonText": "",
+      "searchAnywhereKeyCombo": "",
+      "searchAnywhereText": ""
+    },
+    "ticketPurchase": {
+      "ctaLong": "",
+      "ctaShort": ""
+    },
+    "toggle": "",
+    "user": {
+      "authorizedApplications": "",
+      "logOut": "",
+      "myAccount": "",
+      "myOrderHistory": "",
+      "myProfile": ""
+    }
+  },
+  "schedule": {
+    "legends": {
+      "attendeeCounts": {
+        "confirmed": "",
+        "confirmedAbbreviation": "",
+        "minPreferredMax": "",
+        "nocount": "",
+        "nocountAbbreviation": "",
+        "title": "",
+        "totals": "",
+        "waitlisted": "",
+        "waitlistedAbbreviation": ""
+      },
+      "eventCategories": {
+        "title": ""
+      },
+      "eventFullness": {
+        "belowMinimum": "",
+        "full": "",
+        "minimum": "",
+        "preferred": "",
+        "title": "",
+        "unlimited": ""
+      },
+      "signupStatus": {
+        "title": ""
+      },
+      "slotAvailability": {
+        "fullyAvailable": "",
+        "halfAvailable": "",
+        "noAvailability": "",
+        "title": "",
+        "unlimited": ""
+      }
+    },
+    "timezoneMessage": ""
+  },
+  "signups": {
+    "states": {
+      "confirmed": "",
+      "notSignedUp": "",
+      "waitlisted": ""
+    }
+  },
+  "tables": {
+    "choiceSetFilter": {
+      "anyText": ""
+    },
+    "exportCSV": {
+      "buttonText": ""
+    },
+    "privileges": {
+      "siteAdmin": ""
+    },
+    "ticketStatus": {
+      "unpaid": ""
+    }
+  }
+}

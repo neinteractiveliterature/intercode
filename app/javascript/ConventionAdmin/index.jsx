@@ -35,7 +35,7 @@ function ConventionAdmin({ id }) {
           'email_mode', 'event_mailing_list_domain', 'location', 'timezone_name', 'timezone_mode',
           'show_schedule', 'show_event_list', 'maximum_tickets', 'signup_mode',
           'signup_requests_open', 'site_mode', 'hidden', 'ticket_name', 'ticket_mode',
-          'clickwrap_agreement',
+          'clickwrap_agreement', 'language',
         ],
       ),
       maximum_event_signups: {

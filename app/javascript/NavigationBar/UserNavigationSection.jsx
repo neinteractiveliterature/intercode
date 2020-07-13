@@ -1,5 +1,6 @@
 import React, { forwardRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 
 import htmlFetch from './htmlFetch';
 import PopperDropdown from '../UIComponents/PopperDropdown';
@@ -14,6 +15,7 @@ import MenuIcon from './MenuIcon';
 import SignOutButton from '../Authentication/SignOutButton';
 
 function CurrentPendingOrderButton() {
+  const { t } = useTranslation();
   const { currentPendingOrder } = useContext(AppRootContext);
   const dropdownRef = useAutoClosingDropdownRef();
 
@@ -41,7 +43,10 @@ function CurrentPendingOrderButton() {
             className="btn btn-link nav-link mr-2"
             style={{ position: 'relative' }}
           >
-            <i className="fa fa-shopping-cart" title="My shopping cart" />
+            <i
+              className="fa fa-shopping-cart"
+              title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
+            />
             <div className="badge badge-pill badge-danger" style={{ position: 'absolute', right: '-7px', top: '0' }}>
               {totalQuantity}
             </div>
@@ -51,11 +56,11 @@ function CurrentPendingOrderButton() {
         style={{ zIndex: 1100 }}
       >
         <div className="px-3 pt-3">
-          <h4 className="mb-2">My shopping cart</h4>
+          <h4 className="mb-2">{t('navigation.myShoppingCart.buttonText', 'My shopping cart')}</h4>
           <CartContents
             checkOutButton={(
               <Link className="btn btn-primary mt-2" to="/cart">
-                Go to cart
+                {t('navigation.myShoppingCart.goToCart', 'Go to cart')}
               </Link>
             )}
           />
@@ -67,6 +72,7 @@ function CurrentPendingOrderButton() {
 
 // eslint-disable-next-line react/prop-types
 function LoggedInDropdownTarget({ toggle, visible }, ref) {
+  const { t } = useTranslation();
   const { currentUser, myProfile, assumedIdentityFromProfile } = useContext(AppRootContext);
 
   if (!currentUser) {
@@ -91,7 +97,13 @@ function LoggedInDropdownTarget({ toggle, visible }, ref) {
   }
 
   return (
-    <button className="btn btn-link nav-link" onClick={toggle} ref={ref} type="button">
+    <button
+      className="btn btn-link nav-link"
+      onClick={toggle}
+      ref={ref}
+      type="button"
+      aria-label={t('navigation.headers.user', 'User options')}
+    >
       <Gravatar
         url={(myProfile || {}).gravatar_url}
         enabled={(myProfile || {}).gravatar_enabled || false}
@@ -121,16 +133,21 @@ function RevertAssumedIdentityButton() {
 
   return (
     <button className="btn btn-secondary" onClick={revertAssumedIdentity} type="button">
-      Revert
-      <span className="d-inline d-md-none d-lg-inline">
-        {' to '}
-        {assumedIdentityFromProfile.name_without_nickname}
-      </span>
+      <Trans
+        i18nKey="navigation.assumedIdentity.revert"
+        values={{ name: assumedIdentityFromProfile.name_without_nickname }}
+      >
+        Revert
+        <span className="d-inline d-md-none d-lg-inline">
+          {' to {{ name }}'}
+        </span>
+      </Trans>
     </button>
   );
 }
 
 function UserNavigationSection() {
+  const { t } = useTranslation();
   const { conventionName, currentUser, myProfile } = useContext(AppRootContext);
   const dropdownRef = useAutoClosingDropdownRef();
 
@@ -151,7 +168,7 @@ function UserNavigationSection() {
               {currentUser && (
                 <NavigationItem
                   inSection
-                  label="My Account"
+                  label={t('navigation.user.myAccount', 'My Account')}
                   url="/users/edit"
                   icon="fa-address-card"
                 />
@@ -159,7 +176,7 @@ function UserNavigationSection() {
               {myProfile && (
                 <NavigationItem
                   inSection
-                  label={`My ${conventionName} Profile`}
+                  label={t('navigation.user.myProfile', 'My {{ conventionName }} Profile', { conventionName })}
                   url="/my_profile"
                   icon="fa-user-circle"
                 />
@@ -167,7 +184,7 @@ function UserNavigationSection() {
               {myProfile && (
                 <NavigationItem
                   inSection
-                  label="My Order History"
+                  label={t('navigation.user.myOrderHistory', 'My Order History')}
                   url="/order_history"
                   icon="fa-shopping-bag"
                 />
@@ -175,7 +192,7 @@ function UserNavigationSection() {
               {currentUser && (
                 <NavigationItem
                   inSection
-                  label="Authorized Applications"
+                  label={t('navigation.user.authorizedApplications', 'Authorized Applications')}
                   url="/oauth/authorized_applications"
                   icon="fa-lock"
                 />
@@ -186,7 +203,7 @@ function UserNavigationSection() {
                   caption={(
                     <>
                       <MenuIcon icon="fa-sign-out" />
-                      Log out
+                      {t('navigation.user.logOut', 'Log out')}
                     </>
                   )}
                 />
@@ -206,7 +223,9 @@ function UserNavigationSection() {
         renderReference={({ ref, toggle }) => (
           <button className="btn btn-link nav-link" onClick={toggle} ref={ref} type="button">
             <i className="fa fa-user-circle" />
-            <span className="sr-only">Log in or sign up</span>
+            <span className="sr-only">
+              {t('navigation.headers.authentication', 'Log in or sign up')}
+            </span>
           </button>
         )}
         placement="bottom-end"
@@ -218,7 +237,7 @@ function UserNavigationSection() {
             caption={(
               <>
                 <MenuIcon icon="fa-sign-in" />
-                Log in
+                {t('navigation.authentication.logIn', 'Log in')}
               </>
            )}
           />
@@ -229,7 +248,7 @@ function UserNavigationSection() {
             caption={(
               <>
                 <MenuIcon icon="fa-pencil-square-o" />
-                Sign up
+                {t('navigation.authentication.signUp', 'Sign up')}
               </>
             )}
           />

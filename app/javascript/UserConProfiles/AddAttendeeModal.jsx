@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { AddAttendeeUsersQuery } from './queries.gql';
 import { CreateUserConProfile } from './mutations.gql';
@@ -12,6 +13,7 @@ import UserSelect from '../BuiltInFormControls/UserSelect';
 import useAsyncFunction from '../useAsyncFunction';
 
 function AddAttendeeModal({ conventionName, visible }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const apolloClient = useApolloClient();
   const [user, setUser] = useState(null);
@@ -53,16 +55,17 @@ function AddAttendeeModal({ conventionName, visible }) {
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
       <div className="modal-header">
-        Add attendee
+        {t('admin.userConProfiles.addAttendee.header', 'Add attendee')}
       </div>
 
       <div className="modal-body">
         <p>
-          Choose a user to add as an attendee for
-          {' '}
-          {conventionName}
-          .  This person must
-          already be a user in the site database in order to be added.
+          {t(
+            'admin.userConProfiles.addAttendee.text',
+            `Choose a user to add as an attendee for {{ conventionName }}.
+            This person must already be a user in the site database in order to be added.`,
+            { conventionName },
+          )}
         </p>
 
         <UserSelect
@@ -73,7 +76,12 @@ function AddAttendeeModal({ conventionName, visible }) {
 
         {user && (
           <div className="mt-4">
-            <p>Profile data will be copied from user&rsquo;s latest convention profile.</p>
+            <p>
+              {t(
+                'admin.userConProfiles.addAttendee.dataCopyingNote',
+                'Profile data will be copied from user’s latest convention profile.',
+              )}
+            </p>
           </div>
         )}
 
@@ -87,7 +95,7 @@ function AddAttendeeModal({ conventionName, visible }) {
           onClick={close}
           disabled={inProgress}
         >
-          Cancel
+          {t('buttons.cancel', 'Cancel')}
         </button>
         <button
           className="btn btn-primary"
@@ -95,7 +103,7 @@ function AddAttendeeModal({ conventionName, visible }) {
           onClick={createClicked}
           disabled={user == null || inProgress}
         >
-          {inProgress ? <LoadingIndicator /> : 'Add'}
+          {inProgress ? <LoadingIndicator /> : t('admin.userConProfiles.addAttendee.addButtonText', 'Add')}
         </button>
       </div>
     </Modal>
