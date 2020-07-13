@@ -33,7 +33,7 @@ module.exports = {
   ],
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
-    '^.+\\.(js)x?$': './test/javascript/transform.js',
+    '^.+\\.(js|ts)x?$': './test/javascript/transform.js',
   },
   transformIgnorePatterns: ['/node_modules/(?!(lodash-es|@juggle/resize-observer)/)'],
 };

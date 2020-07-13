@@ -1,5 +1,4 @@
 const schemaJson = require('./schema.json');
-const path = require('path');
 
 module.exports = {
   env: {
@@ -8,36 +7,38 @@ module.exports = {
     es6: true,
     jquery: false,
     node: true,
-    "jest/globals": true
+    'jest/globals': true,
   },
 
   extends: [
-    "airbnb",
+    'airbnb-typescript',
   ],
 
-  parser: "babel-eslint",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 6,
     ecmaFeatures: {
       jsx: true,
     },
+    project: './tsconfig.json',
   },
 
   plugins: [
-    'babel',
+    // 'babel',
     'jest',
     'graphql',
     'react-hooks',
+    '@typescript-eslint',
   ],
 
   rules: {
-    'babel/camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
-    'camelcase': 'off',
-    'jest/no-disabled-tests': "warn",
-    'jest/no-focused-tests': "error",
-    'jest/no-identical-title': "error",
-    'jest/valid-expect': "error",
+    // 'babel/camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
+    camelcase: 'off',
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/valid-expect': 'error',
     'graphql/template-strings': [
       'error',
       { env: 'apollo', schemaJson },
@@ -54,7 +55,7 @@ module.exports = {
       'warn',
       { env: 'apollo', schemaJson },
     ],
-    'no-underscore-dangle': ['error', { allow: ['__typename'] } ],
+    'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'react/destructuring-assignment': 'off',
     'react/jsx-props-no-spreading': 'off',
     'jsx-a11y/label-has-for': 'off',
@@ -65,7 +66,7 @@ module.exports = {
         controlComponents: ['Select'],
       },
     ],
-    "jsx-a11y/control-has-associated-label": [
+    'jsx-a11y/control-has-associated-label': [
       2,
       {
         ignoreElements: [
@@ -73,19 +74,32 @@ module.exports = {
         ],
       },
     ],
-    "no-restricted-imports": ['error', 'graphql-tag'],
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    // "no-restricted-imports": ['error', 'graphql-tag'],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'import/named': 'off',
+    'import/namespace': 'off',
+    'import/default': 'off',
+    'import/no-named-as-default-member': 'off',
   },
 
+  overrides: [
+    {
+      files: ['**/*.tsx'],
+      rules: {
+        'react/prop-types': 'off',
+      },
+    },
+  ],
+
   settings: {
-    // This is making eslint hang rather than exit :(
-    //
-    // 'import/resolver': {
-    //   'webpack': {
-    //     config: path.resolve(__dirname, './config/webpack/environment.js'),
-    //   },
-    // },
+    'import/resolver': {
+      typescript: {
+        // always try to resolve types under `<roo/>@types` directory even it doesn't
+        // contain any source code, like `@types/unist`
+        alwaysTryTypes: true,
+      },
+    },
     'import/ignore': [
       'test/javascript/testUtils.js',
     ],

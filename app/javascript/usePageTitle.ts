@@ -3,7 +3,7 @@ import compact from 'lodash/compact';
 
 import AppRootContext from './AppRootContext';
 
-export default function usePageTitle(title) {
+export default function usePageTitle(title?: string | null) {
   const { conventionName, rootSiteName } = useContext(AppRootContext);
 
   useEffect(
