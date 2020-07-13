@@ -18,6 +18,7 @@
   },
   "include": [
     "./app/javascript/",
+    "./test/javascript/",
     ".eslintrc.js"
   ]
 }
