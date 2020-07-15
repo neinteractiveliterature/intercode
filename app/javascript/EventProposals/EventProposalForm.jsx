@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../ErrorDisplay';
@@ -54,6 +55,7 @@ ExitButton.defaultProps = {
 function EventProposalFormInner({
   convention, initialEventProposal, form, afterSubmit, exitButton,
 }) {
+  const { t } = useTranslation();
   const [updateMutate] = useMutation(UpdateEventProposal);
   const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const [updatePromise, setUpdatePromise] = useState(null);
@@ -151,10 +153,12 @@ function EventProposalFormInner({
           responseValuesChanged={responseValuesChanged}
           submitForm={submitForm}
           exitButton={exitButton}
-          submitButton={{ caption: 'Submit proposal' }}
+          submitButton={{ caption: t('eventProposals.edit.submitButton', 'Submit proposal') }}
           footerContent={(
             <div className="text-right">
-              <small className="text-muted">Your responses are automatically saved.</small>
+              <small className="text-muted">
+                {t('forms.general.autocommitDisclosure', 'Your responses are automatically saved.')}
+              </small>
             </div>
           )}
         />
