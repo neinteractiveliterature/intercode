@@ -37,15 +37,34 @@
     "cancel": "Cancel",
     "refresh": "Refresh"
   },
+  "eventProposals": {
+    "newProposalModal": {
+      "categoryLabel": "What category of event would you like to propose?",
+      "cloneFromDifferentCategoryWarning": "You are proposing a {{ newCategoryName }}, but copying information from {{ cloneProposalTitle }}, which is a {{ cloneProposalCategoryName }}.  Make sure this is what you want before continuing.  You will not be able to change the category of your new event once you have started the proposal.",
+      "cloneProposalLabel": "If you'd like to propose an event you've proposed sometime in the past, please select it here to have its information copied into the proposal form.  Otherwise, leave this field blank.",
+      "createProposalButton": "Create proposal",
+      "subcategoryLabel": "What subcategory of {{ departmentName }} event would you like to propose?",
+      "title": "New event proposal"
+    }
+  },
   "events": {
     "runCapacity": {
       "slotCount": "{{ count }} slot",
-      "slotCount_plural": "{{ count }} slots",
       "slotRemainingCount": "{{ filledCount }} of {{ count }} slot filled",
-      "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled",
       "unlimitedSimple": "unlimited",
       "unlimitedWithCount": "unlimited ({{ signupCount }} signed up)",
-      "zeroCapacity": "0 slots"
+      "zeroCapacity": "0 slots",
+      "slotCount_plural": "{{ count }} slots",
+      "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled"
+    }
+  },
+  "forms": {
+    "ageRestrictions": {
+      "descriptionLabel": "Publicly visible age restrictions text",
+      "minimumAgeDescription": "Must be {{ count }} years or older.",
+      "minimumAgeHelpText": "If specified, the signups list will warn you if someone too young to play has signed up. <2>The site does not enforce age restrictions; you must do so yourself.</2>",
+      "minimumAgeLabel": "Minimum age",
+      "noRestrictions": "No age restrictions."
     }
   },
   "navigation": {
