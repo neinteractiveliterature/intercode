@@ -7,6 +7,7 @@ module.exports = {
   ...environment,
   entry: {
     diffTranslations: './script/diffTranslations.ts',
+    mergeTranslations: './script/mergeTranslations.ts',
     renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.jsx',
   },
   devtool: 'cheap-source-map',
@@ -25,6 +26,7 @@ module.exports = {
     new WebpackShellPlugin({
       onBuildEnd: [
         'chmod +x bin/diffTranslations',
+        'chmod +x bin/mergeTranslations',
         'chmod +x bin/renderFormResponseChangeGroup'
       ],
     }),
