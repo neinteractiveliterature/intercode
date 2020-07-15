@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { humanize } from 'inflected';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
@@ -13,7 +14,6 @@ import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import LoadingIndicator from '../LoadingIndicator';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { humanize } from 'inflected';
 
 function EventProposalAdminNotes({ eventProposalId }) {
   const { data, loading, error } = useQuery(EventProposalAdminNotesQuery, {
