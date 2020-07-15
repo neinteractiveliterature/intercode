@@ -1,11 +1,18 @@
+/* eslint-disable no-console */
 import fs from 'fs';
 import mapValues from 'lodash/mapValues';
 import pickBy from 'lodash/pickBy';
 import isEmpty from 'lodash/isEmpty';
+import minimist from 'minimist';
 
-// TODO make this configurable
-const translation1Path = './locales/en.json';
-const translation2Path = './locales/es.json';
+const argv = minimist(process.argv.slice(2));
+if (!argv.partial) {
+  console.error(`Usage: ${process.argv[1]} --partial=PARTIAL_PATH [--complete=COMPLETE_PATH]`);
+  process.exit(1);
+}
+
+const translation1Path: string = argv.complete ?? './locales/en.json';
+const translation2Path: string = argv.partial;
 
 const translation1: object = JSON.parse(fs.readFileSync(translation1Path, { encoding: 'utf-8' }));
 const translation2: object = JSON.parse(fs.readFileSync(translation2Path, { encoding: 'utf-8' }));

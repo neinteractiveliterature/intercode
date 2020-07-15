@@ -9,6 +9,7 @@
 # Ignore build artifacts
 /bin/diffTranslations
 /bin/manifest.json
+/bin/mergeTranslations
 /bin/renderFormResponseChangeGroup
 /test/html_reports
 
