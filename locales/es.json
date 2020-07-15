@@ -47,7 +47,7 @@
       "deleteButton": "Borrar propuesta",
       "deleteConfirmation": "¿Estás segura?  Esto borrará tu propuesta junto con todo lo que has escrito aquí.",
       "exitButton": "Volver a la página de propuestas",
-      "submitButton": ""
+      "submitButton": "Enviar propuesta"
     },
     "newProposalModal": {
       "categoryLabel": "¿Qué tipo de actividad quieres proponer?",
@@ -87,7 +87,7 @@
       "teamMembersOption": "Especificar un e-mail de contacto para los participantes pero que las jornadas envien e-mails individuales a quienes organizan la actividad"
     },
     "general": {
-      "autocommitDisclosure": "",
+      "autocommitDisclosure": "Tus respuestas son grabadas automáticamente.",
       "backButton": "Volver",
       "continueButton": "Continuar",
       "fieldRequiredError": "Campo obligatorio."
