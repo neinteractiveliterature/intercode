@@ -20,7 +20,7 @@ function mergeObjects(source: object, destination: object) {
 
       return {
         ...acc,
-        [key]: mergeObjects(value, source[key] ?? {}),
+        [key]: mergeObjects(value, destination[key] ?? {}),
       };
     },
     destination,
