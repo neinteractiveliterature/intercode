@@ -7,6 +7,11 @@
         "label": "Site language"
       }
     },
+    "eventProposals": {
+      "edit": {
+        "exitButton": "Return to proposal"
+      }
+    },
     "userConProfiles": {
       "addAttendee": {
         "addButtonText": "Add",
@@ -38,6 +43,12 @@
     "refresh": "Refresh"
   },
   "eventProposals": {
+    "edit": {
+      "deleteButton": "Delete proposal",
+      "deleteConfirmation": "Are you sure?  This will erase your proposal along with everything you’ve written here.",
+      "exitButton": "Return to proposals page",
+      "submitButton": "Submit proposal"
+    },
     "newProposalModal": {
       "categoryLabel": "What category of event would you like to propose?",
       "cloneFromDifferentCategoryWarning": "You are proposing a {{ newCategoryName }}, but copying information from {{ cloneProposalTitle }}, which is a {{ cloneProposalCategoryName }}.  Make sure this is what you want before continuing.  You will not be able to change the category of your new event once you have started the proposal.",
@@ -65,6 +76,26 @@
       "minimumAgeHelpText": "If specified, the signups list will warn you if someone too young to play has signed up. <2>The site does not enforce age restrictions; you must do so yourself.</2>",
       "minimumAgeLabel": "Minimum age",
       "noRestrictions": "No age restrictions."
+    },
+    "eventEmail": {
+      "contactEmailLabel": "Contact email address",
+      "eventEmailOption": "Use a contact email I specify",
+      "formGroupLegend": "How would you like to receive email about this event?",
+      "mailingListAddressLabel": "Mailing list address",
+      "mailingListAliasLabel": "Mailing list address (portion before @ sign)",
+      "teamMailingListOption": "Have the convention create and manage a team mailing list for me",
+      "teamMembersOption": "Specify a contact email for attendees, but have the convention email individual team members with updates"
+    },
+    "general": {
+      "autocommitDisclosure": "Your responses are automatically saved.",
+      "backButton": "Back",
+      "continueButton": "Continue",
+      "fieldRequiredError": "This field is required."
+    }
+  },
+  "general": {
+    "pageTitles": {
+      "editing": "Editing “{{ title }}”"
     }
   },
   "navigation": {
@@ -105,6 +136,10 @@
       "schedule": "Con Schedule",
       "scheduleByRoom": "Con Schedule by Room",
       "scheduleWithCounts": "Schedule With Counts"
+    },
+    "general": {
+      "edit": "Edit",
+      "history": "History"
     },
     "headers": {
       "admin": "Admin",

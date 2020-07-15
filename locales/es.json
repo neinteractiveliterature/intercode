@@ -7,6 +7,11 @@
         "label": "Idioma de la página"
       }
     },
+    "eventProposals": {
+      "edit": {
+        "exitButton": "Volver a la propuesta"
+      }
+    },
     "userConProfiles": {
       "addAttendee": {
         "addButtonText": "Añadir",
@@ -38,6 +43,12 @@
     "refresh": "Actualizar"
   },
   "eventProposals": {
+    "edit": {
+      "deleteButton": "Borrar propuesta",
+      "deleteConfirmation": "¿Estás segura?  Esto borrará tu propuesta junto con todo lo que has escrito aquí.",
+      "exitButton": "Volver a la página de propuestas",
+      "submitButton": "Enviar propuesta"
+    },
     "newProposalModal": {
       "categoryLabel": "¿Qué tipo de actividad quieres proponer?",
       "cloneFromDifferentCategoryWarning": "Estás proponiendo una actividad de tipo {{ newCategoryName }}, pero estás copiando información de la actividad {{ cloneProposalTitle }}, que es de la categoría {{ cloneProposalCategoryName }}.  Asegúrate de que eso es lo que quieres antes de continuar ya que no podrás cambiar la categoria de tu nueva actividad una vez hayas empezado la propuesta.",
@@ -65,6 +76,26 @@
       "minimumAgeHelpText": "Si se especifica, la lista de participantes inscritas mostrará si alguien demasiado joven se ha anotado a la actividad. <2>La web no impone restricciones por edad; eso debes hacerlo tú.</2>",
       "minimumAgeLabel": "Edad mínima",
       "noRestrictions": "Sin restricciones de edad."
+    },
+    "eventEmail": {
+      "contactEmailLabel": "Dirección de e-mail de contacto",
+      "eventEmailOption": "Usar un e-mail de contacto especificado por mi",
+      "formGroupLegend": "¿Cómo quieres recibir e-mails sobre esta actividad?",
+      "mailingListAddressLabel": "Dirección de la lista de correo",
+      "mailingListAliasLabel": "Dirección de la lista de correo (porción antes de la @)",
+      "teamMailingListOption": "Que las jornadas creen y gestionen una lista de correo del equipo de la actividad por mi",
+      "teamMembersOption": "Especificar un e-mail de contacto para los participantes pero que las jornadas envien e-mails individuales a quienes organizan la actividad"
+    },
+    "general": {
+      "autocommitDisclosure": "Tus respuestas son grabadas automáticamente.",
+      "backButton": "Volver",
+      "continueButton": "Continuar",
+      "fieldRequiredError": "Campo obligatorio."
+    }
+  },
+  "general": {
+    "pageTitles": {
+      "editing": "Editando “{{ title }}”"
     }
   },
   "navigation": {
@@ -105,6 +136,10 @@
       "schedule": "Agenda de las jornadas",
       "scheduleByRoom": "Agenda de las jornadas por habitación",
       "scheduleWithCounts": "Agenda con cifras"
+    },
+    "general": {
+      "edit": "Editar",
+      "history": "Histórico"
     },
     "headers": {
       "admin": "Admin",
