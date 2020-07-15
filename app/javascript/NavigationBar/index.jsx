@@ -81,7 +81,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
                 return (
                   <NavigationItem
                     label={rootItem.title}
-                    url={`/pages/${rootItem.page?.slug}`}
+                    url={rootItem.page ? `/pages/${rootItem.page.slug}` : '#'}
                     key={rootItem.id}
                     iconColorClass="" /* don't override the nav-link color in the root bar */
                   />
