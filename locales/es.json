@@ -37,15 +37,34 @@
     "cancel": "Cancelar",
     "refresh": "Actualizar"
   },
+  "eventProposals": {
+    "newProposalModal": {
+      "categoryLabel": "¿Qué tipo de actividad quieres proponer?",
+      "cloneFromDifferentCategoryWarning": "Estás proponiendo una actividad de tipo {{ newCategoryName }}, pero estás copiando información de la actividad {{ cloneProposalTitle }}, que es de la categoría {{ cloneProposalCategoryName }}.  Asegúrate de que eso es lo que quieres antes de continuar ya que no podrás cambiar la categoria de tu nueva actividad una vez hayas empezado la propuesta.",
+      "cloneProposalLabel": "Si quieres proponer una actividad que ya hayas propuesto anteriores, por favor selecciónala aquí para que la información sea copiada al formulario de propuesta de actividad. Si no es el caso, deja este campo en blanco.",
+      "createProposalButton": "Proponer actividad",
+      "subcategoryLabel": "¿Qué subcategoria de actividad de {{ departmentName }} quieres proponer?",
+      "title": "Nueva propuesta de actividad"
+    }
+  },
   "events": {
     "runCapacity": {
       "slotCount": "plaza {{ count }}",
-      "slotCount_plural": "{{ count }} plazas",
       "slotRemainingCount": "Plaza {{ filledCount }} de {{ count }} ocupada",
-      "slotRemainingCount_plural": "{{ filledCount }} de {{ count }} plazas ocupadas",
       "unlimitedSimple": "ilimitadas",
       "unlimitedWithCount": "({{ signupCount }} inscritas (capacidad ilimitada)",
-      "zeroCapacity": "plazas agotadas"
+      "zeroCapacity": "plazas agotadas",
+      "slotCount_plural": "{{ count }} plazas",
+      "slotRemainingCount_plural": "{{ filledCount }} de {{ count }} plazas ocupadas"
+    }
+  },
+  "forms": {
+    "ageRestrictions": {
+      "descriptionLabel": "Texto público de restricción por edad",
+      "minimumAgeDescription": "Debe tener {{ count }} años o más.",
+      "minimumAgeHelpText": "Si se especifica, la lista de participantes inscritas mostrará si alguien demasiado joven se ha anotado a la actividad. <2>La web no impone restricciones por edad; eso debes hacerlo tú.</2>",
+      "minimumAgeLabel": "Edad mínima",
+      "noRestrictions": "Sin restricciones de edad."
     }
   },
   "navigation": {

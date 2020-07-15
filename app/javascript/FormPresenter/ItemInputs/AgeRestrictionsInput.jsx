@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { useTranslation, Trans } from 'react-i18next';
 import useUniqueId from '../../useUniqueId';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
@@ -9,15 +10,20 @@ import RequiredIndicator from './RequiredIndicator';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { parseIntOrNull } from '../../ComposableFormUtils';
 
-function getDefaultAgeRestrictionsDescription(minimumAge) {
+function getDefaultAgeRestrictionsDescription(minimumAge, t) {
   if (!minimumAge) {
-    return 'No age restrictions.';
+    return t('forms.ageRestrictions.noRestrictions', 'No age restrictions.');
   }
 
-  return `Must be ${minimumAge} years or older.`;
+  return t(
+    'forms.ageRestrictions.minimumAgeDescription',
+    'Must be {{ count }} years or older.',
+    { count: minimumAge },
+  );
 }
 
 function AgeRestrictionsInput(props) {
+  const { t } = useTranslation();
   const {
     formItem, onChange, onInteract, valueInvalid,
   } = props;
@@ -46,11 +52,11 @@ function AgeRestrictionsInput(props) {
         !value.age_restrictions_description
         || value.age_restrictions_description.trim() === ''
         || value.age_restrictions_description
-          === getDefaultAgeRestrictionsDescription(value.minimum_age)
+          === getDefaultAgeRestrictionsDescription(value.minimum_age, t)
       ) {
         onChange({
           ...value,
-          age_restrictions_description: getDefaultAgeRestrictionsDescription(newMinimumAge),
+          age_restrictions_description: getDefaultAgeRestrictionsDescription(newMinimumAge, t),
           minimum_age: newMinimumAge,
         });
       } else {
@@ -59,7 +65,7 @@ function AgeRestrictionsInput(props) {
 
       userInteracted();
     },
-    [onChange, userInteracted, value],
+    [onChange, userInteracted, value, t],
   );
 
   return (
@@ -72,7 +78,7 @@ function AgeRestrictionsInput(props) {
       <div className="card-body pb-1">
         <div className="form-group">
           <label htmlFor={descriptionId}>
-            Publicly visible age restrictions text
+            {t('forms.ageRestrictions.descriptionLabel', 'Publicly visible age restrictions text')}
             <RequiredIndicator formItem={formItem} />
           </label>
           <MarkdownInput
@@ -91,14 +97,14 @@ function AgeRestrictionsInput(props) {
           onTextChange={minimumAgeChanged}
           type="number"
           min="0"
-          label="Minimum age"
+          label={t('forms.ageRestrictions.minimumAgeLabel', 'Minimum age')}
           helpText={(
-            <>
+            <Trans i18nKey="forms.ageRestrictions.minimumAgeHelpText">
               If specified, the signups list will warn you if someone too young to play has
               signed up.
               {' '}
               <strong>The site does not enforce age restrictions; you must do so yourself.</strong>
-            </>
+            </Trans>
           )}
         />
       </div>

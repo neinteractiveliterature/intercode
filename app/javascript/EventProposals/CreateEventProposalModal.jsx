@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { CreateEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -12,6 +13,7 @@ import { sortByLocaleString } from '../ValueUtils';
 function CreateEventProposalModal({
   onCreate, cancel, visible, userEventProposals, proposableEventCategories, departments,
 }) {
+  const { t } = useTranslation();
   const [cloneEventProposal, setCloneEventProposal] = useState(null);
   const topLevelEventCategories = useMemo(
     () => proposableEventCategories.filter((category) => !category.department),
@@ -61,11 +63,14 @@ function CreateEventProposalModal({
   return (
     <Modal visible={visible} dialogClassName="modal-lg" className="text-body">
       <div className="modal-header">
-        New event proposal
+        {t('eventProposals.newProposalModal.title', 'New event proposal')}
       </div>
       <div className="modal-body text-left">
         <SelectWithLabel
-          label="What category of event would you like to propose?"
+          label={t(
+            'eventProposals.newProposalModal.categoryLabel',
+            'What category of event would you like to propose?',
+          )}
           options={topLevelEntities}
           isClearable={topLevelEntities.length > 1}
           isDisabled={createInProgress}
@@ -97,7 +102,11 @@ function CreateEventProposalModal({
             )}
 
             <SelectWithLabel
-              label={`What subcategory of ${department.name} event would you like to propose?`}
+              label={t(
+                'eventProposals.newProposalModal.subcategoryLabel',
+                'What subcategory of {{ departmentName }} event would you like to propose?',
+                { departmentName: department.name },
+              )}
               options={departmentEventCategories}
               isClearable
               isDisabled={createInProgress}
@@ -118,11 +127,12 @@ function CreateEventProposalModal({
         <hr />
 
         <SelectWithLabel
-          label={
+          label={t(
+            'eventProposals.newProposalModal.cloneProposalLabel',
             `If you'd like to propose an event you've proposed sometime in the past,
             please select it here to have its information copied into the proposal form.
-            Otherwise, leave this field blank.`
-          }
+            Otherwise, leave this field blank.`,
+          )}
           options={(userEventProposals || [])
             .filter((eventProposal) => eventProposal.status !== 'draft')
             .filter((eventProposal) => (
@@ -148,16 +158,18 @@ function CreateEventProposalModal({
           )
             ? (
               <div className="mt-4 alert alert-warning">
-                {'You are proposing a '}
-                {eventCategory.name}
-                {', but copying information from '}
-                {cloneEventProposal.title}
-                {', which is a '}
-                {cloneEventProposal.event_category.name}
-                {'. '}
-                Make sure this is what you want before continuing.  You will not be able to change
-                {' '}
-                the category of your new event once you have started the proposal.
+                {t(
+                  'eventProposals.newProposalModal.cloneFromDifferentCategoryWarning',
+                  `You are proposing a {{ newCategoryName }}, but copying information
+                  from {{ cloneProposalTitle }}, which is a {{ cloneProposalCategoryName }}.
+                  Make sure this is what you want before continuing.  You will not be able to change
+                  the category of your new event once you have started the proposal.`,
+                  {
+                    newCategoryName: eventCategory.name,
+                    cloneProposalTitle: cloneEventProposal.title,
+                    cloneProposalCategoryName: cloneEventProposal.event_category.name,
+                  },
+                )}
               </div>
             )
             : null
@@ -172,7 +184,7 @@ function CreateEventProposalModal({
           disabled={createInProgress}
           onClick={cancel}
         >
-          Cancel
+          {t('buttons.cancel', 'Cancel')}
         </button>
         <button
           className="btn btn-primary"
@@ -180,7 +192,7 @@ function CreateEventProposalModal({
           disabled={!eventCategory || createInProgress}
           onClick={createClicked}
         >
-          Create proposal
+          {t('eventProposals.newProposalModal.createProposalButton', 'Create proposal')}
         </button>
       </div>
     </Modal>
