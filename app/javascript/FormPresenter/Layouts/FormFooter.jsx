@@ -1,5 +1,6 @@
 import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import Form from '../../Models/Form';
 import { SectionTraversalContext } from '../SectionTraversalContext';
@@ -7,11 +8,12 @@ import useFormValidation from '../useFormValidation';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 
 function BackButton({ goToPreviousSection }) {
+  const { t } = useTranslation();
   return (
     <button className="btn btn-secondary" onClick={goToPreviousSection} type="button">
       <i className="fa fa-chevron-left" />
       {' '}
-      Back
+      {t('forms.general.backButton', 'Back')}
     </button>
   );
 }
@@ -21,13 +23,14 @@ BackButton.propTypes = {
 };
 
 function ContinueButton({ tryNextSection }) {
+  const { t } = useTranslation();
   return (
     <button
       className="btn btn-primary"
       onClick={tryNextSection}
       type="button"
     >
-      Continue
+      {t('forms.general.continueButton', 'Continue')}
       {' '}
       <i className="fa fa-chevron-right" />
     </button>

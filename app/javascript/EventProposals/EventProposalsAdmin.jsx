@@ -3,6 +3,7 @@ import {
   Link, Switch, Route, useParams, useHistory,
 } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import EventProposalAdminDisplay from './EventProposalAdminDisplay';
@@ -18,6 +19,7 @@ import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrum
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function SingleProposalBreadcrumbs() {
+  const { t } = useTranslation();
   const params = useParams();
   const eventProposalId = Number.parseInt(params.id, 10);
   const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
@@ -42,23 +44,27 @@ function SingleProposalBreadcrumbs() {
       </RouteActivatedBreadcrumbItem>
 
       <Route path="/admin_event_proposals/:id/edit">
-        <BreadcrumbItem active>Edit</BreadcrumbItem>
+        <BreadcrumbItem active>{t('navigation.general.edit', 'Edit')}</BreadcrumbItem>
       </Route>
 
       <Route path="/admin_event_proposals/:id/history">
-        <BreadcrumbItem active>History</BreadcrumbItem>
+        <BreadcrumbItem active>{t('navigation.general.history', 'History')}</BreadcrumbItem>
       </Route>
     </>
   );
 }
 
 function AdminEditEventProposal() {
+  const { t } = useTranslation();
   const history = useHistory();
   const eventProposalId = Number.parseInt(useParams().id, 10);
   const { data, loading, error } = useQuery(EventProposalQuery, { variables: { eventProposalId } });
 
   usePageTitle(
-    useValueUnless(() => `Editing “${data.eventProposal.title}”`, loading || error),
+    useValueUnless(
+      () => t('general.pageTitles.editing', 'Editing “{{ title }}”', { title: data.eventProposal.title }),
+      error || loading,
+    ),
   );
 
   return (
@@ -70,7 +76,7 @@ function AdminEditEventProposal() {
           className="btn btn-outline-secondary mr-2"
           to={`/admin_event_proposals/${eventProposalId}`}
         >
-          Return to proposal
+          {t('admin.eventProposals.edit.exitButton', 'Return to proposal')}
         </Link>
       )}
     />
@@ -78,6 +84,7 @@ function AdminEditEventProposal() {
 }
 
 function EventProposalsAdmin() {
+  const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
 
   if (authorizationWarning) return authorizationWarning;
@@ -90,7 +97,7 @@ function EventProposalsAdmin() {
             matchProps={{ path: '/admin_event_proposals', exact: true }}
             to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
           >
-            Event proposals
+            {t('navigation.admin.eventProposals', 'Event proposals')}
           </RouteActivatedBreadcrumbItem>
 
           <Route path="/admin_event_proposals/:id"><SingleProposalBreadcrumbs /></Route>
