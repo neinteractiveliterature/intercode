@@ -1,4 +1,10 @@
 {
+  "addToCalendarDropdown": {
+    "copyWebcal": "Copiar enlace webcal://",
+    "subscribeGoogle": "Subscribirte en Google Calendar",
+    "subscribeICal": "Subscribirte via iCal",
+    "title": "Añadir al calendario"
+  },
   "admin": {
     "convention": {
       "language": {
@@ -30,9 +36,17 @@
       "orderSummary": "Resumen del pedido",
       "paymentAmount": "Cantidad a pagar",
       "privileges": "Privilegios",
+      "signupsCard": {
+        "header": "Inscripciones",
+        "noSignups": "No hay inscripciones",
+        "unSignedUpOther": "{{ name }} en un miembro del equipo de las siguientes actividades, pero no se ha inscrito a ellas:",
+        "unSignedUpYou": "Eres un miembro de las siguientes actividades pero no te has inscrito a ellas:",
+        "withdrawFromAllConfirmation": "¿Estás segura de querer retirar a {{ name }} de todas las actividades de {{ conventionName }}?"
+      },
       "ticketStatusChangedAt": "Estado de {{ ticketName }} cambiado",
       "ticketType": "Tipo de {{ ticketName }}",
-      "userId": "Identificador de usuario"
+      "userId": "Identificador de usuario",
+      "withdrawFromAllButton": "Retirar de todas"
     }
   },
   "alerts": {
@@ -131,6 +145,10 @@
       }
     }
   },
+  "copyToClipboard": {
+    "defaultSuccess": "¡Copiado!",
+    "defaultText": "Copiado al portapapeles"
+  },
   "errors": {
     "unauthorized": "Lo siento, tu cuenta no está autorizada a ver esta página."
   },
@@ -197,6 +215,16 @@
     "bioLabel": "Bio",
     "bioNicknameHelpText": "Tu nombre aparecerá en tu bio como {{ name }}.",
     "bioNicknameLabel": "Mostrar apodo (si lo tiene) en la bio",
+    "display": {
+      "avatarLabel": "Avatar",
+      "bioLabel": "Bio",
+      "emailLabel": "E-mail",
+      "gravatarDisabled": "Gravatar desactivado",
+      "gravatarEnabled": "Gravatar activado",
+      "header": "Mi perfil de {{ conventionName }}",
+      "pageTitle": "Mi perfil"
+    },
+    "editButton": "Editar mi perfil",
     "gravatarEnabledHelpText": "Gravatar es un servicio que te permite crear un avatar reconocido globalmente asociado a tu dirección de e-mail. Para más información o para configurar tu Gravatar <2>visita gravatar.com</2>.",
     "gravatarEnabledLabel": "Activar Gravatar en mi perfil",
     "initialSetupFinishButton": "Acabar",
