@@ -38,9 +38,101 @@
   "alerts": {
     "conventionCanceled": "{{ conventionName }} ha sido cancelada."
   },
+  "authentication": {
+    "confirmPasswordLabel": "Confirma contraseña",
+    "editUser": {
+      "accountDataHeader": "Datos de la cuenta",
+      "currentPasswordHelpText": "Necesitamos tu contraseña actual para confirmar tu identidad",
+      "currentPasswordLabel": "Contraseña actual",
+      "header": "Actualizar tu cuenta",
+      "passwordHelpText": "Déjala en blanco si no quieres cambiarla",
+      "passwordLabel": "Contraseña",
+      "updateAccountButton": "Actualizar cuenta"
+    },
+    "forgotPassword": {
+      "sendInstructionsButton": "Enviar instrucciones"
+    },
+    "forgotPasswordForm": {
+      "emailLabel": "Email",
+      "header": "¿Olvidaste la contraseña?",
+      "successMessage": "<0>Por favor comprueba tu e-mail. Deberías recibir instrucciones sobre resetear la contraseña en breve.</0><1>Si no recibes las instrucciones, por favor envía un e-mail a <2>nuestro equipo web</2> para que te ayuden a resetear tu contraseña.</1>"
+    },
+    "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+    "logInLink": "Iniciar sesión con una cuenta existente",
+    "passwordInput": {
+      "fair": "razonable",
+      "good": "buena",
+      "great": "genial",
+      "insecure": "insegura",
+      "label": "Contraseña",
+      "strengthMeterLabel": "Fortaleza de la contraseña"
+    },
+    "resetPassword": {
+      "header": "Resetear contraseña",
+      "passwordLabel": "Contraseña",
+      "setPasswordButton": "Establecer contraseña"
+    },
+    "signInForm": {
+      "emailLabel": "E-mail",
+      "header": "Iniciar sesión",
+      "logInButton": "Iniciar sesión",
+      "passwordLabel": "Contraseña",
+      "rememberMeLabel": "Recordarme"
+    },
+    "signUpForm": {
+      "header": "Registro",
+      "passwordLabel": "Contraseña",
+      "signUpButton": "Registrarse"
+    },
+    "signUpLink": "Registrar cuenta",
+    "userForm": {
+      "emailLabel": "E-mail",
+      "firstNameLabel": "Nombre",
+      "lastNameLabel": "Apellidos",
+      "nameWarning": "Por favor ten en cuenta que cada evento mantiene un registro separado de tu nombre. Cambiar tu nombre aquí se aplicará a los nuevos eventos en los que te inscribas en el futuro. Para cambiar tu nombre en eventos pasados, por favor ve a la página web de cada evento y elige “mi perfil” en el menú."
+    }
+  },
   "buttons": {
+    "add": "Añadir",
     "cancel": "Cancelar",
+    "close": "Cerrar",
+    "edit": "Editar",
+    "help": "Ayuda",
+    "ok": "OK",
+    "preview": "Previsualizar",
+    "proposeEventLoggedOut": "Inicia sesión para proponer una actividad",
     "refresh": "Actualizar"
+  },
+  "clickwrap": {
+    "agreeButton": "Estoy de acuerdo",
+    "disclosureMessage": "Para usar la página web de {{ conventionName }}, debes aceptar los siguientes términos de servicio. Si no estás de acuerdo con ellos, por favor cierra esta ventana de navegador.",
+    "header": "Terminos de servicio de {{ conventionName }}"
+  },
+  "cms": {
+    "addFileModal": {
+      "chooseExistingFileLabel": "Elige fichero",
+      "filePreview": {
+        "title": "Previsualización"
+      },
+      "title": "Añadir fichero"
+    },
+    "fileUploadForm": {
+      "clearFileButton": "Limpiar",
+      "fileInputLabel": "Elige un fichero...",
+      "title": "Cargar fichero",
+      "uploadFileButton": "Cargar"
+    },
+    "liquidInput": {
+      "addFileButton": "Añadir fichero...",
+      "help": {
+        "conventionSpecificMarkup": "Marcas específicas del evento",
+        "coreLiquidMarkup": "Marcas Core Liquid",
+        "iframeTitle": "Documentación"
+      }
+    }
+  },
+  "errors": {
+    "unauthorized": "Lo siento, tu cuenta no está autorizada a ver esta página."
   },
   "eventProposals": {
     "edit": {
@@ -94,9 +186,23 @@
     }
   },
   "general": {
+    "editors": {
+      "markdownHelpText": "Usa <1>Sintaxis Markdown</1> para formatear."
+    },
     "pageTitles": {
       "editing": "Editando “{{ title }}”"
     }
+  },
+  "myProfile": {
+    "bioLabel": "Bio",
+    "bioNicknameHelpText": "Tu nombre aparecerá en tu bio como {{ name }}.",
+    "bioNicknameLabel": "Mostrar apodo (si lo tiene) en la bio",
+    "gravatarEnabledHelpText": "Gravatar es un servicio que te permite crear un avatar reconocido globalmente asociado a tu dirección de e-mail. Para más información o para configurar tu Gravatar <2>visita gravatar.com</2>.",
+    "gravatarEnabledLabel": "Activar Gravatar en mi perfil",
+    "initialSetupFinishButton": "Acabar",
+    "initialSetupText": "¡Bienvenido a {{ conventionName }}!  No habías accedido a este evento antes, por lo que tómate un momento para actualizar tu perfil.",
+    "profileEditFinishButton": "Acabar y volver a mi perfil",
+    "title": "Mi perfil de {{ conventionName }}"
   },
   "navigation": {
     "admin": {

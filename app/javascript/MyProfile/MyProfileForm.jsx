@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import MD5 from 'md5.js';
+import { useTranslation, Trans } from 'react-i18next';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
@@ -31,6 +32,7 @@ function parseResponseErrors(error) {
 function MyProfileFormInner({
   initialSetup, initialUserConProfile, convention, form,
 }) {
+  const { t } = useTranslation();
   const [updateMutate] = useMutation(UpdateUserConProfile);
   const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
   const [responseErrors, setResponseErrors] = useState({});
@@ -110,16 +112,16 @@ function MyProfileFormInner({
   return (
     <>
       <h1 className="mb-4">
-        {`My ${convention.name} profile`}
+        {t('myProfile.title', 'My {{ conventionName }} profile', { conventionName: convention.name })}
       </h1>
 
       {initialSetup && (
         <div className="alert alert-success mb-4">
-          Welcome to
-          {' '}
-          {convention.name}
-          !  You haven&rsquo;t signed
-          into this convention before, so please take a moment to update your profile.
+          {t(
+            'myProfile.initialSetupText',
+            'Welcome to {{ conventionName }}!  You haven’t signed into this convention before, so please take a moment to update your profile.',
+            { conventionName: convention.name },
+          )}
         </div>
       )}
       <ItemInteractionTrackerContext.Provider value={itemInteractionProps}>
@@ -130,33 +132,39 @@ function MyProfileFormInner({
         <>
           <div className="form-group">
             <legend className="col-form-label">
-              Bio
+              {t('myProfile.bioLabel', 'Bio')}
             </legend>
             <MarkdownInput value={userConProfile.bio} onChange={setBio} />
             <small className="form-text text-muted">
-              {'Use '}
-              <a
-                href="https://en.support.wordpress.com/markdown-quick-reference/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Markdown syntax
-              </a>
-              {' for formatting.'}
+              <Trans i18nKey="general.editors.markdownHelpText">
+                {'Use '}
+                <a
+                  href="https://en.support.wordpress.com/markdown-quick-reference/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Markdown syntax
+                </a>
+                {' for formatting.'}
+              </Trans>
             </small>
           </div>
 
           <BooleanInput
-            caption="Show nickname (if any) in bio"
+            caption={t('myProfile.bioNicknameLabel', 'Show nickname (if any) in bio')}
             value={userConProfile.show_nickname_in_bio}
             onChange={setShowNickname}
-            helpText={
-              `Your name will appear in your bio as ${userConProfile.form_response_attrs.first_name}
-              ${(userConProfile.show_nickname_in_bio && userConProfile.form_response_attrs.nickname)
-                ? `“${userConProfile.form_response_attrs.nickname}”`
-                : ''}
-              ${userConProfile.form_response_attrs.last_name}.`
-            }
+            helpText={t(
+              'myProfile.bioNicknameHelpText',
+              'Your name will appear in your bio as {{ name }}.',
+              {
+                name: `${userConProfile.form_response_attrs.first_name}
+                  ${(userConProfile.show_nickname_in_bio && userConProfile.form_response_attrs.nickname)
+                  ? `“${userConProfile.form_response_attrs.nickname}”`
+                  : ''}
+                  ${userConProfile.form_response_attrs.last_name}`,
+              },
+            )}
           />
         </>
       )}
@@ -173,13 +181,13 @@ function MyProfileFormInner({
                   imgClassName="align-baseline"
                 />
                 {' '}
-                Enable Gravatar for my profile
+                {t('myProfile.gravatarEnabledLabel', 'Enable Gravatar for my profile')}
               </>
             )}
             value={userConProfile.gravatar_enabled}
             onChange={setGravatarEnabled}
             helpText={(
-              <>
+              <Trans i18nKey="myProfile.gravatarEnabledHelpText">
                 Gravatar is a service that lets you create a globally-recognized avatar attached to
                 your email address. For more information or to set up a Gravatar,
                 {' '}
@@ -187,7 +195,7 @@ function MyProfileFormInner({
                   visit gravatar.com
                 </a>
                 .
-              </>
+              </Trans>
             )}
           />
         </div>
@@ -198,12 +206,12 @@ function MyProfileFormInner({
           initialSetup
             ? (
               <Link to="/" className="btn btn-primary">
-                Finish
+                {t('myProfile.initialSetupFinishButton', 'Finish')}
               </Link>
             )
             : (
               <Link to="/my_profile" className="btn btn-primary">
-                Finish and return to my profile
+                {t('myProfile.profileEditFinishButton', 'Finish and return to my profile')}
               </Link>
             )
         }

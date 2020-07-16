@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
+import { useTranslation } from 'react-i18next';
 
 import useAsyncFunction from '../useAsyncFunction';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -51,6 +52,7 @@ async function signUp(authenticityToken, formState, password, passwordConfirmati
 }
 
 function SignUpForm() {
+  const { t } = useTranslation();
   const {
     close: closeModal, setCurrentView, recaptchaSiteKey,
   } = useContext(AuthenticationModalContext);
@@ -75,14 +77,18 @@ function SignUpForm() {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">Sign up</div>
+          <div className="lead flex-grow-1">
+            {t('authentication.signUpForm.header', 'Sign up')}
+          </div>
         </div>
 
         <div className="modal-body">
           <AccountFormContent />
           <UserFormFields formState={formState} setFormState={setFormState} />
           <div className="form-group">
-            <label htmlFor={passwordFieldId}>Password</label>
+            <label htmlFor={passwordFieldId}>
+              {t('authentication.signUpForm.passwordLabel', 'Password')}
+            </label>
             <Suspense fallback={<LoadingIndicator />}>
               <PasswordInputWithStrengthCheck
                 id={passwordFieldId}
@@ -107,10 +113,10 @@ function SignUpForm() {
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
             <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signIn'); }}>
-              Log in to an existing account
+              {t('authentication.logInLink', 'Log in to an existing account')}
             </button>
             <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('forgotPassword'); }}>
-              Forgot your password?
+              {t('authentication.forgotPasswordLink', 'Forgot your password?')}
             </button>
           </div>
           <div>
@@ -120,14 +126,14 @@ function SignUpForm() {
               disabled={submitInProgress}
               onClick={closeModal}
             >
-              Cancel
+              {t('buttons.cancel', 'Cancel')}
             </button>
             <input
               type="submit"
               className="btn btn-primary"
               disabled={submitInProgress}
-              value="Sign up"
-              aria-label="Sign up"
+              value={t('authentication.signUpForm.signUpButton', 'Sign up')}
+              aria-label={t('authentication.signUpForm.signUpButton', 'Sign up')}
             />
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, {
   useState, useContext, useMemo, Suspense,
 } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useUniqueId from '../useUniqueId';
@@ -37,6 +38,7 @@ async function changePassword(
 }
 
 function ResetPassword() {
+  const { t } = useTranslation();
   const location = useLocation();
   const resetPasswordToken = useMemo(
     () => new URLSearchParams(location.search).get('reset_password_token'),
@@ -60,13 +62,15 @@ function ResetPassword() {
 
   return (
     <>
-      <h1 className="mb-4">Reset password</h1>
+      <h1 className="mb-4">{t('authentication.resetPassword.header', 'Reset password')}</h1>
 
       <form onSubmit={onSubmit}>
         <div className="card">
           <div className="card-body">
             <div className="form-group">
-              <label htmlFor={passwordId}>Password</label>
+              <label htmlFor={passwordId}>
+                {t('authentication.resetPassword.passwordLabel', 'Password')}
+              </label>
               <Suspense fallback={<LoadingIndicator />}>
                 <PasswordInputWithStrengthCheck
                   value={password}
@@ -89,9 +93,9 @@ function ResetPassword() {
           <div className="card-footer text-right">
             <input
               type="submit"
-              value="Set password"
+              value={t('authentication.resetPassword.setPasswordButton', 'Set password')}
               className="btn btn-primary"
-              aria-label="Set password"
+              aria-label={t('authentication.resetPassword.setPasswordButton', 'Set password')}
             />
           </div>
         </div>
