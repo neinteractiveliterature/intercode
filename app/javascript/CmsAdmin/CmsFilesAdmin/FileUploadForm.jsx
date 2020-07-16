@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import { CmsFilesAdminQuery } from './queries.gql';
 import { CreateCmsFile } from './mutations.gql';
@@ -10,6 +11,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 
 function FileUploadForm({ onUpload }) {
+  const { t } = useTranslation();
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputId = useUniqueId('file-');
@@ -59,7 +61,9 @@ function FileUploadForm({ onUpload }) {
 
   return (
     <div className="card">
-      <div className="card-header">Upload a file</div>
+      <div className="card-header">
+        {t('cms.fileUploadForm.title', 'Upload a file')}
+      </div>
       <div className="card-body">
         <form onSubmit={uploadFormSubmitted}>
           {
@@ -72,13 +76,14 @@ function FileUploadForm({ onUpload }) {
                     url={imageUrl}
                   />
                   <button className="btn btn-secondary ml-4" type="button" onClick={clearFile}>
-                    Clear
+                    {t('cms.fileUploadForm.clearFileButton', 'Clear')}
                   </button>
                 </div>
               )
               : (
                 <div className="form-group">
                   <div className="custom-file">
+                    { /* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
                     <input
                       className="custom-file-input"
                       type="file"
@@ -87,7 +92,7 @@ function FileUploadForm({ onUpload }) {
                       disabled={createInProgress}
                     />
                     <label className="custom-file-label" htmlFor={fileInputId}>
-                      Choose a file...
+                      {t('cms.fileUploadForm.fileInputLabel', 'Choose a file...')}
                     </label>
                   </div>
                 </div>
@@ -101,7 +106,8 @@ function FileUploadForm({ onUpload }) {
               type="submit"
               className="btn btn-primary mr-4"
               disabled={!file || createInProgress}
-              value="Upload"
+              value={t('cms.fileUploadForm.uploadFileButton', 'Upload')}
+              aria-label={t('cms.fileUploadForm.uploadFileButton', 'Upload')}
             />
           </div>
         </form>

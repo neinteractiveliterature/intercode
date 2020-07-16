@@ -3,6 +3,7 @@
 import React, { useState, useContext } from 'react';
 import fetch from 'unfetch';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -42,6 +43,7 @@ async function signIn(authenticityToken, email, password, rememberMe) {
 }
 
 function SignInForm() {
+  const { t } = useTranslation();
   const history = useHistory();
   const {
     close: closeModal, setCurrentView, afterSignInPath,
@@ -90,13 +92,15 @@ function SignInForm() {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">Log in</div>
+          <div className="lead flex-grow-1">
+            {t('authentication.signInForm.header', 'Log in')}
+          </div>
         </div>
 
         <div className="modal-body">
           <BootstrapFormInput
             type="email"
-            label="Email"
+            label={t('authentication.signInForm.emailLabel', 'Email')}
             value={email}
             onTextChange={setEmail}
             disabled={submitInProgress}
@@ -104,14 +108,14 @@ function SignInForm() {
 
           <BootstrapFormInput
             type="password"
-            label="Password"
+            label={t('authentication.signInForm.passwordLabel', 'Password')}
             value={password}
             onTextChange={setPassword}
             disabled={submitInProgress}
           />
 
           <BootstrapFormCheckbox
-            label="Remember me"
+            label={t('authentication.signInForm.rememberMeLabel', 'Remember me')}
             checked={rememberMe}
             onCheckedChange={setRememberMe}
             disabled={submitInProgress}
@@ -123,10 +127,10 @@ function SignInForm() {
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
             <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signUp'); }}>
-              Sign up for an account
+              {t('authentication.signUpLink', 'Sign up for an account')}
             </button>
             <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('forgotPassword'); }}>
-              Forgot your password?
+              {t('authentication.forgotPasswordLink', 'Forgot your password?')}
             </button>
           </div>
           <div>
@@ -136,14 +140,14 @@ function SignInForm() {
               disabled={submitInProgress}
               onClick={onCancel}
             >
-              Cancel
+              {t('buttons.cancel', 'Cancel')}
             </button>
             <input
               type="submit"
               className="btn btn-primary"
               disabled={submitInProgress}
-              value="Log in"
-              aria-label="Log in"
+              value={t('authentication.signInForm.logInButton', 'Log in')}
+              aria-label={t('authentication.signInForm.logInButton', 'Log in')}
             />
           </div>
         </div>

@@ -2,8 +2,9 @@ import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
-
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
+
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
 import { timespanFromRun } from '../../TimespanUtils';
@@ -23,6 +24,7 @@ function filterAndSortSignups(signups) {
 }
 
 function UserConProfileSignupsCard({ userConProfileId }) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { data, error, loading } = useQuery(UserConProfileSignupsQuery, {
     variables: { id: userConProfileId },
@@ -96,8 +98,15 @@ function UserConProfileSignupsCard({ userConProfileId }) {
       <li className="list-group-item list-group-item-warning">
         {(
           userConProfile.id === myProfile.id
-            ? 'You are a team member for the following events, but are not signed up for them:'
-            : `${userConProfile.name_without_nickname} is a team member for the following events, but is not signed up for them:`
+            ? t(
+              'admin.userConProfiles.signupsCard.unSignedUpYou',
+              'You are a team member for the following events, but are not signed up for them:',
+            )
+            : t(
+              'admin.userConProfiles.signupsCard.unSignedUpOther',
+              '{{ name }} is a team member for the following events, but is not signed up for them:',
+              { name: userConProfile.name_without_nickname },
+            )
         )}
         {' '}
         {unSignedUpEvents.map((event) => renderEventLink(event)).reduce((prev, curr) => [prev, ', ', curr])}
@@ -116,12 +125,18 @@ function UserConProfileSignupsCard({ userConProfileId }) {
             />
           </div>
         )}
-        Signups
+        {t('admin.userConProfiles.signupsCard.header', 'Signups')}
       </div>
       <ul className="list-group list-group-flush">
         {
           signups.length === 0
-            ? <li className="list-group-item"><em>No signups</em></li>
+            ? (
+              <li className="list-group-item">
+                <em>
+                  {t('admin.userConProfiles.signupsCard.noSignups', 'No signups')}
+                </em>
+              </li>
+            )
             : null
         }
         {signups.map((signup) => renderSignup(signup, data.convention))}
@@ -135,12 +150,19 @@ function UserConProfileSignupsCard({ userConProfileId }) {
                 type="button"
                 className="btn btn-danger btn-sm"
                 onClick={() => confirm({
-                  prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from all their events at ${data.convention.name}?`,
+                  prompt: t(
+                    'admin.userConProfiles.signupsCard.withdrawFromAllConfirmation',
+                    'Are you sure you want to withdraw {{ name }} from all their events at {{ conventionName }}?',
+                    {
+                      name: data.userConProfile.name_without_nickname,
+                      conventionName: data.convention.name,
+                    },
+                  ),
                   action: () => withdrawAllSignups({ variables: { userConProfileId } }),
                   renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
                 })}
               >
-                Withdraw from all
+                {t('admin.userConProfiles.withdrawFromAllButton', 'Withdraw from all')}
               </button>
             </div>
           ) : null

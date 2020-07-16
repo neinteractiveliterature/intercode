@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import zxcvbn from 'zxcvbn';
 import pickBy from 'lodash/pickBy';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import PopperDropdown from '../UIComponents/PopperDropdown';
 
@@ -49,6 +50,7 @@ PasswordFeedback.defaultProps = {
 };
 
 function PasswordInputWithStrengthCheck({ id, value, onChange }) {
+  const { t } = useTranslation();
   const passwordStrengthResult = useMemo(
     () => zxcvbn(value),
     [value],
@@ -80,6 +82,12 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     'text-primary': score === 3,
     'text-success': score >= 4,
   };
+  const scoreTextTranslated = {
+    insecure: t('authentication.passwordInput.insecure', 'insecure'),
+    fair: t('authentication.passwordInput.fair', 'fair'),
+    good: t('authentication.passwordInput.good', 'good'),
+    great: t('authentication.passwordInput.great', 'great'),
+  }[scoreText];
 
   return (
     <>
@@ -90,7 +98,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
           type="password"
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          aria-label="Password"
+          aria-label={t('authentication.passwordInput.label', 'Password')}
         />
         <div
           style={{ right: 0, top: 0, position: 'absolute' }}
@@ -116,13 +124,13 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
               >
                 {value.length > 0 && (
                   <>
-                    {scoreText}
+                    {scoreTextTranslated}
                     {hasFeedback && (
                       <>
                         {' '}
                         <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
                           <span className="sr-only">
-                            Help
+                            {t('buttons.help', 'Help')}
                           </span>
                         </i>
                       </>
@@ -171,7 +179,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
             className={classNames('progress-bar', scoreProgressClasses)}
             aria-valuemin="0"
             aria-valuemax="4"
-            aria-label="Password strength"
+            aria-label={t('authentication.passwordInput.strengthMeterLabel', 'Password strength')}
           />
         </div>
       </div>
