@@ -2,6 +2,7 @@ import React, { useState, useContext, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { EditUserQuery } from './queries.gql';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -56,6 +57,7 @@ async function updateUser(
 }
 
 function EditUserForm({ initialFormState }) {
+  const { t } = useTranslation();
   const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
   const [formState, setFormState] = useState(initialFormState);
   const [password, setPassword] = useState('');
@@ -74,19 +76,23 @@ function EditUserForm({ initialFormState }) {
 
   return (
     <>
-      <h1 className="mb-4">Update your account</h1>
+      <h1 className="mb-4">
+        {t('authentication.editUser.header', 'Update your account')}
+      </h1>
 
       <AccountFormContent />
 
       <form onSubmit={onSubmit} className="card">
         <div className="card-header">
-          Account data
+          {t('authentication.editUser.accountDataHeader', 'Account data')}
         </div>
 
         <div className="card-body">
           <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
           <div className="form-group">
-            <label htmlFor={passwordFieldId}>Password</label>
+            <label htmlFor={passwordFieldId}>
+              {t('authentication.editUser.passwordLabel', 'Password')}
+            </label>
             <Suspense fallback={<LoadingIndicator />}>
               <PasswordInputWithStrengthCheck
                 id={passwordFieldId}
@@ -95,7 +101,7 @@ function EditUserForm({ initialFormState }) {
               />
             </Suspense>
             <small className="form-text text-muted">
-              Leave blank if you don&rsquo;t want to change it
+              {t('authentication.editUser.passwordHelpText', 'Leave blank if you don’t want to change it')}
             </small>
           </div>
           <PasswordConfirmationInput
@@ -104,8 +110,8 @@ function EditUserForm({ initialFormState }) {
             onChange={setPasswordConfirmation}
           />
           <BootstrapFormInput
-            label="Current password"
-            helpText="We need your current password to verify your identity"
+            label={t('authentication.editUser.currentPasswordLabel', 'Current password')}
+            helpText={t('authentication.editUser.currentPasswordHelpText', 'We need your current password to verify your identity')}
             type="password"
             value={currentPassword}
             onTextChange={setCurrentPassword}
@@ -114,15 +120,14 @@ function EditUserForm({ initialFormState }) {
           <ErrorDisplay stringError={(updateUserError || {}).message} />
         </div>
 
-
         <div className="card-footer text-right">
           <div>
             <input
               type="submit"
               className="btn btn-primary"
               disabled={updateUserInProgress}
-              value="Update account"
-              aria-label="Update account"
+              value={t('authentication.editUser.updateAccountButton', 'Update account')}
+              aria-label={t('authentication.editUser.updateAccountButton', 'Update account')}
             />
           </div>
         </div>

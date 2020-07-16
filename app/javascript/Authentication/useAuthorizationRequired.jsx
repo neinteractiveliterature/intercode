@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from './useLoginRequired';
 
 export function useAuthorizationRequiredWithoutLogin(...abilities) {
+  const { t } = useTranslation();
   const { currentAbility } = useContext(AppRootContext);
 
   if (!abilities.every((ability) => currentAbility[ability])) {
     return (
       <div className="alert alert-danger">
-        Sorry, your account is not authorized to view this page.
+        {t('errors.unauthorized', 'Sorry, your account is not authorized to view this page.')}
       </div>
     );
   }

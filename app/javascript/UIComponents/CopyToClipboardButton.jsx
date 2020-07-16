@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Clipboard from 'react-clipboard.js';
+import { useTranslation } from 'react-i18next';
 
 function CopyToClipboardButton({
   copiedProps, defaultText, copiedText, ...otherProps
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const onSuccess = () => {
@@ -24,7 +26,9 @@ function CopyToClipboardButton({
     >
       <i className="fa fa-copy" />
       {' '}
-      {copied ? (copiedText || 'Copied!') : (defaultText || 'Copy to clipboard')}
+      {copied
+        ? (copiedText || t('copyToClipboard.defaultSuccess', 'Copied!'))
+        : (defaultText || t('copyToClipboard.defaultText', 'Copy to clipboard'))}
     </Clipboard>
   );
 }

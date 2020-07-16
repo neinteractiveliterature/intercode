@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { MyProfileQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -13,6 +14,7 @@ import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function MyProfileDisplay() {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(MyProfileQuery);
 
   const form = useMemo(
@@ -52,7 +54,7 @@ function MyProfileDisplay() {
     [form],
   );
 
-  usePageTitle('My profile');
+  usePageTitle(t('myProfile.display.pageTitle', 'My profile'));
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -67,16 +69,18 @@ function MyProfileDisplay() {
       <div className="col-lg-9">
         <section>
           <h1 className="mb-4">
-            {'My '}
-            {data.convention.name}
-            {' profile'}
+            {t('myProfile.display.header', 'My {{ conventionName }} profile', { conventionName: data.convention.name })}
           </h1>
 
           <dl className="row">
-            <dt className="col-md-3 mb-2">Email</dt>
+            <dt className="col-md-3 mb-2">
+              {t('myProfile.display.emailLabel', 'Email')}
+            </dt>
             <dd className="col-md-9 mb-2">{data.myProfile.email}</dd>
 
-            <dt className="col-md-3 mb-2">Avatar</dt>
+            <dt className="col-md-3 mb-2">
+              {t('myProfile.display.avatarLabel', 'Avatar')}
+            </dt>
             <dd className="col-md-9 mb-2">
               <div className="d-flex align-items-center">
                 <div className="mr-2">
@@ -87,7 +91,9 @@ function MyProfileDisplay() {
                   />
                 </div>
                 <div className="font-italic">
-                  {data.myProfile.gravatar_enabled ? 'Gravatar enabled' : 'Gravatar disabled'}
+                  {data.myProfile.gravatar_enabled
+                    ? t('myProfile.display.gravatarEnabled', 'Gravatar enabled')
+                    : t('myProfile.display.gravatarDisabled', 'Gravatar disabled')}
                 </div>
               </div>
             </dd>
@@ -95,7 +101,9 @@ function MyProfileDisplay() {
             {
               data.myProfile.can_have_bio && (
                 <>
-                  <dt className="col-md-3 mb-2">Bio</dt>
+                  <dt className="col-md-3 mb-2">
+                    {t('myProfile.display.bioLabel', 'Bio')}
+                  </dt>
                   <dd className="col-md-9 mb-2">
                     <div className="card bg-light">
                       <div className="card-body">
@@ -125,11 +133,9 @@ function MyProfileDisplay() {
           </dl>
 
           <Link to="/my_profile/edit" className="btn btn-secondary">
-            Edit my profile
+            {t('myProfile.editButton', 'Edit my profile')}
           </Link>
         </section>
-
-
       </div>
 
       <div className="col-lg-3">

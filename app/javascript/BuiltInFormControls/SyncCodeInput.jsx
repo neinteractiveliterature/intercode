@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import 'codemirror';
 import 'codemirror/mode/markdown/markdown';
@@ -30,6 +31,7 @@ function SyncCodeInput({
   className, lines, formControlClassName, editorWrapperClassName, children,
   renderPreview, ...props
 }) {
+  const { t } = useTranslation();
   const [previewing, setPreviewing] = useState(false);
   const [previewContent, setPreviewContent] = useState(null);
   const [previewLoading, setPreviewLoading] = useState(false);
@@ -137,7 +139,7 @@ function SyncCodeInput({
             className={classNames('btn btn-link nav-link py-0 px-2', { active: !previewing })}
             onClick={editTabClicked}
           >
-            Edit
+            {t('buttons.edit', 'Edit')}
           </button>
         </li>
         {getPreviewContent && (
@@ -147,7 +149,7 @@ function SyncCodeInput({
               className={classNames('btn btn-link nav-link py-0 px-2', { active: previewing })}
               onClick={previewTabClicked}
             >
-              Preview
+              {t('buttons.preview', 'Preview')}
             </button>
           </li>
         )}

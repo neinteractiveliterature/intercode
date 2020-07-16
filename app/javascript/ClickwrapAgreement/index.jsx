@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
 import { useHistory, Redirect } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { AcceptClickwrapAgreement } from './mutations.gql';
 import { ClickwrapAgreementQuery } from './queries.gql';
@@ -12,6 +13,7 @@ import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
 function ClickwrapAgreement() {
+  const { t } = useTranslation();
   const history = useHistory();
   const { data, loading, error } = useQuery(ClickwrapAgreementQuery);
   const [acceptMutate] = useMutation(AcceptClickwrapAgreement);
@@ -52,19 +54,17 @@ function ClickwrapAgreement() {
   return (
     <>
       <p className="my-4">
-        In order to use the
-        {' '}
-        {convention.name}
-        {' '}
-        web site, you must agree to the following terms of service.  If you do not agree, please
-        close this browser window.
+        {t(
+          'clickwrap.disclosureMessage',
+          'In order to use the {{ conventionName }} web site, you must agree to the following terms of service.  If you do not agree, please close this browser window.',
+          { conventionName: convention.name },
+        )}
       </p>
 
       <div className="px-4">
         <div className="card">
           <div className="card-header">
-            {convention.name}
-            {' terms of service'}
+            {t('clickwrap.header', '{{ conventionName }} terms of service', { conventionName: convention.name })}
           </div>
           <div className="card-body">
             {parseCmsContent(convention.clickwrap_agreement_html).bodyComponents}
@@ -78,7 +78,7 @@ function ClickwrapAgreement() {
               onClick={acceptClicked}
               disabled={acceptInProgress}
             >
-              I agree
+              {t('clickwrap.agreeButton', 'I agree')}
             </button>
           </div>
         </div>
