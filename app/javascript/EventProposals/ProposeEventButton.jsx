@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import CreateEventProposalModal from './CreateEventProposalModal';
 import { ProposeEventButtonQuery } from './queries.gql';
@@ -12,6 +13,7 @@ import LoadingIndicator from '../LoadingIndicator';
 import ErrorDisplay from '../ErrorDisplay';
 
 function ProposeEventButton({ className, caption }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const buttonId = useUniqueId('propose-event-button-');
   const modal = useModal();
@@ -34,7 +36,7 @@ function ProposeEventButton({ className, caption }) {
       <SignInButton
         afterSignInPath={window.location.href}
         className={className}
-        caption="Log in to propose an event"
+        caption={t('buttons.proposeEventLoggedOut', 'Log in to propose an event')}
       />
     );
   }

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import fetch from 'unfetch';
+import { useTranslation, Trans } from 'react-i18next';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -31,6 +32,7 @@ async function resetPassword(authenticityToken, email) {
 }
 
 function ForgotPasswordForm() {
+  const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
   const authenticityToken = useContext(AuthenticityTokensContext).resetPassword;
   const [email, setEmail] = useState('');
@@ -49,14 +51,16 @@ function ForgotPasswordForm() {
     <>
       <form onSubmit={onSubmit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">Forgot your password?</div>
+          <div className="lead flex-grow-1">
+            {t('authentication.forgotPasswordForm.header', 'Forgot your password?')}
+          </div>
         </div>
 
         <div className="modal-body">
           {
             success
               ? (
-                <>
+                <Trans i18nKey="authentication.forgotPasswordForm.successMessage">
                   <p>
                     Please check your email.  You should receive instructions on how to reset your
                     {' '}
@@ -70,12 +74,12 @@ function ForgotPasswordForm() {
                     {' '}
                     for help resetting your password.
                   </p>
-                </>
+                </Trans>
               )
               : (
                 <BootstrapFormInput
                   type="email"
-                  label="Email"
+                  label={t('authentication.forgotPasswordForm.emailLabel', 'Email')}
                   value={email}
                   onTextChange={setEmail}
                   disabled={resetPasswordInProgress}
@@ -89,10 +93,10 @@ function ForgotPasswordForm() {
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
             <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signUp'); }}>
-              Sign up for an account
+              {t('authentication.signUpLink', 'Sign up for an account')}
             </button>
             <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('signIn'); }}>
-              Log in to an existing account
+              {t('authentication.logInLink', 'Log in to an existing account')}
             </button>
           </div>
           <div>
@@ -102,15 +106,15 @@ function ForgotPasswordForm() {
               disabled={resetPasswordInProgress}
               onClick={closeModal}
             >
-              {success ? 'OK' : 'Cancel'}
+              {success ? t('buttons.ok', 'OK') : t('buttons.cancel', 'Cancel')}
             </button>
             {!success && (
               <input
                 type="submit"
                 className="btn btn-primary"
                 disabled={resetPasswordInProgress}
-                value="Send instructions"
-                aria-label="Send instructions"
+                value={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions')}
+                aria-label={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions')}
               />
             )}
           </div>

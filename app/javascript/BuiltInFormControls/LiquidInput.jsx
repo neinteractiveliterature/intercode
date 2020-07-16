@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useApolloClient, useLazyQuery } from '@apollo/react-hooks';
 import Modal from 'react-bootstrap4-modal';
+import { useTranslation } from 'react-i18next';
 
 import { CmsFilesAdminQuery } from '../CmsAdmin/CmsFilesAdmin/queries.gql';
 import CodeInput from './CodeInput';
@@ -15,6 +16,7 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 
 function AddFileModal({ visible, fileChosen, close }) {
+  const { t } = useTranslation();
   const [loadData, {
     called, data, loading, error,
   }] = useLazyQuery(CmsFilesAdminQuery);
@@ -39,14 +41,16 @@ function AddFileModal({ visible, fileChosen, close }) {
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">Add file</div>
+      <div className="modal-header">
+        {t('cms.addFileModal.title', 'Add file')}
+      </div>
       <div className="modal-body">
         {error
           ? <ErrorDisplay graphQLError={error} />
           : (
             <>
               <SelectWithLabel
-                label="Choose existing file"
+                label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
                 options={data.cmsFiles}
                 getOptionLabel={(f) => f.filename}
                 getOptionValue={(f) => f.filename}
@@ -75,7 +79,9 @@ function AddFileModal({ visible, fileChosen, close }) {
               )}
               {file && (
                 <div className="card mt-2">
-                  <div className="card-header">Preview</div>
+                  <div className="card-header">
+                    {t('cms.addFileModal.filePreview.title', 'Preview')}
+                  </div>
                   <div className="card-body">
                     <FilePreview
                       url={file.url}
@@ -89,7 +95,9 @@ function AddFileModal({ visible, fileChosen, close }) {
           )}
       </div>
       <div className="modal-footer">
-        <button className="btn btn-secondary" type="button" onClick={close}>Cancel</button>
+        <button className="btn btn-secondary" type="button" onClick={close}>
+          {t('buttons.cancel', 'Cancel')}
+        </button>
         <button
           type="button"
           className="btn btn-primary"
@@ -99,7 +107,7 @@ function AddFileModal({ visible, fileChosen, close }) {
             close();
           }}
         >
-          Add
+          {t('buttons.add', 'Add')}
         </button>
       </div>
     </Modal>
@@ -113,6 +121,7 @@ AddFileModal.propTypes = {
 };
 
 function LiquidInput(props) {
+  const { t } = useTranslation();
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');
   const client = useApolloClient();
@@ -162,7 +171,7 @@ function LiquidInput(props) {
                     className={classNames('nav-link', { active: currentDocTab === 'convention' })}
                     onClick={(e) => docTabClicked(e, 'convention')}
                   >
-                    Convention-specific markup
+                    {t('cms.liquidInput.help.conventionSpecificMarkup', 'Convention-specific markup')}
                   </a>
                 </li>
                 <li className="nav-item">
@@ -172,7 +181,7 @@ function LiquidInput(props) {
                     className={classNames('nav-link', { active: currentDocTab === 'core' })}
                     onClick={(e) => docTabClicked(e, 'core')}
                   >
-                    Core Liquid markup
+                    {t('cms.liquidInput.help.coreLiquidMarkup', 'Core Liquid markup')}
                   </a>
                 </li>
               </ul>
@@ -184,7 +193,7 @@ function LiquidInput(props) {
                 style={{ cursor: 'pointer' }}
                 onClick={() => setShowingDocs(false)}
               >
-                <i className="fa fa-close" title="Close" />
+                <i className="fa fa-close" title={t('buttons.close', 'Close')} />
               </button>
             </div>
           </header>
@@ -194,7 +203,7 @@ function LiquidInput(props) {
                 ? liquidDocsUrl
                 : 'https://shopify.github.io/liquid/'
             }
-            title="Liquid markup documentation"
+            title={t('cms.liquidInput.help.iframeTitle', 'Documentation')}
             className="flex-grow-1 border-0"
           />
         </div>
@@ -219,7 +228,7 @@ function LiquidInput(props) {
                 onClick={addFileModal.open}
               >
                 <MenuIcon icon="fa-file-image-o" colorClass="" />
-                Add file…
+                {t('cms.liquidInput.addFileButton', 'Add file…')}
               </button>
             </li>
             <li className="flex-grow-1 d-flex justify-content-end">
@@ -231,7 +240,7 @@ function LiquidInput(props) {
                 >
                   <i className="fa fa-question-circle" />
                   {' '}
-                  Help
+                  {t('buttons.help', 'Help')}
                 </button>
               </div>
             </li>

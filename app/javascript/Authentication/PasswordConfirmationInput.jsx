@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
 function PasswordConfirmationInput({ value, onChange, password }) {
+  const { t } = useTranslation();
   const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
 
   const confirmationInvalid = (
@@ -15,7 +17,7 @@ function PasswordConfirmationInput({ value, onChange, password }) {
   return (
     <BootstrapFormInput
       type="password"
-      label="Confirm password"
+      label={t('authentication.confirmPasswordLabel', 'Confirm password')}
       className={classNames('form-control', { 'is-invalid': confirmationInvalid })}
       value={value}
       onTextChange={onChange}
