@@ -1,4 +1,10 @@
 {
+  "addToCalendarDropdown": {
+    "copyWebcal": "Copy webcal:// link",
+    "subscribeGoogle": "Subscribe on Google Calendar",
+    "subscribeICal": "Subscribe via iCal",
+    "title": "Add to calendar"
+  },
   "admin": {
     "convention": {
       "language": {
@@ -30,9 +36,17 @@
       "orderSummary": "Order summary",
       "paymentAmount": "Payment amount",
       "privileges": "Privileges",
+      "signupsCard": {
+        "header": "Signups",
+        "noSignups": "No signups",
+        "unSignedUpOther": "{{ name }} is a team member for the following events, but is not signed up for them:",
+        "unSignedUpYou": "You are a team member for the following events, but are not signed up for them:",
+        "withdrawFromAllConfirmation": "Are you sure you want to withdraw {{ name }} from all their events at {{ conventionName }}?"
+      },
       "ticketStatusChangedAt": "{{ ticketName }} status changed",
       "ticketType": "{{ ticketName }} type",
-      "userId": "User ID"
+      "userId": "User ID",
+      "withdrawFromAllButton": "Withdraw from all"
     }
   },
   "alerts": {
@@ -131,6 +145,10 @@
       }
     }
   },
+  "copyToClipboard": {
+    "defaultSuccess": "Copied!",
+    "defaultText": "Copy to clipboard"
+  },
   "errors": {
     "unauthorized": "Sorry, your account is not authorized to view this page."
   },
@@ -197,6 +215,16 @@
     "bioLabel": "Bio",
     "bioNicknameHelpText": "Your name will appear in your bio as {{ name }}.",
     "bioNicknameLabel": "Show nickname (if any) in bio",
+    "display": {
+      "avatarLabel": "Avatar",
+      "bioLabel": "Bio",
+      "emailLabel": "Email",
+      "gravatarDisabled": "Gravatar disabled",
+      "gravatarEnabled": "Gravatar enabled",
+      "header": "My {{ conventionName }} profile",
+      "pageTitle": "My profile"
+    },
+    "editButton": "Edit my profile",
     "gravatarEnabledHelpText": "Gravatar is a service that lets you create a globally-recognized avatar attached to your email address. For more information or to set up a Gravatar, <2>visit gravatar.com</2>.",
     "gravatarEnabledLabel": "Enable Gravatar for my profile",
     "initialSetupFinishButton": "Finish",
