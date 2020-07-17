@@ -201,7 +201,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "react-test-renderer": "^16.13.1",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.6",
+    "typescript": "^3.9.7",
     "webpack-dev-server": "^3.11.0"
   },
   "resolutions": {
