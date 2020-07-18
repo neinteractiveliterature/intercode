@@ -1,6 +1,7 @@
 require 'intercode/liquid/tags/app_component_renderer'
 require 'intercode/liquid/tags/add_to_calendar_dropdown'
 require 'intercode/liquid/tags/assign_graphql_result'
+require 'intercode/liquid/tags/cookie_consent'
 require 'intercode/liquid/tags/event_admin_menu'
 require 'intercode/liquid/tags/event_runs_section'
 require 'intercode/liquid/tags/long_form_event_details'
