@@ -9,7 +9,7 @@ Intercode is a web application that:
 * automates signup and payment
 * automates business processes for the convention staff
 
-The original Intercode was written in PHP by Barry Tannenbaum for Intercon New England, and has since been used by several other conventions around the world.
+[The original Intercode](https://github.com/neinteractiveliterature/intercode-classic) was written in PHP by Barry Tannenbaum for Intercon New England, and has since been used by several other conventions around the world.
 
 Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more flexible, and more modern.
 
@@ -19,7 +19,7 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 * **Frontend**: React and Apollo-based single-page JavaScript app
 * **Database engine**: PostgreSQL
 * **Background queue system**: Amazon SQS + Shoryuken (this might change in the future)
-* **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Heroku](https://heroku.com) and running it as Docker containers (as opposed to using buildpacks).  In fact, trying to use Heroku buildpacks with this app won't work, because we use the C++-based libgraphqlparser on the server.  (If you figure out a way to make that work with buildpacks, please let @nbudin know, because he would really like to know.)
+* **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Heroku](https://heroku.com) and running it as Docker containers (as opposed to using buildpacks).  However, since we removed libgraphql-parser from the build, Heroku buildpacks may also work (but we haven't tested it since removing the library).
 
 # Getting Started with Developing Intercode
 
