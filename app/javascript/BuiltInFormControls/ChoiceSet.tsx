@@ -1,11 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode, ChangeEvent } from 'react';
 import BootstrapFormCheckbox from './BootstrapFormCheckbox';
 
-function ChoiceSet(props) {
+export type ChoiceSetChoice = {
+  label: ReactNode,
+  value: string,
+  disabled?: boolean,
+};
+
+export interface ChoiceSetBaseProps {
+  name?: string;
+  choices: ChoiceSetChoice[];
+  value?: string | string[] | null;
+  onChange(value: string | string[] | null): any;
+  multiple?: boolean;
+  containerClassName?: string;
+  choiceClassName?: string;
+  inputClassName?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
+}
+
+export interface ChoiceSetSingleChoiceProps extends ChoiceSetBaseProps {
+  value?: string | null;
+  multiple?: false;
+}
+
+export interface ChoiceSetMultipleChoiceProps extends ChoiceSetBaseProps {
+  value?: string[] | null;
+  multiple: true;
+}
+
+type ChoiceSetProps = ChoiceSetSingleChoiceProps | ChoiceSetMultipleChoiceProps;
+
+function ChoiceSet(props: ChoiceSetProps) {
   const choiceType = props.multiple ? 'checkbox' : 'radio';
 
-  const onChange = (event) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (props.multiple) {
       if (event.target.checked) {
         props.onChange([...(props.value || []), event.target.value]);
@@ -21,7 +51,7 @@ function ChoiceSet(props) {
     <BootstrapFormCheckbox
       // eslint-disable-next-line react/no-array-index-key
       key={index}
-      name={props.name}
+      name={props.name || ''}
       type={choiceType}
       className={props.choiceClassName}
       inputClassName={props.inputClassName}
@@ -43,36 +73,5 @@ function ChoiceSet(props) {
     </div>
   );
 }
-
-ChoiceSet.propTypes = {
-  name: PropTypes.string,
-  choices: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-    value: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
-  }).isRequired).isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  ]),
-  onChange: PropTypes.func.isRequired,
-  multiple: PropTypes.bool,
-  containerClassName: PropTypes.string,
-  choiceClassName: PropTypes.string,
-  inputClassName: PropTypes.string,
-  disabled: PropTypes.bool,
-  readOnly: PropTypes.bool,
-};
-
-ChoiceSet.defaultProps = {
-  name: null,
-  value: null,
-  multiple: false,
-  containerClassName: null,
-  choiceClassName: null,
-  inputClassName: null,
-  disabled: false,
-  readOnly: false,
-};
 
 export default ChoiceSet;
