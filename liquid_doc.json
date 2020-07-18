@@ -5001,6 +5001,84 @@
       ]
     },
     {
+      "name": "Intercode::Liquid::Tags::CookieConsent",
+      "superclasses": [
+        "Intercode::Liquid::Tags::CookieConsent",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders a cookie consent.  Requires a URL for a cookie policy to link to.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "",
+          "text": "{% cookie_consent https://www.neilhosting.net/pages/cookies %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "cookie_consent",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "cookie_policy_url",
+          "docstring": "Returns the value of attribute cookie_policy_url.",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of CookieConsent",
+              "types": [
+                "CookieConsent"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render_react_component",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Intercode::Liquid::Tags::EventAdminMenu",
       "superclasses": [
         "Intercode::Liquid::Tags::EventAdminMenu",

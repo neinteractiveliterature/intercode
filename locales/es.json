@@ -145,6 +145,10 @@
       }
     }
   },
+  "cookieConsent": {
+    "buttonText": "Acepto",
+    "text": "Esta página web usa cookies para mejorar la experiencia de usuario. Para más información, por favor consulta nuestra <2>política de cookies</2>."
+  },
   "copyToClipboard": {
     "defaultSuccess": "¡Copiado!",
     "defaultText": "Copiado al portapapeles"
