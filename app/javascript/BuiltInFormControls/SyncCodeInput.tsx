@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { Controlled as CodeMirror } from 'react-codemirror2';
+import React, { useState, useCallback, ReactNode } from 'react';
+import { Controlled as CodeMirror, IControlledCodeMirror, DomEvent } from 'react-codemirror2';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { ApolloError } from 'apollo-client';
 
-import 'codemirror';
+import { EditorConfiguration } from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/javascript/javascript';
@@ -26,16 +26,30 @@ import parseCmsContent from '../parseCmsContent';
 
 import '../Codemirror/LiquidMultiplexModes';
 
+export type SyncCodeInputProps = Omit<IControlledCodeMirror, 'onChange' | 'onBeforeChange'> & {
+  onChange: (value: string) => void,
+  getPreviewContent?: (value: string) => Promise<string>,
+  mode: string,
+  disabled?: boolean,
+  codeMirrorOptions?: EditorConfiguration,
+  extraNavControls?: ReactNode,
+  lines?: number,
+  formControlClassName?: string,
+  editorWrapperClassName?: string,
+  children?: ReactNode,
+  renderPreview?: (previewContent: string) => ReactNode,
+};
+
 function SyncCodeInput({
   onBlur, onChange, value, getPreviewContent, mode, disabled, codeMirrorOptions, extraNavControls,
   className, lines, formControlClassName, editorWrapperClassName, children,
   renderPreview, ...props
-}) {
+}: SyncCodeInputProps) {
   const { t } = useTranslation();
   const [previewing, setPreviewing] = useState(false);
-  const [previewContent, setPreviewContent] = useState(null);
+  const [previewContent, setPreviewContent] = useState<string | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
-  const [previewError, setPreviewError] = useState(null);
+  const [previewError, setPreviewError] = useState<ApolloError | null>(null);
 
   const onBeforeChange = useCallback(
     (editor, data, newValue) => {
@@ -53,7 +67,7 @@ function SyncCodeInput({
     [],
   );
 
-  const previewTabClicked = async (event) => {
+  const previewTabClicked = async (event: React.MouseEvent) => {
     event.preventDefault();
 
     if (!getPreviewContent) {
@@ -86,7 +100,7 @@ function SyncCodeInput({
     }
 
     if (renderPreview) {
-      return renderPreview(previewContent);
+      return renderPreview(previewContent ?? '');
     }
 
     return (
@@ -102,7 +116,7 @@ function SyncCodeInput({
     }
 
     // react-codemirror2 doesn't want event handlers to be passed undefined
-    const eventHandlers = {};
+    const eventHandlers: { onBlur?: DomEvent } = {};
     if (onBlur) {
       eventHandlers.onBlur = onBlur;
     }
@@ -182,36 +196,5 @@ function SyncCodeInput({
     </div>
   );
 }
-
-SyncCodeInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  getPreviewContent: PropTypes.func,
-  mode: PropTypes.string.isRequired,
-  onBlur: PropTypes.func,
-  className: PropTypes.string,
-  formControlClassName: PropTypes.string,
-  lines: PropTypes.number,
-  children: PropTypes.node,
-  codeMirrorOptions: PropTypes.shape({}),
-  editorWrapperClassName: PropTypes.string,
-  extraNavControls: PropTypes.node,
-  disabled: PropTypes.bool,
-  renderPreview: PropTypes.func,
-};
-
-SyncCodeInput.defaultProps = {
-  className: null,
-  formControlClassName: null,
-  lines: null,
-  children: null,
-  onBlur: null,
-  codeMirrorOptions: {},
-  editorWrapperClassName: null,
-  extraNavControls: null,
-  getPreviewContent: null,
-  disabled: false,
-  renderPreview: null,
-};
 
 export default SyncCodeInput;

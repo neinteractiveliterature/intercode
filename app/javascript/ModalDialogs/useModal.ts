@@ -3,20 +3,28 @@ import {
 } from 'react';
 import useIsMounted from '../useIsMounted';
 
-export default function useModal(initiallyOpen = false) {
+export interface ModalData<StateType> {
+  open: (newModalState?: StateType) => void;
+  close: () => void;
+  state?: StateType;
+  setState: (newState?: StateType) => void;
+  visible: boolean;
+}
+
+export default function useModal<StateType>(initiallyOpen = false): ModalData<StateType> {
   const [visible, setVisible] = useState(initiallyOpen);
-  const [state, setState] = useState(null);
+  const [state, setState] = useState<StateType | undefined>(undefined);
   const isMounted = useIsMounted();
 
   const open = useCallback(
-    (newModalState) => { setState(newModalState); setVisible(true); },
+    (newModalState?: StateType) => { setState(newModalState); setVisible(true); },
     [],
   );
 
   const close = useCallback(
     () => {
       if (isMounted.current) {
-        setState(null);
+        setState(undefined);
         setVisible(false);
       }
     },
