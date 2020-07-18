@@ -1,22 +1,33 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { ApolloError } from 'apollo-client';
 
-import { CmsFilesAdminQuery } from './queries.gql';
-import { CreateCmsFile } from './mutations.gql';
+import { CmsFilesAdminQuery } from './queries';
+import { CreateCmsFile } from './mutations';
 import FilePreview from './FilePreview';
 import useUniqueId from '../../useUniqueId';
 import { useCreateMutation } from '../../MutationUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
+import { CmsFile } from '../../graphqlTypes.generated';
+import { CmsFilesAdminQueryQuery } from './queries.generated';
+import { CreateCmsFileMutationVariables, CreateCmsFileMutation } from './mutations.generated';
 
-function FileUploadForm({ onUpload }) {
+export type FileUploadFormProps = {
+  onUpload?: (cmsFile: CmsFile) => void,
+};
+
+function FileUploadForm({ onUpload }: FileUploadFormProps) {
   const { t } = useTranslation();
-  const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const fileInputId = useUniqueId('file-');
   const [createMutate, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreateCmsFile, {
+    useCreateMutation<
+    CmsFilesAdminQueryQuery,
+    CreateCmsFileMutationVariables,
+    CreateCmsFileMutation
+    >(CreateCmsFile, {
       query: CmsFilesAdminQuery,
       arrayPath: ['cmsFiles'],
       newObjectPath: ['createCmsFile', 'cms_file'],
@@ -24,8 +35,13 @@ function FileUploadForm({ onUpload }) {
   );
 
   const uploadFileChanged = useCallback(
-    (event) => {
-      const newFile = event.target.files[0];
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = event.target;
+      if (files == null) {
+        return;
+      }
+
+      const newFile = files[0];
       if (!newFile) {
         return;
       }
@@ -34,7 +50,7 @@ function FileUploadForm({ onUpload }) {
 
       const reader = new FileReader();
       reader.addEventListener('load', () => {
-        setImageUrl(reader.result);
+        setImageUrl(reader.result as string);
       });
       reader.readAsDataURL(newFile);
     },
@@ -49,11 +65,11 @@ function FileUploadForm({ onUpload }) {
     [],
   );
 
-  const uploadFormSubmitted = async (event) => {
+  const uploadFormSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
     event.stopPropagation();
     const response = await createMutate({ variables: { file } });
-    if (onUpload) {
+    if (response?.data?.createCmsFile && onUpload) {
       onUpload(response.data.createCmsFile.cms_file);
     }
     clearFile();
@@ -73,7 +89,7 @@ function FileUploadForm({ onUpload }) {
                   <FilePreview
                     filename={(file || {}).name}
                     contentType={(file || {}).type}
-                    url={imageUrl}
+                    url={imageUrl ?? undefined}
                   />
                   <button className="btn btn-secondary ml-4" type="button" onClick={clearFile}>
                     {t('cms.fileUploadForm.clearFileButton', 'Clear')}
@@ -91,7 +107,7 @@ function FileUploadForm({ onUpload }) {
                       id={fileInputId}
                       disabled={createInProgress}
                     />
-                    <label className="custom-file-label" htmlFor={fileInputId}>
+                    <label className="custom-file-label" htmlFor={fileInputId} aria-hidden>
                       {t('cms.fileUploadForm.fileInputLabel', 'Choose a file...')}
                     </label>
                   </div>
@@ -99,14 +115,14 @@ function FileUploadForm({ onUpload }) {
               )
           }
 
-          <ErrorDisplay graphQLError={createError} />
+          <ErrorDisplay graphQLError={createError as ApolloError} />
 
           <div className="mt-2">
             <input
               type="submit"
               className="btn btn-primary mr-4"
               disabled={!file || createInProgress}
-              value={t('cms.fileUploadForm.uploadFileButton', 'Upload')}
+              value={t<string>('cms.fileUploadForm.uploadFileButton', 'Upload')}
               aria-label={t('cms.fileUploadForm.uploadFileButton', 'Upload')}
             />
           </div>
@@ -115,13 +131,5 @@ function FileUploadForm({ onUpload }) {
     </div>
   );
 }
-
-FileUploadForm.propTypes = {
-  onUpload: PropTypes.func,
-};
-
-FileUploadForm.defaultProps = {
-  onUpload: null,
-};
 
 export default FileUploadForm;

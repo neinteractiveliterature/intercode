@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Clipboard from 'react-clipboard.js';
+import React, { useState, ReactNode } from 'react';
+import ClipboardButton from 'react-clipboard.js';
 import { useTranslation } from 'react-i18next';
+
+export type CopyToClipboardButtonProps = ClipboardButton['props'] & {
+  copiedProps?: ClipboardButton['props'],
+  defaultText?: ReactNode,
+  copiedText?: ReactNode,
+};
 
 function CopyToClipboardButton({
   copiedProps, defaultText, copiedText, ...otherProps
-}) {
+}: CopyToClipboardButtonProps) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
@@ -19,7 +24,7 @@ function CopyToClipboardButton({
   };
 
   return (
-    <Clipboard
+    <ClipboardButton
       {...otherProps}
       {...copied ? (copiedProps || {}) : {}}
       onSuccess={onSuccess}
@@ -29,20 +34,8 @@ function CopyToClipboardButton({
       {copied
         ? (copiedText || t('copyToClipboard.defaultSuccess', 'Copied!'))
         : (defaultText || t('copyToClipboard.defaultText', 'Copy to clipboard'))}
-    </Clipboard>
+    </ClipboardButton>
   );
 }
-
-CopyToClipboardButton.propTypes = {
-  copiedProps: PropTypes.shape({}),
-  defaultText: PropTypes.string,
-  copiedText: PropTypes.string,
-};
-
-CopyToClipboardButton.defaultProps = {
-  copiedProps: {},
-  defaultText: null,
-  copiedText: null,
-};
 
 export default CopyToClipboardButton;

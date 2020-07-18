@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
 import chunk from 'lodash/chunk';
 import bytes from 'bytes';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { CmsFilesAdminQuery } from './queries.gql';
-import { DeleteCmsFile, RenameCmsFile } from './mutations.gql';
+import { CmsFilesAdminQuery } from './queries';
+import { DeleteCmsFile } from './mutations';
 import FilePreview from './FilePreview';
 import FileUploadForm from './FileUploadForm';
 import { useDeleteMutation } from '../../MutationUtils';
@@ -14,22 +13,30 @@ import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
+import {
+  DeleteCmsFileMutationVariables, DeleteCmsFileMutation, useRenameCmsFileMutation,
+} from './mutations.generated';
+import { useCmsFilesAdminQueryQuery } from './queries.generated';
 
 function CmsFilesAdmin() {
-  const { data, loading, error } = useQuery(CmsFilesAdminQuery);
-  const deleteFileMutate = useDeleteMutation(DeleteCmsFile, {
-    query: CmsFilesAdminQuery,
-    arrayPath: ['cmsFiles'],
-    idVariablePath: ['id'],
-  });
-  const [renameFileMutate] = useMutation(RenameCmsFile);
+  const {
+    data, loading, error, refetch,
+  } = useCmsFilesAdminQueryQuery();
+  const deleteFileMutate = useDeleteMutation<DeleteCmsFileMutationVariables, DeleteCmsFileMutation>(
+    DeleteCmsFile, {
+      query: CmsFilesAdminQuery,
+      arrayPath: ['cmsFiles'],
+      idVariablePath: ['id'],
+    },
+  );
+  const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
 
   usePageTitle('CMS Files');
 
   const fileChunks = useMemo(
     () => {
-      if (loading || error) {
+      if (loading || error || !data) {
         return [];
       }
 
@@ -38,8 +45,10 @@ function CmsFilesAdmin() {
     [data, loading, error],
   );
 
-  const deleteFile = (id) => deleteFileMutate({ variables: { id } });
-  const renameFile = (id, filename) => renameFileMutate({ variables: { id, filename } });
+  const deleteFile = (id: number) => deleteFileMutate({ variables: { id } });
+  const renameFile = (id: number, filename: string) => renameFileMutate({
+    variables: { id, filename },
+  });
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -103,7 +112,7 @@ function CmsFilesAdmin() {
         </div>
       ))}
 
-      {data.currentAbility.can_create_cms_files && <FileUploadForm />}
+      {data?.currentAbility.can_create_cms_files && <FileUploadForm onUpload={() => refetch()} />}
     </>
   );
 }

@@ -27,4 +27,6 @@ query CmsFilesAdminQuery {
     ...CmsFileFields
   }
 }
+
+${CmsFileFields}
 `;

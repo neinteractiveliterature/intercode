@@ -24,6 +24,7 @@ function BootstrapFormCheckbox(props: BootstrapFormCheckboxProps) {
     label,
     onChange,
     onCheckedChange,
+    type,
     ...otherProps
   } = props;
 
@@ -41,6 +42,7 @@ function BootstrapFormCheckbox(props: BootstrapFormCheckboxProps) {
           className={classnames('form-check-input', inputClassName)}
           id={inputId}
           onChange={onChangeProp}
+          type={type ?? 'checkbox'}
           {...otherProps}
         />
         {' '}

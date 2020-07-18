@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-function iconForContentType(contentType) {
+function iconForContentType(contentType: string) {
   if (contentType.match(/^audio\//)) {
     return 'file-audio-o';
   }
@@ -33,12 +32,21 @@ function iconForContentType(contentType) {
   }
 }
 
+export type FilePreviewProps = {
+  url?: string,
+  contentType?: string,
+  filename?: string,
+  size?: string,
+};
+
 function FilePreview({
   url, contentType, filename, size,
-}) {
+}: FilePreviewProps) {
   if (!contentType) {
     return null;
   }
+
+  const effectiveSize = size ?? '100px';
 
   if (contentType.startsWith('image/')) {
     if (url == null) {
@@ -49,7 +57,7 @@ function FilePreview({
       <img
         src={url}
         className="img-responsive"
-        style={{ maxWidth: size, maxHeight: size }}
+        style={{ maxWidth: effectiveSize, maxHeight: effectiveSize }}
         alt={filename}
       />
     );
@@ -58,24 +66,10 @@ function FilePreview({
   return (
     <i
       className={`fa fa-${iconForContentType(contentType)}`}
-      style={{ fontSize: size }}
+      style={{ fontSize: effectiveSize }}
       aria-hidden
     />
   );
 }
-
-FilePreview.propTypes = {
-  contentType: PropTypes.string,
-  url: PropTypes.string,
-  filename: PropTypes.string,
-  size: PropTypes.string,
-};
-
-FilePreview.defaultProps = {
-  contentType: null,
-  url: null,
-  filename: null,
-  size: '100px',
-};
 
 export default FilePreview;
