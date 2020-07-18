@@ -1,3 +1,6 @@
+import gql from 'graphql-tag';
+
+export const CmsFileFields = gql`
 fragment CmsFileFields on CmsFile {
   id
   filename
@@ -6,7 +9,9 @@ fragment CmsFileFields on CmsFile {
   size
   current_ability_can_delete
 }
+`;
 
+export const CmsFilesAdminQuery = gql`
 query CmsFilesAdminQuery {
   convention {
     id
@@ -18,6 +23,10 @@ query CmsFilesAdminQuery {
   }
 
   cmsFiles {
+    id
     ...CmsFileFields
   }
 }
+
+${CmsFileFields}
+`;

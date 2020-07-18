@@ -1,12 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
 import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';
 
+export type FormGroupWithLabelProps = {
+  children: (id: string) => ReactNode,
+  label: ReactNode,
+  name?: string,
+  helpText?: ReactNode,
+  className?: string,
+  labelClassName?: string,
+};
+
 function FormGroupWithLabel({
   children, label, name, helpText, className, labelClassName,
-}) {
+}: FormGroupWithLabelProps) {
   const id = useUniqueId(`${name || 'input'}-`);
 
   return (
@@ -19,21 +27,5 @@ function FormGroupWithLabel({
     </div>
   );
 }
-
-FormGroupWithLabel.propTypes = {
-  className: PropTypes.string,
-  labelClassName: PropTypes.string,
-  children: PropTypes.func.isRequired,
-  label: PropTypes.node.isRequired,
-  name: PropTypes.string,
-  helpText: PropTypes.node,
-};
-
-FormGroupWithLabel.defaultProps = {
-  className: null,
-  labelClassName: null,
-  name: null,
-  helpText: null,
-};
 
 export default FormGroupWithLabel;
