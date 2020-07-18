@@ -145,6 +145,10 @@
       }
     }
   },
+  "cookieConsent": {
+    "buttonText": "I understand",
+    "text": "This web site uses cookies to enhance the user experience.  For more information, please see <2>our cookie policy</2>."
+  },
   "copyToClipboard": {
     "defaultSuccess": "Copied!",
     "defaultText": "Copy to clipboard"
