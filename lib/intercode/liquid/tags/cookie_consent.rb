@@ -24,7 +24,7 @@ module Intercode
           'CookieConsent'
         end
 
-        def props(context)
+        def props(_context)
           { cookiePolicyUrl: cookie_policy_url }
         end
       end
