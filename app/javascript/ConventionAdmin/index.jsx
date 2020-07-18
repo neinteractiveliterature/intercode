@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 import pick from 'lodash/pick';
@@ -14,9 +13,9 @@ import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function ConventionAdmin({ id }) {
+function ConventionAdmin() {
   const history = useHistory();
-  const { data, loading, error } = useQuery(ConventionAdminConventionQuery, { variables: { id } });
+  const { data, loading, error } = useQuery(ConventionAdminConventionQuery);
   const [updateMutate] = useMutation(UpdateConvention);
   const [mutate, mutationError] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
@@ -93,13 +92,5 @@ function ConventionAdmin({ id }) {
     </div>
   );
 }
-
-ConventionAdmin.propTypes = {
-  id: PropTypes.number,
-};
-
-ConventionAdmin.defaultProps = {
-  id: null,
-};
 
 export default ConventionAdmin;
