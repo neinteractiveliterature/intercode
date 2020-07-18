@@ -1,28 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useApolloClient, useLazyQuery } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
+import { Editor } from 'codemirror';
 
-import { CmsFilesAdminQuery } from '../CmsAdmin/CmsFilesAdmin/queries.gql';
+import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import CodeInput from './CodeInput';
-import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries.gql';
+import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import useModal from '../ModalDialogs/useModal';
 import ErrorDisplay from '../ErrorDisplay';
 import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
+import { PreviewNotifierLiquidQueryQuery, PreviewLiquidQueryQuery } from './previewQueries.generated';
+import { CmsFile } from '../graphqlTypes.generated';
+import { SyncCodeInputProps } from './SyncCodeInput';
 
-function AddFileModal({ visible, fileChosen, close }) {
+type AddFileModalProps = {
+  visible: boolean,
+  fileChosen: (file: CmsFile) => void,
+  close: () => void,
+};
+
+function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
   const { t } = useTranslation();
   const [loadData, {
     called, data, loading, error,
-  }] = useLazyQuery(CmsFilesAdminQuery);
-  const [file, setFile] = useState(null);
+  }] = useCmsFilesAdminQueryLazyQuery();
+  const [file, setFile] = useState<CmsFile | null>(null);
 
-  const uploadedFile = (newFile) => {
+  const uploadedFile = (newFile: CmsFile) => {
     setFile(newFile);
   };
 
@@ -49,13 +58,13 @@ function AddFileModal({ visible, fileChosen, close }) {
           ? <ErrorDisplay graphQLError={error} />
           : (
             <>
-              <SelectWithLabel
+              <SelectWithLabel<CmsFile>
                 label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
-                options={data.cmsFiles}
+                options={data?.cmsFiles || []}
                 getOptionLabel={(f) => f.filename}
                 getOptionValue={(f) => f.filename}
                 value={file}
-                onChange={setFile}
+                onChange={(newValue) => { setFile(newValue as CmsFile | null); }}
                 formatOptionLabel={(f) => (
                   <div className="d-flex align-items-center">
                     <div className="mr-2">
@@ -74,7 +83,7 @@ function AddFileModal({ visible, fileChosen, close }) {
                   menu: (provided) => ({ ...provided, zIndex: 25 }),
                 }}
               />
-              {data.currentAbility.can_create_cms_files && (
+              {data?.currentAbility.can_create_cms_files && (
                 <FileUploadForm onUpload={uploadedFile} />
               )}
               {file && (
@@ -103,6 +112,10 @@ function AddFileModal({ visible, fileChosen, close }) {
           className="btn btn-primary"
           disabled={file == null}
           onClick={() => {
+            if (file == null) {
+              return;
+            }
+
             fileChosen(file);
             close();
           }}
@@ -114,39 +127,47 @@ function AddFileModal({ visible, fileChosen, close }) {
   );
 }
 
-AddFileModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  fileChosen: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
+export type LiquidInputProps = Omit<SyncCodeInputProps, 'mode' | 'editorDidMount'> & {
+  notifierEventKey?: string,
+  disablePreview?: boolean,
 };
 
-function LiquidInput(props) {
+function LiquidInput(props: LiquidInputProps) {
   const { t } = useTranslation();
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');
   const client = useApolloClient();
   const { notifierEventKey } = props;
-  const editorRef = useRef(null);
+  const editorRef = useRef<Editor | null>(null);
   const addFileModal = useModal();
 
-  const docTabClicked = (event, tab) => {
+  const docTabClicked = (event: React.MouseEvent, tab: string) => {
     event.preventDefault();
     setCurrentDocTab(tab);
   };
 
-  const getPreviewContent = props.disablePreview ? null : async (liquid) => {
-    const response = await client.query({
-      query: notifierEventKey ? PreviewNotifierLiquidQuery : PreviewLiquidQuery,
-      variables: { liquid, ...(notifierEventKey ? { eventKey: notifierEventKey } : {}) },
+  const getPreviewContent = props.disablePreview ? undefined : async (liquid: string) => {
+    if (notifierEventKey) {
+      const response = await client.query<PreviewNotifierLiquidQueryQuery>({
+        query: PreviewNotifierLiquidQuery,
+        variables: { liquid, eventKey: notifierEventKey },
+        fetchPolicy: 'no-cache',
+      });
+      return response.data.previewLiquid;
+    }
+
+    const response = await client.query<PreviewLiquidQueryQuery>({
+      query: PreviewLiquidQuery,
+      variables: { liquid },
       fetchPolicy: 'no-cache',
     });
 
     return response.data.previewLiquid;
   };
 
-  const addFile = (file) => {
-    editorRef.current.replaceSelection(`{% file_url ${file.filename} %}`, 'start');
-    editorRef.current.focus();
+  const addFile = (file: CmsFile) => {
+    editorRef.current?.replaceSelection(`{% file_url ${file.filename} %}`, 'start');
+    editorRef.current?.focus();
   };
 
   const renderDocs = () => {
@@ -257,15 +278,5 @@ function LiquidInput(props) {
     </>
   );
 }
-
-LiquidInput.propTypes = {
-  disablePreview: PropTypes.bool,
-  notifierEventKey: PropTypes.string,
-};
-
-LiquidInput.defaultProps = {
-  disablePreview: false,
-  notifierEventKey: null,
-};
 
 export default LiquidInput;

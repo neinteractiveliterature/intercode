@@ -1,6 +1,6 @@
 class Types::StaffPositionType < Types::BaseObject
   field :id, Integer, null: false
-  field :name, String, null: true
+  field :name, String, null: false
   field :email, String, null: true
   field :email_aliases, [String], null: false
   field :visible, Boolean, null: true

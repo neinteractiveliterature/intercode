@@ -1,8 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
+import { ApolloError } from 'apollo-client';
 
-const ErrorDisplay = ({ stringError, graphQLError }) => {
-  let displayContents = null;
+export type ErrorDisplayProps = {
+  stringError?: string | null,
+  graphQLError?: ApolloError | null,
+};
+
+const ErrorDisplay = ({ stringError, graphQLError }: ErrorDisplayProps) => {
+  let displayContents: ReactNode = null;
 
   if (graphQLError) {
     try {
@@ -34,21 +39,6 @@ const ErrorDisplay = ({ stringError, graphQLError }) => {
   return (
     <div className="alert alert-danger">{displayContents}</div>
   );
-};
-
-ErrorDisplay.propTypes = {
-  stringError: PropTypes.string,
-  graphQLError: PropTypes.shape({
-    graphQLErrors: PropTypes.arrayOf(PropTypes.shape({
-      message: PropTypes.string.isRequired,
-    })),
-    message: PropTypes.string,
-  }),
-};
-
-ErrorDisplay.defaultProps = {
-  stringError: null,
-  graphQLError: null,
 };
 
 export default ErrorDisplay;

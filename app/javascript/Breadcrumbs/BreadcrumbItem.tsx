@@ -1,8 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
-function BreadcrumbItem({ active, children, to }) {
+export type BreadcrumbItemProps = {
+  active?: boolean,
+  children: ReactNode,
+  to: string,
+};
+
+function BreadcrumbItem({ active, children, to }: BreadcrumbItemProps) {
   if (active) {
     return (
       <li className="breadcrumb-item active">
@@ -19,16 +24,5 @@ function BreadcrumbItem({ active, children, to }) {
     </li>
   );
 }
-
-BreadcrumbItem.propTypes = {
-  active: PropTypes.bool,
-  children: PropTypes.node.isRequired,
-  to: PropTypes.string,
-};
-
-BreadcrumbItem.defaultProps = {
-  active: false,
-  to: null,
-};
 
 export default BreadcrumbItem;

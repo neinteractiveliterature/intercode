@@ -134,6 +134,12 @@
         "description": null,
         "isDeprecated": false,
         "deprecationReason": null
+      },
+      {
+        "name": "free",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
       }
     ],
     "possibleTypes": null

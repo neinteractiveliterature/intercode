@@ -1,19 +1,18 @@
 class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field_class Types::BaseField # Camelize fields in this type
 
-  # Add root-level fields here.
-  # They will be entry points for queries on your schema.
+  field :convention, Types::ConventionType, null: true
 
-  field :convention, Types::ConventionType, null: true do
-    argument :id, Integer, required: false
+  def convention
+    context[:convention]
   end
 
-  def convention(**args)
-    if args[:id]
-      Convention.find(args[:id])
-    else
-      context[:convention]
-    end
+  field :convention_by_id, Types::ConventionType, null: false do
+    argument :id, Integer, required: true
+  end
+
+  def convention_by_id(id:)
+    Convention.find(id)
   end
 
   field :conventions, [Types::ConventionType], null: false
@@ -46,7 +45,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  field :event, Types::EventType, null: true do
+  field :event, Types::EventType, null: false do
     argument :id, Integer, required: true
   end
 
@@ -54,7 +53,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     context[:convention].events.active.find(args[:id])
   end
 
-  field :run, Types::RunType, null: true do
+  field :run, Types::RunType, null: false do
     argument :id, Integer, required: true
   end
 
@@ -62,13 +61,13 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     Run.where(event_id: context[:convention].events.active.select(:id)).find(args[:id])
   end
 
-  field :runs, [Types::RunType], null: true
+  field :runs, [Types::RunType], null: false
 
   def runs
     Run.where(event_id: context[:convention].events.active.select(:id))
   end
 
-  field :events, [Types::EventType, null: true], null: true do
+  field :events, [Types::EventType], null: false do
     argument :extended_counts, Boolean, required: false
     argument :include_dropped, Boolean, required: false
     argument :start, Types::DateType, required: false
@@ -87,7 +86,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     end
   end
 
-  field :event_proposal, Types::EventProposalType, null: true do
+  field :event_proposal, Types::EventProposalType, null: false do
     argument :id, Integer, required: true
   end
 
@@ -95,10 +94,10 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     convention.event_proposals.find(args[:id])
   end
 
-  field :my_signups, [Types::SignupType], null: true, camelize: false
+  field :my_signups, [Types::SignupType], null: false, camelize: false
 
   def my_signups
-    context[:user_con_profile].signups
+    context[:user_con_profile]&.signups || []
   end
 
   field :my_profile, Types::UserConProfileType, null: true
@@ -159,7 +158,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     cms_parent.cms_content_groups.find(id)
   end
 
-  field :cms_files, [Types::CmsFileType], null: true
+  field :cms_files, [Types::CmsFileType], null: false
 
   def cms_files
     if context[:convention]
@@ -211,7 +210,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     end
   end
 
-  field :cms_variables, [Types::CmsVariable], null: true
+  field :cms_variables, [Types::CmsVariable], null: false
 
   def cms_variables
     if context[:convention]
@@ -221,7 +220,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     end
   end
 
-  field :cms_graphql_queries, [Types::CmsGraphqlQueryType], null: true
+  field :cms_graphql_queries, [Types::CmsGraphqlQueryType], null: false
 
   def cms_graphql_queries
     if context[:convention]
@@ -268,7 +267,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
   end
 
-  field :user_con_profile, Types::UserConProfileType, null: true do
+  field :user_con_profile, Types::UserConProfileType, null: false do
     argument :id, Integer, required: true
   end
 
@@ -276,7 +275,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     convention.user_con_profiles.find(args[:id])
   end
 
-  field :form, Types::FormType, null: true do
+  field :form, Types::FormType, null: false do
     argument :id, Integer, required: true
   end
 
@@ -284,7 +283,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     convention.forms.find(args[:id])
   end
 
-  field :staff_position, Types::StaffPositionType, null: true do
+  field :staff_position, Types::StaffPositionType, null: false do
     argument :id, Integer, required: true
   end
 
@@ -292,13 +291,13 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     convention.staff_positions.find(id)
   end
 
-  field :liquid_assigns, [Types::LiquidAssign], null: true
+  field :liquid_assigns, [Types::LiquidAssign], null: false
 
   def liquid_assigns
     LiquidAssignGraphqlPresenter.from_hash(context[:cadmus_renderer].default_assigns)
   end
 
-  field :notifier_liquid_assigns, [Types::LiquidAssign], null: true do
+  field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
     argument :event_key, String, required: true
   end
 

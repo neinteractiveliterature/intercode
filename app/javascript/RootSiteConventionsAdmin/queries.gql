@@ -47,7 +47,7 @@ fragment ConventionDisplayFields on Convention {
 }
 
 query ConventionDisplayQuery($id: Int!) {
-  convention(id: $id) {
+  convention: conventionById(id: $id) {
     ...ConventionDisplayFields
   }
 }
