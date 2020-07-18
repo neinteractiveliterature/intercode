@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-for */
 
-import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useState, useMemo, ReactNode, SetStateAction,
+} from 'react';
 import Select from 'react-select';
 import { IANAZone } from 'luxon';
 import { Search, TfIdfSearchIndex } from 'js-search';
@@ -9,11 +10,23 @@ import { Search, TfIdfSearchIndex } from 'js-search';
 import timezoneSelectData from './timezoneSelectData.json';
 import useUniqueId from '../useUniqueId';
 
-class BoostableTfIdfSearchIndex extends TfIdfSearchIndex {
+interface TfIdfSearchIndexWithOverridableCreate extends TfIdfSearchIndex {
+  _createCalculateTfIdf(): Function;
+}
+
+type BoostableDocument = {
+  $boost?: number,
+};
+
+class BoostableTfIdfSearchIndex
+  extends TfIdfSearchIndex
+  implements TfIdfSearchIndexWithOverridableCreate {
   _createCalculateTfIdf() {
-    // eslint-disable-next-line no-underscore-dangle
+    /* eslint-disable-next-line no-underscore-dangle */ /* @ts-ignore */
     const baseTfIdf = super._createCalculateTfIdf();
-    return (tokens, document, documents) => (
+    return (
+      tokens: string[], document: BoostableDocument, documents: BoostableDocument[],
+    ): number => (
       baseTfIdf(tokens, document, documents) * (document.$boost ?? 1.0)
     );
   }
@@ -21,7 +34,7 @@ class BoostableTfIdfSearchIndex extends TfIdfSearchIndex {
 
 const NOW = new Date().getTime();
 
-function getFormattedOffset(zoneName) {
+function getFormattedOffset(zoneName: string) {
   const zone = IANAZone.create(zoneName);
   let offset = zone.offset(NOW);
   if (zone.name.startsWith('Etc/')) {
@@ -34,7 +47,13 @@ function getFormattedOffset(zoneName) {
   return `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`;
 }
 
-function TimezoneSelect(props) {
+export type TimezoneSelectProps = {
+  label: ReactNode,
+  value?: string | null,
+  onChange: React.Dispatch<SetStateAction<string | null | undefined>>;
+};
+
+function TimezoneSelect(props: TimezoneSelectProps) {
   const searchIndex = useMemo(
     () => {
       const search = new Search('name');
@@ -48,7 +67,7 @@ function TimezoneSelect(props) {
     [],
   );
 
-  const loadOptions = (inputValue) => {
+  const loadOptions = (inputValue?: string | null) => {
     if (!inputValue) {
       return [];
     }
@@ -59,7 +78,7 @@ function TimezoneSelect(props) {
 
   const [options, setOptions] = useState(loadOptions(''));
 
-  const filterOptions = (input) => {
+  const filterOptions = (input?: string | null) => {
     setOptions(loadOptions(input));
   };
 
@@ -77,7 +96,7 @@ function TimezoneSelect(props) {
         inputId={selectId}
         options={options}
         isClearable
-        value={timezoneSelectData.zones[value]}
+        value={value ? timezoneSelectData.zones[value] : undefined}
         onInputChange={(input) => filterOptions(input)}
         onChange={(newValue) => { onChange(newValue?.name); }}
         getOptionValue={(zone) => zone.name}
@@ -100,15 +119,5 @@ function TimezoneSelect(props) {
     </div>
   );
 }
-
-TimezoneSelect.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-};
-
-TimezoneSelect.defaultProps = {
-  value: null,
-};
 
 export default TimezoneSelect;
