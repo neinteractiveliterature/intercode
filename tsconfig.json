@@ -14,7 +14,7 @@
       "node_modules/@types",
       "app/javascript/@types",
     ],
-    "lib": ["DOM", "ES2015"]
+    "lib": ["DOM", "DOM.Iterable", "ES2015"]
   },
   "include": [
     "./app/javascript/",

@@ -351,6 +351,9 @@
       "waitlisted": "En lista de espera"
     }
   },
+  "spoiler": {
+    "hoverText": ""
+  },
   "tables": {
     "choiceSetFilter": {
       "anyText": "Cualquiera"
