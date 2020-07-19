@@ -351,6 +351,9 @@
       "waitlisted": "Waitlisted"
     }
   },
+  "spoiler": {
+    "hoverText": "Click to reveal"
+  },
   "tables": {
     "choiceSetFilter": {
       "anyText": "Any"
