@@ -12668,10 +12668,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollbar-sourcemap-webpack-plugin@^2.11.2:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/rollbar-sourcemap-webpack-plugin/-/rollbar-sourcemap-webpack-plugin-2.11.2.tgz#e6681477082723f47612d5c812ad721300aa8059"
-  integrity sha512-A14w28Fb8Q3aFqCIipP/Ya03+MjHt3XhOs5B7FGPBRiIVYh8RB6lIg0+pilc3k/QzhSugN90b595UgIuxA6ymg==
+rollbar-sourcemap-webpack-plugin@^2.11.3:
+  version "2.11.3"
+  resolved "https://registry.yarnpkg.com/rollbar-sourcemap-webpack-plugin/-/rollbar-sourcemap-webpack-plugin-2.11.3.tgz#10125459dae4a101ddce0873edf1c1ae939779c0"
+  integrity sha512-ZYcMkq/oeHN3RY3qwxkLKSM+nNkgx/Pa8fgGGeTqHhGHDQSiiJVXonD9I+w19hm+3Nn2EcfGGqAWTn+j/cwnTg==
   dependencies:
     async "^3.1.1"
     lodash.find "^4.3.0"
