@@ -245,7 +245,7 @@ GEM
       multi_json (>= 1.9.2)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (1.8.3)
+    i18n (1.8.4)
       concurrent-ruby (~> 1.0)
     icalendar (2.6.1)
       ice_cube (~> 0.16)
@@ -439,10 +439,10 @@ GEM
       parser (>= 2.7.0.1)
     rubocop-performance (1.7.1)
       rubocop (>= 0.82.0)
-    rubocop-rails (2.6.0)
+    rubocop-rails (2.7.0)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
-      rubocop (>= 0.82.0)
+      rubocop (>= 0.87.0)
     ruby-debug-ide (0.7.2)
       rake (>= 0.8.1)
     ruby-progressbar (1.10.1)
@@ -527,7 +527,7 @@ GEM
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
     yard (0.9.25)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   java
