@@ -1,10 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+export type GravatarProps = {
+  url?: string,
+  enabled?: boolean,
+  pixelSize: number,
+  imgClassName?: string,
+};
 
 function Gravatar({
   url, enabled, pixelSize, imgClassName,
 }) {
-  if (!url || !enabled) {
+  if (!url || !(enabled ?? true)) {
     return (
       <span className="d-inline-block" style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}>
         <i className="fa fa-user-circle" style={{ fontSize: `${pixelSize}px` }} />
@@ -25,18 +31,5 @@ function Gravatar({
     />
   );
 }
-
-Gravatar.propTypes = {
-  url: PropTypes.string,
-  enabled: PropTypes.bool,
-  pixelSize: PropTypes.number.isRequired,
-  imgClassName: PropTypes.string,
-};
-
-Gravatar.defaultProps = {
-  url: null,
-  enabled: true,
-  imgClassName: null,
-};
 
 export default Gravatar;
