@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
-function PageLoadingIndicator({ visible }) {
+export type PageLoadingIndicatorProps = {
+  visible: boolean,
+};
+
+function PageLoadingIndicator({ visible }: PageLoadingIndicatorProps) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
   useEffect(
@@ -28,9 +31,5 @@ function PageLoadingIndicator({ visible }) {
     </div>
   );
 }
-
-PageLoadingIndicator.propTypes = {
-  visible: PropTypes.bool.isRequired,
-};
 
 export default PageLoadingIndicator;

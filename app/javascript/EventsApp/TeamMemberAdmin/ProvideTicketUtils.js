@@ -1,19 +1,3 @@
-import { humanize } from 'inflected';
-
-import pluralizeWithCount from '../../pluralizeWithCount';
-
-export const describeTicketType = (ticketType, ticketName) => (
-  `${humanize(ticketType.name).toLowerCase()} ${ticketName}`
-);
-
-export const describeTicketTypeProvidability = (ticketType, alreadyProvidedCount, ticketName) => {
-  const remaining = (
-    ticketType.maximum_event_provided_tickets - alreadyProvidedCount
-  );
-
-  return pluralizeWithCount(describeTicketType(ticketType, ticketName), remaining);
-};
-
 export function getProvidableTicketTypes(convention) {
   return convention.ticket_types.filter((
     (ticketType) => ticketType.maximum_event_provided_tickets > 0
@@ -30,5 +14,21 @@ export function getProvidedTicketCountByType(convention, event) {
         )).length,
       })
     )),
+  );
+}
+
+export function getRemainingTicketCountByType(convention, event) {
+  const providableTicketTypes = getProvidableTicketTypes(convention);
+  const providedTicketCountsByType = getProvidedTicketCountByType(convention, event);
+
+  return Object.assign(
+    {},
+    ...Object.entries(providedTicketCountsByType).map(([ticketTypeId, providedCount]) => {
+      const ticketType = providableTicketTypes
+        .find((ticketType) => ticketType.id.toString() === ticketTypeId);
+      return ({
+        [ticketTypeId]: ticketType.maximum_event_provided_tickets - providedCount,
+      });
+    }),
   );
 }

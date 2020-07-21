@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import EventCapacityDisplay from './EventCapacityDisplay';
@@ -14,6 +15,7 @@ import { formResponseValueIsComplete } from '../../Models/FormItem';
 import LoadingIndicator from '../../LoadingIndicator';
 
 function ShortFormEventDetails({ eventId }) {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
 
   const { shortFormItems, formResponse } = useSectionizedFormItems(
@@ -104,7 +106,7 @@ function ShortFormEventDetails({ eventId }) {
         acceptsSignups
           ? (
             <>
-              <dt className="col-md-3">Capacity</dt>
+              <dt className="col-md-3">{t('events.runCapacity.label', 'Capacity')}</dt>
               <dd className="col-md-9 mb-0"><EventCapacityDisplay event={event} /></dd>
             </>
           )

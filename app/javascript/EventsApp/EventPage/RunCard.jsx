@@ -2,6 +2,7 @@ import React, { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useHistory, useLocation } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import RunCapacityGraph from './RunCapacityGraph';
@@ -14,10 +15,27 @@ import WithdrawSignupButton from './WithdrawSignupButton';
 import LoadingIndicator from '../../LoadingIndicator';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
 
+function describeSignupState(mySignup, t) {
+  if (mySignup.state === 'confirmed') {
+    return t('signups.runCardText.confirmed', 'You are signed up.');
+  }
+
+  if (mySignup.waitlist_position) {
+    return t(
+      'signups.runCardText.waitlisted',
+      'You are #{{ waitlistNumber }} on the waitlist.',
+      { waitlistPosition: mySignup.waitlist_position },
+    );
+  }
+
+  return t('signups.runCardText.waitlistedUnknownPosition', 'You are on the waitlist.');
+}
+
 function RunCard({
   run, event, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
   showViewSignups, createSignup, withdrawSignup, withdrawPendingSignupRequest,
 }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
   const { siteMode, timezoneName } = useContext(AppRootContext);
@@ -28,7 +46,9 @@ function RunCard({
     }
   }, [history.location.hash, run.id]);
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup);
-  const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
+  const {
+    setAfterSignInPath, open: openAuthenticationModal,
+  } = useContext(AuthenticationModalContext);
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
@@ -42,11 +62,13 @@ function RunCard({
           className="btn btn-outline-primary"
           style={{ whiteSpace: 'normal' }}
         >
-          <strong>Log in</strong>
-          {' '}
-          to sign up for
-          <br />
-          <em>{event.title}</em>
+          <Trans i18nKey="signups.signedOutSignupButton">
+            <strong>Log in</strong>
+            {' '}
+            to sign up for
+            <br />
+            <em>{{ eventTitle: event.title }}</em>
+          </Trans>
         </button>
       );
     }
@@ -55,11 +77,7 @@ function RunCard({
       return (
         <>
           <em>
-            {
-              mySignup.state === 'confirmed'
-                ? 'You are signed up.'
-                : `You are ${mySignup.waitlist_position ? `#${mySignup.waitlist_position}` : ''} on the waitlist.`
-            }
+            {describeSignupState(mySignup, t)}
           </em>
           <p className="mb-0">
             <WithdrawSignupButton run={run} event={event} withdrawSignup={withdrawSignup} />
@@ -71,14 +89,16 @@ function RunCard({
     if (myPendingSignupRequest) {
       return (
         <>
-          <em>You have requested to sign up for this event.</em>
+          <em>
+            {t('signups.runCardText.requestPending', 'You have requested to sign up for this event.')}
+          </em>
           <p className="mb-0">
             <button
               className="btn btn-outline-danger"
               type="button"
               onClick={withdrawPendingSignupRequest}
             >
-              Withdraw signup request
+              {t('signups.withdrawSignupRequestButton', 'Withdraw signup request')}
             </button>
           </p>
         </>
@@ -157,7 +177,7 @@ function RunCard({
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
               {runTimespan.start.format('ddd h:mma')}
-              {'-'}
+              -
               {runTimespan.finish.format('h:mma')}
             </div>
 
@@ -189,7 +209,7 @@ function RunCard({
           )
           : (
             <div className="card-body">
-              <small>This event does not take signups.</small>
+              <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
             </div>
           )
       }

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize } from 'inflected';
+import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from './InPlaceEditor';
@@ -24,6 +25,7 @@ const NULL_TICKET_TYPE = {
 function MaximumEventProvidedTicketsOverrideEditor({
   eventId, ticketName, overrides, ticketTypes, createOverride, updateOverride, deleteOverride,
 }) {
+  const { t } = useTranslation();
   const [createOverrideAsync, createError, , clearCreateError] = useAsyncFunction(createOverride);
   const [updateOverrideAsync, updateError, , clearUpdateError] = useAsyncFunction(updateOverride);
   const [deleteOverrideAsync, deleteError, , clearDeleteError] = useAsyncFunction(deleteOverride);
@@ -126,14 +128,21 @@ function MaximumEventProvidedTicketsOverrideEditor({
           type="button"
           onClick={() => confirm({
             action: () => deleteOverrideConfirmed(override),
-            prompt: `Are you sure you want to remove the override for "${override.ticket_type.description}" tickets?`,
+            prompt: t(
+              'events.ticketQuotaOverrides.deletePrompt',
+              'Are you sure you want to remove the override for "{{ ticketType }}" tickets?',
+              { ticketType: override.ticket_type.description },
+            ),
             renderError: (err) => <ErrorDisplay graphQLError={err} />,
           })}
         >
           <i className="fa fa-trash-o" />
           <span className="sr-only">
-            Delete override for
-            {override.ticket_type.description}
+            {t(
+              'events.ticketQuotaOverrides.deleteButton',
+              'Delete override for {{ ticketType }}',
+              { ticketType: override.ticket_type.description },
+            )}
           </span>
         </button>
       </td>
@@ -149,23 +158,25 @@ function MaximumEventProvidedTicketsOverrideEditor({
   return (
     <div className="card bg-light">
       <div className="card-header">
-        Override event-provided
-        {' '}
-        {ticketName}
-        {' '}
-        quotas
+        {t(
+          'events.ticketQuotaOverrides.header',
+          'Override event-provided {{ ticketName }} quotas',
+          { ticketName },
+        )}
       </div>
       <div className="card-body">
         <table className="table table-striped">
           <thead>
             <tr>
               <th>
-                {capitalize(ticketName)}
-                {' '}
-                type
+                {t(
+                  'events.ticketQuotaOverrides.ticketTypeHeader',
+                  '{{ ticketName }} type',
+                  { ticketName: capitalize(ticketName) },
+                )}
               </th>
-              <th>Default quota</th>
-              <th>Overridden quota</th>
+              <th>{t('events.ticketQuotaOverrides.defaultQuotaHeader', 'Default quota')}</th>
+              <th>{t('events.ticketQuotaOverrides.overridenQuotaHeader', 'Overridden quota')}</th>
               <th />
             </tr>
           </thead>
@@ -180,7 +191,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   value={addingOverride.ticket_type.id}
                   onChange={addingTicketTypeIdDidChange}
                 >
-                  <option aria-label="Blank placeholder option" />
+                  <option aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')} />
                   {ticketTypeOptions}
                 </select>
               </td>
@@ -194,7 +205,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                     addingOverride.override_value == null ? '' : addingOverride.override_value
                   }
                   onChange={addingOverrideValueDidChange}
-                  aria-label="Overridden quota"
+                  aria-label={t('events.ticketQuotaOverrides.overridenQuotaHeader', 'Overridden quota')}
                 />
               </td>
               <td>
@@ -204,7 +215,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   disabled={!addingOverrideDataComplete}
                   onClick={addOverride}
                 >
-                  Add
+                  {t('buttons.add', 'Add')}
                 </button>
               </td>
             </tr>

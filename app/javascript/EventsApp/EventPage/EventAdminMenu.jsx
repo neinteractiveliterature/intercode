@@ -4,12 +4,14 @@ import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
+import { useTranslation } from 'react-i18next';
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
 import { EventPageQuery } from './queries.gql';
 import LoadingIndicator from '../../LoadingIndicator';
 
 function EventAdminMenu({ eventId }) {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
 
   if (loading) {
@@ -30,22 +32,24 @@ function EventAdminMenu({ eventId }) {
   return (
     <div className="card mb-4">
       <div className="card-header">
-        Event Admin
+        {t('events.adminMenu.header', 'Event Admin')}
       </div>
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
-          <Link to={`${eventPath}/edit`}>Edit event</Link>
+          <Link to={`${eventPath}/edit`}>{t('events.adminMenu.editLink', 'Edit event')}</Link>
         </li>
         <li className="list-group-item">
           <Link to={`${eventPath}/team_members`}>
-            Edit
-            {' '}
-            {pluralize(event.event_category.team_member_name)}
+            {t(
+              'events.adminMenu.editTeamMembersLink',
+              'Edit {{ teamMemberNamePlural }}',
+              { teamMemberNamePlural: pluralize(event.event_category.team_member_name) },
+            )}
           </Link>
         </li>
         <li className="list-group-item">
           <Link to={`${eventPath}/history`}>
-            View edit history
+            {t('events.adminMenu.historyLink', 'Vew edit history')}
           </Link>
         </li>
       </ul>

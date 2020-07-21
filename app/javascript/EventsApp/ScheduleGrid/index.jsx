@@ -81,7 +81,7 @@ function ScheduleGridApp({ configKey }) {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item active" aria-current="page">
-            {config.title}
+            {t(config.titlei18nKey, config.title)}
           </li>
         </ol>
       </nav>

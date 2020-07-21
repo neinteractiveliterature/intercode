@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import sortBuckets from './sortBuckets';
 
-function describeBucketCapacity(bucket) {
+function describeBucketCapacity(bucket, t) {
   if (!bucket.slots_limited) {
-    return 'unlimited';
+    return t('events.runCapacity.unlimitedSimple', 'unlimited');
   }
 
   if (bucket.minimum_slots === bucket.total_slots) {
@@ -16,6 +17,7 @@ function describeBucketCapacity(bucket) {
 }
 
 function EventCapacityDisplay({ event }) {
+  const { t } = useTranslation();
   return (
     <ul className="list-inline mb-0">
       {sortBuckets(event.registration_policy.buckets).map((bucket) => (
@@ -25,7 +27,7 @@ function EventCapacityDisplay({ event }) {
             :
           </strong>
           {' '}
-          {describeBucketCapacity(bucket)}
+          {describeBucketCapacity(bucket, t)}
         </li>
       ))}
     </ul>

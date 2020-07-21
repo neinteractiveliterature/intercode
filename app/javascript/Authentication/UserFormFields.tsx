@@ -4,7 +4,19 @@ import { useTranslation } from 'react-i18next';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useStatePropertyUpdater from '../useStatePropertyUpdater';
 
-function UserFormFields({ formState, setFormState, showNameWarning }) {
+export type UserFormState = {
+  first_name?: string,
+  last_name?: string,
+  email?: string,
+};
+
+export type UserFormFieldsProps = {
+  formState: UserFormState,
+  setFormState: React.Dispatch<React.SetStateAction<UserFormState>>,
+  showNameWarning?: boolean,
+};
+
+function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFieldsProps) {
   const { t } = useTranslation();
   const setFormField = useStatePropertyUpdater(setFormState);
 

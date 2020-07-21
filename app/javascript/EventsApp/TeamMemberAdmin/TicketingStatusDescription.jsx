@@ -1,45 +1,60 @@
 import React from 'react';
 
-import { describeTicketType } from './ProvideTicketUtils';
+import { Trans, useTranslation } from 'react-i18next';
+import { humanize } from 'inflected';
 
 function TicketingStatusDescription({ userConProfile, convention }) {
-  const statusDescription = [];
-  statusDescription.push(userConProfile.name_without_nickname);
+  const { t } = useTranslation();
   const { ticket_name: ticketName } = convention;
 
   if (userConProfile.ticket) {
-    statusDescription.push((
-      ` has a ${describeTicketType(userConProfile.ticket.ticket_type, ticketName)}`
-    ));
     if (userConProfile.ticket.provided_by_event) {
-      statusDescription.push(` provided by ${userConProfile.ticket.provided_by_event.title}`);
+      return t(
+        'events.teamMemberAdmin.eventProvidedTicketDescription',
+        '{{ name }} has a {{ ticketType }} {{ ticketName }} provided by {{ eventTitle }}.',
+        {
+          name: userConProfile.name_without_nickname,
+          ticketType: humanize(userConProfile.ticket.ticket_type.name).toLowerCase(),
+          ticketName,
+          eventTitle: userConProfile.ticket.provided_by_event.title,
+        },
+      );
     }
-  } else {
-    statusDescription.push((
-      <span key="unticketed-warning">
+
+    return t(
+      'events.teamMemberAdmin.nonEventProvidedTicketDescription',
+      '{{ name }} has a {{ ticketType }} {{ ticketName }}.',
+      {
+        name: userConProfile.name_without_nickname,
+        ticketType: humanize(userConProfile.ticket.ticket_type.name).toLowerCase(),
+        ticketName,
+      },
+    );
+  }
+
+  return (
+    <span key="unticketed-warning">
+      <Trans i18nKey="events.teamMemberAdmin.unticketedWarning">
+        {{ name: userConProfile.name_without_nickname }}
         <span className="text-danger">
           {' '}
           has no
           {' '}
-          {ticketName}
+          {{ ticketName }}
           {' '}
           for
           {' '}
-          {convention.name}
+          {{ conventionName: convention.name }}
           .
         </span>
         {' '}
         Without a
         {' '}
-        {ticketName}
-        , users cannot sign up for events at the convention
-      </span>
-    ));
-  }
-
-  statusDescription.push('.');
-
-  return statusDescription;
+        {{ ticketName }}
+        , users cannot sign up for events at the convention.
+      </Trans>
+    </span>
+  );
 }
 
 export default TicketingStatusDescription;
