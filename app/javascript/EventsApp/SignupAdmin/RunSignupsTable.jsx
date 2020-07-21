@@ -5,6 +5,7 @@ import ReactTable from 'react-table';
 import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 
+import { useTranslation } from 'react-i18next';
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailCell from '../../Tables/EmailCell';
@@ -37,20 +38,21 @@ function decodeFilterValue(field, value) {
   return value;
 }
 
-const STATE_OPTIONS = [
-  { value: 'confirmed', label: 'Confirmed' },
-  { value: 'waitlisted', label: 'Waitlisted' },
-  { value: 'withdrawn', label: 'Withdrawn' },
-];
-
-const SignupStateFilter = ({ filter, onChange }) => (
-  <ChoiceSetFilter
-    name="state"
-    choices={STATE_OPTIONS}
-    onChange={onChange}
-    filter={filter}
-  />
-);
+const SignupStateFilter = ({ filter, onChange }) => {
+  const { t } = useTranslation();
+  return (
+    <ChoiceSetFilter
+      name="state"
+      choices={[
+        { value: 'confirmed', label: t('signups.states.confirmed', 'Confirmed') },
+        { value: 'waitlisted', label: t('signups.states.waitlisted', 'Waitlisted') },
+        { value: 'withdrawn', label: t('signups.states.withdrawn', 'Withdrawn') },
+      ]}
+      onChange={onChange}
+      filter={filter}
+    />
+  );
+};
 
 SignupStateFilter.propTypes = {
   filter: PropTypes.shape({
@@ -64,16 +66,21 @@ SignupStateFilter.defaultProps = {
 };
 
 const AgeRestrictionsCheckCell = ({ value }) => {
+  const { t } = useTranslation();
   let badgeClass = 'badge-danger';
+  let text = value;
   if (value === 'OK') {
     badgeClass = 'badge-success';
+    text = t('tables.ageRestrictionsCheck.ok', 'OK');
   } else if (value === 'Unknown age') {
     badgeClass = 'badge-warning';
+    text = t('tables.ageRestrictionsCheck.unknown', 'Unknown age');
   } else if (value === 'N/A') {
     badgeClass = 'badge-light';
+    text = t('tables.ageRestrictionsCheck.notApplicable', 'N/A');
   }
 
-  return <span className={`badge ${badgeClass}`}>{value}</span>;
+  return <span className={`badge ${badgeClass}`}>{text}</span>;
 };
 
 AgeRestrictionsCheckCell.propTypes = {
@@ -81,8 +88,9 @@ AgeRestrictionsCheckCell.propTypes = {
 };
 
 const BucketCell = ({ original }) => {
+  const { t } = useTranslation();
   const data = useContext(QueryDataContext);
-  return formatBucket(original, data.event);
+  return formatBucket(original, data.event, t);
 };
 
 BucketCell.propTypes = {
@@ -122,16 +130,16 @@ BucketFilter.defaultProps = {
   filter: null,
 };
 
-const getPossibleColumns = () => [
+const getPossibleColumns = (t) => [
   {
-    Header: 'Seq',
+    Header: t('events.signupAdmin.sequenceHeader', 'Seq'),
     id: 'id',
     accessor: 'id',
     filterable: false,
     width: 65,
   },
   {
-    Header: 'State',
+    Header: t('events.signupAdmin.stateHeader', 'State'),
     id: 'state',
     accessor: 'state',
     width: 130,
@@ -139,21 +147,21 @@ const getPossibleColumns = () => [
     Cell: SignupStateCell,
   },
   {
-    Header: 'Name',
+    Header: t('events.signupAdmin.nameHeader', 'Name'),
     id: 'name',
     accessor: (signup) => signup.user_con_profile,
     Filter: FreeTextFilter,
     Cell: UserConProfileWithGravatarCell,
   },
   {
-    Header: 'Bucket',
+    Header: t('events.signupAdmin.bucketHeader', 'Bucket'),
     id: 'bucket',
     accessor: (signup) => signup.bucket_key,
     Cell: (props) => <BucketCell {...props} />,
     Filter: BucketFilter,
   },
   {
-    Header: 'Age check',
+    Header: t('events.signupAdmin.ageCheckHeader', 'Age check'),
     id: 'age_restrictions_check',
     accessor: 'age_restrictions_check',
     width: 100,
@@ -161,7 +169,7 @@ const getPossibleColumns = () => [
     Cell: AgeRestrictionsCheckCell,
   },
   {
-    Header: 'Age',
+    Header: t('events.signupAdmin.ageHeader', 'Age'),
     id: 'age',
     width: 40,
     accessor: (signup) => ageAsOf(
@@ -171,7 +179,7 @@ const getPossibleColumns = () => [
     filterable: false,
   },
   {
-    Header: 'Email',
+    Header: t('events.signupAdmin.emailHeader', 'Email'),
     id: 'email',
     accessor: (signup) => signup.user_con_profile.email,
     Cell: EmailCell,
@@ -182,8 +190,13 @@ const getPossibleColumns = () => [
 function RunSignupsTable({
   defaultVisibleColumns, eventId, runId, runPath,
 }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
+  const getPossibleColumnsFunc = useMemo(
+    () => () => getPossibleColumns(t),
+    [t],
+  );
 
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
@@ -191,13 +204,19 @@ function RunSignupsTable({
     encodeFilterValue,
     getData: ({ data: tableData }) => tableData.event.run.signups_paginated.entries,
     getPages: ({ data: tableData }) => tableData.event.run.signups_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: getPossibleColumnsFunc,
     query: RunSignupsTableSignupsQuery,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId, runId },
   });
 
-  usePageTitle(useValueUnless(() => `Signups - ${data.event.title}`, error || loading));
+  usePageTitle(useValueUnless(
+    () => t(
+      'events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}',
+      { eventTitle: data.event.title },
+    ),
+    error || loading,
+  ));
 
   if (loading) {
     return <PageLoadingIndicator visible />;

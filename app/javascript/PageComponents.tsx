@@ -5,12 +5,12 @@ import ClickwrapAgreement from './ClickwrapAgreement';
 import CmsPage from './CmsPage';
 import { lazyWithBundleHashCheck } from './checkBundleHash';
 
-function getDisplayName(WrappedComponent) {
+function getDisplayName(WrappedComponent: React.ComponentType) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
-function NonCMSPageWrapper(WrappedComponent) {
-  const wrapper = (props) => (
+function NonCMSPageWrapper(WrappedComponent: React.ComponentType): React.FunctionComponent {
+  const wrapper = (props: any) => (
     <div className="non-cms-page">
       <WrappedComponent {...props} />
     </div>

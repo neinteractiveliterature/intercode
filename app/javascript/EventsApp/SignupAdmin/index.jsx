@@ -6,6 +6,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EditSignup from './EditSignup';
@@ -15,6 +16,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function SignupAdmin({ runId, eventId, eventPath }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
   const runPath = `${eventPath}/runs/${runId}`;
@@ -38,10 +40,12 @@ function SignupAdmin({ runId, eventId, eventPath }) {
             active={!location.pathname.endsWith('edit')}
             to={`${runPath}/admin_signups?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
           >
-            Signups
+            {t('events.signupAdmin.title', 'Signups')}
           </BreadcrumbItem>
           <Route path={`${runPath}/admin_signups/:id/edit`}>
-            <BreadcrumbItem active>Edit signup</BreadcrumbItem>
+            <BreadcrumbItem active>
+              {t('events.signupAdmin.editTitle', 'Edit signup')}
+            </BreadcrumbItem>
           </Route>
         </ol>
       </nav>

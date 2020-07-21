@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { EventHistoryQuery } from './queries.gql';
 import Form from '../../Models/Form';
@@ -16,6 +17,7 @@ const EXCLUDE_FIELDS = new Set([
 ]);
 
 function EventHistory({ eventId, eventPath }) {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(EventHistoryQuery, {
     variables: { id: eventId },
   });
@@ -58,7 +60,7 @@ function EventHistory({ eventId, eventPath }) {
             matchProps={{ path: `${eventPath}/history`, exact: true }}
             to={`${eventPath}/history`}
           >
-            History
+            {t('events.history.title', 'History')}
           </RouteActivatedBreadcrumbItem>
         </ol>
       </nav>

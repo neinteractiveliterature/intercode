@@ -70,7 +70,7 @@ function UserConProfileSignupsCard({ userConProfileId }) {
     <li className="list-group-item" key={signup.id}>
       <ul className="list-unstyled">
         <li><strong>{renderEventLink(signup.run.event)}</strong></li>
-        <li>{formatSignupStatus(signup, signup.run.event)}</li>
+        <li>{formatSignupStatus(signup, signup.run.event, t)}</li>
         <li>
           <small>
             {timespanFromRun(convention, signup.run.event, signup.run)

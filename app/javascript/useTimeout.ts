@@ -1,8 +1,8 @@
 // adapted from https://github.com/siddharthkp/use-timeout/blob/master/index.js
 import { useEffect, useRef } from 'react';
 
-function useTimeout(callback, delay) {
-  const savedCallback = useRef();
+function useTimeout(callback: (...args: any[]) => void, delay: number) {
+  const savedCallback = useRef<(...args: any[]) => void>();
 
   // Remember the latest callback.
   useEffect(
@@ -16,13 +16,15 @@ function useTimeout(callback, delay) {
   useEffect(
     () => {
       function tick() {
-        savedCallback.current();
+        if (savedCallback.current) {
+          savedCallback.current();
+        }
       }
       if (delay !== null) {
         const id = setTimeout(tick, delay);
         return () => clearTimeout(id);
       }
-      return null;
+      return undefined;
     },
     [delay],
   );

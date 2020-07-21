@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { WithdrawMySignup } from './mutations.gql';
 import WithdrawSignupButton from './WithdrawSignupButton';
@@ -10,10 +11,15 @@ import ErrorDisplay from '../../ErrorDisplay';
 function WithdrawMySignupButton({
   run, event, reloadOnSuccess, ...otherProps
 }) {
+  const { t } = useTranslation();
   const [withdrawMutate] = useMutation(WithdrawMySignup);
   const confirm = useConfirm();
   const withdrawSignup = () => confirm({
-    prompt: `Are you sure you want to withdraw from ${event.title}?`,
+    prompt: t(
+      'events.withdrawPrompt.selfServiceSignup',
+      'Are you sure you want to withdraw from {{ eventTitle }}?',
+      { eventTitle: event.title },
+    ),
     action: async () => {
       await withdrawMutate({ variables: { runId: run.id } });
       if (reloadOnSuccess) {

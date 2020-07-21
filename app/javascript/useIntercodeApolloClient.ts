@@ -1,6 +1,8 @@
-import { useRef, useMemo, useEffect } from 'react';
+import {
+  useRef, useMemo, useEffect, RefObject,
+} from 'react';
 import { ApolloClient } from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, Operation, NextLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
@@ -11,7 +13,9 @@ import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
-export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) {
+export function useIntercodeApolloLink(
+  authenticityToken: string, onUnauthenticatedRef: RefObject<() => void>,
+) {
   const authenticityTokenRef = useRef(authenticityToken);
   useEffect(
     () => { authenticityTokenRef.current = authenticityToken; },
@@ -19,8 +23,8 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
   );
 
   const AuthLink = useMemo(
-    () => (operation, next) => {
-      operation.setContext((context) => ({
+    () => new ApolloLink((operation: Operation, next: NextLink) => {
+      operation.setContext((context: Record<string, any>) => ({
         ...context,
         credentials: 'same-origin',
         headers: {
@@ -30,14 +34,14 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
       }));
 
       return next(operation);
-    },
+    }),
     [],
   );
 
   const AddTimezoneLink = useMemo(
-    () => (operation, next) => {
+    () => new ApolloLink((operation: Operation, next: NextLink) => {
       const localTime = DateTime.local();
-      operation.setContext((context) => ({
+      operation.setContext((context: Record<string, any>) => ({
         ...context,
         headers: {
           ...context.headers,
@@ -46,7 +50,7 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
       }));
 
       return next(operation);
-    },
+    }),
     [],
   );
 
@@ -76,7 +80,9 @@ export function useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef) 
   return link;
 }
 
-function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
+function useIntercodeApolloClient(
+  authenticityToken: string, onUnauthenticatedRef: RefObject<() => void>,
+) {
   const link = useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef);
 
   const client = useMemo(

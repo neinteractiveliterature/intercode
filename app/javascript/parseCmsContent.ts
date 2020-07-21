@@ -1,5 +1,5 @@
 import { lazyWithBundleHashCheck } from './checkBundleHash';
-import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
+import parsePageContent, { DEFAULT_COMPONENT_MAP, ComponentMap } from './parsePageContent';
 import CookieConsent from './UIComponents/CookieConsent';
 
 const AddToCalendarDropdown = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "my-profile" */ './EventsApp/SignupAdmin/AddToCalendarDropdown'));
@@ -10,7 +10,7 @@ const RunsSection = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "e
 const ShortFormEventDetails = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/ShortFormEventDetails'));
 const WithdrawMySignupButton = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'));
 
-export const CMS_COMPONENT_MAP = {
+export const CMS_COMPONENT_MAP: ComponentMap = {
   ...DEFAULT_COMPONENT_MAP,
   AddToCalendarDropdown,
   CookieConsent,
@@ -22,6 +22,6 @@ export const CMS_COMPONENT_MAP = {
   WithdrawMySignupButton,
 };
 
-export default function parseCmsContent(content, componentMap = CMS_COMPONENT_MAP) {
+export default function parseCmsContent(content: string, componentMap = CMS_COMPONENT_MAP) {
   return parsePageContent(content, componentMap);
 }

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import ButtonWithTooltip from '../../UIComponents/ButtonWithTooltip';
 
 function SignupButtonDisplay({ signupOption, onClick, disabled }) {
+  const { t } = useTranslation();
   return (
     <ButtonWithTooltip
       buttonProps={{
@@ -18,7 +20,7 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }) {
       }}
       tooltipContent={signupOption.helpText}
     >
-      <strong>Sign up</strong>
+      <strong>{t('signups.signupButton', 'Sign up')}</strong>
       {
         signupOption.label
           ? (

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link, useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { getConventionDayTimespans, timespanFromConvention } from '../../TimespanUtils';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
@@ -33,6 +34,7 @@ function getConventionDayStart(event, run, convention, timezoneName) {
 function EventBreadcrumbItems({
   event, convention, currentAbility, eventPath,
 }) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const history = useHistory();
   const runToLink = findRunFromHash(event.runs, history.location.hash) || event.runs[0];
@@ -49,12 +51,12 @@ function EventBreadcrumbItems({
                   `/events/schedule/${conventionDayStart.format('dddd').toLowerCase()}`
                 }
               >
-                Con schedule
+                {t('navigation.events.schedule', 'Con schedule')}
               </Link>
             )
             : (
               <Link to="/events">
-                List of events
+                {t('navigation.events.eventsList', 'List of events')}
               </Link>
             )
         }
