@@ -2,6 +2,11 @@
 <title>
   <%= page_title %>
 </title>
+<% if ENV['ASSETS_HOST'].present? -%>
+  <script type="application/javascript">
+    window.intercodeAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
+  </script>
+<% end -%>
 <%= stylesheet_bundle_tag 'application', media: 'all' %>
 <%= javascript_bundle_tag 'browser-warning', defer: true %>
 <%= javascript_bundle_tag 'application', defer: true, type: 'module' %>
