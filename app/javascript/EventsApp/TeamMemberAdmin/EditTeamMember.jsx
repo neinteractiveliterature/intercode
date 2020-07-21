@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { titleize, underscore } from 'inflected';
 import { useMutation } from '@apollo/react-hooks';
 import { useHistory, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -12,6 +13,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 
 function EditTeamMember({ event, eventPath }) {
+  const { t } = useTranslation();
   const teamMemberId = Number.parseInt(useParams().teamMemberId, 10);
   const history = useHistory();
   const [teamMember, setTeamMember] = useState(
@@ -21,7 +23,15 @@ function EditTeamMember({ event, eventPath }) {
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(
-    `Editing ${event.event_category.team_member_name} “${teamMember.user_con_profile.name_without_nickname}” - ${event.title}`,
+    t(
+      'events.teamMemberAdmin.editPageTitle',
+      'Editing {{ teamMemberName }} “{{ name }}” - {{ eventTitle }}',
+      {
+        teamMemberName: event.event_category.team_member_name,
+        name: teamMember.user_con_profile.name_without_nickname,
+        eventTitle: event.title,
+      },
+    ),
   );
 
   const updateClicked = async () => {
@@ -40,20 +50,25 @@ function EditTeamMember({ event, eventPath }) {
   return (
     <>
       <h1 className="mb-4">
-        {titleize(underscore(event.event_category.team_member_name))}
-        {' Settings for '}
-        {teamMember.user_con_profile.name_without_nickname}
+        {t(
+          'events.teamMemberAdmin.editHeader',
+          '{{ teamMemberName }} Settings for {{ name }}',
+          {
+            teamMemberName: titleize(underscore(event.event_category.team_member_name)),
+            name: teamMember.user_con_profile.name_without_nickname,
+          },
+        )}
       </h1>
 
       <dl className="row">
-        <dt className="col-md-3">Email</dt>
+        <dt className="col-md-3">{t('events.teamMemberAdmin.emailLabel', 'Email')}</dt>
         <dd className="col-md-9">
           <a href={`mailto:${teamMember.user_con_profile.email}`}>
             {teamMember.user_con_profile.email}
           </a>
         </dd>
 
-        <dt className="col-md-3">Mobile phone</dt>
+        <dt className="col-md-3">{t('events.teamMemberAdmin.mobilePhoneLabel', 'Mobile phone')}</dt>
         <dd className="col-md-9">
           <a href={`tel:${teamMember.user_con_profile.mobile_phone}`}>
             {teamMember.user_con_profile.mobile_phone}
@@ -78,8 +93,11 @@ function EditTeamMember({ event, eventPath }) {
             disabled={updateInProgress}
             onClick={updateClicked}
           >
-            {'Update '}
-            {event.event_category.team_member_name}
+            {t(
+              'events.teamMemberAdmin.updateButton',
+              'Update {{ teamMemberName }}',
+              { teamMemberName: event.event_category.team_member_name },
+            )}
           </button>
         </li>
       </ul>

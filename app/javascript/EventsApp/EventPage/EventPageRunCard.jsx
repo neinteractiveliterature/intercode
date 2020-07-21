@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useTranslation, Trans } from 'react-i18next';
 
 import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations.gql';
 import { EventPageQuery } from './queries.gql';
@@ -28,6 +29,7 @@ function updateCacheAfterSignup(cache, event, run, signup) {
 function EventPageRunCard({
   event, run, myProfile, ...otherProps
 }) {
+  const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
   const signupOptions = useMemo(
     () => buildSignupOptions(event, myProfile),
@@ -63,20 +65,24 @@ function EventPageRunCard({
 
   const selfServiceWithdraw = useCallback(
     () => confirm({
-      prompt: `Are you sure you want to withdraw from ${event.title}?`,
+      prompt: t(
+        'events.withdrawPrompt.selfServiceSignup',
+        'Are you sure you want to withdraw from {{ eventTitle }}?',
+        { eventTitle: event.title },
+      ),
       action: async () => {
         await withdrawMySignupMutate({ variables: { runId: run.id } });
         await apolloClient.resetStore();
       },
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     }),
-    [apolloClient, confirm, event.title, run.id, withdrawMySignupMutate],
+    [apolloClient, confirm, event.title, run.id, withdrawMySignupMutate, t],
   );
 
   const moderatedWithdraw = useCallback(
     () => confirm({
       prompt: (
-        <>
+        <Trans i18nKey="events.withdrawPrompt.moderatedSignup">
           <p>
             <strong>
               If you’re thinking of signing up for a different event instead, please
@@ -89,10 +95,10 @@ function EventPageRunCard({
           <p className="mb-0">
             Are you sure you want to withdraw from
             {' '}
-            {event.title}
+            {{ eventTitle: event.title }}
             {'? '}
           </p>
-        </>
+        </Trans>
       ),
       action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
@@ -125,7 +131,11 @@ function EventPageRunCard({
   };
 
   const withdrawPendingSignupRequest = () => confirm({
-    prompt: `Are you sure you want to withdraw your request to sign up for ${event.title}?`,
+    prompt: t(
+      'events.withdrawPrompt.signupRequest',
+      'Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?',
+      { eventTitle: event.title },
+    ),
     action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
     renderError: (error) => <ErrorDisplay graphQLError={error} />,
   });

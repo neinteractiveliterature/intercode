@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {
   NavLink, Switch, Route, Redirect,
 } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeGroup from './FormItemChangeGroup';
 import { buildChangeGroups, getTimespanForChangeGroup } from './FormItemChangeUtils';
@@ -10,6 +12,7 @@ import { buildChangeGroups, getTimespanForChangeGroup } from './FormItemChangeUt
 function FormResponseChangeHistory({
   basePath, changes, convention, form,
 }) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const changeGroups = useMemo(
     () => buildChangeGroups(changes, form),
@@ -17,7 +20,7 @@ function FormResponseChangeHistory({
   );
 
   if (changeGroups.length === 0) {
-    return 'No changes.';
+    return t('forms.history.noChanges', 'No changes.');
   }
 
   return (

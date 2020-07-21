@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { capitalize, pluralize } from 'inflected';
 import Modal from 'react-bootstrap4-modal';
 import { useMutation } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
@@ -15,6 +16,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 function ProvideTicketModal({
   event, convention, onClose, teamMember, visible,
 }) {
+  const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState(null);
   const [provideTicketMutate] = useMutation(ProvideEventTicket);
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
@@ -106,7 +108,7 @@ function ProvideTicketModal({
                 className="btn btn-primary"
                 onClick={onClose}
               >
-                OK
+                {t('buttons.ok', 'OK')}
               </button>
             )
             : (
@@ -117,7 +119,7 @@ function ProvideTicketModal({
                   onClick={onClose}
                   disabled={mutationInProgress}
                 >
-                  Cancel
+                  {t('buttons.cancel', 'Cancel')}
                 </button>
                 <button
                   type="button"
@@ -125,8 +127,11 @@ function ProvideTicketModal({
                   disabled={ticketTypeId == null || mutationInProgress}
                   onClick={provideTicketClicked}
                 >
-                  {'Provide '}
-                  {convention.ticket_name}
+                  {t(
+                    'events.teamMemberAdmin.provideTicketButton',
+                    'Provide {{ ticketName }}',
+                    { ticketName: convention.ticket_name },
+                  )}
                 </button>
               </>
             )

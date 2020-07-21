@@ -5,6 +5,7 @@ import {
 } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Checkmark from './Checkmark';
 import { useConfirm } from '../../ModalDialogs/Confirm';
@@ -27,6 +28,7 @@ function sortTeamMembers(teamMembers) {
 function TeamMemberActionMenu({
   event, convention, teamMember, openProvideTicketModal, eventPath,
 }) {
+  const { t } = useTranslation();
   const confirm = useConfirm();
   const deleteTeamMember = useDeleteMutation(DeleteTeamMember, {
     query: TeamMembersQuery,
@@ -41,14 +43,16 @@ function TeamMemberActionMenu({
       renderReference={({ ref, toggle }) => (
         <button type="button" className="btn btn-sm btn-primary" ref={ref} onClick={toggle}>
           <i className="fa fa-ellipsis-h" />
-          <span className="sr-only">Options</span>
+          <span className="sr-only">{t('buttons.options', 'Options')}</span>
         </button>
       )}
     >
       <Link to={`${eventPath}/team_members/${teamMember.id}`} className="dropdown-item">
-        {'Edit '}
-        {event.event_category.team_member_name}
-        {' settings'}
+        {t(
+          'events.teamMemberAdmin.editSettingsLink',
+          'Edit {{ teamMemberName }} settings',
+          { teamMemberName: event.event_category.team_member_name },
+        )}
       </Link>
       {
         event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled'
@@ -58,8 +62,11 @@ function TeamMemberActionMenu({
               onClick={openProvideTicketModal}
               type="button"
             >
-              {'Provide '}
-              {convention.ticket_name}
+              {t(
+                'events.teamMemberAdmin.provideTicketLink',
+                'Provide {{ ticketName }}',
+                { ticketName: convention.ticket_name },
+              )}
             </button>
           )
           : null
@@ -68,13 +75,23 @@ function TeamMemberActionMenu({
         className="dropdown-item cursor-pointer text-danger"
         type="button"
         onClick={() => confirm({
-          prompt: `Are you sure you want to remove ${teamMember.user_con_profile.name_without_nickname} as a ${event.event_category.team_member_name}?`,
+          prompt: t(
+            'events.teamMemberAdmin.removeTeamMemberPrompt',
+            'Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?',
+            {
+              name: teamMember.user_con_profile.name_without_nickname,
+              teamMemberName: event.event_category.team_member_name,
+            },
+          ),
           action: deleteTeamMember,
           renderError: (error) => <ErrorDisplay graphQLError={error} />,
         })}
       >
-        {'Remove '}
-        {event.event_category.team_member_name}
+        {t(
+          'events.teamMemberAdmin.removeTeamMemberLink',
+          'Remove {{ teamMemberName }}',
+          { teamMemberName: event.event_category.team_member_name },
+        )}
       </button>
     </PopperDropdown>
   );
@@ -103,6 +120,7 @@ TeamMemberActionMenu.propTypes = {
 };
 
 function TeamMembersIndex({ eventId, eventPath }) {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
   const modal = useModal();
 
@@ -135,9 +153,11 @@ function TeamMembersIndex({ eventId, eventPath }) {
   return (
     <>
       <h1 className="mb-4">
-        {titleizedTeamMemberName}
-        {' for '}
-        {event.title}
+        {t(
+          'events.teamMemberAdmin.header',
+          '{{ teamMemberName }} for {{ eventTitle }}',
+          { teamMemberName: titleizedTeamMemberName, eventTitle: event.title },
+        )}
       </h1>
 
       {
@@ -147,19 +167,31 @@ function TeamMembersIndex({ eventId, eventPath }) {
               <table className="table table-striped">
                 <thead>
                   <tr>
-                    <th>Name</th>
+                    <th>{t('events.teamMemberAdmin.nameHeader', 'Name')}</th>
                     <th>
-                      {'Display as '}
-                      {event.event_category.team_member_name}
+                      {t(
+                        'events.teamMemberAdmin.displayHeader',
+                        'Display as {{ teamMemberName }}',
+                        { teamMemberName: event.event_category.team_member_name },
+                      )}
                     </th>
-                    <th>Display email address</th>
-                    <th>Receive email from con</th>
-                    <th>Receive email on signup or withdrawal</th>
+                    <th>
+                      {t('events.teamMemberAdmin.displayEmailHeader', 'Display email address')}
+                    </th>
+                    <th>
+                      {t('events.teamMemberAdmin.receiveConEmailHeader', 'Receive email from con')}
+                    </th>
+                    <th>
+                      {t('events.teamMemberAdmin.receiveSignupEmailHeader', 'Receive email on signup or withdrawal')}
+                    </th>
                     {
                       convention.ticket_mode !== 'disabled' && (
                         <th>
-                          {titleize(convention.ticket_name)}
-                          {' from this event'}
+                          {t(
+                            'events.teamMemberAdmin.hasEventTicketHeader',
+                            '{{ ticketName }} from this event',
+                            { ticketName: titleize(convention.ticket_name) },
+                          )}
                         </th>
                       )
                     }
@@ -209,8 +241,11 @@ function TeamMembersIndex({ eventId, eventPath }) {
       }
       <p>
         <Link to={`${eventPath}/team_members/new`} className="btn btn-primary">
-          {'Add '}
-          {event.event_category.team_member_name}
+          {t(
+            'events.teamMemberAdmin.addTeamMemberButton',
+            'Add {{ teamMemberName }}',
+            { teamMemberName: event.event_category.team_member_name },
+          )}
         </Link>
       </p>
 

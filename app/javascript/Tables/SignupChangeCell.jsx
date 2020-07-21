@@ -1,32 +1,73 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { humanize } from 'inflected';
+import { useTranslation } from 'react-i18next';
 
 import SignupStateCell from './SignupStateCell';
 
-const SignupChangeCell = ({ value }) => (
-  <>
-    {value.previous_signup_change
-      ? (
+export function describeAction(action, t) {
+  if (action === 'self_service_signup') {
+    return t('tables.signupChange.actions.selfServiceSignup', 'self-service signup');
+  }
+
+  if (action === 'admin_create_signup') {
+    return t('tables.signupChange.actions.adminCreateSignup', 'admin-created signup');
+  }
+
+  if (action === 'accept_signup_request') {
+    return t('tables.signupChange.actions.acceptSignupRequest', 'accepted signup request');
+  }
+
+  if (action === 'change_registration_policy') {
+    return t('tables.signupChange.actions.changeRegistrationPolicy', 'registration policy change');
+  }
+
+  if (action === 'vacancy_fill') {
+    return t('tables.signupChange.actions.vacancyFill', 'vacancy fill');
+  }
+
+  if (action === 'withdraw') {
+    return t('tables.signupChange.actions.withdraw', 'withdraw');
+  }
+
+  if (action === 'unknown') {
+    return t('tables.signupChange.actions.unknown', 'unknown action');
+  }
+
+  return action;
+}
+
+const SignupChangeCell = ({ value }) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {value.previous_signup_change
+        ? (
+          <>
+            <SignupStateCell value={value.previous_signup_change.state} strikeThrough />
+            {' → '}
+          </>
+        )
+        : (value.action === 'unknown' && (
+          <span className="text-muted">
+            {t('tables.signupChange.unknownState', 'unknown')}
+            {' '}
+            →
+            {' '}
+          </span>
+        ))}
+      <SignupStateCell value={value.state} />
+      {value.action !== 'unknown' && (
         <>
-          <SignupStateCell value={value.previous_signup_change.state} strikeThrough />
-          {' → '}
+          <br />
+          <small className="text-muted">
+            {describeAction(value.action, t)}
+          </small>
         </>
-      )
-      : (value.action === 'unknown' && <span className="text-muted">unknown → </span>)}
-    <SignupStateCell value={value.state} />
-    {value.action !== 'unknown' && (
-      <>
-        <br />
-        <small className="text-muted">
-          via
-          {' '}
-          {humanize(value.action).toLowerCase()}
-        </small>
-      </>
-    )}
-  </>
-);
+      )}
+    </>
+  );
+};
 
 SignupChangeCell.propTypes = {
   value: PropTypes.shape({

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import EventRatingIcon from './EventRatingIcon';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
@@ -53,6 +54,7 @@ RatingButton.defaultProps = {
 };
 
 function RateEventControl({ value, onChange, size }) {
+  const { t } = useTranslation();
   const clearRating = () => {
     onChange(0);
   };
@@ -72,7 +74,7 @@ function RateEventControl({ value, onChange, size }) {
             onClick={clearRating}
             selected
             size={size}
-            tooltipContent="Clear rating"
+            tooltipContent={t('events.ratings.clearButton', 'Clear rating')}
           />
         )
         : (
@@ -81,14 +83,14 @@ function RateEventControl({ value, onChange, size }) {
               rating={1}
               onClick={() => onChange(1)}
               size={size}
-              tooltipContent="Mark as favorite"
+              tooltipContent={t('events.ratings.favoriteButton', 'Mark as favorite')}
             />
 
             <RatingButton
               rating={-1}
               onClick={() => onChange(-1)}
               size={size}
-              tooltipContent="Hide event"
+              tooltipContent={t('events.ratings.hideButton', 'Hide event')}
             />
           </div>
         )}

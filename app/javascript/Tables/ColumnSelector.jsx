@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import PopperDropdown from '../UIComponents/PopperDropdown';
@@ -7,6 +8,7 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 function ColumnSelector({
   alwaysVisibleColumns, possibleColumns, visibleColumnIds, setVisibleColumnIds,
 }) {
+  const { t } = useTranslation();
   const renderHiddenColumnCount = () => {
     const count = (
       possibleColumns.length
@@ -33,7 +35,7 @@ function ColumnSelector({
       placement="bottom-end"
       renderReference={({ ref, toggle }) => (
         <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
-          Columns
+          {t('tables.columnSelectorButton', 'Columns')}
           {renderHiddenColumnCount()}
         </button>
       )}

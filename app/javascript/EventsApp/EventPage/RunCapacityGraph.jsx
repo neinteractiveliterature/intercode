@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import RunCapacityGraphBucket from './RunCapacityGraphBucket';
 import SignupCountData from '../SignupCountData';
@@ -7,6 +8,7 @@ import sortBuckets from './sortBuckets';
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 
 function RunCapacityGraph({ run, event, signupsAvailable }) {
+  const { t } = useTranslation();
   const signupCountData = SignupCountData.fromRun(run);
 
   return (
@@ -21,9 +23,11 @@ function RunCapacityGraph({ run, event, signupsAvailable }) {
         />
       ))}
       <div className="bucket-capacity">
-        Waitlist
-        {' - '}
-        {signupCountData.getWaitlistCount()}
+        {t(
+          'events.runCapacity.waitlistCount',
+          'Waitlist - {{ waitlistCount }}',
+          { waitlistCount: signupCountData.getWaitlistCount() },
+        )}
         <BucketAvailabilityDisplay
           className="text-secondary"
           signupCount={signupCountData.getWaitlistCount()}
