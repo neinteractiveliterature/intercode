@@ -110,9 +110,11 @@
     "add": "Add",
     "cancel": "Cancel",
     "close": "Close",
+    "composeEmail": "Compose email",
     "edit": "Edit",
     "help": "Help",
     "ok": "OK",
+    "options": "Options",
     "preview": "Preview",
     "proposeEventLoggedOut": "Log in to propose an event",
     "refresh": "Refresh"
@@ -173,14 +175,133 @@
     }
   },
   "events": {
+    "adminMenu": {
+      "editLink": "Edit event",
+      "editTeamMembersLink": "Edit {{ teamMemberNamePlural }}",
+      "header": "Event Admin",
+      "historyLink": "Vew edit history"
+    },
+    "edit": {
+      "dropButton": "Drop event",
+      "dropPrompt": "Are you sure you want to drop {{ eventTitle }}?  Doing so will also delete any runs of this event and remove any participants signed up for those runs.",
+      "editHeader": "Edit event",
+      "newHeader": "New event",
+      "roomsLabel": "Room(s)",
+      "scheduleNoteLabel": "Schedule note",
+      "timeLabel": "Time",
+      "titleSuffixLabel": "Title suffix"
+    },
+    "history": {
+      "title": "History"
+    },
+    "ratings": {
+      "clearButton": "Clear rating",
+      "favoriteButton": "Mark as favorite",
+      "hideButton": "Hide event"
+    },
     "runCapacity": {
+      "label": "Capacity",
       "slotCount": "{{ count }} slot",
       "slotRemainingCount": "{{ filledCount }} of {{ count }} slot filled",
       "unlimitedSimple": "unlimited",
       "unlimitedWithCount": "unlimited ({{ signupCount }} signed up)",
+      "waitlistCount": "Waitlist - {{ waitlistCount }}",
       "zeroCapacity": "0 slots",
       "slotCount_plural": "{{ count }} slots",
       "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled"
+    },
+    "runHeader": {
+      "maxSignups": "Max signups: {{ count }}"
+    },
+    "signupAdmin": {
+      "ageCheckHeader": "Age check",
+      "ageHeader": "Age",
+      "bucketHeader": "Bucket",
+      "editTitle": "Edit signup",
+      "emailFilters": {
+        "confirmed": "Include confirmed",
+        "nobody": "Nobody",
+        "teamMembers": "Include {{ teamMemberName }}",
+        "waitlisted": "Include waitlisted"
+      },
+      "emailHeader": "Email",
+      "history": {
+        "bucketHeader": "Bucket",
+        "changeHeader": "Change",
+        "nameHeader": "Name",
+        "timestampHeader": "Timestamp"
+      },
+      "historyPageTitle": "Signup change history - {{ eventTitle }}",
+      "indexPageTitle": "Signups - {{ eventTitle }}",
+      "nameHeader": "Name",
+      "sequenceHeader": "Seq",
+      "stateHeader": "State",
+      "title": "Signups"
+    },
+    "signupsAdmin": {
+      "emailsCommaTitle": "Emails (comma-separated)",
+      "emailsSemicolonTitle": "Emails (semicolon-separated)",
+      "emailsSemicolonWarning": "<0>Note:</0> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
+      "historyTitle": "Change history",
+      "title": "Signups"
+    },
+    "signupSummary": {
+      "nameHeader": "Name",
+      "stateHeader": "State",
+      "title": "Signup summary"
+    },
+    "teamMemberAdmin": {
+      "addButton": "Add {{ teamMemberName }}",
+      "addTeamMemberButton": "Add {{ teamMemberName }}",
+      "displayEmailHeader": "Display email address",
+      "displayHeader": "Display as {{ teamMemberName }}",
+      "displayLabel": "Display as {{ teamMemberName }}",
+      "editHeader": "{{ teamMemberName }} Settings for {{ name }}",
+      "editPageTitle": "Editing {{ teamMemberName }} “{{ name }}” - {{ eventTitle }}",
+      "editSettingsLink": "Edit {{ teamMemberName }} settings",
+      "emailLabel": "Email",
+      "eventProvidedTicketDescription": "{{ name }} has a {{ ticketType }} {{ ticketName }} provided by {{ eventTitle }}.",
+      "hasEventTicketHeader": "{{ ticketName }} from this event",
+      "header": "{{ teamMemberName }} for {{ eventTitle }}",
+      "mobilePhoneLabel": "Mobile phone",
+      "nameHeader": "Name",
+      "newHeader": "Add {{ teamMemberName }}",
+      "newPageTitle": "Add {{ teamMemberName }} - {{ eventTitle }}",
+      "nonEventProvidedTicketDescription": "{{ name }} has a {{ ticketType }} {{ ticketName }}.",
+      "provideTicketButton": "Provide {{ ticketName }}",
+      "provideTicketChoice": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
+      "provideTicketLink": "Provide {{ ticketName }}",
+      "receiveConEmailHeader": "Receive email from con",
+      "receiveConEmailLabel": "Receive email from convention",
+      "receiveSignupEmail": {
+        "allSignups": "Yes, all signup activity",
+        "noEmail": "No",
+        "nonWaitlistSignups": "Yes, except joining and dropping from waitlist"
+      },
+      "receiveSignupEmailHeader": "Receive email on signup or withdrawal",
+      "receiveSignupEmailLabel": "Receive email on signup and withdrawal",
+      "removeTeamMemberLink": "Remove {{ teamMemberName }}",
+      "removeTeamMemberPrompt": "Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?",
+      "selectUserConProfilePrompt": "Select a person to continue.",
+      "showEmailLabel": "Show individual email address on event page <2>Selecting this option will make the individual email address for this {{teamMemberName}} appear on the event page, but only for logged-in site users.</2>",
+      "ticketProvidability": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
+      "unticketedWarning": "{{name}}<1> has no {{ticketName}} for {{conventionName}}.</1> Without a {{ticketName}}, users cannot sign up for events at the convention.",
+      "updateButton": "Update {{ teamMemberName }}",
+      "userConProfileLabel": "{{ teamMemberName }} to add",
+      "userConProfilePlaceholder": "Type the name of the {{ teamMemberName }} you want to add"
+    },
+    "ticketQuotaOverrides": {
+      "defaultQuotaHeader": "Default quota",
+      "deleteButton": "Delete override for {{ ticketType }}",
+      "deletePrompt": "Are you sure you want to remove the override for \"{{ ticketType }}\" tickets?",
+      "header": "Override event-provided {{ ticketName }} quotas",
+      "overridenQuotaHeader": "Overridden quota",
+      "ticketTypeHeader": "{{ ticketName }} type"
+    },
+    "withdrawPrompt": {
+      "moderatedSignup": "<0><0>If you’re thinking of signing up for a different event instead, please go to that event’s page and request to sign up for it.</0> If the request is accepted, you’ll automatically be withdrawn from this event.</0><1>Are you sure you want to withdraw from {{eventTitle}}? </1>",
+      "selfServiceSignup": "Are you sure you want to withdraw from {{ eventTitle }}?",
+      "signupRequest": "Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?"
     }
   },
   "forms": {
@@ -205,6 +326,9 @@
       "backButton": "Back",
       "continueButton": "Continue",
       "fieldRequiredError": "This field is required."
+    },
+    "history": {
+      "noChanges": "No changes."
     }
   },
   "general": {
@@ -213,7 +337,8 @@
     },
     "pageTitles": {
       "editing": "Editing “{{ title }}”"
-    }
+    },
+    "placeholderOptionLabel": "Blank placeholder option"
   },
   "myProfile": {
     "bioLabel": "Bio",
@@ -345,24 +470,65 @@
     "timezoneMessage": "All times displayed in {{ offsetName }}."
   },
   "signups": {
+    "noSignupsAvailable": "This event does not take signups.",
+    "runCardText": {
+      "confirmed": "You are signed up.",
+      "requestPending": "You have requested to sign up for this event.",
+      "waitlisted": "You are #{{ waitlistNumber }} on the waitlist.",
+      "waitlistedUnknownPosition": "You are on the waitlist."
+    },
+    "signedOutSignupButton": "<0>Log in</0> to sign up for<3></3><4>{{eventTitle}}</4>",
+    "signupButton": "Sign up",
+    "signupSummaryLink": "Attendee-facing signup summary",
     "states": {
+      "bucketWithNoPreference": "{{ bucketName }} (no preference)",
       "confirmed": "Confirmed",
+      "inUnrequestedBucket": "{{ bucketName }} (requested {{ requestedBucketName }})",
+      "noBucketName": "None",
+      "notCounted": "Not counted",
+      "notCountedWithBucket": "{{ bucketName }} (not counted)",
       "notSignedUp": "Not signed up",
-      "waitlisted": "Waitlisted"
-    }
+      "stateWithRequestedBucket": "{{ state }} (requested {{ requestedBucket }})",
+      "teamMemberNotCounted": "{{ teamMemberName }} (not counted)",
+      "waitlisted": "Waitlisted",
+      "waitlistedNoPreference": "Waitlisted (no preference)",
+      "waitlistedWithRequestedBucket": "Waitlisted (requested {{ requestedBucketName }})",
+      "withdrawn": "Withdrawn"
+    },
+    "viewSignupsLink": "View signups",
+    "withdrawButton": "Withdraw",
+    "withdrawSignupRequestButton": "Withdraw signup request"
   },
   "spoiler": {
     "hoverText": "Click to reveal"
   },
   "tables": {
+    "ageRestrictionsCheck": {
+      "notApplicable": "N/A",
+      "ok": "OK",
+      "unknown": "Unknown age"
+    },
     "choiceSetFilter": {
       "anyText": "Any"
     },
+    "columnSelectorButton": "Columns",
     "exportCSV": {
       "buttonText": "Export CSV"
     },
     "privileges": {
       "siteAdmin": "Global admin"
+    },
+    "signupChange": {
+      "actions": {
+        "acceptSignupRequest": "accepted signup request",
+        "adminCreateSignup": "admin-created signup",
+        "changeRegistrationPolicy": "registration policy change",
+        "selfServiceSignup": "self-service signup",
+        "unknown": "unknown action",
+        "vacancyFill": "vacancy fill",
+        "withdraw": "withdraw"
+      },
+      "unknownState": "unknown"
     },
     "ticketStatus": {
       "unpaid": "Unpaid"

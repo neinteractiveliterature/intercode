@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import { RunHeaderRunInfoQuery } from './queries.gql';
 import { timespanFromRun } from '../../TimespanUtils';
@@ -9,6 +10,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import AppRootContext from '../../AppRootContext';
 
 function RunHeader({ eventId, runId }) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(RunHeaderRunInfoQuery, {
     variables: { runId, eventId },
@@ -39,9 +41,11 @@ function RunHeader({ eventId, runId }) {
       <ul className="list-inline">
         {data.event.registration_policy.slots_limited && (
           <li className="list-inline-item">
-            Max signups:
-            {' '}
-            {data.event.registration_policy.total_slots}
+            {t(
+              'events.runHeader.maxSignups',
+              'Max signups: {{ count }}',
+              { count: data.event.registration_policy.total_slots },
+            )}
           </li>
         )}
 
@@ -49,11 +53,11 @@ function RunHeader({ eventId, runId }) {
           data.event.registration_policy.buckets.length > 1
             ? (
               <li className="list-inline-item">
-                {'('}
+                (
                 {data.event.registration_policy.buckets
                   .map((bucket) => `${bucket.name}: ${bucket.total_slots}`)
                   .join(', ')}
-                {')'}
+                )
               </li>
             )
             : null

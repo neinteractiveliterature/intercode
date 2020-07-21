@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation, Trans } from 'react-i18next';
 
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
@@ -9,6 +10,7 @@ import HelpPopover from '../../UIComponents/HelpPopover';
 function TeamMemberForm({
   event, disabled, value, onChange,
 }) {
+  const { t } = useTranslation();
   const formMutator = mutator({
     getState: () => value,
     setState: onChange,
@@ -20,28 +22,40 @@ function TeamMemberForm({
     },
   });
 
+  const teamMemberName = event.event_category.team_member_name;
+
   return (
     <>
       {
         [
-          { name: 'display_team_member', label: `Display as ${event.event_category.team_member_name}` },
+          {
+            name: 'display_team_member',
+            label: t(
+              'events.teamMemberAdmin.displayLabel',
+              'Display as {{ teamMemberName }}',
+              { teamMemberName },
+            ),
+          },
           {
             name: 'show_email',
             label: (
-              <>
+              <Trans i18nKey="events.teamMemberAdmin.showEmailLabel">
                 Show individual email address on event page
                 {' '}
                 <HelpPopover>
                   Selecting this option will make the individual email address for this
                   {' '}
-                  {event.event_category.team_member_name}
+                  {{ teamMemberName }}
                   {' '}
                   appear on the event page, but only for logged-in site users.
                 </HelpPopover>
-              </>
+              </Trans>
             ),
           },
-          { name: 'receive_con_email', label: 'Receive email from convention' },
+          {
+            name: 'receive_con_email',
+            label: t('events.teamMemberAdmin.receiveConEmailLabel', 'Receive email from convention'),
+          },
         ].map(({ name, label }) => (
           <BootstrapFormCheckbox
             key={name}
@@ -55,11 +69,20 @@ function TeamMemberForm({
       }
 
       <MultipleChoiceInput
-        caption="Receive email on signup and withdrawal"
+        caption={t('events.teamMemberAdmin.receiveSignupEmailLabel', 'Receive email on signup and withdrawal')}
         choices={[
-          { label: 'Yes, all signup activity', value: 'ALL_SIGNUPS' },
-          { label: 'Yes, except joining and dropping from waitlist', value: 'NON_WAITLIST_SIGNUPS' },
-          { label: 'No', value: 'NO' },
+          {
+            label: t('events.teamMemberAdmin.receiveSignupEmail.allSignups', 'Yes, all signup activity'),
+            value: 'ALL_SIGNUPS',
+          },
+          {
+            label: t(
+              'events.teamMemberAdmin.receiveSignupEmail.nonWaitlistSignups',
+              'Yes, except joining and dropping from waitlist',
+            ),
+            value: 'NON_WAITLIST_SIGNUPS',
+          },
+          { label: t('events.teamMemberAdmin.receiveSignupEmail.noEmail', 'No'), value: 'NO' },
         ]}
         value={value.receive_signup_email}
         onChange={formMutator.receive_signup_email}

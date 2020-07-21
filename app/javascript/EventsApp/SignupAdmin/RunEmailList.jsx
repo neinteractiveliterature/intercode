@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, underscore, humanize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
@@ -43,6 +44,7 @@ function getEmails({ data, includes }) {
 }
 
 function RunEmailList({ runId, eventId, separator }) {
+  const { t } = useTranslation();
   const [includes, setIncludes] = useState(['teamMembers', 'confirmed']);
   const { data, loading, error } = useQuery(RunSignupsTableSignupsQuery, {
     variables: {
@@ -60,7 +62,12 @@ function RunEmailList({ runId, eventId, separator }) {
 
   usePageTitle(
     useValueUnless(
-      () => `Emails (${separator === '; ' ? 'semicolon-separated' : 'comma-separated'}) - ${data.event.title}`,
+      () => {
+        const mainTitle = separator === '; '
+          ? t('events.signupsAdmin.emailsSemicolonTitle', 'Emails (semicolon-separated)')
+          : t('events.signupsAdmin.emailsCommaTitle', 'Emails (comma-separated)');
+        return `${mainTitle} - ${data.event.title}`;
+      },
       error || loading,
     ),
   );
@@ -80,15 +87,22 @@ function RunEmailList({ runId, eventId, separator }) {
       renderToolbarContent={() => (
         <ChoiceSetFilter
           choices={[
-            { label: `Include ${pluralize(data.event.event_category.team_member_name)}`, value: 'teamMembers' },
-            { label: 'Include confirmed', value: 'confirmed' },
-            { label: 'Include waitlisted', value: 'waitlisted' },
+            {
+              label: t(
+                'events.signupAdmin.emailFilters.teamMembers',
+                'Include {{ teamMemberName }}',
+                { teamMemberName: pluralize(data.event.event_category.team_member_name) },
+              ),
+              value: 'teamMembers',
+            },
+            { label: t('events.signupAdmin.emailFilters.confirmed', 'Include confirmed'), value: 'confirmed' },
+            { label: t('events.signupAdmin.emailFilters.waitlisted', 'Include waitlisted'), value: 'waitlisted' },
           ]}
           filter={{ value: includes }}
           onChange={setIncludes}
           renderHeaderCaption={(currentIncludes) => {
             if (currentIncludes.length === 0) {
-              return 'Nobody';
+              return t('events.signupAdmin.emailFilters.nobody', 'Nobody');
             }
 
             return [...currentIncludes].sort().map((include) => {
@@ -98,7 +112,7 @@ function RunEmailList({ runId, eventId, separator }) {
                 )));
               }
 
-              return humanize(underscore(include));
+              return t(`signups.states.${include}`, humanize(underscore(include)));
             }).join(', ');
           }}
         />

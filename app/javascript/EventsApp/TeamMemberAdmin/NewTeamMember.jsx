@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize, underscore } from 'inflected';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import { CreateTeamMember } from './mutations.gql';
@@ -15,6 +16,7 @@ import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 
 function NewTeamMember({ event, eventPath }) {
+  const { t } = useTranslation();
   const history = useHistory();
   const [teamMember, setTeamMember] = useState({
     user_con_profile: null,
@@ -33,7 +35,16 @@ function NewTeamMember({ event, eventPath }) {
     }),
   );
 
-  usePageTitle(`Add ${event.event_category.team_member_name} - ${event.title}`);
+  usePageTitle(
+    t(
+      'events.teamMemberAdmin.newPageTitle',
+      'Add {{ teamMemberName }} - {{ eventTitle }}',
+      {
+        teamMemberName: event.event_category.team_member_name,
+        eventTitle: event.title,
+      },
+    ),
+  );
 
   const userConProfileChanged = (userConProfile) => setTeamMember((prevTeamMember) => ({
     ...prevTeamMember,
@@ -61,15 +72,20 @@ function NewTeamMember({ event, eventPath }) {
   return (
     <>
       <h1 className="mb-4">
-        {'Add '}
-        {titleize(underscore(event.event_category.team_member_name))}
+        {t(
+          'events.teamMemberAdmin.newHeader',
+          'Add {{ teamMemberName }}',
+          { teamMemberName: titleize(underscore(event.event_category.team_member_name)) },
+        )}
       </h1>
 
       <div className="form-group">
         <label htmlFor={userConProfileSelectId}>
-          {`${humanize(underscore(event.event_category.team_member_name))}`}
-          {' '}
-          to add
+          {t(
+            'events.teamMemberAdmin.userConProfileLabel',
+            '{{ teamMemberName }} to add',
+            { teamMemberName: humanize(underscore(event.event_category.team_member_name)) },
+          )}
         </label>
         <UserConProfileSelect
           inputId={userConProfileSelectId}
@@ -77,7 +93,11 @@ function NewTeamMember({ event, eventPath }) {
           onChange={userConProfileChanged}
           disabled={createInProgress}
           userConProfilesQuery={TeamMemberUserConProfilesQuery}
-          placeholder={`Type the name of the ${event.event_category.team_member_name} you want to add`}
+          placeholder={t(
+            'events.teamMemberAdmin.userConProfilePlaceholder',
+            'Type the name of the {{ teamMemberName }} you want to add',
+            { teamMemberName: event.event_category.team_member_name },
+          )}
         />
       </div>
 
@@ -102,15 +122,18 @@ function NewTeamMember({ event, eventPath }) {
                     disabled={createInProgress}
                     onClick={createClicked}
                   >
-                    {'Add '}
-                    {event.event_category.team_member_name}
+                    {t(
+                      'events.teamMemberAdmin.addButton',
+                      'Add {{ teamMemberName }}',
+                      { teamMemberName: event.event_category.team_member_name },
+                    )}
                   </button>
                 </li>
               </ul>
             </>
           )
           : (
-            <p>Select a person to continue.</p>
+            <p>{t('events.teamMemberAdmin.selectUserConProfilePrompt', 'Select a person to continue.')}</p>
           )
       }
     </>

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
-import { findBucket } from './SignupUtils';
+import { findBucket, formatSignupState } from './SignupUtils';
 import RunHeader from './RunHeader';
 import { RunSignupSummaryQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
@@ -47,11 +48,14 @@ function sortSignups(signups, teamMembers) {
 }
 
 function RunSignupSummary({ eventId, runId, eventPath }) {
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(RunSignupSummaryQuery, {
     variables: { eventId, runId },
   });
 
-  usePageTitle(useValueUnless(() => `Signup summary - ${data.event.title}`, error || loading));
+  const signupSummaryTitle = t('events.signupSummary.title', 'Signup summary');
+
+  usePageTitle(useValueUnless(() => `${signupSummaryTitle} - ${data.event.title}`, error || loading));
 
   const sortedSignups = useMemo(
     () => (error || loading
@@ -98,7 +102,7 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
                     <strong>
                       {' ('}
                       {humanize(underscore(teamMemberName))}
-                      {')'}
+                      )
                     </strong>
                   )
                   : null
@@ -107,7 +111,7 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
           </div>
         </td>
         <td>
-          {humanize(signup.state)}
+          {formatSignupState(signup.state, t)}
           {waitlistPosition}
           {suffix}
         </td>
@@ -134,7 +138,7 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
             eventPath={eventPath}
           />
           <BreadcrumbItem active>
-            Signup summary
+            {signupSummaryTitle}
           </BreadcrumbItem>
         </ol>
       </nav>
@@ -144,8 +148,8 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
       <table className="table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>State</th>
+            <th>{t('events.signupSummary.nameHeader', 'Name')}</th>
+            <th>{t('events.signupSummary.stateHeader', 'State')}</th>
           </tr>
         </thead>
         <tbody>

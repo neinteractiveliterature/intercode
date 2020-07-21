@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import CopyToClipboardButton from './CopyToClipboardButton';
 
@@ -12,6 +13,7 @@ function formatEmail({ email, name }) {
 }
 
 function EmailList({ emails, separator, renderToolbarContent }) {
+  const { t } = useTranslation();
   const addresses = emails.map(formatEmail).join(separator);
   const mailtoParams = new URLSearchParams();
   mailtoParams.append('bcc', addresses);
@@ -26,7 +28,7 @@ function EmailList({ emails, separator, renderToolbarContent }) {
           <a href={mailtoLink} className="btn btn-secondary mr-2">
             <i className="fa fa-envelope" />
             {' '}
-            Compose email
+            {t('buttons.composeEmail', 'Compose email')}
           </a>
 
           <CopyToClipboardButton
@@ -44,7 +46,13 @@ function EmailList({ emails, separator, renderToolbarContent }) {
         }
       </div>
 
-      <textarea className="form-control" readOnly rows={textareaRows} value={addresses} />
+      <textarea
+        className="form-control"
+        readOnly
+        rows={textareaRows}
+        value={addresses}
+        aria-label="Email addresses"
+      />
     </>
   );
 }

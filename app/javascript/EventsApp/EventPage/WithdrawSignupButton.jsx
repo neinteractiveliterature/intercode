@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 function WithdrawSignupButton({
   buttonClass, buttonText, withdrawSignup,
 }) {
+  const { t } = useTranslation();
+
   return (
     <button
       className={`btn ${buttonClass || 'btn-outline-danger'} withdraw-button`}
       type="button"
       onClick={withdrawSignup}
     >
-      {buttonText || 'Withdraw'}
+      {buttonText ?? t('signups.withdrawButton', 'Withdraw')}
     </button>
   );
 }

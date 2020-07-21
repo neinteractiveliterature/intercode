@@ -4,6 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
+import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
@@ -23,6 +24,7 @@ const roomPropType = PropTypes.shape({
 });
 
 function RunFormFields({ run, event, onChange }) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
@@ -97,7 +99,7 @@ function RunFormFields({ run, event, onChange }) {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-label">Time</legend>
+        <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
         <TimeSelect
           value={{ hour, minute }}
           onChange={timeInputChanged}
@@ -121,11 +123,11 @@ function RunFormFields({ run, event, onChange }) {
       />
       {renderTimeSelect()}
 
-      <FormGroupWithLabel label="Room(s)">
+      <FormGroupWithLabel label={t('events.edit.roomsLabel', 'Room(s)')}>
         {(id) => (
           <RoomSelect
             id={id}
-            label="Room(s)"
+            label={t('events.edit.roomsLabel', 'Room(s)')}
             name="room_ids"
             rooms={data.convention.rooms}
             isMulti
@@ -147,7 +149,7 @@ function RunFormFields({ run, event, onChange }) {
 
       <BootstrapFormInput
         name="title_suffix"
-        label="Title suffix"
+        label={t('events.edit.titleSuffixLabel', 'Title suffix')}
         value={run.title_suffix || ''}
         onTextChange={(titleSuffix) => onChange((prevRun) => ({
           ...prevRun, title_suffix: titleSuffix,
@@ -155,7 +157,7 @@ function RunFormFields({ run, event, onChange }) {
       />
       <BootstrapFormInput
         name="schedule_note"
-        label="Schedule note"
+        label={t('events.edit.scheduleNoteLabel', 'Schedule note')}
         value={run.schedule_note || ''}
         onTextChange={(scheduleNote) => onChange((prevRun) => ({
           ...prevRun, schedule_note: scheduleNote,
