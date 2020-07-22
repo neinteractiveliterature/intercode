@@ -444,7 +444,7 @@ export type Convention = {
   stripe_publishable_key?: Maybe<Scalars['String']>;
   ticket_mode: TicketMode;
   ticket_name: Scalars['String'];
-  ticket_types?: Maybe<Array<TicketType>>;
+  ticket_types: Array<TicketType>;
   tickets_available_for_purchase: Scalars['Boolean'];
   timezone_mode: TimezoneMode;
   timezone_name?: Maybe<Scalars['String']>;
