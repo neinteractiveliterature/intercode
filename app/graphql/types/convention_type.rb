@@ -41,7 +41,7 @@ class Types::ConventionType < Types::BaseObject
   field :root_page, Types::PageType, null: true
   field :staff_positions, [Types::StaffPositionType], null: true
   field :catch_all_staff_position, Types::StaffPositionType, null: true
-  field :ticket_types, [Types::TicketTypeType], null: true
+  field :ticket_types, [Types::TicketTypeType], null: false
   field :organization, Types::OrganizationType, null: true
   field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: true
   field :reports, Types::ConventionReportsType, null: false do

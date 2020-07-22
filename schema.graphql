@@ -363,7 +363,7 @@ type Convention {
   stripe_publishable_key: String
   ticket_mode: TicketMode!
   ticket_name: String!
-  ticket_types: [TicketType!]
+  ticket_types: [TicketType!]!
   tickets_available_for_purchase: Boolean!
   timezone_mode: TimezoneMode!
   timezone_name: String

@@ -1,7 +1,6 @@
 import React, {
-  useState, useContext, Suspense, useEffect,
+  useState, useContext, Suspense, useEffect, ReactNode,
 } from 'react';
-import PropTypes from 'prop-types';
 import {
   Switch, Route, Redirect, useLocation, useParams,
 } from 'react-router-dom';
@@ -11,6 +10,7 @@ import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
 import { reloadOnBundleHashMismatch } from './checkBundleHash';
 import FourOhFourPage from './FourOhFourPage';
+import { SignupMode } from './graphqlTypes.generated';
 
 function CmsPageBySlug() {
   const { slug } = useParams();
@@ -37,7 +37,7 @@ function renderCommonRoutes() {
   ];
 }
 
-function renderCommonInConventionRoutes({ signupMode }) {
+function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode }) {
   return [
     <Route path="/admin_departments" key="adminDepartments"><PageComponents.DepartmentAdmin /></Route>,
     <Route path="/admin_events" key="adminEvents"><PageComponents.EventAdmin /></Route>,
@@ -67,7 +67,7 @@ function renderCommonInConventionRoutes({ signupMode }) {
   ];
 }
 
-function renderConventionModeRoutes({ signupMode }) {
+function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode }) {
   return [
     <Route path="/admin_event_proposals" key="adminEventProposals"><PageComponents.EventProposalsAdmin /></Route>,
     <Route path="/event_categories" key="eventCategories"><PageComponents.EventCategoryAdmin /></Route>,
@@ -77,7 +77,7 @@ function renderConventionModeRoutes({ signupMode }) {
   ];
 }
 
-function renderSingleEventModeRoutes({ signupMode }) {
+function renderSingleEventModeRoutes({ signupMode }: { signupMode: SignupMode }) {
   return [
     ...renderCommonInConventionRoutes({ signupMode }),
   ];
@@ -99,7 +99,11 @@ function renderRootSiteRoutes() {
   ];
 }
 
-function AppRouter({ alert }) {
+export type AppRouterProps = {
+  alert?: ReactNode,
+};
+
+function AppRouter({ alert }: AppRouterProps) {
   const location = useLocation();
   const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
@@ -117,10 +121,10 @@ function AppRouter({ alert }) {
     }
 
     if (siteMode === 'single_event') {
-      return renderSingleEventModeRoutes({ signupMode });
+      return renderSingleEventModeRoutes({ signupMode: signupMode! });
     }
 
-    return renderConventionModeRoutes({ signupMode });
+    return renderConventionModeRoutes({ signupMode: signupMode! });
   };
 
   return (
@@ -141,13 +145,5 @@ function AppRouter({ alert }) {
     </Suspense>
   );
 }
-
-AppRouter.propTypes = {
-  alert: PropTypes.string,
-};
-
-AppRouter.defaultProps = {
-  alert: null,
-};
 
 export default AppRouter;

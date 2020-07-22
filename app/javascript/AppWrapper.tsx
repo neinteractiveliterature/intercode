@@ -1,7 +1,6 @@
 import React, {
-  Suspense, useCallback, useRef, useEffect,
+  Suspense, useCallback, useRef, useEffect, ReactNode,
 } from 'react';
-import PropTypes from 'prop-types';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { BrowserRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd-multi-backend';
@@ -18,10 +17,20 @@ import useIntercodeApolloClient from './useIntercodeApolloClient';
 import ErrorBoundary from './ErrorBoundary';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 
-export default (WrappedComponent) => {
-  function Wrapper({
-    authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps
-  }) {
+export type AppWrapperProps = {
+  authenticityTokens: {
+    graphql: string,
+  },
+  mapboxAccessToken: string,
+  recaptchaSiteKey: string,
+  stripePublishableKey: string,
+};
+
+function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
+  function Wrapper(props: P & AppWrapperProps) {
+    const {
+      authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps
+    } = props;
     const confirm = useConfirm();
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
     const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
@@ -47,7 +56,7 @@ export default (WrappedComponent) => {
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
 
     const getUserConfirmation = useCallback(
-      (message, callback) => {
+      (message: ReactNode, callback: (confirmed: boolean) => void) => {
         confirm({
           prompt: message,
           action: () => callback(true),
@@ -77,7 +86,7 @@ export default (WrappedComponent) => {
                       <Suspense fallback={<PageLoadingIndicator visible />}>
                         <AlertProvider>
                           <ErrorBoundary placement="replace" errorType="plain">
-                            <WrappedComponent {...otherProps} />
+                            <WrappedComponent {...((otherProps as unknown) as P)} />
                           </ErrorBoundary>
                         </AlertProvider>
                       </Suspense>
@@ -94,28 +103,17 @@ export default (WrappedComponent) => {
     );
   }
 
-  Wrapper.propTypes = {
-    authenticityTokens: PropTypes.shape({
-      graphql: PropTypes.string.isRequired,
-    }).isRequired,
-    mapboxAccessToken: PropTypes.string.isRequired,
-    recaptchaSiteKey: PropTypes.string.isRequired,
-    stripePublishableKey: PropTypes.string,
-  };
-
-  Wrapper.defaultProps = {
-    stripePublishableKey: null,
-  };
-
   const wrappedComponentDisplayName = (
     WrappedComponent.displayName || WrappedComponent.name || 'Component'
   );
 
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
-  function ConfirmWrapper(props) {
+  function ConfirmWrapper(props: P & AppWrapperProps) {
     return <Confirm><Wrapper {...props} /></Confirm>;
   }
 
   return ConfirmWrapper;
-};
+}
+
+export default AppWrapper;

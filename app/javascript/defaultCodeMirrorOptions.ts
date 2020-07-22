@@ -1,4 +1,6 @@
-export default {
+import { EditorConfiguration } from 'codemirror';
+
+const DefaultCodeMirrorOptions: EditorConfiguration = {
   theme: 'intercode',
   lineNumbers: true,
   foldGutter: true,
@@ -10,8 +12,10 @@ export default {
   extraKeys: {
     Tab: (cm) => {
       // always use spaces, not tabs
-      const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+      const spaces = Array((cm.getOption('indentUnit') ?? 2) + 1).join(' ');
       cm.replaceSelection(spaces);
     },
   },
 };
+
+export default DefaultCodeMirrorOptions;
