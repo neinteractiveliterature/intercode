@@ -17,7 +17,9 @@ function TicketPurchaseNavigationItem() {
     return null;
   }
 
-  if (!ticketTypes.some((ticketType) => ticketType.publicly_available)) {
+  if (!ticketTypes.some(
+    (ticketType) => ticketType.providing_products.some((product) => product.available),
+  )) {
     return null;
   }
 

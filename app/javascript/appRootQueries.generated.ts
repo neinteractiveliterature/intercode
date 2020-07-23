@@ -44,7 +44,11 @@ export type AppRootQueryQuery = (
     & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'accepting_proposals' | 'canceled' | 'language' | 'site_mode' | 'signup_mode' | 'ticket_mode' | 'timezone_name' | 'timezone_mode' | 'clickwrap_agreement' | 'tickets_available_for_purchase' | 'ticket_name'>
     & { ticket_types: Array<(
       { __typename?: 'TicketType' }
-      & Pick<Types.TicketType, 'id' | 'publicly_available'>
+      & Pick<Types.TicketType, 'id'>
+      & { providing_products: Array<(
+        { __typename?: 'Product' }
+        & Pick<Types.Product, 'id' | 'available'>
+      )> }
     )> }
   )>, rootSite: (
     { __typename?: 'RootSite' }
@@ -141,7 +145,10 @@ export const AppRootQueryDocument = gql`
     ticket_name
     ticket_types {
       id
-      publicly_available
+      providing_products {
+        id
+        available
+      }
     }
   }
   rootSite {

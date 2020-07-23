@@ -23,12 +23,25 @@ props is BootstrapFormInputPropsWithHTMLChange {
   return Object.prototype.hasOwnProperty.call(props, 'onChange');
 }
 
-function BootstrapFormInput(props: BootstrapFormInputProps) {
-  const inputId = useUniqueId(`${props.name || 'input'}-`);
+function extractInputElementAttributes(
+  props: BootstrapFormInputProps,
+): InputHTMLAttributes<HTMLInputElement> {
+  if (isHTMLChangeProps(props)) {
+    const {
+      helpText, label, hideLabel, invalidFeedback, type, onChange, ...otherProps
+    } = props;
+    return otherProps;
+  }
 
   const {
-    helpText, label, hideLabel, invalidFeedback, type, ...otherProps
+    helpText, label, hideLabel, invalidFeedback, type, onTextChange, ...otherProps
   } = props;
+  return otherProps;
+}
+
+function BootstrapFormInput(props: BootstrapFormInputProps) {
+  const inputId = useUniqueId(`${props.name || 'input'}-`);
+  const inputAttributes = extractInputElementAttributes(props);
 
   const onChangeProp = isHTMLChangeProps(props)
     ? props.onChange
@@ -36,16 +49,16 @@ function BootstrapFormInput(props: BootstrapFormInputProps) {
 
   return (
     <div className="form-group">
-      <label htmlFor={inputId} className={hideLabel ? 'sr-only' : undefined}>{label}</label>
+      <label htmlFor={inputId} className={props.hideLabel ? 'sr-only' : undefined}>{props.label}</label>
       <input
         className="form-control"
         id={inputId}
         onChange={onChangeProp}
-        type={type ?? 'text'}
-        {...otherProps}
+        type={props.type ?? 'text'}
+        {...inputAttributes}
       />
-      <HelpText>{helpText}</HelpText>
-      {invalidFeedback && <div className="invalid-feedback">{invalidFeedback}</div>}
+      <HelpText>{props.helpText}</HelpText>
+      {props.invalidFeedback && <div className="invalid-feedback">{props.invalidFeedback}</div>}
     </div>
   );
 }
