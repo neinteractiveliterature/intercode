@@ -85,7 +85,10 @@ query AppRootQuery($path: String!) {
     ticket_name
     ticket_types {
       id
-      publicly_available
+      providing_products {
+        id
+        available
+      }
     }
   }
 
