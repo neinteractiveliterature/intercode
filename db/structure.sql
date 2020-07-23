@@ -10,20 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -548,7 +534,7 @@ ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ahoy_events; Type: TABLE; Schema: public; Owner: -
@@ -1003,7 +989,8 @@ CREATE TABLE public.conventions (
     canceled boolean DEFAULT false NOT NULL,
     location jsonb,
     timezone_mode character varying NOT NULL,
-    hidden boolean DEFAULT false NOT NULL
+    hidden boolean DEFAULT false NOT NULL,
+    language character varying NOT NULL
 );
 
 
@@ -5211,6 +5198,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200515153931'),
 ('20200516164805'),
 ('20200517155823'),
-('20200601160341');
+('20200601160341'),
+('20200712160144');
 
 
