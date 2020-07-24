@@ -14,7 +14,7 @@ import introspectionQueryResultData from './fragmentTypes.json';
 const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
 export function useIntercodeApolloLink(
-  authenticityToken: string, onUnauthenticatedRef: RefObject<() => void>,
+  authenticityToken: string, onUnauthenticatedRef?: RefObject<() => void>,
 ) {
   const authenticityTokenRef = useRef(authenticityToken);
   useEffect(

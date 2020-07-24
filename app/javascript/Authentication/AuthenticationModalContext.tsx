@@ -31,7 +31,7 @@ export function useAuthenticationModalProvider(recaptchaSiteKey?: string) {
   const {
     visible, state, setState, open, close,
   } = useModal<AuthenticationModalState>();
-  const [afterSignInPath, setAfterSignInPath] = useState(null);
+  const [afterSignInPath, setAfterSignInPath] = useState<string>();
   const [unauthenticatedError, setUnauthenticatedError] = useState(false);
 
   const contextValue = useMemo(

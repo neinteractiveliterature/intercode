@@ -1,14 +1,19 @@
 import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { ApolloError, ApolloQueryResult } from 'apollo-client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import PlainTextDisplay from '../PlainTextDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 
-function AdminNotes({ mutate, value }) {
-  const [editingValue, setEditingValue] = useState(null);
+export type AdminNotesProps = {
+  mutate: (value: string) => Promise<ApolloQueryResult<any>>,
+  value?: string,
+};
+
+function AdminNotes({ mutate, value }: AdminNotesProps) {
+  const [editingValue, setEditingValue] = useState<string | null>(null);
   const [save, saveError, saveInProgress] = useAsyncFunction(mutate);
-  const textareaElement = useRef(null);
+  const textareaElement = useRef<HTMLTextAreaElement | null>(null);
 
   const startEditing = () => {
     setEditingValue(value || '');
@@ -20,7 +25,7 @@ function AdminNotes({ mutate, value }) {
   const cancelEditing = () => { setEditingValue(null); };
 
   const saveClicked = async () => {
-    await save(editingValue);
+    await save(editingValue ?? '');
     setEditingValue(null);
   };
 
@@ -56,8 +61,9 @@ function AdminNotes({ mutate, value }) {
           value={editingValue}
           onChange={(event) => { setEditingValue(event.target.value); }}
           ref={textareaElement}
+          aria-label="Admin notes"
         />
-        <ErrorDisplay graphQLError={saveError} />
+        <ErrorDisplay graphQLError={saveError as ApolloError} />
       </div>
       <div className="card-footer text-right">
         <button
@@ -80,14 +86,5 @@ function AdminNotes({ mutate, value }) {
     </div>
   );
 }
-
-AdminNotes.propTypes = {
-  mutate: PropTypes.func.isRequired,
-  value: PropTypes.string,
-};
-
-AdminNotes.defaultProps = {
-  value: null,
-};
 
 export default AdminNotes;

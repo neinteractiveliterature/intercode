@@ -11,7 +11,6 @@ export interface ChoiceSetBaseProps {
   name?: string;
   choices: ChoiceSetChoice[];
   value?: string | string[] | null;
-  onChange(value: string | string[] | null): any;
   multiple?: boolean;
   containerClassName?: string;
   choiceClassName?: string;
@@ -22,15 +21,17 @@ export interface ChoiceSetBaseProps {
 
 export interface ChoiceSetSingleChoiceProps extends ChoiceSetBaseProps {
   value?: string | null;
+  onChange(value: string | null): any;
   multiple?: false;
 }
 
 export interface ChoiceSetMultipleChoiceProps extends ChoiceSetBaseProps {
   value?: string[] | null;
+  onChange(value: string[] | null): any;
   multiple: true;
 }
 
-type ChoiceSetProps = ChoiceSetSingleChoiceProps | ChoiceSetMultipleChoiceProps;
+export type ChoiceSetProps = ChoiceSetSingleChoiceProps | ChoiceSetMultipleChoiceProps;
 
 function ChoiceSet(props: ChoiceSetProps) {
   const choiceType = props.multiple ? 'checkbox' : 'radio';

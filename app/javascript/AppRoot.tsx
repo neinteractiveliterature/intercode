@@ -4,11 +4,10 @@ import React, {
 import {
   Switch, Route, useLocation, useHistory,
 } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
 import moment from 'moment-timezone';
 import { Settings } from 'luxon';
 
-import { AppRootQuery } from './appRootQueries.gql';
+import { useAppRootQueryQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import ErrorDisplay from './ErrorDisplay';
 import NavigationBar from './NavigationBar';
@@ -21,7 +20,7 @@ import { timezoneNameForConvention } from './TimeUtils';
 import i18n from './setupI18Next';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
-function normalizePathForLayout(path) {
+function normalizePathForLayout(path: string) {
   if (path.startsWith('/pages/') || path === '/') {
     return path;
   }
@@ -38,22 +37,21 @@ function normalizePathForLayout(path) {
 function AppRoot() {
   const location = useLocation();
   const history = useHistory();
-  const { data, loading, error } = useQuery(
-    AppRootQuery,
+  const { data, loading, error } = useAppRootQueryQuery(
     { variables: { path: normalizePathForLayout(location.pathname) } },
   );
 
-  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState(null);
+  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<number>();
   const [layoutChanged, setLayoutChanged] = useState(false);
 
   const bodyComponents = useMemo(
     () => {
-      if (error || loading) {
+      if (error || loading || !data) {
         return null;
       }
 
       return parseCmsContent(
-        data.effectiveCmsLayout.content_html,
+        data.effectiveCmsLayout?.content_html ?? '',
         { ...CMS_COMPONENT_MAP, AppRouter, NavigationBar },
       ).bodyComponents;
     },
@@ -68,32 +66,32 @@ function AppRoot() {
   const appRootContextValue = useCachedLoadableValue(
     loading, error,
     () => ({
-      assumedIdentityFromProfile: data.assumedIdentityFromProfile,
-      cmsNavigationItems: data.cmsNavigationItems,
-      conventionAcceptingProposals: data.convention?.accepting_proposals,
-      conventionCanceled: data.convention?.canceled,
-      conventionName: data.convention?.name,
-      conventionDomain: data.convention?.domain,
-      currentAbility: data.currentAbility,
-      currentPendingOrder: data.currentPendingOrder,
-      currentUser: data.currentUser,
-      language: data.convention?.language ?? 'en',
-      myProfile: data.myProfile,
-      rootSiteName: data.rootSite?.site_name,
-      siteMode: data.convention?.site_mode,
-      signupMode: data.convention?.signup_mode,
-      ticketMode: data.convention?.ticket_mode,
-      ticketName: data.convention?.ticket_name,
-      ticketTypes: data.convention?.ticket_types,
-      ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
-      timezoneName: timezoneNameForConvention(data.convention),
+      assumedIdentityFromProfile: data!.assumedIdentityFromProfile,
+      cmsNavigationItems: data!.cmsNavigationItems,
+      conventionAcceptingProposals: data!.convention?.accepting_proposals,
+      conventionCanceled: data!.convention?.canceled,
+      conventionName: data!.convention?.name,
+      conventionDomain: data!.convention?.domain,
+      currentAbility: data!.currentAbility,
+      currentPendingOrder: data!.currentPendingOrder,
+      currentUser: data!.currentUser,
+      language: data!.convention?.language ?? 'en',
+      myProfile: data!.myProfile,
+      rootSiteName: data!.rootSite?.site_name,
+      siteMode: data!.convention?.site_mode,
+      signupMode: data!.convention?.signup_mode,
+      ticketMode: data!.convention?.ticket_mode,
+      ticketName: data!.convention?.ticket_name,
+      ticketTypes: data!.convention?.ticket_types,
+      ticketsAvailableForPurchase: data!.convention?.tickets_available_for_purchase,
+      timezoneName: timezoneNameForConvention(data!.convention),
     }),
     [data],
   );
 
   useEffect(
     () => {
-      if (!loading && !error && cachedCmsLayoutId !== data.effectiveCmsLayout.id) {
+      if (!loading && !error && data && cachedCmsLayoutId !== data.effectiveCmsLayout.id) {
         if (cachedCmsLayoutId) {
           // if the layout changed we need a full page reload to rerender the <head>
           setLayoutChanged(true);
@@ -110,8 +108,8 @@ function AppRoot() {
     () => {
       if (
         !loading && !error
-        && data.myProfile
-        && ((data.convention || {}).clickwrap_agreement || '').trim() !== ''
+        && data?.myProfile
+        && (data.convention?.clickwrap_agreement || '').trim() !== ''
         && !data.myProfile.accepted_clickwrap_agreement
         && location.pathname !== '/clickwrap_agreement'
         && location.pathname !== '/'
@@ -127,7 +125,7 @@ function AppRoot() {
     () => {
       if (appRootContextValue?.language) {
         i18n.changeLanguage(appRootContextValue.language);
-        Settings.locale = appRootContextValue.language;
+        Settings.defaultLocale = appRootContextValue.language;
 
         if (appRootContextValue.language === 'es') {
           import('moment/locale/es').then(() => moment.locale('es'));
@@ -152,7 +150,7 @@ function AppRoot() {
   }
 
   return (
-    <AppRootContext.Provider value={appRootContextValue}>
+    <AppRootContext.Provider value={appRootContextValue!}>
       <Switch>
         <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
           <PageComponents.FormEditor />

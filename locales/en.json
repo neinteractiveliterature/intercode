@@ -156,6 +156,7 @@
     "defaultText": "Copy to clipboard"
   },
   "errors": {
+    "404": "<0>Oops!</0><1>We couldn’t find a page at the location {{pathname}}.</1>",
     "unauthorized": "Sorry, your account is not authorized to view this page."
   },
   "eventProposals": {

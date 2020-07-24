@@ -2,9 +2,25 @@ import React, { useState, useCallback, useMemo } from 'react';
 import fetch from 'unfetch';
 import isEqual from 'lodash/isEqual';
 
-const AuthenticityTokensContext = React.createContext({});
+export type AuthenticityTokensContextValue = {
+  refresh: () => Promise<void>,
+  graphql: string,
+  changePassword?: string,
+  denyAuthorization?: string,
+  grantAuthorization?: string,
+  resetPassword?: string,
+  signIn?: string,
+  signOut?: string,
+  signUp?: string,
+  updateUser?: string,
+};
 
-export function useAuthenticityTokens(initialTokens) {
+const AuthenticityTokensContext = React.createContext<AuthenticityTokensContextValue>({
+  refresh: () => Promise.resolve(),
+  graphql: 'fakeAuthenticityToken',
+});
+
+export function useAuthenticityTokens(initialTokens: Omit<AuthenticityTokensContextValue, 'refresh'>) {
   const [tokens, setTokens] = useState(initialTokens);
 
   const refresh = useCallback(

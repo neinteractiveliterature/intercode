@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 
 export default React.createContext({
-  getMapboxGL: null,
+  getMapboxGL: () => {},
   mapboxAccessToken: null,
   mapboxgl: null,
 });

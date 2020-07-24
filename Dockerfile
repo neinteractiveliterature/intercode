@@ -5,8 +5,6 @@ ARG RUBY_VERSION=2.7.0
 
 FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
 
-ARG ASSETS_HOST
-
 USER root
 WORKDIR /usr/src/intercode
 
@@ -33,7 +31,6 @@ ENV RAILS_ENV production
 ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
-ENV ASSETS_HOST ${ASSETS_HOST}
 
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
   --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \

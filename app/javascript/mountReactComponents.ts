@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 // adapted from webpacker-react
-export default function mountReactComponents(components: { [name: string]: React.ComponentType }) {
+export default function mountReactComponents(
+  components: { [name: string]: React.ComponentType<any> },
+) {
   const toMount = document.querySelectorAll('[data-react-class]');
   toMount.forEach((element) => {
     const reactClassName = element.getAttribute('data-react-class');
