@@ -1,11 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import ArrayEditor from '../BuiltInFormControls/ArrayEditor';
+import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { EmailRoute } from '../graphqlTypes.generated';
 
-function EmailRouteForm({ emailRoute, onChange }) {
-  const changeField = (field) => (value) => onChange({ ...emailRoute, [field]: value });
+export type EmailRouteFormProps = {
+  emailRoute: EmailRoute,
+  onChange: React.Dispatch<EmailRoute>,
+};
+
+function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps) {
+  const changeField = <F extends keyof EmailRoute>(field: F) => (
+    (value: EmailRoute[F]) => onChange({ ...emailRoute, [field]: value })
+  );
 
   return (
     <>
@@ -15,8 +22,8 @@ function EmailRouteForm({ emailRoute, onChange }) {
         onTextChange={changeField('receiver_address')}
       />
 
-      <ArrayEditor
-        array={emailRoute.forward_addresses}
+      <StringArrayEditor
+        array={emailRoute.forward_addresses ?? []}
         onChange={changeField('forward_addresses')}
         header="Forward addresses"
         renderValue={(value) => value}
@@ -37,13 +44,5 @@ function EmailRouteForm({ emailRoute, onChange }) {
     </>
   );
 }
-
-EmailRouteForm.propTypes = {
-  emailRoute: PropTypes.shape({
-    receiver_address: PropTypes.string.isRequired,
-    forward_addresses: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-};
 
 export default EmailRouteForm;
