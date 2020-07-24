@@ -46,7 +46,7 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
       <div className="modal-header">
         <div className="flex-grow-1">Edit email route</div>
         <button
-          className="btn-sm btn-outline-danger"
+          className="btn btn-sm btn-outline-danger"
           type="button"
           onClick={() => confirm({
             prompt: `Are you sure you want to delete the email route for ${initialEmailRoute.receiver_address}?`,

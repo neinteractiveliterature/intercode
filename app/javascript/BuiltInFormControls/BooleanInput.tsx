@@ -1,10 +1,19 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import MultipleChoiceInput from './MultipleChoiceInput';
+import React, { useMemo, ReactNode } from 'react';
+import MultipleChoiceInput, { MultipleChoiceInputProps } from './MultipleChoiceInput';
+
+export type BooleanInputProps = (
+  Omit<MultipleChoiceInputProps, 'multiple' | 'value' | 'onChange' | 'choices'> & {
+    onChange: React.Dispatch<boolean>,
+    value?: boolean,
+    trueLabel?: ReactNode,
+    falseLabel?: ReactNode,
+    falseBeforeTrue?: boolean,
+  }
+);
 
 function BooleanInput({
   value, onChange, trueLabel, falseLabel, falseBeforeTrue, ...otherProps
-}) {
+}: BooleanInputProps) {
   const choices = useMemo(
     () => {
       const workingChoices = [
@@ -27,24 +36,9 @@ function BooleanInput({
       choices={choices}
       choiceClassName="form-check-inline"
       value={value != null ? value.toString() : null}
-      onChange={(newValue) => onChange(newValue === 'true')}
+      onChange={(newValue: string) => onChange(newValue === 'true')}
     />
   );
 }
-
-BooleanInput.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.bool,
-  trueLabel: PropTypes.string,
-  falseLabel: PropTypes.string,
-  falseBeforeTrue: PropTypes.bool,
-};
-
-BooleanInput.defaultProps = {
-  value: null,
-  trueLabel: null,
-  falseLabel: null,
-  falseBeforeTrue: false,
-};
 
 export default BooleanInput;
