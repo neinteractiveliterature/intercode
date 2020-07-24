@@ -1,20 +1,36 @@
-/* global Rollbar */
-import React from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable max-classes-per-file */
+import React, { ReactNode, ErrorInfo } from 'react';
+import { ApolloError } from 'apollo-client';
 
 import ErrorDisplay from './ErrorDisplay';
 
-class ErrorBoundary extends React.Component {
-  static getDerivedStateFromError(error) {
+declare class GlobalRollbar {
+  error: (error: Error, options: { errorInfo: ErrorInfo }) => void;
+}
+
+declare const Rollbar: GlobalRollbar;
+
+export type ErrorBoundaryProps = {
+  errorType?: 'graphql' | 'plain',
+  placement?: 'before' | 'after' | 'replace',
+  children?: ReactNode,
+};
+
+type ErrorBoundaryState = {
+  error: Error | null,
+};
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  static getDerivedStateFromError(error: any) {
     return { error };
   }
 
-  constructor(props) {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { error: null };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: Error, info: ErrorInfo) {
     this.setState({ error });
 
     if (typeof Rollbar !== 'undefined') {
@@ -28,15 +44,17 @@ class ErrorBoundary extends React.Component {
   }
 
   render = () => {
-    const { errorType, placement, children } = this.props;
+    const errorType = this.props.errorType ?? 'graphql';
+    const placement = this.props.placement ?? 'before';
+    const { children } = this.props;
 
     if (!this.state.error) {
       return children;
     }
 
     const errorDisplayProps = (
-      errorType === 'graphql'
-        ? { graphQLError: this.state.error }
+      (errorType ?? 'graphql') === 'graphql'
+        ? { graphQLError: this.state.error as ApolloError }
         : { stringError: this.state.error.message }
     );
 
@@ -59,19 +77,7 @@ class ErrorBoundary extends React.Component {
         <ErrorDisplay {...errorDisplayProps} />
       </>
     );
-  }
+  };
 }
-
-ErrorBoundary.propTypes = {
-  errorType: PropTypes.oneOf(['graphql', 'plain']),
-  placement: PropTypes.oneOf(['before', 'after', 'replace']),
-  children: PropTypes.node,
-};
-
-ErrorBoundary.defaultProps = {
-  errorType: 'graphql',
-  placement: 'before',
-  children: null,
-};
 
 export default ErrorBoundary;

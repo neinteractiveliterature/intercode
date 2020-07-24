@@ -1,17 +1,21 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import StaffPositionPropType from './StaffPositionPropType';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import AppRootContext from '../AppRootContext';
 import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
-import ArrayEditor from '../BuiltInFormControls/ArrayEditor';
+import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
+import { StaffPosition } from '../graphqlTypes.generated';
 
-function StaffPositionForm({ staffPosition, onChange }) {
+export type StaffPositionFormProps = {
+  staffPosition: StaffPosition,
+  onChange: React.Dispatch<StaffPosition>,
+};
+
+function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
   const { conventionDomain } = useContext(AppRootContext);
   const formMutator = mutator({
     getState: () => staffPosition,
@@ -24,10 +28,10 @@ function StaffPositionForm({ staffPosition, onChange }) {
     },
   });
 
-  const setEmailAliases = (emailAliases) => onChange({
+  const setEmailAliases = (emailAliases: StaffPosition['email_aliases']) => onChange({
     ...staffPosition, email_aliases: emailAliases,
   });
-  const setCcAddresses = (ccAddresses) => onChange({
+  const setCcAddresses = (ccAddresses: StaffPosition['cc_addresses']) => onChange({
     ...staffPosition, cc_addresses: ccAddresses,
   });
 
@@ -49,7 +53,7 @@ function StaffPositionForm({ staffPosition, onChange }) {
         helpText={`If this address ends in @${conventionDomain}, email will be automatically forwarded to staff members.`}
       />
 
-      <ArrayEditor
+      <StringArrayEditor
         header={(
           <>
             <legend className="col-form-label p-0">Email aliases</legend>
@@ -87,7 +91,7 @@ function StaffPositionForm({ staffPosition, onChange }) {
       <BooleanInput
         name="visible"
         caption="Visible in CMS content?"
-        value={staffPosition.visible}
+        value={staffPosition.visible ?? undefined}
         onChange={formMutator.visible}
       />
 
@@ -102,7 +106,7 @@ function StaffPositionForm({ staffPosition, onChange }) {
         )}
       </FormGroupWithLabel>
 
-      <ArrayEditor
+      <StringArrayEditor
         header={(
           <>
             <legend className="col-form-label p-0">CC addresses</legend>
@@ -130,10 +134,5 @@ function StaffPositionForm({ staffPosition, onChange }) {
     </div>
   );
 }
-
-StaffPositionForm.propTypes = {
-  staffPosition: StaffPositionPropType.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
 
 export default StaffPositionForm;

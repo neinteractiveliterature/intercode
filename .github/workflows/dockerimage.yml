@@ -31,7 +31,6 @@ jobs:
     # Do the actual build
     - name: Build the "local-build-production" Docker image
       run: docker buildx build .
-        --build-arg ASSETS_HOST=assets.neilhosting.net
         $(if [ -f build-cache/index.json ]; then echo '--cache-from=type=local,src=build-cache'; fi)
         --cache-to=type=local,dest=build-cache-new
         --target build-production
@@ -43,7 +42,6 @@ jobs:
     # Run the tests
     - name: Build the "test" Docker image
       run: docker buildx build .
-        --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from local-build-production
         --target test
         --tag local-test
@@ -88,7 +86,6 @@ jobs:
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && (github.event.ref == 'refs/heads/main')
       run: docker buildx build .
-        --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from local-build-production
         --target production
         --tag local-production

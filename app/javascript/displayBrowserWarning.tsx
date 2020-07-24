@@ -4,6 +4,10 @@
 import { detect } from 'detect-browser';
 import includes from 'lodash/includes';
 
+declare global {
+  interface Window { setDontShowCookie: () => void; }
+}
+
 const IOS_WEBVIEW_APP_HOSTS = {
   crios: 'Google Chrome on iOS',
   facebook: 'Facebook on iOS',
@@ -40,7 +44,7 @@ const MIN_SUPPORTED_VERSION = {
 
 const SUPPORTED_BROWSERS = Object.getOwnPropertyNames(MIN_SUPPORTED_VERSION);
 
-function getMajorVersion(versionString) {
+function getMajorVersion(versionString?: string) {
   if (!versionString) {
     return 0;
   }
@@ -53,18 +57,18 @@ function getMajorVersion(versionString) {
   return parseInt(parts[0], 10);
 }
 
-function renderRecommendation(browser) {
-  if (IOS_WEBVIEW_APP_HOSTS[browser]) {
+function renderRecommendation(browser: ReturnType<typeof detect>) {
+  if (IOS_WEBVIEW_APP_HOSTS[browser?.name ?? 'unknown']) {
     return `
       <p class="text-left">
-        {IOS_WEBVIEW_APP_HOSTS[browser]}
+        ${IOS_WEBVIEW_APP_HOSTS[browser?.name ?? 'unknown']}
         uses the Safari engine, which ships with iOS itself.  To update it, update your device to
         the latest version of iOS.
       </p>
     `;
   }
 
-  switch (browser.name) {
+  switch (browser?.name ?? 'unknown') {
     case 'chrome':
       return `
         <a href="https://www.google.com/chrome/" class="btn btn-primary mr-2">
@@ -114,8 +118,8 @@ function renderRecommendation(browser) {
   }
 }
 
-function getWarningMessage(browser) {
-  if (includes(SUPPORTED_BROWSERS, browser.name)) {
+function getWarningMessage(browser: ReturnType<typeof detect>) {
+  if (includes(SUPPORTED_BROWSERS, browser?.name)) {
     return 'This version is out of date and might not work correctly with this site.';
   }
 
@@ -128,8 +132,8 @@ function setDontShowCookie() {
 }
 window.setDontShowCookie = setDontShowCookie;
 
-function renderBrowserWarning(browser) {
-  const browserName = BROWSER_NAMES[browser.name] || 'an unknown web browser';
+function renderBrowserWarning(browser: ReturnType<typeof detect>) {
+  const browserName = BROWSER_NAMES[browser?.name || 'unknown'] || 'an unknown web browser';
 
   const wrapperDiv = document.createElement('div');
   wrapperDiv.innerHTML = `
@@ -146,7 +150,7 @@ function renderBrowserWarning(browser) {
               You&apos;re viewing this web site with
               <strong>
                 ${browserName}
-                ${getMajorVersion(browser.version)}
+                ${getMajorVersion(browser?.version ?? undefined)}
               </strong>.
               ${getWarningMessage(browser)}
             </p>
@@ -175,33 +179,34 @@ function displayBrowserWarning() {
     return;
   }
 
-  let browser = detect() || {};
-  if (browser.bot) {
+  let browser = detect();
+  if (browser?.type === 'bot') {
     return;
   }
 
-  if (IOS_WEBVIEW_APP_HOSTS[browser.name] && browser.os === 'iOS') {
+  if (IOS_WEBVIEW_APP_HOSTS[browser?.name ?? 'unknown'] && browser?.os === 'iOS') {
     // special handling for iOS apps which are actually just a UIWebView
 
     const match = navigator.userAgent.match(/iPhone OS (\d+)/);
     if (match) {
       const iosVersion = parseInt(match[1], 10);
       browser = {
-        name: browser.name,
+        ...browser,
         version: iosVersion.toString(),
       };
     }
   }
 
-  if (includes(SUPPORTED_BROWSERS, browser.name)) {
-    if (getMajorVersion(browser.version) >= MIN_SUPPORTED_VERSION[browser.name]) {
+  if (includes(SUPPORTED_BROWSERS, browser?.name)) {
+    const minVersion = MIN_SUPPORTED_VERSION[browser?.name ?? 'unknown'];
+    if (getMajorVersion(browser?.version ?? undefined) >= minVersion) {
       return;
     }
   }
 
   const warningDiv = document.createElement('div');
   const noscript = document.getElementById('no-javascript-warning');
-  noscript.parentNode.insertBefore(warningDiv, noscript);
+  noscript?.parentNode?.insertBefore(warningDiv, noscript);
 
   const warning = renderBrowserWarning(browser);
   warningDiv.appendChild(warning);

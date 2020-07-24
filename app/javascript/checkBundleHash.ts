@@ -1,7 +1,7 @@
-import { lazy } from 'react';
+import { lazy, ComponentType } from 'react';
 import fetch from 'unfetch';
 
-let bundleHash = null;
+let bundleHash: string;
 
 async function bundleHashMatches() {
   try {
@@ -26,8 +26,8 @@ export async function reloadOnBundleHashMismatch() {
   }
 }
 
-export function checkBundleHashOnError(func) {
-  return new Promise((resolve, reject) => {
+export function checkBundleHashOnError<T>(func: () => Promise<T>) {
+  return new Promise<T>((resolve, reject) => {
     func().then(resolve).catch((error) => {
       bundleHashMatches().then((matches) => {
         if (!matches) {
@@ -40,6 +40,8 @@ export function checkBundleHashOnError(func) {
   });
 }
 
-export function lazyWithBundleHashCheck(func) {
+export function lazyWithBundleHashCheck<T extends ComponentType<any>>(
+  func: () => Promise<{ default: T }>,
+) {
   return lazy(() => checkBundleHashOnError(func));
 }

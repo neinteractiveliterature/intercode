@@ -1,3 +1,7 @@
+import gql from 'graphql-tag';
+
+// eslint-disable-next-line import/prefer-default-export
+export const AppRootQuery = gql`
 query AppRootQuery($path: String!) {
   effectiveCmsLayout(path: $path) {
     id
@@ -81,7 +85,10 @@ query AppRootQuery($path: String!) {
     ticket_name
     ticket_types {
       id
-      publicly_available
+      providing_products {
+        id
+        available
+      }
     }
   }
 
@@ -105,3 +112,4 @@ query AppRootQuery($path: String!) {
     }
   }
 }
+`;

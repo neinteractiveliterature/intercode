@@ -10,8 +10,8 @@ const CACHE_PATH = 'tmp/cache/webpack';
 
 module.exports = {
   entry: {
-    application: './app/javascript/packs/application.js',
-    'browser-warning': './app/javascript/displayBrowserWarning.jsx',
+    application: './app/javascript/packs/applicationEntry.js',
+    'browser-warning': './app/javascript/displayBrowserWarning.tsx',
   },
   output: {
     filename: '[name]-[chunkhash].js',
