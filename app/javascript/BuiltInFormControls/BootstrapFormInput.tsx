@@ -20,7 +20,7 @@ export type BootstrapFormInputProps = (
 
 function isHTMLChangeProps(props: BootstrapFormInputProps):
 props is BootstrapFormInputPropsWithHTMLChange {
-  return Object.prototype.hasOwnProperty.call(props, 'onChange');
+  return !Object.prototype.hasOwnProperty.call(props, 'onTextChange');
 }
 
 function extractInputElementAttributes(
