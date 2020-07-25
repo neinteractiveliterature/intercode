@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, ReactNode } from 'react';
 import classNames from 'classnames';
 
-export function useTabs(tabs, initialTabId = null) {
-  const [selectedTab, setSelectedTab] = useState(initialTabId || tabs[0].id);
+export type TabProps = {
+  id: string,
+  name: string,
+  renderContent: () => ReactNode,
+};
+
+export function useTabs(tabs: TabProps[], initialTabId?: string) {
+  const [selectedTab, setSelectedTab] = useState(initialTabId ?? tabs[0].id);
 
   return { tabs, selectedTab, setSelectedTab };
 }
 
-const TabsPropType = PropTypes.arrayOf(PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  renderContent: PropTypes.func.isRequired,
-}));
+export type TabListProps = {
+  tabs: TabProps[],
+  selectedTab?: string,
+  setSelectedTab: (selectedTab: string) => void,
+};
 
-export function TabList({ tabs, selectedTab, setSelectedTab }) {
+export function TabList({ tabs, selectedTab, setSelectedTab }: TabListProps) {
   return (
     <ul className="nav nav-tabs">
       {
@@ -37,13 +42,12 @@ export function TabList({ tabs, selectedTab, setSelectedTab }) {
   );
 }
 
-TabList.propTypes = {
-  tabs: TabsPropType.isRequired,
-  selectedTab: PropTypes.string.isRequired,
-  setSelectedTab: PropTypes.func.isRequired,
+export type TabBodyProps = {
+  tabs: TabProps[],
+  selectedTab?: string,
 };
 
-export function TabBody({ tabs, selectedTab }) {
+export function TabBody({ tabs, selectedTab }: TabBodyProps) {
   return (
     <>
       {
@@ -56,8 +60,3 @@ export function TabBody({ tabs, selectedTab }) {
     </>
   );
 }
-
-TabBody.propTypes = {
-  tabs: TabsPropType.isRequired,
-  selectedTab: PropTypes.string.isRequired,
-};

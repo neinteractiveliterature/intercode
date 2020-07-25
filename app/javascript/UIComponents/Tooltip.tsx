@@ -1,10 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Ref, CSSProperties, ReactNode } from 'react';
 import classNames from 'classnames';
+import { PopperProps, PopperArrowProps } from 'react-popper';
+
+export type TooltipProps = {
+  withRef: Ref<HTMLDivElement>,
+  style?: CSSProperties,
+  visible?: boolean,
+  placement: NonNullable<PopperProps['placement']>,
+  arrowProps: PopperArrowProps,
+  children: ReactNode,
+};
 
 function Tooltip({
   withRef, style, visible, placement, arrowProps, children,
-}) {
+}: TooltipProps) {
   const placementClass = (placement || '').split('-')[0];
 
   return (
@@ -22,17 +31,5 @@ function Tooltip({
     </div>
   );
 }
-
-Tooltip.propTypes = {
-  withRef: PropTypes.func.isRequired,
-  style: PropTypes.shape({}).isRequired,
-  visible: PropTypes.bool.isRequired,
-  placement: PropTypes.string.isRequired,
-  arrowProps: PropTypes.shape({
-    ref: PropTypes.any,
-    style: PropTypes.shape({}),
-  }).isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 export default Tooltip;

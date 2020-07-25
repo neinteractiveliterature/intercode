@@ -1,10 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-function formatEmail({ email, name }) {
+export type EmailListEntry = { email: string, name: string };
+
+function formatEmail({ email, name }: EmailListEntry) {
   if (name.match(/[^0-9A-Za-z ]/)) {
     return `"${name.replace(/"/g, '\\"')}" <${email}>`;
   }
@@ -12,7 +13,13 @@ function formatEmail({ email, name }) {
   return `${name} <${email}>`;
 }
 
-function EmailList({ emails, separator, renderToolbarContent }) {
+export type EmailListProps = {
+  emails: EmailListEntry[],
+  separator: string,
+  renderToolbarContent?: () => ReactNode,
+};
+
+function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) {
   const { t } = useTranslation();
   const addresses = emails.map(formatEmail).join(separator);
   const mailtoParams = new URLSearchParams();
@@ -56,18 +63,5 @@ function EmailList({ emails, separator, renderToolbarContent }) {
     </>
   );
 }
-
-EmailList.propTypes = {
-  emails: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-  })).isRequired,
-  separator: PropTypes.string.isRequired,
-  renderToolbarContent: PropTypes.func,
-};
-
-EmailList.defaultProps = {
-  renderToolbarContent: null,
-};
 
 export default EmailList;

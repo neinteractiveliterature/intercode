@@ -1,23 +1,34 @@
 import React, {
-  useState, useEffect, useRef, useImperativeHandle, forwardRef,
+  useState, useEffect, useRef, useImperativeHandle, forwardRef, Ref, CSSProperties,
+  ReactNode,
 } from 'react';
-import PropTypes from 'prop-types';
 import ReactDOM, { findDOMNode } from 'react-dom';
-import { Manager, Reference, Popper } from 'react-popper';
+import {
+  Manager, Reference, Popper, PopperProps, PopperChildrenProps,
+} from 'react-popper';
 import classNames from 'classnames';
 import onClickOutside from 'react-onclickoutside';
 
+export type PopperDropdownContentProps = {
+  visible: boolean,
+  popperRef: Ref<any>,
+  style: CSSProperties,
+  placement: PopperProps['placement'],
+  suppressWrapperDiv?: boolean,
+  children: ReactNode,
+};
+
 function PopperDropdownContent({
-  visible, getPopperRef, style, placement, suppressWrapperDiv, children,
-}) {
+  visible, popperRef, style, placement, suppressWrapperDiv, children,
+}: PopperDropdownContentProps) {
   if (suppressWrapperDiv) {
-    return children;
+    return <>{children}</>;
   }
 
   return (
     <div
       className={classNames('dropdown-menu', { show: visible })}
-      ref={getPopperRef}
+      ref={popperRef}
       style={style}
       data-placement={placement}
     >
@@ -26,37 +37,52 @@ function PopperDropdownContent({
   );
 }
 
-PopperDropdownContent.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  getPopperRef: PropTypes.func.isRequired,
-  style: PropTypes.shape({}).isRequired,
-  placement: PropTypes.string.isRequired,
-  suppressWrapperDiv: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
-};
-
 const PopperDropdownContentWithOnClickOutside = onClickOutside(PopperDropdownContent);
 
+export type PopperDropdownChildrenProps = PopperChildrenProps & {
+  visible: boolean,
+  toggle: React.MouseEventHandler,
+  setVisible: React.Dispatch<boolean>,
+};
+
+export type PopperDropdownChildrenRenderFunction = (
+  (props: PopperDropdownChildrenProps) => JSX.Element
+);
+
+export type PopperDropdownProps = {
+  children: JSX.Element | PopperDropdownChildrenRenderFunction,
+  onToggle?: (prevVisible: boolean | undefined, event: React.BaseSyntheticEvent) => any,
+  placement: PopperProps['placement'],
+  renderReference: (options: {
+    ref: Ref<any>,
+    toggle: (event: React.BaseSyntheticEvent) => void,
+    setVisible: React.Dispatch<boolean>,
+    visible: boolean,
+  }) => JSX.Element,
+  style?: CSSProperties,
+  visible?: boolean,
+  modifiers?: PopperProps['modifiers'],
+};
+
 function PopperDropdown({
-  // eslint-disable-next-line react/prop-types
   children, onToggle, placement, renderReference, style, visible, modifiers,
-}, ref) {
+}: PopperDropdownProps, ref: Ref<any>) {
   const [internalVisible, setInternalVisible] = useState(visible);
   useEffect(() => { setInternalVisible(visible); }, [visible]);
   const managerNode = useRef(null);
 
   useImperativeHandle(ref, () => ({ setVisible: setInternalVisible }));
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event: React.MouseEvent) => {
     // eslint-disable-next-line react/no-find-dom-node
-    if (managerNode.current && findDOMNode(managerNode.current).contains(event.target)) {
+    if (managerNode.current && findDOMNode(managerNode.current)?.contains(event.target as Node)) {
       return;
     }
 
     setInternalVisible(false);
   };
 
-  const targetClicked = (event) => {
+  const targetClicked = (event: React.SyntheticEvent) => {
     if (onToggle) {
       setInternalVisible((prevVisible) => onToggle(prevVisible, event));
     } else {
@@ -79,7 +105,7 @@ function PopperDropdown({
       {ReactDOM.createPortal(
         (
           <Popper
-            placement={internalVisible ? effectivePlacement : 'invalid'}
+            placement={internalVisible ? effectivePlacement : undefined}
             modifiers={{
               preventOverflow: { boundariesElement: 'viewport' },
               ...(modifiers || {}),
@@ -90,7 +116,7 @@ function PopperDropdown({
 
               return (
                 <PopperDropdownContentWithOnClickOutside
-                  getPopperRef={popperRef}
+                  popperRef={popperRef}
                   style={effectiveStyle}
                   placement={effectivePlacement}
                   visible={internalVisible || false}
@@ -122,21 +148,5 @@ function PopperDropdown({
 }
 
 const PopperDropdownWithRefForwarding = forwardRef(PopperDropdown);
-
-PopperDropdownWithRefForwarding.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-  onToggle: PropTypes.func,
-  placement: PropTypes.string,
-  renderReference: PropTypes.func.isRequired,
-  visible: PropTypes.bool,
-  modifiers: PropTypes.shape({}),
-};
-
-PopperDropdownWithRefForwarding.defaultProps = {
-  onToggle: null,
-  placement: 'bottom-start',
-  visible: null,
-  modifiers: {},
-};
 
 export default PopperDropdownWithRefForwarding;
