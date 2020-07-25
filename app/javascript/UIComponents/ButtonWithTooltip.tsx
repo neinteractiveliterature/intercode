@@ -1,10 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
 import PopperDropdown from './PopperDropdown';
 import Tooltip from './Tooltip';
 
-function ButtonWithTooltip({ children, buttonProps, tooltipContent }) {
+export type ButtonWithTooltipProps = {
+  children: ReactNode,
+  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>,
+  tooltipContent: ReactNode,
+};
+
+function ButtonWithTooltip({ children, buttonProps, tooltipContent }: ButtonWithTooltipProps) {
   return (
     <PopperDropdown
       placement="bottom"
@@ -30,11 +35,5 @@ function ButtonWithTooltip({ children, buttonProps, tooltipContent }) {
     </PopperDropdown>
   );
 }
-
-ButtonWithTooltip.propTypes = {
-  children: PropTypes.node.isRequired,
-  buttonProps: PropTypes.shape({}).isRequired,
-  tooltipContent: PropTypes.node.isRequired,
-};
 
 export default ButtonWithTooltip;
