@@ -1,10 +1,24 @@
 import React, {
-  useState, useRef, useLayoutEffect, useCallback,
+  useState, useRef, useLayoutEffect, useCallback, ReactNode, RefObject,
 } from 'react';
-import PropTypes from 'prop-types';
 import useIsMounted from '../useIsMounted';
 
-const DefaultInPlaceEditorInput = React.forwardRef((
+export type InPlaceEditorInputProps<T> = {
+  inputProps: {
+    onChange: React.Dispatch<React.SetStateAction<T>>,
+    value?: T,
+    disabled?: boolean,
+    committing?: boolean,
+  },
+  buttons: ReactNode,
+  commitEditing: (event: React.SyntheticEvent) => Promise<void>,
+  cancelEditing: React.EventHandler<any>,
+};
+
+const DefaultInPlaceEditorInput = React.forwardRef<
+HTMLInputElement,
+InPlaceEditorInputProps<string>
+>((
   {
     inputProps: {
       value, onChange, committing, disabled, ...inputProps
@@ -25,24 +39,23 @@ const DefaultInPlaceEditorInput = React.forwardRef((
   </>
 ));
 
-DefaultInPlaceEditorInput.propTypes = {
-  inputProps: PropTypes.shape({
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.string,
-    disabled: PropTypes.bool,
-    committing: PropTypes.bool,
-  }).isRequired,
-  buttons: PropTypes.node.isRequired,
+export type InPlaceEditorInputWrapperProps<T> = {
+  initialValue: T,
+  commit: ((value: T) => Promise<void>) | ((value: T) => void),
+  cancel: React.EventHandler<any>,
+  inputRef: RefObject<any>,
+  renderInput: (props: InPlaceEditorInputProps<T>) => JSX.Element,
 };
 
-function InPlaceEditorInputWrapper({
-  initialValue, commit, cancel, inputRef, renderInput,
-}) {
+function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) {
+  const {
+    initialValue, commit, cancel, inputRef, renderInput,
+  } = props;
   const [value, setValue] = useState(initialValue);
   const [committing, setCommitting] = useState(false);
   const isMounted = useIsMounted();
 
-  const commitEditing = async (event) => {
+  const commitEditing = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
       await commit(value);
@@ -53,7 +66,7 @@ function InPlaceEditorInputWrapper({
     }
   };
 
-  const keyDownInInput = (event) => {
+  const keyDownInInput = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case 'Escape':
         event.preventDefault();
@@ -106,34 +119,35 @@ function InPlaceEditorInputWrapper({
     buttons,
   };
 
-  if (renderInput) {
-    return renderInput(wrappedComponentProps);
-  }
+  return renderInput(wrappedComponentProps);
+}
 
+function DefaultInPlaceEditorInputWrapper(
+  props: Omit<InPlaceEditorInputWrapperProps<string>, 'renderInput'>,
+) {
   return (
-    <DefaultInPlaceEditorInput {...wrappedComponentProps} />
+    <InPlaceEditorInputWrapper
+      {...props}
+      renderInput={(wrappedComponentProps: InPlaceEditorInputProps<string>) => (
+        <DefaultInPlaceEditorInput {...wrappedComponentProps} />
+      )}
+    />
   );
 }
 
-InPlaceEditorInputWrapper.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  initialValue: PropTypes.any,
-  commit: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired,
-  inputRef: PropTypes.shape({}).isRequired,
-  renderInput: PropTypes.func,
+export type InPlaceEditorProps<T> = {
+  value: T,
+  onChange: (value: T) => void | Promise<any>,
+  children?: ReactNode,
+  renderInput?: (props: InPlaceEditorInputProps<T>) => JSX.Element,
+  className?: string,
 };
 
-InPlaceEditorInputWrapper.defaultProps = {
-  initialValue: null,
-  renderInput: null,
-};
-
-function InPlaceEditor({
+function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
   children, className, onChange, renderInput, value,
-}) {
+}: InPlaceEditorProps<T>) {
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef();
+  const inputRef = useRef<InputType>();
 
   useLayoutEffect(
     () => {
@@ -161,9 +175,9 @@ function InPlaceEditor({
   );
 
   const commitEditing = useCallback(
-    async (newValue) => {
+    async (newValue: T) => {
       const onChangeReturn = onChange(newValue);
-      if (onChangeReturn?.then) {
+      if (onChangeReturn && onChangeReturn.then) {
         await onChangeReturn.then(() => {
           setEditing(false);
         });
@@ -177,13 +191,24 @@ function InPlaceEditor({
   if (editing) {
     return (
       <div className={className || 'form-inline align-items-start'}>
-        <InPlaceEditorInputWrapper
-          commit={commitEditing}
-          cancel={cancelEditing}
-          initialValue={value}
-          inputRef={inputRef}
-          renderInput={renderInput}
-        />
+        {renderInput
+          ? (
+            <InPlaceEditorInputWrapper
+              commit={commitEditing}
+              cancel={cancelEditing}
+              initialValue={value}
+              inputRef={inputRef}
+              renderInput={renderInput}
+            />
+          )
+          : (
+            <DefaultInPlaceEditorInputWrapper
+              commit={(commitEditing as unknown) as ((value: string) => void | Promise<any>)}
+              cancel={cancelEditing}
+              initialValue={(value as unknown) as string}
+              inputRef={inputRef}
+            />
+          )}
       </div>
     );
   }
@@ -197,20 +222,5 @@ function InPlaceEditor({
     </div>
   );
 }
-
-InPlaceEditor.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  value: PropTypes.any.isRequired,
-  onChange: PropTypes.func.isRequired,
-  children: PropTypes.node,
-  renderInput: PropTypes.func,
-  className: PropTypes.string,
-};
-
-InPlaceEditor.defaultProps = {
-  children: null,
-  renderInput: null,
-  className: null,
-};
 
 export default InPlaceEditor;

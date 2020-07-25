@@ -1,12 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode, HTMLAttributes } from 'react';
 import useUniqueId from '../useUniqueId';
 import useDebouncedState from '../useDebouncedState';
 
+export type SearchInputProps = {
+  value?: string,
+  onChange: (value: string) => void,
+  label: ReactNode,
+  wait?: number,
+  name?: string,
+  inputProps?: HTMLAttributes<HTMLInputElement>,
+  inputGroupProps?: HTMLAttributes<HTMLDivElement>,
+};
+
 function SearchInput({
   value, onChange, wait, name, label, inputProps, inputGroupProps,
-}) {
-  const [transientValue, setTransientValue] = useDebouncedState(value || '', onChange, wait);
+}: SearchInputProps) {
+  const [transientValue, setTransientValue] = useDebouncedState(value ?? '', onChange, wait ?? 100);
   const inputId = useUniqueId(`${name || 'search'}-`);
 
   return (
@@ -18,7 +27,7 @@ function SearchInput({
           type="search"
           className="form-control search-input-control"
           style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-          value={transientValue}
+          value={transientValue ?? ''}
           name={name}
           onChange={(event) => setTransientValue(event.target.value)}
           {...(inputProps || {})}
@@ -32,23 +41,5 @@ function SearchInput({
     </div>
   );
 }
-
-SearchInput.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  wait: PropTypes.number,
-  name: PropTypes.string,
-  inputProps: PropTypes.shape({}),
-  inputGroupProps: PropTypes.shape({}),
-};
-
-SearchInput.defaultProps = {
-  value: null,
-  wait: 100,
-  name: null,
-  inputProps: {},
-  inputGroupProps: {},
-};
 
 export default SearchInput;
