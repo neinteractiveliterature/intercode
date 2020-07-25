@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
+// @ts-ignore
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { ApolloError } from 'apollo-client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from './InPlaceEditor';
@@ -9,27 +10,42 @@ import { parseIntOrNull } from '../ComposableFormUtils';
 import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import { TicketType, MaximumEventProvidedTicketsOverride } from '../graphqlTypes.generated';
 
-const TicketTypePropType = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  description: PropTypes.string.isRequired,
-  maximum_event_provided_tickets: PropTypes.number.isRequired,
-});
+type TicketTypeForMEPTO = Pick<TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>;
 
-const NULL_TICKET_TYPE = {
-  id: '',
+const NULL_TICKET_TYPE: TicketTypeForMEPTO = {
+  id: 0,
   description: '',
-  maximum_event_provided_tickets: '',
+  maximum_event_provided_tickets: 0,
+};
+
+export type MEPTOInput = {
+  eventId: number,
+  overrideValue: number,
+  ticketTypeId: number,
+};
+
+export type MEPTOEditorProps = {
+  eventId: number,
+  ticketName: string,
+  overrides: MaximumEventProvidedTicketsOverride[],
+  ticketTypes: TicketTypeForMEPTO[],
+  createOverride: (input: MEPTOInput) => Promise<any>,
+  updateOverride: (input: { id: number, overrideValue: number }) => Promise<any>,
+  deleteOverride: (id: number) => Promise<any>,
 };
 
 function MaximumEventProvidedTicketsOverrideEditor({
   eventId, ticketName, overrides, ticketTypes, createOverride, updateOverride, deleteOverride,
-}) {
+}: MEPTOEditorProps) {
   const { t } = useTranslation();
   const [createOverrideAsync, createError, , clearCreateError] = useAsyncFunction(createOverride);
   const [updateOverrideAsync, updateError, , clearUpdateError] = useAsyncFunction(updateOverride);
   const [deleteOverrideAsync, deleteError, , clearDeleteError] = useAsyncFunction(deleteOverride);
-  const [addingOverride, setAddingOverride] = useState({
+  const [addingOverride, setAddingOverride] = useState<{
+    ticket_type: TicketTypeForMEPTO, override_value: number | null
+  }>({
     ticket_type: NULL_TICKET_TYPE,
     override_value: null,
   });
@@ -41,12 +57,12 @@ function MaximumEventProvidedTicketsOverrideEditor({
   };
 
   const sortedOverrides = useMemo(
-    () => sortByLocaleString(overrides, (o) => o.ticket_type.description),
+    () => sortByLocaleString(overrides, (o) => o.ticket_type?.description ?? ''),
     [overrides],
   );
 
   const sortedTicketTypes = useMemo(
-    () => sortByLocaleString(ticketTypes, (tt) => tt.description),
+    () => sortByLocaleString(ticketTypes, (tt) => tt.description ?? ''),
     [ticketTypes],
   );
 
@@ -57,11 +73,11 @@ function MaximumEventProvidedTicketsOverrideEditor({
   );
 
   const addingOverrideDataComplete = (
-    addingOverride.ticket_type.id
+    !!addingOverride.ticket_type.id
     && addingOverride.override_value != null
   );
 
-  const addingTicketTypeIdDidChange = (event) => {
+  const addingTicketTypeIdDidChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newTicketType = ticketTypes.find((
       (ticketType) => ticketType.id.toString() === event.target.value
     ));
@@ -78,7 +94,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
     }
   };
 
-  const addingOverrideValueDidChange = (event) => {
+  const addingOverrideValueDidChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseIntOrNull(event.target.value);
     setAddingOverride((prevAddingOverride) => ({
       ...prevAddingOverride,
@@ -91,7 +107,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
     await createOverrideAsync({
       eventId,
       ticketTypeId: addingOverride.ticket_type.id,
-      overrideValue: addingOverride.override_value,
+      overrideValue: addingOverride.override_value!,
     });
 
     setAddingOverride({
@@ -100,14 +116,14 @@ function MaximumEventProvidedTicketsOverrideEditor({
     });
   };
 
-  const existingOverrideValueDidChange = (id, overrideValue) => {
+  const existingOverrideValueDidChange = (id: number, overrideValue: string) => {
     clearAllErrors();
     updateOverrideAsync({
       id, overrideValue: Number.parseInt(overrideValue, 10),
     });
   };
 
-  const deleteOverrideConfirmed = async (override) => {
+  const deleteOverrideConfirmed = async (override: { id: number }) => {
     clearAllErrors();
     await deleteOverrideAsync(override.id);
   };
@@ -221,24 +237,10 @@ function MaximumEventProvidedTicketsOverrideEditor({
             </tr>
           </tfoot>
         </table>
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as (ApolloError | null)} />
       </div>
     </div>
   );
 }
-
-MaximumEventProvidedTicketsOverrideEditor.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  ticketName: PropTypes.string.isRequired,
-  overrides: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    ticket_type: TicketTypePropType.isRequired,
-    override_value: PropTypes.number.isRequired,
-  })).isRequired,
-  ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
-  createOverride: PropTypes.func.isRequired,
-  deleteOverride: PropTypes.func.isRequired,
-  updateOverride: PropTypes.func.isRequired,
-};
 
 export default MaximumEventProvidedTicketsOverrideEditor;

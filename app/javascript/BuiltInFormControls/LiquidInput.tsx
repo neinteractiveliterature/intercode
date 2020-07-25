@@ -16,7 +16,7 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryQuery, PreviewLiquidQueryQuery } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
-import { SyncCodeInputProps } from './SyncCodeInput';
+import type { SyncCodeInputProps } from './SyncCodeInput';
 
 type AddFileModalProps = {
   visible: boolean,

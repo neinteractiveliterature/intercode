@@ -1,14 +1,31 @@
-import React, { useState, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useState, useCallback, useRef, ReactNode, InputHTMLAttributes,
+} from 'react';
 import classNames from 'classnames';
+
+type CommitableInputChangeHandler = React.Dispatch<string> | ((value: string) => Promise<void>);
+
+export type CommitableInputProps = {
+  value?: string,
+  onChange: CommitableInputChangeHandler,
+  onCancel?: () => void,
+  className?: string,
+  disabled?: boolean,
+  renderInput?: (
+    props: Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> &
+    { onChange: CommitableInputChangeHandler }
+  ) => ReactNode,
+  placeholder?: string,
+  label?: string,
+};
 
 function CommitableInput({
   value, onChange, onCancel, className, disabled, renderInput, placeholder, label,
-}) {
+}: CommitableInputProps) {
   const [editing, setEditing] = useState(false);
-  const [editingValue, setEditingValue] = useState('');
+  const [editingValue, setEditingValue] = useState<string | undefined>('');
   const [commitInProgress, setCommitInProgress] = useState(false);
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>();
 
   const beginEditing = useCallback(
     () => {
@@ -33,11 +50,11 @@ function CommitableInput({
     [onCancel],
   );
 
-  const commitEditing = async (event) => {
+  const commitEditing = async (event: React.KeyboardEvent | React.MouseEvent) => {
     event.preventDefault();
     setCommitInProgress(true);
     try {
-      await onChange(editingValue);
+      await onChange(editingValue ?? '');
       setEditing(false);
       setEditingValue(undefined);
       setCommitInProgress(false);
@@ -60,7 +77,7 @@ function CommitableInput({
     }
   };
 
-  const keyDownInInput = (event) => {
+  const keyDownInInput = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case 'Escape':
         event.preventDefault();
@@ -153,26 +170,5 @@ function CommitableInput({
     </div>
   );
 }
-
-CommitableInput.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  onCancel: PropTypes.func,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
-  renderInput: PropTypes.func,
-  placeholder: PropTypes.string,
-  label: PropTypes.string,
-};
-
-CommitableInput.defaultProps = {
-  value: null,
-  className: null,
-  onCancel: null,
-  disabled: false,
-  renderInput: null,
-  placeholder: null,
-  label: null,
-};
 
 export default CommitableInput;

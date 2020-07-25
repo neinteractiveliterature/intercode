@@ -1,7 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { InputHTMLAttributes } from 'react';
 
-function EmailAliasInput({ onTextChange, domain, ...otherProps }) {
+export type EmailAliasInputProps = InputHTMLAttributes<HTMLInputElement> & {
+  onTextChange: (value: string) => void,
+  domain: string,
+};
+
+function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInputProps) {
   return (
     <div className="input-group">
       <input
@@ -20,10 +24,5 @@ function EmailAliasInput({ onTextChange, domain, ...otherProps }) {
     </div>
   );
 }
-
-EmailAliasInput.propTypes = {
-  onTextChange: PropTypes.func.isRequired,
-  domain: PropTypes.string.isRequired,
-};
 
 export default EmailAliasInput;

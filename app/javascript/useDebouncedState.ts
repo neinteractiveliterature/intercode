@@ -24,5 +24,5 @@ export default function useDebouncedState<T>(
     [transientValue, transientValueChanged],
   );
 
-  return [transientValue, setTransientValue];
+  return [transientValue, setTransientValue] as const;
 }
