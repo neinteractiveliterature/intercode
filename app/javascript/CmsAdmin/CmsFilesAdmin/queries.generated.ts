@@ -16,7 +16,7 @@ export type CmsFilesAdminQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 export type CmsFilesAdminQueryQuery = (
   { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: Types.Maybe<(
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, currentAbility: (

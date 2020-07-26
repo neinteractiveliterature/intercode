@@ -1,10 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
-import PopperDropdown from '../UIComponents/PopperDropdown';
+import PopperDropdown, { PopperDropdownChildrenRenderFunction } from '../UIComponents/PopperDropdown';
 import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 
-function NavigationSection({ children, label }) {
+export type NavigationSectionProps = {
+  children: JSX.Element | PopperDropdownChildrenRenderFunction,
+  label: ReactNode,
+};
+
+function NavigationSection({ children, label }: NavigationSectionProps) {
   const dropdownRef = useAutoClosingDropdownRef();
 
   return (
@@ -21,10 +25,5 @@ function NavigationSection({ children, label }) {
     </PopperDropdown>
   );
 }
-
-NavigationSection.propTypes = {
-  children: PropTypes.node.isRequired,
-  label: PropTypes.string.isRequired,
-};
 
 export default NavigationSection;

@@ -29,7 +29,7 @@ function CartContents({
     !data.currentPendingOrder
     || data.currentPendingOrder.order_entries.length === 0
   ) {
-    return 'Your cart is empty.';
+    return <>Your cart is empty.</>;
   }
 
   const rows = data.currentPendingOrder.order_entries.map((entry) => (

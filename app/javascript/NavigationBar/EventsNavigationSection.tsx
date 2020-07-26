@@ -2,9 +2,10 @@ import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
-import GeneratedNavigationSection from './GeneratedNavigationSection';
+import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
+import { notFalse, notEmpty } from '../ValueUtils';
 
-export function useEventsNavigationItems() {
+export function useEventsNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
   const { conventionAcceptingProposals, currentAbility } = useContext(AppRootContext);
 
@@ -35,7 +36,7 @@ export function useEventsNavigationItems() {
         url: '/events/schedule_with_counts',
         icon: 'fa-calendar-check-o',
       },
-    ],
+    ].filter(notFalse).filter(notEmpty),
     [currentAbility, conventionAcceptingProposals, t],
   );
 

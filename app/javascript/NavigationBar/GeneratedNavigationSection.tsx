@@ -1,12 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { sortByLocaleString } from '../ValueUtils';
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
 
-function GeneratedNavigationSection({ label, items }) {
-  const sortedItems = sortByLocaleString(items, (item) => (item || {}).label || '');
+export type GeneratedNavigationItem = {
+  label: string,
+  url: string,
+  icon: string,
+};
+
+export type GeneratedNavigationSectionProps = {
+  label: string,
+  items: GeneratedNavigationItem[],
+};
+
+function GeneratedNavigationSection({ label, items }: GeneratedNavigationSectionProps) {
+  const sortedItems = sortByLocaleString(items, (item) => item?.label ?? '');
 
   if (items.some((item) => item)) {
     return (
@@ -26,16 +36,5 @@ function GeneratedNavigationSection({ label, items }) {
 
   return null;
 }
-
-GeneratedNavigationSection.propTypes = {
-  label: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }),
-    PropTypes.bool,
-  ])).isRequired,
-};
 
 export default GeneratedNavigationSection;

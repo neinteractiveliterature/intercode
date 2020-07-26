@@ -8,6 +8,8 @@ generates:
     plugins:
       - add: '/* eslint-disable */'
       - typescript
+    config:
+      avoidOptionals: true
   app/javascript/:
     preset: near-operation-file
     presetConfig:
@@ -22,3 +24,4 @@ generates:
       withHOC: false
       withHooks: true
       documentMode: graphQLTag
+      avoidOptionals: true

@@ -11,7 +11,7 @@ function SearchNavigationItem() {
   const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);
 
   const setVisibleWithHiding = useCallback(
-    (newVisible) => {
+    (newVisible: boolean) => {
       setVisible(newVisible);
       if (newVisible) {
         setHideBrand(true);
@@ -22,7 +22,7 @@ function SearchNavigationItem() {
   );
 
   const visibilityChangeComplete = useCallback(
-    (newVisible) => {
+    (newVisible: boolean) => {
       if (!newVisible) {
         setHideBrand(false);
         setHideNavItems(false);

@@ -10,7 +10,7 @@ const CACHE_PATH = 'tmp/cache/webpack';
 
 module.exports = {
   entry: {
-    application: './app/javascript/packs/applicationEntry.js',
+    application: './app/javascript/packs/applicationEntry.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',
   },
   output: {

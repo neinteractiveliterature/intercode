@@ -5,12 +5,12 @@ import classnames from 'classnames';
 
 const COLLAPSE_DURATION = 350;
 
-export default function useCollapse(elementRef) {
+export default function useCollapse<T extends HTMLElement>(elementRef: React.RefObject<T>) {
   const [collapsed, setCollapsed] = useState(true);
   const [prevCollapsed, setPrevCollapsed] = useState(true);
   const [collapsing, setCollapsing] = useState(false);
-  const collapseTimeoutId = useRef(null);
-  const [heightOverride, setHeightOverride] = useState(null);
+  const collapseTimeoutId = useRef<number>();
+  const [heightOverride, setHeightOverride] = useState<number>();
 
   const toggleCollapsed = () => {
     if (!collapsed && elementRef.current) {
@@ -23,9 +23,9 @@ export default function useCollapse(elementRef) {
   };
 
   const finishCollapse = () => {
-    setHeightOverride(null);
+    setHeightOverride(undefined);
     setCollapsing(false);
-    collapseTimeoutId.current = null;
+    collapseTimeoutId.current = undefined;
   };
 
   useLayoutEffect(
@@ -42,18 +42,18 @@ export default function useCollapse(elementRef) {
 
         if (collapseTimeoutId.current) {
           clearTimeout(collapseTimeoutId.current);
-          collapseTimeoutId.current = null;
+          collapseTimeoutId.current = undefined;
         }
 
         requestAnimationFrame(() => {
           if (collapsed) {
             // force a reflow; stolen from Reactstrap
-            // eslint-disable-next-line no-unused-vars
-            const unused = elementRef.current.scrollHeight;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const unused = elementRef.current?.scrollHeight;
             setHeightOverride(0);
           }
 
-          collapseTimeoutId.current = setTimeout(finishCollapse, COLLAPSE_DURATION);
+          collapseTimeoutId.current = window.setTimeout(finishCollapse, COLLAPSE_DURATION);
         });
       }
     },
@@ -63,7 +63,7 @@ export default function useCollapse(elementRef) {
   useEffect(() => () => {
     if (collapseTimeoutId.current) {
       clearTimeout(collapseTimeoutId.current);
-      collapseTimeoutId.current = null;
+      collapseTimeoutId.current = undefined;
     }
   }, []);
 

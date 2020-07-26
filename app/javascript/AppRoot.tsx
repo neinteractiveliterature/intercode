@@ -138,7 +138,7 @@ function AppRoot() {
   );
 
   if (layoutChanged) {
-    return null;
+    return <></>;
   }
 
   if (loading && !cachedBodyComponents) {

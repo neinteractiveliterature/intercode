@@ -2615,7 +2615,7 @@ type Order {
   charge_id: String
   coupon_applications: [CouponApplication!]!
   id: Int
-  order_entries: [OrderEntry]!
+  order_entries: [OrderEntry!]!
   paid_at: Date
   payment_amount: Money
   payment_note: String
