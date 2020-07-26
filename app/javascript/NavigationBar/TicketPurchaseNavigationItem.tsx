@@ -30,7 +30,11 @@ function TicketPurchaseNavigationItem() {
           {t('navigation.ticketPurchase.ctaLong', 'Buy a {{ ticketName }}!', { ticketName })}
         </span>
         <span className="d-none d-md-inline d-lg-none">
-          {t('navigation.ticketPurchase.ctaShort', '{{ ticketName }}!', { ticketName: humanize(ticketName) })}
+          {t(
+            'navigation.ticketPurchase.ctaShort',
+            '{{ ticketName }}!',
+            { ticketName: humanize(ticketName ?? 'ticket') },
+          )}
         </span>
       </Link>
     </li>

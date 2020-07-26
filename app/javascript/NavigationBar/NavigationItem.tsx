@@ -1,12 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 import MenuIcon from './MenuIcon';
 
+export type NavigationItemProps = {
+  label: ReactNode,
+  url: string,
+  inSection: boolean,
+  icon?: string,
+  iconColorClass?: string,
+};
+
 function NavigationItem({
   label, url, inSection, icon, iconColorClass,
-}) {
+}: NavigationItemProps) {
   const labelContent = (
     <>
       <MenuIcon icon={icon || 'fa-file-text-o'} colorClass={iconColorClass} />
@@ -24,18 +31,5 @@ function NavigationItem({
     </li>
   );
 }
-
-NavigationItem.propTypes = {
-  label: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  inSection: PropTypes.bool.isRequired,
-  icon: PropTypes.string,
-  iconColorClass: PropTypes.string,
-};
-
-NavigationItem.defaultProps = {
-  icon: null,
-  iconColorClass: undefined,
-};
 
 export default NavigationItem;

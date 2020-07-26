@@ -15,7 +15,7 @@ export type CreateCmsFileMutationVariables = Types.Exact<{
 
 export type CreateCmsFileMutation = (
   { __typename?: 'Mutation' }
-  & { createCmsFile?: Types.Maybe<(
+  & { createCmsFile: Types.Maybe<(
     { __typename?: 'CreateCmsFilePayload' }
     & { cms_file: (
       { __typename?: 'CmsFile' }
@@ -33,7 +33,7 @@ export type RenameCmsFileMutationVariables = Types.Exact<{
 
 export type RenameCmsFileMutation = (
   { __typename?: 'Mutation' }
-  & { renameCmsFile?: Types.Maybe<(
+  & { renameCmsFile: Types.Maybe<(
     { __typename?: 'RenameCmsFilePayload' }
     & { cms_file: (
       { __typename?: 'CmsFile' }
@@ -50,7 +50,7 @@ export type DeleteCmsFileMutationVariables = Types.Exact<{
 
 export type DeleteCmsFileMutation = (
   { __typename?: 'Mutation' }
-  & { deleteCmsFile?: Types.Maybe<(
+  & { deleteCmsFile: Types.Maybe<(
     { __typename?: 'DeleteCmsFilePayload' }
     & Pick<Types.DeleteCmsFilePayload, 'clientMutationId'>
   )> }

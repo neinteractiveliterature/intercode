@@ -1,7 +1,6 @@
 import React, {
   useContext, useMemo, useRef, useEffect, useState,
 } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sortBy from 'lodash/sortBy';
 import { useLocation } from 'react-router-dom';
@@ -19,13 +18,22 @@ import AdminNavigationSection from './AdminNavigationSection';
 import SearchNavigationItem from './SearchNavigationItem';
 import NavigationBarContext from './NavigationBarContext';
 
-function NavigationBarContent({ navbarClasses, rootItems }) {
+type RootItem = AppRootContext['cmsNavigationItems'][0] & {
+  sectionItems: AppRootContext['cmsNavigationItems'],
+};
+
+type NavigationBarContentProps = {
+  navbarClasses?: string,
+  rootItems: RootItem[],
+};
+
+function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContentProps) {
   const { t } = useTranslation();
   const location = useLocation();
   const {
     conventionName, conventionCanceled, rootSiteName, siteMode, ticketsAvailableForPurchase,
   } = useContext(AppRootContext);
-  const collapseRef = useRef();
+  const collapseRef = useRef<HTMLDivElement>(null);
   const {
     collapsed, collapseProps, setCollapsed, toggleCollapsed,
   } = useCollapse(collapseRef);
@@ -66,14 +74,16 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
                 if (rootItem.sectionItems && rootItem.sectionItems.length > 0) {
                   return (
                     <NavigationSection label={rootItem.title} key={rootItem.id}>
-                      {rootItem.sectionItems.map((sectionItem) => (
-                        <NavigationItem
-                          label={sectionItem.title}
-                          url={`/pages/${sectionItem.page.slug}`}
-                          key={sectionItem.id}
-                          inSection
-                        />
-                      ))}
+                      <>
+                        {rootItem.sectionItems.map((sectionItem) => (
+                          <NavigationItem
+                            label={sectionItem.title}
+                            url={`/pages/${sectionItem.page?.slug}`}
+                            key={sectionItem.id}
+                            inSection
+                          />
+                        ))}
+                      </>
                     </NavigationSection>
                   );
                 }
@@ -84,6 +94,7 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
                     url={rootItem.page ? `/pages/${rootItem.page.slug}` : '#'}
                     key={rootItem.id}
                     iconColorClass="" /* don't override the nav-link color in the root bar */
+                    inSection={false}
                   />
                 );
               })}
@@ -119,17 +130,16 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
   );
 }
 
-NavigationBarContent.propTypes = {
-  navbarClasses: PropTypes.string.isRequired,
-  rootItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-};
-
 const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
 
-function NavigationBar({ navbarClasses }) {
+export type NavigationBarProps = {
+  navbarClasses: string,
+};
+
+function NavigationBar({ navbarClasses }: NavigationBarProps) {
   const { cmsNavigationItems } = useContext(AppRootContext);
 
-  const rootNavigationItems = useMemo(
+  const rootNavigationItems: RootItem[] = useMemo(
     () => {
       const rootItems = sortBy(
         cmsNavigationItems.filter((item) => item.navigation_section == null),
@@ -157,13 +167,5 @@ function NavigationBar({ navbarClasses }) {
     />
   );
 }
-
-NavigationBar.propTypes = {
-  navbarClasses: PropTypes.string,
-};
-
-NavigationBar.defaultProps = {
-  navbarClasses: null,
-};
 
 export default NavigationBar;

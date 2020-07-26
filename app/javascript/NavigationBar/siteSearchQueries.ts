@@ -1,3 +1,7 @@
+/* eslint-disable import/prefer-default-export */
+import gql from 'graphql-tag';
+
+export const SiteSearchQuery = gql`
 query SiteSearchQuery($query: String!) {
   siteSearch(query: $query) {
     total_entries
@@ -30,3 +34,4 @@ query SiteSearchQuery($query: String!) {
     }
   }
 }
+`;

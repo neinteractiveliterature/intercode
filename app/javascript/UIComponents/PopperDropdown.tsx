@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useRef, useImperativeHandle, forwardRef, Ref, CSSProperties,
   ReactNode,
+  ForwardRefRenderFunction,
 } from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
 import {
@@ -52,7 +53,7 @@ export type PopperDropdownChildrenRenderFunction = (
 export type PopperDropdownProps = {
   children: JSX.Element | PopperDropdownChildrenRenderFunction,
   onToggle?: (prevVisible: boolean | undefined, event: React.BaseSyntheticEvent) => any,
-  placement: PopperProps['placement'],
+  placement?: PopperProps['placement'],
   renderReference: (options: {
     ref: Ref<any>,
     toggle: (event: React.BaseSyntheticEvent) => void,
@@ -64,9 +65,16 @@ export type PopperDropdownProps = {
   modifiers?: PopperProps['modifiers'],
 };
 
-function PopperDropdown({
+export type PopperDropdownImperativeHandle = {
+  setVisible: (visible: boolean) => void,
+};
+
+const PopperDropdown: ForwardRefRenderFunction<
+PopperDropdownImperativeHandle,
+PopperDropdownProps
+> = ({
   children, onToggle, placement, renderReference, style, visible, modifiers,
-}: PopperDropdownProps, ref: Ref<any>) {
+}, ref) => {
   const [internalVisible, setInternalVisible] = useState(visible);
   useEffect(() => { setInternalVisible(visible); }, [visible]);
   const managerNode = useRef(null);
@@ -145,8 +153,10 @@ function PopperDropdown({
       )}
     </Manager>
   );
-}
+};
 
-const PopperDropdownWithRefForwarding = forwardRef(PopperDropdown);
+const PopperDropdownWithRefForwarding = (
+  forwardRef<PopperDropdownImperativeHandle, PopperDropdownProps>(PopperDropdown)
+);
 
 export default PopperDropdownWithRefForwarding;

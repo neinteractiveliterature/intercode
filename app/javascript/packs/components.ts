@@ -8,7 +8,7 @@ import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
 const LiquidDocs = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 
-const unwrappedComponents = {
+const unwrappedComponents: { [name: string]: React.ComponentType<any> } = {
   AppRoot,
   LiquidDocs,
 };

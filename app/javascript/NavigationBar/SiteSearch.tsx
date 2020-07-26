@@ -1,8 +1,7 @@
 import React, {
   useCallback, useEffect, useRef, useState, useMemo,
 } from 'react';
-import PropTypes from 'prop-types';
-import { components } from 'react-select';
+import { components, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useHistory } from 'react-router-dom';
@@ -16,13 +15,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
-import { SiteSearchQuery } from './siteSearchQueries.gql';
+import { SiteSearchQueryDocument, SiteSearchQueryQuery, SiteSearchQueryQueryVariables } from './siteSearchQueries.generated';
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
+import { UnwrapPromise } from '../ValueUtils';
 
-function getSearchableModelIcon(model) {
+function getSearchableModelIcon(model: { __typename: string, icon?: string }) {
   if (model.__typename === 'NavigationItem') {
-    return model.icon || 'fa-file-text-o';
+    return model.icon ?? 'fa-file-text-o';
   }
 
   if (model.__typename === 'Page') {
@@ -44,7 +44,7 @@ function getSearchableModelIcon(model) {
   return 'fa-square';
 }
 
-function SearchDropdownIndicator(props) {
+function SearchDropdownIndicator(props: any) {
   return (
     <components.DropdownIndicator {...props}>
       <i className="fa fa-search" />
@@ -52,38 +52,37 @@ function SearchDropdownIndicator(props) {
   );
 }
 
-function SearchMenu(props) {
+function SearchMenu(props: MenuProps<any>) {
   const { t } = useTranslation();
 
   return (
     <components.Menu {...props}>
-      {props.children}
-      <div className="bg-light small p-1 text-muted d-none d-md-block">
-        <i className="fa fa-lightbulb-o" />
-        {' '}
-        {t('navigation.search.searchAnywhereText', 'Search anywhere:')}
-        Search anywhere:
-        {' '}
-        <span className="bg-white text-monospace border rounded px-1">
-          {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
-        </span>
-      </div>
+      <>
+        {props.children}
+        <div className="bg-light small p-1 text-muted d-none d-md-block">
+          <i className="fa fa-lightbulb-o" />
+          {' '}
+          {t('navigation.search.searchAnywhereText', 'Search anywhere:')}
+          Search anywhere:
+          {' '}
+          <span className="bg-white text-monospace border rounded px-1">
+            {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
+          </span>
+        </div>
+      </>
     </components.Menu>
   );
 }
 
-SearchMenu.propTypes = {
-  children: PropTypes.node,
+export type SiteSearchProps = {
+  visible: boolean,
+  setVisible: (visible: boolean) => void,
+  visibilityChangeComplete: (visible: boolean) => void,
 };
 
-SearchMenu.defaultProps = {
-  children: null,
-};
-
-function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
+function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearchProps) {
   const history = useHistory();
   const apolloClient = useApolloClient();
-  const selectRef = useRef();
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState(null);
   const adminNavigationItems = useAdminNavigationItems();
@@ -108,6 +107,39 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
     },
     [navigationItemsWithId],
   );
+
+  const loadOptions = useMemo(
+    () => debounce(
+      async (query: string) => {
+        const { data } = (
+          await apolloClient.query<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>({
+            query: SiteSearchQueryDocument, variables: { query }, fetchPolicy: 'no-cache',
+          })
+        );
+        const navigationItemsResult = (
+          navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId
+        ).map((navigationItem) => ({
+          title: navigationItem.label,
+          highlight: '',
+          model: {
+            __typename: 'NavigationItem',
+            ...navigationItem,
+          },
+        }));
+        return [
+          ...navigationItemsResult,
+          ...data.siteSearch.entries,
+        ];
+      },
+      200,
+      { leading: false },
+    ),
+    [apolloClient, navigationItemsSearchIndex],
+  );
+
+  type OptionType = UnwrapPromise<ReturnType<typeof loadOptions>>[0];
+
+  const selectRef = useRef<AsyncSelect<OptionType>>(null);
 
   const keyDownListener = useCallback(
     (event) => {
@@ -137,36 +169,11 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
     [keyDownListener],
   );
 
-  const loadOptions = useCallback(
-    debounce(
-      async (query) => {
-        const { data } = await apolloClient.query({
-          query: SiteSearchQuery, variables: { query }, fetchPolicy: 'no-cache',
-        });
-        const navigationItemsResult = navigationItemsSearchIndex.search(query);
-        return [
-          ...navigationItemsResult.map((navigationItem) => ({
-            title: navigationItem.label,
-            highlight: '',
-            model: {
-              __typename: 'NavigationItem',
-              ...navigationItem,
-            },
-          })),
-          ...data.siteSearch.entries,
-        ];
-      },
-      200,
-      { leading: false },
-    ),
-    [apolloClient],
-  );
-
   const optionSelected = useCallback(
-    (entry) => {
+    (entry: OptionType) => {
       const { model } = entry;
       if (model.__typename === 'Page') {
-        history.push(`/pages/${model.slug}`);
+        history.push(`/pages/${(model as { slug: string }).slug}`);
       } else if (model.__typename === 'Event') {
         history.push(buildEventUrl(model));
       } else if (model.__typename === 'NavigationItem') {
@@ -207,7 +214,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
 
   return (
     <CSSTransition timeout={400} in={visible} classNames="site-search" onEntered={entered} onExited={exited}>
-      <AsyncSelect
+      <AsyncSelect<OptionType>
         ref={selectRef}
         placeholder=""
         className="site-search"
@@ -226,10 +233,10 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
         styles={{
           control: (baseProps) => ({
             ...baseProps,
-            borderRadius: baseProps.minHeight / 2,
-            paddingLeft: baseProps.minHeight / 6,
+            borderRadius: (baseProps.minHeight as number) / 2,
+            paddingLeft: (baseProps.minHeight as number) / 6,
           }),
-          indicatorSeparator: () => { },
+          indicatorSeparator: () => ({}),
           indicatorsContainer: (baseProps) => ({
             ...baseProps,
             position: 'absolute',
@@ -243,7 +250,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
         loadOptions={loadOptions}
         onChange={optionSelected}
         onBlur={close}
-        formatOptionLabel={(entry) => (
+        formatOptionLabel={(entry: OptionType) => (
           <>
             <div className="font-weight-bold mb-1">
               <i className={`fa ${getSearchableModelIcon(entry.model)}`} />
@@ -259,7 +266,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
                 overflow: 'hidden',
               }}
               // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: entry.highlight }}
+              dangerouslySetInnerHTML={{ __html: entry.highlight ?? '' }}
             />
           </>
         )}
@@ -267,11 +274,5 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }) {
     </CSSTransition>
   );
 }
-
-SiteSearch.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  setVisible: PropTypes.func.isRequired,
-  visibilityChangeComplete: PropTypes.func.isRequired,
-};
 
 export default SiteSearch;

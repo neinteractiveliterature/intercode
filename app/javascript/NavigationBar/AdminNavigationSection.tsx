@@ -1,11 +1,14 @@
 import React, { useContext, useMemo } from 'react';
 import { titleize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import AppRootContext from '../AppRootContext';
-import GeneratedNavigationSection from './GeneratedNavigationSection';
+import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
+import { notFalse } from '../ValueUtils';
+import { Ability } from '../graphqlTypes.generated';
 
-function generateSiteContentItem(currentAbility, t) {
+function generateSiteContentItem(currentAbility: Pick<Ability, 'can_manage_any_cms_content'>, t: TFunction) {
   return currentAbility.can_manage_any_cms_content && {
     label: t('navigation.admin.siteContent', 'Site Content'),
     url: '/cms_pages',
@@ -13,7 +16,7 @@ function generateSiteContentItem(currentAbility, t) {
   };
 }
 
-function useConventionAdminNavigationItems() {
+function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
   const {
     currentAbility, signupMode, siteMode, ticketMode, ticketName,
@@ -98,7 +101,10 @@ function useConventionAdminNavigationItems() {
         icon: 'fa-shopping-cart',
       },
       currentAbility.can_manage_ticket_types && ticketMode !== 'disabled' && {
-        label: t('navigation.admin.ticketTypes', '{{ ticketName }} Types', { ticketName: titleize(ticketName) }),
+        label: t(
+          'navigation.admin.ticketTypes', '{{ ticketName }} Types',
+          { ticketName: titleize(ticketName ?? 'ticket') },
+        ),
         url: '/ticket_types',
         icon: 'fa-ticket',
       },
@@ -107,14 +113,14 @@ function useConventionAdminNavigationItems() {
         url: '/user_activity_alerts',
         icon: 'fa-exclamation-triangle',
       },
-    ],
+    ].filter(notFalse),
     [currentAbility, signupMode, siteMode, ticketMode, ticketName, t],
   );
 
   return items;
 }
 
-function useRootSiteAdminNavigationItems() {
+function useRootSiteAdminNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
   const { currentAbility } = useContext(AppRootContext);
 
@@ -141,7 +147,7 @@ function useRootSiteAdminNavigationItems() {
         url: '/users',
         icon: 'fa-users',
       },
-    ],
+    ].filter(notFalse),
     [currentAbility, t],
   );
 

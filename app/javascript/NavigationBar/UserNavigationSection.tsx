@@ -70,51 +70,58 @@ function CurrentPendingOrderButton() {
   );
 }
 
-// eslint-disable-next-line react/prop-types
-function LoggedInDropdownTarget({ toggle, visible }, ref) {
-  const { t } = useTranslation();
-  const { currentUser, myProfile, assumedIdentityFromProfile } = useContext(AppRootContext);
+type LoggedInDropdownTargetProps = {
+  toggle: (event: React.BaseSyntheticEvent) => void,
+  visible: boolean,
+};
 
-  if (!currentUser) {
-    // this can happen in the middle of a resetStore
-    return null;
-  }
+const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTargetProps>(
+  ({ toggle, visible }, ref) => {
+    const { t } = useTranslation();
+    const { currentUser, myProfile, assumedIdentityFromProfile } = useContext(AppRootContext);
 
-  if (assumedIdentityFromProfile) {
+    if (!currentUser) {
+      // this can happen in the middle of a resetStore
+      return null;
+    }
+
+    if (assumedIdentityFromProfile) {
+      // if assumedIdentityFromProfile is not null, myProfile must be non-null too
+      const nonNullProfile = myProfile!;
+
+      return (
+        <button className="btn btn-warning dropdown-toggle" onClick={toggle} ref={ref} type="button">
+          <i className="fa fa-user-secret" />
+
+          <span className="d-inline d-md-none d-lg-inline">
+            {nonNullProfile.name_without_nickname}
+          </span>
+          <span className="d-none d-md-inline d-lg-none">
+            {(nonNullProfile.first_name ?? '')[0]}
+            {(nonNullProfile.last_name ?? '')[0]}
+          </span>
+        </button>
+      );
+    }
+
     return (
-      <button className="btn btn-warning dropdown-toggle" onClick={toggle} ref={ref} type="button">
-        <i className="fa fa-user-secret" />
-
-        <span className="d-inline d-md-none d-lg-inline">
-          {myProfile.name_without_nickname}
-        </span>
-        <span className="d-none d-md-inline d-lg-none">
-          {myProfile.first_name[0]}
-          {myProfile.last_name[0]}
-        </span>
+      <button
+        className="btn btn-link nav-link"
+        onClick={toggle}
+        ref={ref}
+        type="button"
+        aria-label={t('navigation.headers.user', 'User options')}
+      >
+        <Gravatar
+          url={(myProfile || {}).gravatar_url}
+          enabled={(myProfile || {}).gravatar_enabled || false}
+          pixelSize={(myProfile || {}).gravatar_enabled ? 24 : 16}
+          imgClassName={visible ? 'glow-light' : ''}
+        />
       </button>
     );
-  }
-
-  return (
-    <button
-      className="btn btn-link nav-link"
-      onClick={toggle}
-      ref={ref}
-      type="button"
-      aria-label={t('navigation.headers.user', 'User options')}
-    >
-      <Gravatar
-        url={(myProfile || {}).gravatar_url}
-        enabled={(myProfile || {}).gravatar_enabled || false}
-        pixelSize={(myProfile || {}).gravatar_enabled ? 24 : 16}
-        imgClassName={visible ? 'glow-light' : ''}
-      />
-    </button>
-  );
-}
-
-const RefForwardingLoggedInDropdownTarget = forwardRef(LoggedInDropdownTarget);
+  },
+);
 
 function RevertAssumedIdentityButton() {
   const { assumedIdentityFromProfile } = useContext(AppRootContext);
@@ -160,54 +167,56 @@ function UserNavigationSection() {
             <PopperDropdown
               ref={dropdownRef}
               renderReference={({ ref, toggle, visible }) => (
-                <RefForwardingLoggedInDropdownTarget ref={ref} toggle={toggle} visible={visible} />
+                <LoggedInDropdownTarget ref={ref} toggle={toggle} visible={visible} />
               )}
               placement="bottom-end"
               style={{ zIndex: 1100 }}
             >
-              {currentUser && (
-                <NavigationItem
-                  inSection
-                  label={t('navigation.user.myAccount', 'My Account')}
-                  url="/users/edit"
-                  icon="fa-address-card"
-                />
-              )}
-              {myProfile && (
-                <NavigationItem
-                  inSection
-                  label={t('navigation.user.myProfile', 'My {{ conventionName }} Profile', { conventionName })}
-                  url="/my_profile"
-                  icon="fa-user-circle"
-                />
-              )}
-              {myProfile && (
-                <NavigationItem
-                  inSection
-                  label={t('navigation.user.myOrderHistory', 'My Order History')}
-                  url="/order_history"
-                  icon="fa-shopping-bag"
-                />
-              )}
-              {currentUser && (
-                <NavigationItem
-                  inSection
-                  label={t('navigation.user.authorizedApplications', 'Authorized Applications')}
-                  url="/oauth/authorized_applications"
-                  icon="fa-lock"
-                />
-              )}
-              {currentUser && (
-                <SignOutButton
-                  className="dropdown-item"
-                  caption={(
-                    <>
-                      <MenuIcon icon="fa-sign-out" />
-                      {t('navigation.user.logOut', 'Log out')}
-                    </>
-                  )}
-                />
-              )}
+              <>
+                {currentUser && (
+                  <NavigationItem
+                    inSection
+                    label={t('navigation.user.myAccount', 'My Account')}
+                    url="/users/edit"
+                    icon="fa-address-card"
+                  />
+                )}
+                {myProfile && (
+                  <NavigationItem
+                    inSection
+                    label={t('navigation.user.myProfile', 'My {{ conventionName }} Profile', { conventionName })}
+                    url="/my_profile"
+                    icon="fa-user-circle"
+                  />
+                )}
+                {myProfile && (
+                  <NavigationItem
+                    inSection
+                    label={t('navigation.user.myOrderHistory', 'My Order History')}
+                    url="/order_history"
+                    icon="fa-shopping-bag"
+                  />
+                )}
+                {currentUser && (
+                  <NavigationItem
+                    inSection
+                    label={t('navigation.user.authorizedApplications', 'Authorized Applications')}
+                    url="/oauth/authorized_applications"
+                    icon="fa-lock"
+                  />
+                )}
+                {currentUser && (
+                  <SignOutButton
+                    className="dropdown-item"
+                    caption={(
+                      <>
+                        <MenuIcon icon="fa-sign-out" />
+                        {t('navigation.user.logOut', 'Log out')}
+                      </>
+                    )}
+                  />
+                )}
+              </>
             </PopperDropdown>
           </div>
           <RevertAssumedIdentityButton />
@@ -231,28 +240,30 @@ function UserNavigationSection() {
         placement="bottom-end"
         style={{ zIndex: 1100 }}
       >
-        <li className="nav-item login my-auto">
-          <SignInButton
-            className="btn btn-link dropdown-item"
-            caption={(
-              <>
-                <MenuIcon icon="fa-sign-in" />
-                {t('navigation.authentication.logIn', 'Log in')}
-              </>
-           )}
-          />
-        </li>
-        <li className="nav-item my-auto">
-          <SignUpButton
-            className="btn btn-link dropdown-item"
-            caption={(
-              <>
-                <MenuIcon icon="fa-pencil-square-o" />
-                {t('navigation.authentication.signUp', 'Sign up')}
-              </>
+        <>
+          <li className="nav-item login my-auto">
+            <SignInButton
+              className="btn btn-link dropdown-item"
+              caption={(
+                <>
+                  <MenuIcon icon="fa-sign-in" />
+                  {t('navigation.authentication.logIn', 'Log in')}
+                </>
             )}
-          />
-        </li>
+            />
+          </li>
+          <li className="nav-item my-auto">
+            <SignUpButton
+              className="btn btn-link dropdown-item"
+              caption={(
+                <>
+                  <MenuIcon icon="fa-pencil-square-o" />
+                  {t('navigation.authentication.signUp', 'Sign up')}
+                </>
+              )}
+            />
+          </li>
+        </>
       </PopperDropdown>
     </>
   );
