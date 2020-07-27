@@ -105,7 +105,7 @@ function SyncCodeInput({
 
     return (
       <div className="markdown-preview">
-        {parseCmsContent(previewContent).bodyComponents}
+        {parseCmsContent(previewContent ?? '').bodyComponents}
       </div>
     );
   };

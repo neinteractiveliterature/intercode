@@ -7,13 +7,13 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 
 
 export type DefaultEventsQueryQueryVariables = Types.Exact<{
-  title: Types.Maybe<Types.Scalars['String']>;
+  title?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
 export type DefaultEventsQueryQuery = (
   { __typename?: 'Query' }
-  & { convention: Types.Maybe<(
+  & { convention?: Types.Maybe<(
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { events_paginated: (
@@ -27,13 +27,13 @@ export type DefaultEventsQueryQuery = (
 );
 
 export type DefaultUserConProfilesQueryQueryVariables = Types.Exact<{
-  name: Types.Maybe<Types.Scalars['String']>;
+  name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
 export type DefaultUserConProfilesQueryQuery = (
   { __typename?: 'Query' }
-  & { convention: Types.Maybe<(
+  & { convention?: Types.Maybe<(
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { user_con_profiles_paginated: (
@@ -47,7 +47,7 @@ export type DefaultUserConProfilesQueryQuery = (
 );
 
 export type DefaultUsersQueryQueryVariables = Types.Exact<{
-  name: Types.Maybe<Types.Scalars['String']>;
+  name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 

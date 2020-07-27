@@ -66,14 +66,14 @@ function UserConProfileSignupsCard({ userConProfileId }) {
     </Link>
   );
 
-  const renderSignup = (signup, convention) => (
+  const renderSignup = (signup) => (
     <li className="list-group-item" key={signup.id}>
       <ul className="list-unstyled">
         <li><strong>{renderEventLink(signup.run.event)}</strong></li>
         <li>{formatSignupStatus(signup, signup.run.event, t)}</li>
         <li>
           <small>
-            {timespanFromRun(convention, signup.run.event, signup.run)
+            {timespanFromRun(timezoneName, signup.run.event, signup.run)
               .humanizeInTimezone(timezoneName)}
           </small>
         </li>
@@ -139,7 +139,7 @@ function UserConProfileSignupsCard({ userConProfileId }) {
             )
             : null
         }
-        {signups.map((signup) => renderSignup(signup, data.convention))}
+        {signups.map((signup) => renderSignup(signup))}
         {renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
       </ul>
       {

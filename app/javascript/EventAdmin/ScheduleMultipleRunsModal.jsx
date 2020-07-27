@@ -18,6 +18,7 @@ import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 function ScheduleMultipleRunsModal({
   convention, event, visible, onCancel, onFinish,
@@ -77,7 +78,9 @@ function ScheduleMultipleRunsModal({
   );
 
   const existingRunTimespans = useMemo(
-    () => event.runs.map((run) => timespanFromRun(convention, event, run)),
+    () => event.runs.map((run) => timespanFromRun(
+      timezoneNameForConvention(convention), event, run,
+    )),
     [event, convention],
   );
 

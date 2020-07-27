@@ -1,7 +1,6 @@
 import { Settings } from 'luxon';
 import * as TimespanUtils from '../../app/javascript/TimespanUtils';
 
-
 describe('user_local timezone mode', () => {
   let originalDefaultZoneName;
 
@@ -24,7 +23,7 @@ describe('user_local timezone mode', () => {
 
   test('timespanFromRun figures out the end time correctly', () => {
     const timespan = TimespanUtils.timespanFromRun(
-      { timezone_mode: 'user_local' },
+      'Etc/UTC',
       { length_seconds: 3600 },
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
@@ -49,7 +48,7 @@ describe('convention_local timezone mode', () => {
 
   test('timespanFromRun figures out the end time correctly', () => {
     const timespan = TimespanUtils.timespanFromRun(
-      { timezone_name: 'America/New_York', timezone_mode: 'convention_local' },
+      'America/New_York',
       { length_seconds: 3600 },
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );

@@ -35,11 +35,7 @@ function CreateModeratedSignupModal({
       }
 
       return ((data.myProfile || {}).signups || []).find((signup) => {
-        const timespan = timespanFromRun(
-          { timezone_name: timezoneName },
-          signup.run.event,
-          signup.run,
-        );
+        const timespan = timespanFromRun(timezoneName, signup.run.event, signup.run);
 
         return (
           !(event.can_play_concurrently || signup.run.event.can_play_concurrently)

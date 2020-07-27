@@ -1,22 +1,33 @@
 import moment from 'moment-timezone';
 import { DateTime } from 'luxon';
-import Timespan from './Timespan';
+import Timespan, { FiniteTimespan } from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
+import { Convention, Event, Run } from './graphqlTypes.generated';
 
-export function timespanFromConvention(convention) {
+type ConventionForTimespanUtils = Pick<Convention,
+'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>;
+
+export function timespanFromConvention(convention: ConventionForTimespanUtils) {
   return Timespan.fromStrings(convention.starts_at, convention.ends_at)
     .tz(timezoneNameForConvention(convention));
 }
 
-export function timespanFromRun(convention, event, run) {
-  const start = moment(run.starts_at).tz(timezoneNameForConvention(convention));
+export function timespanFromRun(
+  timezoneName: string,
+  event: Pick<Event, 'length_seconds'>,
+  run: Pick<Run, 'starts_at'>,
+) {
+  const start = moment(run.starts_at).tz(timezoneName);
   const finish = start.clone().add(event.length_seconds, 'seconds');
 
-  return new Timespan(start, finish);
+  return Timespan.fromMoments(start, finish);
 }
 
-export function getConventionDayTimespans(conventionTimespan, timezoneName) {
+export function getConventionDayTimespans(
+  conventionTimespan: FiniteTimespan,
+  timezoneName: string,
+) {
   return conventionTimespan.getTimespansWithin(
     timezoneName,
     {
@@ -26,7 +37,7 @@ export function getConventionDayTimespans(conventionTimespan, timezoneName) {
   );
 }
 
-export function getMemoizationKeyForTimespan(timespan) {
+export function getMemoizationKeyForTimespan(timespan: Timespan) {
   if (!timespan) {
     return '';
   }
@@ -37,7 +48,9 @@ export function getMemoizationKeyForTimespan(timespan) {
   ].join('/');
 }
 
-export function describeInterval(timespan, formatDateTime, timeZone) {
+export function describeInterval(
+  timespan: Timespan, formatDateTime: (dateTime: DateTime) => string, timeZone: string,
+) {
   const start = (
     timespan.start
       ? formatDateTime(DateTime.fromISO(timespan.start.toISOString()).setZone(timeZone))

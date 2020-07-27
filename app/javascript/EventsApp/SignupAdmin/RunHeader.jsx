@@ -34,7 +34,7 @@ function RunHeader({ eventId, runId }) {
       </h1>
 
       <h3 className="mt-0">
-        {timespanFromRun(data.convention, data.event, data.event.run)
+        {timespanFromRun(timezoneName, data.event, data.event.run)
           .humanizeInTimezone(timezoneName)}
       </h3>
 
