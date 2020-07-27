@@ -1,14 +1,16 @@
 import { useContext, useMemo } from 'react';
 import { DateTime } from 'luxon';
+import { Moment } from 'moment-timezone';
 
 import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
+import { Convention } from './graphqlTypes.generated';
 
-export const timeIsOnTheHour = (time) => (
+export const timeIsOnTheHour = (time: Moment) => (
   time.millisecond() === 0 && time.second() === 0 && time.minute() === 0
 );
 
-export const humanTimeFormat = (time) => {
+export const humanTimeFormat = (time: Moment) => {
   if (timeIsOnTheHour(time)) {
     if (time.hour() === 0) {
       return '[midnight]';
@@ -22,7 +24,7 @@ export const humanTimeFormat = (time) => {
   return 'h:mma';
 };
 
-export const humanizeTime = (time, includeDay) => {
+export const humanizeTime = (time: Moment, includeDay?: boolean) => {
   let timeFormat = humanTimeFormat(time);
   if (includeDay) {
     timeFormat = `ddd ${timeFormat}`;
@@ -31,15 +33,15 @@ export const humanizeTime = (time, includeDay) => {
   return time.format(timeFormat);
 };
 
-export const timesAreSameOrBothNull = (a, b) => {
+export const timesAreSameOrBothNull = (a?: Moment | null, b?: Moment | null) => {
   if (onlyOneIsNull(a, b)) {
     return false;
   }
 
-  return (a == null && b == null) || a.isSame(b);
+  return (a == null && b == null) || a!.isSame(b);
 };
 
-export const compareTimesAscending = (a, b) => {
+export const compareTimesAscending = (a: Moment, b: Moment) => {
   if (a.isBefore(b)) {
     return -1;
   }
@@ -51,9 +53,9 @@ export const compareTimesAscending = (a, b) => {
   return 0;
 };
 
-export const compareTimesDescending = (a, b) => compareTimesAscending(b, a);
+export const compareTimesDescending = (a: Moment, b: Moment) => compareTimesAscending(b, a);
 
-export function ageAsOf(birthDate, date) {
+export function ageAsOf(birthDate?: Moment | null, date?: Moment | null) {
   if (!birthDate || !date || !birthDate.isValid() || !date.isValid()) {
     return null;
   }
@@ -68,15 +70,15 @@ export function ageAsOf(birthDate, date) {
   return (date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1));
 }
 
-export function timezoneNameForConvention(convention) {
+export function timezoneNameForConvention(convention?: Pick<Convention, 'timezone_mode' | 'timezone_name'> | null) {
   if (convention?.timezone_mode === 'convention_local') {
-    return convention.timezone_name;
+    return convention.timezone_name!;
   }
 
   return DateTime.local().zoneName;
 }
 
-export function useISODateTimeInAppZone(isoValue) {
+export function useISODateTimeInAppZone(isoValue: string) {
   const { timezoneName } = useContext(AppRootContext);
   const timestamp = useMemo(
     () => DateTime.fromISO(isoValue).setZone(timezoneName),

@@ -1,6 +1,33 @@
 import PropTypes from 'prop-types';
 
-function ageRestrictionsValueIsComplete(value) {
+export type APIFormItem<P> = {
+  id: number,
+  form_section_id: number,
+  position: number,
+  item_type: string,
+  identifier: string,
+  properties: P,
+  admin_description?: string,
+  public_description?: string,
+};
+
+export type AgeRestrictionsProperties = {
+  identifier: string,
+  caption: string,
+  required?: boolean,
+};
+
+export type AgeRestrictionsValue = {
+  age_restrictions_description?: string,
+  minimum_age?: number,
+};
+
+export type EventEmailValue = {
+  team_mailing_list_name?: string,
+  email?: string,
+};
+
+function ageRestrictionsValueIsComplete(value?: AgeRestrictionsValue | null) {
   if (value && typeof value.age_restrictions_description === 'string') {
     return value.age_restrictions_description.trim() !== '';
   }
@@ -8,7 +35,7 @@ function ageRestrictionsValueIsComplete(value) {
   return false;
 }
 
-function eventEmailValueIsComplete(value) {
+function eventEmailValueIsComplete(value?: EventEmailValue | null) {
   if (!value) {
     return false;
   }
@@ -16,7 +43,7 @@ function eventEmailValueIsComplete(value) {
   return (value.team_mailing_list_name || value.email);
 }
 
-function freeTextValueIsComplete(value) {
+function freeTextValueIsComplete(value?: string | boolean) {
   if (typeof value === 'string') {
     return value.trim() !== '';
   }
@@ -24,7 +51,7 @@ function freeTextValueIsComplete(value) {
   return false;
 }
 
-function multipleChoiceValueIsComplete(value) {
+function multipleChoiceValueIsComplete(value?: string | boolean | null) {
   if (typeof value === 'string') {
     return value.trim() !== '';
   }
@@ -86,7 +113,7 @@ export function formResponseValueIsComplete(formItem, value) {
   }
 }
 
-export function formResponseValueIsCompleteIfRequired(formItem, value) {
+export function formResponseValueIsCompleteIfRequired(formItem: APIFormItem<any>, value) {
   if (!formItem.properties.required) {
     return true;
   }

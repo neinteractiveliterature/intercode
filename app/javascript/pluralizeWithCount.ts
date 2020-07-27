@@ -1,6 +1,6 @@
 import { pluralize } from 'inflected';
 
-export default (word, count, hideCount = false) => {
+export default (word: string, count: number, hideCount = false) => {
   if (count === 1) {
     if (hideCount) {
       return word;

@@ -16,6 +16,7 @@ import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
+import { timezoneNameForConvention } from '../TimeUtils';
 
 function SingleRunEventAdminList({ eventCategoryId }) {
   const { timezoneName } = useContext(AppRootContext);
@@ -41,7 +42,7 @@ function SingleRunEventAdminList({ eventCategoryId }) {
     const run = event.runs[0];
     let timespan;
     if (run) {
-      timespan = timespanFromRun(data.convention, event, run);
+      timespan = timespanFromRun(timezoneNameForConvention(data.convention), event, run);
     }
 
     return (

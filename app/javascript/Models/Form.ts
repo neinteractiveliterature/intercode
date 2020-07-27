@@ -3,6 +3,9 @@ import keyBy from 'lodash/keyBy';
 import compact from 'lodash/compact';
 import flatMap from 'lodash/flatMap';
 
+import { FormSection } from '../graphqlTypes.generated';
+import { APIFormItem } from './FormItem';
+
 export default class Form {
   static propType = PropTypes.shape({
     properties: PropTypes.object.isRequired,
@@ -10,7 +13,26 @@ export default class Form {
     formItems: PropTypes.object.isRequired,
   });
 
-  static fromApiResponse(body) {
+  properties: {};
+
+  formSections: {
+    [id: string]: FormSection,
+  };
+
+  formItems: {
+    [id: string]: APIFormItem<any>,
+  };
+
+  memoizedFormSections: FormSection[];
+
+  memoizedFormItemsByIdentifier: {
+    [identifier: string]: APIFormItem<any>,
+  };
+
+  static fromApiResponse(body: {
+    form_sections: FormSection[],
+    form_items: APIFormItem<any>[],
+  }) {
     const { form_sections: formSections, form_items: formItems, ...properties } = body;
     const formSectionsById = keyBy(formSections || [], (section) => section.id);
     const formItemsById = keyBy(formItems, (item) => item.id);
@@ -18,7 +40,11 @@ export default class Form {
     return new Form(properties, formSectionsById, formItemsById);
   }
 
-  constructor(properties, formSections, formItems) {
+  constructor(
+    properties: {},
+    formSections: typeof Form.prototype['formSections'],
+    formItems: typeof Form.prototype['formItems'],
+  ) {
     this.properties = properties;
     this.formSections = formSections;
     this.formItems = formItems;
@@ -27,21 +53,21 @@ export default class Form {
   getSections() {
     if (!this.memoizedFormSections) {
       this.memoizedFormSections = [...Object.values(this.formSections)]
-        .sort((a, b) => a.position - b.position);
+        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
     }
 
     return this.memoizedFormSections;
   }
 
-  getSection(sectionId) {
+  getSection(sectionId: number) {
     return this.formSections[sectionId];
   }
 
-  getSectionIndex(sectionId) {
+  getSectionIndex(sectionId: number) {
     return this.getSections().findIndex((section) => section.id === sectionId);
   }
 
-  getItemsInSection(sectionId) {
+  getItemsInSection(sectionId: number) {
     const sectionItems = Object.values(this.formItems)
       .filter((item) => item.form_section_id === sectionId);
     return sectionItems.sort((a, b) => a.position - b.position);
@@ -51,7 +77,7 @@ export default class Form {
     return flatMap(this.getSections(), (section) => this.getItemsInSection(section.id));
   }
 
-  getItemWithIdentifier(identifier) {
+  getItemWithIdentifier(identifier: string) {
     if (!this.memoizedFormItemsByIdentifier) {
       this.memoizedFormItemsByIdentifier = keyBy(
         compact(Object.values(this.formItems)),

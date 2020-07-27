@@ -21,15 +21,17 @@ function GeneratedNavigationSection({ label, items }: GeneratedNavigationSection
   if (items.some((item) => item)) {
     return (
       <NavigationSection label={label}>
-        {sortedItems.map((item) => item && (
-          <NavigationItem
-            inSection
-            key={`${item.label}-${item.url}`}
-            label={item.label}
-            url={item.url}
-            icon={item.icon}
-          />
-        ))}
+        <>
+          {sortedItems.map((item) => item && (
+            <NavigationItem
+              inSection
+              key={`${item.label}-${item.url}`}
+              label={item.label}
+              url={item.url}
+              icon={item.icon}
+            />
+          ))}
+        </>
       </NavigationSection>
     );
   }

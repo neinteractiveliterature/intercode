@@ -36,7 +36,7 @@ function describeRequestedBucket(signupRequest) {
 
 function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }) {
   const { timezoneName } = useContext(AppRootContext);
-  const runTimespan = timespanFromRun({ timezone_name: timezoneName }, run.event, run);
+  const runTimespan = timespanFromRun(timezoneName, run.event, run);
 
   return (
     <>

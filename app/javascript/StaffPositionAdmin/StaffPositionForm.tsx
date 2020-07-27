@@ -80,7 +80,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
             value={value}
             onTextChange={onAddValueChange}
             aria-label="Add email alias (portion before @ sign)"
-            domain={conventionDomain}
+            domain={conventionDomain!}
             name="add-alias"
             onKeyDown={onKeyDown}
           />
