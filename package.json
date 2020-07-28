@@ -106,7 +106,7 @@
     "graphql-tag": "^2.10.4",
     "html-to-react": "^1.4.3",
     "hypernova": "^2.5.0",
-    "i18next": "^19.6.2",
+    "i18next": "^19.6.3",
     "inflected": "^2.0.3",
     "js-search": "^2.0.0",
     "js-yaml": "^3.14.0",
