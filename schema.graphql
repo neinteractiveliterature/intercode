@@ -2249,7 +2249,7 @@ type FormItem {
   form_section: FormSection!
   id: Int!
   identifier: String
-  item_type: String
+  item_type: String!
   position: Int
   properties: Json
   public_description: String
