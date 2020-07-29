@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 
-import { CreateEventProposal } from './mutations.gql';
+import { CreateEventProposal } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useAsyncFunction from '../useAsyncFunction';

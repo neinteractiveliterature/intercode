@@ -2,7 +2,7 @@ import React, { useContext, useRef, useCallback } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 
-import { CreateFormItem } from './mutations.gql';
+import { CreateFormItem } from './mutations';
 import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import buildNewFormItem from './buildNewFormItem';

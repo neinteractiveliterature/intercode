@@ -5,10 +5,10 @@ import {
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { DeleteEventProposal } from './mutations.gql';
+import { DeleteEventProposal } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposalForm from './EventProposalForm';
-import { EventProposalQuery } from './queries.gql';
+import { EventProposalQuery } from './queries';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';

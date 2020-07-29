@@ -1,8 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import TextDiffDisplay from './TextDiffDisplay';
 
-function MultipleChoiceItemChangeDisplay({ change }) {
+import TextDiffDisplay from './TextDiffDisplay';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
+
+export type MultipleChoiceItemChangeDisplayProps = {
+  change: ParsedFormResponseChange<MultipleChoiceFormItem>,
+};
+
+function MultipleChoiceItemChangeDisplay({ change }: MultipleChoiceItemChangeDisplayProps) {
   const { previous_value: before, new_value: after } = change;
 
   if (Array.isArray(before) || Array.isArray(after)) {
@@ -14,12 +20,5 @@ function MultipleChoiceItemChangeDisplay({ change }) {
 
   return <TextDiffDisplay before={(before || '').toString()} after={(after || '').toString()} />;
 }
-
-MultipleChoiceItemChangeDisplay.propTypes = {
-  change: PropTypes.shape({
-    previous_value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-    new_value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  }).isRequired,
-};
 
 export default MultipleChoiceItemChangeDisplay;

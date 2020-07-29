@@ -4,9 +4,9 @@ import { humanize, pluralize } from 'inflected';
 import { useQuery } from '@apollo/react-hooks';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { DeleteForm } from './mutations.gql';
+import { DeleteForm } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { FormAdminQuery } from './queries.gql';
+import { FormAdminQuery } from './queries';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import { useDeleteMutation } from '../MutationUtils';

@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 
 import CreateEventProposalModal from './CreateEventProposalModal';
-import { ProposeEventButtonQuery } from './queries.gql';
+import { ProposeEventButtonQuery } from './queries';
 import SignInButton from '../Authentication/SignInButton';
 import useUniqueId from '../useUniqueId';
 import useModal from '../ModalDialogs/useModal';

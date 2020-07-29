@@ -5,7 +5,7 @@ import { timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
 import { Convention, Event, Run } from './graphqlTypes.generated';
 
-type ConventionForTimespanUtils = Pick<Convention,
+export type ConventionForTimespanUtils = Pick<Convention,
 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>;
 
 export function timespanFromConvention(convention: ConventionForTimespanUtils) {

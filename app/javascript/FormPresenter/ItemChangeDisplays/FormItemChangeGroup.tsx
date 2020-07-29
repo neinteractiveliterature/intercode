@@ -1,20 +1,36 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import AppRootContext from '../../AppRootContext';
-import FormItemChangeDisplay from './FormItemChangeDisplay';
+import FormItemChangeDisplay, { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
 import TextDiffDisplay from './TextDiffDisplay';
-import { getTimespanForChangeGroup } from './FormItemChangeUtils';
+import { getTimespanForChangeGroup, FormResponseChangeGroup } from './FormItemChangeUtils';
+import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
 
-function describeFormItem(item, itemIdentifier) {
+function describeFormItem(item: TypedFormItem | undefined | null, itemIdentifier: string) {
   if (!item) {
     return itemIdentifier;
   }
 
-  return item.admin_description || (item.properties || {}).caption || itemIdentifier;
+  if (item.admin_description) {
+    return item.admin_description;
+  }
+
+  if (
+    item.rendered_properties
+    && Object.prototype.hasOwnProperty.call(item.rendered_properties, 'caption')
+  ) {
+    return (item.rendered_properties as { caption: string }).caption;
+  }
+
+  return itemIdentifier;
 }
 
-function FormItemChangeGroup({ convention, changeGroup }) {
+export type FormItemChangeGroupProps = {
+  convention: ConventionForFormItemChangeDisplay,
+  changeGroup: FormResponseChangeGroup,
+};
+
+function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps) {
   const { timezoneName } = useContext(AppRootContext);
   const timespan = useMemo(
     () => getTimespanForChangeGroup(changeGroup),
@@ -45,8 +61,8 @@ function FormItemChangeGroup({ convention, changeGroup }) {
                 )
                 : (
                   <TextDiffDisplay
-                    before={(change.previous_value || '').toString()}
-                    after={(change.new_value || '').toString()}
+                    before={(change.previous_value ?? '').toString()}
+                    after={(change.new_value ?? '').toString()}
                   />
                 )}
             </dd>
@@ -56,17 +72,5 @@ function FormItemChangeGroup({ convention, changeGroup }) {
     </section>
   );
 }
-
-FormItemChangeGroup.propTypes = {
-  changeGroup: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    changes: PropTypes.arrayOf(PropTypes.shape({
-      user_con_profile: PropTypes.shape({
-        name_without_nickname: PropTypes.string.isRequired,
-      }).isRequired,
-    })).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({}).isRequired,
-};
 
 export default FormItemChangeGroup;

@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
-import { EventProposalQueryWithOwner } from './queries.gql';
+import { EventProposalQueryWithOwner } from './queries';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import ErrorDisplay from '../ErrorDisplay';
 import Gravatar from '../Gravatar';

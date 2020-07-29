@@ -1,11 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import { humanize } from 'inflected';
 
 import ObjectDiffDisplay from './ObjectDiffDisplay';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
 
-function RegistrationPolicyItemChangeDisplay({ change }) {
+export type RegistrationPolicyItemChangeDisplayProps = {
+  change: ParsedFormResponseChange<RegistrationPolicyFormItem>,
+};
+
+function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemChangeDisplayProps) {
   const { buckets: prevBuckets, ...otherPrev } = (change.previous_value || {});
   const { buckets: newBuckets, ...otherNew } = (change.new_value || {});
   const combinedBucketKeys = uniq([
@@ -39,17 +44,5 @@ function RegistrationPolicyItemChangeDisplay({ change }) {
     </div>
   );
 }
-
-RegistrationPolicyItemChangeDisplay.propTypes = {
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      format: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-  change: PropTypes.shape({
-    previous_value: PropTypes.string,
-    new_value: PropTypes.string,
-  }).isRequired,
-};
 
 export default RegistrationPolicyItemChangeDisplay;
