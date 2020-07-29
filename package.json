@@ -184,7 +184,7 @@
     "@graphql-codegen/typescript": "^1.17.0",
     "@graphql-codegen/typescript-operations": "^1.17.4",
     "@graphql-codegen/typescript-react-apollo": "^1.17.6",
-    "@testing-library/jest-dom": "^5.11.1",
+    "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react-hooks": "^3.3.0",
     "@typescript-eslint/eslint-plugin": "^3.7.1",
     "@typescript-eslint/parser": "^3.7.1",
