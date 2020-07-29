@@ -1,11 +1,9 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   preferencesMatch,
-  TimeblockPropType,
-  TimeblockOmissionPropType,
-  TimeblockPreferenceAPIRepresentationPropType,
+  ParsedTimeblockPreference,
+  UnparsedTimeblockPreference,
 } from '../TimeblockTypes';
 import {
   describeOrdinality,
@@ -13,21 +11,36 @@ import {
   getColumnHeader,
   getValidTimeblockColumns,
   rotateTimeblockColumnsToRows,
+  ConcreteTimeblock,
+  TimeblockColumn,
 } from '../TimeblockUtils';
 import TextDiffDisplay from './TextDiffDisplay';
+import { TimeblockPreferenceFormItem } from '../../FormAdmin/FormItemUtils';
+import { ConventionForTimespanUtils } from '../../TimespanUtils';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
 
-function findOrdinalityForCell(value, cell) {
+function findOrdinalityForCell(
+  value: (ParsedTimeblockPreference | UnparsedTimeblockPreference)[],
+  cell: ConcreteTimeblock,
+) {
   const existingPreference = value
     .find((p) => preferencesMatch(p, {
       start: cell.timespan.start,
       finish: cell.timespan.finish,
-      label: cell.timeblock.label,
     }));
-  return (existingPreference || {}).ordinality;
+  return existingPreference?.ordinality;
 }
 
-function TimeblockPreferenceItemChangeDisplay({ formItem, convention, change }) {
-  const renderCell = (cell, column) => {
+export type TimeblockPreferenceItemChangeDisplayProps = {
+  formItem: TimeblockPreferenceFormItem,
+  convention: ConventionForTimespanUtils,
+  change: ParsedFormResponseChange<TimeblockPreferenceFormItem>,
+};
+
+function TimeblockPreferenceItemChangeDisplay(
+  { formItem, convention, change }: TimeblockPreferenceItemChangeDisplayProps,
+) {
+  const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
     const key = column.dayStart.format('dddd');
     if (cell == null) {
       return <td key={key} className="table-secondary" />;
@@ -73,7 +86,7 @@ function TimeblockPreferenceItemChangeDisplay({ formItem, convention, change }) 
             <td>
               {row.timeblock.label}
               {
-                formItem.properties.hide_timestamps
+                formItem.rendered_properties.hide_timestamps
                   ? null
                   : (
                     <>
@@ -90,29 +103,5 @@ function TimeblockPreferenceItemChangeDisplay({ formItem, convention, change }) 
     </table>
   );
 }
-
-TimeblockPreferenceItemChangeDisplay.propTypes = {
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-      timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
-      omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
-      hide_timestamps: PropTypes.bool,
-    }).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-  change: PropTypes.shape({
-    previous_value: PropTypes.arrayOf(
-      TimeblockPreferenceAPIRepresentationPropType.isRequired,
-    ).isRequired,
-    new_value: PropTypes.arrayOf(
-      TimeblockPreferenceAPIRepresentationPropType.isRequired,
-    ).isRequired,
-  }).isRequired,
-};
 
 export default TimeblockPreferenceItemChangeDisplay;

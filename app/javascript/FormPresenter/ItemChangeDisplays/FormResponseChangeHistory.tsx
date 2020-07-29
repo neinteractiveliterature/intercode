@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import {
   NavLink, Switch, Route, Redirect,
 } from 'react-router-dom';
@@ -7,11 +6,20 @@ import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeGroup from './FormItemChangeGroup';
-import { buildChangeGroups, getTimespanForChangeGroup } from './FormItemChangeUtils';
+import { buildChangeGroups, getTimespanForChangeGroup, ParseableFormResponseChange } from './FormItemChangeUtils';
+import { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
+import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
+
+export type FormResponseChangeHistoryProps = {
+  basePath: string,
+  changes: ParseableFormResponseChange[],
+  convention: ConventionForFormItemChangeDisplay,
+  form: CommonFormFieldsFragment,
+};
 
 function FormResponseChangeHistory({
   basePath, changes, convention, form,
-}) {
+}: FormResponseChangeHistoryProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const changeGroups = useMemo(
@@ -20,7 +28,7 @@ function FormResponseChangeHistory({
   );
 
   if (changeGroups.length === 0) {
-    return t('forms.history.noChanges', 'No changes.');
+    return <>{t('forms.history.noChanges', 'No changes.')}</>;
   }
 
   return (
@@ -57,12 +65,5 @@ function FormResponseChangeHistory({
     </div>
   );
 }
-
-FormResponseChangeHistory.propTypes = {
-  basePath: PropTypes.string.isRequired,
-  changes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  convention: PropTypes.shape({}).isRequired,
-  form: PropTypes.shape({}).isRequired,
-};
 
 export default FormResponseChangeHistory;

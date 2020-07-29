@@ -7,7 +7,7 @@ import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import { TransitionEventProposal } from './mutations.gql';
+import { TransitionEventProposal } from './mutations';
 import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 

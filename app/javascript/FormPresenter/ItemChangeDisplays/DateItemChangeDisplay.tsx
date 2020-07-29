@@ -1,11 +1,16 @@
 import React, { useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
 import TextDiffDisplay from './TextDiffDisplay';
 
 import { describeDate } from '../ItemDisplays/DateItemDisplay';
 import AppRootContext from '../../AppRootContext';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { DateFormItem } from '../../FormAdmin/FormItemUtils';
 
-function DateItemChangeDisplay({ change }) {
+export type DateItemChangeDisplayProps = {
+  change: ParsedFormResponseChange<DateFormItem>,
+};
+
+function DateItemChangeDisplay({ change }: DateItemChangeDisplayProps) {
   const { timezoneName } = useContext(AppRootContext);
   const before = useMemo(
     () => describeDate(change.previous_value || '', timezoneName),
@@ -18,15 +23,5 @@ function DateItemChangeDisplay({ change }) {
 
   return <TextDiffDisplay before={before} after={after} />;
 }
-
-DateItemChangeDisplay.propTypes = {
-  change: PropTypes.shape({
-    previous_value: PropTypes.string,
-    new_value: PropTypes.string,
-  }).isRequired,
-  convention: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default DateItemChangeDisplay;

@@ -8,14 +8,14 @@ import flatMap from 'lodash/flatMap';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { FormEditorContext } from './FormEditorContexts';
-import { FormEditorQuery } from './queries.gql';
+import { FormEditorQuery } from './queries';
 import FormItemEditorLayout from './FormItemEditorLayout';
 import FormSectionEditorLayout from './FormSectionEditorLayout';
 import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseFormItemObject } from './FormItemUtils';
-import { UpdateForm } from './mutations.gql';
+import { UpdateForm } from './mutations';
 import usePageTitle from '../usePageTitle';
 
 function FormEditor() {

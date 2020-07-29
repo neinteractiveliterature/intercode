@@ -6,7 +6,7 @@ import ReactTable from 'react-table';
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
-import { EventProposalsAdminQuery } from './queries.gql';
+import { EventProposalsAdminQuery } from './queries';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';

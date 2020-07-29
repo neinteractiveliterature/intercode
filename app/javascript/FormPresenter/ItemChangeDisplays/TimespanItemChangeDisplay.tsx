@@ -2,8 +2,14 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import TextDiffDisplay from './TextDiffDisplay';
 import { describeTimespan } from '../ItemDisplays/TimespanItemDisplay';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { TimespanFormItem } from '../../FormAdmin/FormItemUtils';
 
-function TimespanItemChangeDisplay({ change }) {
+export type TimespanItemChangeDisplayProps = {
+  change: ParsedFormResponseChange<TimespanFormItem>,
+};
+
+function TimespanItemChangeDisplay({ change }: TimespanItemChangeDisplayProps) {
   const before = useMemo(
     () => describeTimespan(change.previous_value || 0),
     [change.previous_value],
@@ -15,12 +21,5 @@ function TimespanItemChangeDisplay({ change }) {
 
   return <TextDiffDisplay before={before} after={after} />;
 }
-
-TimespanItemChangeDisplay.propTypes = {
-  change: PropTypes.shape({
-    previous_value: PropTypes.number,
-    new_value: PropTypes.number,
-  }).isRequired,
-};
 
 export default TimespanItemChangeDisplay;

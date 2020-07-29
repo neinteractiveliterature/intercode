@@ -1,10 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 
 import ObjectDiffDisplay from './ObjectDiffDisplay';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { AgeRestrictionsFormItem } from '../../FormAdmin/FormItemUtils';
 
-function AgeRestrictionsItemChangeDisplay({ change }) {
+export type AgeRestrictionsItemChangeDisplayProps = {
+  change: ParsedFormResponseChange<AgeRestrictionsFormItem>,
+};
+
+function AgeRestrictionsItemChangeDisplay({ change }: AgeRestrictionsItemChangeDisplayProps) {
   const { previous_value: before, new_value: after } = change;
 
   return (
@@ -17,12 +22,5 @@ function AgeRestrictionsItemChangeDisplay({ change }) {
     </div>
   );
 }
-
-AgeRestrictionsItemChangeDisplay.propTypes = {
-  change: PropTypes.shape({
-    previous_value: PropTypes.shape({}),
-    new_value: PropTypes.shape({}),
-  }).isRequired,
-};
 
 export default AgeRestrictionsItemChangeDisplay;

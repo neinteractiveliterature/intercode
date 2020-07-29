@@ -1,10 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 
 import ObjectDiffDisplay from './ObjectDiffDisplay';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { EventEmailFormItem } from '../../FormAdmin/FormItemUtils';
 
-function EventEmailItemChangeDisplay({ change }) {
+export type EventEmailItemChangeDisplayProps = {
+  change: ParsedFormResponseChange<EventEmailFormItem>,
+};
+
+function EventEmailItemChangeDisplay({ change }: EventEmailItemChangeDisplayProps) {
   const { previous_value: before, new_value: after } = change;
 
   return (
@@ -17,12 +22,5 @@ function EventEmailItemChangeDisplay({ change }) {
     </div>
   );
 }
-
-EventEmailItemChangeDisplay.propTypes = {
-  change: PropTypes.shape({
-    previous_value: PropTypes.shape({}),
-    new_value: PropTypes.shape({}),
-  }).isRequired,
-};
 
 export default EventEmailItemChangeDisplay;

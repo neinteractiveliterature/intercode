@@ -1,3 +1,7 @@
+import gql from 'graphql-tag';
+import { CommonFormItemFields, CommonFormFields } from '../Models/commonFormFragments';
+
+export const FormFields = gql`
 fragment FormFields on Form {
   id
   title
@@ -19,39 +23,40 @@ fragment FormFields on Form {
     name
   }
 }
+`;
 
+export const FormEditorFormItemFields = gql`
 fragment FormEditorFormItemFields on FormItem {
   id
-  position
-  identifier
-  item_type
   admin_description
   public_description
   properties
-  rendered_properties
-  default_value
+  ...CommonFormItemFields
 }
 
-fragment FormEditorFormSectionFields on FormSection {
-  id
-  title
-  position
-  form_items {
-    ...FormEditorFormItemFields
-  }
-}
+${CommonFormItemFields}
+`;
 
+export const FormEditorData = gql`
 fragment FormEditorData on Form {
   id
-  title
-  form_type
+  ...CommonFormFields
 
   form_sections {
     id
-    ...FormEditorFormSectionFields
+
+    form_items {
+      id
+      ...FormEditorFormItemFields
+    }
   }
 }
 
+${CommonFormFields}
+${FormEditorFormItemFields}
+`;
+
+export const FormAdminQuery = gql`
 query FormAdminQuery {
   convention {
     id
@@ -63,7 +68,9 @@ query FormAdminQuery {
     }
   }
 }
+`;
 
+export const FormEditorQuery = gql`
 query FormEditorQuery($id: Int!) {
   convention {
     id
@@ -75,13 +82,21 @@ query FormEditorQuery($id: Int!) {
   }
 
   form(id: $id) {
+    id
     ...FormEditorData
   }
 }
 
+${FormEditorData}
+`;
+
+export const PreviewFormItemQuery = gql`
 query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
   previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
     id
     ...FormEditorFormItemFields
   }
 }
+
+${FormEditorFormItemFields}
+`;

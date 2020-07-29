@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../ErrorDisplay';
-import { EventProposalQuery } from './queries.gql';
+import { EventProposalQuery } from './queries';
 import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
-import { UpdateEventProposal, SubmitEventProposal } from './mutations.gql';
+import { UpdateEventProposal, SubmitEventProposal } from './mutations';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import PageLoadingIndicator from '../PageLoadingIndicator';

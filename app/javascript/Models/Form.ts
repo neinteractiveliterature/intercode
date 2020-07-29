@@ -5,6 +5,18 @@ import flatMap from 'lodash/flatMap';
 
 import { FormSection } from '../graphqlTypes.generated';
 import { APIFormItem } from './FormItem';
+import { CommonFormFieldsFragment, CommonFormItemFieldsFragment } from './commonFormFragments.generated';
+
+export function getFormItemsByIdentifier(
+  form: CommonFormFieldsFragment,
+): { [identifier: string]: CommonFormItemFieldsFragment } {
+  const indexedSectionItems = form.form_sections.map((formSection) => keyBy(
+    formSection.form_items.filter((formItem) => formItem.identifier != null),
+    'identifier'
+  ));
+
+  return indexedSectionItems.reduce((memo, sectionItems) => ({ ...memo, ...sectionItems }), {});
+}
 
 export default class Form {
   static propType = PropTypes.shape({

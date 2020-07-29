@@ -5,9 +5,9 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import CodeInput from '../BuiltInFormControls/CodeInput';
-import { CreateFormWithJSON, UpdateFormWithJSON } from './mutations.gql';
+import { CreateFormWithJSON, UpdateFormWithJSON } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { FormAdminQuery } from './queries.gql';
+import { FormAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';

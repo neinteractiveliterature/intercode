@@ -1,3 +1,7 @@
+import gql from 'graphql-tag';
+import { CommonFormFields } from '../Models/commonFormFragments';
+
+export const EventProposalFields = gql`
 fragment EventProposalFields on EventProposal {
   id
   title
@@ -18,7 +22,9 @@ fragment EventProposalFields on EventProposal {
     id
   }
 }
+`;
 
+export const EventProposalFormData = gql`
 fragment EventProposalFormData on Convention {
   id
   starts_at
@@ -26,7 +32,9 @@ fragment EventProposalFormData on Convention {
   timezone_name
   event_mailing_list_domain
 }
+`;
 
+export const EventProposalQuery = gql`
 query EventProposalQuery($eventProposalId: Int!) {
   currentAbility {
     can_delete_event_proposal(event_proposal_id: $eventProposalId)
@@ -43,6 +51,11 @@ query EventProposalQuery($eventProposalId: Int!) {
   }
 }
 
+${EventProposalFormData}
+${EventProposalFields}
+`;
+
+export const EventProposalQueryWithOwner = gql`
 query EventProposalQueryWithOwner($eventProposalId: Int!) {
   convention {
     id
@@ -68,13 +81,20 @@ query EventProposalQueryWithOwner($eventProposalId: Int!) {
   }
 }
 
+${EventProposalFormData}
+${EventProposalFields}
+`;
+
+export const EventProposalAdminNotesQuery = gql`
 query EventProposalAdminNotesQuery($eventProposalId: Int!) {
   eventProposal(id: $eventProposalId) {
     id
     admin_notes
   }
 }
+`;
 
+export const ProposeEventButtonQuery = gql`
 query ProposeEventButtonQuery {
   myProfile {
     id
@@ -122,7 +142,9 @@ query ProposeEventButtonQuery {
     }
   }
 }
+`;
 
+export const EventProposalsAdminQuery = gql`
 query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
   convention {
     id
@@ -170,13 +192,16 @@ query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposa
     }
   }
 }
+`;
 
+export const EventProposalHistoryQuery = gql`
 query EventProposalHistoryQuery($id: Int!) {
   convention {
     id
     starts_at
     ends_at
     timezone_name
+    timezone_mode
   }
 
   eventProposal(id: $id) {
@@ -192,7 +217,16 @@ query EventProposalHistoryQuery($id: Int!) {
 
       event_proposal_form {
         id
-        form_api_json
+        ...CommonFormFields
+
+        form_sections {
+          id
+
+          form_items {
+            id
+            admin_description
+          }
+        }
       }
     }
 
@@ -210,3 +244,6 @@ query EventProposalHistoryQuery($id: Int!) {
     }
   }
 }
+
+${CommonFormFields}
+`;
