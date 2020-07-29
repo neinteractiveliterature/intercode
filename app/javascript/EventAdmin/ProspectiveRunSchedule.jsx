@@ -89,7 +89,7 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
         signupStatus: (`${run.id}`.startsWith(PROSPECTIVE_RUN_ID_PREFIX) ? 'confirmed' : null),
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
-        unlimited: !event.registration_policy.slots_limited,
+        unlimited: !event.registration_policy?.slots_limited,
       })}
       style={{
         ...runStyle,
@@ -101,7 +101,7 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
         <AvailabilityBar
           availabilityFraction={0}
           runStyle={runStyle}
-          unlimited={!event.registration_policy.slots_limited}
+          unlimited={!event.registration_policy?.slots_limited}
         />
         {event.title}
       </div>
