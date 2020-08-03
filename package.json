@@ -183,7 +183,7 @@
     "@graphql-codegen/near-operation-file-preset": "^1.17.6",
     "@graphql-codegen/typescript": "^1.17.0",
     "@graphql-codegen/typescript-operations": "^1.17.6",
-    "@graphql-codegen/typescript-react-apollo": "^1.17.6",
+    "@graphql-codegen/typescript-react-apollo": "^2.0.0",
     "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react-hooks": "^3.4.1",
     "@typescript-eslint/eslint-plugin": "^3.7.1",
