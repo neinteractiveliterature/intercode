@@ -1416,12 +1416,12 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@graphql-codegen/add@1.17.6":
-  version "1.17.6"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.17.6.tgz#bb8a2a51bb846b10092b253186b4da6af0fff2c6"
-  integrity sha512-6OJKO220jBQci1oo0ryhy3njz8Ps5wnfWZu4BN/uTrkH2LSEtEu1oeifQn+RM7/DaX2tysNQO84jTby8FGrc8A==
+"@graphql-codegen/add@1.17.7":
+  version "1.17.7"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.17.7.tgz#ca070179400350909756ebd0fb10dc29ae235ccd"
+  integrity sha512-ER8mZmFRWIek6WO/4J8OPRkMjMQW0GSmHUzTgLJvbH/29RnQgyJNGBpliIebRfjyDiSvYbGrfutPK5tyPiXKUg==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.17.6"
+    "@graphql-codegen/plugin-helpers" "1.17.7"
     tslib "~2.0.0"
 
 "@graphql-codegen/cli@^1.17.6":
@@ -1499,14 +1499,14 @@
     "@graphql-codegen/plugin-helpers" "1.17.6"
     tslib "~2.0.0"
 
-"@graphql-codegen/near-operation-file-preset@^1.17.6":
-  version "1.17.6"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/near-operation-file-preset/-/near-operation-file-preset-1.17.6.tgz#6dab8c5ffa943ba2e8207ad917f1fd2c738e34eb"
-  integrity sha512-OQDffT+7T2/L7bqKyLgEx5VVAHN3f0pGL5M3y0yLQCbsF1VO6Y6cPup1zjcnvjUzO4HsE9ACTiHY0/hBcFq2tQ==
+"@graphql-codegen/near-operation-file-preset@^1.17.7":
+  version "1.17.7"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/near-operation-file-preset/-/near-operation-file-preset-1.17.7.tgz#538fe2d4e3485d2cc85d0c9244a375a6b2e7d04d"
+  integrity sha512-l7SYIWOMZ2OnTKoQAKeSyNsxd6+TUUnbPonn24gPBoLL+InYhg4UMYmVGNUop3z3s9DjRgAy2FsaStBiMY5pXA==
   dependencies:
-    "@graphql-codegen/add" "1.17.6"
-    "@graphql-codegen/plugin-helpers" "1.17.6"
-    "@graphql-codegen/visitor-plugin-common" "1.17.6"
+    "@graphql-codegen/add" "1.17.7"
+    "@graphql-codegen/plugin-helpers" "1.17.7"
+    "@graphql-codegen/visitor-plugin-common" "1.17.7"
     parse-filepath "1.0.2"
     tslib "~2.0.0"
 
@@ -1592,7 +1592,7 @@
     pascal-case "3.1.1"
     tslib "~2.0.0"
 
-"@graphql-codegen/visitor-plugin-common@^1.17.7":
+"@graphql-codegen/visitor-plugin-common@1.17.7", "@graphql-codegen/visitor-plugin-common@^1.17.7":
   version "1.17.7"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-1.17.7.tgz#3158ca4fc7d45a0f5a6ad0706061015eae481d9e"
   integrity sha512-z5WvYqgCgPAAuMJMOE0e0nEicdaQRm59/vP+yYihKQmwrASzPlqa1BUiGDnfrPcCooB9fEUHB+cQb3gt9GRfEg==
