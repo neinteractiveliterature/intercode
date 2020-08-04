@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
-import { EventListEventsQuery } from './queries.gql';
+import { EventListEventsQuery } from './queries';
 import EventListEvents from './EventListEvents';
 import EventListSortDropdown from './EventListSortDropdown';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';

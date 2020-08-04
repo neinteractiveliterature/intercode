@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
-import { EventPageQuery } from './queries.gql';
+import { EventPageQuery } from './queries';
 import LoadingIndicator from '../../LoadingIndicator';
 
 function EventAdminMenu({ eventId }) {

@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import BucketInput from './BucketInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import { ForceConfirmSignup } from './mutations.gql';
+import { ForceConfirmSignup } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 
 function ForceConfirmSignupModal({ signup, onComplete, onCancel }) {

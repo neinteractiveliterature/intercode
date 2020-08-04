@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/react-hooks';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
-import { ScheduleGridCombinedQuery } from './queries.gql';
+import { ScheduleGridCombinedQuery } from './queries';
 import AppRootContext from '../../AppRootContext';
 
 function ConventionDayTab({ basename, timespan, prefetchTimespan }) {

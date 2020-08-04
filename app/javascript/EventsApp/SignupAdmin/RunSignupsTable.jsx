@@ -12,7 +12,7 @@ import EmailCell from '../../Tables/EmailCell';
 import { encodeStringArray, decodeStringArray } from '../../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
-import { RunSignupsTableSignupsQuery, SignupAdminEventQuery } from './queries.gql';
+import { RunSignupsTableSignupsQuery, SignupAdminEventQuery } from './queries';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';

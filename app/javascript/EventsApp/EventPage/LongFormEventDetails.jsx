@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
 import ErrorDisplay from '../../ErrorDisplay';
-import { EventPageQuery } from './queries.gql';
+import { EventPageQuery } from './queries';
 import parsePageContent from '../../parsePageContent';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import LoadingIndicator from '../../LoadingIndicator';

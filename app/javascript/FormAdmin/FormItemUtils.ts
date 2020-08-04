@@ -77,14 +77,14 @@ export type AgeRestrictionsValue = {
 };
 
 export type AgeRestrictionsFormItem = (
-  ParsedFormItem<AgeRestrictionsProperties, AgeRestrictionsValue, 'age_restrictions'>
+  WithRequiredIdentifier<ParsedFormItem<AgeRestrictionsProperties, AgeRestrictionsValue, 'age_restrictions'>>
 );
 
 export type DateProperties = CommonQuestionProperties & {
   caption: string,
 };
 
-export type DateFormItem = ParsedFormItem<DateProperties, string, 'date'>;
+export type DateFormItem = WithRequiredIdentifier<ParsedFormItem<DateProperties, string, 'date'>>;
 
 export type EventEmailProperties = CommonQuestionProperties;
 
@@ -94,7 +94,7 @@ export type EventEmailValue = {
   team_mailing_list_name?: string,
 };
 
-export type EventEmailFormItem = ParsedFormItem<EventEmailProperties, EventEmailValue, 'event_email'>;
+export type EventEmailFormItem = WithRequiredIdentifier<ParsedFormItem<EventEmailProperties, EventEmailValue, 'event_email'>>;
 
 export type FreeTextProperties = CommonQuestionProperties & {
   caption: string,
@@ -103,7 +103,7 @@ export type FreeTextProperties = CommonQuestionProperties & {
   format: 'text' | 'markdown',
 };
 
-export type FreeTextFormItem = ParsedFormItem<FreeTextProperties, string, 'free_text'>;
+export type FreeTextFormItem = WithRequiredIdentifier<ParsedFormItem<FreeTextProperties, string, 'free_text'>>;
 
 export type MultipleChoiceProperties = CommonQuestionProperties & {
   caption: string,
@@ -116,7 +116,7 @@ export type MultipleChoiceProperties = CommonQuestionProperties & {
   other_caption?: string,
 };
 
-export type MultipleChoiceFormItem = ParsedFormItem<MultipleChoiceProperties, string | string[], 'multiple_choice'>;
+export type MultipleChoiceFormItem = WithRequiredIdentifier<ParsedFormItem<MultipleChoiceProperties, string | string[], 'multiple_choice'>>;
 
 export type RegistrationPolicyProperties = CommonQuestionProperties & {
   presets: {
@@ -127,7 +127,7 @@ export type RegistrationPolicyProperties = CommonQuestionProperties & {
 };
 
 export type RegistrationPolicyFormItem = (
-  ParsedFormItem<RegistrationPolicyProperties, RegistrationPolicy, 'registration_policy'>
+  WithRequiredIdentifier<ParsedFormItem<RegistrationPolicyProperties, RegistrationPolicy, 'registration_policy'>>
 );
 
 export type StaticTextProperties = {
@@ -145,14 +145,14 @@ export type TimeblockPreferenceProperties = CommonQuestionProperties & {
 };
 
 export type TimeblockPreferenceFormItem = (
-  ParsedFormItem<TimeblockPreferenceProperties, UnparsedTimeblockPreference[], 'timeblock_preference'>
+  WithRequiredIdentifier<ParsedFormItem<TimeblockPreferenceProperties, UnparsedTimeblockPreference[], 'timeblock_preference'>>
 );
 
 export type TimespanProperties = CommonQuestionProperties & {
   caption: string,
 };
 
-export type TimespanFormItem = ParsedFormItem<TimespanProperties, number, 'timespan'>;
+export type TimespanFormItem = WithRequiredIdentifier<ParsedFormItem<TimespanProperties, number, 'timespan'>>;
 
 export type TypedFormItem = (
   AgeRestrictionsFormItem |

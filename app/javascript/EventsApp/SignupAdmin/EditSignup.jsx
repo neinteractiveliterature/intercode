@@ -6,14 +6,14 @@ import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { AdminSignupQuery } from './queries.gql';
+import { AdminSignupQuery } from './queries';
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import ForceConfirmSignupModal from './ForceConfirmSignupModal';
 import Timespan from '../../Timespan';
-import { UpdateSignupCounted } from './mutations.gql';
+import { UpdateSignupCounted } from './mutations';
 import useModal from '../../ModalDialogs/useModal';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';

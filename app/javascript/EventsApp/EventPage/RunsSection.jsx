@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { useQuery } from '@apollo/react-hooks';
 
 import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
-import { EventPageQuery } from './queries.gql';
+import { EventPageQuery } from './queries';
 import RunCapacityGraph from './RunCapacityGraph';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventPageRunCard from './EventPageRunCard';

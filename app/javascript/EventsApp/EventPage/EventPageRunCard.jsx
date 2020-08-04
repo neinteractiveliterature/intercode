@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations.gql';
-import { EventPageQuery } from './queries.gql';
+import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations';
+import { EventPageQuery } from './queries';
 import RunCard from './RunCard';
 import buildEventUrl from '../buildEventUrl';
 import buildSignupOptions from './buildSignupOptions';

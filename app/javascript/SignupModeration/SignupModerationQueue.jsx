@@ -4,11 +4,11 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import moment from 'moment-timezone';
 import Pagination from 'react-js-pagination';
 
-import { AcceptSignupRequest, RejectSignupRequest } from './mutations.gql';
+import { AcceptSignupRequest, RejectSignupRequest } from './mutations';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import { SignupModerationQueueQuery } from './queries.gql';
+import { SignupModerationQueueQuery } from './queries';
 import { timespanFromRun } from '../TimespanUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';

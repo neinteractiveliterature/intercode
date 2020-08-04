@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
-import { RunSignupsTableSignupsQuery } from './queries.gql';
+import { RunSignupsTableSignupsQuery } from './queries';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import LoadingIndicator from '../../LoadingIndicator';

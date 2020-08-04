@@ -9,7 +9,7 @@ import ConfigPropType from './ConfigPropType';
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
-import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery } from './queries.gql';
+import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery } from './queries';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';

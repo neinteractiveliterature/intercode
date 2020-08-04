@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
 import gql from 'graphql-tag';
-import { CommonFormFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 

@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/react-hooks';
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';
 import TeamMembersIndex from './TeamMembersIndex';
-import { TeamMembersQuery } from './queries.gql';
+import { TeamMembersQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
