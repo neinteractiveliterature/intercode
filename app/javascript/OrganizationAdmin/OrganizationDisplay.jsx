@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import { titleize } from 'inflected';
 

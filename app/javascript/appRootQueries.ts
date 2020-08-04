@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 // eslint-disable-next-line import/prefer-default-export
 export const AppRootQuery = gql`

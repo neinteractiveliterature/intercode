@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/client';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import { SetCmsVariableMutation } from './queries.gql';

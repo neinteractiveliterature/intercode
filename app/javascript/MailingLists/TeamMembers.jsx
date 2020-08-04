@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { TeamMembersMailingListQuery } from './queries.gql';

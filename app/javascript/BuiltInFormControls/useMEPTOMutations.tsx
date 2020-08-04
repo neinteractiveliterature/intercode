@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { DataProxy } from 'apollo-cache';
+import { ApolloCache } from '@apollo/client';
 import { MEPTOEditorProps } from './MaximumEventProvidedTicketsOverrideEditor';
 
 export type UseMEPTOMutationsProps<OverrideType> = {
@@ -13,7 +13,7 @@ export type UseMEPTOMutationsProps<OverrideType> = {
     },
 
     update: (
-      store: DataProxy,
+      store: ApolloCache<any>,
       result: {
         data: {
           createMaximumEventProvidedTicketsOverride: {
@@ -39,11 +39,11 @@ export type UseMEPTOMutationsProps<OverrideType> = {
         id: number,
       },
     },
-    update: (store: DataProxy) => void,
+    update: (store: ApolloCache<any>) => void,
   }) => Promise<any>,
 
-  createUpdater: (store: DataProxy, eventId: number, override: OverrideType) => void,
-  deleteUpdater: (store: DataProxy, id: number) => void,
+  createUpdater: (store: ApolloCache<any>, eventId: number, override: OverrideType) => void,
+  deleteUpdater: (store: ApolloCache<any>, id: number) => void,
 };
 
 export type MEPTOMutations = Pick<MEPTOEditorProps, 'createOverride' | 'updateOverride' | 'deleteOverride'>;

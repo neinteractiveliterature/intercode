@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import React, { ReactNode, ErrorInfo } from 'react';
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 
 import ErrorDisplay from './ErrorDisplay';
 

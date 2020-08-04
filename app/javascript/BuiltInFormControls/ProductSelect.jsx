@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { AdminProductsQuery } from '../Store/queries.gql';
 import LoadingIndicator from '../LoadingIndicator';

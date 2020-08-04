@@ -5,7 +5,7 @@ import { components, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useHistory } from 'react-router-dom';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 import { CSSTransition } from 'react-transition-group';
 import {
   Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer,

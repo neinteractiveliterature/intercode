@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'codemirror';

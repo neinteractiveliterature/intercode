@@ -1,9 +1,8 @@
 /* eslint-disable */
 import * as Types from './graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type AppRootQueryQueryVariables = Types.Exact<{
@@ -186,12 +185,12 @@ export const AppRootQueryDocument = gql`
  *   },
  * });
  */
-export function useAppRootQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
+export function useAppRootQueryQuery(baseOptions?: Apollo.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
+        return Apollo.useQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
       }
-export function useAppRootQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
+export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
+          return Apollo.useLazyQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
         }
 export type AppRootQueryQueryHookResult = ReturnType<typeof useAppRootQueryQuery>;
 export type AppRootQueryLazyQueryHookResult = ReturnType<typeof useAppRootQueryLazyQuery>;
-export type AppRootQueryQueryResult = ApolloReactCommon.QueryResult<AppRootQueryQuery, AppRootQueryQueryVariables>;
+export type AppRootQueryQueryResult = Apollo.QueryResult<AppRootQueryQuery, AppRootQueryQueryVariables>;

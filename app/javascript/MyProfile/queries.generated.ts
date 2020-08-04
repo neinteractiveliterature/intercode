@@ -2,10 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
-import gql from 'graphql-tag';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type MyProfileQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -72,12 +71,12 @@ export const MyProfileQueryDocument = gql`
  *   },
  * });
  */
-export function useMyProfileQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
+export function useMyProfileQueryQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
+        return Apollo.useQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
       }
-export function useMyProfileQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
+export function useMyProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
+          return Apollo.useLazyQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
         }
 export type MyProfileQueryQueryHookResult = ReturnType<typeof useMyProfileQueryQuery>;
 export type MyProfileQueryLazyQueryHookResult = ReturnType<typeof useMyProfileQueryLazyQuery>;
-export type MyProfileQueryQueryResult = ApolloReactCommon.QueryResult<MyProfileQueryQuery, MyProfileQueryQueryVariables>;
+export type MyProfileQueryQueryResult = Apollo.QueryResult<MyProfileQueryQuery, MyProfileQueryQueryVariables>;

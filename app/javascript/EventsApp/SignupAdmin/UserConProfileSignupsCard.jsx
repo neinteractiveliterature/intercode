@@ -2,7 +2,7 @@ import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';

@@ -1,17 +1,15 @@
 import {
   useRef, useMemo, useEffect, RefObject,
 } from 'react';
-import { ApolloClient } from 'apollo-client';
-import { ApolloLink, Operation, NextLink } from 'apollo-link';
-import { onError } from 'apollo-link-error';
+import {
+  ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache,
+} from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import fetch from 'unfetch';
 import { DateTime } from 'luxon';
 
-import introspectionQueryResultData from './fragmentTypes.json';
-
-const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
+import possibleTypes from './possibleTypes.json';
 
 export function useIntercodeApolloLink(
   authenticityToken: string, onUnauthenticatedRef?: RefObject<() => void>,
@@ -72,6 +70,7 @@ export function useIntercodeApolloLink(
       AuthLink,
       AddTimezoneLink,
       ErrorHandlerLink,
+      // @ts-ignore because @types/apollo-upload-client hasn't been updated for 14.x.x
       createUploadLink({ uri: '/graphql', fetch }),
     ]),
     [AuthLink, AddTimezoneLink, ErrorHandlerLink],
@@ -90,7 +89,7 @@ function useIntercodeApolloClient(
       link,
       cache: new InMemoryCache({
         addTypename: true,
-        fragmentMatcher,
+        possibleTypes,
       }),
     }),
     [link],

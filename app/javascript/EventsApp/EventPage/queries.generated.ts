@@ -3,11 +3,10 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { CommonConventionDataFragment } from '../queries.generated';
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
-import gql from 'graphql-tag';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type MySignupFieldsFragment = (
@@ -272,15 +271,15 @@ ${EventPageRunFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useEventPageQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<EventPageQueryQuery, EventPageQueryQueryVariables>(EventPageQueryDocument, baseOptions);
+export function useEventPageQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {
+        return Apollo.useQuery<EventPageQueryQuery, EventPageQueryQueryVariables>(EventPageQueryDocument, baseOptions);
       }
-export function useEventPageQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<EventPageQueryQuery, EventPageQueryQueryVariables>(EventPageQueryDocument, baseOptions);
+export function useEventPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {
+          return Apollo.useLazyQuery<EventPageQueryQuery, EventPageQueryQueryVariables>(EventPageQueryDocument, baseOptions);
         }
 export type EventPageQueryQueryHookResult = ReturnType<typeof useEventPageQueryQuery>;
 export type EventPageQueryLazyQueryHookResult = ReturnType<typeof useEventPageQueryLazyQuery>;
-export type EventPageQueryQueryResult = ApolloReactCommon.QueryResult<EventPageQueryQuery, EventPageQueryQueryVariables>;
+export type EventPageQueryQueryResult = Apollo.QueryResult<EventPageQueryQuery, EventPageQueryQueryVariables>;
 export const CreateModeratedSignupModalQueryDocument = gql`
     query CreateModeratedSignupModalQuery {
   myProfile {
@@ -318,12 +317,12 @@ export const CreateModeratedSignupModalQueryDocument = gql`
  *   },
  * });
  */
-export function useCreateModeratedSignupModalQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>(CreateModeratedSignupModalQueryDocument, baseOptions);
+export function useCreateModeratedSignupModalQueryQuery(baseOptions?: Apollo.QueryHookOptions<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>) {
+        return Apollo.useQuery<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>(CreateModeratedSignupModalQueryDocument, baseOptions);
       }
-export function useCreateModeratedSignupModalQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>(CreateModeratedSignupModalQueryDocument, baseOptions);
+export function useCreateModeratedSignupModalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>) {
+          return Apollo.useLazyQuery<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>(CreateModeratedSignupModalQueryDocument, baseOptions);
         }
 export type CreateModeratedSignupModalQueryQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQueryQuery>;
 export type CreateModeratedSignupModalQueryLazyQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQueryLazyQuery>;
-export type CreateModeratedSignupModalQueryQueryResult = ApolloReactCommon.QueryResult<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>;
+export type CreateModeratedSignupModalQueryQueryResult = Apollo.QueryResult<CreateModeratedSignupModalQueryQuery, CreateModeratedSignupModalQueryQueryVariables>;

@@ -1,9 +1,8 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type PreviewLiquidQueryQueryVariables = Types.Exact<{
@@ -60,15 +59,15 @@ export const PreviewLiquidQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewLiquidQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>(PreviewLiquidQueryDocument, baseOptions);
+export function usePreviewLiquidQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
+        return Apollo.useQuery<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>(PreviewLiquidQueryDocument, baseOptions);
       }
-export function usePreviewLiquidQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>(PreviewLiquidQueryDocument, baseOptions);
+export function usePreviewLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>(PreviewLiquidQueryDocument, baseOptions);
         }
 export type PreviewLiquidQueryQueryHookResult = ReturnType<typeof usePreviewLiquidQueryQuery>;
 export type PreviewLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewLiquidQueryLazyQuery>;
-export type PreviewLiquidQueryQueryResult = ApolloReactCommon.QueryResult<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>;
+export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>;
 export const PreviewMarkdownQueryDocument = gql`
     query PreviewMarkdownQuery($markdown: String!) {
   previewMarkdown(markdown: $markdown)
@@ -91,15 +90,15 @@ export const PreviewMarkdownQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewMarkdownQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>(PreviewMarkdownQueryDocument, baseOptions);
+export function usePreviewMarkdownQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
+        return Apollo.useQuery<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>(PreviewMarkdownQueryDocument, baseOptions);
       }
-export function usePreviewMarkdownQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>(PreviewMarkdownQueryDocument, baseOptions);
+export function usePreviewMarkdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>(PreviewMarkdownQueryDocument, baseOptions);
         }
 export type PreviewMarkdownQueryQueryHookResult = ReturnType<typeof usePreviewMarkdownQueryQuery>;
 export type PreviewMarkdownQueryLazyQueryHookResult = ReturnType<typeof usePreviewMarkdownQueryLazyQuery>;
-export type PreviewMarkdownQueryQueryResult = ApolloReactCommon.QueryResult<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>;
+export type PreviewMarkdownQueryQueryResult = Apollo.QueryResult<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>;
 export const PreviewNotifierLiquidQueryDocument = gql`
     query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
   previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
@@ -123,12 +122,12 @@ export const PreviewNotifierLiquidQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewNotifierLiquidQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>(PreviewNotifierLiquidQueryDocument, baseOptions);
+export function usePreviewNotifierLiquidQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {
+        return Apollo.useQuery<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>(PreviewNotifierLiquidQueryDocument, baseOptions);
       }
-export function usePreviewNotifierLiquidQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>(PreviewNotifierLiquidQueryDocument, baseOptions);
+export function usePreviewNotifierLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>(PreviewNotifierLiquidQueryDocument, baseOptions);
         }
 export type PreviewNotifierLiquidQueryQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQueryQuery>;
 export type PreviewNotifierLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQueryLazyQuery>;
-export type PreviewNotifierLiquidQueryQueryResult = ApolloReactCommon.QueryResult<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>;
+export type PreviewNotifierLiquidQueryQueryResult = Apollo.QueryResult<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>;

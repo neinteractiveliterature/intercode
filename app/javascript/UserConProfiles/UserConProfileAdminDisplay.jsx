@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { humanize } from 'inflected';
 import fetch from 'unfetch';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserConProfile } from './mutations.gql';

@@ -1,9 +1,8 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type DefaultEventsQueryQueryVariables = Types.Exact<{
@@ -93,15 +92,15 @@ export const DefaultEventsQueryDocument = gql`
  *   },
  * });
  */
-export function useDefaultEventsQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>(DefaultEventsQueryDocument, baseOptions);
+export function useDefaultEventsQueryQuery(baseOptions?: Apollo.QueryHookOptions<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>) {
+        return Apollo.useQuery<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>(DefaultEventsQueryDocument, baseOptions);
       }
-export function useDefaultEventsQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>(DefaultEventsQueryDocument, baseOptions);
+export function useDefaultEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>) {
+          return Apollo.useLazyQuery<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>(DefaultEventsQueryDocument, baseOptions);
         }
 export type DefaultEventsQueryQueryHookResult = ReturnType<typeof useDefaultEventsQueryQuery>;
 export type DefaultEventsQueryLazyQueryHookResult = ReturnType<typeof useDefaultEventsQueryLazyQuery>;
-export type DefaultEventsQueryQueryResult = ApolloReactCommon.QueryResult<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>;
+export type DefaultEventsQueryQueryResult = Apollo.QueryResult<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>;
 export const DefaultUserConProfilesQueryDocument = gql`
     query DefaultUserConProfilesQuery($name: String) {
   convention {
@@ -133,15 +132,15 @@ export const DefaultUserConProfilesQueryDocument = gql`
  *   },
  * });
  */
-export function useDefaultUserConProfilesQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>(DefaultUserConProfilesQueryDocument, baseOptions);
+export function useDefaultUserConProfilesQueryQuery(baseOptions?: Apollo.QueryHookOptions<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>) {
+        return Apollo.useQuery<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>(DefaultUserConProfilesQueryDocument, baseOptions);
       }
-export function useDefaultUserConProfilesQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>(DefaultUserConProfilesQueryDocument, baseOptions);
+export function useDefaultUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>) {
+          return Apollo.useLazyQuery<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>(DefaultUserConProfilesQueryDocument, baseOptions);
         }
 export type DefaultUserConProfilesQueryQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQueryQuery>;
 export type DefaultUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQueryLazyQuery>;
-export type DefaultUserConProfilesQueryQueryResult = ApolloReactCommon.QueryResult<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>;
+export type DefaultUserConProfilesQueryQueryResult = Apollo.QueryResult<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>;
 export const DefaultUsersQueryDocument = gql`
     query DefaultUsersQuery($name: String) {
   users_paginated(filters: {name: $name}, per_page: 50) {
@@ -170,12 +169,12 @@ export const DefaultUsersQueryDocument = gql`
  *   },
  * });
  */
-export function useDefaultUsersQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>(DefaultUsersQueryDocument, baseOptions);
+export function useDefaultUsersQueryQuery(baseOptions?: Apollo.QueryHookOptions<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>) {
+        return Apollo.useQuery<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>(DefaultUsersQueryDocument, baseOptions);
       }
-export function useDefaultUsersQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>(DefaultUsersQueryDocument, baseOptions);
+export function useDefaultUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>) {
+          return Apollo.useLazyQuery<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>(DefaultUsersQueryDocument, baseOptions);
         }
 export type DefaultUsersQueryQueryHookResult = ReturnType<typeof useDefaultUsersQueryQuery>;
 export type DefaultUsersQueryLazyQueryHookResult = ReturnType<typeof useDefaultUsersQueryLazyQuery>;
-export type DefaultUsersQueryQueryResult = ApolloReactCommon.QueryResult<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>;
+export type DefaultUsersQueryQueryResult = Apollo.QueryResult<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>;

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 
 export type ErrorDisplayProps = {
   stringError?: string | null,

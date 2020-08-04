@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import { AddAttendeeUsersQuery } from './queries.gql';

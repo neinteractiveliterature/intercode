@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { CommonConventionData } from '../queries';
+import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const StandaloneEditEvent_TicketTypeFields = gql`
 fragment StandaloneEditEvent_TicketTypeFields on TicketType {
@@ -35,7 +36,7 @@ fragment StandaloneEditEvent_EventFields on Event {
     name
     event_form {
       id
-      form_api_json
+      ...CommonFormFields
     }
   }
 
@@ -45,6 +46,7 @@ fragment StandaloneEditEvent_EventFields on Event {
   }
 }
 
+${CommonFormFields}
 ${StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields}
 `;
 

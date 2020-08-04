@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { CommonFormFields } from '../Models/commonFormFragments';
 
 export const EventProposalFields = gql`

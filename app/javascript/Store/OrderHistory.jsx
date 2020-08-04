@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import intersection from 'lodash/intersection';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { OrderHistoryQuery } from './queries.gql';
 import OrderPaymentModal from './OrderPaymentModal';

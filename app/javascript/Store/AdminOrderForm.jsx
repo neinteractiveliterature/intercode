@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import classNames from 'classnames';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';

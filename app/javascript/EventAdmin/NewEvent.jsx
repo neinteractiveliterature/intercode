@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import ErrorDisplay from '../ErrorDisplay';

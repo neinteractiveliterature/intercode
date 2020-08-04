@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { AdminProductsQuery } from '../queries.gql';
 import AdminProductVariantsTable from '../AdminProductVariantsTable';
 import { CreateProduct, UpdateProduct } from '../mutations.gql';

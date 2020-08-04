@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import pick from 'lodash/pick';
 

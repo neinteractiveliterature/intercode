@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { FormFields, FormEditorData, FormEditorFormItemFields } from './queries';
 
 export const CreateFormWithJSON = gql`

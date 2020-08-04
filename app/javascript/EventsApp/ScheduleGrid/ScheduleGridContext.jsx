@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useQuery } from '@apollo/client';
 
 import ConfigPropType from './ConfigPropType';
 import ConventionDayTabContainer from './ConventionDayTabContainer';

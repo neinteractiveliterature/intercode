@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Switch, Route, useParams, useRouteMatch,
 } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import EditOrganizationRole from './EditOrganizationRole';
 import NewOrganizationRole from './NewOrganizationRole';

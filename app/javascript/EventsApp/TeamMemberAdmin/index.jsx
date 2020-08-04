@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';

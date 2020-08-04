@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Link, Redirect, Route, Switch, useRouteMatch,
 } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 

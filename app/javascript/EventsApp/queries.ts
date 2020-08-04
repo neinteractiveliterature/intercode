@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 export const CommonConventionData = gql`
 fragment CommonConventionData on Convention {
@@ -8,6 +8,7 @@ fragment CommonConventionData on Convention {
   ends_at
   site_mode
   timezone_name
+  timezone_mode
   ticket_name
   ticket_mode
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ApolloError, ApolloQueryResult } from 'apollo-client';
+import { ApolloError, ApolloQueryResult } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import PlainTextDisplay from '../PlainTextDisplay';

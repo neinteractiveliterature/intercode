@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 // partial for now, really trying not to port everything all at once
 

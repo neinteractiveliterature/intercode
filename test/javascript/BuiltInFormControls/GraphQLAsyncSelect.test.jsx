@@ -1,5 +1,5 @@
 import React from 'react';
-import gql from 'graphql-tag'; // eslint-disable-line no-restricted-imports
+import { gql } from '@apollo/client'; // eslint-disable-line no-restricted-imports
 
 import {
   render, fireEvent, act, waitFor,

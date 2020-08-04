@@ -1,14 +1,13 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type CommonConventionDataFragment = (
   { __typename?: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'site_mode' | 'timezone_name' | 'ticket_name' | 'ticket_mode'>
+  & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'site_mode' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
   & { event_categories: Array<(
     { __typename?: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name' | 'scheduling_ui' | 'default_color' | 'full_color' | 'signed_up_color'>
@@ -47,6 +46,7 @@ export const CommonConventionDataFragmentDoc = gql`
   ends_at
   site_mode
   timezone_name
+  timezone_mode
   ticket_name
   ticket_mode
   event_categories {
@@ -97,12 +97,12 @@ export const CommonConventionDataQueryDocument = gql`
  *   },
  * });
  */
-export function useCommonConventionDataQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>(CommonConventionDataQueryDocument, baseOptions);
+export function useCommonConventionDataQueryQuery(baseOptions?: Apollo.QueryHookOptions<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>) {
+        return Apollo.useQuery<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>(CommonConventionDataQueryDocument, baseOptions);
       }
-export function useCommonConventionDataQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>(CommonConventionDataQueryDocument, baseOptions);
+export function useCommonConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>) {
+          return Apollo.useLazyQuery<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>(CommonConventionDataQueryDocument, baseOptions);
         }
 export type CommonConventionDataQueryQueryHookResult = ReturnType<typeof useCommonConventionDataQueryQuery>;
 export type CommonConventionDataQueryLazyQueryHookResult = ReturnType<typeof useCommonConventionDataQueryLazyQuery>;
-export type CommonConventionDataQueryQueryResult = ApolloReactCommon.QueryResult<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>;
+export type CommonConventionDataQueryQueryResult = Apollo.QueryResult<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>;
