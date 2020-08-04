@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Switch, Route, Redirect, useLocation,
 } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';

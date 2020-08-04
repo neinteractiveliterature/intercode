@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 import CodeInput from './CodeInput';
 import { PreviewMarkdownQuery } from './previewQueries';
 import { PreviewMarkdownQueryQuery } from './previewQueries.generated';

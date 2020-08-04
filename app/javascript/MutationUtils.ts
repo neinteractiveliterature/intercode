@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import get from 'lodash/fp/get';
 import set from 'lodash/fp/set';
-import { useMutation, MutationHookOptions } from '@apollo/react-hooks';
+import {
+  useMutation, MutationHookOptions, ApolloCache, OperationVariables,
+} from '@apollo/client';
 import { DocumentNode, ExecutionResult } from 'graphql';
-import { OperationVariables } from 'apollo-client';
-import { DataProxy } from 'apollo-cache';
 
 export function createUpdater<
 QueryType extends object,
@@ -18,7 +18,7 @@ TData
   arrayPath: string[],
   newObjectPath: string[],
 }) {
-  return (store: DataProxy, result: ExecutionResult<TData>) => {
+  return (store: ApolloCache<any>, result: ExecutionResult<TData>) => {
     const newObject = get(['data', ...newObjectPath], result);
     const data = store.readQuery<QueryType, TVariables>({ query, variables });
     if (data == null) {
@@ -46,7 +46,7 @@ TVariables extends OperationVariables
   idAttribute?: string,
   id: any,
 }) {
-  return (store: DataProxy) => {
+  return (store: ApolloCache<any>) => {
     const data = store.readQuery<QueryType, TVariables>({ query, variables: queryVariables });
     if (data == null) {
       return;

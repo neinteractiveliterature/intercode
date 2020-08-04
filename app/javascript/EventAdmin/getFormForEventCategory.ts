@@ -1,5 +1,6 @@
 import { EventPageQueryQuery } from '../EventsApp/EventPage/queries.generated';
-import { FormType, EventCategory, Form } from '../graphqlTypes.generated';
+import { FormType, EventCategory } from '../graphqlTypes.generated';
+import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 
 const BLANK_FORM: NonNullable<EventPageQueryQuery['event']['form']> = {
   id: 0,
@@ -8,7 +9,10 @@ const BLANK_FORM: NonNullable<EventPageQueryQuery['event']['form']> = {
   form_sections: [],
 };
 
-type EventCategoryFormData = Pick<EventCategory, 'id' | 'event_form' | 'event_proposal_form'>;
+type EventCategoryFormData = Pick<EventCategory, 'id'> & {
+  event_form: CommonFormFieldsFragment,
+  event_proposal_form?: CommonFormFieldsFragment,
+};
 export type ConventionForEventCategoryForms = {
   event_categories: EventCategoryFormData[],
 };
@@ -16,17 +20,17 @@ export type ConventionForEventCategoryForms = {
 function getFormDataForEventCategoryId(
   eventCategoryId: number | undefined | null,
   convention: ConventionForEventCategoryForms,
-  getData: (eventCategory: EventCategoryFormData) => Form | null | undefined,
-) {
+  getData: (eventCategory: EventCategoryFormData) => CommonFormFieldsFragment | null | undefined,
+): CommonFormFieldsFragment {
   if (!eventCategoryId) {
-    return { form: BLANK_FORM };
+    return BLANK_FORM;
   }
 
   const eventCategory = convention.event_categories.find((c) => c.id === eventCategoryId);
   if (eventCategory) {
-    return getData(eventCategory) ?? { form: BLANK_FORM };
+    return getData(eventCategory) ?? BLANK_FORM;
   }
-  return { form: BLANK_FORM };
+  return BLANK_FORM;
 }
 
 export function getEventFormForEventCategoryId(

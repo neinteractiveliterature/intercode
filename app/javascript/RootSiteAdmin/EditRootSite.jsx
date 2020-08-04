@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';

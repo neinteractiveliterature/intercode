@@ -1,9 +1,8 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type SiteSearchQueryQueryVariables = Types.Exact<{
@@ -83,12 +82,12 @@ export const SiteSearchQueryDocument = gql`
  *   },
  * });
  */
-export function useSiteSearchQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
+export function useSiteSearchQueryQuery(baseOptions?: Apollo.QueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
+        return Apollo.useQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
       }
-export function useSiteSearchQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
+export function useSiteSearchQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
+          return Apollo.useLazyQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
         }
 export type SiteSearchQueryQueryHookResult = ReturnType<typeof useSiteSearchQueryQuery>;
 export type SiteSearchQueryLazyQueryHookResult = ReturnType<typeof useSiteSearchQueryLazyQuery>;
-export type SiteSearchQueryQueryResult = ApolloReactCommon.QueryResult<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>;
+export type SiteSearchQueryQueryResult = Apollo.QueryResult<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>;

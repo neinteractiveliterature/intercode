@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, underscore, humanize } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';

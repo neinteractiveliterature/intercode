@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFields } from '../EventsApp/EventPage/queries';
 
 export const SignupModerationRunFields = gql`

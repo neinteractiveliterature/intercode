@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   humanize, pluralize, titleize, underscore,
 } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

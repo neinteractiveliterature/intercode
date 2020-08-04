@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { CreateTicket } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';

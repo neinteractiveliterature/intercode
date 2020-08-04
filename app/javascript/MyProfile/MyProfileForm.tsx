@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 import MD5 from 'md5.js';
 import { useTranslation, Trans } from 'react-i18next';
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';

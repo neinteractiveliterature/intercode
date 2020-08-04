@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
 import { CartQuery, OrderFormProductQuery } from './queries.gql';

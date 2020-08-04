@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { capitalize } from 'inflected';
 
 import AppRootContext from '../AppRootContext';

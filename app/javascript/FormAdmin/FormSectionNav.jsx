@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { CreateFormSection, MoveFormSection } from './mutations';
 import { FormEditorContext } from './FormEditorContexts';

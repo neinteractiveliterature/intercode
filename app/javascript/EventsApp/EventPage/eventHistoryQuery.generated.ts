@@ -2,10 +2,9 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
-import gql from 'graphql-tag';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type EventHistoryQueryQueryVariables = Types.Exact<{
@@ -106,12 +105,12 @@ export const EventHistoryQueryDocument = gql`
  *   },
  * });
  */
-export function useEventHistoryQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
+export function useEventHistoryQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
+        return Apollo.useQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
       }
-export function useEventHistoryQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
+export function useEventHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
+          return Apollo.useLazyQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
         }
 export type EventHistoryQueryQueryHookResult = ReturnType<typeof useEventHistoryQueryQuery>;
 export type EventHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventHistoryQueryLazyQuery>;
-export type EventHistoryQueryQueryResult = ApolloReactCommon.QueryResult<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>;
+export type EventHistoryQueryQueryResult = Apollo.QueryResult<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>;

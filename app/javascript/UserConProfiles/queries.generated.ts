@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import gql from 'graphql-tag';
 
 
 export type UserConProfileFieldsFragment = (

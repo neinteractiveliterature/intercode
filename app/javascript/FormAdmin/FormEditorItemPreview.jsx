@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { DeleteFormItem, MoveFormItem } from './mutations';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';

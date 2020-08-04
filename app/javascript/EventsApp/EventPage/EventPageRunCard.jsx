@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations';

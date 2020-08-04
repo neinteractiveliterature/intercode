@@ -2,10 +2,9 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { CmsFileFieldsFragment } from './queries.generated';
-import gql from 'graphql-tag';
 import { CmsFileFieldsFragmentDoc } from './queries.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type CreateCmsFileMutationVariables = Types.Exact<{
@@ -67,7 +66,7 @@ export const CreateCmsFileDocument = gql`
   }
 }
     ${CmsFileFieldsFragmentDoc}`;
-export type CreateCmsFileMutationFn = ApolloReactCommon.MutationFunction<CreateCmsFileMutation, CreateCmsFileMutationVariables>;
+export type CreateCmsFileMutationFn = Apollo.MutationFunction<CreateCmsFileMutation, CreateCmsFileMutationVariables>;
 
 /**
  * __useCreateCmsFileMutation__
@@ -86,12 +85,12 @@ export type CreateCmsFileMutationFn = ApolloReactCommon.MutationFunction<CreateC
  *   },
  * });
  */
-export function useCreateCmsFileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCmsFileMutation, CreateCmsFileMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateCmsFileMutation, CreateCmsFileMutationVariables>(CreateCmsFileDocument, baseOptions);
+export function useCreateCmsFileMutation(baseOptions?: Apollo.MutationHookOptions<CreateCmsFileMutation, CreateCmsFileMutationVariables>) {
+        return Apollo.useMutation<CreateCmsFileMutation, CreateCmsFileMutationVariables>(CreateCmsFileDocument, baseOptions);
       }
 export type CreateCmsFileMutationHookResult = ReturnType<typeof useCreateCmsFileMutation>;
-export type CreateCmsFileMutationResult = ApolloReactCommon.MutationResult<CreateCmsFileMutation>;
-export type CreateCmsFileMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCmsFileMutation, CreateCmsFileMutationVariables>;
+export type CreateCmsFileMutationResult = Apollo.MutationResult<CreateCmsFileMutation>;
+export type CreateCmsFileMutationOptions = Apollo.BaseMutationOptions<CreateCmsFileMutation, CreateCmsFileMutationVariables>;
 export const RenameCmsFileDocument = gql`
     mutation RenameCmsFile($id: Int!, $filename: String!) {
   renameCmsFile(input: {id: $id, filename: $filename}) {
@@ -102,7 +101,7 @@ export const RenameCmsFileDocument = gql`
   }
 }
     ${CmsFileFieldsFragmentDoc}`;
-export type RenameCmsFileMutationFn = ApolloReactCommon.MutationFunction<RenameCmsFileMutation, RenameCmsFileMutationVariables>;
+export type RenameCmsFileMutationFn = Apollo.MutationFunction<RenameCmsFileMutation, RenameCmsFileMutationVariables>;
 
 /**
  * __useRenameCmsFileMutation__
@@ -122,12 +121,12 @@ export type RenameCmsFileMutationFn = ApolloReactCommon.MutationFunction<RenameC
  *   },
  * });
  */
-export function useRenameCmsFileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RenameCmsFileMutation, RenameCmsFileMutationVariables>) {
-        return ApolloReactHooks.useMutation<RenameCmsFileMutation, RenameCmsFileMutationVariables>(RenameCmsFileDocument, baseOptions);
+export function useRenameCmsFileMutation(baseOptions?: Apollo.MutationHookOptions<RenameCmsFileMutation, RenameCmsFileMutationVariables>) {
+        return Apollo.useMutation<RenameCmsFileMutation, RenameCmsFileMutationVariables>(RenameCmsFileDocument, baseOptions);
       }
 export type RenameCmsFileMutationHookResult = ReturnType<typeof useRenameCmsFileMutation>;
-export type RenameCmsFileMutationResult = ApolloReactCommon.MutationResult<RenameCmsFileMutation>;
-export type RenameCmsFileMutationOptions = ApolloReactCommon.BaseMutationOptions<RenameCmsFileMutation, RenameCmsFileMutationVariables>;
+export type RenameCmsFileMutationResult = Apollo.MutationResult<RenameCmsFileMutation>;
+export type RenameCmsFileMutationOptions = Apollo.BaseMutationOptions<RenameCmsFileMutation, RenameCmsFileMutationVariables>;
 export const DeleteCmsFileDocument = gql`
     mutation DeleteCmsFile($id: Int!) {
   deleteCmsFile(input: {id: $id}) {
@@ -135,7 +134,7 @@ export const DeleteCmsFileDocument = gql`
   }
 }
     `;
-export type DeleteCmsFileMutationFn = ApolloReactCommon.MutationFunction<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>;
+export type DeleteCmsFileMutationFn = Apollo.MutationFunction<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>;
 
 /**
  * __useDeleteCmsFileMutation__
@@ -154,9 +153,9 @@ export type DeleteCmsFileMutationFn = ApolloReactCommon.MutationFunction<DeleteC
  *   },
  * });
  */
-export function useDeleteCmsFileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>(DeleteCmsFileDocument, baseOptions);
+export function useDeleteCmsFileMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>) {
+        return Apollo.useMutation<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>(DeleteCmsFileDocument, baseOptions);
       }
 export type DeleteCmsFileMutationHookResult = ReturnType<typeof useDeleteCmsFileMutation>;
-export type DeleteCmsFileMutationResult = ApolloReactCommon.MutationResult<DeleteCmsFileMutation>;
-export type DeleteCmsFileMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>;
+export type DeleteCmsFileMutationResult = Apollo.MutationResult<DeleteCmsFileMutation>;
+export type DeleteCmsFileMutationOptions = Apollo.BaseMutationOptions<DeleteCmsFileMutation, DeleteCmsFileMutationVariables>;

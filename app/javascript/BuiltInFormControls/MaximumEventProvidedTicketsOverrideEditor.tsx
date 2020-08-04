@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 // @ts-ignore
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from './InPlaceEditor';

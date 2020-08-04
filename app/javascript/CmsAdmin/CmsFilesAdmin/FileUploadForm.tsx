@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 
 import { CmsFilesAdminQuery } from './queries';
 import { CreateCmsFile } from './mutations';

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { PageAdminDropdownQuery } from './queries.gql';
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';

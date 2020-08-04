@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Link, Switch, Route, useParams, useHistory,
 } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import AddVariableRow from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';

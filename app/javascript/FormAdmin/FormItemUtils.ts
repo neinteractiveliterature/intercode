@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
+import { ApolloCache } from '@apollo/client';
 
-import { DataProxy } from 'apollo-cache';
 import { FormEditorQuery } from './queries';
 import { FormSection, FormItemInput, RegistrationPolicy } from '../graphqlTypes.generated';
 import { CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
@@ -306,7 +306,7 @@ export function mutationUpdaterForFormSection<ResultDataType>(
     mutationResultData: ResultDataType,
   ) => void,
 ) {
-  return (proxy: DataProxy, mutationResultData: ResultDataType) => {
+  return (proxy: ApolloCache<any>, mutationResultData: ResultDataType) => {
     const data = proxy.readQuery<FormEditorQueryQuery>({
       query: FormEditorQuery,
       variables: { id: formId },

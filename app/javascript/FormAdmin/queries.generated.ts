@@ -2,10 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { CommonFormItemFieldsFragment, CommonFormFieldsFragment, CommonFormSectionFieldsFragment } from '../Models/commonFormFragments.generated';
-import gql from 'graphql-tag';
 import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type FormFieldsFragment = (
@@ -163,15 +162,15 @@ export const FormAdminQueryDocument = gql`
  *   },
  * });
  */
-export function useFormAdminQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FormAdminQueryQuery, FormAdminQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<FormAdminQueryQuery, FormAdminQueryQueryVariables>(FormAdminQueryDocument, baseOptions);
+export function useFormAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<FormAdminQueryQuery, FormAdminQueryQueryVariables>) {
+        return Apollo.useQuery<FormAdminQueryQuery, FormAdminQueryQueryVariables>(FormAdminQueryDocument, baseOptions);
       }
-export function useFormAdminQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FormAdminQueryQuery, FormAdminQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FormAdminQueryQuery, FormAdminQueryQueryVariables>(FormAdminQueryDocument, baseOptions);
+export function useFormAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FormAdminQueryQuery, FormAdminQueryQueryVariables>) {
+          return Apollo.useLazyQuery<FormAdminQueryQuery, FormAdminQueryQueryVariables>(FormAdminQueryDocument, baseOptions);
         }
 export type FormAdminQueryQueryHookResult = ReturnType<typeof useFormAdminQueryQuery>;
 export type FormAdminQueryLazyQueryHookResult = ReturnType<typeof useFormAdminQueryLazyQuery>;
-export type FormAdminQueryQueryResult = ApolloReactCommon.QueryResult<FormAdminQueryQuery, FormAdminQueryQueryVariables>;
+export type FormAdminQueryQueryResult = Apollo.QueryResult<FormAdminQueryQuery, FormAdminQueryQueryVariables>;
 export const FormEditorQueryDocument = gql`
     query FormEditorQuery($id: Int!) {
   convention {
@@ -205,15 +204,15 @@ export const FormEditorQueryDocument = gql`
  *   },
  * });
  */
-export function useFormEditorQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<FormEditorQueryQuery, FormEditorQueryQueryVariables>(FormEditorQueryDocument, baseOptions);
+export function useFormEditorQueryQuery(baseOptions?: Apollo.QueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
+        return Apollo.useQuery<FormEditorQueryQuery, FormEditorQueryQueryVariables>(FormEditorQueryDocument, baseOptions);
       }
-export function useFormEditorQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FormEditorQueryQuery, FormEditorQueryQueryVariables>(FormEditorQueryDocument, baseOptions);
+export function useFormEditorQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
+          return Apollo.useLazyQuery<FormEditorQueryQuery, FormEditorQueryQueryVariables>(FormEditorQueryDocument, baseOptions);
         }
 export type FormEditorQueryQueryHookResult = ReturnType<typeof useFormEditorQueryQuery>;
 export type FormEditorQueryLazyQueryHookResult = ReturnType<typeof useFormEditorQueryLazyQuery>;
-export type FormEditorQueryQueryResult = ApolloReactCommon.QueryResult<FormEditorQueryQuery, FormEditorQueryQueryVariables>;
+export type FormEditorQueryQueryResult = Apollo.QueryResult<FormEditorQueryQuery, FormEditorQueryQueryVariables>;
 export const PreviewFormItemQueryDocument = gql`
     query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
   previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
@@ -240,12 +239,12 @@ export const PreviewFormItemQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewFormItemQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>(PreviewFormItemQueryDocument, baseOptions);
+export function usePreviewFormItemQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {
+        return Apollo.useQuery<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>(PreviewFormItemQueryDocument, baseOptions);
       }
-export function usePreviewFormItemQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>(PreviewFormItemQueryDocument, baseOptions);
+export function usePreviewFormItemQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>(PreviewFormItemQueryDocument, baseOptions);
         }
 export type PreviewFormItemQueryQueryHookResult = ReturnType<typeof usePreviewFormItemQueryQuery>;
 export type PreviewFormItemQueryLazyQueryHookResult = ReturnType<typeof usePreviewFormItemQueryLazyQuery>;
-export type PreviewFormItemQueryQueryResult = ApolloReactCommon.QueryResult<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>;
+export type PreviewFormItemQueryQueryResult = Apollo.QueryResult<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>;

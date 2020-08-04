@@ -1,7 +1,7 @@
 import React, {
   useContext, useMemo, useState, useCallback,
 } from 'react';
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 

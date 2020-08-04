@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { ConvertTicketToEventProvided } from './mutations.gql';
 import { ConvertToEventProvidedTicketQuery, UserConProfileAdminQuery } from './queries.gql';

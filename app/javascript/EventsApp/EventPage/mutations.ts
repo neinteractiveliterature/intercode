@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { MySignupFields, EventPageRunFields, MySignupRequestFields } from './queries';
 import { RunBasicSignupData } from '../queries';
 

@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const EventHistoryQuery = gql`

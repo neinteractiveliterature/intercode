@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncSelect, { Props } from 'react-select/async';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import type { OptionTypeBase } from 'react-select';
 

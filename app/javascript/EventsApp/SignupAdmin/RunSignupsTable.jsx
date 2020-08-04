@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';

@@ -2,10 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { UserConProfileFieldsFragment } from './queries.generated';
-import gql from 'graphql-tag';
 import { UserConProfileFieldsFragmentDoc } from './queries.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
+const gql = Apollo.gql;
 
 
 export type UpdateUserConProfileMutationVariables = Types.Exact<{
@@ -36,7 +35,7 @@ export const UpdateUserConProfileDocument = gql`
   }
 }
     ${UserConProfileFieldsFragmentDoc}`;
-export type UpdateUserConProfileMutationFn = ApolloReactCommon.MutationFunction<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>;
+export type UpdateUserConProfileMutationFn = Apollo.MutationFunction<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>;
 
 /**
  * __useUpdateUserConProfileMutation__
@@ -55,9 +54,9 @@ export type UpdateUserConProfileMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useUpdateUserConProfileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>) {
-        return ApolloReactHooks.useMutation<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>(UpdateUserConProfileDocument, baseOptions);
+export function useUpdateUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>) {
+        return Apollo.useMutation<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>(UpdateUserConProfileDocument, baseOptions);
       }
 export type UpdateUserConProfileMutationHookResult = ReturnType<typeof useUpdateUserConProfileMutation>;
-export type UpdateUserConProfileMutationResult = ApolloReactCommon.MutationResult<UpdateUserConProfileMutation>;
-export type UpdateUserConProfileMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>;
+export type UpdateUserConProfileMutationResult = Apollo.MutationResult<UpdateUserConProfileMutation>;
+export type UpdateUserConProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>;

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
+import { useMutation, useQuery, useApolloClient } from '@apollo/client';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
