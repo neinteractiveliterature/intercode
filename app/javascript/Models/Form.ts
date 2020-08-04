@@ -5,14 +5,29 @@ import flatMap from 'lodash/flatMap';
 
 import { FormSection } from '../graphqlTypes.generated';
 import { APIFormItem } from './FormItem';
-import { CommonFormFieldsFragment, CommonFormItemFieldsFragment } from './commonFormFragments.generated';
+import {
+  CommonFormFieldsFragment, CommonFormItemFieldsFragment,
+} from './commonFormFragments.generated';
+
+export function getSortedFormSections<T extends CommonFormFieldsFragment>(
+  form: T,
+): T['form_sections'] {
+  return [...form.form_sections].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+}
+
+export function getSortedFormItems<T extends CommonFormFieldsFragment>(
+  form: T,
+): T['form_sections'][0]['form_items'] {
+  return flatMap(getSortedFormSections(form), (section) => [...section.form_items]
+    .sort((a, b) => (a.position ?? 0) - (b.position ?? 0)));
+}
 
 export function getFormItemsByIdentifier(
   form: CommonFormFieldsFragment,
 ): { [identifier: string]: CommonFormItemFieldsFragment } {
   const indexedSectionItems = form.form_sections.map((formSection) => keyBy(
     formSection.form_items.filter((formItem) => formItem.identifier != null),
-    'identifier'
+    'identifier',
   ));
 
   return indexedSectionItems.reduce((memo, sectionItems) => ({ ...memo, ...sectionItems }), {});

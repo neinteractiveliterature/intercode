@@ -155,7 +155,11 @@ mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
   moveFormItem(input: { id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex }) {
     form_section {
       id
-      ...FormEditorFormSectionFields
+
+      form_items {
+        id
+        ...FormEditorFormItemFields
+      }
     }
   }
 }

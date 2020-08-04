@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 
-import { RunHeaderRunInfoQuery } from './queries.gql';
+import { RunHeaderRunInfoQuery } from './queries';
 import { timespanFromRun } from '../../TimespanUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';

@@ -5,8 +5,8 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import classnames from 'classnames';
 
 import AppRootContext from '../../AppRootContext';
-import { CreateModeratedSignupModalQuery, EventPageQuery } from './queries.gql';
-import { CreateSignupRequest } from './mutations.gql';
+import { CreateModeratedSignupModalQuery, EventPageQuery } from './queries';
+import { CreateSignupRequest } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';

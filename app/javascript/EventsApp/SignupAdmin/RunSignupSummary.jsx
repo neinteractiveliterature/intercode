@@ -9,7 +9,7 @@ import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
 import { findBucket, formatSignupState } from './SignupUtils';
 import RunHeader from './RunHeader';
-import { RunSignupSummaryQuery } from './queries.gql';
+import { RunSignupSummaryQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import ErrorDisplay from '../../ErrorDisplay';

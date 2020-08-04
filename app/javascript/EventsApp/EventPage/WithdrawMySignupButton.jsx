@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 
-import { WithdrawMySignup } from './mutations.gql';
+import { WithdrawMySignup } from './mutations';
 import WithdrawSignupButton from './WithdrawSignupButton';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';

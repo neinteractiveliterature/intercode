@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import EventCapacityDisplay from './EventCapacityDisplay';
-import { EventPageQuery } from './queries.gql';
+import { EventPageQuery } from './queries';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import teamMembersForDisplay from '../teamMembersForDisplay';

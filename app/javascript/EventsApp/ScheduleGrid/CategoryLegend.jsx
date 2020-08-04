@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 
-import { CommonConventionDataQuery } from '../queries.gql';
+import { CommonConventionDataQuery } from '../queries';
 import FakeEventRun from './FakeEventRun';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';

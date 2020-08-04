@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import BucketInput from './BucketInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import { ChangeSignupBucket } from './mutations.gql';
+import { ChangeSignupBucket } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 
 function ChangeBucketModal({ signup, onComplete, onCancel }) {

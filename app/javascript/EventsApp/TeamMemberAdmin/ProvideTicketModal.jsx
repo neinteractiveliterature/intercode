@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 import ErrorDisplay from '../../ErrorDisplay';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
-import { ProvideEventTicket } from './mutations.gql';
-import { TeamMembersQuery } from './queries.gql';
+import { ProvideEventTicket } from './mutations';
+import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
 

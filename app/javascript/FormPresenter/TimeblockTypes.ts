@@ -70,9 +70,31 @@ export const TimeblockPreferenceAPIRepresentationPropType = PropTypes.shape({
   ...timeblockPreferenceCommonProps,
 });
 
-type TimeblockPreferenceForComparison = (
+export type TimeblockPreferenceForComparison = (
   Pick<ParsedTimeblockPreference | UnparsedTimeblockPreference, 'start' | 'finish'>
 );
+
+export function parseTimeblockPreference(
+  unparsedPreference: UnparsedTimeblockPreference,
+): ParsedTimeblockPreference {
+  return {
+    start: moment(unparsedPreference.start),
+    finish: moment(unparsedPreference.finish),
+    label: unparsedPreference.label,
+    ordinality: unparsedPreference.ordinality,
+  };
+}
+
+export function serializeTimeblockPreference(
+  preference: ParsedTimeblockPreference,
+): UnparsedTimeblockPreference {
+  return {
+    start: preference.start.toISOString(),
+    finish: preference.finish.toISOString(),
+    label: preference.label,
+    ordinality: preference.ordinality,
+  };
+}
 
 export function preferencesMatch(
   a: TimeblockPreferenceForComparison,

@@ -68,6 +68,8 @@ query FormAdminQuery {
     }
   }
 }
+
+${FormFields}
 `;
 
 export const FormEditorQuery = gql`

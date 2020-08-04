@@ -6,13 +6,13 @@ import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
 import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../../ErrorDisplay';
-import { StandaloneEditEventQuery } from './queries.gql';
+import { StandaloneEditEventQuery } from './queries';
 import {
   StandaloneUpdateEvent,
   StandaloneCreateMaximumEventProvidedTicketsOverride,
   StandaloneDeleteMaximumEventProvidedTicketsOverride,
   StandaloneUpdateMaximumEventProvidedTicketsOverride,
-} from './mutations.gql';
+} from './mutations';
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
 import EditEvent from '../../BuiltInForms/EditEvent';

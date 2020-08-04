@@ -1,0 +1,36 @@
+/* eslint-disable import/prefer-default-export */
+import gql from 'graphql-tag';
+import { CommonFormFields } from '../Models/commonFormFragments';
+
+export const MyProfileQuery = gql`
+query MyProfileQuery {
+  convention {
+    id
+    name
+    starts_at
+    ends_at
+    timezone_name
+    timezone_mode
+
+    user_con_profile_form {
+      id
+      ...CommonFormFields
+    }
+  }
+
+  myProfile {
+    id
+    email
+    form_response_attrs_json
+    can_have_bio
+    gravatar_url
+    gravatar_enabled
+    bio
+    show_nickname_in_bio
+    bio_name
+    bio_html
+  }
+}
+
+${CommonFormFields}
+`;

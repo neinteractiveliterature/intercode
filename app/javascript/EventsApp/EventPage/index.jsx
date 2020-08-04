@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
-import { EventPageQuery } from './queries.gql';
+import { EventPageQuery } from './queries';
 import RunsSection from './RunsSection';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';

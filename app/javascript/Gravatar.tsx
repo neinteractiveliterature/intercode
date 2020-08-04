@@ -9,7 +9,7 @@ export type GravatarProps = {
 
 function Gravatar({
   url, enabled, pixelSize, imgClassName,
-}) {
+}: GravatarProps) {
   if (!url || !(enabled ?? true)) {
     return (
       <span className="d-inline-block" style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}>
