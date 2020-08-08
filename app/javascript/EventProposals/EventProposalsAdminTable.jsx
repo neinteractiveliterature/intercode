@@ -43,7 +43,10 @@ const STATUS_OPTIONS = [
 
 function EventCategoryCell({ value }) {
   return (
-    <span className="p-1 small rounded" style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}>
+    <span
+      className="p-1 small rounded"
+      style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}
+    >
       {value.name}
     </span>
   );
@@ -56,11 +59,7 @@ EventCategoryCell.propTypes = {
 };
 
 function CapacityCell({ value }) {
-  return (
-    <div className="text-nowrap text-right">
-      {formatCapacity(value)}
-    </div>
-  );
+  return <div className="text-nowrap text-right">{formatCapacity(value)}</div>;
 }
 
 CapacityCell.propTypes = {
@@ -90,6 +89,7 @@ function StatusFilter({ filter, onChange }) {
       choices={STATUS_OPTIONS}
       onChange={onChange}
       filter={filter}
+      multiple
     />
   );
 }
@@ -105,11 +105,7 @@ StatusFilter.defaultProps = {
 
 function StatusCell({ value }) {
   const statusOption = STATUS_OPTIONS.find((option) => option.value === value) || {};
-  return (
-    <div className={`badge ${statusOption.badgeClass}`}>
-      {statusOption.label || value}
-    </div>
-  );
+  return <div className={`badge ${statusOption.badgeClass}`}>{statusOption.label || value}</div>;
 }
 
 StatusCell.propTypes = {
@@ -118,7 +114,14 @@ StatusCell.propTypes = {
 
 function ExtraCell({ original }) {
   return (
-    <Link to={`/admin_event_proposals/${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
+    <Link
+      to={`/admin_event_proposals/${original.id}`}
+      target="_blank"
+      rel="noopener"
+      onClick={(event) => {
+        event.stopPropagation();
+      }}
+    >
       <i className="fa fa-external-link">
         <span className="sr-only">Open in new window</span>
       </i>
@@ -135,14 +138,13 @@ ExtraCell.propTypes = {
 const EventCategoryFilter = ({ filter, onChange }) => {
   const data = useContext(QueryDataContext);
   const choices = useMemo(
-    () => (
+    () =>
       data
         ? data.convention.event_categories.map((eventCategory) => ({
-          value: eventCategory.id.toString(),
-          label: eventCategory.name,
-        }))
-        : []
-    ),
+            value: eventCategory.id.toString(),
+            label: eventCategory.name,
+          }))
+        : [],
     [data],
   );
 
@@ -153,6 +155,7 @@ const EventCategoryFilter = ({ filter, onChange }) => {
       onChange={onChange}
       filter={filter}
       filterCodec={FilterCodecs.integer}
+      multiple
     />
   );
 };
@@ -232,7 +235,7 @@ const getPossibleColumns = () => [
   {
     Header: '',
     id: '_extra',
-    accessor: () => { },
+    accessor: () => {},
     width: 30,
     filterable: false,
     sortable: false,
@@ -244,7 +247,16 @@ function EventProposalsAdminTable() {
   const history = useHistory();
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultVisibleColumns: ['event_category', 'title', 'owner', 'total_slots', 'length_seconds', 'status', 'submitted_at', 'updated_at'],
+    defaultVisibleColumns: [
+      'event_category',
+      'title',
+      'owner',
+      'total_slots',
+      'length_seconds',
+      'status',
+      'submitted_at',
+      'updated_at',
+    ],
     alwaysVisibleColumns: ['_extra'],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
@@ -264,7 +276,6 @@ function EventProposalsAdminTable() {
 
         <ReactTable
           {...reactTableProps}
-
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => ({
             style: { cursor: 'pointer' },

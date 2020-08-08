@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { AddAttendeeUsersQuery } from './queries.gql';
-import { CreateUserConProfile } from './mutations.gql';
+import { AddAttendeeUsersQuery } from './queries';
+import { CreateUserConProfile } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import UserSelect from '../BuiltInFormControls/UserSelect';
@@ -42,9 +42,7 @@ function AddAttendeeModal({ conventionName, visible }) {
       variables: {
         user_id: user.id,
         user_con_profile: {
-          form_response_attrs_json: JSON.stringify(
-            userConProfile.form_response_attrs,
-          ),
+          form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
         },
       },
     });
@@ -68,11 +66,7 @@ function AddAttendeeModal({ conventionName, visible }) {
           )}
         </p>
 
-        <UserSelect
-          value={user}
-          onChange={userSelected}
-          usersQuery={AddAttendeeUsersQuery}
-        />
+        <UserSelect value={user} onChange={userSelected} usersQuery={AddAttendeeUsersQuery} />
 
         {user && (
           <div className="mt-4">
@@ -89,12 +83,7 @@ function AddAttendeeModal({ conventionName, visible }) {
       </div>
 
       <div className="modal-footer">
-        <button
-          className="btn btn-secondary"
-          type="button"
-          onClick={close}
-          disabled={inProgress}
-        >
+        <button className="btn btn-secondary" type="button" onClick={close} disabled={inProgress}>
           {t('buttons.cancel', 'Cancel')}
         </button>
         <button
@@ -103,7 +92,11 @@ function AddAttendeeModal({ conventionName, visible }) {
           onClick={createClicked}
           disabled={user == null || inProgress}
         >
-          {inProgress ? <LoadingIndicator /> : t('admin.userConProfiles.addAttendee.addButtonText', 'Add')}
+          {inProgress ? (
+            <LoadingIndicator />
+          ) : (
+            t('admin.userConProfiles.addAttendee.addButtonText', 'Add')
+          )}
         </button>
       </div>
     </Modal>

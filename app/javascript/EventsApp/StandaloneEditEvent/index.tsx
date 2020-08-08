@@ -1,12 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 
 import ErrorDisplay from '../../ErrorDisplay';
-import { StandaloneEditEventQuery } from './queries';
-import {
-  StandaloneUpdateEvent,
-} from './mutations';
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -14,14 +10,18 @@ import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useStandaloneEditEventQueryQuery, StandaloneEditEventQueryQuery } from './queries.generated';
+import {
+  useStandaloneEditEventQueryQuery,
+  StandaloneEditEventQueryQuery,
+  StandaloneEditEventQueryDocument,
+} from './queries.generated';
 import deserializeFormResponse, { WithFormResponse } from '../../Models/deserializeFormResponse';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
-import { ConventionForFormItemDisplay } from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import {
   useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation,
   useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation,
   useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
+  useStandaloneUpdateEventMutation,
 } from './mutations.generated';
 
 export type StandaloneEditEventFormProps = {
@@ -43,7 +43,7 @@ function StandaloneEditEventForm({
     convention, initialEvent, eventForm,
   });
 
-  const [updateEventMutate] = useMutation(StandaloneUpdateEvent);
+  const [updateEventMutate] = useStandaloneUpdateEventMutation();
   const updateEvent = useCallback(
     async () => {
       await updateEventMutate({
@@ -68,14 +68,14 @@ function StandaloneEditEventForm({
     createUpdater: useCallback(
       (store, updatedEventId, override) => {
         const storeData = store.readQuery<StandaloneEditEventQueryQuery>({
-          query: StandaloneEditEventQuery,
+          query: StandaloneEditEventQueryDocument,
           ...queryOptions,
         });
         if (!storeData) {
           return;
         }
         store.writeQuery({
-          query: StandaloneEditEventQuery,
+          query: StandaloneEditEventQueryDocument,
           ...queryOptions,
           data: {
             ...storeData,
@@ -94,14 +94,14 @@ function StandaloneEditEventForm({
     deleteUpdater: useCallback(
       (store, id) => {
         const storeData = store.readQuery<StandaloneEditEventQueryQuery>({
-          query: StandaloneEditEventQuery,
+          query: StandaloneEditEventQueryDocument,
           ...queryOptions,
         });
         if (!storeData) {
           return;
         }
         store.writeQuery({
-          query: StandaloneEditEventQuery,
+          query: StandaloneEditEventQueryDocument,
           ...queryOptions,
           data: {
             ...storeData,

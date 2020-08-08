@@ -2,8 +2,8 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { EventAdminEventsQuery } from './queries.gql';
-import { RestoreDroppedEvent } from './mutations.gql';
+import { EventAdminEventsQuery } from './queries';
+import { RestoreDroppedEvent } from './mutations';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -24,8 +24,9 @@ function DroppedEventAdmin() {
   }
 
   const droppedEvents = data.events.filter((event) => {
-    const eventCategory = data.convention.event_categories
-      .find((c) => c.id === event.event_category.id);
+    const eventCategory = data.convention.event_categories.find(
+      (c) => c.id === event.event_category.id,
+    );
     return event.status === 'dropped' && eventCategory.scheduling_ui !== 'single_run';
   });
   droppedEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
@@ -33,8 +34,8 @@ function DroppedEventAdmin() {
   if (droppedEvents.length === 0) {
     return (
       <p className="mt-2">
-        There are no dropped events to display.  (Single-run events that are
-        dropped cannot be restored.)
+        There are no dropped events to display. (Single-run events that are dropped cannot be
+        restored.)
       </p>
     );
   }
@@ -46,12 +47,14 @@ function DroppedEventAdmin() {
         <button
           type="button"
           className="btn btn-sm btn-secondary"
-          onClick={() => confirm({
-            prompt: `Are you sure you want to restore this event?  (Scheduled runs and
+          onClick={() =>
+            confirm({
+              prompt: `Are you sure you want to restore this event?  (Scheduled runs and
               previous signups will not be restored.)`,
-            action: () => restoreDroppedEvent({ variables: { input: { id: droppedEvent.id } } }),
-            renderError: (restoreError) => <ErrorDisplay graphQLError={restoreError} />,
-          })}
+              action: () => restoreDroppedEvent({ variables: { input: { id: droppedEvent.id } } }),
+              renderError: (restoreError) => <ErrorDisplay graphQLError={restoreError} />,
+            })
+          }
         >
           Restore
         </button>
@@ -62,9 +65,7 @@ function DroppedEventAdmin() {
   return (
     <div className="mt-2">
       <table className="table table-striped">
-        <tbody>
-          {rows}
-        </tbody>
+        <tbody>{rows}</tbody>
       </table>
     </div>
   );

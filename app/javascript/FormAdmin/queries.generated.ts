@@ -2,9 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { CommonFormItemFieldsFragment, CommonFormFieldsFragment, CommonFormSectionFieldsFragment } from '../Models/commonFormFragments.generated';
+import { gql } from '@apollo/client';
 import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type FormFieldsFragment = (

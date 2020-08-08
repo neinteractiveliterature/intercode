@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
-import { EventAdminEventsQuery } from './queries.gql';
+import { EventAdminEventsQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
@@ -18,7 +18,10 @@ function EventAdminRunsTable({ eventCategoryId }) {
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const [eventCategory, sortedEvents] = useEventAdminCategory(
-    data, loading, error, eventCategoryId,
+    data,
+    loading,
+    error,
+    eventCategoryId,
   );
 
   usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
@@ -33,7 +36,10 @@ function EventAdminRunsTable({ eventCategoryId }) {
 
   return (
     <div>
-      <Link to={`${buildEventCategoryUrl(eventCategory)}/new`} className="btn btn-primary mt-4 mb-2">
+      <Link
+        to={`${buildEventCategoryUrl(eventCategory)}/new`}
+        className="btn btn-primary mt-4 mb-2"
+      >
         {'Create new '}
         {eventCategory.name.toLowerCase()}
       </Link>
@@ -48,11 +54,7 @@ function EventAdminRunsTable({ eventCategoryId }) {
         </thead>
         <tbody>
           {sortedEvents.map((event) => (
-            <EventAdminRow
-              event={event}
-              convention={data.convention}
-              key={event.id}
-            />
+            <EventAdminRow event={event} convention={data.convention} key={event.id} />
           ))}
         </tbody>
       </table>

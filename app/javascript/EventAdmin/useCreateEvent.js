@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { CreateEvent, CreateFillerEvent } from './mutations.gql';
-import { EventAdminEventsQuery } from './queries.gql';
+import { CreateEvent, CreateFillerEvent } from './mutations';
+import { EventAdminEventsQuery } from './queries';
 import { useCreateMutation } from '../MutationUtils';
 
 export function useCreateRegularEvent() {
@@ -13,11 +13,12 @@ export function useCreateRegularEvent() {
   });
 
   const createEvent = useCallback(
-    ({ event }) => mutate({
-      variables: {
-        input: buildEventInput(event),
-      },
-    }),
+    ({ event }) =>
+      mutate({
+        variables: {
+          input: buildEventInput(event),
+        },
+      }),
     [mutate],
   );
 
@@ -32,21 +33,19 @@ export function useCreateSingleRunEvent() {
   });
 
   return useCallback(
-    ({ event, run }) => mutate({
-      variables: {
-        input: {
-          ...buildEventInput(
-            event,
-            {
+    ({ event, run }) =>
+      mutate({
+        variables: {
+          input: {
+            ...buildEventInput(event, {
               can_play_concurrently: false,
               con_mail_destination: 'event_email',
               author: '{{ convention.name }} Staff',
-            },
-          ),
-          ...buildRunInput(run),
+            }),
+            ...buildRunInput(run),
+          },
         },
-      },
-    }),
+      }),
     [mutate],
   );
 }

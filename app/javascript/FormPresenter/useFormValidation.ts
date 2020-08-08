@@ -5,12 +5,14 @@ import { ItemInteractionTrackerContextValue } from './ItemInteractionTracker';
 import { TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { FormResponse } from './useFormResponse';
 import { formResponseValueIsCompleteIfRequired } from '../Models/FormItem';
+import { sortFormItems } from '../Models/Form';
 
 function getIncompleteItems(items: TypedFormItem[], response: FormResponse) {
-  return items.filter((item) => (
-    item.identifier != null
-    && !formResponseValueIsCompleteIfRequired(item, response[item.identifier])
-  ));
+  return items.filter(
+    (item) =>
+      item.identifier != null &&
+      !formResponseValueIsCompleteIfRequired(item, response[item.identifier]),
+  );
 }
 
 export default function useFormValidation(
@@ -18,7 +20,7 @@ export default function useFormValidation(
   interactWithItem: ItemInteractionTrackerContextValue['interactWithItem'],
 ) {
   return useCallback(
-    (items, response) => {
+    (items: TypedFormItem[], response: FormResponse) => {
       const incompleteItems = getIncompleteItems(items, response);
 
       if (incompleteItems.length === 0) {
@@ -30,7 +32,7 @@ export default function useFormValidation(
           interactWithItem(item.identifier);
         }
       });
-      scrollToItem(incompleteItems[0]);
+      scrollToItem(sortFormItems(incompleteItems)[0]);
 
       return false;
     },

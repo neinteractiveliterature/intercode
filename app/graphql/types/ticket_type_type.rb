@@ -2,7 +2,7 @@ class Types::TicketTypeType < Types::BaseObject
   include DeprecatedTicketApiCompat
 
   field :id, Integer, null: false
-  field :name, String, null: true
+  field :name, String, null: false
   field :counts_towards_convention_maximum, Boolean, null: false
   field :allows_event_signups, Boolean, null: false
   field :description, String, null: true

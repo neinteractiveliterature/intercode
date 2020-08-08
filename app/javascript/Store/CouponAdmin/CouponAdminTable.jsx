@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTable from 'react-table';
 
-import { AdminCouponsQuery } from './queries.gql';
+import { AdminCouponsQuery } from './queries';
 import describeCoupon from '../describeCoupon';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
@@ -42,9 +42,7 @@ const getPossibleColumns = () => [
     filterable: false,
     sortable: false,
     // eslint-disable-next-line react/prop-types
-    Cell: ({ value }) => (value
-      ? `${pluralizeWithCount('use', value)}`
-      : <em>Unlimited uses</em>),
+    Cell: ({ value }) => (value ? `${pluralizeWithCount('use', value)}` : <em>Unlimited uses</em>),
   },
   {
     Header: 'Expiration date',
@@ -77,12 +75,10 @@ function CouponAdminTable() {
             className="btn btn-outline-primary ml-2"
             onClick={newCouponModal.open}
           >
-            <i className="fa fa-plus" />
-            {' '}
-            New coupon
+            <i className="fa fa-plus" /> New coupon
           </button>
         )}
-        exportButton={(
+        exportButton={
           <ReactTableExportButtonWithColumnTransform
             exportUrl="/csv_exports/coupons"
             filtered={tableHeaderProps.filtered}
@@ -90,24 +86,22 @@ function CouponAdminTable() {
             visibleColumnIds={columnSelectionProps.visibleColumnIds}
             columnTransform={transformColumnIdForExport}
           />
-        )}
+        }
       />
 
       <ReactTable
         {...reactTableProps}
-
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
-          onClick: () => { editCouponModal.open({ initialCoupon: rowInfo.original }); },
+          onClick: () => {
+            editCouponModal.open({ initialCoupon: rowInfo.original });
+          },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
 
-      <NewCouponModal
-        visible={newCouponModal.visible}
-        close={newCouponModal.close}
-      />
+      <NewCouponModal visible={newCouponModal.visible} close={newCouponModal.close} />
 
       <EditCouponModal
         initialCoupon={editCouponModal.state?.initialCoupon}

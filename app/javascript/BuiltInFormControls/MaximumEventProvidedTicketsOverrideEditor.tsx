@@ -20,6 +20,10 @@ const NULL_TICKET_TYPE: TicketTypeForMEPTO = {
   maximum_event_provided_tickets: 0,
 };
 
+type MEPTOForEditor = Pick<MaximumEventProvidedTicketsOverride, 'id' | 'override_value'> & {
+  ticket_type: TicketTypeForMEPTO
+};
+
 export type MEPTOInput = {
   eventId: number,
   overrideValue: number,
@@ -29,7 +33,7 @@ export type MEPTOInput = {
 export type MEPTOEditorProps = {
   eventId: number,
   ticketName: string,
-  overrides: MaximumEventProvidedTicketsOverride[],
+  overrides: MEPTOForEditor[],
   ticketTypes: TicketTypeForMEPTO[],
   createOverride: (input: MEPTOInput) => Promise<any>,
   updateOverride: (input: { id: number, overrideValue: number }) => Promise<any>,

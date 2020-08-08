@@ -2,9 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { RunCardRegistrationPolicyFieldsFragment } from '../EventsApp/EventPage/queries.generated';
+import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type SignupModerationRunFieldsFragment = (

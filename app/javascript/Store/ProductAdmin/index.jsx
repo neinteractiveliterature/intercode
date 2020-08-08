@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 
 import AdminProductCard from './AdminProductCard';
-import { AdminProductsQuery } from '../queries.gql';
+import { AdminProductsQuery } from '../queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useModal from '../../ModalDialogs/useModal';
-import EditPricingStructureModal, { PricingStructureModalContext } from '../EditPricingStructureModal';
+import EditPricingStructureModal, {
+  PricingStructureModalContext,
+} from '../EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
 
@@ -20,30 +22,30 @@ function ProductAdmin() {
 
   usePageTitle('Products');
 
-  const newProductClicked = () => setNewProducts((prevNewProducts) => ([
-    ...prevNewProducts,
-    {
-      generatedId: new Date().getTime(),
-      name: '',
-      description: '',
-      image_url: null,
-      price: null,
-      product_variants: [],
-      available: true,
-    },
-  ]));
+  const newProductClicked = () =>
+    setNewProducts((prevNewProducts) => [
+      ...prevNewProducts,
+      {
+        generatedId: new Date().getTime(),
+        name: '',
+        description: '',
+        image_url: null,
+        price: null,
+        product_variants: [],
+        available: true,
+      },
+    ]);
 
-  const removeNewProduct = (product) => setNewProducts((prevNewProducts) => prevNewProducts
-    .filter((newProduct) => newProduct.generatedId !== product.generatedId));
+  const removeNewProduct = (product) =>
+    setNewProducts((prevNewProducts) =>
+      prevNewProducts.filter((newProduct) => newProduct.generatedId !== product.generatedId),
+    );
 
-  useEffect(
-    () => {
-      if (!loading && !error) {
-        scrollToLocationHash();
-      }
-    },
-    [loading, error],
-  );
+  useEffect(() => {
+    if (!loading && !error) {
+      scrollToLocationHash();
+    }
+  }, [loading, error]);
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -56,28 +58,23 @@ function ProductAdmin() {
   return (
     <PricingStructureModalContext.Provider value={pricingStructureModal}>
       <div>
-        {sortByLocaleString(data.convention.products, (product) => product.name)
-          .map((product) => (
-            editingProductIds.includes(product.id)
-              ? (
-                <EditAdminProductCard
-                  key={product.id}
-                  initialProduct={product}
-                  close={() => setEditingProductIds(
-                    (prev) => prev.filter((id) => id !== product.id),
-                  )}
-                  ticketTypes={data.convention.ticket_types}
-                />
-              )
-              : (
-                <AdminProductCard
-                  key={product.id}
-                  product={product}
-                  currentAbility={data.currentAbility}
-                  startEditing={() => setEditingProductIds((prev) => [...prev, product.id])}
-                />
-              )
-          ))}
+        {sortByLocaleString(data.convention.products, (product) => product.name).map((product) =>
+          editingProductIds.includes(product.id) ? (
+            <EditAdminProductCard
+              key={product.id}
+              initialProduct={product}
+              close={() => setEditingProductIds((prev) => prev.filter((id) => id !== product.id))}
+              ticketTypes={data.convention.ticket_types}
+            />
+          ) : (
+            <AdminProductCard
+              key={product.id}
+              product={product}
+              currentAbility={data.currentAbility}
+              startEditing={() => setEditingProductIds((prev) => [...prev, product.id])}
+            />
+          ),
+        )}
         {newProducts.map((newProduct) => (
           <EditAdminProductCard
             key={newProduct.generatedId}
@@ -88,11 +85,7 @@ function ProductAdmin() {
         ))}
         <div className="my-4">
           {data.currentAbility.can_update_products && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={newProductClicked}
-            >
+            <button type="button" className="btn btn-primary" onClick={newProductClicked}>
               New product
             </button>
           )}

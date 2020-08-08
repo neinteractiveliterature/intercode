@@ -2,20 +2,21 @@ import { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { EventAdminEventsQuery } from './queries.gql';
-import { UpdateEvent, CreateRun, UpdateRun } from './mutations.gql';
+import { EventAdminEventsQuery } from './queries';
+import { UpdateEvent, CreateRun, UpdateRun } from './mutations';
 
 function useUpdateRegularEvent() {
   const [updateEventMutate] = useMutation(UpdateEvent);
   const updateEvent = useCallback(
-    ({ event }) => updateEventMutate({
-      variables: {
-        input: {
-          ...buildEventInput(event),
-          id: event.id,
+    ({ event }) =>
+      updateEventMutate({
+        variables: {
+          input: {
+            ...buildEventInput(event),
+            id: event.id,
+          },
         },
-      },
-    }),
+      }),
     [updateEventMutate],
   );
 
@@ -55,7 +56,14 @@ function useUpdateSingleRunEvent() {
               event_id: event.id,
             },
           },
-          update: (store, { data: { createRun: { run: newRun } } }) => {
+          update: (
+            store,
+            {
+              data: {
+                createRun: { run: newRun },
+              },
+            },
+          ) => {
             const eventsData = store.readQuery({ query: EventAdminEventsQuery });
             store.writeQuery({
               query: EventAdminEventsQuery,
@@ -65,10 +73,7 @@ function useUpdateSingleRunEvent() {
                   if (existingEvent.id === event.id) {
                     return {
                       ...existingEvent,
-                      runs: [
-                        ...existingEvent.runs,
-                        newRun,
-                      ],
+                      runs: [...existingEvent.runs, newRun],
                     };
                   }
 

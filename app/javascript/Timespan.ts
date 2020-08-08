@@ -5,24 +5,25 @@ import {
   humanizeTime,
   timesAreSameOrBothNull,
 } from './TimeUtils';
-import { chooseAmong, preferNull } from './ValueUtils';
+import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
 
 export type TimeHopOptions = {
-  unit: unitOfTime.Base,
-  offset?: moment.DurationInputArg1 | null,
-  duration?: moment.DurationInputArg1 | null
+  unit: unitOfTime.Base;
+  offset?: moment.DurationInputArg1 | null;
+  duration?: moment.DurationInputArg1 | null;
 };
 
 export interface FiniteTimespan extends Timespan {
   start: Moment;
   finish: Moment;
   clone(): FiniteTimespan;
-  getLength(unit: unitOfTime.Diff): number,
-  union(other: FiniteTimespan): FiniteTimespan,
-  expandedToFit(other: FiniteTimespan): FiniteTimespan,
-  expand(...args: Parameters<Moment['add']> & Parameters<Moment['subtract']>): FiniteTimespan,
-  expandStart(...args: Parameters<Moment['subtract']>): FiniteTimespan,
-  expandFinish(...args: Parameters<Moment['add']>): FiniteTimespan,
+  getLength(unit: unitOfTime.Diff): number;
+  union(other: FiniteTimespan): FiniteTimespan;
+  intersection(other: FiniteTimespan): FiniteTimespan;
+  expandedToFit(other: FiniteTimespan): FiniteTimespan;
+  expand(...args: Parameters<Moment['add']> & Parameters<Moment['subtract']>): FiniteTimespan;
+  expandStart(...args: Parameters<Moment['subtract']>): FiniteTimespan;
+  expandFinish(...args: Parameters<Moment['add']>): FiniteTimespan;
 }
 
 export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
@@ -34,11 +35,19 @@ class Timespan {
 
   finish: Moment | null | undefined;
 
+  static finiteFromStrings(start: string, finish: string): FiniteTimespan {
+    return new Timespan(moment(start), moment(finish)) as FiniteTimespan;
+  }
+
   static fromStrings(start?: string | null, finish?: string | null): Timespan {
     return new Timespan(
-      (start != null ? moment(start) : null),
-      (finish != null ? moment(finish) : null),
+      start != null ? moment(start) : null,
+      finish != null ? moment(finish) : null,
     );
+  }
+
+  static finiteFromMoments(start: Moment, finish: Moment): FiniteTimespan {
+    return new Timespan(start, finish) as FiniteTimespan;
   }
 
   static fromMoments(start?: Moment | null, finish?: Moment | null): Timespan {
@@ -56,8 +65,8 @@ class Timespan {
 
   tz(timezoneName: string) {
     return new Timespan(
-      (this.start != null ? this.start.tz(timezoneName) : null),
-      (this.finish != null ? this.finish.tz(timezoneName) : null),
+      this.start != null ? this.start.tz(timezoneName) : null,
+      this.finish != null ? this.finish.tz(timezoneName) : null,
     );
   }
 
@@ -67,29 +76,29 @@ class Timespan {
 
   includesTime(time: Moment) {
     return (
-      (this.start == null || this.start.isSameOrBefore(time))
-      && (this.finish == null || this.finish.isAfter(time))
+      (this.start == null || this.start.isSameOrBefore(time)) &&
+      (this.finish == null || this.finish.isAfter(time))
     );
   }
 
   includesTimespan(other: Timespan) {
     return (
-      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start)))
-      && (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
+      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start))) &&
+      (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
     );
   }
 
   overlapsTimespan(other: Timespan) {
     return (
-      (this.start == null || other.finish == null || this.start.isBefore(other.finish))
-      && (this.finish == null || other.start == null || other.start.isBefore(this.finish))
+      (this.start == null || other.finish == null || this.start.isBefore(other.finish)) &&
+      (this.finish == null || other.start == null || other.start.isBefore(this.finish))
     );
   }
 
   isSame(other: Timespan) {
     return (
-      timesAreSameOrBothNull(this.start, other.start)
-      && timesAreSameOrBothNull(this.finish, other.finish)
+      timesAreSameOrBothNull(this.start, other.start) &&
+      timesAreSameOrBothNull(this.finish, other.finish)
     );
   }
 
@@ -112,24 +121,15 @@ class Timespan {
   }
 
   expandStart(...args: Parameters<Moment['subtract']>) {
-    return new Timespan(
-      this.start?.clone().subtract(...args),
-      this.finish,
-    );
+    return new Timespan(this.start?.clone().subtract(...args), this.finish);
   }
 
   expandFinish(...args: Parameters<Moment['add']>) {
-    return new Timespan(
-      this.start,
-      this.finish?.clone().add(...args),
-    );
+    return new Timespan(this.start, this.finish?.clone().add(...args));
   }
 
   expand(...args: Parameters<Moment['add']> & Parameters<Moment['subtract']>) {
-    return new Timespan(
-      this.start?.clone().subtract(...args),
-      this.finish?.clone().add(...args),
-    );
+    return new Timespan(this.start?.clone().subtract(...args), this.finish?.clone().add(...args));
   }
 
   expandedToFit = this.union;
@@ -170,7 +170,7 @@ class Timespan {
     }
 
     const start = this.start.tz(timezoneName);
-    const includeDayInFinish = (finish.date() !== start.date());
+    const includeDayInFinish = finish.date() !== start.date();
 
     return humanizeTime(finish, includeDayInFinish);
   }
@@ -197,7 +197,9 @@ class Timespan {
 
   getTimeHopsWithin(timezoneName: string, { unit, offset = 0, duration = 1 }: TimeHopOptions) {
     if (!this.isFinite()) {
-      throw new Error(`getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
+      throw new Error(
+        `getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`,
+      );
     }
 
     const timeBlocks: Moment[] = [];
@@ -214,32 +216,45 @@ class Timespan {
     return timeBlocks;
   }
 
-  getTimespansWithin(timezoneName: string, { unit, offset = 0, duration = 1 }: TimeHopOptions) {
-    if (!this.isFinite()) {
-      throw new Error(`getTimespansWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
+  getTimespansWithin(
+    timezoneName: string,
+    { unit, offset = 0, duration = 1 }: TimeHopOptions,
+  ): FiniteTimespan[] {
+    const thisTimespan = this;
+    if (!thisTimespan.isFinite()) {
+      throw new Error(
+        `getTimespansWithin called on an infinite Timespan ${thisTimespan.humanizeInTimezone(
+          timezoneName,
+        )}`,
+      );
     }
 
-    const timeHops = this.getTimeHopsWithin(timezoneName, { unit, offset, duration });
-    return timeHops.map((timeHop, i) => {
-      if (i < timeHops.length - 1) {
-        return new Timespan(timeHop, timeHops[i + 1]).intersection(this);
-      }
+    const timeHops = thisTimespan.getTimeHopsWithin(timezoneName, { unit, offset, duration });
+    return timeHops
+      .map((timeHop, i) => {
+        if (i < timeHops.length - 1) {
+          return Timespan.finiteFromMoments(timeHop, timeHops[i + 1]).intersection(thisTimespan);
+        }
 
-      if (offset) {
-        return new Timespan(
+        if (offset) {
+          return Timespan.finiteFromMoments(
+            timeHop,
+            timeHop.clone().subtract(offset).add(duration, unit).add(offset),
+          ).intersection(thisTimespan);
+        }
+
+        return Timespan.finiteFromMoments(
           timeHop,
-          timeHop.clone().subtract(offset).add(duration, unit).add(offset),
-        ).intersection(this);
-      }
-
-      return new Timespan(timeHop, timeHop.clone().add(duration, unit)).intersection(this);
-    }).filter((timespan) => timespan != null);
+          timeHop.clone().add(duration, unit),
+        ).intersection(thisTimespan);
+      })
+      .filter(notEmpty);
   }
 
   clone() {
     return new Timespan(
-      (this.start != null ? this.start.clone() : null),
-      (this.finish != null ? this.finish.clone() : null),
+      this.start != null ? this.start.clone() : null,
+      this.finish != null ? this.finish.clone() : null,
     );
   }
 }
