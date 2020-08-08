@@ -4,8 +4,8 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import TicketForm from './TicketForm';
-import { UpdateTicket } from './mutations.gql';
-import { UserConProfileAdminQuery } from './queries.gql';
+import { UpdateTicket } from './mutations';
+import { UserConProfileAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -31,10 +31,12 @@ function EditTicket() {
     [updateTicket, history, userConProfileId, data],
   );
 
-  usePageTitle(useValueUnless(
-    () => `Editing ${data.convention.ticket_name} for ${data.userConProfile.name}`,
-    error || loading,
-  ));
+  usePageTitle(
+    useValueUnless(
+      () => `Editing ${data.convention.ticket_name} for ${data.userConProfile.name}`,
+      error || loading,
+    ),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -50,9 +52,7 @@ function EditTicket() {
     <>
       <h1 className="mb-4">
         {'Edit '}
-        {convention.name}
-        {' '}
-        {convention.ticket_name}
+        {convention.name} {convention.ticket_name}
         {' for '}
         {userConProfile.name}
       </h1>

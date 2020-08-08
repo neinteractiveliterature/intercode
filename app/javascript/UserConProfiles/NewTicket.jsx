@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { CreateTicket } from './mutations.gql';
+import { CreateTicket } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketForm from './TicketForm';
-import { UserConProfileAdminQuery } from './queries.gql';
+import { UserConProfileAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -17,7 +17,14 @@ function NewTicket() {
     variables: { id: userConProfileId },
   });
   const [createTicket] = useMutation(CreateTicket, {
-    update: (cache, { data: { createTicket: { ticket } } }) => {
+    update: (
+      cache,
+      {
+        data: {
+          createTicket: { ticket },
+        },
+      },
+    ) => {
       const cacheData = cache.readQuery({
         query: UserConProfileAdminQuery,
         variables: { id: userConProfileId },
@@ -49,10 +56,12 @@ function NewTicket() {
     [createTicket, history, userConProfileId],
   );
 
-  usePageTitle(useValueUnless(
-    () => `New ${data.convention.ticket_name} for ${data.userConProfile.name}`,
-    loading || error,
-  ));
+  usePageTitle(
+    useValueUnless(
+      () => `New ${data.convention.ticket_name} for ${data.userConProfile.name}`,
+      loading || error,
+    ),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -68,9 +77,7 @@ function NewTicket() {
     <>
       <h1 className="mb-4">
         {'Create '}
-        {convention.name}
-        {' '}
-        {convention.ticket_name}
+        {convention.name} {convention.ticket_name}
         {' for '}
         {userConProfile.name}
       </h1>

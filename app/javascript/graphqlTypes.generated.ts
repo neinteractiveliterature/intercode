@@ -392,7 +392,7 @@ export type Convention = {
   clickwrap_agreement_html?: Maybe<Scalars['String']>;
   cms_content_groups: Array<CmsContentGroup>;
   cms_layouts?: Maybe<Array<CmsLayout>>;
-  cms_navigation_items?: Maybe<Array<CmsNavigationItem>>;
+  cms_navigation_items: Array<CmsNavigationItem>;
   coupons_paginated: CouponsPagination;
   created_at?: Maybe<Scalars['Date']>;
   default_layout?: Maybe<CmsLayout>;
@@ -421,13 +421,13 @@ export type Convention = {
   orders?: Maybe<OrdersConnection>;
   orders_paginated: OrdersPagination;
   organization?: Maybe<Organization>;
-  pages?: Maybe<Array<Page>>;
+  pages: Array<Page>;
   pre_schedule_content_html?: Maybe<Scalars['String']>;
   /** @deprecated Privileges have gone away in favor of permissions */
   privilege_names: Array<Scalars['String']>;
   products?: Maybe<Array<Product>>;
   reports: ConventionReports;
-  rooms?: Maybe<Array<Room>>;
+  rooms: Array<Room>;
   root_page?: Maybe<Page>;
   show_event_list?: Maybe<ShowSchedule>;
   show_schedule?: Maybe<ShowSchedule>;
@@ -450,7 +450,7 @@ export type Convention = {
   timezone_name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['Date']>;
   user_activity_alert: UserActivityAlert;
-  user_activity_alerts?: Maybe<Array<Maybe<UserActivityAlert>>>;
+  user_activity_alerts: Array<Maybe<UserActivityAlert>>;
   user_con_profile_form: Form;
   user_con_profiles_paginated: UserConProfilesPagination;
 };
@@ -3999,7 +3999,7 @@ export type TicketType = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   maximum_event_provided_tickets: Scalars['Int'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   /** @deprecated Tickets are now provided through products */
   pricing_schedule: ScheduledMoneyValue;
   providing_products: Array<Product>;

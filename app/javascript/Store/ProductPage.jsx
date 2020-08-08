@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { OrderFormProductQuery } from './queries.gql';
+import { OrderFormProductQuery } from './queries';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
@@ -16,10 +16,9 @@ import AppRootContext from '../AppRootContext';
 function ProductPage() {
   const { timezoneName } = useContext(AppRootContext);
   const { id } = useParams();
-  const { data, loading, error } = useQuery(
-    OrderFormProductQuery,
-    { variables: { productId: Number.parseInt(id, 10) } },
-  );
+  const { data, loading, error } = useQuery(OrderFormProductQuery, {
+    variables: { productId: Number.parseInt(id, 10) },
+  });
 
   usePageTitle(useValueUnless(() => data.product.name, error || loading));
 
@@ -43,7 +42,9 @@ function ProductPage() {
 
       <div className="mb-4">
         <h1>{product.name}</h1>
-        <div className="lead">{describeUserPricingStructure(product.pricing_structure, timezoneName)}</div>
+        <div className="lead">
+          {describeUserPricingStructure(product.pricing_structure, timezoneName)}
+        </div>
       </div>
 
       {product.image_url && (
@@ -54,11 +55,15 @@ function ProductPage() {
         <div className="mb-4">{parseCmsContent(product.description_html).bodyComponents}</div>
       )}
 
-      {
-        currentUser
-          ? <ProductOrderForm productId={product.id} />
-          : <SignInButton caption="Log in to order" className="btn btn-primary" afterSignInPath={window.location.href} />
-      }
+      {currentUser ? (
+        <ProductOrderForm productId={product.id} />
+      ) : (
+        <SignInButton
+          caption="Log in to order"
+          className="btn btn-primary"
+          afterSignInPath={window.location.href}
+        />
+      )}
     </>
   );
 }

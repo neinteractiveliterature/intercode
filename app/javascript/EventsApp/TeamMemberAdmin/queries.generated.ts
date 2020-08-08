@@ -2,9 +2,9 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { CommonConventionDataFragment } from '../queries.generated';
+import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type TeamMemberTicketFieldsFragment = (

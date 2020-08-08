@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { EventAdminEventsQuery } from './queries.gql';
+import { EventAdminEventsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
-import { DropEvent } from './mutations.gql';
+import { DropEvent } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
@@ -22,7 +22,10 @@ function SingleRunEventAdminList({ eventCategoryId }) {
   const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
   const [eventCategory, sortedEvents] = useEventAdminCategory(
-    data, loading, error, eventCategoryId,
+    data,
+    loading,
+    error,
+    eventCategoryId,
   );
 
   const [drop] = useMutation(DropEvent);
@@ -55,22 +58,21 @@ function SingleRunEventAdminList({ eventCategoryId }) {
             {event.title}
           </span>
         </th>
-        <td>
-          {timespan && timespan.humanizeInTimezone(timezoneName)}
-        </td>
+        <td>{timespan && timespan.humanizeInTimezone(timezoneName)}</td>
         <td>
           <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
             Edit
-          </Link>
-          {' '}
+          </Link>{' '}
           <button
             type="button"
             className="btn btn-outline-danger btn-sm"
-            onClick={() => confirm({
-              prompt: 'Are you sure you want to drop this event?',
-              action: () => drop({ variables: { input: { id: event.id } } }),
-              renderError: (e) => <ErrorDisplay graphQLError={e} />,
-            })}
+            onClick={() =>
+              confirm({
+                prompt: 'Are you sure you want to drop this event?',
+                action: () => drop({ variables: { input: { id: event.id } } }),
+                renderError: (e) => <ErrorDisplay graphQLError={e} />,
+              })
+            }
           >
             <i className="fa fa-trash-o" />
           </button>
@@ -86,9 +88,7 @@ function SingleRunEventAdminList({ eventCategoryId }) {
         {eventCategory.name.toLowerCase()}
       </Link>
       <table className="table table-striped">
-        <tbody>
-          {eventRows}
-        </tbody>
+        <tbody>{eventRows}</tbody>
       </table>
     </div>
   );

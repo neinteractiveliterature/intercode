@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import ReactTable from 'react-table';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
-import { AdminOrdersQuery } from './queries.gql';
+import { AdminOrdersQuery } from './queries';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import MoneyCell from '../Tables/MoneyCell';
@@ -127,10 +127,11 @@ function OrderAdmin() {
   // memo to my future self if I get the bright idea to rip this out again:
   // if we don't do it this way, the order doesn't update in the EditOrderModal after it changes
   const editingOrder = useMemo(
-    () => (editingOrderId
-      && queryData?.convention?.orders_paginated?.entries?.
-        find((order) => order.id === editingOrderId)
-    ),
+    () =>
+      editingOrderId &&
+      queryData?.convention?.orders_paginated?.entries?.find(
+        (order) => order.id === editingOrderId,
+      ),
     [queryData, editingOrderId],
   );
 
@@ -140,25 +141,30 @@ function OrderAdmin() {
         <TableHeader
           {...tableHeaderProps}
           exportUrl="/csv_exports/orders"
-          renderLeftContent={() => queryData?.currentAbility?.can_create_orders && (
-            <button type="button" className="btn btn-outline-primary ml-2" onClick={newOrderModal.open}>
-              <i className="fa fa-plus" />
-              {' '}
-              New order
-            </button>
-          )}
+          renderLeftContent={() =>
+            queryData?.currentAbility?.can_create_orders && (
+              <button
+                type="button"
+                className="btn btn-outline-primary ml-2"
+                onClick={newOrderModal.open}
+              >
+                <i className="fa fa-plus" /> New order
+              </button>
+            )
+          }
         />
 
         <ReactTable
           {...reactTableProps}
-
           className="-striped -highlight"
           getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
           getTrProps={(state, rowInfo) => {
             if (queryData?.currentAbility?.can_update_orders) {
               return {
                 style: { cursor: 'pointer' },
-                onClick: () => { setEditingOrderId(rowInfo.original.id); },
+                onClick: () => {
+                  setEditingOrderId(rowInfo.original.id);
+                },
               };
             }
 

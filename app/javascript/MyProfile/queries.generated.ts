@@ -2,9 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
+import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type MyProfileQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -18,6 +18,14 @@ export type MyProfileQueryQuery = (
     & { user_con_profile_form: (
       { __typename?: 'Form' }
       & Pick<Types.Form, 'id'>
+      & { form_sections: Array<(
+        { __typename?: 'FormSection' }
+        & Pick<Types.FormSection, 'id'>
+        & { form_items: Array<(
+          { __typename?: 'FormItem' }
+          & Pick<Types.FormItem, 'id' | 'admin_description'>
+        )> }
+      )> }
       & CommonFormFieldsFragment
     ) }
   )>, myProfile?: Types.Maybe<(
@@ -39,6 +47,13 @@ export const MyProfileQueryDocument = gql`
     user_con_profile_form {
       id
       ...CommonFormFields
+      form_sections {
+        id
+        form_items {
+          id
+          admin_description
+        }
+      }
     }
   }
   myProfile {

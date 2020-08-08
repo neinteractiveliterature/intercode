@@ -1,8 +1,8 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
+import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type DefaultEventsQueryQueryVariables = Types.Exact<{

@@ -5,9 +5,13 @@ import Modal from 'react-bootstrap4-modal';
 
 import AdminOrderForm from './AdminOrderForm';
 import {
-  AdminUpdateOrder, AdminCreateOrderEntry, AdminUpdateOrderEntry, AdminDeleteOrderEntry,
-  CreateCouponApplication, DeleteCouponApplication,
-} from './mutations.gql';
+  AdminUpdateOrder,
+  AdminCreateOrderEntry,
+  AdminUpdateOrderEntry,
+  AdminDeleteOrderEntry,
+  CreateCouponApplication,
+  DeleteCouponApplication,
+} from './mutations';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 
@@ -21,44 +25,47 @@ function EditOrderModal({ order, closeModal }) {
   const [deleteCouponApplicationMutate] = useMutation(DeleteCouponApplication);
 
   const updateOrder = useCallback(
-    (attributes) => updateMutate({
-      variables: {
-        id: order?.id,
-        order: attributes,
-      },
-    }),
+    (attributes) =>
+      updateMutate({
+        variables: {
+          id: order?.id,
+          order: attributes,
+        },
+      }),
     [order, updateMutate],
   );
 
   const createOrderEntry = useCallback(
-    (orderEntry) => createOrderEntryMutate({
-      variables: {
-        input: {
-          order_id: order.id,
-          order_entry: {
-            product_id: orderEntry.product?.id,
-            product_variant_id: orderEntry.product_variant?.id,
-            quantity: orderEntry.quantity,
-            price_per_item: {
-              fractional: orderEntry.price_per_item?.fractional,
-              currency_code: orderEntry.price_per_item?.currency_code,
+    (orderEntry) =>
+      createOrderEntryMutate({
+        variables: {
+          input: {
+            order_id: order.id,
+            order_entry: {
+              product_id: orderEntry.product?.id,
+              product_variant_id: orderEntry.product_variant?.id,
+              quantity: orderEntry.quantity,
+              price_per_item: {
+                fractional: orderEntry.price_per_item?.fractional,
+                currency_code: orderEntry.price_per_item?.currency_code,
+              },
             },
           },
         },
-      },
-    }),
+      }),
     [createOrderEntryMutate, order],
   );
 
   const updateOrderEntry = useCallback(
-    (orderEntry, attributes) => updateOrderEntryMutate({
-      variables: {
-        input: {
-          id: orderEntry.id,
-          order_entry: attributes,
+    (orderEntry, attributes) =>
+      updateOrderEntryMutate({
+        variables: {
+          input: {
+            id: orderEntry.id,
+            order_entry: attributes,
+          },
         },
-      },
-    }),
+      }),
     [updateOrderEntryMutate],
   );
 
@@ -68,31 +75,27 @@ function EditOrderModal({ order, closeModal }) {
   );
 
   const createCouponApplication = useCallback(
-    (couponCode) => createCouponApplicationMutate({
-      variables: {
-        orderId: order?.id,
-        couponCode,
-      },
-    }),
+    (couponCode) =>
+      createCouponApplicationMutate({
+        variables: {
+          orderId: order?.id,
+          couponCode,
+        },
+      }),
     [createCouponApplicationMutate, order],
   );
 
   const deleteCouponApplication = useCallback(
-    (couponApplication) => deleteCouponApplicationMutate({
-      variables: { id: couponApplication.id },
-    }),
+    (couponApplication) =>
+      deleteCouponApplicationMutate({
+        variables: { id: couponApplication.id },
+      }),
     [deleteCouponApplicationMutate],
   );
 
   return (
-    <Modal
-      visible={order != null && !confirm.visible}
-      dialogClassName="modal-lg"
-    >
-      <div className="modal-header">
-        Order #
-        {(order || {}).id}
-      </div>
+    <Modal visible={order != null && !confirm.visible} dialogClassName="modal-lg">
+      <div className="modal-header">Order #{(order || {}).id}</div>
       <div className="modal-body">
         {order && (
           <>
@@ -112,7 +115,9 @@ function EditOrderModal({ order, closeModal }) {
         )}
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-primary" onClick={closeModal}>Close</button>
+        <button type="button" className="btn btn-primary" onClick={closeModal}>
+          Close
+        </button>
       </div>
     </Modal>
   );

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
+import { gql } from '@apollo/client';
 
 
 export type CommonFormItemFieldsFragment = (

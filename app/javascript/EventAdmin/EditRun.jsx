@@ -4,42 +4,36 @@ import { propType } from 'graphql-anywhere';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import EditRunModal from './EditRunModal';
-import { ConventionFields, EventFields } from './queries.gql';
+import { ConventionFields, EventFields } from './queries';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 
 function EditRun({ convention, events }) {
   const match = useRouteMatch();
   const history = useHistory();
-  const event = useMemo(
-    () => {
-      if (!match) {
-        return null;
-      }
+  const event = useMemo(() => {
+    if (!match) {
+      return null;
+    }
 
-      return events.find((e) => e.id.toString() === match.params.eventId);
-    },
-    [match, events],
-  );
+    return events.find((e) => e.id.toString() === match.params.eventId);
+  }, [match, events]);
 
-  const initialRun = useMemo(
-    () => {
-      if (!match) {
-        return null;
-      }
+  const initialRun = useMemo(() => {
+    if (!match) {
+      return null;
+    }
 
-      if (match.path.endsWith('/new')) {
-        return {
-          starts_at: null,
-          title_suffix: null,
-          schedule_note: null,
-          rooms: [],
-        };
-      }
+    if (match.path.endsWith('/new')) {
+      return {
+        starts_at: null,
+        title_suffix: null,
+        schedule_note: null,
+        rooms: [],
+      };
+    }
 
-      return event.runs.find((r) => r.id.toString() === match.params.runId);
-    },
-    [match, event],
-  );
+    return event.runs.find((r) => r.id.toString() === match.params.runId);
+  }, [match, event]);
 
   const cancelEditing = () => {
     const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
@@ -62,9 +56,9 @@ function EditRun({ convention, events }) {
       event={event}
       onCancel={cancelEditing}
       onDelete={cancelEditing}
-      onSaveStart={() => { }}
+      onSaveStart={() => {}}
       onSaveSucceeded={cancelEditing}
-      onSaveFailed={() => { }}
+      onSaveFailed={() => {}}
       run={run}
     />
   );

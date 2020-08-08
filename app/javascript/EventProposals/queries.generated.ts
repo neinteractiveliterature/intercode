@@ -2,9 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
+import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type EventProposalFieldsFragment = (
@@ -15,7 +15,16 @@ export type EventProposalFieldsFragment = (
     & Pick<Types.EventCategory, 'id' | 'name'>
     & { event_proposal_form?: Types.Maybe<(
       { __typename?: 'Form' }
-      & Pick<Types.Form, 'id' | 'form_api_json'>
+      & Pick<Types.Form, 'id'>
+      & { form_sections: Array<(
+        { __typename?: 'FormSection' }
+        & Pick<Types.FormSection, 'id'>
+        & { form_items: Array<(
+          { __typename?: 'FormItem' }
+          & Pick<Types.FormItem, 'id' | 'admin_description'>
+        )> }
+      )> }
+      & CommonFormFieldsFragment
     )> }
   ), event?: Types.Maybe<(
     { __typename?: 'Event' }
@@ -25,7 +34,7 @@ export type EventProposalFieldsFragment = (
 
 export type EventProposalFormDataFragment = (
   { __typename?: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'event_mailing_list_domain'>
+  & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
 );
 
 export type EventProposalQueryQueryVariables = Types.Exact<{
@@ -218,20 +227,28 @@ export const EventProposalFieldsFragmentDoc = gql`
     name
     event_proposal_form {
       id
-      form_api_json
+      ...CommonFormFields
+      form_sections {
+        id
+        form_items {
+          id
+          admin_description
+        }
+      }
     }
   }
   event {
     id
   }
 }
-    `;
+    ${CommonFormFieldsFragmentDoc}`;
 export const EventProposalFormDataFragmentDoc = gql`
     fragment EventProposalFormData on Convention {
   id
   starts_at
   ends_at
   timezone_name
+  timezone_mode
   event_mailing_list_domain
 }
     `;

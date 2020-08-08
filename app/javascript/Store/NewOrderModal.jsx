@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
 
 import AdminOrderForm from './AdminOrderForm';
-import { CreateOrder, CreateCouponApplication } from './mutations.gql';
+import { CreateOrder, CreateCouponApplication } from './mutations';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import useAsyncFunction from '../useAsyncFunction';
@@ -29,17 +29,20 @@ function NewOrderModal({ visible, close, initialOrder }) {
   const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
   const apolloClient = useApolloClient();
 
-  useEffect(
-    () => {
-      if (!visible) {
-        setOrder(initialOrder || BLANK_ORDER);
-      }
-    },
-    [visible, initialOrder],
-  );
+  useEffect(() => {
+    if (!visible) {
+      setOrder(initialOrder || BLANK_ORDER);
+    }
+  }, [visible, initialOrder]);
 
   const createOrder = async () => {
-    const { data: { createOrder: { order: { id: orderId } } } } = await createMutate({
+    const {
+      data: {
+        createOrder: {
+          order: { id: orderId },
+        },
+      },
+    } = await createMutate({
       variables: {
         userConProfileId: order.user_con_profile?.id,
         order: {
@@ -62,11 +65,16 @@ function NewOrderModal({ visible, close, initialOrder }) {
         })),
       },
     });
-    await Promise.all(order.coupon_applications.map((application) => createCouponApplicationMutate({
-      variables: {
-        orderId, couponCode: application.coupon.code,
-      },
-    })));
+    await Promise.all(
+      order.coupon_applications.map((application) =>
+        createCouponApplicationMutate({
+          variables: {
+            orderId,
+            couponCode: application.coupon.code,
+          },
+        }),
+      ),
+    );
   };
   const [createOrderAsync, createOrderError, createOrderInProgress] = useAsyncFunction(createOrder);
 
@@ -78,53 +86,49 @@ function NewOrderModal({ visible, close, initialOrder }) {
 
   const updateOrder = (attributes) => setOrder((prevOrder) => ({ ...prevOrder, ...attributes }));
 
-  const createOrderEntry = (orderEntry) => setOrder((prevOrder) => ({
-    ...prevOrder,
-    order_entries: [
-      ...prevOrder.order_entries,
-      { ...orderEntry, generatedId: uuidv4() },
-    ],
-  }));
+  const createOrderEntry = (orderEntry) =>
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      order_entries: [...prevOrder.order_entries, { ...orderEntry, generatedId: uuidv4() }],
+    }));
 
-  const updateOrderEntry = (orderEntry, attributes) => setOrder((prevOrder) => ({
-    ...prevOrder,
-    order_entries: prevOrder.order_entries.map((entry) => {
-      if (entry.generatedId === orderEntry.generatedId) {
-        return { ...entry, ...attributes };
-      }
+  const updateOrderEntry = (orderEntry, attributes) =>
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      order_entries: prevOrder.order_entries.map((entry) => {
+        if (entry.generatedId === orderEntry.generatedId) {
+          return { ...entry, ...attributes };
+        }
 
-      return entry;
-    }),
-  }));
+        return entry;
+      }),
+    }));
 
-  const deleteOrderEntry = (orderEntry) => setOrder((prevOrder) => ({
-    ...prevOrder,
-    order_entries: prevOrder.order_entries
-      .filter((entry) => entry.generatedId !== orderEntry.generatedId),
-  }));
+  const deleteOrderEntry = (orderEntry) =>
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      order_entries: prevOrder.order_entries.filter(
+        (entry) => entry.generatedId !== orderEntry.generatedId,
+      ),
+    }));
 
-  const createCouponApplication = (couponCode) => setOrder((prevOrder) => ({
-    ...prevOrder,
-    coupon_applications: [
-      ...prevOrder.coupon_applications,
-      { coupon: { code: couponCode } },
-    ],
-  }));
+  const createCouponApplication = (couponCode) =>
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      coupon_applications: [...prevOrder.coupon_applications, { coupon: { code: couponCode } }],
+    }));
 
-  const deleteCouponApplication = (couponApplication) => setOrder((prevOrder) => ({
-    ...prevOrder,
-    order_entries: prevOrder.coupon_applications
-      .filter((application) => application.coupon.code !== couponApplication.coupon.code),
-  }));
+  const deleteCouponApplication = (couponApplication) =>
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      order_entries: prevOrder.coupon_applications.filter(
+        (application) => application.coupon.code !== couponApplication.coupon.code,
+      ),
+    }));
 
   return (
-    <Modal
-      visible={visible && !confirm.visible}
-      dialogClassName="modal-lg"
-    >
-      <div className="modal-header">
-        New order
-      </div>
+    <Modal visible={visible && !confirm.visible} dialogClassName="modal-lg">
+      <div className="modal-header">New order</div>
       <div className="modal-body">
         <AdminOrderForm order={order} updateOrder={updateOrder} />
 

@@ -29,17 +29,15 @@ function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): Regist
   };
 }
 
-const BLANK_EVENT = {
-  form_response_attrs: {
-    can_play_concurrently: false,
-    con_mail_destination: 'event_email',
-    title: '',
-    email: '',
-    short_blurb: '',
-    description: '',
-    length_seconds: null,
-    registration_policy: buildSingleBucketRegistrationPolicy(null),
-  },
+export const DEFAULT_EVENT_FORM_RESPONSE_ATTRS = {
+  can_play_concurrently: false,
+  con_mail_destination: 'event_email',
+  title: '',
+  email: '',
+  short_blurb: '',
+  description: '',
+  length_seconds: null,
+  registration_policy: buildSingleBucketRegistrationPolicy(null),
 };
 
 const processFormResponseValue = (key: string, value: any) => {
@@ -75,7 +73,13 @@ export type EventFormProps<EventType extends FormResponse> = {
 export default function useEventForm<EventType extends FormResponse>({
   convention, initialEvent, eventForm,
 }: UseEventFormOptions<EventType>) {
-  const [event, setEvent] = useState<EventType>({ ...BLANK_EVENT, ...initialEvent });
+  const [event, setEvent] = useState<EventType>(() => ({
+    ...initialEvent,
+    form_response_attrs: {
+      ...DEFAULT_EVENT_FORM_RESPONSE_ATTRS,
+      ...initialEvent.form_response_attrs,
+    },
+  }));
 
   const [, eventAttrsChanged] = useFormResponse(event, setEvent);
 

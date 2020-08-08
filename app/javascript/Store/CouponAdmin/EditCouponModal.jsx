@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import CouponForm from './CouponForm';
-import { UpdateCoupon, DeleteCoupon } from './mutations.gql';
+import { UpdateCoupon, DeleteCoupon } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 import buildCouponInput from './buildCouponInput';
@@ -18,10 +18,9 @@ function EditCouponModal({ initialCoupon, visible, close }) {
   const [deleteCoupon] = useMutation(DeleteCoupon);
   const apolloClient = useApolloClient();
 
-  useEffect(
-    () => { setCoupon(initialCoupon); },
-    [initialCoupon],
-  );
+  useEffect(() => {
+    setCoupon(initialCoupon);
+  }, [initialCoupon]);
 
   const saveClicked = async () => {
     await updateCouponAsync({
@@ -45,14 +44,14 @@ function EditCouponModal({ initialCoupon, visible, close }) {
           <button
             className="btn btn-outline-danger btn-sm"
             type="button"
-            onClick={() => confirm({
-              action: deleteConfirmed,
-              prompt: 'Are you sure you want to delete this coupon?',
-            })}
+            onClick={() =>
+              confirm({
+                action: deleteConfirmed,
+                prompt: 'Are you sure you want to delete this coupon?',
+              })
+            }
           >
-            <i className="fa fa-trash-o" />
-            {' '}
-            Delete coupon
+            <i className="fa fa-trash-o" /> Delete coupon
           </button>
         </div>
       </div>
@@ -61,12 +60,7 @@ function EditCouponModal({ initialCoupon, visible, close }) {
         <ErrorDisplay graphQLError={error} />
       </div>
       <div className="modal-footer">
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={close}
-          disabled={inProgress}
-        >
+        <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
           Cancel
         </button>
         <button

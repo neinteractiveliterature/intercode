@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { ConvertTicketToEventProvided } from './mutations.gql';
-import { ConvertToEventProvidedTicketQuery, UserConProfileAdminQuery } from './queries.gql';
+import { ConvertTicketToEventProvided } from './mutations';
+import { ConvertToEventProvidedTicketQuery, UserConProfileAdminQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import EventSelect from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
@@ -14,7 +14,12 @@ import LoadingIndicator from '../LoadingIndicator';
 
 function EventSpecificSection({
   // eslint-disable-next-line react/prop-types
-  event, userConProfile, convention, ticketTypeId, setTicketTypeId, disabled,
+  event,
+  userConProfile,
+  convention,
+  ticketTypeId,
+  setTicketTypeId,
+  disabled,
 }) {
   const { data, loading, error } = useQuery(ConvertToEventProvidedTicketQuery, {
     variables: { eventId: event.id }, // eslint-disable-line react/prop-types
@@ -31,10 +36,7 @@ function EventSpecificSection({
   return (
     <>
       <p className="mt-4">
-        <TicketingStatusDescription
-          userConProfile={userConProfile}
-          convention={convention}
-        />
+        <TicketingStatusDescription userConProfile={userConProfile} convention={convention} />
       </p>
 
       <ProvidableTicketTypeSelection
@@ -48,9 +50,7 @@ function EventSpecificSection({
   );
 }
 
-function ConvertToEventProvidedTicketModal({
-  convention, userConProfile, visible, onClose,
-}) {
+function ConvertToEventProvidedTicketModal({ convention, userConProfile, visible, onClose }) {
   const [event, setEvent] = useState(null);
   const [ticketTypeId, setTicketTypeId] = useState(null);
   const [convertMutate] = useMutation(ConvertTicketToEventProvided);
@@ -63,7 +63,14 @@ function ConvertToEventProvidedTicketModal({
         ticketTypeId,
         userConProfileId: userConProfile.id,
       },
-      update: (cache, { data: { convertTicketToEventProvided: { ticket } } }) => {
+      update: (
+        cache,
+        {
+          data: {
+            convertTicketToEventProvided: { ticket },
+          },
+        },
+      ) => {
         const cachedData = cache.readQuery({
           query: UserConProfileAdminQuery,
           variables: { id: userConProfile.id },
@@ -90,7 +97,7 @@ function ConvertToEventProvidedTicketModal({
       <div className="modal-header">
         {'Convert '}
         {userConProfile.name}
-        {'\'s '}
+        {"'s "}
         {convention.ticket_name}
         {' to event-provided'}
       </div>
@@ -102,14 +109,19 @@ function ConvertToEventProvidedTicketModal({
           ’s
           {' existing '}
           {convention.ticket_name}
-          {' and create a new one for them, provided by an event.  If they paid for their existing '}
+          {
+            ' and create a new one for them, provided by an event.  If they paid for their existing '
+          }
           {convention.ticket_name}
           {', that payment will be refunded.'}
         </p>
 
         <EventSelect
           value={event}
-          onChange={(value) => { setEvent(value); setTicketTypeId(null); }}
+          onChange={(value) => {
+            setEvent(value);
+            setTicketTypeId(null);
+          }}
           placeholder="Select event..."
           disabled={inProgress}
         />
@@ -129,12 +141,7 @@ function ConvertToEventProvidedTicketModal({
       </div>
 
       <div className="modal-footer">
-        <button
-          type="button"
-          onClick={onClose}
-          className="btn btn-secondary"
-          disabled={inProgress}
-        >
+        <button type="button" onClick={onClose} className="btn btn-secondary" disabled={inProgress}>
           Cancel
         </button>
         <button

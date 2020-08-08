@@ -2,9 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { EventProposalFieldsFragment } from './queries.generated';
+import { gql } from '@apollo/client';
 import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type CreateEventProposalMutationVariables = Types.Exact<{

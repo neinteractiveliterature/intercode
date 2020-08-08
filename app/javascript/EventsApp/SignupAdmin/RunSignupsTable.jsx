@@ -15,7 +15,9 @@ import FreeTextFilter from '../../Tables/FreeTextFilter';
 import { RunSignupsTableSignupsQuery, SignupAdminEventQuery } from './queries';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
-import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, {
+  QueryDataContext,
+} from '../../Tables/useReactTableWithTheWorks';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
@@ -42,6 +44,7 @@ const SignupStateFilter = ({ filter, onChange }) => {
   const { t } = useTranslation();
   return (
     <ChoiceSetFilter
+      multiple
       name="state"
       choices={[
         { value: 'confirmed', label: t('signups.states.confirmed', 'Confirmed') },
@@ -100,22 +103,18 @@ BucketCell.propTypes = {
 const BucketFilter = ({ filter, onChange }) => {
   const data = useContext(QueryDataContext);
   const choices = useMemo(
-    () => (
+    () =>
       (data || {}).event
-        ? data.event.registration_policy.buckets
-          .map((bucket) => ({ label: bucket.name, value: bucket.key }))
-        : []
-    ),
+        ? data.event.registration_policy.buckets.map((bucket) => ({
+            label: bucket.name,
+            value: bucket.key,
+          }))
+        : [],
     [data],
   );
 
   return (
-    <ChoiceSetFilter
-      name="bucket"
-      choices={choices}
-      onChange={onChange}
-      filter={filter}
-    />
+    <ChoiceSetFilter multiple name="bucket" choices={choices} onChange={onChange} filter={filter} />
   );
 };
 
@@ -172,10 +171,8 @@ const getPossibleColumns = (t) => [
     Header: t('events.signupAdmin.ageHeader', 'Age'),
     id: 'age',
     width: 40,
-    accessor: (signup) => ageAsOf(
-      moment(signup.user_con_profile.birth_date),
-      moment(signup.run.starts_at),
-    ),
+    accessor: (signup) =>
+      ageAsOf(moment(signup.user_con_profile.birth_date), moment(signup.run.starts_at)),
     filterable: false,
   },
   {
@@ -187,16 +184,11 @@ const getPossibleColumns = (t) => [
   },
 ];
 
-function RunSignupsTable({
-  defaultVisibleColumns, eventId, runId, runPath,
-}) {
+function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }) {
   const { t } = useTranslation();
   const history = useHistory();
   const { data, loading, error } = useQuery(SignupAdminEventQuery, { variables: { eventId } });
-  const getPossibleColumnsFunc = useMemo(
-    () => () => getPossibleColumns(t),
-    [t],
-  );
+  const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
 
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
@@ -210,13 +202,15 @@ function RunSignupsTable({
     variables: { eventId, runId },
   });
 
-  usePageTitle(useValueUnless(
-    () => t(
-      'events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}',
-      { eventTitle: data.event.title },
+  usePageTitle(
+    useValueUnless(
+      () =>
+        t('events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}', {
+          eventTitle: data.event.title,
+        }),
+      error || loading,
     ),
-    error || loading,
-  ));
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -232,7 +226,6 @@ function RunSignupsTable({
         <TableHeader {...tableHeaderProps} exportUrl={`/csv_exports/run_signups?run_id=${runId}`} />
         <ReactTable
           {...reactTableProps}
-
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => ({
             style: { cursor: 'pointer' },

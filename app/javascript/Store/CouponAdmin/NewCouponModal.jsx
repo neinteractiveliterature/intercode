@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import CouponForm from './CouponForm';
-import { CreateCoupon } from './mutations.gql';
+import { CreateCoupon } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 import buildCouponInput from './buildCouponInput';
@@ -36,12 +36,7 @@ function NewCouponModal({ visible, close }) {
         <ErrorDisplay graphQLError={error} />
       </div>
       <div className="modal-footer">
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={close}
-          disabled={inProgress}
-        >
+        <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
           Cancel
         </button>
         <button

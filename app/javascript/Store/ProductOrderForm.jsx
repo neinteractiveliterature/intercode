@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
-import { CartQuery, OrderFormProductQuery } from './queries.gql';
+import { AddOrderEntryToCurrentPendingOrder } from './mutations';
+import { CartQuery, OrderFormProductQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
@@ -16,23 +16,19 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function ProductOrderForm({ productId }) {
   const history = useHistory();
   const { data, loading, error } = useQuery(OrderFormProductQuery, { variables: { productId } });
-  const [addOrderEntryToCurrentPendingOrder] = useMutation(
-    AddOrderEntryToCurrentPendingOrder,
-    { refetchQueries: [{ query: CartQuery }] },
-  );
+  const [addOrderEntryToCurrentPendingOrder] = useMutation(AddOrderEntryToCurrentPendingOrder, {
+    refetchQueries: [{ query: CartQuery }],
+  });
 
   const [productVariantId, productVariantIdChanged] = useTransformedState(null, Transforms.integer);
   const [quantity, quantityChanged] = useTransformedState(1, Transforms.integer);
 
   const dataComplete = useMemo(
-    () => (
-      !error && !loading
-      && (
-        data.product.product_variants.length < 1
-        || productVariantId != null
-      )
-      && quantity > 0
-    ),
+    () =>
+      !error &&
+      !loading &&
+      (data.product.product_variants.length < 1 || productVariantId != null) &&
+      quantity > 0,
     [data, error, loading, productVariantId, quantity],
   );
 
@@ -86,7 +82,9 @@ function ProductOrderForm({ productId }) {
         value={productVariantId || ''}
         onChange={(event) => productVariantIdChanged(event.target.value)}
       >
-        <option disabled value="">Select...</option>
+        <option disabled value="">
+          Select...
+        </option>
         {options}
       </select>
     );
@@ -113,8 +111,9 @@ function ProductOrderForm({ productId }) {
 
     let pricePerItem = data.product.pricing_structure.price.fractional;
     if (productVariantId) {
-      const productVariant = data.product.product_variants
-        .find((variant) => variant.id === productVariantId);
+      const productVariant = data.product.product_variants.find(
+        (variant) => variant.id === productVariantId,
+      );
 
       if (productVariant.override_pricing_structure != null) {
         pricePerItem = productVariant.override_pricing_structure.price.fractional;
@@ -126,24 +125,16 @@ function ProductOrderForm({ productId }) {
       currency_code: data.product.pricing_structure.price.currency_code,
     };
 
-    return (
-      <strong>
-        Total:
-        {' '}
-        {formatMoney(totalPrice)}
-      </strong>
-    );
+    return <strong>Total: {formatMoney(totalPrice)}</strong>;
   };
 
   return (
     <div className="card bg-light">
       <div className="card-body">
         {renderVariantSelect()}
-        {(!data.product.provides_ticket_type) && renderQuantity()}
+        {!data.product.provides_ticket_type && renderQuantity()}
         <div className="row align-items-baseline">
-          <div className="col-6">
-            {renderTotalAmount()}
-          </div>
+          <div className="col-6">{renderTotalAmount()}</div>
           <div className="col-6 mb-2">
             <button
               type="button"
@@ -151,12 +142,7 @@ function ProductOrderForm({ productId }) {
               disabled={!dataComplete || addToCartInProgress}
               onClick={addToCartClicked}
             >
-              {
-                addToCartInProgress
-                  ? (<LoadingIndicator />)
-                  : (<i className="fa fa-shopping-cart" />)
-              }
-              {' '}
+              {addToCartInProgress ? <LoadingIndicator /> : <i className="fa fa-shopping-cart" />}{' '}
               Add to cart
             </button>
           </div>

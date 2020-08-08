@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
-import {
-  NavLink, Route, Switch, Redirect,
-} from 'react-router-dom';
+import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { humanize } from 'inflected';
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
-import { EventAdminEventsQuery } from './queries.gql';
+import { EventAdminEventsQuery } from './queries';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
@@ -33,7 +31,7 @@ function EventAdmin() {
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const eventCategories = useMemo(
-    () => ((loading || error) ? null : sortEventCategories(data.convention.event_categories)),
+    () => (loading || error ? null : sortEventCategories(data.convention.event_categories)),
     [data, loading, error],
   );
 
@@ -53,7 +51,9 @@ function EventAdmin() {
     if (data.events.length === 0) {
       return (
         <Switch>
-          <Route path="/admin_events/new"><NewEvent /></Route>
+          <Route path="/admin_events/new">
+            <NewEvent />
+          </Route>
           <Redirect to="/admin_events/new" />
         </Switch>
       );
@@ -61,7 +61,9 @@ function EventAdmin() {
 
     return (
       <Switch>
-        <Route path="/admin_events/:id/edit"><EventAdminEditEvent /></Route>
+        <Route path="/admin_events/:id/edit">
+          <EventAdminEditEvent />
+        </Route>
         <Redirect to={`/admin_events/${data.events[0].id}/edit`} />
       </Switch>
     );
@@ -75,31 +77,38 @@ function EventAdmin() {
           ref={dropdownRef}
           renderReference={({ ref, toggle }) => (
             <li className="nav-item dropdown" role="presentation" ref={ref}>
-              <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">
+              <button
+                className="btn btn-link nav-link dropdown-toggle"
+                onClick={toggle}
+                type="button"
+              >
                 Event categories
               </button>
             </li>
           )}
         >
           {eventCategories.map((eventCategory) => (
-            <NavLink className="dropdown-item" key={eventCategory.id} to={buildEventCategoryUrl(eventCategory)}>
-              {eventCategory.name}
-              {' '}
-              <small className="text-muted">
-                (
-                {humanize(eventCategory.scheduling_ui)}
-                )
-              </small>
+            <NavLink
+              className="dropdown-item"
+              key={eventCategory.id}
+              to={buildEventCategoryUrl(eventCategory)}
+            >
+              {eventCategory.name}{' '}
+              <small className="text-muted">({humanize(eventCategory.scheduling_ui)})</small>
             </NavLink>
           ))}
         </PopperDropdown>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/admin_events/dropped_events">Dropped events</NavLink>
+          <NavLink className="nav-link" to="/admin_events/dropped_events">
+            Dropped events
+          </NavLink>
         </li>
       </ul>
 
       <Switch>
-        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`}><NewEvent /></Route>
+        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`}>
+          <NewEvent />
+        </Route>
         {eventCategories.map((eventCategory) => {
           const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
 
@@ -109,8 +118,12 @@ function EventAdmin() {
             </Route>
           );
         })}
-        <Route path="/admin_events/:id/edit"><EventAdminEditEvent /></Route>
-        <Route path="/admin_events/dropped_events"><DroppedEventAdmin /></Route>
+        <Route path="/admin_events/:id/edit">
+          <EventAdminEditEvent />
+        </Route>
+        <Route path="/admin_events/dropped_events">
+          <DroppedEventAdmin />
+        </Route>
         <Redirect to={buildEventCategoryUrl(eventCategories[0])} />
       </Switch>
     </>

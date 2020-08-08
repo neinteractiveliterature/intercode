@@ -2,9 +2,9 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { StandaloneEditEvent_EventFieldsFragment, StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment } from './queries.generated';
+import { gql } from '@apollo/client';
 import { StandaloneEditEvent_EventFieldsFragmentDoc, StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type StandaloneDropEventMutationVariables = Types.Exact<{

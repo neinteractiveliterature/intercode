@@ -7,7 +7,7 @@ class TicketType < ApplicationRecord
     class_name: 'Product', foreign_key: 'provides_ticket_type_id', dependent: :nullify
 
   # Only allow letters, numbers, and underscores
-  validates :name, format: { with: /\A\w+\z/, allow_blank: true }
+  validates :name, format: { with: /\A\w+\z/, allow_blank: false }
 
   scope :event_provided, -> { where('maximum_event_provided_tickets > 0') }
 

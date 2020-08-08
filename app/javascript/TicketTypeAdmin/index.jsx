@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import EditTicketType from './EditTicketType';
 import NewTicketType from './NewTicketType';
 import TicketTypesList from './TicketTypesList';
-import { AdminTicketTypesQuery } from './queries.gql';
+import { AdminTicketTypesQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -27,11 +27,11 @@ function TicketTypeAdmin() {
   return (
     <Switch>
       <Route path="/ticket_types/new">
-        <NewTicketType
-          ticketName={data.convention.ticket_name}
-        />
+        <NewTicketType ticketName={data.convention.ticket_name} />
       </Route>
-      <Route path="/ticket_types/:id/edit"><EditTicketType /></Route>
+      <Route path="/ticket_types/:id/edit">
+        <EditTicketType />
+      </Route>
       <Route path="/ticket_types">
         <TicketTypesList
           ticketTypes={data.convention.ticket_types}

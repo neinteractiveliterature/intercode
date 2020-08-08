@@ -2,9 +2,9 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { useMutation } from '@apollo/client';
-import { AdminProductsQuery } from '../queries.gql';
+import { AdminProductsQuery } from '../queries';
 import AdminProductVariantsTable from '../AdminProductVariantsTable';
-import { CreateProduct, UpdateProduct } from '../mutations.gql';
+import { CreateProduct, UpdateProduct } from '../mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
@@ -29,9 +29,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
   const { ticketName } = useContext(AppRootContext);
   const [createProduct] = useMutation(CreateProduct);
   const [updateProduct] = useMutation(UpdateProduct);
-  const [product, setProduct] = useState(
-    () => duplicateProductForEditing(initialProduct),
-  );
+  const [product, setProduct] = useState(() => duplicateProductForEditing(initialProduct));
   const editingProductMutator = mutator({
     getState: () => product,
     setState: setProduct,
@@ -59,7 +57,8 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
     const reader = new FileReader();
     reader.addEventListener('load', () => {
       setProduct((prevEditingProduct) => ({
-        ...prevEditingProduct, image_url: reader.result,
+        ...prevEditingProduct,
+        image_url: reader.result,
       }));
     });
     reader.readAsDataURL(file);
@@ -68,10 +67,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
   const deleteVariant = (variantId) => {
     setProduct((prevEditingProduct) => ({
       ...prevEditingProduct,
-      delete_variant_ids: [
-        ...prevEditingProduct.delete_variant_ids,
-        variantId,
-      ],
+      delete_variant_ids: [...prevEditingProduct.delete_variant_ids, variantId],
     }));
   };
 
@@ -85,7 +81,14 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
     } else {
       await createProduct({
         variables: { product: productInput },
-        update: (cache, { data: { createProduct: { product: newProduct } } }) => {
+        update: (
+          cache,
+          {
+            data: {
+              createProduct: { product: newProduct },
+            },
+          },
+        ) => {
           const data = cache.readQuery({ query: AdminProductsQuery });
           data.convention.products.push(newProduct);
           cache.writeQuery({ query: AdminProductsQuery, data });
@@ -102,9 +105,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
     {
       label: (
         <span>
-          <i className="fa fa-cc-stripe" />
-          {' '}
-          Stripe
+          <i className="fa fa-cc-stripe" /> Stripe
         </span>
       ),
       value: 'stripe',
@@ -112,9 +113,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
     {
       label: (
         <span>
-          <i className="fa fa-suitcase" />
-          {' '}
-          Pay at convention
+          <i className="fa fa-suitcase" /> Pay at convention
         </span>
       ),
       value: 'pay_at_convention',
@@ -135,26 +134,20 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
               placeholder="Product name"
               name="name"
               value={product.name}
-              onChange={(event) => { editingProductMutator.name(event.target.value); }}
+              onChange={(event) => {
+                editingProductMutator.name(event.target.value);
+              }}
             />
           </div>
           <div className="mr-2">
             <ul className="list-inline m-0">
               <li className="list-inline-item">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-secondary"
-                  onClick={close}
-                >
+                <button type="button" className="btn btn-sm btn-secondary" onClick={close}>
                   Cancel
                 </button>
               </li>
               <li className="list-inline-item">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-primary"
-                  onClick={saveClicked}
-                >
+                <button type="button" className="btn btn-sm btn-primary" onClick={saveClicked}>
                   Save
                 </button>
               </li>
@@ -185,16 +178,14 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
             <BootstrapFormSelect
               label={`Provide ${ticketName} type`}
               value={product.provides_ticket_type?.id}
-              onValueChange={(value) => setProduct((prev) => ({
-                ...prev,
-                provides_ticket_type: ticketTypes.find((tt) => tt.id.toString() === value),
-              }))}
+              onValueChange={(value) =>
+                setProduct((prev) => ({
+                  ...prev,
+                  provides_ticket_type: ticketTypes.find((tt) => tt.id.toString() === value),
+                }))
+              }
             >
-              <option value={null}>
-                No
-                {' '}
-                {ticketName}
-              </option>
+              <option value={null}>No {ticketName}</option>
               {ticketTypes.map((ticketType) => (
                 <option value={ticketType.id} key={ticketType.id}>
                   {ticketType.description}
@@ -211,14 +202,12 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
           <div className="d-flex flex-column align-items-center">
             {product.image_url && (
-              <img
-                src={product.image_url}
-                style={{ maxWidth: '200px' }}
-                alt={product.name}
-              />
+              <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />
             )}
             <div className="custom-file mt-2" style={{ width: '220px' }}>
-              <label className="custom-file-label" htmlFor={imageInputId}>Choose image...</label>
+              <label className="custom-file-label" htmlFor={imageInputId}>
+                Choose image...
+              </label>
               <input
                 id={imageInputId}
                 className="custom-file-input"
@@ -239,10 +228,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
               />
             </div>
 
-            <LiquidInput
-              value={product.description}
-              onChange={editingProductMutator.description}
-            />
+            <LiquidInput value={product.description} onChange={editingProductMutator.description} />
 
             <AdminProductVariantsTable
               product={product}
@@ -266,25 +252,29 @@ EditAdminProductCard.propTypes = {
     image_url: PropTypes.string,
     payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
     pricing_structure: PropTypes.shape({}),
-    product_variants: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string,
-      override_price: PropTypes.shape({
-        fractional: PropTypes.number.isRequired,
-        currency_code: PropTypes.string.isRequired,
-      }),
-    }).isRequired).isRequired,
+    product_variants: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        override_price: PropTypes.shape({
+          fractional: PropTypes.number.isRequired,
+          currency_code: PropTypes.string.isRequired,
+        }),
+      }).isRequired,
+    ).isRequired,
     available: PropTypes.bool.isRequired,
   }).isRequired,
   currentAbility: PropTypes.shape({
     can_update_products: PropTypes.bool.isRequired,
   }).isRequired,
   close: PropTypes.func.isRequired,
-  ticketTypes: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-  })).isRequired,
+  ticketTypes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      description: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default EditAdminProductCard;

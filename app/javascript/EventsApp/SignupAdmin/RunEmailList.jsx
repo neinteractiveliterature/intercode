@@ -13,11 +13,14 @@ import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 
 function getEmails({ data, includes }) {
-  const teamMemberUserConProfileIds = data.event.team_members
-    .map((teamMember) => teamMember.user_con_profile.id);
+  const teamMemberUserConProfileIds = data.event.team_members.map(
+    (teamMember) => teamMember.user_con_profile.id,
+  );
 
   const includesObject = {};
-  includes.forEach((value) => { includesObject[value] = true; });
+  includes.forEach((value) => {
+    includesObject[value] = true;
+  });
 
   const signups = data.event.run.signups_paginated.entries.filter((signup) => {
     const isTeamMember = teamMemberUserConProfileIds.includes(signup.user_con_profile.id);
@@ -53,23 +56,19 @@ function RunEmailList({ runId, eventId, separator }) {
       filters: {
         state: ['confirmed', 'waitlisted'],
       },
-      sort: [
-        { field: 'id', desc: false },
-      ],
+      sort: [{ field: 'id', desc: false }],
       perPage: 100,
     },
   });
 
   usePageTitle(
-    useValueUnless(
-      () => {
-        const mainTitle = separator === '; '
+    useValueUnless(() => {
+      const mainTitle =
+        separator === '; '
           ? t('events.signupsAdmin.emailsSemicolonTitle', 'Emails (semicolon-separated)')
           : t('events.signupsAdmin.emailsCommaTitle', 'Emails (comma-separated)');
-        return `${mainTitle} - ${data.event.title}`;
-      },
-      error || loading,
-    ),
+      return `${mainTitle} - ${data.event.title}`;
+    }, error || loading),
   );
 
   if (loading) {
@@ -86,6 +85,7 @@ function RunEmailList({ runId, eventId, separator }) {
       separator={separator}
       renderToolbarContent={() => (
         <ChoiceSetFilter
+          multiple
           choices={[
             {
               label: t(
@@ -95,8 +95,14 @@ function RunEmailList({ runId, eventId, separator }) {
               ),
               value: 'teamMembers',
             },
-            { label: t('events.signupAdmin.emailFilters.confirmed', 'Include confirmed'), value: 'confirmed' },
-            { label: t('events.signupAdmin.emailFilters.waitlisted', 'Include waitlisted'), value: 'waitlisted' },
+            {
+              label: t('events.signupAdmin.emailFilters.confirmed', 'Include confirmed'),
+              value: 'confirmed',
+            },
+            {
+              label: t('events.signupAdmin.emailFilters.waitlisted', 'Include waitlisted'),
+              value: 'waitlisted',
+            },
           ]}
           filter={{ value: includes }}
           onChange={setIncludes}
@@ -105,15 +111,18 @@ function RunEmailList({ runId, eventId, separator }) {
               return t('events.signupAdmin.emailFilters.nobody', 'Nobody');
             }
 
-            return [...currentIncludes].sort().map((include) => {
-              if (include === 'teamMembers') {
-                return humanize(underscore(pluralize(
-                  data.event.event_category.team_member_name,
-                )));
-              }
+            return [...currentIncludes]
+              .sort()
+              .map((include) => {
+                if (include === 'teamMembers') {
+                  return humanize(
+                    underscore(pluralize(data.event.event_category.team_member_name)),
+                  );
+                }
 
-              return t(`signups.states.${include}`, humanize(underscore(include)));
-            }).join(', ');
+                return t(`signups.states.${include}`, humanize(underscore(include)));
+              })
+              .join(', ');
           }}
         />
       )}

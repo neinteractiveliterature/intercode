@@ -4,17 +4,18 @@ import {
   getEventFormForEventCategoryId,
   getProposalFormForEventCategoryId,
   ConventionForEventCategoryForms,
+  EventCategoryFormData,
 } from './getFormForEventCategory';
 
-export type UseEventCategorySelectionOptions = {
-  convention: ConventionForEventCategoryForms,
+export type UseEventCategorySelectionOptions<EventCategoryType extends EventCategoryFormData> = {
+  convention: ConventionForEventCategoryForms<EventCategoryType>,
   initialEventCategoryId?: number | null,
   selectableCategoryIds?: number[] | null,
 };
 
-export default function useEventCategorySelection({
+export default function useEventCategorySelection<EventCategoryType extends EventCategoryFormData>({
   convention, initialEventCategoryId, selectableCategoryIds,
-}: UseEventCategorySelectionOptions) {
+}: UseEventCategorySelectionOptions<EventCategoryType>) {
   const selectableCategories = useMemo(
     () => (selectableCategoryIds
       ? convention.event_categories
@@ -25,19 +26,19 @@ export default function useEventCategorySelection({
 
   const [eventCategoryId, setEventCategoryId] = useState(
     initialEventCategoryId || (
-      selectableCategories.length === 1 ? selectableCategories[0].id : null
+      selectableCategories.length === 1 ? selectableCategories[0].id : undefined
     ),
   );
 
   const eventCategory = useMemo(
     () => (eventCategoryId
       ? convention.event_categories.find((category) => category.id === eventCategoryId)
-      : null),
+      : undefined),
     [convention.event_categories, eventCategoryId],
   );
 
   const eventCategorySelectChanged = useCallback(
-    (e) => setEventCategoryId(Transforms.integer(e)),
+    (e) => setEventCategoryId(Transforms.integer(e) ?? undefined),
     [setEventCategoryId],
   );
 

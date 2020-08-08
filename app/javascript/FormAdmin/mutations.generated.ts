@@ -2,9 +2,9 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { FormFieldsFragment, FormEditorDataFragment, FormEditorFormItemFieldsFragment } from './queries.generated';
+import { gql } from '@apollo/client';
 import { FormFieldsFragmentDoc, FormEditorDataFragmentDoc, FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const gql = Apollo.gql;
 
 
 export type CreateFormWithJsonMutationVariables = Types.Exact<{

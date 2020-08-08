@@ -9,17 +9,17 @@ const BLANK_FORM: NonNullable<EventPageQueryQuery['event']['form']> = {
   form_sections: [],
 };
 
-type EventCategoryFormData = Pick<EventCategory, 'id'> & {
+export type EventCategoryFormData = Pick<EventCategory, 'id'> & {
   event_form: CommonFormFieldsFragment,
   event_proposal_form?: CommonFormFieldsFragment,
 };
-export type ConventionForEventCategoryForms = {
-  event_categories: EventCategoryFormData[],
+export type ConventionForEventCategoryForms<EventCategoryType extends EventCategoryFormData> = {
+  event_categories: EventCategoryType[],
 };
 
-function getFormDataForEventCategoryId(
+function getFormDataForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
   eventCategoryId: number | undefined | null,
-  convention: ConventionForEventCategoryForms,
+  convention: ConventionForEventCategoryForms<EventCategoryType>,
   getData: (eventCategory: EventCategoryFormData) => CommonFormFieldsFragment | null | undefined,
 ): CommonFormFieldsFragment {
   if (!eventCategoryId) {
@@ -33,9 +33,9 @@ function getFormDataForEventCategoryId(
   return BLANK_FORM;
 }
 
-export function getEventFormForEventCategoryId(
+export function getEventFormForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
   eventCategoryId: number | undefined | null,
-  convention: ConventionForEventCategoryForms,
+  convention: ConventionForEventCategoryForms<EventCategoryType>,
 ) {
   return getFormDataForEventCategoryId(
     eventCategoryId,
@@ -44,9 +44,9 @@ export function getEventFormForEventCategoryId(
   );
 }
 
-export function getProposalFormForEventCategoryId(
+export function getProposalFormForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
   eventCategoryId: number | undefined | null,
-  convention: ConventionForEventCategoryForms,
+  convention: ConventionForEventCategoryForms<EventCategoryType>,
 ) {
   return getFormDataForEventCategoryId(
     eventCategoryId,
