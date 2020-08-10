@@ -8,6 +8,7 @@ class Page < ApplicationRecord
   belongs_to :cms_layout, optional: true
   has_many :cms_content_group_associations, as: :content
   has_many :cms_content_groups, through: :cms_content_group_associations
+  has_many :cms_navigation_items, dependent: :destroy
   has_and_belongs_to_many :cms_files
   has_and_belongs_to_many :cms_partials
 
