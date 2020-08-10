@@ -8,7 +8,7 @@ import Gravatar from '../Gravatar';
 import LoadingIndicator from '../LoadingIndicator';
 import { useEventProposalQueryWithOwnerQuery } from './queries.generated';
 import { getSortedFormItems } from '../Models/Form';
-import { TypedFormItem, parseFormItemObject } from '../FormAdmin/FormItemUtils';
+import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 
 function EventProposalDisplay({ eventProposalId }) {
@@ -20,9 +20,9 @@ function EventProposalDisplay({ eventProposalId }) {
     () =>
       loading || error || !data
         ? []
-        : (getSortedFormItems(data.eventProposal.event_category.event_proposal_form!).map(
-            parseFormItemObject,
-          ) as TypedFormItem[]),
+        : parseTypedFormItemArray(
+            getSortedFormItems(data.eventProposal.event_category.event_proposal_form!),
+          ),
     [loading, error, data],
   );
 

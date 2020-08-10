@@ -26,8 +26,8 @@ import {
   UserConProfilesTableUserConProfilesQueryQuery,
   UserConProfilesTableUserConProfilesQueryQueryVariables,
 } from './queries.generated';
-import { TypedFormItem, parseFormItemObject } from '../FormAdmin/FormItemUtils';
-import { getSortedFormItems } from '../Models/Form';
+import { TypedFormItem } from '../FormAdmin/FormItemUtils';
+import { getSortedParsedFormItems } from '../Models/Form';
 
 type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryQuery['convention']
@@ -148,7 +148,7 @@ const PrivilegesFilter = ({ filter, onChange }: PrivilegesFilterProps) => (
 const getPossibleColumns = (
   data: UserConProfilesTableUserConProfilesQueryQuery,
   t: TFunction,
-  formItems: UserConProfilesTableFormItem[],
+  formItems: TypedFormItem[],
 ) => {
   const columns: Column[] = [
     {
@@ -287,7 +287,7 @@ const getPossibleColumns = (
 
     const FormItemCell = ({ value }) => (
       <FormItemDisplay
-        formItem={formItem as TypedFormItem}
+        formItem={formItem}
         value={value}
         convention={data.convention!}
         displayMode="admin"
@@ -324,11 +324,7 @@ function UserConProfilesTable({ defaultVisibleColumns }) {
   const history = useHistory();
   const getPossibleColumnsWithTranslation = useMemo(
     () => (data: UserConProfilesTableUserConProfilesQueryQuery) =>
-      getPossibleColumns(
-        data,
-        t,
-        getSortedFormItems(data.convention!.user_con_profile_form).map(parseFormItemObject),
-      ),
+      getPossibleColumns(data, t, getSortedParsedFormItems(data.convention!.user_con_profile_form)),
     [t],
   );
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks<

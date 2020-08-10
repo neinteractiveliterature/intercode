@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import { CommonFormFields } from '../Models/commonFormFragments';
 import { AdminOrderFieldsFragment } from '../Store/orderFields';
+import { AdminProductFields } from '../Store/adminProductFields';
 
 export const UserConProfileFormData = gql`
   fragment UserConProfileFormData on Convention {
@@ -8,12 +9,15 @@ export const UserConProfileFormData = gql`
     starts_at
     ends_at
     timezone_name
+    timezone_mode
 
     user_con_profile_form {
       id
-      form_api_json
+      ...CommonFormFields
     }
   }
+
+  ${CommonFormFields}
 `;
 
 export const UserConProfileFields = gql`
@@ -146,6 +150,7 @@ export const UserConProfileAdminQuery = gql`
     }
   }
 
+  ${AdminProductFields}
   ${UserConProfileAdminTicketFields}
   ${CommonFormFields}
 `;

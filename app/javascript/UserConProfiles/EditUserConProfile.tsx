@@ -1,52 +1,55 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import ErrorDisplay from '../ErrorDisplay';
 import UserConProfileForm from './UserConProfileForm';
-import { UserConProfileQuery, UserConProfileAdminQuery } from './queries';
-import { UpdateUserConProfile } from './mutations';
+import { UserConProfileAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import {
+  useUserConProfileQueryQuery,
+  UserConProfileQueryQuery,
+  UserConProfileAdminQueryQuery,
+} from './queries.generated';
+import { useUpdateUserConProfileMutation } from './mutations.generated';
 
-function EditUserConProfileForm({ data }) {
+function EditUserConProfileForm({ data }: { data: UserConProfileQueryQuery }) {
   const history = useHistory();
   const { userConProfile: initialUserConProfile, convention, form } = buildFormStateFromData(
     data.userConProfile,
-    data.convention,
+    data.convention!,
   );
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
 
-  const [mutate] = useMutation(UpdateUserConProfile, {
-    update: useCallback(
-      (
-        cache,
-        {
-          data: {
-            updateUserConProfile: { user_con_profile: updatedUserConProfile },
-          },
-        },
-      ) => {
-        const variables = { id: initialUserConProfile.id };
-        const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
-        cache.writeQuery({
+  const [mutate] = useUpdateUserConProfileMutation({
+    update: (cache, result) => {
+      const variables = { id: initialUserConProfile.id };
+      let query: UserConProfileAdminQueryQuery | null = null;
+      try {
+        query = cache.readQuery<UserConProfileAdminQueryQuery>({
           query: UserConProfileAdminQuery,
           variables,
-          data: {
-            ...query,
-            userConProfile: {
-              ...query.userConProfile,
-              ...updatedUserConProfile,
-            },
-          },
         });
-      },
-      [initialUserConProfile.id],
-    ),
+      } catch (error) {
+        // Work around https://github.com/apollographql/apollo-client/issues/6094
+        return;
+      }
+      cache.writeQuery({
+        query: UserConProfileAdminQuery,
+        variables,
+        data: {
+          ...query,
+          userConProfile: {
+            ...query?.userConProfile,
+            ...result.data?.updateUserConProfile?.user_con_profile,
+          },
+        },
+      });
+    },
   });
 
   const [updateUserConProfile, updateError, updateInProgress] = useAsyncFunction(
@@ -71,7 +74,7 @@ function EditUserConProfileForm({ data }) {
   return (
     <div>
       <h1 className="mb-4">Editing {userConProfile.name}</h1>
-      <UserConProfileForm
+      <UserConProfileForm<typeof userConProfile>
         userConProfile={userConProfile}
         onChange={setUserConProfile}
         footerContent={
@@ -87,21 +90,14 @@ function EditUserConProfileForm({ data }) {
         form={form}
         convention={convention}
       />
-      <ErrorDisplay graphQLError={updateError} />
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
     </div>
   );
 }
 
-EditUserConProfileForm.propTypes = {
-  data: PropTypes.shape({
-    userConProfile: PropTypes.shape({}).isRequired,
-    convention: PropTypes.shape({}).isRequired,
-  }).isRequired,
-};
-
 function EditUserConProfile() {
-  const id = Number.parseInt(useParams().id, 10);
-  const { data, loading, error } = useQuery(UserConProfileQuery, { variables: { id } });
+  const id = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const { data, loading, error } = useUserConProfileQueryQuery({ variables: { id } });
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -111,7 +107,7 @@ function EditUserConProfile() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return <EditUserConProfileForm data={data} />;
+  return <EditUserConProfileForm data={data!} />;
 }
 
 export default EditUserConProfile;

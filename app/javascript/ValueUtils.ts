@@ -1,9 +1,7 @@
 import escapeRegExp from 'lodash/escapeRegExp';
 
-export const onlyOneIsNull = (a: any, b: any) => (
-  (a == null && b != null)
-  || (a != null && b == null)
-);
+export const onlyOneIsNull = (a: any, b: any) =>
+  (a == null && b != null) || (a != null && b == null);
 
 export function chooseAmong<T>(
   values: T[],
@@ -40,18 +38,17 @@ export function sortByLocaleString<T>(
 }
 
 export function normalizeTitle(title: string) {
-  return title.normalize('NFD') // not exactly unaccent but will make the diacritics separate chars
+  return title
+    .normalize('NFD') // not exactly unaccent but will make the diacritics separate chars
     .replace(/[^0-9a-z ]/gi, '')
-    .trim().replace(/^(the|a|an) /i, '')
+    .trim()
+    .replace(/^(the|a|an) /i, '')
     .replace(/ /g, '');
 }
 
 export function titleSort<T>(list: T[], transform?: (item: T) => string) {
   const effectiveTransform = transform ?? ((e) => String(e));
-  return sortByLocaleString(
-    list,
-    (element) => normalizeTitle(effectiveTransform(element)),
-  );
+  return sortByLocaleString(list, (element) => normalizeTitle(effectiveTransform(element)));
 }
 
 export function findCommonArrayPrefix<T>(a: T[], b: T[]) {
@@ -102,3 +99,5 @@ export function notFalse<TValue>(value: TValue | false): value is TValue {
 }
 
 export type UnwrapPromise<T> = T extends PromiseLike<infer ValueType> ? ValueType : T;
+
+export type OmitStrict<T, K extends keyof T> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;

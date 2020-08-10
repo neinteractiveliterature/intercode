@@ -1,12 +1,12 @@
-import React, { useContext, useCallback, ReactNode } from 'react';
+import React, { useContext, useCallback, ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SectionTraversalContext } from '../SectionTraversalContext';
 import useFormValidation from '../useFormValidation';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 import { FormResponse } from '../useFormResponse';
-import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { FormBodyImperativeHandle } from './FormBody';
+import { sortAndParseFormItems } from '../../Models/Form';
 
 type BackButtonProps = {
   goToPreviousSection: () => void;
@@ -83,11 +83,15 @@ function FormFooter({
   } = useContext(SectionTraversalContext);
   const { interactWithItem } = useContext(ItemInteractionTrackerContext);
   const validate = useFormValidation(scrollToItem, interactWithItem);
+  const sectionItems = useMemo(() => sortAndParseFormItems(currentSection?.form_items ?? []), [
+    currentSection?.form_items,
+  ]);
 
-  const validateContinue = useCallback(
-    () => validate((currentSection?.form_items as TypedFormItem[]) ?? [], response),
-    [currentSection, response, validate],
-  );
+  const validateContinue = useCallback(() => validate(sectionItems, response), [
+    sectionItems,
+    response,
+    validate,
+  ]);
 
   const goToPreviousSection = useCallback(() => {
     previousSection();

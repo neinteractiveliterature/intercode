@@ -1,22 +1,23 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { AdminOrderFieldsFragmentFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from '../Store/orderFields.generated';
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
+import { AdminOrderFieldsFragmentFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragment } from '../Store/adminProductFields.generated';
 import { gql } from '@apollo/client';
-import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from '../Store/orderFields.generated';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import * as Apollo from '@apollo/client';
 
 
 export type UserConProfileFormDataFragment = (
   { __typename?: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name'>
+  & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
   & { user_con_profile_form: (
     { __typename?: 'Form' }
-    & Pick<Types.Form, 'id' | 'form_api_json'>
+    & Pick<Types.Form, 'id'>
+    & CommonFormFieldsFragment
   ) }
 );
 
@@ -267,12 +268,13 @@ export const UserConProfileFormDataFragmentDoc = gql`
   starts_at
   ends_at
   timezone_name
+  timezone_mode
   user_con_profile_form {
     id
-    form_api_json
+    ...CommonFormFields
   }
 }
-    `;
+    ${CommonFormFieldsFragmentDoc}`;
 export const UserConProfileFieldsFragmentDoc = gql`
     fragment UserConProfileFields on UserConProfile {
   id

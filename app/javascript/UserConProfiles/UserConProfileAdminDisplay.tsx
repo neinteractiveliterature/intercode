@@ -15,8 +15,7 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useDeleteUserConProfileMutation } from './mutations.generated';
 import { useUserConProfileAdminQueryQuery } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
-import { getSortedFormItems } from '../Models/Form';
-import { TypedFormItem, parseFormItemObject } from '../FormAdmin/FormItemUtils';
+import { getSortedParsedFormItems } from '../Models/Form';
 
 function UserConProfileAdminDisplay() {
   const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
@@ -26,9 +25,7 @@ function UserConProfileAdminDisplay() {
   });
   const formItems = useMemo(
     () =>
-      loading || error
-        ? []
-        : getSortedFormItems(data!.convention!.user_con_profile_form).map(parseFormItemObject),
+      loading || error ? [] : getSortedParsedFormItems(data!.convention!.user_con_profile_form),
     [data, loading, error],
   );
   const formResponse = useMemo(
@@ -67,7 +64,7 @@ function UserConProfileAdminDisplay() {
           </th>
           <td className="col-md-9">
             <FormItemDisplay
-              formItem={item as TypedFormItem}
+              formItem={item}
               convention={data!.convention!}
               value={formResponse.form_response_attrs[item.identifier]}
               displayMode="admin"
@@ -187,7 +184,10 @@ function UserConProfileAdminDisplay() {
         </table>
 
         {data!.convention!.ticket_mode !== 'disabled' && (
-          <TicketAdminSection userConProfile={data.userConProfile} convention={data!.convention!} />
+          <TicketAdminSection
+            userConProfile={data!.userConProfile}
+            convention={data!.convention!}
+          />
         )}
       </div>
 

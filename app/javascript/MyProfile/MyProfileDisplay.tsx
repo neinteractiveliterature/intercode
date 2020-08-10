@@ -10,41 +10,33 @@ import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useMyProfileQueryQuery } from './queries.generated';
-import { getSortedFormItems } from '../Models/Form';
+import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
-import { parseFormItemObject, TypedFormItem } from '../FormAdmin/FormItemUtils';
 
 function MyProfileDisplay() {
   const { t } = useTranslation();
   const { data, loading, error } = useMyProfileQueryQuery();
 
-  const formResponse = useMemo(
-    () => {
-      if (loading || error) {
-        return null;
-      }
+  const formResponse = useMemo(() => {
+    if (loading || error) {
+      return null;
+    }
 
-      if (!data?.myProfile) {
-        return null;
-      }
+    if (!data?.myProfile) {
+      return null;
+    }
 
-      return JSON.parse(data.myProfile.form_response_attrs_json ?? '{}');
-    },
-    [data, loading, error],
-  );
+    return JSON.parse(data.myProfile.form_response_attrs_json ?? '{}');
+  }, [data, loading, error]);
 
-  const formItems = useMemo(
-    () => {
-      if (!data?.convention?.user_con_profile_form) {
-        return [];
-      }
+  const formItems = useMemo(() => {
+    if (!data?.convention?.user_con_profile_form) {
+      return [];
+    }
 
-      return getSortedFormItems(data.convention.user_con_profile_form)
-        .map((unparsed) => parseFormItemObject<any, any>(unparsed) as TypedFormItem);
-    },
-    [data?.convention?.user_con_profile_form],
-  );
+    return getSortedParsedFormItems(data.convention.user_con_profile_form);
+  }, [data?.convention?.user_con_profile_form]);
 
   usePageTitle(t('myProfile.display.pageTitle', 'My profile'));
 
@@ -64,7 +56,9 @@ function MyProfileDisplay() {
 
           <Link to="/admin_forms">To create or edit the user profile form, go here.</Link>
           <br />
-          <Link to="/convention/edit">To set it as the user profile form for this convention, go here.</Link>
+          <Link to="/convention/edit">
+            To set it as the user profile form for this convention, go here.
+          </Link>
         </Trans>
       </AdminWarning>
     );
@@ -78,18 +72,16 @@ function MyProfileDisplay() {
       <div className="col-lg-9">
         <section>
           <h1 className="mb-4">
-            {t('myProfile.display.header', 'My {{ conventionName }} profile', { conventionName: convention.name })}
+            {t('myProfile.display.header', 'My {{ conventionName }} profile', {
+              conventionName: convention.name,
+            })}
           </h1>
 
           <dl className="row">
-            <dt className="col-md-3 mb-2">
-              {t('myProfile.display.emailLabel', 'Email')}
-            </dt>
+            <dt className="col-md-3 mb-2">{t('myProfile.display.emailLabel', 'Email')}</dt>
             <dd className="col-md-9 mb-2">{myProfile.email}</dd>
 
-            <dt className="col-md-3 mb-2">
-              {t('myProfile.display.avatarLabel', 'Avatar')}
-            </dt>
+            <dt className="col-md-3 mb-2">{t('myProfile.display.avatarLabel', 'Avatar')}</dt>
             <dd className="col-md-9 mb-2">
               <div className="d-flex align-items-center">
                 <div className="mr-2">
@@ -107,41 +99,40 @@ function MyProfileDisplay() {
               </div>
             </dd>
 
-            {
-              myProfile.can_have_bio && (
-                <>
-                  <dt className="col-md-3 mb-2">
-                    {t('myProfile.display.bioLabel', 'Bio')}
-                  </dt>
-                  <dd className="col-md-9 mb-2">
-                    <div className="card bg-light">
-                      <div className="card-body">
-                        <strong>{myProfile.bio_name}</strong>
-                        <br />
-                        { /* eslint-disable-next-line react/no-danger */}
-                        <div dangerouslySetInnerHTML={{ __html: myProfile.bio_html ?? '' }} />
-                      </div>
+            {myProfile.can_have_bio && (
+              <>
+                <dt className="col-md-3 mb-2">{t('myProfile.display.bioLabel', 'Bio')}</dt>
+                <dd className="col-md-9 mb-2">
+                  <div className="card bg-light">
+                    <div className="card-body">
+                      <strong>{myProfile.bio_name}</strong>
+                      <br />
+                      {/* eslint-disable-next-line react/no-danger */}
+                      <div dangerouslySetInnerHTML={{ __html: myProfile.bio_html ?? '' }} />
                     </div>
-                  </dd>
-                </>
-              )
-            }
+                  </div>
+                </dd>
+              </>
+            )}
 
-            {formItems.map((item) => (
-              item.identifier && (
-                <React.Fragment key={item.id}>
-                  <dt className="col-md-3 mb-2"><AdminCaption formItem={item} /></dt>
-                  <dd className="col-md-9 mb-2">
-                    <FormItemDisplay
-                      formItem={item}
-                      value={formResponse[item.identifier]}
-                      convention={convention as ConventionForTimespanUtils}
-                      displayMode="admin"
-                    />
-                  </dd>
-                </React.Fragment>
-              )
-            ))}
+            {formItems.map(
+              (item) =>
+                item.identifier && (
+                  <React.Fragment key={item.id}>
+                    <dt className="col-md-3 mb-2">
+                      <AdminCaption formItem={item} />
+                    </dt>
+                    <dd className="col-md-9 mb-2">
+                      <FormItemDisplay
+                        formItem={item}
+                        value={formResponse[item.identifier]}
+                        convention={convention as ConventionForTimespanUtils}
+                        displayMode="admin"
+                      />
+                    </dd>
+                  </React.Fragment>
+                ),
+            )}
           </dl>
 
           <Link to="/my_profile/edit" className="btn btn-secondary">

@@ -32,7 +32,7 @@ type TicketAdminControlsProps = {
   };
   userConProfile: {
     id: number;
-    name: string;
+    name?: string | null;
     ticket?: {
       id: number;
       provided_by_event?: {
