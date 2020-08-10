@@ -11,34 +11,42 @@ import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
-import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
+import {
+  useItemInteractionTracking,
+  ItemInteractionTrackerContext,
+} from '../FormPresenter/ItemInteractionTracker';
 import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { ParsedUserConProfile } from '../UserConProfiles/deserializeUserConProfile';
 import { useMyProfileQueryQuery, MyProfileQueryQuery } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
+import { WithFormResponse } from '../Models/deserializeFormResponse';
 
 function parseResponseErrors(error: ApolloError) {
   const { graphQLErrors } = error;
-  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateUserConProfile']));
-  const { validationErrors } = ((updateError || {}).extensions || {});
+  const updateError = graphQLErrors.find((graphQLError) =>
+    isEqual(graphQLError.path, ['updateUserConProfile']),
+  );
+  const { validationErrors } = (updateError || {}).extensions || {};
   return validationErrors;
 }
 
 type MyProfileFormInnerProps = {
-  initialSetup?: boolean,
-  initialUserConProfile: ParsedUserConProfile<NonNullable<MyProfileQueryQuery['myProfile']>>,
-  convention: NonNullable<MyProfileQueryQuery['convention']>,
-  form: CommonFormFieldsFragment,
+  initialSetup?: boolean;
+  initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryQuery['myProfile']>>;
+  convention: NonNullable<MyProfileQueryQuery['convention']>;
+  form: CommonFormFieldsFragment;
 };
 
 function MyProfileFormInner({
-  initialSetup, initialUserConProfile, convention, form,
+  initialSetup,
+  initialUserConProfile,
+  convention,
+  form,
 }: MyProfileFormInnerProps) {
   const { t } = useTranslation();
   const [updateMutate] = useUpdateUserConProfileMutation();
@@ -85,10 +93,12 @@ function MyProfileFormInner({
   const setShowNickname = useCallback(
     (showNickname) => {
       setUserConProfile((prevUserConProfile) => ({
-        ...prevUserConProfile, show_nickname_in_bio: showNickname,
+        ...prevUserConProfile,
+        show_nickname_in_bio: showNickname,
       }));
       updateUserConProfile({
-        ...userConProfile, show_nickname_in_bio: showNickname,
+        ...userConProfile,
+        show_nickname_in_bio: showNickname,
       });
     },
     [updateUserConProfile, userConProfile],
@@ -97,10 +107,12 @@ function MyProfileFormInner({
   const setGravatarEnabled = useCallback(
     (gravatarEnabled) => {
       setUserConProfile((prevUserConProfile) => ({
-        ...prevUserConProfile, gravatar_enabled: gravatarEnabled,
+        ...prevUserConProfile,
+        gravatar_enabled: gravatarEnabled,
       }));
       updateUserConProfile({
-        ...userConProfile, gravatar_enabled: gravatarEnabled,
+        ...userConProfile,
+        gravatar_enabled: gravatarEnabled,
       });
     },
     [updateUserConProfile, userConProfile],
@@ -114,13 +126,15 @@ function MyProfileFormInner({
     isSubmittingResponse: false,
     isUpdatingResponse: mutationInProgress,
     responseValuesChanged,
-    submitForm: () => { },
+    submitForm: () => {},
   };
 
   return (
     <>
       <h1 className="mb-4">
-        {t('myProfile.title', 'My {{ conventionName }} profile', { conventionName: convention.name })}
+        {t('myProfile.title', 'My {{ conventionName }} profile', {
+          conventionName: convention.name,
+        })}
       </h1>
 
       {initialSetup && (
@@ -139,9 +153,7 @@ function MyProfileFormInner({
       {initialUserConProfile.can_have_bio && (
         <>
           <div className="form-group">
-            <legend className="col-form-label">
-              {t('myProfile.bioLabel', 'Bio')}
-            </legend>
+            <legend className="col-form-label">{t('myProfile.bioLabel', 'Bio')}</legend>
             <MarkdownInput value={userConProfile.bio ?? ''} onChange={setBio} />
             <small className="form-text text-muted">
               <Trans i18nKey="general.editors.markdownHelpText">
@@ -167,9 +179,12 @@ function MyProfileFormInner({
               'Your name will appear in your bio as {{ name }}.',
               {
                 name: `${userConProfile.form_response_attrs.first_name}
-                  ${(userConProfile.show_nickname_in_bio && userConProfile.form_response_attrs.nickname)
-                  ? `“${userConProfile.form_response_attrs.nickname}”`
-                  : ''}
+                  ${
+                    userConProfile.show_nickname_in_bio &&
+                    userConProfile.form_response_attrs.nickname
+                      ? `“${userConProfile.form_response_attrs.nickname}”`
+                      : ''
+                  }
                   ${userConProfile.form_response_attrs.last_name}`,
               },
             )}
@@ -180,57 +195,57 @@ function MyProfileFormInner({
       <div className="d-flex align-items-center">
         <div>
           <BooleanInput
-            caption={(
+            caption={
               <>
                 <Gravatar
-                  url={`https://gravatar.com/avatar/${new MD5().update((userConProfile.email ?? '').trim().toLowerCase()).digest('hex')}`}
+                  url={`https://gravatar.com/avatar/${new MD5()
+                    .update((userConProfile.email ?? '').trim().toLowerCase())
+                    .digest('hex')}`}
                   enabled={userConProfile.gravatar_enabled}
                   pixelSize={32}
                   imgClassName="align-baseline"
-                />
-                {' '}
+                />{' '}
                 {t('myProfile.gravatarEnabledLabel', 'Enable Gravatar for my profile')}
               </>
-            )}
+            }
             value={userConProfile.gravatar_enabled}
             onChange={setGravatarEnabled}
-            helpText={(
+            helpText={
               <Trans i18nKey="myProfile.gravatarEnabledHelpText">
                 Gravatar is a service that lets you create a globally-recognized avatar attached to
-                your email address. For more information or to set up a Gravatar,
-                {' '}
+                your email address. For more information or to set up a Gravatar,{' '}
                 <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer">
                   visit gravatar.com
                 </a>
                 .
               </Trans>
-            )}
+            }
           />
         </div>
       </div>
 
       <div className="my-4">
-        {
-          initialSetup
-            ? (
-              <Link to="/" className="btn btn-primary">
-                {t('myProfile.initialSetupFinishButton', 'Finish')}
-              </Link>
-            )
-            : (
-              <Link to="/my_profile" className="btn btn-primary">
-                {t('myProfile.profileEditFinishButton', 'Finish and return to my profile')}
-              </Link>
-            )
-        }
-        {mutationInProgress && <span className="ml-2"><LoadingIndicator /></span>}
+        {initialSetup ? (
+          <Link to="/" className="btn btn-primary">
+            {t('myProfile.initialSetupFinishButton', 'Finish')}
+          </Link>
+        ) : (
+          <Link to="/my_profile" className="btn btn-primary">
+            {t('myProfile.profileEditFinishButton', 'Finish and return to my profile')}
+          </Link>
+        )}
+        {mutationInProgress && (
+          <span className="ml-2">
+            <LoadingIndicator />
+          </span>
+        )}
       </div>
     </>
   );
 }
 
 export type MyProfileFormProps = {
-  initialSetup?: boolean,
+  initialSetup?: boolean;
 };
 
 function MyProfileForm({ initialSetup }: MyProfileFormProps) {

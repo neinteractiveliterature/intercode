@@ -17,7 +17,9 @@ export type UserConProfileFormProps<UserConProfileType extends FormResponse> = {
 function UserConProfileForm<UserConProfileType extends FormResponse>(
   props: UserConProfileFormProps<UserConProfileType>,
 ) {
-  const formResponseValuesChanged = (newResponseValues: any) => {
+  const formResponseValuesChanged = (
+    newResponseValues: UserConProfileType['form_response_attrs'],
+  ) => {
     props.onChange({
       ...props.userConProfile,
       form_response_attrs: {

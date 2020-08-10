@@ -1,23 +1,18 @@
 /* eslint-disable max-classes-per-file */
 import React, { ReactNode, ErrorInfo } from 'react';
 import { ApolloError } from '@apollo/client';
+import type { Rollbar } from './@types/Rollbar';
 
 import ErrorDisplay from './ErrorDisplay';
 
-declare class GlobalRollbar {
-  error: (error: Error, options: { errorInfo: ErrorInfo }) => void;
-}
-
-declare const Rollbar: GlobalRollbar;
-
 export type ErrorBoundaryProps = {
-  errorType?: 'graphql' | 'plain',
-  placement?: 'before' | 'after' | 'replace',
-  children?: ReactNode,
+  errorType?: 'graphql' | 'plain';
+  placement?: 'before' | 'after' | 'replace';
+  children?: ReactNode;
 };
 
 type ErrorBoundaryState = {
-  error: Error | null,
+  error: Error | null;
 };
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -52,11 +47,10 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       return children;
     }
 
-    const errorDisplayProps = (
+    const errorDisplayProps =
       (errorType ?? 'graphql') === 'graphql'
         ? { graphQLError: this.state.error as ApolloError }
-        : { stringError: this.state.error.message }
-    );
+        : { stringError: this.state.error.message };
 
     if (placement === 'before') {
       return (

@@ -1,27 +1,41 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
-import { ConvertTicketToEventProvided } from './mutations';
-import { ConvertToEventProvidedTicketQuery, UserConProfileAdminQuery } from './queries';
+import { UserConProfileAdminQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
-import EventSelect from '../BuiltInFormControls/EventSelect';
+import EventSelect, { DefaultEventSelectOptionType } from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
 import TicketingStatusDescription from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
 import useAsyncFunction from '../useAsyncFunction';
 import LoadingIndicator from '../LoadingIndicator';
+import {
+  useConvertToEventProvidedTicketQueryQuery,
+  UserConProfileAdminQueryQuery,
+} from './queries.generated';
+import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
+import { DefaultEventsQueryQuery } from '../BuiltInFormControls/selectDefaultQueries.generated';
+
+type EventSpecificSectionProps = {
+  event: {
+    id: number;
+  };
+  userConProfile: any; // TODO get more specific once TicketingStatusDescription is converted
+  convention: any; // TODO ditto
+  ticketTypeId?: number;
+  setTicketTypeId: React.Dispatch<number>;
+  disabled?: boolean;
+};
 
 function EventSpecificSection({
-  // eslint-disable-next-line react/prop-types
   event,
   userConProfile,
   convention,
   ticketTypeId,
   setTicketTypeId,
   disabled,
-}) {
-  const { data, loading, error } = useQuery(ConvertToEventProvidedTicketQuery, {
+}: EventSpecificSectionProps) {
+  const { data, loading, error } = useConvertToEventProvidedTicketQueryQuery({
     variables: { eventId: event.id }, // eslint-disable-line react/prop-types
   });
 
@@ -40,8 +54,8 @@ function EventSpecificSection({
       </p>
 
       <ProvidableTicketTypeSelection
-        event={data.event}
-        convention={data.convention}
+        event={data!.event}
+        convention={data!.convention!}
         value={ticketTypeId}
         onChange={setTicketTypeId}
         disabled={disabled}
@@ -50,28 +64,45 @@ function EventSpecificSection({
   );
 }
 
-function ConvertToEventProvidedTicketModal({ convention, userConProfile, visible, onClose }) {
-  const [event, setEvent] = useState(null);
-  const [ticketTypeId, setTicketTypeId] = useState(null);
-  const [convertMutate] = useMutation(ConvertTicketToEventProvided);
+export type ConvertToEventProvidedTicketModalProps = {
+  convention: {
+    ticket_name: string;
+  };
+  userConProfile: {
+    id: number;
+    name?: string | null;
+  };
+  visible: boolean;
+  onClose: () => void;
+};
+type EventType = NonNullable<
+  DefaultEventsQueryQuery['convention']
+>['events_paginated']['entries'][0];
+
+function ConvertToEventProvidedTicketModal({
+  convention,
+  userConProfile,
+  visible,
+  onClose,
+}: ConvertToEventProvidedTicketModalProps) {
+  const [event, setEvent] = useState<EventType>();
+  const [ticketTypeId, setTicketTypeId] = useState<number>();
+  const [convertMutate] = useConvertTicketToEventProvidedMutation();
   const [convertTicketToEventProvided, error, inProgress] = useAsyncFunction(convertMutate);
 
   const convertClicked = async () => {
+    if (event == null || ticketTypeId == null) {
+      return;
+    }
+
     await convertTicketToEventProvided({
       variables: {
         eventId: event.id,
         ticketTypeId,
         userConProfileId: userConProfile.id,
       },
-      update: (
-        cache,
-        {
-          data: {
-            convertTicketToEventProvided: { ticket },
-          },
-        },
-      ) => {
-        const cachedData = cache.readQuery({
+      update: (cache, result) => {
+        const cachedData = cache.readQuery<UserConProfileAdminQueryQuery>({
           query: UserConProfileAdminQuery,
           variables: { id: userConProfile.id },
         });
@@ -82,8 +113,8 @@ function ConvertToEventProvidedTicketModal({ convention, userConProfile, visible
           data: {
             ...cachedData,
             userConProfile: {
-              ...cachedData.userConProfile,
-              ticket,
+              ...cachedData?.userConProfile,
+              ticket: result.data?.convertTicketToEventProvided?.ticket,
             },
           },
         });
@@ -112,15 +143,14 @@ function ConvertToEventProvidedTicketModal({ convention, userConProfile, visible
           {
             ' and create a new one for them, provided by an event.  If they paid for their existing '
           }
-          {convention.ticket_name}
-          {', that payment will be refunded.'}
+          {convention.ticket_name}, that payment will be refunded.
         </p>
 
         <EventSelect
           value={event}
-          onChange={(value) => {
+          onChange={(value: DefaultEventSelectOptionType) => {
             setEvent(value);
-            setTicketTypeId(null);
+            setTicketTypeId(undefined);
           }}
           placeholder="Select event..."
           disabled={inProgress}
@@ -137,7 +167,7 @@ function ConvertToEventProvidedTicketModal({ convention, userConProfile, visible
           />
         )}
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -157,17 +187,5 @@ function ConvertToEventProvidedTicketModal({ convention, userConProfile, visible
     </Modal>
   );
 }
-
-ConvertToEventProvidedTicketModal.propTypes = {
-  convention: PropTypes.shape({
-    ticket_name: PropTypes.string.isRequired,
-  }).isRequired,
-  userConProfile: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  visible: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
 
 export default ConvertToEventProvidedTicketModal;
