@@ -1,45 +1,51 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-import formatMoney from '../formatMoney';
-import { parseFloatOrNull } from '../ComposableFormUtils';
+import formatMoney from "../formatMoney";
+import { parseFloatOrNull } from "../ComposableFormUtils";
 
-const MoneyInput = React.forwardRef(({
-  value, onChange, appendContent, inputGroupClassName, ...inputProps
-}, ref) => {
-  const [inputValue, setInputValue] = useState(formatMoney(value, false));
-  const inputChanged = (event) => {
-    const newValue = event.target.value;
-    setInputValue(newValue);
+const MoneyInput = React.forwardRef(
+  (
+    { value, onChange, appendContent, inputGroupClassName, ...inputProps },
+    ref
+  ) => {
+    const [inputValue, setInputValue] = useState(formatMoney(value, false));
+    const inputChanged = (event) => {
+      const newValue = event.target.value;
+      setInputValue(newValue);
 
-    const floatValue = parseFloatOrNull(newValue);
-    if (floatValue) {
-      onChange({ fractional: Math.floor(floatValue * 100.0), currency_code: 'USD' });
-    } else {
-      onChange(null);
-    }
-  };
+      const floatValue = parseFloatOrNull(newValue);
+      if (floatValue != null) {
+        onChange({
+          fractional: Math.floor(floatValue * 100.0),
+          currency_code: "USD",
+        });
+      } else {
+        onChange(null);
+      }
+    };
 
-  return (
-    <div className={inputGroupClassName || 'input-group'}>
-      <div className="input-group-prepend">
-        <span className="input-group-text">$</span>
+    return (
+      <div className={inputGroupClassName || "input-group"}>
+        <div className="input-group-prepend">
+          <span className="input-group-text">$</span>
+        </div>
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <input
+          type="text"
+          className="form-control"
+          value={inputValue}
+          onChange={inputChanged}
+          ref={ref}
+          {...inputProps}
+        />
+        {appendContent && (
+          <div className="input-group-append">{appendContent}</div>
+        )}
       </div>
-      { /* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
-      <input
-        type="text"
-        className="form-control"
-        value={inputValue}
-        onChange={inputChanged}
-        ref={ref}
-        {...inputProps}
-      />
-      {appendContent && (
-        <div className="input-group-append">{appendContent}</div>
-      )}
-    </div>
-  );
-});
+    );
+  }
+);
 
 MoneyInput.propTypes = {
   value: PropTypes.shape({
