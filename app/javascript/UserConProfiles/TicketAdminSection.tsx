@@ -33,20 +33,20 @@ type TicketAdminControlsProps = {
   userConProfile: {
     id: number;
     name?: string | null;
-    ticket?: {
+    ticket?: null | {
       id: number;
-      provided_by_event?: {
-        title: string;
+      provided_by_event?: null | {
+        title?: string | null;
       };
       ticket_type: {
         id: number;
-        description?: string;
+        description?: string | null;
       };
-      order_entry?: {
+      order_entry?: null | {
         price_per_item?: Money;
         order?: {
-          charge_id?: string;
-          payment_note?: string;
+          charge_id?: string | null;
+          payment_note?: string | null;
         };
       };
       created_at: string;

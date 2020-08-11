@@ -3,7 +3,8 @@ import React, { forwardRef, useMemo } from 'react';
 import FormBody, { FormBodyProps, FormBodyImperativeHandle } from './FormBody';
 import { sortFormItems } from '../../Models/Form';
 import { CommonFormSectionFieldsFragment } from '../../Models/commonFormFragments.generated';
-import { parseFormItemObject } from '../../FormAdmin/FormItemUtils';
+import { parseTypedFormItemObject } from '../../FormAdmin/FormItemUtils';
+import { notEmpty } from '../../ValueUtils';
 
 export type FormSectionProps = Omit<FormBodyProps, 'formItems'> & {
   section: CommonFormSectionFieldsFragment;
@@ -11,9 +12,10 @@ export type FormSectionProps = Omit<FormBodyProps, 'formItems'> & {
 
 const FormSection = forwardRef<FormBodyImperativeHandle, FormSectionProps>(
   ({ section, ...props }, ref) => {
-    const items = useMemo(() => sortFormItems(section.form_items).map(parseFormItemObject), [
-      section,
-    ]);
+    const items = useMemo(
+      () => sortFormItems(section.form_items).map(parseTypedFormItemObject).filter(notEmpty),
+      [section],
+    );
 
     return <FormBody ref={ref} formItems={items} {...props} />;
   },

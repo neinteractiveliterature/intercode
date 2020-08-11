@@ -22,7 +22,7 @@ const MarkdownInput = (props: MarkdownInputProps) => {
           fetchPolicy: 'no-cache',
         });
 
-        return response.data.previewMarkdown;
+        return response.data?.previewMarkdown ?? '';
       }}
     />
   );

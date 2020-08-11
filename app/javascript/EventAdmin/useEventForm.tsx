@@ -1,13 +1,17 @@
-import React, { useCallback, useState, ReactNode } from 'react';
+import React, { useCallback, useState, ReactNode, useMemo } from 'react';
 
 import useFormResponse, { FormResponse } from '../FormPresenter/useFormResponse';
 import useValidatableForm from '../FormPresenter/useValidatableForm';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
-import { ItemInteractionTrackerContext, ItemInteractionTrackerContextValue } from '../FormPresenter/ItemInteractionTracker';
+import {
+  ItemInteractionTrackerContext,
+  ItemInteractionTrackerContextValue,
+} from '../FormPresenter/ItemInteractionTracker';
 import { RegistrationPolicy } from '../graphqlTypes.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormBodyImperativeHandle } from '../FormPresenter/Layouts/FormBody';
+import { getSortedParsedFormItems } from '../Models/Form';
 
 function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): RegistrationPolicy {
   return {
@@ -43,7 +47,7 @@ export const DEFAULT_EVENT_FORM_RESPONSE_ATTRS = {
 const processFormResponseValue = (key: string, value: any) => {
   switch (key) {
     case 'can_play_concurrently':
-      return { can_play_concurrently: (value === 'true') };
+      return { can_play_concurrently: value === 'true' };
     case 'total_slots':
       return {
         total_slots: value,
@@ -55,23 +59,25 @@ const processFormResponseValue = (key: string, value: any) => {
 };
 
 export type UseEventFormOptions<EventType extends FormResponse> = {
-  convention: ConventionForFormItemDisplay,
-  initialEvent: EventType,
-  eventForm: CommonFormFieldsFragment,
+  convention: ConventionForFormItemDisplay;
+  initialEvent: EventType;
+  eventForm: CommonFormFieldsFragment;
 };
 
 export type EventFormProps<EventType extends FormResponse> = {
-  eventForm: CommonFormFieldsFragment,
-  convention: ConventionForFormItemDisplay,
-  itemInteractionTrackingProps: ItemInteractionTrackerContextValue,
-  event: EventType,
-  formResponseValuesChanged: (newResponseValues: any) => void,
-  formRef: React.Ref<FormBodyImperativeHandle | undefined>,
-  children?: ReactNode,
+  eventForm: CommonFormFieldsFragment;
+  convention: ConventionForFormItemDisplay;
+  itemInteractionTrackingProps: ItemInteractionTrackerContextValue;
+  event: EventType;
+  formResponseValuesChanged: (newResponseValues: any) => void;
+  formRef: React.Ref<FormBodyImperativeHandle | undefined>;
+  children?: ReactNode;
 };
 
 export default function useEventForm<EventType extends FormResponse>({
-  convention, initialEvent, eventForm,
+  convention,
+  initialEvent,
+  eventForm,
 }: UseEventFormOptions<EventType>) {
   const [event, setEvent] = useState<EventType>(() => ({
     ...initialEvent,
@@ -100,13 +106,17 @@ export default function useEventForm<EventType extends FormResponse>({
     [eventAttrsChanged],
   );
 
-  const validateForm = useCallback(
-    () => validate(eventForm, event.form_response_attrs),
-    [event.form_response_attrs, eventForm, validate],
-  );
+  const formItems = useMemo(() => getSortedParsedFormItems(eventForm), [eventForm]);
+
+  const validateForm = useCallback(() => validate(formItems, event), [event, formItems, validate]);
 
   const eventFormProps: EventFormProps<EventType> = {
-    event, eventForm, convention, itemInteractionTrackingProps, formResponseValuesChanged, formRef,
+    event,
+    eventForm,
+    convention,
+    itemInteractionTrackingProps,
+    formResponseValuesChanged,
+    formRef,
   };
 
   return [
@@ -121,8 +131,13 @@ export default function useEventForm<EventType extends FormResponse>({
 }
 
 export function EventForm<EventType extends FormResponse>({
-  eventForm, convention, itemInteractionTrackingProps, event,
-  formResponseValuesChanged, formRef, children,
+  eventForm,
+  convention,
+  itemInteractionTrackingProps,
+  event,
+  formResponseValuesChanged,
+  formRef,
+  children,
 }: EventFormProps<EventType>) {
   return (
     <ItemInteractionTrackerContext.Provider value={itemInteractionTrackingProps}>
