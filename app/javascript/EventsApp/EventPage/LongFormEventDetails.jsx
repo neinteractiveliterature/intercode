@@ -23,22 +23,20 @@ function LongFormEventDetails({ eventId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return longFormItems.map((item, index) => (
-    formResponse[item.identifier] && formResponse[item.identifier].trim() !== ''
-      ? (
-        <section className="mb-4 event-details" id={item.identifier} key={item.identifier}>
-          {index > 0 && <hr />}
-          {
-            item.identifier === 'description'
-              ? null
-              : <h4>{item.public_description}</h4>
-          }
+  return (
+    <>
+      {longFormItems.map((item, index) =>
+        formResponse[item.identifier] && formResponse[item.identifier].trim() !== '' ? (
+          <section className="mb-4 event-details" id={item.identifier} key={item.identifier}>
+            {index > 0 && <hr />}
+            {item.identifier === 'description' ? null : <h4>{item.public_description}</h4>}
 
-          {parsePageContent(formResponse[item.identifier]).bodyComponents}
-        </section>
-      )
-      : null
-  ));
+            {parsePageContent(formResponse[item.identifier]).bodyComponents}
+          </section>
+        ) : null,
+      )}
+    </>
+  );
 }
 
 LongFormEventDetails.propTypes = {

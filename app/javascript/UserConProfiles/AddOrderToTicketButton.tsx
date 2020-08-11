@@ -17,8 +17,8 @@ export type AddOrderToTicketButtonProps = {
     ticket_types: {
       id: number;
       providing_products: {
-        pricing_structure: {
-          price: Money;
+        pricing_structure?: null | {
+          price?: Money | null;
         };
       }[];
     }[];
@@ -62,7 +62,7 @@ function AddOrderToTicketButton({
         close={newOrderModal.close}
         initialOrder={{
           user_con_profile: userConProfile,
-          payment_amount: providingProduct.pricing_structure.price,
+          payment_amount: providingProduct.pricing_structure?.price,
           status: 'paid',
           payment_note: `Entered manually by ${myProfile!.name_without_nickname}`,
           order_entries: [
@@ -71,7 +71,7 @@ function AddOrderToTicketButton({
               product: providingProduct,
               product_variant: null,
               quantity: 1,
-              price_per_item: providingProduct.pricing_structure.price,
+              price_per_item: providingProduct.pricing_structure?.price,
               ticket_id: ticket.id,
             },
           ],

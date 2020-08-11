@@ -20,7 +20,7 @@ export type FormBodyImperativeHandle = {
   scrollToItem: (item: CommonFormItemFieldsFragment) => void;
 };
 
-const FormBody = forwardRef<FormBodyImperativeHandle, FormBodyProps>(
+const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(
   (
     {
       // eslint-disable-next-line react/prop-types

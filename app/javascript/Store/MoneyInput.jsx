@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import formatMoney from "../formatMoney";
-import { parseFloatOrNull } from "../ComposableFormUtils";
+import formatMoney from '../formatMoney';
+import { parseFloatOrNull } from '../ComposableFormUtils';
 
 const MoneyInput = React.forwardRef(
-  (
-    { value, onChange, appendContent, inputGroupClassName, ...inputProps },
-    ref
-  ) => {
+  ({ value, onChange, appendContent, inputGroupClassName, ...inputProps }, ref) => {
     const [inputValue, setInputValue] = useState(formatMoney(value, false));
     const inputChanged = (event) => {
       const newValue = event.target.value;
@@ -18,7 +15,7 @@ const MoneyInput = React.forwardRef(
       if (floatValue != null) {
         onChange({
           fractional: Math.floor(floatValue * 100.0),
-          currency_code: "USD",
+          currency_code: 'USD',
         });
       } else {
         onChange(null);
@@ -26,7 +23,7 @@ const MoneyInput = React.forwardRef(
     };
 
     return (
-      <div className={inputGroupClassName || "input-group"}>
+      <div className={inputGroupClassName || 'input-group'}>
         <div className="input-group-prepend">
           <span className="input-group-text">$</span>
         </div>
@@ -39,12 +36,10 @@ const MoneyInput = React.forwardRef(
           ref={ref}
           {...inputProps}
         />
-        {appendContent && (
-          <div className="input-group-append">{appendContent}</div>
-        )}
+        {appendContent && <div className="input-group-append">{appendContent}</div>}
       </div>
     );
-  }
+  },
 );
 
 MoneyInput.propTypes = {
