@@ -14,7 +14,6 @@ import {
   TimeblockOmission,
   UnparsedTimeblockPreference,
 } from '../FormPresenter/TimeblockTypes';
-import { Rollbar } from '../@types/Rollbar';
 import { notEmpty } from '../ValueUtils';
 
 const GENERATED_ID_ARRAY_PROPERTIES = [

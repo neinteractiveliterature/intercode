@@ -25,41 +25,44 @@ import {
 } from './mutations.generated';
 
 export type StandaloneEditEventFormProps = {
-  initialEvent: WithFormResponse<StandaloneEditEventQueryQuery['event']>,
-  eventPath: string,
-  eventForm: CommonFormFieldsFragment,
-  convention: NonNullable<StandaloneEditEventQueryQuery['convention']>,
-  currentAbility: StandaloneEditEventQueryQuery['currentAbility'],
+  initialEvent: WithFormResponse<StandaloneEditEventQueryQuery['event']>;
+  eventPath: string;
+  eventForm: CommonFormFieldsFragment;
+  convention: NonNullable<StandaloneEditEventQueryQuery['convention']>;
+  currentAbility: StandaloneEditEventQueryQuery['currentAbility'];
 };
 
 function StandaloneEditEventForm({
-  initialEvent, eventPath, eventForm, convention, currentAbility,
+  initialEvent,
+  eventPath,
+  eventForm,
+  convention,
+  currentAbility,
 }: StandaloneEditEventFormProps) {
   const history = useHistory();
   const queryOptions = { variables: { eventId: initialEvent.id } };
   const apolloClient = useApolloClient();
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
-    convention, initialEvent, eventForm,
+    convention,
+    initialEvent,
+    eventForm,
   });
 
   const [updateEventMutate] = useStandaloneUpdateEventMutation();
-  const updateEvent = useCallback(
-    async () => {
-      await updateEventMutate({
-        variables: {
-          input: {
-            id: event.id,
-            event: {
-              form_response_attrs_json: JSON.stringify(event.form_response_attrs),
-            },
+  const updateEvent = useCallback(async () => {
+    await updateEventMutate({
+      variables: {
+        input: {
+          id: event.id,
+          event: {
+            form_response_attrs_json: JSON.stringify(event.form_response_attrs),
           },
         },
-      });
-      await apolloClient.resetStore();
-    },
-    [apolloClient, event, updateEventMutate],
-  );
+      },
+    });
+    await apolloClient.resetStore();
+  }, [apolloClient, event, updateEventMutate]);
 
   const meptoMutations = useMEPTOMutations({
     createMutate: useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation()[0],
@@ -107,9 +110,9 @@ function StandaloneEditEventForm({
             ...storeData,
             event: {
               ...storeData.event,
-              maximum_event_provided_tickets_overrides: storeData
-                .event.maximum_event_provided_tickets_overrides
-                .filter((override) => override.id !== id),
+              maximum_event_provided_tickets_overrides: storeData.event.maximum_event_provided_tickets_overrides.filter(
+                (override) => override.id !== id,
+              ),
             },
           },
         });
@@ -123,12 +126,13 @@ function StandaloneEditEventForm({
       event={event}
       validateForm={validateForm}
       updateEvent={updateEvent}
-      onSave={() => { history.push(eventPath); }}
+      onSave={() => {
+        history.push(eventPath);
+      }}
     >
       <EventForm {...eventFormProps}>
-        {currentAbility.can_override_maximum_event_provided_tickets
-          && convention.ticket_mode !== 'disabled'
-          && (
+        {currentAbility.can_override_maximum_event_provided_tickets &&
+          convention.ticket_mode !== 'disabled' && (
             <MaximumEventProvidedTicketsOverrideEditor
               {...meptoMutations}
               ticketName={convention.ticket_name}
@@ -143,8 +147,8 @@ function StandaloneEditEventForm({
 }
 
 export type StandaloneEditEventProps = {
-  eventId: number,
-  eventPath: string,
+  eventId: number;
+  eventPath: string;
 };
 
 function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
