@@ -6,8 +6,6 @@ declare class GlobalRollbar {
   warn: (error: Error | string, options?: { errorInfo?: ErrorInfo }) => void;
 }
 
-declare namespace global {
-  const Rollbar: GlobalRollbar;
+declare global {
+  const Rollbar: GlobalRollbar | undefined;
 }
-
-declare const Rollbar: GlobalRollbar | undefined;

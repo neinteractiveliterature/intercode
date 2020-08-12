@@ -32,7 +32,7 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
     },
     ref,
   ) => {
-    const itemRefs = useRef(new Map<string, HTMLDivElement>()).current;
+    const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
     const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
 
     const responseValueChanged = useCallback(
@@ -44,14 +44,17 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
 
     useImperativeHandle(ref, () => ({
       scrollToItem: (item: CommonFormItemFieldsFragment) => {
-        if (!item.identifier) {
+        const { identifier } = item;
+        if (!identifier) {
           return;
         }
 
-        const itemRef = itemRefs.get(item.identifier);
-        if (itemRef) {
-          itemRef.scrollIntoView({ behavior: 'smooth' });
-        }
+        window.requestAnimationFrame(() => {
+          const itemElement = itemElements.get(identifier);
+          if (itemElement) {
+            itemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
       },
     }));
 
@@ -70,9 +73,9 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
                 }
 
                 if (element == null) {
-                  itemRefs.delete(item.identifier);
+                  itemElements.delete(item.identifier);
                 } else {
-                  itemRefs.set(item.identifier, element);
+                  itemElements.set(item.identifier, element);
                 }
               }}
             >

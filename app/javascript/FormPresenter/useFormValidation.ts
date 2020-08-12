@@ -11,7 +11,7 @@ function getIncompleteItems(items: TypedFormItem[], response: FormResponse) {
   return items.filter(
     (item) =>
       item.identifier != null &&
-      !formResponseValueIsCompleteIfRequired(item, response[item.identifier]),
+      !formResponseValueIsCompleteIfRequired(item, response.form_response_attrs[item.identifier]),
   );
 }
 

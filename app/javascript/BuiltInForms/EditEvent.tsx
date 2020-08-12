@@ -8,46 +8,52 @@ import EditEventHeader from './EditEventHeader';
 import { Event } from '../graphqlTypes.generated';
 
 export type EditEventProps = {
-  children?: ReactNode,
-  cancelPath?: string,
-  event: Pick<Event, 'id' | 'status' | 'title'>,
-  validateForm: () => boolean,
-  updateEvent: () => Promise<any>,
-  onSave: () => void,
-  showDropButton?: boolean,
-  dropEvent?: () => Promise<any>,
-  onDrop?: () => void,
+  children?: ReactNode;
+  cancelPath?: string;
+  event: Pick<Event, 'id' | 'status' | 'title'>;
+  validateForm: () => boolean;
+  updateEvent: () => Promise<any>;
+  onSave: () => void;
+  showDropButton?: boolean;
+  dropEvent?: () => Promise<any>;
+  onDrop?: () => void;
 };
 
 export default function EditEvent({
-  children, cancelPath, showDropButton, event, dropEvent, validateForm,
-  updateEvent, onSave, onDrop,
+  children,
+  cancelPath,
+  showDropButton,
+  event,
+  dropEvent,
+  validateForm,
+  updateEvent,
+  onSave,
+  onDrop,
 }: EditEventProps) {
-  const [updateEventCallback, updateError, updateInProgress] = useAsyncFunction(useCallback(
-    async () => {
+  const [updateEventCallback, updateError, updateInProgress] = useAsyncFunction(
+    useCallback(async () => {
       if (!validateForm()) {
         return;
       }
 
       await updateEvent();
       onSave();
-    },
-    [updateEvent, onSave, validateForm],
-  ), { suppressError: true });
+    }, [updateEvent, onSave, validateForm]),
+    { suppressError: true },
+  );
 
-  const [dropEventCallback, , dropInProgress] = useAsyncFunction(useCallback(
-    async () => {
+  const [dropEventCallback, , dropInProgress] = useAsyncFunction(
+    useCallback(async () => {
       if (dropEvent != null) {
         await dropEvent();
         if (onDrop != null) {
           onDrop();
         }
       }
-    },
-    [dropEvent, onDrop],
-  ));
+    }, [dropEvent, onDrop]),
+  );
 
-  const saveCaption = (event.id ? 'Save event' : 'Create event');
+  const saveCaption = event.id ? 'Save event' : 'Create event';
 
   return (
     <form className="my-4">
@@ -71,7 +77,11 @@ export default function EditEvent({
           {saveCaption}
         </button>
 
-        {cancelPath && <Link to={cancelPath} className="btn btn-link">Cancel</Link>}
+        {cancelPath && (
+          <Link to={cancelPath} className="btn btn-link">
+            Cancel
+          </Link>
+        )}
       </div>
     </form>
   );
