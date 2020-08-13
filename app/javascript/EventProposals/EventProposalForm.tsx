@@ -65,7 +65,7 @@ function EventProposalFormInner({
   }, []);
 
   const commitResponse = useCallback(
-    async (proposal) => {
+    async (proposal: typeof eventProposal) => {
       try {
         setResponseErrors({});
         const promise = updateEventProposal({
@@ -73,7 +73,7 @@ function EventProposalFormInner({
             input: {
               id: proposal.id,
               event_proposal: {
-                form_response_attrs_json: JSON.stringify(proposal.formResponseAttrs),
+                form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
               },
             },
           },
@@ -91,7 +91,7 @@ function EventProposalFormInner({
   useAutocommitFormResponseOnChange(commitResponse, eventProposal);
 
   const submitResponse = useCallback(
-    (proposal) =>
+    (proposal: typeof eventProposal) =>
       submitEventProposal({
         variables: {
           input: {

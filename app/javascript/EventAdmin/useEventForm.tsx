@@ -108,26 +108,44 @@ export default function useEventForm<EventType extends FormResponse>({
 
   const formItems = useMemo(() => getSortedParsedFormItems(eventForm), [eventForm]);
 
-  const validateForm = useCallback(() => validate(formItems, event), [event, formItems, validate]);
-
-  const eventFormProps: EventFormProps<EventType> = {
+  const validateForm: () => boolean = useCallback(() => validate(formItems, event), [
     event,
-    eventForm,
-    convention,
-    itemInteractionTrackingProps,
-    formResponseValuesChanged,
-    formRef,
-  };
+    formItems,
+    validate,
+  ]);
 
-  return [
-    eventFormProps,
-    {
+  const eventFormProps: EventFormProps<EventType> = useMemo(
+    () => ({
       event,
-      setEvent,
       eventForm,
-      validateForm,
-    },
-  ] as const;
+      convention,
+      itemInteractionTrackingProps,
+      formResponseValuesChanged,
+      formRef,
+    }),
+    [
+      event,
+      eventForm,
+      convention,
+      itemInteractionTrackingProps,
+      formResponseValuesChanged,
+      formRef,
+    ],
+  );
+
+  return useMemo(
+    () =>
+      [
+        eventFormProps,
+        {
+          event,
+          setEvent,
+          eventForm,
+          validateForm,
+        },
+      ] as const,
+    [eventFormProps, event, setEvent, eventForm, validateForm],
+  );
 }
 
 export function EventForm<EventType extends FormResponse>({

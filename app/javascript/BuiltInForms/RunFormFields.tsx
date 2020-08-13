@@ -18,7 +18,10 @@ import {
 } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
 
-type RunForRunFormFields = Pick<Run, 'id' | 'starts_at' | 'title_suffix' | 'schedule_note'> & {
+export type RunForRunFormFields = Pick<
+  Run,
+  'id' | 'starts_at' | 'title_suffix' | 'schedule_note'
+> & {
   rooms: RoomForSelect[];
 };
 
