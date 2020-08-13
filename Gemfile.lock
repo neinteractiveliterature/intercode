@@ -97,7 +97,7 @@ GEM
       rails (>= 4.2)
     ast (2.4.1)
     aws-eventstream (1.1.0)
-    aws-partitions (1.353.0)
+    aws-partitions (1.354.0)
     aws-sdk-core (3.104.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -109,8 +109,8 @@ GEM
     aws-sdk-rails (3.1.0)
       aws-sdk-ses (~> 1)
       railties (>= 5.2.0)
-    aws-sdk-s3 (1.76.0)
-      aws-sdk-core (~> 3, >= 3.104.1)
+    aws-sdk-s3 (1.78.0)
+      aws-sdk-core (~> 3, >= 3.104.3)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sdk-ses (1.28.0)
@@ -129,9 +129,9 @@ GEM
     bcrypt (3.1.13-java)
     benchmark (0.1.0)
     bindata (2.4.4)
-    bootsnap (1.4.7)
+    bootsnap (1.4.8)
       msgpack (~> 1.0)
-    bootsnap (1.4.7-java)
+    bootsnap (1.4.8-java)
       msgpack (~> 1.0)
     builder (3.2.4)
     cadmus (0.7.0)
@@ -426,13 +426,13 @@ GEM
       rollbar (~> 2.21, <= 3.0)
       shoryuken (>= 4.0, <= 5.1)
     rouge (3.11.0)
-    rubocop (0.89.0)
+    rubocop (0.89.1)
       parallel (~> 1.10)
       parser (>= 2.7.1.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.7)
       rexml
-      rubocop-ast (>= 0.1.0, < 1.0)
+      rubocop-ast (>= 0.3.0, < 1.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
     rubocop-ast (0.3.0)
@@ -465,7 +465,7 @@ GEM
     skylight-core (4.3.1)
       activesupport (>= 4.2.0)
     slop (3.6.0)
-    solargraph (0.39.13)
+    solargraph (0.39.14)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -597,7 +597,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 0.89.0)
+  rubocop (= 0.89.1)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide
