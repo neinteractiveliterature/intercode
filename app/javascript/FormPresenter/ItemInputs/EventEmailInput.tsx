@@ -14,32 +14,37 @@ import { EventEmailFormItem, EventEmailValue } from '../../FormAdmin/FormItemUti
 
 function isEventEmailValue(value: unknown | undefined | null): value is EventEmailValue {
   // EventEmailValue has no required properties so literally any object will do
-  return (typeof value === 'object');
+  return typeof value === 'object' && value != null;
 }
 
 export type EventEmailInputProps = CommonFormItemInputProps<EventEmailFormItem> & {
-  convention: ConventionForFormItemDisplay,
+  convention: ConventionForFormItemDisplay;
 };
 
-type EventEmailBehavior = NonNullable<'team_mailing_list' | EventEmailValue['con_mail_destination']>;
+type EventEmailBehavior = NonNullable<
+  'team_mailing_list' | EventEmailValue['con_mail_destination']
+>;
 
 function EventEmailInput({
-  convention, value: uncheckedValue, formItem, onChange, onInteract, valueInvalid,
+  convention,
+  value: uncheckedValue,
+  formItem,
+  onChange,
+  onInteract,
+  valueInvalid,
 }: EventEmailInputProps) {
   const { t } = useTranslation();
   const value = isEventEmailValue(uncheckedValue) ? uncheckedValue : {};
   const [emailBehavior, setEmailBehavior] = useState<EventEmailBehavior | undefined>(() => {
     const teamMailingListName = value.team_mailing_list_name;
-    return (
-      teamMailingListName && convention.event_mailing_list_domain
-        ? 'team_mailing_list'
-        : value.con_mail_destination
-    );
+    return teamMailingListName && convention.event_mailing_list_domain
+      ? 'team_mailing_list'
+      : value.con_mail_destination;
   });
-  const userDidInteract = useCallback(
-    () => onInteract(formItem.identifier),
-    [formItem.identifier, onInteract],
-  );
+  const userDidInteract = useCallback(() => onInteract(formItem.identifier), [
+    formItem.identifier,
+    onInteract,
+  ]);
 
   const valueMutator = mutator({
     getState: () => value,
@@ -51,9 +56,10 @@ function EventEmailInput({
           // a team mailing list
           team_mailing_list_name: '',
           ...state,
-          email: (state.team_mailing_list_name && state.team_mailing_list_name.trim() !== '')
-            ? `${state.team_mailing_list_name}@${convention.event_mailing_list_domain}`
-            : null,
+          email:
+            state.team_mailing_list_name && state.team_mailing_list_name.trim() !== ''
+              ? `${state.team_mailing_list_name}@${convention.event_mailing_list_domain}`
+              : null,
         });
       } else {
         onChange({
@@ -93,19 +99,22 @@ function EventEmailInput({
       return (
         <FormGroupWithLabel
           name="team-mailing-list-name"
-          label={(
+          label={
             <>
               {t('forms.eventEmail.mailingListAddressLabel', 'Mailing list address')}
               <RequiredIndicator formItem={formItem} />
             </>
-          )}
+          }
         >
           {(id) => (
             <EmailAliasInput
               value={(value || {}).team_mailing_list_name}
               onTextChange={valueMutator.team_mailing_list_name}
               id={id}
-              aria-label={t('forms.eventEmail.mailingListAliasLabel', 'Mailing list address (portion before @ sign)')}
+              aria-label={t(
+                'forms.eventEmail.mailingListAliasLabel',
+                'Mailing list address (portion before @ sign)',
+              )}
               domain={convention.event_mailing_list_domain ?? ''}
             />
           )}
@@ -115,12 +124,12 @@ function EventEmailInput({
 
     return (
       <BootstrapFormInput
-        label={(
+        label={
           <>
             {t('forms.eventEmail.contactEmailLabel', 'Contact email address')}
             <RequiredIndicator formItem={formItem} />
           </>
-        )}
+        }
         name={`${formItem.identifier}.email`}
         value={(value || {}).email || ''}
         onTextChange={valueMutator.email}
@@ -131,25 +140,35 @@ function EventEmailInput({
 
   return (
     <fieldset className="form-group">
-      <div className={classNames({ 'border-0': !valueInvalid, 'border rounded border-danger': valueInvalid })}>
+      <div
+        className={classNames({
+          'border-0': !valueInvalid,
+          'border rounded border-danger': valueInvalid,
+        })}
+      >
         <legend className="col-form-label">
-          <span>{t('forms.eventEmail.formGroupLegend', 'How would you like to receive email about this event?')}</span>
+          <span>
+            {t(
+              'forms.eventEmail.formGroupLegend',
+              'How would you like to receive email about this event?',
+            )}
+          </span>
           <RequiredIndicator formItem={formItem} />
         </legend>
         <ChoiceSet
           name={formItem.identifier}
           choices={[
-            ...(
-              convention.event_mailing_list_domain
-                ? [{
-                  label: t(
-                    'forms.eventEmail.teamMailingListOption',
-                    'Have the convention create and manage a team mailing list for me',
-                  ),
-                  value: 'team_mailing_list',
-                }]
-                : []
-            ),
+            ...(convention.event_mailing_list_domain
+              ? [
+                  {
+                    label: t(
+                      'forms.eventEmail.teamMailingListOption',
+                      'Have the convention create and manage a team mailing list for me',
+                    ),
+                    value: 'team_mailing_list',
+                  },
+                ]
+              : []),
             {
               label: t('forms.eventEmail.eventEmailOption', 'Use a contact email I specify'),
               value: 'event_email',
@@ -165,18 +184,12 @@ function EventEmailInput({
           value={emailBehavior}
           onChange={emailBehaviorChanged}
         />
-        <div className="mt-4">
-          {renderEmailInput()}
-        </div>
-        {
-          valueInvalid
-            ? (
-              <span className="text-danger">
-                {t('forms.general.fieldRequiredError', 'This field is required.')}
-              </span>
-            )
-            : null
-        }
+        <div className="mt-4">{renderEmailInput()}</div>
+        {valueInvalid ? (
+          <span className="text-danger">
+            {t('forms.general.fieldRequiredError', 'This field is required.')}
+          </span>
+        ) : null}
       </div>
     </fieldset>
   );

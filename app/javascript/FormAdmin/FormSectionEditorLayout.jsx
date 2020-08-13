@@ -28,8 +28,16 @@ function FormSectionEditorLayout() {
         update: mutationUpdaterForFormSection(
           form.id,
           currentSection.id,
-          (formSection, { data: { createFormItem: { form_item: formItem } } }) => ({
-            ...formSection, form_items: [...formSection.form_items, formItem],
+          (
+            formSection,
+            {
+              data: {
+                createFormItem: { form_item: formItem },
+              },
+            },
+          ) => ({
+            ...formSection,
+            form_items: [...formSection.form_items, formItem],
           }),
         ),
       });
@@ -43,13 +51,12 @@ function FormSectionEditorLayout() {
     [createFormItemMutate, currentSection, form.id],
   );
 
-  const createStaticText = useCallback(
-    async () => {
-      const response = await createFormItem(buildNewFormItem('static_text'));
-      history.push(`/admin_forms/${form.id}/edit/section/${currentSection.id}/item/${response.data.createFormItem.form_item.id}`);
-    },
-    [createFormItem, currentSection.id, form.id, history],
-  );
+  const createStaticText = useCallback(async () => {
+    const response = await createFormItem(buildNewFormItem('static_text'));
+    history.push(
+      `/admin_forms/${form.id}/edit/section/${currentSection.id}/item/${response.data.createFormItem.form_item.id}`,
+    );
+  }, [createFormItem, currentSection?.id, form.id, history]);
 
   return (
     <>
@@ -64,14 +71,16 @@ function FormSectionEditorLayout() {
       </div>
 
       <div className="form-section-editor-add-item-bar bg-warning-light p-2 border-top border-warning">
-        <button className="btn btn-sm btn-secondary mr-2" type="button" onClick={newFormItemModal.open}>
+        <button
+          className="btn btn-sm btn-secondary mr-2"
+          type="button"
+          onClick={newFormItemModal.open}
+        >
           Add item
         </button>
 
         <button className="btn btn-sm btn-secondary" type="button" onClick={createStaticText}>
-          <i className="fa fa-paragraph" />
-          {' '}
-          Add static text
+          <i className="fa fa-paragraph" /> Add static text
         </button>
 
         <NewFormItemModal

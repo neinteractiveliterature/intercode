@@ -2230,7 +2230,7 @@ type ForceConfirmSignupPayload {
 type Form {
   event_categories: [EventCategory!]!
   export_json: Json!
-  form_api_json: Json!
+  form_api_json: Json! @deprecated(reason: "The old form API export is deprecated; please use the \"form\" field and its subfields instead")
   form_sections: [FormSection!]!
   form_type: FormType!
   id: Int!
