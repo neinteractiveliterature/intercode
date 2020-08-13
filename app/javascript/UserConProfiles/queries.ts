@@ -291,19 +291,6 @@ export const AddAttendeeUsersQuery = gql`
   }
 `;
 
-export const AddAttendeeUserConProfileFormQuery = gql`
-  query AddAttendeeUserConProfileFormQuery {
-    convention {
-      id
-
-      user_con_profile_form {
-        id
-        form_api_json
-      }
-    }
-  }
-`;
-
 export const TicketAdminWithoutTicketAbilityQuery = gql`
   query TicketAdminWithoutTicketAbilityQuery {
     currentAbility {

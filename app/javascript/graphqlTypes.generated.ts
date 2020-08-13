@@ -1,6 +1,6 @@
 /* eslint-disable */
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -1939,6 +1939,7 @@ export type Form = {
   __typename?: 'Form';
   event_categories: Array<EventCategory>;
   export_json: Scalars['Json'];
+  /** @deprecated The old form API export is deprecated; please use the "form" field and its subfields instead */
   form_api_json: Scalars['Json'];
   form_sections: Array<FormSection>;
   form_type: FormType;

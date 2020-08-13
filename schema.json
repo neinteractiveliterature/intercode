@@ -14270,8 +14270,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "The old form API export is deprecated; please use the \"form\" field and its subfields instead"
             },
             {
               "name": "form_sections",

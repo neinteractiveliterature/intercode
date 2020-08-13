@@ -223,21 +223,6 @@ export type AddAttendeeUsersQueryQuery = (
   ) }
 );
 
-export type AddAttendeeUserConProfileFormQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type AddAttendeeUserConProfileFormQueryQuery = (
-  { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { user_con_profile_form: (
-      { __typename?: 'Form' }
-      & Pick<Types.Form, 'id' | 'form_api_json'>
-    ) }
-  )> }
-);
-
 export type TicketAdminWithoutTicketAbilityQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -629,42 +614,6 @@ export function useAddAttendeeUsersQueryLazyQuery(baseOptions?: Apollo.LazyQuery
 export type AddAttendeeUsersQueryQueryHookResult = ReturnType<typeof useAddAttendeeUsersQueryQuery>;
 export type AddAttendeeUsersQueryLazyQueryHookResult = ReturnType<typeof useAddAttendeeUsersQueryLazyQuery>;
 export type AddAttendeeUsersQueryQueryResult = Apollo.QueryResult<AddAttendeeUsersQueryQuery, AddAttendeeUsersQueryQueryVariables>;
-export const AddAttendeeUserConProfileFormQueryDocument = gql`
-    query AddAttendeeUserConProfileFormQuery {
-  convention {
-    id
-    user_con_profile_form {
-      id
-      form_api_json
-    }
-  }
-}
-    `;
-
-/**
- * __useAddAttendeeUserConProfileFormQueryQuery__
- *
- * To run a query within a React component, call `useAddAttendeeUserConProfileFormQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAddAttendeeUserConProfileFormQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAddAttendeeUserConProfileFormQueryQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAddAttendeeUserConProfileFormQueryQuery(baseOptions?: Apollo.QueryHookOptions<AddAttendeeUserConProfileFormQueryQuery, AddAttendeeUserConProfileFormQueryQueryVariables>) {
-        return Apollo.useQuery<AddAttendeeUserConProfileFormQueryQuery, AddAttendeeUserConProfileFormQueryQueryVariables>(AddAttendeeUserConProfileFormQueryDocument, baseOptions);
-      }
-export function useAddAttendeeUserConProfileFormQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddAttendeeUserConProfileFormQueryQuery, AddAttendeeUserConProfileFormQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AddAttendeeUserConProfileFormQueryQuery, AddAttendeeUserConProfileFormQueryQueryVariables>(AddAttendeeUserConProfileFormQueryDocument, baseOptions);
-        }
-export type AddAttendeeUserConProfileFormQueryQueryHookResult = ReturnType<typeof useAddAttendeeUserConProfileFormQueryQuery>;
-export type AddAttendeeUserConProfileFormQueryLazyQueryHookResult = ReturnType<typeof useAddAttendeeUserConProfileFormQueryLazyQuery>;
-export type AddAttendeeUserConProfileFormQueryQueryResult = Apollo.QueryResult<AddAttendeeUserConProfileFormQueryQuery, AddAttendeeUserConProfileFormQueryQueryVariables>;
 export const TicketAdminWithoutTicketAbilityQueryDocument = gql`
     query TicketAdminWithoutTicketAbilityQuery {
   currentAbility {
