@@ -1,12 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import ErrorDisplay from '../ErrorDisplay';
-import { EventAdminEventsQuery } from './queries';
-import RunFormFields from '../BuiltInForms/RunFormFields';
+import RunFormFields, { RunForRunFormFields } from '../BuiltInForms/RunFormFields';
 import useAsyncFunction from '../useAsyncFunction';
 import useEventFormWithCategorySelection, {
   EventFormWithCategorySelection,
@@ -14,28 +12,56 @@ import useEventFormWithCategorySelection, {
 import useCreateEvent from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useEventAdminEventsQueryQuery, EventAdminEventsQueryQuery } from './queries.generated';
 
-function NewEventForm({ data }) {
-  const { convention } = data;
+type NewEventFormProps = {
+  data: EventAdminEventsQueryQuery;
+};
+
+type NewEventFormResponseAttrs = {
+  length_seconds?: number | null;
+  can_play_concurrently?: boolean | null;
+  title?: string | null;
+};
+
+type EventCategoryType = NonNullable<
+  EventAdminEventsQueryQuery['convention']
+>['event_categories'][0];
+
+type NewEventFormEvent = {
+  event_category?: EventCategoryType | null;
+  form_response_attrs: NewEventFormResponseAttrs;
+};
+
+function NewEventForm({ data }: NewEventFormProps) {
+  const convention = data.convention!;
   const history = useHistory();
-  const { eventCategoryId: eventCategoryIdParam } = useParams();
+  const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
-    () => data.convention.event_categories.find((c) => c.id.toString() === eventCategoryIdParam),
-    [data, eventCategoryIdParam],
+    () =>
+      convention.event_categories.find((c) => c.id === Number.parseInt(eventCategoryIdParam, 10)),
+    [convention, eventCategoryIdParam],
   );
   const [createMutate, createError] = useAsyncFunction(useCreateEvent());
+  const initialEvent = useMemo(
+    () => ({
+      form_response_attrs: {},
+      event_category: initialEventCategory,
+    }),
+    [initialEventCategory],
+  );
   const [
     formProps,
     { event, eventCategory, eventCategoryId, validateForm },
-  ] = useEventFormWithCategorySelection({
+  ] = useEventFormWithCategorySelection<EventCategoryType, NewEventFormEvent>({
     convention,
     schedulingUi: initialEventCategory ? initialEventCategory.scheduling_ui : null,
-    initialEvent: initialEventCategory ? { event_category: initialEventCategory } : null,
+    initialEvent,
   });
-  const [run, setRun] = useState({});
+  const [run, setRun] = useState<RunForRunFormFields>();
 
   const donePath =
-    convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory);
+    convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/';
 
   const createEvent = async () => {
     if (!validateForm()) {
@@ -53,8 +79,7 @@ function NewEventForm({ data }) {
   };
 
   const warningMessage =
-    (eventCategory || {}).scheduling_ui === 'single_run' &&
-    !event.form_response_attrs.length_seconds
+    eventCategory?.scheduling_ui === 'single_run' && !event.form_response_attrs.length_seconds
       ? 'Please specify a length of time for this event.'
       : null;
 
@@ -62,30 +87,34 @@ function NewEventForm({ data }) {
     <>
       <h2 className="mb-4 mt-2">New event</h2>
       <EventFormWithCategorySelection {...formProps}>
-        {(eventCategory || {}).scheduling_ui === 'single_run' &&
+        {eventCategory &&
+          eventCategory.scheduling_ui === 'single_run' &&
           event.form_response_attrs.length_seconds && (
             <RunFormFields
-              run={run}
+              run={run ?? { id: -1, rooms: [], starts_at: '' }}
               event={{
+                id: -1,
+                can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
                 title: event.form_response_attrs.title,
                 length_seconds: event.form_response_attrs.length_seconds,
                 event_category: eventCategory,
+                maximum_event_provided_tickets_overrides: [],
+                runs: [],
               }}
-              convention={convention}
               onChange={setRun}
             />
           )}
 
         {warningMessage && <div className="alert alert-warning">{warningMessage}</div>}
 
-        <ErrorDisplay graphQLError={createError} />
+        <ErrorDisplay graphQLError={createError as ApolloError} />
 
         <div>
           <button
             type="button"
             className="btn btn-primary"
             onClick={createEvent}
-            disabled={!eventCategoryId || warningMessage}
+            disabled={!eventCategoryId || !!warningMessage}
           >
             Create event
           </button>
@@ -98,17 +127,8 @@ function NewEventForm({ data }) {
   );
 }
 
-NewEventForm.propTypes = {
-  data: PropTypes.shape({
-    convention: PropTypes.shape({
-      site_mode: PropTypes.string.isRequired,
-      event_categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    }).isRequired,
-  }).isRequired,
-};
-
 function NewEvent() {
-  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   usePageTitle('New event');
 
@@ -120,7 +140,7 @@ function NewEvent() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return <NewEventForm data={data} />;
+  return <NewEventForm data={data!} />;
 }
 
 export default NewEvent;

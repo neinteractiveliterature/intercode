@@ -6,34 +6,61 @@ import {
   ConventionForEventCategoryForms,
   EventCategoryFormData,
 } from './getFormForEventCategory';
+import { EventCategorySelectProps } from '../BuiltInFormControls/EventCategorySelect';
+import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
+import { EventCategory } from '../graphqlTypes.generated';
 
-export type UseEventCategorySelectionOptions<EventCategoryType extends EventCategoryFormData> = {
-  convention: ConventionForEventCategoryForms<EventCategoryType>,
-  initialEventCategoryId?: number | null,
-  selectableCategoryIds?: number[] | null,
+type EventCategorySelectorData = EventCategoryFormData & Pick<EventCategory, 'name'>;
+export type UseEventCategorySelectionOptions<
+  EventCategoryType extends EventCategorySelectorData
+> = {
+  convention: ConventionForEventCategoryForms<EventCategoryType>;
+  initialEventCategoryId?: number | null;
+  selectableCategoryIds?: number[] | null;
 };
 
-export default function useEventCategorySelection<EventCategoryType extends EventCategoryFormData>({
-  convention, initialEventCategoryId, selectableCategoryIds,
-}: UseEventCategorySelectionOptions<EventCategoryType>) {
+export type UseEventCategorySelectionResult<
+  EventCategoryType extends EventCategorySelectorData
+> = readonly [
+  EventCategorySelectProps,
+  {
+    eventCategoryId?: number;
+    setEventCategoryId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    eventCategory?: EventCategoryType;
+    eventForm: CommonFormFieldsFragment;
+    eventProposalForm: CommonFormFieldsFragment;
+  },
+];
+
+export default function useEventCategorySelection<
+  EventCategoryType extends EventCategorySelectorData
+>({
+  convention,
+  initialEventCategoryId,
+  selectableCategoryIds,
+}: UseEventCategorySelectionOptions<EventCategoryType>): UseEventCategorySelectionResult<
+  EventCategoryType
+> {
   const selectableCategories = useMemo(
-    () => (selectableCategoryIds
-      ? convention.event_categories
-        .filter((category) => selectableCategoryIds.includes(category.id))
-      : convention.event_categories),
+    () =>
+      selectableCategoryIds
+        ? convention.event_categories.filter((category) =>
+            selectableCategoryIds.includes(category.id),
+          )
+        : convention.event_categories,
     [convention.event_categories, selectableCategoryIds],
   );
 
   const [eventCategoryId, setEventCategoryId] = useState(
-    initialEventCategoryId || (
-      selectableCategories.length === 1 ? selectableCategories[0].id : undefined
-    ),
+    initialEventCategoryId ||
+      (selectableCategories.length === 1 ? selectableCategories[0].id : undefined),
   );
 
   const eventCategory = useMemo(
-    () => (eventCategoryId
-      ? convention.event_categories.find((category) => category.id === eventCategoryId)
-      : undefined),
+    () =>
+      eventCategoryId
+        ? convention.event_categories.find((category) => category.id === eventCategoryId)
+        : undefined,
     [convention.event_categories, eventCategoryId],
   );
 
@@ -42,23 +69,40 @@ export default function useEventCategorySelection<EventCategoryType extends Even
     [setEventCategoryId],
   );
 
-  const eventForm = useMemo(
-    () => getEventFormForEventCategoryId(eventCategoryId, convention),
-    [convention, eventCategoryId],
-  );
+  const eventForm = useMemo(() => getEventFormForEventCategoryId(eventCategoryId, convention), [
+    convention,
+    eventCategoryId,
+  ]);
 
   const eventProposalForm = useMemo(
     () => getProposalFormForEventCategoryId(eventCategoryId, convention),
     [convention, eventCategoryId],
   );
 
-  const selectProps = {
-    eventCategories: selectableCategories,
-    value: eventCategoryId,
-    onValueChange: eventCategorySelectChanged,
-  };
-
-  return [selectProps, {
-    eventCategoryId, setEventCategoryId, eventCategory, eventForm, eventProposalForm,
-  }] as const;
+  return useMemo(
+    () =>
+      [
+        {
+          eventCategories: selectableCategories,
+          value: eventCategoryId,
+          onValueChange: eventCategorySelectChanged,
+        },
+        {
+          eventCategoryId,
+          setEventCategoryId,
+          eventCategory,
+          eventForm,
+          eventProposalForm,
+        },
+      ] as const,
+    [
+      selectableCategories,
+      eventCategoryId,
+      eventCategorySelectChanged,
+      setEventCategoryId,
+      eventCategory,
+      eventForm,
+      eventProposalForm,
+    ],
+  );
 }
