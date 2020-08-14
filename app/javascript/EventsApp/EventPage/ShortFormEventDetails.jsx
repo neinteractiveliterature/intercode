@@ -1,22 +1,21 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
 import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import EventCapacityDisplay from './EventCapacityDisplay';
-import { EventPageQuery } from './queries.gql';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import teamMembersForDisplay from '../teamMembersForDisplay';
 import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
 import LoadingIndicator from '../../LoadingIndicator';
+import { useEventPageQueryQuery } from './queries.generated';
 
 function ShortFormEventDetails({ eventId }) {
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
 
   const { shortFormItems, formResponse } = useSectionizedFormItems(
     error || loading ? null : data.event,
@@ -37,10 +36,9 @@ function ShortFormEventDetails({ eventId }) {
 
   const { event, convention } = data;
 
-  const acceptsSignups = (
-    !event.registration_policy.slots_limited
-    || event.registration_policy.total_slots_including_not_counted > 0
-  );
+  const acceptsSignups =
+    !event.registration_policy.slots_limited ||
+    event.registration_policy.total_slots_including_not_counted > 0;
 
   return (
     <dl className="row mb-0">
@@ -59,59 +57,47 @@ function ShortFormEventDetails({ eventId }) {
             </dd>
           </React.Fragment>
         ))}
-      {
-        displayTeamMembers.length > 0
-          ? (
-            <>
-              <dt className="col-md-3">{pluralize(humanize(underscore(event.event_category.team_member_name)))}</dt>
-              <dd className="col-md-9">
-                <ul className="list-unstyled mb-0">
-                  {displayTeamMembers.map((teamMember) => (
-                    <li key={teamMember.id}>
-                      <div className="d-flex align-items-center mb-1">
-                        <div className="mr-2">
-                          <Gravatar
-                            url={teamMember.user_con_profile.gravatar_url}
-                            enabled={teamMember.user_con_profile.gravatar_enabled}
-                            pixelSize={26}
-                          />
-                        </div>
-                        <div>
-                          {teamMember.user_con_profile.name_without_nickname}
-                          {
-                            teamMember.email
-                              ? (
-                                <>
-                                  {' '}
-                                  (
-                                  <a href={`mailto:${teamMember.email}`}>
-                                    {teamMember.email}
-                                  </a>
-                                  )
-                                </>
-                              )
-                              : null
-                          }
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </>
-          )
-          : null
-      }
-      {
-        acceptsSignups
-          ? (
-            <>
-              <dt className="col-md-3">{t('events.runCapacity.label', 'Capacity')}</dt>
-              <dd className="col-md-9 mb-0"><EventCapacityDisplay event={event} /></dd>
-            </>
-          )
-          : null
-      }
+      {displayTeamMembers.length > 0 ? (
+        <>
+          <dt className="col-md-3">
+            {pluralize(humanize(underscore(event.event_category.team_member_name)))}
+          </dt>
+          <dd className="col-md-9">
+            <ul className="list-unstyled mb-0">
+              {displayTeamMembers.map((teamMember) => (
+                <li key={teamMember.id}>
+                  <div className="d-flex align-items-center mb-1">
+                    <div className="mr-2">
+                      <Gravatar
+                        url={teamMember.user_con_profile.gravatar_url}
+                        enabled={teamMember.user_con_profile.gravatar_enabled}
+                        pixelSize={26}
+                      />
+                    </div>
+                    <div>
+                      {teamMember.user_con_profile.name_without_nickname}
+                      {teamMember.email ? (
+                        <>
+                          {' '}
+                          (<a href={`mailto:${teamMember.email}`}>{teamMember.email}</a>)
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </>
+      ) : null}
+      {acceptsSignups ? (
+        <>
+          <dt className="col-md-3">{t('events.runCapacity.label', 'Capacity')}</dt>
+          <dd className="col-md-9 mb-0">
+            <EventCapacityDisplay event={event} />
+          </dd>
+        </>
+      ) : null}
     </dl>
   );
 }

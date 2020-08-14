@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import moment from 'moment-timezone';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { WaitlistMailingListsQuery } from './queries.gql';

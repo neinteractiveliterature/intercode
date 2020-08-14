@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
 

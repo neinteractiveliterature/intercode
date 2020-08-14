@@ -294,7 +294,7 @@ type Convention {
   clickwrap_agreement_html: String
   cms_content_groups: [CmsContentGroup!]!
   cms_layouts: [CmsLayout!]
-  cms_navigation_items: [CmsNavigationItem!]
+  cms_navigation_items: [CmsNavigationItem!]!
   coupons_paginated(filters: CouponFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): CouponsPagination!
   created_at: Date
   default_layout: CmsLayout
@@ -342,12 +342,12 @@ type Convention {
   ): OrdersConnection
   orders_paginated(filters: OrderFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): OrdersPagination!
   organization: Organization
-  pages: [Page!]
+  pages: [Page!]!
   pre_schedule_content_html: String
   privilege_names: [String!]! @deprecated(reason: "Privileges have gone away in favor of permissions")
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]
   reports: ConventionReports!
-  rooms: [Room!]
+  rooms: [Room!]!
   root_page: Page
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
@@ -369,7 +369,7 @@ type Convention {
   timezone_name: String
   updated_at: Date
   user_activity_alert(id: Int!): UserActivityAlert!
-  user_activity_alerts: [UserActivityAlert]
+  user_activity_alerts: [UserActivityAlert]!
   user_con_profile_form: Form!
   user_con_profiles_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UserConProfilesPagination!
 }
@@ -2230,7 +2230,7 @@ type ForceConfirmSignupPayload {
 type Form {
   event_categories: [EventCategory!]!
   export_json: Json!
-  form_api_json: Json!
+  form_api_json: Json! @deprecated(reason: "The old form API export is deprecated; please use the \"form\" field and its subfields instead")
   form_sections: [FormSection!]!
   form_type: FormType!
   id: Int!
@@ -2249,7 +2249,7 @@ type FormItem {
   form_section: FormSection!
   id: Int!
   identifier: String
-  item_type: String
+  item_type: String!
   position: Int
   properties: Json
   public_description: String
@@ -2615,7 +2615,7 @@ type Order {
   charge_id: String
   coupon_applications: [CouponApplication!]!
   id: Int
-  order_entries: [OrderEntry]!
+  order_entries: [OrderEntry!]!
   paid_at: Date
   payment_amount: Money
   payment_note: String
@@ -3618,7 +3618,7 @@ type TicketType {
   description: String
   id: Int!
   maximum_event_provided_tickets(event_id: Int): Int!
-  name: String
+  name: String!
   pricing_schedule: ScheduledMoneyValue! @deprecated(reason: "Tickets are now provided through products")
   providing_products: [Product!]!
   publicly_available: Boolean! @deprecated(reason: "Tickets are now provided through products")

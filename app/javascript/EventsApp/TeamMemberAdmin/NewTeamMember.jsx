@@ -5,10 +5,10 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
-import { CreateTeamMember } from './mutations.gql';
+import { CreateTeamMember } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import TeamMemberForm from './TeamMemberForm';
-import { TeamMembersQuery, TeamMemberUserConProfilesQuery } from './queries.gql';
+import { TeamMembersQuery, TeamMemberUserConProfilesQuery } from './queries';
 import UserConProfileSelect from '../../BuiltInFormControls/UserConProfileSelect';
 import useUniqueId from '../../useUniqueId';
 import useAsyncFunction from '../../useAsyncFunction';

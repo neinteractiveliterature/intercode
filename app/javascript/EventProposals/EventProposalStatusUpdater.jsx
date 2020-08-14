@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/client';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import { TransitionEventProposal } from './mutations.gql';
+import { TransitionEventProposal } from './mutations';
 import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 

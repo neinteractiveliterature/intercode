@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 
 import { NotificationAdminQuery } from './queries.gql';

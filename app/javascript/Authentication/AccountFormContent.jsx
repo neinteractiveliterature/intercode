@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { AccountFormContentQuery } from './queries.gql';
 import parseCmsContent from '../parseCmsContent';

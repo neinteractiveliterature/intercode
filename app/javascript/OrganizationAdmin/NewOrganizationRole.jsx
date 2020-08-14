@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import { CreateOrganizationRole } from './mutations.gql';

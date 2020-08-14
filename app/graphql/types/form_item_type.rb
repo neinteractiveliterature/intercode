@@ -2,7 +2,7 @@ class Types::FormItemType < Types::BaseObject
   field :id, Int, null: false
   field :position, Int, null: true
   field :identifier, String, null: true
-  field :item_type, String, null: true
+  field :item_type, String, null: false
   field :admin_description, String, null: true
   field :public_description, String, null: true
   field :default_value, Types::JSON, null: true

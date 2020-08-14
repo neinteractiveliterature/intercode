@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { FormEditorContext } from './FormEditorContexts';
 import FormEditorItemPreview from './FormEditorItemPreview';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { UpdateFormSection } from './mutations.gql';
+import { UpdateFormSection } from './mutations';
 
 function FormSectionEditorContent() {
   const { currentSection } = useContext(FormEditorContext);

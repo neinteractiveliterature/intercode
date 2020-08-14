@@ -9,7 +9,7 @@ class Types::OrderType < Types::BaseObject
   field :payment_amount, Types::MoneyType, null: true
   field :payment_note, String, null: true
   field :charge_id, String, null: true
-  field :order_entries, [Types::OrderEntryType, null: true], null: false
+  field :order_entries, [Types::OrderEntryType], null: false
   field :submitted_at, Types::DateType, null: true
   field :paid_at, Types::DateType, null: true
   field :coupon_applications, [Types::CouponApplicationType], null: false

@@ -1,12 +1,15 @@
 import React, { useCallback } from 'react';
 import intersection from 'lodash/intersection';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
-import { CartQuery } from './queries.gql';
+import { CartQuery } from './queries';
 import {
-  DeleteOrderEntry, UpdateOrderEntry, CreateCouponApplication, DeleteCouponApplication,
-} from './mutations.gql';
+  DeleteOrderEntry,
+  UpdateOrderEntry,
+  CreateCouponApplication,
+  DeleteCouponApplication,
+} from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import OrderPaymentModal from './OrderPaymentModal';
 import useModal from '../ModalDialogs/useModal';
@@ -29,59 +32,68 @@ function Cart() {
   usePageTitle('Cart');
 
   const updateOrderEntry = useCallback(
-    (id, quantity) => updateMutate({
-      variables: { input: { id, order_entry: { quantity } } },
-    }),
+    (id, quantity) =>
+      updateMutate({
+        variables: { input: { id, order_entry: { quantity } } },
+      }),
     [updateMutate],
   );
 
   const deleteOrderEntry = useCallback(
-    (id) => deleteMutate({
-      variables: { input: { id } },
-      update: (proxy) => {
-        const storeData = proxy.readQuery({ query: CartQuery });
-        storeData.currentPendingOrder.order_entries = storeData.currentPendingOrder.order_entries
-          .filter((entry) => entry.id !== id);
-        proxy.writeQuery({ query: CartQuery, data: storeData });
-      },
-    }),
+    (id) =>
+      deleteMutate({
+        variables: { input: { id } },
+        update: (proxy) => {
+          const storeData = proxy.readQuery({ query: CartQuery });
+          storeData.currentPendingOrder.order_entries = storeData.currentPendingOrder.order_entries.filter(
+            (entry) => entry.id !== id,
+          );
+          proxy.writeQuery({ query: CartQuery, data: storeData });
+        },
+      }),
     [deleteMutate],
   );
 
-  const [changeQuantity, changeQuantityError] = useAsyncFunction(useCallback(
-    async (orderEntryId, newQuantityString) => {
-      const newQuantity = Number.parseInt(newQuantityString, 10);
-      if (Number.isNaN(newQuantity)) {
-        return;
-      }
+  const [changeQuantity, changeQuantityError] = useAsyncFunction(
+    useCallback(
+      async (orderEntryId, newQuantityString) => {
+        const newQuantity = Number.parseInt(newQuantityString, 10);
+        if (Number.isNaN(newQuantity)) {
+          return;
+        }
 
-      if (newQuantity === 0) {
-        await deleteOrderEntry(orderEntryId);
-      } else {
-        await updateOrderEntry(orderEntryId, newQuantity);
-      }
-    },
-    [deleteOrderEntry, updateOrderEntry],
-  ));
+        if (newQuantity === 0) {
+          await deleteOrderEntry(orderEntryId);
+        } else {
+          await updateOrderEntry(orderEntryId, newQuantity);
+        }
+      },
+      [deleteOrderEntry, updateOrderEntry],
+    ),
+  );
 
   const createCouponApplication = useCallback(
-    (couponCode) => createCouponApplicationMutate({
-      variables: {
-        orderId: data.currentPendingOrder?.id,
-        couponCode,
-      },
-    }),
+    (couponCode) =>
+      createCouponApplicationMutate({
+        variables: {
+          orderId: data.currentPendingOrder?.id,
+          couponCode,
+        },
+      }),
     [createCouponApplicationMutate, data],
   );
 
   const deleteCouponApplication = useCallback(
-    (couponApplication) => deleteCouponApplicationMutate({
-      variables: { id: couponApplication.id },
-    }),
+    (couponApplication) =>
+      deleteCouponApplicationMutate({
+        variables: { id: couponApplication.id },
+      }),
     [deleteCouponApplicationMutate],
   );
 
-  const checkOutComplete = () => { history.push('/order_history'); };
+  const checkOutComplete = () => {
+    history.push('/order_history');
+  };
 
   if (error) {
     return <ErrorDisplay error={error} />;
@@ -111,13 +123,11 @@ function Cart() {
           });
         }}
         changeQuantity={(entry, quantity) => changeQuantity(entry.id, quantity)}
-        checkOutButton={(
+        checkOutButton={
           <button type="button" className="btn btn-primary mt-2" onClick={checkOutModal.open}>
-            <i className="fa fa-shopping-cart" />
-            {' '}
-            Check out
+            <i className="fa fa-shopping-cart" /> Check out
           </button>
-        )}
+        }
         createCouponApplication={createCouponApplication}
         deleteCouponApplication={deleteCouponApplication}
       />
@@ -128,12 +138,11 @@ function Cart() {
         initialName={data.myProfile.name_without_nickname}
         orderId={(data.currentPendingOrder || {}).id}
         onComplete={checkOutComplete}
-        paymentOptions={
-          intersection(
-            ...((data.currentPendingOrder || {}).order_entries || [])
-              .map((entry) => entry.product.payment_options),
-          )
-        }
+        paymentOptions={intersection(
+          ...((data.currentPendingOrder || {}).order_entries || []).map(
+            (entry) => entry.product.payment_options,
+          ),
+        )}
         totalPrice={data.currentPendingOrder?.total_price ?? { fractional: 0 }}
       />
     </div>

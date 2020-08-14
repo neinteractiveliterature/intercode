@@ -1,0 +1,25 @@
+import React from 'react';
+import TextDiffDisplay from './TextDiffDisplay';
+import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';
+import { ParsedFormResponseChange } from './FormItemChangeUtils';
+
+export type FreeTextItemChangeDisplayProps = {
+  formItem: FreeTextFormItem,
+  change: ParsedFormResponseChange<FreeTextFormItem>,
+};
+
+function FreeTextItemChangeDisplay({ formItem, change }: FreeTextItemChangeDisplayProps) {
+  const { previous_value: before, new_value: after } = change;
+
+  if (formItem.rendered_properties.format === 'markdown') {
+    return (
+      <div className="text-monospace small border rounded p-1">
+        <TextDiffDisplay before={before} after={after} />
+      </div>
+    );
+  }
+
+  return <TextDiffDisplay before={before} after={after} />;
+}
+
+export default FreeTextItemChangeDisplay;

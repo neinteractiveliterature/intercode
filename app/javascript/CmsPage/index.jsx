@@ -2,7 +2,7 @@ import React, {
   useMemo, useEffect, Suspense,
 } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { CmsPageQuery } from './queries.gql';

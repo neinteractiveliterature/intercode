@@ -147,7 +147,7 @@ function RunCard({
     );
   };
 
-  const runTimespan = timespanFromRun({ timezone_name: timezoneName }, event, run);
+  const runTimespan = timespanFromRun(timezoneName, event, run);
   const acceptsSignups = (
     !event.registration_policy.slots_limited
     || event.registration_policy.total_slots_including_not_counted > 0

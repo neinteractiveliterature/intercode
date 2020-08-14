@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/react-hooks';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
-import { EventPageQuery } from './queries.gql';
 import RunsSection from './RunsSection';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
@@ -15,15 +13,14 @@ import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useEventPageQueryQuery } from './queries.generated';
 
 function EventPage({ eventId, eventPath }) {
   const { myProfile } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
   const rateEvent = useRateEvent();
 
-  usePageTitle(
-    useValueUnless(() => data.event.title, error || loading),
-  );
+  usePageTitle(useValueUnless(() => data.event.title, error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -33,9 +30,7 @@ function EventPage({ eventId, eventPath }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const {
-    convention, currentAbility, event,
-  } = data;
+  const { convention, currentAbility, event } = data;
 
   return (
     <>

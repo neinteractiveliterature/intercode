@@ -1,7 +1,7 @@
 import React, { Suspense, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { parse } from 'graphql/language/parser';
-import { execute } from 'apollo-link';
+import { execute } from '@apollo/client';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';

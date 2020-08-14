@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/client';
 
-import { SubmitOrder } from './mutations.gql';
+import { SubmitOrder } from './mutations';
 
 export default function useSubmitOrder() {
   const stripe = useStripe();

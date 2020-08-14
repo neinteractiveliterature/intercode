@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { humanize } from 'inflected';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
-import { EventProposalQueryWithOwner, EventProposalAdminNotesQuery } from './queries.gql';
-import { UpdateEventProposalAdminNotes } from './mutations.gql';
+import { EventProposalQueryWithOwner, EventProposalAdminNotesQuery } from './queries';
+import { UpdateEventProposalAdminNotes } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';

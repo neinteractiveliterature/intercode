@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { DeleteFormSection } from './mutations.gql';
+import { DeleteFormSection } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import { FormEditorContext } from './FormEditorContexts';
-import { FormEditorQuery } from './queries.gql';
+import { FormEditorQuery } from './queries';
 import { useDeleteMutation } from '../MutationUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useSortable from '../useSortable';

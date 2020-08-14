@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { humanize, titleize } from 'inflected';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
 

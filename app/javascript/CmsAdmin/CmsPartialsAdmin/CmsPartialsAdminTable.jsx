@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { CmsPartialsAdminQuery } from './queries.gql';
 import { DeletePartial } from './mutations.gql';

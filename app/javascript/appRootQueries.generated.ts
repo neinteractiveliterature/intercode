@@ -1,9 +1,8 @@
 /* eslint-disable */
 import * as Types from './graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 
 
 export type AppRootQueryQueryVariables = Types.Exact<{
@@ -25,10 +24,10 @@ export type AppRootQueryQuery = (
   )>, currentPendingOrder?: Types.Maybe<(
     { __typename?: 'Order' }
     & Pick<Types.Order, 'id'>
-    & { order_entries: Array<Types.Maybe<(
+    & { order_entries: Array<(
       { __typename?: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id' | 'quantity'>
-    )>> }
+    )> }
   )>, myProfile?: Types.Maybe<(
     { __typename?: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name' | 'accepted_clickwrap_agreement' | 'name_without_nickname' | 'first_name' | 'last_name' | 'gravatar_enabled' | 'gravatar_url'>
@@ -186,12 +185,12 @@ export const AppRootQueryDocument = gql`
  *   },
  * });
  */
-export function useAppRootQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
+export function useAppRootQueryQuery(baseOptions?: Apollo.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
+        return Apollo.useQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
       }
-export function useAppRootQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
+export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
+          return Apollo.useLazyQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
         }
 export type AppRootQueryQueryHookResult = ReturnType<typeof useAppRootQueryQuery>;
 export type AppRootQueryLazyQueryHookResult = ReturnType<typeof useAppRootQueryLazyQuery>;
-export type AppRootQueryQueryResult = ApolloReactCommon.QueryResult<AppRootQueryQuery, AppRootQueryQueryVariables>;
+export type AppRootQueryQueryResult = Apollo.QueryResult<AppRootQueryQuery, AppRootQueryQueryVariables>;

@@ -5,13 +5,13 @@ import {
   Switch,
   useLocation,
 } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EditSignup from './EditSignup';
 import SignupsIndex from './SignupsIndex';
-import { SignupAdminEventQuery } from './queries.gql';
+import { SignupAdminEventQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 

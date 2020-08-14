@@ -1,7 +1,7 @@
 /* eslint-disable import/export */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
 import { render, queries } from '@testing-library/react';
 
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';

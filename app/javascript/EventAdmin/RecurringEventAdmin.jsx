@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import EditRun from './EditRun';
 import RecurringEventSection from './RecurringEventSection';
-import { EventAdminEventsQuery } from './queries.gql';
+import { EventAdminEventsQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
@@ -16,7 +16,12 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function RecurringEventAdmin({ eventCategoryId }) {
   const { data, loading, error } = useQuery(EventAdminEventsQuery);
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, loading, error, eventCategoryId);
+  const [eventCategory, sortedEvents] = useEventAdminCategory(
+    data,
+    loading,
+    error,
+    eventCategoryId,
+  );
 
   usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
 
@@ -36,16 +41,10 @@ function RecurringEventAdmin({ eventCategoryId }) {
       </Link>
       <hr className="my-4" />
       {sortedEvents.map((event) => (
-        <RecurringEventSection
-          convention={data.convention}
-          event={event}
-          key={event.id}
-        />
+        <RecurringEventSection convention={data.convention} event={event} key={event.id} />
       ))}
       <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
-        {(props) => (
-          <EditRun {...props} events={data.events} convention={data.convention} />
-        )}
+        {(props) => <EditRun {...props} events={data.events} convention={data.convention} />}
       </Route>
     </div>
   );

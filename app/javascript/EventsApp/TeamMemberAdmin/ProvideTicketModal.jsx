@@ -2,14 +2,14 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize, pluralize } from 'inflected';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
-import { ProvideEventTicket } from './mutations.gql';
-import { TeamMembersQuery } from './queries.gql';
+import { ProvideEventTicket } from './mutations';
+import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
 
