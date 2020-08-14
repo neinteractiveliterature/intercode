@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
 import { ReportsMenuQuery } from './queries.gql';

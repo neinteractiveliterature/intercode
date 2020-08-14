@@ -2,7 +2,7 @@ import React, { useState, useCallback, ReactNode } from 'react';
 import { Controlled as CodeMirror, IControlledCodeMirror, DomEvent } from 'react-codemirror2';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 
 import { EditorConfiguration } from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
@@ -105,7 +105,7 @@ function SyncCodeInput({
 
     return (
       <div className="markdown-preview">
-        {parseCmsContent(previewContent).bodyComponents}
+        {parseCmsContent(previewContent ?? '').bodyComponents}
       </div>
     );
   };

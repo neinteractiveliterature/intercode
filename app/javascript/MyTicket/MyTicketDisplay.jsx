@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
-import { MyTicketDisplayQuery } from './queries.gql';
+import { MyTicketDisplayQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import useValueUnless from '../useValueUnless';
@@ -38,9 +38,7 @@ function MyTicketDisplay() {
   return (
     <>
       <h1 className="mb-4">
-        My
-        {' '}
-        {convention.ticket_name}
+        My {convention.ticket_name}
         {' receipt for '}
         {convention.name}
       </h1>

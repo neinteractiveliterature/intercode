@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import BucketInput from './BucketInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import { ChangeSignupBucket } from './mutations.gql';
+import { ChangeSignupBucket } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 
 function ChangeBucketModal({ signup, onComplete, onCancel }) {

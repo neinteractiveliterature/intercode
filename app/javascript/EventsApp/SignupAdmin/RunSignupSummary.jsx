@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
 import { findBucket, formatSignupState } from './SignupUtils';
 import RunHeader from './RunHeader';
-import { RunSignupSummaryQuery } from './queries.gql';
+import { RunSignupSummaryQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import ErrorDisplay from '../../ErrorDisplay';

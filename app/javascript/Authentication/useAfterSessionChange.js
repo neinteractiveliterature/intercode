@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 // import { useHistory } from 'react-router-dom';
-// import { useApolloClient } from '@apollo/react-hooks';
+// import { useApolloClient } from '@apollo/client';
 
 // import AuthenticityTokensContext from '../AuthenticityTokensContext';
 // import AuthenticationModalContext from './AuthenticationModalContext';

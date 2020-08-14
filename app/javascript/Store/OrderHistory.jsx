@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import intersection from 'lodash/intersection';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
-import { OrderHistoryQuery } from './queries.gql';
+import { OrderHistoryQuery } from './queries';
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
 import ErrorDisplay from '../ErrorDisplay';
@@ -15,9 +15,7 @@ import AppRootContext from '../AppRootContext';
 
 function OrderHistoryOrderEntry({ orderEntry }) {
   const productVariant = orderEntry.product_variant || {};
-  const name = orderEntry.product.name + (
-    productVariant.name ? ` (${productVariant.name})` : ''
-  );
+  const name = orderEntry.product.name + (productVariant.name ? ` (${productVariant.name})` : '');
   const imageUrl = productVariant.image_url || orderEntry.product.image_url;
 
   return (
@@ -27,7 +25,9 @@ function OrderHistoryOrderEntry({ orderEntry }) {
           <div className="flex-grow-1">
             <strong>{name}</strong>
           </div>
-          {imageUrl && <img className="mr-4" src={imageUrl} alt={name} style={{ width: '100px' }} />}
+          {imageUrl && (
+            <img className="mr-4" src={imageUrl} alt={name} style={{ width: '100px' }} />
+          )}
         </div>
       </td>
       <td className="text-right">{orderEntry.quantity}</td>
@@ -58,10 +58,7 @@ function OrderHistoryCouponApplication({ couponApplication }) {
         <em>{'Coupon code: '}</em>
         <code>{couponApplication.coupon.code}</code>
       </td>
-      <td className="pr-4 font-italic text-right">
-        -
-        {formatMoney(couponApplication.discount)}
-      </td>
+      <td className="pr-4 font-italic text-right">-{formatMoney(couponApplication.discount)}</td>
     </tr>
   );
 }
@@ -77,8 +74,9 @@ OrderHistoryCouponApplication.propTypes = {
 
 function OrderHistoryOrderStatus({ order, convention, paymentModal }) {
   if (order.status === 'paid') {
-    const opsPosition = convention.staff_positions
-      .find((staffPosition) => staffPosition.name === 'Operations Coordinator');
+    const opsPosition = convention.staff_positions.find(
+      (staffPosition) => staffPosition.name === 'Operations Coordinator',
+    );
     const opsEmail = (opsPosition || {}).email;
     const emailSubject = `[${convention.name}] Cancellation request: order ${order.id}`;
     const emailBody = `I would like to request that order ${order.id} be canceled.`;
@@ -90,7 +88,12 @@ function OrderHistoryOrderStatus({ order, convention, paymentModal }) {
         </div>
       </div>,
       opsEmail ? (
-        <a href={`mailto:${opsEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`} key="cancellation-link">
+        <a
+          href={`mailto:${opsEmail}?subject=${encodeURIComponent(
+            emailSubject,
+          )}&body=${encodeURIComponent(emailBody)}`}
+          key="cancellation-link"
+        >
           <small>Request cancellation</small>
         </a>
       ) : null,
@@ -117,7 +120,9 @@ function OrderHistoryOrderStatus({ order, convention, paymentModal }) {
       <button
         type="button"
         className="btn btn-sm btn-outline-success mt-2"
-        onClick={() => { paymentModal.open({ order }); }}
+        onClick={() => {
+          paymentModal.open({ order });
+        }}
       >
         Pay now
       </button>
@@ -132,10 +137,12 @@ OrderHistoryOrderStatus.propTypes = {
   }).isRequired,
   convention: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    staff_positions: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-      email: PropTypes.string,
-    })).isRequired,
+    staff_positions: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        email: PropTypes.string,
+      }),
+    ).isRequired,
   }).isRequired,
   paymentModal: PropTypes.shape({
     open: PropTypes.func.isRequired,
@@ -150,10 +157,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }) {
     <li key={order.id} className="card mb-4">
       <div className="d-flex card-header border-bottom-0">
         <div className="col pl-0">
-          <h3>
-            Order #
-            {order.id}
-          </h3>
+          <h3>Order #{order.id}</h3>
           <small>{submittedTime.format('dddd, MMMM D, YYYY, h:mma')}</small>
         </div>
         <div className="text-right">
@@ -177,11 +181,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }) {
           <tfoot>
             <tr className="bg-warning-light">
               <td colSpan={3} className="text-right px-4">
-                <strong>
-                  Total:
-                  {' '}
-                  {formatMoney(order.total_price)}
-                </strong>
+                <strong>Total: {formatMoney(order.total_price)}</strong>
               </td>
             </tr>
           </tfoot>
@@ -196,12 +196,16 @@ OrderHistoryOrder.propTypes = {
     id: PropTypes.number.isRequired,
     submitted_at: PropTypes.string.isRequired,
     total_price: PropTypes.shape({}).isRequired,
-    order_entries: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
-    coupon_applications: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
+    order_entries: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
+    coupon_applications: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
   convention: PropTypes.shape({
     timezone_name: PropTypes.string.isRequired,
@@ -248,9 +252,10 @@ function OrderHistory() {
             paymentOptions={
               paymentModal.state
                 ? intersection(
-                  ...paymentModal.state.order.order_entries
-                    .map((entry) => entry.product.payment_options),
-                ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
+                    ...paymentModal.state.order.order_entries.map(
+                      (entry) => entry.product.payment_options,
+                    ),
+                  ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
                 : []
             }
             totalPrice={paymentModal.state?.order?.total_price ?? { fractional: 0 }}

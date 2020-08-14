@@ -6,8 +6,8 @@ import { useHistory } from 'react-router-dom';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
-import { CreateForm } from './mutations.gql';
-import { FormAdminQuery } from './queries.gql';
+import { CreateForm } from './mutations';
+import { FormAdminQuery } from './queries';
 import FormTypes from '../../../config/form_types.json';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';

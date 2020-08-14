@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import classnames from 'classnames';
 
 import AppRootContext from '../../AppRootContext';
-import { CreateModeratedSignupModalQuery, EventPageQuery } from './queries.gql';
-import { CreateSignupRequest } from './mutations.gql';
+import { CreateModeratedSignupModalQuery, EventPageQuery } from './queries';
+import { CreateSignupRequest } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';
@@ -35,11 +35,7 @@ function CreateModeratedSignupModal({
       }
 
       return ((data.myProfile || {}).signups || []).find((signup) => {
-        const timespan = timespanFromRun(
-          { timezone_name: timezoneName },
-          signup.run.event,
-          signup.run,
-        );
+        const timespan = timespanFromRun(timezoneName, signup.run.event, signup.run);
 
         return (
           !(event.can_play_concurrently || signup.run.event.can_play_concurrently)

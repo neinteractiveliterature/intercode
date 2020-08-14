@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Link, Switch, Route, useParams, useHistory,
 } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import EventProposalAdminDisplay from './EventProposalAdminDisplay';
 import EventProposalForm from './EventProposalForm';
-import { EventProposalQuery, EventProposalQueryWithOwner } from './queries.gql';
+import { EventProposalQuery, EventProposalQueryWithOwner } from './queries';
 import EventProposalsAdminTable from './EventProposalsAdminTable';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';

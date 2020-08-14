@@ -2,114 +2,114 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
-import {
-  EventAdminEventsQuery, RunFields, EventFields, ConventionFields,
-} from './queries.gql';
-import { CreateRun, UpdateRun, DeleteRun } from './mutations.gql';
+import { EventAdminEventsQuery, RunFields, EventFields, ConventionFields } from './queries';
+import { CreateRun, UpdateRun, DeleteRun } from './mutations';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 
 function EditRunModal({
-  run, event, convention, editingRunChanged,
-  onCancel, onSaveFailed, onSaveSucceeded, onSaveStart, onDelete,
+  run,
+  event,
+  convention,
+  editingRunChanged,
+  onCancel,
+  onSaveFailed,
+  onSaveSucceeded,
+  onSaveStart,
+  onDelete,
 }) {
   const [createRun] = useMutation(CreateRun);
   const [updateRun] = useMutation(UpdateRun);
   const [deleteMutate] = useMutation(DeleteRun);
   const confirm = useConfirm();
 
-  const initiateSaveMutation = useCallback(
-    () => {
-      const commonProps = {
-        run: {
-          starts_at: run.starts_at,
-          title_suffix: run.title_suffix,
-          schedule_note: run.schedule_note,
-          room_ids: run.rooms.map((room) => room.id),
-        },
-      };
+  const initiateSaveMutation = useCallback(() => {
+    const commonProps = {
+      run: {
+        starts_at: run.starts_at,
+        title_suffix: run.title_suffix,
+        schedule_note: run.schedule_note,
+        room_ids: run.rooms.map((room) => room.id),
+      },
+    };
 
-      if (run.id) {
-        return updateRun({
-          variables: {
-            input: {
-              id: run.id,
-              ...commonProps,
-            },
-          },
-        });
-      }
-
-      return createRun({
-        variables: {
-          input: {
-            event_id: event.id,
-            ...commonProps,
-          },
-        },
-        update: (store, { data: { createRun: { run: newRun } } }) => {
-          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-          const eventData = eventsData.events.find((e) => e.id === event.id);
-          eventData.runs.push(newRun);
-          store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
-        },
-      });
-    },
-    [createRun, event, run, updateRun],
-  );
-
-  const saveRun = useCallback(
-    async () => {
-      onSaveStart();
-
-      try {
-        const data = await initiateSaveMutation();
-        onSaveSucceeded(data.run);
-      } catch (error) {
-        onSaveFailed(error);
-      }
-    },
-    [onSaveSucceeded, onSaveFailed, onSaveStart, initiateSaveMutation],
-  );
-
-  const deleteRun = useCallback(
-    async () => {
-      const data = await deleteMutate({
+    if (run.id) {
+      return updateRun({
         variables: {
           input: {
             id: run.id,
+            ...commonProps,
           },
         },
-        update: (store) => {
-          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-          const eventData = eventsData.events.find((e) => e.id === event.id);
-          const runIndex = eventData.runs.findIndex((r) => r.id === run.id);
-          eventData.runs.splice(runIndex, 1);
-          store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
-        },
       });
-      onDelete(data);
-    },
-    [onDelete, deleteMutate, event, run],
-  );
+    }
 
-  const title = useMemo(
-    () => {
-      if (!run) {
-        return null;
-      }
+    return createRun({
+      variables: {
+        input: {
+          event_id: event.id,
+          ...commonProps,
+        },
+      },
+      update: (
+        store,
+        {
+          data: {
+            createRun: { run: newRun },
+          },
+        },
+      ) => {
+        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
+        const eventData = eventsData.events.find((e) => e.id === event.id);
+        eventData.runs.push(newRun);
+        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
+      },
+    });
+  }, [createRun, event, run, updateRun]);
 
-      if (run.id != null) {
-        return `Edit run of ${event.title} `;
-      }
+  const saveRun = useCallback(async () => {
+    onSaveStart();
 
-      return `Add run of ${event.title}`;
-    },
-    [event, run],
-  );
+    try {
+      const data = await initiateSaveMutation();
+      onSaveSucceeded(data.run);
+    } catch (error) {
+      onSaveFailed(error);
+    }
+  }, [onSaveSucceeded, onSaveFailed, onSaveStart, initiateSaveMutation]);
+
+  const deleteRun = useCallback(async () => {
+    const data = await deleteMutate({
+      variables: {
+        input: {
+          id: run.id,
+        },
+      },
+      update: (store) => {
+        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
+        const eventData = eventsData.events.find((e) => e.id === event.id);
+        const runIndex = eventData.runs.findIndex((r) => r.id === run.id);
+        eventData.runs.splice(runIndex, 1);
+        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
+      },
+    });
+    onDelete(data);
+  }, [onDelete, deleteMutate, event, run]);
+
+  const title = useMemo(() => {
+    if (!run) {
+      return null;
+    }
+
+    if (run.id != null) {
+      return `Edit run of ${event.title} `;
+    }
+
+    return `Add run of ${event.title}`;
+  }, [event, run]);
 
   return (
     <div>
@@ -133,11 +133,13 @@ function EditRunModal({
               <button
                 type="button"
                 className="btn btn-outline-danger"
-                onClick={() => confirm({
-                  prompt: `Are you sure you want to delete this run of ${event && event.title}?`,
-                  action: deleteRun,
-                  renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                })}
+                onClick={() =>
+                  confirm({
+                    prompt: `Are you sure you want to delete this run of ${event && event.title}?`,
+                    action: deleteRun,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                  })
+                }
               >
                 Delete
               </button>

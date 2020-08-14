@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react';
 
-import { CreateSignupEventsQuery } from './queries.gql';
+import { CreateSignupEventsQuery } from './queries';
 import CreateSignupRunCard from './CreateSignupRunCard';
 import EventSelect from '../BuiltInFormControls/EventSelect';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';

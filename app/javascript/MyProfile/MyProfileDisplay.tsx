@@ -1,0 +1,153 @@
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
+
+import ErrorDisplay from '../ErrorDisplay';
+import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
+import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
+import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import usePageTitle from '../usePageTitle';
+import Gravatar from '../Gravatar';
+import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useMyProfileQueryQuery } from './queries.generated';
+import { getSortedParsedFormItems } from '../Models/Form';
+import AdminWarning from '../UIComponents/AdminWarning';
+import { ConventionForTimespanUtils } from '../TimespanUtils';
+
+function MyProfileDisplay() {
+  const { t } = useTranslation();
+  const { data, loading, error } = useMyProfileQueryQuery();
+
+  const formResponse = useMemo(() => {
+    if (loading || error) {
+      return null;
+    }
+
+    if (!data?.myProfile) {
+      return null;
+    }
+
+    return JSON.parse(data.myProfile.form_response_attrs_json ?? '{}');
+  }, [data, loading, error]);
+
+  const formItems = useMemo(() => {
+    if (!data?.convention?.user_con_profile_form) {
+      return [];
+    }
+
+    return getSortedParsedFormItems(data.convention.user_con_profile_form);
+  }, [data?.convention?.user_con_profile_form]);
+
+  usePageTitle(t('myProfile.display.pageTitle', 'My profile'));
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (!formItems) {
+    return (
+      <AdminWarning>
+        <Trans i18nKey="admin.warnings.emptyUserConProfileForm">
+          <p>This convention has no user profile form set up, or the form is empty.</p>
+
+          <Link to="/admin_forms">To create or edit the user profile form, go here.</Link>
+          <br />
+          <Link to="/convention/edit">
+            To set it as the user profile form for this convention, go here.
+          </Link>
+        </Trans>
+      </AdminWarning>
+    );
+  }
+
+  const convention = data!.convention!;
+  const myProfile = data!.myProfile!;
+
+  return (
+    <div className="row">
+      <div className="col-lg-9">
+        <section>
+          <h1 className="mb-4">
+            {t('myProfile.display.header', 'My {{ conventionName }} profile', {
+              conventionName: convention.name,
+            })}
+          </h1>
+
+          <dl className="row">
+            <dt className="col-md-3 mb-2">{t('myProfile.display.emailLabel', 'Email')}</dt>
+            <dd className="col-md-9 mb-2">{myProfile.email}</dd>
+
+            <dt className="col-md-3 mb-2">{t('myProfile.display.avatarLabel', 'Avatar')}</dt>
+            <dd className="col-md-9 mb-2">
+              <div className="d-flex align-items-center">
+                <div className="mr-2">
+                  <Gravatar
+                    url={myProfile.gravatar_url}
+                    enabled={myProfile.gravatar_enabled}
+                    pixelSize={32}
+                  />
+                </div>
+                <div className="font-italic">
+                  {myProfile.gravatar_enabled
+                    ? t('myProfile.display.gravatarEnabled', 'Gravatar enabled')
+                    : t('myProfile.display.gravatarDisabled', 'Gravatar disabled')}
+                </div>
+              </div>
+            </dd>
+
+            {myProfile.can_have_bio && (
+              <>
+                <dt className="col-md-3 mb-2">{t('myProfile.display.bioLabel', 'Bio')}</dt>
+                <dd className="col-md-9 mb-2">
+                  <div className="card bg-light">
+                    <div className="card-body">
+                      <strong>{myProfile.bio_name}</strong>
+                      <br />
+                      {/* eslint-disable-next-line react/no-danger */}
+                      <div dangerouslySetInnerHTML={{ __html: myProfile.bio_html ?? '' }} />
+                    </div>
+                  </div>
+                </dd>
+              </>
+            )}
+
+            {formItems.map(
+              (item) =>
+                item.identifier && (
+                  <React.Fragment key={item.id}>
+                    <dt className="col-md-3 mb-2">
+                      <AdminCaption formItem={item} />
+                    </dt>
+                    <dd className="col-md-9 mb-2">
+                      <FormItemDisplay
+                        formItem={item}
+                        value={formResponse[item.identifier]}
+                        convention={convention as ConventionForTimespanUtils}
+                        displayMode="admin"
+                      />
+                    </dd>
+                  </React.Fragment>
+                ),
+            )}
+          </dl>
+
+          <Link to="/my_profile/edit" className="btn btn-secondary">
+            {t('myProfile.editButton', 'Edit my profile')}
+          </Link>
+        </section>
+      </div>
+
+      <div className="col-lg-3">
+        <div className="mt-4 mt-lg-0">
+          <UserConProfileSignupsCard userConProfileId={myProfile.id} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default MyProfileDisplay;

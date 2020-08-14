@@ -88,7 +88,9 @@ task sanitize_db: :environment do
     'marleigh@mit.edu',
     'rwensley314@gmail.com',
     'dancesthroughlife@gmail.com',
-    'hannahdotread@gmail.com'
+    'hannahdotread@gmail.com',
+    'lisefrac@gmail.com',
+    'elfracal@electric-monk.net'
   ]
   sanitizer = SanitizeDatabaseService.new(dev_emails: dev_emails)
   sanitizer.call!

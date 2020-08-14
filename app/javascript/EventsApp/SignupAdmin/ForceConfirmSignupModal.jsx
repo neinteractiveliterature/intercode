@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import BucketInput from './BucketInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import { ForceConfirmSignup } from './mutations.gql';
+import { ForceConfirmSignup } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 
 function ForceConfirmSignupModal({ signup, onComplete, onCancel }) {

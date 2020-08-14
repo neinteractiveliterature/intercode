@@ -4,11 +4,11 @@ import MomentPropTypes from 'react-moment-proptypes';
 import {
   NavLink, Switch, Redirect, Route, useLocation,
 } from 'react-router-dom';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
-import { ScheduleGridCombinedQuery } from './queries.gql';
+import { ScheduleGridCombinedQuery } from './queries';
 import AppRootContext from '../../AppRootContext';
 
 function ConventionDayTab({ basename, timespan, prefetchTimespan }) {

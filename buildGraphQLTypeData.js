@@ -26,6 +26,18 @@ function getEnumTypesData(schema) {
   return filteredTypes.reduce((acc, type) => ({ ...acc, [type.name]: type }), {});
 }
 
+function getPossibleTypesData(schema) {
+  const possibleTypes = {};
+
+  schema.data.__schema.types.forEach(supertype => {
+    if (supertype.possibleTypes) {
+      possibleTypes[supertype.name] = supertype.possibleTypes.map(subtype => subtype.name);
+    }
+  });
+
+  return possibleTypes;
+}
+
 function writeDataToFile(data, path) {
   fs.writeFile(
     path, JSON.stringify(data, null, 2), (err) => {
@@ -39,5 +51,7 @@ function writeDataToFile(data, path) {
 }
 
 const schema = JSON.parse(fs.readFileSync('./schema.json'));
-writeDataToFile(getFragmentTypesData(schema), './app/javascript/fragmentTypes.json');
+// no longer needed in @apollo/client 3
+// writeDataToFile(getFragmentTypesData(schema), './app/javascript/fragmentTypes.json');
+writeDataToFile(getPossibleTypesData(schema), './app/javascript/possibleTypes.json');
 writeDataToFile(getEnumTypesData(schema), './app/javascript/enumTypes.json');

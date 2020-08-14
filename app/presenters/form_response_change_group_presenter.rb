@@ -38,7 +38,7 @@ class FormResponseChangeGroupPresenter
         'starts_at' => convention.starts_at,
         'ends_at' => convention.ends_at,
         # force JS timezone helpers to use the request timezone
-        'timezone_name' => Notifier.current_timezone,
+        'timezone_name' => Notifier.current_timezone || 'Etc/UTC',
         'timezone_mode' => 'convention_local'
       }
     }
@@ -74,8 +74,7 @@ class FormResponseChangeGroupPresenter
       identifier: item.identifier,
       position: item.position,
       admin_description: item.admin_description,
-      public_description: item.public_description,
-      properties: item.properties
+      rendered_properties: item.properties
     }
   end
 

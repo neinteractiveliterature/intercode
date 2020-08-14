@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { RunHeaderRunInfoQuery } from './queries.gql';
+import { RunHeaderRunInfoQuery } from './queries';
 import { timespanFromRun } from '../../TimespanUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -34,7 +34,7 @@ function RunHeader({ eventId, runId }) {
       </h1>
 
       <h3 className="mt-0">
-        {timespanFromRun(data.convention, data.event, data.event.run)
+        {timespanFromRun(timezoneName, data.event, data.event.run)
           .humanizeInTimezone(timezoneName)}
       </h3>
 

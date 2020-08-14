@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import moment from 'moment-timezone';
 import Pagination from 'react-js-pagination';
 
-import { AcceptSignupRequest, RejectSignupRequest } from './mutations.gql';
+import { AcceptSignupRequest, RejectSignupRequest } from './mutations';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import { SignupModerationQueueQuery } from './queries.gql';
+import { SignupModerationQueueQuery } from './queries';
 import { timespanFromRun } from '../TimespanUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
@@ -36,7 +36,7 @@ function describeRequestedBucket(signupRequest) {
 
 function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }) {
   const { timezoneName } = useContext(AppRootContext);
-  const runTimespan = timespanFromRun({ timezone_name: timezoneName }, run.event, run);
+  const runTimespan = timespanFromRun(timezoneName, run.event, run);
 
   return (
     <>

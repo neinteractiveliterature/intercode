@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';

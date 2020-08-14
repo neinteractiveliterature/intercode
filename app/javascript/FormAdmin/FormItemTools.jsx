@@ -2,13 +2,13 @@ import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
-import { MoveFormItem } from './mutations.gql';
-import { FormEditorQuery } from './queries.gql';
+import { MoveFormItem } from './mutations';
+import { FormEditorQuery } from './queries';
 import useCollapse from '../NavigationBar/useCollapse';
 import useUniqueId from '../useUniqueId';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';

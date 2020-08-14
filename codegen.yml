@@ -8,6 +8,9 @@ generates:
     plugins:
       - add: '/* eslint-disable */'
       - typescript
+    config:
+      scalars:
+        Date: string
   app/javascript/:
     preset: near-operation-file
     presetConfig:
@@ -22,3 +25,4 @@ generates:
       withHOC: false
       withHooks: true
       documentMode: graphQLTag
+      gqlImport: '@apollo/client#gql'

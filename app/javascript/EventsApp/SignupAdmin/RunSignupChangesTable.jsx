@@ -4,7 +4,7 @@ import ReactTable from 'react-table';
 import { useTranslation } from 'react-i18next';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
-import { RunSignupChangesQuery } from './queries.gql';
+import { RunSignupChangesQuery } from './queries';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';

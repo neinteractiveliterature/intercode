@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
-import { AdminTicketTypesQuery } from './queries.gql';
+import { AdminTicketTypesQuery } from './queries';
 import buildTicketTypeInput from './buildTicketTypeInput';
-import { CreateTicketType } from './mutations.gql';
+import { CreateTicketType } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
@@ -27,15 +27,22 @@ function NewTicketType({ ticketName }) {
   });
 
   const [mutate] = useMutation(CreateTicketType, {
-    update: (proxy, { data: { createTicketType: { ticket_type: newTicketType } } }) => {
+    update: (
+      proxy,
+      {
+        data: {
+          createTicketType: { ticket_type: newTicketType },
+        },
+      },
+    ) => {
       const data = proxy.readQuery({ query: AdminTicketTypesQuery });
       data.convention.ticket_types.push(newTicketType);
       proxy.writeQuery({ query: AdminTicketTypesQuery, data });
     },
   });
 
-  const [saveClicked, error, inProgress] = useAsyncFunction(useCallback(
-    async () => {
+  const [saveClicked, error, inProgress] = useAsyncFunction(
+    useCallback(async () => {
       await mutate({
         variables: {
           input: {
@@ -44,25 +51,16 @@ function NewTicketType({ ticketName }) {
         },
       });
       history.replace('/ticket_types');
-    },
-    [mutate, ticketType, history],
-  ));
+    }, [mutate, ticketType, history]),
+  );
 
   return (
     <div>
-      <h1 className="mb-4">
-        New
-        {' '}
-        {ticketName}
-        {' '}
-        type
-      </h1>
-      <TicketTypeForm
-        ticketType={ticketType}
-        ticketName={ticketName}
-        onChange={setTicketType}
-      />
-      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>Save</button>
+      <h1 className="mb-4">New {ticketName} type</h1>
+      <TicketTypeForm ticketType={ticketType} ticketName={ticketName} onChange={setTicketType} />
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
+        Save
+      </button>
       <ErrorDisplay graphQLError={error} />
     </div>
   );

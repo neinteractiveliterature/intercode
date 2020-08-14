@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { humanize } from 'inflected';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';

@@ -1,7 +1,7 @@
 import React, {
   useContext, useMemo, useState, useCallback,
 } from 'react';
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 
@@ -9,8 +9,8 @@ import FormItemTools from './FormItemTools';
 import FormItemEditorContent from './FormItemEditorContent';
 import { FormEditorContext, FormItemEditorContext } from './FormEditorContexts';
 import { parseFormItemObject, buildFormItemInput, addGeneratedIds } from './FormItemUtils';
-import { PreviewFormItemQuery } from './queries.gql';
-import { UpdateFormItem } from './mutations.gql';
+import { PreviewFormItemQuery } from './queries';
+import { UpdateFormItem } from './mutations';
 import useDebouncedState from '../useDebouncedState';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import useAsyncFunction from '../useAsyncFunction';

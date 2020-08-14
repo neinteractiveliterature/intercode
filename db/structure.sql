@@ -2398,7 +2398,7 @@ ALTER SEQUENCE public.team_members_id_seq OWNED BY public.team_members.id;
 CREATE TABLE public.ticket_types (
     id integer NOT NULL,
     convention_id integer,
-    name text,
+    name text NOT NULL,
     description text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -4315,6 +4315,20 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
+-- Name: events tsvector_update_event_title; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('title_vector', 'public.simple_unaccent', 'title');
+
+
+--
+-- Name: pg_search_documents tsvector_update_pg_search_documents_content; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvector_update_pg_search_documents_content BEFORE INSERT OR UPDATE ON public.pg_search_documents FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('content_vector', 'public.english_unaccent', 'content');
+
+
+--
 -- Name: signup_requests fk_rails_008590ab32; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5199,6 +5213,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200516164805'),
 ('20200517155823'),
 ('20200601160341'),
-('20200712160144');
+('20200712160144'),
+('20200807160757');
 
 

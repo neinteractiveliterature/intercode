@@ -1,9 +1,8 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 
 
 export type CmsFileFieldsFragment = (
@@ -70,12 +69,12 @@ export const CmsFilesAdminQueryDocument = gql`
  *   },
  * });
  */
-export function useCmsFilesAdminQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>(CmsFilesAdminQueryDocument, baseOptions);
+export function useCmsFilesAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>) {
+        return Apollo.useQuery<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>(CmsFilesAdminQueryDocument, baseOptions);
       }
-export function useCmsFilesAdminQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>(CmsFilesAdminQueryDocument, baseOptions);
+export function useCmsFilesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>) {
+          return Apollo.useLazyQuery<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>(CmsFilesAdminQueryDocument, baseOptions);
         }
 export type CmsFilesAdminQueryQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryQuery>;
 export type CmsFilesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryLazyQuery>;
-export type CmsFilesAdminQueryQueryResult = ApolloReactCommon.QueryResult<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>;
+export type CmsFilesAdminQueryQueryResult = Apollo.QueryResult<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>;

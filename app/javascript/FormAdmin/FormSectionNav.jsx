@@ -1,10 +1,10 @@
 import React, { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
-import { CreateFormSection, MoveFormSection } from './mutations.gql';
+import { CreateFormSection, MoveFormSection } from './mutations';
 import { FormEditorContext } from './FormEditorContexts';
-import { FormEditorQuery } from './queries.gql';
+import { FormEditorQuery } from './queries';
 import { useCreateMutation } from '../MutationUtils';
 import { serializeParsedFormSection } from './FormItemUtils';
 import FormSectionNavItem from './FormSectionNavItem';

@@ -1,9 +1,9 @@
 import React from 'react';
 import flatten from 'lodash/flatten';
 import { humanize } from 'inflected';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
-import { OrderSummaryQuery } from './queries.gql';
+import { OrderSummaryQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -12,10 +12,14 @@ const ORDER_STATUSES = ['paid', 'unpaid', 'cancelled'];
 
 function statusClass(status) {
   switch (status) {
-    case 'paid': return 'table-success';
-    case 'unpaid': return 'table-warning';
-    case 'cancelled': return 'text-muted';
-    default: return '';
+    case 'paid':
+      return 'table-success';
+    case 'unpaid':
+      return 'table-warning';
+    case 'cancelled':
+      return 'text-muted';
+    default:
+      return '';
   }
 }
 
@@ -25,7 +29,11 @@ function OrderSummary() {
 
   const renderQuantityCell = (quantitiesByStatus, status) => {
     const { quantity } = quantitiesByStatus.find((qbs) => qbs.status === status);
-    return <td key={status} className={statusClass(status)}>{quantity}</td>;
+    return (
+      <td key={status} className={statusClass(status)}>
+        {quantity}
+      </td>
+    );
   };
 
   const renderTotalToPurchaseCell = (quantitiesByStatus) => {
@@ -37,16 +45,23 @@ function OrderSummary() {
       return acc + qbs.quantity;
     }, 0);
 
-    return <td key="total-to-purchase" className="table-primary font-weight-bold">{total}</td>;
+    return (
+      <td key="total-to-purchase" className="table-primary font-weight-bold">
+        {total}
+      </td>
+    );
   };
 
   const renderVariant = (variant) => {
-    const quantityCells = ORDER_STATUSES
-      .map((status) => renderQuantityCell(variant.order_quantities_by_status, status));
+    const quantityCells = ORDER_STATUSES.map((status) =>
+      renderQuantityCell(variant.order_quantities_by_status, status),
+    );
 
     return (
       <tr key={`variant-${variant.id}`}>
-        <th scope="row" className="font-weight-normal pl-4">{variant.name}</th>
+        <th scope="row" className="font-weight-normal pl-4">
+          {variant.name}
+        </th>
         {renderTotalToPurchaseCell(variant.order_quantities_by_status)}
         {quantityCells}
       </tr>
@@ -64,8 +79,9 @@ function OrderSummary() {
       ];
     }
 
-    const quantityCells = ORDER_STATUSES
-      .map((status) => renderQuantityCell(product.order_quantities_by_status, status));
+    const quantityCells = ORDER_STATUSES.map((status) =>
+      renderQuantityCell(product.order_quantities_by_status, status),
+    );
 
     return [
       <tr key={`product-${product.id}`}>
@@ -93,13 +109,13 @@ function OrderSummary() {
           <th>Product</th>
           <th className="table-primary">Total to purchase</th>
           {ORDER_STATUSES.map((status) => (
-            <th key={status} className={statusClass(status)}>{humanize(status)}</th>
+            <th key={status} className={statusClass(status)}>
+              {humanize(status)}
+            </th>
           ))}
         </tr>
       </thead>
-      <tbody>
-        {flatten(products)}
-      </tbody>
+      <tbody>{flatten(products)}</tbody>
     </table>
   );
 }

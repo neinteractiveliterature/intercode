@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useMutation, useApolloClient, useQuery } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';

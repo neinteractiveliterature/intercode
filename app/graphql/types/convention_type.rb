@@ -35,15 +35,15 @@ class Types::ConventionType < Types::BaseObject
   field :cms_content_groups, [Types::CmsContentGroupType], null: false
   field :default_layout, Types::CmsLayoutType, null: true
   field :departments, [Types::DepartmentType], null: false
-  field :cms_navigation_items, [Types::CmsNavigationItemType], null: true
-  field :pages, [Types::PageType], null: true
-  field :rooms, [Types::RoomType], null: true
+  field :cms_navigation_items, [Types::CmsNavigationItemType], null: false
+  field :pages, [Types::PageType], null: false
+  field :rooms, [Types::RoomType], null: false
   field :root_page, Types::PageType, null: true
   field :staff_positions, [Types::StaffPositionType], null: true
   field :catch_all_staff_position, Types::StaffPositionType, null: true
   field :ticket_types, [Types::TicketTypeType], null: false
   field :organization, Types::OrganizationType, null: true
-  field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: true
+  field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: false
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end
