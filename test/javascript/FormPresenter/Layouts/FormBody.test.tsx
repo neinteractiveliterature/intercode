@@ -4,35 +4,36 @@ import { render, fireEvent } from '../../testUtils';
 import { convention, minimalForm } from '../../EventAdmin/formMockData';
 import FormBody from '../../../../app/javascript/FormPresenter/Layouts/FormBody';
 import { ItemInteractionTrackerContext } from '../../../../app/javascript/FormPresenter/ItemInteractionTracker';
+import { getSortedParsedFormItems } from '../../../../app/javascript/Models/Form';
 
 describe('FormBody', () => {
   const defaultProps = {
-    formItems: minimalForm.getAllItems(),
+    formItems: getSortedParsedFormItems(minimalForm),
     convention,
     response: { title: 'A title' },
     responseValuesChanged: () => {},
     errors: {},
   };
 
-  const renderFormBody = (overrideProps = {}, interactedItemIds = null) => {
-    const interactedItemIdsSet = new Set(interactedItemIds || []);
-    return render((
+  const renderFormBody = (overrideProps: any = {}, interactedItemIds?: string[]) => {
+    const interactedItemIdsSet = new Set<string>(interactedItemIds ?? []);
+    return render(
       <ItemInteractionTrackerContext.Provider
         value={{
           hasInteractedWithItem: (id) => interactedItemIdsSet.has(id),
-          interactWithItem: () => { },
+          interactWithItem: () => {},
           interactedItemIds: interactedItemIdsSet,
         }}
       >
         <FormBody {...defaultProps} {...overrideProps} />
-      </ItemInteractionTrackerContext.Provider>
-    ));
+      </ItemInteractionTrackerContext.Provider>,
+    );
   };
 
   it('renders values correctly', () => {
     const { getByLabelText } = renderFormBody();
 
-    expect(getByLabelText('Title*').value).toEqual('A title');
+    expect((getByLabelText('Title*') as HTMLInputElement).value).toEqual('A title');
   });
 
   it('accepts item changes', () => {

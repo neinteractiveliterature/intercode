@@ -1,0 +1,54 @@
+import {
+  CommonFormFieldsFragment,
+  CommonFormSectionFieldsFragment,
+  CommonFormItemFieldsFragment,
+} from '../../app/javascript/Models/commonFormFragments.generated';
+
+export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFragment {
+  let formSectionId = 1;
+  const formSections: CommonFormSectionFieldsFragment[] = [];
+
+  exportJSON.sections.forEach((section: any) => {
+    const { section_items: sectionItems, ...sectionProps } = section;
+
+    const formItems: CommonFormItemFieldsFragment[] = [];
+    let formItemId = 1;
+
+    sectionItems.forEach((item: any) => {
+      const {
+        item_type: itemType,
+        identifier,
+        admin_description: adminDescription,
+        public_description: publicDescription,
+        default_value: defaultValue,
+        ...properties
+      } = item;
+
+      formItems.push({
+        id: formItemId,
+        position: formItemId,
+        item_type: itemType,
+        identifier,
+        default_value: JSON.stringify(defaultValue ?? null),
+        rendered_properties: JSON.stringify(properties),
+      });
+      formItemId += 1;
+    });
+
+    formSections.push({
+      ...sectionProps,
+      id: formSectionId,
+      position: formSectionId,
+      form_items: formItems,
+    });
+
+    formSectionId += 1;
+  });
+
+  return {
+    id: 1,
+    title: exportJSON.title,
+    form_type: exportJSON.form_type,
+    form_sections: formSections,
+  };
+}
