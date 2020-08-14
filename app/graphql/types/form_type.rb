@@ -2,7 +2,9 @@ class Types::FormType < Types::BaseObject
   field :id, Int, null: false
   field :title, String, null: false
   field :form_sections, [Types::FormSectionType], null: false, camelize: false
-  field :form_api_json, Types::JSON, null: false, camelize: false,
+  field :form_api_json, Types::JSON,
+    null: false,
+    camelize: false,
     deprecation_reason: 'The old form API export is deprecated; please use the "form" field and its subfields instead'
   field :form_type, Types::FormTypeType, null: false, camelize: false
   field :export_json, Types::JSON, null: false, camelize: false
