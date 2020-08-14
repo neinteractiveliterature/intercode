@@ -4,19 +4,19 @@ import { BrowserRouter } from 'react-router-dom';
 import * as formMockData from '../EventAdmin/formMockData';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
-import {
-  render, fireEvent, waitFor, act,
-} from '../testUtils';
+import { render, fireEvent, waitFor, act } from '../testUtils';
 
 const defaultProps = {
-  updateEvent: () => { },
-  onSave: () => { },
+  updateEvent: async () => {},
+  onSave: () => {},
 };
 
 function EditEventTester({
-  // eslint-disable-next-line react/prop-types
-  convention, initialEvent, eventForm, ...props
-}) {
+  convention,
+  initialEvent,
+  eventForm,
+  ...props
+}: Partial<typeof formMockData> & { eventForm?: typeof formMockData.minimalForm }) {
   const [formProps, { event, validateForm }] = useEventForm({
     convention: convention || formMockData.convention,
     initialEvent: initialEvent || formMockData.initialEvent,
@@ -80,7 +80,9 @@ describe('EditEvent', () => {
     });
 
     test('if the save fails, it displays the error and does not call onSave', async () => {
-      const updateEvent = jest.fn(() => { throw new Error('blahhhh'); });
+      const updateEvent = jest.fn(() => {
+        throw new Error('blahhhh');
+      });
       const onSave = jest.fn();
       const { getByText } = renderEditEvent({
         updateEvent,
@@ -155,7 +157,9 @@ describe('EditEvent', () => {
     });
 
     test('if the drop fails, it displays the error and does not call onDrop', async () => {
-      const dropEvent = jest.fn(() => { throw new Error('fooey'); });
+      const dropEvent = jest.fn(() => {
+        throw new Error('fooey');
+      });
       const onDrop = jest.fn();
       const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
@@ -172,14 +176,16 @@ describe('EditEvent', () => {
   describe('cancel link', () => {
     test('no cancel link by default', () => {
       const { queryByText } = renderEditEvent();
-      expect(queryByText((content, element) => element.tagName === 'A' && content === 'Cancel'))
-        .toBeNull();
+      expect(
+        queryByText((content, element) => element.tagName === 'A' && content === 'Cancel'),
+      ).toBeNull();
     });
 
     test('passing a cancelPath makes a cancel link show up', () => {
       const { queryAllByText } = renderEditEvent({ cancelPath: '/' });
-      expect(queryAllByText((content, element) => element.tagName === 'A' && content === 'Cancel'))
-        .toHaveLength(1);
+      expect(
+        queryAllByText((content, element) => element.tagName === 'A' && content === 'Cancel'),
+      ).toHaveLength(1);
     });
   });
 });
