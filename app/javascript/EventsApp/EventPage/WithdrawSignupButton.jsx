@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-function WithdrawSignupButton({
-  buttonClass, buttonText, withdrawSignup,
-}) {
+function WithdrawSignupButton({ buttonClass, buttonText, withdrawSignup }) {
   const { t } = useTranslation();
 
   return (

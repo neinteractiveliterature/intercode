@@ -15,9 +15,7 @@ function checkFieldMinimums(object, targetField, sourceFields) {
       return [`Please enter a value for ${humanFieldNames[targetField]}`];
     }
 
-    return [
-      `${humanFieldNames[targetField]} cannot be less than ${humanFieldNames[errorField]}`,
-    ];
+    return [`${humanFieldNames[targetField]} cannot be less than ${humanFieldNames[errorField]}`];
   }
 
   return [];
@@ -25,16 +23,8 @@ function checkFieldMinimums(object, targetField, sourceFields) {
 
 export function checkBucketFieldMinimums(bucket) {
   return [
-    ...checkFieldMinimums(
-      bucket,
-      'preferred_slots',
-      ['minimum_slots'],
-    ),
-    ...checkFieldMinimums(
-      bucket,
-      'total_slots',
-      ['preferred_slots', 'minimum_slots'],
-    ),
+    ...checkFieldMinimums(bucket, 'preferred_slots', ['minimum_slots']),
+    ...checkFieldMinimums(bucket, 'total_slots', ['preferred_slots', 'minimum_slots']),
   ];
 }
 

@@ -27,7 +27,7 @@ module.exports = {
       onBuildEnd: [
         'chmod +x bin/diffTranslations',
         'chmod +x bin/mergeTranslations',
-        'chmod +x bin/renderFormResponseChangeGroup'
+        'chmod +x bin/renderFormResponseChangeGroup',
       ],
     }),
   ],

@@ -8,19 +8,20 @@ import CommitableInput from '../BuiltInFormControls/CommitableInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 
-function ConventionFormBillingSection({
-  convention, dispatch, maskedStripeSecretKey, disabled,
-}) {
+function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecretKey, disabled }) {
   const [
-    changeStripePublishableKey, changeStripeSecretKey, changeTicketName, changeMaximumTickets,
+    changeStripePublishableKey,
+    changeStripeSecretKey,
+    changeTicketName,
+    changeMaximumTickets,
     changeTicketMode,
-  ] = useChangeDispatchers(
-    dispatch,
-    [
-      'stripe_publishable_key', 'stripe_secret_key', 'ticket_name', 'maximum_tickets',
-      'ticket_mode',
-    ],
-  );
+  ] = useChangeDispatchers(dispatch, [
+    'stripe_publishable_key',
+    'stripe_secret_key',
+    'ticket_name',
+    'maximum_tickets',
+    'ticket_mode',
+  ]);
 
   return (
     <>
@@ -34,11 +35,9 @@ function ConventionFormBillingSection({
               id="stripe_publishable_key"
               {...inputProps}
               onChange={(event) => onChange(event.target.value)}
-              className={classNames(
-                inputProps.className,
-                'text-monospace',
-                { 'bg-warning-light': inputProps.onFocus != null },
-              )}
+              className={classNames(inputProps.className, 'text-monospace', {
+                'bg-warning-light': inputProps.onFocus != null,
+              })}
               disabled={disabled}
             />
           )}
@@ -55,15 +54,11 @@ function ConventionFormBillingSection({
               id="stripe_secret_key"
               {...inputProps}
               onChange={(event) => onChange(event.target.value)}
-              className={classNames(
-                inputProps.className,
-                'text-monospace',
-                { 'bg-warning-light': inputProps.onFocus != null },
-              )}
+              className={classNames(inputProps.className, 'text-monospace', {
+                'bg-warning-light': inputProps.onFocus != null,
+              })}
               value={
-                inputProps.onFocus
-                  ? (inputProps.value || maskedStripeSecretKey)
-                  : inputProps.value
+                inputProps.onFocus ? inputProps.value || maskedStripeSecretKey : inputProps.value
               }
               disabled={disabled}
             />
@@ -80,7 +75,9 @@ function ConventionFormBillingSection({
           },
           {
             value: 'required_for_signup',
-            label: `${pluralize(capitalize(convention.ticket_name))} are sold and required for event signups`,
+            label: `${pluralize(
+              capitalize(convention.ticket_name),
+            )} are sold and required for event signups`,
           },
         ]}
         value={convention.ticket_mode}

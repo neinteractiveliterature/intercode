@@ -13,7 +13,7 @@ const BucketChangeCell = ({ value }) => {
 
   return (
     <>
-      {(oldBucket && oldBucket !== newBucket) && (
+      {oldBucket && oldBucket !== newBucket && (
         <>
           <s>{oldBucket}</s>
           <br />

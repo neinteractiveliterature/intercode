@@ -10,11 +10,11 @@ const BLANK_FORM: NonNullable<EventPageQueryQuery['event']['form']> = {
 };
 
 export type EventCategoryFormData = Pick<EventCategory, 'id'> & {
-  event_form: CommonFormFieldsFragment,
-  event_proposal_form?: CommonFormFieldsFragment,
+  event_form: CommonFormFieldsFragment;
+  event_proposal_form?: CommonFormFieldsFragment;
 };
 export type ConventionForEventCategoryForms<EventCategoryType extends EventCategoryFormData> = {
-  event_categories: EventCategoryType[],
+  event_categories: EventCategoryType[];
 };
 
 function getFormDataForEventCategoryId<EventCategoryType extends EventCategoryFormData>(

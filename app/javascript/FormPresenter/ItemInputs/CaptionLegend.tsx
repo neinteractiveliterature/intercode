@@ -2,13 +2,13 @@ import React from 'react';
 import RequiredIndicator from './RequiredIndicator';
 import { ParsedFormItem } from '../../FormAdmin/FormItemUtils';
 
-export type CaptionLegendProps<PropertiesType extends { caption: string, required?: boolean }> = {
-  formItem: ParsedFormItem<PropertiesType, any>,
+export type CaptionLegendProps<PropertiesType extends { caption: string; required?: boolean }> = {
+  formItem: ParsedFormItem<PropertiesType, any>;
 };
 
-function CaptionLegend<PropertiesType extends { caption: string, required?: boolean }>(
-  { formItem }: CaptionLegendProps<PropertiesType>,
-) {
+function CaptionLegend<PropertiesType extends { caption: string; required?: boolean }>({
+  formItem,
+}: CaptionLegendProps<PropertiesType>) {
   return (
     <legend className="col-form-label">
       <span

@@ -47,7 +47,10 @@ function CurrentPendingOrderButton() {
               className="fa fa-shopping-cart"
               title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
             />
-            <div className="badge badge-pill badge-danger" style={{ position: 'absolute', right: '-7px', top: '0' }}>
+            <div
+              className="badge badge-pill badge-danger"
+              style={{ position: 'absolute', right: '-7px', top: '0' }}
+            >
               {totalQuantity}
             </div>
           </button>
@@ -58,11 +61,11 @@ function CurrentPendingOrderButton() {
         <div className="px-3 pt-3">
           <h4 className="mb-2">{t('navigation.myShoppingCart.buttonText', 'My shopping cart')}</h4>
           <CartContents
-            checkOutButton={(
+            checkOutButton={
               <Link className="btn btn-primary mt-2" to="/cart">
                 {t('navigation.myShoppingCart.goToCart', 'Go to cart')}
               </Link>
-            )}
+            }
           />
         </div>
       </PopperDropdown>
@@ -71,8 +74,8 @@ function CurrentPendingOrderButton() {
 }
 
 type LoggedInDropdownTargetProps = {
-  toggle: (event: React.BaseSyntheticEvent) => void,
-  visible: boolean,
+  toggle: (event: React.BaseSyntheticEvent) => void;
+  visible: boolean;
 };
 
 const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTargetProps>(
@@ -90,7 +93,12 @@ const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTar
       const nonNullProfile = myProfile!;
 
       return (
-        <button className="btn btn-warning dropdown-toggle" onClick={toggle} ref={ref} type="button">
+        <button
+          className="btn btn-warning dropdown-toggle"
+          onClick={toggle}
+          ref={ref}
+          type="button"
+        >
           <i className="fa fa-user-secret" />
 
           <span className="d-inline d-md-none d-lg-inline">
@@ -145,9 +153,7 @@ function RevertAssumedIdentityButton() {
         values={{ name: assumedIdentityFromProfile.name_without_nickname }}
       >
         Revert
-        <span className="d-inline d-md-none d-lg-inline">
-          {' to {{ name }}'}
-        </span>
+        <span className="d-inline d-md-none d-lg-inline">{' to {{ name }}'}</span>
       </Trans>
     </button>
   );
@@ -184,7 +190,9 @@ function UserNavigationSection() {
                 {myProfile && (
                   <NavigationItem
                     inSection
-                    label={t('navigation.user.myProfile', 'My {{ conventionName }} Profile', { conventionName })}
+                    label={t('navigation.user.myProfile', 'My {{ conventionName }} Profile', {
+                      conventionName,
+                    })}
                     url="/my_profile"
                     icon="fa-user-circle"
                   />
@@ -208,12 +216,12 @@ function UserNavigationSection() {
                 {currentUser && (
                   <SignOutButton
                     className="dropdown-item"
-                    caption={(
+                    caption={
                       <>
                         <MenuIcon icon="fa-sign-out" />
                         {t('navigation.user.logOut', 'Log out')}
                       </>
-                    )}
+                    }
                   />
                 )}
               </>
@@ -244,23 +252,23 @@ function UserNavigationSection() {
           <li className="nav-item login my-auto">
             <SignInButton
               className="btn btn-link dropdown-item"
-              caption={(
+              caption={
                 <>
                   <MenuIcon icon="fa-sign-in" />
                   {t('navigation.authentication.logIn', 'Log in')}
                 </>
-            )}
+              }
             />
           </li>
           <li className="nav-item my-auto">
             <SignUpButton
               className="btn btn-link dropdown-item"
-              caption={(
+              caption={
                 <>
                   <MenuIcon icon="fa-pencil-square-o" />
                   {t('navigation.authentication.signUp', 'Sign up')}
                 </>
-              )}
+              }
             />
           </li>
         </>

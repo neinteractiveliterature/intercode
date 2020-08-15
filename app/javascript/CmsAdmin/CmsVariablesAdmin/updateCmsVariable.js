@@ -1,13 +1,15 @@
-import { CmsVariablesQuery } from './queries.gql';
+import { CmsVariablesQuery } from './queries';
 
 export default function updateCmsVariable(
   cache,
-  { data: { setCmsVariable: { cms_variable: cmsVariable } } },
+  {
+    data: {
+      setCmsVariable: { cms_variable: cmsVariable },
+    },
+  },
 ) {
   const data = cache.readQuery({ query: CmsVariablesQuery });
-  if (
-    data.cmsVariables.some((variable) => variable.key === cmsVariable.key)
-  ) {
+  if (data.cmsVariables.some((variable) => variable.key === cmsVariable.key)) {
     data.cmsVariables = data.cmsVariables.map((variable) => {
       if (variable.key === cmsVariable.key) {
         return cmsVariable;

@@ -30,7 +30,9 @@ function ApplyCouponControl({ createCouponApplication }) {
         className="form-control form-control-sm col-4 d-inline-block ml-2"
         value={couponCode}
         id={couponCodeInputId}
-        onChange={(event) => { setCouponCode(event.target.value); }}
+        onChange={(event) => {
+          setCouponCode(event.target.value);
+        }}
         onKeyDown={keyDownInCodeInput}
         disabled={applyInProgress}
         aria-label="Coupon code"

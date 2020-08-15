@@ -8,16 +8,13 @@ import Confirm from '../../app/javascript/ModalDialogs/Confirm';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
 
 function TestWrapper({ apolloMocks, stripePublishableKey, children }) {
-  const lazyStripeProviderValue = useMemo(
-    () => ({ publishableKey: stripePublishableKey }),
-    [stripePublishableKey],
-  );
+  const lazyStripeProviderValue = useMemo(() => ({ publishableKey: stripePublishableKey }), [
+    stripePublishableKey,
+  ]);
   return (
     <MockedProvider mocks={apolloMocks}>
       <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-        <Confirm>
-          {children}
-        </Confirm>
+        <Confirm>{children}</Confirm>
       </LazyStripeContext.Provider>
     </MockedProvider>
   );
@@ -47,7 +44,8 @@ function customRender(ui, options = {}) {
     queries: {
       ...queries,
       getMultipleChoiceInput: (container, formGroupLegendText, labelText) => {
-        const formGroup = queries.getByText(container, formGroupLegendText, { selector: 'legend' })
+        const formGroup = queries
+          .getByText(container, formGroupLegendText, { selector: 'legend' })
           .closest('.form-group');
         return queries.getByLabelText(formGroup, labelText);
       },

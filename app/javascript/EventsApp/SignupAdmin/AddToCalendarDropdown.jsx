@@ -7,30 +7,36 @@ import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
 
 function AddToCalendarDropdown({ icalSecret, className }) {
   const { t } = useTranslation();
-  const icalUrl = new URL(`/calendars/user_schedule/${encodeURIComponent(icalSecret)}`, window.location.href);
+  const icalUrl = new URL(
+    `/calendars/user_schedule/${encodeURIComponent(icalSecret)}`,
+    window.location.href,
+  );
   icalUrl.protocol = 'webcal';
-  const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(icalUrl)}`;
+  const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(
+    icalUrl,
+  )}`;
 
   return (
     <PopperDropdown
       renderReference={({ ref, toggle }) => (
         <button className={`${className} dropdown-toggle`} type="button" ref={ref} onClick={toggle}>
           <i className="fa fa-calendar" aria-hidden />
-          <span className="sr-only">
-            {t('addToCalendarDropdown.title', 'Add to calendar')}
-          </span>
+          <span className="sr-only">{t('addToCalendarDropdown.title', 'Add to calendar')}</span>
         </button>
       )}
       placement="bottom-end"
     >
-      <a className="dropdown-item" href={googleCalendarUrl} target="_blank" rel="noopener noreferrer">
-        <i className="fa fa-google" aria-hidden />
-        {' '}
+      <a
+        className="dropdown-item"
+        href={googleCalendarUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i className="fa fa-google" aria-hidden />{' '}
         {t('addToCalendarDropdown.subscribeGoogle', 'Subscribe on Google Calendar')}
       </a>
       <a className="dropdown-item" href={icalUrl}>
-        <i className="fa fa-calendar" aria-hidden />
-        {' '}
+        <i className="fa fa-calendar" aria-hidden />{' '}
         {t('addToCalendarDropdown.subscribeICal', 'Subscribe via iCal')}
       </a>
       <CopyToClipboardButton

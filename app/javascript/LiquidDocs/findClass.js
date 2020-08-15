@@ -8,10 +8,7 @@ export default function findClass(className) {
   }
 
   if (classesByName == null) {
-    classesByName = DocData.classes.reduce(
-      (map, klass) => map.set(klass.name, klass),
-      new Map(),
-    );
+    classesByName = DocData.classes.reduce((map, klass) => map.set(klass.name, klass), new Map());
   }
 
   const arrayMatch = className.match(/^Array<(\w+)>$/);

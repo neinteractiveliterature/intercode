@@ -14,15 +14,17 @@ import useAsyncFunction from '../useAsyncFunction';
 import ApplyCouponControl from './ApplyCouponControl';
 
 function AdminOrderEntriesTable({
-  order, createOrderEntry, updateOrderEntry, deleteOrderEntry,
-  createCouponApplication, deleteCouponApplication,
+  order,
+  createOrderEntry,
+  updateOrderEntry,
+  deleteOrderEntry,
+  createCouponApplication,
+  deleteCouponApplication,
 }) {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState(null);
   const [applyingCoupon, setApplyingCoupon] = useState(null);
-  const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(
-    createOrderEntry,
-  );
+  const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(createOrderEntry);
 
   const applyCoupon = async (...args) => {
     await createCouponApplication(...args);
@@ -71,19 +73,22 @@ function AdminOrderEntriesTable({
             <td>
               <InPlaceEditor
                 value={orderEntry.quantity.toString()}
-                onChange={(newValue) => updateOrderEntry(orderEntry,
-                  { quantity: parseIntOrNull(newValue) })}
+                onChange={(newValue) =>
+                  updateOrderEntry(orderEntry, { quantity: parseIntOrNull(newValue) })
+                }
               />
             </td>
             <td>
               <InPlaceMoneyEditor
                 value={orderEntry.price_per_item}
-                onChange={(value) => updateOrderEntry(orderEntry, {
-                  price_per_item: {
-                    fractional: value.fractional,
-                    currency_code: value.currency_code,
-                  },
-                })}
+                onChange={(value) =>
+                  updateOrderEntry(orderEntry, {
+                    price_per_item: {
+                      fractional: value.fractional,
+                      currency_code: value.currency_code,
+                    },
+                  })
+                }
               >
                 {formatMoney(orderEntry.price_per_item)}
                 {orderEntry.quantity > 1 && ' each'}
@@ -94,13 +99,15 @@ function AdminOrderEntriesTable({
                 className="btn btn-outline-danger btn-sm"
                 type="button"
                 aria-label="Delete item"
-                onClick={() => confirm({
-                  prompt: `Are you sure you want to delete
+                onClick={() =>
+                  confirm({
+                    prompt: `Are you sure you want to delete
                     ${pluralizeWithCount(orderEntry.product.name, orderEntry.quantity)} from the
                     order?  This cannot be undone.`,
-                  action: () => deleteOrderEntry(orderEntry),
-                  renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                })}
+                    action: () => deleteOrderEntry(orderEntry),
+                    renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                  })
+                }
               >
                 <i className="fa fa-trash-o" />
               </button>
@@ -113,21 +120,20 @@ function AdminOrderEntriesTable({
               <em>{'Coupon code: '}</em>
               <code>{couponApplication.coupon.code}</code>
             </td>
-            <td className="font-italic">
-              -
-              {formatMoney(couponApplication.discount)}
-            </td>
+            <td className="font-italic">-{formatMoney(couponApplication.discount)}</td>
             <td>
               <button
                 className="btn btn-outline-danger btn-sm"
                 type="button"
                 aria-label="Delete item"
-                onClick={() => confirm({
-                  prompt: `Are you sure you want to delete this coupon from the order?  This
+                onClick={() =>
+                  confirm({
+                    prompt: `Are you sure you want to delete this coupon from the order?  This
                     cannot be undone.`,
-                  action: () => deleteCouponApplication(couponApplication),
-                  renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                })}
+                    action: () => deleteCouponApplication(couponApplication),
+                    renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                  })
+                }
               >
                 <i className="fa fa-trash-o" />
               </button>
@@ -160,9 +166,12 @@ function AdminOrderEntriesTable({
             <td>
               <InPlaceEditor
                 value={addingItem.quantity.toString()}
-                onChange={(newValue) => setAddingItem((prev) => ({
-                  ...prev, quantity: parseIntOrNull(newValue),
-                }))}
+                onChange={(newValue) =>
+                  setAddingItem((prev) => ({
+                    ...prev,
+                    quantity: parseIntOrNull(newValue),
+                  }))
+                }
                 disabled={createInProgress}
               />
             </td>
@@ -190,7 +199,9 @@ function AdminOrderEntriesTable({
         )}
         {createError && (
           <tr>
-            <td colSpan={4}><ErrorDisplay graphQLError={createError} /></td>
+            <td colSpan={4}>
+              <ErrorDisplay graphQLError={createError} />
+            </td>
           </tr>
         )}
         {applyingCoupon && (
@@ -206,9 +217,14 @@ function AdminOrderEntriesTable({
               <button
                 className="btn btn-sm btn-outline-primary mr-2"
                 type="button"
-                onClick={() => setAddingItem({
-                  product: null, product_variant: null, quantity: 1, price_per_item: null,
-                })}
+                onClick={() =>
+                  setAddingItem({
+                    product: null,
+                    product_variant: null,
+                    quantity: 1,
+                    price_per_item: null,
+                  })
+                }
               >
                 Add item(s)
               </button>
@@ -223,12 +239,8 @@ function AdminOrderEntriesTable({
               </button>
             )}
           </td>
-          <td>
-            Total price
-          </td>
-          <td>
-            {formatMoney(order.total_price)}
-          </td>
+          <td>Total price</td>
+          <td>{formatMoney(order.total_price)}</td>
           <td />
         </tr>
       </tfoot>

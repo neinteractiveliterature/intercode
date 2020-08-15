@@ -14,18 +14,15 @@ function ChangeBucketModal({ signup, onComplete, onCancel }) {
   const [bucketKey, setBucketKey] = useState(null);
   const [prevSignupId, setPrevSignupId] = useState(null);
 
-  const okClicked = useCallback(
-    async () => {
-      await changeBucket({
-        variables: {
-          signupId: signup.id,
-          bucketKey,
-        },
-      });
-      onComplete();
-    },
-    [changeBucket, onComplete, signup, bucketKey],
-  );
+  const okClicked = useCallback(async () => {
+    await changeBucket({
+      variables: {
+        signupId: signup.id,
+        bucketKey,
+      },
+    });
+    onComplete();
+  }, [changeBucket, onComplete, signup, bucketKey]);
 
   if (prevSignupId !== (signup || {}).id) {
     setBucketKey((signup || {}).bucket_key);
@@ -54,18 +51,16 @@ function ChangeBucketModal({ signup, onComplete, onCancel }) {
 
   return (
     <Modal visible={signup != null}>
-      <div className="modal-header">
-        Change signup bucket
-      </div>
-      <div className="modal-body">
-        {renderBody()}
-      </div>
+      <div className="modal-header">Change signup bucket</div>
+      <div className="modal-body">{renderBody()}</div>
       <div className="modal-footer">
-        <button className="btn btn-secondary" onClick={onCancel} type="button">Cancel</button>
+        <button className="btn btn-secondary" onClick={onCancel} type="button">
+          Cancel
+        </button>
         <button
           className="btn btn-primary"
           onClick={okClicked}
-          disabled={(bucketKey == null) || requestInProgress}
+          disabled={bucketKey == null || requestInProgress}
           type="button"
         >
           OK
@@ -86,10 +81,12 @@ ChangeBucketModal.propTypes = {
     run: PropTypes.shape({
       event: PropTypes.shape({
         registration_policy: PropTypes.shape({
-          buckets: PropTypes.arrayOf(PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-          })).isRequired,
+          buckets: PropTypes.arrayOf(
+            PropTypes.shape({
+              key: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+            }),
+          ).isRequired,
         }).isRequired,
       }).isRequired,
     }).isRequired,

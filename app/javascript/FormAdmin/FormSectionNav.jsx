@@ -14,9 +14,7 @@ import useUniqueId from '../useUniqueId';
 
 function FormSectionNav() {
   const collapseRef = useRef();
-  const {
-    collapsed, collapseProps, toggleCollapsed,
-  } = useCollapse(collapseRef);
+  const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const history = useHistory();
   const { form } = useContext(FormEditorContext);
@@ -32,7 +30,9 @@ function FormSectionNav() {
   const moveSection = useCallback(
     (dragIndex, hoverIndex) => {
       const optimisticSections = buildOptimisticArrayForMove(
-        form.form_sections, dragIndex, hoverIndex,
+        form.form_sections,
+        dragIndex,
+        hoverIndex,
       ).map(serializeParsedFormSection);
 
       moveFormSection({
@@ -55,7 +55,13 @@ function FormSectionNav() {
   );
 
   const addSection = async () => {
-    const { data: { createFormSection: { form_section: { id } } } } = await addFormSection({
+    const {
+      data: {
+        createFormSection: {
+          form_section: { id },
+        },
+      },
+    } = await addFormSection({
       variables: { formId: form.id, formSection: { title: 'New section' } },
     });
     history.replace(`/admin_forms/${form.id}/edit/section/${id}`);
@@ -70,9 +76,7 @@ function FormSectionNav() {
         aria-expanded={!collapsed}
         aria-controls={navId}
       >
-        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} />
-        {' '}
-        Sections
+        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} /> Sections
       </button>
       <nav
         id={navId}

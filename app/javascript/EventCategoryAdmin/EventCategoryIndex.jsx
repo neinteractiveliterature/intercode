@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { EventCategoryAdminQuery } from './queries.gql';
+import { EventCategoryAdminQuery } from './queries';
 import EventCategoryRow from './EventCategoryRow';
 import { sortByLocaleString } from '../ValueUtils';
 import ErrorDisplay from '../ErrorDisplay';
@@ -30,10 +30,11 @@ function EventCategoryIndex() {
 
       <table className="table table-striped">
         <tbody>
-          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name)
-            .map((eventCategory) => (
+          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map(
+            (eventCategory) => (
               <EventCategoryRow eventCategory={eventCategory} key={eventCategory.id} />
-            ))}
+            ),
+          )}
         </tbody>
       </table>
 

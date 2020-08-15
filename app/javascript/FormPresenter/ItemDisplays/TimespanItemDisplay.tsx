@@ -11,7 +11,7 @@ export function describeTimespan(value: number) {
 }
 
 export type TimespanItemDisplayProps = {
-  value: FormItemValueType<TimespanFormItem>,
+  value: FormItemValueType<TimespanFormItem>;
 };
 
 function TimespanItemDisplay({ value }: TimespanItemDisplayProps) {

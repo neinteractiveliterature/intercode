@@ -1,39 +1,42 @@
-import React, {
-  useState, useCallback, useRef, ReactNode, InputHTMLAttributes,
-} from 'react';
+import React, { useState, useCallback, useRef, ReactNode, InputHTMLAttributes } from 'react';
 import classNames from 'classnames';
 
 type CommitableInputChangeHandler = React.Dispatch<string> | ((value: string) => Promise<void>);
 
 export type CommitableInputProps = {
-  value?: string,
-  onChange: CommitableInputChangeHandler,
-  onCancel?: () => void,
-  className?: string,
-  disabled?: boolean,
+  value?: string;
+  onChange: CommitableInputChangeHandler;
+  onCancel?: () => void;
+  className?: string;
+  disabled?: boolean;
   renderInput?: (
-    props: Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> &
-    { onChange: CommitableInputChangeHandler }
-  ) => ReactNode,
-  placeholder?: string,
-  label?: string,
+    props: Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+      onChange: CommitableInputChangeHandler;
+    },
+  ) => ReactNode;
+  placeholder?: string;
+  label?: string;
 };
 
 function CommitableInput({
-  value, onChange, onCancel, className, disabled, renderInput, placeholder, label,
+  value,
+  onChange,
+  onCancel,
+  className,
+  disabled,
+  renderInput,
+  placeholder,
+  label,
 }: CommitableInputProps) {
   const [editing, setEditing] = useState(false);
   const [editingValue, setEditingValue] = useState<string | undefined>('');
   const [commitInProgress, setCommitInProgress] = useState(false);
   const inputRef = useRef<HTMLInputElement>();
 
-  const beginEditing = useCallback(
-    () => {
-      setEditing(true);
-      setEditingValue(value);
-    },
-    [value],
-  );
+  const beginEditing = useCallback(() => {
+    setEditing(true);
+    setEditingValue(value);
+  }, [value]);
 
   const cancelEditing = useCallback(
     (event) => {
@@ -101,11 +104,11 @@ function CommitableInput({
     'aria-label': label,
   };
 
-  const renderInputInternal = renderInput || (
-    ({ onChange: inputChange, ...props }) => (
+  const renderInputInternal =
+    renderInput ||
+    (({ onChange: inputChange, ...props }) => (
       <input onChange={(event) => inputChange(event.target.value)} {...props} />
-    )
-  );
+    ));
 
   if (editing) {
     return (
@@ -150,22 +153,20 @@ function CommitableInput({
         disabled,
       })}
       <div className="input-group-append">
-        {
-          value
-            ? (
-              <button
-                type="button"
-                className="btn btn-outline-danger"
-                onMouseDown={() => { onChange(''); }}
-                disabled={disabled || !value}
-              >
-                <i className="fa fa-times-rectangle">
-                  <span className="sr-only">Clear</span>
-                </i>
-              </button>
-            )
-            : null
-        }
+        {value ? (
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onMouseDown={() => {
+              onChange('');
+            }}
+            disabled={disabled || !value}
+          >
+            <i className="fa fa-times-rectangle">
+              <span className="sr-only">Clear</span>
+            </i>
+          </button>
+        ) : null}
       </div>
     </div>
   );

@@ -82,7 +82,7 @@ function timeblockPreferenceValueIsComplete(value?: any) {
 }
 
 function timespanValueIsComplete(value?: any) {
-  return (typeof value === 'number');
+  return typeof value === 'number';
 }
 
 export function formResponseValueIsComplete(
@@ -90,15 +90,24 @@ export function formResponseValueIsComplete(
   value: any | null | undefined,
 ): boolean {
   switch (formItem.item_type) {
-    case 'age_restrictions': return ageRestrictionsValueIsComplete(value);
-    case 'date': return dateValueIsComplete(value);
-    case 'event_email': return eventEmailValueIsComplete(value);
-    case 'free_text': return freeTextValueIsComplete(value);
-    case 'multiple_choice': return multipleChoiceValueIsComplete(value);
-    case 'registration_policy': return registrationPolicyValueIsComplete(value);
-    case 'static_text': return true;
-    case 'timeblock_preference': return timeblockPreferenceValueIsComplete(value);
-    case 'timespan': return timespanValueIsComplete(value);
+    case 'age_restrictions':
+      return ageRestrictionsValueIsComplete(value);
+    case 'date':
+      return dateValueIsComplete(value);
+    case 'event_email':
+      return eventEmailValueIsComplete(value);
+    case 'free_text':
+      return freeTextValueIsComplete(value);
+    case 'multiple_choice':
+      return multipleChoiceValueIsComplete(value);
+    case 'registration_policy':
+      return registrationPolicyValueIsComplete(value);
+    case 'static_text':
+      return true;
+    case 'timeblock_preference':
+      return timeblockPreferenceValueIsComplete(value);
+    case 'timespan':
+      return timespanValueIsComplete(value);
     default:
       assertNever(formItem, true);
       return true;

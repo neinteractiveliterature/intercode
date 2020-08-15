@@ -15,9 +15,7 @@ function AttendeesPage() {
   return (
     <>
       <h1 className="mb-4">Attendees</h1>
-      <UserConProfilesTable
-        defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']}
-      />
+      <UserConProfilesTable defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']} />
     </>
   );
 }
@@ -28,12 +26,24 @@ function UserConProfilesAdmin() {
 
   return (
     <Switch>
-      <Route path="/user_con_profiles/new"><AttendeesPage /></Route>
-      <Route path="/user_con_profiles/:id/admin_ticket/new"><NewTicket /></Route>
-      <Route path="/user_con_profiles/:id/admin_ticket/edit"><EditTicket /></Route>
-      <Route path="/user_con_profiles/:id/edit"><EditUserConProfile /></Route>
-      <Route path="/user_con_profiles/:id"><UserConProfileAdminDisplay /></Route>
-      <Route><AttendeesPage /></Route>
+      <Route path="/user_con_profiles/new">
+        <AttendeesPage />
+      </Route>
+      <Route path="/user_con_profiles/:id/admin_ticket/new">
+        <NewTicket />
+      </Route>
+      <Route path="/user_con_profiles/:id/admin_ticket/edit">
+        <EditTicket />
+      </Route>
+      <Route path="/user_con_profiles/:id/edit">
+        <EditUserConProfile />
+      </Route>
+      <Route path="/user_con_profiles/:id">
+        <UserConProfileAdminDisplay />
+      </Route>
+      <Route>
+        <AttendeesPage />
+      </Route>
     </Switch>
   );
 }

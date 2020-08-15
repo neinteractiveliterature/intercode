@@ -1,13 +1,10 @@
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
-import { ConventionDisplayQuery } from './queries.gql';
+import { useConventionDisplayQueryQuery } from './queries.generated';
 
-export function useConventionQuery(id) {
-  return useQuery(ConventionDisplayQuery, { variables: { id } });
-}
-
+// eslint-disable-next-line import/prefer-default-export
 export function useConventionQueryFromIdParam() {
   const { id } = useParams();
-  return useConventionQuery(Number.parseInt(id, 10));
+  return useConventionDisplayQueryQuery({ variables: { id: Number.parseInt(id, 10) } });
 }

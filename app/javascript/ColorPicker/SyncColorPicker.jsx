@@ -19,7 +19,9 @@ function SyncColorPicker({ value, onChange }) {
   return (
     <ChromePicker
       color={decodeValue(value)}
-      onChangeComplete={(newValue) => { onChange(encodeValue(newValue)); }}
+      onChangeComplete={(newValue) => {
+        onChange(encodeValue(newValue));
+      }}
     />
   );
 }

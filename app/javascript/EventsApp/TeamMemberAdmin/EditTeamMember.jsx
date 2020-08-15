@@ -50,14 +50,10 @@ function EditTeamMember({ event, eventPath }) {
   return (
     <>
       <h1 className="mb-4">
-        {t(
-          'events.teamMemberAdmin.editHeader',
-          '{{ teamMemberName }} Settings for {{ name }}',
-          {
-            teamMemberName: titleize(underscore(event.event_category.team_member_name)),
-            name: teamMember.user_con_profile.name_without_nickname,
-          },
-        )}
+        {t('events.teamMemberAdmin.editHeader', '{{ teamMemberName }} Settings for {{ name }}', {
+          teamMemberName: titleize(underscore(event.event_category.team_member_name)),
+          name: teamMember.user_con_profile.name_without_nickname,
+        })}
       </h1>
 
       <dl className="row">
@@ -93,11 +89,9 @@ function EditTeamMember({ event, eventPath }) {
             disabled={updateInProgress}
             onClick={updateClicked}
           >
-            {t(
-              'events.teamMemberAdmin.updateButton',
-              'Update {{ teamMemberName }}',
-              { teamMemberName: event.event_category.team_member_name },
-            )}
+            {t('events.teamMemberAdmin.updateButton', 'Update {{ teamMemberName }}', {
+              teamMemberName: event.event_category.team_member_name,
+            })}
           </button>
         </li>
       </ul>
@@ -111,9 +105,11 @@ EditTeamMember.propTypes = {
     event_category: PropTypes.shape({
       team_member_name: PropTypes.string.isRequired,
     }).isRequired,
-    team_members: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
+    team_members: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
   eventPath: PropTypes.string.isRequired,
 };

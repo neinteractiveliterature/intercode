@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 export type SpoilerProps = {
-  content: ReactNode,
+  content: ReactNode;
 };
 
 function Spoiler({ content }: SpoilerProps) {

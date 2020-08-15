@@ -9,21 +9,19 @@ export function formatBucket(signup, event, t) {
 
   if (!signup.counted) {
     if (bucketKey) {
-      return t(
-        'signups.states.notCountedWithBucket',
-        '{{ bucketName }} (not counted)',
-        { bucketName: findBucket(bucketKey, event.registration_policy).name },
-      );
+      return t('signups.states.notCountedWithBucket', '{{ bucketName }} (not counted)', {
+        bucketName: findBucket(bucketKey, event.registration_policy).name,
+      });
     }
 
-    if (event.team_members
-      .some((teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id)
+    if (
+      event.team_members.some(
+        (teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id,
+      )
     ) {
-      return t(
-        'signups.states.teamMemberNotCounted',
-        '{{ teamMemberName }} (not counted)',
-        { teamMemberName: humanize(underscore(event.event_category.team_member_name)) },
-      );
+      return t('signups.states.teamMemberNotCounted', '{{ teamMemberName }} (not counted)', {
+        teamMemberName: humanize(underscore(event.event_category.team_member_name)),
+      });
     }
 
     if (signup.state === 'waitlisted') {
@@ -58,11 +56,9 @@ export function formatBucket(signup, event, t) {
   }
 
   if (bucket) {
-    return t(
-      'signups.states.bucketWithNoPreference',
-      '{{ bucketName }} (no preference)',
-      { bucketName: bucket.name },
-    );
+    return t('signups.states.bucketWithNoPreference', '{{ bucketName }} (no preference)', {
+      bucketName: bucket.name,
+    });
   }
 
   return t('signups.states.noBucketName', 'None');

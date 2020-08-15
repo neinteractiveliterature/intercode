@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { DepartmentAdminQuery } from './queries.gql';
-import { CreateDepartment } from './mutations.gql';
+import { DepartmentAdminQuery } from './queries';
+import { CreateDepartment } from './mutations';
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
@@ -32,14 +32,9 @@ function NewDepartment() {
 
   return (
     <>
-      <h1 className="mb-4">
-        New department
-      </h1>
+      <h1 className="mb-4">New department</h1>
 
-      <DepartmentForm
-        initialDepartment={{ name: '', proposal_description: '' }}
-        onSave={onSave}
-      />
+      <DepartmentForm initialDepartment={{ name: '', proposal_description: '' }} onSave={onSave} />
     </>
   );
 }

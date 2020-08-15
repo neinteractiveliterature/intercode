@@ -10,17 +10,13 @@ const ExampleTagDoc = ({ tag }) => (
   <li>
     <div className="card mt-4 border-success">
       <div className="card-header bg-success-light">
-        {
-          tag.name
-            ? (
-              <>
-                <strong>Example:</strong>
-                {' '}
-                {tag.name}
-              </>
-            )
-            : <strong>Example</strong>
-        }
+        {tag.name ? (
+          <>
+            <strong>Example:</strong> {tag.name}
+          </>
+        ) : (
+          <strong>Example</strong>
+        )}
       </div>
 
       <div className="card-body">
@@ -37,21 +33,13 @@ ExampleTagDoc.propTypes = {
   }).isRequired,
 };
 
-const ReturnTagWithClassDoc = ({
-  tag, assignName, returnClassName, prefix,
-}) => (
+const ReturnTagWithClassDoc = ({ tag, assignName, returnClassName, prefix }) => (
   <>
     <p className="mb-1">
-      <strong>Return:</strong>
-      {' '}
-      <em>
-        {tag.types.join(', ')}
-      </em>
+      <strong>Return:</strong> <em>{tag.types.join(', ')}</em>
     </p>
     <div className="d-flex align-items-start">
-      <div className="h3 mr-1">
-        ↳
-      </div>
+      <div className="h3 mr-1">↳</div>
       <AssignDocLink
         assign={{ name: assignName, drop_class_name: returnClassName }}
         compact
@@ -76,13 +64,7 @@ ReturnTagWithClassDoc.defaultProps = {
 
 const SeeTagDoc = ({ tag }) => (
   <li>
-    <strong>See:</strong>
-    {' '}
-    {
-      tag.name
-        ? <a href={tag.name}>{tag.text}</a>
-        : tag.text
-    }
+    <strong>See:</strong> {tag.name ? <a href={tag.name}>{tag.text}</a> : tag.text}
   </li>
 );
 
@@ -96,32 +78,13 @@ SeeTagDoc.propTypes = {
 const FallbackTagDoc = ({ tag }) => (
   <li>
     <strong>{humanize(tag.tag_name)}</strong>
-    {
-      tag.types
-        ? (
-          <>
-            {' '}
-            <em>
-              [
-              {tag.types.join(', ')}
-              ]
-            </em>
-          </>
-        )
-        : null
-    }
-    {
-      tag.text
-        ? (
-          <>
-            {' '}
-            &mdash;
-            {' '}
-            {tag.text}
-          </>
-        )
-        : null
-    }
+    {tag.types ? (
+      <>
+        {' '}
+        <em>[{tag.types.join(', ')}]</em>
+      </>
+    ) : null}
+    {tag.text ? <> &mdash; {tag.text}</> : null}
   </li>
 );
 
@@ -135,7 +98,7 @@ FallbackTagDoc.propTypes = {
 
 function TagDoc({ tag, method = null, prefix = null }) {
   if (tag.tag_name === 'example') {
-    return (<ExampleTagDoc tag={tag} />);
+    return <ExampleTagDoc tag={tag} />;
   }
 
   if (tag.tag_name === 'return') {
@@ -154,10 +117,10 @@ function TagDoc({ tag, method = null, prefix = null }) {
   }
 
   if (tag.tag_name === 'see') {
-    return (<SeeTagDoc tag={tag} />);
+    return <SeeTagDoc tag={tag} />;
   }
 
-  return (<FallbackTagDoc tag={tag} />);
+  return <FallbackTagDoc tag={tag} />;
 }
 
 TagDoc.propTypes = {

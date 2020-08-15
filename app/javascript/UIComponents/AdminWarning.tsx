@@ -2,7 +2,7 @@ import React, { ReactNode, useContext } from 'react';
 import AppRootContext from '../AppRootContext';
 
 export type AdminWarningProps = {
-  children: ReactNode,
+  children: ReactNode;
 };
 
 export default function AdminWarning({ children }: AdminWarningProps) {
@@ -19,9 +19,7 @@ export default function AdminWarning({ children }: AdminWarningProps) {
         <h1 className="mr-4">
           <i className="fa fa-exclamation-triangle" />
         </h1>
-        <div className="flex-grow-1">
-          {children}
-        </div>
+        <div className="flex-grow-1">{children}</div>
       </div>
     </div>
   );

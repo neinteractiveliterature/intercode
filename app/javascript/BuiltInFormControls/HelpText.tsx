@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 export type HelpTextProps = {
-  children?: ReactNode,
+  children?: ReactNode;
 };
 
 function HelpText({ children }: HelpTextProps) {

@@ -1,6 +1,4 @@
-import React, {
-  useMemo, useContext, useState, useEffect,
-} from 'react';
+import React, { useMemo, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 
@@ -11,10 +9,7 @@ function dateTimeToISO(date, time, timezoneName) {
     return null;
   }
 
-  const newDateTime = DateTime.fromISO(
-    `${date}T${time}`,
-    { zone: timezoneName },
-  );
+  const newDateTime = DateTime.fromISO(`${date}T${time}`, { zone: timezoneName });
 
   if (!newDateTime.isValid) {
     return null;
@@ -29,9 +24,7 @@ function dateTimeToISO(date, time, timezoneName) {
   return isoDateTime;
 }
 
-export function DateInput({
-  value, onChange, ...otherProps
-}) {
+export function DateInput({ value, onChange, ...otherProps }) {
   const dateChanged = (event) => onChange(event.target.value);
 
   return (
@@ -56,9 +49,7 @@ DateInput.defaultProps = {
   value: null,
 };
 
-export function TimeInput({
-  value, onChange, ...otherProps
-}) {
+export function TimeInput({ value, onChange, ...otherProps }) {
   const timeChanged = (event) => onChange(event.target.value);
 
   return (
@@ -83,34 +74,32 @@ TimeInput.defaultProps = {
   value: null,
 };
 
-function DateTimeInput({
-  value, timezoneName, onChange, id, alwaysShowTimezone, ...otherProps
-}) {
+function DateTimeInput({ value, timezoneName, onChange, id, alwaysShowTimezone, ...otherProps }) {
   const { timezoneName: appTimezoneName } = useContext(AppRootContext);
   const effectiveTimezoneName = timezoneName || appTimezoneName;
-  const dateTime = useMemo(
-    () => DateTime.fromISO(value).setZone(effectiveTimezoneName),
-    [value, effectiveTimezoneName],
-  );
+  const dateTime = useMemo(() => DateTime.fromISO(value).setZone(effectiveTimezoneName), [
+    value,
+    effectiveTimezoneName,
+  ]);
   const [date, setDate] = useState(() => dateTime.toISODate());
-  const [time, setTime] = useState(() => dateTime.toISOTime({
-    suppressMilliseconds: true, includeOffset: false,
-  }));
+  const [time, setTime] = useState(() =>
+    dateTime.toISOTime({
+      suppressMilliseconds: true,
+      includeOffset: false,
+    }),
+  );
   const userTimezoneName = DateTime.local().zoneName;
-  const showZone = alwaysShowTimezone || (
-    effectiveTimezoneName !== appTimezoneName
-    || effectiveTimezoneName !== userTimezoneName
-  );
+  const showZone =
+    alwaysShowTimezone ||
+    effectiveTimezoneName !== appTimezoneName ||
+    effectiveTimezoneName !== userTimezoneName;
 
-  useEffect(
-    () => {
-      if (dateTime.isValid) {
-        setDate(dateTime.toISODate());
-        setTime(dateTime.toISOTime({ suppressMilliseconds: true, includeOffset: false }));
-      }
-    },
-    [dateTime],
-  );
+  useEffect(() => {
+    if (dateTime.isValid) {
+      setDate(dateTime.toISODate());
+      setTime(dateTime.toISOTime({ suppressMilliseconds: true, includeOffset: false }));
+    }
+  }, [dateTime]);
 
   const dateChanged = (newDate) => {
     setDate(newDate);
@@ -130,21 +119,12 @@ function DateTimeInput({
 
   return (
     <div className="d-flex align-items-center">
-      <DateInput
-        value={date}
-        onChange={dateChanged}
-        id={id}
-        {...otherProps}
-      />
-      <TimeInput
-        value={time}
-        onChange={timeChanged}
-        {...otherProps}
-      />
+      <DateInput value={date} onChange={dateChanged} id={id} {...otherProps} />
+      <TimeInput value={time} onChange={timeChanged} {...otherProps} />
       {showZone && (
         <span className="ml-2">
-          {dateTime.offsetNameShort ?? DateTime
-            .fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
+          {dateTime.offsetNameShort ??
+            DateTime.fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
         </span>
       )}
     </div>

@@ -17,23 +17,31 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
 
   const mySortOrders = [...SORT_ORDERS];
   if (showConventionOrder) {
-    mySortOrders.splice(1, 0, { sorted: [{ id: 'first_scheduled_run_start', desc: false }], caption: 'convention order' });
+    mySortOrders.splice(1, 0, {
+      sorted: [{ id: 'first_scheduled_run_start', desc: false }],
+      caption: 'convention order',
+    });
   }
 
   if (myProfile) {
-    mySortOrders.splice(0, 0, { sorted: [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }], caption: 'my favorites' });
+    mySortOrders.splice(0, 0, {
+      sorted: [
+        { id: 'my_rating', desc: true },
+        { id: 'title', desc: false },
+      ],
+      caption: 'my favorites',
+    });
   }
 
-  const currentSort = (
-    mySortOrders.find((order) => isEqual(order.sorted, value))
-    || mySortOrders[0]
-  );
+  const currentSort = mySortOrders.find((order) => isEqual(order.sorted, value)) || mySortOrders[0];
 
   const sortOptions = mySortOrders.map((order) => (
     <button
       className="dropdown-item"
       key={order.caption}
-      onClick={() => { onChange(order.sorted); }}
+      onClick={() => {
+        onChange(order.sorted);
+      }}
       type="button"
     >
       {humanize(order.caption)}
@@ -44,9 +52,7 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
     <PopperDropdown
       renderReference={({ ref, toggle }) => (
         <button type="button" className="btn btn-link dropdown-toggle" ref={ref} onClick={toggle}>
-          Sort by
-          {' '}
-          {currentSort.caption}
+          Sort by {currentSort.caption}
         </button>
       )}
       placement="bottom-end"
@@ -58,10 +64,12 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
 
 EventListSortDropdown.propTypes = {
   showConventionOrder: PropTypes.bool.isRequired,
-  value: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    desc: PropTypes.bool,
-  })),
+  value: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      desc: PropTypes.bool,
+    }),
+  ),
   onChange: PropTypes.func.isRequired,
 };
 

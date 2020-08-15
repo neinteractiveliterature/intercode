@@ -9,13 +9,7 @@ function isMainOption(option, noPreferenceOptions, notCountedOptions) {
     return true;
   }
 
-  return (
-    option.noPreference
-    || (
-      (option.bucket || {}).slots_limited
-      && option.counted
-    )
-  );
+  return option.noPreference || ((option.bucket || {}).slots_limited && option.counted);
 }
 
 function isTeamMember(event, userConProfile) {
@@ -23,8 +17,9 @@ function isTeamMember(event, userConProfile) {
     return false;
   }
 
-  return event.team_members
-    .some((teamMember) => teamMember.user_con_profile.id === userConProfile.id);
+  return event.team_members.some(
+    (teamMember) => teamMember.user_con_profile.id === userConProfile.id,
+  );
 }
 
 function buildBucketSignupOption(bucket, index, hideLabel) {
@@ -45,23 +40,26 @@ function buildNoPreferenceOptions(event) {
     return [];
   }
 
-  const eligibleBuckets = ((event.registration_policy || {}).buckets || [])
-    .filter((bucket) => bucket.slots_limited && !bucket.not_counted);
+  const eligibleBuckets = ((event.registration_policy || {}).buckets || []).filter(
+    (bucket) => bucket.slots_limited && !bucket.not_counted,
+  );
 
   if (eligibleBuckets.length < 2) {
     return [];
   }
 
-  return [{
-    key: '_no_preference',
-    label: 'No preference',
-    buttonClass: 'btn-outline-dark',
-    bucket: null,
-    helpText: `Sign up for any of: ${eligibleBuckets.map((bucket) => bucket.name).join(', ')}`,
-    noPreference: true,
-    teamMember: false,
-    counted: true, // no preference signups only go to counted buckets
-  }];
+  return [
+    {
+      key: '_no_preference',
+      label: 'No preference',
+      buttonClass: 'btn-outline-dark',
+      bucket: null,
+      helpText: `Sign up for any of: ${eligibleBuckets.map((bucket) => bucket.name).join(', ')}`,
+      noPreference: true,
+      teamMember: false,
+      counted: true, // no preference signups only go to counted buckets
+    },
+  ];
 }
 
 function allSignupOptions(event, userConProfile) {
@@ -84,19 +82,21 @@ function allSignupOptions(event, userConProfile) {
   const nonAnythingBuckets = buckets.filter((bucket) => !bucket.anything);
 
   return [
-    ...buckets.map((bucket, index) => {
-      // yes, this seems inefficient, but we need to count the anything buckets
-      // so the indexes match the run capacity graph's indexes
-      if (bucket.anything) {
-        return null;
-      }
+    ...buckets
+      .map((bucket, index) => {
+        // yes, this seems inefficient, but we need to count the anything buckets
+        // so the indexes match the run capacity graph's indexes
+        if (bucket.anything) {
+          return null;
+        }
 
-      return buildBucketSignupOption(
-        bucket,
-        index,
-        !bucket.not_counted && nonAnythingBuckets.length === 1,
-      );
-    }).filter((bucket) => bucket != null),
+        return buildBucketSignupOption(
+          bucket,
+          index,
+          !bucket.not_counted && nonAnythingBuckets.length === 1,
+        );
+      })
+      .filter((bucket) => bucket != null),
     ...buildNoPreferenceOptions(event),
   ];
 }

@@ -2,8 +2,10 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { FormFieldsFragment, FormEditorDataFragment, FormEditorFormItemFieldsFragment } from './queries.generated';
+import { CommonFormSectionFieldsFragment } from '../Models/commonFormFragments.generated';
 import { gql } from '@apollo/client';
 import { FormFieldsFragmentDoc, FormEditorDataFragmentDoc, FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
+import { CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 
 
@@ -110,6 +112,7 @@ export type CreateFormSectionMutation = (
         & Pick<Types.FormItem, 'id'>
         & FormEditorFormItemFieldsFragment
       )> }
+      & CommonFormSectionFieldsFragment
     ) }
   )> }
 );
@@ -132,6 +135,7 @@ export type UpdateFormSectionMutation = (
         & Pick<Types.FormItem, 'id'>
         & FormEditorFormItemFieldsFragment
       )> }
+      & CommonFormSectionFieldsFragment
     ) }
   )> }
 );
@@ -421,6 +425,7 @@ export const CreateFormSectionDocument = gql`
   createFormSection(input: {form_id: $formId, form_section: $formSection}) {
     form_section {
       id
+      ...CommonFormSectionFields
       form_items {
         id
         ...FormEditorFormItemFields
@@ -428,7 +433,8 @@ export const CreateFormSectionDocument = gql`
     }
   }
 }
-    ${FormEditorFormItemFieldsFragmentDoc}`;
+    ${CommonFormSectionFieldsFragmentDoc}
+${FormEditorFormItemFieldsFragmentDoc}`;
 export type CreateFormSectionMutationFn = Apollo.MutationFunction<CreateFormSectionMutation, CreateFormSectionMutationVariables>;
 
 /**
@@ -460,6 +466,7 @@ export const UpdateFormSectionDocument = gql`
   updateFormSection(input: {id: $id, form_section: $formSection}) {
     form_section {
       id
+      ...CommonFormSectionFields
       form_items {
         id
         ...FormEditorFormItemFields
@@ -467,7 +474,8 @@ export const UpdateFormSectionDocument = gql`
     }
   }
 }
-    ${FormEditorFormItemFieldsFragmentDoc}`;
+    ${CommonFormSectionFieldsFragmentDoc}
+${FormEditorFormItemFieldsFragmentDoc}`;
 export type UpdateFormSectionMutationFn = Apollo.MutationFunction<UpdateFormSectionMutation, UpdateFormSectionMutationVariables>;
 
 /**

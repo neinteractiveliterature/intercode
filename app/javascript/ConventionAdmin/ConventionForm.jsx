@@ -39,9 +39,7 @@ function conventionFormReducer(state, action) {
   );
 }
 
-function ConventionForm({
-  initialConvention, cmsLayouts, pages, saveConvention, rootSite,
-}) {
+function ConventionForm({ initialConvention, cmsLayouts, pages, saveConvention, rootSite }) {
   const [convention, dispatch] = useReducer(conventionFormReducer, initialConvention);
   const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
 

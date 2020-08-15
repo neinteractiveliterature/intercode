@@ -7,7 +7,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import TabbedMailingList from './TabbedMailingList';
 import Timespan from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
-import { WhosFreeQuery } from './queries.gql';
+import { WhosFreeQuery } from './queries';
 import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
 

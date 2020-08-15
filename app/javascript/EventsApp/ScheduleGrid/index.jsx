@@ -34,21 +34,18 @@ function ScheduleGridApp({ configKey }) {
   const config = ScheduleGridConfig.get(configKey);
   const storageKey = `schedule:${configKey}:personalFilters`;
 
-  const loadPersonalFilters = useCallback(
-    () => {
-      const storedValue = window.localStorage.getItem(storageKey);
-      if (storedValue) {
-        try {
-          return JSON.parse(storedValue);
-        } catch (e) {
-          return DEFAULT_PERSONAL_FILTERS;
-        }
+  const loadPersonalFilters = useCallback(() => {
+    const storedValue = window.localStorage.getItem(storageKey);
+    if (storedValue) {
+      try {
+        return JSON.parse(storedValue);
+      } catch (e) {
+        return DEFAULT_PERSONAL_FILTERS;
       }
+    }
 
-      return DEFAULT_PERSONAL_FILTERS;
-    },
-    [storageKey],
-  );
+    return DEFAULT_PERSONAL_FILTERS;
+  }, [storageKey]);
 
   useEffect(() => {
     if (config.showPersonalFilters && myProfile && !location.search) {
@@ -65,7 +62,9 @@ function ScheduleGridApp({ configKey }) {
   ];
 
   const choiceSetChanged = (newValue) => {
-    const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(Transforms.integer);
+    const integerArray = newValue
+      .filter((choice) => choice !== 'conflicts')
+      .map(Transforms.integer);
 
     const newFiltered = [
       { id: 'my_rating', value: integerArray },
@@ -109,39 +108,38 @@ function ScheduleGridApp({ configKey }) {
             )}
             <ScheduleGrid timespan={timespan} />
             <div className="font-italic">
-              {t(
-                'schedule.timezoneMessage',
-                'All times displayed in {{ offsetName }}.',
-                {
-                  offsetName: DateTime.fromISO(timespan.start.toISOString())
-                    .reconfigure({ locale: language, timezoneName })
-                    .offsetNameLong,
-                },
-              )}
+              {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
+                offsetName: DateTime.fromISO(timespan.start.toISOString()).reconfigure({
+                  locale: language,
+                  timezoneName,
+                }).offsetNameLong,
+              })}
             </div>
           </div>
         )}
       </ScheduleGridProvider>
-      {
-        (config.legends || []).map((legend, i) => {
-          if (legend.type === 'text') {
-            // eslint-disable-next-line react/no-array-index-key
-            return <p key={i} className="font-italic">{legend.text}</p>;
-          }
+      {(config.legends || []).map((legend, i) => {
+        if (legend.type === 'text') {
+          // eslint-disable-next-line react/no-array-index-key
+          return (
+            <p key={i} className="font-italic">
+              {legend.text}
+            </p>
+          );
+        }
 
-          if (legend.type === 'category') {
-            // eslint-disable-next-line react/no-array-index-key
-            return <CategoryLegend key={i} />;
-          }
+        if (legend.type === 'category') {
+          // eslint-disable-next-line react/no-array-index-key
+          return <CategoryLegend key={i} />;
+        }
 
-          if (legend.type === 'fullness') {
-            // eslint-disable-next-line react/no-array-index-key
-            return <FullnessLegend key={i} />;
-          }
+        if (legend.type === 'fullness') {
+          // eslint-disable-next-line react/no-array-index-key
+          return <FullnessLegend key={i} />;
+        }
 
-          return `Unknown legend type ${legend.type}`;
-        })
-      }
+        return `Unknown legend type ${legend.type}`;
+      })}
     </>
   );
 }

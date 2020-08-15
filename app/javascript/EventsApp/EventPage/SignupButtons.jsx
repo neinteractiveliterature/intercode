@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import SignupButtonDisplay from './SignupButtonDisplay';
 
-function SignupButtons({
-  signupOptions, onClick, disabled,
-}) {
+function SignupButtons({ signupOptions, onClick, disabled }) {
   if (signupOptions.length === 0) {
     return null;
   }
@@ -25,9 +23,11 @@ function SignupButtons({
 }
 
 SignupButtons.propTypes = {
-  signupOptions: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string.isRequired,
-  })).isRequired,
+  signupOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
 };

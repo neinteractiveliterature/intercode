@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  NavLink, Switch, Route, Redirect,
-} from 'react-router-dom';
+import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
-import { CmsAdminBaseQuery } from './queries.gql';
+import { CmsAdminBaseQuery } from './queries';
 import NavigationItemsAdmin from './NavigationItemsAdmin';
 import ErrorDisplay from '../ErrorDisplay';
 import CmsContentGroupsAdmin from './CmsContentGroupsAdmin';
@@ -60,36 +58,75 @@ function CmsAdmin() {
       <h1>CMS</h1>
 
       <ul className="nav nav-tabs" role="tablist">
-        <CmsAdminNavTab path="/cms_pages" icon="fa-file-text-o">Pages</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_partials" icon="fa-paperclip">Partials</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_files" icon="fa-file-image-o">Files</CmsAdminNavTab>
-        {data.currentAbility.can_create_cms_navigation_items
-          && <CmsAdminNavTab path="/cms_navigation_items" icon="fa-map-o">Navigation</CmsAdminNavTab>}
-        <CmsAdminNavTab path="/cms_layouts" icon="fa-columns">Layouts</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_variables" icon="fa-list">Variables</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_graphql_queries" icon="fa-code">GraphQL queries</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_content_groups" icon="fa-group">Content groups</CmsAdminNavTab>
-        {
-          !data.convention && (
-            <CmsAdminNavTab path="/root_site" icon="fa-cogs">Root site settings</CmsAdminNavTab>
-          )
-        }
+        <CmsAdminNavTab path="/cms_pages" icon="fa-file-text-o">
+          Pages
+        </CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_partials" icon="fa-paperclip">
+          Partials
+        </CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_files" icon="fa-file-image-o">
+          Files
+        </CmsAdminNavTab>
+        {data.currentAbility.can_create_cms_navigation_items && (
+          <CmsAdminNavTab path="/cms_navigation_items" icon="fa-map-o">
+            Navigation
+          </CmsAdminNavTab>
+        )}
+        <CmsAdminNavTab path="/cms_layouts" icon="fa-columns">
+          Layouts
+        </CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_variables" icon="fa-list">
+          Variables
+        </CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_graphql_queries" icon="fa-code">
+          GraphQL queries
+        </CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_content_groups" icon="fa-group">
+          Content groups
+        </CmsAdminNavTab>
+        {!data.convention && (
+          <CmsAdminNavTab path="/root_site" icon="fa-cogs">
+            Root site settings
+          </CmsAdminNavTab>
+        )}
       </ul>
 
       <br />
 
       <Switch>
-        <Route path="/cms_pages"><CmsPagesAdmin /></Route>
-        <Route path="/cms_partials"><CmsPartialsAdmin /></Route>
-        <Route path="/cms_files"><CmsFilesAdmin /></Route>
-        {data.currentAbility.can_create_cms_navigation_items
-          ? <Route path="/cms_navigation_items"><NavigationItemsAdmin /></Route>
-          : <Route path="/cms_navigation_items"><Redirect to="/cms_pages" /></Route>}
-        <Route path="/cms_layouts"><CmsLayoutsAdmin /></Route>
-        <Route path="/cms_variables"><CmsVariablesAdmin /></Route>
-        <Route path="/cms_graphql_queries"><CmsGraphqlQueriesAdmin /></Route>
-        <Route path="/cms_content_groups"><CmsContentGroupsAdmin /></Route>
-        <Route path="/root_site"><RootSiteAdmin /></Route>
+        <Route path="/cms_pages">
+          <CmsPagesAdmin />
+        </Route>
+        <Route path="/cms_partials">
+          <CmsPartialsAdmin />
+        </Route>
+        <Route path="/cms_files">
+          <CmsFilesAdmin />
+        </Route>
+        {data.currentAbility.can_create_cms_navigation_items ? (
+          <Route path="/cms_navigation_items">
+            <NavigationItemsAdmin />
+          </Route>
+        ) : (
+          <Route path="/cms_navigation_items">
+            <Redirect to="/cms_pages" />
+          </Route>
+        )}
+        <Route path="/cms_layouts">
+          <CmsLayoutsAdmin />
+        </Route>
+        <Route path="/cms_variables">
+          <CmsVariablesAdmin />
+        </Route>
+        <Route path="/cms_graphql_queries">
+          <CmsGraphqlQueriesAdmin />
+        </Route>
+        <Route path="/cms_content_groups">
+          <CmsContentGroupsAdmin />
+        </Route>
+        <Route path="/root_site">
+          <RootSiteAdmin />
+        </Route>
       </Switch>
     </>
   );

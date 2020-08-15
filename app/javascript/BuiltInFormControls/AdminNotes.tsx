@@ -6,8 +6,8 @@ import PlainTextDisplay from '../PlainTextDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 
 export type AdminNotesProps = {
-  mutate: (value: string) => Promise<ApolloQueryResult<any>>,
-  value?: string,
+  mutate: (value: string) => Promise<ApolloQueryResult<any>>;
+  value?: string;
 };
 
 function AdminNotes({ mutate, value }: AdminNotesProps) {
@@ -22,7 +22,9 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
     }
   };
 
-  const cancelEditing = () => { setEditingValue(null); };
+  const cancelEditing = () => {
+    setEditingValue(null);
+  };
 
   const saveClicked = async () => {
     await save(editingValue ?? '');
@@ -31,20 +33,19 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
 
   if (editingValue == null) {
     return (
-      <div className="input-group bg-warning-light border-warning border-1 w-100" style={{ maxWidth: '40em' }}>
+      <div
+        className="input-group bg-warning-light border-warning border-1 w-100"
+        style={{ maxWidth: '40em' }}
+      >
         <div className="flex-grow-1 p-1">
-          {
-            value
-              ? <PlainTextDisplay value={value} />
-              : <small className="text-muted">Admin notes</small>
-          }
+          {value ? (
+            <PlainTextDisplay value={value} />
+          ) : (
+            <small className="text-muted">Admin notes</small>
+          )}
         </div>
         <div className="input-group-append">
-          <button
-            className="btn btn-secondary btn-sm"
-            type="button"
-            onClick={startEditing}
-          >
+          <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
             Edit
           </button>
         </div>
@@ -59,7 +60,9 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
         <textarea
           className="form-control"
           value={editingValue}
-          onChange={(event) => { setEditingValue(event.target.value); }}
+          onChange={(event) => {
+            setEditingValue(event.target.value);
+          }}
           ref={textareaElement}
           aria-label="Admin notes"
         />

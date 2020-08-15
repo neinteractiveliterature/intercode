@@ -17,8 +17,9 @@ import Gravatar from '../../Gravatar';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 function isTeamMember(signup, teamMembers) {
-  return teamMembers
-    .some((teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id);
+  return teamMembers.some(
+    (teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id,
+  );
 }
 
 function sortSignups(signups, teamMembers) {
@@ -43,7 +44,9 @@ function sortSignups(signups, teamMembers) {
       return a.waitlist_position - b.waitlist_position;
     }
 
-    return a.user_con_profile.name_inverted.localeCompare(b.user_con_profile.name_inverted, { sensitivity: 'base' });
+    return a.user_con_profile.name_inverted.localeCompare(b.user_con_profile.name_inverted, {
+      sensitivity: 'base',
+    });
   });
 }
 
@@ -55,27 +58,23 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
 
   const signupSummaryTitle = t('events.signupSummary.title', 'Signup summary');
 
-  usePageTitle(useValueUnless(() => `${signupSummaryTitle} - ${data.event.title}`, error || loading));
+  usePageTitle(
+    useValueUnless(() => `${signupSummaryTitle} - ${data.event.title}`, error || loading),
+  );
 
   const sortedSignups = useMemo(
-    () => (error || loading
-      ? null
-      : sortSignups(data.event.run.signups_paginated.entries, data.event.team_members)),
+    () =>
+      error || loading
+        ? null
+        : sortSignups(data.event.run.signups_paginated.entries, data.event.team_members),
     [data, error, loading],
   );
 
   const renderSignupRow = (signup, registrationPolicy, teamMembers, teamMemberName) => {
     const bucket = findBucket(signup.bucket_key, registrationPolicy);
-    const suffix = (
-      signup.bucket_key && bucket && bucket.expose_attendees
-        ? ` (${bucket.name})`
-        : null
-    );
-    const waitlistPosition = (
-      signup.state === 'waitlisted'
-        ? ` #${signup.waitlist_position}`
-        : null
-    );
+    const suffix =
+      signup.bucket_key && bucket && bucket.expose_attendees ? ` (${bucket.name})` : null;
+    const waitlistPosition = signup.state === 'waitlisted' ? ` #${signup.waitlist_position}` : null;
 
     return (
       <tr
@@ -96,17 +95,12 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
             </div>
             <div>
               {signup.user_con_profile.name_inverted}
-              {
-                isTeamMember(signup, teamMembers)
-                  ? (
-                    <strong>
-                      {' ('}
-                      {humanize(underscore(teamMemberName))}
-                      )
-                    </strong>
-                  )
-                  : null
-              }
+              {isTeamMember(signup, teamMembers) ? (
+                <strong>
+                  {' ('}
+                  {humanize(underscore(teamMemberName))})
+                </strong>
+              ) : null}
             </div>
           </div>
         </td>
@@ -137,9 +131,7 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
             currentAbility={data.currentAbility}
             eventPath={eventPath}
           />
-          <BreadcrumbItem active>
-            {signupSummaryTitle}
-          </BreadcrumbItem>
+          <BreadcrumbItem active>{signupSummaryTitle}</BreadcrumbItem>
         </ol>
       </nav>
 
@@ -153,12 +145,14 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
           </tr>
         </thead>
         <tbody>
-          {sortedSignups.map((signup) => renderSignupRow(
-            signup,
-            data.event.registration_policy,
-            data.event.team_members,
-            data.event.event_category.team_member_name,
-          ))}
+          {sortedSignups.map((signup) =>
+            renderSignupRow(
+              signup,
+              data.event.registration_policy,
+              data.event.team_members,
+              data.event.event_category.team_member_name,
+            ),
+          )}
         </tbody>
       </table>
     </>

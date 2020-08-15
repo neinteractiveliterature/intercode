@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UsersWithPendingBioQuery } from './queries.gql';
+import { UsersWithPendingBioQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';

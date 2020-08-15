@@ -4,9 +4,7 @@ import classNames from 'classnames';
 
 import PopperDropdown from './PopperDropdown';
 
-function HelpPopover({
-  children, className, initialVisible, visibleChanged,
-}) {
+function HelpPopover({ children, className, initialVisible, visibleChanged }) {
   const [visible, setVisible] = useState(initialVisible);
 
   const toggleVisible = (prevVisible, event) => {
@@ -39,33 +37,21 @@ function HelpPopover({
           }}
         >
           <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
-            <span className="sr-only">
-              Help
-            </span>
+            <span className="sr-only">Help</span>
           </i>
         </span>
       )}
     >
-      {({
-        placement,
-        arrowProps,
-        ref,
-        style,
-      }) => (
+      {({ placement, arrowProps, ref, style }) => (
         <div
-          className={classNames(
-            'card',
-            'popover',
-            `bs-popover-${placement}`,
-            { 'd-none': !visible },
-          )}
+          className={classNames('card', 'popover', `bs-popover-${placement}`, {
+            'd-none': !visible,
+          })}
           ref={ref}
           style={style}
           data-placement={placement}
         >
-          <div className="card-body">
-            {children}
-          </div>
+          <div className="card-body">{children}</div>
           <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
         </div>
       )}

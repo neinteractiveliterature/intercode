@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import ErrorDisplay from '../../ErrorDisplay';
-import { SetCmsVariableMutation } from './queries.gql';
+import { SetCmsVariableMutation } from './queries';
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
 
-function AddVariableRow({
-  variable, onChange, onSave, onCancel,
-}) {
+function AddVariableRow({ variable, onChange, onSave, onCancel }) {
   const [setCmsVariableMutate] = useMutation(SetCmsVariableMutation);
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();
@@ -47,6 +45,7 @@ function AddVariableRow({
             className="form-control text-monospace"
             value={variable.key}
             onChange={(event) => onChange({ ...variable, key: event.target.value })}
+            aria-label="Variable name"
           />
         </td>
         <td>
@@ -56,6 +55,7 @@ function AddVariableRow({
             value={variable.value_json}
             onChange={(event) => onChange({ ...variable, value_json: event.target.value })}
             onKeyDown={handleKeyDown}
+            aria-label="Variable value (JSON format)"
           />
         </td>
         <td>
@@ -72,9 +72,7 @@ function AddVariableRow({
               type="button"
               className="btn btn-primary"
               disabled={
-                variable.key.trim() === ''
-                || variable.value_json.trim() === ''
-                || setInProgress
+                variable.key.trim() === '' || variable.value_json.trim() === '' || setInProgress
               }
               onClick={save}
             >
@@ -83,17 +81,13 @@ function AddVariableRow({
           </div>
         </td>
       </tr>
-      {
-        setError
-          ? (
-            <tr>
-              <td colSpan="3">
-                <ErrorDisplay graphQLError={setError} />
-              </td>
-            </tr>
-          )
-          : null
-      }
+      {setError ? (
+        <tr>
+          <td colSpan="3">
+            <ErrorDisplay graphQLError={setError} />
+          </td>
+        </tr>
+      ) : null}
     </>
   );
 }

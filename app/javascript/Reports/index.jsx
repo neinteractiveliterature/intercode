@@ -4,7 +4,7 @@ import { pluralize } from 'inflected';
 import { useQuery } from '@apollo/client';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
-import { ReportsMenuQuery } from './queries.gql';
+import { ReportsMenuQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';
@@ -38,18 +38,24 @@ function ReportsMenu() {
           <ul className="mb-0">
             {data.convention.ticket_mode !== 'disabled' && (
               <>
-                <li><Link to="/reports/attendance_by_payment_amount">Attendance by payment amount</Link></li>
+                <li>
+                  <Link to="/reports/attendance_by_payment_amount">
+                    Attendance by payment amount
+                  </Link>
+                </li>
                 <li>
                   <Link to="/reports/event_provided_tickets">
-                    Event-provided
-                    {' '}
-                    {pluralize(data.convention.ticket_name)}
+                    Event-provided {pluralize(data.convention.ticket_name)}
                   </Link>
                 </li>
               </>
             )}
-            <li><Link to="/reports/events_by_choice">Events by choice</Link></li>
-            <li><Link to="/reports/signup_spy">Signup spy</Link></li>
+            <li>
+              <Link to="/reports/events_by_choice">Events by choice</Link>
+            </li>
+            <li>
+              <Link to="/reports/signup_spy">Signup spy</Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -96,11 +102,21 @@ function Reports() {
 
   return (
     <Switch>
-      <Route path="/reports/attendance_by_payment_amount"><AttendanceByPaymentAmount /></Route>
-      <Route path="/reports/event_provided_tickets"><EventProvidedTickets /></Route>
-      <Route path="/reports/events_by_choice"><EventsByChoice /></Route>
-      <Route path="/reports/signup_spy"><SignupSpy /></Route>
-      <Route path="/reports"><ReportsMenu /></Route>
+      <Route path="/reports/attendance_by_payment_amount">
+        <AttendanceByPaymentAmount />
+      </Route>
+      <Route path="/reports/event_provided_tickets">
+        <EventProvidedTickets />
+      </Route>
+      <Route path="/reports/events_by_choice">
+        <EventsByChoice />
+      </Route>
+      <Route path="/reports/signup_spy">
+        <SignupSpy />
+      </Route>
+      <Route path="/reports">
+        <ReportsMenu />
+      </Route>
     </Switch>
   );
 }

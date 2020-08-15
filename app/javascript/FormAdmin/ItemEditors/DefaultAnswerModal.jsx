@@ -23,15 +23,13 @@ function DefaultAnswerModal({ close, visible }) {
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">
-        Change default answer
-      </div>
+      <div className="modal-header">Change default answer</div>
       <div className="modal-body">
         {renderedFormItem && (
           <FormItemInput
             convention={convention}
             formItem={renderedFormItem}
-            onInteract={() => { }}
+            onInteract={() => {}}
             value={defaultValue}
             onChange={inputChanged}
           />

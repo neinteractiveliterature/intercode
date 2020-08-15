@@ -13,7 +13,12 @@ import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 
 function OrderPaymentModalContents({
-  onCancel, onComplete, initialName, orderId, paymentOptions, totalPrice,
+  onCancel,
+  onComplete,
+  initialName,
+  orderId,
+  paymentOptions,
+  totalPrice,
 }) {
   const [paymentMode, setPaymentMode] = useState(
     paymentOptions.includes('pay_at_convention') ? null : 'now',
@@ -21,18 +26,18 @@ function OrderPaymentModalContents({
   const [paymentDetails, setPaymentDetails] = useState({ name: initialName || '' });
 
   const submitOrder = useSubmitOrder();
-  const [submitCheckOut, error, submitting] = useAsyncFunction(useCallback(
-    async () => {
-      const actualPaymentMode = (totalPrice.fractional === 0 ? 'free' : paymentMode);
+  const [submitCheckOut, error, submitting] = useAsyncFunction(
+    useCallback(async () => {
+      const actualPaymentMode = totalPrice.fractional === 0 ? 'free' : paymentMode;
       await submitOrder(orderId, actualPaymentMode, paymentDetails);
       onComplete();
-    },
-    [onComplete, paymentMode, submitOrder, orderId, paymentDetails, totalPrice],
-  ));
-
-  const disabled = !paymentMode || submitting || (
-    paymentMode === 'now' && !paymentDetailsComplete(paymentDetails)
+    }, [onComplete, paymentMode, submitOrder, orderId, paymentDetails, totalPrice]),
   );
+
+  const disabled =
+    !paymentMode ||
+    submitting ||
+    (paymentMode === 'now' && !paymentDetailsComplete(paymentDetails));
 
   const renderCheckOutModalContent = () => {
     if (totalPrice.fractional === 0) {
@@ -59,17 +64,13 @@ function OrderPaymentModalContents({
     return (
       <div className="modal-body">
         {paymentModeSelect}
-        {
-          paymentMode === 'now'
-            ? (
-              <OrderPaymentForm
-                paymentDetails={paymentDetails}
-                onChange={setPaymentDetails}
-                disabled={submitting}
-              />
-            )
-            : null
-        }
+        {paymentMode === 'now' ? (
+          <OrderPaymentForm
+            paymentDetails={paymentDetails}
+            onChange={setPaymentDetails}
+            disabled={submitting}
+          />
+        ) : null}
         <ErrorDisplay graphQLError={error} />
       </div>
     );
@@ -82,12 +83,9 @@ function OrderPaymentModalContents({
       <div className="modal-footer">
         <div className="d-flex align-items-center">
           <div className="col">
-            {
-              paymentMode === 'now' && totalPrice.fractional !== 0
-                ? (
-                  <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
-                ) : null
-            }
+            {paymentMode === 'now' && totalPrice.fractional !== 0 ? (
+              <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
+            ) : null}
           </div>
           <button
             type="button"
@@ -103,9 +101,7 @@ function OrderPaymentModalContents({
             onClick={submitCheckOut}
             disabled={disabled}
           >
-            {totalPrice.fractional === 0
-              ? 'Submit order (free)'
-              : `Pay ${formatMoney(totalPrice)}`}
+            {totalPrice.fractional === 0 ? 'Submit order (free)' : `Pay ${formatMoney(totalPrice)}`}
           </button>
         </div>
       </div>
@@ -129,7 +125,13 @@ OrderPaymentModalContents.defaultProps = {
 };
 
 function OrderPaymentModal({
-  visible, onCancel, onComplete, initialName, orderId, paymentOptions, totalPrice,
+  visible,
+  onCancel,
+  onComplete,
+  initialName,
+  orderId,
+  paymentOptions,
+  totalPrice,
 }) {
   return (
     <Modal visible={visible} dialogClassName="modal-lg">

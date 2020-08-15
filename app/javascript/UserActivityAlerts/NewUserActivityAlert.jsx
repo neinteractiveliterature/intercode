@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
-import { CreateUserActivityAlert } from './mutations.gql';
-import { ConventionTicketNameQuery, UserActivityAlertsAdminQuery } from './queries.gql';
+import { CreateUserActivityAlert } from './mutations';
+import { ConventionTicketNameQuery, UserActivityAlertsAdminQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import { useCreateMutation } from '../MutationUtils';
@@ -27,7 +27,9 @@ function NewUserActivityAlert() {
     notification_destinations: [],
   });
   const [
-    notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination,
+    notificationDestinationChangeSet,
+    addNotificationDestination,
+    removeNotificationDestination,
   ] = useChangeSet();
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateUserActivityAlert, {
@@ -39,8 +41,9 @@ function NewUserActivityAlert() {
   const combinedUserActivityAlert = useMemo(
     () => ({
       ...userActivityAlert,
-      notification_destinations: notificationDestinationChangeSet
-        .apply(userActivityAlert.notification_destinations),
+      notification_destinations: notificationDestinationChangeSet.apply(
+        userActivityAlert.notification_destinations,
+      ),
     }),
     [notificationDestinationChangeSet, userActivityAlert],
   );
@@ -59,7 +62,8 @@ function NewUserActivityAlert() {
     await create({
       variables: {
         userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        notificationDestinations: notificationDestinationChangeSet.getAddValues()
+        notificationDestinations: notificationDestinationChangeSet
+          .getAddValues()
           .map((addValue) => {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };

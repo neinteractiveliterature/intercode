@@ -11,31 +11,29 @@ import useUniqueId from '../../useUniqueId';
 
 export const pageReducer = transformsReducer({});
 
-function CmsPageForm({
-  page, dispatch, cmsParent, cmsLayouts, readOnly,
-}) {
+function CmsPageForm({ page, dispatch, cmsParent, cmsLayouts, readOnly }) {
   const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
   const slugInputId = useUniqueId('slug-');
+  const defaultLayout = cmsParent.default_layout ?? cmsParent.root_site_default_layout;
 
   const cmsLayoutOptions = useMemo(
-    () => sortByLocaleString(cmsLayouts, (layout) => layout.name).map((layout) => {
-      if (cmsParent.default_layout && cmsParent.default_layout.id === layout.id) {
-        return {
-          ...layout,
-          name: `${layout.name} (site default)`,
-        };
-      }
+    () =>
+      sortByLocaleString(cmsLayouts, (layout) => layout.name).map((layout) => {
+        if (defaultLayout && defaultLayout.id === layout.id) {
+          return {
+            ...layout,
+            name: `${layout.name} (site default)`,
+          };
+        }
 
-      return layout;
-    }),
-    [cmsLayouts, cmsParent.default_layout],
+        return layout;
+      }),
+    [cmsLayouts, defaultLayout],
   );
 
-  const cmsLayoutSelectPlaceholder = (
-    cmsParent.default_layout
-      ? `Default layout (currently set as ${cmsParent.default_layout.name})`
-      : 'Default layout'
-  );
+  const cmsLayoutSelectPlaceholder = defaultLayout
+    ? `Default layout (currently set as ${defaultLayout.name})`
+    : 'Default layout';
 
   return (
     <>
@@ -54,9 +52,7 @@ function CmsPageForm({
       />
 
       <div className="form-group">
-        <label htmlFor={slugInputId}>
-          URL
-        </label>
+        <label htmlFor={slugInputId}>URL</label>
         <div className="input-group">
           <div className="input-group-prepend">
             <span className="input-group-text">
@@ -132,11 +128,17 @@ CmsPageForm.propTypes = {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     }),
+    root_site_default_layout: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
   }).isRequired,
-  cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  cmsLayouts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   readOnly: PropTypes.bool,
 };
 

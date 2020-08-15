@@ -6,18 +6,18 @@ import { useChangeDispatchers } from '../ComposableFormUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 
-function ConventionFormEmailSection({
-  convention, dispatch, disabled, staffPositions,
-}) {
+function ConventionFormEmailSection({ convention, dispatch, disabled, staffPositions }) {
   const [
     changeEventMailingListDomain,
     changeEmailFrom,
     changeCatchAllStaffPosition,
     changeEmailMode,
-  ] = useChangeDispatchers(
-    dispatch,
-    ['event_mailing_list_domain', 'email_from', 'catch_all_staff_position', 'email_mode'],
-  );
+  ] = useChangeDispatchers(dispatch, [
+    'event_mailing_list_domain',
+    'email_from',
+    'catch_all_staff_position',
+    'email_mode',
+  ]);
 
   return (
     <>

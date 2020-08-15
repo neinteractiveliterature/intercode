@@ -3,9 +3,11 @@ export default function buildBlankSignupCountsFromRegistrationPolicy(registratio
     return [];
   }
 
-  return registrationPolicy.buckets
-    .reduce((signupCountByBucketAndCounted, bucket) => ({
+  return registrationPolicy.buckets.reduce(
+    (signupCountByBucketAndCounted, bucket) => ({
       ...signupCountByBucketAndCounted,
       [bucket.key]: { counted: 0, not_counted: 0 },
-    }), {});
+    }),
+    {},
+  );
 }

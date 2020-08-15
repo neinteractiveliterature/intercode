@@ -5,9 +5,9 @@ import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { pageReducer } from './CmsPageForm';
-import { CmsPagesAdminQuery } from './queries.gql';
+import { CmsPagesAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
-import { UpdatePage } from './mutations.gql';
+import { UpdatePage } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
@@ -74,9 +74,7 @@ function EditCmsPage() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsPagesAdminQuery);
   const initialPage = useMemo(
-    () => (error || loading
-      ? null
-      : data.cmsPages.find((p) => id === p.id.toString())),
+    () => (error || loading ? null : data.cmsPages.find((p) => id === p.id.toString())),
     [error, loading, data, id],
   );
 

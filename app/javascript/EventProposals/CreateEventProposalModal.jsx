@@ -11,7 +11,12 @@ import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';
 
 function CreateEventProposalModal({
-  onCreate, cancel, visible, userEventProposals, proposableEventCategories, departments,
+  onCreate,
+  cancel,
+  visible,
+  userEventProposals,
+  proposableEventCategories,
+  departments,
 }) {
   const { t } = useTranslation();
   const [cloneEventProposal, setCloneEventProposal] = useState(null);
@@ -23,32 +28,32 @@ function CreateEventProposalModal({
     () => sortByLocaleString([...topLevelEventCategories, ...departments], (entity) => entity.name),
     [departments, topLevelEventCategories],
   );
-  const [department, setDepartment] = useState(
-    topLevelEntities.length > 1 ? null : departments[0],
+  const [department, setDepartment] = useState(topLevelEntities.length > 1 ? null : departments[0]);
+  const [eventCategory, setEventCategory] = useState(() =>
+    department && department.event_categories.length === 1 ? department.event_categories[0] : null,
   );
-  const [eventCategory, setEventCategory] = useState(() => (
-    (department && department.event_categories.length === 1) ? department.event_categories[0] : null
-  ));
   const [createMutate] = useMutation(CreateEventProposal);
   const [createProposal, createError, createInProgress] = useAsyncFunction(createMutate);
   const apolloClient = useApolloClient();
 
   const departmentEventCategories = useMemo(
-    () => (
+    () =>
       department
         ? sortByLocaleString(
-          proposableEventCategories.filter((category) => category.department
-            && category.department.id === department.id),
-          (category) => category.name,
-        )
-        : []
-    ),
+            proposableEventCategories.filter(
+              (category) => category.department && category.department.id === department.id,
+            ),
+            (category) => category.name,
+          )
+        : [],
     [department, proposableEventCategories],
   );
 
   const createClicked = async () => {
     const {
-      data: { createEventProposal: { event_proposal: eventProposal } },
+      data: {
+        createEventProposal: { event_proposal: eventProposal },
+      },
     } = await createProposal({
       variables: {
         cloneEventProposalId: (cloneEventProposal || {}).id,
@@ -96,9 +101,7 @@ function CreateEventProposalModal({
         {department && (
           <>
             {department.proposal_description && (
-              <div className="alert alert-info">
-                {department.proposal_description}
-              </div>
+              <div className="alert alert-info">{department.proposal_description}</div>
             )}
 
             <SelectWithLabel
@@ -113,15 +116,15 @@ function CreateEventProposalModal({
               value={eventCategory}
               getOptionValue={(option) => option.id}
               getOptionLabel={(option) => option.name}
-              onChange={(category) => { setEventCategory(category); }}
+              onChange={(category) => {
+                setEventCategory(category);
+              }}
             />
           </>
         )}
 
         {eventCategory && eventCategory.proposal_description && (
-          <div className="alert alert-info">
-            {eventCategory.proposal_description}
-          </div>
+          <div className="alert alert-info">{eventCategory.proposal_description}</div>
         )}
 
         <hr />
@@ -135,45 +138,43 @@ function CreateEventProposalModal({
           )}
           options={(userEventProposals || [])
             .filter((eventProposal) => eventProposal.status !== 'draft')
-            .filter((eventProposal) => (
-              eventCategory
-              && eventProposal.event_category.name.toLowerCase()
-              === eventCategory.name.toLowerCase()
-            ))}
+            .filter(
+              (eventProposal) =>
+                eventCategory &&
+                eventProposal.event_category.name.toLowerCase() ===
+                  eventCategory.name.toLowerCase(),
+            )}
           isClearable
           isDisabled={createInProgress}
           value={cloneEventProposal}
           getOptionValue={(option) => option.id}
-          getOptionLabel={(option) => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
-          onChange={(proposal) => { setCloneEventProposal(proposal); }}
+          getOptionLabel={(option) =>
+            `${option.title} (${option.event_category.name}, ${option.convention.name})`
+          }
+          onChange={(proposal) => {
+            setCloneEventProposal(proposal);
+          }}
         />
 
-        {
-          (
-            cloneEventProposal && eventCategory
-            && (
-              cloneEventProposal.event_category.name.toLowerCase()
-              !== eventCategory.name.toLowerCase()
-            )
-          )
-            ? (
-              <div className="mt-4 alert alert-warning">
-                {t(
-                  'eventProposals.newProposalModal.cloneFromDifferentCategoryWarning',
-                  `You are proposing a {{ newCategoryName }}, but copying information
+        {cloneEventProposal &&
+        eventCategory &&
+        cloneEventProposal.event_category.name.toLowerCase() !==
+          eventCategory.name.toLowerCase() ? (
+          <div className="mt-4 alert alert-warning">
+            {t(
+              'eventProposals.newProposalModal.cloneFromDifferentCategoryWarning',
+              `You are proposing a {{ newCategoryName }}, but copying information
                   from {{ cloneProposalTitle }}, which is a {{ cloneProposalCategoryName }}.
                   Make sure this is what you want before continuing.  You will not be able to change
                   the category of your new event once you have started the proposal.`,
-                  {
-                    newCategoryName: eventCategory.name,
-                    cloneProposalTitle: cloneEventProposal.title,
-                    cloneProposalCategoryName: cloneEventProposal.event_category.name,
-                  },
-                )}
-              </div>
-            )
-            : null
-        }
+              {
+                newCategoryName: eventCategory.name,
+                cloneProposalTitle: cloneEventProposal.title,
+                cloneProposalCategoryName: cloneEventProposal.event_category.name,
+              },
+            )}
+          </div>
+        ) : null}
 
         <ErrorDisplay graphQLError={createError} />
       </div>
@@ -203,25 +204,31 @@ CreateEventProposalModal.propTypes = {
   onCreate: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
-  departments: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    proposal_description: PropTypes.string,
-  })).isRequired,
-  userEventProposals: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    status: PropTypes.string.isRequired,
-    created_at: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    convention: PropTypes.shape({
+  departments: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-    }).isRequired,
-  })).isRequired,
-  proposableEventCategories: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    proposable: PropTypes.bool.isRequired,
-  })).isRequired,
+      proposal_description: PropTypes.string,
+    }),
+  ).isRequired,
+  userEventProposals: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      status: PropTypes.string.isRequired,
+      created_at: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      convention: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }).isRequired,
+    }),
+  ).isRequired,
+  proposableEventCategories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      proposable: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default CreateEventProposalModal;

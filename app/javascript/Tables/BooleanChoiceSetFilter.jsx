@@ -24,7 +24,9 @@ function BooleanChoiceSetFilter({ filter, onChange, ...otherProps }) {
         { label: 'no', value: 'false' },
       ]}
       multiple={false}
-      onChange={(value) => { onChange(value === 'any' ? null : value === 'true'); }}
+      onChange={(value) => {
+        onChange(value === 'any' ? null : value === 'true');
+      }}
       filter={{ ...filter, value: getBooleanFilterValue(filter) }}
       {...otherProps}
     />

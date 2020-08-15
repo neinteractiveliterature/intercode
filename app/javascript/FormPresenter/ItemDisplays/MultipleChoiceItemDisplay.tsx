@@ -17,33 +17,37 @@ function castValue(value: any): CastedValue {
 }
 
 export type MultipleChoiceItemDisplayProps = {
-  formItem: MultipleChoiceFormItem,
-  value: FormItemValueType<MultipleChoiceFormItem>,
+  formItem: MultipleChoiceFormItem;
+  value: FormItemValueType<MultipleChoiceFormItem>;
 };
 
-function MultipleChoiceItemDisplay(
-  { formItem, value: uncastValue }: MultipleChoiceItemDisplayProps,
-) {
+function MultipleChoiceItemDisplay({
+  formItem,
+  value: uncastValue,
+}: MultipleChoiceItemDisplayProps) {
   const value = castValue(uncastValue);
-  const isValueOther = (v: string) => !(formItem.rendered_properties.choices
-    .some((choice) => choice.value === v));
+  const isValueOther = (v: string) =>
+    !formItem.rendered_properties.choices.some((choice) => choice.value === v);
 
   if (Array.isArray(value)) {
-    const selectedChoiceLabels = formItem.rendered_properties.choices.map((choice) => {
-      if (value.includes(choice.value)) {
-        return choice.caption;
-      }
+    const selectedChoiceLabels = formItem.rendered_properties.choices
+      .map((choice) => {
+        if (value.includes(choice.value)) {
+          return choice.caption;
+        }
 
-      return null;
-    }).filter((selectedChoiceLabel) => selectedChoiceLabel != null);
+        return null;
+      })
+      .filter((selectedChoiceLabel) => selectedChoiceLabel != null);
 
     const otherChoiceLabels = value.filter(isValueOther).map((choice) => `Other: ${choice}`);
 
     return <>{[...selectedChoiceLabels, ...otherChoiceLabels].join(', ')}</>;
   }
 
-  const selectedChoice = formItem.rendered_properties.choices
-    .find((choice) => value === choice.value);
+  const selectedChoice = formItem.rendered_properties.choices.find(
+    (choice) => value === choice.value,
+  );
 
   if (selectedChoice) {
     return <>{selectedChoice.caption}</>;

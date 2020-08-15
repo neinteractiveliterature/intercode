@@ -1,8 +1,0 @@
-mutation RateEvent($eventId: Int!, $rating: Int!) {
-  rateEvent(input: { event_id: $eventId, rating: $rating }) {
-    event {
-      id
-      my_rating
-    }
-  }
-}

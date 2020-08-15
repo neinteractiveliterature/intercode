@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
+import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { RoomsAdminQuery } from './queries.gql';
+import { RoomsAdminQuery } from './queries';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';
@@ -18,17 +18,21 @@ function RoomsAdmin() {
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const { data, loading, error } = useQuery(RoomsAdminQuery);
   const [updateMutate] = useMutation(UpdateRoom);
-  const [createRoom, createError] = useAsyncFunction(useCreateMutation(CreateRoom, {
-    query: RoomsAdminQuery,
-    arrayPath: ['convention', 'rooms'],
-    newObjectPath: ['createRoom', 'room'],
-  }));
+  const [createRoom, createError] = useAsyncFunction(
+    useCreateMutation(CreateRoom, {
+      query: RoomsAdminQuery,
+      arrayPath: ['convention', 'rooms'],
+      newObjectPath: ['createRoom', 'room'],
+    }),
+  );
   const [updateRoom, updateError] = useAsyncFunction(updateMutate);
-  const [deleteRoom, deleteError] = useAsyncFunction(useDeleteMutation(DeleteRoom, {
-    query: RoomsAdminQuery,
-    arrayPath: ['convention', 'rooms'],
-    idVariablePath: ['input', 'id'],
-  }));
+  const [deleteRoom, deleteError] = useAsyncFunction(
+    useDeleteMutation(DeleteRoom, {
+      query: RoomsAdminQuery,
+      arrayPath: ['convention', 'rooms'],
+      idVariablePath: ['input', 'id'],
+    }),
+  );
   const confirm = useConfirm();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
@@ -45,9 +49,10 @@ function RoomsAdmin() {
 
   if (authorizationWarning) return authorizationWarning;
 
-  const roomNameDidChange = (id, name) => updateRoom({
-    variables: { input: { id, room: { name } } },
-  });
+  const roomNameDidChange = (id, name) =>
+    updateRoom({
+      variables: { input: { id, room: { name } } },
+    });
 
   const createRoomWasClicked = async (event) => {
     event.preventDefault();
@@ -63,9 +68,10 @@ function RoomsAdmin() {
     }
   };
 
-  const deleteRoomConfirmed = (roomId) => deleteRoom({
-    variables: { input: { id: roomId } },
-  });
+  const deleteRoomConfirmed = (roomId) =>
+    deleteRoom({
+      variables: { input: { id: roomId } },
+    });
 
   const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name);
 
@@ -75,26 +81,28 @@ function RoomsAdmin() {
         <div className="ml-3">
           <InPlaceEditor
             value={room.name}
-            onChange={(newName) => { roomNameDidChange(room.id, newName); }}
+            onChange={(newName) => {
+              roomNameDidChange(room.id, newName);
+            }}
           />
         </div>
         <div className="col">
           {room.runs.length > 0 ? (
             <span className="text-muted">
-              (
-              {pluralizeWithCount('event run', room.runs.length)}
-              )
+              ({pluralizeWithCount('event run', room.runs.length)})
             </span>
           ) : null}
         </div>
         <button
           className="btn btn-sm btn-outline-danger mr-3"
           title="Delete room"
-          onClick={() => confirm({
-            prompt: 'Are you sure you want to delete this room?',
-            action: () => deleteRoomConfirmed(room.id),
-            renderError: (e) => <ErrorDisplay error={e} />,
-          })}
+          onClick={() =>
+            confirm({
+              prompt: 'Are you sure you want to delete this room?',
+              action: () => deleteRoomConfirmed(room.id),
+              renderError: (e) => <ErrorDisplay error={e} />,
+            })
+          }
           type="button"
         >
           <i className="fa fa-trash" />

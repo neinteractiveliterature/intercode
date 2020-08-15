@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { CmsGraphqlQueriesQuery } from './queries.gql';
+import { CmsGraphqlQueriesQuery } from './queries';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CreateCmsGraphqlQuery } from './mutations.gql';
+import { CreateCmsGraphqlQuery } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';

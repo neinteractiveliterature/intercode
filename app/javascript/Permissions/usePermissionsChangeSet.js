@@ -2,9 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { permissionEquals, findPermission } from './PermissionUtils';
 
-export default function usePermissionsChangeSet({
-  initialPermissions, changeSet, add, remove,
-}) {
+export default function usePermissionsChangeSet({ initialPermissions, changeSet, add, remove }) {
   const currentPermissions = useMemo(
     () => (changeSet ? changeSet.apply(initialPermissions) : initialPermissions),
     [changeSet, initialPermissions],
@@ -12,11 +10,7 @@ export default function usePermissionsChangeSet({
 
   const grantPermission = useCallback(
     ({ role, model, permission }) => {
-      add(
-        { role, model, permission },
-        initialPermissions,
-        permissionEquals,
-      );
+      add({ role, model, permission }, initialPermissions, permissionEquals);
     },
     [add, initialPermissions],
   );

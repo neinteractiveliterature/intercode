@@ -6,14 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { pluralize, humanize } from 'inflected';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 
-import {
-  getProvidableTicketTypes,
-  getRemainingTicketCountByType,
-} from './ProvideTicketUtils';
+import { getProvidableTicketTypes, getRemainingTicketCountByType } from './ProvideTicketUtils';
 
-function ProvidableTicketTypeSelection({
-  convention, event, value, onChange, disabled,
-}) {
+function ProvidableTicketTypeSelection({ convention, event, value, onChange, disabled }) {
   const { t } = useTranslation();
   const providableTicketTypes = getProvidableTicketTypes(convention);
   const remainingCountByType = getRemainingTicketCountByType(convention, event);
@@ -49,16 +44,16 @@ function ProvidableTicketTypeSelection({
 
   return (
     <>
-      <div>
-        {providabilityDescription}
-      </div>
+      <div>{providabilityDescription}</div>
 
       <MultipleChoiceInput
         name="ticketTypeId"
         caption=""
         choices={choices}
         value={value == null ? '' : value.toString()}
-        onChange={(newValue) => { onChange(Number.parseInt(newValue, 10)); }}
+        onChange={(newValue) => {
+          onChange(Number.parseInt(newValue, 10));
+        }}
         disabled={disabled}
       />
     </>

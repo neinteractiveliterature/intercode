@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UserAdminQuery } from './queries.gql';
+import { UserAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import LoadingIndicator from '../LoadingIndicator';
@@ -53,15 +53,17 @@ function UserAdminDisplay() {
           <tbody>
             {['first_name', 'last_name', 'email'].map((field) => (
               <tr key={field}>
-                <th scope="row" className="pr-2">{humanize(field)}</th>
-                <td className="col-md-9">
-                  {data.user[field]}
-                </td>
+                <th scope="row" className="pr-2">
+                  {humanize(field)}
+                </th>
+                <td className="col-md-9">{data.user[field]}</td>
               </tr>
             ))}
 
             <tr>
-              <th scope="row" className="pr-2">Privileges</th>
+              <th scope="row" className="pr-2">
+                Privileges
+              </th>
               <td>
                 {data.user.privileges.length > 0
                   ? data.user.privileges.map((priv) => titleize(priv)).join(', ')
@@ -70,39 +72,46 @@ function UserAdminDisplay() {
             </tr>
 
             <tr>
-              <th scope="row" className="pr-2">Convention profiles</th>
+              <th scope="row" className="pr-2">
+                Convention profiles
+              </th>
               <td>
-                {data.user.user_con_profiles.length > 0
-                  ? (
-                    <ul className="list-unstyled mb-0">
-                      {userConProfiles.map((profile) => (
-                        <li key={profile.id}>
-                          <a href={buildProfileUrl(profile)}>
-                            {profile.convention.name}
-                            {' '}
-                            <small>
-                              (
-                              {moment.tz(profile.convention.starts_at, timezoneNameForConvention(profile.convention)).format('YYYY')}
+                {data.user.user_con_profiles.length > 0 ? (
+                  <ul className="list-unstyled mb-0">
+                    {userConProfiles.map((profile) => (
+                      <li key={profile.id}>
+                        <a href={buildProfileUrl(profile)}>
+                          {profile.convention.name}{' '}
+                          <small>
+                            (
+                            {moment
+                              .tz(
+                                profile.convention.starts_at,
+                                timezoneNameForConvention(profile.convention),
                               )
-                            </small>
-                          </a>
-                          {profile.staff_positions.length > 0
-                            ? ` (${profile.staff_positions.map((pos) => pos.name).sort().join(', ')})`
-                            : null}
-                        </li>
-                      ))}
-                    </ul>
-                  )
-                  : 'none'}
+                              .format('YYYY')}
+                            )
+                          </small>
+                        </a>
+                        {profile.staff_positions.length > 0
+                          ? ` (${profile.staff_positions
+                              .map((pos) => pos.name)
+                              .sort()
+                              .join(', ')})`
+                          : null}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'none'
+                )}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div className="col-lg-3">
-        {/* this.renderUserAdminSection(data) */}
-      </div>
+      <div className="col-lg-3">{/* this.renderUserAdminSection(data) */}</div>
     </div>
   );
 }

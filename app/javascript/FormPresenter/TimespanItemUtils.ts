@@ -5,10 +5,7 @@ export const UNITS = [
 
 export function getUnitForValue(value: any) {
   if (typeof value === 'number') {
-    return (
-      UNITS.find((unit) => value % unit.length_seconds === 0)
-      || UNITS[UNITS.length - 1]
-    );
+    return UNITS.find((unit) => value % unit.length_seconds === 0) || UNITS[UNITS.length - 1];
   }
 
   return UNITS[0];
@@ -19,7 +16,7 @@ export function breakValueIntoUnitQuantities(value: number) {
   return UNITS.map((unit) => {
     const workingValue = value - accumulatedSeconds;
     const unitQuantity = Math.floor(workingValue / unit.length_seconds);
-    accumulatedSeconds += (unitQuantity * unit.length_seconds);
+    accumulatedSeconds += unitQuantity * unit.length_seconds;
     return { unit, quantity: unitQuantity };
   }).filter(({ quantity }) => quantity > 0);
 }

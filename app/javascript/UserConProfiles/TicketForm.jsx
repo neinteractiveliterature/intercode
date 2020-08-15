@@ -13,17 +13,14 @@ import formatMoney from '../formatMoney';
 import EditOrderModal from '../Store/EditOrderModal';
 import AddOrderToTicketButton from './AddOrderToTicketButton';
 
-function TicketForm({
-  initialTicket, convention, onSubmit, submitCaption,
-}) {
+function TicketForm({ initialTicket, convention, onSubmit, submitCaption }) {
   const editOrderModal = useModal();
   const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);
   const [providedByEvent, setProvidedByEvent] = useState(initialTicket.provided_by_event);
 
-  const sortedTicketTypes = useMemo(
-    () => sortTicketTypes(convention.ticket_types),
-    [convention.ticket_types],
-  );
+  const sortedTicketTypes = useMemo(() => sortTicketTypes(convention.ticket_types), [
+    convention.ticket_types,
+  ]);
 
   const ticketInput = useMemo(
     () => ({
@@ -52,60 +49,50 @@ function TicketForm({
       >
         <option aria-label="Blank placeholder option" />
         {sortedTicketTypes.map(({ id, description }) => (
-          <option value={id} key={id}>{description}</option>
+          <option value={id} key={id}>
+            {description}
+          </option>
         ))}
       </BootstrapFormSelect>
 
       <FormGroupWithLabel label="Provided by event (if applicable)">
-        {(id) => (
-          <EventSelect
-            inputId={id}
-            value={providedByEvent}
-            onChange={setProvidedByEvent}
-          />
-        )}
+        {(id) => <EventSelect inputId={id} value={providedByEvent} onChange={setProvidedByEvent} />}
       </FormGroupWithLabel>
 
       <div className="card mb-4">
         <div className="card-header">Order information</div>
 
         <div className="card-body">
-          {initialTicket.order_entry
-            ? (
-              <>
-                <dl className="row">
-                  <dt className="col-md-3">Order ID</dt>
-                  <dd className="col-md-9">{initialTicket.order_entry.order.id}</dd>
+          {initialTicket.order_entry ? (
+            <>
+              <dl className="row">
+                <dt className="col-md-3">Order ID</dt>
+                <dd className="col-md-9">{initialTicket.order_entry.order.id}</dd>
 
-                  <dt className="col-md-3">
-                    {capitalize(convention.ticket_name)}
-                    {' '}
-                    price
-                  </dt>
-                  <dd className="col-md-9">
-                    {formatMoney(initialTicket.order_entry.price_per_item)}
-                  </dd>
-                </dl>
+                <dt className="col-md-3">{capitalize(convention.ticket_name)} price</dt>
+                <dd className="col-md-9">
+                  {formatMoney(initialTicket.order_entry.price_per_item)}
+                </dd>
+              </dl>
 
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={() => editOrderModal.open({ order: initialTicket.order_entry.order })}
-                  type="button"
-                >
-                  Edit order
-                </button>
-              </>
-            )
-            : (
-              initialTicket.id && (
+              <button
+                className="btn btn-outline-primary"
+                onClick={() => editOrderModal.open({ order: initialTicket.order_entry.order })}
+                type="button"
+              >
+                Edit order
+              </button>
+            </>
+          ) : (
+            initialTicket.id && (
               <AddOrderToTicketButton
                 ticket={initialTicket}
                 userConProfile={initialTicket.user_con_profile}
                 convention={convention}
                 className="btn btn-outline-success"
               />
-              )
-            )}
+            )
+          )}
         </div>
       </div>
 

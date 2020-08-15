@@ -5,20 +5,26 @@ import ColumnSelector from './ColumnSelector';
 import ExportButton from './ExportButton';
 
 function TableHeader({
-  columnSelectionProps, exportButton, exportUrl, filtered,
-  renderLeftContent, renderRightContent, sorted,
+  columnSelectionProps,
+  exportButton,
+  exportUrl,
+  filtered,
+  renderLeftContent,
+  renderRightContent,
+  sorted,
 }) {
   return (
     <div className="d-flex mb-2">
       <div className="flex-grow-1">
-        {exportButton || (exportUrl && (
-          <ExportButton
-            exportUrl={exportUrl}
-            filtered={filtered}
-            sorted={sorted}
-            columns={columnSelectionProps.visibleColumnIds}
-          />
-        ))}
+        {exportButton ||
+          (exportUrl && (
+            <ExportButton
+              exportUrl={exportUrl}
+              filtered={filtered}
+              sorted={sorted}
+              columns={columnSelectionProps.visibleColumnIds}
+            />
+          ))}
         {(renderLeftContent || (() => null))()}
       </div>
       <div>

@@ -32,9 +32,7 @@ function getRatingColorClass(rating, selected) {
   return '';
 }
 
-function EventRatingIcon({
-  rating, selected, useColors, size, overrideElementSize,
-}) {
+function EventRatingIcon({ rating, selected, useColors, size, overrideElementSize }) {
   return (
     <i
       className={classnames(

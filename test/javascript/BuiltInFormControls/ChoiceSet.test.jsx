@@ -6,16 +6,19 @@ describe('ChoiceSet', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderChoiceSet = (props) => render(<ChoiceSet
-    name="pickSomething"
-    onChange={onChange}
-    choices={[
-      { label: 'a', value: '1' },
-      { label: 'b', value: '2' },
-      { label: 'c', value: '3' },
-    ]}
-    {...props}
-  />);
+  const renderChoiceSet = (props) =>
+    render(
+      <ChoiceSet
+        name="pickSomething"
+        onChange={onChange}
+        choices={[
+          { label: 'a', value: '1' },
+          { label: 'b', value: '2' },
+          { label: 'c', value: '3' },
+        ]}
+        {...props}
+      />,
+    );
 
   test('by default it renders radio buttons', () => {
     const { getAllByRole } = renderChoiceSet();

@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import { RegistrationPolicyBucketPropType } from './RegistrationPolicyBucket';
 
 function sumBucketProperty(registrationPolicy, property) {
-  return (registrationPolicy.buckets || [])
-    .reduce((sum, bucket) => (sum + bucket[property] || 0), 0);
+  return (registrationPolicy.buckets || []).reduce((sum, bucket) => sum + bucket[property] || 0, 0);
 }
 
 export function sumTotalSlots(registrationPolicy) {

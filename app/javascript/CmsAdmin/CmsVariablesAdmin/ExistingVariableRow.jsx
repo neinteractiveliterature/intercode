@@ -5,24 +5,24 @@ import { useMutation, useApolloClient } from '@apollo/client';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import { CmsVariablesQuery, DeleteCmsVariableMutation, SetCmsVariableMutation } from './queries.gql';
+import { CmsVariablesQuery, DeleteCmsVariableMutation, SetCmsVariableMutation } from './queries';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useDeleteMutation } from '../../MutationUtils';
 
 function ExistingVariableRow({ variable }) {
   const [setVariableMutate] = useMutation(SetCmsVariableMutation);
-  const [
-    setVariable, setVariableError, , clearSetVariableError,
-  ] = useAsyncFunction(setVariableMutate);
+  const [setVariable, setVariableError, , clearSetVariableError] = useAsyncFunction(
+    setVariableMutate,
+  );
   const deleteVariableMutate = useDeleteMutation(DeleteCmsVariableMutation, {
     query: CmsVariablesQuery,
     arrayPath: ['cmsVariables'],
     idVariablePath: ['key'],
     idAttribute: 'key',
   });
-  const [
-    deleteVariable, deleteVariableError, , clearDeleteVariableError,
-  ] = useAsyncFunction(deleteVariableMutate);
+  const [deleteVariable, deleteVariableError, , clearDeleteVariableError] = useAsyncFunction(
+    deleteVariableMutate,
+  );
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
 
@@ -55,26 +55,28 @@ function ExistingVariableRow({ variable }) {
           <code>{variable.key}</code>
         </td>
         <td>
-          {variable.current_ability_can_update
-            ? (
-              <CommitableInput
-                className="text-monospace"
-                value={variable.value_json}
-                onChange={commitVariable}
-                onCancel={clearError}
-              />
-            )
-            : <span className="text-monospace">{variable.value_json}</span>}
+          {variable.current_ability_can_update ? (
+            <CommitableInput
+              className="text-monospace"
+              value={variable.value_json}
+              onChange={commitVariable}
+              onCancel={clearError}
+            />
+          ) : (
+            <span className="text-monospace">{variable.value_json}</span>
+          )}
         </td>
         <td>
           {variable.current_ability_can_delete && (
             <button
               className="btn btn-outline-danger"
               type="button"
-              onClick={() => confirm({
-                prompt: `Are you sure you want to delete the variable "${variable.key}"?`,
-                action: deleteConfirmed,
-              })}
+              onClick={() =>
+                confirm({
+                  prompt: `Are you sure you want to delete the variable "${variable.key}"?`,
+                  action: deleteConfirmed,
+                })
+              }
             >
               <i className="fa fa-trash-o" />
               <span className="sr-only">
@@ -86,17 +88,13 @@ function ExistingVariableRow({ variable }) {
           )}
         </td>
       </tr>
-      {
-        error
-          ? (
-            <tr>
-              <td colSpan="3">
-                <ErrorDisplay graphQLError={error} />
-              </td>
-            </tr>
-          )
-          : null
-      }
+      {error ? (
+        <tr>
+          <td colSpan="3">
+            <ErrorDisplay graphQLError={error} />
+          </td>
+        </tr>
+      ) : null}
     </>
   );
 }

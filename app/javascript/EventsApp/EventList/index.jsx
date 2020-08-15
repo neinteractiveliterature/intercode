@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback, useContext,
-} from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
@@ -54,64 +52,52 @@ const fetchMoreEvents = async (fetchMore, page) => {
 };
 
 function EventList() {
-  const {
-    sorted, filtered, onSortedChange, onFilteredChange,
-  } = useReactRouterReactTable({ ...filterCodecs });
+  const { sorted, filtered, onSortedChange, onFilteredChange } = useReactRouterReactTable({
+    ...filterCodecs,
+  });
   const { myProfile } = useContext(AppRootContext);
-  const defaultSort = (myProfile
-    ? [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }]
-    : [{ id: 'title', desc: false }]
-  );
+  const defaultSort = myProfile
+    ? [
+        { id: 'my_rating', desc: true },
+        { id: 'title', desc: false },
+      ]
+    : [{ id: 'title', desc: false }];
   const [cachedConventionName, setCachedConventionName] = useState(null);
   const [cachedEventCategories, setCachedEventCategories] = useState(null);
   const [cachedPageCount, setCachedPageCount] = useState(null);
-  const defaultFiltered = (myProfile
-    ? [{ id: 'my_rating', value: [1, 0] }, { id: 'category', value: [] }]
-    : [{ id: 'category', value: [] }]
-  );
-  const effectiveSorted = (sorted && sorted.length > 0) ? sorted : defaultSort;
-  const effectiveFiltered = (filtered && filtered.length > 0) ? filtered : defaultFiltered;
+  const defaultFiltered = myProfile
+    ? [
+        { id: 'my_rating', value: [1, 0] },
+        { id: 'category', value: [] },
+      ]
+    : [{ id: 'category', value: [] }];
+  const effectiveSorted = sorted && sorted.length > 0 ? sorted : defaultSort;
+  const effectiveFiltered = filtered && filtered.length > 0 ? filtered : defaultFiltered;
 
-  const {
-    data, loading, error, fetchMore,
-  } = useQuery(
-    EventListEventsQuery,
-    {
-      variables: {
-        page: 1,
-        pageSize: PAGE_SIZE,
-        sort: reactTableSortToTableResultsSort(effectiveSorted),
-        filters: reactTableFiltersToTableResultsFilters(effectiveFiltered),
-      },
+  const { data, loading, error, fetchMore } = useQuery(EventListEventsQuery, {
+    variables: {
+      page: 1,
+      pageSize: PAGE_SIZE,
+      sort: reactTableSortToTableResultsSort(effectiveSorted),
+      filters: reactTableFiltersToTableResultsFilters(effectiveFiltered),
     },
-  );
-  const [
-    fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress,
-  ] = useAsyncFunction(fetchMoreEvents);
-
-  const loadedEntries = (
-    loading || error
-      ? 0
-      : data.convention.events_paginated.entries.length
-  );
-  const totalEntries = (
-    loading || error
-      ? null
-      : data.convention.events_paginated.total_entries
+  });
+  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(
+    fetchMoreEvents,
   );
 
-  const fetchMoreIfNeeded = useCallback(
-    () => {
-      if (loadedEntries === 0) {
-        return;
-      }
+  const loadedEntries = loading || error ? 0 : data.convention.events_paginated.entries.length;
+  const totalEntries = loading || error ? null : data.convention.events_paginated.total_entries;
 
-      if (loadedEntries < totalEntries) {
-        fetchMoreEventsAsync(fetchMore, (loadedEntries / PAGE_SIZE) + 1);
-      }
-    },
-    [fetchMore, fetchMoreEventsAsync, loadedEntries, totalEntries],
-  );
+  const fetchMoreIfNeeded = useCallback(() => {
+    if (loadedEntries === 0) {
+      return;
+    }
+
+    if (loadedEntries < totalEntries) {
+      fetchMoreEventsAsync(fetchMore, loadedEntries / PAGE_SIZE + 1);
+    }
+  }, [fetchMore, fetchMoreEventsAsync, loadedEntries, totalEntries]);
 
   const changeFilterValue = useCallback(
     (fieldId, value) => {
@@ -123,30 +109,24 @@ function EventList() {
     [onFilteredChange],
   );
 
-  const categoryChanged = useCallback(
-    (value) => changeFilterValue('category', value),
-    [changeFilterValue],
-  );
+  const categoryChanged = useCallback((value) => changeFilterValue('category', value), [
+    changeFilterValue,
+  ]);
 
-  const myRatingFilterChanged = useCallback(
-    (value) => changeFilterValue('my_rating', value),
-    [changeFilterValue],
-  );
+  const myRatingFilterChanged = useCallback((value) => changeFilterValue('my_rating', value), [
+    changeFilterValue,
+  ]);
 
-  const titlePrefixChanged = useCallback(
-    (value) => changeFilterValue('title_prefix', value),
-    [changeFilterValue],
-  );
+  const titlePrefixChanged = useCallback((value) => changeFilterValue('title_prefix', value), [
+    changeFilterValue,
+  ]);
 
-  useEffect(
-    () => {
-      if (!loading && !error) {
-        setCachedConventionName(data.convention.name);
-        setCachedEventCategories(data.convention.event_categories);
-      }
-    },
-    [data, loading, error],
-  );
+  useEffect(() => {
+    if (!loading && !error) {
+      setCachedConventionName(data.convention.name);
+      setCachedEventCategories(data.convention.event_categories);
+    }
+  }, [data, loading, error]);
 
   usePageTitle('List of Events');
 
@@ -154,7 +134,7 @@ function EventList() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const eventsPaginated = (loading ? { entries: [] } : data.convention.events_paginated);
+  const eventsPaginated = loading ? { entries: [] } : data.convention.events_paginated;
 
   if (!loading && cachedPageCount !== eventsPaginated.total_pages) {
     setCachedPageCount(eventsPaginated.total_pages);
@@ -209,29 +189,23 @@ function EventList() {
       </div>
 
       <PageLoadingIndicator visible={loading} />
-      {
-        loading
-          ? null
-          : (
-            <>
-              <EventListEvents
-                convention={data.convention}
-                eventsPaginated={eventsPaginated}
-                sorted={sorted}
-                canReadSchedule={data.currentAbility.can_read_schedule}
-                fetchMoreIfNeeded={fetchMoreIfNeeded}
-              />
-              {fetchMoreInProgress && (
-                <div>
-                  <LoadingIndicator />
-                  {' '}
-                  <em className="text-muted">Loading more events...</em>
-                </div>
-              )}
-              <ErrorDisplay graphQLError={fetchMoreError} />
-            </>
-          )
-      }
+      {loading ? null : (
+        <>
+          <EventListEvents
+            convention={data.convention}
+            eventsPaginated={eventsPaginated}
+            sorted={sorted}
+            canReadSchedule={data.currentAbility.can_read_schedule}
+            fetchMoreIfNeeded={fetchMoreIfNeeded}
+          />
+          {fetchMoreInProgress && (
+            <div>
+              <LoadingIndicator /> <em className="text-muted">Loading more events...</em>
+            </div>
+          )}
+          <ErrorDisplay graphQLError={fetchMoreError} />
+        </>
+      )}
     </>
   );
 }

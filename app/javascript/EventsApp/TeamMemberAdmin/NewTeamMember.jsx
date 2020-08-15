@@ -36,20 +36,17 @@ function NewTeamMember({ event, eventPath }) {
   );
 
   usePageTitle(
-    t(
-      'events.teamMemberAdmin.newPageTitle',
-      'Add {{ teamMemberName }} - {{ eventTitle }}',
-      {
-        teamMemberName: event.event_category.team_member_name,
-        eventTitle: event.title,
-      },
-    ),
+    t('events.teamMemberAdmin.newPageTitle', 'Add {{ teamMemberName }} - {{ eventTitle }}', {
+      teamMemberName: event.event_category.team_member_name,
+      eventTitle: event.title,
+    }),
   );
 
-  const userConProfileChanged = (userConProfile) => setTeamMember((prevTeamMember) => ({
-    ...prevTeamMember,
-    user_con_profile: userConProfile,
-  }));
+  const userConProfileChanged = (userConProfile) =>
+    setTeamMember((prevTeamMember) => ({
+      ...prevTeamMember,
+      user_con_profile: userConProfile,
+    }));
 
   const createClicked = async () => {
     await createTeamMember({
@@ -60,9 +57,7 @@ function NewTeamMember({ event, eventPath }) {
           user_con_profile_id: teamMember.user_con_profile.id,
         },
       },
-      refetchQueries: [
-        { query: TeamMembersQuery, variables: { eventId: event.id } },
-      ],
+      refetchQueries: [{ query: TeamMembersQuery, variables: { eventId: event.id } }],
       awaitRefetchQueries: true,
     });
 
@@ -72,20 +67,16 @@ function NewTeamMember({ event, eventPath }) {
   return (
     <>
       <h1 className="mb-4">
-        {t(
-          'events.teamMemberAdmin.newHeader',
-          'Add {{ teamMemberName }}',
-          { teamMemberName: titleize(underscore(event.event_category.team_member_name)) },
-        )}
+        {t('events.teamMemberAdmin.newHeader', 'Add {{ teamMemberName }}', {
+          teamMemberName: titleize(underscore(event.event_category.team_member_name)),
+        })}
       </h1>
 
       <div className="form-group">
         <label htmlFor={userConProfileSelectId}>
-          {t(
-            'events.teamMemberAdmin.userConProfileLabel',
-            '{{ teamMemberName }} to add',
-            { teamMemberName: humanize(underscore(event.event_category.team_member_name)) },
-          )}
+          {t('events.teamMemberAdmin.userConProfileLabel', '{{ teamMemberName }} to add', {
+            teamMemberName: humanize(underscore(event.event_category.team_member_name)),
+          })}
         </label>
         <UserConProfileSelect
           inputId={userConProfileSelectId}
@@ -101,41 +92,37 @@ function NewTeamMember({ event, eventPath }) {
         />
       </div>
 
-      {
-        teamMember.user_con_profile
-          ? (
-            <>
-              <TeamMemberForm
-                event={event}
-                value={teamMember}
-                onChange={setTeamMember}
+      {teamMember.user_con_profile ? (
+        <>
+          <TeamMemberForm
+            event={event}
+            value={teamMember}
+            onChange={setTeamMember}
+            disabled={createInProgress}
+          />
+
+          <ErrorDisplay graphQLError={createError} />
+
+          <ul className="list-inline mt-4">
+            <li className="list-inline-item">
+              <button
+                type="button"
+                className="btn btn-primary"
                 disabled={createInProgress}
-              />
-
-              <ErrorDisplay graphQLError={createError} />
-
-              <ul className="list-inline mt-4">
-                <li className="list-inline-item">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    disabled={createInProgress}
-                    onClick={createClicked}
-                  >
-                    {t(
-                      'events.teamMemberAdmin.addButton',
-                      'Add {{ teamMemberName }}',
-                      { teamMemberName: event.event_category.team_member_name },
-                    )}
-                  </button>
-                </li>
-              </ul>
-            </>
-          )
-          : (
-            <p>{t('events.teamMemberAdmin.selectUserConProfilePrompt', 'Select a person to continue.')}</p>
-          )
-      }
+                onClick={createClicked}
+              >
+                {t('events.teamMemberAdmin.addButton', 'Add {{ teamMemberName }}', {
+                  teamMemberName: event.event_category.team_member_name,
+                })}
+              </button>
+            </li>
+          </ul>
+        </>
+      ) : (
+        <p>
+          {t('events.teamMemberAdmin.selectUserConProfilePrompt', 'Select a person to continue.')}
+        </p>
+      )}
     </>
   );
 }
@@ -146,9 +133,11 @@ NewTeamMember.propTypes = {
     event_category: PropTypes.shape({
       team_member_name: PropTypes.string.isRequired,
     }).isRequired,
-    team_members: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
+    team_members: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
     id: PropTypes.number.isRequired,
   }).isRequired,
   eventPath: PropTypes.string.isRequired,

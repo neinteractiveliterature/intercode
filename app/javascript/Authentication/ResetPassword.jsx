@@ -1,6 +1,4 @@
-import React, {
-  useState, useContext, useMemo, Suspense,
-} from 'react';
+import React, { useState, useContext, useMemo, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -12,10 +10,17 @@ import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'));
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() =>
+  import(
+    /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
+  ),
+);
 
 async function changePassword(
-  authenticityToken, resetPasswordToken, password, passwordConfirmation,
+  authenticityToken,
+  resetPasswordToken,
+  password,
+  passwordConfirmation,
 ) {
   const formData = new FormData();
   formData.append('user[reset_password_token]', resetPasswordToken);
@@ -48,14 +53,17 @@ function ResetPassword() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useUniqueId('password-');
-  const [
-    changePasswordAsync, changePasswordError, changePasswordInProgress,
-  ] = useAsyncFunction(changePassword);
+  const [changePasswordAsync, changePasswordError, changePasswordInProgress] = useAsyncFunction(
+    changePassword,
+  );
 
   const onSubmit = async (event) => {
     event.preventDefault();
     await changePasswordAsync(
-      authenticityToken, resetPasswordToken, password, passwordConfirmation,
+      authenticityToken,
+      resetPasswordToken,
+      password,
+      passwordConfirmation,
     );
     window.location.href = '/';
   };

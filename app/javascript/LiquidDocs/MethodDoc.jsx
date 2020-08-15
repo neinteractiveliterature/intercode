@@ -30,15 +30,13 @@ function MethodDoc({ method, prefix = null }) {
         </code>
       </p>
 
-      {method.docstring && (<p>{method.docstring}</p>)}
+      {method.docstring && <p>{method.docstring}</p>}
 
       <ul className="list-unstyled">
-        {
-          sortedTags.map((tag, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} method={method} prefix={prefix} />
-          ))
-        }
+        {sortedTags.map((tag, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} method={method} prefix={prefix} />
+        ))}
       </ul>
     </li>
   );
@@ -47,9 +45,11 @@ function MethodDoc({ method, prefix = null }) {
 MethodDoc.propTypes = {
   method: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      tag_name: PropTypes.string,
-    })).isRequired,
+    tags: PropTypes.arrayOf(
+      PropTypes.shape({
+        tag_name: PropTypes.string,
+      }),
+    ).isRequired,
     docstring: PropTypes.string,
   }).isRequired,
   prefix: PropTypes.string,

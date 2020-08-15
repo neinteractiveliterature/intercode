@@ -2,9 +2,9 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 
-import { CreateOrganizationRole } from './mutations.gql';
+import { CreateOrganizationRole } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -13,10 +13,14 @@ function NewOrganizationRole() {
   const organizationId = Number.parseInt(useParams().organizationId, 10);
   const history = useHistory();
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
-  const { renderForm, formState } = useOrganizationRoleForm({ name: '', users: [], permissions: [] });
-  const [
-    mutate, { error: mutationError, loading: mutationInProgress },
-  ] = useMutation(CreateOrganizationRole);
+  const { renderForm, formState } = useOrganizationRoleForm({
+    name: '',
+    users: [],
+    permissions: [],
+  });
+  const [mutate, { error: mutationError, loading: mutationInProgress }] = useMutation(
+    CreateOrganizationRole,
+  );
 
   usePageTitle('New organization role');
 
@@ -28,9 +32,7 @@ function NewOrganizationRole() {
     return <Redirect to="/organizations" />;
   }
 
-  const createOrganizationRole = async ({
-    name, usersChangeSet, permissionsChangeSet,
-  }) => {
+  const createOrganizationRole = async ({ name, usersChangeSet, permissionsChangeSet }) => {
     await mutate({
       variables: {
         organizationId,
@@ -40,7 +42,14 @@ function NewOrganizationRole() {
           permission: permission.permission,
         })),
       },
-      update: (proxy, { data: { createOrganizationRole: { organization_role: newRole } } }) => {
+      update: (
+        proxy,
+        {
+          data: {
+            createOrganizationRole: { organization_role: newRole },
+          },
+        },
+      ) => {
         const storeData = proxy.readQuery({ query: OrganizationAdminOrganizationsQuery });
         proxy.writeQuery({
           query: OrganizationAdminOrganizationsQuery,
@@ -65,11 +74,7 @@ function NewOrganizationRole() {
 
   return (
     <>
-      <h1 className="mb-4">
-        New role in
-        {' '}
-        {organization.name}
-      </h1>
+      <h1 className="mb-4">New role in {organization.name}</h1>
 
       {renderForm()}
 

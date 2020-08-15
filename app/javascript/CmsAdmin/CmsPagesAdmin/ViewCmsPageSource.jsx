@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsPageForm from './CmsPageForm';
-import { CmsPagesAdminQuery } from './queries.gql';
+import { CmsPagesAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
@@ -13,11 +13,7 @@ function ViewCmsPageSource() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsPagesAdminQuery);
   const page = useMemo(
-    () => (
-      error || loading
-        ? null
-        : data.cmsPages.find((p) => id === p.id.toString())
-    ),
+    () => (error || loading ? null : data.cmsPages.find((p) => id === p.id.toString())),
     [data, error, loading, id],
   );
 
@@ -32,12 +28,7 @@ function ViewCmsPageSource() {
   }
 
   return (
-    <CmsPageForm
-      page={page}
-      cmsLayouts={data.cmsLayouts}
-      cmsParent={data.cmsParent}
-      readOnly
-    />
+    <CmsPageForm page={page} cmsLayouts={data.cmsLayouts} cmsParent={data.cmsParent} readOnly />
   );
 }
 

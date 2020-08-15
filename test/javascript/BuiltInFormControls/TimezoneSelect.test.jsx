@@ -4,13 +4,8 @@ import { render, fireEvent, waitFor } from '../testUtils';
 import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
 describe('TimezoneSelect', () => {
-  const renderComponent = (overrideProps) => render((
-    <TimezoneSelect
-      label="Timezone"
-      onChange={() => {}}
-      {...overrideProps}
-    />
-  ));
+  const renderComponent = (overrideProps) =>
+    render(<TimezoneSelect label="Timezone" onChange={() => {}} {...overrideProps} />);
 
   test('it renders', () => {
     const { getAllByText } = renderComponent();

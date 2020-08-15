@@ -7,13 +7,13 @@ function EventListPageSizeControl({ pageSize, onPageSizeChange }) {
       <select
         className="form-control mx-1"
         value={pageSize.toString()}
-        onChange={(event) => { onPageSizeChange(Number.parseInt(event.target.value, 10)); }}
+        onChange={(event) => {
+          onPageSizeChange(Number.parseInt(event.target.value, 10));
+        }}
       >
         {[10, 20, 50, 100, 200].map((pageSizeOption) => (
           <option value={pageSizeOption.toString()} key={pageSizeOption}>
-            {pageSizeOption}
-            {' '}
-            per page
+            {pageSizeOption} per page
           </option>
         ))}
       </select>

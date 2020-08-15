@@ -1,9 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 
-import {
-  act, waitFor, render, fireEvent,
-} from '../testUtils';
+import { act, waitFor, render, fireEvent } from '../testUtils';
 import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
 
 describe('ConventionForm', () => {
@@ -21,9 +19,7 @@ describe('ConventionForm', () => {
     show_event_list: 'no',
     hidden: false,
     maximum_event_signups: {
-      timespans: [
-        { start: null, finish: null, value: 'unlimited' },
-      ],
+      timespans: [{ start: null, finish: null, value: 'unlimited' }],
     },
     maximum_tickets: null,
     ticket_name: 'ticket',
@@ -33,50 +29,58 @@ describe('ConventionForm', () => {
     email_mode: 'forward',
   };
 
-  const renderConventionForm = (props, initialConventionProps) => render(
-    <ConventionForm
-      initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
-      rootSite={{ url: 'https://example.com', id: 'singleton' }}
-      saveConvention={() => {}}
-      cmsLayouts={[]}
-      pages={[]}
-      {...props}
-    />,
-  );
+  const renderConventionForm = (props, initialConventionProps) =>
+    render(
+      <ConventionForm
+        initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
+        rootSite={{ url: 'https://example.com', id: 'singleton' }}
+        saveConvention={() => {}}
+        cmsLayouts={[]}
+        pages={[]}
+        {...props}
+      />,
+    );
 
   test('it renders the given values', () => {
     const now = moment.tz('2019-04-18T18:34:04.283Z', 'UTC').toISOString();
-    const { getByLabelText, getByText, getMultipleChoiceInput } = renderConventionForm({}, {
-      ...defaultInitialConvention,
-      starts_at: now,
-      ends_at: now,
-      name: 'myName',
-      domain: 'myDomain',
-      timezone_name: 'Etc/UTC',
-      accepting_proposals: true,
-      show_schedule: 'gms',
-      maximum_event_signups: {
-        timespans: [
-          { start: null, finish: now, value: 'not_yet' },
-          { start: now, finish: null, value: 'unlimited' },
-        ],
+    const { getByLabelText, getByText, getMultipleChoiceInput } = renderConventionForm(
+      {},
+      {
+        ...defaultInitialConvention,
+        starts_at: now,
+        ends_at: now,
+        name: 'myName',
+        domain: 'myDomain',
+        timezone_name: 'Etc/UTC',
+        accepting_proposals: true,
+        show_schedule: 'gms',
+        maximum_event_signups: {
+          timespans: [
+            { start: null, finish: now, value: 'not_yet' },
+            { start: now, finish: null, value: 'unlimited' },
+          ],
+        },
+        maximum_tickets: 100,
       },
-      maximum_tickets: 100,
-    });
+    );
 
     expect(getByLabelText('Convention starts').value).toEqual('2019-04-18');
     expect(getByLabelText('Convention ends').value).toEqual('2019-04-18');
     expect(getByLabelText('Name').value).toEqual('myName');
     expect(getByLabelText('Convention domain name').value).toEqual('myDomain');
-    expect(getByLabelText('Time zone').closest('.form-group')).toHaveTextContent('Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)');
+    expect(getByLabelText('Time zone').closest('.form-group')).toHaveTextContent(
+      'Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)',
+    );
 
     fireEvent.click(getByText('Events'));
 
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
-    expect(getMultipleChoiceInput(
-      'Show event schedule',
-      'Only to event team members and users with any schedule viewing permissions',
-    ).checked).toBe(true);
+    expect(
+      getMultipleChoiceInput(
+        'Show event schedule',
+        'Only to event team members and users with any schedule viewing permissions',
+      ).checked,
+    ).toBe(true);
 
     fireEvent.click(getByText('Payments'));
     expect(getByLabelText('Maximum tickets').value).toEqual('100');
@@ -87,7 +91,9 @@ describe('ConventionForm', () => {
 
     fireEvent.click(getByText('Events'));
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(false);
-    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), { target: { checked: true } });
+    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), {
+      target: { checked: true },
+    });
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
   });
 

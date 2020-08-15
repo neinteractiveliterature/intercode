@@ -12,9 +12,8 @@ function CategoryLegend() {
   const { t } = useTranslation();
   const { data, loading, error } = useQuery(CommonConventionDataQuery);
   const sortedEventCategories = useMemo(
-    () => (error || loading
-      ? null
-      : sortByLocaleString(data.convention.event_categories, (c) => c.name)),
+    () =>
+      error || loading ? null : sortByLocaleString(data.convention.event_categories, (c) => c.name),
     [error, loading, data],
   );
 
@@ -80,15 +79,11 @@ function CategoryLegend() {
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} signupStatus="confirmed">
-              <i className="fa fa-user-circle" />
-              {' '}
-              {t('signups.states.confirmed', 'Confirmed')}
+              <i className="fa fa-user-circle" /> {t('signups.states.confirmed', 'Confirmed')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} signupStatus="waitlisted">
-              <i className="fa fa-hourglass-half" />
-              {' '}
-              {t('signups.states.waitlisted', 'Waitlisted')}
+              <i className="fa fa-hourglass-half" /> {t('signups.states.waitlisted', 'Waitlisted')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory}>

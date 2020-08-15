@@ -3,17 +3,16 @@ import sortBy from 'lodash/sortBy';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function renderOrganizationConventions(organization) {
-  const sortedConventions = sortBy(
-    organization.conventions,
-    [(convention) => convention.starts_at],
-  );
+  const sortedConventions = sortBy(organization.conventions, [
+    (convention) => convention.starts_at,
+  ]);
   sortedConventions.reverse();
 
   const conventionNames = sortedConventions.slice(0, 3).map((convention) => convention.name);
@@ -50,20 +49,18 @@ function OrganizationIndex() {
         </thead>
 
         <tbody>
-          {
-            sortedOrganizations.map((organization) => (
-              <tr key={organization.id}>
-                <td>
-                  {
-                    organization.current_ability_can_manage_access
-                      ? <Link to={`/organizations/${organization.id}`}>{organization.name}</Link>
-                      : organization.name
-                  }
-                </td>
-                <td>{renderOrganizationConventions(organization)}</td>
-              </tr>
-            ))
-          }
+          {sortedOrganizations.map((organization) => (
+            <tr key={organization.id}>
+              <td>
+                {organization.current_ability_can_manage_access ? (
+                  <Link to={`/organizations/${organization.id}`}>{organization.name}</Link>
+                ) : (
+                  organization.name
+                )}
+              </td>
+              <td>{renderOrganizationConventions(organization)}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

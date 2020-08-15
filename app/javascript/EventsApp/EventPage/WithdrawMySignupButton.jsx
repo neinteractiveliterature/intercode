@@ -8,26 +8,25 @@ import WithdrawSignupButton from './WithdrawSignupButton';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 
-function WithdrawMySignupButton({
-  run, event, reloadOnSuccess, ...otherProps
-}) {
+function WithdrawMySignupButton({ run, event, reloadOnSuccess, ...otherProps }) {
   const { t } = useTranslation();
   const [withdrawMutate] = useMutation(WithdrawMySignup);
   const confirm = useConfirm();
-  const withdrawSignup = () => confirm({
-    prompt: t(
-      'events.withdrawPrompt.selfServiceSignup',
-      'Are you sure you want to withdraw from {{ eventTitle }}?',
-      { eventTitle: event.title },
-    ),
-    action: async () => {
-      await withdrawMutate({ variables: { runId: run.id } });
-      if (reloadOnSuccess) {
-        window.location.reload();
-      }
-    },
-    renderError: (error) => <ErrorDisplay graphQLError={error} />,
-  });
+  const withdrawSignup = () =>
+    confirm({
+      prompt: t(
+        'events.withdrawPrompt.selfServiceSignup',
+        'Are you sure you want to withdraw from {{ eventTitle }}?',
+        { eventTitle: event.title },
+      ),
+      action: async () => {
+        await withdrawMutate({ variables: { runId: run.id } });
+        if (reloadOnSuccess) {
+          window.location.reload();
+        }
+      },
+      renderError: (error) => <ErrorDisplay graphQLError={error} />,
+    });
 
   return (
     <WithdrawSignupButton

@@ -6,9 +6,9 @@ import { useHistory, useParams } from 'react-router-dom';
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { DeleteUserActivityAlert, UpdateUserActivityAlert } from './mutations.gql';
+import { DeleteUserActivityAlert, UpdateUserActivityAlert } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { UserActivityAlertsAdminQuery, UserActivityAlertQuery } from './queries.gql';
+import { UserActivityAlertsAdminQuery, UserActivityAlertQuery } from './queries';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import useAsyncFunction from '../useAsyncFunction';
 import { useDeleteMutation } from '../MutationUtils';
@@ -19,7 +19,9 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
   const history = useHistory();
   const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
   const [
-    notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination,
+    notificationDestinationChangeSet,
+    addNotificationDestination,
+    removeNotificationDestination,
   ] = useChangeSet();
   const [updateMutate] = useMutation(UpdateUserActivityAlert);
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
@@ -45,7 +47,8 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
       variables: {
         id: userActivityAlert.id,
         userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        addNotificationDestinations: notificationDestinationChangeSet.getAddValues()
+        addNotificationDestinations: notificationDestinationChangeSet
+          .getAddValues()
           .map((addValue) => {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };
@@ -78,9 +81,7 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
             });
           }}
         >
-          <i className="fa fa-trash-o" />
-          {' '}
-          Delete
+          <i className="fa fa-trash-o" /> Delete
         </button>
       </div>
 

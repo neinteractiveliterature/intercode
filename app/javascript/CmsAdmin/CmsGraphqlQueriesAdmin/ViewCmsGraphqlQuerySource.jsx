@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CmsGraphqlQueriesQuery } from './queries.gql';
+import { CmsGraphqlQueriesQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -13,9 +13,8 @@ import 'graphiql/graphiql.css';
 function ViewCmsGraphqlQuerySource() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
-  const query = loading || error
-    ? null
-    : data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
+  const query =
+    loading || error ? null : data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
 
   usePageTitle(`View “${(query || {}).identifier}” Source`);
 

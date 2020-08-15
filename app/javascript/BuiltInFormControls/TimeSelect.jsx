@@ -5,9 +5,7 @@ import MomentPropTypes from 'react-moment-proptypes';
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import useUniqueId from '../useUniqueId';
 
-function TimeSelect({
-  value, timespan, onChange, children,
-}) {
+function TimeSelect({ value, timespan, onChange, children }) {
   const hourValues = useMemo(
     () => {
       let hourOffset = 0;
@@ -55,7 +53,9 @@ function TimeSelect({
   ));
 
   const minuteOptions = [0, 15, 30, 45].map((minute) => (
-    <option key={minute} value={minute}>{minute.toString(10).padStart(2, '0')}</option>
+    <option key={minute} value={minute}>
+      {minute.toString(10).padStart(2, '0')}
+    </option>
   ));
 
   const hourInputId = useUniqueId('hour-');

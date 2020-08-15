@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UserActivityAlertsAdminQuery } from './queries.gql';
+import { UserActivityAlertsAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
@@ -22,9 +22,7 @@ function renderAlertMatches(userActivityAlert) {
   if (userActivityAlert.partial_name) {
     matches.push(
       <li key="partial_name">
-        <strong>Partial name:</strong>
-        {' '}
-        <code>{userActivityAlert.partial_name}</code>
+        <strong>Partial name:</strong> <code>{userActivityAlert.partial_name}</code>
       </li>,
     );
   }
@@ -32,9 +30,7 @@ function renderAlertMatches(userActivityAlert) {
   if (userActivityAlert.email) {
     matches.push(
       <li key="email">
-        <strong>Email:</strong>
-        {' '}
-        <code>{userActivityAlert.email}</code>
+        <strong>Email:</strong> <code>{userActivityAlert.email}</code>
       </li>,
     );
   }
@@ -42,9 +38,7 @@ function renderAlertMatches(userActivityAlert) {
   if (userActivityAlert.user) {
     matches.push(
       <li key="user">
-        <strong>User account:</strong>
-        {' '}
-        <code>{userActivityAlert.user.name}</code>
+        <strong>User account:</strong> <code>{userActivityAlert.user.name}</code>
       </li>,
     );
   }
@@ -60,13 +54,7 @@ function renderAlertTriggers(convention, userActivityAlert) {
   }
 
   if (userActivityAlert.trigger_on_ticket_create && convention.ticket_mode !== 'disabled') {
-    triggers.push(
-      <li key="ticket_create">
-        {humanize(convention.ticket_name)}
-        {' '}
-        creation
-      </li>,
-    );
+    triggers.push(<li key="ticket_create">{humanize(convention.ticket_name)} creation</li>);
   }
 
   return renderCriteriaList(triggers, 'Never triggers');
@@ -75,10 +63,18 @@ function renderAlertTriggers(convention, userActivityAlert) {
 function renderAlertNotificationDestinations(userActivityAlert) {
   const destinations = userActivityAlert.notification_destinations.map((destination) => {
     if (destination.staff_position) {
-      return <li key={`staff_position_${destination.staff_position.id}`}>{destination.staff_position.name}</li>;
+      return (
+        <li key={`staff_position_${destination.staff_position.id}`}>
+          {destination.staff_position.name}
+        </li>
+      );
     }
 
-    return <li key={`user_con_profile_${destination.user_con_profile.id}`}>{destination.user_con_profile.name_without_nickname}</li>;
+    return (
+      <li key={`user_con_profile_${destination.user_con_profile.id}`}>
+        {destination.user_con_profile.name_without_nickname}
+      </li>
+    );
   });
 
   return renderCriteriaList(destinations, 'No destinations');
@@ -110,26 +106,33 @@ function UserActivityAlertsList() {
           </tr>
         </thead>
         <tbody>
-          {
-            data.convention.user_activity_alerts.map((userActivityAlert) => (
-              <tr key={userActivityAlert.id}>
-                <td>{renderAlertMatches(userActivityAlert)}</td>
-                <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>
-                <td>{renderAlertNotificationDestinations(userActivityAlert)}</td>
-                <td className="text-right">
-                  <Link to={`/user_activity_alerts/${userActivityAlert.id}/edit`} className="btn btn-sm btn-primary">Edit</Link>
-                </td>
-              </tr>
-            ))
-          }
-          {
-            data.convention.user_activity_alerts.length === 0
-              ? <tr><td colSpan="4"><em>No alerts configured.</em></td></tr>
-              : null
-          }
+          {data.convention.user_activity_alerts.map((userActivityAlert) => (
+            <tr key={userActivityAlert.id}>
+              <td>{renderAlertMatches(userActivityAlert)}</td>
+              <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>
+              <td>{renderAlertNotificationDestinations(userActivityAlert)}</td>
+              <td className="text-right">
+                <Link
+                  to={`/user_activity_alerts/${userActivityAlert.id}/edit`}
+                  className="btn btn-sm btn-primary"
+                >
+                  Edit
+                </Link>
+              </td>
+            </tr>
+          ))}
+          {data.convention.user_activity_alerts.length === 0 ? (
+            <tr>
+              <td colSpan="4">
+                <em>No alerts configured.</em>
+              </td>
+            </tr>
+          ) : null}
         </tbody>
       </table>
-      <Link to="/user_activity_alerts/new" className="btn btn-primary">Create user activity alert</Link>
+      <Link to="/user_activity_alerts/new" className="btn btn-primary">
+        Create user activity alert
+      </Link>
     </>
   );
 }

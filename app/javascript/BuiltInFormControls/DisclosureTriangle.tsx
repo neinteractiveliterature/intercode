@@ -1,5 +1,5 @@
 export type DisclosureTriangleProps = {
-  expanded: boolean,
+  expanded: boolean;
 };
 
 function DisclosureTriangle({ expanded }: DisclosureTriangleProps) {

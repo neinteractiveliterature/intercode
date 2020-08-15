@@ -1,12 +1,12 @@
-import React, {
-  Suspense, useCallback, useRef, useEffect, ReactNode,
-} from 'react';
+import React, { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
-import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
+import AuthenticationModalContext, {
+  useAuthenticationModalProvider,
+} from './Authentication/AuthenticationModalContext';
 import Confirm, { useConfirm } from './ModalDialogs/Confirm';
 import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
@@ -19,17 +19,21 @@ import MapboxContext, { useMapboxContext } from './MapboxContext';
 
 export type AppWrapperProps = {
   authenticityTokens: {
-    graphql: string,
-  },
-  mapboxAccessToken: string,
-  recaptchaSiteKey: string,
-  stripePublishableKey: string,
+    graphql: string;
+  };
+  mapboxAccessToken: string;
+  recaptchaSiteKey: string;
+  stripePublishableKey: string;
 };
 
 function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
   function Wrapper(props: P & AppWrapperProps) {
     const {
-      authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps
+      authenticityTokens,
+      mapboxAccessToken,
+      recaptchaSiteKey,
+      stripePublishableKey,
+      ...otherProps
     } = props;
     const confirm = useConfirm();
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
@@ -40,19 +44,15 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
       unauthenticatedError,
       setUnauthenticatedError,
     } = authenticationModalContextValue;
-    const openSignIn = useCallback(
-      async () => {
-        setUnauthenticatedError(true);
-        await refresh();
-        openAuthenticationModal({ currentView: 'signIn' });
-      },
-      [openAuthenticationModal, setUnauthenticatedError, refresh],
-    );
+    const openSignIn = useCallback(async () => {
+      setUnauthenticatedError(true);
+      await refresh();
+      openAuthenticationModal({ currentView: 'signIn' });
+    }, [openAuthenticationModal, setUnauthenticatedError, refresh]);
     const onUnauthenticatedRef = useRef(openSignIn);
-    useEffect(
-      () => { onUnauthenticatedRef.current = openSignIn; },
-      [openSignIn],
-    );
+    useEffect(() => {
+      onUnauthenticatedRef.current = openSignIn;
+    }, [openSignIn]);
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
 
     const getUserConfirmation = useCallback(
@@ -83,13 +83,13 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
                   <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
                     <>
                       {!unauthenticatedError && (
-                      <Suspense fallback={<PageLoadingIndicator visible />}>
-                        <AlertProvider>
-                          <ErrorBoundary placement="replace" errorType="plain">
-                            <WrappedComponent {...((otherProps as unknown) as P)} />
-                          </ErrorBoundary>
-                        </AlertProvider>
-                      </Suspense>
+                        <Suspense fallback={<PageLoadingIndicator visible />}>
+                          <AlertProvider>
+                            <ErrorBoundary placement="replace" errorType="plain">
+                              <WrappedComponent {...((otherProps as unknown) as P)} />
+                            </ErrorBoundary>
+                          </AlertProvider>
+                        </Suspense>
                       )}
                       <AuthenticationModal />
                     </>
@@ -103,14 +103,17 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
     );
   }
 
-  const wrappedComponentDisplayName = (
-    WrappedComponent.displayName || WrappedComponent.name || 'Component'
-  );
+  const wrappedComponentDisplayName =
+    WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
   function ConfirmWrapper(props: P & AppWrapperProps) {
-    return <Confirm><Wrapper {...props} /></Confirm>;
+    return (
+      <Confirm>
+        <Wrapper {...props} />
+      </Confirm>
+    );
   }
 
   return ConfirmWrapper;

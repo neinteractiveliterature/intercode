@@ -21,19 +21,26 @@ function describeSignupState(mySignup, t) {
   }
 
   if (mySignup.waitlist_position) {
-    return t(
-      'signups.runCardText.waitlisted',
-      'You are #{{ waitlistNumber }} on the waitlist.',
-      { waitlistPosition: mySignup.waitlist_position },
-    );
+    return t('signups.runCardText.waitlisted', 'You are #{{ waitlistNumber }} on the waitlist.', {
+      waitlistPosition: mySignup.waitlist_position,
+    });
   }
 
   return t('signups.runCardText.waitlistedUnknownPosition', 'You are on the waitlist.');
 }
 
 function RunCard({
-  run, event, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
-  showViewSignups, createSignup, withdrawSignup, withdrawPendingSignupRequest,
+  run,
+  event,
+  signupOptions,
+  currentAbility,
+  myProfile,
+  mySignup,
+  myPendingSignupRequest,
+  showViewSignups,
+  createSignup,
+  withdrawSignup,
+  withdrawPendingSignupRequest,
 }) {
   const { t } = useTranslation();
   const history = useHistory();
@@ -46,9 +53,9 @@ function RunCard({
     }
   }, [history.location.hash, run.id]);
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup);
-  const {
-    setAfterSignInPath, open: openAuthenticationModal,
-  } = useContext(AuthenticationModalContext);
+  const { setAfterSignInPath, open: openAuthenticationModal } = useContext(
+    AuthenticationModalContext,
+  );
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
@@ -63,9 +70,7 @@ function RunCard({
           style={{ whiteSpace: 'normal' }}
         >
           <Trans i18nKey="signups.signedOutSignupButton">
-            <strong>Log in</strong>
-            {' '}
-            to sign up for
+            <strong>Log in</strong> to sign up for
             <br />
             <em>{{ eventTitle: event.title }}</em>
           </Trans>
@@ -76,9 +81,7 @@ function RunCard({
     if (mySignup) {
       return (
         <>
-          <em>
-            {describeSignupState(mySignup, t)}
-          </em>
+          <em>{describeSignupState(mySignup, t)}</em>
           <p className="mb-0">
             <WithdrawSignupButton run={run} event={event} withdrawSignup={withdrawSignup} />
           </p>
@@ -90,7 +93,10 @@ function RunCard({
       return (
         <>
           <em>
-            {t('signups.runCardText.requestPending', 'You have requested to sign up for this event.')}
+            {t(
+              'signups.runCardText.requestPending',
+              'You have requested to sign up for this event.',
+            )}
           </em>
           <p className="mb-0">
             <button
@@ -148,71 +154,58 @@ function RunCard({
   };
 
   const runTimespan = timespanFromRun(timezoneName, event, run);
-  const acceptsSignups = (
-    !event.registration_policy.slots_limited
-    || event.registration_policy.total_slots_including_not_counted > 0
-  );
+  const acceptsSignups =
+    !event.registration_policy.slots_limited ||
+    event.registration_policy.total_slots_including_not_counted > 0;
 
   return (
     <div
       ref={cardRef}
-      className={classNames(
-        'card run-card',
-        { 'glow-success': history.location.hash === `#run-${run.id}` },
-      )}
+      className={classNames('card run-card', {
+        'glow-success': history.location.hash === `#run-${run.id}`,
+      })}
       id={`run-${run.id}`}
     >
       {(siteMode !== 'single_event' || event.runs.length !== 1) && (
         <div className="card-header">
-          {
-            run.title_suffix
-              ? (
-                <p>
-                  <strong>{run.title_suffix}</strong>
-                </p>
-              )
-              : null
-          }
+          {run.title_suffix ? (
+            <p>
+              <strong>{run.title_suffix}</strong>
+            </p>
+          ) : null}
 
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
-              {runTimespan.start.format('ddd h:mma')}
-              -
-              {runTimespan.finish.format('h:mma')}
+              {runTimespan.start.format('ddd h:mma')}-{runTimespan.finish.format('h:mma')}
             </div>
 
             <div>
-              {run.rooms.map((room) => room.name).sort().join(', ')}
+              {run.rooms
+                .map((room) => room.name)
+                .sort()
+                .join(', ')}
             </div>
           </div>
         </div>
       )}
-      {
-        acceptsSignups
-          ? (
-            <>
-              <div className="card-body text-center">
-                <RunCapacityGraph run={run} event={event} signupsAvailable />
-                {renderMainSignupSection(signupButtonClicked)}
-              </div>
+      {acceptsSignups ? (
+        <>
+          <div className="card-body text-center">
+            <RunCapacityGraph run={run} event={event} signupsAvailable />
+            {renderMainSignupSection(signupButtonClicked)}
+          </div>
 
-              {renderAuxiliarySignupSection(signupButtonClicked)}
+          {renderAuxiliarySignupSection(signupButtonClicked)}
 
-              {showViewSignups && (
-                <ViewSignupsOptions
-                  event={event}
-                  run={run}
-                  currentAbility={currentAbility}
-                />
-              )}
-            </>
-          )
-          : (
-            <div className="card-body">
-              <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
-            </div>
-          )
-      }
+          {showViewSignups && (
+            <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />
+          )}
+        </>
+      ) : (
+        <div className="card-body">
+          <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
+        </div>
+      )}
     </div>
   );
 }
@@ -221,9 +214,11 @@ RunCard.propTypes = {
   run: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title_suffix: PropTypes.string,
-    rooms: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+    rooms: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
   event: PropTypes.shape({
     id: PropTypes.number.isRequired,

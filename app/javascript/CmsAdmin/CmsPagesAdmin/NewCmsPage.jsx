@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { pageReducer } from './CmsPageForm';
-import { CmsPagesAdminQuery } from './queries.gql';
+import { CmsPagesAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
-import { CreatePage } from './mutations.gql';
+import { CreatePage } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';

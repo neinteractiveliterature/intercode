@@ -4,8 +4,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
-import { UpdateOrganizationRole } from './mutations.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
+import { UpdateOrganizationRole } from './mutations';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -13,14 +13,12 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function EditOrganizationRoleForm({ initialOrganizationRole, organization }) {
   const history = useHistory();
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
-  const [
-    mutate, { error: mutationError, loading: mutationInProgress },
-  ] = useMutation(UpdateOrganizationRole);
+  const [mutate, { error: mutationError, loading: mutationInProgress }] = useMutation(
+    UpdateOrganizationRole,
+  );
 
   usePageTitle(`Editing “${initialOrganizationRole.name}”`);
-  const updateOrganizationRole = async ({
-    name, usersChangeSet, permissionsChangeSet,
-  }) => {
+  const updateOrganizationRole = async ({ name, usersChangeSet, permissionsChangeSet }) => {
     await mutate({
       variables: {
         id: initialOrganizationRole.id,
@@ -80,9 +78,10 @@ function EditOrganizationRole() {
     [data, error, loading, organizationId],
   );
   const initialOrganizationRole = useMemo(
-    () => (organization
-      ? organization.organization_roles.find((role) => role.id === organizationRoleId)
-      : null),
+    () =>
+      organization
+        ? organization.organization_roles.find((role) => role.id === organizationRoleId)
+        : null,
     [organization, organizationRoleId],
   );
 

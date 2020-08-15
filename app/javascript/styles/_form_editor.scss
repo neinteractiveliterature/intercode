@@ -5,22 +5,22 @@
   grid-template-rows: min-content min-content min-content min-content minmax(0, 1fr) min-content;
   grid-template-columns: 1fr;
   grid-template-areas:
-      "navbar"
-      "side"
-      "preview"
-      "error"
-      "content"
-      "toolbar";
+    'navbar'
+    'side'
+    'preview'
+    'error'
+    'content'
+    'toolbar';
 
   @include media-breakpoint-up(lg) {
     grid-template-rows: min-content min-content min-content minmax(0, 1fr) min-content;
     grid-template-columns: 300px 1fr;
     grid-template-areas:
-      "navbar navbar"
-      "side   preview"
-      "side   error"
-      "side   content"
-      "side   toolbar";
+      'navbar navbar'
+      'side   preview'
+      'side   error'
+      'side   content'
+      'side   toolbar';
   }
 }
 
@@ -36,7 +36,8 @@
   grid-area: toolbar;
 }
 
-.form-item-editor-tools, .form-section-editor-nav {
+.form-item-editor-tools,
+.form-section-editor-nav {
   grid-area: side;
 }
 
@@ -61,7 +62,7 @@
 }
 
 .form-editor-item-overlay {
-  opacity: 0.0;
+  opacity: 0;
   position: absolute;
   cursor: pointer;
   z-index: 100;
@@ -79,7 +80,7 @@
   text-decoration: none;
 
   &:hover {
-    opacity: 1.0;
+    opacity: 1;
     color: white;
     text-decoration: none;
   }

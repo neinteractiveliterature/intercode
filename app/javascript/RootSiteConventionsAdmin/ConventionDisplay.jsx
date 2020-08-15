@@ -12,7 +12,7 @@ import NewConventionModal from './NewConventionModal';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { SetConventionCanceled } from './mutations.gql';
+import { SetConventionCanceled } from './mutations';
 
 function ConventionDisplay() {
   const confirm = useConfirm();
@@ -24,12 +24,9 @@ function ConventionDisplay() {
   const { close: closeCloneModal } = cloneModal;
 
   usePageTitle(useValueUnless(() => data.convention.name, error || loading));
-  useEffect(
-    () => {
-      closeCloneModal();
-    },
-    [closeCloneModal, id],
-  );
+  useEffect(() => {
+    closeCloneModal();
+  }, [closeCloneModal, id]);
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -56,9 +53,11 @@ function ConventionDisplay() {
 
         <dt className="col-md-3">Organization</dt>
         <dd className="col-md-9">
-          {organization
-            ? <Link to={`/organizations/${organization.id}`}>{organization.name}</Link>
-            : 'None'}
+          {organization ? (
+            <Link to={`/organizations/${organization.id}`}>{organization.name}</Link>
+          ) : (
+            'None'
+          )}
         </dd>
 
         <dt className="col-md-3">Web site</dt>
@@ -79,37 +78,41 @@ function ConventionDisplay() {
           Clone convention
         </button>
 
-        {convention.canceled
-          ? (
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={() => confirm({
+        {convention.canceled ? (
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={() =>
+              confirm({
                 prompt: `Are you sure you want to uncancel ${convention.name}?`,
-                action: () => setConventionCanceled({
-                  variables: { id: convention.id, canceled: false },
-                }),
+                action: () =>
+                  setConventionCanceled({
+                    variables: { id: convention.id, canceled: false },
+                  }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
-              })}
-            >
-              Uncancel convention
-            </button>
-          )
-          : (
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={() => confirm({
+              })
+            }
+          >
+            Uncancel convention
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={() =>
+              confirm({
                 prompt: `Are you sure you want to cancel ${convention.name}?`,
-                action: () => setConventionCanceled({
-                  variables: { id: convention.id, canceled: true },
-                }),
+                action: () =>
+                  setConventionCanceled({
+                    variables: { id: convention.id, canceled: true },
+                  }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
-              })}
-            >
-              Cancel convention
-            </button>
-          )}
+              })
+            }
+          >
+            Cancel convention
+          </button>
+        )}
       </div>
 
       <NewConventionModal

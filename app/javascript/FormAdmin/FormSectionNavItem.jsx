@@ -33,11 +33,19 @@ function FormSectionNavItem({ formSection, index, moveSection }) {
   const [ref, drag, { isDragging }] = useSortable(index, moveSection, 'formSection');
 
   return (
-    <li key={formSection.id} className={classNames('nav-item', { 'opacity-50': isDragging })} ref={ref}>
+    <li
+      key={formSection.id}
+      className={classNames('nav-item', { 'opacity-50': isDragging })}
+      ref={ref}
+    >
       <div className="d-flex align-items-center">
         <div className="mr-2">
           <span className="sr-only">Drag to reorder</span>
-          <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
+          <i
+            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+            className="fa fa-bars"
+            ref={drag}
+          />
         </div>
         <NavLink
           to={`/admin_forms/${match.params.id}/edit/section/${formSection.id}`}
@@ -50,11 +58,13 @@ function FormSectionNavItem({ formSection, index, moveSection }) {
           <button
             className="btn btn-outline-danger btn-sm"
             type="button"
-            onClick={() => confirm({
-              prompt: 'Are you sure you want to delete this section and all items in it?',
-              action: deleteConfirmed,
-              renderError: (error) => <ErrorDisplay graphQLError={error} />,
-            })}
+            onClick={() =>
+              confirm({
+                prompt: 'Are you sure you want to delete this section and all items in it?',
+                action: deleteConfirmed,
+                renderError: (error) => <ErrorDisplay graphQLError={error} />,
+              })
+            }
           >
             <span className="sr-only">Delete item</span>
             <i className="fa fa-trash-o" />

@@ -4,10 +4,10 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
-import { EventCategoryAdminQuery } from './queries.gql';
+import { EventCategoryAdminQuery } from './queries';
 import EventCategoryForm from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateEventCategory } from './mutations.gql';
+import { UpdateEventCategory } from './mutations';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -77,9 +77,10 @@ function EditEventCategory() {
   const { data, loading, error } = useQuery(EventCategoryAdminQuery);
 
   const initialEventCategory = useMemo(
-    () => (error || loading
-      ? null
-      : data.convention.event_categories.find((c) => c.id.toString() === id)),
+    () =>
+      error || loading
+        ? null
+        : data.convention.event_categories.find((c) => c.id.toString() === id),
     [data, error, loading, id],
   );
 

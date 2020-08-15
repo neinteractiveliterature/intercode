@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { TicketedAttendeesQuery } from './queries.gql';
+import { TicketedAttendeesQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
@@ -11,9 +11,9 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function TicketedAttendees() {
   const { data, loading, error } = useQuery(TicketedAttendeesQuery);
 
-  usePageTitle(useValueUnless(
-    () => `All attendees with ${data.convention.ticket_name}`, error || loading,
-  ));
+  usePageTitle(
+    useValueUnless(() => `All attendees with ${data.convention.ticket_name}`, error || loading),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -25,11 +25,7 @@ function TicketedAttendees() {
 
   return (
     <>
-      <h1 className="mb-4">
-        Mail to all attendees with
-        {' '}
-        {data.convention.ticket_name}
-      </h1>
+      <h1 className="mb-4">Mail to all attendees with {data.convention.ticket_name}</h1>
 
       <TabbedMailingList
         emails={data.convention.mailing_lists.ticketed_attendees.emails}

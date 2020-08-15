@@ -1,11 +1,13 @@
 import React, { ReactNode } from 'react';
 
-import PopperDropdown, { PopperDropdownChildrenRenderFunction } from '../UIComponents/PopperDropdown';
+import PopperDropdown, {
+  PopperDropdownChildrenRenderFunction,
+} from '../UIComponents/PopperDropdown';
 import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 
 export type NavigationSectionProps = {
-  children: JSX.Element | PopperDropdownChildrenRenderFunction,
-  label: ReactNode,
+  children: JSX.Element | PopperDropdownChildrenRenderFunction;
+  label: ReactNode;
 };
 
 function NavigationSection({ children, label }: NavigationSectionProps) {
@@ -16,7 +18,9 @@ function NavigationSection({ children, label }: NavigationSectionProps) {
       ref={dropdownRef}
       renderReference={({ ref, toggle }) => (
         <li className="nav-item dropdown" role="presentation" ref={ref}>
-          <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">{label}</button>
+          <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">
+            {label}
+          </button>
         </li>
       )}
       style={{ zIndex: 1100 }}

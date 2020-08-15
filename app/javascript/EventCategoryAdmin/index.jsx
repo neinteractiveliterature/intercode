@@ -33,9 +33,15 @@ function EventCategoryAdmin() {
       </ol>
 
       <Switch>
-        <Route path="/event_categories/new"><NewEventCategory /></Route>
-        <Route path="/event_categories/:id/edit"><EditEventCategory /></Route>
-        <Route path="/event_categories"><EventCategoryIndex /></Route>
+        <Route path="/event_categories/new">
+          <NewEventCategory />
+        </Route>
+        <Route path="/event_categories/:id/edit">
+          <EditEventCategory />
+        </Route>
+        <Route path="/event_categories">
+          <EventCategoryIndex />
+        </Route>
       </Switch>
     </>
   );

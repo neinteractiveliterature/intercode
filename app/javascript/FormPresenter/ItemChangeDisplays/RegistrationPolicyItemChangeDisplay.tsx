@@ -7,14 +7,15 @@ import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type RegistrationPolicyItemChangeDisplayProps = {
-  change: ParsedFormResponseChange<RegistrationPolicyFormItem>,
+  change: ParsedFormResponseChange<RegistrationPolicyFormItem>;
 };
 
 function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemChangeDisplayProps) {
-  const { buckets: prevBuckets, ...otherPrev } = (change.previous_value || {});
-  const { buckets: newBuckets, ...otherNew } = (change.new_value || {});
+  const { buckets: prevBuckets, ...otherPrev } = change.previous_value || {};
+  const { buckets: newBuckets, ...otherNew } = change.new_value || {};
   const combinedBucketKeys = uniq([
-    ...(prevBuckets || []).map((b) => b.key), ...(newBuckets || []).map((b) => b.key),
+    ...(prevBuckets || []).map((b) => b.key),
+    ...(newBuckets || []).map((b) => b.key),
   ]).sort();
 
   return (
@@ -36,11 +37,7 @@ function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemC
           </React.Fragment>
         ))}
       </dl>
-      <ObjectDiffDisplay
-        before={otherPrev}
-        after={otherNew}
-        renderKey={(key) => humanize(key)}
-      />
+      <ObjectDiffDisplay before={otherPrev} after={otherNew} renderKey={(key) => humanize(key)} />
     </div>
   );
 }

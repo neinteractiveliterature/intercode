@@ -5,11 +5,9 @@ import { useTranslation } from 'react-i18next';
 import EventRatingIcon from './EventRatingIcon';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 
-function RatingButton({
-  rating, selected, onClick, padding, size, tooltipContent,
-}) {
+function RatingButton({ rating, selected, onClick, padding, size, tooltipContent }) {
   const defaultPadding = size * 0.5;
-  const actualPadding = (padding || defaultPadding);
+  const actualPadding = padding || defaultPadding;
   const paddingStyle = {
     padding: `${actualPadding}rem`,
     paddingTop: `${actualPadding * 0.75}rem`,
@@ -62,38 +60,36 @@ function RateEventControl({ value, onChange, size }) {
   const hasRating = value != null && value !== 0;
   const buttonSize = size || RatingButton.defaultProps.size;
   const buttonPadding = buttonSize * 0.5;
-  const buttonWidth = buttonSize + (buttonPadding * 2.0);
+  const buttonWidth = buttonSize + buttonPadding * 2.0;
   const width = `calc(${hasRating ? buttonWidth : buttonWidth * 2.0}rem + 2px)`;
 
   return (
     <div className="bg-white border rounded rate-event-control" style={{ width }}>
-      {hasRating
-        ? (
+      {hasRating ? (
+        <RatingButton
+          rating={value}
+          onClick={clearRating}
+          selected
+          size={size}
+          tooltipContent={t('events.ratings.clearButton', 'Clear rating')}
+        />
+      ) : (
+        <div className="d-flex">
           <RatingButton
-            rating={value}
-            onClick={clearRating}
-            selected
+            rating={1}
+            onClick={() => onChange(1)}
             size={size}
-            tooltipContent={t('events.ratings.clearButton', 'Clear rating')}
+            tooltipContent={t('events.ratings.favoriteButton', 'Mark as favorite')}
           />
-        )
-        : (
-          <div className="d-flex">
-            <RatingButton
-              rating={1}
-              onClick={() => onChange(1)}
-              size={size}
-              tooltipContent={t('events.ratings.favoriteButton', 'Mark as favorite')}
-            />
 
-            <RatingButton
-              rating={-1}
-              onClick={() => onChange(-1)}
-              size={size}
-              tooltipContent={t('events.ratings.hideButton', 'Hide event')}
-            />
-          </div>
-        )}
+          <RatingButton
+            rating={-1}
+            onClick={() => onChange(-1)}
+            size={size}
+            tooltipContent={t('events.ratings.hideButton', 'Hide event')}
+          />
+        </div>
+      )}
     </div>
   );
 }

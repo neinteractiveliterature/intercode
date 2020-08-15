@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import useUniqueId from '../useUniqueId';
 
 function RegistrationPolicyPresetSelector({
-  presets, preset, presetSelected, allowCustom, custom,
+  presets,
+  preset,
+  presetSelected,
+  allowCustom,
+  custom,
 }) {
   const presetSelectorId = useUniqueId('preset-');
 
@@ -23,11 +27,15 @@ function RegistrationPolicyPresetSelector({
   }
 
   const presetOptions = presets.map((p) => (
-    <option value={p.name} key={p.name}>{p.name}</option>
+    <option value={p.name} key={p.name}>
+      {p.name}
+    </option>
   ));
   if (allowCustom) {
     presetOptions.push(
-      <option value="_custom" key="_custom">Custom registration policy (advanced)</option>,
+      <option value="_custom" key="_custom">
+        Custom registration policy (advanced)
+      </option>,
     );
   }
 
@@ -41,7 +49,9 @@ function RegistrationPolicyPresetSelector({
           value={selectorValue || ''}
           onChange={presetSelected}
         >
-          <option value="" disabled>Select one...</option>
+          <option value="" disabled>
+            Select one...
+          </option>
           {presetOptions}
         </select>
       </label>
@@ -50,9 +60,11 @@ function RegistrationPolicyPresetSelector({
 }
 
 RegistrationPolicyPresetSelector.propTypes = {
-  presets: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  })),
+  presets: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
+  ),
   preset: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }),

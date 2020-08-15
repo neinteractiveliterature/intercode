@@ -13,17 +13,24 @@ const selectStyles = {
 };
 
 function ConventionFormWebsiteSection({
-  convention, rootSite, dispatch, cmsLayouts, pages, disabled,
+  convention,
+  rootSite,
+  dispatch,
+  cmsLayouts,
+  pages,
+  disabled,
 }) {
   const [
     changeDefaultLayout,
     changeRootPage,
     changeClickwrapAgreement,
     changeHidden,
-  ] = useChangeDispatchers(
-    dispatch,
-    ['default_layout', 'root_page', 'clickwrap_agreement', 'hidden'],
-  );
+  ] = useChangeDispatchers(dispatch, [
+    'default_layout',
+    'root_page',
+    'clickwrap_agreement',
+    'hidden',
+  ]);
 
   return (
     <>
@@ -54,14 +61,15 @@ function ConventionFormWebsiteSection({
       />
 
       <BooleanInput
-        caption={(
+        caption={
           <>
-            Hide convention from public list on
-            {' '}
-            <a href={rootSite.url} target="_blank" rel="noreferrer">{rootSite.url}</a>
+            Hide convention from public list on{' '}
+            <a href={rootSite.url} target="_blank" rel="noreferrer">
+              {rootSite.url}
+            </a>
             ?
           </>
-        )}
+        }
         value={convention.hidden}
         onChange={changeHidden}
       />
@@ -97,14 +105,18 @@ ConventionFormWebsiteSection.propTypes = {
     hidden: PropTypes.bool.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
-  cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
-  pages: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+  cmsLayouts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+  pages: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
   rootSite: PropTypes.shape({
     url: PropTypes.string.isRequired,
   }).isRequired,

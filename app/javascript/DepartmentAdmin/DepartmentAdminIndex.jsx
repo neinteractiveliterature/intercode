@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { DepartmentAdminQuery } from './queries.gql';
-import { DeleteDepartment } from './mutations.gql';
+import { DepartmentAdminQuery } from './queries';
+import { DeleteDepartment } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import { sortByLocaleString } from '../ValueUtils';
@@ -45,16 +45,23 @@ function DepartmentAdminIndex() {
           {data.convention.departments.map((department) => (
             <tr key={`${department.id}`}>
               <td>{department.name}</td>
-              <td>{sortByLocaleString(department.event_categories.map((category) => category.name), (name) => name).join(', ')}</td>
+              <td>
+                {sortByLocaleString(
+                  department.event_categories.map((category) => category.name),
+                  (name) => name,
+                ).join(', ')}
+              </td>
               <td>
                 <button
                   type="button"
                   className="btn btn-sm btn-outline-danger mr-2"
-                  onClick={() => confirm({
-                    action: () => deleteDepartment({ variables: { id: department.id } }),
-                    prompt: `Are you sure you want to delete the department “${department.name}”?`,
-                    renderError: (err) => <ErrorDisplay graphQLError={err} />,
-                  })}
+                  onClick={() =>
+                    confirm({
+                      action: () => deleteDepartment({ variables: { id: department.id } }),
+                      prompt: `Are you sure you want to delete the department “${department.name}”?`,
+                      renderError: (err) => <ErrorDisplay graphQLError={err} />,
+                    })
+                  }
                 >
                   <span className="sr-only">Delete department</span>
                   <i className="fa fa-trash-o" />

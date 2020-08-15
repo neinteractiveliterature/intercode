@@ -7,17 +7,18 @@ import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltIn
 describe('ScheduledValueTimespanRowDatepicker', () => {
   const timespan = { nonsense: moment.tz('1970-01-01T01:02:03', 'UTC').toISOString(true) };
 
-  const renderScheduledValueTimespanRowDatepicker = (props) => render(
-    <ScheduledValueTimespanRowDatepicker
-      fieldName="nonsense"
-      value={null}
-      validateDate={() => true}
-      timezoneName="UTC"
-      timespan={timespan}
-      rowAttributeDidChange={() => {}}
-      {...props}
-    />,
-  );
+  const renderScheduledValueTimespanRowDatepicker = (props) =>
+    render(
+      <ScheduledValueTimespanRowDatepicker
+        fieldName="nonsense"
+        value={null}
+        validateDate={() => true}
+        timezoneName="UTC"
+        timespan={timespan}
+        rowAttributeDidChange={() => {}}
+        {...props}
+      />,
+    );
 
   test('it renders with a value', () => {
     const { getByLabelText } = renderScheduledValueTimespanRowDatepicker();

@@ -12,35 +12,27 @@ const ticketTypeTransformsReducer = transformsReducer({
 });
 
 function ticketTypeReducer(state, action) {
-  return ticketTypeTransformsReducer(
-    state,
-    action,
-  );
+  return ticketTypeTransformsReducer(state, action);
 }
 
-function TicketTypeForm({
-  ticketType, ticketName, onChange,
-}) {
-  const dispatch = useCallback(
-    (action) => onChange(ticketTypeReducer(ticketType, action)),
-    [ticketType, onChange],
-  );
+function TicketTypeForm({ ticketType, ticketName, onChange }) {
+  const dispatch = useCallback((action) => onChange(ticketTypeReducer(ticketType, action)), [
+    ticketType,
+    onChange,
+  ]);
   const [
     changeName,
     changeDescription,
     changeCountsTowardsConventionMaximum,
     changeAllowsEventSignups,
     changeMaximumEventProvidedTickets,
-  ] = useChangeDispatchers(
-    dispatch,
-    [
-      'name',
-      'description',
-      'counts_towards_convention_maximum',
-      'allows_event_signups',
-      'maximum_event_provided_tickets',
-    ],
-  );
+  ] = useChangeDispatchers(dispatch, [
+    'name',
+    'description',
+    'counts_towards_convention_maximum',
+    'allows_event_signups',
+    'maximum_event_provided_tickets',
+  ]);
 
   return (
     <div>

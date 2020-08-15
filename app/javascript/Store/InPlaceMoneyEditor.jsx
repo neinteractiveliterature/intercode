@@ -9,14 +9,12 @@ function InPlaceMoneyEditor({ value, children, ...props }) {
   return (
     <InPlaceEditor
       value={value}
-      renderInput={({
-        commitEditing, cancelEditing, inputProps, committing,
-      }) => (
+      renderInput={({ commitEditing, cancelEditing, inputProps, committing }) => (
         <MoneyInput
           {...inputProps}
           inputGroupClassName="input-group input-group-sm"
           className="form-control form-control-sm"
-          appendContent={(
+          appendContent={
             <>
               <button
                 type="button"
@@ -37,7 +35,7 @@ function InPlaceMoneyEditor({ value, children, ...props }) {
                 <i className="fa fa-check" />
               </button>
             </>
-          )}
+          }
         />
       )}
       {...props}

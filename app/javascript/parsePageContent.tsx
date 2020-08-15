@@ -11,7 +11,7 @@ import SignUpButton from './Authentication/SignUpButton';
 import Spoiler from './Spoiler';
 
 export type ComponentMap = {
-  [name: string]: React.ComponentType<any>,
+  [name: string]: React.ComponentType<any>;
 };
 
 export const DEFAULT_COMPONENT_MAP: ComponentMap = {
@@ -22,9 +22,9 @@ export const DEFAULT_COMPONENT_MAP: ComponentMap = {
 };
 
 export type ProcessingInstruction<T> = {
-  shouldProcessNode: (node: Node) => boolean,
-  processNode: (node: T, children: Node[], index: number) => ReactNode,
-  replaceChildren?: boolean,
+  shouldProcessNode: (node: Node) => boolean;
+  processNode: (node: T, children: Node[], index: number) => ReactNode;
+  replaceChildren?: boolean;
 };
 
 function nodeIsElement(node: Node): node is Element {
@@ -34,8 +34,23 @@ function nodeIsElement(node: Node): node is Element {
 // adapted from html-to-react library
 
 const voidElementTags = [
-  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param',
-  'source', 'track', 'wbr', 'menuitem', 'textarea',
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'keygen',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+  'menuitem',
+  'textarea',
 ];
 
 function createStyleJsonFromString(style: string) {
@@ -64,7 +79,8 @@ function createStyleJsonFromString(style: string) {
 }
 
 function jsxAttributeKeyForHtmlKey(htmlKey: string) {
-  const key = (camelCaseAttrMap as { [key: string]: string })[htmlKey.replace(/[-:]/, '')] || htmlKey;
+  const key =
+    (camelCaseAttrMap as { [key: string]: string })[htmlKey.replace(/[-:]/, '')] || htmlKey;
 
   if (key === 'class') {
     return 'className';
@@ -141,19 +157,21 @@ const AUTHENTICATION_LINK_REPLACEMENTS = {
   ),
 };
 
-const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<Element>[] = Object
-  .entries(AUTHENTICATION_LINK_REPLACEMENTS)
-  .map(([path, processNode]) => ({
-    shouldProcessNode: (node: Node) => (
-      nodeIsElement(node)
-        && node.nodeName.toLowerCase() === 'a'
-        && ((node.attributes.getNamedItem('href') || {}).value || '').endsWith(path)
-    ),
-    processNode,
-  }));
+const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<
+  Element
+>[] = Object.entries(AUTHENTICATION_LINK_REPLACEMENTS).map(([path, processNode]) => ({
+  shouldProcessNode: (node: Node) =>
+    nodeIsElement(node) &&
+    node.nodeName.toLowerCase() === 'a' &&
+    ((node.attributes.getNamedItem('href') || {}).value || '').endsWith(path),
+  processNode,
+}));
 
 function processReactComponentNode(
-  node: Element, children: ReactNode[], index: number, componentMap: ComponentMap,
+  node: Element,
+  children: ReactNode[],
+  index: number,
+  componentMap: ComponentMap,
 ) {
   const component = componentMap[node.attributes['data-react-class'].value];
   if (!component) {
@@ -163,7 +181,7 @@ function processReactComponentNode(
   const props = JSON.parse((node.attributes['data-react-props'] || { value: '{}' }).value);
   return React.createElement(
     Suspense,
-    { fallback: (<></>), key: index },
+    { fallback: <></>, key: index },
     React.createElement(
       ErrorBoundary,
       { errorType: 'graphql' },
@@ -174,19 +192,21 @@ function processReactComponentNode(
 
 function processCmsLinkNode(node: Element, children: ReactNode[], index: number) {
   const attributesArray = [...node.attributes];
-  const hrefAttribute = attributesArray
-    .find((attribute) => (attribute.name || '').toLowerCase() === 'href');
-  const otherAttributes = attributesArray
-    .filter((attribute) => (attribute.name || '').toLowerCase() !== 'href');
+  const hrefAttribute = attributesArray.find(
+    (attribute) => (attribute.name || '').toLowerCase() === 'href',
+  );
+  const otherAttributes = attributesArray.filter(
+    (attribute) => (attribute.name || '').toLowerCase() !== 'href',
+  );
   const href = (hrefAttribute || {}).value;
 
-  if (href && !href.startsWith('#') && (new URL(href, window.location.href).origin === window.location.origin)) {
+  if (
+    href &&
+    !href.startsWith('#') &&
+    new URL(href, window.location.href).origin === window.location.origin
+  ) {
     return (
-      <Link
-        to={href}
-        key={index}
-        {...jsxAttributesFromHTMLAttributes(otherAttributes)}
-      >
+      <Link to={href} key={index} {...jsxAttributesFromHTMLAttributes(otherAttributes)}>
         {children}
       </Link>
     );
@@ -202,14 +222,14 @@ function traverseDom(
   index: number,
 ) {
   if (isValidNode(node)) {
-    const processingInstruction = processingInstructions.find((instruction) => (
-      instruction.shouldProcessNode(node)
-    ));
+    const processingInstruction = processingInstructions.find((instruction) =>
+      instruction.shouldProcessNode(node),
+    );
 
     if (processingInstruction != null) {
-      const traversedChildren = [...node.childNodes].map((child, i) => (
-        traverseDom(child, isValidNode, processingInstructions, i)
-      ));
+      const traversedChildren = [...node.childNodes].map((child, i) =>
+        traverseDom(child, isValidNode, processingInstructions, i),
+      );
       const children = traversedChildren.filter((x) => x != null && x !== false);
 
       if (processingInstruction.replaceChildren) {
@@ -231,9 +251,9 @@ function traverseWithInstructions(
   isValidNode: (node: Node) => boolean,
   processingInstructions: ProcessingInstruction<any>[],
 ): ReactNode[] {
-  const list = [...nodes].map((domTreeItem, index) => (
-    traverseDom(domTreeItem, isValidNode, processingInstructions, index)
-  ));
+  const list = [...nodes].map((domTreeItem, index) =>
+    traverseDom(domTreeItem, isValidNode, processingInstructions, index),
+  );
   return list.length <= 1 ? list[0] : list;
 }
 
@@ -245,11 +265,10 @@ function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInst
       processNode: processCmsLinkNode,
     },
     {
-      shouldProcessNode: (node) => nodeIsElement(node)
-        && node.attributes.getNamedItem('data-react-class') != null,
-      processNode: (node: Element, children: Node[], index: number) => (
-        processReactComponentNode(node, children, index, componentMap)
-      ),
+      shouldProcessNode: (node) =>
+        nodeIsElement(node) && node.attributes.getNamedItem('data-react-class') != null,
+      processNode: (node: Element, children: Node[], index: number) =>
+        processReactComponentNode(node, children, index, componentMap),
     },
     {
       shouldProcessNode: () => true,
@@ -259,7 +278,8 @@ function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInst
 }
 
 export default function parsePageContent(
-  content: string, componentMap: ComponentMap = DEFAULT_COMPONENT_MAP,
+  content: string,
+  componentMap: ComponentMap = DEFAULT_COMPONENT_MAP,
 ) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/html');

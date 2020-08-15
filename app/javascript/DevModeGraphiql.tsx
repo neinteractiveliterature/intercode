@@ -12,13 +12,13 @@ import './styles/dev-mode-graphiql.scss';
 
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
-    graphql: string,
-  },
+    graphql: string;
+  };
 };
 
-function DevModeGraphiql(
-  { authenticityTokens: { graphql: authenticityToken } }: DevModeGraphiqlProps,
-) {
+function DevModeGraphiql({
+  authenticityTokens: { graphql: authenticityToken },
+}: DevModeGraphiqlProps) {
   const link = useIntercodeApolloLink(authenticityToken);
 
   // @ts-ignore

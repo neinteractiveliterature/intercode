@@ -11,16 +11,14 @@ import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';
 export type FreeTextItemInputProps = CommonFormItemInputProps<FreeTextFormItem>;
 
 function FreeTextItemInput(props: FreeTextItemInputProps) {
-  const {
-    formItem, onChange, onInteract, value: uncheckedValue, valueInvalid,
-  } = props;
+  const { formItem, onChange, onInteract, value: uncheckedValue, valueInvalid } = props;
   const domId = useUniqueId(`${formItem.identifier}-`);
-  const value = (typeof uncheckedValue === 'string') ? uncheckedValue : '';
+  const value = typeof uncheckedValue === 'string' ? uncheckedValue : '';
 
-  const userInteracted = useCallback(
-    () => onInteract(formItem.identifier),
-    [onInteract, formItem.identifier],
-  );
+  const userInteracted = useCallback(() => onInteract(formItem.identifier), [
+    onInteract,
+    formItem.identifier,
+  ]);
 
   const valueChanged = useCallback(
     (newValue) => {

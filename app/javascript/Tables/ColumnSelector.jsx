@@ -6,15 +6,17 @@ import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 
 function ColumnSelector({
-  alwaysVisibleColumns, possibleColumns, visibleColumnIds, setVisibleColumnIds,
+  alwaysVisibleColumns,
+  possibleColumns,
+  visibleColumnIds,
+  setVisibleColumnIds,
 }) {
   const { t } = useTranslation();
   const renderHiddenColumnCount = () => {
-    const count = (
-      possibleColumns.length
-      - visibleColumnIds.filter((columnId) => !alwaysVisibleColumns.includes(columnId)).length
-      - alwaysVisibleColumns.length
-    );
+    const count =
+      possibleColumns.length -
+      visibleColumnIds.filter((columnId) => !alwaysVisibleColumns.includes(columnId)).length -
+      alwaysVisibleColumns.length;
 
     if (count <= 0) {
       return null;
@@ -23,9 +25,7 @@ function ColumnSelector({
     return (
       <>
         {' '}
-        <span className="badge badge-primary">
-          {count}
-        </span>
+        <span className="badge badge-primary">{count}</span>
       </>
     );
   };
@@ -34,7 +34,12 @@ function ColumnSelector({
     <PopperDropdown
       placement="bottom-end"
       renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
+        <button
+          type="button"
+          className="btn btn-outline-primary dropdown-toggle"
+          ref={ref}
+          onClick={toggle}
+        >
           {t('tables.columnSelectorButton', 'Columns')}
           {renderHiddenColumnCount()}
         </button>
@@ -44,11 +49,9 @@ function ColumnSelector({
         <ChoiceSet
           name="columns"
           multiple
-          choices={
-            possibleColumns
-              .filter((column) => !alwaysVisibleColumns.includes(column.id))
-              .map((column) => ({ label: column.Header, value: column.id }))
-          }
+          choices={possibleColumns
+            .filter((column) => !alwaysVisibleColumns.includes(column.id))
+            .map((column) => ({ label: column.Header, value: column.id }))}
           value={visibleColumnIds}
           onChange={setVisibleColumnIds}
         />
@@ -59,9 +62,11 @@ function ColumnSelector({
 
 ColumnSelector.propTypes = {
   alwaysVisibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  possibleColumns: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  })).isRequired,
+  possibleColumns: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setVisibleColumnIds: PropTypes.func.isRequired,
 };

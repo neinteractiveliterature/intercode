@@ -8,7 +8,13 @@ import { PermissionNamePropType, PermissionPropType, ModelPropType } from './Per
 import usePermissionToggle from './usePermissionToggle';
 
 function PermissionsListRow({
-  grantPermission, revokePermission, model, permission, name, initialPermissions, changeSet,
+  grantPermission,
+  revokePermission,
+  model,
+  permission,
+  name,
+  initialPermissions,
+  changeSet,
   currentPermissions,
 }) {
   const { toggle, hasPermission, className } = usePermissionToggle({
@@ -65,7 +71,10 @@ function PermissionsListInput({
   header,
 }) {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
-    initialPermissions, changeSet, add, remove,
+    initialPermissions,
+    changeSet,
+    add,
+    remove,
   });
 
   return (

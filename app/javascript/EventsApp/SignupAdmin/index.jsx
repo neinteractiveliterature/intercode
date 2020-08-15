@@ -1,10 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Route,
-  Switch,
-  useLocation,
-} from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
@@ -33,9 +29,7 @@ function SignupAdmin({ runId, eventId, eventPath }) {
     <div>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItem to={eventPath}>
-            {data.event.title}
-          </BreadcrumbItem>
+          <BreadcrumbItem to={eventPath}>{data.event.title}</BreadcrumbItem>
           <BreadcrumbItem
             active={!location.pathname.endsWith('edit')}
             to={`${runPath}/admin_signups?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
@@ -55,11 +49,7 @@ function SignupAdmin({ runId, eventId, eventPath }) {
           <EditSignup teamMembersUrl={`${eventPath}/team_members`} />
         </Route>
         <Route path={`${runPath}/admin_signups`}>
-          <SignupsIndex
-            runId={runId}
-            eventId={eventId}
-            runPath={runPath}
-          />
+          <SignupsIndex runId={runId} eventId={eventId} runPath={runPath} />
         </Route>
       </Switch>
     </div>

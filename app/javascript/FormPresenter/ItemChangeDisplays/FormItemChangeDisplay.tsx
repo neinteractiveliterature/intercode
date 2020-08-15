@@ -23,14 +23,15 @@ import {
 } from '../../FormAdmin/FormItemUtils';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 
-export type ConventionForFormItemChangeDisplay = (
-  Pick<Convention, 'timezone_name' | 'timezone_mode' | 'starts_at' | 'ends_at'>
-);
+export type ConventionForFormItemChangeDisplay = Pick<
+  Convention,
+  'timezone_name' | 'timezone_mode' | 'starts_at' | 'ends_at'
+>;
 
 export type FormItemChangeDisplayProps = {
-  formItem: TypedFormItem,
-  change: ParsedFormResponseChange<any>,
-  convention: ConventionForFormItemChangeDisplay,
+  formItem: TypedFormItem;
+  change: ParsedFormResponseChange<any>;
+  convention: ConventionForFormItemChangeDisplay;
 };
 
 function FormItemChangeDisplay({ formItem, change, convention }: FormItemChangeDisplayProps) {
@@ -69,7 +70,11 @@ function FormItemChangeDisplay({ formItem, change, convention }: FormItemChangeD
         />
       );
     case 'static_text':
-      return <div><code>static text change (this is probably a bug)</code></div>;
+      return (
+        <div>
+          <code>static text change (this is probably a bug)</code>
+        </div>
+      );
     case 'timeblock_preference':
       return (
         <TimeblockPreferenceItemChangeDisplay
@@ -80,14 +85,16 @@ function FormItemChangeDisplay({ formItem, change, convention }: FormItemChangeD
       );
     case 'timespan':
       return (
-        <TimespanItemChangeDisplay
-          change={change as ParsedFormResponseChange<TimespanFormItem>}
-        />
+        <TimespanItemChangeDisplay change={change as ParsedFormResponseChange<TimespanFormItem>} />
       );
     default:
       // we don't actually enforce this at the API level, so it could be an unknown type
       assertNever(formItem, true);
-      return <div><code>{formItem.item_type}</code></div>;
+      return (
+        <div>
+          <code>{formItem.item_type}</code>
+        </div>
+      );
   }
 }
 

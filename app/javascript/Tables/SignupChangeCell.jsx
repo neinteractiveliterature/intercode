@@ -41,28 +41,21 @@ const SignupChangeCell = ({ value }) => {
 
   return (
     <>
-      {value.previous_signup_change
-        ? (
-          <>
-            <SignupStateCell value={value.previous_signup_change.state} strikeThrough />
-            {' → '}
-          </>
+      {value.previous_signup_change ? (
+        <>
+          <SignupStateCell value={value.previous_signup_change.state} strikeThrough />
+          {' → '}
+        </>
+      ) : (
+        value.action === 'unknown' && (
+          <span className="text-muted">{t('tables.signupChange.unknownState', 'unknown')} → </span>
         )
-        : (value.action === 'unknown' && (
-          <span className="text-muted">
-            {t('tables.signupChange.unknownState', 'unknown')}
-            {' '}
-            →
-            {' '}
-          </span>
-        ))}
+      )}
       <SignupStateCell value={value.state} />
       {value.action !== 'unknown' && (
         <>
           <br />
-          <small className="text-muted">
-            {describeAction(value.action, t)}
-          </small>
+          <small className="text-muted">{describeAction(value.action, t)}</small>
         </>
       )}
     </>
