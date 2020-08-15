@@ -10,12 +10,7 @@ module.exports = {
     'jest/globals': true,
   },
 
-  extends: [
-    'airbnb-typescript',
-    'prettier',
-    'prettier/react',
-    'prettier/@typescript-eslint',
-  ],
+  extends: ['airbnb-typescript', 'prettier', 'prettier/react', 'prettier/@typescript-eslint'],
 
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -42,22 +37,10 @@ module.exports = {
     'jest/no-focused-tests': 'error',
     'jest/no-identical-title': 'error',
     'jest/valid-expect': 'error',
-    'graphql/template-strings': [
-      'error',
-      { env: 'apollo', schemaJson },
-    ],
-    'graphql/required-fields': [
-      'error',
-      { env: 'apollo', schemaJson, requiredFields: ['id'] },
-    ],
-    'graphql/named-operations': [
-      'warn',
-      { env: 'apollo', schemaJson },
-    ],
-    'graphql/no-deprecated-fields': [
-      'warn',
-      { env: 'apollo', schemaJson },
-    ],
+    'graphql/template-strings': ['error', { env: 'apollo', schemaJson }],
+    'graphql/required-fields': ['error', { env: 'apollo', schemaJson, requiredFields: ['id'] }],
+    'graphql/named-operations': ['error', { env: 'apollo', schemaJson }],
+    'graphql/no-deprecated-fields': ['warn', { env: 'apollo', schemaJson }],
     'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'react/destructuring-assignment': 'off',
     'react/jsx-props-no-spreading': 'off',
@@ -72,12 +55,10 @@ module.exports = {
     'jsx-a11y/control-has-associated-label': [
       2,
       {
-        ignoreElements: [
-          'th',
-        ],
+        ignoreElements: ['th'],
       },
     ],
-    // "no-restricted-imports": ['error', 'graphql-tag'],
+    'no-restricted-imports': ['error', 'graphql-tag'],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'import/named': 'off',
@@ -103,8 +84,6 @@ module.exports = {
         alwaysTryTypes: true,
       },
     },
-    'import/ignore': [
-      'test/javascript/testUtils.js',
-    ],
+    'import/ignore': ['test/javascript/testUtils.js'],
   },
 };
