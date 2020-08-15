@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { CmsPartialsAdminQuery } from './queries.gql';
-import { DeletePartial } from './mutations.gql';
+import { CmsPartialsAdminQuery } from './queries';
+import { DeletePartial } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';

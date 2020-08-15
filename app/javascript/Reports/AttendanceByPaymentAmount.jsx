@@ -3,7 +3,7 @@ import { capitalize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 import { useQuery } from '@apollo/client';
 
-import { AttendanceByPaymentAmountQuery } from './queries.gql';
+import { AttendanceByPaymentAmountQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';

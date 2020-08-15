@@ -2,8 +2,8 @@ import React, { useMemo, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 
-import { DepartmentAdminQuery } from './queries.gql';
-import { UpdateDepartment } from './mutations.gql';
+import { DepartmentAdminQuery } from './queries';
+import { UpdateDepartment } from './mutations';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
 import ErrorDisplay from '../ErrorDisplay';

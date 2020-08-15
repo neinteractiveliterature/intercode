@@ -5,9 +5,9 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import buildPartialInput from './buildPartialInput';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
-import { CmsPartialsAdminQuery } from './queries.gql';
+import { CmsPartialsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
-import { UpdatePartial } from './mutations.gql';
+import { UpdatePartial } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';

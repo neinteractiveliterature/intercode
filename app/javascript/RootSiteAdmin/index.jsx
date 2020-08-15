@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import EditRootSite from './EditRootSite';
-import { RootSiteAdminQuery } from './queries.gql';
+import { RootSiteAdminQuery } from './queries';
 import LoadingIndicator from '../LoadingIndicator';
 import ErrorDisplay from '../ErrorDisplay';
 

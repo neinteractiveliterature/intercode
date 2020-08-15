@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import ErrorDisplay from '../../ErrorDisplay';
-import { SetCmsVariableMutation } from './queries.gql';
+import { SetCmsVariableMutation } from './queries';
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
 
@@ -45,6 +45,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }) {
             className="form-control text-monospace"
             value={variable.key}
             onChange={(event) => onChange({ ...variable, key: event.target.value })}
+            aria-label="Variable name"
           />
         </td>
         <td>
@@ -54,6 +55,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }) {
             value={variable.value_json}
             onChange={(event) => onChange({ ...variable, value_json: event.target.value })}
             onKeyDown={handleKeyDown}
+            aria-label="Variable value (JSON format)"
           />
         </td>
         <td>

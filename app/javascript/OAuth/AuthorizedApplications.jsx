@@ -1,12 +1,12 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { OAuthAuthorizedApplicationsQuery } from './queries.gql';
+import { OAuthAuthorizedApplicationsQuery } from './queries';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import PermissionsPrompt from './PermissionsPrompt';
-import { RevokeAuthorizedApplication } from './mutations.gql';
+import { RevokeAuthorizedApplication } from './mutations';
 import { useDeleteMutation } from '../MutationUtils';
 
 function AuthorizedApplications() {

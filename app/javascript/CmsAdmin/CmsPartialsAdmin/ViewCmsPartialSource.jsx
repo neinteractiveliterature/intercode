@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsPartialForm from './CmsPartialForm';
-import { CmsPartialsAdminQuery } from './queries.gql';
+import { CmsPartialsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';

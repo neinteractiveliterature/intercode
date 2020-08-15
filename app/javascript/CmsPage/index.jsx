@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import { CmsPageQuery } from './queries.gql';
+import { CmsPageQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useValueUnless from '../useValueUnless';

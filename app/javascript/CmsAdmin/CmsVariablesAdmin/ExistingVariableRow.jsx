@@ -5,11 +5,7 @@ import { useMutation, useApolloClient } from '@apollo/client';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import {
-  CmsVariablesQuery,
-  DeleteCmsVariableMutation,
-  SetCmsVariableMutation,
-} from './queries.gql';
+import { CmsVariablesQuery, DeleteCmsVariableMutation, SetCmsVariableMutation } from './queries';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useDeleteMutation } from '../../MutationUtils';
 

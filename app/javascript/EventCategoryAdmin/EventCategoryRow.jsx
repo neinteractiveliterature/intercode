@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import { DeleteEventCategory } from './mutations.gql';
+import { DeleteEventCategory } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { EventCategoryAdminQuery } from './queries.gql';
+import { EventCategoryAdminQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
-import PopperDropdown from '../UIComponents/PopperDropdown';
-import Tooltip from '../UIComponents/Tooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';

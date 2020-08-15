@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { PageAdminDropdownQuery } from './queries.gql';
-import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
+import { PageAdminDropdownQuery } from './queries';
+import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
@@ -31,7 +31,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
 
   const layoutId = data.cmsPage.cms_layout
     ? data.cmsPage.cms_layout.id
-    : data.cmsParent.default_layout.id;
+    : data.cmsParent.default_layout?.id ?? data.cmsParent.root_site_default_layout?.id;
 
   return (
     <div>

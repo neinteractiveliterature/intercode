@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 
 import UsersTable from './UsersTable';
 import UserAdminDisplay from './UserAdminDisplay';
-import { UserAdminQuery } from './queries.gql';
+import { UserAdminQuery } from './queries';
 import LoadingIndicator from '../LoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';

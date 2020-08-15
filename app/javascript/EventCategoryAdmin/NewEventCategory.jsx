@@ -3,8 +3,8 @@ import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
-import { CreateEventCategory } from './mutations.gql';
-import { EventCategoryAdminQuery } from './queries.gql';
+import { CreateEventCategory } from './mutations';
+import { EventCategoryAdminQuery } from './queries';
 import EventCategoryForm from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';

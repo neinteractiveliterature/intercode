@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CmsGraphqlQueriesQuery } from './queries.gql';
+import { CmsGraphqlQueriesQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';

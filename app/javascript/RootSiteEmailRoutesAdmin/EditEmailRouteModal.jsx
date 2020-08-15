@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useMutation, useApolloClient } from '@apollo/client';
 
-import { UpdateEmailRoute, DeleteEmailRoute } from './mutations.gql';
+import { UpdateEmailRoute, DeleteEmailRoute } from './mutations';
 import EmailRouteForm from './EmailRouteForm';
 import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';

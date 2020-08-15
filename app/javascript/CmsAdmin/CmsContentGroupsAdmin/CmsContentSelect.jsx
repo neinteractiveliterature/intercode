@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GraphQLAsyncSelect from '../../BuiltInFormControls/GraphQLAsyncSelect';
-import { SearchCmsContentQuery } from './queries.gql';
+import { SearchCmsContentQuery } from './queries';
 
 function CmsContentSelect(props) {
   const { ...otherProps } = props;

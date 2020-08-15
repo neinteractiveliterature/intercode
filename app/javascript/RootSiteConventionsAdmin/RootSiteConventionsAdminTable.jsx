@@ -8,7 +8,7 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import { timespanFromConvention } from '../TimespanUtils';
-import { RootSiteConventionsAdminTableQuery } from './queries.gql';
+import { RootSiteConventionsAdminTableQuery } from './queries';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import useModal from '../ModalDialogs/useModal';

@@ -6,10 +6,10 @@ import flatMap from 'lodash/flatMap';
 import { useMutation, useQuery } from '@apollo/client';
 
 import Confirm from '../ModalDialogs/Confirm';
-import { DeleteStaffPosition } from './mutations.gql';
+import { DeleteStaffPosition } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
-import { StaffPositionsQuery } from './queries.gql';
+import { StaffPositionsQuery } from './queries';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { sortByLocaleString } from '../ValueUtils';

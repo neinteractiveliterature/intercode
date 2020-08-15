@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { CmsLayoutsAdminQuery } from './queries.gql';
-import { DeleteLayout } from './mutations.gql';
+import { CmsLayoutsAdminQuery } from './queries';
+import { DeleteLayout } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';

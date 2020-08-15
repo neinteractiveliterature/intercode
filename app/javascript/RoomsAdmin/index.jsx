@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
+import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { RoomsAdminQuery } from './queries.gql';
+import { RoomsAdminQuery } from './queries';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';

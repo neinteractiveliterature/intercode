@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsPageForm from './CmsPageForm';
-import { CmsPagesAdminQuery } from './queries.gql';
+import { CmsPagesAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';

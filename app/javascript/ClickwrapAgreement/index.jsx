@@ -3,8 +3,8 @@ import { useMutation, useQuery, useApolloClient } from '@apollo/client';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { AcceptClickwrapAgreement } from './mutations.gql';
-import { ClickwrapAgreementQuery } from './queries.gql';
+import { AcceptClickwrapAgreement } from './mutations';
+import { ClickwrapAgreementQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import parseCmsContent from '../parseCmsContent';

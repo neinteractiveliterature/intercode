@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 
 import EditOrganizationRole from './EditOrganizationRole';
 import NewOrganizationRole from './NewOrganizationRole';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 import ErrorDisplay from '../ErrorDisplay';

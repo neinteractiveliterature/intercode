@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import AddVariableRow from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
-import { CmsVariablesQuery } from './queries.gql';
+import { CmsVariablesQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';

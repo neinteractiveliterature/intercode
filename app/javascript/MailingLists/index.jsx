@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposers from './EventProposers';
-import { MailingListsMenuQuery } from './queries.gql';
+import { MailingListsMenuQuery } from './queries';
 import TicketedAttendees from './TicketedAttendees';
 import TeamMembers from './TeamMembers';
 import UsersWithPendingBio from './UsersWithPendingBio';

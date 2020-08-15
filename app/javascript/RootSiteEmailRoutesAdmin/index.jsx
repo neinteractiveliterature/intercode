@@ -4,7 +4,7 @@ import ReactTable from 'react-table';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import { RootSiteEmailRoutesAdminTableQuery } from './queries.gql';
+import { RootSiteEmailRoutesAdminTableQuery } from './queries';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import useModal from '../ModalDialogs/useModal';

@@ -4,8 +4,8 @@ import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CmsGraphqlQueriesQuery } from './queries.gql';
-import { UpdateCmsGraphqlQuery } from './mutations.gql';
+import { CmsGraphqlQueriesQuery } from './queries';
+import { UpdateCmsGraphqlQuery } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';

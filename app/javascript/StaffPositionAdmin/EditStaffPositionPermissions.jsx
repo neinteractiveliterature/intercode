@@ -4,8 +4,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateStaffPositionPermissions } from './mutations.gql';
-import { StaffPositionsQuery } from './queries.gql';
+import { UpdateStaffPositionPermissions } from './mutations';
+import { StaffPositionsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';

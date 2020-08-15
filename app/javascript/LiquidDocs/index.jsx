@@ -8,7 +8,7 @@ import DocData from '../../../liquid_doc.json';
 import findLiquidTagName from './findLiquidTagName';
 import FilterDoc from './FilterDoc';
 import FilterDocLink from './FilterDocLink';
-import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries.gql';
+import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries';
 import LiquidTagDoc from './LiquidTagDoc';
 import LiquidTagDocLink from './LiquidTagDocLink';
 import LoadingIndicator from '../LoadingIndicator';

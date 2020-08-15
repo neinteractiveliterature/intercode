@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { WaitlistMailingListsQuery } from './queries.gql';
+import { WaitlistMailingListsQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -35,11 +35,7 @@ function WaitlistMailingLists() {
             <div className="card-header">
               {runTime} &mdash; {waitlistResult.run.event.title}
               {(waitlistResult.run.title_suffix || '').trim() !== '' && (
-                <>
-                  {' ('}
-                  {waitlistResult.run.title_suffix}
-                  {')'}
-                </>
+                <> ({waitlistResult.run.title_suffix})</>
               )}
             </div>
             <div className="card-body">

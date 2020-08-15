@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
-import { CreateUserActivityAlert } from './mutations.gql';
-import { ConventionTicketNameQuery, UserActivityAlertsAdminQuery } from './queries.gql';
+import { CreateUserActivityAlert } from './mutations';
+import { ConventionTicketNameQuery, UserActivityAlertsAdminQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import { useCreateMutation } from '../MutationUtils';
