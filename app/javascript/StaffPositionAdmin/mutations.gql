@@ -19,15 +19,17 @@ mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
 }
 
 mutation UpdateStaffPositionPermissions(
-  $staffPositionId: Int!,
-  $grantPermissions: [PermissionInput!]!,
+  $staffPositionId: Int!
+  $grantPermissions: [PermissionInput!]!
   $revokePermissions: [PermissionInput!]!
 ) {
-  updateStaffPositionPermissions(input: {
-    staff_position_id: $staffPositionId,
-    grant_permissions: $grantPermissions,
-    revoke_permissions: $revokePermissions
-  }) {
+  updateStaffPositionPermissions(
+    input: {
+      staff_position_id: $staffPositionId
+      grant_permissions: $grantPermissions
+      revoke_permissions: $revokePermissions
+    }
+  ) {
     staff_position {
       id
       ...StaffPositionFields

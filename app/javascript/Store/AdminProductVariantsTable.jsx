@@ -7,40 +7,35 @@ import sortProductVariants from './sortProductVariants';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import { describeAdminPricingStructure } from './describePricingStructure';
 
-const variantMatches = (a, b) => (
-  (a.generatedId && b.generatedId === a.generatedId)
-  || (a.id && b.id === a.id)
-);
+const variantMatches = (a, b) =>
+  (a.generatedId && b.generatedId === a.generatedId) || (a.id && b.id === a.id);
 
-const productVariantUpdater = (
-  getProductVariants, setProductVariants, variant, transforms,
-) => mutator({
-  getState: () => getProductVariants()
-    .find((existingVariant) => variantMatches(variant, existingVariant)),
+const productVariantUpdater = (getProductVariants, setProductVariants, variant, transforms) =>
+  mutator({
+    getState: () =>
+      getProductVariants().find((existingVariant) => variantMatches(variant, existingVariant)),
 
-  setState: (state) => {
-    const newVariants = getProductVariants().map((existingVariant) => {
-      if (variantMatches(variant, existingVariant)) {
-        return { ...existingVariant, ...state };
-      }
+    setState: (state) => {
+      const newVariants = getProductVariants().map((existingVariant) => {
+        if (variantMatches(variant, existingVariant)) {
+          return { ...existingVariant, ...state };
+        }
 
-      return existingVariant;
-    });
+        return existingVariant;
+      });
 
-    setProductVariants(newVariants);
-  },
+      setProductVariants(newVariants);
+    },
 
-  transforms,
-});
+    transforms,
+  });
 
-function AdminProductVariantsTable({
-  product, editing, onChange, deleteVariant,
-}) {
+function AdminProductVariantsTable({ product, editing, onChange, deleteVariant }) {
   const tableRef = useRef();
 
   const addVariantClicked = () => {
-    const position = Math.max(0, ...product.product_variants
-      .map((variant) => variant.position)) + 1;
+    const position =
+      Math.max(0, ...product.product_variants.map((variant) => variant.position)) + 1;
 
     onChange([
       ...product.product_variants,
@@ -58,8 +53,11 @@ function AdminProductVariantsTable({
     if (variant.id) {
       deleteVariant(variant.id);
     } else if (variant.generatedId) {
-      onChange(product.product_variants
-        .filter((existingVariant) => existingVariant.generatedId !== variant.generatedId));
+      onChange(
+        product.product_variants.filter(
+          (existingVariant) => existingVariant.generatedId !== variant.generatedId,
+        ),
+      );
     }
   };
 
@@ -91,9 +89,9 @@ function AdminProductVariantsTable({
             productId={product.id}
             index={index}
             variant={productVariant}
-            deleteVariant={() => { }}
+            deleteVariant={() => {}}
             updater={{}}
-            moveVariant={() => { }}
+            moveVariant={() => {}}
             isDragging={false}
           />
         </table>
@@ -126,8 +124,9 @@ function AdminProductVariantsTable({
 
   let variants;
   if (editing) {
-    variants = product.product_variants
-      .filter((variant) => !product.delete_variant_ids.includes(variant.id));
+    variants = product.product_variants.filter(
+      (variant) => !product.delete_variant_ids.includes(variant.id),
+    );
   } else {
     variants = product.product_variants;
   }
@@ -181,9 +180,7 @@ function AdminProductVariantsTable({
             <th />
           </tr>
         </thead>
-        <tbody>
-          {rows}
-        </tbody>
+        <tbody>{rows}</tbody>
       </table>
       <Preview generator={generatePreview} />
       {renderAddVariantButton()}
@@ -195,15 +192,17 @@ AdminProductVariantsTable.propTypes = {
   product: PropTypes.shape({
     id: PropTypes.number,
     generatedId: PropTypes.number,
-    product_variants: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      description: PropTypes.string,
-      override_price: PropTypes.shape({
-        fractional: PropTypes.number,
-        currency_code: PropTypes.string,
+    product_variants: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        description: PropTypes.string,
+        override_price: PropTypes.shape({
+          fractional: PropTypes.number,
+          currency_code: PropTypes.string,
+        }),
       }),
-    })),
+    ),
     delete_variant_ids: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
   editing: PropTypes.bool.isRequired,

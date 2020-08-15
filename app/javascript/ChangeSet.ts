@@ -2,18 +2,18 @@ import { useState } from 'react';
 import { ActionMeta } from 'react-select';
 
 type ChangeTrackable = {
-  id: number,
+  id: number;
 };
 
 type AddChange<T extends ChangeTrackable> = {
-  changeType: 'add',
-  generatedId: number,
-  value: T,
+  changeType: 'add';
+  generatedId: number;
+  value: T;
 };
 
 type RemoveChange = {
-  changeType: 'remove',
-  id: number,
+  changeType: 'remove';
+  id: number;
 };
 
 export type Change<T extends ChangeTrackable> = AddChange<T> | RemoveChange;
@@ -27,12 +27,15 @@ class ChangeSet<T extends ChangeTrackable> {
 
   add(value: T, originalValues?: T[], comparisonFunction?: (a: T, b: T) => boolean) {
     if (originalValues && comparisonFunction) {
-      const removedValue = originalValues
-        .find((originalValue) => comparisonFunction(value, originalValue));
+      const removedValue = originalValues.find((originalValue) =>
+        comparisonFunction(value, originalValue),
+      );
       if (removedValue) {
-        return new ChangeSet(this.changes.filter((change) => (
-          !(change.changeType === 'remove' && change.id === removedValue.id)
-        )));
+        return new ChangeSet(
+          this.changes.filter(
+            (change) => !(change.changeType === 'remove' && change.id === removedValue.id),
+          ),
+        );
       }
     }
 
@@ -49,12 +52,11 @@ class ChangeSet<T extends ChangeTrackable> {
   remove(id: number) {
     let newChanges: Change<T>[];
     if (this.changes.some((change) => change.changeType === 'add' && change.generatedId === id)) {
-      newChanges = this.changes.filter((change) => !(change.changeType === 'add' && change.generatedId === id));
+      newChanges = this.changes.filter(
+        (change) => !(change.changeType === 'add' && change.generatedId === id),
+      );
     } else {
-      newChanges = [
-        ...this.changes,
-        { changeType: 'remove', id },
-      ];
+      newChanges = [...this.changes, { changeType: 'remove', id }];
     }
 
     return new ChangeSet(newChanges);
@@ -75,12 +77,14 @@ class ChangeSet<T extends ChangeTrackable> {
   }
 
   getAddValues() {
-    return this.changes.filter((change): change is AddChange<T> => change.changeType === 'add')
+    return this.changes
+      .filter((change): change is AddChange<T> => change.changeType === 'add')
       .map((change) => change.value);
   }
 
   getRemoveIds() {
-    return this.changes.filter((change): change is RemoveChange => change.changeType === 'remove')
+    return this.changes
+      .filter((change): change is RemoveChange => change.changeType === 'remove')
       .map((change) => change.id);
   }
 }

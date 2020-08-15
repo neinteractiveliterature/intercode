@@ -22,25 +22,26 @@ function EventProposalAdminNotes({ eventProposalId }) {
 
   const [updateAdminNotesMutate] = useMutation(UpdateEventProposalAdminNotes);
   const updateAdminNotes = useCallback(
-    (adminNotes) => updateAdminNotesMutate({
-      variables: { eventProposalId, adminNotes },
-      update: (cache) => {
-        const { eventProposal } = cache.readQuery({
-          query: EventProposalAdminNotesQuery,
-          variables: { eventProposalId },
-        });
-        cache.writeQuery({
-          query: EventProposalAdminNotesQuery,
-          variables: { eventProposalId },
-          data: {
-            eventProposal: {
-              ...eventProposal,
-              admin_notes: adminNotes,
+    (adminNotes) =>
+      updateAdminNotesMutate({
+        variables: { eventProposalId, adminNotes },
+        update: (cache) => {
+          const { eventProposal } = cache.readQuery({
+            query: EventProposalAdminNotesQuery,
+            variables: { eventProposalId },
+          });
+          cache.writeQuery({
+            query: EventProposalAdminNotesQuery,
+            variables: { eventProposalId },
+            data: {
+              eventProposal: {
+                ...eventProposal,
+                admin_notes: adminNotes,
+              },
             },
-          },
-        });
-      },
-    }),
+          });
+        },
+      }),
     [eventProposalId, updateAdminNotesMutate],
   );
 
@@ -52,12 +53,7 @@ function EventProposalAdminNotes({ eventProposalId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return (
-    <AdminNotes
-      value={data.eventProposal.admin_notes}
-      mutate={updateAdminNotes}
-    />
-  );
+  return <AdminNotes value={data.eventProposal.admin_notes} mutate={updateAdminNotes} />;
 }
 
 EventProposalAdminNotes.propTypes = {
@@ -69,9 +65,7 @@ function EventProposalAdminDisplay() {
   const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
     variables: { eventProposalId },
   });
-  usePageTitle(
-    useValueUnless(() => data.eventProposal.title, error || loading),
-  );
+  usePageTitle(useValueUnless(() => data.eventProposal.title, error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -86,63 +80,42 @@ function EventProposalAdminDisplay() {
       <div className="d-flex justify-space-between align-items-baseline">
         <div className="col">
           <h1>
-            {data.eventProposal.title}
-            {' '}
-            <small className="text-muted">
-              (
-              {data.eventProposal.event_category.name}
-              )
-            </small>
+            {data.eventProposal.title}{' '}
+            <small className="text-muted">({data.eventProposal.event_category.name})</small>
           </h1>
         </div>
 
-        {
-          data.currentAbility.can_update_event_proposal
-            ? (
-              <EventProposalStatusUpdater
-                eventProposal={data.eventProposal}
-              />
-            )
-            : (
-              <div>
-                <strong>Status: </strong>
-                {humanize(data.eventProposal.status)}
-              </div>
-            )
-        }
+        {data.currentAbility.can_update_event_proposal ? (
+          <EventProposalStatusUpdater eventProposal={data.eventProposal} />
+        ) : (
+          <div>
+            <strong>Status: </strong>
+            {humanize(data.eventProposal.status)}
+          </div>
+        )}
       </div>
 
       <div className="my-4 d-flex align-items-end">
-        {
-          data.eventProposal.event
-            ? (
-              <Link to={`/events/${data.eventProposal.event.id}`} className="btn btn-link">
-                Go to event
-              </Link>
-            )
-            : null
-        }
-        {
-          !data.eventProposal.event && data.currentAbility.can_update_event_proposal
-            ? (
-              <Link
-                to={`/admin_event_proposals/${eventProposalId}/edit`}
-                className="btn btn-outline-primary"
-              >
-                Edit proposal
-              </Link>
-            )
-            : null
-        }
-        <Link
-          to={`/admin_event_proposals/${eventProposalId}/history`}
-          className="btn btn-link"
-        >
+        {data.eventProposal.event ? (
+          <Link to={`/events/${data.eventProposal.event.id}`} className="btn btn-link">
+            Go to event
+          </Link>
+        ) : null}
+        {!data.eventProposal.event && data.currentAbility.can_update_event_proposal ? (
+          <Link
+            to={`/admin_event_proposals/${eventProposalId}/edit`}
+            className="btn btn-outline-primary"
+          >
+            Edit proposal
+          </Link>
+        ) : null}
+        <Link to={`/admin_event_proposals/${eventProposalId}/history`} className="btn btn-link">
           View edit history
         </Link>
         <div className="flex-grow-1 d-flex justify-content-end">
-          {data.currentAbility.can_read_admin_notes_on_event_proposal
-            && <EventProposalAdminNotes eventProposalId={eventProposalId} />}
+          {data.currentAbility.can_read_admin_notes_on_event_proposal && (
+            <EventProposalAdminNotes eventProposalId={eventProposalId} />
+          )}
         </div>
       </div>
 

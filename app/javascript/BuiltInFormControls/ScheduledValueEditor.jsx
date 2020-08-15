@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import maxBy from 'lodash/maxBy';
 import moment from 'moment-timezone';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
-import ScheduledValueTimespanRow, { scheduledValueTimespanIsValid } from './ScheduledValueTimespanRow';
+import ScheduledValueTimespanRow, {
+  scheduledValueTimespanIsValid,
+} from './ScheduledValueTimespanRow';
 
 export function scheduledValueIsValid(scheduledValue) {
   if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
@@ -47,23 +49,21 @@ export function scheduledValueReducer(state, action) {
     case 'deleteTimespan':
       return {
         ...state,
-        timespans: state.timespans.slice(0, action.index)
+        timespans: state.timespans
+          .slice(0, action.index)
           .concat(state.timespans.slice(action.index + 1)),
       };
     case 'updateTimespanField':
-      return updateScheduledValueTimespan(
-        state,
-        action.index,
-        (timespan) => ({ ...timespan, [action.field]: action.value }),
-      );
+      return updateScheduledValueTimespan(state, action.index, (timespan) => ({
+        ...timespan,
+        [action.field]: action.value,
+      }));
     default:
       return state;
   }
 }
 
-function ScheduledValueEditor({
-  scheduledValue, timezone, dispatch, buildValueInput,
-}) {
+function ScheduledValueEditor({ scheduledValue, timezone, dispatch, buildValueInput }) {
   const addRowClicked = (e) => {
     e.preventDefault();
     dispatch({ type: 'addTimespan' });
@@ -74,9 +74,13 @@ function ScheduledValueEditor({
   };
 
   const timespanAttributeDidChange = useCallback(
-    (index, field, value) => dispatch({
-      type: 'updateTimespanField', index, field, value,
-    }),
+    (index, field, value) =>
+      dispatch({
+        type: 'updateTimespanField',
+        index,
+        field,
+        value,
+      }),
     [dispatch],
   );
 

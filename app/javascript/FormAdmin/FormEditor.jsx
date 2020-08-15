@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-  Link, Redirect, Route, Switch, useRouteMatch,
-} from 'react-router-dom';
+import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
@@ -27,32 +25,33 @@ function FormEditor() {
   });
   const [updateForm] = useMutation(UpdateForm);
 
-  const form = useMemo(
-    () => {
-      if (loading || error) {
-        return {};
-      }
+  const form = useMemo(() => {
+    if (loading || error) {
+      return {};
+    }
 
-      return {
-        ...data.form,
-        form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
-          ...formSection,
-          form_items: sortBy(formSection.form_items, 'position').map(parseFormItemObject),
-        })),
-      };
-    },
-    [data, error, loading],
-  );
+    return {
+      ...data.form,
+      form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
+        ...formSection,
+        form_items: sortBy(formSection.form_items, 'position').map(parseFormItemObject),
+      })),
+    };
+  }, [data, error, loading]);
 
   const renderedFormItemsById = useMemo(
-    () => new Map(flatMap(form.form_sections || [], (formSection) => (
-      formSection.form_items.map((formItem) => [
-        formItem.id,
-        {
-          ...formItem,
-          properties: formItem.rendered_properties,
-        },
-      ])))),
+    () =>
+      new Map(
+        flatMap(form.form_sections || [], (formSection) =>
+          formSection.form_items.map((formItem) => [
+            formItem.id,
+            {
+              ...formItem,
+              properties: formItem.rendered_properties,
+            },
+          ]),
+        ),
+      ),
     [form],
   );
 
@@ -76,8 +75,9 @@ function FormEditor() {
       return <Redirect to={`/admin_forms/${match.params.id}/edit/section/${firstSection.id}`} />;
     }
   } else {
-    currentSection = form.form_sections
-      .find((formSection) => formSection.id.toString() === match.params.sectionId);
+    currentSection = form.form_sections.find(
+      (formSection) => formSection.id.toString() === match.params.sectionId,
+    );
   }
 
   const { convention } = data;
@@ -86,24 +86,18 @@ function FormEditor() {
   return (
     <div className="form-editor">
       <div className="form-editor-top-navbar navbar navbar-light bg-warning-light">
-        {match.params.itemId
-          ? (
-            <Link
-              to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
-              className="btn btn-secondary"
-            >
-              <i className="fa fa-chevron-left" />
-              {' '}
-              Back to section
-            </Link>
-          )
-          : (
-            <Link to="/admin_forms" className="btn btn-secondary">
-              <i className="fa fa-chevron-left" />
-              {' '}
-              Back to forms
-            </Link>
-          )}
+        {match.params.itemId ? (
+          <Link
+            to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
+            className="btn btn-secondary"
+          >
+            <i className="fa fa-chevron-left" /> Back to section
+          </Link>
+        ) : (
+          <Link to="/admin_forms" className="btn btn-secondary">
+            <i className="fa fa-chevron-left" /> Back to forms
+          </Link>
+        )}
         <div className="flex-grow-1 ml-2">
           <InPlaceEditor
             className="d-flex align-items-start w-100"
@@ -117,12 +111,20 @@ function FormEditor() {
 
       <FormEditorContext.Provider
         value={{
-          convention, currentSection, form, formType, renderedFormItemsById,
+          convention,
+          currentSection,
+          form,
+          formType,
+          renderedFormItemsById,
         }}
       >
         <Switch>
-          <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"><FormItemEditorLayout /></Route>
-          <Route path="/admin_forms/:id/edit/section/:sectionId"><FormSectionEditorLayout /></Route>
+          <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
+            <FormItemEditorLayout />
+          </Route>
+          <Route path="/admin_forms/:id/edit/section/:sectionId">
+            <FormSectionEditorLayout />
+          </Route>
         </Switch>
       </FormEditorContext.Provider>
     </div>

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Link, Switch, Route, useParams, useHistory,
-} from 'react-router-dom';
+import { Link, Switch, Route, useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
@@ -27,7 +25,11 @@ function SingleProposalBreadcrumbs() {
   });
 
   if (loading) {
-    return <BreadcrumbItem active><LoadingIndicator /></BreadcrumbItem>;
+    return (
+      <BreadcrumbItem active>
+        <LoadingIndicator />
+      </BreadcrumbItem>
+    );
   }
 
   if (error) {
@@ -62,7 +64,10 @@ function AdminEditEventProposal() {
 
   usePageTitle(
     useValueUnless(
-      () => t('general.pageTitles.editing', 'Editing “{{ title }}”', { title: data.eventProposal.title }),
+      () =>
+        t('general.pageTitles.editing', 'Editing “{{ title }}”', {
+          title: data.eventProposal.title,
+        }),
       error || loading,
     ),
   );
@@ -70,15 +75,17 @@ function AdminEditEventProposal() {
   return (
     <EventProposalForm
       eventProposalId={eventProposalId}
-      afterSubmit={() => { history.push(`/admin_event_proposals/${eventProposalId}`); }}
-      exitButton={(
+      afterSubmit={() => {
+        history.push(`/admin_event_proposals/${eventProposalId}`);
+      }}
+      exitButton={
         <Link
           className="btn btn-outline-secondary mr-2"
           to={`/admin_event_proposals/${eventProposalId}`}
         >
           {t('admin.eventProposals.edit.exitButton', 'Return to proposal')}
         </Link>
-      )}
+      }
     />
   );
 }
@@ -100,15 +107,25 @@ function EventProposalsAdmin() {
             {t('navigation.admin.eventProposals', 'Event proposals')}
           </RouteActivatedBreadcrumbItem>
 
-          <Route path="/admin_event_proposals/:id"><SingleProposalBreadcrumbs /></Route>
+          <Route path="/admin_event_proposals/:id">
+            <SingleProposalBreadcrumbs />
+          </Route>
         </ol>
       </nav>
 
       <Switch>
-        <Route path="/admin_event_proposals/:id/history"><EventProposalHistory /></Route>
-        <Route path="/admin_event_proposals/:id/edit"><AdminEditEventProposal /></Route>
-        <Route path="/admin_event_proposals/:id"><EventProposalAdminDisplay /></Route>
-        <Route path="/admin_event_proposals"><EventProposalsAdminTable /></Route>
+        <Route path="/admin_event_proposals/:id/history">
+          <EventProposalHistory />
+        </Route>
+        <Route path="/admin_event_proposals/:id/edit">
+          <AdminEditEventProposal />
+        </Route>
+        <Route path="/admin_event_proposals/:id">
+          <EventProposalAdminDisplay />
+        </Route>
+        <Route path="/admin_event_proposals">
+          <EventProposalsAdminTable />
+        </Route>
       </Switch>
     </>
   );

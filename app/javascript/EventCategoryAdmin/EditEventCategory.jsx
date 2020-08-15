@@ -77,9 +77,10 @@ function EditEventCategory() {
   const { data, loading, error } = useQuery(EventCategoryAdminQuery);
 
   const initialEventCategory = useMemo(
-    () => (error || loading
-      ? null
-      : data.convention.event_categories.find((c) => c.id.toString() === id)),
+    () =>
+      error || loading
+        ? null
+        : data.convention.event_categories.find((c) => c.id.toString() === id),
     [data, error, loading, id],
   );
 

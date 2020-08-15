@@ -14,9 +14,7 @@ function AssignDocHeader({ assign, prefix = null }) {
           <AssignName assign={assign} prefix={prefix} />
         </code>
       </h2>
-      <h5>
-        {assign.drop_class_name}
-      </h5>
+      <h5>{assign.drop_class_name}</h5>
       <p className="mb-0">{assignClass.docstring}</p>
     </>
   );

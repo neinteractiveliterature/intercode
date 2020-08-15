@@ -23,17 +23,12 @@ function getConventionDayStart(event, run, convention, timezoneName) {
   }
 
   const runStart = moment.tz(run.starts_at, timezoneName);
-  const conventionDayTimespans = getConventionDayTimespans(
-    conventionTimespan,
-    timezoneName,
-  );
+  const conventionDayTimespans = getConventionDayTimespans(conventionTimespan, timezoneName);
   const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(runStart));
   return (conventionDay || conventionTimespan).start;
 }
 
-function EventBreadcrumbItems({
-  event, convention, currentAbility, eventPath,
-}) {
+function EventBreadcrumbItems({ event, convention, currentAbility, eventPath }) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const history = useHistory();
@@ -43,23 +38,13 @@ function EventBreadcrumbItems({
   return (
     <>
       <li className="breadcrumb-item">
-        {
-          currentAbility.can_read_schedule && event.runs.length > 0
-            ? (
-              <Link
-                to={
-                  `/events/schedule/${conventionDayStart.format('dddd').toLowerCase()}`
-                }
-              >
-                {t('navigation.events.schedule', 'Con schedule')}
-              </Link>
-            )
-            : (
-              <Link to="/events">
-                {t('navigation.events.eventsList', 'List of events')}
-              </Link>
-            )
-        }
+        {currentAbility.can_read_schedule && event.runs.length > 0 ? (
+          <Link to={`/events/schedule/${conventionDayStart.format('dddd').toLowerCase()}`}>
+            {t('navigation.events.schedule', 'Con schedule')}
+          </Link>
+        ) : (
+          <Link to="/events">{t('navigation.events.eventsList', 'List of events')}</Link>
+        )}
       </li>
       <RouteActivatedBreadcrumbItem matchProps={{ path: eventPath, exact: true }} to={eventPath}>
         {event.title}

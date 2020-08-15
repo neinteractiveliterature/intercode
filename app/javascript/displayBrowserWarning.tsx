@@ -5,7 +5,9 @@ import { detect } from 'detect-browser';
 import includes from 'lodash/includes';
 
 declare global {
-  interface Window { setDontShowCookie: () => void; }
+  interface Window {
+    setDontShowCookie: () => void;
+  }
 }
 
 const IOS_WEBVIEW_APP_HOSTS = {
@@ -29,10 +31,13 @@ const BROWSER_NAMES = {
 
 // cutoff is native URLSearchParams support + async functions + css grid + esmodules
 const MIN_SUPPORTED_VERSION = {
-  ...(Object.keys(IOS_WEBVIEW_APP_HOSTS).reduce((iosVersions, browserName) => ({
-    ...iosVersions,
-    [browserName]: 11,
-  }), {})),
+  ...Object.keys(IOS_WEBVIEW_APP_HOSTS).reduce(
+    (iosVersions, browserName) => ({
+      ...iosVersions,
+      [browserName]: 11,
+    }),
+    {},
+  ),
   chrome: 61,
   firefox: 60,
   safari: 11,
@@ -175,7 +180,12 @@ function renderBrowserWarning(browser: ReturnType<typeof detect>) {
 }
 
 function displayBrowserWarning() {
-  if (document.cookie.replace(/(?:(?:^|.*;\s*)suppressBrowserWarning\s*=\s*([^;]*).*$)|^.*$/, '$1') === 'true') {
+  if (
+    document.cookie.replace(
+      /(?:(?:^|.*;\s*)suppressBrowserWarning\s*=\s*([^;]*).*$)|^.*$/,
+      '$1',
+    ) === 'true'
+  ) {
     return;
   }
 

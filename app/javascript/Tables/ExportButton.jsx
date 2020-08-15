@@ -22,15 +22,18 @@ function dataToKeyPathValuePairs(data, prependKeys = []) {
   }
 
   if (Array.isArray(data)) {
-    return data.map((item) => dataToKeyPathValuePairs(item, [...prependKeys, '']))
+    return data
+      .map((item) => dataToKeyPathValuePairs(item, [...prependKeys, '']))
       .reduce((acc, subValue) => acc.concat(subValue), []);
   }
 
-  return Object.entries(data).map(([key, value]) => {
-    const keyPath = [...prependKeys, key];
+  return Object.entries(data)
+    .map(([key, value]) => {
+      const keyPath = [...prependKeys, key];
 
-    return dataToKeyPathValuePairs(value, keyPath);
-  }).reduce((acc, value) => acc.concat(value), []);
+      return dataToKeyPathValuePairs(value, keyPath);
+    })
+    .reduce((acc, value) => acc.concat(value), []);
 }
 
 function dataToQueryString(data) {
@@ -48,36 +51,31 @@ function getExportUrl(baseUrl, { filtered, sorted, columns }) {
   const queryParams = {
     filters: reactTableFiltersToTableResultsFilters(filtered),
     sort: reactTableSortToTableResultsSort(sorted),
-    ...(
-      columns
-        ? { columns }
-        : {}
-    ),
+    ...(columns ? { columns } : {}),
   };
 
   const url = new URL(baseUrl, window.location.href);
   const search = new URLSearchParams(url.search);
-  new URLSearchParams(dataToQueryString(queryParams))
-    .forEach((value, key) => search.append(key, value));
+  new URLSearchParams(dataToQueryString(queryParams)).forEach((value, key) =>
+    search.append(key, value),
+  );
   url.search = search;
 
   return url.toString();
 }
 
-function ReactTableExportButton({
-  exportUrl, filtered, sorted, columns,
-}) {
+function ReactTableExportButton({ exportUrl, filtered, sorted, columns }) {
   const { t } = useTranslation();
-  const href = useMemo(
-    () => getExportUrl(exportUrl, { filtered, sorted, columns }),
-    [columns, exportUrl, filtered, sorted],
-  );
+  const href = useMemo(() => getExportUrl(exportUrl, { filtered, sorted, columns }), [
+    columns,
+    exportUrl,
+    filtered,
+    sorted,
+  ]);
 
   return (
     <a className="btn btn-outline-primary" href={href}>
-      <i className="fa fa-file-excel-o" />
-      {' '}
-      {t('tables.exportCSV.buttonText', 'Export CSV')}
+      <i className="fa fa-file-excel-o" /> {t('tables.exportCSV.buttonText', 'Export CSV')}
     </a>
   );
 }

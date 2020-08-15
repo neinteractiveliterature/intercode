@@ -7,11 +7,8 @@ describe('InPlaceEditor', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderEditor = (props) => render(<InPlaceEditor
-    value="someValue"
-    onChange={onChange}
-    {...props}
-  />);
+  const renderEditor = (props) =>
+    render(<InPlaceEditor value="someValue" onChange={onChange} {...props} />);
 
   test('it renders just the value by default', () => {
     const { getAllByText, queryAllByRole } = renderEditor();
@@ -20,7 +17,9 @@ describe('InPlaceEditor', () => {
   });
 
   test('it renders children rather than the value if they are passed', () => {
-    const { queryAllByText, queryAllByRole } = renderEditor({ children: (<a href="http://homestarrunner.com">its dot net</a>) });
+    const { queryAllByText, queryAllByRole } = renderEditor({
+      children: <a href="http://homestarrunner.com">its dot net</a>,
+    });
     expect(queryAllByText('its dot net')).toHaveLength(1);
     expect(queryAllByText('someValue')).toHaveLength(0);
     expect(queryAllByRole('link')).toHaveLength(1);

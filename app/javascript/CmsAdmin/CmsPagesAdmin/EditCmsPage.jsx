@@ -74,9 +74,7 @@ function EditCmsPage() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsPagesAdminQuery);
   const initialPage = useMemo(
-    () => (error || loading
-      ? null
-      : data.cmsPages.find((p) => id === p.id.toString())),
+    () => (error || loading ? null : data.cmsPages.find((p) => id === p.id.toString())),
     [error, loading, data, id],
   );
 

@@ -4,9 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
 
-function RegistrationPolicyItemEditorPresetModal({
-  initialPreset, onChange, visible, close,
-}) {
+function RegistrationPolicyItemEditorPresetModal({ initialPreset, onChange, visible, close }) {
   const [preset, setPreset] = useState(initialPreset);
 
   const policyChanged = (policy) => {
@@ -24,15 +22,8 @@ function RegistrationPolicyItemEditorPresetModal({
   };
 
   return (
-    <Modal
-      visible={visible}
-      dialogClassName="modal-xl"
-    >
-      <div className="modal-header">
-        Edit “
-        {preset.name}
-        ”
-      </div>
+    <Modal visible={visible} dialogClassName="modal-xl">
+      <div className="modal-header">Edit “{preset.name}”</div>
 
       <div className="modal-body">
         <RegistrationPolicyEditor
@@ -43,8 +34,12 @@ function RegistrationPolicyItemEditorPresetModal({
       </div>
 
       <div className="modal-footer">
-        <button className="btn btn-secondary" type="button" onClick={cancelClicked}>Cancel</button>
-        <button className="btn btn-primary" type="button" onClick={saveClicked}>Save</button>
+        <button className="btn btn-secondary" type="button" onClick={cancelClicked}>
+          Cancel
+        </button>
+        <button className="btn btn-primary" type="button" onClick={saveClicked}>
+          Save
+        </button>
       </div>
     </Modal>
   );

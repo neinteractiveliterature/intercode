@@ -13,50 +13,56 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function AuthorizationPrompt() {
   const location = useLocation();
   const preAuthParamsJSON = useMemo(
-    () => JSON.stringify(
-      [...(new URLSearchParams(location.search))]
-        .reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
-    ),
+    () =>
+      JSON.stringify(
+        [...new URLSearchParams(location.search)].reduce(
+          (object, [field, value]) => ({ ...object, [field]: value }),
+          {},
+        ),
+      ),
     [location.search],
   );
-  const { data, loading, error } = useQuery(
-    OAuthAuthorizationPromptQuery,
-    { variables: { queryParams: preAuthParamsJSON } },
-  );
-  const preAuth = useMemo(
-    () => {
-      if (error || loading) {
-        return null;
-      }
+  const { data, loading, error } = useQuery(OAuthAuthorizationPromptQuery, {
+    variables: { queryParams: preAuthParamsJSON },
+  });
+  const preAuth = useMemo(() => {
+    if (error || loading) {
+      return null;
+    }
 
-      return JSON.parse(data.oauthPreAuth);
-    },
-    [data, loading, error],
-  );
-  const scopes = useMemo(
-    () => {
-      if (!preAuth) {
-        return null;
-      }
+    return JSON.parse(data.oauthPreAuth);
+  }, [data, loading, error]);
+  const scopes = useMemo(() => {
+    if (!preAuth) {
+      return null;
+    }
 
-      return preAuth.scope.split(' ');
-    },
-    [preAuth],
-  );
+    return preAuth.scope.split(' ');
+  }, [preAuth]);
 
   const authenticityTokens = useContext(AuthenticityTokensContext);
-  const authorizationParams = useMemo(
-    () => {
-      if (!preAuth) {
-        return null;
-      }
+  const authorizationParams = useMemo(() => {
+    if (!preAuth) {
+      return null;
+    }
 
-      return ['client_id', 'redirect_uri', 'state', 'response_type', 'scope', 'nonce', 'code_challenge', 'code_challenge_method'].reduce((params, field) => ({
-        ...params, [field]: preAuth[field],
-      }), {});
-    },
-    [preAuth],
-  );
+    return [
+      'client_id',
+      'redirect_uri',
+      'state',
+      'response_type',
+      'scope',
+      'nonce',
+      'code_challenge',
+      'code_challenge_method',
+    ].reduce(
+      (params, field) => ({
+        ...params,
+        [field]: preAuth[field],
+      }),
+      {},
+    );
+  }, [preAuth]);
   const authenticationModal = useContext(AuthenticationModalContext);
 
   usePageTitle('Authorization required');
@@ -126,11 +132,7 @@ function AuthorizationPrompt() {
           </p>
 
           <p>
-            This will allow
-            {' '}
-            {preAuth.client_name}
-            {' '}
-            to access your convention profile and information
+            This will allow {preAuth.client_name} to access your convention profile and information
             about events you can access.
           </p>
 
@@ -139,7 +141,11 @@ function AuthorizationPrompt() {
 
         <div className="card-footer">
           <div className="actions d-flex justify-content-end">
-            <button className="btn btn-outline-danger mr-2" type="button" onClick={denyAuthorization}>
+            <button
+              className="btn btn-outline-danger mr-2"
+              type="button"
+              onClick={denyAuthorization}
+            >
               Deny
             </button>
             <button className="btn btn-success" type="button" onClick={grantAuthorization}>

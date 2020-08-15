@@ -28,15 +28,17 @@ export async function reloadOnBundleHashMismatch() {
 
 export function checkBundleHashOnError<T>(func: () => Promise<T>) {
   return new Promise<T>((resolve, reject) => {
-    func().then(resolve).catch((error) => {
-      bundleHashMatches().then((matches) => {
-        if (!matches) {
-          window.location.reload();
-        } else {
-          reject(error);
-        }
+    func()
+      .then(resolve)
+      .catch((error) => {
+        bundleHashMatches().then((matches) => {
+          if (!matches) {
+            window.location.reload();
+          } else {
+            reject(error);
+          }
+        });
       });
-    });
   });
 }
 

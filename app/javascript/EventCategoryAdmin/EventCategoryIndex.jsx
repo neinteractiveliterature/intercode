@@ -30,10 +30,11 @@ function EventCategoryIndex() {
 
       <table className="table table-striped">
         <tbody>
-          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name)
-            .map((eventCategory) => (
+          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map(
+            (eventCategory) => (
               <EventCategoryRow eventCategory={eventCategory} key={eventCategory.id} />
-            ))}
+            ),
+          )}
         </tbody>
       </table>
 

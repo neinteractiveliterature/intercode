@@ -14,7 +14,9 @@ import {
   ParsedTimeblockPreference,
   TimeblockPreferenceOrdinality,
 } from '../TimeblockTypes';
-import TimeblockPreferenceCell, { TimeblockPreferenceCellChangeCallback } from './TimeblockPreferenceCell';
+import TimeblockPreferenceCell, {
+  TimeblockPreferenceCellChangeCallback,
+} from './TimeblockPreferenceCell';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
@@ -26,29 +28,30 @@ function valueIsTimeblockPreferenceValue(
     return false;
   }
 
-  return ['start', 'finish', 'label', 'ordinality'].every((field) => (
-    Object.prototype.hasOwnProperty.call(value, field) && typeof value![field] === 'string'
-  ));
+  return ['start', 'finish', 'label', 'ordinality'].every(
+    (field) =>
+      Object.prototype.hasOwnProperty.call(value, field) && typeof value![field] === 'string',
+  );
 }
 
-export type TimeblockPreferenceItemInputProps = (
-  CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
-    convention: ConventionForTimespanUtils
-  }
-);
+export type TimeblockPreferenceItemInputProps = CommonFormItemInputProps<
+  TimeblockPreferenceFormItem
+> & {
+  convention: ConventionForTimespanUtils;
+};
 
 function TimeblockPreferenceItemInput({
-  convention, formItem, value: uncheckedValue, onChange,
+  convention,
+  formItem,
+  value: uncheckedValue,
+  onChange,
 }: TimeblockPreferenceItemInputProps) {
   const value = useMemo(
     () => (valueIsTimeblockPreferenceValue(uncheckedValue) ? uncheckedValue : []),
     [uncheckedValue],
   );
 
-  const preferences = useMemo(
-    () => value.map(parseTimeblockPreference),
-    [value],
-  );
+  const preferences = useMemo(() => value.map(parseTimeblockPreference), [value]);
 
   const preferencesDidChange = useCallback(
     (newPreferences: ParsedTimeblockPreference[]) => {
@@ -58,22 +61,23 @@ function TimeblockPreferenceItemInput({
   );
 
   const preferenceDidChange: TimeblockPreferenceCellChangeCallback = (
-    newOrdinality, hypotheticalPreference,
+    newOrdinality,
+    hypotheticalPreference,
   ) => {
-    const existingPreference = preferences
-      .find((p) => preferencesMatch(p, hypotheticalPreference));
+    const existingPreference = preferences.find((p) => preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
-      preferencesDidChange(preferences
-        .filter((p) => !(preferencesMatch(p, hypotheticalPreference))));
+      preferencesDidChange(preferences.filter((p) => !preferencesMatch(p, hypotheticalPreference)));
     } else if (existingPreference) {
-      preferencesDidChange(preferences.map((p) => {
-        if (preferencesMatch(p, hypotheticalPreference)) {
-          return { ...p, ordinality: newOrdinality };
-        }
+      preferencesDidChange(
+        preferences.map((p) => {
+          if (preferencesMatch(p, hypotheticalPreference)) {
+            return { ...p, ordinality: newOrdinality };
+          }
 
-        return p;
-      }));
+          return p;
+        }),
+      );
     } else {
       preferencesDidChange([
         ...preferences,
@@ -85,14 +89,11 @@ function TimeblockPreferenceItemInput({
     }
   };
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
-  const rows = useMemo(
-    () => rotateTimeblockColumnsToRows(formItem, columns),
-    [columns, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
+    convention,
+    formItem,
+  ]);
+  const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (
     <fieldset className="form-group">
@@ -102,9 +103,7 @@ function TimeblockPreferenceItemInput({
           <tr>
             <th />
             {columns.map((column) => (
-              <th key={column.dayStart.toString()}>
-                {getColumnHeader(column)}
-              </th>
+              <th key={column.dayStart.toString()}>{getColumnHeader(column)}</th>
             ))}
           </tr>
         </thead>
@@ -113,32 +112,28 @@ function TimeblockPreferenceItemInput({
             <tr key={row.timeblock.label}>
               <td>
                 {row.timeblock.label}
-                {
-                  formItem.rendered_properties.hide_timestamps
-                    ? null
-                    : (
-                      <>
-                        <br />
-                        <small>{describeTimeblock(row.timeblock)}</small>
-                      </>
-                    )
-                }
+                {formItem.rendered_properties.hide_timestamps ? null : (
+                  <>
+                    <br />
+                    <small>{describeTimeblock(row.timeblock)}</small>
+                  </>
+                )}
               </td>
-              {row.cells.map((cell, x) => (
-                cell
-                  ? (
-                    <TimeblockPreferenceCell
-                      key={cell.dayStart.format('dddd')}
-                      timeblock={cell.timeblock}
-                      existingPreferences={preferences}
-                      dayStart={cell.dayStart}
-                      start={cell.timespan.start}
-                      finish={cell.timespan.finish}
-                      onChange={preferenceDidChange}
-                    />
-                  )
-                  : <td key={columns[x].dayStart.format('dddd')} />
-              ))}
+              {row.cells.map((cell, x) =>
+                cell ? (
+                  <TimeblockPreferenceCell
+                    key={cell.dayStart.format('dddd')}
+                    timeblock={cell.timeblock}
+                    existingPreferences={preferences}
+                    dayStart={cell.dayStart}
+                    start={cell.timespan.start}
+                    finish={cell.timespan.finish}
+                    onChange={preferenceDidChange}
+                  />
+                ) : (
+                  <td key={columns[x].dayStart.format('dddd')} />
+                ),
+              )}
             </tr>
           ))}
         </tbody>

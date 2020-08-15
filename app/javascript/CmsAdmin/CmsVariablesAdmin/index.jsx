@@ -14,32 +14,37 @@ function CmsVariablesAdmin() {
   const [addingVariables, setAddingVariables] = useState([]);
 
   const addVariable = useCallback(
-    () => setAddingVariables((prevAddingVariables) => [
-      ...prevAddingVariables,
-      {
-        key: '',
-        value_json: '',
-        generatedId: new Date().getTime(),
-      },
-    ]),
+    () =>
+      setAddingVariables((prevAddingVariables) => [
+        ...prevAddingVariables,
+        {
+          key: '',
+          value_json: '',
+          generatedId: new Date().getTime(),
+        },
+      ]),
     [],
   );
 
   const addVariableChanged = useCallback(
-    (generatedId, value) => setAddingVariables((prevAddingVariables) => (
-      prevAddingVariables.map((variable) => {
-        if (variable.generatedId === generatedId) {
-          return { ...variable, ...value };
-        }
+    (generatedId, value) =>
+      setAddingVariables((prevAddingVariables) =>
+        prevAddingVariables.map((variable) => {
+          if (variable.generatedId === generatedId) {
+            return { ...variable, ...value };
+          }
 
-        return variable;
-      }))),
+          return variable;
+        }),
+      ),
     [],
   );
 
   const removeAddVariable = useCallback(
-    (generatedId) => setAddingVariables((prevAddingVariables) => (
-      prevAddingVariables.filter((variable) => variable.generatedId !== generatedId))),
+    (generatedId) =>
+      setAddingVariables((prevAddingVariables) =>
+        prevAddingVariables.filter((variable) => variable.generatedId !== generatedId),
+      ),
     [],
   );
 
@@ -77,25 +82,19 @@ function CmsVariablesAdmin() {
             onCancel={(generatedId) => removeAddVariable(generatedId)}
           />
         ))}
-        {
-          (cmsVariables.length + addingVariables.length) === 0
-            ? (
-              <tr>
-                <td colSpan="3" className="font-italic">No variables defined.</td>
-              </tr>
-            )
-            : null
-        }
+        {cmsVariables.length + addingVariables.length === 0 ? (
+          <tr>
+            <td colSpan="3" className="font-italic">
+              No variables defined.
+            </td>
+          </tr>
+        ) : null}
       </tbody>
       {data.currentAbility.can_create_cms_variables && (
         <tfoot>
           <tr>
             <td colSpan="3">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={addVariable}
-              >
+              <button type="button" className="btn btn-primary" onClick={addVariable}>
                 Add variable
               </button>
             </td>

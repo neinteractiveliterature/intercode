@@ -16,11 +16,20 @@
 }
 
 @keyframes site-search-fade-and-expand {
-  0% { opacity: 0; flex: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 1; flex: 1; }
+  0% {
+    opacity: 0;
+    flex: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    flex: 1;
+  }
 }
-.site-search, .site-search-exit-done {
+.site-search,
+.site-search-exit-done {
   opacity: 0;
   flex: 0;
 }
@@ -43,23 +52,32 @@
 }
 
 @keyframes site-search-navigation-button-fade {
-  0% { opacity: 0; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.site-search-navigation-button, .site-search-navigation-button-enter-done {
+.site-search-navigation-button,
+.site-search-navigation-button-enter-done {
   position: absolute;
   right: 10px;
   top: -3px;
   opacity: 1;
 }
 @include media-breakpoint-up(md) {
-  .site-search-navigation-button, .site-search-navigation-button-enter-done {
+  .site-search-navigation-button,
+  .site-search-navigation-button-enter-done {
     right: 2px;
   }
 }
-.site-search-navigation-button-enter-active, .site-search-navigation-button-exit-active {
+.site-search-navigation-button-enter-active,
+.site-search-navigation-button-exit-active {
   animation-name: site-search-navigation-button-fade;
   animation-duration: 400ms;
   animation-fill-mode: forwards;

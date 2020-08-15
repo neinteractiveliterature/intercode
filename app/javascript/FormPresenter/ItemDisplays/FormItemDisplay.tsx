@@ -23,19 +23,23 @@ import {
 } from '../../FormAdmin/FormItemUtils';
 import { FormItemDisplayMode } from './FormItemDisplayMode';
 
-export type ConventionForFormItemDisplay = (
-  Pick<Convention, 'timezone_name' | 'timezone_mode' | 'starts_at' | 'ends_at' | 'event_mailing_list_domain'>
-);
+export type ConventionForFormItemDisplay = Pick<
+  Convention,
+  'timezone_name' | 'timezone_mode' | 'starts_at' | 'ends_at' | 'event_mailing_list_domain'
+>;
 
 export type FormItemDisplayProps<FormItemType extends TypedFormItem> = {
-  formItem: TypedFormItem,
-  value: FormItemValueType<FormItemType>,
-  convention: ConventionForFormItemDisplay,
-  displayMode: FormItemDisplayMode,
+  formItem: TypedFormItem;
+  value: FormItemValueType<FormItemType>;
+  convention: ConventionForFormItemDisplay;
+  displayMode: FormItemDisplayMode;
 };
 
 function FormItemDisplay<FormItemType extends TypedFormItem>({
-  formItem, value, convention, displayMode,
+  formItem,
+  value,
+  convention,
+  displayMode,
 }: FormItemDisplayProps<FormItemType>) {
   if (value == null) {
     return null;
@@ -44,10 +48,7 @@ function FormItemDisplay<FormItemType extends TypedFormItem>({
   switch (formItem.item_type) {
     case 'age_restrictions':
       return (
-        <AgeRestrictionsDisplay
-          displayMode={displayMode}
-          value={value as AgeRestrictionsValue}
-        />
+        <AgeRestrictionsDisplay displayMode={displayMode} value={value as AgeRestrictionsValue} />
       );
     case 'date':
       return <DateItemDisplay value={value as string} />;
@@ -90,7 +91,11 @@ function FormItemDisplay<FormItemType extends TypedFormItem>({
     default:
       // we don't actually enforce this at the API level, so it could be an unknown type
       assertNever(formItem, true);
-      return <div><code>{formItem.identifier}</code></div>;
+      return (
+        <div>
+          <code>{formItem.identifier}</code>
+        </div>
+      );
   }
 }
 

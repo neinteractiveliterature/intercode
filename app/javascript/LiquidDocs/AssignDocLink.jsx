@@ -6,25 +6,21 @@ import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
 import findClass from './findClass';
 
-function AssignDocLink({
-  assign, compact = false, prefix = null, preAssignNameContent = null,
-}) {
+function AssignDocLink({ assign, compact = false, prefix = null, preAssignNameContent = null }) {
   const location = useLocation();
 
   const renderCard = () => (
     <div className="card mb-2">
       <div className="card-header">
-        {
-          compact
-            ? (
-              <CompactAssignDocHeader
-                assign={assign}
-                prefix={prefix}
-                preAssignNameContent={preAssignNameContent}
-              />
-            )
-            : <AssignDocHeader assign={assign} prefix={prefix} />
-        }
+        {compact ? (
+          <CompactAssignDocHeader
+            assign={assign}
+            prefix={prefix}
+            preAssignNameContent={preAssignNameContent}
+          />
+        ) : (
+          <AssignDocHeader assign={assign} prefix={prefix} />
+        )}
       </div>
     </div>
   );

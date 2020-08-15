@@ -23,23 +23,26 @@ function findOrdinalityForCell(
   value: (ParsedTimeblockPreference | UnparsedTimeblockPreference)[],
   cell: ConcreteTimeblock,
 ) {
-  const existingPreference = value
-    .find((p) => preferencesMatch(p, {
+  const existingPreference = value.find((p) =>
+    preferencesMatch(p, {
       start: cell.timespan.start,
       finish: cell.timespan.finish,
-    }));
+    }),
+  );
   return existingPreference?.ordinality;
 }
 
 export type TimeblockPreferenceItemChangeDisplayProps = {
-  formItem: TimeblockPreferenceFormItem,
-  convention: ConventionForTimespanUtils,
-  change: ParsedFormResponseChange<TimeblockPreferenceFormItem>,
+  formItem: TimeblockPreferenceFormItem;
+  convention: ConventionForTimespanUtils;
+  change: ParsedFormResponseChange<TimeblockPreferenceFormItem>;
 };
 
-function TimeblockPreferenceItemChangeDisplay(
-  { formItem, convention, change }: TimeblockPreferenceItemChangeDisplayProps,
-) {
+function TimeblockPreferenceItemChangeDisplay({
+  formItem,
+  convention,
+  change,
+}: TimeblockPreferenceItemChangeDisplayProps) {
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
     const key = column.dayStart.format('dddd');
     if (cell == null) {
@@ -51,22 +54,16 @@ function TimeblockPreferenceItemChangeDisplay(
 
     return (
       <td key={key} className="align-middle text-center">
-        <TextDiffDisplay
-          before={describeOrdinality(before)}
-          after={describeOrdinality(after)}
-        />
+        <TextDiffDisplay before={describeOrdinality(before)} after={describeOrdinality(after)} />
       </td>
     );
   };
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
-  const rows = useMemo(
-    () => rotateTimeblockColumnsToRows(formItem, columns),
-    [columns, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
+    convention,
+    formItem,
+  ]);
+  const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (
     <table className="table table-sm">
@@ -85,16 +82,12 @@ function TimeblockPreferenceItemChangeDisplay(
           <tr key={row.timeblock.label}>
             <td>
               {row.timeblock.label}
-              {
-                formItem.rendered_properties.hide_timestamps
-                  ? null
-                  : (
-                    <>
-                      <br />
-                      <small>{describeTimeblock(row.timeblock)}</small>
-                    </>
-                  )
-              }
+              {formItem.rendered_properties.hide_timestamps ? null : (
+                <>
+                  <br />
+                  <small>{describeTimeblock(row.timeblock)}</small>
+                </>
+              )}
             </td>
             {row.cells.map((cell, x) => renderCell(cell, columns[x]))}
           </tr>

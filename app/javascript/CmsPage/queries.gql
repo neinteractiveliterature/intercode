@@ -26,7 +26,7 @@ query CmsPageQuery($slug: String, $rootPage: Boolean) {
 
 query PageAdminDropdownQuery($id: Int!) {
   cmsParent {
-    ...on Convention {
+    ... on Convention {
       id
 
       default_layout {
@@ -35,7 +35,7 @@ query PageAdminDropdownQuery($id: Int!) {
       }
     }
 
-    ...on RootSite {
+    ... on RootSite {
       id
 
       default_layout {

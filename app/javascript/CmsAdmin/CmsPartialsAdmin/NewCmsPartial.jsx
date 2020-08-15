@@ -36,10 +36,7 @@ function NewCmsPartial() {
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsPartialForm
-          partial={partial}
-          dispatch={dispatch}
-        />
+        <CmsPartialForm partial={partial} dispatch={dispatch} />
 
         <ErrorDisplay graphQLError={createError} />
 

@@ -5,14 +5,15 @@ import BooleanInput from '../../../app/javascript/BuiltInFormControls/BooleanInp
 
 describe('BooleanInput', () => {
   const onChange = jest.fn();
-  const renderInput = (overrideProps = {}) => render(
-    <BooleanInput
-      caption="Is this a test?"
-      onChange={onChange}
-      value={false}
-      {...overrideProps}
-    />,
-  );
+  const renderInput = (overrideProps = {}) =>
+    render(
+      <BooleanInput
+        caption="Is this a test?"
+        onChange={onChange}
+        value={false}
+        {...overrideProps}
+      />,
+    );
 
   beforeEach(onChange.mockReset);
 

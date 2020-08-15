@@ -8,22 +8,22 @@ export default function useArrayProperty(property, onChange, generateNewItem) {
 
   const itemChanged = useCallback(
     (generatedId, updater) => {
-      updateItems((prevItems) => prevItems.map((item) => {
-        if (item.generatedId !== generatedId) {
-          return item;
-        }
+      updateItems((prevItems) =>
+        prevItems.map((item) => {
+          if (item.generatedId !== generatedId) {
+            return item;
+          }
 
-        return updater(item);
-      }));
+          return updater(item);
+        }),
+      );
     },
     [updateItems],
   );
 
   const addItem = useCallback(
-    () => updateItems((prevItems) => [
-      ...prevItems,
-      { ...generateNewItem(), generatedId: uuidv4() },
-    ]),
+    () =>
+      updateItems((prevItems) => [...prevItems, { ...generateNewItem(), generatedId: uuidv4() }]),
     [generateNewItem, updateItems],
   );
 
@@ -33,9 +33,9 @@ export default function useArrayProperty(property, onChange, generateNewItem) {
         ...prevFormItem,
         properties: {
           ...prevFormItem.properties,
-          [property]: prevFormItem.properties[property].filter((item) => (
-            item.generatedId !== generatedId
-          )),
+          [property]: prevFormItem.properties[property].filter(
+            (item) => item.generatedId !== generatedId,
+          ),
         },
       }));
     },

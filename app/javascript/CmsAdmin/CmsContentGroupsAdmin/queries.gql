@@ -3,17 +3,17 @@
 fragment CmsContentFields on CmsContent {
   __typename
 
-  ...on Page {
+  ... on Page {
     id
     name
   }
 
-  ...on CmsPartial {
+  ... on CmsPartial {
     id
     name
   }
 
-  ...on CmsLayout {
+  ... on CmsLayout {
     id
     name
   }

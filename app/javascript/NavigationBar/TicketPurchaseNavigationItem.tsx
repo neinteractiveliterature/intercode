@@ -17,9 +17,11 @@ function TicketPurchaseNavigationItem() {
     return null;
   }
 
-  if (!ticketTypes.some(
-    (ticketType) => ticketType.providing_products.some((product) => product.available),
-  )) {
+  if (
+    !ticketTypes.some((ticketType) =>
+      ticketType.providing_products.some((product) => product.available),
+    )
+  ) {
     return null;
   }
 
@@ -30,11 +32,9 @@ function TicketPurchaseNavigationItem() {
           {t('navigation.ticketPurchase.ctaLong', 'Buy a {{ ticketName }}!', { ticketName })}
         </span>
         <span className="d-none d-md-inline d-lg-none">
-          {t(
-            'navigation.ticketPurchase.ctaShort',
-            '{{ ticketName }}!',
-            { ticketName: humanize(ticketName ?? 'ticket') },
-          )}
+          {t('navigation.ticketPurchase.ctaShort', '{{ ticketName }}!', {
+            ticketName: humanize(ticketName ?? 'ticket'),
+          })}
         </span>
       </Link>
     </li>

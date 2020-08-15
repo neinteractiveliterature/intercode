@@ -4,8 +4,8 @@ import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 
 export type FreeTextItemChangeDisplayProps = {
-  formItem: FreeTextFormItem,
-  change: ParsedFormResponseChange<FreeTextFormItem>,
+  formItem: FreeTextFormItem;
+  change: ParsedFormResponseChange<FreeTextFormItem>;
 };
 
 function FreeTextItemChangeDisplay({ formItem, change }: FreeTextItemChangeDisplayProps) {

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-export type EmailListEntry = { email: string, name: string };
+export type EmailListEntry = { email: string; name: string };
 
 function formatEmail({ email, name }: EmailListEntry) {
   if (name.match(/[^0-9A-Za-z ]/)) {
@@ -14,9 +14,9 @@ function formatEmail({ email, name }: EmailListEntry) {
 }
 
 export type EmailListProps = {
-  emails: EmailListEntry[],
-  separator: string,
-  renderToolbarContent?: () => ReactNode,
+  emails: EmailListEntry[];
+  separator: string;
+  renderToolbarContent?: () => ReactNode;
 };
 
 function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) {
@@ -26,16 +26,14 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
   mailtoParams.append('bcc', addresses);
   const mailtoLink = `mailto:?bcc=${addresses}`;
 
-  const textareaRows = (emails.length > 80 ? (emails.length / 4) : 20);
+  const textareaRows = emails.length > 80 ? emails.length / 4 : 20;
 
   return (
     <>
       <div className="d-flex align-items-baseline mb-2">
         <div className="flex-grow-1">
           <a href={mailtoLink} className="btn btn-secondary mr-2">
-            <i className="fa fa-envelope" />
-            {' '}
-            {t('buttons.composeEmail', 'Compose email')}
+            <i className="fa fa-envelope" /> {t('buttons.composeEmail', 'Compose email')}
           </a>
 
           <CopyToClipboardButton
@@ -46,11 +44,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
             }}
           />
         </div>
-        {
-          renderToolbarContent
-            ? renderToolbarContent()
-            : null
-        }
+        {renderToolbarContent ? renderToolbarContent() : null}
       </div>
 
       <textarea

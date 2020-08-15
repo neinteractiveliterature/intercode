@@ -6,7 +6,7 @@ import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { AgeRestrictionsFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type AgeRestrictionsItemChangeDisplayProps = {
-  change: ParsedFormResponseChange<AgeRestrictionsFormItem>,
+  change: ParsedFormResponseChange<AgeRestrictionsFormItem>;
 };
 
 function AgeRestrictionsItemChangeDisplay({ change }: AgeRestrictionsItemChangeDisplayProps) {
@@ -14,11 +14,7 @@ function AgeRestrictionsItemChangeDisplay({ change }: AgeRestrictionsItemChangeD
 
   return (
     <div className="border p-1 rounded">
-      <ObjectDiffDisplay
-        before={before}
-        after={after}
-        renderKey={(key) => humanize(key)}
-      />
+      <ObjectDiffDisplay before={before} after={after} renderKey={(key) => humanize(key)} />
     </div>
   );
 }

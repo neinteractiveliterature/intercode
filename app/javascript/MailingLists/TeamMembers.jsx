@@ -11,7 +11,10 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function TeamMembers() {
   const { data, loading, error } = useQuery(TeamMembersMailingListQuery);
 
-  usePageTitle('Event team members', useValueUnless(() => data.convention, error || loading));
+  usePageTitle(
+    'Event team members',
+    useValueUnless(() => data.convention, error || loading),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;

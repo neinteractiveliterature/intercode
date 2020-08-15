@@ -14,16 +14,17 @@ import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
 import {
-  DeleteCmsFileMutationVariables, DeleteCmsFileMutation, useRenameCmsFileMutation,
+  DeleteCmsFileMutationVariables,
+  DeleteCmsFileMutation,
+  useRenameCmsFileMutation,
 } from './mutations.generated';
 import { useCmsFilesAdminQueryQuery } from './queries.generated';
 
 function CmsFilesAdmin() {
-  const {
-    data, loading, error, refetch,
-  } = useCmsFilesAdminQueryQuery();
+  const { data, loading, error, refetch } = useCmsFilesAdminQueryQuery();
   const deleteFileMutate = useDeleteMutation<DeleteCmsFileMutationVariables, DeleteCmsFileMutation>(
-    DeleteCmsFile, {
+    DeleteCmsFile,
+    {
       query: CmsFilesAdminQuery,
       arrayPath: ['cmsFiles'],
       idVariablePath: ['id'],
@@ -34,21 +35,19 @@ function CmsFilesAdmin() {
 
   usePageTitle('CMS Files');
 
-  const fileChunks = useMemo(
-    () => {
-      if (loading || error || !data) {
-        return [];
-      }
+  const fileChunks = useMemo(() => {
+    if (loading || error || !data) {
+      return [];
+    }
 
-      return chunk(data.cmsFiles, 3);
-    },
-    [data, loading, error],
-  );
+    return chunk(data.cmsFiles, 3);
+  }, [data, loading, error]);
 
   const deleteFile = (id: number) => deleteFileMutate({ variables: { id } });
-  const renameFile = (id: number, filename: string) => renameFileMutate({
-    variables: { id, filename },
-  });
+  const renameFile = (id: number, filename: string) =>
+    renameFileMutate({
+      variables: { id, filename },
+    });
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -70,11 +69,13 @@ function CmsFilesAdmin() {
                     <button
                       type="button"
                       className="btn btn-outline-danger px-2 py-1"
-                      onClick={() => confirm({
-                        prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
-                        action: () => deleteFile(cmsFile.id),
-                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                      })}
+                      onClick={() =>
+                        confirm({
+                          prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
+                          action: () => deleteFile(cmsFile.id),
+                          renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                        })
+                      }
                     >
                       <i className="fa fa-trash" aria-hidden="true" />
                     </button>

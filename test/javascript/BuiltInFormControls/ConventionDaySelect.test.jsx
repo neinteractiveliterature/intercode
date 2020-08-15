@@ -9,18 +9,19 @@ describe('ConventionDaySelect', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderConventionDaySelect = (props) => render(
-    <AppRootContext.Provider value={{ timezoneName: 'Etc/UTC' }}>
-      <ConventionDaySelect
-        convention={{
-          starts_at: '2017-01-01T00:00:00.000Z',
-          ends_at: '2017-01-04T00:00:00.000Z',
-        }}
-        onChange={onChange}
-        {...props}
-      />
-    </AppRootContext.Provider>,
-  );
+  const renderConventionDaySelect = (props) =>
+    render(
+      <AppRootContext.Provider value={{ timezoneName: 'Etc/UTC' }}>
+        <ConventionDaySelect
+          convention={{
+            starts_at: '2017-01-01T00:00:00.000Z',
+            ends_at: '2017-01-04T00:00:00.000Z',
+          }}
+          onChange={onChange}
+          {...props}
+        />
+      </AppRootContext.Provider>,
+    );
 
   test('it renders an option for each convention day', () => {
     const { getAllByRole } = renderConventionDaySelect();
@@ -32,7 +33,9 @@ describe('ConventionDaySelect', () => {
   });
 
   test('the value is selected', () => {
-    const { getByLabelText } = renderConventionDaySelect({ value: moment('2017-01-02T06:00:00.000Z') });
+    const { getByLabelText } = renderConventionDaySelect({
+      value: moment('2017-01-02T06:00:00.000Z'),
+    });
     expect(getByLabelText('Sunday')).not.toBeChecked();
     expect(getByLabelText('Monday')).toBeChecked();
     expect(getByLabelText('Tuesday')).not.toBeChecked();

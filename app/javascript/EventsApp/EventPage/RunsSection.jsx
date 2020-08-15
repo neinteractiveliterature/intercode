@@ -35,9 +35,11 @@ function FakeRun({ event }) {
 FakeRun.propTypes = {
   event: PropTypes.shape({
     registration_policy: PropTypes.shape({
-      buckets: PropTypes.arrayOf(PropTypes.shape({
-        key: PropTypes.string.isRequired,
-      })).isRequired,
+      buckets: PropTypes.arrayOf(
+        PropTypes.shape({
+          key: PropTypes.string.isRequired,
+        }),
+      ).isRequired,
     }).isRequired,
   }).isRequired,
 };
@@ -47,13 +49,14 @@ function RunsSection({ eventId }) {
   const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
 
   const sortedRuns = useMemo(
-    () => (error || loading
-      ? null
-      : [...data.event.runs].sort((a, b) => (
-        moment.tz(a.starts_at, timezoneName).valueOf()
-        - moment.tz(b.starts_at, timezoneName).valueOf()
-      ))
-    ),
+    () =>
+      error || loading
+        ? null
+        : [...data.event.runs].sort(
+            (a, b) =>
+              moment.tz(a.starts_at, timezoneName).valueOf() -
+              moment.tz(b.starts_at, timezoneName).valueOf(),
+          ),
     [data, error, loading, timezoneName],
   );
 
@@ -65,20 +68,18 @@ function RunsSection({ eventId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const {
-    currentAbility, myProfile, convention, event,
-  } = data;
+  const { currentAbility, myProfile, convention, event } = data;
 
-  const showFakeRun = (
-    sortedRuns.length === 0
-    || (convention.site_mode === 'convention' && !currentAbility.can_read_schedule)
-  );
+  const showFakeRun =
+    sortedRuns.length === 0 ||
+    (convention.site_mode === 'convention' && !currentAbility.can_read_schedule);
 
   return (
     <div className="run-card-deck">
-      {showFakeRun
-        ? <FakeRun event={event} />
-        : sortedRuns.map((run) => (
+      {showFakeRun ? (
+        <FakeRun event={event} />
+      ) : (
+        sortedRuns.map((run) => (
           <EventPageRunCard
             event={event}
             run={run}
@@ -86,7 +87,8 @@ function RunsSection({ eventId }) {
             myProfile={myProfile}
             currentAbility={currentAbility}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 }

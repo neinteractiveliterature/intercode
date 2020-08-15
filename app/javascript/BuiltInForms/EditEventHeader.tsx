@@ -6,9 +6,9 @@ import ErrorDisplay from '../ErrorDisplay';
 import { Event } from '../graphqlTypes.generated';
 
 export type EditEventHeaderProps = {
-  event: Pick<Event, 'id' | 'status' | 'title'>,
-  showDropButton: boolean,
-  dropEvent: () => void,
+  event: Pick<Event, 'id' | 'status' | 'title'>;
+  showDropButton: boolean;
+  dropEvent: () => void;
 };
 
 function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderProps) {
@@ -21,15 +21,17 @@ function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderPr
       <button
         type="button"
         className="btn btn-outline-danger float-right"
-        onClick={() => confirm({
-          prompt: t(
-            'events.edit.dropPrompt',
-            'Are you sure you want to drop {{ eventTitle }}?  Doing so will also delete any runs of this event and remove any participants signed up for those runs.',
-            { eventTitle: event.title },
-          ),
-          action: dropEvent,
-          renderError: (error) => <ErrorDisplay graphQLError={error} />,
-        })}
+        onClick={() =>
+          confirm({
+            prompt: t(
+              'events.edit.dropPrompt',
+              'Are you sure you want to drop {{ eventTitle }}?  Doing so will also delete any runs of this event and remove any participants signed up for those runs.',
+              { eventTitle: event.title },
+            ),
+            action: dropEvent,
+            renderError: (error) => <ErrorDisplay graphQLError={error} />,
+          })
+        }
       >
         {t('events.edit.dropButton', 'Drop event')}
       </button>
@@ -41,7 +43,9 @@ function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderPr
       {dropButton}
 
       <h3 className="mb-4">
-        {event.id ? t('events.edit.editHeader', 'Edit event') : t('events.edit.newHeader', 'New event')}
+        {event.id
+          ? t('events.edit.editHeader', 'Edit event')
+          : t('events.edit.newHeader', 'New event')}
       </h3>
     </header>
   );

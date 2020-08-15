@@ -24,8 +24,8 @@ function EventProvidedTicketsByEvent({ data }) {
     <section className="mt-2" key={row.provided_by_event.id}>
       <p className="font-weight-bold mb-0">{row.provided_by_event.title}</p>
       <ul className="list-unstyled">
-        {sortByLocaleString(row.tickets, (ticket) => ticket.user_con_profile.name_inverted)
-          .map((ticket) => (
+        {sortByLocaleString(row.tickets, (ticket) => ticket.user_con_profile.name_inverted).map(
+          (ticket) => (
             <li key={ticket.id}>
               {ticket.user_con_profile.name_inverted}
               <span className="text-muted">
@@ -34,7 +34,8 @@ function EventProvidedTicketsByEvent({ data }) {
                 {')'}
               </span>
             </li>
-          ))}
+          ),
+        )}
       </ul>
     </section>
   ));
@@ -45,17 +46,14 @@ EventProvidedTicketsByEvent.propTypes = {
 };
 
 function EventProvidedTicketsByUser({ data }) {
-  const sortedRows = useMemo(
-    () => {
-      const unsortedRows = flatMap(
-        data.convention.reports.event_provided_tickets,
-        ({ provided_by_event: event, tickets }) => tickets.map((ticket) => ({ ticket, event })),
-      );
+  const sortedRows = useMemo(() => {
+    const unsortedRows = flatMap(
+      data.convention.reports.event_provided_tickets,
+      ({ provided_by_event: event, tickets }) => tickets.map((ticket) => ({ ticket, event })),
+    );
 
-      return sortByLocaleString(unsortedRows, (row) => row.ticket.user_con_profile.name_inverted);
-    },
-    [data],
-  );
+    return sortByLocaleString(unsortedRows, (row) => row.ticket.user_con_profile.name_inverted);
+  }, [data]);
 
   return (
     <table className="table table-striped mt-4">
@@ -98,10 +96,12 @@ function EventProvidedTickets() {
     },
   ]);
 
-  usePageTitle(useValueUnless(
-    () => `Event-provided ${pluralize(data.convention.ticket_name)}`,
-    error || loading,
-  ));
+  usePageTitle(
+    useValueUnless(
+      () => `Event-provided ${pluralize(data.convention.ticket_name)}`,
+      error || loading,
+    ),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;

@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-  act, render, fireEvent, waitFor,
-} from '../testUtils';
+import { act, render, fireEvent, waitFor } from '../testUtils';
 import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
 
@@ -25,17 +23,18 @@ describe('RegistrationPolicyEditor', () => {
     props,
     buckets = [defaultRegistrationPolicyBucket],
     preventNoPreferenceSignups = false,
-  ) => render(
-    <RegistrationPolicyEditor
-      registrationPolicy={{ buckets, prevent_no_preference_signups: preventNoPreferenceSignups }}
-      onChange={onChange}
-      lockNameAndDescription={false}
-      lockLimitedBuckets={[]}
-      lockDeleteBuckets={[]}
-      allowCustom
-      {...props}
-    />,
-  );
+  ) =>
+    render(
+      <RegistrationPolicyEditor
+        registrationPolicy={{ buckets, prevent_no_preference_signups: preventNoPreferenceSignups }}
+        onChange={onChange}
+        lockNameAndDescription={false}
+        lockLimitedBuckets={[]}
+        lockDeleteBuckets={[]}
+        allowCustom
+        {...props}
+      />,
+    );
 
   test('basic layout', () => {
     const { getByText, getByDisplayValue, queryAllByRole } = renderRegistrationPolicyEditor();
@@ -57,12 +56,16 @@ describe('RegistrationPolicyEditor', () => {
   });
 
   test('lockLimitedBuckets', () => {
-    const { queryAllByRole } = renderRegistrationPolicyEditor({ lockLimitedBuckets: ['testBucket'] });
+    const { queryAllByRole } = renderRegistrationPolicyEditor({
+      lockLimitedBuckets: ['testBucket'],
+    });
     expect(queryAllByRole('checkbox')).toHaveLength(0);
   });
 
   test('lockDeleteBuckets', () => {
-    const { queryAllByText } = renderRegistrationPolicyEditor({ lockDeleteBuckets: ['testBucket'] });
+    const { queryAllByText } = renderRegistrationPolicyEditor({
+      lockDeleteBuckets: ['testBucket'],
+    });
     expect(queryAllByText('Delete bucket')).toHaveLength(0);
   });
 
@@ -101,7 +104,9 @@ describe('RegistrationPolicyEditor', () => {
   });
 
   describe('with presets', () => {
-    const preset = defaultPresets.find((aPreset) => aPreset.name === 'Limited slots by gender (classic Intercon-style)');
+    const preset = defaultPresets.find(
+      (aPreset) => aPreset.name === 'Limited slots by gender (classic Intercon-style)',
+    );
     const presetBuckets = preset.policy.buckets.map((presetBucket) => ({
       ...defaultRegistrationPolicyBucket,
       ...presetBucket,
@@ -109,7 +114,8 @@ describe('RegistrationPolicyEditor', () => {
 
     test('renders the selector by default', () => {
       const { getByRole, queryAllByRole } = renderRegistrationPolicyEditor(
-        { presets: defaultPresets }, [],
+        { presets: defaultPresets },
+        [],
       );
       expect(getByRole('combobox')).toBeTruthy();
       expect(queryAllByRole('option')).toHaveLength(7); // number of presets + blank + custom
@@ -130,7 +136,8 @@ describe('RegistrationPolicyEditor', () => {
 
     test('locks name and description for matching buckets when in a preset', () => {
       const { getByText, queryAllByText, queryAllByDisplayValue } = renderRegistrationPolicyEditor(
-        { presets: defaultPresets }, presetBuckets,
+        { presets: defaultPresets },
+        presetBuckets,
       );
       expect(getByText('Bucket name')).toBeTruthy();
       expect(queryAllByText('Female role')).not.toHaveLength(0);
@@ -139,21 +146,24 @@ describe('RegistrationPolicyEditor', () => {
 
     test('locks limited for matching buckets when in a preset', () => {
       const { queryAllByRole } = renderRegistrationPolicyEditor(
-        { presets: defaultPresets }, presetBuckets,
+        { presets: defaultPresets },
+        presetBuckets,
       );
       expect(queryAllByRole('checkbox')).toHaveLength(0);
     });
 
     test('locks delete for matching buckets when in a preset', () => {
       const { queryAllByText } = renderRegistrationPolicyEditor(
-        { presets: defaultPresets }, presetBuckets,
+        { presets: defaultPresets },
+        presetBuckets,
       );
       expect(queryAllByText('Delete bucket')).toHaveLength(0);
     });
 
     test('locks adding buckets when in a preset', () => {
       const { queryAllByText } = renderRegistrationPolicyEditor(
-        { presets: defaultPresets }, presetBuckets,
+        { presets: defaultPresets },
+        presetBuckets,
       );
       expect(queryAllByText('Add regular bucket')).toHaveLength(0);
       expect(queryAllByText('Add flex bucket')).toHaveLength(0);
@@ -163,8 +173,9 @@ describe('RegistrationPolicyEditor', () => {
       const { getByRole } = renderRegistrationPolicyEditor({ presets: defaultPresets });
       fireEvent.change(getByRole('combobox'), { target: { value: preset.name } });
       const newPolicy = onChange.mock.calls[0][0];
-      expect(newPolicy.buckets.map((bucket) => bucket.name))
-        .toEqual(presetBuckets.map((bucket) => bucket.name));
+      expect(newPolicy.buckets.map((bucket) => bucket.name)).toEqual(
+        presetBuckets.map((bucket) => bucket.name),
+      );
     });
   });
 });

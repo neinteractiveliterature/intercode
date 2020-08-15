@@ -34,14 +34,18 @@ function EditCmsContentGroupForm({ convention, initialContentGroup }) {
         cmsContentGroup: {
           name: contentGroup.name,
           contents: contentGroup.contents.map(({ id, __typename }) => ({
-            id, content_type: __typename,
+            id,
+            content_type: __typename,
           })),
         },
         grantPermissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
-        revokePermissions: permissionsChangeSet.getRemoveIds()
-          .map((removeId) => buildPermissionInput(
-            initialContentGroup.permissions.find((perm) => perm.id === removeId),
-          )),
+        revokePermissions: permissionsChangeSet
+          .getRemoveIds()
+          .map((removeId) =>
+            buildPermissionInput(
+              initialContentGroup.permissions.find((perm) => perm.id === removeId),
+            ),
+          ),
       },
     });
 
@@ -53,11 +57,7 @@ function EditCmsContentGroupForm({ convention, initialContentGroup }) {
 
   return (
     <form onSubmit={submit}>
-      <h3 className="mb-4">
-        Editing
-        {' '}
-        {initialContentGroup.name}
-      </h3>
+      <h3 className="mb-4">Editing {initialContentGroup.name}</h3>
 
       <CmsContentGroupFormFields
         contentGroup={contentGroup}
@@ -87,25 +87,24 @@ EditCmsContentGroupForm.propTypes = {
   initialContentGroup: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    permissions: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
+    permissions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
 };
 
 function EditCmsContentGroup() {
   const params = useParams();
   const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
-  const initialContentGroup = useMemo(
-    () => {
-      if (loading || error) {
-        return null;
-      }
+  const initialContentGroup = useMemo(() => {
+    if (loading || error) {
+      return null;
+    }
 
-      return data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === params.id);
-    },
-    [data, loading, error, params.id],
-  );
+    return data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === params.id);
+  }, [data, loading, error, params.id]);
 
   usePageTitle(`Editing “${(initialContentGroup || {}).name}”`);
 

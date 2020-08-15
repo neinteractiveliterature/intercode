@@ -57,7 +57,11 @@ function RootSiteEmailRoutesAdminTable() {
         {...tableHeaderProps}
         renderLeftContent={() => (
           <>
-            <button type="button" className="btn btn-outline-primary" onClick={newEmailRouteModal.open}>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={newEmailRouteModal.open}
+            >
               New email route
             </button>
           </>
@@ -66,7 +70,6 @@ function RootSiteEmailRoutesAdminTable() {
 
       <ReactTable
         {...reactTableProps}
-
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },

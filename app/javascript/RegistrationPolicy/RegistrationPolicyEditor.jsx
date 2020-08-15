@@ -20,17 +20,21 @@ import PreventNoPreferenceSignupRow from './PreventNoPreferenceSignupRow';
 
 function RegistrationPolicyEditor(props) {
   const {
-    allowCustom, lockCounts, lockNameAndDescription, lockDeleteBuckets, lockLimitedBuckets,
-    onChange, presets, validateComplete,
+    allowCustom,
+    lockCounts,
+    lockNameAndDescription,
+    lockDeleteBuckets,
+    lockLimitedBuckets,
+    onChange,
+    presets,
+    validateComplete,
   } = props;
   const registrationPolicy = props.registrationPolicy || { buckets: [] };
 
   const [preset, setPreset] = useState(() => findPreset(registrationPolicy, presets));
-  const [custom, setCustom] = useState(() => (
-    presets
-    && !preset
-    && (registrationPolicy.buckets || []).length > 0
-  ));
+  const [custom, setCustom] = useState(
+    () => presets && !preset && (registrationPolicy.buckets || []).length > 0,
+  );
 
   const headerLabels = useMemo(
     () => [
@@ -49,45 +53,36 @@ function RegistrationPolicyEditor(props) {
       .filter((key) => key.match(/^custom-\d+$/))
       .map((key) => Number.parseInt(key.replace('custom-', ''), 10));
 
-    const maxBucketKeyNumber = (
-      customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0
-    );
+    const maxBucketKeyNumber =
+      customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0;
 
     const customBucketNumber = maxBucketKeyNumber + 1;
 
-    onChange(addRegistrationPolicyBucket(
-      registrationPolicy,
-      `custom-${customBucketNumber}`,
-      {
+    onChange(
+      addRegistrationPolicyBucket(registrationPolicy, `custom-${customBucketNumber}`, {
         name: `Custom ${customBucketNumber}`,
         anything: false,
         slots_limited: true,
         not_counted: false,
         expose_attendees: false,
-      },
-    ));
+      }),
+    );
   };
 
   const addFlexBucketClicked = (event) => {
     event.preventDefault();
-    onChange(addRegistrationPolicyBucket(
-      registrationPolicy,
-      'flex',
-      {
+    onChange(
+      addRegistrationPolicyBucket(registrationPolicy, 'flex', {
         name: 'Flex',
         description: 'Characters that can be in any other limited bucket',
         slots_limited: true,
         anything: true,
-      },
-    ));
+      }),
+    );
   };
 
   const bucketChanged = (key, newBucket) => {
-    onChange(updateRegistrationPolicyBucket(
-      registrationPolicy,
-      key,
-      newBucket,
-    ));
+    onChange(updateRegistrationPolicyBucket(registrationPolicy, key, newBucket));
   };
 
   const preventNoPreferenceSignupsChanged = (newValue) => {
@@ -124,9 +119,8 @@ function RegistrationPolicyEditor(props) {
     }
   };
 
-  const renderAddButtons = () => (preset
-    ? null
-    : (
+  const renderAddButtons = () =>
+    preset ? null : (
       <ul className="list-inline">
         <li className="list-inline-item">
           <button type="button" className="btn btn-secondary" onClick={addBucketClicked}>
@@ -144,24 +138,17 @@ function RegistrationPolicyEditor(props) {
           </button>
         </li>
       </ul>
-    )
-  );
+    );
 
   const renderBucketRow = (bucket) => {
-    const bucketInPreset = (
-      preset
-      && !!preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key)
-    );
+    const bucketInPreset =
+      preset && !!preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key);
 
-    const lockDelete = (
-      bucketInPreset
-      || (lockDeleteBuckets && lockDeleteBuckets.includes(bucket.key))
-    );
+    const lockDelete =
+      bucketInPreset || (lockDeleteBuckets && lockDeleteBuckets.includes(bucket.key));
 
-    const lockLimited = (
-      bucketInPreset
-      || (lockLimitedBuckets && lockLimitedBuckets.includes(bucket.key))
-    );
+    const lockLimited =
+      bucketInPreset || (lockLimitedBuckets && lockLimitedBuckets.includes(bucket.key));
 
     return (
       <RegistrationBucketRow
@@ -211,12 +198,12 @@ function RegistrationPolicyEditor(props) {
         <table className="table">
           <thead>
             <tr>
-              {headerLabels.map((label) => <th key={label}>{label}</th>)}
+              {headerLabels.map((label) => (
+                <th key={label}>{label}</th>
+              ))}
             </tr>
           </thead>
-          <tbody>
-            {bucketRows}
-          </tbody>
+          <tbody>{bucketRows}</tbody>
           <tfoot>
             <PreventNoPreferenceSignupRow
               columnCount={headerLabels.length}
@@ -226,9 +213,7 @@ function RegistrationPolicyEditor(props) {
             />
             <tr>
               <td colSpan={headerLabels.length} className="text-right">
-                <strong>Total capacity:</strong>
-                {' '}
-                {renderTotals()}
+                <strong>Total capacity:</strong> {renderTotals()}
               </td>
             </tr>
           </tfoot>
@@ -272,13 +257,9 @@ function RegistrationPolicyEditor(props) {
 
   return (
     <div className="card">
-      <div className="card-header">
-        Registration policy
-      </div>
+      <div className="card-header">Registration policy</div>
       <div className="d-flex flex-column flex-lg-row">
-        <div className="col-lg-8 p-3">
-          {renderEditorBody()}
-        </div>
+        <div className="col-lg-8 p-3">{renderEditorBody()}</div>
         {renderPreviewContent()}
       </div>
     </div>
@@ -292,10 +273,12 @@ RegistrationPolicyEditor.propTypes = {
   lockNameAndDescription: PropTypes.bool,
   lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
   lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-  presets: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    policy: RegistrationPolicyPropType.isRequired,
-  }).isRequired),
+  presets: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      policy: RegistrationPolicyPropType.isRequired,
+    }).isRequired,
+  ),
   allowCustom: PropTypes.bool,
   validateComplete: PropTypes.bool,
 };

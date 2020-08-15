@@ -1,6 +1,9 @@
 import { NavigationItemsAdminQuery } from './queries.gql';
 import {
-  CreateNavigationItem, UpdateNavigationItem, DeleteNavigationItem, SortNavigationItems,
+  CreateNavigationItem,
+  UpdateNavigationItem,
+  DeleteNavigationItem,
+  SortNavigationItems,
 } from './mutations.gql';
 
 function graphqlNavigationItemToCadmusNavbarAdminObject(navigationItem) {
@@ -33,15 +36,16 @@ class Client {
   }
 
   onError(error) {
-    this.errorSubscribers.forEach((errorSubscriber) => { errorSubscriber(error); });
+    this.errorSubscribers.forEach((errorSubscriber) => {
+      errorSubscriber(error);
+    });
   }
 
   async fetchNavigationItems() {
     this.requestsInProgress.loadingNavigationItems = true;
     try {
       const { data } = await this.apolloClient.query({ query: NavigationItemsAdminQuery });
-      return data.cmsNavigationItems
-        .map(graphqlNavigationItemToCadmusNavbarAdminObject);
+      return data.cmsNavigationItems.map(graphqlNavigationItemToCadmusNavbarAdminObject);
     } catch (error) {
       this.onError(error);
       throw error;
@@ -84,7 +88,11 @@ class Client {
         mutation = CreateNavigationItem;
         update = (
           cache,
-          { data: { createCmsNavigationItem: { cms_navigation_item: newNavigationItem } } },
+          {
+            data: {
+              createCmsNavigationItem: { cms_navigation_item: newNavigationItem },
+            },
+          },
         ) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
           data.cmsNavigationItems.push(newNavigationItem);
@@ -93,11 +101,10 @@ class Client {
       }
 
       const { data } = await this.apolloClient.mutate({ mutation, variables, update });
-      const mutationResponse = (
+      const mutationResponse =
         mutation === UpdateNavigationItem
           ? data.updateCmsNavigationItem
-          : data.createCmsNavigationItem
-      );
+          : data.createCmsNavigationItem;
 
       await this.apolloClient.resetStore();
       return graphqlNavigationItemToCadmusNavbarAdminObject(mutationResponse.cms_navigation_item);
@@ -118,8 +125,9 @@ class Client {
         variables: { id: navigationItem.id },
         update: (cache) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
-          data.cmsNavigationItems = data.cmsNavigationItems
-            .filter((item) => item.id !== navigationItem.id);
+          data.cmsNavigationItems = data.cmsNavigationItems.filter(
+            (item) => item.id !== navigationItem.id,
+          );
           cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         },
       });

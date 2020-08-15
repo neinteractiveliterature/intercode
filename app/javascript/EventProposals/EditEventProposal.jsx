@@ -1,8 +1,6 @@
 import React from 'react';
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
-import {
-  Redirect, useHistory, useParams, Link,
-} from 'react-router-dom';
+import { Redirect, useHistory, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { DeleteEventProposal } from './mutations';
@@ -25,7 +23,10 @@ function EditEventProposal() {
 
   usePageTitle(
     useValueUnless(
-      () => t('general.pageTitles.editing', 'Editing “{{ title }}”', { title: data.eventProposal.title }),
+      () =>
+        t('general.pageTitles.editing', 'Editing “{{ title }}”', {
+          title: data.eventProposal.title,
+        }),
       error || loading,
     ),
   );
@@ -46,18 +47,19 @@ function EditEventProposal() {
   const deleteButtonProps = {
     children: t('eventProposals.edit.deleteButton', 'Delete proposal'),
     className: 'btn btn-danger',
-    onClick: () => confirm({
-      prompt: t(
-        'eventProposals.edit.deleteConfirmation',
-        'Are you sure?  This will erase your proposal along with everything you’ve written here.',
-      ),
-      action: async () => {
-        await deleteProposal({ variables: { id: eventProposalId } });
-        await apolloClient.clearStore();
-        history.replace('/pages/new-proposal');
-      },
-      renderError: (e) => <ErrorDisplay graphQLError={e} />,
-    }),
+    onClick: () =>
+      confirm({
+        prompt: t(
+          'eventProposals.edit.deleteConfirmation',
+          'Are you sure?  This will erase your proposal along with everything you’ve written here.',
+        ),
+        action: async () => {
+          await deleteProposal({ variables: { id: eventProposalId } });
+          await apolloClient.clearStore();
+          history.replace('/pages/new-proposal');
+        },
+        renderError: (e) => <ErrorDisplay graphQLError={e} />,
+      }),
   };
 
   return (
@@ -69,9 +71,13 @@ function EditEventProposal() {
         <div className="col-md-3">
           {canDelete && (
             <>
-              <div className="d-md-none"><button type="button" {...deleteButtonProps} /></div>
+              <div className="d-md-none">
+                <button type="button" {...deleteButtonProps} />
+              </div>
               <div className="d-none d-md-block">
-                <div className="text-right"><button type="button" {...deleteButtonProps} /></div>
+                <div className="text-right">
+                  <button type="button" {...deleteButtonProps} />
+                </div>
               </div>
             </>
           )}
@@ -80,11 +86,11 @@ function EditEventProposal() {
       <EventProposalForm
         eventProposalId={eventProposalId}
         afterSubmit={() => history.push('/pages/new-proposal')}
-        exitButton={(
+        exitButton={
           <Link className="btn btn-outline-secondary mr-2" to="/pages/new-proposal">
             {t('eventProposals.edit.exitButton', 'Return to proposals page')}
           </Link>
-        )}
+        }
       />
     </>
   );

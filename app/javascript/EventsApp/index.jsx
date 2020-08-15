@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Switch, Route, Redirect, useParams,
-} from 'react-router-dom';
+import { Switch, Route, Redirect, useParams } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
 import eventIdRegexp from './eventIdRegexp';
@@ -43,18 +41,10 @@ function RunRoutes({ eventId, eventPath }) {
   return (
     <Switch>
       <Route path={`${runPath}/admin_signups`}>
-        <SignupAdmin
-          eventId={eventId}
-          runId={runId}
-          eventPath={eventPath}
-        />
+        <SignupAdmin eventId={eventId} runId={runId} eventPath={eventPath} />
       </Route>
       <Route path={`${runPath}/signup_summary`}>
-        <RunSignupSummary
-          eventId={eventId}
-          runId={runId}
-          eventPath={eventPath}
-        />
+        <RunSignupSummary eventId={eventId} runId={runId} eventPath={eventPath} />
       </Route>
     </Switch>
   );
@@ -74,9 +64,11 @@ function EventRoutes() {
   return (
     <Switch>
       <Route path={`${eventPath}/edit`}>
-        {siteMode === 'single_event'
-          ? <Redirect to="/admin_events" />
-          : <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />}
+        {siteMode === 'single_event' ? (
+          <Redirect to="/admin_events" />
+        ) : (
+          <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />
+        )}
       </Route>
       <Route path={`${eventPath}/team_members`}>
         <TeamMemberAdmin eventId={eventId} eventPath={eventPath} />
@@ -88,9 +80,11 @@ function EventRoutes() {
         <RunRoutes eventId={eventId} eventPath={eventPath} />
       </Route>
       <Route path={eventPath}>
-        {siteMode === 'single_event'
-          ? <Redirect to="/" />
-          : <EventPage eventId={eventId} eventPath={eventPath} />}
+        {siteMode === 'single_event' ? (
+          <Redirect to="/" />
+        ) : (
+          <EventPage eventId={eventId} eventPath={eventPath} />
+        )}
       </Route>
     </Switch>
   );
@@ -105,7 +99,11 @@ function EventsApp() {
       <Route path={`/events/:eventId(${eventIdRegexp})`}>
         <EventRoutes />
       </Route>
-      {siteMode !== 'single_event' && <Route path="/events"><EventList /></Route>}
+      {siteMode !== 'single_event' && (
+        <Route path="/events">
+          <EventList />
+        </Route>
+      )}
     </Switch>
   );
 }

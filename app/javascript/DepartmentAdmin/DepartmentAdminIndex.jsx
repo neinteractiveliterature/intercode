@@ -45,16 +45,23 @@ function DepartmentAdminIndex() {
           {data.convention.departments.map((department) => (
             <tr key={`${department.id}`}>
               <td>{department.name}</td>
-              <td>{sortByLocaleString(department.event_categories.map((category) => category.name), (name) => name).join(', ')}</td>
+              <td>
+                {sortByLocaleString(
+                  department.event_categories.map((category) => category.name),
+                  (name) => name,
+                ).join(', ')}
+              </td>
               <td>
                 <button
                   type="button"
                   className="btn btn-sm btn-outline-danger mr-2"
-                  onClick={() => confirm({
-                    action: () => deleteDepartment({ variables: { id: department.id } }),
-                    prompt: `Are you sure you want to delete the department “${department.name}”?`,
-                    renderError: (err) => <ErrorDisplay graphQLError={err} />,
-                  })}
+                  onClick={() =>
+                    confirm({
+                      action: () => deleteDepartment({ variables: { id: department.id } }),
+                      prompt: `Are you sure you want to delete the department “${department.name}”?`,
+                      renderError: (err) => <ErrorDisplay graphQLError={err} />,
+                    })
+                  }
                 >
                   <span className="sr-only">Delete department</span>
                   <i className="fa fa-trash-o" />

@@ -7,8 +7,9 @@ import PopperDropdown from '../../UIComponents/PopperDropdown';
 import { Transforms } from '../../ComposableFormUtils';
 
 const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
-  const currentCategories = eventCategories
-    .filter((category) => (value || []).includes(category.id));
+  const currentCategories = eventCategories.filter((category) =>
+    (value || []).includes(category.id),
+  );
 
   let categoryDescription = 'All event types';
   if (currentCategories.length === 1) {
@@ -17,22 +18,18 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
     categoryDescription = `${currentCategories.length} event types`;
   }
 
-  const sortedCategories = [...eventCategories].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
-  const choiceSetValue = (
+  const sortedCategories = [...eventCategories].sort((a, b) =>
+    a.name.localeCompare(b.name, { sensitivity: 'base' }),
+  );
+  const choiceSetValue =
     (value || []).length > 0
       ? value.map((id) => id.toString())
-      : eventCategories.map((c) => c.id.toString())
-  );
+      : eventCategories.map((c) => c.id.toString());
 
   return (
     <PopperDropdown
       renderReference={({ ref, toggle }) => (
-        <button
-          type="button"
-          className="btn btn-link dropdown-toggle"
-          ref={ref}
-          onClick={toggle}
-        >
+        <button type="button" className="btn btn-link dropdown-toggle" ref={ref} onClick={toggle}>
           {categoryDescription}
         </button>
       )}
@@ -40,13 +37,14 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
     >
       <div className="p-2">
         <ChoiceSet
-          choices={sortedCategories
-            .map((category) => ({
-              label: category.name,
-              value: category.id.toString(),
-            }))}
+          choices={sortedCategories.map((category) => ({
+            label: category.name,
+            value: category.id.toString(),
+          }))}
           value={choiceSetValue}
-          onChange={(integerArray) => { onChange(integerArray.map(Transforms.integer)); }}
+          onChange={(integerArray) => {
+            onChange(integerArray.map(Transforms.integer));
+          }}
           multiple
         />
       </div>
@@ -55,10 +53,12 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
 };
 
 EventListCategoryDropdown.propTypes = {
-  eventCategories: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  eventCategories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   value: PropTypes.arrayOf(PropTypes.number),
   onChange: PropTypes.func.isRequired,
 };

@@ -18,9 +18,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
   );
 
   const runLists = conventionDays.map((conventionDay) => {
-    const dayRuns = event.runs.filter((run) => (
-      conventionDay.includesTime(moment(run.starts_at))
-    ));
+    const dayRuns = event.runs.filter((run) => conventionDay.includesTime(moment(run.starts_at)));
 
     dayRuns.sort((a, b) => moment(a.starts_at).diff(moment(b.starts_at)));
 
@@ -30,11 +28,16 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
       if (runStart.day() !== conventionDay.start.day()) {
         format = 'ddd h:mma';
       }
-      const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
+      const eventCategory = convention.event_categories.find(
+        (c) => c.id === event.event_category.id,
+      );
 
       return (
         <li key={run.id} className="my-2">
-          <Link className="btn btn-secondary" to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}>
+          <Link
+            className="btn btn-secondary"
+            to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}
+          >
             {runStart.format(format)}
           </Link>
         </li>
@@ -46,9 +49,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
         <div className="card">
           <div className="card-header">{conventionDay.start.format('dddd, MMMM DD')}</div>
           <div className="card-body py-3">
-            <ul className="list-unstyled m-0">
-              {runItems}
-            </ul>
+            <ul className="list-unstyled m-0">{runItems}</ul>
           </div>
         </div>
       </div>
@@ -71,9 +72,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
         </button>
       </div>
 
-      <div className="d-flex mb-4">
-        {runLists}
-      </div>
+      <div className="d-flex mb-4">{runLists}</div>
     </div>
   );
 }
@@ -82,9 +81,11 @@ RecurringEventSectionBody.propTypes = {
   event: PropTypes.shape({
     id: PropTypes.number.isRequired,
     description_html: PropTypes.string.isRequired,
-    runs: PropTypes.arrayOf(PropTypes.shape({
-      starts_at: PropTypes.string.isRequired,
-    })).isRequired,
+    runs: PropTypes.arrayOf(
+      PropTypes.shape({
+        starts_at: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
     length_seconds: PropTypes.number,
   }).isRequired,
   convention: PropTypes.shape({
@@ -112,19 +113,10 @@ function RecurringEventSection({ event, convention }) {
             aria-expanded={expanded}
           >
             <h4>
-              <DisclosureTriangle expanded={expanded} />
-              {' '}
-              {event.title}
-              {' '}
+              <DisclosureTriangle expanded={expanded} /> {event.title}{' '}
               <small>
-                (
-                {event.runs.length}
-                {' '}
-                runs;
-                {' '}
-                {moment.duration(event.length_seconds, 'seconds').humanize()}
-                {' '}
-                per run)
+                ({event.runs.length} runs;{' '}
+                {moment.duration(event.length_seconds, 'seconds').humanize()} per run)
               </small>
             </h4>
           </button>

@@ -4,12 +4,8 @@ import { render, fireEvent } from '../testUtils';
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
 
 describe('BootstrapFormInput', () => {
-  const renderComponent = (overrideProps = {}) => render(<BootstrapFormInput
-    name="my_input"
-    label="type in me"
-    value=""
-    {...overrideProps}
-  />);
+  const renderComponent = (overrideProps = {}) =>
+    render(<BootstrapFormInput name="my_input" label="type in me" value="" {...overrideProps} />);
 
   test('it passes change events', () => {
     const onChange = jest.fn();

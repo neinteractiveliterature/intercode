@@ -11,21 +11,17 @@ import CaptionLabel from './CaptionLabel';
 export type TimespanItemInputProps = CommonFormItemInputProps<TimespanFormItem>;
 
 function TimespanItemInput(props: TimespanItemInputProps) {
-  const {
-    formItem, value: uncheckedValue, valueInvalid, onChange, onInteract,
-  } = props;
-  const value = useMemo(
-    () => (typeof uncheckedValue === 'number' ? uncheckedValue : null),
-    [uncheckedValue],
-  );
+  const { formItem, value: uncheckedValue, valueInvalid, onChange, onInteract } = props;
+  const value = useMemo(() => (typeof uncheckedValue === 'number' ? uncheckedValue : null), [
+    uncheckedValue,
+  ]);
   const [unit, setUnit] = useState(() => getUnitForValue(value).name);
 
-  const currentUnit = useMemo(
-    () => UNITS.find((u) => unit === u.name),
-    [unit],
-  );
+  const currentUnit = useMemo(() => UNITS.find((u) => unit === u.name), [unit]);
 
-  const userDidInteract = () => { onInteract(formItem.identifier); };
+  const userDidInteract = () => {
+    onInteract(formItem.identifier);
+  };
 
   const inputDidChange = (event: ChangeEvent<HTMLInputElement>) => {
     const quantity = parseInt(event.target.value, 10);
@@ -64,7 +60,7 @@ function TimespanItemInput(props: TimespanItemInputProps) {
       <CaptionLabel formItem={formItem} htmlFor={inputId} />
       <div className="d-flex">
         <div className="w-25">
-          { /* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <input
             id={inputId}
             type="number"

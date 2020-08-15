@@ -3,24 +3,32 @@ import useUniqueId from '../useUniqueId';
 import useDebouncedState from '../useDebouncedState';
 
 export type SearchInputProps = {
-  value?: string,
-  onChange: (value: string) => void,
-  label: ReactNode,
-  wait?: number,
-  name?: string,
-  inputProps?: HTMLAttributes<HTMLInputElement>,
-  inputGroupProps?: HTMLAttributes<HTMLDivElement>,
+  value?: string;
+  onChange: (value: string) => void;
+  label: ReactNode;
+  wait?: number;
+  name?: string;
+  inputProps?: HTMLAttributes<HTMLInputElement>;
+  inputGroupProps?: HTMLAttributes<HTMLDivElement>;
 };
 
 function SearchInput({
-  value, onChange, wait, name, label, inputProps, inputGroupProps,
+  value,
+  onChange,
+  wait,
+  name,
+  label,
+  inputProps,
+  inputGroupProps,
 }: SearchInputProps) {
   const [transientValue, setTransientValue] = useDebouncedState(value ?? '', onChange, wait ?? 100);
   const inputId = useUniqueId(`${name || 'search'}-`);
 
   return (
     <div className="form-group mb-0">
-      <label htmlFor={inputId} className="sr-only">{label}</label>
+      <label htmlFor={inputId} className="sr-only">
+        {label}
+      </label>
       <div className="input-group" {...(inputGroupProps || {})}>
         <input
           id={inputId}

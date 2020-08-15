@@ -12,11 +12,13 @@ if (process.env.ANALYZE_BUNDLE_SIZE) {
   const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 
   if (process.env.ROLLBAR_ACCESS_TOKEN) {
-    environment.plugins.push(new RollbarSourceMapPlugin({
-      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
-      version: process.env.SOURCE_VERSION,
-      publicPath: process.env.ROLLBAR_PUBLIC_PATH,
-    }));
+    environment.plugins.push(
+      new RollbarSourceMapPlugin({
+        accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+        version: process.env.SOURCE_VERSION,
+        publicPath: process.env.ROLLBAR_PUBLIC_PATH,
+      }),
+    );
   }
 }
 
@@ -31,7 +33,7 @@ module.exports = {
     new CompressionPlugin({
       filename: '[path].gz[query]',
       algorithm: 'gzip',
-      test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/
+      test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
     }),
     new OptimizeCSSAssetsPlugin(),
   ],

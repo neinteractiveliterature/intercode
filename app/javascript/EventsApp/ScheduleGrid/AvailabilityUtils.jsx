@@ -16,7 +16,7 @@ export function calculateAvailability(event, signupCountData) {
     totalSlots,
     signupCount,
     remainingCapacity: totalSlots - signupCount,
-    availabilityFraction: 1.0 - (signupCount / totalSlots),
+    availabilityFraction: 1.0 - signupCount / totalSlots,
     unlimited: !event.registration_policy.slots_limited,
     waitlistCount: signupCountData.getWaitlistCount(),
   };
@@ -36,9 +36,7 @@ export function describeAvailability(event, signupCountData) {
     );
   }
 
-  const {
-    unlimited, totalSlots, signupCount,
-  } = calculateAvailability(event, signupCountData);
+  const { unlimited, totalSlots, signupCount } = calculateAvailability(event, signupCountData);
 
   if (unlimited) {
     return 'Unlimited slots';
@@ -57,9 +55,7 @@ export function describeWaitlist(event, signupCountData) {
   if (signupCountData.runFull(event)) {
     return (
       <>
-        <strong>Waitlist:</strong>
-        {' '}
-        {signupCountData.getWaitlistCount()}
+        <strong>Waitlist:</strong> {signupCountData.getWaitlistCount()}
       </>
     );
   }

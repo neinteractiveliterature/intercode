@@ -34,12 +34,9 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
     close();
   };
 
-  useEffect(
-    () => {
-      setEmailRoute(initialEmailRoute);
-    },
-    [initialEmailRoute],
-  );
+  useEffect(() => {
+    setEmailRoute(initialEmailRoute);
+  }, [initialEmailRoute]);
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
@@ -48,15 +45,15 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
         <button
           className="btn btn-sm btn-outline-danger"
           type="button"
-          onClick={() => confirm({
-            prompt: `Are you sure you want to delete the email route for ${initialEmailRoute.receiver_address}?`,
-            action: deleteConfirmed,
-            renderError: (e) => <ErrorDisplay graphQLError={e} />,
-          })}
+          onClick={() =>
+            confirm({
+              prompt: `Are you sure you want to delete the email route for ${initialEmailRoute.receiver_address}?`,
+              action: deleteConfirmed,
+              renderError: (e) => <ErrorDisplay graphQLError={e} />,
+            })
+          }
         >
-          <i className="fa fa-trash-o" />
-          {' '}
-          Delete route
+          <i className="fa fa-trash-o" /> Delete route
         </button>
       </div>
 
@@ -71,7 +68,12 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
           Cancel
         </button>
 
-        <button className="btn btn-primary" type="button" onClick={updateClicked} disabled={inProgress}>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={updateClicked}
+          disabled={inProgress}
+        >
           Update email route
         </button>
       </div>

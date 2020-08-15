@@ -13,6 +13,8 @@ export default function useValidatableForm() {
   );
 
   return {
-    formRef, itemInteractionTrackingProps, validate,
+    formRef,
+    itemInteractionTrackingProps,
+    validate,
   };
 }

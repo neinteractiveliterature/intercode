@@ -7,9 +7,7 @@ import { SetCmsVariableMutation } from './queries.gql';
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
 
-function AddVariableRow({
-  variable, onChange, onSave, onCancel,
-}) {
+function AddVariableRow({ variable, onChange, onSave, onCancel }) {
   const [setCmsVariableMutate] = useMutation(SetCmsVariableMutation);
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();
@@ -72,9 +70,7 @@ function AddVariableRow({
               type="button"
               className="btn btn-primary"
               disabled={
-                variable.key.trim() === ''
-                || variable.value_json.trim() === ''
-                || setInProgress
+                variable.key.trim() === '' || variable.value_json.trim() === '' || setInProgress
               }
               onClick={save}
             >
@@ -83,17 +79,13 @@ function AddVariableRow({
           </div>
         </td>
       </tr>
-      {
-        setError
-          ? (
-            <tr>
-              <td colSpan="3">
-                <ErrorDisplay graphQLError={setError} />
-              </td>
-            </tr>
-          )
-          : null
-      }
+      {setError ? (
+        <tr>
+          <td colSpan="3">
+            <ErrorDisplay graphQLError={setError} />
+          </td>
+        </tr>
+      ) : null}
     </>
   );
 }

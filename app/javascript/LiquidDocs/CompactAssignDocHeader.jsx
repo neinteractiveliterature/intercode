@@ -15,31 +15,16 @@ function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = 
           <AssignName assign={assign} prefix={prefix} />
         </code>
         <br />
-        <strong>
-          {assign.drop_class_name}
-        </strong>
-        {
-          assign.cms_variable_value_json
-            ? (
-              <>
-                <br />
-                <strong>
-                  Value:
-                  {' '}
-                </strong>
-                <code>
-                  {assign.cms_variable_value_json}
-                </code>
-              </>
-            )
-            : null
-        }
+        <strong>{assign.drop_class_name}</strong>
+        {assign.cms_variable_value_json ? (
+          <>
+            <br />
+            <strong>Value: </strong>
+            <code>{assign.cms_variable_value_json}</code>
+          </>
+        ) : null}
       </div>
-      {
-        (assignClass || {}).docstring
-          ? <p className="mt-2 mb-0">{assignClass.docstring}</p>
-          : null
-      }
+      {(assignClass || {}).docstring ? <p className="mt-2 mb-0">{assignClass.docstring}</p> : null}
     </>
   );
 }

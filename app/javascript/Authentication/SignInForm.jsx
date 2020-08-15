@@ -46,8 +46,11 @@ function SignInForm() {
   const { t } = useTranslation();
   const history = useHistory();
   const {
-    close: closeModal, setCurrentView, afterSignInPath,
-    unauthenticatedError, setUnauthenticatedError,
+    close: closeModal,
+    setCurrentView,
+    afterSignInPath,
+    unauthenticatedError,
+    setUnauthenticatedError,
   } = useContext(AuthenticationModalContext);
   const { signIn: authenticityToken } = useContext(AuthenticityTokensContext);
   const [email, setEmail] = useState('');
@@ -92,9 +95,7 @@ function SignInForm() {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">
-            {t('authentication.signInForm.header', 'Log in')}
-          </div>
+          <div className="lead flex-grow-1">{t('authentication.signInForm.header', 'Log in')}</div>
         </div>
 
         <div className="modal-body">
@@ -126,10 +127,22 @@ function SignInForm() {
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
-            <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signUp'); }}>
+            <button
+              type="button"
+              className="btn btn-link p-0 mb-1"
+              onClick={() => {
+                setCurrentView('signUp');
+              }}
+            >
               {t('authentication.signUpLink', 'Sign up for an account')}
             </button>
-            <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('forgotPassword'); }}>
+            <button
+              type="button"
+              className="btn btn-link p-0"
+              onClick={() => {
+                setCurrentView('forgotPassword');
+              }}
+            >
               {t('authentication.forgotPasswordLink', 'Forgot your password?')}
             </button>
           </div>

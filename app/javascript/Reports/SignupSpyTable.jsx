@@ -76,12 +76,18 @@ const getPossibleColumns = () => [
 ];
 
 function SignupSpyTable() {
-  const [reactTableProps, {
-    columnSelectionProps, queryResult, queryData, tableHeaderProps,
-  }] = useReactTableWithTheWorks({
+  const [
+    reactTableProps,
+    { columnSelectionProps, queryResult, queryData, tableHeaderProps },
+  ] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: [
-      'name', 'event_title', 'action', 'bucket_change', 'created_at', 'choice',
+      'name',
+      'event_title',
+      'action',
+      'bucket_change',
+      'created_at',
+      'choice',
     ],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data }) => data.convention.signup_changes_paginated.entries,
@@ -104,17 +110,15 @@ function SignupSpyTable() {
           <div className="mb-4">
             <TableHeader
               {...tableHeaderProps}
-              renderLeftContent={() => (
-                <RefreshButton refreshData={() => queryResult.refetch()} />
-              )}
-              exportButton={(
+              renderLeftContent={() => <RefreshButton refreshData={() => queryResult.refetch()} />}
+              exportButton={
                 <SignupChangesTableExportButton
                   exportUrl="/csv_exports/signup_changes"
                   filtered={filtered}
                   sorted={sorted}
                   visibleColumnIds={columnSelectionProps.visibleColumnIds}
                 />
-              )}
+              }
             />
             {makeTable()}
           </div>

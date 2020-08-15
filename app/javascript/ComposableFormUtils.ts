@@ -60,7 +60,8 @@ export function convertDatetimeValue(value: string | null | Moment, timezoneName
 }
 
 function namedFunction<A extends any[], R>(
-  func: (...args: A) => R, name: string,
+  func: (...args: A) => R,
+  name: string,
 ): (...args: A) => R {
   try {
     Object.defineProperty(func, 'name', { value: name });
@@ -71,10 +72,18 @@ function namedFunction<A extends any[], R>(
 }
 
 export const Transforms = {
-  identity<T>(value: T) { return value; },
-  integer(value: string) { return parseIntOrNull(value); },
-  float(value: string) { return parseFloatOrNull(value); },
-  datetime(value: string | null | Moment) { return convertDatetimeValue(value); },
+  identity<T>(value: T) {
+    return value;
+  },
+  integer(value: string) {
+    return parseIntOrNull(value);
+  },
+  float(value: string) {
+    return parseFloatOrNull(value);
+  },
+  datetime(value: string | null | Moment) {
+    return convertDatetimeValue(value);
+  },
   datetimeWithTimezone(timezoneName: string) {
     return namedFunction(
       (value: string | null | Moment) => convertDatetimeValue(value, timezoneName),
@@ -87,12 +96,18 @@ export const Transforms = {
       `datetimeWithForcedTimezone('${timezoneName}')`,
     );
   },
-  negate<T>(func: (value: T) => boolean) { return namedFunction((value: T) => !func(value), 'negate'); },
+  negate<T>(func: (value: T) => boolean) {
+    return namedFunction((value: T) => !func(value), 'negate');
+  },
   parseInt<T>(func: (value: T) => string) {
     return namedFunction((value: T) => Number.parseInt(func(value), 10), 'parseInt');
   },
-  booleanString(value: string) { return value === 'true'; },
-  multiValue<T>(choices: { value: T }[]) { return choices.map((choice) => choice.value); },
+  booleanString(value: string) {
+    return value === 'true';
+  },
+  multiValue<T>(choices: { value: T }[]) {
+    return choices.map((choice) => choice.value);
+  },
 };
 
 export function stateChangeCalculator(
@@ -103,10 +118,11 @@ export function stateChangeCalculator(
 ) {
   const actualTransform = transform || Transforms.identity;
   return namedFunction(
-    (state, value) => postprocessState({
-      ...preprocessState(state),
-      [name]: actualTransform(value),
-    }),
+    (state, value) =>
+      postprocessState({
+        ...preprocessState(state),
+        [name]: actualTransform(value),
+      }),
     `stateChangeCalculator('${name}')`,
   );
 }
@@ -116,31 +132,28 @@ export function combineStateChangeCalculators(
   preprocessState: (state: any) => any = Transforms.identity,
   postprocessState: (state: any) => any = Transforms.identity,
 ) {
-  return Object.keys(transformsByName).reduce(
-    (acc, name) => {
-      if (transformsByName[name] == null || typeof transformsByName[name] === 'function') {
-        return {
-          ...acc,
-          [name]: stateChangeCalculator(
-            name,
-            transformsByName[name],
-            preprocessState,
-            postprocessState,
-          ),
-        };
-      }
-
+  return Object.keys(transformsByName).reduce((acc, name) => {
+    if (transformsByName[name] == null || typeof transformsByName[name] === 'function') {
       return {
         ...acc,
-        [name]: combineStateChangeCalculators(
+        [name]: stateChangeCalculator(
+          name,
           transformsByName[name],
-          namedFunction((state) => preprocessState(state)[name], `dig('${name}')`),
-          namedFunction((state) => postprocessState({ [name]: state }), `bury('${name}')`),
+          preprocessState,
+          postprocessState,
         ),
       };
-    },
-    {},
-  );
+    }
+
+    return {
+      ...acc,
+      [name]: combineStateChangeCalculators(
+        transformsByName[name],
+        namedFunction((state) => preprocessState(state)[name], `dig('${name}')`),
+        namedFunction((state) => postprocessState({ [name]: state }), `bury('${name}')`),
+      ),
+    };
+  }, {});
 }
 
 export function stateUpdater<T>(
@@ -148,38 +161,32 @@ export function stateUpdater<T>(
   setState: (state: T) => void,
   stateChangeCalculators: any,
 ) {
-  return Object.keys(stateChangeCalculators).reduce(
-    (acc, name) => {
-      if (typeof stateChangeCalculators[name] === 'function') {
-        return {
-          ...acc,
-          [name]: namedFunction(
-            (value) => {
-              setState(stateChangeCalculators[name](getState(), value));
-            },
-            `stateFieldUpdater('${name}')`,
-          ),
-        };
-      }
-
+  return Object.keys(stateChangeCalculators).reduce((acc, name) => {
+    if (typeof stateChangeCalculators[name] === 'function') {
       return {
         ...acc,
-        [name]: stateUpdater(getState, setState, stateChangeCalculators[name]),
+        [name]: namedFunction((value) => {
+          setState(stateChangeCalculators[name](getState(), value));
+        }, `stateFieldUpdater('${name}')`),
       };
-    },
-    {},
-  );
+    }
+
+    return {
+      ...acc,
+      [name]: stateUpdater(getState, setState, stateChangeCalculators[name]),
+    };
+  }, {});
 }
 
 type MutatorConfigWithComponent<T> = {
-  component: React.Component<any, T>,
-  transforms: any,
+  component: React.Component<any, T>;
+  transforms: any;
 };
 
 type MutatorConfigWithGetterAndSetter<T> = {
-  getState: () => T,
-  setState: (state: T) => void,
-  transforms: any,
+  getState: () => T;
+  setState: (state: T) => void;
+  transforms: any;
 };
 
 export type MutatorConfig<T> = MutatorConfigWithComponent<T> | MutatorConfigWithGetterAndSetter<T>;
@@ -201,7 +208,8 @@ export function mutator<T>(config: MutatorConfig<T>) {
 }
 
 export function useTransformedState<T, I>(
-  initialValue: T, transform: (untransformedValue: I) => T,
+  initialValue: T,
+  transform: (untransformedValue: I) => T,
 ) {
   const [state, setState] = useState<T>(initialValue);
   const setStateWithTransform = (untransformedValue: I) => setState(transform(untransformedValue));
@@ -210,15 +218,16 @@ export function useTransformedState<T, I>(
 }
 
 export type TransformsReducerChangeAction<StateType, Key extends keyof StateType> = {
-  type: 'change',
-  key: Key,
-  value: StateType[Key],
+  type: 'change';
+  key: Key;
+  value: StateType[Key];
 };
 
 export type TransformsReducerAction = TransformsReducerChangeAction<any, any>;
 export type TransformsReducer<StateType> = (
-  (state: StateType, action: TransformsReducerAction) => StateType
-);
+  state: StateType,
+  action: TransformsReducerAction,
+) => StateType;
 
 export function transformsReducer<StateType>(
   transforms: { [x in keyof StateType]: (value: any) => StateType[x] },
@@ -237,10 +246,12 @@ export function transformsReducer<StateType>(
 }
 
 export function useChangeDispatchers<StateType>(
-  dispatch: (action: TransformsReducerAction) => void, keys: (keyof StateType)[],
+  dispatch: (action: TransformsReducerAction) => void,
+  keys: (keyof StateType)[],
 ) {
   return useMemo(
-    () => keys.map((key) => (value: StateType[typeof key]) => dispatch({ type: 'change', key, value })),
+    () =>
+      keys.map((key) => (value: StateType[typeof key]) => dispatch({ type: 'change', key, value })),
     [dispatch, keys],
   );
 }

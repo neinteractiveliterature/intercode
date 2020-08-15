@@ -6,18 +6,17 @@ import BootstrapFormSelect, { BootstrapFormSelectProps } from './BootstrapFormSe
 import { EventCategory } from '../graphqlTypes.generated';
 
 export type EventCategorySelectProps = Omit<BootstrapFormSelectProps, 'label'> & {
-  eventCategories: Pick<EventCategory, 'id' | 'name'>[],
-  label?: ReactNode,
+  eventCategories: Pick<EventCategory, 'id' | 'name'>[];
+  label?: ReactNode;
 };
 
-function EventCategorySelect({
-  eventCategories, label, ...props
-}: EventCategorySelectProps) {
+function EventCategorySelect({ eventCategories, label, ...props }: EventCategorySelectProps) {
   const { t } = useTranslation();
-  const categoryOptions = eventCategories
-    .map((category) => (
-      <option value={category.id.toString()} key={category.id}>{humanize(category.name)}</option>
-    ));
+  const categoryOptions = eventCategories.map((category) => (
+    <option value={category.id.toString()} key={category.id}>
+      {humanize(category.name)}
+    </option>
+  ));
 
   return (
     <BootstrapFormSelect

@@ -13,17 +13,22 @@ import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 
 export type FormItemInputProps = Omit<CommonFormItemInputProps<any>, 'onChange'> & {
-  onChange: (identifier: string, newValue: any) => void,
-  convention: ConventionForFormItemDisplay,
+  onChange: (identifier: string, newValue: any) => void;
+  convention: ConventionForFormItemDisplay;
 };
 
 function FormItemInput({
-  formItem, value, onChange, onInteract, valueInvalid, convention,
+  formItem,
+  value,
+  onChange,
+  onInteract,
+  valueInvalid,
+  convention,
 }: FormItemInputProps) {
-  const valueDidChange = useCallback(
-    (newValue) => onChange(formItem.identifier, newValue),
-    [formItem.identifier, onChange],
-  );
+  const valueDidChange = useCallback((newValue) => onChange(formItem.identifier, newValue), [
+    formItem.identifier,
+    onChange,
+  ]);
 
   const commonProps = {
     formItem,
@@ -53,16 +58,19 @@ function FormItemInput({
     case 'timespan':
       return <TimespanItemInput {...commonProps} />;
     default:
-      return <div><code>{formItem.identifier}</code></div>;
+      return (
+        <div>
+          <code>{formItem.identifier}</code>
+        </div>
+      );
   }
 }
 
 export default React.memo(
   FormItemInput,
-  (prevProps, nextProps) => (
-    nextProps.value === prevProps.value
-      && nextProps.convention === prevProps.convention
-      && nextProps.valueInvalid === prevProps.valueInvalid
-      && nextProps.formItem === prevProps.formItem
-  ),
+  (prevProps, nextProps) =>
+    nextProps.value === prevProps.value &&
+    nextProps.convention === prevProps.convention &&
+    nextProps.valueInvalid === prevProps.valueInvalid &&
+    nextProps.formItem === prevProps.formItem,
 );

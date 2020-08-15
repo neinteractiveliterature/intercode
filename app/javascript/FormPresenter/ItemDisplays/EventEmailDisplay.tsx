@@ -4,22 +4,19 @@ import { FormItemDisplayMode } from './FormItemDisplayMode';
 import { EventEmailValue } from '../../FormAdmin/FormItemUtils';
 
 export type EventEmailDisplayProps = {
-  convention: Pick<Convention, 'event_mailing_list_domain'>,
-  value: EventEmailValue,
-  displayMode: FormItemDisplayMode,
+  convention: Pick<Convention, 'event_mailing_list_domain'>;
+  value: EventEmailValue;
+  displayMode: FormItemDisplayMode;
 };
 
 function EventEmailDisplay({ convention, value, displayMode }: EventEmailDisplayProps) {
-  const address = useMemo(
-    () => {
-      if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
-        return `${value.team_mailing_list_name}@${convention.event_mailing_list_domain}`;
-      }
+  const address = useMemo(() => {
+    if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
+      return `${value.team_mailing_list_name}@${convention.event_mailing_list_domain}`;
+    }
 
-      return value.email;
-    },
-    [convention.event_mailing_list_domain, value.email, value.team_mailing_list_name],
-  );
+    return value.email;
+  }, [convention.event_mailing_list_domain, value.email, value.team_mailing_list_name]);
 
   if (displayMode === 'public') {
     return <a href={`mailto:${address}`}>{address}</a>;
@@ -29,9 +26,7 @@ function EventEmailDisplay({ convention, value, displayMode }: EventEmailDisplay
     return (
       <ul className="list-unstyled m-0">
         <li>
-          <strong>Auto-managed mailing list:</strong>
-          {' '}
-          {address}
+          <strong>Auto-managed mailing list:</strong> {address}
         </li>
       </ul>
     );
@@ -41,9 +36,7 @@ function EventEmailDisplay({ convention, value, displayMode }: EventEmailDisplay
     return (
       <ul className="list-unstyled m-0">
         <li>
-          <strong>Attendee contact email:</strong>
-          {' '}
-          {address}
+          <strong>Attendee contact email:</strong> {address}
         </li>
         <li>
           <strong>Convention will email team members individually</strong>
@@ -54,9 +47,7 @@ function EventEmailDisplay({ convention, value, displayMode }: EventEmailDisplay
 
   return (
     <ul className="list-unstyled m-0">
-      <li>
-        {address}
-      </li>
+      <li>{address}</li>
     </ul>
   );
 }

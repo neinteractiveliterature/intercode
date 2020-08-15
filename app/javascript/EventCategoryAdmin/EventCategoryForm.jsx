@@ -29,16 +29,19 @@ function autogenerateColors(eventCategory) {
   return {
     ...eventCategory,
     full_color: fullColor.toRgbString(),
-    signed_up_color: (
-      signedUpColor.getAlpha() === 1.0
-        ? signedUpColor.toHexString()
-        : signedUpColor.toRgbString()
-    ),
+    signed_up_color:
+      signedUpColor.getAlpha() === 1.0 ? signedUpColor.toHexString() : signedUpColor.toRgbString(),
   };
 }
 
 function EventCategoryForm({
-  value, onChange, departments, forms, disabled, ticketName, ticketMode,
+  value,
+  onChange,
+  departments,
+  forms,
+  disabled,
+  ticketName,
+  ticketMode,
 }) {
   const valueMutator = mutator({
     getState: () => value,
@@ -145,20 +148,11 @@ function EventCategoryForm({
                 </div>
               )}
             >
-              {({
-                placement,
-                visible,
-                arrowProps,
-                ref,
-                style,
-              }) => (
+              {({ placement, visible, arrowProps, ref, style }) => (
                 <div
-                  className={classNames(
-                    'card',
-                    'popover',
-                    `bs-popover-${placement}`,
-                    { 'd-none': !visible },
-                  )}
+                  className={classNames('card', 'popover', `bs-popover-${placement}`, {
+                    'd-none': !visible,
+                  })}
                   ref={ref}
                   style={style}
                   data-placement={placement}
@@ -208,16 +202,14 @@ function EventCategoryForm({
         isClearable
       />
 
-      {
-        ticketMode !== 'disabled' && (
-          <BooleanInput
-            name="can_provide_tickets"
-            caption={`Can provide ${pluralize(ticketName)}?`}
-            value={value.can_provide_tickets}
-            onChange={valueMutator.can_provide_tickets}
-          />
-        )
-      }
+      {ticketMode !== 'disabled' && (
+        <BooleanInput
+          name="can_provide_tickets"
+          caption={`Can provide ${pluralize(ticketName)}?`}
+          value={value.can_provide_tickets}
+          onChange={valueMutator.can_provide_tickets}
+        />
+      )}
     </>
   );
 }
@@ -237,14 +229,18 @@ EventCategoryForm.propTypes = {
     can_provide_tickets: PropTypes.bool,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
-  forms: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-  })).isRequired,
-  departments: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  forms: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  departments: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   disabled: PropTypes.bool,
   ticketName: PropTypes.string.isRequired,
   ticketMode: PropTypes.string.isRequired,

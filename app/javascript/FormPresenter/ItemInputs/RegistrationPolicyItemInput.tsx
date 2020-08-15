@@ -18,22 +18,22 @@ function valueIsRegistrationPolicy(
 export type RegistrationPolicyItemInputProps = CommonFormItemInputProps<RegistrationPolicyFormItem>;
 
 function RegistrationPolicyItemInput({
-  formItem, value, valueInvalid, onChange, onInteract,
+  formItem,
+  value,
+  valueInvalid,
+  onChange,
+  onInteract,
 }: RegistrationPolicyItemInputProps) {
-  const defaultValue = useMemo(
-    () => {
-      const { presets, allow_custom: allowCustom } = formItem.rendered_properties;
-      if (presets && presets.length === 1 && !allowCustom) {
-        return presets[0].policy;
-      }
-      return null;
-    },
-    [formItem.rendered_properties],
-  );
+  const defaultValue = useMemo(() => {
+    const { presets, allow_custom: allowCustom } = formItem.rendered_properties;
+    if (presets && presets.length === 1 && !allowCustom) {
+      return presets[0].policy;
+    }
+    return null;
+  }, [formItem.rendered_properties]);
 
-  const effectiveValue = (!valueIsRegistrationPolicy(value) || value.buckets.length === 0)
-    ? defaultValue
-    : value;
+  const effectiveValue =
+    !valueIsRegistrationPolicy(value) || value.buckets.length === 0 ? defaultValue : value;
 
   const valueChanged = (newValue: RegistrationPolicy) => {
     onInteract(formItem.identifier);
@@ -42,7 +42,12 @@ function RegistrationPolicyItemInput({
 
   return (
     <fieldset className="form-group">
-      <div className={classNames({ 'border-0': !valueInvalid, 'border rounded border-danger': valueInvalid })}>
+      <div
+        className={classNames({
+          'border-0': !valueInvalid,
+          'border rounded border-danger': valueInvalid,
+        })}
+      >
         <RegistrationPolicyEditor
           registrationPolicy={effectiveValue}
           onChange={valueChanged}
@@ -50,15 +55,7 @@ function RegistrationPolicyItemInput({
           allowCustom={formItem.rendered_properties.allow_custom}
           validateComplete={valueInvalid}
         />
-        {
-          valueInvalid
-            ? (
-              <span className="text-danger">
-                This field is required.
-              </span>
-            )
-            : null
-        }
+        {valueInvalid ? <span className="text-danger">This field is required.</span> : null}
       </div>
     </fieldset>
   );

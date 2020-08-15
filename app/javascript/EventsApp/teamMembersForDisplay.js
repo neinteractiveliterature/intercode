@@ -3,8 +3,9 @@ export function teamMemberSortKey(teamMember) {
 }
 
 export function sortTeamMembers(event) {
-  return [...event.team_members]
-    .sort((a, b) => teamMemberSortKey(a).localeCompare(teamMemberSortKey(b), { sensitivity: 'base' }));
+  return [...event.team_members].sort((a, b) =>
+    teamMemberSortKey(a).localeCompare(teamMemberSortKey(b), { sensitivity: 'base' }),
+  );
 }
 
 export default function teamMembersForDisplay(event) {

@@ -7,7 +7,12 @@ function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }) {
   return (
     <PopperDropdown
       renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
+        <button
+          type="button"
+          className="btn btn-outline-primary dropdown-toggle"
+          ref={ref}
+          onClick={toggle}
+        >
           Actions
         </button>
       )}

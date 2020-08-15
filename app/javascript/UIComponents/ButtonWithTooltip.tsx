@@ -4,9 +4,9 @@ import PopperDropdown from './PopperDropdown';
 import Tooltip from './Tooltip';
 
 export type ButtonWithTooltipProps = {
-  children: ReactNode,
-  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>,
-  tooltipContent: ReactNode,
+  children: ReactNode;
+  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  tooltipContent: ReactNode;
 };
 
 function ButtonWithTooltip({ children, buttonProps, tooltipContent }: ButtonWithTooltipProps) {

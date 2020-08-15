@@ -31,20 +31,16 @@ function EventAdminMenu({ eventId }) {
 
   return (
     <div className="card mb-4">
-      <div className="card-header">
-        {t('events.adminMenu.header', 'Event Admin')}
-      </div>
+      <div className="card-header">{t('events.adminMenu.header', 'Event Admin')}</div>
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
           <Link to={`${eventPath}/edit`}>{t('events.adminMenu.editLink', 'Edit event')}</Link>
         </li>
         <li className="list-group-item">
           <Link to={`${eventPath}/team_members`}>
-            {t(
-              'events.adminMenu.editTeamMembersLink',
-              'Edit {{ teamMemberNamePlural }}',
-              { teamMemberNamePlural: pluralize(event.event_category.team_member_name) },
-            )}
+            {t('events.adminMenu.editTeamMembersLink', 'Edit {{ teamMemberNamePlural }}', {
+              teamMemberNamePlural: pluralize(event.event_category.team_member_name),
+            })}
           </Link>
         </li>
         <li className="list-group-item">

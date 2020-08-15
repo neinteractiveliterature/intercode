@@ -17,8 +17,8 @@ function parseURL(value: string) {
 }
 
 export type FreeTextItemDisplayProps = {
-  formItem: FreeTextFormItem,
-  value: FormItemValueType<FreeTextFormItem>,
+  formItem: FreeTextFormItem;
+  value: FormItemValueType<FreeTextFormItem>;
 };
 
 function FreeTextItemDisplay({ formItem, value }: FreeTextItemDisplayProps) {
@@ -30,7 +30,7 @@ function FreeTextItemDisplay({ formItem, value }: FreeTextItemDisplayProps) {
     try {
       const url = parseURL(value);
       if (url) {
-        return (<a href={url.toString()}>{url.toString()}</a>);
+        return <a href={url.toString()}>{url.toString()}</a>;
       }
     } catch {
       // fall through to displaying as plain text

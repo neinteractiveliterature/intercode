@@ -10,7 +10,6 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { UpdateNotificationTemplate } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 
-
 function NotificationConfiguration() {
   const match = useRouteMatch();
   const history = useHistory();
@@ -19,25 +18,23 @@ function NotificationConfiguration() {
 
   const { data, loading, error } = useQuery(NotificationAdminQuery);
   const [updateMutate] = useMutation(UpdateNotificationTemplate);
-  const [
-    updateNotificationTemplate, updateError, updateInProgress,
-  ] = useAsyncFunction(updateMutate);
+  const [updateNotificationTemplate, updateError, updateInProgress] = useAsyncFunction(
+    updateMutate,
+  );
 
   const eventKey = `${category.key}/${event.key}`;
 
-  const initialNotificationTemplate = (
+  const initialNotificationTemplate =
     loading || error
       ? null
-      : data.convention.notification_templates
-        .find((t) => t.event_key === eventKey));
+      : data.convention.notification_templates.find((t) => t.event_key === eventKey);
 
   const [notificationTemplate, setNotificationTemplate] = useState(initialNotificationTemplate);
 
   // if the page changes and we're still mounted
-  useEffect(
-    () => setNotificationTemplate(initialNotificationTemplate),
-    [initialNotificationTemplate],
-  );
+  useEffect(() => setNotificationTemplate(initialNotificationTemplate), [
+    initialNotificationTemplate,
+  ]);
 
   const saveClicked = async () => {
     await updateNotificationTemplate({
@@ -67,17 +64,9 @@ function NotificationConfiguration() {
     <>
       <header className="mb-4">
         <h1>
-          {category.name}
-          {' '}
-          &mdash;
-          {' '}
-          {event.name}
+          {category.name} &mdash; {event.name}
         </h1>
-        <h4>
-          Destination:
-          {' '}
-          {event.destination_description}
-        </h4>
+        <h4>Destination: {event.destination_description}</h4>
       </header>
 
       <div className="form-group">
@@ -108,33 +97,45 @@ function NotificationConfiguration() {
           value={notificationTemplate.body_text}
           onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_text: value }))}
           notifierEventKey={eventKey}
-          renderPreview={(previewContent) => <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>}
+          renderPreview={(previewContent) => (
+            <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+          )}
           disabled={updateInProgress}
         />
       </div>
 
-      {event.sends_sms
-        ? (
-          <div className="form-group">
-            <legend className="col-form-label">Notification body (SMS text message)</legend>
-            <LiquidInput
-              value={notificationTemplate.body_sms}
-              onChange={(value) => setNotificationTemplate((prev) => ({
-                ...prev, body_sms: value,
-              }))}
-              notifierEventKey={eventKey}
-              renderPreview={(previewContent) => (
-                <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
-              )}
-              disabled={updateInProgress}
-            />
-          </div>
-        )
-        : <p><em>This event does not send SMS text messages.</em></p>}
+      {event.sends_sms ? (
+        <div className="form-group">
+          <legend className="col-form-label">Notification body (SMS text message)</legend>
+          <LiquidInput
+            value={notificationTemplate.body_sms}
+            onChange={(value) =>
+              setNotificationTemplate((prev) => ({
+                ...prev,
+                body_sms: value,
+              }))
+            }
+            notifierEventKey={eventKey}
+            renderPreview={(previewContent) => (
+              <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+            )}
+            disabled={updateInProgress}
+          />
+        </div>
+      ) : (
+        <p>
+          <em>This event does not send SMS text messages.</em>
+        </p>
+      )}
 
       <ErrorDisplay graphQLError={updateError} />
 
-      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={updateInProgress}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={saveClicked}
+        disabled={updateInProgress}
+      >
         Save changes
       </button>
     </>

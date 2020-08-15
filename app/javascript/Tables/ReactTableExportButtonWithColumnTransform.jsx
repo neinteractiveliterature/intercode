@@ -5,12 +5,16 @@ import flatMap from 'lodash/flatMap';
 import ReactTableExportButton from './ExportButton';
 
 function ReactTableExportButtonWithColumnTransform({
-  exportUrl, filtered, sorted, visibleColumnIds, columnTransform,
+  exportUrl,
+  filtered,
+  sorted,
+  visibleColumnIds,
+  columnTransform,
 }) {
-  const columns = useMemo(
-    () => flatMap(visibleColumnIds, columnTransform),
-    [visibleColumnIds, columnTransform],
-  );
+  const columns = useMemo(() => flatMap(visibleColumnIds, columnTransform), [
+    visibleColumnIds,
+    columnTransform,
+  ]);
 
   return (
     <ReactTableExportButton

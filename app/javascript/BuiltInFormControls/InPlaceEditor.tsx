@@ -1,30 +1,22 @@
-import React, {
-  useState, useRef, useLayoutEffect, useCallback, ReactNode, RefObject,
-} from 'react';
+import React, { useState, useRef, useLayoutEffect, useCallback, ReactNode, RefObject } from 'react';
 import useIsMounted from '../useIsMounted';
 
 export type InPlaceEditorInputProps<T> = {
   inputProps: {
-    onChange: React.Dispatch<React.SetStateAction<T>>,
-    value?: T,
-    disabled?: boolean,
-    committing?: boolean,
-  },
-  buttons: ReactNode,
-  commitEditing: (event: React.SyntheticEvent) => Promise<void>,
-  cancelEditing: React.EventHandler<any>,
+    onChange: React.Dispatch<React.SetStateAction<T>>;
+    value?: T;
+    disabled?: boolean;
+    committing?: boolean;
+  };
+  buttons: ReactNode;
+  commitEditing: (event: React.SyntheticEvent) => Promise<void>;
+  cancelEditing: React.EventHandler<any>;
 };
 
 const DefaultInPlaceEditorInput = React.forwardRef<
-HTMLInputElement,
-InPlaceEditorInputProps<string>
->((
-  {
-    inputProps: {
-      value, onChange, committing, disabled, ...inputProps
-    }, buttons,
-  }, ref,
-) => (
+  HTMLInputElement,
+  InPlaceEditorInputProps<string>
+>(({ inputProps: { value, onChange, committing, disabled, ...inputProps }, buttons }, ref) => (
   <>
     <input
       type="text"
@@ -32,7 +24,9 @@ InPlaceEditorInputProps<string>
       value={value || ''}
       {...inputProps}
       ref={ref}
-      onChange={(event) => { onChange(event.target.value); }}
+      onChange={(event) => {
+        onChange(event.target.value);
+      }}
       disabled={disabled || committing}
     />
     {buttons}
@@ -40,17 +34,15 @@ InPlaceEditorInputProps<string>
 ));
 
 export type InPlaceEditorInputWrapperProps<T> = {
-  initialValue: T,
-  commit: ((value: T) => Promise<void>) | ((value: T) => void),
-  cancel: React.EventHandler<any>,
-  inputRef: RefObject<any>,
-  renderInput: (props: InPlaceEditorInputProps<T>) => JSX.Element,
+  initialValue: T;
+  commit: ((value: T) => Promise<void>) | ((value: T) => void);
+  cancel: React.EventHandler<any>;
+  inputRef: RefObject<any>;
+  renderInput: (props: InPlaceEditorInputProps<T>) => JSX.Element;
 };
 
 function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) {
-  const {
-    initialValue, commit, cancel, inputRef, renderInput,
-  } = props;
+  const { initialValue, commit, cancel, inputRef, renderInput } = props;
   const [value, setValue] = useState(initialValue);
   const [committing, setCommitting] = useState(false);
   const isMounted = useIsMounted();
@@ -136,43 +128,38 @@ function DefaultInPlaceEditorInputWrapper(
 }
 
 export type InPlaceEditorProps<T> = {
-  value: T,
-  onChange: (value: T) => void | Promise<any>,
-  children?: ReactNode,
-  renderInput?: (props: InPlaceEditorInputProps<T>) => JSX.Element,
-  className?: string,
+  value: T;
+  onChange: (value: T) => void | Promise<any>;
+  children?: ReactNode;
+  renderInput?: (props: InPlaceEditorInputProps<T>) => JSX.Element;
+  className?: string;
 };
 
 function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
-  children, className, onChange, renderInput, value,
+  children,
+  className,
+  onChange,
+  renderInput,
+  value,
 }: InPlaceEditorProps<T>) {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputType>();
 
-  useLayoutEffect(
-    () => {
-      if (editing && inputRef.current) {
-        inputRef.current.focus();
-      }
-    },
-    [editing],
-  );
+  useLayoutEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
 
-  const beginEditing = useCallback(
-    (event) => {
-      event.preventDefault();
-      setEditing(true);
-    },
-    [],
-  );
+  const beginEditing = useCallback((event) => {
+    event.preventDefault();
+    setEditing(true);
+  }, []);
 
-  const cancelEditing = useCallback(
-    (event) => {
-      event.preventDefault();
-      setEditing(false);
-    },
-    [],
-  );
+  const cancelEditing = useCallback((event) => {
+    event.preventDefault();
+    setEditing(false);
+  }, []);
 
   const commitEditing = useCallback(
     async (newValue: T) => {
@@ -191,24 +178,22 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
   if (editing) {
     return (
       <div className={className || 'form-inline align-items-start'}>
-        {renderInput
-          ? (
-            <InPlaceEditorInputWrapper
-              commit={commitEditing}
-              cancel={cancelEditing}
-              initialValue={value}
-              inputRef={inputRef}
-              renderInput={renderInput}
-            />
-          )
-          : (
-            <DefaultInPlaceEditorInputWrapper
-              commit={(commitEditing as unknown) as ((value: string) => void | Promise<any>)}
-              cancel={cancelEditing}
-              initialValue={(value as unknown) as string}
-              inputRef={inputRef}
-            />
-          )}
+        {renderInput ? (
+          <InPlaceEditorInputWrapper
+            commit={commitEditing}
+            cancel={cancelEditing}
+            initialValue={value}
+            inputRef={inputRef}
+            renderInput={renderInput}
+          />
+        ) : (
+          <DefaultInPlaceEditorInputWrapper
+            commit={(commitEditing as unknown) as (value: string) => void | Promise<any>}
+            cancel={cancelEditing}
+            initialValue={(value as unknown) as string}
+            inputRef={inputRef}
+          />
+        )}
       </div>
     );
   }
@@ -216,7 +201,12 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
   return (
     <div className="d-flex">
       <div>{children || value}</div>
-      <button type="button" className="btn btn-link btn-sm" onClick={beginEditing} aria-label="Edit">
+      <button
+        type="button"
+        className="btn btn-link btn-sm"
+        onClick={beginEditing}
+        aria-label="Edit"
+      >
         <i className="fa fa-pencil" />
       </button>
     </div>

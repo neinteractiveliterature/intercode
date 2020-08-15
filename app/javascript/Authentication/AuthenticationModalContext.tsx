@@ -5,18 +5,18 @@ import useModal from '../ModalDialogs/useModal';
 export type AuthenticationModalView = 'signIn' | 'signUp' | 'forgotPassword';
 
 export type AuthenticationModalState = {
-  currentView?: AuthenticationModalView,
+  currentView?: AuthenticationModalView;
 };
 
 export type AuthenticationModalContextData = {
-  visible: boolean,
-  currentView?: AuthenticationModalView,
-  afterSignInPath?: string,
-  setAfterSignInPath: (afterSignInPath?: string) => void,
-  setCurrentView: (currentView?: AuthenticationModalView) => void,
-  open: (state: AuthenticationModalState) => void,
-  close: () => void,
-  recaptchaSiteKey?: string,
+  visible: boolean;
+  currentView?: AuthenticationModalView;
+  afterSignInPath?: string;
+  setAfterSignInPath: (afterSignInPath?: string) => void;
+  setCurrentView: (currentView?: AuthenticationModalView) => void;
+  open: (state: AuthenticationModalState) => void;
+  close: () => void;
+  recaptchaSiteKey?: string;
 };
 
 const AuthenticationModalContext = React.createContext<AuthenticationModalContextData>({
@@ -28,9 +28,7 @@ const AuthenticationModalContext = React.createContext<AuthenticationModalContex
 });
 
 export function useAuthenticationModalProvider(recaptchaSiteKey?: string) {
-  const {
-    visible, state, setState, open, close,
-  } = useModal<AuthenticationModalState>();
+  const { visible, state, setState, open, close } = useModal<AuthenticationModalState>();
   const [afterSignInPath, setAfterSignInPath] = useState<string>();
   const [unauthenticatedError, setUnauthenticatedError] = useState(false);
 
@@ -49,8 +47,15 @@ export function useAuthenticationModalProvider(recaptchaSiteKey?: string) {
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      afterSignInPath, close, open, recaptchaSiteKey, setState, setUnauthenticatedError, state,
-      unauthenticatedError, visible,
+      afterSignInPath,
+      close,
+      open,
+      recaptchaSiteKey,
+      setState,
+      setUnauthenticatedError,
+      state,
+      unauthenticatedError,
+      visible,
     ],
   );
 

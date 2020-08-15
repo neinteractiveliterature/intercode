@@ -17,10 +17,16 @@ const STATUSES = [
   { key: 'tentative_accept', transitionLabel: 'Accept tentatively', buttonClass: 'btn-primary' },
   { key: 'accepted', transitionLabel: 'Accept', buttonClass: 'btn-success' },
   {
-    key: 'rejected', transitionLabel: 'Reject', buttonClass: 'btn-danger', offerDropEvent: true,
+    key: 'rejected',
+    transitionLabel: 'Reject',
+    buttonClass: 'btn-danger',
+    offerDropEvent: true,
   },
   {
-    key: 'withdrawn', transitionLabel: 'Update', buttonClass: 'btn-danger', offerDropEvent: true,
+    key: 'withdrawn',
+    transitionLabel: 'Update',
+    buttonClass: 'btn-danger',
+    offerDropEvent: true,
   },
 ];
 
@@ -53,14 +59,10 @@ function EventProposalStatusUpdater({ eventProposal }) {
 
   return (
     <div>
-      <strong>Status:</strong>
-      {' '}
-      {humanize(eventProposal.status)}
-      {' '}
+      <strong>Status:</strong> {humanize(eventProposal.status)}{' '}
       <button type="button" className="btn btn-sm btn-primary" onClick={openModal}>
         Change
       </button>
-
       <Modal visible={modalVisible}>
         <div className="modal-header">
           {'Change status for '}
@@ -70,38 +72,40 @@ function EventProposalStatusUpdater({ eventProposal }) {
         <div className="modal-body">
           <MultipleChoiceInput
             caption="New status"
-            choices={['proposed', 'reviewing', 'tentative_accept', 'accepted', 'rejected', 'withdrawn'].map((s) => ({
-              label: humanize(s), value: s,
+            choices={[
+              'proposed',
+              'reviewing',
+              'tentative_accept',
+              'accepted',
+              'rejected',
+              'withdrawn',
+            ].map((s) => ({
+              label: humanize(s),
+              value: s,
             }))}
             value={status}
-            onChange={(newStatus) => { setStatus(newStatus); setDropEvent(false); }}
+            onChange={(newStatus) => {
+              setStatus(newStatus);
+              setDropEvent(false);
+            }}
             disabled={transitionInProgress}
           />
 
-          {
-            status === 'accepted' && !eventProposal.event
-              ? (
-                <p className="text-danger">
-                  This will create an event on the convention web site.  It will not yet be
-                  on the schedule or possible to sign up for, but it will appear in the events
-                  list.
-                </p>
-              )
-              : null
-          }
+          {status === 'accepted' && !eventProposal.event ? (
+            <p className="text-danger">
+              This will create an event on the convention web site. It will not yet be on the
+              schedule or possible to sign up for, but it will appear in the events list.
+            </p>
+          ) : null}
 
-          {
-            getStatus(status).offerDropEvent && eventProposal.event
-              ? (
-                <BooleanInput
-                  caption="Drop event?"
-                  value={dropEvent}
-                  onChange={setDropEvent}
-                  disabled={transitionInProgress}
-                />
-              )
-              : null
-          }
+          {getStatus(status).offerDropEvent && eventProposal.event ? (
+            <BooleanInput
+              caption="Drop event?"
+              value={dropEvent}
+              onChange={setDropEvent}
+              disabled={transitionInProgress}
+            />
+          ) : null}
 
           <ErrorDisplay graphQLError={transitionError} />
         </div>
@@ -120,10 +124,7 @@ function EventProposalStatusUpdater({ eventProposal }) {
             type="button"
             className={`btn ${getStatus(status).buttonClass}`}
             onClick={performTransition}
-            disabled={
-              transitionInProgress
-              || status === eventProposal.status
-            }
+            disabled={transitionInProgress || status === eventProposal.status}
           >
             {getStatus(status).transitionLabel}
           </button>

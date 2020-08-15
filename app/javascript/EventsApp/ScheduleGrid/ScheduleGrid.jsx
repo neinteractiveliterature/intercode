@@ -20,25 +20,26 @@ function ScheduleGrid({ timespan }) {
 
   return (
     <div className="schedule-grid" style={{ overflowX: 'auto' }}>
-      <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
+      <div
+        className="schedule-grid-content"
+        style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}
+      >
         <div className="mt-1 d-flex">
-          {
-            schedule.shouldUseRowHeaders()
-              ? (<div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />)
-              : null
-          }
+          {schedule.shouldUseRowHeaders() ? (
+            <div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />
+          ) : null}
           <ScheduleGridHeaderBlock timespan={layout.timespan} eventRuns={layout.eventRuns} />
         </div>
         {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
-          <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={scheduleBlock.id}>
+          <div
+            className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
+            key={scheduleBlock.id}
+          >
             <ScheduleBlock
               scheduleBlock={scheduleBlock}
               rowHeader={options.rowHeader}
               renderEventRun={({ layoutResult, runDimensions }) => (
-                <ScheduleGridEventRun
-                  layoutResult={layoutResult}
-                  runDimensions={runDimensions}
-                />
+                <ScheduleGridEventRun layoutResult={layoutResult} runDimensions={runDimensions} />
               )}
             />
           </div>

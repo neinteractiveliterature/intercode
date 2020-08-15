@@ -49,12 +49,7 @@ function EditCmsGraphqlQueryForm({ initialQuery }) {
 
       <ErrorDisplay graphQLError={saveError} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        disabled={saveInProgress}
-        onClick={save}
-      >
+      <button type="button" className="btn btn-primary" disabled={saveInProgress} onClick={save}>
         Save GraphQL query
       </button>
     </>
@@ -71,11 +66,7 @@ function EditCmsGraphqlQuery() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
   const initialQuery = useMemo(
-    () => (
-      error || loading
-        ? null
-        : data.cmsGraphqlQueries.find((q) => q.id.toString() === id)
-    ),
+    () => (error || loading ? null : data.cmsGraphqlQueries.find((q) => q.id.toString() === id)),
     [data, loading, error, id],
   );
 

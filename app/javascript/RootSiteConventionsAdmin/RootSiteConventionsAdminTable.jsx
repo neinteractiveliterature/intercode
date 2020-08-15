@@ -17,39 +17,32 @@ import NewConventionModal from './NewConventionModal';
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
 function ConventionDatesCell({ value }) {
-  const timespan = useMemo(
-    () => timespanFromConvention(value),
-    [value],
-  );
+  const timespan = useMemo(() => timespanFromConvention(value), [value]);
 
-  const datesDescription = useMemo(
-    () => {
-      if (timespan.isFinite()) {
-        const sameYear = timespan.start.year() === timespan.finish.year();
-        const sameMonth = sameYear && timespan.start.month() === timespan.finish.month();
-        const sameDay = sameMonth && timespan.start.day() === timespan.finish.day();
+  const datesDescription = useMemo(() => {
+    if (timespan.isFinite()) {
+      const sameYear = timespan.start.year() === timespan.finish.year();
+      const sameMonth = sameYear && timespan.start.month() === timespan.finish.month();
+      const sameDay = sameMonth && timespan.start.day() === timespan.finish.day();
 
-        if (sameDay) {
-          return timespan.start.format('MMMM D, YYYY');
-        }
-
-        const startFormat = sameYear ? 'MMMM D' : 'MMMM D, YYYY';
-        const finishFormat = sameMonth ? 'D, YYYY' : 'MMMM D, YYYY';
-        return `${timespan.start.format(startFormat)} - ${timespan.finish.format(finishFormat)}`;
+      if (sameDay) {
+        return timespan.start.format('MMMM D, YYYY');
       }
 
-      return timespan.humanizeInTimezone(value.timezone_name, 'MMMM D, YYYY', 'MMMM D, YYYY');
-    },
-    [timespan, value.timezone_name],
-  );
+      const startFormat = sameYear ? 'MMMM D' : 'MMMM D, YYYY';
+      const finishFormat = sameMonth ? 'D, YYYY' : 'MMMM D, YYYY';
+      return `${timespan.start.format(startFormat)} - ${timespan.finish.format(finishFormat)}`;
+    }
+
+    return timespan.humanizeInTimezone(value.timezone_name, 'MMMM D, YYYY', 'MMMM D, YYYY');
+  }, [timespan, value.timezone_name]);
 
   const now = moment();
 
   if (timespan.includesTime(now)) {
     return (
       <>
-        <i className="fa fa-circle" aria-label="Ongoing convention" />
-        {' '}
+        <i className="fa fa-circle" aria-label="Ongoing convention" />{' '}
         <strong>{datesDescription}</strong>
       </>
     );
@@ -58,18 +51,14 @@ function ConventionDatesCell({ value }) {
   if (timespan.start.isAfter(now)) {
     return (
       <>
-        <i className="fa fa-arrow-circle-right" aria-label="Future convention" />
-        {' '}
-        {datesDescription}
+        <i className="fa fa-arrow-circle-right" aria-label="Future convention" /> {datesDescription}
       </>
     );
   }
 
   return (
     <span className="text-secondary">
-      <i className="fa fa-arrow-circle-left" aria-label="Past convention" />
-      {' '}
-      {datesDescription}
+      <i className="fa fa-arrow-circle-left" aria-label="Past convention" /> {datesDescription}
     </span>
   );
 }
@@ -125,7 +114,11 @@ function RootSiteConventionsAdminTable() {
         {...tableHeaderProps}
         renderLeftContent={() => (
           <>
-            <button type="button" className="btn btn-outline-primary" onClick={newConventionModal.open}>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={newConventionModal.open}
+            >
               New convention
             </button>
           </>
@@ -134,7 +127,6 @@ function RootSiteConventionsAdminTable() {
 
       <ReactTable
         {...reactTableProps}
-
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },

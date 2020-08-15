@@ -1,6 +1,4 @@
-import React, {
-  useState, useContext, useMemo, useCallback, ReactNode,
-} from 'react';
+import React, { useState, useContext, useMemo, useCallback, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
@@ -8,20 +6,20 @@ import useModal from './useModal';
 import ErrorDisplay from '../ErrorDisplay';
 
 export type ConfirmModalState = {
-  action: () => any,
-  prompt: ReactNode,
-  error?: any,
-  onCancel?: () => void,
-  onError?: (error: any) => void,
-  renderError?: (error: any) => ReactNode,
+  action: () => any;
+  prompt: ReactNode;
+  error?: any;
+  onCancel?: () => void;
+  onError?: (error: any) => void;
+  renderError?: (error: any) => ReactNode;
 };
 
 export type ConfirmFunction = {
-  (state?: ConfirmModalState): void,
-  visible: boolean,
+  (state?: ConfirmModalState): void;
+  visible: boolean;
 };
 
-function defaultConfirm() { }
+function defaultConfirm() {}
 defaultConfirm.visible = false;
 
 const ConfirmContext = React.createContext<ConfirmFunction>(defaultConfirm);
@@ -52,24 +50,18 @@ function Confirm({ children }) {
     }
   };
 
-  const contextValue = useMemo(
-    () => {
-      const augmentedConfirm = (state?: any) => modal.open(state);
-      augmentedConfirm.visible = modal.visible;
-      return augmentedConfirm;
-    },
-    [modal],
-  );
+  const contextValue = useMemo(() => {
+    const augmentedConfirm = (state?: any) => modal.open(state);
+    augmentedConfirm.visible = modal.visible;
+    return augmentedConfirm;
+  }, [modal]);
 
-  const cancelClicked = useCallback(
-    () => {
-      if (modal.state?.onCancel) {
-        modal.state?.onCancel();
-      }
-      modal.close();
-    },
-    [modal],
-  );
+  const cancelClicked = useCallback(() => {
+    if (modal.state?.onCancel) {
+      modal.state?.onCancel();
+    }
+    modal.close();
+  }, [modal]);
 
   return (
     <ConfirmContext.Provider value={contextValue}>
@@ -81,11 +73,9 @@ function Confirm({ children }) {
         disableButtons={actionInProgress}
       >
         {modal.state?.prompt ?? <div />}
-        {
-          (modal.state?.renderError && modal.state?.error)
-            ? modal.state.renderError(modal.state.error)
-            : null
-        }
+        {modal.state?.renderError && modal.state?.error
+          ? modal.state.renderError(modal.state.error)
+          : null}
       </ConfirmModal>
     </ConfirmContext.Provider>
   );
@@ -102,25 +92,18 @@ export function useConfirm() {
 
 export function useGraphQLConfirm(): ConfirmFunction {
   const confirm = useConfirm();
-  const defaultRenderError = useCallback(
-    (error) => <ErrorDisplay graphQLError={error} />,
-    [],
-  );
-  const augmentedConfirmWithDefaults = useMemo(
-    () => {
-      const confirmWithDefaults = (options: ConfirmModalState) => confirm(
-        { renderError: defaultRenderError, ...options },
-      );
-      confirmWithDefaults.visible = confirm.visible;
-      return confirmWithDefaults;
-    },
-    [confirm, defaultRenderError],
-  );
+  const defaultRenderError = useCallback((error) => <ErrorDisplay graphQLError={error} />, []);
+  const augmentedConfirmWithDefaults = useMemo(() => {
+    const confirmWithDefaults = (options: ConfirmModalState) =>
+      confirm({ renderError: defaultRenderError, ...options });
+    confirmWithDefaults.visible = confirm.visible;
+    return confirmWithDefaults;
+  }, [confirm, defaultRenderError]);
   return augmentedConfirmWithDefaults;
 }
 
 export type ConfirmTriggerProps = {
-  children: (confirm: ConfirmFunction) => ReactNode,
+  children: (confirm: ConfirmFunction) => ReactNode;
 };
 
 function ConfirmTrigger({ children }: ConfirmTriggerProps) {

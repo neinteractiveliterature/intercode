@@ -32,14 +32,9 @@ function NewDepartment() {
 
   return (
     <>
-      <h1 className="mb-4">
-        New department
-      </h1>
+      <h1 className="mb-4">New department</h1>
 
-      <DepartmentForm
-        initialDepartment={{ name: '', proposal_description: '' }}
-        onSave={onSave}
-      />
+      <DepartmentForm initialDepartment={{ name: '', proposal_description: '' }} onSave={onSave} />
     </>
   );
 }

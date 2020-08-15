@@ -21,16 +21,12 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }) {
       tooltipContent={signupOption.helpText}
     >
       <strong>{t('signups.signupButton', 'Sign up')}</strong>
-      {
-        signupOption.label
-          ? (
-            <>
-              <br />
-              {signupOption.label}
-            </>
-          )
-          : null
-      }
+      {signupOption.label ? (
+        <>
+          <br />
+          {signupOption.label}
+        </>
+      ) : null}
     </ButtonWithTooltip>
   );
 }

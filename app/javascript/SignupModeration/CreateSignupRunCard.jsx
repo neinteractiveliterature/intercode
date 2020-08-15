@@ -35,14 +35,15 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   };
 
   const [withdrawSignupMutate] = useMutation(WithdrawUserSignup);
-  const withdrawSignup = () => confirm({
-    prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from ${data.event.title}?`,
-    action: async () => {
-      await withdrawSignupMutate({ variables: { runId, userConProfileId } });
-      await apolloClient.resetStore();
-    },
-    renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
-  });
+  const withdrawSignup = () =>
+    confirm({
+      prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from ${data.event.title}?`,
+      action: async () => {
+        await withdrawSignupMutate({ variables: { runId, userConProfileId } });
+        await apolloClient.resetStore();
+      },
+      renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
+    });
 
   const signupOptions = useMemo(
     () => (error || loading ? null : buildSignupOptions(data.event, data.userConProfile)),
@@ -50,12 +51,20 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   );
 
   const mySignup = useMemo(
-    () => (error || loading ? null : data.userConProfile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn')),
+    () =>
+      error || loading
+        ? null
+        : data.userConProfile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn'),
     [data, error, loading, runId],
   );
 
   const myPendingSignupRequest = useMemo(
-    () => (error || loading ? null : data.userConProfile.signup_requests.find((sr) => sr.target_run.id === runId && sr.state === 'pending')),
+    () =>
+      error || loading
+        ? null
+        : data.userConProfile.signup_requests.find(
+            (sr) => sr.target_run.id === runId && sr.state === 'pending',
+          ),
     [data, error, loading, runId],
   );
 
@@ -83,7 +92,11 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
       myProfile={data.userConProfile}
       createSignup={createSignup}
       withdrawSignup={withdrawSignup}
-      withdrawPendingSignupRequest={() => alert('Admins cannot withdraw other users’ pending signup requests.  To accept or reject this request, go to the Moderation Queue tab.')}
+      withdrawPendingSignupRequest={() =>
+        alert(
+          'Admins cannot withdraw other users’ pending signup requests.  To accept or reject this request, go to the Moderation Queue tab.',
+        )
+      }
     />
   );
 }

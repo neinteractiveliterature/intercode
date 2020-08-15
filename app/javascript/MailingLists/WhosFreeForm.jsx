@@ -33,47 +33,41 @@ function WhosFreeForm({ onSubmit }) {
   const [finish, setFinish] = useState(null);
   const [day, setDay] = useState(null);
 
-  const renderTimeSelects = useCallback(
-    () => {
-      if (day == null) {
-        return null;
-      }
+  const renderTimeSelects = useCallback(() => {
+    if (day == null) {
+      return null;
+    }
 
-      const startTimespan = new Timespan(day, day.clone().add(1, 'day'));
-      const finishTimespan = new Timespan(start || day, startTimespan.finish);
+    const startTimespan = new Timespan(day, day.clone().add(1, 'day'));
+    const finishTimespan = new Timespan(start || day, startTimespan.finish);
 
-      return (
-        <div className="d-flex mb-4">
-          <div className="mr-4">
-            from
-            <TimeSelect
-              timespan={startTimespan}
-              value={momentToTimeObject(start)}
-              onChange={(newTime) => setStart(makeTimeOfDay(start, day, newTime))}
-            />
-          </div>
-          <div>
-            until
-            <TimeSelect
-              timespan={finishTimespan}
-              value={momentToTimeObject(finish)}
-              onChange={(newTime) => setFinish(makeTimeOfDay(finish, day, newTime))}
-            />
-          </div>
+    return (
+      <div className="d-flex mb-4">
+        <div className="mr-4">
+          from
+          <TimeSelect
+            timespan={startTimespan}
+            value={momentToTimeObject(start)}
+            onChange={(newTime) => setStart(makeTimeOfDay(start, day, newTime))}
+          />
         </div>
-      );
-    },
-    [day, start, finish],
-  );
+        <div>
+          until
+          <TimeSelect
+            timespan={finishTimespan}
+            value={momentToTimeObject(finish)}
+            onChange={(newTime) => setFinish(makeTimeOfDay(finish, day, newTime))}
+          />
+        </div>
+      </div>
+    );
+  }, [day, start, finish]);
 
-  const dayChanged = useCallback(
-    (newDay) => {
-      setDay(newDay);
-      setStart(null);
-      setFinish(null);
-    },
-    [],
-  );
+  const dayChanged = useCallback((newDay) => {
+    setDay(newDay);
+    setStart(null);
+    setFinish(null);
+  }, []);
 
   const search = useCallback(
     (event) => {
@@ -98,11 +92,7 @@ function WhosFreeForm({ onSubmit }) {
       <div className="card-body">
         <h5>Timespan to search within</h5>
 
-        <ConventionDaySelect
-          convention={convention}
-          value={day}
-          onChange={dayChanged}
-        />
+        <ConventionDaySelect convention={convention} value={day} onChange={dayChanged} />
 
         {renderTimeSelects()}
 

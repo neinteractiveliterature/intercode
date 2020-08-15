@@ -1,8 +1,8 @@
 import React, { InputHTMLAttributes } from 'react';
 
 export type EmailAliasInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  onTextChange: (value: string) => void,
-  domain: string,
+  onTextChange: (value: string) => void;
+  domain: string;
 };
 
 function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInputProps) {
@@ -16,10 +16,7 @@ function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInpu
         {...otherProps}
       />
       <div className="input-group-append">
-        <span className="input-group-text">
-          @
-          {domain}
-        </span>
+        <span className="input-group-text">@{domain}</span>
       </div>
     </div>
   );

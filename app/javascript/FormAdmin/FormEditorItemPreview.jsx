@@ -28,9 +28,9 @@ function describeFormItemForDelete(formItem, standardItem) {
 function FormEditorItemPreview({ formItem, index }) {
   const confirm = useConfirm();
   const match = useRouteMatch();
-  const {
-    convention, currentSection, form, formType, renderedFormItemsById,
-  } = useContext(FormEditorContext);
+  const { convention, currentSection, form, formType, renderedFormItemsById } = useContext(
+    FormEditorContext,
+  );
   const renderedFormItem = renderedFormItemsById.get(formItem.id);
   const [moveFormItem] = useMutation(MoveFormItem);
   const [deleteFormItem] = useMutation(DeleteFormItem, {
@@ -43,7 +43,9 @@ function FormEditorItemPreview({ formItem, index }) {
   const moveItem = useCallback(
     (dragIndex, hoverIndex) => {
       const optimisticItems = buildOptimisticArrayForMove(
-        currentSection.form_items, dragIndex, hoverIndex,
+        currentSection.form_items,
+        dragIndex,
+        hoverIndex,
       ).map(serializeParsedFormItem);
 
       moveFormItem({
@@ -71,7 +73,10 @@ function FormEditorItemPreview({ formItem, index }) {
   const standardItem = ((formType || {}).standard_items || {})[formItem.identifier];
 
   return (
-    <div ref={ref} className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}>
+    <div
+      ref={ref}
+      className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}
+    >
       <div className="mr-2 mt-2">
         <span className="sr-only">Drag to reorder</span>
         <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
@@ -83,21 +88,15 @@ function FormEditorItemPreview({ formItem, index }) {
         >
           {formItem.identifier && (
             <div className="form-editor-item-identifier">
-              {standardItem
-                ? (
-                  <>
-                    <i className="fa fa-wrench" />
-                    {' '}
-                    {standardItem.description}
-                  </>
-                )
-                : (
-                  <>
-                    <i className="fa fa-tag" />
-                    {' '}
-                    {formItem.identifier}
-                  </>
-                )}
+              {standardItem ? (
+                <>
+                  <i className="fa fa-wrench" /> {standardItem.description}
+                </>
+              ) : (
+                <>
+                  <i className="fa fa-tag" /> {formItem.identifier}
+                </>
+              )}
             </div>
           )}
           <div className="font-weight-bold">Click to edit</div>
@@ -106,35 +105,38 @@ function FormEditorItemPreview({ formItem, index }) {
         <FormItemInput
           convention={convention}
           formItem={renderedFormItem}
-          onInteract={() => { }}
+          onInteract={() => {}}
           value={formItem.default_value}
         />
       </div>
       <div className="ml-2 mt-2">
-        {(standardItem && standardItem.required)
-          ? (
-            <ButtonWithTooltip
-              buttonProps={{ className: 'btn btn-outline-danger btn-sm', disabled: true }}
-              tooltipContent={`${standardItem.description} is required for ${formType.description}`}
-            >
-              <span className="sr-only">Delete item</span>
-              <i className="fa fa-trash-o" />
-            </ButtonWithTooltip>
-          )
-          : (
-            <button
-              className="btn btn-outline-danger btn-sm"
-              type="button"
-              onClick={() => confirm({
-                prompt: `Are you sure you want to delete ${describeFormItemForDelete(formItem, standardItem)}?`,
+        {standardItem && standardItem.required ? (
+          <ButtonWithTooltip
+            buttonProps={{ className: 'btn btn-outline-danger btn-sm', disabled: true }}
+            tooltipContent={`${standardItem.description} is required for ${formType.description}`}
+          >
+            <span className="sr-only">Delete item</span>
+            <i className="fa fa-trash-o" />
+          </ButtonWithTooltip>
+        ) : (
+          <button
+            className="btn btn-outline-danger btn-sm"
+            type="button"
+            onClick={() =>
+              confirm({
+                prompt: `Are you sure you want to delete ${describeFormItemForDelete(
+                  formItem,
+                  standardItem,
+                )}?`,
                 action: () => deleteFormItem({ variables: { id: formItem.id } }),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
-              })}
-            >
-              <span className="sr-only">Delete item</span>
-              <i className="fa fa-trash-o" />
-            </button>
-          )}
+              })
+            }
+          >
+            <span className="sr-only">Delete item</span>
+            <i className="fa fa-trash-o" />
+          </button>
+        )}
       </div>
     </div>
   );

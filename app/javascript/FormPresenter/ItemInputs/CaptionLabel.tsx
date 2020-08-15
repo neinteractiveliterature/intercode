@@ -2,14 +2,15 @@ import React from 'react';
 import RequiredIndicator from './RequiredIndicator';
 import { ParsedFormItem } from '../../FormAdmin/FormItemUtils';
 
-export type CaptionLabelProps<PropertiesType extends { caption: string, required?: boolean }> = {
-  formItem: ParsedFormItem<PropertiesType, any>,
-  htmlFor: string,
+export type CaptionLabelProps<PropertiesType extends { caption: string; required?: boolean }> = {
+  formItem: ParsedFormItem<PropertiesType, any>;
+  htmlFor: string;
 };
 
-function CaptionLabel<PropertiesType extends { caption: string, required?: boolean }>(
-  { formItem, htmlFor }: CaptionLabelProps<PropertiesType>,
-) {
+function CaptionLabel<PropertiesType extends { caption: string; required?: boolean }>({
+  formItem,
+  htmlFor,
+}: CaptionLabelProps<PropertiesType>) {
   return (
     <label className="form-item-label" htmlFor={htmlFor}>
       <span

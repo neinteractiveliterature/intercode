@@ -47,7 +47,8 @@ function NewCmsContentGroup() {
         cmsContentGroup: {
           name: contentGroup.name,
           contents: contentGroup.contents.map(({ id, __typename }) => ({
-            id, content_type: __typename,
+            id,
+            content_type: __typename,
           })),
         },
         permissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),

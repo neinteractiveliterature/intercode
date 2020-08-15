@@ -30,10 +30,7 @@ const BLANK_VALUES = {
 
 function CouponForm({ value, onChange }) {
   const setCouponField = useStatePropertyUpdater(onChange);
-  const discountMode = useMemo(
-    () => DISCOUNT_MODES.find((mode) => value[mode] != null),
-    [value],
-  );
+  const discountMode = useMemo(() => DISCOUNT_MODES.find((mode) => value[mode] != null), [value]);
 
   const setDiscountMode = (newDiscountMode) => {
     const discountFields = DISCOUNT_MODES.reduce(

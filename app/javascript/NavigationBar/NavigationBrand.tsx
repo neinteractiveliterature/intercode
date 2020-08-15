@@ -6,15 +6,17 @@ import NavigationBarContext from './NavigationBarContext';
 
 export type NavigationBrandProps = {
   item: {
-    label: ReactNode,
-  },
+    label: ReactNode;
+  };
 };
 
 function NavigationBrand({ item }) {
   const { hideBrand } = useContext(NavigationBarContext);
 
   return (
-    <Link to="/" className={classNames('navbar-brand', { 'd-none': hideBrand })}>{item.label}</Link>
+    <Link to="/" className={classNames('navbar-brand', { 'd-none': hideBrand })}>
+      {item.label}
+    </Link>
   );
 }
 

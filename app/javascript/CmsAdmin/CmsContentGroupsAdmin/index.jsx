@@ -9,10 +9,18 @@ import ViewCmsContentGroup from './ViewCmsContentGroup';
 function CmsContentGroupsAdmin() {
   return (
     <Switch>
-      <Route path="/cms_content_groups/:id/edit"><EditCmsContentGroup /></Route>
-      <Route path="/cms_content_groups/new"><NewCmsContentGroup /></Route>
-      <Route path="/cms_content_groups/:id"><ViewCmsContentGroup /></Route>
-      <Route path="/cms_content_groups"><CmsContentGroupsAdminTable /></Route>
+      <Route path="/cms_content_groups/:id/edit">
+        <EditCmsContentGroup />
+      </Route>
+      <Route path="/cms_content_groups/new">
+        <NewCmsContentGroup />
+      </Route>
+      <Route path="/cms_content_groups/:id">
+        <ViewCmsContentGroup />
+      </Route>
+      <Route path="/cms_content_groups">
+        <CmsContentGroupsAdminTable />
+      </Route>
     </Switch>
   );
 }

@@ -20,33 +20,26 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
 
   const initialPermissions = useMemo(
-    () => initialOrganizationRole.permissions
-      .map((permission) => ({ ...permission, model: initialOrganizationRole })),
+    () =>
+      initialOrganizationRole.permissions.map((permission) => ({
+        ...permission,
+        model: initialOrganizationRole,
+      })),
     [initialOrganizationRole],
   );
 
-  const users = useMemo(
-    () => usersChangeSet.apply(initialOrganizationRole.users),
-    [usersChangeSet, initialOrganizationRole],
-  );
+  const users = useMemo(() => usersChangeSet.apply(initialOrganizationRole.users), [
+    usersChangeSet,
+    initialOrganizationRole,
+  ]);
 
   const renderForm = () => (
     <>
-      <BootstrapFormInput
-        name="name"
-        label="Role name"
-        value={name}
-        onTextChange={onNameChange}
-      />
+      <BootstrapFormInput name="name" label="Role name" value={name} onTextChange={onNameChange} />
 
       <div className="form-group">
         <label htmlFor="users">Users</label>
-        <UserSelect
-          isMulti
-          inputId="users"
-          value={users}
-          onChange={onChangeUsers}
-        />
+        <UserSelect isMulti inputId="users" value={users} onChange={onChangeUsers} />
       </div>
 
       <fieldset>

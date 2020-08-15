@@ -3,9 +3,9 @@ import MomentPropTypes from 'react-moment-proptypes';
 import moment, { Moment } from 'moment-timezone';
 
 export type FuzzyTime = {
-  hour?: number,
-  minute?: number,
-  second?: number,
+  hour?: number;
+  minute?: number;
+  second?: number;
 };
 
 export const FuzzyTimePropType = PropTypes.shape({
@@ -15,9 +15,9 @@ export const FuzzyTimePropType = PropTypes.shape({
 });
 
 export type TimeblockDefinition = {
-  label: string,
-  start: FuzzyTime,
-  finish: FuzzyTime,
+  label: string;
+  start: FuzzyTime;
+  finish: FuzzyTime;
 };
 
 export const TimeblockPropType = PropTypes.shape({
@@ -27,8 +27,8 @@ export const TimeblockPropType = PropTypes.shape({
 });
 
 export type TimeblockOmission = {
-  label: string,
-  date: string,
+  label: string;
+  date: string;
 };
 
 export const TimeblockOmissionPropType = PropTypes.shape({
@@ -39,8 +39,8 @@ export const TimeblockOmissionPropType = PropTypes.shape({
 export type TimeblockPreferenceOrdinality = '1' | '2' | '3' | 'X';
 
 type TimeblockPreferenceCommon = {
-  label: string,
-  ordinality: TimeblockPreferenceOrdinality,
+  label: string;
+  ordinality: TimeblockPreferenceOrdinality;
 };
 
 const timeblockPreferenceCommonProps = {
@@ -49,8 +49,8 @@ const timeblockPreferenceCommonProps = {
 };
 
 export type ParsedTimeblockPreference = TimeblockPreferenceCommon & {
-  start: Moment,
-  finish: Moment,
+  start: Moment;
+  finish: Moment;
 };
 
 export const TimeblockPreferencePropType = PropTypes.shape({
@@ -60,8 +60,8 @@ export const TimeblockPreferencePropType = PropTypes.shape({
 });
 
 export type UnparsedTimeblockPreference = TimeblockPreferenceCommon & {
-  start: string,
-  finish: string,
+  start: string;
+  finish: string;
 };
 
 export const TimeblockPreferenceAPIRepresentationPropType = PropTypes.shape({
@@ -70,9 +70,10 @@ export const TimeblockPreferenceAPIRepresentationPropType = PropTypes.shape({
   ...timeblockPreferenceCommonProps,
 });
 
-export type TimeblockPreferenceForComparison = (
-  Pick<ParsedTimeblockPreference | UnparsedTimeblockPreference, 'start' | 'finish'>
-);
+export type TimeblockPreferenceForComparison = Pick<
+  ParsedTimeblockPreference | UnparsedTimeblockPreference,
+  'start' | 'finish'
+>;
 
 export function parseTimeblockPreference(
   unparsedPreference: UnparsedTimeblockPreference,

@@ -9,13 +9,16 @@ import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import { useEventHistoryQueryQuery } from './eventHistoryQuery.generated';
 
 const EXCLUDE_FIELDS = new Set([
-  'minimum_age', 'age_restrictions_description',
-  'con_mail_destination', 'email', 'team_mailing_list_name',
+  'minimum_age',
+  'age_restrictions_description',
+  'con_mail_destination',
+  'email',
+  'team_mailing_list_name',
 ]);
 
 export type EventHistoryProps = {
-  eventId: number,
-  eventPath: string,
+  eventId: number;
+  eventPath: string;
 };
 
 function EventHistory({ eventId, eventPath }: EventHistoryProps) {
@@ -25,12 +28,12 @@ function EventHistory({ eventId, eventPath }: EventHistoryProps) {
   });
 
   const changes = useMemo(
-    () => ((loading || error || !data)
-      ? []
-      : data.event.form_response_changes.filter((change) => (
-        !EXCLUDE_FIELDS.has(change.field_identifier)
-      ))
-    ),
+    () =>
+      loading || error || !data
+        ? []
+        : data.event.form_response_changes.filter(
+            (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
+          ),
     [data, error, loading],
   );
 
@@ -46,7 +49,9 @@ function EventHistory({ eventId, eventPath }: EventHistoryProps) {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItem to={eventPath} active={false}>{data!.event.title}</BreadcrumbItem>
+          <BreadcrumbItem to={eventPath} active={false}>
+            {data!.event.title}
+          </BreadcrumbItem>
           <RouteActivatedBreadcrumbItem
             matchProps={{ path: `${eventPath}/history`, exact: true }}
             to={`${eventPath}/history`}

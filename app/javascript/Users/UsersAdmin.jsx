@@ -15,16 +15,18 @@ function UserBreadcrumbItem() {
   const { data, loading, error } = useQuery(UserAdminQuery, { variables: { id } });
 
   if (loading) {
-    return <BreadcrumbItem active><LoadingIndicator /></BreadcrumbItem>;
+    return (
+      <BreadcrumbItem active>
+        <LoadingIndicator />
+      </BreadcrumbItem>
+    );
   }
 
   if (error) {
     return null;
   }
 
-  return (
-    <BreadcrumbItem active>{data.user.name}</BreadcrumbItem>
-  );
+  return <BreadcrumbItem active>{data.user.name}</BreadcrumbItem>;
 }
 
 function UsersAdmin() {
@@ -44,8 +46,12 @@ function UsersAdmin() {
       </ol>
 
       <Switch>
-        <Route path="/users/:id"><UserAdminDisplay /></Route>
-        <Route path="/users"><UsersTable /></Route>
+        <Route path="/users/:id">
+          <UserAdminDisplay />
+        </Route>
+        <Route path="/users">
+          <UsersTable />
+        </Route>
       </Switch>
     </>
   );

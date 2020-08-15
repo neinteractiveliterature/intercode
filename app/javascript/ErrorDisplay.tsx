@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import { ApolloError } from '@apollo/client';
 
 export type ErrorDisplayProps = {
-  stringError?: string | null,
-  graphQLError?: ApolloError | null,
+  stringError?: string | null;
+  graphQLError?: ApolloError | null;
 };
 
 const ErrorDisplay = ({ stringError, graphQLError }: ErrorDisplayProps) => {
@@ -17,9 +17,7 @@ const ErrorDisplay = ({ stringError, graphQLError }: ErrorDisplayProps) => {
           <li key={i}>{error.message}</li>
         ));
 
-        displayContents = (
-          <ul className="list-unstyled m-0">{errorMessages}</ul>
-        );
+        displayContents = <ul className="list-unstyled m-0">{errorMessages}</ul>;
       } else {
         displayContents = <pre>{graphQLError.message}</pre>;
       }
@@ -36,9 +34,7 @@ const ErrorDisplay = ({ stringError, graphQLError }: ErrorDisplayProps) => {
     return null;
   }
 
-  return (
-    <div className="alert alert-danger">{displayContents}</div>
-  );
+  return <div className="alert alert-danger">{displayContents}</div>;
 };
 
 export default ErrorDisplay;

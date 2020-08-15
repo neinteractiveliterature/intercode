@@ -1,17 +1,17 @@
 fragment PermissionedModelFields on PermissionedModel {
   __typename
 
-  ...on CmsContentGroup {
+  ... on CmsContentGroup {
     id
     name
   }
 
-  ...on Convention {
+  ... on Convention {
     id
     name
   }
 
-  ...on EventCategory {
+  ... on EventCategory {
     id
     name
     default_color
@@ -21,12 +21,12 @@ fragment PermissionedModelFields on PermissionedModel {
 fragment PermissionedRoleFields on PermissionedRole {
   __typename
 
-  ...on StaffPosition {
+  ... on StaffPosition {
     id
     name
   }
 
-  ...on OrganizationRole {
+  ... on OrganizationRole {
     id
     name
   }

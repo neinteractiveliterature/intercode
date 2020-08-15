@@ -5,15 +5,15 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useStatePropertyUpdater from '../useStatePropertyUpdater';
 
 export type UserFormState = {
-  first_name?: string,
-  last_name?: string,
-  email?: string,
+  first_name?: string;
+  last_name?: string;
+  email?: string;
 };
 
 export type UserFormFieldsProps = {
-  formState: UserFormState,
-  setFormState: React.Dispatch<React.SetStateAction<UserFormState>>,
-  showNameWarning?: boolean,
+  formState: UserFormState;
+  setFormState: React.Dispatch<React.SetStateAction<UserFormState>>;
+  showNameWarning?: boolean;
 };
 
 function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFieldsProps) {

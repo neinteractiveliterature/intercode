@@ -42,7 +42,12 @@ function NewEmailRouteModal({ visible, close }) {
           Cancel
         </button>
 
-        <button className="btn btn-primary" type="button" onClick={createClicked} disabled={inProgress}>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={createClicked}
+          disabled={inProgress}
+        >
           Create email route
         </button>
       </div>

@@ -25,9 +25,7 @@ function renderChoiceCounts(choiceData) {
 
   return (
     <span title={title}>
-      {choiceData.confirmed || 0}
-      /
-      {choiceData.total}
+      {choiceData.confirmed || 0}/{choiceData.total}
     </span>
   );
 }
@@ -35,33 +33,29 @@ function renderChoiceCounts(choiceData) {
 function EventsByChoice() {
   const { data, loading, error } = useQuery(EventsByChoiceQuery);
 
-  const choiceColumns = useMemo(
-    () => {
-      if (loading || error) {
-        return 0;
-      }
+  const choiceColumns = useMemo(() => {
+    if (loading || error) {
+      return 0;
+    }
 
-      const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) => (
-        eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice)
-      ));
+    const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) =>
+      eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice),
+    );
 
-      return Array.from({ length: max(choices) }, (element, index) => index + 1);
-    },
-    [data, loading, error],
-  );
+    return Array.from({ length: max(choices) }, (element, index) => index + 1);
+  }, [data, loading, error]);
 
   const filteredRows = useMemo(
-    () => (loading || error
-      ? []
-      : data.convention.reports.events_by_choice.filter((row) => row.choice_counts.length > 0)
-    ),
+    () =>
+      loading || error
+        ? []
+        : data.convention.reports.events_by_choice.filter((row) => row.choice_counts.length > 0),
     [data, loading, error],
   );
 
-  const sortedRows = useMemo(
-    () => titleSort(filteredRows, (row) => row.event.title),
-    [filteredRows],
-  );
+  const sortedRows = useMemo(() => titleSort(filteredRows, (row) => row.event.title), [
+    filteredRows,
+  ]);
 
   // producing an array of rows where each row looks like:
   // {
@@ -69,23 +63,24 @@ function EventsByChoice() {
   //   choiceCountsProcessed: { '1': { confirmed: 1, waitlisted: 2, withdrawn: 1, total: 4 } }
   // }
   const processedRows = useMemo(
-    () => sortedRows.map((row) => ({
-      ...row,
-      choiceCountsProcessed: mapValues(
-        groupBy(row.choice_counts, (choiceCount) => choiceCount.choice),
-        (choiceCounts) => {
-          const countsByState = mapValues(
-            keyBy(choiceCounts, (choiceCount) => choiceCount.state),
-            (choiceCount) => choiceCount.count,
-          );
+    () =>
+      sortedRows.map((row) => ({
+        ...row,
+        choiceCountsProcessed: mapValues(
+          groupBy(row.choice_counts, (choiceCount) => choiceCount.choice),
+          (choiceCounts) => {
+            const countsByState = mapValues(
+              keyBy(choiceCounts, (choiceCount) => choiceCount.state),
+              (choiceCount) => choiceCount.count,
+            );
 
-          return {
-            ...countsByState,
-            total: sum(Object.values(countsByState)),
-          };
-        },
-      ),
-    })),
+            return {
+              ...countsByState,
+              total: sum(Object.values(countsByState)),
+            };
+          },
+        ),
+      })),
     [sortedRows],
   );
 
@@ -104,17 +99,13 @@ function EventsByChoice() {
       <h1 className="mb-4">Events by choice</h1>
 
       <p>
-        Numbers are presented as &ldquo;Confirmed / All Signups&rdquo;. All Signups include
-        {' '}
+        Numbers are presented as &ldquo;Confirmed / All Signups&rdquo;. All Signups include{' '}
         Confirmed, Waitlisted and Withdrawn.
       </p>
 
       <p className="text-muted">
-        Event team members are excluded from these counts.
-        {' '}
-        Note that there may be some players waitlisted for this game because the bucket they
-        {' '}
-        requested was full.
+        Event team members are excluded from these counts. Note that there may be some players
+        waitlisted for this game because the bucket they requested was full.
       </p>
 
       <table className="table table-bordered table-hover">

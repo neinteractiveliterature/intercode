@@ -1,4 +1,8 @@
-import { mutator, combineStateChangeCalculators, Transforms } from '../../app/javascript/ComposableFormUtils';
+import {
+  mutator,
+  combineStateChangeCalculators,
+  Transforms,
+} from '../../app/javascript/ComposableFormUtils';
 
 const initialGizmo = {
   shouldntChange: 1,
@@ -31,57 +35,51 @@ describe('state change calculators', () => {
   const stateChangeCalculator = combineStateChangeCalculators(transforms);
 
   test('it changes state properly for a boolean field', () => {
-    expect(stateChangeCalculator.gizmo.booleanField(
-      state,
-      'true',
-    ).gizmo.booleanField).toEqual(true);
+    expect(stateChangeCalculator.gizmo.booleanField(state, 'true').gizmo.booleanField).toEqual(
+      true,
+    );
 
-    expect(stateChangeCalculator.gizmo.booleanField(
-      state,
-      'false',
-    ).gizmo.booleanField).toEqual(false);
+    expect(stateChangeCalculator.gizmo.booleanField(state, 'false').gizmo.booleanField).toEqual(
+      false,
+    );
   });
 
   test('it changes state properly for an integer field', () => {
-    expect(stateChangeCalculator.gizmo.intField(
-      state,
-      '8675309',
-    ).gizmo.intField).toEqual(8675309);
+    expect(stateChangeCalculator.gizmo.intField(state, '8675309').gizmo.intField).toEqual(8675309);
   });
 
   test('it changes state properly for a datetime field', () => {
-    expect(stateChangeCalculator.gizmo.datetimeField(
-      state,
-      '2017-01-01T17:00:00.000Z',
-    ).gizmo.datetimeField).toEqual('2017-01-01T17:00:00.000Z');
+    expect(
+      stateChangeCalculator.gizmo.datetimeField(state, '2017-01-01T17:00:00.000Z').gizmo
+        .datetimeField,
+    ).toEqual('2017-01-01T17:00:00.000Z');
   });
 
   test('it changes state properly for a timezoned datetime field', () => {
-    expect(stateChangeCalculator.gizmo.datetimeEasternField(
-      state,
-      '2017-01-01T17:00:00.000Z',
-    ).gizmo.datetimeEasternField).toEqual('2017-01-01T12:00:00.000-05:00');
+    expect(
+      stateChangeCalculator.gizmo.datetimeEasternField(state, '2017-01-01T17:00:00.000Z').gizmo
+        .datetimeEasternField,
+    ).toEqual('2017-01-01T12:00:00.000-05:00');
   });
 
   test('it changes state properly for a forced-timezone datetime field', () => {
-    expect(stateChangeCalculator.gizmo.datetimeForceEasternField(
-      state,
-      '2017-01-01T17:00:00.000Z',
-    ).gizmo.datetimeForceEasternField).toEqual('2017-01-01T17:00:00.000-05:00');
+    expect(
+      stateChangeCalculator.gizmo.datetimeForceEasternField(state, '2017-01-01T17:00:00.000Z').gizmo
+        .datetimeForceEasternField,
+    ).toEqual('2017-01-01T17:00:00.000-05:00');
   });
 
   test('it changes state properly for a select multiple field', () => {
-    expect(stateChangeCalculator.gizmo.selectMultipleField(
-      state,
-      [{ value: 'a' }, { value: 'c' }],
-    ).gizmo.selectMultipleField).toEqual(['a', 'c']);
+    expect(
+      stateChangeCalculator.gizmo.selectMultipleField(state, [{ value: 'a' }, { value: 'c' }]).gizmo
+        .selectMultipleField,
+    ).toEqual(['a', 'c']);
   });
 
   test('it just throws the value in for anything else', () => {
-    expect(stateChangeCalculator.gizmo.objectField(
-      state,
-      { a: 6 },
-    ).gizmo.objectField).toEqual({ a: 6 });
+    expect(stateChangeCalculator.gizmo.objectField(state, { a: 6 }).gizmo.objectField).toEqual({
+      a: 6,
+    });
   });
 });
 
@@ -91,7 +89,9 @@ describe('mutator', () => {
 
     const theMutator = mutator({
       getState: () => mutableState,
-      setState: (value) => { mutableState = { ...mutableState, ...value }; },
+      setState: (value) => {
+        mutableState = { ...mutableState, ...value };
+      },
       transforms,
     });
 
