@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  NavLink,
-  Switch,
-  Route,
-  Redirect,
-  useRouteMatch,
-} from 'react-router-dom';
+import { NavLink, Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
 import RunEmailList from './RunEmailList';
@@ -14,9 +8,7 @@ import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
 import RunSignupChangesTable from './RunSignupChangesTable';
 
-function SignupsIndex({
-  runId, eventId, runPath,
-}) {
+function SignupsIndex({ runId, eventId, runPath }) {
   const { t } = useTranslation();
   const signupsTabMatch = useRouteMatch({ path: `${runPath}/admin_signups`, exact: true });
   const signupChangesTabMatch = useRouteMatch({ path: `${runPath}/admin_signups/signup_changes` });
@@ -61,10 +53,8 @@ function SignupsIndex({
         <Route path={`${runPath}/admin_signups/emails/semicolon`}>
           <div className="alert alert-warning mb-2">
             <Trans i18nKey="events.signupsAdmin.emailsSemicolonWarning">
-              <strong>Note:</strong>
-              {' '}
-              Most email apps use comma-separated address lists.  Only Outlook uses
-              semicolon-separated address lists.  If you’re not using Outlook, try
+              <strong>Note:</strong> Most email apps use comma-separated address lists. Only Outlook
+              uses semicolon-separated address lists. If you’re not using Outlook, try
               comma-separated first.
             </Trans>
           </div>
@@ -78,7 +68,14 @@ function SignupsIndex({
             runId={runId}
             eventId={eventId}
             runPath={runPath}
-            defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
+            defaultVisibleColumns={[
+              'id',
+              'state',
+              'name',
+              'bucket',
+              'age_restrictions_check',
+              'email',
+            ]}
           />
         </Route>
         <Redirect to={`${runPath}/admin_signups`} />

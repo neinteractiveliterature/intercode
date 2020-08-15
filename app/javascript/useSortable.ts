@@ -1,9 +1,5 @@
-import {
-  useCallback, useRef, RefObject, MutableRefObject,
-} from 'react';
-import {
-  useDrag, useDrop, DragSourceOptions, DragElementWrapper,
-} from 'react-dnd';
+import { useCallback, useRef, RefObject, MutableRefObject } from 'react';
+import { useDrag, useDrop, DragSourceOptions, DragElementWrapper } from 'react-dnd';
 
 export type MoveItemFunction = (dragIndex: number, hoverIndex: number) => void;
 
@@ -62,11 +58,7 @@ export default function useSortable<T extends HTMLElement>(
   index: number,
   moveItem: MoveItemFunction,
   itemType: string,
-): [
-    MutableRefObject<T | null>,
-    DragElementWrapper<DragSourceOptions>,
-    { isDragging: boolean }
-  ] {
+): [MutableRefObject<T | null>, DragElementWrapper<DragSourceOptions>, { isDragging: boolean }] {
   const ref = useRef<T>(null);
   const [{ isDragging }, drag, preview] = useDrag({
     item: { index, type: itemType },

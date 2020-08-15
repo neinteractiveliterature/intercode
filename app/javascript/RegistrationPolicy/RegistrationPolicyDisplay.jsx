@@ -35,7 +35,11 @@ function renderBucketOptions(bucket, preset) {
 
   return (
     <div className="ml-2">
-      {bucketOptions.map((option) => <span className="badge badge-secondary" key={option}>{option}</span>)}
+      {bucketOptions.map((option) => (
+        <span className="badge badge-secondary" key={option}>
+          {option}
+        </span>
+      ))}
     </div>
   );
 }
@@ -44,33 +48,15 @@ function RegistrationPolicyDisplayBucketRow({ bucket, preset }) {
   return (
     <tr>
       <td>{bucket.name}</td>
-      {
-        preset
-          ? null
-          : <td>{bucket.description}</td>
-      }
+      {preset ? null : <td>{bucket.description}</td>}
       <td>
         <div className="d-flex flex-column flex-lg-row">
-          <div className="flex-grow-1">
-            Min:
-            {' '}
-            {bucket.minimum_slots}
-          </div>
-          <div className="flex-grow-1">
-            Pref:
-            {' '}
-            {bucket.preferred_slots}
-          </div>
-          <div className="flex-grow-1">
-            Max:
-            {' '}
-            {bucket.total_slots}
-          </div>
+          <div className="flex-grow-1">Min: {bucket.minimum_slots}</div>
+          <div className="flex-grow-1">Pref: {bucket.preferred_slots}</div>
+          <div className="flex-grow-1">Max: {bucket.total_slots}</div>
         </div>
       </td>
-      <td>
-        {renderBucketOptions(bucket, preset)}
-      </td>
+      <td>{renderBucketOptions(bucket, preset)}</td>
     </tr>
   );
 }
@@ -91,10 +77,10 @@ RegistrationPolicyDisplayBucketRow.defaultProps = {
 };
 
 function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
-  const preset = useMemo(
-    () => findPreset(registrationPolicy, presets),
-    [presets, registrationPolicy],
-  );
+  const preset = useMemo(() => findPreset(registrationPolicy, presets), [
+    presets,
+    registrationPolicy,
+  ]);
   const isUnlimited = useMemo(
     () => !registrationPolicy.buckets.some((bucket) => bucket.slots_limited),
     [registrationPolicy.buckets],
@@ -107,8 +93,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
       return (
         <tr>
           <td colSpan={columnCount}>
-            &quot;No preference&quot; option is inapplicable
-            {' '}
+            &quot;No preference&quot; option is inapplicable{' '}
             <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
           </td>
         </tr>
@@ -118,10 +103,11 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
     return (
       <tr>
         <td colSpan={columnCount}>
-          {registrationPolicy.prevent_no_preference_signups
-            ? <span>&quot;No preference&quot; option will not be available</span>
-            : <span>&quot;No preference&quot; option will be available</span>}
-          {' '}
+          {registrationPolicy.prevent_no_preference_signups ? (
+            <span>&quot;No preference&quot; option will not be available</span>
+          ) : (
+            <span>&quot;No preference&quot; option will be available</span>
+          )}{' '}
           <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
         </td>
       </tr>
@@ -135,21 +121,9 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
 
     return (
       <>
-        <div className="flex-grow-1">
-          Min:
-          {' '}
-          {sumMinimumSlots(registrationPolicy)}
-        </div>
-        <div className="flex-grow-1">
-          Pref:
-          {' '}
-          {sumPreferredSlots(registrationPolicy)}
-        </div>
-        <div className="flex-grow-1">
-          Max:
-          {' '}
-          {sumTotalSlots(registrationPolicy)}
-        </div>
+        <div className="flex-grow-1">Min: {sumMinimumSlots(registrationPolicy)}</div>
+        <div className="flex-grow-1">Pref: {sumPreferredSlots(registrationPolicy)}</div>
+        <div className="flex-grow-1">Max: {sumTotalSlots(registrationPolicy)}</div>
       </>
     );
   };
@@ -164,25 +138,15 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
         </tr>
         <tr>
           <th>Bucket name</th>
-          {
-              preset
-                ? null
-                : <th>Description</th>
-            }
+          {preset ? null : <th>Description</th>}
           <th>Limits</th>
           <th />
         </tr>
       </thead>
       <tbody>
-        {registrationPolicy.buckets
-          .sort(bucketSortCompare)
-          .map((bucket) => (
-            <RegistrationPolicyDisplayBucketRow
-              bucket={bucket}
-              preset={preset}
-              key={bucket.key}
-            />
-          ))}
+        {registrationPolicy.buckets.sort(bucketSortCompare).map((bucket) => (
+          <RegistrationPolicyDisplayBucketRow bucket={bucket} preset={preset} key={bucket.key} />
+        ))}
       </tbody>
       <tfoot>
         {renderPreventNoPreferenceSignupsRow()}
@@ -190,9 +154,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
           <td colSpan={columnCount - 2} className="text-right">
             <strong className="mr-2">Total capacity:</strong>
           </td>
-          <td className="d-flex flex-column flex-lg-row">
-            {renderTotals()}
-          </td>
+          <td className="d-flex flex-column flex-lg-row">{renderTotals()}</td>
           <td />
         </tr>
       </tfoot>
@@ -201,13 +163,9 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
 
   return (
     <div className="card">
-      <div className="card-header">
-        Registration policy
-      </div>
+      <div className="card-header">Registration policy</div>
       <div className="d-flex flex-column flex-lg-row">
-        <div className="col-lg-8 p-3">
-          {renderPolicyTable()}
-        </div>
+        <div className="col-lg-8 p-3">{renderPolicyTable()}</div>
         <RegistrationPolicyPreview registrationPolicy={registrationPolicy} />
       </div>
     </div>
@@ -215,10 +173,12 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
 }
 
 RegistrationPolicyDisplay.propTypes = {
-  presets: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    policy: RegistrationPolicyPropType.isRequired,
-  }).isRequired),
+  presets: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      policy: RegistrationPolicyPropType.isRequired,
+    }).isRequired,
+  ),
   registrationPolicy: RegistrationPolicyPropType.isRequired,
 };
 

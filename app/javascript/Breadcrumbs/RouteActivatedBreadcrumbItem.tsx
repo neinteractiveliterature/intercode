@@ -4,14 +4,16 @@ import { useRouteMatch, RouteProps } from 'react-router-dom';
 import BreadcrumbItem from './BreadcrumbItem';
 
 export type RouteActivatedBreadcrumbItemProps = {
-  to: string,
-  matchProps: RouteProps,
-  children: ReactNode,
+  to: string;
+  matchProps: RouteProps;
+  children: ReactNode;
 };
 
-function RouteActivatedBreadcrumbItem(
-  { to, children, matchProps }: RouteActivatedBreadcrumbItemProps,
-) {
+function RouteActivatedBreadcrumbItem({
+  to,
+  children,
+  matchProps,
+}: RouteActivatedBreadcrumbItemProps) {
   const match = useRouteMatch(matchProps);
 
   return (

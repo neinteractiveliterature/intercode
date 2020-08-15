@@ -3,19 +3,22 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
-import { RootSiteAdminQuery } from './queries.gql';
+import { RootSiteAdminQuery } from './queries';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import { UpdateRootSite } from './mutations.gql';
+import { UpdateRootSite } from './mutations';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function useDirtyState(initialState, setDirty) {
   const [value, setValue] = useState(initialState);
-  return [value, (newValue) => {
-    setValue(newValue);
-    setDirty();
-  }];
+  return [
+    value,
+    (newValue) => {
+      setValue(newValue);
+      setDirty();
+    },
+  ];
 }
 
 function EditRootSite() {

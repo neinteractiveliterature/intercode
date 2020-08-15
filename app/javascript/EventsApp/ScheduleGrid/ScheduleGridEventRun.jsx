@@ -9,42 +9,33 @@ import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
 
 function ScheduleGridEventRun({ runDimensions, layoutResult }) {
-  const {
-    schedule, toggleRunDetailsVisibility, visibleRunDetailsIds,
-  } = useContext(ScheduleGridContext);
+  const { schedule, toggleRunDetailsVisibility, visibleRunDetailsIds } = useContext(
+    ScheduleGridContext,
+  );
   const detailsVisible = visibleRunDetailsIds.has(runDimensions.eventRun.runId);
 
   const { eventRun } = runDimensions;
-  const run = useMemo(
-    () => schedule.getRun(eventRun.runId),
-    [schedule, eventRun.runId],
-  );
-  const event = useMemo(
-    () => {
-      if (!run) {
-        return null;
-      }
+  const run = useMemo(() => schedule.getRun(eventRun.runId), [schedule, eventRun.runId]);
+  const event = useMemo(() => {
+    if (!run) {
+      return null;
+    }
 
-      return schedule.getEvent(run.event_id);
-    },
-    [schedule, run],
-  );
+    return schedule.getEvent(run.event_id);
+  }, [schedule, run]);
 
-  const signupCountData = useMemo(
-    () => {
-      if (!run) {
-        return null;
-      }
+  const signupCountData = useMemo(() => {
+    if (!run) {
+      return null;
+    }
 
-      return SignupCountData.fromRun(run);
-    },
-    [run],
-  );
+    return SignupCountData.fromRun(run);
+  }, [run]);
 
-  const toggleVisibility = useCallback(
-    () => toggleRunDetailsVisibility((run || {}).id),
-    [run, toggleRunDetailsVisibility],
-  );
+  const toggleVisibility = useCallback(() => toggleRunDetailsVisibility((run || {}).id), [
+    run,
+    toggleRunDetailsVisibility,
+  ]);
 
   if (event == null || run == null) {
     return null;
@@ -70,22 +61,15 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
 
   return (
     <Manager>
-      <Reference>
-        {({ ref }) => renderRunDisplay(ref)}
-      </Reference>
-      {ReactDOM.createPortal((
+      <Reference>{({ ref }) => renderRunDisplay(ref)}</Reference>
+      {ReactDOM.createPortal(
         <Popper
           placement={detailsVisible ? 'bottom' : 'invalid'}
           modifiers={{
             preventOverflow: { boundariesElement: popoverParent },
           }}
         >
-          {({
-            ref,
-            placement,
-            arrowProps,
-            style: popperStyle,
-          }) => {
+          {({ ref, placement, arrowProps, style: popperStyle }) => {
             if (!detailsVisible) {
               return <></>;
             }
@@ -104,8 +88,9 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
               />
             );
           }}
-        </Popper>
-      ), popoverParent)}
+        </Popper>,
+        popoverParent,
+      )}
     </Manager>
   );
 }

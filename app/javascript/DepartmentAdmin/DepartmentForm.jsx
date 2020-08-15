@@ -12,10 +12,11 @@ function DepartmentForm({ initialDepartment, onSave }) {
   );
   const [save, saveError, saveInProgress] = useAsyncFunction(onSave);
 
-  const saveClicked = () => save({
-    name,
-    proposal_description: proposalDescription,
-  });
+  const saveClicked = () =>
+    save({
+      name,
+      proposal_description: proposalDescription,
+    });
 
   return (
     <>

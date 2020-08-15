@@ -7,20 +7,25 @@ import { getRunClassificationStyles, getRunClassName } from './StylingUtils';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 
 function FakeEventRun({
-  eventCategory, children, availability, unlimited, runFull, signupStatus, onClick, withRef,
+  eventCategory,
+  children,
+  availability,
+  unlimited,
+  runFull,
+  signupStatus,
+  onClick,
+  withRef,
   zeroCapacity,
 }) {
   const config = { classifyEventsBy: 'category', showSignedUp: true };
   const signupCountData = { runFull: () => runFull };
-  const clickableProps = (
-    onClick
-      ? {
+  const clickableProps = onClick
+    ? {
         tabIndex: 0,
         role: 'button',
         onClick,
       }
-      : {}
-  );
+    : {};
 
   const runStyle = {
     zIndex: 0,
@@ -28,7 +33,11 @@ function FakeEventRun({
     height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
     marginBottom: LANE_GUTTER_HEIGHT,
     ...getRunClassificationStyles({
-      config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
+      config,
+      signupCountData,
+      signupStatus,
+      event: {},
+      eventCategory: eventCategory || {},
     }),
   };
 
@@ -37,7 +46,11 @@ function FakeEventRun({
       className={classNames(
         'px-1 pb-1 schedule-grid-event small',
         getRunClassName({
-          config, signupCountData, signupStatus, event: {}, unlimited,
+          config,
+          signupCountData,
+          signupStatus,
+          event: {},
+          unlimited,
         }),
         {
           'zero-capacity': zeroCapacity,
@@ -47,9 +60,7 @@ function FakeEventRun({
       ref={withRef}
       {...clickableProps}
     >
-      <div className="schedule-grid-event-content">
-        {children}
-      </div>
+      <div className="schedule-grid-event-content">{children}</div>
 
       <AvailabilityBar
         availabilityFraction={availability}

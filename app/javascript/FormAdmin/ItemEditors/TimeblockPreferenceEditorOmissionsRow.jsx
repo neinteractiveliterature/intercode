@@ -14,15 +14,13 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
   const { convention } = useContext(FormEditorContext);
   const { formItem, setFormItem } = useContext(FormItemEditorContext);
 
-  const conventionTimespan = useMemo(
-    () => timespanFromConvention(convention),
-    [convention],
-  );
+  const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
 
   const omissionDates = useMemo(
-    () => (formItem.properties.omit_timeblocks || []).filter((omission) => (
-      omission.label === timeblock.label
-    )).map((omission) => omission.date),
+    () =>
+      (formItem.properties.omit_timeblocks || [])
+        .filter((omission) => omission.label === timeblock.label)
+        .map((omission) => omission.date),
     [formItem.properties.omit_timeblocks, timeblock.label],
   );
 
@@ -46,41 +44,41 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
     [setFormItem, timeblock.label],
   );
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
+    convention,
+    formItem,
+  ]);
 
   const choices = useMemo(
-    () => columns.map((column) => {
-      const dayStart = moment.tz(column.dayStart, timezoneName);
-      const timespan = new Timespan(
-        moment(dayStart).add(timeblock.start),
-        moment(dayStart).add(timeblock.finish),
-      );
+    () =>
+      columns.map((column) => {
+        const dayStart = moment.tz(column.dayStart, timezoneName);
+        const timespan = new Timespan(
+          moment(dayStart).add(timeblock.start),
+          moment(dayStart).add(timeblock.finish),
+        );
 
-      return {
-        label: dayStart.format('dddd'),
-        value: dayStart.format('YYYY-MM-DD'),
-        disabled: !timespan.overlapsTimespan(conventionTimespan),
-      };
-    }),
+        return {
+          label: dayStart.format('dddd'),
+          value: dayStart.format('YYYY-MM-DD'),
+          disabled: !timespan.overlapsTimespan(conventionTimespan),
+        };
+      }),
     [columns, timezoneName, conventionTimespan, timeblock.finish, timeblock.start],
   );
 
   const inclusionDates = useMemo(
-    () => choices
-      .filter(({ value, disabled }) => !disabled && !omissionDates.includes(value))
-      .map(({ value }) => value),
+    () =>
+      choices
+        .filter(({ value, disabled }) => !disabled && !omissionDates.includes(value))
+        .map(({ value }) => value),
     [choices, omissionDates],
   );
 
   const inclusionDatesChanged = useCallback(
     (newInclusionDates) => {
       omissionDatesChanged(
-        choices
-          .filter(({ value }) => !newInclusionDates.includes(value))
-          .map(({ value }) => value),
+        choices.filter(({ value }) => !newInclusionDates.includes(value)).map(({ value }) => value),
       );
     },
     [choices, omissionDatesChanged],

@@ -7,7 +7,8 @@ import { ScheduledValue, ScheduledMoneyValue } from './graphqlTypes.generated';
 type AnyScheduledValue = ScheduledValue | ScheduledMoneyValue;
 
 export function findTimespanIndexAt<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>, time: MomentInput,
+  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
+  time: MomentInput,
 ) {
   const timeMoment = moment(time);
   return scheduledValue.timespans.findIndex((timespanObj: ScheduledValueType['timespans'][0]) => {
@@ -17,7 +18,8 @@ export function findTimespanIndexAt<ScheduledValueType extends AnyScheduledValue
 }
 
 export function findTimespanAt<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>, time: MomentInput,
+  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
+  time: MomentInput,
 ) {
   const index = findTimespanIndexAt(scheduledValue, time);
   if (index === -1) {
@@ -27,7 +29,8 @@ export function findTimespanAt<ScheduledValueType extends AnyScheduledValue>(
 }
 
 export function findValueAt<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>, time: MomentInput,
+  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
+  time: MomentInput,
 ) {
   const timespan = findTimespanAt(scheduledValue, time);
   return timespan?.value;

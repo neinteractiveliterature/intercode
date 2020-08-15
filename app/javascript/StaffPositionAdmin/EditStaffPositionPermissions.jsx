@@ -4,14 +4,17 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateStaffPositionPermissions } from './mutations.gql';
-import { StaffPositionsQuery } from './queries.gql';
+import { UpdateStaffPositionPermissions } from './mutations';
+import { StaffPositionsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
-import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
+import {
+  getPermissionNamesForModelType,
+  buildPermissionInput,
+} from '../Permissions/PermissionUtils';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
@@ -92,11 +95,9 @@ function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
       await mutate({
         variables: {
           staffPositionId: staffPosition.id,
-          grantPermissions: changeSet.getAddValues()
-            .map(buildPermissionInput),
+          grantPermissions: changeSet.getAddValues().map(buildPermissionInput),
           revokePermissions: changeSet.getRemoveIds().map((removeId) => {
-            const existingPermission = staffPosition.permissions
-              .find((p) => p.id === removeId);
+            const existingPermission = staffPosition.permissions.find((p) => p.id === removeId);
 
             return buildPermissionInput(existingPermission);
           }),
@@ -140,24 +141,30 @@ EditStaffPositionPermissionsForm.propTypes = {
   staffPosition: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    permissions: PropTypes.arrayOf(PropTypes.shape({
-      model: PropTypes.shape({
-        __typename: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-      }).isRequired,
-      permission: PropTypes.string.isRequired,
-    })).isRequired,
+    permissions: PropTypes.arrayOf(
+      PropTypes.shape({
+        model: PropTypes.shape({
+          __typename: PropTypes.string.isRequired,
+          id: PropTypes.number.isRequired,
+        }).isRequired,
+        permission: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
   convention: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    event_categories: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    cms_content_groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+    event_categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+    cms_content_groups: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
 };
 
@@ -165,15 +172,14 @@ function EditStaffPositionPermissions() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(StaffPositionsQuery);
 
-  const convention = useMemo(
-    () => (loading || error ? null : data.convention),
-    [loading, error, data],
-  );
+  const convention = useMemo(() => (loading || error ? null : data.convention), [
+    loading,
+    error,
+    data,
+  ]);
 
   const staffPosition = useMemo(
-    () => (convention
-      ? convention.staff_positions.find((sp) => sp.id.toString(10) === id)
-      : null),
+    () => (convention ? convention.staff_positions.find((sp) => sp.id.toString(10) === id) : null),
     [convention, id],
   );
 

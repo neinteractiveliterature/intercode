@@ -5,7 +5,10 @@ import classNames from 'classnames';
 import Confirm from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
 import { mutator, Transforms } from '../ComposableFormUtils';
-import { RegistrationPolicyBucketPropType, checkBucketFieldMinimums } from './RegistrationPolicyBucket';
+import {
+  RegistrationPolicyBucketPropType,
+  checkBucketFieldMinimums,
+} from './RegistrationPolicyBucket';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useUniqueId from '../useUniqueId';
@@ -22,18 +25,23 @@ const bucketTransforms = {
 };
 
 function RegistrationBucketRow({
-  registrationBucket, onChange, lockLimited, lockCounts, lockNameAndDescription, validateComplete,
-  lockDelete, onDelete,
+  registrationBucket,
+  onChange,
+  lockLimited,
+  lockCounts,
+  lockNameAndDescription,
+  validateComplete,
+  lockDelete,
+  onDelete,
 }) {
   const bucketMutator = useMemo(
-    () => mutator({
-      getState: () => registrationBucket,
-      setState: (newState) => onChange(
-        registrationBucket.key,
-        { ...registrationBucket, ...newState },
-      ),
-      transforms: bucketTransforms,
-    }),
+    () =>
+      mutator({
+        getState: () => registrationBucket,
+        setState: (newState) =>
+          onChange(registrationBucket.key, { ...registrationBucket, ...newState }),
+        transforms: bucketTransforms,
+      }),
     [onChange, registrationBucket],
   );
 
@@ -60,10 +68,11 @@ function RegistrationBucketRow({
               className="form-check-input"
               type="checkbox"
               checked={!registrationBucket.slots_limited}
-              onChange={(event) => { bucketMutator.slots_limited(event.target.checked); }}
+              onChange={(event) => {
+                bucketMutator.slots_limited(event.target.checked);
+              }}
               aria-label="Unlimited?"
             />
-
             Unlimited?
           </label>
         </div>
@@ -75,18 +84,17 @@ function RegistrationBucketRow({
               className="form-check-input"
               type="checkbox"
               checked={!registrationBucket.not_counted}
-              onChange={(event) => { bucketMutator.not_counted(event.target.checked); }}
+              onChange={(event) => {
+                bucketMutator.not_counted(event.target.checked);
+              }}
               aria-label="Counted?"
             />
-
             Counted?
           </label>
           <HelpPopover>
-            &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups,
-            and are included in the &ldquo;No Preference&rdquo; option. If the bucket is
-
+            &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups, and
+            are included in the &ldquo;No Preference&rdquo; option. If the bucket is
             <em>not</em>
-
             counted, any attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this
             bucket.
           </HelpPopover>
@@ -100,15 +108,16 @@ function RegistrationBucketRow({
                 className="form-check-input"
                 type="checkbox"
                 checked={registrationBucket.expose_attendees}
-                onChange={(event) => { bucketMutator.expose_attendees(event.target.checked); }}
+                onChange={(event) => {
+                  bucketMutator.expose_attendees(event.target.checked);
+                }}
                 aria-label="Expose attendees?"
               />
-
               Expose attendees?
             </label>
             <HelpPopover>
               If checked, attendees will be able to see which of their fellow attendees are in this
-              bucket via the signup summary page.  (The signup summary always lists fellow
+              bucket via the signup summary page. (The signup summary always lists fellow
               attendees&rsquo; names, but normally doesn&rsquo;t show which bucket they&rsquo;re
               in.)
             </HelpPopover>
@@ -146,11 +155,11 @@ function RegistrationBucketRow({
         min: 0,
         inputId: maxId,
       },
-    ].map(({
-      label, field, min, inputId,
-    }) => (
+    ].map(({ label, field, min, inputId }) => (
       <div key={field} className={lockLimited ? 'd-inline mr-2' : null}>
-        <label htmlFor={inputId} className="d-inline">{label}</label>
+        <label htmlFor={inputId} className="d-inline">
+          {label}
+        </label>
         <input
           id={inputId}
           type="number"
@@ -159,7 +168,9 @@ function RegistrationBucketRow({
           min={min}
           placeholder={label}
           value={registrationBucket[field] == null ? '' : registrationBucket[field]}
-          onChange={(event) => { bucketMutator[field](event.target.value); }}
+          onChange={(event) => {
+            bucketMutator[field](event.target.value);
+          }}
           style={{ width: '4em' }}
           aria-label={label}
         />
@@ -169,20 +180,14 @@ function RegistrationBucketRow({
     return (
       <div>
         {slotControls}
-        <small className="text-danger">
-          {countValidationErrors.join(', ')}
-        </small>
+        <small className="text-danger">{countValidationErrors.join(', ')}</small>
       </div>
     );
   };
 
   const renderNameAndDescription = () => {
     if (lockNameAndDescription) {
-      return (
-        <td title={registrationBucket.description}>
-          {registrationBucket.name}
-        </td>
-      );
+      return <td title={registrationBucket.description}>{registrationBucket.name}</td>;
     }
 
     return [
@@ -229,10 +234,12 @@ function RegistrationBucketRow({
             <button
               className="btn btn-sm btn-secondary"
               type="button"
-              onClick={() => confirm({
-                prompt: 'Are you sure you wish to delete this registration bucket?',
-                action: () => onDelete(registrationBucket.key),
-              })}
+              onClick={() =>
+                confirm({
+                  prompt: 'Are you sure you wish to delete this registration bucket?',
+                  action: () => onDelete(registrationBucket.key),
+                })
+              }
             >
               <i className="fa fa-trash-o" />
               <span className="sr-only">Delete bucket</span>

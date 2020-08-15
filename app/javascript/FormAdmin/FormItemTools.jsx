@@ -24,16 +24,11 @@ function StandardItemMetadata() {
   return (
     <>
       <div className="mr-2">
-        <i className="fa fa-wrench" />
-        {' '}
+        <i className="fa fa-wrench" />{' '}
         <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
       </div>
       <div className="mr-2">
-        <small>
-          Standard item for
-          {' '}
-          {pluralize(formType.description)}
-        </small>
+        <small>Standard item for {pluralize(formType.description)}</small>
       </div>
     </>
   );
@@ -43,9 +38,7 @@ function StaticTextMetadata() {
   return (
     <>
       <div>
-        <i className="fa fa-paragraph" />
-        {' '}
-        <strong>Static text</strong>
+        <i className="fa fa-paragraph" /> <strong>Static text</strong>
       </div>
     </>
   );
@@ -57,18 +50,10 @@ function CustomItemMetadata() {
   return (
     <>
       <div className="mr-2">
-        <i className="fa fa-tag" />
-        {' '}
-        <strong>{formItem.identifier}</strong>
+        <i className="fa fa-tag" /> <strong>{formItem.identifier}</strong>
       </div>
       <div>
-        <small>
-          Custom
-          {' '}
-          {humanize(formItem.item_type).toLowerCase()}
-          {' '}
-          item
-        </small>
+        <small>Custom {humanize(formItem.item_type).toLowerCase()} item</small>
       </div>
     </>
   );
@@ -88,11 +73,11 @@ function MoveFormItemModal({ visible, close }) {
         id: formItem.id,
         formSectionId: destinationSectionId,
       },
-      refetchQueries: [
-        { query: FormEditorQuery, variables: { id: form.id } },
-      ],
+      refetchQueries: [{ query: FormEditorQuery, variables: { id: form.id } }],
     });
-    history.replace(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`);
+    history.replace(
+      `/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`,
+    );
     close();
   };
 
@@ -102,13 +87,13 @@ function MoveFormItemModal({ visible, close }) {
 
       <div className="modal-body">
         <MultipleChoiceInput
-          caption={(
+          caption={
             <>
               Move item
               {formItem.properties.caption ? ` “${formItem.properties.caption}” ` : ' '}
               to which section?
             </>
-          )}
+          }
           choices={form.form_sections.map((formSection) => ({
             label: formSection.title,
             value: formSection.id.toString(),
@@ -173,9 +158,7 @@ function FormItemTools({ saveFormItem }) {
 
   return (
     <>
-      <div className="d-flex flex-row flex-wrap flex-lg-column mb-2">
-        {renderItemMetadata()}
-      </div>
+      <div className="d-flex flex-row flex-wrap flex-lg-column mb-2">{renderItemMetadata()}</div>
 
       <button
         className="p-0 d-lg-none btn"
@@ -184,9 +167,7 @@ function FormItemTools({ saveFormItem }) {
         aria-expanded={!collapsed}
         aria-controls={collapseId}
       >
-        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} />
-        {' '}
-        Tools
+        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} /> Tools
       </button>
       <div
         id={collapseId}

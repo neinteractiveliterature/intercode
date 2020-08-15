@@ -11,10 +11,7 @@ export default function FourOhFourPage() {
         <h1>Oops!</h1>
 
         <p className="mb-0">
-          We couldn’t find a page at the location
-          {' '}
-          {{ pathname: location.pathname }}
-          .
+          We couldn’t find a page at the location {{ pathname: location.pathname }}.
         </p>
       </Trans>
     </div>

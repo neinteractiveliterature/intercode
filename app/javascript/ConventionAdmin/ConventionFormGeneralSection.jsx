@@ -18,13 +18,26 @@ import ConventionLanguageInput from './ConventionLanguageInput';
 function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
   const { mapboxAccessToken } = useContext(MapboxContext);
   const [
-    changeName, changeSiteMode, changeDomain, changeTimezoneName, changeStartsAt, changeEndsAt,
-    changeLocation, changeTimezoneMode, changeLanguage,
-  ] = useChangeDispatchers(
-    dispatch,
-    ['name', 'site_mode', 'domain', 'timezone_name', 'starts_at', 'ends_at', 'location',
-      'timezone_mode', 'language'],
-  );
+    changeName,
+    changeSiteMode,
+    changeDomain,
+    changeTimezoneName,
+    changeStartsAt,
+    changeEndsAt,
+    changeLocation,
+    changeTimezoneMode,
+    changeLanguage,
+  ] = useChangeDispatchers(dispatch, [
+    'name',
+    'site_mode',
+    'domain',
+    'timezone_name',
+    'starts_at',
+    'ends_at',
+    'location',
+    'timezone_mode',
+    'language',
+  ]);
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
 
@@ -148,9 +161,7 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
         </>
       )}
 
-      <div className="row form-group">
-        {startEndFields}
-      </div>
+      <div className="row form-group">{startEndFields}</div>
     </>
   );
 }

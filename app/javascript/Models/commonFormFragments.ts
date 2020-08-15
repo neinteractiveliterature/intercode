@@ -1,41 +1,41 @@
 import { gql } from '@apollo/client';
 
 export const CommonFormItemFields = gql`
-fragment CommonFormItemFields on FormItem {
-  id
-  position
-  identifier
-  item_type
-  rendered_properties
-  default_value
-}
+  fragment CommonFormItemFields on FormItem {
+    id
+    position
+    identifier
+    item_type
+    rendered_properties
+    default_value
+  }
 `;
 
 export const CommonFormSectionFields = gql`
-fragment CommonFormSectionFields on FormSection {
-  id
-  title
-  position
-  form_items {
+  fragment CommonFormSectionFields on FormSection {
     id
-    ...CommonFormItemFields
+    title
+    position
+    form_items {
+      id
+      ...CommonFormItemFields
+    }
   }
-}
 
-${CommonFormItemFields}
+  ${CommonFormItemFields}
 `;
 
 export const CommonFormFields = gql`
-fragment CommonFormFields on Form {
-  id
-  title
-  form_type
-
-  form_sections {
+  fragment CommonFormFields on Form {
     id
-    ...CommonFormSectionFields
-  }
-}
+    title
+    form_type
 
-${CommonFormSectionFields}
+    form_sections {
+      id
+      ...CommonFormSectionFields
+    }
+  }
+
+  ${CommonFormSectionFields}
 `;

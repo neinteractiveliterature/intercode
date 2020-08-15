@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { WaitlistMailingListsQuery } from './queries.gql';
+import { WaitlistMailingListsQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -28,23 +28,14 @@ function WaitlistMailingLists() {
       <h1 className="mb-4">Mail to waitlists</h1>
 
       {data.convention.mailing_lists.waitlists.map((waitlistResult) => {
-        const runTime = moment.tz(waitlistResult.run.starts_at, timezoneName)
-          .format('ddd h:mma');
+        const runTime = moment.tz(waitlistResult.run.starts_at, timezoneName).format('ddd h:mma');
 
         return (
           <div className="card my-4" key={waitlistResult.run.id}>
             <div className="card-header">
-              {runTime}
-              {' '}
-              &mdash;
-              {' '}
-              {waitlistResult.run.event.title}
+              {runTime} &mdash; {waitlistResult.run.event.title}
               {(waitlistResult.run.title_suffix || '').trim() !== '' && (
-                <>
-                  {' ('}
-                  {waitlistResult.run.title_suffix}
-                  {')'}
-                </>
+                <> ({waitlistResult.run.title_suffix})</>
               )}
             </div>
             <div className="card-body">

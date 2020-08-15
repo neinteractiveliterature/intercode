@@ -1,12 +1,12 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { OAuthAuthorizedApplicationsQuery } from './queries.gql';
+import { OAuthAuthorizedApplicationsQuery } from './queries';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import PermissionsPrompt from './PermissionsPrompt';
-import { RevokeAuthorizedApplication } from './mutations.gql';
+import { RevokeAuthorizedApplication } from './mutations';
 import { useDeleteMutation } from '../MutationUtils';
 
 function AuthorizedApplications() {
@@ -46,25 +46,23 @@ function AuthorizedApplications() {
           <th />
         </thead>
         <tbody>
-          {
-            data.myAuthorizedApplications.map((authorizedApplication) => (
-              <tr key={authorizedApplication.uid}>
-                <td>{authorizedApplication.name}</td>
-                <td>
-                  <PermissionsPrompt scopeNames={authorizedApplication.scopes} />
-                </td>
-                <td className="text-right">
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger"
-                    onClick={() => revokeClicked(authorizedApplication)}
-                  >
-                    Revoke
-                  </button>
-                </td>
-              </tr>
-            ))
-          }
+          {data.myAuthorizedApplications.map((authorizedApplication) => (
+            <tr key={authorizedApplication.uid}>
+              <td>{authorizedApplication.name}</td>
+              <td>
+                <PermissionsPrompt scopeNames={authorizedApplication.scopes} />
+              </td>
+              <td className="text-right">
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onClick={() => revokeClicked(authorizedApplication)}
+                >
+                  Revoke
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

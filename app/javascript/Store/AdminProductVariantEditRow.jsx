@@ -6,9 +6,7 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import useSortable from '../useSortable';
 import PricingStructureInput from './PricingStructureInput';
 
-function AdminProductVariantEditRow({
-  variant, updater, deleteVariant, moveVariant, index,
-}) {
+function AdminProductVariantEditRow({ variant, updater, deleteVariant, moveVariant, index }) {
   const [rowRef, drag, { isDragging }] = useSortable(index, moveVariant, 'PRODUCT_VARIANT');
 
   return (
@@ -23,10 +21,7 @@ function AdminProductVariantEditRow({
         </i>
       </td>
       <td>
-        <InPlaceEditor
-          value={variant.name}
-          onChange={updater.name || ''}
-        />
+        <InPlaceEditor value={variant.name} onChange={updater.name || ''} />
       </td>
       <td>
         <InPlaceEditor
@@ -48,11 +43,7 @@ function AdminProductVariantEditRow({
         />
       </td>
       <td>
-        <button
-          type="button"
-          className="btn btn-sm btn-danger"
-          onClick={deleteVariant}
-        >
+        <button type="button" className="btn btn-sm btn-danger" onClick={deleteVariant}>
           <i className="fa fa-trash-o">
             <span className="sr-only">
               Delete

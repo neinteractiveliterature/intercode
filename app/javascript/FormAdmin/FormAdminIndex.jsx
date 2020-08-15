@@ -16,9 +16,15 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function describeFormUsers(form) {
   return [
-    ...form.user_con_profile_conventions.map((convention) => `User profile form for ${convention.name}`).sort(),
-    ...form.event_categories.map((eventCategory) => `Event form for ${pluralize(eventCategory.name)}`).sort(),
-    ...form.proposal_event_categories.map((eventCategory) => `Proposal form for ${pluralize(eventCategory.name)}`).sort(),
+    ...form.user_con_profile_conventions
+      .map((convention) => `User profile form for ${convention.name}`)
+      .sort(),
+    ...form.event_categories
+      .map((eventCategory) => `Event form for ${pluralize(eventCategory.name)}`)
+      .sort(),
+    ...form.proposal_event_categories
+      .map((eventCategory) => `Proposal form for ${pluralize(eventCategory.name)}`)
+      .sort(),
   ];
 }
 
@@ -32,9 +38,8 @@ function FormAdminIndex() {
   });
   const newFormModal = useModal();
   const sortedForms = useMemo(
-    () => (error || loading
-      ? null
-      : sortByLocaleString(data.convention.forms, (form) => form.title)),
+    () =>
+      error || loading ? null : sortByLocaleString(data.convention.forms, (form) => form.title),
     [data, error, loading],
   );
 
@@ -56,7 +61,7 @@ function FormAdminIndex() {
       </h1>
 
       <div className="alert alert-warning mt-4">
-        Changes to forms take effect immediately.  Proceed with caution.
+        Changes to forms take effect immediately. Proceed with caution.
       </div>
 
       <table className="table table-striped">
@@ -76,9 +81,7 @@ function FormAdminIndex() {
               <td>
                 <ul className="list-unstyled m-0">
                   {describeFormUsers(form).map((formUser, i) => (
-                    <li key={i /* eslint-disable-line react/no-array-index-key */}>
-                      {formUser}
-                    </li>
+                    <li key={i /* eslint-disable-line react/no-array-index-key */}>{formUser}</li>
                   ))}
                 </ul>
               </td>
@@ -86,18 +89,21 @@ function FormAdminIndex() {
                 <button
                   className="btn btn-sm btn-outline-danger mr-2"
                   type="button"
-                  onClick={() => confirm({
-                    prompt: 'Are you sure you want to delete this form?',
-                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                    action: () => deleteForm({ variables: { id: form.id } }),
-                  })}
+                  onClick={() =>
+                    confirm({
+                      prompt: 'Are you sure you want to delete this form?',
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                      action: () => deleteForm({ variables: { id: form.id } }),
+                    })
+                  }
                 >
                   <i className="fa fa-trash-o" />
-                  <span className="sr-only">
-                    Delete form
-                  </span>
+                  <span className="sr-only">Delete form</span>
                 </button>
-                <Link to={`/admin_forms/${form.id}/edit`} className="btn btn-sm btn-outline-primary">
+                <Link
+                  to={`/admin_forms/${form.id}/edit`}
+                  className="btn btn-sm btn-outline-primary"
+                >
                   Edit
                 </Link>
               </td>

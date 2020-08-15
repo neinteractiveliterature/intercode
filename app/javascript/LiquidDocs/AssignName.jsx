@@ -8,15 +8,7 @@ function AssignName({ assign, prefix = null }) {
     // eslint-disable-next-line react/no-array-index-key
     <React.Fragment key={i}>
       <span className="text-nowrap">{part}</span>
-      {
-        i < rawParts.length - 1
-          ? (
-            <>
-              &#8203;.
-            </>
-          )
-          : null
-      }
+      {i < rawParts.length - 1 ? <>&#8203;.</> : null}
     </React.Fragment>
   ));
 

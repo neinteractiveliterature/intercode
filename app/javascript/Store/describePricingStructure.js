@@ -16,7 +16,11 @@ export function describeAdminPricingStructure(pricingStructure) {
   if (pricingStructure.pricing_strategy === 'scheduled_value') {
     const pricePointCount = pricingStructure.value.timespans.length;
     const currentValue = findCurrentValue(pricingStructure.value);
-    return `${formatMoney(currentValue)} (${pricePointCount} scheduled price ${pluralizeWithCount('point', pricePointCount, true)})`;
+    return `${formatMoney(currentValue)} (${pricePointCount} scheduled price ${pluralizeWithCount(
+      'point',
+      pricePointCount,
+      true,
+    )})`;
   }
 
   return null;
@@ -42,7 +46,9 @@ export function describeUserPricingStructure(pricingStructure, timezoneName) {
     if (nextTimespan) {
       const nextValue = nextTimespan.value;
       const nextChange = moment.tz(nextTimespan.start, timezoneName);
-      return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${nextChange.format('MMM DD, YYYY [at] h:mma')})`;
+      return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${nextChange.format(
+        'MMM DD, YYYY [at] h:mma',
+      )})`;
     }
     return formatMoney(currentValue);
   }

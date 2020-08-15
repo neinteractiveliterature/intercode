@@ -12,16 +12,21 @@ import AppRootContext from '../../AppRootContext';
 
 function useTimeblockPropertyUpdater(onChange, generatedId, property) {
   return useCallback(
-    (value) => onChange(generatedId, (prevTimeblock) => ({
-      ...prevTimeblock,
-      [property]: value,
-    })),
+    (value) =>
+      onChange(generatedId, (prevTimeblock) => ({
+        ...prevTimeblock,
+        [property]: value,
+      })),
     [generatedId, onChange, property],
   );
 }
 
 function TimeblockPreferenceEditorTimeblockRow({
-  timeblock, index, onChange, deleteTimeblock, moveTimeblock,
+  timeblock,
+  index,
+  onChange,
+  deleteTimeblock,
+  moveTimeblock,
 }) {
   const { timezoneName } = useContext(AppRootContext);
   const confirm = useConfirm();
@@ -31,33 +36,31 @@ function TimeblockPreferenceEditorTimeblockRow({
   const [rowRef, drag, { isDragging }] = useSortable(index, moveTimeblock, 'timeblock');
 
   const selectTimespan = useMemo(
-    () => new Timespan(
-      moment.tz({ hour: 0 }, timezoneName),
-      moment.tz({ hour: 0 }, timezoneName).add(31, 'hours'),
-    ),
+    () =>
+      new Timespan(
+        moment.tz({ hour: 0 }, timezoneName),
+        moment.tz({ hour: 0 }, timezoneName).add(31, 'hours'),
+      ),
     [timezoneName],
   );
 
-  const timespanError = useMemo(
-    () => {
-      if (!timeblock.start || !timeblock.finish) {
-        return null;
-      }
-
-      try {
-        // eslint-disable-next-line no-new
-        new Timespan(
-          moment.tz(timeblock.start, timezoneName),
-          moment.tz(timeblock.finish, timezoneName),
-        );
-      } catch (e) {
-        return e.message;
-      }
-
+  const timespanError = useMemo(() => {
+    if (!timeblock.start || !timeblock.finish) {
       return null;
-    },
-    [timeblock, timezoneName],
-  );
+    }
+
+    try {
+      // eslint-disable-next-line no-new
+      new Timespan(
+        moment.tz(timeblock.start, timezoneName),
+        moment.tz(timeblock.finish, timezoneName),
+      );
+    } catch (e) {
+      return e.message;
+    }
+
+    return null;
+  }, [timeblock, timezoneName]);
 
   return (
     <tr ref={rowRef}>
@@ -73,9 +76,7 @@ function TimeblockPreferenceEditorTimeblockRow({
         />
         {timespanError && (
           <div className="small text-danger mt-1">
-            <i className="fa fa-warning" />
-            {' '}
-            {timespanError}
+            <i className="fa fa-warning" /> {timespanError}
           </div>
         )}
       </td>
@@ -99,10 +100,12 @@ function TimeblockPreferenceEditorTimeblockRow({
           type="button"
           className="btn btn-sm btn-outline-danger"
           aria-label="Delete timeblock"
-          onClick={() => confirm({
-            prompt: 'Are you sure you want to delete this timeblock?',
-            action: () => deleteTimeblock(timeblock.generatedId),
-          })}
+          onClick={() =>
+            confirm({
+              prompt: 'Are you sure you want to delete this timeblock?',
+              action: () => deleteTimeblock(timeblock.generatedId),
+            })
+          }
         >
           <i className="fa fa-trash-o" />
         </button>

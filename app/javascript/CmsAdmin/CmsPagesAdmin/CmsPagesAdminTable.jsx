@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { CmsPagesAdminQuery } from './queries.gql';
-import { DeletePage } from './mutations.gql';
+import { CmsPagesAdminQuery } from './queries';
+import { DeletePage } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';
@@ -23,16 +23,13 @@ function CmsPagesAdminTable() {
 
   usePageTitle(useValueUnless(() => 'CMS Pages', error || loading));
 
-  const pagesSorted = useMemo(
-    () => {
-      if (error || loading) {
-        return [];
-      }
+  const pagesSorted = useMemo(() => {
+    if (error || loading) {
+      return [];
+    }
 
-      return sortByLocaleString(data.cmsPages, (page) => page.name);
-    },
-    [data, loading, error],
-  );
+    return sortByLocaleString(data.cmsPages, (page) => page.name);
+  }, [data, loading, error]);
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -53,40 +50,40 @@ function CmsPagesAdminTable() {
               <td>
                 {page.hidden_from_search && (
                   <>
-                    <i className="fa fa-eye-slash" />
-                    {' '}
+                    <i className="fa fa-eye-slash" />{' '}
                   </>
                 )}
                 <Link to={`/pages/${page.slug}`}>{page.name}</Link>
-                {
-                  page.admin_notes && page.admin_notes.trim() !== '' && (
-                    <>
-                      <br />
-                      <small>{page.admin_notes}</small>
-                    </>
-                  )
-                }
+                {page.admin_notes && page.admin_notes.trim() !== '' && (
+                  <>
+                    <br />
+                    <small>{page.admin_notes}</small>
+                  </>
+                )}
               </td>
               <td className="text-right">
-                {page.current_ability_can_update
-                  ? (
-                    <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
-                      Edit
-                    </Link>
-                  )
-                  : (
-                    <Link to={`/cms_pages/${page.id}/view_source`} className="btn btn-outline-secondary btn-sm">
-                      View source
-                    </Link>
-                  )}
+                {page.current_ability_can_update ? (
+                  <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
+                    Edit
+                  </Link>
+                ) : (
+                  <Link
+                    to={`/cms_pages/${page.id}/view_source`}
+                    className="btn btn-outline-secondary btn-sm"
+                  >
+                    View source
+                  </Link>
+                )}
                 {page.current_ability_can_delete && (
                   <button
                     type="button"
-                    onClick={() => confirm({
-                      prompt: `Are you sure you want to delete ${page.name}?`,
-                      action: () => deletePage(page.id),
-                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                    })}
+                    onClick={() =>
+                      confirm({
+                        prompt: `Are you sure you want to delete ${page.name}?`,
+                        action: () => deletePage(page.id),
+                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                      })
+                    }
                     className="btn btn-danger btn-sm ml-1"
                   >
                     Delete
@@ -99,7 +96,9 @@ function CmsPagesAdminTable() {
       </table>
 
       {data.currentAbility.can_create_pages && (
-        <Link to="/cms_pages/new" className="btn btn-secondary">New Page</Link>
+        <Link to="/cms_pages/new" className="btn btn-secondary">
+          New Page
+        </Link>
       )}
     </>
   );

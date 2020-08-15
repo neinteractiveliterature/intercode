@@ -23,11 +23,9 @@ function RunCapacityGraph({ run, event, signupsAvailable }) {
         />
       ))}
       <div className="bucket-capacity">
-        {t(
-          'events.runCapacity.waitlistCount',
-          'Waitlist - {{ waitlistCount }}',
-          { waitlistCount: signupCountData.getWaitlistCount() },
-        )}
+        {t('events.runCapacity.waitlistCount', 'Waitlist - {{ waitlistCount }}', {
+          waitlistCount: signupCountData.getWaitlistCount(),
+        })}
         <BucketAvailabilityDisplay
           className="text-secondary"
           signupCount={signupCountData.getWaitlistCount()}
@@ -44,11 +42,13 @@ RunCapacityGraph.propTypes = {
   }).isRequired,
   event: PropTypes.shape({
     registration_policy: PropTypes.shape({
-      buckets: PropTypes.arrayOf(PropTypes.shape({
-        slots_limited: PropTypes.bool.isRequired,
-        anything: PropTypes.bool,
-        name: PropTypes.string.isRequired,
-      }).isRequired).isRequired,
+      buckets: PropTypes.arrayOf(
+        PropTypes.shape({
+          slots_limited: PropTypes.bool.isRequired,
+          anything: PropTypes.bool,
+          name: PropTypes.string.isRequired,
+        }).isRequired,
+      ).isRequired,
     }).isRequired,
   }).isRequired,
   signupsAvailable: PropTypes.bool.isRequired,

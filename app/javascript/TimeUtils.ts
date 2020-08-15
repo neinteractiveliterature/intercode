@@ -6,9 +6,8 @@ import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 
-export const timeIsOnTheHour = (time: Moment) => (
-  time.millisecond() === 0 && time.second() === 0 && time.minute() === 0
-);
+export const timeIsOnTheHour = (time: Moment) =>
+  time.millisecond() === 0 && time.second() === 0 && time.minute() === 0;
 
 export const humanTimeFormat = (time: Moment) => {
   if (timeIsOnTheHour(time)) {
@@ -60,17 +59,16 @@ export function ageAsOf(birthDate?: Moment | null, date?: Moment | null) {
     return null;
   }
 
-  const onOrAfterBirthday = (
-    date.month() > birthDate.month() || (
-      date.month() === birthDate.month()
-      && date.date() >= birthDate.date()
-    )
-  );
+  const onOrAfterBirthday =
+    date.month() > birthDate.month() ||
+    (date.month() === birthDate.month() && date.date() >= birthDate.date());
 
-  return (date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1));
+  return date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1);
 }
 
-export function timezoneNameForConvention(convention?: Pick<Convention, 'timezone_mode' | 'timezone_name'> | null) {
+export function timezoneNameForConvention(
+  convention?: Pick<Convention, 'timezone_mode' | 'timezone_name'> | null,
+) {
   if (convention?.timezone_mode === 'convention_local') {
     return convention.timezone_name!;
   }
@@ -80,10 +78,10 @@ export function timezoneNameForConvention(convention?: Pick<Convention, 'timezon
 
 export function useISODateTimeInAppZone(isoValue: string) {
   const { timezoneName } = useContext(AppRootContext);
-  const timestamp = useMemo(
-    () => DateTime.fromISO(isoValue).setZone(timezoneName),
-    [isoValue, timezoneName],
-  );
+  const timestamp = useMemo(() => DateTime.fromISO(isoValue).setZone(timezoneName), [
+    isoValue,
+    timezoneName,
+  ]);
 
   return timestamp;
 }

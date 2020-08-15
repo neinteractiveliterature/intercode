@@ -31,16 +31,14 @@ function CmsLayoutForm({ layout, dispatch, readOnly }) {
         className="form-control text-monospace"
         value={layout.navbar_classes || ''}
         onTextChange={changeCallback('navbar_classes')}
-        helpText={(
+        helpText={
           <>
             Overrides the default CSS classes for the Bootstrap navigation bar
             {' (by default, '}
-            <code>
-              navbar-fixed-top navbar-expand-md mb-4 navbar-dark bg-intercode-blue
-            </code>
+            <code>navbar-fixed-top navbar-expand-md mb-4 navbar-dark bg-intercode-blue</code>
             {')'}
           </>
-        )}
+        }
         readOnly={readOnly}
       />
 

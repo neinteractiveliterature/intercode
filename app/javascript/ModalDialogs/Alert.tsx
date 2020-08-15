@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import useModal from './useModal';
 
 export type AlertState = {
-  message?: ReactNode,
+  message?: ReactNode;
 };
 
 export type AlertFunction = (message?: ReactNode) => void;
@@ -22,9 +22,7 @@ export function AlertProvider({ children }) {
     <AlertContext.Provider value={{ alert }}>
       {children}
       <Modal visible={modal.visible}>
-        <div className="modal-body">
-          {modal.state?.message ?? <div />}
-        </div>
+        <div className="modal-body">{modal.state?.message ?? <div />}</div>
         <div className="modal-footer">
           <button type="button" className="btn btn-primary" onClick={modal.close}>
             {t('buttons.ok', 'OK')}

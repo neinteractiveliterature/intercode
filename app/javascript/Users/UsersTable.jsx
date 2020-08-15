@@ -8,7 +8,7 @@ import EmailCell from '../Tables/EmailCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
-import { UsersTableUsersQuery } from './queries.gql';
+import { UsersTableUsersQuery } from './queries';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import useModal from '../ModalDialogs/useModal';
 import MergeUsersModal from './MergeUsersModal';
@@ -24,7 +24,9 @@ function CheckboxCell({ original }) {
       type="checkbox"
       value={original.id}
       checked={checkedUserIds.has(original.id)}
-      onClick={(event) => { event.stopPropagation(); }}
+      onClick={(event) => {
+        event.stopPropagation();
+      }}
       onChange={() => {
         const newCheckedUserIds = new Set(checkedUserIds);
         if (checkedUserIds.has(original.id)) {
@@ -107,7 +109,9 @@ function UsersTable() {
     getPages: ({ data }) => data.users_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'users',
-    onFilteredChange: () => { setCheckedUserIds(new Set()); },
+    onFilteredChange: () => {
+      setCheckedUserIds(new Set());
+    },
     query: UsersTableUsersQuery,
   });
 
@@ -131,7 +135,6 @@ function UsersTable() {
 
         <ReactTable
           {...reactTableProps}
-
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => ({
             style: { cursor: 'pointer' },
@@ -143,7 +146,9 @@ function UsersTable() {
             if (column.id === '_checkbox') {
               return {
                 style: { cursor: 'default' },
-                onClick: (e) => { e.stopPropagation(); },
+                onClick: (e) => {
+                  e.stopPropagation();
+                },
               };
             }
 

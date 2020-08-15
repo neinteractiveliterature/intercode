@@ -7,8 +7,11 @@ import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormR
 import { useEventProposalHistoryQueryQuery } from './queries.generated';
 
 const EXCLUDE_FIELDS = new Set([
-  'minimum_age', 'age_restrictions_description',
-  'con_mail_destination', 'email', 'team_mailing_list_name',
+  'minimum_age',
+  'age_restrictions_description',
+  'con_mail_destination',
+  'email',
+  'team_mailing_list_name',
 ]);
 
 function EventProposalHistory() {
@@ -18,21 +21,18 @@ function EventProposalHistory() {
   });
 
   const changes = useMemo(
-    () => ((loading || error || !data)
-      ? []
-      : data.eventProposal.form_response_changes.filter((change) => (
-        !EXCLUDE_FIELDS.has(change.field_identifier)
-      ))
-    ),
+    () =>
+      loading || error || !data
+        ? []
+        : data.eventProposal.form_response_changes.filter(
+            (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
+          ),
     [data, error, loading],
   );
 
   const form = useMemo(
-    () => (
-      loading || error || !data
-        ? null
-        : data.eventProposal.event_category.event_proposal_form
-    ),
+    () =>
+      loading || error || !data ? null : data.eventProposal.event_category.event_proposal_form,
     [data, error, loading],
   );
 

@@ -2,7 +2,10 @@ import moment from 'moment-timezone';
 import Timespan from '../../app/javascript/Timespan';
 
 describe('Timespan', () => {
-  const defaultTimespan = new Timespan(moment('2010-01-01T00:00:00Z'), moment('2010-01-02T00:00:00Z'));
+  const defaultTimespan = new Timespan(
+    moment('2010-01-01T00:00:00Z'),
+    moment('2010-01-02T00:00:00Z'),
+  );
   const infiniteTimespan = new Timespan(null, null);
   const beginningOfTime = defaultTimespan.clone();
   beginningOfTime.start = null;
@@ -13,10 +16,7 @@ describe('Timespan', () => {
   it('checks that finish is after start', () => {
     expect(() => {
       // eslint-disable-next-line no-new
-      new Timespan(
-        moment('2010-01-02T00:00:00Z'),
-        moment('2010-01-01T00:00:00Z'),
-      );
+      new Timespan(moment('2010-01-02T00:00:00Z'), moment('2010-01-01T00:00:00Z'));
     }).toThrow('Start cannot be after finish');
   });
 
@@ -287,7 +287,9 @@ describe('Timespan', () => {
   describe('humanizeStartInTimezone', () => {
     it('formats the start time correctly for the given time zone', () => {
       expect(defaultTimespan.humanizeStartInTimezone('UTC', 'h:mma')).toEqual('12:00am');
-      expect(defaultTimespan.humanizeStartInTimezone('America/New_York', 'h:mma')).toEqual('7:00pm');
+      expect(defaultTimespan.humanizeStartInTimezone('America/New_York', 'h:mma')).toEqual(
+        '7:00pm',
+      );
     });
 
     it('handles open ends', () => {
@@ -298,7 +300,9 @@ describe('Timespan', () => {
   describe('humanizeFinishInTimezone', () => {
     it('formats the finish time correctly for the given time zone', () => {
       expect(defaultTimespan.humanizeFinishInTimezone('UTC', 'h:mma')).toEqual('12:00am');
-      expect(defaultTimespan.humanizeFinishInTimezone('America/New_York', 'h:mma')).toEqual('7:00pm');
+      expect(defaultTimespan.humanizeFinishInTimezone('America/New_York', 'h:mma')).toEqual(
+        '7:00pm',
+      );
     });
 
     it('handles open ends', () => {
@@ -333,16 +337,23 @@ describe('Timespan', () => {
     });
 
     it('handles durations', () => {
-      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(12);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(
+        12,
+      );
     });
 
     it('returns moment objects with the correct time zone', () => {
       expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })[0].utcOffset()).toEqual(0);
-      expect(defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].utcOffset()).toEqual(-5 * 60);
+      expect(
+        defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].utcOffset(),
+      ).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
+      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', {
+        unit: 'hour',
+        offset: moment.duration(2, 'hours'),
+      });
       expect(hopsWithOffset).toHaveLength(24);
       expect(hopsWithOffset[0].hour()).toEqual(2);
     });
@@ -362,16 +373,27 @@ describe('Timespan', () => {
     });
 
     it('handles durations', () => {
-      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(12);
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', duration: 2 })).toHaveLength(
+        12,
+      );
     });
 
     it('returns timespans with the correct time zone', () => {
-      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.utcOffset()).toEqual(0);
-      expect(defaultTimespan.getTimespansWithin('America/New_York', { unit: 'day' })[0].start.utcOffset()).toEqual(-5 * 60);
+      expect(
+        defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.utcOffset(),
+      ).toEqual(0);
+      expect(
+        defaultTimespan
+          .getTimespansWithin('America/New_York', { unit: 'day' })[0]
+          .start.utcOffset(),
+      ).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', { unit: 'hour', offset: moment.duration(2, 'hours') });
+      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', {
+        unit: 'hour',
+        offset: moment.duration(2, 'hours'),
+      });
       expect(hopsWithOffset).toHaveLength(22);
       expect(hopsWithOffset[0].start.hour()).toEqual(2);
     });

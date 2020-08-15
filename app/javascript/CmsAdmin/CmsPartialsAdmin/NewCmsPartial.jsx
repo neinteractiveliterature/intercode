@@ -2,8 +2,8 @@ import React, { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import buildPartialInput from './buildPartialInput';
-import { CmsPartialsAdminQuery } from './queries.gql';
-import { CreatePartial } from './mutations.gql';
+import { CmsPartialsAdminQuery } from './queries';
+import { CreatePartial } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
@@ -36,10 +36,7 @@ function NewCmsPartial() {
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsPartialForm
-          partial={partial}
-          dispatch={dispatch}
-        />
+        <CmsPartialForm partial={partial} dispatch={dispatch} />
 
         <ErrorDisplay graphQLError={createError} />
 

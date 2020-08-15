@@ -11,9 +11,7 @@ SourceMapSupport.install();
 const props = JSON.parse(process.argv[2]);
 
 ReactDOMServer.renderToStaticNodeStream(
-  <AppRootContext.Provider
-    value={{ timezoneName: timezoneNameForConvention(props.convention) }}
-  >
+  <AppRootContext.Provider value={{ timezoneName: timezoneNameForConvention(props.convention) }}>
     <FormItemChangeGroup {...props} />
   </AppRootContext.Provider>,
 ).pipe(process.stdout);

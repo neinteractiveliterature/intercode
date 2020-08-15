@@ -4,32 +4,35 @@ import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 
 export type RenderAddValueInputProps<T> = {
-  value: T,
-  onChange: React.Dispatch<T>,
-  addValue: () => void,
+  value: T;
+  onChange: React.Dispatch<T>;
+  addValue: () => void;
 };
 
 export type ArrayEditorProps<T> = {
-  array: T[],
-  initialAddValue: T,
-  valuesEqual: (a: T, b: T) => boolean,
-  onChange: (value: T[]) => void,
-  header: ReactNode,
-  renderValue: (value: T) => ReactNode,
-  getDeleteButtonLabel: (value: T) => string,
-  getDeletePrompt: (value: T) => ReactNode,
-  renderAddValueInput: (props: RenderAddValueInputProps<T>) => ReactNode,
-  addValueLabel: ReactNode,
+  array: T[];
+  initialAddValue: T;
+  valuesEqual: (a: T, b: T) => boolean;
+  onChange: (value: T[]) => void;
+  header: ReactNode;
+  renderValue: (value: T) => ReactNode;
+  getDeleteButtonLabel: (value: T) => string;
+  getDeletePrompt: (value: T) => ReactNode;
+  renderAddValueInput: (props: RenderAddValueInputProps<T>) => ReactNode;
+  addValueLabel: ReactNode;
 };
 
 function ArrayEditor<T>({
-  array, onChange,
+  array,
+  onChange,
   initialAddValue,
   valuesEqual,
   header,
   renderValue,
-  getDeleteButtonLabel, getDeletePrompt,
-  renderAddValueInput, addValueLabel,
+  getDeleteButtonLabel,
+  getDeletePrompt,
+  renderAddValueInput,
+  addValueLabel,
 }: ArrayEditorProps<T>) {
   const confirm = useConfirm();
   const [addingValue, setAddingValue] = useState(initialAddValue);
@@ -43,27 +46,25 @@ function ArrayEditor<T>({
 
   return (
     <fieldset className="card form-group">
-      <div className="card-header">
-        {header}
-      </div>
+      <div className="card-header">{header}</div>
 
       <ul className="list-group list-group-flush">
         {array.map((value, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <li className="list-group-item" key={index}>
             <div className="d-flex">
-              <div className="flex-grow-1">
-                {renderValue(value)}
-              </div>
+              <div className="flex-grow-1">{renderValue(value)}</div>
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
                 aria-label={getDeleteButtonLabel(value)}
-                onClick={() => confirm({
-                  prompt: getDeletePrompt(value),
-                  action: () => deleteValue(value),
-                  renderError: (e) => <ErrorDisplay graphQLError={e} />,
-                })}
+                onClick={() =>
+                  confirm({
+                    prompt: getDeletePrompt(value),
+                    action: () => deleteValue(value),
+                    renderError: (e) => <ErrorDisplay graphQLError={e} />,
+                  })
+                }
               >
                 <i className="fa fa-trash-o" />
               </button>
@@ -79,11 +80,7 @@ function ArrayEditor<T>({
                 addValue,
               })}
             </div>
-            <button
-              type="button"
-              className="ml-2 btn btn-outline-primary"
-              onClick={addValue}
-            >
+            <button type="button" className="ml-2 btn btn-outline-primary" onClick={addValue}>
               {addValueLabel}
             </button>
           </div>
@@ -94,12 +91,14 @@ function ArrayEditor<T>({
 }
 
 export type StringArrayEditorProps = Omit<
-ArrayEditorProps<string>,
-'renderAddValueInput' | 'initialAddValue' | 'valuesEqual'
+  ArrayEditorProps<string>,
+  'renderAddValueInput' | 'initialAddValue' | 'valuesEqual'
 > & {
-  renderAddValueInput: (props: RenderAddValueInputProps<string> & {
-    onKeyDown: React.KeyboardEventHandler,
-  }) => ReactNode,
+  renderAddValueInput: (
+    props: RenderAddValueInputProps<string> & {
+      onKeyDown: React.KeyboardEventHandler;
+    },
+  ) => ReactNode;
 };
 
 export function StringArrayEditor({ renderAddValueInput, ...otherProps }: StringArrayEditorProps) {
@@ -107,23 +106,25 @@ export function StringArrayEditor({ renderAddValueInput, ...otherProps }: String
     <ArrayEditor
       initialAddValue=""
       valuesEqual={(a, b) => a === b}
-      renderAddValueInput={(props) => renderAddValueInput({
-        value: props.value,
-        addValue: props.addValue,
-        onKeyDown: (event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            props.addValue();
-          }
-        },
-        onChange: (addingValue: string) => {
-          if (addingValue == null || addingValue.trim().length === 0) {
-            return;
-          }
+      renderAddValueInput={(props) =>
+        renderAddValueInput({
+          value: props.value,
+          addValue: props.addValue,
+          onKeyDown: (event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              props.addValue();
+            }
+          },
+          onChange: (addingValue: string) => {
+            if (addingValue == null || addingValue.trim().length === 0) {
+              return;
+            }
 
-          props.onChange(addingValue);
-        },
-      })}
+            props.onChange(addingValue);
+          },
+        })
+      }
       {...otherProps}
     />
   );

@@ -1,32 +1,32 @@
 import { gql } from '@apollo/client';
 
 export const CmsFileFields = gql`
-fragment CmsFileFields on CmsFile {
-  id
-  filename
-  url
-  content_type
-  size
-  current_ability_can_delete
-}
+  fragment CmsFileFields on CmsFile {
+    id
+    filename
+    url
+    content_type
+    size
+    current_ability_can_delete
+  }
 `;
 
 export const CmsFilesAdminQuery = gql`
-query CmsFilesAdminQuery {
-  convention {
-    id
-    name
+  query CmsFilesAdminQuery {
+    convention {
+      id
+      name
+    }
+
+    currentAbility {
+      can_create_cms_files
+    }
+
+    cmsFiles {
+      id
+      ...CmsFileFields
+    }
   }
 
-  currentAbility {
-    can_create_cms_files
-  }
-
-  cmsFiles {
-    id
-    ...CmsFileFields
-  }
-}
-
-${CmsFileFields}
+  ${CmsFileFields}
 `;

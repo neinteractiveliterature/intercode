@@ -13,14 +13,19 @@ function useChoicePropertyUpdater(choiceChanged, generatedId, property) {
 }
 
 function MultipleChoiceOptionRow({
-  choice, choiceChanged, index, nonUnique, deleteChoice, moveChoice,
+  choice,
+  choiceChanged,
+  index,
+  nonUnique,
+  deleteChoice,
+  moveChoice,
 }) {
   const confirm = useConfirm();
   const [rowRef, drag, { isDragging }] = useSortable(index, moveChoice, 'choice');
   const captionChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'caption');
   const valueChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'value');
 
-  const missingValue = (!choice.value || choice.value.trim() === '');
+  const missingValue = !choice.value || choice.value.trim() === '';
   const hasValidationError = nonUnique || missingValue;
 
   return (
@@ -46,25 +51,21 @@ function MultipleChoiceOptionRow({
           value={choice.value || ''}
           onChange={(event) => valueChanged(event.target.value)}
         />
-        {missingValue && (
-          <div className="invalid-feedback">
-            Options must have an output value
-          </div>
-        )}
+        {missingValue && <div className="invalid-feedback">Options must have an output value</div>}
         {nonUnique && (
-          <div className="invalid-feedback">
-            Options should not have the same output value
-          </div>
+          <div className="invalid-feedback">Options should not have the same output value</div>
         )}
       </td>
       <td>
         <button
           type="button"
           className="btn btn-outline-danger btn-sm"
-          onClick={() => confirm({
-            prompt: 'Are you sure you want to delete this option?',
-            action: () => deleteChoice(choice.generatedId),
-          })}
+          onClick={() =>
+            confirm({
+              prompt: 'Are you sure you want to delete this option?',
+              action: () => deleteChoice(choice.generatedId),
+            })
+          }
         >
           <span className="sr-only">Delete option</span>
           <i className="fa fa-trash-o" />

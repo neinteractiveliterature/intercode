@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { CmsGraphqlQueriesQuery } from './queries.gql';
+import { CmsGraphqlQueriesQuery } from './queries';
 import { useConfirm } from '../../ModalDialogs/Confirm';
-import { DeleteCmsGraphqlQuery } from './mutations.gql';
+import { DeleteCmsGraphqlQuery } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import { useDeleteMutation } from '../../MutationUtils';
@@ -37,36 +37,43 @@ function CmsGraphqlQueriesAdminTable() {
             <tr key={query.id}>
               <td>
                 <code>{query.identifier}</code>
-                {
-                  query.admin_notes
-                    ? (
-                      <>
-                        <br />
-                        {query.admin_notes}
-                      </>
-                    )
-                    : null
-                }
+                {query.admin_notes ? (
+                  <>
+                    <br />
+                    {query.admin_notes}
+                  </>
+                ) : null}
               </td>
               <td className="text-right">
-                {query.current_ability_can_update
-                  ? (
-                    <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary mr-2">Edit</Link>
-                  )
-                  : (
-                    <Link to={`/cms_graphql_queries/${query.id}/view_source`} className="btn btn-sm btn-outline-secondary mr-2">View source</Link>
-                  )}
+                {query.current_ability_can_update ? (
+                  <Link
+                    to={`/cms_graphql_queries/${query.id}/edit`}
+                    className="btn btn-sm btn-secondary mr-2"
+                  >
+                    Edit
+                  </Link>
+                ) : (
+                  <Link
+                    to={`/cms_graphql_queries/${query.id}/view_source`}
+                    className="btn btn-sm btn-outline-secondary mr-2"
+                  >
+                    View source
+                  </Link>
+                )}
                 {query.current_ability_can_delete && (
                   <button
                     type="button"
                     className="btn btn-sm btn-danger"
-                    onClick={() => confirm({
-                      prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
-                      action: () => deleteCmsGraphqlQuery({
-                        variables: { id: query.id },
-                      }),
-                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                    })}
+                    onClick={() =>
+                      confirm({
+                        prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
+                        action: () =>
+                          deleteCmsGraphqlQuery({
+                            variables: { id: query.id },
+                          }),
+                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                      })
+                    }
                   >
                     Delete
                   </button>

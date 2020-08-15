@@ -18,9 +18,7 @@ function RegistrationPolicyPreview({ registrationPolicy }) {
             <p>
               <strong>Preview</strong>
             </p>
-
             Start time-end time
-
             <br />
             Room A, Room B
           </div>
@@ -40,17 +38,13 @@ function RegistrationPolicyPreview({ registrationPolicy }) {
             <SignupButtons signupOptions={signupOptions.mainNoPreference} />
           </div>
 
-          {
-            signupOptions.auxiliary.length > 0
-              ? (
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item border-bottom-0">
-                    <SignupButtons signupOptions={signupOptions.auxiliary} />
-                  </li>
-                </ul>
-              )
-              : null
-          }
+          {signupOptions.auxiliary.length > 0 ? (
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item border-bottom-0">
+                <SignupButtons signupOptions={signupOptions.auxiliary} />
+              </li>
+            </ul>
+          ) : null}
         </div>
       </div>
     </div>

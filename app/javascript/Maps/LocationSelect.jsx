@@ -6,7 +6,9 @@ import MapboxContext from '../MapboxContext';
 function LocationSelect({ ...props }) {
   const { mapboxAccessToken } = useContext(MapboxContext);
   const loadOptions = async (inputValue) => {
-    const uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(inputValue)}.json?access_token=${mapboxAccessToken}`;
+    const uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      inputValue,
+    )}.json?access_token=${mapboxAccessToken}`;
     const results = await fetch(uri);
     const json = await results.json();
     return json.features;
@@ -22,8 +24,7 @@ function LocationSelect({ ...props }) {
 
         return (
           <>
-            {option.text}
-            {' '}
+            {option.text}{' '}
             <small className="text-muted">
               {option.place_name.replace(option.text, '').replace(/^,/, '').trim()}
             </small>

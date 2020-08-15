@@ -11,11 +11,7 @@ function FilterDocHeader({ filter }) {
           {' }}'}
         </code>
       </div>
-      {
-        filter.docstring
-          ? <p className="mt-2 mb-0">{filter.docstring}</p>
-          : null
-      }
+      {filter.docstring ? <p className="mt-2 mb-0">{filter.docstring}</p> : null}
     </>
   );
 }

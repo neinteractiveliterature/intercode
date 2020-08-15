@@ -13,11 +13,12 @@ class ScheduleBlock {
     this.interval = moment.duration(1, 'hour');
     this.schedule = schedule;
 
-    const sortedEventRuns = sortBy(
-      eventRuns,
-      (eventRun) => eventRun.timespan.start.toDate().getTime(),
+    const sortedEventRuns = sortBy(eventRuns, (eventRun) =>
+      eventRun.timespan.start.toDate().getTime(),
     );
-    sortedEventRuns.forEach((eventRun) => { this.addEventRun(eventRun); });
+    sortedEventRuns.forEach((eventRun) => {
+      this.addEventRun(eventRun);
+    });
   }
 
   addEventRun(eventRun) {
@@ -25,23 +26,21 @@ class ScheduleBlock {
 
     if (!this.schedule.shouldShowRun(eventRun.runId)) {
       if (
-        this.hiddenEventsFakeEventRun
-        && this.hiddenEventsFakeEventRun.timespan.overlapsTimespan(eventRun.timespan)
+        this.hiddenEventsFakeEventRun &&
+        this.hiddenEventsFakeEventRun.timespan.overlapsTimespan(eventRun.timespan)
       ) {
         this.hiddenEventRunsInTimespan.push(eventRun);
         const run = this.schedule.getRun(this.hiddenEventsFakeEventRun.runId);
         const event = this.schedule.getEvent(run.event_id);
         event.title = `+ ${this.hiddenEventRunsInTimespan.length} not shown`;
-        this.hiddenEventsFakeEventRun.timespan = this.hiddenEventsFakeEventRun.timespan
-          .expandedToFit(eventRun.timespan);
+        this.hiddenEventsFakeEventRun.timespan = this.hiddenEventsFakeEventRun.timespan.expandedToFit(
+          eventRun.timespan,
+        );
 
         return;
       }
 
-      const fakeEventRun = this.schedule.addFakeEventRun(
-        eventRun.timespan,
-        '+ 1 not shown',
-      );
+      const fakeEventRun = this.schedule.addFakeEventRun(eventRun.timespan, '+ 1 not shown');
 
       this.hiddenEventsFakeEventRun = fakeEventRun;
       this.hiddenEventRunsInTimespan = [eventRun];
@@ -53,16 +52,14 @@ class ScheduleBlock {
   }
 
   getRunCountInTimespan(event, timespan) {
-    return event.runs
-      .filter((run) => {
-        const eventRun = this.eventRuns.find((er) => er.runId === run.id);
-        if (!eventRun) {
-          return false;
-        }
+    return event.runs.filter((run) => {
+      const eventRun = this.eventRuns.find((er) => er.runId === run.id);
+      if (!eventRun) {
+        return false;
+      }
 
-        return eventRun.timespan.overlapsTimespan(timespan);
-      })
-      .length;
+      return eventRun.timespan.overlapsTimespan(timespan);
+    }).length;
   }
 
   getTimeSortedEventRuns() {
@@ -83,13 +80,22 @@ class ScheduleBlock {
           return -1;
         }
 
-        const eventAOverlappingRunCount = this.getRunCountInTimespan(eventA, b.timespan.expand(1, 'hour'));
-        const eventBOverlappingRunCount = this.getRunCountInTimespan(eventB, a.timespan.expand(1, 'hour'));
+        const eventAOverlappingRunCount = this.getRunCountInTimespan(
+          eventA,
+          b.timespan.expand(1, 'hour'),
+        );
+        const eventBOverlappingRunCount = this.getRunCountInTimespan(
+          eventB,
+          a.timespan.expand(1, 'hour'),
+        );
         const runCountDiff = eventBOverlappingRunCount - eventAOverlappingRunCount;
 
         if (runCountDiff === 0) {
           // finally, use event title as a tiebreaker
-          const titleDiff = normalizeTitle(eventA.title).localeCompare(normalizeTitle(eventB.title), { sensitivity: 'base' });
+          const titleDiff = normalizeTitle(eventA.title).localeCompare(
+            normalizeTitle(eventB.title),
+            { sensitivity: 'base' },
+          );
 
           if (titleDiff === 0) {
             // as a tiebreaker, sort longer events first

@@ -8,17 +8,18 @@ const START_TIME = '2017-01-01T00:00:00Z';
 const FINISH_TIME = '2017-01-02T00:00:00Z';
 
 describe('TimeSelect', () => {
-  const renderTimeSelect = (props) => render((
-    <TimeSelect
-      value={{}}
-      onChange={() => {}}
-      timespan={{
-        start: moment.tz(START_TIME, 'UTC'),
-        finish: moment.tz(FINISH_TIME, 'UTC'),
-      }}
-      {...props}
-    />
-  ));
+  const renderTimeSelect = (props) =>
+    render(
+      <TimeSelect
+        value={{}}
+        onChange={() => {}}
+        timespan={{
+          start: moment.tz(START_TIME, 'UTC'),
+          finish: moment.tz(FINISH_TIME, 'UTC'),
+        }}
+        {...props}
+      />,
+    );
 
   test('it renders the correct options', () => {
     const { getByLabelText } = renderTimeSelect();
@@ -26,13 +27,11 @@ describe('TimeSelect', () => {
     const hourOptions = queries.getAllByRole(hourSelect, 'option');
     expect(hourOptions.map((option) => option.innerHTML)).toEqual([
       '',
-      ...([...Array(24).keys()].map((hour) => moment(START_TIME).set({ hour }).format('ha'))),
+      ...[...Array(24).keys()].map((hour) => moment(START_TIME).set({ hour }).format('ha')),
     ]);
     const minuteSelect = getByLabelText(/Minute/);
     const minuteOptions = queries.getAllByRole(minuteSelect, 'option');
-    expect(minuteOptions.map((option) => option.innerHTML)).toEqual([
-      '', '00', '15', '30', '45',
-    ]);
+    expect(minuteOptions.map((option) => option.innerHTML)).toEqual(['', '00', '15', '30', '45']);
   });
 
   test('it renders +days options', () => {
@@ -46,9 +45,13 @@ describe('TimeSelect', () => {
     const hourOptions = queries.getAllByRole(hourSelect, 'option');
     expect(hourOptions.map((option) => option.innerHTML)).toEqual([
       '',
-      ...([...Array(24).keys()].map((hour) => moment(START_TIME).set({ hour }).format('ha'))),
-      ...([...Array(24).keys()].map((hour) => `${moment(START_TIME).set({ hour }).format('ha')} (+1 day)`)),
-      ...([...Array(24).keys()].map((hour) => `${moment(START_TIME).set({ hour }).format('ha')} (+2 days)`)),
+      ...[...Array(24).keys()].map((hour) => moment(START_TIME).set({ hour }).format('ha')),
+      ...[...Array(24).keys()].map(
+        (hour) => `${moment(START_TIME).set({ hour }).format('ha')} (+1 day)`,
+      ),
+      ...[...Array(24).keys()].map(
+        (hour) => `${moment(START_TIME).set({ hour }).format('ha')} (+2 days)`,
+      ),
     ]);
   });
 
@@ -63,7 +66,9 @@ describe('TimeSelect', () => {
       const onChange = jest.fn();
       const { getByLabelText } = renderTimeSelect({ onChange });
       const hourSelect = getByLabelText(/Hour/);
-      fireEvent.change(hourSelect, { target: { value: '3', name: hourSelect.getAttribute('name') } });
+      fireEvent.change(hourSelect, {
+        target: { value: '3', name: hourSelect.getAttribute('name') },
+      });
       expect(onChange).toHaveBeenCalledWith({ hour: 3, minute: 0 });
     });
 
@@ -71,7 +76,9 @@ describe('TimeSelect', () => {
       const onChange = jest.fn();
       const { getByLabelText } = renderTimeSelect({ onChange, value: { hour: 1, minute: 15 } });
       const hourSelect = getByLabelText(/Hour/);
-      fireEvent.change(hourSelect, { target: { value: '3', name: hourSelect.getAttribute('name') } });
+      fireEvent.change(hourSelect, {
+        target: { value: '3', name: hourSelect.getAttribute('name') },
+      });
       expect(onChange).toHaveBeenCalledWith({ hour: 3, minute: 15 });
     });
 
@@ -79,7 +86,9 @@ describe('TimeSelect', () => {
       const onChange = jest.fn();
       const { getByLabelText } = renderTimeSelect({ value: { hour: 3, minute: 45 }, onChange });
       const hourSelect = getByLabelText(/Hour/);
-      fireEvent.change(hourSelect, { target: { value: '', name: hourSelect.getAttribute('name') } });
+      fireEvent.change(hourSelect, {
+        target: { value: '', name: hourSelect.getAttribute('name') },
+      });
       expect(onChange).toHaveBeenCalledWith({ hour: null, minute: 45 });
     });
   });

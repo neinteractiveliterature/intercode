@@ -1,9 +1,0 @@
-query CmsAdminBaseQuery {
-  convention {
-    id
-  }
-
-  currentAbility {
-    can_create_cms_navigation_items
-  }
-}

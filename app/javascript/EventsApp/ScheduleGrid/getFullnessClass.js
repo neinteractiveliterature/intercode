@@ -10,11 +10,9 @@ export default function getFullnessClass(event, signupCountData) {
   }
 
   const thresholds = getCapacityThresholds(event.registration_policy);
-  const signupCount = (
-    event.registration_policy.only_uncounted
-      ? signupCountData.getNotCountedConfirmedSignupCount()
-      : signupCountData.getConfirmedLimitedSignupCount(event)
-  );
+  const signupCount = event.registration_policy.only_uncounted
+    ? signupCountData.getNotCountedConfirmedSignupCount()
+    : signupCountData.getConfirmedLimitedSignupCount(event);
 
   if (signupCount >= thresholds.total_slots) {
     return 'event-fullness-full';

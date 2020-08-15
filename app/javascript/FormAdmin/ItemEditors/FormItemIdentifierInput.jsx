@@ -8,11 +8,11 @@ import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 function FormItemIdentifierInput({ formType, value, onChange }) {
   const standardItems = formType.standard_items || {};
   const standardIdentifiers = useMemo(
-    () => Object.entries(standardItems).map(([identifier]) => (identifier)),
+    () => Object.entries(standardItems).map(([identifier]) => identifier),
     [standardItems],
   );
 
-  const normalizedIdentifier = (value || '');
+  const normalizedIdentifier = value || '';
   const identifierIsReserved = standardIdentifiers.includes(normalizedIdentifier.toLowerCase());
 
   return (
@@ -24,22 +24,13 @@ function FormItemIdentifierInput({ formType, value, onChange }) {
       invalidFeedback={
         identifierIsReserved && (
           <>
-            <i className="fa fa-warning" />
-            {' '}
-            “
-            {normalizedIdentifier}
-            ”
-            {' '}
-            is a reserved identifier in
-            {' '}
+            <i className="fa fa-warning" /> “{normalizedIdentifier}” is a reserved identifier in{' '}
             {pluralize(formType.description)}
           </>
         )
       }
-      helpText={
-        `An identifier is a short name for your custom form items.  It should contain only lowercase
-        letters, digits, and underscores (_).  It must be unique across all items in this form.`
-      }
+      helpText={`An identifier is a short name for your custom form items.  It should contain only lowercase
+        letters, digits, and underscores (_).  It must be unique across all items in this form.`}
       value={value}
       onTextChange={onChange}
     />

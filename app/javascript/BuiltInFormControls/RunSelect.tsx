@@ -6,21 +6,21 @@ import { sortByLocaleString } from '../ValueUtils';
 import AppRootContext from '../AppRootContext';
 
 type RoomForRunSelectProps = {
-  name: string,
+  name: string;
 };
 
 type RunForRunSelectProps = {
-  id: number,
-  rooms: RoomForRunSelectProps[],
-  starts_at: string,
-  title_suffix?: string,
+  id: number;
+  rooms: RoomForRunSelectProps[];
+  starts_at: string;
+  title_suffix?: string;
 };
 
 type RunSelectProps = {
   event?: {
-    length_seconds: number,
-    runs: RunForRunSelectProps[],
-  },
+    length_seconds: number;
+    runs: RunForRunSelectProps[];
+  };
 };
 
 function RunSelect({ event, ...otherProps }: RunSelectProps) {
@@ -37,14 +37,16 @@ function RunSelect({ event, ...otherProps }: RunSelectProps) {
         const timespan = timespanFromRun(timezoneName, event, r);
         const timeDescription = timespan.humanizeInTimezone(timezoneName, undefined, undefined);
         const roomsDescription = sortByLocaleString(
-          r.rooms || [], (room: RoomForRunSelectProps) => room.name,
-        ).map((room) => room.name).join(', ');
+          r.rooms || [],
+          (room: RoomForRunSelectProps) => room.name,
+        )
+          .map((room) => room.name)
+          .join(', ');
 
         if (r.title_suffix) {
           return (
             <>
-              {r.title_suffix}
-              {' '}
+              {r.title_suffix}{' '}
               <small className="text-muted">
                 {timeDescription}
                 {' - '}
@@ -56,11 +58,7 @@ function RunSelect({ event, ...otherProps }: RunSelectProps) {
 
         return (
           <>
-            {timeDescription}
-            {' '}
-            <small className="text-muted">
-              {roomsDescription}
-            </small>
+            {timeDescription} <small className="text-muted">{roomsDescription}</small>
           </>
         );
       }}

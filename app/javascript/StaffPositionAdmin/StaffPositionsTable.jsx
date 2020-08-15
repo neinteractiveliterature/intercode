@@ -1,6 +1,4 @@
-import React, {
-  useCallback, useContext, useMemo, useState,
-} from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
@@ -8,10 +6,10 @@ import flatMap from 'lodash/flatMap';
 import { useMutation, useQuery } from '@apollo/client';
 
 import Confirm from '../ModalDialogs/Confirm';
-import { DeleteStaffPosition } from './mutations.gql';
+import { DeleteStaffPosition } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
-import { StaffPositionsQuery } from './queries.gql';
+import { StaffPositionsQuery } from './queries';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { sortByLocaleString } from '../ValueUtils';
@@ -38,8 +36,7 @@ function UserConProfilesList({ userConProfiles }) {
         url={ucp.gravatar_url}
         imgClassName="align-baseline"
         pixelSize={16}
-      />
-      {' '}
+      />{' '}
       {ucp.name_without_nickname}
     </span>
   ));
@@ -55,10 +52,8 @@ function UserConProfilesList({ userConProfiles }) {
         type="button"
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >
-        <DisclosureTriangle expanded={expanded} />
-        {' '}
-        {joinReact(fullList.slice(0, 2), ', ')}
-        {expanded ? ', ' : (<>&hellip;</>)}
+        <DisclosureTriangle expanded={expanded} /> {joinReact(fullList.slice(0, 2), ', ')}
+        {expanded ? ', ' : <>&hellip;</>}
       </button>
       {expanded && joinReact(fullList.slice(2), ', ')}
     </>
@@ -116,20 +111,17 @@ function describePermissionModel(model) {
 
 function PermissionsDescription({ permissions }) {
   const [expanded, setExpanded] = useState(false);
-  const descriptions = useMemo(
-    () => {
-      const permissionsByModel = groupBy(permissions, ({ model }) => [model.__typename, model.id]);
-      return Object.entries(permissionsByModel).map(([, modelPermissions]) => {
-        const { model } = modelPermissions[0];
-        return ({
-          key: `${model.__typename}-${model.id}`,
-          model: describePermissionModel(model),
-          abilities: describePermissionAbilities(modelPermissions),
-        });
-      });
-    },
-    [permissions],
-  );
+  const descriptions = useMemo(() => {
+    const permissionsByModel = groupBy(permissions, ({ model }) => [model.__typename, model.id]);
+    return Object.entries(permissionsByModel).map(([, modelPermissions]) => {
+      const { model } = modelPermissions[0];
+      return {
+        key: `${model.__typename}-${model.id}`,
+        model: describePermissionModel(model),
+        abilities: describePermissionAbilities(modelPermissions),
+      };
+    });
+  }, [permissions]);
 
   if (permissions.length === 0) {
     return <></>;
@@ -142,12 +134,9 @@ function PermissionsDescription({ permissions }) {
         type="button"
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >
-        <DisclosureTriangle expanded={expanded} />
-        {' '}
+        <DisclosureTriangle expanded={expanded} />{' '}
         {joinReact(
-          descriptions.map(({ key, model }) => (
-            <React.Fragment key={key}>{model}</React.Fragment>
-          )),
+          descriptions.map(({ key, model }) => <React.Fragment key={key}>{model}</React.Fragment>),
           ', ',
         )}
       </button>
@@ -176,24 +165,25 @@ function StaffPositionsTable() {
 
   const [deleteMutate] = useMutation(DeleteStaffPosition);
   const deleteStaffPosition = useCallback(
-    (id) => deleteMutate({
-      variables: { input: { id } },
-      update: (proxy) => {
-        const storeData = proxy.readQuery({ query: StaffPositionsQuery });
-        proxy.writeQuery({
-          query: StaffPositionsQuery,
-          data: {
-            ...storeData,
-            convention: {
-              ...storeData.convention,
-              staff_positions: storeData.convention.staff_positions.filter((
-                (staffPosition) => staffPosition.id !== id
-              )),
+    (id) =>
+      deleteMutate({
+        variables: { input: { id } },
+        update: (proxy) => {
+          const storeData = proxy.readQuery({ query: StaffPositionsQuery });
+          proxy.writeQuery({
+            query: StaffPositionsQuery,
+            data: {
+              ...storeData,
+              convention: {
+                ...storeData.convention,
+                staff_positions: storeData.convention.staff_positions.filter(
+                  (staffPosition) => staffPosition.id !== id,
+                ),
+              },
             },
-          },
-        });
-      },
-    }),
+          });
+        },
+      }),
     [deleteMutate],
   );
 
@@ -210,7 +200,7 @@ function StaffPositionsTable() {
   const renderRow = (staffPosition) => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
-      <td>{staffPosition.visible ? (<i className="fa fa-check" />) : null}</td>
+      <td>{staffPosition.visible ? <i className="fa fa-check" /> : null}</td>
       <td>
         <UserConProfilesList userConProfiles={staffPosition.user_con_profiles} />
       </td>
@@ -222,20 +212,12 @@ function StaffPositionsTable() {
         <ul className="list-unstyled">
           {staffPosition.email_aliases.map((alias) => (
             <li key={alias} className="text-nowrap">
-              <strong>
-                Alias:
-              </strong>
-              {' '}
-              {alias}
-              @
-              {conventionDomain}
+              <strong>Alias:</strong> {alias}@{conventionDomain}
             </li>
           ))}
           {staffPosition.cc_addresses.map((ccAddress) => (
             <li key={ccAddress} className="text-nowrap">
-              <strong>CC:</strong>
-              {' '}
-              {ccAddress}
+              <strong>CC:</strong> {ccAddress}
             </li>
           ))}
         </ul>
@@ -252,7 +234,10 @@ function StaffPositionsTable() {
           <Link to={`/staff_positions/${staffPosition.id}/edit`} className="dropdown-item">
             Edit settings
           </Link>
-          <Link to={`/staff_positions/${staffPosition.id}/edit_permissions`} className="dropdown-item">
+          <Link
+            to={`/staff_positions/${staffPosition.id}/edit_permissions`}
+            className="dropdown-item"
+          >
             Edit permissions
           </Link>
           <Confirm.Trigger>
@@ -260,11 +245,13 @@ function StaffPositionsTable() {
               <button
                 className="dropdown-item cursor-pointer text-danger"
                 type="button"
-                onClick={() => confirm({
-                  prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
-                  action: () => deleteStaffPosition(staffPosition.id),
-                  renderError: (e) => <ErrorDisplay graphQLError={e} />,
-                })}
+                onClick={() =>
+                  confirm({
+                    prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
+                    action: () => deleteStaffPosition(staffPosition.id),
+                    renderError: (e) => <ErrorDisplay graphQLError={e} />,
+                  })
+                }
               >
                 Delete
               </button>
@@ -294,12 +281,12 @@ function StaffPositionsTable() {
           </tr>
         </thead>
 
-        <tbody>
-          {sortedStaffPositions.map(renderRow)}
-        </tbody>
+        <tbody>{sortedStaffPositions.map(renderRow)}</tbody>
       </table>
 
-      <Link to="/staff_positions/new" className="btn btn-primary">New Staff Position</Link>
+      <Link to="/staff_positions/new" className="btn btn-primary">
+        New Staff Position
+      </Link>
     </div>
   );
 }

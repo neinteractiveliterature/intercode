@@ -114,10 +114,7 @@ function computeRunDimensionsWithSpanning(scheduleBlock) {
     }
   }
 
-  return new ScheduleLayoutResult(
-    [...runDimensions.values()],
-    maxColumns,
-  );
+  return new ScheduleLayoutResult([...runDimensions.values()], maxColumns);
 }
 
 export default computeRunDimensionsWithSpanning;

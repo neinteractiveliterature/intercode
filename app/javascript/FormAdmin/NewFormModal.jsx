@@ -54,9 +54,13 @@ function NewFormModal({ visible, close }) {
           onValueChange={setFormType}
           disabled={inProgress}
         >
-          <option disabled value="">Select a form type...</option>
+          <option disabled value="">
+            Select a form type...
+          </option>
           {Object.entries(FormTypes).map(([value, ft]) => (
-            <option value={value} key={value}>{capitalize(ft.description)}</option>
+            <option value={value} key={value}>
+              {capitalize(ft.description)}
+            </option>
           ))}
         </BootstrapFormSelect>
 
@@ -64,12 +68,7 @@ function NewFormModal({ visible, close }) {
       </div>
 
       <div className="modal-footer">
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={close}
-          disabled={inProgress}
-        >
+        <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
           Cancel
         </button>
         <button

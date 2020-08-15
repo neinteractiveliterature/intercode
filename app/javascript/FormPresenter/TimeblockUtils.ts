@@ -36,42 +36,45 @@ export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | 
 }
 
 function getDayStarts(convention: ConventionForTimespanUtils) {
-  return timespanFromConvention(convention)
-    .getTimeHopsWithin(timezoneNameForConvention(convention), { unit: 'day' });
+  return timespanFromConvention(convention).getTimeHopsWithin(
+    timezoneNameForConvention(convention),
+    { unit: 'day' },
+  );
 }
 
 export type ConcreteTimeblock = {
-  dayStart: Moment,
-  timeblock: TimeblockDefinition,
-  label: string,
-  timespan: FiniteTimespan,
+  dayStart: Moment;
+  timeblock: TimeblockDefinition;
+  label: string;
+  timespan: FiniteTimespan;
 };
 
 function getAllPossibleTimeblocks(
   convention: ConventionForTimespanUtils,
   formItem: TimeblockPreferenceFormItem,
 ) {
-  return flatMap(
-    getDayStarts(convention),
-    (dayStart) => formItem.rendered_properties.timeblocks.map((timeblock) => {
-      try {
-        const timespan = Timespan.fromMoments(
-          moment(dayStart).set(timeblock.start),
-          moment(dayStart).set(timeblock.finish),
-        ) as FiniteTimespan;
+  return flatMap(getDayStarts(convention), (dayStart) =>
+    formItem.rendered_properties.timeblocks
+      .map((timeblock) => {
+        try {
+          const timespan = Timespan.fromMoments(
+            moment(dayStart).set(timeblock.start),
+            moment(dayStart).set(timeblock.finish),
+          ) as FiniteTimespan;
 
-        const concreteTimeblock: ConcreteTimeblock = {
-          dayStart,
-          timeblock,
-          label: timeblock.label,
-          timespan,
-        };
+          const concreteTimeblock: ConcreteTimeblock = {
+            dayStart,
+            timeblock,
+            label: timeblock.label,
+            timespan,
+          };
 
-        return concreteTimeblock;
-      } catch (error) {
-        return null;
-      }
-    }).filter(notEmpty),
+          return concreteTimeblock;
+        } catch (error) {
+          return null;
+        }
+      })
+      .filter(notEmpty),
   );
 }
 
@@ -87,9 +90,11 @@ function isTimeblockValid(
   }
 
   const timeblockOmitted = formItem.rendered_properties.omit_timeblocks.some((omission) => {
-    const omissionDate = moment.tz(omission.date, timezoneNameForConvention(convention)).startOf('day');
+    const omissionDate = moment
+      .tz(omission.date, timezoneNameForConvention(convention))
+      .startOf('day');
     const dayStart = moment(timeblock.timespan.start).startOf('day');
-    return (omission.label === timeblock.label && omissionDate.isSame(dayStart));
+    return omission.label === timeblock.label && omissionDate.isSame(dayStart);
   });
 
   return !timeblockOmitted;
@@ -99,13 +104,14 @@ export function getValidTimeblocks(
   convention: ConventionForTimespanUtils,
   formItem: TimeblockPreferenceFormItem,
 ) {
-  return getAllPossibleTimeblocks(convention, formItem)
-    .filter((timeblock) => isTimeblockValid(convention, formItem, timeblock));
+  return getAllPossibleTimeblocks(convention, formItem).filter((timeblock) =>
+    isTimeblockValid(convention, formItem, timeblock),
+  );
 }
 
 export type TimeblockColumn = {
-  dayStart: Moment,
-  cells: (ConcreteTimeblock | null)[],
+  dayStart: Moment;
+  cells: (ConcreteTimeblock | null)[];
 };
 
 export function getValidTimeblockColumns(
@@ -115,25 +121,23 @@ export function getValidTimeblockColumns(
   const allPossibleTimeblocks = getAllPossibleTimeblocks(convention, formItem);
   return getDayStarts(convention)
     .map((dayStart) => {
-      const possibleTimeblocksForDayStart = allPossibleTimeblocks
-        .filter((timeblock) => dayStart.isSame(timeblock.dayStart));
+      const possibleTimeblocksForDayStart = allPossibleTimeblocks.filter((timeblock) =>
+        dayStart.isSame(timeblock.dayStart),
+      );
 
       return {
         dayStart,
-        cells: possibleTimeblocksForDayStart
-          .map((timeblock) => (
-            isTimeblockValid(convention, formItem, timeblock)
-              ? timeblock
-              : null
-          )),
+        cells: possibleTimeblocksForDayStart.map((timeblock) =>
+          isTimeblockValid(convention, formItem, timeblock) ? timeblock : null,
+        ),
       };
     })
     .filter((column) => column.cells.some(notEmpty));
 }
 
 export type TimeblockRow = {
-  timeblock: TimeblockDefinition,
-  cells: (ConcreteTimeblock | null)[],
+  timeblock: TimeblockDefinition;
+  cells: (ConcreteTimeblock | null)[];
 };
 
 export function rotateTimeblockColumnsToRows(
@@ -142,22 +146,24 @@ export function rotateTimeblockColumnsToRows(
 ): TimeblockRow[] {
   const columnCount = columns.length;
 
-  return formItem.rendered_properties.timeblocks.map((timeblock, x) => {
-    const row: (ConcreteTimeblock | null)[] = [];
-    for (let y = 0; y < columnCount; y += 1) {
-      const column = columns[y];
-      row.push(column.cells[x]);
-    }
+  return formItem.rendered_properties.timeblocks
+    .map((timeblock, x) => {
+      const row: (ConcreteTimeblock | null)[] = [];
+      for (let y = 0; y < columnCount; y += 1) {
+        const column = columns[y];
+        row.push(column.cells[x]);
+      }
 
-    if (row.some((cell) => cell != null)) {
-      return {
-        timeblock,
-        cells: row,
-      };
-    }
+      if (row.some((cell) => cell != null)) {
+        return {
+          timeblock,
+          cells: row,
+        };
+      }
 
-    return null;
-  }).filter(notEmpty);
+      return null;
+    })
+    .filter(notEmpty);
 }
 
 export function getColumnHeader(column: TimeblockColumn) {

@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import classNames from 'classnames';
 
-function EventListPagination({
-  currentPage, totalPages, onPageChange, extraClasses,
-}) {
+function EventListPagination({ currentPage, totalPages, onPageChange, extraClasses }) {
   return (
     <nav>
       <Pagination

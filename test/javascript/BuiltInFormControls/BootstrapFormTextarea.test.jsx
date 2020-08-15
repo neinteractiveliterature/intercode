@@ -4,12 +4,10 @@ import { render, fireEvent } from '../testUtils';
 import BootstrapFormTextarea from '../../../app/javascript/BuiltInFormControls/BootstrapFormTextarea';
 
 describe('BootstrapFormTextarea', () => {
-  const renderComponent = (overrideProps = {}) => render(<BootstrapFormTextarea
-    name="my_textarea"
-    label="type in me"
-    value=""
-    {...overrideProps}
-  />);
+  const renderComponent = (overrideProps = {}) =>
+    render(
+      <BootstrapFormTextarea name="my_textarea" label="type in me" value="" {...overrideProps} />,
+    );
 
   test('it passes change events', () => {
     const onChange = jest.fn();

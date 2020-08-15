@@ -16,14 +16,15 @@ export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_now', 'Signups frozen'],
 ];
 
-
 const buildMaximumEventSignupsInput = (value, onChange) => {
   const processChangeEvent = (event) => {
     onChange(event.target.value);
   };
 
   const options = MAXIMUM_EVENT_SIGNUPS_OPTIONS.map(([optionValue, label]) => (
-    <option key={optionValue} value={optionValue}>{label}</option>
+    <option key={optionValue} value={optionValue}>
+      {label}
+    </option>
   ));
 
   return (
@@ -42,10 +43,13 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
     changeAcceptingProposals,
     changeShowEventList,
     changeShowSchedule,
-  ] = useChangeDispatchers(
-    dispatch,
-    ['signup_mode', 'signup_requests_open', 'accepting_proposals', 'show_event_list', 'show_schedule'],
-  );
+  ] = useChangeDispatchers(dispatch, [
+    'signup_mode',
+    'signup_requests_open',
+    'accepting_proposals',
+    'show_event_list',
+    'show_schedule',
+  ]);
 
   const dispatchMaximumEventSignups = useCallback(
     (action) => dispatch({ type: 'dispatchMaximumEventSignups', action }),
@@ -58,8 +62,15 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         name="signup_mode"
         caption="Signup mode"
         choices={[
-          { value: 'self_service', label: 'Self-service (attendees can sign themselves up for events)' },
-          { value: 'moderated', label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)' },
+          {
+            value: 'self_service',
+            label: 'Self-service (attendees can sign themselves up for events)',
+          },
+          {
+            value: 'moderated',
+            label:
+              'Moderated (attendees can request signups and signup changes but con staff must approve them)',
+          },
         ]}
         value={convention.signup_mode}
         onChange={changeSignupMode}
@@ -88,7 +99,10 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         choices={[
           { value: 'no', label: 'No' },
           { value: 'priv', label: 'Only to users with prerelease schedule viewing permission' },
-          { value: 'gms', label: 'Only to event team members and users with any schedule viewing permissions' },
+          {
+            value: 'gms',
+            label: 'Only to event team members and users with any schedule viewing permissions',
+          },
           { value: 'yes', label: 'Yes, to everyone' },
         ]}
         value={convention.show_event_list}
@@ -102,7 +116,10 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         choices={[
           { value: 'no', label: 'No' },
           { value: 'priv', label: 'Only to users with prerelease schedule viewing permission' },
-          { value: 'gms', label: 'Only to event team members and users with any schedule viewing permissions' },
+          {
+            value: 'gms',
+            label: 'Only to event team members and users with any schedule viewing permissions',
+          },
           { value: 'yes', label: 'Yes, to everyone' },
         ]}
         value={convention.show_schedule}
@@ -130,11 +147,13 @@ ConventionFormEventsSection.propTypes = {
     show_schedule: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
     show_event_list: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
     maximum_event_signups: PropTypes.shape({
-      timespans: PropTypes.arrayOf(PropTypes.shape({
-        start: PropTypes.string,
-        finish: PropTypes.string,
-        value: PropTypes.string.isRequired,
-      }).isRequired).isRequired,
+      timespans: PropTypes.arrayOf(
+        PropTypes.shape({
+          start: PropTypes.string,
+          finish: PropTypes.string,
+          value: PropTypes.string.isRequired,
+        }).isRequired,
+      ).isRequired,
     }).isRequired,
     site_mode: PropTypes.oneOf(['convention', 'single_event']).isRequired,
     signup_mode: PropTypes.oneOf(['self_service', 'moderated']).isRequired,

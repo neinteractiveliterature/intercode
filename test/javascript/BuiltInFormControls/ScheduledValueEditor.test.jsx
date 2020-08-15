@@ -3,18 +3,21 @@ import moment from 'moment';
 
 import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
-import ScheduledValueEditor, { scheduledValueIsValid } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, {
+  scheduledValueIsValid,
+} from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 
 describe('ScheduledValueEditor', () => {
-  const renderScheduledValueEditor = (props) => render((
-    <ScheduledValueEditor
-      scheduledValue={{ timespans: [] }}
-      timezone="UTC"
-      dispatch={() => {}}
-      buildValueInput={buildTestScheduledValueInput}
-      {...props}
-    />
-  ));
+  const renderScheduledValueEditor = (props) =>
+    render(
+      <ScheduledValueEditor
+        scheduledValue={{ timespans: [] }}
+        timezone="UTC"
+        dispatch={() => {}}
+        buildValueInput={buildTestScheduledValueInput}
+        {...props}
+      />,
+    );
 
   test('it renders the correct values', () => {
     const cutoff = moment();
@@ -43,9 +46,7 @@ describe('ScheduledValueEditor', () => {
     const dispatch = jest.fn();
     const { getByText } = renderScheduledValueEditor({
       scheduledValue: {
-        timespans: [
-          { value: 'something', start: null, finish: null },
-        ],
+        timespans: [{ value: 'something', start: null, finish: null }],
       },
       dispatch,
     });
@@ -57,9 +58,7 @@ describe('ScheduledValueEditor', () => {
     const dispatch = jest.fn();
     const { getByTestId } = renderScheduledValueEditor({
       scheduledValue: {
-        timespans: [
-          { value: 'something', start: null, finish: null },
-        ],
+        timespans: [{ value: 'something', start: null, finish: null }],
       },
       dispatch,
     });
@@ -80,24 +79,28 @@ describe('ScheduledValueEditor', () => {
     });
 
     test('it requires every timespan have a value', () => {
-      expect(scheduledValueIsValid({
-        timespans: [{ start: null, finish: null, value: null }],
-      })).toBeFalsy();
+      expect(
+        scheduledValueIsValid({
+          timespans: [{ start: null, finish: null, value: null }],
+        }),
+      ).toBeFalsy();
 
-      expect(scheduledValueIsValid({
-        timespans: [
-          { start: null, finish: null, value: null },
-          { start: null, finish: null, value: 6 },
-        ],
-      })).toBeFalsy();
+      expect(
+        scheduledValueIsValid({
+          timespans: [
+            { start: null, finish: null, value: null },
+            { start: null, finish: null, value: 6 },
+          ],
+        }),
+      ).toBeFalsy();
     });
 
     test('it passes if every timespan has a value', () => {
-      expect(scheduledValueIsValid({
-        timespans: [
-          { start: null, finish: null, value: 6 },
-        ],
-      })).toBeTruthy();
+      expect(
+        scheduledValueIsValid({
+          timespans: [{ start: null, finish: null, value: 6 }],
+        }),
+      ).toBeTruthy();
     });
   });
 });

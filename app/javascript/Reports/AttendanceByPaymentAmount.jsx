@@ -3,7 +3,7 @@ import { capitalize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 import { useQuery } from '@apollo/client';
 
-import { AttendanceByPaymentAmountQuery } from './queries.gql';
+import { AttendanceByPaymentAmountQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
@@ -18,8 +18,8 @@ function describeRow(ticketType, paymentAmount) {
 }
 
 function descriptionCell(ticketType, paymentAmount) {
-  if (ticketType.pricing_schedule.timespans
-    .some((timespan) => isEqual(timespan.value, paymentAmount))
+  if (
+    ticketType.pricing_schedule.timespans.some((timespan) => isEqual(timespan.value, paymentAmount))
   ) {
     return <td>{describeRow(ticketType, paymentAmount)}</td>;
   }
@@ -27,11 +27,11 @@ function descriptionCell(ticketType, paymentAmount) {
   return (
     <td
       className="text-danger"
-      title={`${formatMoney(paymentAmount)} does not appear in the pricing schedule for ${ticketType.description}`}
+      title={`${formatMoney(paymentAmount)} does not appear in the pricing schedule for ${
+        ticketType.description
+      }`}
     >
-      <i className="fa fa-exclamation-circle" />
-      {' '}
-      {describeRow(ticketType, paymentAmount)}
+      <i className="fa fa-exclamation-circle" /> {describeRow(ticketType, paymentAmount)}
     </td>
   );
 }
@@ -80,7 +80,9 @@ function AttendanceByPaymentAmount() {
               {descriptionCell(ticketType, paymentAmount)}
               <td className="text-right">
                 <a
-                  href={`/user_con_profiles?columns=name,email,ticket,privileges,payment_amount&filters.ticket=${ticketType.id}&filters.payment_amount=${paymentAmount.fractional / 100}`}
+                  href={`/user_con_profiles?columns=name,email,ticket,privileges,payment_amount&filters.ticket=${
+                    ticketType.id
+                  }&filters.payment_amount=${paymentAmount.fractional / 100}`}
                 >
                   {count}
                 </a>
@@ -93,10 +95,10 @@ function AttendanceByPaymentAmount() {
         </tbody>
         <tfoot>
           <tr className="font-weight-bold">
-            <td colSpan="2" className="text-right">Total revenue</td>
-            <td className="text-right">
-              {formatMoney(data.convention.reports.total_revenue)}
+            <td colSpan="2" className="text-right">
+              Total revenue
             </td>
+            <td className="text-right">{formatMoney(data.convention.reports.total_revenue)}</td>
           </tr>
         </tfoot>
       </table>

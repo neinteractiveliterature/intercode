@@ -1,6 +1,4 @@
-import React, {
-  useContext, useMemo, useRef, useEffect, useState,
-} from 'react';
+import React, { useContext, useMemo, useRef, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import sortBy from 'lodash/sortBy';
 import { useLocation } from 'react-router-dom';
@@ -19,42 +17,47 @@ import SearchNavigationItem from './SearchNavigationItem';
 import NavigationBarContext from './NavigationBarContext';
 
 type RootItem = AppRootContext['cmsNavigationItems'][0] & {
-  sectionItems: AppRootContext['cmsNavigationItems'],
+  sectionItems: AppRootContext['cmsNavigationItems'];
 };
 
 type NavigationBarContentProps = {
-  navbarClasses?: string,
-  rootItems: RootItem[],
+  navbarClasses?: string;
+  rootItems: RootItem[];
 };
 
 function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContentProps) {
   const { t } = useTranslation();
   const location = useLocation();
   const {
-    conventionName, conventionCanceled, rootSiteName, siteMode, ticketsAvailableForPurchase,
+    conventionName,
+    conventionCanceled,
+    rootSiteName,
+    siteMode,
+    ticketsAvailableForPurchase,
   } = useContext(AppRootContext);
   const collapseRef = useRef<HTMLDivElement>(null);
-  const {
-    collapsed, collapseProps, setCollapsed, toggleCollapsed,
-  } = useCollapse(collapseRef);
+  const { collapsed, collapseProps, setCollapsed, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const [hideBrand, setHideBrand] = useState(false);
   const [hideNavItems, setHideNavItems] = useState(false);
 
-  useEffect(
-    () => {
-      setCollapsed(true);
-    },
-    [location.pathname, setCollapsed],
-  );
+  useEffect(() => {
+    setCollapsed(true);
+  }, [location.pathname, setCollapsed]);
 
   return (
     <NavigationBarContext.Provider
       value={{
-        setHideBrand, hideBrand, setHideNavItems, hideNavItems,
+        setHideBrand,
+        hideBrand,
+        setHideNavItems,
+        hideNavItems,
       }}
     >
-      <nav className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })} role="navigation">
+      <nav
+        className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })}
+        role="navigation"
+      >
         <div className="container">
           <NavigationBrand item={{ label: conventionName || rootSiteName }} />
           <div
@@ -67,9 +70,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
               {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
                 <TicketPurchaseNavigationItem />
               )}
-              {conventionName && siteMode !== 'single_event' && (
-                <EventsNavigationSection />
-              )}
+              {conventionName && siteMode !== 'single_event' && <EventsNavigationSection />}
               {rootItems.map((rootItem) => {
                 if (rootItem.sectionItems && rootItem.sectionItems.length > 0) {
                   return (
@@ -120,7 +121,9 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
           <div className="navbar-convention-canceled-notice">
             <div className="container">
               <div className="text-center flex-grow-1">
-                {t('alerts.conventionCanceled', '{{ conventionName }} is canceled.', { conventionName })}
+                {t('alerts.conventionCanceled', '{{ conventionName }} is canceled.', {
+                  conventionName,
+                })}
               </div>
             </div>
           </div>
@@ -133,38 +136,32 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
 const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
 
 export type NavigationBarProps = {
-  navbarClasses: string,
+  navbarClasses: string;
 };
 
 function NavigationBar({ navbarClasses }: NavigationBarProps) {
   const { cmsNavigationItems } = useContext(AppRootContext);
 
-  const rootNavigationItems: RootItem[] = useMemo(
-    () => {
-      const rootItems = sortBy(
-        cmsNavigationItems.filter((item) => item.navigation_section == null),
+  const rootNavigationItems: RootItem[] = useMemo(() => {
+    const rootItems = sortBy(
+      cmsNavigationItems.filter((item) => item.navigation_section == null),
+      (item) => item.position,
+    );
+
+    return rootItems.map((rootItem) => {
+      const sectionItems = sortBy(
+        cmsNavigationItems.filter(
+          (item) => item.navigation_section && item.navigation_section.id === rootItem.id,
+        ),
         (item) => item.position,
       );
 
-      return rootItems.map((rootItem) => {
-        const sectionItems = sortBy(
-          cmsNavigationItems.filter(
-            (item) => item.navigation_section && item.navigation_section.id === rootItem.id,
-          ),
-          (item) => item.position,
-        );
-
-        return { ...rootItem, sectionItems };
-      });
-    },
-    [cmsNavigationItems],
-  );
+      return { ...rootItem, sectionItems };
+    });
+  }, [cmsNavigationItems]);
 
   return (
-    <MemoizedNavigationBarContent
-      rootItems={rootNavigationItems}
-      navbarClasses={navbarClasses}
-    />
+    <MemoizedNavigationBarContent rootItems={rootNavigationItems} navbarClasses={navbarClasses} />
   );
 }
 

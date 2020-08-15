@@ -34,34 +34,27 @@ function RunHeader({ eventId, runId }) {
       </h1>
 
       <h3 className="mt-0">
-        {timespanFromRun(timezoneName, data.event, data.event.run)
-          .humanizeInTimezone(timezoneName)}
+        {timespanFromRun(timezoneName, data.event, data.event.run).humanizeInTimezone(timezoneName)}
       </h3>
 
       <ul className="list-inline">
         {data.event.registration_policy.slots_limited && (
           <li className="list-inline-item">
-            {t(
-              'events.runHeader.maxSignups',
-              'Max signups: {{ count }}',
-              { count: data.event.registration_policy.total_slots },
-            )}
+            {t('events.runHeader.maxSignups', 'Max signups: {{ count }}', {
+              count: data.event.registration_policy.total_slots,
+            })}
           </li>
         )}
 
-        {
-          data.event.registration_policy.buckets.length > 1
-            ? (
-              <li className="list-inline-item">
-                (
-                {data.event.registration_policy.buckets
-                  .map((bucket) => `${bucket.name}: ${bucket.total_slots}`)
-                  .join(', ')}
-                )
-              </li>
+        {data.event.registration_policy.buckets.length > 1 ? (
+          <li className="list-inline-item">
+            (
+            {data.event.registration_policy.buckets
+              .map((bucket) => `${bucket.name}: ${bucket.total_slots}`)
+              .join(', ')}
             )
-            : null
-        }
+          </li>
+        ) : null}
       </ul>
     </div>
   );

@@ -33,15 +33,13 @@ function iconForContentType(contentType: string) {
 }
 
 export type FilePreviewProps = {
-  url?: string,
-  contentType?: string,
-  filename?: string,
-  size?: string,
+  url?: string;
+  contentType?: string;
+  filename?: string;
+  size?: string;
 };
 
-function FilePreview({
-  url, contentType, filename, size,
-}: FilePreviewProps) {
+function FilePreview({ url, contentType, filename, size }: FilePreviewProps) {
   if (!contentType) {
     return null;
   }

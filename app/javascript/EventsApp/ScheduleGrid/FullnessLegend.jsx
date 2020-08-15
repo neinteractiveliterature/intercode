@@ -62,7 +62,10 @@ function FullnessLegend() {
                 /
                 <abbr
                   className="text-info"
-                  title={t('schedule.legends.attendeeCounts.nocount', 'non-counted signups (usually staff or NPCs)')}
+                  title={t(
+                    'schedule.legends.attendeeCounts.nocount',
+                    'non-counted signups (usually staff or NPCs)',
+                  )}
                 >
                   {t('schedule.legends.attendeeCounts.nocountAbbreviation', 'nocount')}
                 </abbr>

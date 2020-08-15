@@ -11,11 +11,7 @@ export function SingleLineTimestampCell({ value }) {
     return null;
   }
 
-  return (
-    <>
-      {timestamp.toFormat('yyyy-MM-dd HH:mm')}
-    </>
-  );
+  return <>{timestamp.toFormat('yyyy-MM-dd HH:mm')}</>;
 }
 
 SingleLineTimestampCell.propTypes = {

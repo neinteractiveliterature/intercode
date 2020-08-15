@@ -11,8 +11,8 @@ import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { StaffPosition } from '../graphqlTypes.generated';
 
 export type StaffPositionFormProps = {
-  staffPosition: StaffPosition,
-  onChange: React.Dispatch<StaffPosition>,
+  staffPosition: StaffPosition;
+  onChange: React.Dispatch<StaffPosition>;
 };
 
 function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
@@ -28,12 +28,16 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
     },
   });
 
-  const setEmailAliases = (emailAliases: StaffPosition['email_aliases']) => onChange({
-    ...staffPosition, email_aliases: emailAliases,
-  });
-  const setCcAddresses = (ccAddresses: StaffPosition['cc_addresses']) => onChange({
-    ...staffPosition, cc_addresses: ccAddresses,
-  });
+  const setEmailAliases = (emailAliases: StaffPosition['email_aliases']) =>
+    onChange({
+      ...staffPosition,
+      email_aliases: emailAliases,
+    });
+  const setCcAddresses = (ccAddresses: StaffPosition['cc_addresses']) =>
+    onChange({
+      ...staffPosition,
+      cc_addresses: ccAddresses,
+    });
 
   return (
     <div>
@@ -54,27 +58,26 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
       />
 
       <StringArrayEditor
-        header={(
+        header={
           <>
             <legend className="col-form-label p-0">Email aliases</legend>
             <small className="text-muted">
               Email sent to these addresses will also be automatically forwarded to staff members.
             </small>
           </>
-        )}
+        }
         array={staffPosition.email_aliases}
         onChange={setEmailAliases}
         renderValue={(value) => (
           <>
             {value}
-            <em>
-              @
-              {conventionDomain}
-            </em>
+            <em>@{conventionDomain}</em>
           </>
         )}
         getDeleteButtonLabel={(value) => `Delete alias ${value}@${conventionDomain}`}
-        getDeletePrompt={(value) => `Are you sure you want to delete the email alias ${value}@${conventionDomain}?`}
+        getDeletePrompt={(value) =>
+          `Are you sure you want to delete the email alias ${value}@${conventionDomain}?`
+        }
         renderAddValueInput={({ value, onChange: onAddValueChange, onKeyDown }) => (
           <EmailAliasInput
             value={value}
@@ -107,14 +110,14 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
       </FormGroupWithLabel>
 
       <StringArrayEditor
-        header={(
+        header={
           <>
             <legend className="col-form-label p-0">CC addresses</legend>
             <small className="text-muted">
               Email sent to staff members will also be automatically forwarded to these addresses.
             </small>
           </>
-        )}
+        }
         array={staffPosition.cc_addresses}
         onChange={setCcAddresses}
         renderValue={(value) => value}

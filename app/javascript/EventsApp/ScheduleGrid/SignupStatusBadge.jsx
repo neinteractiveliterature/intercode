@@ -16,7 +16,11 @@ function SignupStatusBadge({ signupStatus, myRating }) {
   }
 
   if (myRating) {
-    return <span className="mr-1"><EventRatingIcon rating={myRating} selected /></span>;
+    return (
+      <span className="mr-1">
+        <EventRatingIcon rating={myRating} selected />
+      </span>
+    );
   }
 
   return null;

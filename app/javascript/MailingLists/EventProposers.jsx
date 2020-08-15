@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { EventProposersQuery } from './queries.gql';
+import { EventProposersQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
@@ -11,7 +11,10 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function EventProposers() {
   const { data, loading, error } = useQuery(EventProposersQuery);
 
-  usePageTitle('Event proposers', useValueUnless(() => data.convention, error || loading));
+  usePageTitle(
+    'Event proposers',
+    useValueUnless(() => data.convention, error || loading),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;

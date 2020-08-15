@@ -37,9 +37,8 @@ function ForceConfirmSignupModal({ signup, onComplete, onCancel }) {
 
         <p className="text-danger">
           Caution: this operation ignores registration bucket capacity (and therefore can overfill
-          the event run).  Doing this may have
-          unexpected effects if other attendees drop out of the event.  Adjusting the event capacity
-          after doing this is strongly recommended.
+          the event run). Doing this may have unexpected effects if other attendees drop out of the
+          event. Adjusting the event capacity after doing this is strongly recommended.
         </p>
 
         <ErrorDisplay graphQLError={error} />
@@ -47,24 +46,17 @@ function ForceConfirmSignupModal({ signup, onComplete, onCancel }) {
     );
   };
 
-  const disableOK = (bucketKey == null) || inProgress;
+  const disableOK = bucketKey == null || inProgress;
 
   return (
     <Modal visible={signup != null}>
-      <div className="modal-header">
-        Force signup into run
-      </div>
-      <div className="modal-body">
-        {renderBody()}
-      </div>
+      <div className="modal-header">Force signup into run</div>
+      <div className="modal-body">{renderBody()}</div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={onClickOK}
-          disabled={disableOK}
-        >
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+          Cancel
+        </button>
+        <button type="button" className="btn btn-primary" onClick={onClickOK} disabled={disableOK}>
           OK
         </button>
       </div>
@@ -82,10 +74,12 @@ ForceConfirmSignupModal.propTypes = {
     run: PropTypes.shape({
       event: PropTypes.shape({
         registration_policy: PropTypes.shape({
-          buckets: PropTypes.arrayOf(PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-          })).isRequired,
+          buckets: PropTypes.arrayOf(
+            PropTypes.shape({
+              key: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+            }),
+          ).isRequired,
         }).isRequired,
       }).isRequired,
     }).isRequired,

@@ -8,14 +8,11 @@ export default function useAutoClosingDropdownRef() {
   const dropdownRef = useRef<PopperDropdownImperativeHandle>(null);
   const { visible: authenticationModalVisible } = useContext(AuthenticationModalContext);
 
-  useEffect(
-    () => {
-      if (dropdownRef.current) {
-        dropdownRef.current.setVisible(false);
-      }
-    },
-    [location, authenticationModalVisible],
-  );
+  useEffect(() => {
+    if (dropdownRef.current) {
+      dropdownRef.current.setVisible(false);
+    }
+  }, [location, authenticationModalVisible]);
 
   return dropdownRef;
 }

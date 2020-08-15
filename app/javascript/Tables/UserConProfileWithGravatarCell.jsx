@@ -6,12 +6,7 @@ import Gravatar from '../Gravatar';
 function UserConProfileWithGravatarCell({ value }) {
   return (
     <>
-      <Gravatar
-        url={value.gravatar_url}
-        enabled={value.gravatar_enabled}
-        pixelSize={16}
-      />
-      {' '}
+      <Gravatar url={value.gravatar_url} enabled={value.gravatar_enabled} pixelSize={16} />{' '}
       {value.name_inverted}
     </>
   );

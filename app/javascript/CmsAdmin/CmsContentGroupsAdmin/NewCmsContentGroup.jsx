@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
-import { CmsContentGroupsAdminQuery } from './queries.gql';
-import { CreateContentGroup } from './mutations.gql';
+import { CmsContentGroupsAdminQuery } from './queries';
+import { CreateContentGroup } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import useAsyncFunction from '../../useAsyncFunction';
@@ -47,7 +47,8 @@ function NewCmsContentGroup() {
         cmsContentGroup: {
           name: contentGroup.name,
           contents: contentGroup.contents.map(({ id, __typename }) => ({
-            id, content_type: __typename,
+            id,
+            content_type: __typename,
           })),
         },
         permissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),

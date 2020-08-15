@@ -11,19 +11,23 @@ import { lazyWithBundleHashCheck } from '../../checkBundleHash';
 import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
 import AuthenticityTokensContext from '../../AuthenticityTokensContext';
 
-const GraphiQL = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
+const GraphiQL = lazyWithBundleHashCheck(() =>
+  import(/* webpackChunkName: 'graphiql' */ 'graphiql'),
+);
 
 function CmsGraphqlQueryForm({ value, onChange, readOnly }) {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
-  const valueMutator = onChange && mutator({
-    getState: () => value,
-    setState: onChange,
-    transforms: {
-      identifier: Transforms.identity,
-      admin_notes: Transforms.identity,
-      query: Transforms.identity,
-    },
-  });
+  const valueMutator =
+    onChange &&
+    mutator({
+      getState: () => value,
+      setState: onChange,
+      transforms: {
+        identifier: Transforms.identity,
+        admin_notes: Transforms.identity,
+        query: Transforms.identity,
+      },
+    });
   const link = useIntercodeApolloLink(authenticityToken);
 
   const fetcher = useCallback(

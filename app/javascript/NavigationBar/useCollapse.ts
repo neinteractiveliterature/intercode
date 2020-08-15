@@ -1,6 +1,4 @@
-import {
-  useState, useRef, useLayoutEffect, useEffect,
-} from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import classnames from 'classnames';
 
 const COLLAPSE_DURATION = 350;
@@ -28,44 +26,44 @@ export default function useCollapse<T extends HTMLElement>(elementRef: React.Ref
     collapseTimeoutId.current = undefined;
   };
 
-  useLayoutEffect(
-    () => {
-      if (!elementRef.current) {
-        return;
+  useLayoutEffect(() => {
+    if (!elementRef.current) {
+      return;
+    }
+
+    if (collapsed !== prevCollapsed) {
+      if (!collapsed) {
+        // measure the height after the DOM has updated
+        setHeightOverride(elementRef.current.scrollHeight);
       }
 
-      if (collapsed !== prevCollapsed) {
-        if (!collapsed) {
-          // measure the height after the DOM has updated
-          setHeightOverride(elementRef.current.scrollHeight);
+      if (collapseTimeoutId.current) {
+        clearTimeout(collapseTimeoutId.current);
+        collapseTimeoutId.current = undefined;
+      }
+
+      requestAnimationFrame(() => {
+        if (collapsed) {
+          // force a reflow; stolen from Reactstrap
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const unused = elementRef.current?.scrollHeight;
+          setHeightOverride(0);
         }
 
-        if (collapseTimeoutId.current) {
-          clearTimeout(collapseTimeoutId.current);
-          collapseTimeoutId.current = undefined;
-        }
+        collapseTimeoutId.current = window.setTimeout(finishCollapse, COLLAPSE_DURATION);
+      });
+    }
+  }, [collapsed, elementRef, prevCollapsed]);
 
-        requestAnimationFrame(() => {
-          if (collapsed) {
-            // force a reflow; stolen from Reactstrap
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const unused = elementRef.current?.scrollHeight;
-            setHeightOverride(0);
-          }
-
-          collapseTimeoutId.current = window.setTimeout(finishCollapse, COLLAPSE_DURATION);
-        });
+  useEffect(
+    () => () => {
+      if (collapseTimeoutId.current) {
+        clearTimeout(collapseTimeoutId.current);
+        collapseTimeoutId.current = undefined;
       }
     },
-    [collapsed, elementRef, prevCollapsed],
+    [],
   );
-
-  useEffect(() => () => {
-    if (collapseTimeoutId.current) {
-      clearTimeout(collapseTimeoutId.current);
-      collapseTimeoutId.current = undefined;
-    }
-  }, []);
 
   const collapseProps = {
     className: classnames({
@@ -77,6 +75,9 @@ export default function useCollapse<T extends HTMLElement>(elementRef: React.Ref
   };
 
   return {
-    collapsed, toggleCollapsed, setCollapsed, collapseProps,
+    collapsed,
+    toggleCollapsed,
+    setCollapsed,
+    collapseProps,
   };
 }

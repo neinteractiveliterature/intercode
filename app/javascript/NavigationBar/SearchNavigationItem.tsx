@@ -32,7 +32,10 @@ function SearchNavigationItem() {
   );
 
   return (
-    <div className="navbar-nav flex-grow-1 justify-content-end mr-2" style={{ position: 'relative' }}>
+    <div
+      className="navbar-nav flex-grow-1 justify-content-end mr-2"
+      style={{ position: 'relative' }}
+    >
       <SiteSearch
         setVisible={setVisibleWithHiding}
         visible={visible}

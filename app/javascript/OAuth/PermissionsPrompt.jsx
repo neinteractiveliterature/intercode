@@ -70,30 +70,29 @@ function PermissionsPrompt({ scopeNames }) {
             className="cursor-pointer btn btn-link text-body p-0 text-decoration-none"
             onClick={() => groupClicked(scopeGroup)}
           >
-            {
-              expandedGroups.includes(scopeGroup)
-                ? <i className="fa fa-caret-down"><span className="sr-only">Collapse</span></i>
-                : <i className="fa fa-caret-right"><span className="sr-only">Expand</span></i>
-            }
-            {' '}
+            {expandedGroups.includes(scopeGroup) ? (
+              <i className="fa fa-caret-down">
+                <span className="sr-only">Collapse</span>
+              </i>
+            ) : (
+              <i className="fa fa-caret-right">
+                <span className="sr-only">Expand</span>
+              </i>
+            )}{' '}
             <strong>{SCOPE_GROUP_DESCRIPTIONS[scopeGroup]}</strong>
           </button>
         </div>
 
-        {
-          expandedGroups.includes(scopeGroup)
-            ? (
-              <div className="card-body">
-                <p>This application will be able to:</p>
-                <ul className="mb-0">
-                  {groupedScopes[scopeGroup].map((scopeName) => (
-                    <li key={scopeName}>{SCOPE_DESCRIPTIONS[scopeName]}</li>
-                  ))}
-                </ul>
-              </div>
-            )
-            : null
-        }
+        {expandedGroups.includes(scopeGroup) ? (
+          <div className="card-body">
+            <p>This application will be able to:</p>
+            <ul className="mb-0">
+              {groupedScopes[scopeGroup].map((scopeName) => (
+                <li key={scopeName}>{SCOPE_DESCRIPTIONS[scopeName]}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </section>
     );
   });

@@ -1,12 +1,10 @@
 import React from 'react';
-import {
-  Switch, Route, useParams, useRouteMatch,
-} from 'react-router-dom';
+import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import EditOrganizationRole from './EditOrganizationRole';
 import NewOrganizationRole from './NewOrganizationRole';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 import ErrorDisplay from '../ErrorDisplay';
@@ -21,7 +19,11 @@ function OrganizationWithIdBreadcrumbs() {
   const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
 
   if (loading) {
-    return <BreadcrumbItem active><LoadingIndicator /></BreadcrumbItem>;
+    return (
+      <BreadcrumbItem active>
+        <LoadingIndicator />
+      </BreadcrumbItem>
+    );
   }
 
   if (error) {
@@ -37,15 +39,11 @@ function OrganizationWithIdBreadcrumbs() {
       </BreadcrumbItem>
 
       <Route path="/organizations/:id/roles/new">
-        <BreadcrumbItem active>
-          New organization role
-        </BreadcrumbItem>
+        <BreadcrumbItem active>New organization role</BreadcrumbItem>
       </Route>
 
       <Route path="/organizations/:id/roles/:roleId/edit">
-        <BreadcrumbItem active>
-          Edit organization role
-        </BreadcrumbItem>
+        <BreadcrumbItem active>Edit organization role</BreadcrumbItem>
       </Route>
     </>
   );
@@ -71,12 +69,18 @@ function OrganizationAdmin() {
       </ol>
 
       <Switch>
-        <Route path="/organizations/:organizationId/roles/new"><NewOrganizationRole /></Route>
+        <Route path="/organizations/:organizationId/roles/new">
+          <NewOrganizationRole />
+        </Route>
         <Route path="/organizations/:organizationId/roles/:organizationRoleId/edit">
           <EditOrganizationRole />
         </Route>
-        <Route path="/organizations/:id"><OrganizationDisplay /></Route>
-        <Route path="/organizations"><OrganizationIndex /></Route>
+        <Route path="/organizations/:id">
+          <OrganizationDisplay />
+        </Route>
+        <Route path="/organizations">
+          <OrganizationIndex />
+        </Route>
       </Switch>
     </>
   );

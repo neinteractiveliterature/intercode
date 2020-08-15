@@ -17,17 +17,15 @@ function TeamMemberAdmin({ eventId, eventPath }) {
   const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
   const teamMemberMatch = useRouteMatch(`${eventPath}/team_members/:teamMemberId(\\d+)`);
 
-  const teamMember = useMemo(
-    () => {
-      if (loading || error || !teamMemberMatch) {
-        return null;
-      }
+  const teamMember = useMemo(() => {
+    if (loading || error || !teamMemberMatch) {
+      return null;
+    }
 
-      return data.event.team_members
-        .find((tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId);
-    },
-    [data, error, loading, teamMemberMatch],
-  );
+    return data.event.team_members.find(
+      (tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId,
+    );
+  }, [data, error, loading, teamMemberMatch]);
 
   if (loading) {
     return <PageLoadingIndicator visible />;

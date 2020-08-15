@@ -6,10 +6,9 @@ import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWith
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
 
 function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }) {
-  const layoutResult = useMemo(
-    () => computeRunDimensionsWithoutSpanning(scheduleBlock),
-    [scheduleBlock],
-  );
+  const layoutResult = useMemo(() => computeRunDimensionsWithoutSpanning(scheduleBlock), [
+    scheduleBlock,
+  ]);
 
   const blockContentStyle = {
     position: 'relative',

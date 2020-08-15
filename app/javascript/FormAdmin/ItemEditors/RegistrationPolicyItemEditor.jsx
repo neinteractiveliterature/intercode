@@ -22,7 +22,9 @@ function RegistrationPolicyItemEditor() {
   const allowCustomChanged = usePropertyUpdater(setFormItem, 'allow_custom');
 
   const [addPreset, presetChanged, deletePreset, movePreset] = useArrayProperty(
-    'presets', setFormItem, generateNewPreset,
+    'presets',
+    setFormItem,
+    generateNewPreset,
   );
 
   return (
@@ -70,9 +72,7 @@ function RegistrationPolicyItemEditor() {
                 onClick={addPreset}
                 disabled={disabled}
               >
-                <i className="fa fa-plus" />
-                {' '}
-                Add policy preset
+                <i className="fa fa-plus" /> Add policy preset
               </button>
             </td>
           </tr>

@@ -12,9 +12,9 @@ import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import OrganizationSelect from '../BuiltInFormControls/OrganizationSelect';
-import { NewConventionModalQuery } from './queries.gql';
+import { NewConventionModalQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
-import { CreateConvention } from './mutations.gql';
+import { CreateConvention } from './mutations';
 import LoadingIndicator from '../LoadingIndicator';
 import useAsyncFunction from '../useAsyncFunction';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
@@ -38,11 +38,11 @@ function NewConventionModal({ visible, close, cloneConvention }) {
   const history = useHistory();
   const { data, loading, error } = useQuery(NewConventionModalQuery);
   const [createConvention] = useMutation(CreateConvention);
-  const [convention, setConvention] = useState(() => (
+  const [convention, setConvention] = useState(() =>
     cloneConvention
       ? { ...cloneConvention, ...DEFAULT_PROPS }
-      : { ...DEFAULT_PROPS, timezone_name: moment.tz.guess() }
-  ));
+      : { ...DEFAULT_PROPS, timezone_name: moment.tz.guess() },
+  );
   const cloneConventionTimespan = useMemo(
     () => (cloneConvention ? timespanFromConvention(cloneConvention) : null),
     [cloneConvention],
@@ -51,24 +51,25 @@ function NewConventionModal({ visible, close, cloneConvention }) {
     cloneConvention ? null : CMS_CONTENT_SET_OPTIONS[0],
   );
 
-  const conventionSetter = (fieldName) => (
-    (value) => setConvention((prevConvention) => ({ ...prevConvention, [fieldName]: value }))
-  );
+  const conventionSetter = (fieldName) => (value) =>
+    setConvention((prevConvention) => ({ ...prevConvention, [fieldName]: value }));
 
   const setTimezoneMode = (timezoneMode) => {
     setConvention((prevConvention) => ({
       ...prevConvention,
       timezone_mode: timezoneMode,
-      timezone_name: (timezoneMode === 'user_local' ? null : prevConvention.timezone_name),
+      timezone_name: timezoneMode === 'user_local' ? null : prevConvention.timezone_name,
     }));
   };
 
   const setStartsAt = (newStartsAt) => {
     if (
-      cloneConventionTimespan?.isFinite()
-      && timespanFromConvention(convention).getLength('day') === cloneConventionTimespan.getLength('day')
+      cloneConventionTimespan?.isFinite() &&
+      timespanFromConvention(convention).getLength('day') ===
+        cloneConventionTimespan.getLength('day')
     ) {
-      const newEndsAt = moment.tz(newStartsAt, convention.timezone_name)
+      const newEndsAt = moment
+        .tz(newStartsAt, convention.timezone_name)
         .add(cloneConventionTimespan.getLength('day'), 'day')
         .set({
           hour: cloneConventionTimespan.finish.hour(),
@@ -76,7 +77,9 @@ function NewConventionModal({ visible, close, cloneConvention }) {
           second: cloneConventionTimespan.finish.second(),
         });
       setConvention((prevConvention) => ({
-        ...prevConvention, starts_at: newStartsAt, ends_at: newEndsAt.toISOString(),
+        ...prevConvention,
+        starts_at: newStartsAt,
+        ends_at: newEndsAt.toISOString(),
       }));
     } else {
       setConvention((prevConvention) => ({ ...prevConvention, starts_at: newStartsAt }));

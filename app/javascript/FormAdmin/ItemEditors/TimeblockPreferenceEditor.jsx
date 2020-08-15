@@ -13,13 +13,12 @@ function TimeblockPreferenceEditor() {
   const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timeblock-preference-');
 
-  const generateNewTimeblock = useCallback(
-    () => ({ label: '', start: {}, finish: {} }),
-    [],
-  );
+  const generateNewTimeblock = useCallback(() => ({ label: '', start: {}, finish: {} }), []);
 
   const [addTimeblock, timeblockChanged, deleteTimeblock, moveTimeblock] = useArrayProperty(
-    'timeblocks', setFormItem, generateNewTimeblock,
+    'timeblocks',
+    setFormItem,
+    generateNewTimeblock,
   );
 
   return (
@@ -80,9 +79,7 @@ function TimeblockPreferenceEditor() {
                   onClick={addTimeblock}
                   disabled={disabled}
                 >
-                  <i className="fa fa-plus" />
-                  {' '}
-                  Add timeblock
+                  <i className="fa fa-plus" /> Add timeblock
                 </button>
               </td>
             </tr>

@@ -2,9 +2,9 @@ import React, { ReactNode, ChangeEvent } from 'react';
 import BootstrapFormCheckbox from './BootstrapFormCheckbox';
 
 export type ChoiceSetChoice = {
-  label: ReactNode,
-  value: string,
-  disabled?: boolean,
+  label: ReactNode;
+  value: string;
+  disabled?: boolean;
 };
 
 export interface ChoiceSetBaseProps {
@@ -58,21 +58,13 @@ function ChoiceSet(props: ChoiceSetProps) {
       inputClassName={props.inputClassName}
       label={label}
       value={value}
-      checked={(
-        props.multiple
-          ? ((props.value || []).includes(value))
-          : props.value === value
-      )}
+      checked={props.multiple ? (props.value || []).includes(value) : props.value === value}
       onChange={onChange}
       disabled={props.disabled || disabled}
     />
   ));
 
-  return (
-    <div className={props.containerClassName}>
-      {options}
-    </div>
-  );
+  return <div className={props.containerClassName}>{options}</div>;
 }
 
 export default ChoiceSet;

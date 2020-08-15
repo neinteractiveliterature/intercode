@@ -5,8 +5,8 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
-import { UpdateStaffPosition } from './mutations.gql';
-import { StaffPositionsQuery } from './queries.gql';
+import { UpdateStaffPosition } from './mutations';
+import { StaffPositionsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
@@ -20,34 +20,29 @@ function EditStaffPositionForm({ initialStaffPosition }) {
 
   usePageTitle(`Editing “${initialStaffPosition.name}”`);
 
-  const saveClicked = useCallback(
-    async () => {
-      await mutate({
-        variables: {
-          input: {
-            id: staffPosition.id,
-            staff_position: buildStaffPositionInput(staffPosition),
-          },
+  const saveClicked = useCallback(async () => {
+    await mutate({
+      variables: {
+        input: {
+          id: staffPosition.id,
+          staff_position: buildStaffPositionInput(staffPosition),
         },
-      });
-      history.push('/staff_positions');
-    },
-    [mutate, staffPosition, history],
-  );
+      },
+    });
+    history.push('/staff_positions');
+  }, [mutate, staffPosition, history]);
 
   return (
     <div>
-      <h1 className="mb-4">
-        Editing
-        {' '}
-        {initialStaffPosition.name}
-      </h1>
-      <StaffPositionForm
-        staffPosition={staffPosition}
-        onChange={setStaffPosition}
-      />
+      <h1 className="mb-4">Editing {initialStaffPosition.name}</h1>
+      <StaffPositionForm staffPosition={staffPosition} onChange={setStaffPosition} />
       <ErrorDisplay graphQLError={updateError} />
-      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={requestInProgress}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={saveClicked}
+        disabled={requestInProgress}
+      >
         Save changes
       </button>
     </div>
@@ -65,9 +60,10 @@ function EditStaffPosition() {
   const { data, loading, error } = useQuery(StaffPositionsQuery);
 
   const initialStaffPosition = useMemo(
-    () => (loading || error
-      ? null
-      : data.convention.staff_positions.find((sp) => sp.id.toString(10) === id)),
+    () =>
+      loading || error
+        ? null
+        : data.convention.staff_positions.find((sp) => sp.id.toString(10) === id),
     [loading, error, data, id],
   );
 
