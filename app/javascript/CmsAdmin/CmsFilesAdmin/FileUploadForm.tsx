@@ -14,7 +14,7 @@ import { CmsFilesAdminQueryQuery } from './queries.generated';
 import { CreateCmsFileMutationVariables, CreateCmsFileMutation } from './mutations.generated';
 
 export type FileUploadFormProps = {
-  onUpload?: (cmsFile: CmsFile) => void,
+  onUpload?: (cmsFile: CmsFile) => void;
 };
 
 function FileUploadForm({ onUpload }: FileUploadFormProps) {
@@ -24,9 +24,9 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
   const fileInputId = useUniqueId('file-');
   const [createMutate, createError, createInProgress] = useAsyncFunction(
     useCreateMutation<
-    CmsFilesAdminQueryQuery,
-    CreateCmsFileMutationVariables,
-    CreateCmsFileMutation
+      CmsFilesAdminQueryQuery,
+      CreateCmsFileMutationVariables,
+      CreateCmsFileMutation
     >(CreateCmsFile, {
       query: CmsFilesAdminQuery,
       arrayPath: ['cmsFiles'],
@@ -34,36 +34,30 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
     }),
   );
 
-  const uploadFileChanged = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { files } = event.target;
-      if (files == null) {
-        return;
-      }
+  const uploadFileChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files == null) {
+      return;
+    }
 
-      const newFile = files[0];
-      if (!newFile) {
-        return;
-      }
+    const newFile = files[0];
+    if (!newFile) {
+      return;
+    }
 
-      setFile(newFile);
+    setFile(newFile);
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        setImageUrl(reader.result as string);
-      });
-      reader.readAsDataURL(newFile);
-    },
-    [],
-  );
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      setImageUrl(reader.result as string);
+    });
+    reader.readAsDataURL(newFile);
+  }, []);
 
-  const clearFile = useCallback(
-    () => {
-      setFile(null);
-      setImageUrl(null);
-    },
-    [],
-  );
+  const clearFile = useCallback(() => {
+    setFile(null);
+    setImageUrl(null);
+  }, []);
 
   const uploadFormSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -77,43 +71,37 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
 
   return (
     <div className="card">
-      <div className="card-header">
-        {t('cms.fileUploadForm.title', 'Upload a file')}
-      </div>
+      <div className="card-header">{t('cms.fileUploadForm.title', 'Upload a file')}</div>
       <div className="card-body">
         <form onSubmit={uploadFormSubmitted}>
-          {
-            file
-              ? (
-                <div className="d-flex align-items-start">
-                  <FilePreview
-                    filename={(file || {}).name}
-                    contentType={(file || {}).type}
-                    url={imageUrl ?? undefined}
-                  />
-                  <button className="btn btn-secondary ml-4" type="button" onClick={clearFile}>
-                    {t('cms.fileUploadForm.clearFileButton', 'Clear')}
-                  </button>
-                </div>
-              )
-              : (
-                <div className="form-group">
-                  <div className="custom-file">
-                    { /* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
-                    <input
-                      className="custom-file-input"
-                      type="file"
-                      onChange={uploadFileChanged}
-                      id={fileInputId}
-                      disabled={createInProgress}
-                    />
-                    <label className="custom-file-label" htmlFor={fileInputId} aria-hidden>
-                      {t('cms.fileUploadForm.fileInputLabel', 'Choose a file...')}
-                    </label>
-                  </div>
-                </div>
-              )
-          }
+          {file ? (
+            <div className="d-flex align-items-start">
+              <FilePreview
+                filename={(file || {}).name}
+                contentType={(file || {}).type}
+                url={imageUrl ?? undefined}
+              />
+              <button className="btn btn-secondary ml-4" type="button" onClick={clearFile}>
+                {t('cms.fileUploadForm.clearFileButton', 'Clear')}
+              </button>
+            </div>
+          ) : (
+            <div className="form-group">
+              <div className="custom-file">
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <input
+                  className="custom-file-input"
+                  type="file"
+                  onChange={uploadFileChanged}
+                  id={fileInputId}
+                  disabled={createInProgress}
+                />
+                <label className="custom-file-label" htmlFor={fileInputId} aria-hidden>
+                  {t('cms.fileUploadForm.fileInputLabel', 'Choose a file...')}
+                </label>
+              </div>
+            </div>
+          )}
 
           <ErrorDisplay graphQLError={createError as ApolloError} />
 

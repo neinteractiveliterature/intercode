@@ -17,10 +17,8 @@ function EditDepartment() {
   const history = useHistory();
 
   const initialDepartment = useMemo(
-    () => ((loading || error)
-      ? null
-      : data.convention.departments.find((d) => d.id.toString() === id)
-    ),
+    () =>
+      loading || error ? null : data.convention.departments.find((d) => d.id.toString() === id),
     [loading, error, data, id],
   );
   usePageTitle(`Editing “${(initialDepartment || {}).name}”`);
@@ -48,16 +46,9 @@ function EditDepartment() {
 
   return (
     <>
-      <h1 className="mb-4">
-        Editing
-        {' '}
-        {initialDepartment.name}
-      </h1>
+      <h1 className="mb-4">Editing {initialDepartment.name}</h1>
 
-      <DepartmentForm
-        initialDepartment={initialDepartment}
-        onSave={onSave}
-      />
+      <DepartmentForm initialDepartment={initialDepartment} onSave={onSave} />
     </>
   );
 }

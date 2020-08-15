@@ -1,9 +1,7 @@
 import React, { useCallback, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
-import {
-  NavLink, Switch, Redirect, Route, useLocation,
-} from 'react-router-dom';
+import { NavLink, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
@@ -13,14 +11,12 @@ import AppRootContext from '../../AppRootContext';
 
 function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
   const location = useLocation();
-  const prefetchProps = (
-    prefetchTimespan
-      ? ({
+  const prefetchProps = prefetchTimespan
+    ? {
         onMouseOver: () => prefetchTimespan(timespan),
         onFocus: () => prefetchTimespan(timespan),
-      })
-      : {}
-  );
+      }
+    : {};
 
   return (
     <li className="nav-item">
@@ -29,12 +25,8 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
         className="nav-link"
         {...prefetchProps}
       >
-        <span className="d-inline d-md-none">
-          {timespan.start.format('ddd')}
-        </span>
-        <span className="d-none d-md-inline">
-          {timespan.start.format('dddd')}
-        </span>
+        <span className="d-inline d-md-none">{timespan.start.format('ddd')}</span>
+        <span className="d-none d-md-inline">{timespan.start.format('dddd')}</span>
       </NavLink>
     </li>
   );
@@ -53,36 +45,35 @@ ConventionDayTab.defaultProps = {
 };
 
 function ConventionDayTabContainer({
-  basename, conventionTimespan, prefetchTimespan, children, showExtendedCounts,
+  basename,
+  conventionTimespan,
+  prefetchTimespan,
+  children,
+  showExtendedCounts,
 }) {
   const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();
   const refreshData = useCallback(
-    () => client.query({
-      query: ScheduleGridCombinedQuery,
-      variables: { extendedCounts: showExtendedCounts || false },
-      fetchPolicy: 'network-only',
-    }),
+    () =>
+      client.query({
+        query: ScheduleGridCombinedQuery,
+        variables: { extendedCounts: showExtendedCounts || false },
+        fetchPolicy: 'network-only',
+      }),
     [client, showExtendedCounts],
   );
 
   const conventionDayTimespans = useMemo(
-    () => (
+    () =>
       conventionTimespan.isFinite()
-        ? getConventionDayTimespans(
-          conventionTimespan,
-          timezoneName,
-        )
-        : []
-    ),
+        ? getConventionDayTimespans(conventionTimespan, timezoneName)
+        : [],
     [conventionTimespan, timezoneName],
   );
 
   if (!conventionTimespan.isFinite()) {
     return (
-      <div className="alert alert-warning">
-        Convention start/end dates have not yet been set.
-      </div>
+      <div className="alert alert-warning">Convention start/end dates have not yet been set.</div>
     );
   }
 
@@ -113,7 +104,9 @@ function ConventionDayTabContainer({
             {children(timespan)}
           </Route>
         ))}
-        <Redirect to={`${basename}/${conventionDayTimespans[0].start.format('dddd').toLowerCase()}`} />
+        <Redirect
+          to={`${basename}/${conventionDayTimespans[0].start.format('dddd').toLowerCase()}`}
+        />
       </Switch>
     </div>
   );

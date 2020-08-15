@@ -1,24 +1,25 @@
-@import "./bootstrap_custom";
-@import "./buckets";
-@import "./codemirror_theme";
-@import "./color_variants";
-@import "./event_list";
-@import "./event_ratings";
-@import "./form_editor";
-@import "./glow";
-@import "./liquid_docs";
-@import "./page_admin_dropdown";
-@import "./print";
-@import "./schedule_grid";
-@import "./search";
-@import "./signups";
-@import "./spoiler";
-@import "./tables";
+@import './bootstrap_custom';
+@import './buckets';
+@import './codemirror_theme';
+@import './color_variants';
+@import './event_list';
+@import './event_ratings';
+@import './form_editor';
+@import './glow';
+@import './liquid_docs';
+@import './page_admin_dropdown';
+@import './print';
+@import './schedule_grid';
+@import './search';
+@import './signups';
+@import './spoiler';
+@import './tables';
 
 $fa-font-path: '~font-awesome/fonts';
-@import "~font-awesome/scss/font-awesome";
+@import '~font-awesome/scss/font-awesome';
 
-.form-item-label p:last-child, legend p:last-child {
+.form-item-label p:last-child,
+legend p:last-child {
   margin-bottom: 0;
 }
 
@@ -75,7 +76,8 @@ table.no-top-border thead th {
       height: auto;
     }
 
-    .markdown-preview, .CodeMirror-scroll {
+    .markdown-preview,
+    .CodeMirror-scroll {
       min-height: #{$i}rem !important;
     }
   }

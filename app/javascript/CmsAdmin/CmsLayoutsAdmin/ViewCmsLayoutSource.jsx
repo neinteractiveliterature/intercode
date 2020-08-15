@@ -12,9 +12,7 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 function ViewCmsLayoutSource() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
-  const layout = loading || error
-    ? null
-    : data.cmsLayouts.find((l) => id === l.id.toString());
+  const layout = loading || error ? null : data.cmsLayouts.find((l) => id === l.id.toString());
 
   usePageTitle(useValueUnless(() => `View “${layout.name}” Source`, loading || error));
 
@@ -26,12 +24,7 @@ function ViewCmsLayoutSource() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return (
-    <CmsLayoutForm
-      layout={layout}
-      readOnly
-    />
-  );
+  return <CmsLayoutForm layout={layout} readOnly />;
 }
 
 export default ViewCmsLayoutSource;

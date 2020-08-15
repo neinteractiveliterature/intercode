@@ -64,7 +64,7 @@ class ColumnReservationSet {
       return -1;
     });
 
-    return (reservedColumnNumbers.filter((columnNumber) => columnNumber !== -1));
+    return reservedColumnNumbers.filter((columnNumber) => columnNumber !== -1);
   }
 
   getLastReservedColumnNumber() {
@@ -136,7 +136,7 @@ class ColumnReservationSet {
   columnFreeBetween(columnNumber, timespan) {
     const reservation = this.reservations[columnNumber];
 
-    return (reservation == null || !reservation.timespan.overlapsTimespan(timespan));
+    return reservation == null || !reservation.timespan.overlapsTimespan(timespan);
   }
 
   recalculateRunColumns() {

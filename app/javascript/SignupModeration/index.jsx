@@ -6,7 +6,11 @@ import SignupModerationQueue from './SignupModerationQueue';
 
 function SignupModeration() {
   const tabProps = useTabs([
-    { id: 'moderation-queue', name: 'Moderation queue', renderContent: () => <SignupModerationQueue /> },
+    {
+      id: 'moderation-queue',
+      name: 'Moderation queue',
+      renderContent: () => <SignupModerationQueue />,
+    },
     { id: 'create-signups', name: 'Create signups', renderContent: () => <CreateSignup /> },
   ]);
 

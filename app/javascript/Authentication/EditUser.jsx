@@ -17,10 +17,18 @@ import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'));
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() =>
+  import(
+    /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
+  ),
+);
 
 async function updateUser(
-  authenticityToken, formState, password, passwordConfirmation, currentPassword,
+  authenticityToken,
+  formState,
+  password,
+  passwordConfirmation,
+  currentPassword,
 ) {
   const formData = new FormData();
   formData.append('user[first_name]', formState.first_name);
@@ -48,7 +56,9 @@ async function updateUser(
     const responseJson = await response.json();
     if (responseJson.errors) {
       throw new Error(
-        Object.entries(responseJson.errors).map(([key, error]) => `${humanize(key)} ${error}`).join(', '),
+        Object.entries(responseJson.errors)
+          .map(([key, error]) => `${humanize(key)} ${error}`)
+          .join(', '),
       );
     }
 
@@ -69,16 +79,18 @@ function EditUserForm({ initialFormState }) {
   const onSubmit = async (event) => {
     event.preventDefault();
     await updateUserAsync(
-      authenticityToken, formState, password, passwordConfirmation, currentPassword,
+      authenticityToken,
+      formState,
+      password,
+      passwordConfirmation,
+      currentPassword,
     );
     window.location.href = '/';
   };
 
   return (
     <>
-      <h1 className="mb-4">
-        {t('authentication.editUser.header', 'Update your account')}
-      </h1>
+      <h1 className="mb-4">{t('authentication.editUser.header', 'Update your account')}</h1>
 
       <AccountFormContent />
 
@@ -101,7 +113,10 @@ function EditUserForm({ initialFormState }) {
               />
             </Suspense>
             <small className="form-text text-muted">
-              {t('authentication.editUser.passwordHelpText', 'Leave blank if you don’t want to change it')}
+              {t(
+                'authentication.editUser.passwordHelpText',
+                'Leave blank if you don’t want to change it',
+              )}
             </small>
           </div>
           <PasswordConfirmationInput
@@ -111,7 +126,10 @@ function EditUserForm({ initialFormState }) {
           />
           <BootstrapFormInput
             label={t('authentication.editUser.currentPasswordLabel', 'Current password')}
-            helpText={t('authentication.editUser.currentPasswordHelpText', 'We need your current password to verify your identity')}
+            helpText={t(
+              'authentication.editUser.currentPasswordHelpText',
+              'We need your current password to verify your identity',
+            )}
             type="password"
             value={currentPassword}
             onTextChange={setCurrentPassword}
@@ -153,9 +171,7 @@ function EditUser() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return (
-    <EditUserForm initialFormState={data.currentUser} />
-  );
+  return <EditUserForm initialFormState={data.currentUser} />;
 }
 
 export default EditUser;

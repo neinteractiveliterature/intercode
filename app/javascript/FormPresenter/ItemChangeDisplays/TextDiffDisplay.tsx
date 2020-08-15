@@ -23,17 +23,14 @@ EditDisplay.propTypes = {
 };
 
 function TextDiffDisplay({ before, after }) {
-  const diff = useMemo(
-    () => {
-      const wordDiff = diffWords(before || '', after || '');
-      if (wordDiff.length > 10) {
-        return diffSentences(before || '', after || '');
-      }
+  const diff = useMemo(() => {
+    const wordDiff = diffWords(before || '', after || '');
+    if (wordDiff.length > 10) {
+      return diffSentences(before || '', after || '');
+    }
 
-      return wordDiff;
-    },
-    [after, before],
-  );
+    return wordDiff;
+  }, [after, before]);
 
   return diff.map(({ value, added, removed }, index) => (
     // eslint-disable-next-line react/no-array-index-key

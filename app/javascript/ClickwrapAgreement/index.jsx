@@ -64,7 +64,9 @@ function ClickwrapAgreement() {
       <div className="px-4">
         <div className="card">
           <div className="card-header">
-            {t('clickwrap.header', '{{ conventionName }} terms of service', { conventionName: convention.name })}
+            {t('clickwrap.header', '{{ conventionName }} terms of service', {
+              conventionName: convention.name,
+            })}
           </div>
           <div className="card-body">
             {parseCmsContent(convention.clickwrap_agreement_html).bodyComponents}

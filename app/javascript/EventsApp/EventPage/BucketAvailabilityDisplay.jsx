@@ -1,15 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 
-import React, {
-  useState, useCallback, useMemo, useEffect, useRef,
-} from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { ResizeObserver } from '@juggle/resize-observer';
 
-function BucketAvailabilityDisplay({
-  className, signupCount, remainingCapacity, compact,
-}) {
+function BucketAvailabilityDisplay({ className, signupCount, remainingCapacity, compact }) {
   const totalCells = signupCount + remainingCapacity;
   const [containerWidth, setContainerWidth] = useState(300);
   const resizeObserverRef = useRef(null);
@@ -43,19 +39,16 @@ function BucketAvailabilityDisplay({
     [],
   );
 
-  const cellWidth = useMemo(
-    () => {
-      const cellWidthRem = compact ? 0.6 : 1.05;
-      const remWidth = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      return (cellWidthRem * remWidth) + 2; // 2px margins
-    },
-    [compact],
-  );
+  const cellWidth = useMemo(() => {
+    const cellWidthRem = compact ? 0.6 : 1.05;
+    const remWidth = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    return cellWidthRem * remWidth + 2; // 2px margins
+  }, [compact]);
 
-  const maxCellsPerLine = useMemo(
-    () => Math.floor(containerWidth / cellWidth),
-    [cellWidth, containerWidth],
-  );
+  const maxCellsPerLine = useMemo(() => Math.floor(containerWidth / cellWidth), [
+    cellWidth,
+    containerWidth,
+  ]);
   let lineWidth = totalCells;
   let numLines = 1;
   if (lineWidth > maxCellsPerLine) {
@@ -92,7 +85,9 @@ function BucketAvailabilityDisplay({
     <div ref={measuredRef}>
       {[...Array(numLines)].map((value, index) => (
         <div
-          className={classNames('bucket-availability-display', className, { 'bucket-availability-display-compact': compact })}
+          className={classNames('bucket-availability-display', className, {
+            'bucket-availability-display-compact': compact,
+          })}
           key={`line-${index}`}
         >
           {cells.slice(index * lineWidth, (index + 1) * lineWidth)}

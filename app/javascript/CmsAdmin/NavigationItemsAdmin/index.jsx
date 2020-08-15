@@ -7,10 +7,7 @@ import usePageTitle from '../../usePageTitle';
 
 const NavigationItemsAdmin = () => {
   const apolloClient = useApolloClient();
-  const navbarAdminClient = useMemo(
-    () => new Client(apolloClient),
-    [apolloClient],
-  );
+  const navbarAdminClient = useMemo(() => new Client(apolloClient), [apolloClient]);
 
   usePageTitle('CMS Navigation');
 

@@ -1,23 +1,21 @@
 import React from 'react';
 import { gql } from '@apollo/client'; // eslint-disable-line no-restricted-imports
 
-import {
-  render, fireEvent, act, waitFor,
-} from '../testUtils';
+import { render, fireEvent, act, waitFor } from '../testUtils';
 import GraphQLAsyncSelect from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
 
 const FakeQuery = gql`
-query FakeQuery($name: String) {
-  convention {
-    id
-    user_con_profiles_paginated(filters: { name: $name }) {
-      entries {
-        id
-        name_without_nickname
+  query FakeQuery($name: String) {
+    convention {
+      id
+      user_con_profiles_paginated(filters: { name: $name }) {
+        entries {
+          id
+          name_without_nickname
+        }
       }
     }
   }
-}
 `;
 
 describe('GraphQLAsyncSelect', () => {
@@ -50,16 +48,18 @@ describe('GraphQLAsyncSelect', () => {
     },
   ];
 
-  const renderUserConProfileSelect = (props, mocks) => render((
-    <GraphQLAsyncSelect
-      query={FakeQuery}
-      getOptions={(data) => data.convention.user_con_profiles_paginated.entries}
-      getOptionLabel={(option) => option.name_without_nickname}
-      getOptionValue={(option) => option.id}
-      getVariables={(input) => ({ name: input })}
-      {...props}
-    />
-  ), { apolloMocks: mocks ?? defaultMocks });
+  const renderUserConProfileSelect = (props, mocks) =>
+    render(
+      <GraphQLAsyncSelect
+        query={FakeQuery}
+        getOptions={(data) => data.convention.user_con_profiles_paginated.entries}
+        getOptionLabel={(option) => option.name_without_nickname}
+        getOptionValue={(option) => option.id}
+        getVariables={(input) => ({ name: input })}
+        {...props}
+      />,
+      { apolloMocks: mocks ?? defaultMocks },
+    );
 
   test('loads options', async () => {
     const { getByRole, queryAllByText } = renderUserConProfileSelect();

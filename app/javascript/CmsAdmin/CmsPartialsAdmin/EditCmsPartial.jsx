@@ -40,10 +40,7 @@ function EditCmsPartialForm({ initialPartial }) {
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsPartialForm
-          partial={partial}
-          dispatch={dispatch}
-        />
+        <CmsPartialForm partial={partial} dispatch={dispatch} />
 
         <ErrorDisplay graphQLError={updateError} />
 
@@ -70,11 +67,7 @@ function EditCmsPartial() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsPartialsAdminQuery);
   const initialPartial = useMemo(
-    () => (
-      loading || error
-        ? null
-        : data.cmsPartials.find((p) => id === p.id.toString())
-    ),
+    () => (loading || error ? null : data.cmsPartials.find((p) => id === p.id.toString())),
     [data, id, loading, error],
   );
 

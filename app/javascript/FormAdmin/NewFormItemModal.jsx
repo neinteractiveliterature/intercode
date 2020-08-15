@@ -43,21 +43,28 @@ function NewFormItemModal({ visible, close, createFormItem }) {
   const standardItems = formType.standard_items;
 
   const existingStandardItemIdentifiers = useMemo(
-    () => new Set(flatMap(form.form_sections.map((section) => (
-      section.form_items.filter((item) => standardItems[item.identifier])
-        .map((item) => item.identifier)
-    )))),
+    () =>
+      new Set(
+        flatMap(
+          form.form_sections.map((section) =>
+            section.form_items
+              .filter((item) => standardItems[item.identifier])
+              .map((item) => item.identifier),
+          ),
+        ),
+      ),
     [form, standardItems],
   );
 
   const standardItemsForDisplay = useMemo(
-    () => sortByLocaleString(
-      Object.entries(standardItems).map(([itemIdentifier, item]) => ({
-        ...item,
-        identifier: itemIdentifier,
-      })),
-      (item) => item.description,
-    ),
+    () =>
+      sortByLocaleString(
+        Object.entries(standardItems).map(([itemIdentifier, item]) => ({
+          ...item,
+          identifier: itemIdentifier,
+        })),
+        (item) => item.description,
+      ),
     [standardItems],
   );
 
@@ -71,12 +78,10 @@ function NewFormItemModal({ visible, close, createFormItem }) {
     [standardItemsForDisplay],
   );
 
-  const standardItemIdentifierOrCustomItemType = (
-    standardItem ? identifier : `_custom_${itemType}`
-  );
+  const standardItemIdentifierOrCustomItemType = standardItem ? identifier : `_custom_${itemType}`;
 
   const setStandardItemIdentifierOrCustomItemType = (value) => {
-    const match = (value && value.match(/^_custom_(\w+)/));
+    const match = value && value.match(/^_custom_(\w+)/);
     if (match) {
       setStandardItem(null);
       setItemType(match[1]);
@@ -111,29 +116,18 @@ function NewFormItemModal({ visible, close, createFormItem }) {
     close();
   };
 
-  const dataComplete = (
-    identifier && identifier.trim() !== ''
-    && itemType && itemType.trim() !== ''
-  );
+  const dataComplete = identifier && identifier.trim() !== '' && itemType && itemType.trim() !== '';
 
   return (
     <Modal visible={visible} dialogClassName="modal-xl">
       <div className="modal-header">
-        <h4 className="mb-0">
-          Add item
-        </h4>
+        <h4 className="mb-0">Add item</h4>
       </div>
 
       <div className="modal-body">
         <div className="row mb-2">
           <div className="col-6">
-            <h5>
-              Standard
-              {' '}
-              {formType.description}
-              {' '}
-              items
-            </h5>
+            <h5>Standard {formType.description} items</h5>
 
             <section>
               {nonDeprecatedStandardItemsForDisplay.map((item) => (
@@ -148,7 +142,9 @@ function NewFormItemModal({ visible, close, createFormItem }) {
                     }
                   }}
                   disabled={existingStandardItemIdentifiers.has(item.identifier)}
-                  className={classNames({ 'text-muted': existingStandardItemIdentifiers.has(item.identifier) })}
+                  className={classNames({
+                    'text-muted': existingStandardItemIdentifiers.has(item.identifier),
+                  })}
                 />
               ))}
             </section>
@@ -159,15 +155,11 @@ function NewFormItemModal({ visible, close, createFormItem }) {
                 {deprecatedStandardItemsForDisplay.map((item) => (
                   <BootstrapFormCheckbox
                     key={item.identifier}
-                    label={(
+                    label={
                       <>
-                        {item.description}
-                        {' '}
-                        <HelpPopover>
-                          {item.deprecation_reason}
-                        </HelpPopover>
+                        {item.description} <HelpPopover>{item.deprecation_reason}</HelpPopover>
                       </>
-                    )}
+                    }
                     checked={standardItemIdentifierOrCustomItemType === item.identifier}
                     type="radio"
                     onCheckedChange={(checked) => {
@@ -176,7 +168,9 @@ function NewFormItemModal({ visible, close, createFormItem }) {
                       }
                     }}
                     disabled={existingStandardItemIdentifiers.has(item.identifier)}
-                    className={classNames({ 'text-muted': existingStandardItemIdentifiers.has(item.identifier) })}
+                    className={classNames({
+                      'text-muted': existingStandardItemIdentifiers.has(item.identifier),
+                    })}
                   />
                 ))}
               </section>
@@ -201,7 +195,7 @@ function NewFormItemModal({ visible, close, createFormItem }) {
           </div>
         </div>
 
-        {(itemType && !standardItem) && (
+        {itemType && !standardItem && (
           <FormItemIdentifierInput
             formType={formType}
             value={identifier}
@@ -209,13 +203,11 @@ function NewFormItemModal({ visible, close, createFormItem }) {
           />
         )}
 
-        {(standardItem && !standardItem.item_type) && (
-          <BootstrapFormSelect
-            label="Item type"
-            value={itemType || ''}
-            onValueChange={setItemType}
-          >
-            <option aria-hidden value="">Choose an item type...</option>
+        {standardItem && !standardItem.item_type && (
+          <BootstrapFormSelect label="Item type" value={itemType || ''} onValueChange={setItemType}>
+            <option aria-hidden value="">
+              Choose an item type...
+            </option>
             {customItemTypes.map((customItemType) => (
               <option key={customItemType} value={customItemType}>
                 {humanize(customItemType)}

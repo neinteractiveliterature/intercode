@@ -8,11 +8,9 @@ function ScheduleGridHeaderBlock({ timespan, eventRuns }) {
   const now = timespan.start.clone();
   const hourDivs = [];
   while (timespan.includesTime(now)) {
-    hourDivs.push(<ScheduleGridHour
-      now={now.clone()}
-      eventRuns={eventRuns}
-      key={now.toISOString()}
-    />);
+    hourDivs.push(
+      <ScheduleGridHour now={now.clone()} eventRuns={eventRuns} key={now.toISOString()} />,
+    );
     now.add(1, 'hour');
   }
 

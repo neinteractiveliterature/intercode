@@ -11,11 +11,10 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 function FreeTextEditor() {
   const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('static-text-caption-');
-  const responseFormat = (
+  const responseFormat =
     formItem.properties.format === 'markdown'
       ? 'markdown'
-      : formItem.properties.free_text_type || 'text'
-  );
+      : formItem.properties.free_text_type || 'text';
   const setResponseFormat = (newResponseFormat) => {
     setFormItem((prevFormItem) => ({
       ...prevFormItem,
@@ -44,7 +43,9 @@ function FreeTextEditor() {
       <BootstrapFormInput
         disabled={disabled}
         value={(formItem.properties.lines || '').toString()}
-        onTextChange={(value) => formItemPropertyUpdater('lines', setFormItem)(Transforms.integer(value))}
+        onTextChange={(value) =>
+          formItemPropertyUpdater('lines', setFormItem)(Transforms.integer(value))
+        }
         type="number"
         min="1"
         label="Lines"

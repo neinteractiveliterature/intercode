@@ -9,17 +9,18 @@ import { timespanFromConvention, getConventionDayTimespans } from '../../Timespa
 import AppRootContext from '../../AppRootContext';
 
 function EventListEvents({
-  convention, eventsPaginated, sorted, canReadSchedule, fetchMoreIfNeeded,
+  convention,
+  eventsPaginated,
+  sorted,
+  canReadSchedule,
+  fetchMoreIfNeeded,
 }) {
   const { timezoneName } = useContext(AppRootContext);
   let previousConventionDay = null;
   let conventionDayTimespans = [];
   const conventionTimespan = timespanFromConvention(convention);
   if (conventionTimespan.isFinite()) {
-    conventionDayTimespans = getConventionDayTimespans(
-      conventionTimespan,
-      timezoneName,
-    );
+    conventionDayTimespans = getConventionDayTimespans(conventionTimespan, timezoneName);
   }
 
   return eventsPaginated.entries.map((event, index) => {
@@ -27,18 +28,14 @@ function EventListEvents({
     if (sorted.some((sort) => sort.id === 'first_scheduled_run_start')) {
       const runs = getSortedRuns(event);
       if (runs.length > 0) {
-        const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(
-          moment.tz(runs[0].starts_at, timezoneName),
-        ));
+        const conventionDay = conventionDayTimespans.find((timespan) =>
+          timespan.includesTime(moment.tz(runs[0].starts_at, timezoneName)),
+        );
         if (
-          conventionDay
-          && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
+          conventionDay &&
+          (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
         ) {
-          preamble = (
-            <h3 className="mt-4">
-              {conventionDay.start.format('dddd, MMMM D')}
-            </h3>
-          );
+          preamble = <h3 className="mt-4">{conventionDay.start.format('dddd, MMMM D')}</h3>;
           previousConventionDay = conventionDay;
         }
       }
@@ -47,20 +44,14 @@ function EventListEvents({
     const eventContent = (
       <React.Fragment key={event.id}>
         {preamble}
-        <EventCard
-          event={event}
-          sorted={sorted}
-          canReadSchedule={canReadSchedule}
-        />
+        <EventCard event={event} sorted={sorted} canReadSchedule={canReadSchedule} />
       </React.Fragment>
     );
 
     if (index === eventsPaginated.entries.length - 5) {
       return (
         <Waypoint fireOnRapidScroll onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
-          <div>
-            {eventContent}
-          </div>
+          <div>{eventContent}</div>
         </Waypoint>
       );
     }
@@ -77,13 +68,17 @@ EventListEvents.propTypes = {
     timezone_name: PropTypes.string.isRequired,
   }).isRequired,
   eventsPaginated: PropTypes.shape({
-    entries: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
+    entries: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
   }).isRequired,
-  sorted: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  })).isRequired,
+  sorted: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default EventListEvents;

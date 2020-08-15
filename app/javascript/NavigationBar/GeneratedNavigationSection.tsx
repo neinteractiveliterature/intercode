@@ -5,14 +5,14 @@ import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
 
 export type GeneratedNavigationItem = {
-  label: string,
-  url: string,
-  icon: string,
+  label: string;
+  url: string;
+  icon: string;
 };
 
 export type GeneratedNavigationSectionProps = {
-  label: string,
-  items: GeneratedNavigationItem[],
+  label: string;
+  items: GeneratedNavigationItem[];
 };
 
 function GeneratedNavigationSection({ label, items }: GeneratedNavigationSectionProps) {
@@ -22,15 +22,18 @@ function GeneratedNavigationSection({ label, items }: GeneratedNavigationSection
     return (
       <NavigationSection label={label}>
         <>
-          {sortedItems.map((item) => item && (
-            <NavigationItem
-              inSection
-              key={`${item.label}-${item.url}`}
-              label={item.label}
-              url={item.url}
-              icon={item.icon}
-            />
-          ))}
+          {sortedItems.map(
+            (item) =>
+              item && (
+                <NavigationItem
+                  inSection
+                  key={`${item.label}-${item.url}`}
+                  label={item.label}
+                  url={item.url}
+                  icon={item.icon}
+                />
+              ),
+          )}
         </>
       </NavigationSection>
     );

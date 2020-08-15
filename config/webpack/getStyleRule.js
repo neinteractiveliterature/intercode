@@ -9,16 +9,16 @@ const getStyleRule = (test, preprocessors = []) => {
         sourceMap: true,
         importLoaders: 2,
         modules: false,
-      }
+      },
     },
     {
       loader: 'postcss-loader',
       options: {
         config: { path: resolve() },
-        sourceMap: true
-      }
+        sourceMap: true,
+      },
     },
-    ...preprocessors
+    ...preprocessors,
   ];
 
   use.unshift(MiniCssExtractPlugin.loader);

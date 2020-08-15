@@ -35,9 +35,7 @@ function MailingListsMenu() {
         {data.convention.ticket_mode !== 'disabled' && (
           <li>
             <Link to="/mailing_lists/ticketed_attendees">
-              All attendees with
-              {' '}
-              {data.convention.ticket_name}
+              All attendees with {data.convention.ticket_name}
             </Link>
           </li>
         )}
@@ -64,13 +62,27 @@ function MailingListsMenu() {
 function MailingLists() {
   return (
     <Switch>
-      <Route path="/mailing_lists/ticketed_attendees"><TicketedAttendees /></Route>
-      <Route path="/mailing_lists/event_proposers"><EventProposers /></Route>
-      <Route path="/mailing_lists/team_members"><TeamMembers /></Route>
-      <Route path="/mailing_lists/users_with_pending_bio"><UsersWithPendingBio /></Route>
-      <Route path="/mailing_lists/waitlists"><WaitlistMailingLists /></Route>
-      <Route path="/mailing_lists/whos_free"><WhosFree /></Route>
-      <Route path="/mailing_lists/"><MailingListsMenu /></Route>
+      <Route path="/mailing_lists/ticketed_attendees">
+        <TicketedAttendees />
+      </Route>
+      <Route path="/mailing_lists/event_proposers">
+        <EventProposers />
+      </Route>
+      <Route path="/mailing_lists/team_members">
+        <TeamMembers />
+      </Route>
+      <Route path="/mailing_lists/users_with_pending_bio">
+        <UsersWithPendingBio />
+      </Route>
+      <Route path="/mailing_lists/waitlists">
+        <WaitlistMailingLists />
+      </Route>
+      <Route path="/mailing_lists/whos_free">
+        <WhosFree />
+      </Route>
+      <Route path="/mailing_lists/">
+        <MailingListsMenu />
+      </Route>
     </Switch>
   );
 }

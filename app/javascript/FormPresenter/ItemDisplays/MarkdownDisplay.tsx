@@ -5,7 +5,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { usePreviewMarkdownQueryQuery } from '../../BuiltInFormControls/previewQueries.generated';
 
 export type MarkdownDisplayProps = {
-  markdown?: string | null,
+  markdown?: string | null;
 };
 
 function MarkdownDisplay({ markdown }: MarkdownDisplayProps) {

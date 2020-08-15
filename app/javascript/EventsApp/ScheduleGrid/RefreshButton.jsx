@@ -17,10 +17,7 @@ function RefreshButton({ refreshData }) {
       onClick={refreshAsync}
     >
       <i className={classNames('fa fa-refresh', { 'fa-spin': refreshInProgress })} />
-      <span className="d-none d-md-inline">
-        {' '}
-        {t('buttons.refresh', 'Refresh')}
-      </span>
+      <span className="d-none d-md-inline"> {t('buttons.refresh', 'Refresh')}</span>
     </button>
   );
 }

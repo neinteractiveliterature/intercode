@@ -24,10 +24,9 @@ function formDataFromJSON(json) {
 
 function FormJSONEditorForm({ initialForm }) {
   const history = useHistory();
-  const initialFormData = useMemo(
-    () => formDataFromJSON(initialForm.export_json),
-    [initialForm.export_json],
-  );
+  const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [
+    initialForm.export_json,
+  ]);
   const [form, setForm] = useState(initialFormData);
   const [createForm, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateFormWithJSON, {
@@ -62,13 +61,7 @@ function FormJSONEditorForm({ initialForm }) {
 
   return (
     <div>
-      <h1 className="mb-4">
-        {
-          initialForm.id
-            ? `Editing ${form.title}`
-            : 'New form'
-        }
-      </h1>
+      <h1 className="mb-4">{initialForm.id ? `Editing ${form.title}` : 'New form'}</h1>
 
       <BootstrapFormInput
         label="Title"
@@ -84,7 +77,9 @@ function FormJSONEditorForm({ initialForm }) {
         onValueChange={(formType) => setForm((prevForm) => ({ ...prevForm, form_type: formType }))}
         disabled={initialForm.id != null}
       >
-        <option disabled selected={form.form_type == null}>Select a form type...</option>
+        <option disabled selected={form.form_type == null}>
+          Select a form type...
+        </option>
         <option value="event">Event form</option>
         <option value="event_proposal">Event proposal form</option>
         <option value="user_con_profile">User con profile form</option>
@@ -126,16 +121,13 @@ function FormJSONEditor() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(FormAdminQuery);
 
-  const initialForm = useMemo(
-    () => {
-      if (loading || error) {
-        return null;
-      }
+  const initialForm = useMemo(() => {
+    if (loading || error) {
+      return null;
+    }
 
-      return data.convention.forms.find((form) => form.id.toString(10) === id);
-    },
-    [data, loading, error, id],
-  );
+    return data.convention.forms.find((form) => form.id.toString(10) === id);
+  }, [data, loading, error, id]);
 
   if (loading) {
     return <PageLoadingIndicator visible />;

@@ -12,10 +12,13 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 
 function useDirtyState(initialState, setDirty) {
   const [value, setValue] = useState(initialState);
-  return [value, (newValue) => {
-    setValue(newValue);
-    setDirty();
-  }];
+  return [
+    value,
+    (newValue) => {
+      setValue(newValue);
+      setDirty();
+    },
+  ];
 }
 
 function EditRootSite() {

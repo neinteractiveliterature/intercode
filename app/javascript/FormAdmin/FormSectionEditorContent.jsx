@@ -35,11 +35,7 @@ function FormSectionEditorContent() {
 
         <div className="card-body">
           {currentSection.form_items.map((formItem, index) => (
-            <FormEditorItemPreview
-              key={formItem.id}
-              formItem={formItem}
-              index={index}
-            />
+            <FormEditorItemPreview key={formItem.id} formItem={formItem} index={index} />
           ))}
         </div>
       </div>

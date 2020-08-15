@@ -16,7 +16,9 @@ function MultipleChoiceEditor() {
   const generateNewChoice = () => ({ caption: '', value: '' });
 
   const [addChoice, choiceChanged, deleteChoice, moveChoice] = useArrayProperty(
-    'choices', setFormItem, generateNewChoice,
+    'choices',
+    setFormItem,
+    generateNewChoice,
   );
 
   return (
@@ -65,8 +67,9 @@ function MultipleChoiceEditor() {
                 deleteChoice={deleteChoice}
                 choiceChanged={choiceChanged}
                 moveChoice={moveChoice}
-                nonUnique={formItem.properties.choices
-                  .filter((c) => c.value === choice.value).length > 1}
+                nonUnique={
+                  formItem.properties.choices.filter((c) => c.value === choice.value).length > 1
+                }
               />
             ))}
             <tr>
@@ -96,10 +99,12 @@ function MultipleChoiceEditor() {
             <tr>
               <td />
               <td colSpan={3}>
-                <button type="button" className="btn btn-outline-primary btn-sm" onClick={addChoice}>
-                  <i className="fa fa-plus" />
-                  {' '}
-                  Add option
+                <button
+                  type="button"
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={addChoice}
+                >
+                  <i className="fa fa-plus" /> Add option
                 </button>
               </td>
             </tr>

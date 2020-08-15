@@ -5,8 +5,8 @@ import { Organization } from '../graphqlTypes.generated';
 
 type OrganizationForSelect = Pick<Organization, 'id' | 'name'>;
 export type OrganizationSelectProps = Omit<SelectWithLabelProps<OrganizationForSelect>, 'label'> & {
-  organizations: OrganizationForSelect[],
-  label?: ReactNode,
+  organizations: OrganizationForSelect[];
+  label?: ReactNode;
 };
 
 function OrganizationSelect({ organizations, label, ...props }: OrganizationSelectProps) {

@@ -7,15 +7,12 @@ export function describeDate(value: string, timezoneName: string) {
 }
 
 export type DateItemDisplayProps = {
-  value: string,
+  value: string;
 };
 
 function DateItemDisplay({ value }: DateItemDisplayProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const formattedDate = useMemo(
-    () => describeDate(value, timezoneName),
-    [timezoneName, value],
-  );
+  const formattedDate = useMemo(() => describeDate(value, timezoneName), [timezoneName, value]);
 
   return <>{formattedDate}</>;
 }

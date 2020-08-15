@@ -19,7 +19,9 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
   const history = useHistory();
   const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
   const [
-    notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination,
+    notificationDestinationChangeSet,
+    addNotificationDestination,
+    removeNotificationDestination,
   ] = useChangeSet();
   const [updateMutate] = useMutation(UpdateUserActivityAlert);
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
@@ -45,7 +47,8 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
       variables: {
         id: userActivityAlert.id,
         userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        addNotificationDestinations: notificationDestinationChangeSet.getAddValues()
+        addNotificationDestinations: notificationDestinationChangeSet
+          .getAddValues()
           .map((addValue) => {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };
@@ -78,9 +81,7 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
             });
           }}
         >
-          <i className="fa fa-trash-o" />
-          {' '}
-          Delete
+          <i className="fa fa-trash-o" /> Delete
         </button>
       </div>
 

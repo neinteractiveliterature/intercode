@@ -19,9 +19,9 @@ function filterEmptyStrings(obj: ResourceKey): ResourceKey {
 type PromiseI18NextBackendOptions = {
   loaders: {
     [language: string]: {
-      [namespace: string]: Promise<ResourceKey>,
-    },
-  },
+      [namespace: string]: Promise<ResourceKey>;
+    };
+  };
 };
 
 const PromiseI18nextBackend: BackendModule = {

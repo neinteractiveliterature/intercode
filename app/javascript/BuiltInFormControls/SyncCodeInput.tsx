@@ -27,23 +27,35 @@ import parseCmsContent from '../parseCmsContent';
 import '../Codemirror/LiquidMultiplexModes';
 
 export type SyncCodeInputProps = Omit<IControlledCodeMirror, 'onChange' | 'onBeforeChange'> & {
-  onChange: (value: string) => void,
-  getPreviewContent?: (value: string) => Promise<string>,
-  mode: string,
-  disabled?: boolean,
-  codeMirrorOptions?: EditorConfiguration,
-  extraNavControls?: ReactNode,
-  lines?: number,
-  formControlClassName?: string,
-  editorWrapperClassName?: string,
-  children?: ReactNode,
-  renderPreview?: (previewContent: string) => ReactNode,
+  onChange: (value: string) => void;
+  getPreviewContent?: (value: string) => Promise<string>;
+  mode: string;
+  disabled?: boolean;
+  codeMirrorOptions?: EditorConfiguration;
+  extraNavControls?: ReactNode;
+  lines?: number;
+  formControlClassName?: string;
+  editorWrapperClassName?: string;
+  children?: ReactNode;
+  renderPreview?: (previewContent: string) => ReactNode;
 };
 
 function SyncCodeInput({
-  onBlur, onChange, value, getPreviewContent, mode, disabled, codeMirrorOptions, extraNavControls,
-  className, lines, formControlClassName, editorWrapperClassName, children,
-  renderPreview, ...props
+  onBlur,
+  onChange,
+  value,
+  getPreviewContent,
+  mode,
+  disabled,
+  codeMirrorOptions,
+  extraNavControls,
+  className,
+  lines,
+  formControlClassName,
+  editorWrapperClassName,
+  children,
+  renderPreview,
+  ...props
 }: SyncCodeInputProps) {
   const { t } = useTranslation();
   const [previewing, setPreviewing] = useState(false);
@@ -59,13 +71,10 @@ function SyncCodeInput({
     [onChange],
   );
 
-  const editTabClicked = useCallback(
-    (event) => {
-      event.preventDefault();
-      setPreviewing(false);
-    },
-    [],
-  );
+  const editTabClicked = useCallback((event) => {
+    event.preventDefault();
+    setPreviewing(false);
+  }, []);
 
   const previewTabClicked = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -104,9 +113,7 @@ function SyncCodeInput({
     }
 
     return (
-      <div className="markdown-preview">
-        {parseCmsContent(previewContent ?? '').bodyComponents}
-      </div>
+      <div className="markdown-preview">{parseCmsContent(previewContent ?? '').bodyComponents}</div>
     );
   };
 
@@ -183,11 +190,9 @@ function SyncCodeInput({
       >
         {renderNav()}
         <div
-          className={classNames(
-            'form-control border-0',
-            editorWrapperClassName,
-            { 'bg-disabled': disabled },
-          )}
+          className={classNames('form-control border-0', editorWrapperClassName, {
+            'bg-disabled': disabled,
+          })}
         >
           {renderContent()}
         </div>

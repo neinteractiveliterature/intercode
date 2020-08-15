@@ -13,9 +13,15 @@ function DepartmentAdmin() {
 
   return (
     <Switch>
-      <Route path="/admin_departments/:id/edit"><EditDepartment /></Route>
-      <Route path="/admin_departments/new"><NewDepartment /></Route>
-      <Route path="/admin_departments"><DepartmentAdminIndex /></Route>
+      <Route path="/admin_departments/:id/edit">
+        <EditDepartment />
+      </Route>
+      <Route path="/admin_departments/new">
+        <NewDepartment />
+      </Route>
+      <Route path="/admin_departments">
+        <DepartmentAdminIndex />
+      </Route>
     </Switch>
   );
 }

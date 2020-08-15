@@ -5,7 +5,7 @@ import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type MultipleChoiceItemChangeDisplayProps = {
-  change: ParsedFormResponseChange<MultipleChoiceFormItem>,
+  change: ParsedFormResponseChange<MultipleChoiceFormItem>;
 };
 
 function MultipleChoiceItemChangeDisplay({ change }: MultipleChoiceItemChangeDisplayProps) {

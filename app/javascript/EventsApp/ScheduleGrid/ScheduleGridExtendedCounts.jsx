@@ -12,21 +12,24 @@ function buildHourRunData(eventRun, schedule) {
   const event = schedule.getEvent(run.event_id);
   const signupCountData = SignupCountData.fromRun(run);
   return {
-    eventRun, run, event, signupCountData,
+    eventRun,
+    run,
+    event,
+    signupCountData,
   };
 }
 
 function ScheduleGridExtendedCounts({ now, eventRuns }) {
-  const { convention: { timezone_name: timezoneName }, schedule } = useContext(ScheduleGridContext);
+  const {
+    convention: { timezone_name: timezoneName },
+    schedule,
+  } = useContext(ScheduleGridContext);
 
   const nowISOString = now.toISOString();
-  const hourTimespan = useMemo(
-    () => {
-      const nowMoment = moment.tz(nowISOString, timezoneName);
-      return new Timespan(nowMoment, nowMoment.clone().add(1, 'hour'));
-    },
-    [nowISOString, timezoneName],
-  );
+  const hourTimespan = useMemo(() => {
+    const nowMoment = moment.tz(nowISOString, timezoneName);
+    return new Timespan(nowMoment, nowMoment.clone().add(1, 'hour'));
+  }, [nowISOString, timezoneName]);
   const hourEventRuns = useMemo(
     () => eventRuns.filter((eventRun) => hourTimespan.overlapsTimespan(eventRun.timespan)),
     [eventRuns, hourTimespan],
@@ -52,16 +55,14 @@ function ScheduleGridExtendedCounts({ now, eventRuns }) {
   );
 
   const confirmedSignups = hourRunData.reduce(
-    (sum, { signupCountData }) => (
-      sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: true })
-    ),
+    (sum, { signupCountData }) =>
+      sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: true }),
     0,
   );
 
   const notCountedSignups = hourRunData.reduce(
-    (sum, { signupCountData }) => (
-      sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: false })
-    ),
+    (sum, { signupCountData }) =>
+      sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: false }),
     0,
   );
 
@@ -75,11 +76,7 @@ function ScheduleGridExtendedCounts({ now, eventRuns }) {
   return (
     <div className="schedule-grid-hour-extended-counts">
       <div>
-        {minimumSlots}
-        /
-        {preferredSlots}
-        /
-        {totalSlots}
+        {minimumSlots}/{preferredSlots}/{totalSlots}
       </div>
       <div>
         <span className="text-success">{confirmedSignups}</span>
@@ -88,21 +85,19 @@ function ScheduleGridExtendedCounts({ now, eventRuns }) {
         {'/'}
         <span className="text-danger">{waitlistedSignups}</span>
       </div>
-      <div>
-        Total:
-        {' '}
-        {playerCount}
-      </div>
+      <div>Total: {playerCount}</div>
     </div>
   );
 }
 
 ScheduleGridExtendedCounts.propTypes = {
   now: MomentPropTypes.momentObj.isRequired,
-  eventRuns: PropTypes.arrayOf(PropTypes.shape({
-    runId: PropTypes.number.isRequired,
-    timespan: PropTypes.shape({}).isRequired,
-  })).isRequired,
+  eventRuns: PropTypes.arrayOf(
+    PropTypes.shape({
+      runId: PropTypes.number.isRequired,
+      timespan: PropTypes.shape({}).isRequired,
+    }),
+  ).isRequired,
 };
 
 export default ScheduleGridExtendedCounts;

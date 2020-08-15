@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
 export type PageLoadingIndicatorProps = {
-  visible: boolean,
+  visible: boolean;
 };
 
 function PageLoadingIndicator({ visible }: PageLoadingIndicatorProps) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
-  useEffect(
-    () => {
-      if (!visible) {
-        setShowLoadingIndicator(false);
-      }
-      const timeoutId = setTimeout(() => setShowLoadingIndicator(visible), 250);
-      return () => clearTimeout(timeoutId);
-    },
-    [visible],
-  );
+  useEffect(() => {
+    if (!visible) {
+      setShowLoadingIndicator(false);
+    }
+    const timeoutId = setTimeout(() => setShowLoadingIndicator(visible), 250);
+    return () => clearTimeout(timeoutId);
+  }, [visible]);
 
   return (
     <div

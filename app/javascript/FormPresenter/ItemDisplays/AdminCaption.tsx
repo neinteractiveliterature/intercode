@@ -2,12 +2,15 @@ import React from 'react';
 
 export type AdminCaptionProps = {
   formItem: {
-    admin_description?: string | null,
-    identifier?: string | null,
-    rendered_properties?: null | {} | {
-      caption: string,
-    },
-  },
+    admin_description?: string | null;
+    identifier?: string | null;
+    rendered_properties?:
+      | null
+      | {}
+      | {
+          caption: string;
+        };
+  };
 };
 
 function propertiesHasCaption(

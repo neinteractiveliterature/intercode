@@ -11,31 +11,28 @@ import useUniqueId from '../../useUniqueId';
 
 export const pageReducer = transformsReducer({});
 
-function CmsPageForm({
-  page, dispatch, cmsParent, cmsLayouts, readOnly,
-}) {
+function CmsPageForm({ page, dispatch, cmsParent, cmsLayouts, readOnly }) {
   const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
   const slugInputId = useUniqueId('slug-');
 
   const cmsLayoutOptions = useMemo(
-    () => sortByLocaleString(cmsLayouts, (layout) => layout.name).map((layout) => {
-      if (cmsParent.default_layout && cmsParent.default_layout.id === layout.id) {
-        return {
-          ...layout,
-          name: `${layout.name} (site default)`,
-        };
-      }
+    () =>
+      sortByLocaleString(cmsLayouts, (layout) => layout.name).map((layout) => {
+        if (cmsParent.default_layout && cmsParent.default_layout.id === layout.id) {
+          return {
+            ...layout,
+            name: `${layout.name} (site default)`,
+          };
+        }
 
-      return layout;
-    }),
+        return layout;
+      }),
     [cmsLayouts, cmsParent.default_layout],
   );
 
-  const cmsLayoutSelectPlaceholder = (
-    cmsParent.default_layout
-      ? `Default layout (currently set as ${cmsParent.default_layout.name})`
-      : 'Default layout'
-  );
+  const cmsLayoutSelectPlaceholder = cmsParent.default_layout
+    ? `Default layout (currently set as ${cmsParent.default_layout.name})`
+    : 'Default layout';
 
   return (
     <>
@@ -54,9 +51,7 @@ function CmsPageForm({
       />
 
       <div className="form-group">
-        <label htmlFor={slugInputId}>
-          URL
-        </label>
+        <label htmlFor={slugInputId}>URL</label>
         <div className="input-group">
           <div className="input-group-prepend">
             <span className="input-group-text">
@@ -133,10 +128,12 @@ CmsPageForm.propTypes = {
       name: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  cmsLayouts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   readOnly: PropTypes.bool,
 };
 

@@ -36,7 +36,11 @@ function castMultipleValue(value: any): string[] {
 export type MultipleChoiceItemInputProps = CommonFormItemInputProps<MultipleChoiceFormItem>;
 
 function MultipleChoiceItemInput({
-  formItem, onChange, value: uncastValue, valueInvalid, onInteract,
+  formItem,
+  onChange,
+  value: uncastValue,
+  valueInvalid,
+  onInteract,
 }: MultipleChoiceItemInputProps) {
   const isMultiple = useMemo(
     () => ['checkbox_horizontal', 'checkbox_vertical'].includes(formItem.rendered_properties.style),
@@ -45,97 +49,86 @@ function MultipleChoiceItemInput({
 
   const value = isMultiple ? castMultipleValue(uncastValue) : castSingleValue(uncastValue);
 
-  const otherIsSelected = useMemo(
-    () => {
-      if (!formItem.rendered_properties.other) {
-        return false;
+  const otherIsSelected = useMemo(() => {
+    if (!formItem.rendered_properties.other) {
+      return false;
+    }
+
+    const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
+
+    if (Array.isArray(value)) {
+      return !value.every((selectedChoiceValue) => choiceValues.includes(selectedChoiceValue));
+    }
+
+    return value != null && !choiceValues.includes(value);
+  }, [formItem.rendered_properties.choices, formItem.rendered_properties.other, value]);
+
+  const otherValue = useMemo(() => {
+    if (otherIsSelected) {
+      if (isMultiple) {
+        const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
+        return castMultipleValue(value).find(
+          (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue),
+        );
       }
+      return castSingleValue(value);
+    }
 
-      const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
+    return '';
+  }, [formItem.rendered_properties.choices, isMultiple, otherIsSelected, value]);
 
-      if (Array.isArray(value)) {
-        return !value.every((
-          (selectedChoiceValue) => choiceValues.includes(selectedChoiceValue)
-        ));
-      }
+  const choicesForChoiceSet = useMemo(() => {
+    const providedChoices = formItem.rendered_properties.choices.map((choice) => ({
+      label: choice.caption,
+      value: choice.value,
+    }));
 
-      return value != null && !choiceValues.includes(value);
-    },
-    [formItem.rendered_properties.choices, formItem.rendered_properties.other, value],
-  );
-
-  const otherValue = useMemo(
-    () => {
-      if (otherIsSelected) {
-        if (isMultiple) {
-          const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
-          return castMultipleValue(value).find((
-            (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue)
-          ));
-        }
-        return castSingleValue(value);
-      }
-
-      return '';
-    },
-    [formItem.rendered_properties.choices, isMultiple, otherIsSelected, value],
-  );
-
-  const choicesForChoiceSet = useMemo(
-    () => {
-      const providedChoices = formItem.rendered_properties.choices.map((choice) => ({
-        label: choice.caption,
-        value: choice.value,
-      }));
-
-      if (formItem.rendered_properties.other) {
-        const otherCaption = formItem.rendered_properties.other_caption || 'Other';
-        return [...providedChoices, {
+    if (formItem.rendered_properties.other) {
+      const otherCaption = formItem.rendered_properties.other_caption || 'Other';
+      return [
+        ...providedChoices,
+        {
           label: otherCaption,
           value: OTHER_VALUE,
-        }];
-      }
+        },
+      ];
+    }
 
-      return providedChoices;
-    },
-    [
-      formItem.rendered_properties.choices,
-      formItem.rendered_properties.other,
-      formItem.rendered_properties.other_caption,
-    ],
-  );
+    return providedChoices;
+  }, [
+    formItem.rendered_properties.choices,
+    formItem.rendered_properties.other,
+    formItem.rendered_properties.other_caption,
+  ]);
 
-  const valueForChoiceSet = useMemo(
-    () => {
-      if (Array.isArray(value)) {
-        if (otherIsSelected) {
-          return [...value, OTHER_VALUE];
-        }
-
-        return value;
-      }
-
+  const valueForChoiceSet = useMemo(() => {
+    if (Array.isArray(value)) {
       if (otherIsSelected) {
-        return OTHER_VALUE;
+        return [...value, OTHER_VALUE];
       }
 
-      return castSingleValue(value);
-    },
-    [otherIsSelected, value],
-  );
+      return value;
+    }
 
-  const userDidInteract = useCallback(
-    () => onInteract(formItem.identifier),
-    [formItem.identifier, onInteract],
-  );
+    if (otherIsSelected) {
+      return OTHER_VALUE;
+    }
+
+    return castSingleValue(value);
+  }, [otherIsSelected, value]);
+
+  const userDidInteract = useCallback(() => onInteract(formItem.identifier), [
+    formItem.identifier,
+    onInteract,
+  ]);
 
   const valueDidChangeMultiple = (newValue: string[] | null) => {
     userDidInteract();
 
     const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
-    const providedValues = (newValue ?? [])
-      .filter((choiceValue) => choiceValues
-        .some((providedValue) => providedValue === choiceValue));
+    const providedValues = (newValue ?? []).filter((choiceValue) =>
+      choiceValues.some((providedValue) => providedValue === choiceValue),
+    );
     if (newValue?.includes(OTHER_VALUE)) {
       onChange([...providedValues, otherValue]);
     } else {
@@ -158,13 +151,15 @@ function MultipleChoiceItemInput({
     if (typeof valueForChoiceSet === 'string') {
       onChange(event.target.value);
     } else {
-      onChange((valueForChoiceSet ?? []).map((singleValue) => {
-        if (singleValue === OTHER_VALUE) {
-          return event.target.value;
-        }
+      onChange(
+        (valueForChoiceSet ?? []).map((singleValue) => {
+          if (singleValue === OTHER_VALUE) {
+            return event.target.value;
+          }
 
-        return singleValue;
-      }));
+          return singleValue;
+        }),
+      );
     }
   };
 
@@ -186,41 +181,38 @@ function MultipleChoiceItemInput({
   };
 
   const choiceClassName = classNames({
-    'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(formItem.rendered_properties.style),
+    'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(
+      formItem.rendered_properties.style,
+    ),
   });
 
   return (
     <fieldset className="form-group">
-      <div className={classNames({ 'border-0': !valueInvalid, 'border rounded border-danger': valueInvalid })}>
+      <div
+        className={classNames({
+          'border-0': !valueInvalid,
+          'border rounded border-danger': valueInvalid,
+        })}
+      >
         <CaptionLegend formItem={formItem} />
-        {Array.isArray(valueForChoiceSet)
-          ? (
-            <ChoiceSet
-              choices={choicesForChoiceSet}
-              value={valueForChoiceSet}
-              onChange={valueDidChangeMultiple}
-              multiple
-              choiceClassName={choiceClassName}
-            />
-          )
-          : (
-            <ChoiceSet
-              choices={choicesForChoiceSet}
-              value={valueForChoiceSet}
-              onChange={valueDidChangeSingle}
-              choiceClassName={choiceClassName}
-            />
-          )}
+        {Array.isArray(valueForChoiceSet) ? (
+          <ChoiceSet
+            choices={choicesForChoiceSet}
+            value={valueForChoiceSet}
+            onChange={valueDidChangeMultiple}
+            multiple
+            choiceClassName={choiceClassName}
+          />
+        ) : (
+          <ChoiceSet
+            choices={choicesForChoiceSet}
+            value={valueForChoiceSet}
+            onChange={valueDidChangeSingle}
+            choiceClassName={choiceClassName}
+          />
+        )}
         {renderOtherInput()}
-        {
-          valueInvalid
-            ? (
-              <span className="text-danger">
-                This field is required.
-              </span>
-            )
-            : null
-        }
+        {valueInvalid ? <span className="text-danger">This field is required.</span> : null}
       </div>
     </fieldset>
   );

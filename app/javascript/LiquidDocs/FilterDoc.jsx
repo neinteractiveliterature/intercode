@@ -14,7 +14,9 @@ function FilterDoc({ filter }) {
           <li className="breadcrumb-item">
             <Link to={`/liquid_docs${location.search}`}>Documentation home</Link>
           </li>
-          <li className="breadcrumb-item active" aria-current="page">{filter.name}</li>
+          <li className="breadcrumb-item active" aria-current="page">
+            {filter.name}
+          </li>
         </ol>
       </nav>
 

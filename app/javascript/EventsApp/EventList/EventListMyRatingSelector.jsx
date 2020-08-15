@@ -8,9 +8,8 @@ import { RATING_NAMES } from '../../EventRatings/EventRatingIcon';
 import HelpPopover from '../../UIComponents/HelpPopover';
 import RatingsHelp from '../../EventRatings/RatingsHelp';
 
-export const RATING_OPTIONS = sortBy(
-  Object.entries(RATING_NAMES),
-  ([rating]) => ['1', '0', '-1'].indexOf(rating),
+export const RATING_OPTIONS = sortBy(Object.entries(RATING_NAMES), ([rating]) =>
+  ['1', '0', '-1'].indexOf(rating),
 ).map(([rating, name]) => ({
   label: name,
   value: rating.toString(),
@@ -36,7 +35,9 @@ function EventListMyRatingSelector({ value, onChange }) {
         choiceClassName="form-check-inline"
         containerClassName="d-flex flex-wrap"
         value={(value || []).map((integer) => integer.toString())}
-        onChange={(integerArray) => { onChange(integerArray.map(Transforms.integer)); }}
+        onChange={(integerArray) => {
+          onChange(integerArray.map(Transforms.integer));
+        }}
         multiple
       />
       <span className="ml-2">

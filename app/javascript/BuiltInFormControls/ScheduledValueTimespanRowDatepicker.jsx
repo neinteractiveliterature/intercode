@@ -6,12 +6,16 @@ import { convertDatetimeValue } from '../ComposableFormUtils';
 import { TimespanPropType } from '../ScheduledValuePropTypes';
 
 function ScheduledValueTimespanRowDatepicker({
-  fieldName, timespan, rowAttributeDidChange, timezoneName,
+  fieldName,
+  timespan,
+  rowAttributeDidChange,
+  timezoneName,
 }) {
-  const stringValue = useMemo(
-    () => convertDatetimeValue(timespan[fieldName], timezoneName),
-    [fieldName, timespan, timezoneName],
-  );
+  const stringValue = useMemo(() => convertDatetimeValue(timespan[fieldName], timezoneName), [
+    fieldName,
+    timespan,
+    timezoneName,
+  ]);
 
   const datetimeValueChanged = useCallback(
     (newValue) => rowAttributeDidChange(fieldName, newValue),

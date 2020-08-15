@@ -5,14 +5,11 @@ import AuthenticationModalContext from './AuthenticationModalContext';
 
 function SignUpButton({ className, caption, initiallyOpen }) {
   const { open } = useContext(AuthenticationModalContext);
-  useEffect(
-    () => {
-      if (initiallyOpen) {
-        open({ currentView: 'signUp' });
-      }
-    },
-    [initiallyOpen, open],
-  );
+  useEffect(() => {
+    if (initiallyOpen) {
+      open({ currentView: 'signUp' });
+    }
+  }, [initiallyOpen, open]);
 
   return (
     <button className={className} type="button" onClick={() => open({ currentView: 'signUp' })}>

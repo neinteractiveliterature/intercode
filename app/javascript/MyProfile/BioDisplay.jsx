@@ -18,25 +18,21 @@ function BioDisplay({ userConProfile }) {
         </div>
         <div className="media-body">
           <h5 className="mt-0">{userConProfile.bio_name}</h5>
-          { /* eslint-disable-next-line react/no-danger */ }
+          {/* eslint-disable-next-line react/no-danger */}
           <div dangerouslySetInnerHTML={{ __html: userConProfile.bio_html }} />
         </div>
       </div>
 
       <div className="mb-4 mt-3">
-        {
-          userConProfile.bio && userConProfile.bio.trim() !== ''
-            ? (
-              <Link to="/my_profile/edit_bio" className="btn btn-secondary">
-                Edit bio/avatar settings
-              </Link>
-            )
-            : (
-              <Link to="/my_profile/edit_bio" className="btn btn-primary">
-                Add bio/avatar
-              </Link>
-            )
-        }
+        {userConProfile.bio && userConProfile.bio.trim() !== '' ? (
+          <Link to="/my_profile/edit_bio" className="btn btn-secondary">
+            Edit bio/avatar settings
+          </Link>
+        ) : (
+          <Link to="/my_profile/edit_bio" className="btn btn-primary">
+            Add bio/avatar
+          </Link>
+        )}
       </div>
     </section>
   );

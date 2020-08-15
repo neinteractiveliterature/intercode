@@ -1,4 +1,8 @@
-query RootSiteConventionsAdminTableQuery($page: Int, $filters: ConventionFiltersInput, $sort: [SortInput!]) {
+query RootSiteConventionsAdminTableQuery(
+  $page: Int
+  $filters: ConventionFiltersInput
+  $sort: [SortInput!]
+) {
   conventions_paginated(page: $page, filters: $filters, sort: $sort) {
     total_entries
     total_pages

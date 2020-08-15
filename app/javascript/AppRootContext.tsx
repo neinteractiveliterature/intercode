@@ -3,24 +3,24 @@ import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryQuery } from './appRootQueries.generated';
 
 type AppRootContext = {
-  assumedIdentityFromProfile?: AppRootQueryQuery['assumedIdentityFromProfile'],
-  cmsNavigationItems: AppRootQueryQuery['cmsNavigationItems'],
-  conventionAcceptingProposals?: boolean | null,
-  conventionCanceled?: boolean | null,
-  conventionDomain?: string | null,
-  conventionName?: string | null,
-  currentAbility: AppRootQueryQuery['currentAbility'],
-  currentPendingOrder?: AppRootQueryQuery['currentPendingOrder'],
-  currentUser?: AppRootQueryQuery['currentUser'],
-  myProfile?: AppRootQueryQuery['myProfile'],
-  rootSiteName?: string | null,
-  signupMode?: SignupMode,
-  siteMode?: SiteMode,
-  ticketsAvailableForPurchase?: boolean | null,
-  ticketMode?: TicketMode | null,
-  ticketName?: string,
-  ticketTypes?: NonNullable<AppRootQueryQuery['convention']>['ticket_types'],
-  timezoneName: string
+  assumedIdentityFromProfile?: AppRootQueryQuery['assumedIdentityFromProfile'];
+  cmsNavigationItems: AppRootQueryQuery['cmsNavigationItems'];
+  conventionAcceptingProposals?: boolean | null;
+  conventionCanceled?: boolean | null;
+  conventionDomain?: string | null;
+  conventionName?: string | null;
+  currentAbility: AppRootQueryQuery['currentAbility'];
+  currentPendingOrder?: AppRootQueryQuery['currentPendingOrder'];
+  currentUser?: AppRootQueryQuery['currentUser'];
+  myProfile?: AppRootQueryQuery['myProfile'];
+  rootSiteName?: string | null;
+  signupMode?: SignupMode;
+  siteMode?: SiteMode;
+  ticketsAvailableForPurchase?: boolean | null;
+  ticketMode?: TicketMode | null;
+  ticketName?: string;
+  ticketTypes?: NonNullable<AppRootQueryQuery['convention']>['ticket_types'];
+  timezoneName: string;
 };
 
 const AppRootContext = React.createContext<AppRootContext>({

@@ -10,15 +10,12 @@ import CaptionLabel from './CaptionLabel';
 export type DateItemInputProps = CommonFormItemInputProps<DateFormItem>;
 
 function DateItemInput(props: DateItemInputProps) {
-  const {
-    formItem, onInteract, onChange, value: uncheckedValue, valueInvalid,
-  } = props;
+  const { formItem, onInteract, onChange, value: uncheckedValue, valueInvalid } = props;
   const domId = useUniqueId(`${formItem.identifier}-`);
 
-  const userDidInteract = useCallback(
-    () => { onInteract(formItem.identifier); },
-    [onInteract, formItem],
-  );
+  const userDidInteract = useCallback(() => {
+    onInteract(formItem.identifier);
+  }, [onInteract, formItem]);
 
   const inputChanged = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -28,12 +25,12 @@ function DateItemInput(props: DateItemInputProps) {
     [onChange, userDidInteract],
   );
 
-  const value = (typeof uncheckedValue === 'string') ? uncheckedValue : '';
+  const value = typeof uncheckedValue === 'string' ? uncheckedValue : '';
 
   return (
     <div className="form-group">
       <CaptionLabel formItem={formItem} htmlFor={domId} />
-      { /* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <input
         id={domId}
         type="date"

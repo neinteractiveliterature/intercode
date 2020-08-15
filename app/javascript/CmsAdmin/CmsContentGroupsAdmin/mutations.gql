@@ -1,6 +1,9 @@
 #import './queries.gql'
 
-mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!, $permissions: [PermissionInput!]) {
+mutation CreateContentGroup(
+  $cmsContentGroup: CmsContentGroupInput!
+  $permissions: [PermissionInput!]
+) {
   createCmsContentGroup(input: { cms_content_group: $cmsContentGroup, permissions: $permissions }) {
     cms_content_group {
       ...CmsContentGroupFields
@@ -8,8 +11,20 @@ mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!, $permission
   }
 }
 
-mutation UpdateContentGroup($id: Int!, $cmsContentGroup: CmsContentGroupInput!, $grantPermissions: [PermissionInput!], $revokePermissions: [PermissionInput!]) {
-  updateCmsContentGroup(input: { id: $id, cms_content_group: $cmsContentGroup, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions }) {
+mutation UpdateContentGroup(
+  $id: Int!
+  $cmsContentGroup: CmsContentGroupInput!
+  $grantPermissions: [PermissionInput!]
+  $revokePermissions: [PermissionInput!]
+) {
+  updateCmsContentGroup(
+    input: {
+      id: $id
+      cms_content_group: $cmsContentGroup
+      grant_permissions: $grantPermissions
+      revoke_permissions: $revokePermissions
+    }
+  ) {
     cms_content_group {
       ...CmsContentGroupFields
     }

@@ -30,9 +30,9 @@ module.exports = {
             options: {
               name: '[path][name]-[hash].[ext]',
               context: path.join('app/javascript'),
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       getStyleRule(/\.(css)$/i),
       getStyleRule(/\.(scss|sass)$/i, [
@@ -49,7 +49,7 @@ module.exports = {
       ]),
       {
         use: {
-          loader: 'thread-loader'
+          loader: 'thread-loader',
         },
       },
       {
@@ -66,22 +66,23 @@ module.exports = {
             options: {
               cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
               presets: [
-                ["@babel/env",
+                [
+                  '@babel/env',
                   {
-                    "targets": {
-                      "browsers": ["> 1%", "last 2 versions", "ie 8"]
-                    }
-                  }
-                ]
-              ]
-            }
-          }
+                    targets: {
+                      browsers: ['> 1%', 'last 2 versions', 'ie 8'],
+                    },
+                  },
+                ],
+              ],
+            },
+          },
         ],
       },
       {
         test: /\.(mjs|js\.flow|jsx)$/,
         include: /node_modules/,
-        type: "javascript/auto",
+        type: 'javascript/auto',
         use: [
           {
             loader: 'cache-loader',
@@ -92,9 +93,9 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(CACHE_PATH, 'babel-loader')
-            }
-          }
+              cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
+            },
+          },
         ],
       },
       {
@@ -110,9 +111,9 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(CACHE_PATH, 'babel-loader')
-            }
-          }
+              cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
+            },
+          },
         ],
       },
       {
@@ -123,15 +124,21 @@ module.exports = {
   },
   resolve: {
     extensions: [
-      '.js', '.jsx',
-      '.ts', '.tsx',
-      '.sass', '.scss',
-      '.css', '.png',
-      '.svg', '.gif',
-      '.jpeg', '.jpg'
+      '.js',
+      '.jsx',
+      '.ts',
+      '.tsx',
+      '.sass',
+      '.scss',
+      '.css',
+      '.png',
+      '.svg',
+      '.gif',
+      '.jpeg',
+      '.jpg',
     ],
     alias: {
-      'lodash.isequal': 'lodash-es/isEqual'
+      'lodash.isequal': 'lodash-es/isEqual',
     },
   },
   plugins: [
@@ -139,11 +146,11 @@ module.exports = {
     new CaseSensitivePathsPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash:8].css',
-      chunkFilename: '[name]-[contenthash:8].chunk.css'
+      chunkFilename: '[name]-[contenthash:8].chunk.css',
     }),
     new WebpackAssetsManifest({
       writeToDisk: true,
-      publicPath: true
+      publicPath: true,
     }),
     // don't load all of moment's locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

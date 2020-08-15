@@ -18,7 +18,11 @@ import useAfterSessionChange from './useAfterSessionChange';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 import LoadingIndicator from '../LoadingIndicator';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'));
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() =>
+  import(
+    /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
+  ),
+);
 
 async function signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue) {
   const formData = new FormData();
@@ -42,7 +46,11 @@ async function signUp(authenticityToken, formState, password, passwordConfirmati
   if (!response.ok) {
     const responseJson = await response.json();
     if (responseJson.errors) {
-      throw new Error(Object.entries(responseJson.errors).map(([key, errors]) => `${humanize(key)} ${arrayToSentence(errors)}`).join(', '));
+      throw new Error(
+        Object.entries(responseJson.errors)
+          .map(([key, errors]) => `${humanize(key)} ${arrayToSentence(errors)}`)
+          .join(', '),
+      );
     } else if (responseJson.error) {
       throw new Error((await response.json()).error);
     }
@@ -53,9 +61,9 @@ async function signUp(authenticityToken, formState, password, passwordConfirmati
 
 function SignUpForm() {
   const { t } = useTranslation();
-  const {
-    close: closeModal, setCurrentView, recaptchaSiteKey,
-  } = useContext(AuthenticationModalContext);
+  const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(
+    AuthenticationModalContext,
+  );
   const history = useHistory();
   const authenticityToken = useContext(AuthenticityTokensContext).signUp;
   const [formState, setFormState] = useState({});
@@ -77,9 +85,7 @@ function SignUpForm() {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">
-            {t('authentication.signUpForm.header', 'Sign up')}
-          </div>
+          <div className="lead flex-grow-1">{t('authentication.signUpForm.header', 'Sign up')}</div>
         </div>
 
         <div className="modal-body">
@@ -102,20 +108,29 @@ function SignUpForm() {
             value={passwordConfirmation}
             onChange={setPasswordConfirmation}
           />
-          <ReCAPTCHA
-            sitekey={recaptchaSiteKey}
-            onChange={setCaptchaValue}
-          />
+          <ReCAPTCHA sitekey={recaptchaSiteKey} onChange={setCaptchaValue} />
 
           <ErrorDisplay stringError={(submitError || {}).message} />
         </div>
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
-            <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signIn'); }}>
+            <button
+              type="button"
+              className="btn btn-link p-0 mb-1"
+              onClick={() => {
+                setCurrentView('signIn');
+              }}
+            >
               {t('authentication.logInLink', 'Log in to an existing account')}
             </button>
-            <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('forgotPassword'); }}>
+            <button
+              type="button"
+              className="btn btn-link p-0"
+              onClick={() => {
+                setCurrentView('forgotPassword');
+              }}
+            >
               {t('authentication.forgotPasswordLink', 'Forgot your password?')}
             </button>
           </div>

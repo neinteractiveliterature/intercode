@@ -1,6 +1,4 @@
-import React, {
-  useContext, useMemo, useState, useCallback,
-} from 'react';
+import React, { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
@@ -19,9 +17,9 @@ import ErrorDisplay from '../ErrorDisplay';
 function FormItemEditorLayout() {
   const match = useRouteMatch();
   const history = useHistory();
-  const {
-    convention, currentSection, formType, renderedFormItemsById,
-  } = useContext(FormEditorContext);
+  const { convention, currentSection, formType, renderedFormItemsById } = useContext(
+    FormEditorContext,
+  );
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
     () => currentSection.form_items.find((item) => item.id.toString() === match.params.itemId),
@@ -76,13 +74,14 @@ function FormItemEditorLayout() {
   return (
     <FormItemEditorContext.Provider
       value={{
-        disabled: updateInProgress, formItem, setFormItem, standardItem, renderedFormItem,
+        disabled: updateInProgress,
+        formItem,
+        setFormItem,
+        standardItem,
+        renderedFormItem,
       }}
     >
-      <Prompt
-        message="Are you sure you want to discard changes to this item?"
-        when={hasChanges}
-      />
+      <Prompt message="Are you sure you want to discard changes to this item?" when={hasChanges} />
       <nav className="form-item-editor-tools bg-light p-2 border-right">
         <FormItemTools saveFormItem={saveFormItem} />
       </nav>
@@ -92,8 +91,8 @@ function FormItemEditorLayout() {
           <FormItemInput
             convention={convention}
             formItem={renderedFormItem}
-            onInteract={() => { }}
-            onChange={() => { }}
+            onInteract={() => {}}
+            onChange={() => {}}
             value={renderedFormItem.default_value}
           />
         </div>

@@ -10,22 +10,20 @@ import {
 
 export type TimeblockPreferenceCellChangeCallback = (
   newOrdinality: TimeblockPreferenceOrdinality | '',
-  hypotheticalPreference: { start: Moment, finish: Moment, label: string },
+  hypotheticalPreference: { start: Moment; finish: Moment; label: string },
 ) => void;
 
 export type TimeblockPreferenceCellProps = {
-  dayStart: Moment,
-  timeblock: TimeblockDefinition,
-  start: Moment,
-  finish: Moment,
-  existingPreferences: ParsedTimeblockPreference[],
-  onChange: TimeblockPreferenceCellChangeCallback,
+  dayStart: Moment;
+  timeblock: TimeblockDefinition;
+  start: Moment;
+  finish: Moment;
+  existingPreferences: ParsedTimeblockPreference[];
+  onChange: TimeblockPreferenceCellChangeCallback;
 };
 
 function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
-  const {
-    start, finish, timeblock, dayStart, existingPreferences, onChange,
-  } = props;
+  const { start, finish, timeblock, dayStart, existingPreferences, onChange } = props;
 
   const hypotheticalPreference = useMemo(
     () => ({
@@ -55,7 +53,7 @@ function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
     }
   };
 
-  const { ordinality } = (existingPreference || {});
+  const { ordinality } = existingPreference || {};
 
   return (
     <td key={dayStart.format('dddd')}>

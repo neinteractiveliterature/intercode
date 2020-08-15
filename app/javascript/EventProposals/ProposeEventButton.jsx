@@ -43,12 +43,7 @@ function ProposeEventButton({ className, caption }) {
 
   return (
     <div>
-      <button
-        id={buttonId}
-        className={className}
-        type="button"
-        onClick={modal.open}
-      >
+      <button id={buttonId} className={className} type="button" onClick={modal.open}>
         {caption}
       </button>
 
@@ -57,8 +52,9 @@ function ProposeEventButton({ className, caption }) {
         cancel={modal.close}
         visible={modal.visible}
         userEventProposals={data.myProfile.user.event_proposals}
-        proposableEventCategories={data.convention.event_categories
-          .filter((category) => category.proposable)}
+        proposableEventCategories={data.convention.event_categories.filter(
+          (category) => category.proposable,
+        )}
         departments={data.convention.departments}
       />
     </div>

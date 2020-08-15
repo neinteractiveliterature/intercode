@@ -13,9 +13,8 @@ import 'graphiql/graphiql.css';
 function ViewCmsGraphqlQuerySource() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
-  const query = loading || error
-    ? null
-    : data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
+  const query =
+    loading || error ? null : data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
 
   usePageTitle(`View “${(query || {}).identifier}” Source`);
 

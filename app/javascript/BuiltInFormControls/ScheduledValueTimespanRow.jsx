@@ -13,17 +13,21 @@ export function scheduledValueTimespanIsValid(timespan) {
 }
 
 function ScheduledValueTimespanRow({
-  buildInput, rowIdentifier, timespan, timezone, attributeDidChange, deleteClicked,
+  buildInput,
+  rowIdentifier,
+  timespan,
+  timezone,
+  attributeDidChange,
+  deleteClicked,
 }) {
   const rowAttributeDidChange = useCallback(
     (field, value) => attributeDidChange(rowIdentifier, field, value),
     [attributeDidChange, rowIdentifier],
   );
 
-  const valueChanged = useCallback(
-    (value) => rowAttributeDidChange('value', value),
-    [rowAttributeDidChange],
-  );
+  const valueChanged = useCallback((value) => rowAttributeDidChange('value', value), [
+    rowAttributeDidChange,
+  ]);
 
   const onDeleteClicked = (e) => {
     e.preventDefault();
@@ -32,9 +36,7 @@ function ScheduledValueTimespanRow({
 
   return (
     <tr>
-      <td className="w-25">
-        {buildInput(timespan.value, valueChanged)}
-      </td>
+      <td className="w-25">{buildInput(timespan.value, valueChanged)}</td>
 
       <td className="w-75">
         <div className="d-flex flex-row align-items-center justify-content-stretch">

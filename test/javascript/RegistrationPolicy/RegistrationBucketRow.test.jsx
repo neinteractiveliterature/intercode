@@ -1,9 +1,7 @@
 import React from 'react';
 
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
-import {
-  render, act, fireEvent, waitFor, waitForElementToBeRemoved,
-} from '../testUtils';
+import { render, act, fireEvent, waitFor, waitForElementToBeRemoved } from '../testUtils';
 
 describe('RegistrationBucketRow', () => {
   let onChange;
@@ -25,30 +23,32 @@ describe('RegistrationBucketRow', () => {
     onDelete = jest.fn();
   });
 
-  const renderRegistrationBucketRow = (props, registrationBucketProps) => render((
-    <table>
-      <tbody>
-        <RegistrationBucketRow
-          registrationBucket={
-            {
+  const renderRegistrationBucketRow = (props, registrationBucketProps) =>
+    render(
+      <table>
+        <tbody>
+          <RegistrationBucketRow
+            registrationBucket={{
               ...defaultRegistrationBucketProps,
               ...registrationBucketProps,
-            }
-          }
-          onChange={onChange}
-          onDelete={onDelete}
-          lockNameAndDescription={false}
-          lockLimited={false}
-          lockDelete={false}
-          {...props}
-        />
-      </tbody>
-    </table>
-  ));
+            }}
+            onChange={onChange}
+            onDelete={onDelete}
+            lockNameAndDescription={false}
+            lockLimited={false}
+            lockDelete={false}
+            {...props}
+          />
+        </tbody>
+      </table>,
+    );
 
   test('it renders the correct field values', () => {
     const {
-      getByDisplayValue, getByLabelText, getByRole, getByText,
+      getByDisplayValue,
+      getByLabelText,
+      getByRole,
+      getByText,
     } = renderRegistrationBucketRow();
     expect(getByRole('row')).not.toHaveClass('anything-bucket');
     expect(getByDisplayValue('test')).toBeTruthy();
@@ -93,7 +93,9 @@ describe('RegistrationBucketRow', () => {
   test('changing the description', () => {
     const { getByLabelText } = renderRegistrationBucketRow();
     fireEvent.focus(getByLabelText('Bucket description'));
-    fireEvent.change(getByLabelText('Bucket description'), { target: { value: 'a new description' } });
+    fireEvent.change(getByLabelText('Bucket description'), {
+      target: { value: 'a new description' },
+    });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].description).toEqual('a new description');
   });

@@ -1,9 +1,5 @@
-import React, {
-  Suspense, useMemo, useState, useEffect,
-} from 'react';
-import {
-  Switch, Route, useLocation, useHistory,
-} from 'react-router-dom';
+import React, { Suspense, useMemo, useState, useEffect } from 'react';
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';
 import { Settings } from 'luxon';
 
@@ -37,34 +33,31 @@ function normalizePathForLayout(path: string) {
 function AppRoot() {
   const location = useLocation();
   const history = useHistory();
-  const { data, loading, error } = useAppRootQueryQuery(
-    { variables: { path: normalizePathForLayout(location.pathname) } },
-  );
+  const { data, loading, error } = useAppRootQueryQuery({
+    variables: { path: normalizePathForLayout(location.pathname) },
+  });
 
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<number>();
   const [layoutChanged, setLayoutChanged] = useState(false);
 
-  const bodyComponents = useMemo(
-    () => {
-      if (error || loading || !data) {
-        return null;
-      }
+  const bodyComponents = useMemo(() => {
+    if (error || loading || !data) {
+      return null;
+    }
 
-      return parseCmsContent(
-        data.effectiveCmsLayout?.content_html ?? '',
-        { ...CMS_COMPONENT_MAP, AppRouter, NavigationBar },
-      ).bodyComponents;
-    },
-    [data, error, loading],
-  );
+    return parseCmsContent(data.effectiveCmsLayout?.content_html ?? '', {
+      ...CMS_COMPONENT_MAP,
+      AppRouter,
+      NavigationBar,
+    }).bodyComponents;
+  }, [data, error, loading]);
 
-  const cachedBodyComponents = useCachedLoadableValue(
-    loading, error,
-    () => bodyComponents,
-    [bodyComponents],
-  );
+  const cachedBodyComponents = useCachedLoadableValue(loading, error, () => bodyComponents, [
+    bodyComponents,
+  ]);
   const appRootContextValue = useCachedLoadableValue(
-    loading, error,
+    loading,
+    error,
     () => ({
       assumedIdentityFromProfile: data!.assumedIdentityFromProfile,
       cmsNavigationItems: data!.cmsNavigationItems,
@@ -89,53 +82,45 @@ function AppRoot() {
     [data],
   );
 
-  useEffect(
-    () => {
-      if (!loading && !error && data && cachedCmsLayoutId !== data.effectiveCmsLayout.id) {
-        if (cachedCmsLayoutId) {
-          // if the layout changed we need a full page reload to rerender the <head>
-          setLayoutChanged(true);
-          window.location.reload();
-        } else {
-          setCachedCmsLayoutId(data.effectiveCmsLayout.id);
-        }
+  useEffect(() => {
+    if (!loading && !error && data && cachedCmsLayoutId !== data.effectiveCmsLayout.id) {
+      if (cachedCmsLayoutId) {
+        // if the layout changed we need a full page reload to rerender the <head>
+        setLayoutChanged(true);
+        window.location.reload();
+      } else {
+        setCachedCmsLayoutId(data.effectiveCmsLayout.id);
       }
-    },
-    [loading, error, cachedCmsLayoutId, data],
-  );
+    }
+  }, [loading, error, cachedCmsLayoutId, data]);
 
-  useEffect(
-    () => {
-      if (
-        !loading && !error
-        && data?.myProfile
-        && (data.convention?.clickwrap_agreement || '').trim() !== ''
-        && !data.myProfile.accepted_clickwrap_agreement
-        && location.pathname !== '/clickwrap_agreement'
-        && location.pathname !== '/'
-        && !location.pathname.startsWith('/pages')
-      ) {
-        history.replace('/clickwrap_agreement');
+  useEffect(() => {
+    if (
+      !loading &&
+      !error &&
+      data?.myProfile &&
+      (data.convention?.clickwrap_agreement || '').trim() !== '' &&
+      !data.myProfile.accepted_clickwrap_agreement &&
+      location.pathname !== '/clickwrap_agreement' &&
+      location.pathname !== '/' &&
+      !location.pathname.startsWith('/pages')
+    ) {
+      history.replace('/clickwrap_agreement');
+    }
+  }, [data, error, history, loading, location]);
+
+  useEffect(() => {
+    if (appRootContextValue?.language) {
+      i18n.changeLanguage(appRootContextValue.language);
+      Settings.defaultLocale = appRootContextValue.language;
+
+      if (appRootContextValue.language === 'es') {
+        import('moment/locale/es').then(() => moment.locale('es'));
+      } else {
+        moment.locale('en');
       }
-    },
-    [data, error, history, loading, location],
-  );
-
-  useEffect(
-    () => {
-      if (appRootContextValue?.language) {
-        i18n.changeLanguage(appRootContextValue.language);
-        Settings.defaultLocale = appRootContextValue.language;
-
-        if (appRootContextValue.language === 'es') {
-          import('moment/locale/es').then(() => moment.locale('es'));
-        } else {
-          moment.locale('en');
-        }
-      }
-    },
-    [appRootContextValue],
-  );
+    }
+  }, [appRootContextValue]);
 
   if (layoutChanged) {
     return <></>;

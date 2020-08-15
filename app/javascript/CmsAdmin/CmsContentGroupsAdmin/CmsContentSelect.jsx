@@ -13,11 +13,8 @@ function CmsContentSelect(props) {
       getOptionValue={({ id: optionId, __typename }) => `${__typename}-${optionId}`}
       formatOptionLabel={(option) => (
         <>
-          {option.name}
-          {' '}
-          <small className="badge badge-light">
-            {option.__typename.replace('Cms', '')}
-          </small>
+          {option.name}{' '}
+          <small className="badge badge-light">{option.__typename.replace('Cms', '')}</small>
         </>
       )}
       query={SearchCmsContentQuery}

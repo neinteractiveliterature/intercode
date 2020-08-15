@@ -15,11 +15,7 @@ function LiquidTagDocHeader({ liquidTag }) {
           {' %}'}
         </code>
       </div>
-      {
-        liquidTag.docstring
-          ? <p className="mt-2 mb-0">{liquidTag.docstring}</p>
-          : null
-      }
+      {liquidTag.docstring ? <p className="mt-2 mb-0">{liquidTag.docstring}</p> : null}
     </>
   );
 }

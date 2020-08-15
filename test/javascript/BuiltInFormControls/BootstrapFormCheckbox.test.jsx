@@ -6,13 +6,16 @@ import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/B
 describe('BootstrapFormCheckbox', () => {
   const onChange = jest.fn();
 
-  const renderComponent = (overrideProps = {}) => render(<BootstrapFormCheckbox
-    name="my_checkbox"
-    label="check me"
-    checked={false}
-    onChange={onChange}
-    {...overrideProps}
-  />);
+  const renderComponent = (overrideProps = {}) =>
+    render(
+      <BootstrapFormCheckbox
+        name="my_checkbox"
+        label="check me"
+        checked={false}
+        onChange={onChange}
+        {...overrideProps}
+      />,
+    );
 
   beforeEach(onChange.mockReset);
 

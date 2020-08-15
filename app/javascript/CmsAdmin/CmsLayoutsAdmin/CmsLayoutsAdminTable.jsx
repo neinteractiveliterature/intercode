@@ -20,16 +20,13 @@ function CmsLayoutsAdminTable() {
     idVariablePath: ['id'],
   });
 
-  const layoutsSorted = useMemo(
-    () => {
-      if (loading || error) {
-        return [];
-      }
+  const layoutsSorted = useMemo(() => {
+    if (loading || error) {
+      return [];
+    }
 
-      return sortByLocaleString(data.cmsLayouts, (layout) => layout.name);
-    },
-    [data, loading, error],
-  );
+    return sortByLocaleString(data.cmsLayouts, (layout) => layout.name);
+  }, [data, loading, error]);
 
   usePageTitle('CMS Layouts');
 
@@ -51,35 +48,36 @@ function CmsLayoutsAdminTable() {
             <tr key={layout.id}>
               <td>
                 {layout.name}
-                {
-                  layout.admin_notes && layout.admin_notes.trim() !== '' && (
-                    <>
-                      <br />
-                      <small>{layout.admin_notes}</small>
-                    </>
-                  )
-                }
+                {layout.admin_notes && layout.admin_notes.trim() !== '' && (
+                  <>
+                    <br />
+                    <small>{layout.admin_notes}</small>
+                  </>
+                )}
               </td>
               <td className="text-right">
-                {layout.current_ability_can_update
-                  ? (
-                    <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
-                      Edit
-                    </Link>
-                  )
-                  : (
-                    <Link to={`/cms_layouts/${layout.id}/view_source`} className="btn btn-outline-secondary btn-sm">
-                      View source
-                    </Link>
-                  )}
+                {layout.current_ability_can_update ? (
+                  <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
+                    Edit
+                  </Link>
+                ) : (
+                  <Link
+                    to={`/cms_layouts/${layout.id}/view_source`}
+                    className="btn btn-outline-secondary btn-sm"
+                  >
+                    View source
+                  </Link>
+                )}
                 {layout.current_ability_can_delete && (
                   <button
                     type="button"
-                    onClick={() => confirm({
-                      prompt: 'Are you sure you want to delete this layout?',
-                      action: () => deleteLayout(layout.id),
-                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                    })}
+                    onClick={() =>
+                      confirm({
+                        prompt: 'Are you sure you want to delete this layout?',
+                        action: () => deleteLayout(layout.id),
+                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                      })
+                    }
                     className="btn btn-danger btn-sm ml-1"
                   >
                     Delete
@@ -92,7 +90,9 @@ function CmsLayoutsAdminTable() {
       </table>
 
       {data.currentAbility.can_create_cms_layouts && (
-        <Link to="/cms_layouts/new" className="btn btn-secondary">New layout</Link>
+        <Link to="/cms_layouts/new" className="btn btn-secondary">
+          New layout
+        </Link>
       )}
     </>
   );

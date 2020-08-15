@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
 
-import {
-  preferencesMatch,
-} from '../TimeblockTypes';
+import { preferencesMatch } from '../TimeblockTypes';
 import {
   describeOrdinality,
   describeTimeblock,
@@ -17,40 +15,39 @@ import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 
 export type TimeblockPreferenceItemDisplayProps = {
-  formItem: TimeblockPreferenceFormItem,
-  convention: ConventionForTimespanUtils,
-  value: FormItemValueType<TimeblockPreferenceFormItem>,
+  formItem: TimeblockPreferenceFormItem;
+  convention: ConventionForTimespanUtils;
+  value: FormItemValueType<TimeblockPreferenceFormItem>;
 };
 
-function TimeblockPreferenceItemDisplay(
-  { formItem, convention, value }: TimeblockPreferenceItemDisplayProps,
-) {
+function TimeblockPreferenceItemDisplay({
+  formItem,
+  convention,
+  value,
+}: TimeblockPreferenceItemDisplayProps) {
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
     const key = column.dayStart.format('dddd');
     if (cell == null) {
       return <td key={key} className="table-secondary" />;
     }
 
-    const existingPreference = value
-      .find((p) => preferencesMatch(p, {
+    const existingPreference = value.find((p) =>
+      preferencesMatch(p, {
         start: cell.timespan.start,
         finish: cell.timespan.finish,
-      }));
-    const { ordinality } = (existingPreference || {});
+      }),
+    );
+    const { ordinality } = existingPreference || {};
     const ordinalityString = (ordinality || '').toString();
 
     return (
       <td
         key={key}
-        className={classNames(
-          'align-middle',
-          'text-center',
-          {
-            'bg-success text-white': ordinalityString === '1',
-            'table-success': ['2', '3'].includes(ordinalityString),
-            'bg-danger text-white': ordinalityString === 'X',
-          },
-        )}
+        className={classNames('align-middle', 'text-center', {
+          'bg-success text-white': ordinalityString === '1',
+          'table-success': ['2', '3'].includes(ordinalityString),
+          'bg-danger text-white': ordinalityString === 'X',
+        })}
       >
         <span
           className={classNames({
@@ -63,14 +60,11 @@ function TimeblockPreferenceItemDisplay(
     );
   };
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
-  const rows = useMemo(
-    () => rotateTimeblockColumnsToRows(formItem, columns),
-    [columns, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
+    convention,
+    formItem,
+  ]);
+  const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (
     <table className="table table-sm">
@@ -89,16 +83,12 @@ function TimeblockPreferenceItemDisplay(
           <tr key={row.timeblock.label}>
             <td>
               {row.timeblock.label}
-              {
-                formItem.rendered_properties.hide_timestamps
-                  ? null
-                  : (
-                    <>
-                      <br />
-                      <small>{describeTimeblock(row.timeblock)}</small>
-                    </>
-                  )
-              }
+              {formItem.rendered_properties.hide_timestamps ? null : (
+                <>
+                  <br />
+                  <small>{describeTimeblock(row.timeblock)}</small>
+                </>
+              )}
             </td>
             {row.cells.map((cell, x) => renderCell(cell, columns[x]))}
           </tr>

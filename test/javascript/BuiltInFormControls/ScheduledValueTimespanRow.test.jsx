@@ -2,7 +2,9 @@ import React from 'react';
 
 import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
-import ScheduledValueTimespanRow, { scheduledValueTimespanIsValid } from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
+import ScheduledValueTimespanRow, {
+  scheduledValueTimespanIsValid,
+} from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
 
 describe('ScheduledValueTimespanRow', () => {
   const attributeDidChange = jest.fn();
@@ -24,7 +26,7 @@ describe('ScheduledValueTimespanRow', () => {
       ...timespanProps,
     };
 
-    return render((
+    return render(
       <table>
         <tbody>
           <ScheduledValueTimespanRow
@@ -38,8 +40,8 @@ describe('ScheduledValueTimespanRow', () => {
             {...props}
           />
         </tbody>
-      </table>
-    ));
+      </table>,
+    );
   };
 
   test('it renders with a value', () => {
@@ -62,11 +64,13 @@ describe('ScheduledValueTimespanRow', () => {
     });
 
     test('it does not require a start or a finish', () => {
-      expect(scheduledValueTimespanIsValid({
-        value: 6,
-        start: null,
-        finish: null,
-      })).toBeTruthy();
+      expect(
+        scheduledValueTimespanIsValid({
+          value: 6,
+          start: null,
+          finish: null,
+        }),
+      ).toBeTruthy();
     });
   });
 });

@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import CommitableInput from '../BuiltInFormControls/CommitableInput';
 
 function FreeTextFilter({ filter, ...otherProps }) {
-  return (
-    <CommitableInput value={(filter || {}).value} {...otherProps} />
-  );
+  return <CommitableInput value={(filter || {}).value} {...otherProps} />;
 }
 
 FreeTextFilter.propTypes = {

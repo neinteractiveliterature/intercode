@@ -7,17 +7,26 @@ import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
 import CmsContentSelect from './CmsContentSelect';
 import PermissionsTableInput from '../../Permissions/PermissionsTableInput';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
-import { permissionEquals, getPermissionNamesForModelType } from '../../Permissions/PermissionUtils';
+import {
+  permissionEquals,
+  getPermissionNamesForModelType,
+} from '../../Permissions/PermissionUtils';
 import { PermissionPropType } from '../../Permissions/PermissionPropTypes';
 
 const ContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 
 function CmsContentGroupFormFields({
-  contentGroup, setContentGroup, disabled, readOnly, convention,
-  permissionsChangeSet, addPermission, removePermission,
+  contentGroup,
+  setContentGroup,
+  disabled,
+  readOnly,
+  convention,
+  permissionsChangeSet,
+  addPermission,
+  removePermission,
 }) {
-  const [staffPositions, setStaffPositions] = useState(
-    () => uniqWith(
+  const [staffPositions, setStaffPositions] = useState(() =>
+    uniqWith(
       contentGroup.permissions.map((perm) => perm.role),
       permissionEquals,
     ),
@@ -53,9 +62,7 @@ function CmsContentGroupFormFields({
       </FormGroupWithLabel>
 
       <section className="my-4 card">
-        <div className="card-header">
-          Permissions
-        </div>
+        <div className="card-header">Permissions</div>
 
         <div className="card-body">
           {staffPositions.length > 0 && (

@@ -6,7 +6,7 @@ import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { EventEmailFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type EventEmailItemChangeDisplayProps = {
-  change: ParsedFormResponseChange<EventEmailFormItem>,
+  change: ParsedFormResponseChange<EventEmailFormItem>;
 };
 
 function EventEmailItemChangeDisplay({ change }: EventEmailItemChangeDisplayProps) {
@@ -14,11 +14,7 @@ function EventEmailItemChangeDisplay({ change }: EventEmailItemChangeDisplayProp
 
   return (
     <div className="border p-1 rounded">
-      <ObjectDiffDisplay
-        before={before}
-        after={after}
-        renderKey={(key) => humanize(key)}
-      />
+      <ObjectDiffDisplay before={before} after={after} renderKey={(key) => humanize(key)} />
     </div>
   );
 }

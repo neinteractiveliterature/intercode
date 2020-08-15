@@ -10,16 +10,13 @@ function getLabelForBucketChoice(signup, bucket) {
   if (bucket.key === signup.requested_bucket_key) {
     addenda.push('user requested');
   }
-  const addendaString = (addenda.length > 0 ? ` (${addenda.join(', ')})` : '');
+  const addendaString = addenda.length > 0 ? ` (${addenda.join(', ')})` : '';
 
   return `${bucket.name}${addendaString}`;
 }
 
 function shouldBucketChoiceBeDisabled(signup, bucket) {
-  return (
-    bucket.key === signup.bucket_key
-    || (bucket.anything && signup.bucket_key)
-  );
+  return bucket.key === signup.bucket_key || (bucket.anything && signup.bucket_key);
 }
 
 const BucketInput = ({ signup, ...otherProps }) => {
@@ -29,12 +26,7 @@ const BucketInput = ({ signup, ...otherProps }) => {
     disabled: shouldBucketChoiceBeDisabled(signup, bucket),
   }));
 
-  return (
-    <MultipleChoiceInput
-      choices={bucketChoices}
-      {...otherProps}
-    />
-  );
+  return <MultipleChoiceInput choices={bucketChoices} {...otherProps} />;
 };
 
 BucketInput.propTypes = {
@@ -42,10 +34,12 @@ BucketInput.propTypes = {
     run: PropTypes.shape({
       event: PropTypes.shape({
         registration_policy: PropTypes.shape({
-          buckets: PropTypes.arrayOf(PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-          }).isRequired).isRequired,
+          buckets: PropTypes.arrayOf(
+            PropTypes.shape({
+              key: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+            }).isRequired,
+          ).isRequired,
         }).isRequired,
       }).isRequired,
     }).isRequired,

@@ -10,7 +10,11 @@ function mapRange(start, end, step, closure) {
 }
 
 function BucketCapacityBar({
-  startingTickmarkIndex, tickmarkCount, tickmarkClass, className, widthFraction,
+  startingTickmarkIndex,
+  tickmarkCount,
+  tickmarkClass,
+  className,
+  widthFraction,
 }) {
   return (
     <div

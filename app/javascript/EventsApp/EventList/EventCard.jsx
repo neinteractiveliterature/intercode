@@ -35,12 +35,8 @@ function renderFirstRunTime(event, timezoneName) {
         previousDayName = dayName;
         return (
           <React.Fragment key={runStart.toISOString()}>
-            <span className="d-lg-none text-nowrap">
-              {runStart.format('ddd h:mma')}
-            </span>
-            <span className="d-none d-lg-inline text-nowrap">
-              {runStart.format('dddd h:mma')}
-            </span>
+            <span className="d-lg-none text-nowrap">{runStart.format('ddd h:mma')}</span>
+            <span className="d-none d-lg-inline text-nowrap">{runStart.format('dddd h:mma')}</span>
           </React.Fragment>
         );
       }),
@@ -55,8 +51,9 @@ function teamIsAllAuthors(author, teamMembers) {
     return false;
   }
 
-  const teamMemberNames = teamMembers
-    .map((teamMember) => teamMember.user_con_profile.name_without_nickname);
+  const teamMemberNames = teamMembers.map(
+    (teamMember) => teamMember.user_con_profile.name_without_nickname,
+  );
 
   if (!teamMemberNames.every((teamMemberName) => author.includes(teamMemberName))) {
     return false;
@@ -69,36 +66,29 @@ function teamIsAllAuthors(author, teamMembers) {
   return true;
 }
 
-const EventCard = ({
-  event, sorted, canReadSchedule,
-}) => {
+const EventCard = ({ event, sorted, canReadSchedule }) => {
   const { timezoneName } = useContext(AppRootContext);
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
   const rateEvent = useRateEvent();
 
-  const displayTeamMembers = useMemo(
-    () => teamMembersForDisplay(event),
-    [event],
-  );
-  const teamMemberNames = displayTeamMembers
-    .map((teamMember) => (
-      <React.Fragment key={teamMember.id}>
-        { teamMember.user_con_profile.gravatar_enabled && (
-          <>
-            <Gravatar
-              url={teamMember.user_con_profile.gravatar_url}
-              enabled={teamMember.user_con_profile.gravatar_enabled}
-              pixelSize={16}
-              imgClassName="align-baseline"
-            />
-            {' '}
-          </>
-        )}
-        {teamMember.user_con_profile.name_without_nickname}
-      </React.Fragment>
-    ));
+  const displayTeamMembers = useMemo(() => teamMembersForDisplay(event), [event]);
+  const teamMemberNames = displayTeamMembers.map((teamMember) => (
+    <React.Fragment key={teamMember.id}>
+      {teamMember.user_con_profile.gravatar_enabled && (
+        <>
+          <Gravatar
+            url={teamMember.user_con_profile.gravatar_url}
+            enabled={teamMember.user_con_profile.gravatar_enabled}
+            pixelSize={16}
+            imgClassName="align-baseline"
+          />{' '}
+        </>
+      )}
+      {teamMember.user_con_profile.name_without_nickname}
+    </React.Fragment>
+  ));
   const teamMemberList = joinReact(teamMemberNames, ', ');
 
   if (teamMemberList.length > 0) {
@@ -115,8 +105,7 @@ const EventCard = ({
           <strong>
             {teamMemberDescription}
             {':'}
-          </strong>
-          {' '}
+          </strong>{' '}
           {teamMemberList}
         </>
       ),
@@ -124,7 +113,11 @@ const EventCard = ({
   }
 
   if (formResponse.author && !teamIsAllAuthors(formResponse.author, event.team_members)) {
-    const authorDescription = pluralizeWithCount('Author', formResponse.author.split(/(,|;| and )/).length, true);
+    const authorDescription = pluralizeWithCount(
+      'Author',
+      formResponse.author.split(/(,|;| and )/).length,
+      true,
+    );
     metadataItems.push({
       key: 'author',
       content: (
@@ -132,8 +125,7 @@ const EventCard = ({
           <strong>
             {authorDescription}
             {':'}
-          </strong>
-          {' '}
+          </strong>{' '}
           {formResponse.author}
         </>
       ),
@@ -145,9 +137,7 @@ const EventCard = ({
       key: 'organization',
       content: (
         <>
-          <strong>Organization:</strong>
-          {' '}
-          {formResponse.organization}
+          <strong>Organization:</strong> {formResponse.organization}
         </>
       ),
     });
@@ -175,11 +165,8 @@ const EventCard = ({
           <div>
             <h4 className="m-0 d-inline event-card-event-title">
               <Link to={buildEventUrl(event)}>{event.title}</Link>
-            </h4>
-            {' '}
-            <span className="lead text-muted">
-              {event.event_category.name}
-            </span>
+            </h4>{' '}
+            <span className="lead text-muted">{event.event_category.name}</span>
             <div className="d-flex flex-wrap mt-1">
               {metadataItems.map((metadataItem) => (
                 <div className="flex-shrink-1 mr-4" key={metadataItem.key}>
@@ -190,19 +177,14 @@ const EventCard = ({
           </div>
         </div>
 
-        {
-          sorted.some((sort) => sort.id === 'created_at')
-            ? (
-              <p className="m-0">
-                <strong>
-                  Added
-                  {' '}
-                  {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
-                </strong>
-              </p>
-            )
-            : null
-        }
+        {sorted.some((sort) => sort.id === 'created_at') ? (
+          <p className="m-0">
+            <strong>
+              Added{' '}
+              {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
+            </strong>
+          </p>
+        ) : null}
       </div>
 
       <div
@@ -228,10 +210,12 @@ EventCard.propTypes = {
     team_members: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     created_at: PropTypes.string.isRequired,
   }).isRequired,
-  sorted: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    desc: PropTypes.bool.isRequired,
-  })),
+  sorted: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      desc: PropTypes.bool.isRequired,
+    }),
+  ),
   canReadSchedule: PropTypes.bool,
 };
 

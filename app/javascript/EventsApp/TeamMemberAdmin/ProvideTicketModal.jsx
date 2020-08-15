@@ -13,35 +13,40 @@ import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
 
-function ProvideTicketModal({
-  event, convention, onClose, teamMember, visible,
-}) {
+function ProvideTicketModal({ event, convention, onClose, teamMember, visible }) {
   const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState(null);
   const [provideTicketMutate] = useMutation(ProvideEventTicket);
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
 
   const provideTicket = useCallback(
-    (args) => provideTicketAsync({
-      ...args,
-      update: (store, { data: { provideEventTicket: { ticket } } }) => {
-        const data = store.readQuery({
-          query: TeamMembersQuery,
-          variables: { eventId: event.id },
-        });
+    (args) =>
+      provideTicketAsync({
+        ...args,
+        update: (
+          store,
+          {
+            data: {
+              provideEventTicket: { ticket },
+            },
+          },
+        ) => {
+          const data = store.readQuery({
+            query: TeamMembersQuery,
+            variables: { eventId: event.id },
+          });
 
-        data.event.provided_tickets.push(ticket);
-        const teamMemberToUpdate = data.event.team_members
-          .find((tm) => teamMember.id === tm.id);
-        teamMemberToUpdate.user_con_profile.ticket = ticket;
+          data.event.provided_tickets.push(ticket);
+          const teamMemberToUpdate = data.event.team_members.find((tm) => teamMember.id === tm.id);
+          teamMemberToUpdate.user_con_profile.ticket = ticket;
 
-        store.writeQuery({
-          query: TeamMembersQuery,
-          variables: { eventId: event.id },
-          data,
-        });
-      },
-    }),
+          store.writeQuery({
+            query: TeamMembersQuery,
+            variables: { eventId: event.id },
+            data,
+          });
+        },
+      }),
     [event, provideTicketAsync, teamMember],
   );
 
@@ -62,80 +67,60 @@ function ProvideTicketModal({
 
   return (
     <Modal visible={visible}>
-      <div className="modal-header">
-        {capitalize(pluralize(convention.ticket_name))}
-      </div>
+      <div className="modal-header">{capitalize(pluralize(convention.ticket_name))}</div>
 
       <div className="modal-body">
-        {
-          teamMember
-            ? (
-              <>
-                <p>
-                  <TicketingStatusDescription
-                    userConProfile={teamMember.user_con_profile}
-                    convention={convention}
-                  />
-                </p>
+        {teamMember ? (
+          <>
+            <p>
+              <TicketingStatusDescription
+                userConProfile={teamMember.user_con_profile}
+                convention={convention}
+              />
+            </p>
 
-                {
-                  teamMember && !teamMember.user_con_profile.ticket
-                    ? (
-                      <ProvidableTicketTypeSelection
-                        event={event}
-                        convention={convention}
-                        value={ticketTypeId}
-                        onChange={setTicketTypeId}
-                        disabled={mutationInProgress}
-                      />
-                    )
-                    : null
-                }
-              </>
-            )
-            : null
-        }
+            {teamMember && !teamMember.user_con_profile.ticket ? (
+              <ProvidableTicketTypeSelection
+                event={event}
+                convention={convention}
+                value={ticketTypeId}
+                onChange={setTicketTypeId}
+                disabled={mutationInProgress}
+              />
+            ) : null}
+          </>
+        ) : null}
 
         <ErrorDisplay graphQLError={error} />
       </div>
 
       <div className="modal-footer">
-        {
-          teamMember && teamMember.user_con_profile.ticket
-            ? (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={onClose}
-              >
-                {t('buttons.ok', 'OK')}
-              </button>
-            )
-            : (
-              <>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={onClose}
-                  disabled={mutationInProgress}
-                >
-                  {t('buttons.cancel', 'Cancel')}
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  disabled={ticketTypeId == null || mutationInProgress}
-                  onClick={provideTicketClicked}
-                >
-                  {t(
-                    'events.teamMemberAdmin.provideTicketButton',
-                    'Provide {{ ticketName }}',
-                    { ticketName: convention.ticket_name },
-                  )}
-                </button>
-              </>
-            )
-        }
+        {teamMember && teamMember.user_con_profile.ticket ? (
+          <button type="button" className="btn btn-primary" onClick={onClose}>
+            {t('buttons.ok', 'OK')}
+          </button>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+              disabled={mutationInProgress}
+            >
+              {t('buttons.cancel', 'Cancel')}
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={ticketTypeId == null || mutationInProgress}
+              onClick={provideTicketClicked}
+            >
+              {t('events.teamMemberAdmin.provideTicketButton', 'Provide {{ ticketName }}', {
+                ticketName: convention.ticket_name,
+              })}
+            </button>
+          </>
+        )}
       </div>
     </Modal>
   );

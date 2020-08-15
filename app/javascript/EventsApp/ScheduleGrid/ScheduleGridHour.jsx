@@ -23,7 +23,14 @@ function formatTime(time, timezoneName) {
 function ScheduleGridHour({ now, eventRuns }) {
   const { schedule, config } = useContext(ScheduleGridContext);
   return (
-    <div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
+    <div
+      key={now.toISOString()}
+      style={{
+        width: `${PIXELS_PER_HOUR}px`,
+        minWidth: `${PIXELS_PER_HOUR}px`,
+        overflow: 'hidden',
+      }}
+    >
       <div className="small text-muted ml-1">
         {formatTime(now, schedule.timezoneName)}
         {config.showExtendedCounts && (

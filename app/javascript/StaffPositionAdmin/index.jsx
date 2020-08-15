@@ -39,10 +39,18 @@ function StaffPositionAdmin() {
       </nav>
 
       <Switch>
-        <Route path="/staff_positions/new"><NewStaffPosition /></Route>
-        <Route path="/staff_positions/:id/edit"><EditStaffPosition /></Route>
-        <Route path="/staff_positions/:id/edit_permissions"><EditStaffPositionPermissions /></Route>
-        <Route path="/staff_positions"><StaffPositionsTable /></Route>
+        <Route path="/staff_positions/new">
+          <NewStaffPosition />
+        </Route>
+        <Route path="/staff_positions/:id/edit">
+          <EditStaffPosition />
+        </Route>
+        <Route path="/staff_positions/:id/edit_permissions">
+          <EditStaffPositionPermissions />
+        </Route>
+        <Route path="/staff_positions">
+          <StaffPositionsTable />
+        </Route>
         <Redirect to="/staff_positions" />
       </Switch>
     </>

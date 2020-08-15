@@ -34,7 +34,7 @@ query CmsPagesAdminQuery {
   }
 
   cmsParent {
-    ...on RootSite {
+    ... on RootSite {
       id
 
       default_layout {
@@ -42,7 +42,7 @@ query CmsPagesAdminQuery {
       }
     }
 
-    ...on Convention {
+    ... on Convention {
       id
 
       default_layout {

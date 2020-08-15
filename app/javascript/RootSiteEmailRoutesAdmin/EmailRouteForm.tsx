@@ -5,14 +5,13 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { EmailRoute } from '../graphqlTypes.generated';
 
 export type EmailRouteFormProps = {
-  emailRoute: EmailRoute,
-  onChange: React.Dispatch<EmailRoute>,
+  emailRoute: EmailRoute;
+  onChange: React.Dispatch<EmailRoute>;
 };
 
 function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps) {
-  const changeField = <F extends keyof EmailRoute>(field: F) => (
-    (value: EmailRoute[F]) => onChange({ ...emailRoute, [field]: value })
-  );
+  const changeField = <F extends keyof EmailRoute>(field: F) => (value: EmailRoute[F]) =>
+    onChange({ ...emailRoute, [field]: value });
 
   return (
     <>
@@ -28,7 +27,9 @@ function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps) {
         header="Forward addresses"
         renderValue={(value) => value}
         getDeleteButtonLabel={(value) => `Delete forward address ${value}`}
-        getDeletePrompt={(value) => `Are you sure you want to delete ${value} from the forward addresses?`}
+        getDeletePrompt={(value) =>
+          `Are you sure you want to delete ${value} from the forward addresses?`
+        }
         renderAddValueInput={({ value, onChange: onAddValueChange, onKeyDown }) => (
           <input
             type="email"

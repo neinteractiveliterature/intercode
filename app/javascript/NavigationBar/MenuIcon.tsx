@@ -1,8 +1,8 @@
 import React from 'react';
 
 export type MenuIconProps = {
-  icon: string,
-  colorClass?: string,
+  icon: string;
+  colorClass?: string;
 };
 
 function MenuIcon({ icon, colorClass }: MenuIconProps) {

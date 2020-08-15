@@ -1,12 +1,5 @@
 class RunDimensions {
-  constructor(
-    eventRun,
-    laneIndex,
-    timePlacement,
-    timeSpan,
-    lanePlacement,
-    laneSpan,
-  ) {
+  constructor(eventRun, laneIndex, timePlacement, timeSpan, lanePlacement, laneSpan) {
     this.eventRun = eventRun;
     this.lanePlacement = lanePlacement;
     this.laneSpan = laneSpan;

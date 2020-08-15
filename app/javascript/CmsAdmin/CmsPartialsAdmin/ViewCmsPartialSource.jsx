@@ -12,9 +12,7 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 function ViewCmsPartialSource() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsPartialsAdminQuery);
-  const partial = error || loading
-    ? null
-    : data.cmsPartials.find((p) => id === p.id.toString());
+  const partial = error || loading ? null : data.cmsPartials.find((p) => id === p.id.toString());
 
   usePageTitle(useValueUnless(() => `Viewing “${partial.name}” Source`, error || loading));
 
@@ -26,12 +24,7 @@ function ViewCmsPartialSource() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return (
-    <CmsPartialForm
-      partial={partial}
-      readOnly
-    />
-  );
+  return <CmsPartialForm partial={partial} readOnly />;
 }
 
 export default ViewCmsPartialSource;

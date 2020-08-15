@@ -9,17 +9,14 @@ export default function useLoginRequired() {
   const { currentUser } = useContext(AppRootContext);
   const location = useLocation();
 
-  useEffect(
-    () => {
-      if (!currentUser) {
-        if (!authenticationModal.visible) {
-          authenticationModal.open({ currentView: 'signIn' });
-          authenticationModal.setAfterSignInPath(location.pathname);
-        }
+  useEffect(() => {
+    if (!currentUser) {
+      if (!authenticationModal.visible) {
+        authenticationModal.open({ currentView: 'signIn' });
+        authenticationModal.setAfterSignInPath(location.pathname);
       }
-    },
-    [authenticationModal, currentUser, location.pathname],
-  );
+    }
+  }, [authenticationModal, currentUser, location.pathname]);
 
   return !currentUser;
 }

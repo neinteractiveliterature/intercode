@@ -11,8 +11,12 @@ import UserSelect from '../BuiltInFormControls/UserSelect';
 import useUniqueId from '../useUniqueId';
 
 function UserActivityAlertForm({
-  userActivityAlert, onChange, onAddNotificationDestination, onRemoveNotificationDestination,
-  convention, disabled,
+  userActivityAlert,
+  onChange,
+  onAddNotificationDestination,
+  onRemoveNotificationDestination,
+  convention,
+  disabled,
 }) {
   const userSelectId = useUniqueId('user-');
   const confirm = useConfirm();
@@ -34,22 +38,21 @@ function UserActivityAlertForm({
     setTriggerOnUserConProfileCreate,
     setTriggerOnTicketCreate,
   ] = useMemo(
-    () => [
-      'partial_name',
-      'email',
-      'user',
-      'trigger_on_user_con_profile_create',
-      'trigger_on_ticket_create',
-    ].map((field) => (value) => onChange({ ...userActivityAlert, [field]: value })),
+    () =>
+      [
+        'partial_name',
+        'email',
+        'user',
+        'trigger_on_user_con_profile_create',
+        'trigger_on_ticket_create',
+      ].map((field) => (value) => onChange({ ...userActivityAlert, [field]: value })),
     [onChange, userActivityAlert],
   );
 
   return (
     <>
       <div className="card">
-        <div className="card-header">
-          Matching
-        </div>
+        <div className="card-header">Matching</div>
 
         <div className="card-body">
           <BootstrapFormInput
@@ -79,15 +82,15 @@ function UserActivityAlertForm({
               onChange={setUser}
               disabled={disabled}
             />
-            <small className="form-text text-muted">Matches across all conventions using this server.</small>
+            <small className="form-text text-muted">
+              Matches across all conventions using this server.
+            </small>
           </div>
         </div>
       </div>
 
       <div className="card mt-4">
-        <div className="card-header">
-          Trigger events
-        </div>
+        <div className="card-header">Trigger events</div>
 
         <div className="card-body">
           <BootstrapFormCheckbox
@@ -99,56 +102,47 @@ function UserActivityAlertForm({
             disabled={disabled}
           />
 
-          {
-            convention.ticket_mode !== 'disabled' && (
-              <BootstrapFormCheckbox
-                name="trigger_on_ticket_create"
-                label={`Trigger on ${convention.ticket_name} creation`}
-                type="checkbox"
-                checked={userActivityAlert.trigger_on_ticket_create}
-                onCheckedChange={setTriggerOnTicketCreate}
-                disabled={disabled}
-              />
-            )
-          }
+          {convention.ticket_mode !== 'disabled' && (
+            <BootstrapFormCheckbox
+              name="trigger_on_ticket_create"
+              label={`Trigger on ${convention.ticket_name} creation`}
+              type="checkbox"
+              checked={userActivityAlert.trigger_on_ticket_create}
+              onCheckedChange={setTriggerOnTicketCreate}
+              disabled={disabled}
+            />
+          )}
         </div>
       </div>
 
       <div className="card mt-4">
-        <div className="card-header">
-          Alert destinations
-        </div>
+        <div className="card-header">Alert destinations</div>
 
         <ul className="list-group list-group-flush">
           {userActivityAlert.notification_destinations.map((notificationDestination) => (
             <li key={notificationDestination.id} className="list-group-item">
               <div className="d-flex">
                 <div className="flex-grow-1">
-                  {
-                    notificationDestination.staff_position
-                      ? (
-                        <>
-                          <strong>Staff position:</strong>
-                          {' '}
-                          {notificationDestination.staff_position.name}
-                        </>
-                      )
-                      : (
-                        <>
-                          <strong>User:</strong>
-                          {' '}
-                          {notificationDestination.user_con_profile.name_without_nickname}
-                        </>
-                      )
-                  }
+                  {notificationDestination.staff_position ? (
+                    <>
+                      <strong>Staff position:</strong> {notificationDestination.staff_position.name}
+                    </>
+                  ) : (
+                    <>
+                      <strong>User:</strong>{' '}
+                      {notificationDestination.user_con_profile.name_without_nickname}
+                    </>
+                  )}
                 </div>
                 <button
                   className="btn btn-sm btn-danger"
                   type="button"
-                  onClick={() => confirm({
-                    action: () => onRemoveNotificationDestination(notificationDestination.id),
-                    prompt: 'Are you sure you want to remove this alert destination?',
-                  })}
+                  onClick={() =>
+                    confirm({
+                      action: () => onRemoveNotificationDestination(notificationDestination.id),
+                      prompt: 'Are you sure you want to remove this alert destination?',
+                    })
+                  }
                   disabled={disabled}
                 >
                   <i className="fa fa-trash-o" />
@@ -211,21 +205,25 @@ UserActivityAlertForm.propTypes = {
     }),
     trigger_on_ticket_create: PropTypes.bool,
     trigger_on_user_con_profile_create: PropTypes.bool,
-    notification_destinations: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      staff_position: PropTypes.shape({
-        name: PropTypes.string.isRequired,
+    notification_destinations: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        staff_position: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        }),
+        user_con_profile: PropTypes.shape({
+          name_without_nickname: PropTypes.string,
+        }),
       }),
-      user_con_profile: PropTypes.shape({
-        name_without_nickname: PropTypes.string,
-      }),
-    })).isRequired,
+    ).isRequired,
   }).isRequired,
   convention: PropTypes.shape({
-    staff_positions: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+    staff_positions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
     ticket_name: PropTypes.string.isRequired,
     ticket_mode: PropTypes.string.isRequired,
   }).isRequired,

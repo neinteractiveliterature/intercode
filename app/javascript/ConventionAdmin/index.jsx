@@ -27,16 +27,30 @@ function ConventionAdmin() {
 
   const saveConvention = async (convention) => {
     const conventionInput = {
-      ...pick(
-        convention,
-        [
-          'accepting_proposals', 'starts_at', 'ends_at', 'name', 'domain', 'email_from',
-          'email_mode', 'event_mailing_list_domain', 'location', 'timezone_name', 'timezone_mode',
-          'show_schedule', 'show_event_list', 'maximum_tickets', 'signup_mode',
-          'signup_requests_open', 'site_mode', 'hidden', 'ticket_name', 'ticket_mode',
-          'clickwrap_agreement', 'language',
-        ],
-      ),
+      ...pick(convention, [
+        'accepting_proposals',
+        'starts_at',
+        'ends_at',
+        'name',
+        'domain',
+        'email_from',
+        'email_mode',
+        'event_mailing_list_domain',
+        'location',
+        'timezone_name',
+        'timezone_mode',
+        'show_schedule',
+        'show_event_list',
+        'maximum_tickets',
+        'signup_mode',
+        'signup_requests_open',
+        'site_mode',
+        'hidden',
+        'ticket_name',
+        'ticket_mode',
+        'clickwrap_agreement',
+        'language',
+      ]),
       maximum_event_signups: {
         timespans: convention.maximum_event_signups.timespans.map((timespan) => ({
           start: timespan.start,
@@ -48,11 +62,7 @@ function ConventionAdmin() {
       root_page_id: (convention.root_page || {}).id,
       catch_all_staff_position_id: (convention.catch_all_staff_position || {}).id,
       stripe_publishable_key: convention.stripe_publishable_key,
-      ...(
-        convention.stripe_secret_key
-          ? { stripe_secret_key: convention.stripe_secret_key }
-          : {}
-      ),
+      ...(convention.stripe_secret_key ? { stripe_secret_key: convention.stripe_secret_key } : {}),
     };
     await mutate({
       variables: {

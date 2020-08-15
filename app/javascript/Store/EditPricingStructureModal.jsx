@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback, useContext,
-} from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 
@@ -8,11 +6,15 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import EnumTypes from '../enumTypes.json';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import MoneyInput from './MoneyInput';
-import ScheduledValueEditor, { scheduledValueReducer } from '../BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, {
+  scheduledValueReducer,
+} from '../BuiltInFormControls/ScheduledValueEditor';
 import AppRootContext from '../AppRootContext';
 
-const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues
-  .map(({ name, description }) => ({ value: name, label: description }));
+const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, description }) => ({
+  value: name,
+  label: description,
+}));
 
 export const PricingStructureModalContext = React.createContext({
   visible: false,
@@ -22,22 +24,16 @@ export const PricingStructureModalContext = React.createContext({
 });
 
 const buildScheduledMoneyValueInput = (value, onChange) => (
-  <MoneyInput
-    value={value}
-    onChange={onChange}
-  />
+  <MoneyInput value={value} onChange={onChange} />
 );
 
-function EditPricingStructureModal({
-  visible, value, onChange, close,
-}) {
+function EditPricingStructureModal({ visible, value, onChange, close }) {
   const { timezoneName } = useContext(AppRootContext);
   const [pricingStructure, setPricingStructure] = useState(value);
 
-  useEffect(
-    () => { setPricingStructure(value); },
-    [value],
-  );
+  useEffect(() => {
+    setPricingStructure(value);
+  }, [value]);
 
   const dispatchScheduledValue = useCallback(
     (action) => {
@@ -65,9 +61,12 @@ function EditPricingStructureModal({
               caption="Pricing strategy"
               choices={PRICING_STRATEGIES}
               value={pricingStructure.pricing_strategy}
-              onChange={(strategy) => setPricingStructure((prev) => ({
-                ...prev, pricing_strategy: strategy,
-              }))}
+              onChange={(strategy) =>
+                setPricingStructure((prev) => ({
+                  ...prev,
+                  pricing_strategy: strategy,
+                }))
+              }
             />
 
             {pricingStructure.pricing_strategy === 'fixed' && (

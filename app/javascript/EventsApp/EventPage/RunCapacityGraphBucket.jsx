@@ -10,7 +10,9 @@ function describeCapacity(bucket, signupCount, signupsAvailable, t) {
       return t('events.runCapacity.unlimitedSimple', 'unlimited');
     }
 
-    return t('events.runCapacity.unlimitedWithCount', 'unlimited ({{ signupCount }} signed up)', { signupCount });
+    return t('events.runCapacity.unlimitedWithCount', 'unlimited ({{ signupCount }} signed up)', {
+      signupCount,
+    });
   }
 
   if (bucket.total_slots == null) {
@@ -32,9 +34,7 @@ function describeCapacity(bucket, signupCount, signupsAvailable, t) {
   );
 }
 
-function RunCapacityGraphBucket({
-  bucket, signupCountData, signupsAvailable, bucketIndex,
-}) {
+function RunCapacityGraphBucket({ bucket, signupCountData, signupsAvailable, bucketIndex }) {
   const { t } = useTranslation();
   const capacity = bucket.total_slots;
 
@@ -42,7 +42,10 @@ function RunCapacityGraphBucket({
     return null;
   }
 
-  const signupCount = signupCountData.sumSignupCounts({ state: 'confirmed', bucket_key: bucket.key });
+  const signupCount = signupCountData.sumSignupCounts({
+    state: 'confirmed',
+    bucket_key: bucket.key,
+  });
   const remainingCapacity = (bucket.total_slots || 0) - signupCount;
 
   return (

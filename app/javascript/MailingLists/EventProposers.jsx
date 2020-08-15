@@ -11,7 +11,10 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 function EventProposers() {
   const { data, loading, error } = useQuery(EventProposersQuery);
 
-  usePageTitle('Event proposers', useValueUnless(() => data.convention, error || loading));
+  usePageTitle(
+    'Event proposers',
+    useValueUnless(() => data.convention, error || loading),
+  );
 
   if (loading) {
     return <PageLoadingIndicator visible />;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type FieldRequiredFeedbackProps = {
-  valueInvalid: boolean,
+  valueInvalid: boolean;
 };
 
 const FieldRequiredFeedback = ({ valueInvalid }: FieldRequiredFeedbackProps) => {
@@ -9,9 +9,7 @@ const FieldRequiredFeedback = ({ valueInvalid }: FieldRequiredFeedbackProps) => 
     return <></>;
   }
 
-  return (
-    <div className="invalid-feedback">This field is required.</div>
-  );
+  return <div className="invalid-feedback">This field is required.</div>;
 };
 
 export default FieldRequiredFeedback;

@@ -3,28 +3,20 @@ import PropTypes from 'prop-types';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 
-function SignInButton({
-  className, caption, initiallyOpen, afterSignInPath,
-}) {
+function SignInButton({ className, caption, initiallyOpen, afterSignInPath }) {
   const { open, setAfterSignInPath } = useContext(AuthenticationModalContext);
-  const openModal = useCallback(
-    () => {
-      open({ currentView: 'signIn' });
-      if (afterSignInPath) {
-        setAfterSignInPath(afterSignInPath);
-      }
-    },
-    [afterSignInPath, open, setAfterSignInPath],
-  );
+  const openModal = useCallback(() => {
+    open({ currentView: 'signIn' });
+    if (afterSignInPath) {
+      setAfterSignInPath(afterSignInPath);
+    }
+  }, [afterSignInPath, open, setAfterSignInPath]);
 
-  useEffect(
-    () => {
-      if (initiallyOpen) {
-        openModal();
-      }
-    },
-    [initiallyOpen, openModal],
-  );
+  useEffect(() => {
+    if (initiallyOpen) {
+      openModal();
+    }
+  }, [initiallyOpen, openModal]);
 
   return (
     <button className={className} type="button" onClick={openModal}>

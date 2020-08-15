@@ -12,8 +12,12 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 function ConventionBreadcrumb() {
   const { data, loading, error } = useConventionQueryFromIdParam();
 
-  if (loading) { return <LoadingIndicator />; }
-  if (error) { return 'Convention'; }
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+  if (error) {
+    return 'Convention';
+  }
 
   return <BreadcrumbItem active>{data.convention.name}</BreadcrumbItem>;
 }
@@ -32,12 +36,18 @@ function RootSiteConventionsAdmin() {
           Conventions
         </RouteActivatedBreadcrumbItem>
 
-        <Route path="/conventions/:id"><ConventionBreadcrumb /></Route>
+        <Route path="/conventions/:id">
+          <ConventionBreadcrumb />
+        </Route>
       </ol>
 
       <Switch>
-        <Route path="/conventions/:id"><ConventionDisplay /></Route>
-        <Route path="/conventions" exact><RootSiteConventionsAdminTable /></Route>
+        <Route path="/conventions/:id">
+          <ConventionDisplay />
+        </Route>
+        <Route path="/conventions" exact>
+          <RootSiteConventionsAdminTable />
+        </Route>
         <Redirect to="/conventions?sort.starts_at=desc" />
       </Switch>
     </>

@@ -1,19 +1,19 @@
 import { gql } from '@apollo/client';
 
 export const PreviewLiquidQuery = gql`
-query PreviewLiquidQuery($liquid: String!) {
-  previewLiquid(content: $liquid)
-}
+  query PreviewLiquidQuery($liquid: String!) {
+    previewLiquid(content: $liquid)
+  }
 `;
 
 export const PreviewMarkdownQuery = gql`
-query PreviewMarkdownQuery($markdown: String!) {
-  previewMarkdown(markdown: $markdown)
-}
+  query PreviewMarkdownQuery($markdown: String!) {
+    previewMarkdown(markdown: $markdown)
+  }
 `;
 
 export const PreviewNotifierLiquidQuery = gql`
-query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
-  previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
-}
+  query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
+    previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
+  }
 `;

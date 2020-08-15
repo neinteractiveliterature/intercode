@@ -8,25 +8,30 @@ import RegistrationPolicyItemEditorPresetModal from './RegistrationPolicyItemEdi
 
 function usePresetPropertyUpdater(onChange, generatedId, property) {
   return useCallback(
-    (value) => onChange(generatedId, (prevPreset) => ({
-      ...prevPreset,
-      [property]: value,
-    })),
+    (value) =>
+      onChange(generatedId, (prevPreset) => ({
+        ...prevPreset,
+        [property]: value,
+      })),
     [generatedId, onChange, property],
   );
 }
 
 function RegistrationPolicyItemEditorPresetRow({
-  preset, index, movePreset, deletePreset, onChange,
+  preset,
+  index,
+  movePreset,
+  deletePreset,
+  onChange,
 }) {
   const confirm = useConfirm();
   const modal = useModal();
   const [rowRef, drag, { isDragging }] = useSortable(index, movePreset, 'choice');
 
-  const presetChanged = useCallback(
-    (newPreset) => onChange(preset.generatedId, () => newPreset),
-    [onChange, preset.generatedId],
-  );
+  const presetChanged = useCallback((newPreset) => onChange(preset.generatedId, () => newPreset), [
+    onChange,
+    preset.generatedId,
+  ]);
   const presetNameChanged = usePresetPropertyUpdater(onChange, preset.generatedId, 'name');
 
   return (
@@ -43,9 +48,7 @@ function RegistrationPolicyItemEditorPresetRow({
           onChange={(event) => presetNameChanged(event.target.value)}
         />
       </td>
-      <td>
-        {preset.policy.buckets.map((bucket) => bucket.name).join(', ') || 'None'}
-      </td>
+      <td>{preset.policy.buckets.map((bucket) => bucket.name).join(', ') || 'None'}</td>
       <td>
         <RegistrationPolicyItemEditorPresetModal
           initialPreset={preset}
@@ -63,10 +66,12 @@ function RegistrationPolicyItemEditorPresetRow({
         <button
           type="button"
           className="btn btn-sm btn-outline-danger"
-          onClick={() => confirm({
-            prompt: 'Are you sure you want to delete this policy preset?',
-            action: () => deletePreset(preset.generatedId),
-          })}
+          onClick={() =>
+            confirm({
+              prompt: 'Are you sure you want to delete this policy preset?',
+              action: () => deletePreset(preset.generatedId),
+            })
+          }
         >
           <span className="sr-only">Delete preset</span>
           <i className="fa fa-trash-o" />
@@ -81,9 +86,11 @@ RegistrationPolicyItemEditorPresetRow.propTypes = {
     generatedId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     policy: PropTypes.shape({
-      buckets: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string,
-      })).isRequired,
+      buckets: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+        }),
+      ).isRequired,
     }).isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,

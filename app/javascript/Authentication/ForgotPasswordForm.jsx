@@ -37,9 +37,9 @@ function ForgotPasswordForm() {
   const authenticityToken = useContext(AuthenticityTokensContext).resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
-  const [
-    resetPasswordAsync, resetPasswordError, resetPasswordInProgress,
-  ] = useAsyncFunction(resetPassword);
+  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(
+    resetPassword,
+  );
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -57,45 +57,50 @@ function ForgotPasswordForm() {
         </div>
 
         <div className="modal-body">
-          {
-            success
-              ? (
-                <Trans i18nKey="authentication.forgotPasswordForm.successMessage">
-                  <p>
-                    Please check your email.  You should receive instructions on how to reset your
-                    {' '}
-                    password shortly.
-                  </p>
+          {success ? (
+            <Trans i18nKey="authentication.forgotPasswordForm.successMessage">
+              <p>
+                Please check your email. You should receive instructions on how to reset your{' '}
+                password shortly.
+              </p>
 
-                  <p>
-                    If you don&rsquo;t receive instructions, please email
-                    {' '}
-                    <a href="mailto:webmaster@interactiveliterature.org">our web team</a>
-                    {' '}
-                    for help resetting your password.
-                  </p>
-                </Trans>
-              )
-              : (
-                <BootstrapFormInput
-                  type="email"
-                  label={t('authentication.forgotPasswordForm.emailLabel', 'Email')}
-                  value={email}
-                  onTextChange={setEmail}
-                  disabled={resetPasswordInProgress}
-                />
-              )
-          }
+              <p>
+                If you don&rsquo;t receive instructions, please email{' '}
+                <a href="mailto:webmaster@interactiveliterature.org">our web team</a> for help
+                resetting your password.
+              </p>
+            </Trans>
+          ) : (
+            <BootstrapFormInput
+              type="email"
+              label={t('authentication.forgotPasswordForm.emailLabel', 'Email')}
+              value={email}
+              onTextChange={setEmail}
+              disabled={resetPasswordInProgress}
+            />
+          )}
         </div>
 
         <ErrorDisplay stringError={(resetPasswordError || {}).message} />
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
-            <button type="button" className="btn btn-link p-0 mb-1" onClick={() => { setCurrentView('signUp'); }}>
+            <button
+              type="button"
+              className="btn btn-link p-0 mb-1"
+              onClick={() => {
+                setCurrentView('signUp');
+              }}
+            >
               {t('authentication.signUpLink', 'Sign up for an account')}
             </button>
-            <button type="button" className="btn btn-link p-0" onClick={() => { setCurrentView('signIn'); }}>
+            <button
+              type="button"
+              className="btn btn-link p-0"
+              onClick={() => {
+                setCurrentView('signIn');
+              }}
+            >
               {t('authentication.logInLink', 'Log in to an existing account')}
             </button>
           </div>
@@ -113,8 +118,14 @@ function ForgotPasswordForm() {
                 type="submit"
                 className="btn btn-primary"
                 disabled={resetPasswordInProgress}
-                value={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions')}
-                aria-label={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions')}
+                value={t(
+                  'authentication.forgotPassword.sendInstructionsButton',
+                  'Send instructions',
+                )}
+                aria-label={t(
+                  'authentication.forgotPassword.sendInstructionsButton',
+                  'Send instructions',
+                )}
               />
             )}
           </div>

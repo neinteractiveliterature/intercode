@@ -1,18 +1,19 @@
 import React from 'react';
 
 export type GravatarProps = {
-  url?: string,
-  enabled?: boolean,
-  pixelSize: number,
-  imgClassName?: string,
+  url?: string;
+  enabled?: boolean;
+  pixelSize: number;
+  imgClassName?: string;
 };
 
-function Gravatar({
-  url, enabled, pixelSize, imgClassName,
-}: GravatarProps) {
+function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps) {
   if (!url || !(enabled ?? true)) {
     return (
-      <span className="d-inline-block" style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}>
+      <span
+        className="d-inline-block"
+        style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}
+      >
         <i className="fa fa-user-circle" style={{ fontSize: `${pixelSize}px` }} />
       </span>
     );

@@ -11,8 +11,12 @@ function NotificationAdmin() {
 
   return (
     <Switch>
-      <Route path="/admin_notifications/:category/:event"><NotificationConfiguration /></Route>
-      <Route path="/admin_notifications"><NotificationAdminIndex /></Route>
+      <Route path="/admin_notifications/:category/:event">
+        <NotificationConfiguration />
+      </Route>
+      <Route path="/admin_notifications">
+        <NotificationAdminIndex />
+      </Route>
     </Switch>
   );
 }

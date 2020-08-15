@@ -40,10 +40,7 @@ function EditCmsLayoutForm({ initialLayout }) {
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsLayoutForm
-          layout={layout}
-          dispatch={dispatch}
-        />
+        <CmsLayoutForm layout={layout} dispatch={dispatch} />
 
         <ErrorDisplay graphQLError={updateError} />
 
@@ -69,9 +66,8 @@ EditCmsLayoutForm.propTypes = {
 function EditCmsLayout() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
-  const initialLayout = error || loading
-    ? null
-    : data.cmsLayouts.find((layout) => id === layout.id.toString());
+  const initialLayout =
+    error || loading ? null : data.cmsLayouts.find((layout) => id === layout.id.toString());
 
   if (loading) {
     return <PageLoadingIndicator visible />;

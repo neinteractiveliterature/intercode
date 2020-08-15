@@ -9,10 +9,8 @@ function PasswordConfirmationInput({ value, onChange, password }) {
   const { t } = useTranslation();
   const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
 
-  const confirmationInvalid = (
-    (interactedWithConfirmation || value.length >= password.length)
-    && value !== password
-  );
+  const confirmationInvalid =
+    (interactedWithConfirmation || value.length >= password.length) && value !== password;
 
   return (
     <BootstrapFormInput
@@ -21,7 +19,9 @@ function PasswordConfirmationInput({ value, onChange, password }) {
       className={classNames('form-control', { 'is-invalid': confirmationInvalid })}
       value={value}
       onTextChange={onChange}
-      onBlur={() => { setInteractedWithConfirmation(true); }}
+      onBlur={() => {
+        setInteractedWithConfirmation(true);
+      }}
     />
   );
 }

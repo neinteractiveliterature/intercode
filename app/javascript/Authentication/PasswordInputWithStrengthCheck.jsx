@@ -20,9 +20,7 @@ function PasswordFeedback({ result }) {
     <div className="text-danger ">
       {result.feedback.warning && (
         <>
-          <i className="fa fa-exclamation-triangle" />
-          {' '}
-          <strong>{result.feedback.warning}</strong>
+          <i className="fa fa-exclamation-triangle" /> <strong>{result.feedback.warning}</strong>
         </>
       )}
       {result.feedback.suggestions && (
@@ -51,15 +49,13 @@ PasswordFeedback.defaultProps = {
 
 function PasswordInputWithStrengthCheck({ id, value, onChange }) {
   const { t } = useTranslation();
-  const passwordStrengthResult = useMemo(
-    () => zxcvbn(value),
-    [value],
-  );
+  const passwordStrengthResult = useMemo(() => zxcvbn(value), [value]);
   const hasFeedback = useMemo(
-    () => passwordStrengthResult && passwordStrengthResult.feedback && (
-      passwordStrengthResult.feedback.warning
-      || passwordStrengthResult.feedback.suggestions.length > 0
-    ),
+    () =>
+      passwordStrengthResult &&
+      passwordStrengthResult.feedback &&
+      (passwordStrengthResult.feedback.warning ||
+        passwordStrengthResult.feedback.suggestions.length > 0),
     [passwordStrengthResult],
   );
 
@@ -70,12 +66,17 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     'bg-primary': score === 3,
     'bg-success': score >= 4,
   };
-  const scoreText = Object.keys(pickBy({
-    insecure: score < 2,
-    fair: score === 2,
-    good: score === 3,
-    great: score >= 4,
-  }, (matches) => matches))[0];
+  const scoreText = Object.keys(
+    pickBy(
+      {
+        insecure: score < 2,
+        fair: score === 2,
+        good: score === 3,
+        great: score >= 4,
+      },
+      (matches) => matches,
+    ),
+  )[0];
   const scoreTextClasses = {
     'text-danger': score < 2,
     'text-warning': score === 2,
@@ -129,9 +130,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
                       <>
                         {' '}
                         <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
-                          <span className="sr-only">
-                            {t('buttons.help', 'Help')}
-                          </span>
+                          <span className="sr-only">{t('buttons.help', 'Help')}</span>
                         </i>
                       </>
                     )}
@@ -140,20 +139,11 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
               </button>
             )}
           >
-            {({
-              placement,
-              visible,
-              arrowProps,
-              ref,
-              style,
-            }) => (
+            {({ placement, visible, arrowProps, ref, style }) => (
               <div
-                className={classNames(
-                  'card',
-                  'popover',
-                  `bs-popover-${placement}`,
-                  { 'd-none': !visible || !hasFeedback },
-                )}
+                className={classNames('card', 'popover', `bs-popover-${placement}`, {
+                  'd-none': !visible || !hasFeedback,
+                })}
                 ref={ref}
                 style={style}
                 data-placement={placement}
@@ -169,7 +159,10 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
         <div
           className="progress w-100 bg-transparent"
           style={{
-            bottom: 0, height: '3px', position: 'absolute', overflow: 'hidden',
+            bottom: 0,
+            height: '3px',
+            position: 'absolute',
+            overflow: 'hidden',
           }}
         >
           <div
