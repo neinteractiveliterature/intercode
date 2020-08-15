@@ -5,9 +5,9 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import buildLayoutInput from './buildLayoutInput';
 import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
-import { CmsLayoutsAdminQuery } from './queries.gql';
+import { CmsLayoutsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
-import { UpdateLayout } from './mutations.gql';
+import { UpdateLayout } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';

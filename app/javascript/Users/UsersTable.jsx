@@ -8,7 +8,7 @@ import EmailCell from '../Tables/EmailCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
-import { UsersTableUsersQuery } from './queries.gql';
+import { UsersTableUsersQuery } from './queries';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import useModal from '../ModalDialogs/useModal';
 import MergeUsersModal from './MergeUsersModal';

@@ -1,22 +1,22 @@
 import React from 'react';
-import { useApolloClient, useMutation, useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import pick from 'lodash/pick';
 
-import { ConventionAdminConventionQuery } from './queries.gql';
 import ConventionForm from './ConventionForm';
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateConvention } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { useConventionAdminConventionQueryQuery } from './queries.generated';
+import { useUpdateConventionMutation } from './mutations.generated';
 
 function ConventionAdmin() {
   const history = useHistory();
-  const { data, loading, error } = useQuery(ConventionAdminConventionQuery);
-  const [updateMutate] = useMutation(UpdateConvention);
+  const { data, loading, error } = useConventionAdminConventionQueryQuery();
+  const [updateMutate] = useUpdateConventionMutation();
   const [mutate, mutationError] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
   const authorizationWarning = useAuthorizationRequired('can_update_convention');

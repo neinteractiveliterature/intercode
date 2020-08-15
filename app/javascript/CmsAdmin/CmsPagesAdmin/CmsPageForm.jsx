@@ -14,11 +14,12 @@ export const pageReducer = transformsReducer({});
 function CmsPageForm({ page, dispatch, cmsParent, cmsLayouts, readOnly }) {
   const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
   const slugInputId = useUniqueId('slug-');
+  const defaultLayout = cmsParent.default_layout ?? cmsParent.root_site_default_layout;
 
   const cmsLayoutOptions = useMemo(
     () =>
       sortByLocaleString(cmsLayouts, (layout) => layout.name).map((layout) => {
-        if (cmsParent.default_layout && cmsParent.default_layout.id === layout.id) {
+        if (defaultLayout && defaultLayout.id === layout.id) {
           return {
             ...layout,
             name: `${layout.name} (site default)`,
@@ -27,11 +28,11 @@ function CmsPageForm({ page, dispatch, cmsParent, cmsLayouts, readOnly }) {
 
         return layout;
       }),
-    [cmsLayouts, cmsParent.default_layout],
+    [cmsLayouts, defaultLayout],
   );
 
-  const cmsLayoutSelectPlaceholder = cmsParent.default_layout
-    ? `Default layout (currently set as ${cmsParent.default_layout.name})`
+  const cmsLayoutSelectPlaceholder = defaultLayout
+    ? `Default layout (currently set as ${defaultLayout.name})`
     : 'Default layout';
 
   return (
@@ -124,6 +125,10 @@ CmsPageForm.propTypes = {
   dispatch: PropTypes.func,
   cmsParent: PropTypes.shape({
     default_layout: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+    root_site_default_layout: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     }),

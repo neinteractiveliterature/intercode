@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
-import { CmsAdminBaseQuery } from './queries.gql';
+import { CmsAdminBaseQuery } from './queries';
 import NavigationItemsAdmin from './NavigationItemsAdmin';
 import ErrorDisplay from '../ErrorDisplay';
 import CmsContentGroupsAdmin from './CmsContentGroupsAdmin';

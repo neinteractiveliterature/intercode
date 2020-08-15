@@ -4,7 +4,7 @@ import { pluralize } from 'inflected';
 import { useQuery } from '@apollo/client';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
-import { ReportsMenuQuery } from './queries.gql';
+import { ReportsMenuQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';

@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { CmsPagesAdminQuery } from './queries.gql';
-import { DeletePage } from './mutations.gql';
+import { CmsPagesAdminQuery } from './queries';
+import { DeletePage } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';

@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { DepartmentAdminQuery } from './queries.gql';
-import { CreateDepartment } from './mutations.gql';
+import { DepartmentAdminQuery } from './queries';
+import { CreateDepartment } from './mutations';
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';

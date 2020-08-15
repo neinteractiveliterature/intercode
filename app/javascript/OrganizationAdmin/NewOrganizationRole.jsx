@@ -2,9 +2,9 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 
-import { CreateOrganizationRole } from './mutations.gql';
+import { CreateOrganizationRole } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';

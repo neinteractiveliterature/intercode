@@ -12,7 +12,7 @@ import NewConventionModal from './NewConventionModal';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { SetConventionCanceled } from './mutations.gql';
+import { SetConventionCanceled } from './mutations';
 
 function ConventionDisplay() {
   const confirm = useConfirm();

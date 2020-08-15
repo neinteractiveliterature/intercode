@@ -14,8 +14,8 @@ import { humanize } from 'inflected';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import { MergeUsers } from './mutations.gql';
-import { MergeUsersModalQuery } from './queries.gql';
+import { MergeUsers } from './mutations';
+import { MergeUsersModalQuery } from './queries';
 import pluralizeWithCount from '../pluralizeWithCount';
 
 function renderIfQueryReady(render, { loading, error }) {
@@ -110,9 +110,7 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       if (userConProfiles.length === 1) {
         return (
           <>
-            <strong>{convention.name}:</strong> {userConProfiles[0].email}
-            &rsquo;
-            {'s profile'}
+            <strong>{convention.name}:</strong> {userConProfiles[0].email}’s profile
           </>
         );
       }

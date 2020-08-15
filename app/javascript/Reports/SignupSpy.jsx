@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { SignupCountsByStateQuery } from './queries.gql';
+import { SignupCountsByStateQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';

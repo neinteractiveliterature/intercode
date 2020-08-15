@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
-import { CmsContentGroupsAdminQuery } from './queries.gql';
-import { CreateContentGroup } from './mutations.gql';
+import { CmsContentGroupsAdminQuery } from './queries';
+import { CreateContentGroup } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import useAsyncFunction from '../../useAsyncFunction';

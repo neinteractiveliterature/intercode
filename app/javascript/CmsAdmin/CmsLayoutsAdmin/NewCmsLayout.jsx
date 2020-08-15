@@ -3,8 +3,8 @@ import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
 import buildLayoutInput from './buildLayoutInput';
-import { CmsLayoutsAdminQuery } from './queries.gql';
-import { CreateLayout } from './mutations.gql';
+import { CmsLayoutsAdminQuery } from './queries';
+import { CreateLayout } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';

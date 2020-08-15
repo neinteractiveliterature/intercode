@@ -1,5 +1,0 @@
-mutation RevokeAuthorizedApplication($uid: ID!) {
-  revokeAuthorizedApplication(input: { uid: $uid }) {
-    clientMutationId
-  }
-}

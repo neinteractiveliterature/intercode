@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsLayoutForm from './CmsLayoutForm';
-import { CmsLayoutsAdminQuery } from './queries.gql';
+import { CmsLayoutsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { EventCategoryAdminQuery } from './queries.gql';
+import { EventCategoryAdminQuery } from './queries';
 import EventCategoryRow from './EventCategoryRow';
 import { sortByLocaleString } from '../ValueUtils';
 import ErrorDisplay from '../ErrorDisplay';

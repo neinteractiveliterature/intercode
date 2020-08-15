@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { useMutation, useApolloClient, useQuery } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { CmsContentGroupsAdminQuery } from './queries.gql';
+import { CmsContentGroupsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
-import { UpdateContentGroup } from './mutations.gql';
+import { UpdateContentGroup } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import usePageTitle from '../../usePageTitle';

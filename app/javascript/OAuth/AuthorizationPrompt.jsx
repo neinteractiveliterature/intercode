@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
-import { OAuthAuthorizationPromptQuery } from './queries.gql';
+import { OAuthAuthorizationPromptQuery } from './queries';
 import PermissionsPrompt from './PermissionsPrompt';
 import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';

@@ -1,4 +1,4 @@
-import { CmsVariablesQuery } from './queries.gql';
+import { CmsVariablesQuery } from './queries';
 
 export default function updateCmsVariable(
   cache,

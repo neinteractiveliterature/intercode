@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { CmsGraphqlQueriesQuery } from './queries.gql';
+import { CmsGraphqlQueriesQuery } from './queries';
 import { useConfirm } from '../../ModalDialogs/Confirm';
-import { DeleteCmsGraphqlQuery } from './mutations.gql';
+import { DeleteCmsGraphqlQuery } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import { useDeleteMutation } from '../../MutationUtils';

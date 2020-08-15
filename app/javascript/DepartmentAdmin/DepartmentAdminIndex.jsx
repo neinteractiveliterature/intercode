@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { DepartmentAdminQuery } from './queries.gql';
-import { DeleteDepartment } from './mutations.gql';
+import { DepartmentAdminQuery } from './queries';
+import { DeleteDepartment } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import { sortByLocaleString } from '../ValueUtils';

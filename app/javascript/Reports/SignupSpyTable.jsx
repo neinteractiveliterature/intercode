@@ -2,7 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
-import { SignupSpySignupChangesQuery } from './queries.gql';
+import { SignupSpySignupChangesQuery } from './queries';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';

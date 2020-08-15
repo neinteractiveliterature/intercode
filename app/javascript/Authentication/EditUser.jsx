@@ -4,7 +4,7 @@ import { humanize } from 'inflected';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { EditUserQuery } from './queries.gql';
+import { EditUserQuery } from './queries';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useUniqueId from '../useUniqueId';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';

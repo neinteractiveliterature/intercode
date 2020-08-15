@@ -5,7 +5,7 @@ import flatMap from 'lodash/flatMap';
 import sum from 'lodash/sum';
 import { useQuery } from '@apollo/client';
 
-import { EventProvidedTicketsQuery } from './queries.gql';
+import { EventProvidedTicketsQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString, titleSort } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
@@ -28,11 +28,7 @@ function EventProvidedTicketsByEvent({ data }) {
           (ticket) => (
             <li key={ticket.id}>
               {ticket.user_con_profile.name_inverted}
-              <span className="text-muted">
-                {' ('}
-                {ticket.ticket_type.description}
-                {')'}
-              </span>
+              <span className="text-muted"> ({ticket.ticket_type.description})</span>
             </li>
           ),
         )}

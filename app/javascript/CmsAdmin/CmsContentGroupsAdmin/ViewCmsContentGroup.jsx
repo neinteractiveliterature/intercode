@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouteMatch } from 'react-router-dom';
 
-import { CmsContentGroupsAdminQuery } from './queries.gql';
+import { CmsContentGroupsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';

@@ -9,7 +9,7 @@ import { capitalize } from 'inflected';
 import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { EventsByChoiceQuery } from './queries.gql';
+import { EventsByChoiceQuery } from './queries';
 import { titleSort } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';

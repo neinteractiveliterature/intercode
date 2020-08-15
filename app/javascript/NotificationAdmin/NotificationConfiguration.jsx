@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 
-import { NotificationAdminQuery } from './queries.gql';
+import { NotificationAdminQuery } from './queries';
 import NotificationsConfig from '../../../config/notifications.json';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
-import { UpdateNotificationTemplate } from './mutations.gql';
+import { UpdateNotificationTemplate } from './mutations';
 import useAsyncFunction from '../useAsyncFunction';
 
 function NotificationConfiguration() {

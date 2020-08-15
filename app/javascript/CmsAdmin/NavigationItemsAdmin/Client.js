@@ -1,10 +1,10 @@
-import { NavigationItemsAdminQuery } from './queries.gql';
+import { NavigationItemsAdminQuery } from './queries';
 import {
   CreateNavigationItem,
   UpdateNavigationItem,
   DeleteNavigationItem,
   SortNavigationItems,
-} from './mutations.gql';
+} from './mutations';
 
 function graphqlNavigationItemToCadmusNavbarAdminObject(navigationItem) {
   return {

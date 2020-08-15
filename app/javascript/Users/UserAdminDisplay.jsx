@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UserAdminQuery } from './queries.gql';
+import { UserAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import LoadingIndicator from '../LoadingIndicator';

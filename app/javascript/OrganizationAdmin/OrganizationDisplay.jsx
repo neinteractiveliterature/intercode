@@ -3,9 +3,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import { titleize } from 'inflected';
 
-import { DeleteOrganizationRole } from './mutations.gql';
+import { DeleteOrganizationRole } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import { OrganizationAdminOrganizationsQuery } from './queries';
 import PermissionNames from '../../../config/permission_names.json';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';

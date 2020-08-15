@@ -5,8 +5,8 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
-import { UpdateStaffPosition } from './mutations.gql';
-import { StaffPositionsQuery } from './queries.gql';
+import { UpdateStaffPosition } from './mutations';
+import { StaffPositionsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';

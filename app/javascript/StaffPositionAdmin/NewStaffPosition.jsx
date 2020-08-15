@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { CreateStaffPosition } from './mutations.gql';
+import { CreateStaffPosition } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
-import { StaffPositionsQuery } from './queries.gql';
+import { StaffPositionsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';

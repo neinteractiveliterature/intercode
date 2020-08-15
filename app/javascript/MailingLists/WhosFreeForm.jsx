@@ -6,7 +6,7 @@ import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import { WhosFreeFormConventionQuery } from './queries.gql';
+import { WhosFreeFormConventionQuery } from './queries';
 import LoadingIndicator from '../LoadingIndicator';
 
 const momentToTimeObject = (momentValue) => {
