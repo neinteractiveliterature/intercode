@@ -1,9 +1,13 @@
 import { useCallback } from 'react';
+import { ParsedFormItem } from '../FormItemUtils';
 
-export default function usePropertyUpdater(onChange, property) {
+export default function usePropertyUpdater<
+  FormItemType extends ParsedFormItem<any, any>,
+  PropertyName extends keyof FormItemType['properties']
+>(onChange: React.Dispatch<React.SetStateAction<FormItemType>>, property: PropertyName) {
   return useCallback(
-    (newValueOrUpdater) =>
-      onChange((prevFormItem) => {
+    (newValueOrUpdater: React.SetStateAction<FormItemType['properties'][PropertyName]>) =>
+      onChange((prevFormItem: FormItemType) => {
         const newValue =
           typeof newValueOrUpdater === 'function'
             ? newValueOrUpdater(prevFormItem.properties[property])
