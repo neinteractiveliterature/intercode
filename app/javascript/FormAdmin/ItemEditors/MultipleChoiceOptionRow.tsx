@@ -1,16 +1,31 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
+import { WithGeneratedId, MultipleChoiceFormItem } from '../FormItemUtils';
 
-function useChoicePropertyUpdater(choiceChanged, generatedId, property) {
+type Choice = WithGeneratedId<NonNullable<MultipleChoiceFormItem['properties']>['choices'][0]>;
+
+function useChoicePropertyUpdater(
+  choiceChanged: (generatedId: string, choice: (prevChoice: Choice) => Choice) => void,
+  generatedId: string,
+  property: keyof Choice,
+) {
   return useCallback(
     (value) => choiceChanged(generatedId, (prevChoice) => ({ ...prevChoice, [property]: value })),
     [choiceChanged, generatedId, property],
   );
 }
+
+export type MultipleChoiceOptionRowProps = {
+  choice: Choice;
+  choiceChanged: (generatedId: string, choice: (prevChoice: Choice) => Choice) => void;
+  index: number;
+  nonUnique: boolean;
+  deleteChoice: (generatedId: string) => void;
+  moveChoice: (dragIndex: number, hoverIndex: number) => void;
+};
 
 function MultipleChoiceOptionRow({
   choice,
@@ -19,9 +34,13 @@ function MultipleChoiceOptionRow({
   nonUnique,
   deleteChoice,
   moveChoice,
-}) {
+}: MultipleChoiceOptionRowProps) {
   const confirm = useConfirm();
-  const [rowRef, drag, { isDragging }] = useSortable(index, moveChoice, 'choice');
+  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
+    index,
+    moveChoice,
+    'choice',
+  );
   const captionChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'caption');
   const valueChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'value');
 
@@ -74,22 +93,5 @@ function MultipleChoiceOptionRow({
     </tr>
   );
 }
-
-MultipleChoiceOptionRow.propTypes = {
-  choice: PropTypes.shape({
-    caption: PropTypes.string,
-    value: PropTypes.string,
-    generatedId: PropTypes.string,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-  choiceChanged: PropTypes.func.isRequired,
-  deleteChoice: PropTypes.func.isRequired,
-  moveChoice: PropTypes.func.isRequired,
-  nonUnique: PropTypes.bool,
-};
-
-MultipleChoiceOptionRow.defaultProps = {
-  nonUnique: false,
-};
 
 export default MultipleChoiceOptionRow;

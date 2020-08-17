@@ -5,9 +5,16 @@ import useArrayProperty from './useArrayProperty';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import usePropertyUpdater from './usePropertyUpdater';
 import { FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorProps } from '../FormItemEditorProps';
+import {
+  RegistrationPolicyFormItem,
+  RegistrationPolicyPreset,
+  WithGeneratedId,
+} from '../FormItemUtils';
 
-function RegistrationPolicyItemEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
+export type RegistrationPolicyItemEditorProps = FormItemEditorProps<RegistrationPolicyFormItem>;
+function RegistrationPolicyItemEditor({ formItem, setFormItem }) {
+  const { disabled } = useContext(FormItemEditorContext);
 
   const generateNewPreset = useCallback(
     () => ({
@@ -21,11 +28,11 @@ function RegistrationPolicyItemEditor() {
 
   const allowCustomChanged = usePropertyUpdater(setFormItem, 'allow_custom');
 
-  const [addPreset, presetChanged, deletePreset, movePreset] = useArrayProperty(
-    'presets',
-    setFormItem,
-    generateNewPreset,
-  );
+  const [addPreset, presetChanged, deletePreset, movePreset] = useArrayProperty<
+    WithGeneratedId<RegistrationPolicyPreset>,
+    typeof formItem,
+    'presets'
+  >('presets', setFormItem, generateNewPreset);
 
   return (
     <>
@@ -57,6 +64,7 @@ function RegistrationPolicyItemEditor() {
                 checked={formItem.properties.allow_custom}
                 onCheckedChange={allowCustomChanged}
                 disabled={disabled}
+                type="checkbox"
               />
             </td>
             <td />

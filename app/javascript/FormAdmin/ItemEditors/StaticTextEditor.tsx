@@ -3,11 +3,13 @@ import React, { useContext } from 'react';
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
-import { formItemPropertyUpdater } from '../FormItemUtils';
+import { formItemPropertyUpdater, StaticTextFormItem } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorProps } from '../FormItemEditorProps';
 
-function StaticTextEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
+export type StaticTextEditorProps = FormItemEditorProps<StaticTextFormItem>;
+function StaticTextEditor({ formItem, setFormItem }: StaticTextEditorProps) {
+  const { disabled } = useContext(FormItemEditorContext);
   const contentInputId = useUniqueId('static-text-content-');
 
   return (
@@ -17,7 +19,6 @@ function StaticTextEditor() {
           Content
         </label>
         <LiquidInput
-          id={contentInputId}
           disabled={disabled}
           disablePreview
           value={formItem.properties.content || ''}

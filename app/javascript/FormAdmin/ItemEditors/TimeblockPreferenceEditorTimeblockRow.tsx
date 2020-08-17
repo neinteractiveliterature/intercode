@@ -1,16 +1,19 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
 import TimeSelect from '../../BuiltInFormControls/TimeSelect';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import Timespan from '../../Timespan';
 import useSortable from '../../useSortable';
-import { FuzzyTimePropType } from '../../FormPresenter/TimeblockTypes';
-import { FormEditorContext } from '../FormEditorContexts';
 import AppRootContext from '../../AppRootContext';
+import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
+import { WithGeneratedId } from '../FormItemUtils';
 
-function useTimeblockPropertyUpdater(onChange, generatedId, property) {
+function useTimeblockPropertyUpdater(
+  onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void,
+  generatedId: string,
+  property: keyof TimeblockDefinition,
+) {
   return useCallback(
     (value) =>
       onChange(generatedId, (prevTimeblock) => ({
@@ -21,19 +24,31 @@ function useTimeblockPropertyUpdater(onChange, generatedId, property) {
   );
 }
 
+export type TimeblockPreferenceEditorTimeblockRowProps = {
+  timeblock: WithGeneratedId<TimeblockDefinition>;
+  index: number;
+  onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void;
+  deleteTimeblock: (generatedId: string) => void;
+  moveTimeblock: (dragIndex: number, hoverIndex: number) => void;
+};
+
 function TimeblockPreferenceEditorTimeblockRow({
   timeblock,
   index,
   onChange,
   deleteTimeblock,
   moveTimeblock,
-}) {
+}: TimeblockPreferenceEditorTimeblockRowProps) {
   const { timezoneName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const startChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'start');
   const finishChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'finish');
   const labelChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'label');
-  const [rowRef, drag, { isDragging }] = useSortable(index, moveTimeblock, 'timeblock');
+  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
+    index,
+    moveTimeblock,
+    'timeblock',
+  );
 
   const selectTimespan = useMemo(
     () =>
@@ -113,18 +128,5 @@ function TimeblockPreferenceEditorTimeblockRow({
     </tr>
   );
 }
-
-TimeblockPreferenceEditorTimeblockRow.propTypes = {
-  timeblock: PropTypes.shape({
-    generatedId: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    start: FuzzyTimePropType,
-    finish: FuzzyTimePropType,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
-  deleteTimeblock: PropTypes.func.isRequired,
-  moveTimeblock: PropTypes.func.isRequired,
-};
 
 export default TimeblockPreferenceEditorTimeblockRow;

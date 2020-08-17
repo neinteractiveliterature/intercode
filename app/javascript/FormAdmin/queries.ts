@@ -80,6 +80,7 @@ export const FormEditorQuery = gql`
       starts_at
       ends_at
       timezone_name
+      timezone_mode
       event_mailing_list_domain
     }
 

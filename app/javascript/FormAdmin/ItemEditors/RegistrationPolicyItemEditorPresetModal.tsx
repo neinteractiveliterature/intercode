@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
+import { RegistrationPolicyPreset } from '../FormItemUtils';
 
-function RegistrationPolicyItemEditorPresetModal({ initialPreset, onChange, visible, close }) {
+export type RegistrationPolicyItemEditorPresetModalProps = {
+  initialPreset: RegistrationPolicyPreset;
+  onChange: React.Dispatch<React.SetStateAction<RegistrationPolicyPreset>>;
+  visible: boolean;
+  close: () => void;
+};
+
+function RegistrationPolicyItemEditorPresetModal({
+  initialPreset,
+  onChange,
+  visible,
+  close,
+}: RegistrationPolicyItemEditorPresetModalProps) {
   const [preset, setPreset] = useState(initialPreset);
 
-  const policyChanged = (policy) => {
+  const policyChanged = (policy: RegistrationPolicyPreset['policy']) => {
     setPreset((prevPreset) => ({ ...prevPreset, policy }));
   };
 
@@ -44,12 +56,5 @@ function RegistrationPolicyItemEditorPresetModal({ initialPreset, onChange, visi
     </Modal>
   );
 }
-
-RegistrationPolicyItemEditorPresetModal.propTypes = {
-  initialPreset: PropTypes.shape({}).isRequired,
-  onChange: PropTypes.func.isRequired,
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-};
 
 export default RegistrationPolicyItemEditorPresetModal;

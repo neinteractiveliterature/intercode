@@ -1,19 +1,22 @@
 import React, { useContext, useCallback } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useMutation } from '@apollo/client';
 
-import { DeleteFormItem, MoveFormItem } from './mutations';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
 import useSortable, { buildOptimisticArrayForMove } from '../useSortable';
-import { serializeParsedFormItem, mutationUpdaterForFormSection } from './FormItemUtils';
+import {
+  mutationUpdaterForFormSection,
+  TypedFormItem,
+  parseTypedFormItemObject,
+} from './FormItemUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
+import { useMoveFormItemMutation, useDeleteFormItemMutation } from './mutations.generated';
+import { FormEditorDataFragment } from './queries.generated';
 
-function describeFormItemForDelete(formItem, standardItem) {
+function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
   if (standardItem) {
     return `the “${standardItem.description}” item`;
   }
@@ -25,16 +28,21 @@ function describeFormItemForDelete(formItem, standardItem) {
   return `the custom item “${formItem.identifier}”`;
 }
 
-function FormEditorItemPreview({ formItem, index }) {
+export type FormEditorItemPreviewProps = {
+  formItem: FormEditorDataFragment['form_sections'][0]['form_items'][0];
+  index: number;
+};
+
+function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) {
   const confirm = useConfirm();
-  const match = useRouteMatch();
-  const { convention, currentSection, form, formType, renderedFormItemsById } = useContext(
+  const match = useRouteMatch<{ id: string; sectionId: string }>();
+  const { convention, currentSection, form, formType, formItemsById } = useContext(
     FormEditorContext,
   );
-  const renderedFormItem = renderedFormItemsById.get(formItem.id);
-  const [moveFormItem] = useMutation(MoveFormItem);
-  const [deleteFormItem] = useMutation(DeleteFormItem, {
-    update: mutationUpdaterForFormSection(form.id, currentSection.id, (section) => ({
+  const renderedFormItem = formItemsById.get(formItem.id)!;
+  const [moveFormItem] = useMoveFormItemMutation();
+  const [deleteFormItem] = useDeleteFormItemMutation({
+    update: mutationUpdaterForFormSection(form.id, currentSection!.id, (section) => ({
       ...section,
       form_items: section.form_items.filter((item) => item.id !== formItem.id),
     })),
@@ -43,22 +51,22 @@ function FormEditorItemPreview({ formItem, index }) {
   const moveItem = useCallback(
     (dragIndex, hoverIndex) => {
       const optimisticItems = buildOptimisticArrayForMove(
-        currentSection.form_items,
+        currentSection!.form_items,
         dragIndex,
         hoverIndex,
-      ).map(serializeParsedFormItem);
+      );
 
       moveFormItem({
         variables: {
-          id: currentSection.form_items[dragIndex].id,
-          formSectionId: currentSection.id,
+          id: currentSection!.form_items[dragIndex].id,
+          formSectionId: currentSection!.id,
           destinationIndex: hoverIndex,
         },
         optimisticResponse: {
           moveFormItem: {
-            __typename: 'Mutation',
+            __typename: 'MoveFormItemPayload',
             form_section: {
-              ...currentSection,
+              ...currentSection!,
               form_items: optimisticItems,
             },
           },
@@ -68,9 +76,9 @@ function FormEditorItemPreview({ formItem, index }) {
     [currentSection, moveFormItem],
   );
 
-  const [ref, drag, { isDragging }] = useSortable(index, moveItem, 'formItem');
+  const [ref, drag, { isDragging }] = useSortable<HTMLDivElement>(index, moveItem, 'formItem');
 
-  const standardItem = ((formType || {}).standard_items || {})[formItem.identifier];
+  const standardItem = ((formType || {}).standard_items || {})[formItem.identifier ?? ''];
 
   return (
     <div
@@ -106,7 +114,9 @@ function FormEditorItemPreview({ formItem, index }) {
           convention={convention}
           formItem={renderedFormItem}
           onInteract={() => {}}
+          onChange={() => {}}
           value={formItem.default_value}
+          valueInvalid={false}
         />
       </div>
       <div className="ml-2 mt-2">
@@ -125,7 +135,7 @@ function FormEditorItemPreview({ formItem, index }) {
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to delete ${describeFormItemForDelete(
-                  formItem,
+                  parseTypedFormItemObject(formItem)!,
                   standardItem,
                 )}?`,
                 action: () => deleteFormItem({ variables: { id: formItem.id } }),
@@ -141,14 +151,5 @@ function FormEditorItemPreview({ formItem, index }) {
     </div>
   );
 }
-
-FormEditorItemPreview.propTypes = {
-  formItem: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    default_value: PropTypes.any,
-    identifier: PropTypes.string,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-};
 
 export default FormEditorItemPreview;

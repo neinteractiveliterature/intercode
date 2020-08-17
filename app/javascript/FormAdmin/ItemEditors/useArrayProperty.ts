@@ -2,25 +2,21 @@ import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import usePropertyUpdater from './usePropertyUpdater';
-import { ParsedFormItem } from '../FormItemUtils';
+import { ParsedFormItem, WithoutGeneratedId } from '../FormItemUtils';
 
 // https://stackoverflow.com/questions/46583883/typescript-pick-properties-with-a-defined-type
 type KeysOfType<T, U> = {
   [P in keyof T]: T[P] extends U ? P : never;
 }[keyof T];
 
-type PickByType<T, U> = Pick<T, KeysOfType<T, U>>;
-
 export default function useArrayProperty<
-  FormItemType extends ParsedFormItem<any, any>,
   ElementType extends { generatedId: string },
+  FormItemType extends ParsedFormItem<any, any>,
   PropertyName extends KeysOfType<FormItemType['properties'], Array<ElementType>>
 >(
   property: PropertyName,
-  onChange: React.Dispatch<
-    React.SetStateAction<PickByType<FormItemType['properties'], Array<ElementType>>[PropertyName]>
-  >,
-  generateNewItem: () => FormItemType['properties'][PropertyName][0],
+  onChange: React.Dispatch<React.SetStateAction<FormItemType>>,
+  generateNewItem: () => WithoutGeneratedId<FormItemType['properties'][PropertyName][0]>,
 ) {
   const updateItems = usePropertyUpdater<FormItemType, PropertyName>(onChange, property);
 
