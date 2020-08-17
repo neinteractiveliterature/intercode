@@ -78,9 +78,9 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   return (
     <fieldset className="card my-2">
       <div className="card-header py-0">
-        {/* eslint-disable-next-line react/no-danger */}
         <legend
           className="col-form-label"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }}
         />
       </div>
