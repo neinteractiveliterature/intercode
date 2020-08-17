@@ -64,27 +64,33 @@ export type ArrayWithoutGeneratedIds<T> = T extends WithGeneratedId<any>[]
   ? WithoutGeneratedId<T[0]>[]
   : never;
 
-export type PropertiesWithGeneratedIds<T> = {
-  [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithGeneratedIds<T[K]> : T[K];
-};
+export type PropertiesWithGeneratedIds<T> = T extends undefined
+  ? undefined
+  : {
+      [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithGeneratedIds<T[K]> : T[K];
+    };
 
 export type PropertiesWithoutGeneratedIds<T> = {
   [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithoutGeneratedIds<T[K]> : T[K];
+};
+
+export type WithRequiredProperties<T extends ParsedFormItem<any, any>> = Omit<T, 'properties'> & {
+  properties: NonNullable<T['properties']>;
 };
 
 export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<any, any>> = Omit<
   T,
   'properties' | 'rendered_properties'
 > & {
-  properties?: PropertiesWithGeneratedIds<T['properties']>;
+  properties: PropertiesWithGeneratedIds<T['properties']>;
   rendered_properties: PropertiesWithGeneratedIds<T['rendered_properties']>;
 };
 
 export type ParsedFormSection<
   FormItemType extends ParsedFormItem<any, any> = ParsedFormItem<any, any>
-> = Omit<FormSection, 'form_items'> & { form_items: FormItemType[] };
+> = Omit<FormSection, 'form_items' | 'form'> & { form_items: FormItemType[] };
 
-type CommonQuestionProperties = {
+export type CommonQuestionProperties = {
   identifier: string;
   required?: boolean;
 };
@@ -146,11 +152,13 @@ export type MultipleChoiceFormItem = WithRequiredIdentifier<
   ParsedFormItem<MultipleChoiceProperties, string | string[], 'multiple_choice'>
 >;
 
+export type RegistrationPolicyPreset = {
+  name: string;
+  policy: RegistrationPolicy;
+};
+
 export type RegistrationPolicyProperties = CommonQuestionProperties & {
-  presets: {
-    name: string;
-    policy: RegistrationPolicy;
-  }[];
+  presets: RegistrationPolicyPreset[];
   allow_custom: boolean;
 };
 
@@ -315,11 +323,15 @@ export function addGeneratedIds<PropertiesType>(properties: PropertiesType) {
 export function removeGeneratedIds<PropertiesType>(
   properties: PropertiesWithGeneratedIds<PropertiesType>,
 ) {
+  if (properties == null) {
+    return properties;
+  }
+
   return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
     if (memo[property] != null) {
       return {
         ...memo,
-        [property]: memo[property].map((item) => {
+        [property]: memo[property].map((item: any) => {
           const { generatedId, ...otherItemProperties } = item;
           return otherItemProperties;
         }),
@@ -327,7 +339,7 @@ export function removeGeneratedIds<PropertiesType>(
     }
 
     return memo;
-  }, properties) as PropertiesType;
+  }, properties!) as PropertiesType;
 }
 
 export function buildFormItemInput(formItem: ParsedFormItem<any, any>): FormItemInput {

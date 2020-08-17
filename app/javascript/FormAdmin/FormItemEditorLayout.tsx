@@ -1,63 +1,71 @@
 import React, { useContext, useMemo, useState, useCallback } from 'react';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, ApolloError } from '@apollo/client';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 
 import FormItemTools from './FormItemTools';
 import FormItemEditorContent from './FormItemEditorContent';
-import { FormEditorContext, FormItemEditorContext } from './FormEditorContexts';
-import { parseFormItemObject, buildFormItemInput, addGeneratedIds } from './FormItemUtils';
+import { FormEditorContext, FormItemEditorContext, FormEditorFormItem } from './FormEditorContexts';
+import {
+  buildFormItemInput,
+  addGeneratedIds,
+  parseTypedFormItemObject,
+  TypedFormItem,
+} from './FormItemUtils';
 import { PreviewFormItemQuery } from './queries';
-import { UpdateFormItem } from './mutations';
 import useDebouncedState from '../useDebouncedState';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import { useUpdateFormItemMutation } from './mutations.generated';
+
+function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
+  return {
+    ...formItem,
+    properties: addGeneratedIds(formItem.properties!),
+    rendered_properties: addGeneratedIds(formItem.rendered_properties),
+  } as FormEditorFormItem;
+}
 
 function FormItemEditorLayout() {
-  const match = useRouteMatch();
+  const match = useRouteMatch<{ itemId: string; id: string; sectionId: string }>();
   const history = useHistory();
-  const { convention, currentSection, formType, renderedFormItemsById } = useContext(
-    FormEditorContext,
-  );
+  const { convention, currentSection, formType, formItemsById } = useContext(FormEditorContext);
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
-    () => currentSection.form_items.find((item) => item.id.toString() === match.params.itemId),
+    () => currentSection!.form_items.find((item) => item.id.toString() === match.params.itemId)!,
     [currentSection, match.params.itemId],
   );
-  const [renderedFormItem, setRenderedFormItem] = useState(
-    () => renderedFormItemsById.get(initialFormItem.id) || initialFormItem,
+  const [previewFormItem, setPreviewFormItem] = useState(() =>
+    formItemsById.get(initialFormItem?.id ?? 0),
   );
   const refreshRenderedFormItem = useCallback(
     async (newFormItem) => {
       const response = await apolloClient.query({
         query: PreviewFormItemQuery,
-        variables: { formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
+        variables: { formSectionId: currentSection!.id, formItem: buildFormItemInput(newFormItem) },
         fetchPolicy: 'no-cache',
       });
-      const previewFormItem = parseFormItemObject(response.data.previewFormItem);
-      setRenderedFormItem({ ...previewFormItem, properties: previewFormItem.rendered_properties });
+      const responseFormItem = parseTypedFormItemObject(response.data.previewFormItem);
+      setPreviewFormItem(responseFormItem);
     },
-    [apolloClient, currentSection.id],
+    [apolloClient, currentSection],
   );
 
-  const [formItem, setFormItem] = useDebouncedState(
-    () => ({
-      ...initialFormItem,
-      properties: addGeneratedIds(initialFormItem.properties),
-    }),
+  const [formItem, setFormItem] = useDebouncedState<FormEditorFormItem>(
+    () => addGeneratedIdsToFormItem(initialFormItem),
     refreshRenderedFormItem,
     150,
   );
 
-  const standardItem = (formType.standard_items || {})[initialFormItem.identifier];
+  const standardItem = (formType.standard_items || {})[initialFormItem.identifier ?? ''];
 
   const hasChanges = useMemo(
     () => !isEqual(buildFormItemInput(initialFormItem), buildFormItemInput(formItem)),
     [formItem, initialFormItem],
   );
 
-  const [updateFormItemMutate] = useMutation(UpdateFormItem);
+  const [updateFormItemMutate] = useUpdateFormItemMutation();
   const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
 
   const saveFormItem = async () => {
@@ -78,7 +86,7 @@ function FormItemEditorLayout() {
         formItem,
         setFormItem,
         standardItem,
-        renderedFormItem,
+        previewFormItem,
       }}
     >
       <Prompt message="Are you sure you want to discard changes to this item?" when={hasChanges} />
@@ -88,17 +96,20 @@ function FormItemEditorLayout() {
       <div className="form-item-editor-preview bg-info-light">
         <div className="bg-info text-white px-2 font-weight-bold">Preview</div>
         <div className="glow-inset-info p-2 overflow-auto">
-          <FormItemInput
-            convention={convention}
-            formItem={renderedFormItem}
-            onInteract={() => {}}
-            onChange={() => {}}
-            value={renderedFormItem.default_value}
-          />
+          {previewFormItem && (
+            <FormItemInput
+              convention={convention}
+              formItem={previewFormItem}
+              onInteract={() => {}}
+              onChange={() => {}}
+              value={previewFormItem.default_value}
+              valueInvalid={false}
+            />
+          )}
         </div>
       </div>
       <div className="form-item-editor-error">
-        <ErrorDisplay graphQLError={updateError} />
+        <ErrorDisplay graphQLError={updateError as ApolloError} />
       </div>
       <div className="form-item-editor-content p-2 overflow-auto">
         <FormItemEditorContent />

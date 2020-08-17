@@ -3,19 +3,21 @@ import React, { useContext } from 'react';
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
-import { formItemPropertyUpdater } from '../FormItemUtils';
+import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { Transforms } from '../../ComposableFormUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorProps } from '../FormItemEditorProps';
 
-function FreeTextEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
+export type FreeTextEditorProps = FormItemEditorProps<FreeTextFormItem>;
+function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {
+  const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat =
     formItem.properties.format === 'markdown'
       ? 'markdown'
       : formItem.properties.free_text_type || 'text';
-  const setResponseFormat = (newResponseFormat) => {
+  const setResponseFormat = (newResponseFormat: typeof responseFormat) => {
     setFormItem((prevFormItem) => ({
       ...prevFormItem,
       properties: {
@@ -33,7 +35,6 @@ function FreeTextEditor() {
           Caption
         </label>
         <LiquidInput
-          id={captionInputId}
           disabled={disabled}
           disablePreview
           value={formItem.properties.caption || ''}

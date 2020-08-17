@@ -110,7 +110,7 @@ const PopperDropdown: ForwardRefRenderFunction<
 
   const extendedModifiers = useMemo(
     () => ({
-      preventOverflow: { boundariesElement: 'viewport' },
+      preventOverflow: { boundariesElement: 'viewport' as const },
       ...(modifiers || {}),
     }),
     [modifiers],

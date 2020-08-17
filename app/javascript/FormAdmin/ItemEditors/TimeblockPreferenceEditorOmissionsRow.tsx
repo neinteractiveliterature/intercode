@@ -1,18 +1,30 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import moment from 'moment-timezone';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getValidTimeblockColumns } from '../../FormPresenter/TimeblockUtils';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import Timespan from '../../Timespan';
 import { timespanFromConvention } from '../../TimespanUtils';
-import { TimeblockPropType } from '../../FormPresenter/TimeblockTypes';
-import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
+import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
+import { FormEditorContext } from '../FormEditorContexts';
 import AppRootContext from '../../AppRootContext';
+import { FormItemEditorProps } from '../FormItemEditorProps';
+import { TimeblockPreferenceFormItem } from '../FormItemUtils';
+import { notEmpty } from '../../ValueUtils';
 
-function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
+export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<
+  TimeblockPreferenceFormItem
+> & {
+  timeblock: TimeblockDefinition;
+};
+function TimeblockPreferenceEditorOmissionsRow({
+  formItem,
+  setFormItem,
+  timeblock,
+}: TimeblockPreferenceEditorOmissionsRowProps) {
   const { timezoneName } = useContext(AppRootContext);
   const { convention } = useContext(FormEditorContext);
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
 
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
 
@@ -25,12 +37,16 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
   );
 
   const omissionDatesChanged = useCallback(
-    (newOmissionDates) => {
+    (newOmissionDates: string[]) => {
       setFormItem((prevFormItem) => {
         const prevOmissions = prevFormItem.properties.omit_timeblocks || [];
         const newOmissions = [
           ...prevOmissions.filter((omission) => omission.label !== timeblock.label),
-          ...newOmissionDates.map((date) => ({ label: timeblock.label, date })),
+          ...newOmissionDates.map((date) => ({
+            generatedId: uuidv4(),
+            label: timeblock.label,
+            date,
+          })),
         ];
         return {
           ...prevFormItem,
@@ -51,19 +67,23 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
 
   const choices = useMemo(
     () =>
-      columns.map((column) => {
-        const dayStart = moment.tz(column.dayStart, timezoneName);
-        const timespan = new Timespan(
-          moment(dayStart).add(timeblock.start),
-          moment(dayStart).add(timeblock.finish),
-        );
+      columns
+        .map((column) => {
+          const dayStart = moment.tz(column.dayStart, timezoneName);
+          const start = moment(dayStart).add(timeblock.start);
+          const finish = moment(dayStart).add(timeblock.finish);
+          if (start.isAfter(finish)) {
+            return undefined;
+          }
+          const timespan = Timespan.fromMoments(start, finish);
 
-        return {
-          label: dayStart.format('dddd'),
-          value: dayStart.format('YYYY-MM-DD'),
-          disabled: !timespan.overlapsTimespan(conventionTimespan),
-        };
-      }),
+          return {
+            label: dayStart.format('dddd'),
+            value: dayStart.format('YYYY-MM-DD'),
+            disabled: !timespan.overlapsTimespan(conventionTimespan),
+          };
+        })
+        .filter(notEmpty),
     [columns, timezoneName, conventionTimespan, timeblock.finish, timeblock.start],
   );
 
@@ -102,9 +122,5 @@ function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
     </tr>
   );
 }
-
-TimeblockPreferenceEditorOmissionsRow.propTypes = {
-  timeblock: TimeblockPropType.isRequired,
-};
 
 export default TimeblockPreferenceEditorOmissionsRow;

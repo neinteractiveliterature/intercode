@@ -2,12 +2,14 @@ import React, { useContext } from 'react';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
-import { formItemPropertyUpdater } from '../FormItemUtils';
+import { formItemPropertyUpdater, DateFormItem } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorProps } from '../FormItemEditorProps';
 
-function AgeRestrictionsEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
-  const captionInputId = useUniqueId('age-restrictions-caption-');
+export type DateEditorProps = FormItemEditorProps<DateFormItem>;
+function DateEditor({ formItem, setFormItem }: DateEditorProps) {
+  const { disabled } = useContext(FormItemEditorContext);
+  const captionInputId = useUniqueId('date-caption-');
 
   return (
     <>
@@ -16,7 +18,6 @@ function AgeRestrictionsEditor() {
           Caption
         </label>
         <LiquidInput
-          id={captionInputId}
           disabled={disabled}
           disablePreview
           value={formItem.properties.caption || ''}
@@ -27,8 +28,4 @@ function AgeRestrictionsEditor() {
   );
 }
 
-AgeRestrictionsEditor.defaultProps = {
-  disabled: false,
-};
-
-export default AgeRestrictionsEditor;
+export default DateEditor;
