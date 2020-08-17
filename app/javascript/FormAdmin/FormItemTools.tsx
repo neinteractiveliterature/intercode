@@ -1,8 +1,7 @@
 import React, { useContext, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
-import { useMutation } from '@apollo/client';
+import { useMutation, ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
@@ -59,10 +58,27 @@ function CustomItemMetadata() {
   );
 }
 
-function MoveFormItemModal({ visible, close }) {
+type PropertiesWithCaption = {
+  caption: string;
+};
+
+function propertiesHasCaption(properties?: object): properties is PropertiesWithCaption {
+  return (
+    typeof properties === 'object' &&
+    Object.prototype.hasOwnProperty.call(properties, 'caption') &&
+    typeof (properties as PropertiesWithCaption).caption === 'string'
+  );
+}
+
+type MoveFormItemModalProps = {
+  visible: boolean;
+  close: () => void;
+};
+
+function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
   const { form, currentSection } = useContext(FormEditorContext);
   const { formItem } = useContext(FormItemEditorContext);
-  const [destinationSectionId, setDestinationSectionId] = useState(null);
+  const [destinationSectionId, setDestinationSectionId] = useState<number>();
   const [moveFormItemMutate] = useMutation(MoveFormItem);
   const [moveFormItem, error, inProgress] = useAsyncFunction(moveFormItemMutate);
   const history = useHistory();
@@ -81,6 +97,10 @@ function MoveFormItemModal({ visible, close }) {
     close();
   };
 
+  const caption = propertiesHasCaption(formItem.properties)
+    ? formItem.properties.caption
+    : undefined;
+
   return (
     <Modal visible={visible}>
       <div className="modal-header">Move form item</div>
@@ -90,21 +110,21 @@ function MoveFormItemModal({ visible, close }) {
           caption={
             <>
               Move item
-              {formItem.properties.caption ? ` “${formItem.properties.caption}” ` : ' '}
+              {caption ? ` “${caption}” ` : ' '}
               to which section?
             </>
           }
           choices={form.form_sections.map((formSection) => ({
             label: formSection.title,
             value: formSection.id.toString(),
-            disabled: formSection.id === currentSection.id,
+            disabled: formSection.id === currentSection!.id,
           }))}
           value={destinationSectionId != null ? destinationSectionId.toString() : ''}
-          onChange={(value) => setDestinationSectionId(parseIntOrNull(value))}
+          onChange={(value: string) => setDestinationSectionId(parseIntOrNull(value) ?? undefined)}
           disabled={inProgress}
         />
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -130,15 +150,15 @@ function MoveFormItemModal({ visible, close }) {
   );
 }
 
-MoveFormItemModal.propTypes = {
-  close: PropTypes.func.isRequired,
-  visible: PropTypes.bool.isRequired,
+export type FormItemToolsProps = {
+  saveFormItem: () => Promise<any>;
 };
 
-function FormItemTools({ saveFormItem }) {
-  const match = useRouteMatch();
-  const { disabled, formItem, standardItem } = useContext(FormItemEditorContext);
-  const collapseRef = useRef();
+function FormItemTools({ saveFormItem }: FormItemToolsProps) {
+  const match = useRouteMatch<{ id: string; sectionId: string }>();
+  const history = useHistory();
+  const { disabled, formItem, setFormItem, standardItem } = useContext(FormItemEditorContext);
+  const collapseRef = useRef<HTMLDivElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const collapseId = useUniqueId('collapse-');
@@ -175,21 +195,23 @@ function FormItemTools({ saveFormItem }) {
         ref={collapseRef}
         {...otherCollapseProps}
       >
-        <CommonQuestionFields />
+        <CommonQuestionFields formItem={formItem} setFormItem={setFormItem} />
         <button className="btn btn-secondary mt-2" type="button" onClick={moveModal.open}>
           Move to another section
         </button>
       </div>
 
       <div className="d-flex align-items-stretch mt-2 mt-lg-4">
-        <NavLink
+        <button
           className="btn btn-outline-secondary col mr-2"
-          to={`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`}
-          exact
           disabled={disabled}
+          type="button"
+          onClick={() => {
+            history.push(`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`);
+          }}
         >
           Cancel
-        </NavLink>
+        </button>
         <button
           type="button"
           className="btn btn-primary col"
@@ -204,9 +226,5 @@ function FormItemTools({ saveFormItem }) {
     </>
   );
 }
-
-FormItemTools.propTypes = {
-  saveFormItem: PropTypes.func.isRequired,
-};
 
 export default FormItemTools;

@@ -1,61 +1,64 @@
 import React, { useMemo } from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/client';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { FormEditorContext } from './FormEditorContexts';
-import { FormEditorQuery } from './queries';
+import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import FormItemEditorLayout from './FormItemEditorLayout';
 import FormSectionEditorLayout from './FormSectionEditorLayout';
 import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { parseFormItemObject } from './FormItemUtils';
-import { UpdateForm } from './mutations';
+import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
+import { useFormEditorQueryQuery } from './queries.generated';
+import { FormType } from '../graphqlTypes.generated';
+import { useUpdateFormMutation } from './mutations.generated';
+import { notEmpty } from '../ValueUtils';
 
 function FormEditor() {
-  const match = useRouteMatch();
-  const { data, error, loading } = useQuery(FormEditorQuery, {
+  const match = useRouteMatch<{ id: string; sectionId?: string; itemId?: string }>();
+  const { data, error, loading } = useFormEditorQueryQuery({
     variables: {
       id: Number.parseInt(match.params.id, 10),
     },
   });
-  const [updateForm] = useMutation(UpdateForm);
+  const [updateForm] = useUpdateFormMutation();
 
-  const form = useMemo(() => {
-    if (loading || error) {
-      return {};
+  const form: FormEditorForm = useMemo(() => {
+    if (loading || error || !data) {
+      return {
+        id: 0,
+        form_type: FormType.Event,
+        title: '',
+        form_sections: [],
+      };
     }
 
     return {
       ...data.form,
       form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
         ...formSection,
-        form_items: sortBy(formSection.form_items, 'position').map(parseFormItemObject),
+        form_items: sortBy(formSection.form_items, 'position')
+          .map(parseTypedFormItemObject)
+          .filter(notEmpty),
       })),
     };
   }, [data, error, loading]);
 
-  const renderedFormItemsById = useMemo(
+  const formItemsById = useMemo(
     () =>
       new Map(
-        flatMap(form.form_sections || [], (formSection) =>
-          formSection.form_items.map((formItem) => [
-            formItem.id,
-            {
-              ...formItem,
-              properties: formItem.rendered_properties,
-            },
-          ]),
+        flatMap(form.form_sections, (formSection) =>
+          formSection.form_items.map((formItem) => [formItem.id, formItem]),
         ),
       ),
     [form],
   );
 
-  const updateFormTitle = (title) => updateForm({ variables: { id: form.id, form: { title } } });
+  const updateFormTitle = (title: string) =>
+    updateForm({ variables: { id: form.id, form: { title } } });
 
   usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
 
@@ -67,7 +70,7 @@ function FormEditor() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  let currentSection = null;
+  let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
   if (!match.params.sectionId) {
     const firstSection = form.form_sections[0];
@@ -80,13 +83,13 @@ function FormEditor() {
     );
   }
 
-  const { convention } = data;
+  const { convention } = data!;
   const formType = FormTypes[form.form_type] || {};
 
   return (
     <div className="form-editor">
       <div className="form-editor-top-navbar navbar navbar-light bg-warning-light">
-        {match.params.itemId ? (
+        {match.params.itemId && currentSection ? (
           <Link
             to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
             className="btn btn-secondary"
@@ -111,11 +114,11 @@ function FormEditor() {
 
       <FormEditorContext.Provider
         value={{
-          convention,
+          convention: convention!,
           currentSection,
           form,
           formType,
-          renderedFormItemsById,
+          formItemsById,
         }}
       >
         <Switch>

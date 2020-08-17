@@ -1,18 +1,24 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { pluralize } from 'inflected';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
+import { FormEditorContextValue } from '../FormEditorContexts';
 
-function FormItemIdentifierInput({ formType, value, onChange }) {
+export type FormItemIdentifierInputProps = {
+  formType: FormEditorContextValue['formType'];
+  value: string | undefined;
+  onChange: React.Dispatch<string | undefined>;
+};
+
+function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifierInputProps) {
   const standardItems = formType.standard_items || {};
   const standardIdentifiers = useMemo(
     () => Object.entries(standardItems).map(([identifier]) => identifier),
     [standardItems],
   );
 
-  const normalizedIdentifier = value || '';
+  const normalizedIdentifier = value ?? '';
   const identifierIsReserved = standardIdentifiers.includes(normalizedIdentifier.toLowerCase());
 
   return (
@@ -36,18 +42,5 @@ function FormItemIdentifierInput({ formType, value, onChange }) {
     />
   );
 }
-
-FormItemIdentifierInput.propTypes = {
-  formType: PropTypes.shape({
-    description: PropTypes.string.isRequired,
-    standard_items: PropTypes.shape({}),
-  }).isRequired,
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-};
-
-FormItemIdentifierInput.defaultProps = {
-  value: '',
-};
 
 export default FormItemIdentifierInput;

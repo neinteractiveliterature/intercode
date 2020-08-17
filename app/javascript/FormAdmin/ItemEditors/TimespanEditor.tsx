@@ -2,11 +2,13 @@ import React, { useContext } from 'react';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
-import { formItemPropertyUpdater } from '../FormItemUtils';
+import { formItemPropertyUpdater, TimespanFormItem } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorProps } from '../FormItemEditorProps';
 
-function TimespanEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
+export type TimespanEditorProps = FormItemEditorProps<TimespanFormItem>;
+function TimespanEditor({ formItem, setFormItem }: TimespanEditorProps) {
+  const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timespan-caption-');
 
   return (
@@ -16,7 +18,6 @@ function TimespanEditor() {
           Caption
         </label>
         <LiquidInput
-          id={captionInputId}
           disabled={disabled}
           disablePreview
           value={formItem.properties.caption || ''}

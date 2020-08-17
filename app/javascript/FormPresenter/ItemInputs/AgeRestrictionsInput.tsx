@@ -26,7 +26,7 @@ function valueIsAgeRestrictionsValue(
   value: unknown | undefined | null,
 ): value is AgeRestrictionsValue {
   // AgeRestrictionsValue has no required properties so literally any object will do
-  return typeof value === 'object';
+  return value != null && typeof value === 'object';
 }
 
 export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictionsFormItem>;
@@ -78,9 +78,9 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   return (
     <fieldset className="card my-2">
       <div className="card-header py-0">
-        {/* eslint-disable-next-line react/no-danger */}
         <legend
           className="col-form-label"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }}
         />
       </div>

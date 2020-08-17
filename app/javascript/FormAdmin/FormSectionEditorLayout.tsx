@@ -14,7 +14,7 @@ import NewFormItemModal from './NewFormItemModal';
 function FormSectionEditorLayout() {
   const { currentSection, form } = useContext(FormEditorContext);
   const [createFormItemMutate] = useMutation(CreateFormItem);
-  const sectionBottomRef = useRef();
+  const sectionBottomRef = useRef<HTMLDivElement>(null);
   const newFormItemModal = useModal();
   const history = useHistory();
 
@@ -22,12 +22,12 @@ function FormSectionEditorLayout() {
     async (newFormItem) => {
       const response = await createFormItemMutate({
         variables: {
-          formSectionId: currentSection.id,
+          formSectionId: currentSection!.id,
           formItem: buildFormItemInput(newFormItem),
         },
         update: mutationUpdaterForFormSection(
           form.id,
-          currentSection.id,
+          currentSection!.id,
           (
             formSection,
             {
@@ -42,9 +42,7 @@ function FormSectionEditorLayout() {
         ),
       });
 
-      if (sectionBottomRef.current) {
-        sectionBottomRef.current.scrollIntoView();
-      }
+      sectionBottomRef.current?.scrollIntoView();
 
       return response;
     },
@@ -54,9 +52,11 @@ function FormSectionEditorLayout() {
   const createStaticText = useCallback(async () => {
     const response = await createFormItem(buildNewFormItem('static_text'));
     history.push(
-      `/admin_forms/${form.id}/edit/section/${currentSection.id}/item/${response.data.createFormItem.form_item.id}`,
+      `/admin_forms/${form.id}/edit/section/${currentSection!.id}/item/${
+        response.data.createFormItem.form_item.id
+      }`,
     );
-  }, [createFormItem, currentSection?.id, form.id, history]);
+  }, [createFormItem, currentSection, form.id, history]);
 
   return (
     <>

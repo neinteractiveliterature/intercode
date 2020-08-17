@@ -68,7 +68,7 @@ export type FormEditorQueryQuery = (
   { __typename?: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename?: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'event_mailing_list_domain'>
+    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
   )>, form: (
     { __typename?: 'Form' }
     & Pick<Types.Form, 'id'>
@@ -179,6 +179,7 @@ export const FormEditorQueryDocument = gql`
     starts_at
     ends_at
     timezone_name
+    timezone_mode
     event_mailing_list_domain
   }
   form(id: $id) {
