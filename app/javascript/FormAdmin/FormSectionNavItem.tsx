@@ -1,21 +1,26 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { DeleteFormSection } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { FormEditorContext } from './FormEditorContexts';
+import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import { FormEditorQuery } from './queries';
 import { useDeleteMutation } from '../MutationUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useSortable from '../useSortable';
 
-function FormSectionNavItem({ formSection, index, moveSection }) {
+export type FormSectionNavItemProps = {
+  formSection: FormEditorForm['form_sections'][0];
+  index: number;
+  moveSection: (dragIndex: number, hoverIndex: number) => void;
+};
+
+function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavItemProps) {
   const { form, currentSection } = useContext(FormEditorContext);
   const confirm = useConfirm();
   const history = useHistory();
-  const match = useRouteMatch();
+  const match = useRouteMatch<{ id: string }>();
   const deleteFormSection = useDeleteMutation(DeleteFormSection, {
     query: FormEditorQuery,
     queryVariables: { id: form.id },
@@ -30,7 +35,7 @@ function FormSectionNavItem({ formSection, index, moveSection }) {
     }
   };
 
-  const [ref, drag, { isDragging }] = useSortable(index, moveSection, 'formSection');
+  const [ref, drag, { isDragging }] = useSortable<HTMLLIElement>(index, moveSection, 'formSection');
 
   return (
     <li
@@ -74,14 +79,5 @@ function FormSectionNavItem({ formSection, index, moveSection }) {
     </li>
   );
 }
-
-FormSectionNavItem.propTypes = {
-  formSection: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-  moveSection: PropTypes.func.isRequired,
-};
 
 export default FormSectionNavItem;

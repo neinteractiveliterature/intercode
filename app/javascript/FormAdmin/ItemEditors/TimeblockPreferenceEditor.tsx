@@ -2,24 +2,26 @@ import React, { useCallback, useContext } from 'react';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
-import { formItemPropertyUpdater } from '../FormItemUtils';
+import { formItemPropertyUpdater, TimeblockPreferenceFormItem } from '../FormItemUtils';
 import TimeblockPreferenceEditorTimeblockRow from './TimeblockPreferenceEditorTimeblockRow';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import TimeblockPreferenceEditorOmissionsRow from './TimeblockPreferenceEditorOmissionsRow';
 import useArrayProperty from './useArrayProperty';
 import { FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorProps } from '../FormItemEditorProps';
 
-function TimeblockPreferenceEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
+export type TimeblockPreferenceEditorProps = FormItemEditorProps<TimeblockPreferenceFormItem>;
+function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenceEditorProps) {
+  const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timeblock-preference-');
 
   const generateNewTimeblock = useCallback(() => ({ label: '', start: {}, finish: {} }), []);
 
-  const [addTimeblock, timeblockChanged, deleteTimeblock, moveTimeblock] = useArrayProperty(
-    'timeblocks',
-    setFormItem,
-    generateNewTimeblock,
-  );
+  const [addTimeblock, timeblockChanged, deleteTimeblock, moveTimeblock] = useArrayProperty<
+    typeof formItem['properties']['timeblocks'][0],
+    typeof formItem,
+    'timeblocks'
+  >('timeblocks', setFormItem, generateNewTimeblock);
 
   return (
     <>
@@ -28,7 +30,6 @@ function TimeblockPreferenceEditor() {
           Caption
         </label>
         <LiquidInput
-          id={captionInputId}
           lines={3}
           disabled={disabled}
           disablePreview
@@ -65,7 +66,11 @@ function TimeblockPreferenceEditor() {
                   moveTimeblock={moveTimeblock}
                 />
 
-                <TimeblockPreferenceEditorOmissionsRow timeblock={timeblock} />
+                <TimeblockPreferenceEditorOmissionsRow
+                  timeblock={timeblock}
+                  formItem={formItem}
+                  setFormItem={setFormItem}
+                />
               </React.Fragment>
             ))}
           </tbody>

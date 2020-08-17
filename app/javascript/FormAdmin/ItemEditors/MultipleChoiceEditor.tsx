@@ -2,24 +2,28 @@ import React, { useContext } from 'react';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
-import { formItemPropertyUpdater } from '../FormItemUtils';
+import { formItemPropertyUpdater, MultipleChoiceFormItem } from '../FormItemUtils';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceOptionRow from './MultipleChoiceOptionRow';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import useArrayProperty from './useArrayProperty';
+import { FormItemEditorProps } from '../FormItemEditorProps';
 
-function MultipleChoiceEditor() {
-  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
+export type MultipleChoiceEditorProps = FormItemEditorProps<MultipleChoiceFormItem>;
+type FormItemType = MultipleChoiceEditorProps['formItem'];
+type ChoiceType = FormItemType['properties']['choices'][0];
+function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorProps) {
+  const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('multiple-choice-caption-');
   const generateNewChoice = () => ({ caption: '', value: '' });
 
-  const [addChoice, choiceChanged, deleteChoice, moveChoice] = useArrayProperty(
-    'choices',
-    setFormItem,
-    generateNewChoice,
-  );
+  const [addChoice, choiceChanged, deleteChoice, moveChoice] = useArrayProperty<
+    ChoiceType,
+    FormItemType,
+    'choices'
+  >('choices', setFormItem, generateNewChoice);
 
   return (
     <>
@@ -28,7 +32,6 @@ function MultipleChoiceEditor() {
           Caption
         </label>
         <LiquidInput
-          id={captionInputId}
           disabled={disabled}
           lines={2}
           disablePreview
@@ -80,6 +83,7 @@ function MultipleChoiceEditor() {
                   checked={!!formItem.properties.other}
                   onCheckedChange={formItemPropertyUpdater('other', setFormItem)}
                   disabled={disabled}
+                  type="checkbox"
                 />
               </td>
               <td className="pb-0">

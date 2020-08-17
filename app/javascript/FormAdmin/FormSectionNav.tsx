@@ -1,26 +1,39 @@
 import React, { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
 
-import { CreateFormSection, MoveFormSection } from './mutations';
 import { FormEditorContext } from './FormEditorContexts';
-import { FormEditorQuery } from './queries';
 import { useCreateMutation } from '../MutationUtils';
 import { serializeParsedFormSection } from './FormItemUtils';
 import FormSectionNavItem from './FormSectionNavItem';
 import { buildOptimisticArrayForMove } from '../useSortable';
 import useCollapse from '../NavigationBar/useCollapse';
 import useUniqueId from '../useUniqueId';
+import {
+  useMoveFormSectionMutation,
+  CreateFormSectionDocument,
+  CreateFormSectionMutation,
+  CreateFormSectionMutationVariables,
+} from './mutations.generated';
+import {
+  FormEditorQueryDocument,
+  FormEditorQueryQuery,
+  FormEditorQueryQueryVariables,
+} from './queries.generated';
 
 function FormSectionNav() {
-  const collapseRef = useRef();
+  const collapseRef = useRef<HTMLElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const history = useHistory();
   const { form } = useContext(FormEditorContext);
-  const [moveFormSection] = useMutation(MoveFormSection);
-  const addFormSection = useCreateMutation(CreateFormSection, {
-    query: FormEditorQuery,
+  const [moveFormSection] = useMoveFormSectionMutation();
+  const addFormSection = useCreateMutation<
+    FormEditorQueryQuery,
+    FormEditorQueryQueryVariables,
+    CreateFormSectionMutationVariables,
+    CreateFormSectionMutation
+  >(CreateFormSectionDocument, {
+    query: FormEditorQueryDocument,
     queryVariables: { id: form.id },
     arrayPath: ['form', 'form_sections'],
     newObjectPath: ['createFormSection', 'form_section'],
@@ -28,7 +41,7 @@ function FormSectionNav() {
   const navId = useUniqueId('section-nav-');
 
   const moveSection = useCallback(
-    (dragIndex, hoverIndex) => {
+    (dragIndex: number, hoverIndex: number) => {
       const optimisticSections = buildOptimisticArrayForMove(
         form.form_sections,
         dragIndex,
@@ -42,7 +55,7 @@ function FormSectionNav() {
         },
         optimisticResponse: {
           moveFormSection: {
-            __typename: 'Mutation',
+            __typename: 'MoveFormSectionPayload',
             form: {
               ...form,
               form_sections: optimisticSections,
@@ -55,16 +68,11 @@ function FormSectionNav() {
   );
 
   const addSection = async () => {
-    const {
-      data: {
-        createFormSection: {
-          form_section: { id },
-        },
-      },
-    } = await addFormSection({
+    const result = await addFormSection({
       variables: { formId: form.id, formSection: { title: 'New section' } },
     });
-    history.replace(`/admin_forms/${form.id}/edit/section/${id}`);
+    const formSectionId = result.data!.createFormSection!.form_section.id;
+    history.replace(`/admin_forms/${form.id}/edit/section/${formSectionId}`);
   };
 
   return (

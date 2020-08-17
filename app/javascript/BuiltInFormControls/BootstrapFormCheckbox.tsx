@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import useUniqueId from '../useUniqueId';
 
 export type BootstrapFormCheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
-  name: string;
+  name?: string;
   label: ReactNode;
   checked: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;

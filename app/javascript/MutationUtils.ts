@@ -68,6 +68,7 @@ export function deleteUpdater<QueryType extends object, TVariables extends Opera
 
 export function useCreateMutation<
   QueryType extends object,
+  QueryVariables extends OperationVariables,
   TVariables extends OperationVariables,
   TData
 >(
@@ -80,14 +81,14 @@ export function useCreateMutation<
     ...options
   }: MutationHookOptions<TData, TVariables> & {
     query: DocumentNode;
-    queryVariables?: TVariables;
+    queryVariables?: QueryVariables;
     arrayPath: string[];
     newObjectPath: string[];
   },
 ) {
   const update = useMemo(
     () =>
-      createUpdater<QueryType, TVariables, TData>({
+      createUpdater<QueryType, QueryVariables, TData>({
         query,
         variables,
         arrayPath,

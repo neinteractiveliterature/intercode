@@ -1,12 +1,18 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
 import useModal from '../../ModalDialogs/useModal';
 import RegistrationPolicyItemEditorPresetModal from './RegistrationPolicyItemEditorPresetModal';
+import { WithGeneratedId, RegistrationPolicyPreset } from '../FormItemUtils';
 
-function usePresetPropertyUpdater(onChange, generatedId, property) {
+type PresetWithId = WithGeneratedId<RegistrationPolicyPreset>;
+
+function usePresetPropertyUpdater(
+  onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void,
+  generatedId: string,
+  property: keyof RegistrationPolicyPreset,
+) {
   return useCallback(
     (value) =>
       onChange(generatedId, (prevPreset) => ({
@@ -17,16 +23,28 @@ function usePresetPropertyUpdater(onChange, generatedId, property) {
   );
 }
 
+export type RegistrationPolicyItemEditorPresetRowProps = {
+  preset: PresetWithId;
+  index: number;
+  movePreset: (dragIndex: number, hoverIndex: number) => void;
+  deletePreset: (generatedId: string) => void;
+  onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void;
+};
+
 function RegistrationPolicyItemEditorPresetRow({
   preset,
   index,
   movePreset,
   deletePreset,
   onChange,
-}) {
+}: RegistrationPolicyItemEditorPresetRowProps) {
   const confirm = useConfirm();
   const modal = useModal();
-  const [rowRef, drag, { isDragging }] = useSortable(index, movePreset, 'choice');
+  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
+    index,
+    movePreset,
+    'choice',
+  );
 
   const presetChanged = useCallback((newPreset) => onChange(preset.generatedId, () => newPreset), [
     onChange,
@@ -80,23 +98,5 @@ function RegistrationPolicyItemEditorPresetRow({
     </tr>
   );
 }
-
-RegistrationPolicyItemEditorPresetRow.propTypes = {
-  preset: PropTypes.shape({
-    generatedId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    policy: PropTypes.shape({
-      buckets: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string,
-        }),
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-  movePreset: PropTypes.func.isRequired,
-  deletePreset: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
 
 export default RegistrationPolicyItemEditorPresetRow;

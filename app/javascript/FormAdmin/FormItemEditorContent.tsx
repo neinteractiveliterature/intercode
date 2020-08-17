@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { assertNever } from 'assert-never';
 
 import StaticTextEditor from './ItemEditors/StaticTextEditor';
 import FreeTextEditor from './ItemEditors/FreeTextEditor';
@@ -12,29 +13,31 @@ import RegistrationPolicyItemEditor from './ItemEditors/RegistrationPolicyItemEd
 import { FormItemEditorContext } from './FormEditorContexts';
 
 function FormItemEditorContent() {
-  const { formItem } = useContext(FormItemEditorContext);
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
 
   switch (formItem.item_type) {
     case 'age_restrictions':
-      return <AgeRestrictionsEditor />;
+      return <AgeRestrictionsEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'date':
-      return <DateEditor />;
+      return <DateEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'event_email':
-      return <EventEmailEditor />;
+      return <EventEmailEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'free_text':
-      return <FreeTextEditor />;
+      return <FreeTextEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'multiple_choice':
-      return <MultipleChoiceEditor />;
+      return <MultipleChoiceEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'registration_policy':
-      return <RegistrationPolicyItemEditor />;
+      return <RegistrationPolicyItemEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'static_text':
-      return <StaticTextEditor />;
+      return <StaticTextEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'timeblock_preference':
-      return <TimeblockPreferenceEditor />;
+      return <TimeblockPreferenceEditor formItem={formItem} setFormItem={setFormItem} />;
     case 'timespan':
-      return <TimespanEditor />;
+      return <TimespanEditor formItem={formItem} setFormItem={setFormItem} />;
     default:
-      return null;
+      assertNever(formItem, true);
+      Rollbar?.warn(`Unknown form item type: ${formItem.item_type}`);
+      return <></>;
   }
 }
 

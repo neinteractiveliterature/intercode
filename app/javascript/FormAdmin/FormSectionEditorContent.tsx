@@ -1,18 +1,17 @@
 import React, { useContext } from 'react';
-import { useMutation } from '@apollo/client';
 
 import { FormEditorContext } from './FormEditorContexts';
 import FormEditorItemPreview from './FormEditorItemPreview';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { UpdateFormSection } from './mutations';
+import { useUpdateFormSectionMutation } from './mutations.generated';
 
 function FormSectionEditorContent() {
   const { currentSection } = useContext(FormEditorContext);
-  const [updateFormSection] = useMutation(UpdateFormSection);
+  const [updateFormSection] = useUpdateFormSectionMutation();
 
-  const updateSectionTitle = async (title) => {
+  const updateSectionTitle = async (title: string) => {
     await updateFormSection({
-      variables: { id: currentSection.id, formSection: { title } },
+      variables: { id: currentSection!.id, formSection: { title } },
     });
   };
 
