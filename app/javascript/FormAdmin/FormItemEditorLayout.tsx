@@ -11,7 +11,6 @@ import {
   addGeneratedIds,
   parseTypedFormItemObject,
   TypedFormItem,
-  parseFormItemObject,
 } from './FormItemUtils';
 import { PreviewFormItemQuery } from './queries';
 import useDebouncedState from '../useDebouncedState';
@@ -54,7 +53,7 @@ function FormItemEditorLayout() {
   );
 
   const [formItem, setFormItem] = useDebouncedState<FormEditorFormItem>(
-    () => addGeneratedIdsToFormItem(parseTypedFormItemObject(initialFormItem)!),
+    () => addGeneratedIdsToFormItem(initialFormItem),
     refreshRenderedFormItem,
     150,
   );
@@ -62,11 +61,7 @@ function FormItemEditorLayout() {
   const standardItem = (formType.standard_items || {})[initialFormItem.identifier ?? ''];
 
   const hasChanges = useMemo(
-    () =>
-      !isEqual(
-        buildFormItemInput(parseFormItemObject(initialFormItem)),
-        buildFormItemInput(formItem),
-      ),
+    () => !isEqual(buildFormItemInput(initialFormItem), buildFormItemInput(formItem)),
     [formItem, initialFormItem],
   );
 

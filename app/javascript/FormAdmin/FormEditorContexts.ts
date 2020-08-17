@@ -36,7 +36,7 @@ export type FormEditorFormItem =
 
 export type FormEditorContextValue = {
   convention: NonNullable<FormEditorQueryQuery['convention']>;
-  currentSection?: FormEditorQueryQuery['form']['form_sections'][0];
+  currentSection?: FormEditorForm['form_sections'][0];
   form: FormEditorForm;
   formType:
     | typeof FormTypes['event']

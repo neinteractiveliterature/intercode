@@ -39,9 +39,9 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
         close={defaultAnswerModal.close}
         visible={defaultAnswerModal.visible}
       />
-      {!standardItem && (
+      {formItemIsQuestion(formItem) && !standardItem && (
         <FormItemIdentifierInput
-          value={formItem.identifier}
+          value={formItem.identifier ?? undefined}
           onChange={(identifier) =>
             setFormItem((prevFormItem) => ({ ...prevFormItem, identifier }))
           }
