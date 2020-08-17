@@ -8,13 +8,12 @@ import useSortable, { buildOptimisticArrayForMove } from '../useSortable';
 import {
   mutationUpdaterForFormSection,
   TypedFormItem,
-  parseTypedFormItemObject,
+  serializeParsedFormItem,
 } from './FormItemUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 import { useMoveFormItemMutation, useDeleteFormItemMutation } from './mutations.generated';
-import { FormEditorDataFragment } from './queries.generated';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
   if (standardItem) {
@@ -29,7 +28,7 @@ function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
 }
 
 export type FormEditorItemPreviewProps = {
-  formItem: FormEditorDataFragment['form_sections'][0]['form_items'][0];
+  formItem: TypedFormItem;
   index: number;
 };
 
@@ -51,7 +50,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
   const moveItem = useCallback(
     (dragIndex, hoverIndex) => {
       const optimisticItems = buildOptimisticArrayForMove(
-        currentSection!.form_items,
+        currentSection!.form_items.map(serializeParsedFormItem),
         dragIndex,
         hoverIndex,
       );
@@ -135,7 +134,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to delete ${describeFormItemForDelete(
-                  parseTypedFormItemObject(formItem)!,
+                  formItem,
                   standardItem,
                 )}?`,
                 action: () => deleteFormItem({ variables: { id: formItem.id } }),

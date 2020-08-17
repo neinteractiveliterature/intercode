@@ -26,7 +26,7 @@ function valueIsAgeRestrictionsValue(
   value: unknown | undefined | null,
 ): value is AgeRestrictionsValue {
   // AgeRestrictionsValue has no required properties so literally any object will do
-  return typeof value === 'object';
+  return value != null && typeof value === 'object';
 }
 
 export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictionsFormItem>;

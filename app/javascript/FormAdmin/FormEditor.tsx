@@ -12,7 +12,7 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
-import { useFormEditorQueryQuery, FormEditorQueryQuery } from './queries.generated';
+import { useFormEditorQueryQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
 import { notEmpty } from '../ValueUtils';
@@ -70,7 +70,7 @@ function FormEditor() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  let currentSection: FormEditorQueryQuery['form']['form_sections'][0] | undefined;
+  let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
   if (!match.params.sectionId) {
     const firstSection = form.form_sections[0];

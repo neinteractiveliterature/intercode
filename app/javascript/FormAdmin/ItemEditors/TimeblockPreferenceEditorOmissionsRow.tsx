@@ -11,6 +11,7 @@ import { FormEditorContext } from '../FormEditorContexts';
 import AppRootContext from '../../AppRootContext';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TimeblockPreferenceFormItem } from '../FormItemUtils';
+import { notEmpty } from '../../ValueUtils';
 
 export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<
   TimeblockPreferenceFormItem
@@ -66,19 +67,23 @@ function TimeblockPreferenceEditorOmissionsRow({
 
   const choices = useMemo(
     () =>
-      columns.map((column) => {
-        const dayStart = moment.tz(column.dayStart, timezoneName);
-        const timespan = new Timespan(
-          moment(dayStart).add(timeblock.start),
-          moment(dayStart).add(timeblock.finish),
-        );
+      columns
+        .map((column) => {
+          const dayStart = moment.tz(column.dayStart, timezoneName);
+          const start = moment(dayStart).add(timeblock.start);
+          const finish = moment(dayStart).add(timeblock.finish);
+          if (start.isAfter(finish)) {
+            return undefined;
+          }
+          const timespan = Timespan.fromMoments(start, finish);
 
-        return {
-          label: dayStart.format('dddd'),
-          value: dayStart.format('YYYY-MM-DD'),
-          disabled: !timespan.overlapsTimespan(conventionTimespan),
-        };
-      }),
+          return {
+            label: dayStart.format('dddd'),
+            value: dayStart.format('YYYY-MM-DD'),
+            disabled: !timespan.overlapsTimespan(conventionTimespan),
+          };
+        })
+        .filter(notEmpty),
     [columns, timezoneName, conventionTimespan, timeblock.finish, timeblock.start],
   );
 

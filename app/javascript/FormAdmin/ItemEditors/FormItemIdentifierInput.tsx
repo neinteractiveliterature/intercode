@@ -8,7 +8,7 @@ import { FormEditorContextValue } from '../FormEditorContexts';
 export type FormItemIdentifierInputProps = {
   formType: FormEditorContextValue['formType'];
   value: string | undefined;
-  onChange: React.Dispatch<React.SetStateAction<string | undefined>>;
+  onChange: React.Dispatch<string | undefined>;
 };
 
 function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifierInputProps) {
