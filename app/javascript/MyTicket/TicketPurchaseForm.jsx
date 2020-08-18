@@ -72,6 +72,13 @@ function TicketPurchaseForm() {
               <div className="flex-grow-1">
                 <strong>{productName}</strong> &mdash;{' '}
                 {describeUserPricingStructure(pricingStructure, timezoneName)}
+                {availableProduct.description_html && (
+                  <div
+                    className="small"
+                    // eslint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{ __html: availableProduct.description_html }}
+                  />
+                )}
               </div>
               <Checkmark value={(product || {}).id === id} className="ml-2" />
             </div>
@@ -86,6 +93,9 @@ function TicketPurchaseForm() {
       <h1 className="mb-4">
         Buy a {data.convention.ticket_name} for {data.convention.name}
       </h1>
+      {availableProducts.length > 1 && (
+        <p className="lead">Please select a {data.convention.ticket_name} type:</p>
+      )}
       {renderProductSelect()}
       {product && (
         <div className="mt-4">
