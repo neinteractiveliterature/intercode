@@ -111,6 +111,7 @@ class CmsRenderingContext
   def liquid_registers
     liquid_assigns.merge(
       'controller' => controller,
+      'parent' => cms_parent,
       :cached_partials => cached_partials,
       :cached_files => cached_files,
       :file_system => Cadmus::PartialFileSystem.new(convention),
