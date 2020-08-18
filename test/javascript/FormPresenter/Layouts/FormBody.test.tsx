@@ -2,20 +2,23 @@ import React from 'react';
 
 import { render, fireEvent } from '../../testUtils';
 import { convention, minimalForm } from '../../EventAdmin/formMockData';
-import FormBody from '../../../../app/javascript/FormPresenter/Layouts/FormBody';
+import FormBody, { FormBodyProps } from '../../../../app/javascript/FormPresenter/Layouts/FormBody';
 import { ItemInteractionTrackerContext } from '../../../../app/javascript/FormPresenter/ItemInteractionTracker';
 import { getSortedParsedFormItems } from '../../../../app/javascript/Models/Form';
 
 describe('FormBody', () => {
-  const defaultProps = {
+  const defaultProps: FormBodyProps = {
     formItems: getSortedParsedFormItems(minimalForm),
     convention,
-    response: { title: 'A title' },
+    response: { form_response_attrs: { title: 'A title' } },
     responseValuesChanged: () => {},
     errors: {},
   };
 
-  const renderFormBody = (overrideProps: any = {}, interactedItemIds?: string[]) => {
+  const renderFormBody = (
+    overrideProps: Partial<FormBodyProps> = {},
+    interactedItemIds?: string[],
+  ) => {
     const interactedItemIdsSet = new Set<string>(interactedItemIds ?? []);
     return render(
       <ItemInteractionTrackerContext.Provider
@@ -47,12 +50,14 @@ describe('FormBody', () => {
 
   describe('incomplete item errors', () => {
     it('does not show incomplete item errors on non-interacted items', () => {
-      const { getByLabelText } = renderFormBody({ response: {} });
+      const { getByLabelText } = renderFormBody({ response: { form_response_attrs: {} } });
       expect(getByLabelText('Title*')).not.toHaveClass('is-invalid');
     });
 
     it('shows errors on interacted items', () => {
-      const { getByLabelText } = renderFormBody({ response: {} }, ['title']);
+      const { getByLabelText } = renderFormBody({ response: { form_response_attrs: {} } }, [
+        'title',
+      ]);
       expect(getByLabelText('Title*')).toHaveClass('is-invalid');
     });
   });
