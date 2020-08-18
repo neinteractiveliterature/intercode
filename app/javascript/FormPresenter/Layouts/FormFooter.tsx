@@ -113,15 +113,15 @@ function FormFooter({
   let continueButton: ReactNode = null;
   let submitButtonComponent: ReactNode = null;
 
-  if (currentSectionIndex && currentSectionIndex >= 1) {
+  if (currentSectionIndex != null && currentSectionIndex >= 1) {
     backButton = <BackButton goToPreviousSection={goToPreviousSection} />;
   }
 
-  if (currentSectionIndex && currentSectionIndex < sectionCount - 1) {
+  if (currentSectionIndex != null && currentSectionIndex < sectionCount - 1) {
     continueButton = <ContinueButton tryNextSection={tryNextSection} />;
   }
 
-  if (submitButton && currentSectionIndex && currentSectionIndex >= sectionCount - 1) {
+  if (submitButton && currentSectionIndex != null && currentSectionIndex >= sectionCount - 1) {
     submitButtonComponent = (
       <SubmitButton
         submitButton={submitButton}

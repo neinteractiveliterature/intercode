@@ -162,7 +162,7 @@ export function EventForm<EventType extends FormResponse>({
       <SinglePageFormPresenter
         form={eventForm}
         convention={convention}
-        response={event.form_response_attrs}
+        response={event}
         responseValuesChanged={formResponseValuesChanged}
         ref={formRef}
       >

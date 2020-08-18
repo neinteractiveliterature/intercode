@@ -7,11 +7,12 @@ import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import { FormResponse } from '../useFormResponse';
 
 export type FormBodyProps = {
   convention: ConventionForFormItemDisplay;
   formItems: TypedFormItem[];
-  response: any;
+  response: FormResponse;
   responseValuesChanged: (newValues: any) => void;
   errors?: { [itemIdentifier: string]: string[] };
 };
@@ -85,9 +86,12 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
                 valueInvalid={
                   !!item.identifier &&
                   hasInteractedWithItem(item.identifier) &&
-                  !formResponseValueIsCompleteIfRequired(item, response[item.identifier])
+                  !formResponseValueIsCompleteIfRequired(
+                    item,
+                    response.form_response_attrs[item.identifier],
+                  )
                 }
-                value={item.identifier ? response[item.identifier] : null}
+                value={item.identifier ? response.form_response_attrs[item.identifier] : null}
                 onChange={responseValueChanged}
                 onInteract={interactWithItem}
               />

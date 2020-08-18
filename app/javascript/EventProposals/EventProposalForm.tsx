@@ -130,7 +130,7 @@ function EventProposalFormInner({
         <FormPresenter
           form={form}
           convention={convention}
-          response={eventProposal.form_response_attrs}
+          response={eventProposal}
           responseErrors={responseErrors}
           isSubmittingResponse={submitInProgress}
           isUpdatingResponse={updateInProgress}
