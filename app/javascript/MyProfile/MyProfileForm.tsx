@@ -54,7 +54,7 @@ function MyProfileFormInner({
   const [responseErrors, setResponseErrors] = useState({});
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
-  const [response, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
+  const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
 
   const updateUserConProfile = useCallback(
     async (profile) => {
@@ -121,7 +121,7 @@ function MyProfileFormInner({
   const formPresenterProps = {
     form,
     convention,
-    response,
+    response: userConProfile,
     responseErrors,
     isSubmittingResponse: false,
     isUpdatingResponse: mutationInProgress,

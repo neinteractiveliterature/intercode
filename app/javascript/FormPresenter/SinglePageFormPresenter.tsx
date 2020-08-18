@@ -4,12 +4,13 @@ import { getSortedParsedFormItems } from '../Models/Form';
 import FormBody, { FormBodyImperativeHandle } from './Layouts/FormBody';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { ConventionForFormItemDisplay } from './ItemDisplays/FormItemDisplay';
+import { FormResponse } from './useFormResponse';
 
 export type SinglePageFormPresenterProps = {
   form: CommonFormFieldsFragment;
   children?: ReactNode;
   convention: ConventionForFormItemDisplay;
-  response: any;
+  response: FormResponse;
   responseValuesChanged: (newValues: any) => void;
 };
 
