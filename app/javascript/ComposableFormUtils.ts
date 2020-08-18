@@ -1,6 +1,5 @@
 import moment, { Moment } from 'moment-timezone';
 import { useState, useMemo } from 'react';
-import { assertNever } from 'assert-never';
 
 export function parseIntOrNull(stringValue: string) {
   const intValue = parseInt(stringValue, 10);
@@ -240,7 +239,7 @@ export function transformsReducer<StateType>(
           [action.key]: (transforms[action.key] || Transforms.identity)(action.value),
         };
       default:
-        return assertNever(action.type);
+        return state;
     }
   };
 }
