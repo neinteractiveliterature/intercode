@@ -45,10 +45,19 @@ function Cart() {
         variables: { input: { id } },
         update: (proxy) => {
           const storeData = proxy.readQuery({ query: CartQuery });
-          storeData.currentPendingOrder.order_entries = storeData.currentPendingOrder.order_entries.filter(
-            (entry) => entry.id !== id,
-          );
-          proxy.writeQuery({ query: CartQuery, data: storeData });
+
+          proxy.writeQuery({
+            query: CartQuery,
+            data: {
+              ...storeData,
+              currentPendingOrder: {
+                ...storeData.currentPendingOrder,
+                order_entries: storeData.currentPendingOrder.order_entries.filter(
+                  (entry) => entry.id !== id,
+                ),
+              },
+            },
+          });
         },
       }),
     [deleteMutate],
