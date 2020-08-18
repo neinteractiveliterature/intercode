@@ -11,6 +11,7 @@ export const TicketPurchaseFormQuery = gql`
       products(only_ticket_providing: true, only_available: true) {
         id
         name
+        description_html
 
         pricing_structure {
           ...PricingStructureFields
