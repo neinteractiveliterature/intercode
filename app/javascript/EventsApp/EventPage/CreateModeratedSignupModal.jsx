@@ -19,7 +19,7 @@ function CreateModeratedSignupModal({ visible, close, run, event, signupOption }
     refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
   });
   const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
-  const runTimespan = useMemo(() => timespanFromRun({ timezone_name: timezoneName }, event, run), [
+  const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [
     timezoneName,
     event,
     run,
