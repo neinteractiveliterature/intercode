@@ -97,7 +97,7 @@ tool 'pull_uploads' do
       dest_path = file.path
       next if File.exist?(dest_path)
 
-      prod_url = URI("https://uploads.neilhosting.net/#{file.store_path}#{file.identifier}")
+      prod_url = URI("https://uploads.neilhosting.net/#{file.store_path}#{URI.encode_www_form_component file.identifier}")
       puts "Downloading #{prod_url}"
       FileUtils.mkdir_p(File.dirname(dest_path))
       File.open(dest_path, 'wb') do |outfile|
