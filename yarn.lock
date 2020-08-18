@@ -11122,9 +11122,10 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-payment@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/payment/-/payment-2.3.0.tgz#b2a95e9c3052459647da3926b8b66c553d93098f"
+payment@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/payment/-/payment-2.4.0.tgz#e9d81de364fa919633bae71829808ac1236da9f8"
+  integrity sha512-FjVkqu1GW0epmWRuA7853cfEdjZx61z1vKagcvfvKWeXwEuUlOKr2nkdrCjue5qJWNSzj235pidaK3GsCbY84A==
   dependencies:
     qj "~2.0.0"
 
