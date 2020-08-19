@@ -92,7 +92,7 @@ GEM
       geocoder (>= 1.4.5)
       safely_block (>= 0.2.1)
     ansi (1.5.0)
-    apollo_upload_server (2.0.1)
+    apollo_upload_server (2.0.2)
       graphql (>= 1.8)
       rails (>= 4.2)
     ast (2.4.1)
@@ -158,7 +158,7 @@ GEM
     civil_service (2.3.0)
       activemodel (>= 3.0.0)
     coderay (1.1.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     crass (1.0.6)
     dalli (2.7.10)
     dante (0.2.0)
@@ -518,9 +518,9 @@ GEM
     unicode-display_width (1.7.0)
     warden (1.2.8)
       rack (>= 2.0.6)
-    websocket-driver (0.7.2)
+    websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
-    websocket-driver (0.7.2-java)
+    websocket-driver (0.7.3-java)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     whenever (1.0.0)
@@ -539,7 +539,7 @@ DEPENDENCIES
   active_record-postgres-constraints
   activerecord-session_store
   ahoy_matey
-  apollo_upload_server (= 2.0.1)
+  apollo_upload_server (= 2.0.2)
   aws-sdk-rails
   aws-sdk-s3
   aws-sdk-sns
