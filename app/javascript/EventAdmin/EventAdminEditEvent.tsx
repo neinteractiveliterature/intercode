@@ -158,7 +158,7 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
 
 function EventAdminEditEvent() {
   const { data, loading, error } = useEventAdminEventsQueryQuery();
-  const { id: eventId } = useParams();
+  const { id: eventId } = useParams<{ id: string }>();
   const serializedEvent = useMemo(
     () => (data ? data.events.find((e) => e.id.toString() === eventId) : undefined),
     [data, eventId],
