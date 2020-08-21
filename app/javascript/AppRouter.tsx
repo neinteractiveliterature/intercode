@@ -9,7 +9,7 @@ import FourOhFourPage from './FourOhFourPage';
 import { SignupMode } from './graphqlTypes.generated';
 
 function CmsPageBySlug() {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug?: string }>();
   return <PageComponents.CmsPage slug={slug} />;
 }
 

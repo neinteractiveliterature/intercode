@@ -37,7 +37,7 @@ function UserConProfileForm<UserConProfileType extends FormResponse>(
         <SinglePageFormPresenter
           form={props.form}
           convention={props.convention}
-          response={props.userConProfile.form_response_attrs}
+          response={props.userConProfile}
           responseValuesChanged={formResponseValuesChanged}
         />
       ),
