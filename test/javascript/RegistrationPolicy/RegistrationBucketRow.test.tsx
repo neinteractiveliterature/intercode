@@ -1,11 +1,11 @@
 import React from 'react';
 
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
-import { render, act, fireEvent, waitFor, waitForElementToBeRemoved } from '../testUtils';
+import { render, act, fireEvent, waitFor } from '../testUtils';
 
 describe('RegistrationBucketRow', () => {
-  let onChange;
-  let onDelete;
+  let onChange: jest.Mock;
+  let onDelete: jest.Mock;
 
   const defaultRegistrationBucketProps = {
     key: 'testBucket',
@@ -23,7 +23,7 @@ describe('RegistrationBucketRow', () => {
     onDelete = jest.fn();
   });
 
-  const renderRegistrationBucketRow = (props, registrationBucketProps) =>
+  const renderRegistrationBucketRow = (props = {}, registrationBucketProps = {}) =>
     render(
       <table>
         <tbody>
@@ -53,8 +53,8 @@ describe('RegistrationBucketRow', () => {
     expect(getByRole('row')).not.toHaveClass('anything-bucket');
     expect(getByDisplayValue('test')).toBeTruthy();
     expect(getByDisplayValue('a bucket for testing')).toBeTruthy();
-    expect(getByLabelText('Unlimited?').checked).toBeFalsy();
-    expect(getByLabelText('Counted?').checked).toBeTruthy();
+    expect((getByLabelText('Unlimited?') as HTMLInputElement).checked).toBeFalsy();
+    expect((getByLabelText('Counted for signups?') as HTMLInputElement).checked).toBeTruthy();
     expect(getByLabelText('Min')).toHaveValue(2);
     expect(getByLabelText('Pref')).toHaveValue(5);
     expect(getByLabelText('Max')).toHaveValue(10);
@@ -109,7 +109,7 @@ describe('RegistrationBucketRow', () => {
 
   test('changing counted checkbox', () => {
     const { getByLabelText } = renderRegistrationBucketRow();
-    fireEvent.click(getByLabelText('Counted?'));
+    fireEvent.click(getByLabelText('Counted for signups?'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].not_counted).toEqual(true);
   });
