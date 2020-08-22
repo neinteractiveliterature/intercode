@@ -30,7 +30,7 @@ function renderBucketOptions(bucket, preset) {
 
   const bucketOptions = [
     bucket.not_counted ? 'Not counted' : 'Counted',
-    bucket.expose_atendees ? 'Expose attendees' : null,
+    bucket.expose_atendees ? 'Display attendees' : null,
   ].filter((option) => option != null);
 
   return (

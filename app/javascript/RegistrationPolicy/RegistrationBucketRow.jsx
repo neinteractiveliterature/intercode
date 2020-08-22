@@ -78,7 +78,7 @@ function RegistrationBucketRow({
         </div>
 
         <div className="form-check">
-          <label className="form-check-label text-nowrap mr-1" htmlFor={countedId}>
+          <label className="form-check-label mr-1" htmlFor={countedId}>
             <input
               id={countedId}
               className="form-check-input"
@@ -87,22 +87,20 @@ function RegistrationBucketRow({
               onChange={(event) => {
                 bucketMutator.not_counted(event.target.checked);
               }}
-              aria-label="Counted?"
+              aria-label="Counted for signups?"
             />
-            Counted?
+            Counted for signups?{' '}
+            <HelpPopover>
+              “Counted” buckets count towards the attendee’s number of signups, and are included in
+              the “No Preference” option. If the bucket is <em>not</em> counted, any attendees who
+              click “No Preference” won’t end up in this bucket.
+            </HelpPopover>
           </label>
-          <HelpPopover>
-            &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups, and
-            are included in the &ldquo;No Preference&rdquo; option. If the bucket is
-            <em>not</em>
-            counted, any attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this
-            bucket.
-          </HelpPopover>
         </div>
 
         <div className="form-check">
           <div className="d-flex">
-            <label className="form-check-label text-nowrap mr-1" htmlFor={exposeAttendeesId}>
+            <label className="form-check-label mr-1" htmlFor={exposeAttendeesId}>
               <input
                 id={exposeAttendeesId}
                 className="form-check-input"
@@ -111,16 +109,15 @@ function RegistrationBucketRow({
                 onChange={(event) => {
                   bucketMutator.expose_attendees(event.target.checked);
                 }}
-                aria-label="Expose attendees?"
+                aria-label="Show bucket name in signup list?"
               />
-              Expose attendees?
+              Show bucket name in signup list?{' '}
+              <HelpPopover>
+                If checked, attendees will be able to see which of their fellow attendees are in
+                this bucket via the signup summary page. (The signup summary always lists fellow
+                attendees’ names, but normally doesn’t show which bucket they’re in.)
+              </HelpPopover>
             </label>
-            <HelpPopover>
-              If checked, attendees will be able to see which of their fellow attendees are in this
-              bucket via the signup summary page. (The signup summary always lists fellow
-              attendees&rsquo; names, but normally doesn&rsquo;t show which bucket they&rsquo;re
-              in.)
-            </HelpPopover>
           </div>
         </div>
       </div>
