@@ -97,9 +97,9 @@ class EventPolicyTest < ActiveSupport::TestCase
         refute EventPolicy.new(user, event).read?
       end
 
-      it 'does not let team members read events' do
+      it 'lets team members read events' do
         team_member = create(:team_member, event: event)
-        refute EventPolicy.new(team_member.user_con_profile.user, event).read?
+        assert EventPolicy.new(team_member.user_con_profile.user, event).read?
       end
 
       it 'does not let regular attendees read events' do
@@ -134,9 +134,9 @@ class EventPolicyTest < ActiveSupport::TestCase
         end
       end
 
-      it 'does not let team members read events' do
+      it 'lets team members read events' do
         team_member = create(:team_member, event: event)
-        refute EventPolicy.new(team_member.user_con_profile.user, event).read?
+        assert EventPolicy.new(team_member.user_con_profile.user, event).read?
       end
 
       it 'does not let regular attendees read events' do
