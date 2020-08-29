@@ -5,8 +5,6 @@ import { StandaloneEditEvent_EventFieldsFragment, StandaloneEditEvent_MaximumEve
 import { gql } from '@apollo/client';
 import { StandaloneEditEvent_EventFieldsFragmentDoc, StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type StandaloneDropEventMutationVariables = Types.Exact<{
   input: Types.DropEventInput;
 }>;

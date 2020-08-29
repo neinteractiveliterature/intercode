@@ -9,8 +9,6 @@ import { SignupFieldsFragmentDoc, UserConProfileSignupsFragmentFragmentDoc } fro
 import { EventPageRunFieldsFragmentDoc } from '../EventPage/queries.generated';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type ChangeSignupBucketMutationVariables = Types.Exact<{
   signupId: Types.Scalars['Int'];
   bucketKey: Types.Scalars['String'];

@@ -3,8 +3,6 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type CmsPartialFieldsFragment = (
   { __typename?: 'CmsPartial' }
   & Pick<Types.CmsPartial, 'id' | 'name' | 'content' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>

@@ -7,8 +7,6 @@ import { gql } from '@apollo/client';
 import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type MarkOrderPaidMutationVariables = Types.Exact<{
   orderId: Types.Scalars['Int'];
 }>;

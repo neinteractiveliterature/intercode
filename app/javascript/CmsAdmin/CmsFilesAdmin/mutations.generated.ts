@@ -5,8 +5,6 @@ import { CmsFileFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsFileFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateCmsFileMutationVariables = Types.Exact<{
   file: Types.Scalars['Upload'];
 }>;

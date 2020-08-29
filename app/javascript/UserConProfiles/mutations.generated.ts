@@ -5,8 +5,6 @@ import { UserConProfileFieldsFragment, UserConProfileAdminTicketFieldsFragment }
 import { gql } from '@apollo/client';
 import { UserConProfileFieldsFragmentDoc, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateUserConProfileMutationVariables = Types.Exact<{
   user_id: Types.Scalars['Int'];
   user_con_profile: Types.UserConProfileInput;

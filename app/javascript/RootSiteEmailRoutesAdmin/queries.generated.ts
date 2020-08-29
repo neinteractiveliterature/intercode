@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type EmailRouteFieldsFragment = (
   { __typename?: 'EmailRoute' }
   & Pick<Types.EmailRoute, 'id' | 'receiver_address' | 'forward_addresses'>

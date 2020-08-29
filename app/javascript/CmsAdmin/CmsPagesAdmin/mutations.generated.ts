@@ -5,8 +5,6 @@ import { CmsPageFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsPageFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreatePageMutationVariables = Types.Exact<{
   page: Types.PageInput;
 }>;

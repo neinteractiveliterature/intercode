@@ -5,8 +5,6 @@ import { RootSiteFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { RootSiteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type UpdateRootSiteMutationVariables = Types.Exact<{
   siteName?: Types.Maybe<Types.Scalars['String']>;
   defaultLayoutId?: Types.Maybe<Types.Scalars['Int']>;

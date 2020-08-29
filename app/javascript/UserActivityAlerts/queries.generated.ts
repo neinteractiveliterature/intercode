@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type UserActivityAlertsAdminConventionFieldsFragment = (
   { __typename?: 'Convention' }
   & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>

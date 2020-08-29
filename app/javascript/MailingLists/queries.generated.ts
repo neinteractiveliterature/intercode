@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type ContactEmailFieldsFragment = (
   { __typename?: 'ContactEmail' }
   & Pick<Types.ContactEmail, 'email' | 'formatted_address' | 'name' | 'metadata_json'>

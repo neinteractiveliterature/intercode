@@ -5,8 +5,6 @@ import { PermissionedRoleFields_OrganizationRole_Fragment, PermissionedRoleField
 import { gql } from '@apollo/client';
 import { PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CmsContentFields_CmsLayout_Fragment = (
   { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name'>

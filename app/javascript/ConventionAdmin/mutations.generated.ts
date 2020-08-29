@@ -5,8 +5,6 @@ import { ConventionAdminConventionFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ConventionAdminConventionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type UpdateConventionMutationVariables = Types.Exact<{
   input: Types.UpdateConventionInput;
 }>;

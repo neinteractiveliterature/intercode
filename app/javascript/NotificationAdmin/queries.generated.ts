@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type NotificationTemplateFieldsFragment = (
   { __typename?: 'NotificationTemplate' }
   & Pick<Types.NotificationTemplate, 'id' | 'event_key' | 'subject' | 'body_html' | 'body_text' | 'body_sms'>

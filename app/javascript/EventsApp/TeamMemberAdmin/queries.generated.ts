@@ -5,8 +5,6 @@ import { CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type TeamMemberTicketFieldsFragment = (
   { __typename?: 'Ticket' }
   & Pick<Types.Ticket, 'id'>
@@ -90,10 +88,6 @@ export type TeamMembersQueryQuery = (
     )>, team_members: Array<(
       { __typename?: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
-      & { user_con_profile: (
-        { __typename?: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id' | 'day_phone' | 'evening_phone' | 'best_call_time' | 'preferred_contact' | 'email'>
-      ) }
       & TeamMemberFieldsFragment
     )> }
   ) }
@@ -215,14 +209,6 @@ export const TeamMembersQueryDocument = gql`
     team_members {
       id
       ...TeamMemberFields
-      user_con_profile {
-        id
-        day_phone
-        evening_phone
-        best_call_time
-        preferred_contact
-        email
-      }
     }
   }
 }

@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type CmsPageQueryQueryVariables = Types.Exact<{
   slug?: Types.Maybe<Types.Scalars['String']>;
   rootPage?: Types.Maybe<Types.Scalars['Boolean']>;

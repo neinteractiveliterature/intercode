@@ -5,8 +5,6 @@ import { CmsPartialFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsPartialFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreatePartialMutationVariables = Types.Exact<{
   cmsPartial: Types.CmsPartialInput;
 }>;

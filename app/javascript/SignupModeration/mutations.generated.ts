@@ -5,8 +5,6 @@ import { SignupModerationSignupRequestFieldsFragment } from './queries.generated
 import { gql } from '@apollo/client';
 import { SignupModerationSignupRequestFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateUserSignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['Int'];
   userConProfileId: Types.Scalars['Int'];

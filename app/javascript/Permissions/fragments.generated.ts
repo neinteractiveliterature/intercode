@@ -2,8 +2,6 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-
-
 export type PermissionedModelFields_CmsContentGroup_Fragment = (
   { __typename: 'CmsContentGroup' }
   & Pick<Types.CmsContentGroup, 'id' | 'name'>

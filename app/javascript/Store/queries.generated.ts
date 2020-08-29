@@ -9,8 +9,6 @@ import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartO
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
 import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type AdminOrdersQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;

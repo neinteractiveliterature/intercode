@@ -7,8 +7,6 @@ import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type MySignupFieldsFragment = (
   { __typename?: 'Signup' }
   & Pick<Types.Signup, 'id' | 'state' | 'waitlist_position'>

@@ -5,8 +5,6 @@ import { ConventionDisplayFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ConventionDisplayFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateConventionMutationVariables = Types.Exact<{
   convention: Types.ConventionInput;
   cloneConventionId?: Types.Maybe<Types.Scalars['Int']>;

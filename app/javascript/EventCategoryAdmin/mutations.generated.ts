@@ -5,8 +5,6 @@ import { EventCategoryFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateEventCategoryMutationVariables = Types.Exact<{
   eventCategory: Types.EventCategoryInput;
 }>;

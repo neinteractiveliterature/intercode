@@ -5,8 +5,6 @@ import { CmsContentGroupFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsContentGroupFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateContentGroupMutationVariables = Types.Exact<{
   cmsContentGroup: Types.CmsContentGroupInput;
   permissions?: Types.Maybe<Array<Types.PermissionInput>>;

@@ -4,8 +4,6 @@ import * as Types from '../graphqlTypes.generated';
 import { CouponFieldsFragment } from './couponFields.generated';
 import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from './couponFields.generated';
-
-
 export type CouponApplicationFieldsFragment = (
   { __typename?: 'CouponApplication' }
   & Pick<Types.CouponApplication, 'id'>

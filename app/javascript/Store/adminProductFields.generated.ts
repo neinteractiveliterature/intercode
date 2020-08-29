@@ -4,8 +4,6 @@ import * as Types from '../graphqlTypes.generated';
 import { PricingStructureFieldsFragment } from './pricingStructureFields.generated';
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.generated';
-
-
 export type AdminProductFieldsFragment = (
   { __typename?: 'Product' }
   & Pick<Types.Product, 'id' | 'name' | 'description' | 'description_html' | 'image_url' | 'available' | 'payment_options'>

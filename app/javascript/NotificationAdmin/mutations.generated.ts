@@ -5,8 +5,6 @@ import { NotificationTemplateFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { NotificationTemplateFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
   notificationTemplate: Types.NotificationTemplateInput;
