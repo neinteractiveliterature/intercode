@@ -60,7 +60,7 @@
     "@types/mapbox-gl": "^1.11.1",
     "@types/minimist": "^1.2.0",
     "@types/moment": "^2.13.0",
-    "@types/moment-timezone": "^0.5.13",
+    "@types/moment-timezone": "^0.5.30",
     "@types/react-onclickoutside": "^6.7.3",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-select": "^3.0.16",
