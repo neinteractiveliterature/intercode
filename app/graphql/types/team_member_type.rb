@@ -3,7 +3,10 @@ class Types::TeamMemberType < Types::BaseObject
   authorize_record
 
   field :id, Int, null: false
-  field :display, Boolean, null: false, deprecation_reason: 'Use display_team_member instead'
+  field :display, Boolean,
+    null: false,
+    resolver_method: :display_team_member,
+    deprecation_reason: 'Use display_team_member instead'
   field :display_team_member, Boolean, null: false
   field :show_email, Boolean, null: false, camelize: false
   field :receive_con_email, Boolean, null: false, camelize: false
@@ -16,10 +19,6 @@ class Types::TeamMemberType < Types::BaseObject
 
   def receive_signup_email
     object.receive_signup_email.upcase
-  end
-
-  def display
-    display_team_member
   end
 
   def display_team_member
