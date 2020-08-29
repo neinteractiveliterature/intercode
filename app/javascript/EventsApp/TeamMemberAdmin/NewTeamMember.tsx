@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { humanize, titleize, underscore } from 'inflected';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ApolloError } from '@apollo/client';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import { CreateTeamMember } from './mutations';
@@ -14,16 +14,25 @@ import useUniqueId from '../../useUniqueId';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
+import { TeamMembersQueryQuery } from './queries.generated';
+import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 
-function NewTeamMember({ event, eventPath }) {
+export type NewTeamMemberProps = {
+  event: TeamMembersQueryQuery['event'];
+  eventPath: string;
+};
+
+function NewTeamMember({ event, eventPath }: NewTeamMemberProps) {
   const { t } = useTranslation();
   const history = useHistory();
-  const [teamMember, setTeamMember] = useState({
-    user_con_profile: null,
+  const [teamMember, setTeamMember] = useState<
+    Partial<TeamMembersQueryQuery['event']['team_members'][0]>
+  >({
+    user_con_profile: undefined,
     display_team_member: true,
     show_email: false,
     receive_con_email: true,
-    receive_signup_email: 'NON_WAITLIST_SIGNUPS',
+    receive_signup_email: ReceiveSignupEmail.NonWaitlistSignups,
   });
   const userConProfileSelectId = useUniqueId('user-con-profile-');
   const [createTeamMember, createError, createInProgress] = useAsyncFunction(
@@ -42,7 +51,7 @@ function NewTeamMember({ event, eventPath }) {
     }),
   );
 
-  const userConProfileChanged = (userConProfile) =>
+  const userConProfileChanged = (userConProfile: typeof teamMember['user_con_profile']) =>
     setTeamMember((prevTeamMember) => ({
       ...prevTeamMember,
       user_con_profile: userConProfile,
@@ -53,8 +62,10 @@ function NewTeamMember({ event, eventPath }) {
       variables: {
         input: {
           event_id: event.id,
-          team_member: buildTeamMemberInput(teamMember),
-          user_con_profile_id: teamMember.user_con_profile.id,
+          team_member: buildTeamMemberInput(
+            teamMember as TeamMembersQueryQuery['event']['team_members'][0],
+          ),
+          user_con_profile_id: teamMember.user_con_profile!.id,
         },
       },
     });
@@ -99,7 +110,7 @@ function NewTeamMember({ event, eventPath }) {
             disabled={createInProgress}
           />
 
-          <ErrorDisplay graphQLError={createError} />
+          <ErrorDisplay graphQLError={createError as ApolloError} />
 
           <ul className="list-inline mt-4">
             <li className="list-inline-item">
@@ -124,21 +135,5 @@ function NewTeamMember({ event, eventPath }) {
     </>
   );
 }
-
-NewTeamMember.propTypes = {
-  event: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    event_category: PropTypes.shape({
-      team_member_name: PropTypes.string.isRequired,
-    }).isRequired,
-    team_members: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-    id: PropTypes.number.isRequired,
-  }).isRequired,
-  eventPath: PropTypes.string.isRequired,
-};
 
 export default NewTeamMember;

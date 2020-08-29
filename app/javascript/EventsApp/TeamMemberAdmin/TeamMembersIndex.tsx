@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { humanize, pluralize, titleize, underscore } from 'inflected';
-import { useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -18,10 +16,22 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { useDeleteMutation } from '../../MutationUtils';
 import { DeleteTeamMember } from './mutations';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { TeamMembersQueryQuery, useTeamMembersQueryQuery } from './queries.generated';
 
-function sortTeamMembers(teamMembers) {
-  return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted);
+function sortTeamMembers(teamMembers: TeamMembersQueryQuery['event']['team_members']) {
+  return sortByLocaleString(
+    teamMembers,
+    (teamMember) => teamMember.user_con_profile.name_inverted ?? '',
+  );
 }
+
+type TeamMemberActionMenuProps = {
+  event: TeamMembersQueryQuery['event'];
+  convention: NonNullable<TeamMembersQueryQuery['convention']>;
+  teamMember: TeamMembersQueryQuery['event']['team_members'][0];
+  openProvideTicketModal: () => void;
+  eventPath: string;
+};
 
 function TeamMemberActionMenu({
   event,
@@ -29,7 +39,7 @@ function TeamMemberActionMenu({
   teamMember,
   openProvideTicketModal,
   eventPath,
-}) {
+}: TeamMemberActionMenuProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const deleteTeamMember = useDeleteMutation(DeleteTeamMember, {
@@ -49,90 +59,75 @@ function TeamMemberActionMenu({
         </button>
       )}
     >
-      <Link to={`${eventPath}/team_members/${teamMember.id}`} className="dropdown-item">
-        {t('events.teamMemberAdmin.editSettingsLink', 'Edit {{ teamMemberName }} settings', {
-          teamMemberName: event.event_category.team_member_name,
-        })}
-      </Link>
-      {event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled' ? (
+      <>
+        <Link to={`${eventPath}/team_members/${teamMember.id}`} className="dropdown-item">
+          {t('events.teamMemberAdmin.editSettingsLink', 'Edit {{ teamMemberName }} settings', {
+            teamMemberName: event.event_category.team_member_name,
+          })}
+        </Link>
+        {event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled' ? (
+          <button
+            className="dropdown-item cursor-pointer"
+            onClick={openProvideTicketModal}
+            type="button"
+          >
+            {t('events.teamMemberAdmin.provideTicketLink', 'Provide {{ ticketName }}', {
+              ticketName: convention.ticket_name,
+            })}
+          </button>
+        ) : null}
         <button
-          className="dropdown-item cursor-pointer"
-          onClick={openProvideTicketModal}
+          className="dropdown-item cursor-pointer text-danger"
           type="button"
+          onClick={() =>
+            confirm({
+              prompt: t(
+                'events.teamMemberAdmin.removeTeamMemberPrompt',
+                'Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?',
+                {
+                  name: teamMember.user_con_profile.name_without_nickname,
+                  teamMemberName: event.event_category.team_member_name,
+                },
+              ),
+              action: () => deleteTeamMember({}),
+              renderError: (error) => <ErrorDisplay graphQLError={error} />,
+            })
+          }
         >
-          {t('events.teamMemberAdmin.provideTicketLink', 'Provide {{ ticketName }}', {
-            ticketName: convention.ticket_name,
+          {t('events.teamMemberAdmin.removeTeamMemberLink', 'Remove {{ teamMemberName }}', {
+            teamMemberName: event.event_category.team_member_name,
           })}
         </button>
-      ) : null}
-      <button
-        className="dropdown-item cursor-pointer text-danger"
-        type="button"
-        onClick={() =>
-          confirm({
-            prompt: t(
-              'events.teamMemberAdmin.removeTeamMemberPrompt',
-              'Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?',
-              {
-                name: teamMember.user_con_profile.name_without_nickname,
-                teamMemberName: event.event_category.team_member_name,
-              },
-            ),
-            action: deleteTeamMember,
-            renderError: (error) => <ErrorDisplay graphQLError={error} />,
-          })
-        }
-      >
-        {t('events.teamMemberAdmin.removeTeamMemberLink', 'Remove {{ teamMemberName }}', {
-          teamMemberName: event.event_category.team_member_name,
-        })}
-      </button>
+      </>
     </PopperDropdown>
   );
 }
 
-TeamMemberActionMenu.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    event_category: PropTypes.shape({
-      can_provide_tickets: PropTypes.bool.isRequired,
-      team_member_name: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    ticket_mode: PropTypes.string.isRequired,
-    ticket_name: PropTypes.string.isRequired,
-  }).isRequired,
-  teamMember: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    user_con_profile: PropTypes.shape({
-      name_without_nickname: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  openProvideTicketModal: PropTypes.func.isRequired,
-  eventPath: PropTypes.string.isRequired,
+export type TeamMembersIndexProps = {
+  eventId: number;
+  eventPath: string;
 };
 
-function TeamMembersIndex({ eventId, eventPath }) {
+function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(TeamMembersQuery, { variables: { eventId } });
-  const modal = useModal();
+  const { data, loading, error } = useTeamMembersQueryQuery({ variables: { eventId } });
+  const modal = useModal<{ teamMember: TeamMembersQueryQuery['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
     () =>
-      error || loading
+      error || loading || !data
         ? null
         : pluralize(titleize(underscore(data.event.event_category.team_member_name))),
     [error, loading, data],
   );
 
   const sortedTeamMembers = useMemo(
-    () => (error || loading ? null : sortTeamMembers(data.event.team_members)),
+    () => (error || loading || !data ? null : sortTeamMembers(data.event.team_members)),
     [data, error, loading],
   );
 
   usePageTitle(
-    useValueUnless(() => `${titleizedTeamMemberName} - ${data.event.title}`, error || loading),
+    useValueUnless(() => `${titleizedTeamMemberName} - ${data?.event.title}`, error || loading),
   );
 
   if (loading) {
@@ -143,7 +138,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { convention, event } = data;
+  const { convention, event } = data!;
 
   return (
     <>
@@ -175,12 +170,12 @@ function TeamMembersIndex({ eventId, eventPath }) {
                     'Receive email on signup or withdrawal',
                   )}
                 </th>
-                {convention.ticket_mode !== 'disabled' && (
+                {convention!.ticket_mode !== 'disabled' && (
                   <th>
                     {t(
                       'events.teamMemberAdmin.hasEventTicketHeader',
                       '{{ ticketName }} from this event',
-                      { ticketName: titleize(convention.ticket_name) },
+                      { ticketName: titleize(convention!.ticket_name) },
                     )}
                   </th>
                 )}
@@ -188,7 +183,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
               </tr>
             </thead>
             <tbody>
-              {sortedTeamMembers.map((teamMember) => (
+              {sortedTeamMembers?.map((teamMember) => (
                 <tr key={teamMember.id}>
                   <td>{teamMember.user_con_profile.name_inverted}</td>
                   <td>
@@ -201,7 +196,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
                     <Checkmark value={teamMember.receive_con_email} />
                   </td>
                   <td>{humanize(teamMember.receive_signup_email)}</td>
-                  {convention.ticket_mode !== 'disabled' && (
+                  {convention!.ticket_mode !== 'disabled' && (
                     <td>
                       <Checkmark
                         value={event.provided_tickets.some(
@@ -213,7 +208,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
                   <td>
                     <TeamMemberActionMenu
                       event={event}
-                      convention={convention}
+                      convention={convention!}
                       teamMember={teamMember}
                       openProvideTicketModal={() => modal.open({ teamMember })}
                       eventPath={eventPath}
@@ -237,16 +232,11 @@ function TeamMembersIndex({ eventId, eventPath }) {
         visible={modal.visible}
         onClose={modal.close}
         event={event}
-        convention={convention}
-        teamMember={(modal.state || {}).teamMember}
+        convention={convention!}
+        teamMember={modal.state?.teamMember}
       />
     </>
   );
 }
-
-TeamMembersIndex.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  eventPath: PropTypes.string.isRequired,
-};
 
 export default TeamMembersIndex;

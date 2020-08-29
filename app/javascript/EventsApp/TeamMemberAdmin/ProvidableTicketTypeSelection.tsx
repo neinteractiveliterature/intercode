@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
 import { useTranslation } from 'react-i18next';
 
@@ -7,8 +6,23 @@ import { pluralize, humanize } from 'inflected';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 
 import { getProvidableTicketTypes, getRemainingTicketCountByType } from './ProvideTicketUtils';
+import { TeamMembersQueryQuery } from './queries.generated';
 
-function ProvidableTicketTypeSelection({ convention, event, value, onChange, disabled }) {
+export type ProvidableTicketTypeSelectionProps = {
+  convention: NonNullable<TeamMembersQueryQuery['convention']>;
+  event: TeamMembersQueryQuery['event'];
+  value?: number;
+  onChange: React.Dispatch<number>;
+  disabled?: boolean;
+};
+
+function ProvidableTicketTypeSelection({
+  convention,
+  event,
+  value,
+  onChange,
+  disabled,
+}: ProvidableTicketTypeSelectionProps) {
   const { t } = useTranslation();
   const providableTicketTypes = getProvidableTicketTypes(convention);
   const remainingCountByType = getRemainingTicketCountByType(convention, event);
@@ -59,20 +73,5 @@ function ProvidableTicketTypeSelection({ convention, event, value, onChange, dis
     </>
   );
 }
-
-ProvidableTicketTypeSelection.propTypes = {
-  convention: PropTypes.shape({
-    ticket_name: PropTypes.string.isRequired,
-  }).isRequired,
-  event: PropTypes.shape({}).isRequired,
-  value: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-};
-
-ProvidableTicketTypeSelection.defaultProps = {
-  value: null,
-  disabled: null,
-};
 
 export default ProvidableTicketTypeSelection;

@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { titleize, underscore } from 'inflected';
-import { useMutation } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import ErrorDisplay from '../../ErrorDisplay';
 import TeamMemberForm from './TeamMemberForm';
-import { UpdateTeamMember } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
+import { TeamMembersQueryQuery } from './queries.generated';
+import { useUpdateTeamMemberMutation } from './mutations.generated';
 
-function EditTeamMember({ event, eventPath }) {
+export type EditTeamMemberProps = {
+  event: TeamMembersQueryQuery['event'];
+  eventPath: string;
+};
+
+function EditTeamMember({ event, eventPath }: EditTeamMemberProps) {
   const { t } = useTranslation();
-  const teamMemberId = Number.parseInt(useParams().teamMemberId, 10);
+  const teamMemberId = Number.parseInt(useParams<{ teamMemberId: string }>().teamMemberId, 10);
   const history = useHistory();
   const [teamMember, setTeamMember] = useState(
-    event.team_members.find((tm) => tm.id === teamMemberId),
+    event.team_members.find((tm) => tm.id === teamMemberId)!,
   );
-  const [updateMutate] = useMutation(UpdateTeamMember);
+  const [updateMutate] = useUpdateTeamMemberMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(
@@ -75,11 +80,13 @@ function EditTeamMember({ event, eventPath }) {
       <TeamMemberForm
         event={event}
         value={teamMember}
-        onChange={setTeamMember}
+        onChange={(newValue) =>
+          setTeamMember(newValue as TeamMembersQueryQuery['event']['team_members'][0])
+        }
         disabled={updateInProgress}
       />
 
-      <ErrorDisplay graphQLError={updateError} />
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
 
       <ul className="list-inline mt-4">
         <li className="list-inline-item">
@@ -98,20 +105,5 @@ function EditTeamMember({ event, eventPath }) {
     </>
   );
 }
-
-EditTeamMember.propTypes = {
-  event: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    event_category: PropTypes.shape({
-      team_member_name: PropTypes.string.isRequired,
-    }).isRequired,
-    team_members: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  eventPath: PropTypes.string.isRequired,
-};
 
 export default EditTeamMember;
