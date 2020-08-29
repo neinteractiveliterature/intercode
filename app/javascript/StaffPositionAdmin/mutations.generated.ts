@@ -5,8 +5,6 @@ import { StaffPositionFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { StaffPositionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateStaffPositionMutationVariables = Types.Exact<{
   input: Types.CreateStaffPositionInput;
 }>;

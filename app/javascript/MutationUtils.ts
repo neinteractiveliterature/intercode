@@ -21,6 +21,13 @@ export function createUpdater<
 }) {
   return (store: ApolloCache<any>, result: ExecutionResult<TData>) => {
     const newObject = get(['data', ...newObjectPath], result);
+    if (newObject == null) {
+      throw new Error(
+        `MutationUtils.createUpdater: Expected an object in mutation response at path ${newObjectPath.join(
+          '.',
+        )}, but none was found`,
+      );
+    }
     const data = store.readQuery<QueryType, TVariables>({ query, variables });
     if (data == null) {
       return;

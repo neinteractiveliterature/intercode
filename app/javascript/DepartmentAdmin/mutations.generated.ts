@@ -5,8 +5,6 @@ import { AdminDepartmentFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminDepartmentFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateDepartmentMutationVariables = Types.Exact<{
   department: Types.DepartmentInput;
 }>;

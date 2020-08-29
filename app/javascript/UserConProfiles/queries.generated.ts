@@ -9,8 +9,6 @@ import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, Common
 import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type UserConProfileFormDataFragment = (
   { __typename?: 'Convention' }
   & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>

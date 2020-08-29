@@ -5,8 +5,6 @@ import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormIt
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type EventHistoryQueryQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;

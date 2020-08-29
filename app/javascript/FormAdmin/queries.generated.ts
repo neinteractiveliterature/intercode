@@ -5,8 +5,6 @@ import { CommonFormItemFieldsFragment, CommonFormFieldsFragment, CommonFormSecti
 import { gql } from '@apollo/client';
 import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type FormFieldsFragment = (
   { __typename?: 'Form' }
   & Pick<Types.Form, 'id' | 'title' | 'form_type' | 'export_json'>

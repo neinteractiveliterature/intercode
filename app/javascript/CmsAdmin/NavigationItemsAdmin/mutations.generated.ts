@@ -5,8 +5,6 @@ import { AdminNavigationItemFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminNavigationItemFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateNavigationItemMutationVariables = Types.Exact<{
   navigationItem: Types.CmsNavigationItemInput;
 }>;

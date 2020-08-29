@@ -5,8 +5,6 @@ import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type TicketPurchaseFormQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -17,7 +15,7 @@ export type TicketPurchaseFormQueryQuery = (
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
     & { products?: Types.Maybe<Array<(
       { __typename?: 'Product' }
-      & Pick<Types.Product, 'id' | 'name'>
+      & Pick<Types.Product, 'id' | 'name' | 'description_html'>
       & { pricing_structure?: Types.Maybe<(
         { __typename?: 'PricingStructure' }
         & PricingStructureFieldsFragment
@@ -92,6 +90,7 @@ export const TicketPurchaseFormQueryDocument = gql`
     products(only_ticket_providing: true, only_available: true) {
       id
       name
+      description_html
       pricing_structure {
         ...PricingStructureFields
       }

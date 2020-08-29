@@ -5,8 +5,6 @@ import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateTicketTypeMutationVariables = Types.Exact<{
   input: Types.CreateTicketTypeInput;
 }>;

@@ -5,8 +5,6 @@ import { EventFieldsFragment, RunFieldsFragment, MaximumEventProvidedTicketsOver
 import { gql } from '@apollo/client';
 import { EventFieldsFragmentDoc, RunFieldsFragmentDoc, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateEventMutationVariables = Types.Exact<{
   input: Types.CreateEventInput;
 }>;

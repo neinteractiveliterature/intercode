@@ -5,8 +5,6 @@ import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../que
 import { gql } from '@apollo/client';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type ScheduleGridEventFragmentFragment = (
   { __typename?: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'short_blurb_html' | 'my_rating' | 'can_play_concurrently'>

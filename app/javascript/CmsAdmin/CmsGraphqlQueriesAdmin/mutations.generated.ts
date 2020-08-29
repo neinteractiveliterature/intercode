@@ -5,8 +5,6 @@ import { CmsGraphqlQueryFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsGraphqlQueryFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
   query: Types.CmsGraphqlQueryInput;
 }>;

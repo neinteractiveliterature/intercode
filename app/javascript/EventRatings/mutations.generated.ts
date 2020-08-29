@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type RateEventMutationVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
   rating: Types.Scalars['Int'];

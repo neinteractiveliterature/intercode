@@ -7,8 +7,6 @@ import { gql } from '@apollo/client';
 import { FormFieldsFragmentDoc, FormEditorDataFragmentDoc, FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
 import { CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateFormWithJsonMutationVariables = Types.Exact<{
   formJSON: Types.Scalars['String'];
   formType: Types.FormType;

@@ -5,8 +5,6 @@ import { CmsLayoutFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsLayoutFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateLayoutMutationVariables = Types.Exact<{
   cmsLayout: Types.CmsLayoutInput;
 }>;

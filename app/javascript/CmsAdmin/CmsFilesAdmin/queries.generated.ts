@@ -3,8 +3,6 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type CmsFileFieldsFragment = (
   { __typename?: 'CmsFile' }
   & Pick<Types.CmsFile, 'id' | 'filename' | 'url' | 'content_type' | 'size' | 'current_ability_can_delete'>

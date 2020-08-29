@@ -5,8 +5,6 @@ import { EmailRouteFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EmailRouteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateEmailRouteMutationVariables = Types.Exact<{
   emailRoute: Types.EmailRouteInput;
 }>;

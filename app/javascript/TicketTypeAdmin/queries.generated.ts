@@ -5,8 +5,6 @@ import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type TicketTypeAdmin_TicketTypeFieldsFragment = (
   { __typename?: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'name' | 'description' | 'counts_towards_convention_maximum' | 'allows_event_signups' | 'maximum_event_provided_tickets'>

@@ -1,12 +1,10 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { TeamMemberFieldsWithoutPersonalInfoFragment, TeamMemberTicketFieldsFragment } from './queries.generated';
+import { TeamMemberFieldsFragment, TeamMemberTicketFieldsFragment, TeamMemberFieldsWithoutPersonalInfoFragment } from './queries.generated';
 import { gql } from '@apollo/client';
-import { TeamMemberFieldsWithoutPersonalInfoFragmentDoc, TeamMemberTicketFieldsFragmentDoc } from './queries.generated';
+import { TeamMemberFieldsFragmentDoc, TeamMemberTicketFieldsFragmentDoc, TeamMemberFieldsWithoutPersonalInfoFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateTeamMemberMutationVariables = Types.Exact<{
   input: Types.CreateTeamMemberInput;
 }>;
@@ -16,7 +14,11 @@ export type CreateTeamMemberMutation = (
   { __typename?: 'Mutation' }
   & { createTeamMember?: Types.Maybe<(
     { __typename?: 'CreateTeamMemberPayload' }
-    & Pick<Types.CreateTeamMemberPayload, 'clientMutationId'>
+    & { team_member: (
+      { __typename?: 'TeamMember' }
+      & Pick<Types.TeamMember, 'id'>
+      & TeamMemberFieldsFragment
+    ) }
   )> }
 );
 
@@ -77,10 +79,13 @@ export type ProvideEventTicketMutation = (
 export const CreateTeamMemberDocument = gql`
     mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
-    clientMutationId
+    team_member {
+      id
+      ...TeamMemberFields
+    }
   }
 }
-    `;
+    ${TeamMemberFieldsFragmentDoc}`;
 export type CreateTeamMemberMutationFn = Apollo.MutationFunction<CreateTeamMemberMutation, CreateTeamMemberMutationVariables>;
 
 /**

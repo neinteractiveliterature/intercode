@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type RootSiteConventionsAdminTableQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.ConventionFiltersInput>;

@@ -5,8 +5,6 @@ import { AdminCouponFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminCouponFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateCouponMutationVariables = Types.Exact<{
   coupon: Types.CouponInput;
 }>;

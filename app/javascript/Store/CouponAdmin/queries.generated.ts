@@ -5,8 +5,6 @@ import { CouponFieldsFragment } from '../couponFields.generated';
 import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from '../couponFields.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type AdminCouponFieldsFragment = (
   { __typename?: 'Coupon' }
   & Pick<Types.Coupon, 'id' | 'usage_limit' | 'expires_at'>

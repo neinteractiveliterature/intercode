@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type CommonConventionDataFragment = (
   { __typename?: 'Convention' }
   & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'site_mode' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>

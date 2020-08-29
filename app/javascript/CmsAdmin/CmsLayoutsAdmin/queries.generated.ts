@@ -3,8 +3,6 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type CmsLayoutFieldsFragment = (
   { __typename?: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name' | 'content' | 'navbar_classes' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>

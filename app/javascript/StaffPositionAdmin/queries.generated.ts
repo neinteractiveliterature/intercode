@@ -5,8 +5,6 @@ import { PermissionedModelFields_CmsContentGroup_Fragment, PermissionedModelFiel
 import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc } from '../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type StaffPositionFieldsFragment = (
   { __typename?: 'StaffPosition' }
   & Pick<Types.StaffPosition, 'id' | 'name' | 'email' | 'visible' | 'email_aliases' | 'cc_addresses'>

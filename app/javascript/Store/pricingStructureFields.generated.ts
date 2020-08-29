@@ -2,8 +2,6 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-
-
 export type PricingStructureFieldsFragment = (
   { __typename?: 'PricingStructure' }
   & Pick<Types.PricingStructure, 'pricing_strategy'>

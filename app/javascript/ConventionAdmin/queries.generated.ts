@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type ConventionAdminConventionFieldsFragment = (
   { __typename?: 'Convention' }
   & Pick<Types.Convention, 'id' | 'accepting_proposals' | 'starts_at' | 'ends_at' | 'canceled' | 'name' | 'domain' | 'email_from' | 'email_mode' | 'event_mailing_list_domain' | 'location' | 'language' | 'timezone_name' | 'timezone_mode' | 'show_schedule' | 'show_event_list' | 'hidden' | 'maximum_tickets' | 'ticket_name' | 'stripe_publishable_key' | 'masked_stripe_secret_key' | 'clickwrap_agreement' | 'ticket_mode' | 'site_mode' | 'signup_mode' | 'signup_requests_open'>

@@ -57,8 +57,6 @@ function NewTeamMember({ event, eventPath }) {
           user_con_profile_id: teamMember.user_con_profile.id,
         },
       },
-      refetchQueries: [{ query: TeamMembersQuery, variables: { eventId: event.id } }],
-      awaitRefetchQueries: true,
     });
 
     history.replace(`${eventPath}/team_members`);

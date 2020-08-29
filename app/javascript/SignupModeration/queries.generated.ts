@@ -5,8 +5,6 @@ import { RunCardRegistrationPolicyFieldsFragment } from '../EventsApp/EventPage/
 import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type SignupModerationRunFieldsFragment = (
   { __typename?: 'Run' }
   & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at'>

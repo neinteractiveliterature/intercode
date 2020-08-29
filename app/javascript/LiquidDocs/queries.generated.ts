@@ -3,8 +3,6 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
-
 export type LiquidAssignFieldsFragment = (
   { __typename?: 'LiquidAssign' }
   & Pick<Types.LiquidAssign, 'name' | 'drop_class_name' | 'cms_variable_value_json'>

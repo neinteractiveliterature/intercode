@@ -122,15 +122,6 @@ export const TeamMembersQuery = gql`
       team_members {
         id
         ...TeamMemberFields
-
-        user_con_profile {
-          id
-          day_phone
-          evening_phone
-          best_call_time
-          preferred_contact
-          email
-        }
       }
     }
   }

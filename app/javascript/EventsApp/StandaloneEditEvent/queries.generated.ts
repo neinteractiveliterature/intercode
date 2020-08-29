@@ -7,8 +7,6 @@ import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type StandaloneEditEvent_TicketTypeFieldsFragment = (
   { __typename?: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>

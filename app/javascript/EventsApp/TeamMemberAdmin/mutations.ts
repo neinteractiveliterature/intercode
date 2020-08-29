@@ -1,13 +1,21 @@
 import { gql } from '@apollo/client';
-import { TeamMemberFieldsWithoutPersonalInfo, TeamMemberTicketFields } from './queries';
+import {
+  TeamMemberFields,
+  TeamMemberFieldsWithoutPersonalInfo,
+  TeamMemberTicketFields,
+} from './queries';
 
 export const CreateTeamMember = gql`
   mutation CreateTeamMember($input: CreateTeamMemberInput!) {
     createTeamMember(input: $input) {
-      clientMutationId
-      # we're using refetchQueries to get the updated team member list here
+      team_member {
+        id
+        ...TeamMemberFields
+      }
     }
   }
+
+  ${TeamMemberFields}
 `;
 
 export const DeleteTeamMember = gql`

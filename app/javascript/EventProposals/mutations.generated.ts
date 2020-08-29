@@ -5,8 +5,6 @@ import { EventProposalFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type CreateEventProposalMutationVariables = Types.Exact<{
   cloneEventProposalId?: Types.Maybe<Types.Scalars['Int']>;
   eventCategoryId: Types.Scalars['Int'];

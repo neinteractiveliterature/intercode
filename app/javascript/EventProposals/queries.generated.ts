@@ -5,8 +5,6 @@ import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormIt
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-
-
 export type EventProposalFieldsFragment = (
   { __typename?: 'EventProposal' }
   & Pick<Types.EventProposal, 'id' | 'title' | 'status' | 'form_response_attrs_json'>

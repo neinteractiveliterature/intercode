@@ -6,7 +6,8 @@ documents:
 generates:
   app/javascript/graphqlTypes.generated.ts:
     plugins:
-      - add: '/* eslint-disable */'
+      - add:
+          content: '/* eslint-disable */'
       - typescript
     config:
       scalars:
@@ -17,7 +18,8 @@ generates:
       extension: .generated.ts
       baseTypesPath: graphqlTypes.generated.ts
     plugins:
-      - add: '/* eslint-disable */'
+      - add:
+          content: '/* eslint-disable */'
       - typescript-operations
       - typescript-react-apollo
     config:
