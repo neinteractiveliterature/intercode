@@ -5,6 +5,7 @@ class EventPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
         convention.site_mode == 'single_event' ||
+        team_member_for_event?(record) ||
         (
           record.status == 'active' &&
           has_schedule_release_permissions?(convention, convention.show_event_list)
