@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
+// @ts-ignore
 import { capitalize, pluralize } from 'inflected';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
@@ -12,10 +12,25 @@ import { ProvideEventTicket } from './mutations';
 import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
+import { TeamMembersQueryQuery, TeamMembersQueryQueryVariables } from './queries.generated';
 
-function ProvideTicketModal({ event, convention, onClose, teamMember, visible }) {
+export type ProvideTicketModalProps = {
+  event: TeamMembersQueryQuery['event'];
+  convention: NonNullable<TeamMembersQueryQuery['convention']>;
+  onClose: () => void;
+  teamMember?: TeamMembersQueryQuery['event']['team_members'][0];
+  visible: boolean;
+};
+
+function ProvideTicketModal({
+  event,
+  convention,
+  onClose,
+  teamMember,
+  visible,
+}: ProvideTicketModalProps) {
   const { t } = useTranslation();
-  const [ticketTypeId, setTicketTypeId] = useState(null);
+  const [ticketTypeId, setTicketTypeId] = useState<number>();
   const [provideTicketMutate] = useMutation(ProvideEventTicket);
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
 
@@ -31,19 +46,34 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible })
             },
           },
         ) => {
-          const data = store.readQuery({
+          const data = store.readQuery<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>({
             query: TeamMembersQuery,
             variables: { eventId: event.id },
           });
 
-          data.event.provided_tickets.push(ticket);
-          const teamMemberToUpdate = data.event.team_members.find((tm) => teamMember.id === tm.id);
-          teamMemberToUpdate.user_con_profile.ticket = ticket;
-
           store.writeQuery({
             query: TeamMembersQuery,
             variables: { eventId: event.id },
-            data,
+            data: {
+              ...data,
+              event: {
+                ...data?.event,
+                provided_tickets: [...(data?.event?.provided_tickets ?? []), ticket],
+                team_members: data?.event.team_members.map((tm) => {
+                  if (tm.id !== teamMember?.id) {
+                    return tm;
+                  }
+
+                  return {
+                    ...tm,
+                    user_con_profile: {
+                      ...tm.user_con_profile,
+                      ticket,
+                    },
+                  };
+                }),
+              },
+            },
           });
         },
       }),
@@ -54,7 +84,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible })
     await provideTicket({
       variables: {
         eventId: event.id,
-        userConProfileId: teamMember.user_con_profile.id,
+        userConProfileId: teamMember?.user_con_profile.id,
         ticketTypeId,
       },
     });
@@ -91,7 +121,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible })
           </>
         ) : null}
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -125,27 +155,5 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible })
     </Modal>
   );
 }
-
-ProvideTicketModal.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    ticket_name: PropTypes.string.isRequired,
-  }).isRequired,
-  onClose: PropTypes.func.isRequired,
-  teamMember: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    user_con_profile: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      ticket: PropTypes.shape({}),
-    }).isRequired,
-  }),
-  visible: PropTypes.bool.isRequired,
-};
-
-ProvideTicketModal.defaultProps = {
-  teamMember: null,
-};
 
 export default ProvideTicketModal;

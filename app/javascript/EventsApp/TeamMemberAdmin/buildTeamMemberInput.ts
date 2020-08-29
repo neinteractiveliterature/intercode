@@ -1,4 +1,9 @@
-function buildTeamMemberInput(teamMember) {
+import { TeamMemberInput } from '../../graphqlTypes.generated';
+import { TeamMembersQueryQuery } from './queries.generated';
+
+function buildTeamMemberInput(
+  teamMember: TeamMembersQueryQuery['event']['team_members'][0],
+): TeamMemberInput {
   return {
     display_team_member: teamMember.display_team_member,
     show_email: teamMember.show_email,

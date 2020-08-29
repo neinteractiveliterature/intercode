@@ -2,8 +2,17 @@ import React from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { humanize } from 'inflected';
+import { TeamMembersQueryQuery } from './queries.generated';
 
-function TicketingStatusDescription({ userConProfile, convention }) {
+export type TicketingStatusDescriptionProps = {
+  userConProfile: TeamMembersQueryQuery['event']['team_members'][0]['user_con_profile'];
+  convention: NonNullable<TeamMembersQueryQuery['convention']>;
+};
+
+function TicketingStatusDescription({
+  userConProfile,
+  convention,
+}: TicketingStatusDescriptionProps) {
   const { t } = useTranslation();
   const { ticket_name: ticketName } = convention;
 
