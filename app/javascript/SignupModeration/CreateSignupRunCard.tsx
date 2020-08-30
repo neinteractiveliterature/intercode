@@ -1,32 +1,37 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useApolloClient, useMutation, useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 
-import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
-import { CreateSignupRunCardQuery } from './queries';
-import { CreateUserSignup, WithdrawUserSignup } from './mutations';
+import buildSignupOptions, { SignupOption } from '../EventsApp/EventPage/buildSignupOptions';
 import ErrorDisplay from '../ErrorDisplay';
 import RunCard from '../EventsApp/EventPage/RunCard';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useAlert } from '../ModalDialogs/Alert';
 import LoadingIndicator from '../LoadingIndicator';
+import { useCreateSignupRunCardQueryQuery } from './queries.generated';
+import { useCreateUserSignupMutation, useWithdrawUserSignupMutation } from './mutations.generated';
+
+export type CreateSignupRunCardProps = {
+  eventId: number;
+  runId: number;
+  userConProfileId: number;
+};
 
 function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   const apolloClient = useApolloClient();
   const confirm = useConfirm();
   const alert = useAlert();
 
-  const { data, loading, error } = useQuery(CreateSignupRunCardQuery, {
+  const { data, loading, error } = useCreateSignupRunCardQueryQuery({
     variables: { userConProfileId, eventId },
   });
 
-  const [createSignupMutate] = useMutation(CreateUserSignup);
-  const createSignup = async (signupOption) => {
+  const [createSignupMutate] = useCreateUserSignupMutation();
+  const createSignup = async (signupOption: SignupOption) => {
     await createSignupMutate({
       variables: {
         runId,
         userConProfileId,
-        requestedBucketKey: (signupOption.bucket || {}).key,
+        requestedBucketKey: signupOption.bucket?.key,
         noRequestedBucket: signupOption.bucket == null,
       },
     });
@@ -34,25 +39,32 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
     await apolloClient.resetStore();
   };
 
-  const [withdrawSignupMutate] = useMutation(WithdrawUserSignup);
-  const withdrawSignup = () =>
+  const [withdrawSignupMutate] = useWithdrawUserSignupMutation();
+  const withdrawSignup = () => {
     confirm({
-      prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from ${data.event.title}?`,
+      prompt: `Are you sure you want to withdraw ${
+        data!.userConProfile.name_without_nickname
+      } from ${data!.event.title}?`,
       action: async () => {
         await withdrawSignupMutate({ variables: { runId, userConProfileId } });
         await apolloClient.resetStore();
       },
       renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
     });
+    return Promise.resolve();
+  };
 
   const signupOptions = useMemo(
-    () => (error || loading ? null : buildSignupOptions(data.event, data.userConProfile)),
+    () =>
+      error || loading || !data
+        ? { mainPreference: [], mainNoPreference: [], auxiliary: [] }
+        : buildSignupOptions(data.event, data.userConProfile),
     [data, loading, error],
   );
 
   const mySignup = useMemo(
     () =>
-      error || loading
+      error || loading || !data
         ? null
         : data.userConProfile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn'),
     [data, error, loading, runId],
@@ -60,7 +72,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
 
   const myPendingSignupRequest = useMemo(
     () =>
-      error || loading
+      error || loading || !data
         ? null
         : data.userConProfile.signup_requests.find(
             (sr) => sr.target_run.id === runId && sr.state === 'pending',
@@ -69,7 +81,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   );
 
   const run = useMemo(
-    () => (error || loading ? null : data.event.runs.find((r) => r.id === runId)),
+    () => (error || loading || !data ? null : data.event.runs.find((r) => r.id === runId)),
     [data, error, loading, runId],
   );
 
@@ -83,16 +95,16 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
 
   return (
     <RunCard
-      event={data.event}
-      run={run}
-      currentAbility={data.currentAbility}
+      event={data!.event}
+      run={run!}
+      currentAbility={data!.currentAbility}
       signupOptions={signupOptions}
       mySignup={mySignup}
       myPendingSignupRequest={myPendingSignupRequest}
-      myProfile={data.userConProfile}
+      myProfile={data!.userConProfile}
       createSignup={createSignup}
       withdrawSignup={withdrawSignup}
-      withdrawPendingSignupRequest={() =>
+      withdrawPendingSignupRequest={async () =>
         alert(
           'Admins cannot withdraw other users’ pending signup requests.  To accept or reject this request, go to the Moderation Queue tab.',
         )
@@ -100,11 +112,5 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
     />
   );
 }
-
-CreateSignupRunCard.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  runId: PropTypes.number.isRequired,
-  userConProfileId: PropTypes.number.isRequired,
-};
 
 export default CreateSignupRunCard;

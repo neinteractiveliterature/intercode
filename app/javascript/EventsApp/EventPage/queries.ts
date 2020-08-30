@@ -96,6 +96,7 @@ export const EventPageQuery = gql`
       length_seconds
       private_signup_list
       my_rating
+      can_play_concurrently
       form_response_attrs_json_with_rendered_markdown
 
       event_category {

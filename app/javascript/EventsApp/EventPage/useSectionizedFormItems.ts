@@ -39,7 +39,7 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: st
   return { shortFormItems, longFormItems };
 }
 
-export default function useSectionizedFormItems(event: EventPageQueryQuery['event']) {
+export default function useSectionizedFormItems(event?: EventPageQueryQuery['event']) {
   const formResponse = useMemo(
     () => (event ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown) : null),
     [event],

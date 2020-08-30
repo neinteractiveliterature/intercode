@@ -1,11 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import SignupButtonDisplay from './SignupButtonDisplay';
+import { SignupOption } from './buildSignupOptions';
 
-function SignupButtons({ signupOptions, onClick, disabled }) {
+export type SignupButtonsProps = {
+  signupOptions: SignupOption[];
+  onClick?: (signupOption: SignupOption) => void;
+  disabled?: boolean;
+};
+
+function SignupButtons({ signupOptions, onClick, disabled }: SignupButtonsProps) {
   if (signupOptions.length === 0) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -21,20 +27,5 @@ function SignupButtons({ signupOptions, onClick, disabled }) {
     </div>
   );
 }
-
-SignupButtons.propTypes = {
-  signupOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool,
-};
-
-SignupButtons.defaultProps = {
-  onClick: null,
-  disabled: false,
-};
 
 export default SignupButtons;

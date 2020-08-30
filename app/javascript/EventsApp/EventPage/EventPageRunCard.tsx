@@ -1,45 +1,81 @@
 import React, { useMemo, useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { ApolloCache, useApolloClient } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations';
 import { EventPageQuery } from './queries';
 import RunCard from './RunCard';
-import buildEventUrl from '../buildEventUrl';
-import buildSignupOptions from './buildSignupOptions';
+import buildSignupOptions, { SignupOption } from './buildSignupOptions';
 import AppRootContext from '../../AppRootContext';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import useModal from '../../ModalDialogs/useModal';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
+import { EventPageQueryQuery, EventPageQueryQueryVariables } from './queries.generated';
+import {
+  useCreateMySignupMutation,
+  useWithdrawMySignupMutation,
+  useWithdrawSignupRequestMutation,
+} from './mutations.generated';
 
-function updateCacheAfterSignup(cache, event, run, signup) {
-  const data = cache.readQuery({ query: EventPageQuery, variables: { eventId: event.id } });
-  const runData = data.event.runs.find((eventRun) => eventRun.id === run.id);
-  runData.my_signups.push(signup);
+function updateCacheAfterSignup(
+  cache: ApolloCache<any>,
+  event: EventPageQueryQuery['event'],
+  run: EventPageQueryQuery['event']['runs'][0],
+  signup: EventPageQueryQuery['event']['runs'][0]['my_signups'][0],
+) {
+  const data = cache.readQuery<EventPageQueryQuery, EventPageQueryQueryVariables>({
+    query: EventPageQuery,
+    variables: { eventId: event.id },
+  });
+  if (!data) {
+    return;
+  }
 
   cache.writeQuery({
     query: EventPageQuery,
     variables: { eventId: event.id },
-    data,
+    data: {
+      ...data,
+      event: {
+        ...data.event,
+        runs: data.event.runs.map((eventRun) => {
+          if (eventRun.id === run.id) {
+            return {
+              ...eventRun,
+              my_signups: [...eventRun.my_signups, signup],
+            };
+          }
+
+          return eventRun;
+        }),
+      },
+    },
   });
 }
 
-function EventPageRunCard({ event, run, myProfile, ...otherProps }) {
+export type EventPageRunCardProps = {
+  event: EventPageQueryQuery['event'];
+  run: EventPageQueryQuery['event']['runs'][0];
+  myProfile: EventPageQueryQuery['myProfile'];
+  currentAbility: EventPageQueryQuery['currentAbility'];
+};
+
+function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRunCardProps) {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
-  const signupOptions = useMemo(() => buildSignupOptions(event, myProfile), [event, myProfile]);
+  const signupOptions = useMemo(() => buildSignupOptions(event, myProfile ?? undefined), [
+    event,
+    myProfile,
+  ]);
   const confirm = useConfirm();
-  const createModeratedSignupModal = useModal();
-  const eventPath = buildEventUrl(event);
+  const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
   const myPendingSignupRequest = run.my_signup_requests.find(
     (signupRequest) => signupRequest.state === 'pending',
   );
-  const [createMySignupMutate] = useMutation(CreateMySignup);
-  const [withdrawMySignupMutate] = useMutation(WithdrawMySignup);
-  const [withdrawSignupRequestMutate] = useMutation(WithdrawSignupRequest);
+  const [createMySignupMutate] = useCreateMySignupMutation();
+  const [withdrawMySignupMutate] = useWithdrawMySignupMutation();
+  const [withdrawSignupRequestMutate] = useWithdrawSignupRequestMutation();
   const apolloClient = useApolloClient();
 
   const selfServiceSignup = useCallback(
@@ -50,15 +86,11 @@ function EventPageRunCard({ event, run, myProfile, ...otherProps }) {
           requestedBucketKey: (signupOption.bucket || {}).key,
           noRequestedBucket: signupOption.bucket == null,
         },
-        update: (
-          cache,
-          {
-            data: {
-              createMySignup: { signup },
-            },
-          },
-        ) => {
-          updateCacheAfterSignup(cache, event, run, signup);
+        update: (cache, { data }) => {
+          const signup = data?.createMySignup?.signup;
+          if (signup) {
+            updateCacheAfterSignup(cache, event, run, signup);
+          }
         },
       });
 
@@ -108,7 +140,7 @@ function EventPageRunCard({ event, run, myProfile, ...otherProps }) {
     [confirm, event.title, run.id, withdrawMySignupMutate],
   );
 
-  const createSignup = (signupOption) => {
+  const createSignup = (signupOption: SignupOption) => {
     if (signupMode === 'self_service' || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
     }
@@ -117,38 +149,43 @@ function EventPageRunCard({ event, run, myProfile, ...otherProps }) {
       createModeratedSignupModal.open({ signupOption });
     }
 
-    return null;
+    return Promise.reject(new Error(`Invalid signup mode: ${signupMode}`));
   };
 
   const withdrawSignup = () => {
     if (signupMode === 'self_service') {
-      return selfServiceWithdraw();
+      selfServiceWithdraw();
+      return Promise.resolve();
     }
 
     if (signupMode === 'moderated') {
-      return moderatedWithdraw();
+      moderatedWithdraw();
+      return Promise.resolve();
     }
 
-    return null;
+    return Promise.reject(new Error(`Invalid signup mode: ${signupMode}`));
   };
 
-  const withdrawPendingSignupRequest = () =>
+  const withdrawPendingSignupRequest = () => {
     confirm({
       prompt: t(
         'events.withdrawPrompt.signupRequest',
         'Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?',
         { eventTitle: event.title },
       ),
-      action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
+      action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest!.id } }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
+
+    return Promise.resolve();
+  };
 
   return (
     <div>
       <RunCard
         run={run}
         event={event}
-        eventPath={eventPath}
+        currentAbility={currentAbility}
         mySignup={mySignup}
         myPendingSignupRequest={myPendingSignupRequest}
         myProfile={myProfile}
@@ -157,14 +194,13 @@ function EventPageRunCard({ event, run, myProfile, ...otherProps }) {
         createSignup={createSignup}
         withdrawSignup={withdrawSignup}
         withdrawPendingSignupRequest={withdrawPendingSignupRequest}
-        {...otherProps}
       />
 
       {signupMode === 'moderated' && (
         <CreateModeratedSignupModal
           close={createModeratedSignupModal.close}
           visible={createModeratedSignupModal.visible}
-          signupOption={(createModeratedSignupModal.state || {}).signupOption}
+          signupOption={createModeratedSignupModal.state?.signupOption}
           event={event}
           run={run}
         />
@@ -172,17 +208,5 @@ function EventPageRunCard({ event, run, myProfile, ...otherProps }) {
     </div>
   );
 }
-
-EventPageRunCard.propTypes = {
-  event: PropTypes.shape({}).isRequired,
-  run: PropTypes.shape({
-    my_signups: PropTypes.arrayOf(
-      PropTypes.shape({
-        state: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  myProfile: PropTypes.shape({}).isRequired,
-};
 
 export default EventPageRunCard;

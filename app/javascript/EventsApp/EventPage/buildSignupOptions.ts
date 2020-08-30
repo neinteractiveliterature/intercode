@@ -1,6 +1,25 @@
+import { notEmpty } from '../../ValueUtils';
+import { EventPageQueryQuery, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 
-function isMainOption(option, noPreferenceOptions, notCountedOptions) {
+type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
+
+export type SignupOption = {
+  bucket?: SignupOptionBucket;
+  key: string;
+  label?: string;
+  buttonClass: string;
+  helpText?: string;
+  noPreference: boolean;
+  counted: boolean;
+  teamMember: boolean;
+};
+
+function isMainOption(
+  option: SignupOption,
+  noPreferenceOptions: SignupOption[],
+  notCountedOptions: SignupOption[],
+) {
   if (option.bucket && option.bucket.anything) {
     return false;
   }
@@ -12,7 +31,10 @@ function isMainOption(option, noPreferenceOptions, notCountedOptions) {
   return option.noPreference || ((option.bucket || {}).slots_limited && option.counted);
 }
 
-function isTeamMember(event, userConProfile) {
+function isTeamMember(
+  event: { team_members: { user_con_profile: { id: number } }[] },
+  userConProfile?: { id: number },
+) {
   if (!userConProfile) {
     return false;
   }
@@ -22,20 +44,26 @@ function isTeamMember(event, userConProfile) {
   );
 }
 
-function buildBucketSignupOption(bucket, index, hideLabel) {
+function buildBucketSignupOption(
+  bucket: SignupOptionBucket,
+  index: number,
+  hideLabel: boolean,
+): SignupOption {
   return {
     key: bucket.key,
-    label: hideLabel ? null : bucket.name,
+    label: hideLabel ? undefined : bucket.name ?? undefined,
     buttonClass: `btn-outline-bucket-color-${(index % 9) + 1}`,
     bucket,
-    helpText: bucket.description,
+    helpText: bucket.description ?? undefined,
     noPreference: false,
     teamMember: false,
     counted: !bucket.not_counted,
   };
 }
 
-function buildNoPreferenceOptions(event) {
+function buildNoPreferenceOptions(
+  event: Pick<EventPageQueryQuery['event'], 'registration_policy'>,
+): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
   }
@@ -53,7 +81,7 @@ function buildNoPreferenceOptions(event) {
       key: '_no_preference',
       label: 'No preference',
       buttonClass: 'btn-outline-dark',
-      bucket: null,
+      bucket: undefined,
       helpText: `Sign up for any of: ${eligibleBuckets.map((bucket) => bucket.name).join(', ')}`,
       noPreference: true,
       teamMember: false,
@@ -62,14 +90,22 @@ function buildNoPreferenceOptions(event) {
   ];
 }
 
-function allSignupOptions(event, userConProfile) {
+function allSignupOptions(
+  event: Parameters<typeof buildNoPreferenceOptions>[0] &
+    Parameters<typeof isTeamMember>[0] & {
+      event_category: {
+        team_member_name: string;
+      };
+    },
+  userConProfile?: { id: number },
+): SignupOption[] {
   if (isTeamMember(event, userConProfile)) {
     return [
       {
         key: '_team_member',
         label: event.event_category.team_member_name,
         buttonClass: 'btn-outline-primary',
-        bucket: null,
+        bucket: undefined,
         helpText: `Register your intent to come to this event as a ${event.event_category.team_member_name}`,
         noPreference: false,
         teamMember: true,
@@ -96,17 +132,26 @@ function allSignupOptions(event, userConProfile) {
           !bucket.not_counted && nonAnythingBuckets.length === 1,
         );
       })
-      .filter((bucket) => bucket != null),
+      .filter(notEmpty),
     ...buildNoPreferenceOptions(event),
   ];
 }
 
-export default function buildSignupOptions(event, userConProfile) {
+export type PartitionedSignupOptions = {
+  mainPreference: SignupOption[];
+  mainNoPreference: SignupOption[];
+  auxiliary: SignupOption[];
+};
+
+export default function buildSignupOptions(
+  event: Parameters<typeof allSignupOptions>[0],
+  userConProfile?: { id: number },
+) {
   const allOptions = allSignupOptions(event, userConProfile);
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
   const notCountedOptions = allOptions.filter((option) => !option.counted);
 
-  const partitionedOptions = {
+  const partitionedOptions: PartitionedSignupOptions = {
     mainPreference: [],
     mainNoPreference: [],
     auxiliary: [],

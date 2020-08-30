@@ -149,7 +149,7 @@ export type SignupSpySignupChangesQueryQuery = (
         ), run: (
           { __typename?: 'Run' }
           & Pick<Types.Run, 'id'>
-          & { event?: Types.Maybe<(
+          & { event: (
             { __typename?: 'Event' }
             & Pick<Types.Event, 'id' | 'title'>
             & { event_category: (
@@ -169,7 +169,7 @@ export type SignupSpySignupChangesQueryQuery = (
                 & Pick<Types.UserConProfile, 'id'>
               ) }
             )> }
-          )> }
+          ) }
         ), user_con_profile: (
           { __typename?: 'UserConProfile' }
           & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>

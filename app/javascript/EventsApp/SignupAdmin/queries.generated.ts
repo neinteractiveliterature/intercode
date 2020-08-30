@@ -14,7 +14,7 @@ export type SignupFieldsFragment = (
     & { rooms: Array<(
       { __typename?: 'Room' }
       & Pick<Types.Room, 'id' | 'name'>
-    )>, event?: Types.Maybe<(
+    )>, event: (
       { __typename?: 'Event' }
       & Pick<Types.Event, 'id' | 'title'>
       & { event_category: (
@@ -34,7 +34,7 @@ export type SignupFieldsFragment = (
           & Pick<Types.UserConProfile, 'id'>
         ) }
       )> }
-    )> }
+    ) }
   ), user_con_profile: (
     { __typename?: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'nickname' | 'birth_date' | 'email' | 'address' | 'city' | 'state' | 'zipcode' | 'country' | 'mobile_phone' | 'gravatar_enabled' | 'gravatar_url'>
@@ -53,7 +53,7 @@ export type UserConProfileSignupsFragmentFragment = (
     ), run: (
       { __typename?: 'Run' }
       & Pick<Types.Run, 'id' | 'starts_at'>
-      & { event?: Types.Maybe<(
+      & { event: (
         { __typename?: 'Event' }
         & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
         & { event_category: (
@@ -73,7 +73,7 @@ export type UserConProfileSignupsFragmentFragment = (
             & Pick<Types.UserConProfile, 'id'>
           ) }
         )> }
-      )>, rooms: Array<(
+      ), rooms: Array<(
         { __typename?: 'Room' }
         & Pick<Types.Room, 'id' | 'name'>
       )> }
@@ -309,10 +309,10 @@ export type RunSignupChangesQueryQuery = (
   )>, run: (
     { __typename?: 'Run' }
     & Pick<Types.Run, 'id'>
-    & { event?: Types.Maybe<(
+    & { event: (
       { __typename?: 'Event' }
       & Pick<Types.Event, 'id' | 'title'>
-    )>, signup_changes_paginated: (
+    ), signup_changes_paginated: (
       { __typename?: 'SignupChangesPagination' }
       & Pick<Types.SignupChangesPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
       & { entries: Array<(
@@ -324,7 +324,7 @@ export type RunSignupChangesQueryQuery = (
         )>, run: (
           { __typename?: 'Run' }
           & Pick<Types.Run, 'id'>
-          & { event?: Types.Maybe<(
+          & { event: (
             { __typename?: 'Event' }
             & Pick<Types.Event, 'id' | 'title'>
             & { event_category: (
@@ -344,7 +344,7 @@ export type RunSignupChangesQueryQuery = (
                 & Pick<Types.UserConProfile, 'id'>
               ) }
             )> }
-          )> }
+          ) }
         ), user_con_profile: (
           { __typename?: 'UserConProfile' }
           & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>

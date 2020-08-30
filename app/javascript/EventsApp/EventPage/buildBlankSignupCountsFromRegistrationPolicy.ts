@@ -1,6 +1,10 @@
-export default function buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy) {
+import { SignupCountsByBucketKeyAndCounted } from '../SignupCountData';
+
+export default function buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy: {
+  buckets: { key: string }[];
+}): SignupCountsByBucketKeyAndCounted {
   if (!registrationPolicy || !registrationPolicy.buckets) {
-    return [];
+    return {};
   }
 
   return registrationPolicy.buckets.reduce(
