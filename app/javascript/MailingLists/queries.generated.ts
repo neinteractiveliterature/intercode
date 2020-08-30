@@ -119,10 +119,10 @@ export type WaitlistMailingListsQueryQuery = (
         )>, run: (
           { __typename?: 'Run' }
           & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
-          & { event?: Types.Maybe<(
+          & { event: (
             { __typename?: 'Event' }
             & Pick<Types.Event, 'id' | 'title'>
-          )> }
+          ) }
         ) }
       )> }
     ) }

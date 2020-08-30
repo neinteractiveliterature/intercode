@@ -1,10 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
+import { RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
+import SignupCountData from '../SignupCountData';
+import { SignupState } from '../../graphqlTypes.generated';
 
-function describeCapacity(bucket, signupCount, signupsAvailable, t) {
+function describeCapacity(
+  bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0],
+  signupCount: number,
+  signupsAvailable: boolean,
+  t: TFunction,
+) {
   if (!bucket.slots_limited) {
     if (!signupsAvailable) {
       return t('events.runCapacity.unlimitedSimple', 'unlimited');
@@ -34,19 +42,31 @@ function describeCapacity(bucket, signupCount, signupsAvailable, t) {
   );
 }
 
-function RunCapacityGraphBucket({ bucket, signupCountData, signupsAvailable, bucketIndex }) {
+export type RunCapacityGraphBucketProps = {
+  bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0];
+  signupCountData: SignupCountData;
+  signupsAvailable: boolean;
+  bucketIndex: number;
+};
+
+function RunCapacityGraphBucket({
+  bucket,
+  signupCountData,
+  signupsAvailable,
+  bucketIndex,
+}: RunCapacityGraphBucketProps) {
   const { t } = useTranslation();
-  const capacity = bucket.total_slots;
+  const capacity = bucket.total_slots ?? 0;
 
   if (capacity < 1 && bucket.slots_limited) {
     return null;
   }
 
   const signupCount = signupCountData.sumSignupCounts({
-    state: 'confirmed',
+    state: SignupState.Confirmed,
     bucket_key: bucket.key,
   });
-  const remainingCapacity = (bucket.total_slots || 0) - signupCount;
+  const remainingCapacity = (bucket.total_slots ?? 0) - signupCount;
 
   return (
     <div className="bucket-capacity">
@@ -61,19 +81,5 @@ function RunCapacityGraphBucket({ bucket, signupCountData, signupsAvailable, buc
     </div>
   );
 }
-
-RunCapacityGraphBucket.propTypes = {
-  bucket: PropTypes.shape({
-    total_slots: PropTypes.number,
-    slots_limited: PropTypes.bool.isRequired,
-    key: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  signupCountData: PropTypes.shape({
-    sumSignupCounts: PropTypes.func.isRequired,
-  }).isRequired,
-  signupsAvailable: PropTypes.bool.isRequired,
-  bucketIndex: PropTypes.number.isRequired,
-};
 
 export default RunCapacityGraphBucket;

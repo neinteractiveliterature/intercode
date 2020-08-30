@@ -1,18 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { useTranslation } from 'react-i18next';
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
-import { EventPageQuery } from './queries';
 import LoadingIndicator from '../../LoadingIndicator';
+import { useEventPageQueryQuery } from './queries.generated';
 
-function EventAdminMenu({ eventId }) {
+export type EventAdminMenuProps = {
+  eventId: number;
+};
+
+function EventAdminMenu({ eventId }: EventAdminMenuProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
 
   if (loading) {
     return <LoadingIndicator />;
@@ -22,7 +24,7 @@ function EventAdminMenu({ eventId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { currentAbility, event } = data;
+  const { currentAbility, event } = data!;
   const eventPath = buildEventUrl(event);
 
   if (!currentAbility.can_update_event) {
@@ -52,9 +54,5 @@ function EventAdminMenu({ eventId }) {
     </div>
   );
 }
-
-EventAdminMenu.propTypes = {
-  eventId: PropTypes.number.isRequired,
-};
 
 export default EventAdminMenu;

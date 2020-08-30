@@ -1,4 +1,8 @@
-function compareBuckets(a, b) {
+import { RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
+
+type EventPageBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
+
+function compareBuckets(a: EventPageBucket, b: EventPageBucket) {
   if (a.slots_limited && !b.slots_limited) {
     return -1;
   }
@@ -23,9 +27,9 @@ function compareBuckets(a, b) {
     return -1;
   }
 
-  return (a.name || '').localeCompare(b.name || '', { sensitivity: 'base' });
+  return (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
 }
 
-export default function sortBuckets(buckets) {
+export default function sortBuckets(buckets: EventPageBucket[]) {
   return [...buckets].sort(compareBuckets);
 }

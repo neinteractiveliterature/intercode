@@ -1,5 +1,5 @@
 type TeamMemberForSorting = {
-  user_con_profile: { last_name?: string; name_without_nickname?: string };
+  user_con_profile: { last_name?: string | null; name_without_nickname?: string | null };
 };
 
 export function teamMemberSortKey(teamMember: TeamMemberForSorting) {

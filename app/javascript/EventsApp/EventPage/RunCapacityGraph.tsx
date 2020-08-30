@@ -1,13 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import RunCapacityGraphBucket from './RunCapacityGraphBucket';
 import SignupCountData from '../SignupCountData';
 import sortBuckets from './sortBuckets';
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
+import { EventPageQueryQuery } from './queries.generated';
 
-function RunCapacityGraph({ run, event, signupsAvailable }) {
+export type RunCapacityGraphProps = {
+  run: Pick<
+    EventPageQueryQuery['event']['runs'][0],
+    'signup_count_by_state_and_bucket_key_and_counted'
+  >;
+  event: EventPageQueryQuery['event'];
+  signupsAvailable: boolean;
+};
+
+function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProps) {
   const { t } = useTranslation();
   const signupCountData = SignupCountData.fromRun(run);
 
@@ -35,23 +44,5 @@ function RunCapacityGraph({ run, event, signupsAvailable }) {
     </div>
   );
 }
-
-RunCapacityGraph.propTypes = {
-  run: PropTypes.shape({
-    signup_count_by_state_and_bucket_key_and_counted: PropTypes.string.isRequired,
-  }).isRequired,
-  event: PropTypes.shape({
-    registration_policy: PropTypes.shape({
-      buckets: PropTypes.arrayOf(
-        PropTypes.shape({
-          slots_limited: PropTypes.bool.isRequired,
-          anything: PropTypes.bool,
-          name: PropTypes.string.isRequired,
-        }).isRequired,
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-  signupsAvailable: PropTypes.bool.isRequired,
-};
 
 export default RunCapacityGraph;

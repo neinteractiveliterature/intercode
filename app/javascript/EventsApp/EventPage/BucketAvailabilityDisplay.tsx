@@ -1,14 +1,25 @@
 /* eslint-disable react/no-array-index-key */
 
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { ResizeObserver } from '@juggle/resize-observer';
 
-function BucketAvailabilityDisplay({ className, signupCount, remainingCapacity, compact }) {
+export type BucketAvailabilityDisplayProps = {
+  className?: string;
+  signupCount: number;
+  remainingCapacity: number;
+  compact?: boolean;
+};
+
+function BucketAvailabilityDisplay({
+  className,
+  signupCount,
+  remainingCapacity,
+  compact,
+}: BucketAvailabilityDisplayProps) {
   const totalCells = signupCount + remainingCapacity;
   const [containerWidth, setContainerWidth] = useState(300);
-  const resizeObserverRef = useRef(null);
+  const resizeObserverRef = useRef<ResizeObserver>();
 
   // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
   const measuredRef = useCallback((element) => {
@@ -56,21 +67,21 @@ function BucketAvailabilityDisplay({ className, signupCount, remainingCapacity, 
     lineWidth = Math.ceil(totalCells / numLines);
   }
 
-  const generateNElements = (n, generateElement) => {
+  const generateNElements = (n: number, generateElement: (index: number) => JSX.Element) => {
     if (n < 1) {
       return [];
     }
 
-    return [...Array(n)].map(generateElement);
+    return [...Array(n)].map((value, index) => generateElement(index));
   };
 
   const cells = [
-    ...generateNElements(signupCount, (value, index) => (
+    ...generateNElements(signupCount, (index) => (
       <div className="bucket-availability-cell" key={`signedup-${index}`}>
         <i className="fa fa-user-circle-o" />
       </div>
     )),
-    ...generateNElements(remainingCapacity, (value, index) => (
+    ...generateNElements(remainingCapacity, (index) => (
       <div className="bucket-availability-cell" key={`available-${index}`}>
         <i className="fa fa-circle-thin" />
       </div>
@@ -96,17 +107,5 @@ function BucketAvailabilityDisplay({ className, signupCount, remainingCapacity, 
     </div>
   );
 }
-
-BucketAvailabilityDisplay.propTypes = {
-  className: PropTypes.string,
-  signupCount: PropTypes.number.isRequired,
-  remainingCapacity: PropTypes.number.isRequired,
-  compact: PropTypes.bool,
-};
-
-BucketAvailabilityDisplay.defaultProps = {
-  className: '',
-  compact: false,
-};
 
 export default BucketAvailabilityDisplay;

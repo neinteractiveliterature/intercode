@@ -69,7 +69,7 @@ export type EventPageQueryQuery = (
     & Pick<Types.UserConProfile, 'id'>
   )>, event: (
     { __typename?: 'Event' }
-    & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list' | 'my_rating' | 'form_response_attrs_json_with_rendered_markdown'>
+    & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list' | 'my_rating' | 'can_play_concurrently' | 'form_response_attrs_json_with_rendered_markdown'>
     & { event_category: (
       { __typename?: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'team_member_name'>
@@ -119,10 +119,10 @@ export type CreateModeratedSignupModalQueryQuery = (
       & { run: (
         { __typename?: 'Run' }
         & Pick<Types.Run, 'id' | 'starts_at'>
-        & { event?: Types.Maybe<(
+        & { event: (
           { __typename?: 'Event' }
           & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'can_play_concurrently'>
-        )> }
+        ) }
       ) }
     )> }
   )> }
@@ -208,6 +208,7 @@ export const EventPageQueryDocument = gql`
     length_seconds
     private_signup_list
     my_rating
+    can_play_concurrently
     form_response_attrs_json_with_rendered_markdown
     event_category {
       id

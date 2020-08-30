@@ -1,11 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import buildEventUrl from '../buildEventUrl';
+import { EventPageQueryQuery } from './queries.generated';
 
-function ViewSignupsOptions({ event, run, currentAbility }) {
+export type ViewSignupsOptionsProps = {
+  event: EventPageQueryQuery['event'];
+  run: EventPageQueryQuery['event']['runs'][0];
+  currentAbility: EventPageQueryQuery['currentAbility'];
+};
+
+function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsProps) {
   const { t } = useTranslation();
   const eventPath = buildEventUrl(event);
 
@@ -39,22 +45,7 @@ function ViewSignupsOptions({ event, run, currentAbility }) {
     );
   }
 
-  return null;
+  return <></>;
 }
-
-ViewSignupsOptions.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    private_signup_list: PropTypes.bool.isRequired,
-  }).isRequired,
-  run: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    current_ability_can_signup_summary_run: PropTypes.bool.isRequired,
-  }).isRequired,
-  currentAbility: PropTypes.shape({
-    can_read_event_signups: PropTypes.bool.isRequired,
-  }).isRequired,
-};
 
 export default ViewSignupsOptions;

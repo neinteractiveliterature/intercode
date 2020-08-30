@@ -1,5 +1,8 @@
 import { gql } from '@apollo/client';
-import { RunCardRegistrationPolicyFields } from '../EventsApp/EventPage/queries';
+import {
+  EventPageRunFields,
+  RunCardRegistrationPolicyFields,
+} from '../EventsApp/EventPage/queries';
 
 export const SignupModerationRunFields = gql`
   fragment SignupModerationRunFields on Run {
@@ -95,7 +98,9 @@ export const CreateSignupEventsQuery = gql`
 export const CreateSignupRunCardQuery = gql`
   query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
     currentAbility {
+      can_read_schedule
       can_read_event_signups(event_id: $eventId)
+      can_update_event(event_id: $eventId)
     }
 
     event(id: $eventId) {
@@ -103,6 +108,7 @@ export const CreateSignupRunCardQuery = gql`
       title
       length_seconds
       private_signup_list
+      can_play_concurrently
 
       registration_policy {
         ...RunCardRegistrationPolicyFields
@@ -110,8 +116,12 @@ export const CreateSignupRunCardQuery = gql`
 
       team_members {
         id
+        display_team_member
         user_con_profile {
           id
+          gravatar_url
+          gravatar_enabled
+          name_without_nickname
         }
       }
 
@@ -122,14 +132,7 @@ export const CreateSignupRunCardQuery = gql`
 
       runs {
         id
-        starts_at
-        title_suffix
-        signup_count_by_state_and_bucket_key_and_counted
-
-        rooms {
-          id
-          name
-        }
+        ...EventPageRunFields
       }
     }
 
@@ -159,6 +162,7 @@ export const CreateSignupRunCardQuery = gql`
   }
 
   ${RunCardRegistrationPolicyFields}
+  ${EventPageRunFields}
 `;
 
 export const SignupModerationQueueQuery = gql`

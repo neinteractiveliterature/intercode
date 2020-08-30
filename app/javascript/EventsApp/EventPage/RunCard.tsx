@@ -1,8 +1,9 @@
 import React, { useContext, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { ApolloError } from '@apollo/client';
+import { TFunction } from 'i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import RunCapacityGraph from './RunCapacityGraph';
@@ -14,8 +15,13 @@ import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 import LoadingIndicator from '../../LoadingIndicator';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
+import { EventPageQueryQuery } from './queries.generated';
+import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 
-function describeSignupState(mySignup, t) {
+function describeSignupState(
+  mySignup: EventPageQueryQuery['event']['runs'][0]['my_signups'][0],
+  t: TFunction,
+) {
   if (mySignup.state === 'confirmed') {
     return t('signups.runCardText.confirmed', 'You are signed up.');
   }
@@ -29,6 +35,20 @@ function describeSignupState(mySignup, t) {
   return t('signups.runCardText.waitlistedUnknownPosition', 'You are on the waitlist.');
 }
 
+export type RunCardProps = {
+  run: EventPageQueryQuery['event']['runs'][0];
+  event: EventPageQueryQuery['event'];
+  signupOptions: PartitionedSignupOptions;
+  currentAbility: EventPageQueryQuery['currentAbility'];
+  myProfile?: object | null;
+  mySignup?: EventPageQueryQuery['event']['runs'][0]['my_signups'][0] | null;
+  myPendingSignupRequest?: EventPageQueryQuery['event']['runs'][0]['my_signup_requests'][0] | null;
+  showViewSignups?: boolean;
+  createSignup: (signupOption: SignupOption) => Promise<any>;
+  withdrawSignup: () => Promise<any>;
+  withdrawPendingSignupRequest: () => Promise<any>;
+};
+
 function RunCard({
   run,
   event,
@@ -41,15 +61,15 @@ function RunCard({
   createSignup,
   withdrawSignup,
   withdrawPendingSignupRequest,
-}) {
+}: RunCardProps) {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
   const { siteMode, timezoneName } = useContext(AppRootContext);
-  const cardRef = useRef(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (history.location.hash === `#run-${run.id}`) {
-      cardRef.current.scrollIntoView(false);
+      cardRef.current?.scrollIntoView(false);
     }
   }, [history.location.hash, run.id]);
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup);
@@ -83,7 +103,7 @@ function RunCard({
         <>
           <em>{describeSignupState(mySignup, t)}</em>
           <p className="mb-0">
-            <WithdrawSignupButton run={run} event={event} withdrawSignup={withdrawSignup} />
+            <WithdrawSignupButton withdrawSignup={withdrawSignup} />
           </p>
         </>
       );
@@ -114,21 +134,17 @@ function RunCard({
     return (
       <>
         <SignupButtons
-          event={event}
-          run={run}
           signupOptions={signupOptions.mainPreference}
           disabled={mutationInProgress}
           onClick={signupButtonClicked}
         />
         <SignupButtons
-          event={event}
-          run={run}
           signupOptions={signupOptions.mainNoPreference}
           disabled={mutationInProgress}
           onClick={signupButtonClicked}
         />
         {mutationInProgress && <LoadingIndicator />}
-        <ErrorDisplay graphQLError={signupError} />
+        <ErrorDisplay graphQLError={signupError as ApolloError} />
       </>
     );
   };
@@ -142,8 +158,6 @@ function RunCard({
       <ul className="list-group list-group-flush">
         <li className="list-group-item border-bottom-0">
           <SignupButtons
-            event={event}
-            run={run}
             signupOptions={signupOptions.auxiliary}
             disabled={mutationInProgress}
             onClick={signupButtonClicked}
@@ -155,8 +169,10 @@ function RunCard({
 
   const runTimespan = timespanFromRun(timezoneName, event, run);
   const acceptsSignups =
-    !event.registration_policy.slots_limited ||
-    event.registration_policy.total_slots_including_not_counted > 0;
+    event.registration_policy &&
+    (!event.registration_policy.slots_limited ||
+      (event.registration_policy.total_slots_including_not_counted &&
+        event.registration_policy.total_slots_including_not_counted > 0));
 
   return (
     <div
@@ -192,10 +208,10 @@ function RunCard({
         <>
           <div className="card-body text-center">
             <RunCapacityGraph run={run} event={event} signupsAvailable />
-            {renderMainSignupSection(signupButtonClicked)}
+            {renderMainSignupSection()}
           </div>
 
-          {renderAuxiliarySignupSection(signupButtonClicked)}
+          {renderAuxiliarySignupSection()}
 
           {showViewSignups && (
             <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />
@@ -209,44 +225,5 @@ function RunCard({
     </div>
   );
 }
-
-RunCard.propTypes = {
-  run: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title_suffix: PropTypes.string,
-    rooms: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired,
-  signupOptions: PropTypes.shape({
-    mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    auxiliary: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
-  currentAbility: PropTypes.shape({}).isRequired,
-  myProfile: PropTypes.shape({}),
-  mySignup: PropTypes.shape({
-    state: PropTypes.string.isRequired,
-  }),
-  myPendingSignupRequest: PropTypes.shape({
-    state: PropTypes.string.isRequired,
-  }),
-  showViewSignups: PropTypes.bool,
-  createSignup: PropTypes.func.isRequired,
-  withdrawSignup: PropTypes.func.isRequired,
-  withdrawPendingSignupRequest: PropTypes.func.isRequired,
-};
-
-RunCard.defaultProps = {
-  myProfile: null,
-  mySignup: null,
-  myPendingSignupRequest: null,
-  showViewSignups: false,
-};
 
 export default RunCard;

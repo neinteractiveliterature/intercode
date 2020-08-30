@@ -1,11 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import ButtonWithTooltip from '../../UIComponents/ButtonWithTooltip';
+import { SignupOption } from './buildSignupOptions';
 
-function SignupButtonDisplay({ signupOption, onClick, disabled }) {
+export type SignupButtonDisplayProps = {
+  signupOption: SignupOption;
+  onClick?: (signupOption: SignupOption) => void;
+  disabled?: boolean;
+};
+
+function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDisplayProps) {
   const { t } = useTranslation();
   return (
     <ButtonWithTooltip
@@ -30,20 +36,5 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }) {
     </ButtonWithTooltip>
   );
 }
-
-SignupButtonDisplay.propTypes = {
-  signupOption: PropTypes.shape({
-    buttonClass: PropTypes.string,
-    helpText: PropTypes.string,
-    label: PropTypes.string,
-  }).isRequired,
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool,
-};
-
-SignupButtonDisplay.defaultProps = {
-  onClick: null,
-  disabled: false,
-};
 
 export default SignupButtonDisplay;

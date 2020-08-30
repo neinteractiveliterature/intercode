@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import { useTranslation } from 'react-i18next';
 
@@ -12,19 +11,28 @@ import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
 import LoadingIndicator from '../../LoadingIndicator';
 import { useEventPageQueryQuery } from './queries.generated';
+import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
 
-function ShortFormEventDetails({ eventId }) {
+export type ShortFormEventDetailsProps = {
+  eventId: number;
+};
+
+function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
   const { t } = useTranslation();
   const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
 
   const { shortFormItems, formResponse } = useSectionizedFormItems(
-    error || loading ? null : data.event,
+    error || loading || !data ? undefined : data.event,
   );
 
   const displayTeamMembers = useMemo(
-    () => (error || loading ? [] : teamMembersForDisplay(data.event)),
+    () => (error || loading || !data ? [] : teamMembersForDisplay(data.event)),
     [data, error, loading],
   );
+
+  const typedFormItems = useMemo(() => parseTypedFormItemArray(shortFormItems ?? []), [
+    shortFormItems,
+  ]);
 
   if (loading) {
     return <LoadingIndicator />;
@@ -34,24 +42,26 @@ function ShortFormEventDetails({ eventId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { event, convention } = data;
+  const { event, convention } = data!;
 
   const acceptsSignups =
-    !event.registration_policy.slots_limited ||
-    event.registration_policy.total_slots_including_not_counted > 0;
+    event.registration_policy &&
+    (!event.registration_policy.slots_limited ||
+      (event.registration_policy.total_slots_including_not_counted &&
+        event.registration_policy.total_slots_including_not_counted > 0));
 
   return (
     <dl className="row mb-0">
-      {shortFormItems
-        .filter((item) => formResponseValueIsComplete(item, formResponse[item.identifier]))
+      {typedFormItems
+        .filter((item) => formResponseValueIsComplete(item, formResponse[item.identifier ?? '']))
         .map((item) => (
-          <React.Fragment key={item.identifier}>
+          <React.Fragment key={item.identifier ?? item.id}>
             <dt className="col-md-3">{item.public_description}</dt>
             <dd className="col-md-9">
               <FormItemDisplay
                 formItem={item}
-                convention={convention}
-                value={formResponse[item.identifier]}
+                convention={convention!}
+                value={formResponse[item.identifier ?? '']}
                 displayMode="public"
               />
             </dd>
@@ -101,9 +111,5 @@ function ShortFormEventDetails({ eventId }) {
     </dl>
   );
 }
-
-ShortFormEventDetails.propTypes = {
-  eventId: PropTypes.number.isRequired,
-};
 
 export default ShortFormEventDetails;

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
 import RunsSection from './RunsSection';
@@ -15,12 +14,17 @@ import useRateEvent from '../../EventRatings/useRateEvent';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useEventPageQueryQuery } from './queries.generated';
 
-function EventPage({ eventId, eventPath }) {
+export type EventPageProps = {
+  eventId: number;
+  eventPath: string;
+};
+
+function EventPage({ eventId, eventPath }: EventPageProps) {
   const { myProfile } = useContext(AppRootContext);
   const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
   const rateEvent = useRateEvent();
 
-  usePageTitle(useValueUnless(() => data.event.title, error || loading));
+  usePageTitle(useValueUnless(() => data!.event.title, error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -30,7 +34,7 @@ function EventPage({ eventId, eventPath }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { convention, currentAbility, event } = data;
+  const { convention, currentAbility, event } = data!;
 
   return (
     <>
@@ -38,7 +42,7 @@ function EventPage({ eventId, eventPath }) {
         <ol className="breadcrumb">
           <EventBreadcrumbItems
             event={event}
-            convention={convention}
+            convention={convention!}
             currentAbility={currentAbility}
             eventPath={eventPath}
           />
@@ -75,10 +79,5 @@ function EventPage({ eventId, eventPath }) {
     </>
   );
 }
-
-EventPage.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  eventPath: PropTypes.string.isRequired,
-};
 
 export default EventPage;

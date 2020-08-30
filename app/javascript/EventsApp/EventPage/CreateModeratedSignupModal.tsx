@@ -1,21 +1,36 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useQuery, useMutation } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import classnames from 'classnames';
 
 import AppRootContext from '../../AppRootContext';
-import { CreateModeratedSignupModalQuery, EventPageQuery } from './queries';
-import { CreateSignupRequest } from './mutations';
+import { EventPageQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
+import { EventPageQueryQuery, useCreateModeratedSignupModalQueryQuery } from './queries.generated';
+import { SignupOption } from './buildSignupOptions';
+import { useCreateSignupRequestMutation } from './mutations.generated';
 
-function CreateModeratedSignupModal({ visible, close, run, event, signupOption }) {
+export type CreateModeratedSignupModalProps = {
+  visible: boolean;
+  close: () => void;
+  run: EventPageQueryQuery['event']['runs'][0];
+  event: EventPageQueryQuery['event'];
+  signupOption?: SignupOption;
+};
+
+function CreateModeratedSignupModal({
+  visible,
+  close,
+  run,
+  event,
+  signupOption,
+}: CreateModeratedSignupModalProps) {
   const { conventionName, timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(CreateModeratedSignupModalQuery);
-  const [createMutate] = useMutation(CreateSignupRequest, {
+  const { data, loading, error } = useCreateModeratedSignupModalQueryQuery();
+  const [createMutate] = useCreateSignupRequestMutation({
     refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
   });
   const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
@@ -26,8 +41,8 @@ function CreateModeratedSignupModal({ visible, close, run, event, signupOption }
   ]);
 
   const conflictingSignup = useMemo(() => {
-    if (loading || error) {
-      return [];
+    if (loading || error || !data) {
+      return undefined;
     }
 
     return ((data.myProfile || {}).signups || []).find((signup) => {
@@ -45,8 +60,8 @@ function CreateModeratedSignupModal({ visible, close, run, event, signupOption }
     await createSignupRequest({
       variables: {
         targetRunId: run.id,
-        requestedBucketKey: (signupOption.bucket || {}).key,
-        replaceSignupId: (conflictingSignup || {}).id,
+        requestedBucketKey: signupOption!.bucket?.key,
+        replaceSignupId: conflictingSignup?.id,
       },
     });
     close();
@@ -81,7 +96,7 @@ function CreateModeratedSignupModal({ visible, close, run, event, signupOption }
           </>
         )}
 
-        <ErrorDisplay graphQLError={createError} />
+        <ErrorDisplay graphQLError={createError as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -105,27 +120,5 @@ function CreateModeratedSignupModal({ visible, close, run, event, signupOption }
     </Modal>
   );
 }
-
-CreateModeratedSignupModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-  run: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired,
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    can_play_concurrently: PropTypes.bool,
-  }).isRequired,
-  signupOption: PropTypes.shape({
-    bucket: PropTypes.shape({
-      key: PropTypes.string,
-    }).isRequired,
-  }),
-};
-
-CreateModeratedSignupModal.defaultProps = {
-  signupOption: null,
-};
 
 export default CreateModeratedSignupModal;

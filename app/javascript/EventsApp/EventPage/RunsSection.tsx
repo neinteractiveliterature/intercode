@@ -1,17 +1,23 @@
 import React, { useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { useQuery } from '@apollo/client';
 
 import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
-import { EventPageQuery } from './queries';
 import RunCapacityGraph from './RunCapacityGraph';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventPageRunCard from './EventPageRunCard';
 import LoadingIndicator from '../../LoadingIndicator';
 import AppRootContext from '../../AppRootContext';
+import { EventPageQueryQuery, useEventPageQueryQuery } from './queries.generated';
 
-function FakeRun({ event }) {
+type FakeRunProps = {
+  event: EventPageQueryQuery['event'];
+};
+
+function FakeRun({ event }: FakeRunProps) {
+  if (!event.registration_policy) {
+    return <></>;
+  }
+
   const blankSignupCountsByBucketKeyAndCounted = buildBlankSignupCountsFromRegistrationPolicy(
     event.registration_policy,
   );
@@ -32,26 +38,18 @@ function FakeRun({ event }) {
   );
 }
 
-FakeRun.propTypes = {
-  event: PropTypes.shape({
-    registration_policy: PropTypes.shape({
-      buckets: PropTypes.arrayOf(
-        PropTypes.shape({
-          key: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
+export type RunsSectionProps = {
+  eventId: number;
 };
 
-function RunsSection({ eventId }) {
+function RunsSection({ eventId }: RunsSectionProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(EventPageQuery, { variables: { eventId } });
+  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
 
   const sortedRuns = useMemo(
     () =>
-      error || loading
-        ? null
+      error || loading || !data
+        ? []
         : [...data.event.runs].sort(
             (a, b) =>
               moment.tz(a.starts_at, timezoneName).valueOf() -
@@ -68,11 +66,11 @@ function RunsSection({ eventId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { currentAbility, myProfile, convention, event } = data;
+  const { currentAbility, myProfile, convention, event } = data!;
 
   const showFakeRun =
     sortedRuns.length === 0 ||
-    (convention.site_mode === 'convention' && !currentAbility.can_read_schedule);
+    (convention?.site_mode === 'convention' && !currentAbility.can_read_schedule);
 
   return (
     <div className="run-card-deck">
@@ -92,9 +90,5 @@ function RunsSection({ eventId }) {
     </div>
   );
 }
-
-RunsSection.propTypes = {
-  eventId: PropTypes.number.isRequired,
-};
 
 export default RunsSection;
