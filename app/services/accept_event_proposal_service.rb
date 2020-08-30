@@ -25,6 +25,7 @@ class AcceptEventProposalService < CivilService::Service
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
     event.con_mail_destination ||= 'gms'
+    event.title ||= event_proposal.title # in case the form doesn't include it
     event.save!
     event_proposal.update!(event: event)
 

@@ -24,7 +24,7 @@ export function timespanFromRun(
   const start = moment(run.starts_at).tz(timezoneName);
   const finish = start.clone().add(event.length_seconds, 'seconds');
 
-  return Timespan.fromMoments(start, finish);
+  return Timespan.fromMoments(start, finish) as FiniteTimespan;
 }
 
 export function getConventionDayTimespans(
