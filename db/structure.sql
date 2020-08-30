@@ -1277,7 +1277,7 @@ ALTER SEQUENCE public.event_ratings_id_seq OWNED BY public.event_ratings.id;
 
 CREATE TABLE public.events (
     id integer NOT NULL,
-    title character varying,
+    title character varying NOT NULL,
     author character varying,
     email character varying,
     organization character varying,
@@ -5214,6 +5214,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200517155823'),
 ('20200601160341'),
 ('20200712160144'),
-('20200807160757');
+('20200807160757'),
+('20200830175919');
 
 
