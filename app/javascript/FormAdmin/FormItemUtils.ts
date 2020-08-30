@@ -216,10 +216,12 @@ function formItemFragmentHasProperties(
 export function parseFormItemObject<PropertiesType, ValueType>(
   formItem: CommonFormItemFieldsFragment,
 ): ParsedFormItem<PropertiesType, ValueType> {
+  const parsedDefaultValue =
+    formItem.default_value == null ? undefined : (JSON.parse(formItem.default_value) as ValueType);
   if (formItemFragmentHasProperties(formItem) && formItem.properties != null) {
     return {
       ...formItem,
-      default_value: JSON.parse(formItem.default_value) as ValueType,
+      default_value: parsedDefaultValue,
       properties: JSON.parse(formItem.properties) as PropertiesType,
       rendered_properties: JSON.parse(formItem.rendered_properties) as PropertiesType,
     };
@@ -227,7 +229,7 @@ export function parseFormItemObject<PropertiesType, ValueType>(
 
   return {
     ...formItem,
-    default_value: JSON.parse(formItem.default_value) as ValueType,
+    default_value: parsedDefaultValue,
     rendered_properties: JSON.parse(formItem.rendered_properties) as PropertiesType,
   };
 }

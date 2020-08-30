@@ -12,7 +12,7 @@ export type RunCapacityGraphProps = {
     EventPageQueryQuery['event']['runs'][0],
     'signup_count_by_state_and_bucket_key_and_counted'
   >;
-  event: EventPageQueryQuery['event'];
+  event: Pick<EventPageQueryQuery['event'], 'registration_policy'>;
   signupsAvailable: boolean;
 };
 

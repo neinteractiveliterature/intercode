@@ -7,7 +7,7 @@ import { RunCardRegistrationPolicyFieldsFragmentDoc, EventPageRunFieldsFragmentD
 import * as Apollo from '@apollo/client';
 export type SignupModerationRunFieldsFragment = (
   { __typename?: 'Run' }
-  & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at'>
+  & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at' | 'signup_count_by_state_and_bucket_key_and_counted'>
   & { event: (
     { __typename?: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
@@ -30,15 +30,16 @@ export type SignupModerationSignupRequestFieldsFragment = (
     ) }
   )>, target_run: (
     { __typename?: 'Run' }
-    & Pick<Types.Run, 'id' | 'signup_count_by_state_and_bucket_key_and_counted'>
+    & Pick<Types.Run, 'id'>
     & { event: (
       { __typename?: 'Event' }
       & Pick<Types.Event, 'id'>
       & { registration_policy?: Types.Maybe<(
         { __typename?: 'RegistrationPolicy' }
+        & Pick<Types.RegistrationPolicy, 'prevent_no_preference_signups'>
         & { buckets: Array<(
           { __typename?: 'RegistrationPolicyBucket' }
-          & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'total_slots' | 'slots_limited' | 'anything'>
+          & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'total_slots' | 'slots_limited' | 'anything' | 'not_counted'>
         )> }
       )> }
     ) }
@@ -157,6 +158,7 @@ export const SignupModerationRunFieldsFragmentDoc = gql`
   id
   title_suffix
   starts_at
+  signup_count_by_state_and_bucket_key_and_counted
   event {
     id
     title
@@ -183,7 +185,6 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
   }
   target_run {
     id
-    signup_count_by_state_and_bucket_key_and_counted
     ...SignupModerationRunFields
     event {
       id
@@ -194,7 +195,9 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
           total_slots
           slots_limited
           anything
+          not_counted
         }
+        prevent_no_preference_signups
       }
     }
   }

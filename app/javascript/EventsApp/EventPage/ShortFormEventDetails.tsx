@@ -11,7 +11,6 @@ import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
 import LoadingIndicator from '../../LoadingIndicator';
 import { useEventPageQueryQuery } from './queries.generated';
-import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
 
 export type ShortFormEventDetailsProps = {
   eventId: number;
@@ -29,10 +28,6 @@ function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
     () => (error || loading || !data ? [] : teamMembersForDisplay(data.event)),
     [data, error, loading],
   );
-
-  const typedFormItems = useMemo(() => parseTypedFormItemArray(shortFormItems ?? []), [
-    shortFormItems,
-  ]);
 
   if (loading) {
     return <LoadingIndicator />;
@@ -52,7 +47,7 @@ function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
 
   return (
     <dl className="row mb-0">
-      {typedFormItems
+      {shortFormItems
         .filter((item) => formResponseValueIsComplete(item, formResponse[item.identifier ?? '']))
         .map((item) => (
           <React.Fragment key={item.identifier ?? item.id}>
