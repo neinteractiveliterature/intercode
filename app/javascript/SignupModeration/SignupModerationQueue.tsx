@@ -1,44 +1,64 @@
 import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useQuery, useMutation } from '@apollo/client';
 import moment from 'moment-timezone';
 import Pagination from 'react-js-pagination';
+import { assertNever } from 'assert-never';
 
-import { AcceptSignupRequest, RejectSignupRequest } from './mutations';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import { SignupModerationQueueQuery } from './queries';
 import { timespanFromRun } from '../TimespanUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
+import { SignupRequestState } from '../graphqlTypes.generated';
+import {
+  SignupModerationQueueQueryQuery,
+  SignupModerationSignupRequestFieldsFragment,
+  useSignupModerationQueueQueryQuery,
+} from './queries.generated';
+import {
+  useAcceptSignupRequestMutation,
+  useRejectSignupRequestMutation,
+} from './mutations.generated';
 
-function signupRequestStateBadgeClass(state) {
+function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
-    case 'accepted':
+    case SignupRequestState.Accepted:
       return 'badge-success';
-    case 'rejected':
+    case SignupRequestState.Rejected:
       return 'badge-danger';
-    case 'pending':
+    case SignupRequestState.Pending:
       return 'badge-info';
-    case 'withdrawn':
+    case SignupRequestState.Withdrawn:
       return 'badge-dark';
     default:
+      assertNever(state, true);
       return 'badge-light';
   }
 }
 
-function describeRequestedBucket(signupRequest) {
+function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFieldsFragment) {
   return signupRequest.requested_bucket_key
     ? (
-        signupRequest.target_run.event.registration_policy.buckets.find(
+        signupRequest.target_run.event.registration_policy?.buckets.find(
           (bucket) => bucket.key === signupRequest.requested_bucket_key,
         ) || {}
       ).name
     : 'No preference';
 }
 
-function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }) {
+type SignupModerationRunDetailsProps = {
+  run: NonNullable<
+    SignupModerationQueueQueryQuery['convention']
+  >['signup_requests_paginated']['entries'][0]['target_run'];
+  showRequestedBucket?: boolean;
+  requestedBucketKey?: string;
+};
+
+function SignupModerationRunDetails({
+  run,
+  showRequestedBucket,
+  requestedBucketKey,
+}: SignupModerationRunDetailsProps) {
   const { timezoneName } = useContext(AppRootContext);
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
 
@@ -52,7 +72,7 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
           <small>
             <strong>Bucket:</strong>{' '}
             {(
-              run.event.registration_policy.buckets.find(
+              run.event.registration_policy?.buckets.find(
                 (bucket) => bucket.key === requestedBucketKey,
               ) || {}
             ).name || 'No preference'}
@@ -64,33 +84,17 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
   );
 }
 
-SignupModerationRunDetails.propTypes = {
-  run: PropTypes.shape({
-    event: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-    title_suffix: PropTypes.string,
-  }).isRequired,
-  showRequestedBucket: PropTypes.bool,
-  requestedBucketKey: PropTypes.string,
-};
-
-SignupModerationRunDetails.defaultProps = {
-  showRequestedBucket: false,
-  requestedBucketKey: null,
-};
-
 function SignupModerationQueue() {
   const { timezoneName } = useContext(AppRootContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, loading, error } = useQuery(SignupModerationQueueQuery, {
+  const { data, loading, error } = useSignupModerationQueueQueryQuery({
     variables: { page: currentPage },
   });
-  const [acceptSignupRequest] = useMutation(AcceptSignupRequest);
-  const [rejectSignupRequest] = useMutation(RejectSignupRequest);
+  const [acceptSignupRequest] = useAcceptSignupRequestMutation();
+  const [rejectSignupRequest] = useRejectSignupRequestMutation();
   const confirm = useConfirm();
 
-  const acceptClicked = (signupRequest) =>
+  const acceptClicked = (signupRequest: SignupModerationSignupRequestFieldsFragment) =>
     confirm({
       prompt: (
         <>
@@ -157,7 +161,7 @@ function SignupModerationQueue() {
           </tr>
         </thead>
         <tbody>
-          {data.convention.signup_requests_paginated.entries.map((signupRequest) => (
+          {data!.convention!.signup_requests_paginated.entries.map((signupRequest) => (
             <tr key={signupRequest.id}>
               <td>{signupRequest.user_con_profile.name}</td>
               <td>
@@ -224,7 +228,7 @@ function SignupModerationQueue() {
       </table>
 
       <Pagination
-        totalItemsCount={data.convention.signup_requests_paginated.total_pages}
+        totalItemsCount={data!.convention!.signup_requests_paginated.total_pages}
         activePage={currentPage}
         onChange={setCurrentPage}
         itemsCountPerPage={1}

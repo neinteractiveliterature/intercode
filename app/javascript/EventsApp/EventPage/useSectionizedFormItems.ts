@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
+import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
 
 import { getSortedParsedFormItems } from '../../Models/Form';
 import { EventPageQueryQuery } from './queries.generated';
 
 type EventPageForm = NonNullable<EventPageQueryQuery['event']['form']>;
-type EventPageFormItem = EventPageForm['form_sections'][0]['form_items'][0];
 
 function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: string]: any }) {
   const displayFormItems = getSortedParsedFormItems(formData).filter(
@@ -15,8 +15,8 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: st
       item.public_description != null &&
       formResponse[item.identifier],
   );
-  const shortFormItems: EventPageFormItem[] = [];
-  const longFormItems: EventPageFormItem[] = [];
+  const shortFormItems: TypedFormItem[] = [];
+  const longFormItems: TypedFormItem[] = [];
   displayFormItems.forEach((item) => {
     if (item.item_type === 'free_text' && item.rendered_properties.format === 'markdown') {
       longFormItems.push(item);
@@ -49,7 +49,11 @@ export default function useSectionizedFormItems(event?: EventPageQueryQuery['eve
     () =>
       event?.form
         ? getSectionizedFormItems(event.form, formResponse)
-        : { shortFormItems: undefined, longFormItems: undefined },
+        : {
+            shortFormItems: [] as TypedFormItem[],
+            longFormItems: [] as TypedFormItem[],
+            formResponse: {},
+          },
     [event, formResponse],
   );
 

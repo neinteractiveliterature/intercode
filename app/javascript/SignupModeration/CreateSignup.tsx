@@ -6,10 +6,20 @@ import EventSelect from '../BuiltInFormControls/EventSelect';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import LoadingIndicator from '../LoadingIndicator';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
+import { CreateSignupEventsQueryQuery } from './queries.generated';
+import { DefaultUserConProfilesQueryQuery } from '../BuiltInFormControls/selectDefaultQueries.generated';
+
+type EventType = NonNullable<
+  CreateSignupEventsQueryQuery['convention']
+>['events_paginated']['entries'][0];
+
+type UserConProfileType = NonNullable<
+  DefaultUserConProfilesQueryQuery['convention']
+>['user_con_profiles_paginated']['entries'][0];
 
 function CreateSignup() {
-  const [event, setEvent] = useState(null);
-  const [userConProfile, setUserConProfile] = useState(null);
+  const [event, setEvent] = useState<EventType>();
+  const [userConProfile, setUserConProfile] = useState<UserConProfileType>();
 
   return (
     <>
@@ -18,7 +28,7 @@ function CreateSignup() {
           <EventSelect
             id={id}
             value={event}
-            onChange={(newEvent) => setEvent(newEvent)}
+            onChange={(newEvent: EventType) => setEvent(newEvent)}
             eventsQuery={CreateSignupEventsQuery}
           />
         )}
@@ -29,7 +39,9 @@ function CreateSignup() {
           <UserConProfileSelect
             id={id}
             value={userConProfile}
-            onChange={(newUserConProfile) => setUserConProfile(newUserConProfile)}
+            onChange={(newUserConProfile: UserConProfileType) =>
+              setUserConProfile(newUserConProfile)
+            }
           />
         )}
       </FormGroupWithLabel>

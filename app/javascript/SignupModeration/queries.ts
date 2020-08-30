@@ -9,6 +9,7 @@ export const SignupModerationRunFields = gql`
     id
     title_suffix
     starts_at
+    signup_count_by_state_and_bucket_key_and_counted
 
     event {
       id
@@ -41,7 +42,6 @@ export const SignupModerationSignupRequestFields = gql`
 
     target_run {
       id
-      signup_count_by_state_and_bucket_key_and_counted
       ...SignupModerationRunFields
 
       event {
@@ -53,7 +53,9 @@ export const SignupModerationSignupRequestFields = gql`
             total_slots
             slots_limited
             anything
+            not_counted
           }
+          prevent_no_preference_signups
         }
       }
     }

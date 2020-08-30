@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import parsePageContent from '../../parsePageContent';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import LoadingIndicator from '../../LoadingIndicator';
-import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
 import { useEventPageQueryQuery } from './queries.generated';
 
 export type LongFormEventDetailsProps = {
@@ -18,10 +17,6 @@ function LongFormEventDetails({ eventId }: LongFormEventDetailsProps) {
     error || loading || !data ? undefined : data.event,
   );
 
-  const typedFormItems = useMemo(() => parseTypedFormItemArray(longFormItems ?? []), [
-    longFormItems,
-  ]);
-
   if (loading) {
     return <LoadingIndicator />;
   }
@@ -32,7 +27,7 @@ function LongFormEventDetails({ eventId }: LongFormEventDetailsProps) {
 
   return (
     <>
-      {typedFormItems.map((item, index) =>
+      {longFormItems.map((item, index) =>
         formResponse[item.identifier ?? ''] && formResponse[item.identifier ?? ''].trim() !== '' ? (
           <section
             className="mb-4 event-details"
