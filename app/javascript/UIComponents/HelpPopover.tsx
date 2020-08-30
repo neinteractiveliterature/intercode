@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
 import PopperDropdown from './PopperDropdown';
 
-function HelpPopover({ children, className, initialVisible, visibleChanged }) {
+export type HelpPopoverProps = {
+  children?: ReactNode;
+  className?: string;
+  initialVisible?: boolean;
+  visibleChanged?: (newVisible: boolean) => void;
+};
+
+function HelpPopover({ children, className, initialVisible, visibleChanged }: HelpPopoverProps) {
   const [visible, setVisible] = useState(initialVisible);
 
-  const toggleVisible = (prevVisible, event) => {
+  const toggleVisible = (prevVisible: boolean, event: React.BaseSyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
     const newVisible = !visible;
@@ -32,7 +38,7 @@ function HelpPopover({ children, className, initialVisible, visibleChanged }) {
           onKeyDown={(event) => {
             if (event.keyCode === 13 || event.keyCode === 32) {
               event.preventDefault();
-              toggle();
+              toggle(event);
             }
           }}
         >
@@ -58,19 +64,5 @@ function HelpPopover({ children, className, initialVisible, visibleChanged }) {
     </PopperDropdown>
   );
 }
-
-HelpPopover.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  initialVisible: PropTypes.bool,
-  visibleChanged: PropTypes.func,
-};
-
-HelpPopover.defaultProps = {
-  children: null,
-  className: null,
-  initialVisible: false,
-  visibleChanged: null,
-};
 
 export default HelpPopover;

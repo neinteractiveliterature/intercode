@@ -1,9 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import classNames from 'classnames';
 
-function EventListPagination({ currentPage, totalPages, onPageChange, extraClasses }) {
+export type EventListPaginationProps = {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: React.Dispatch<number>;
+  extraClasses?: string[];
+};
+
+function EventListPagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+  extraClasses,
+}: EventListPaginationProps) {
   return (
     <nav>
       <Pagination
@@ -21,16 +32,5 @@ function EventListPagination({ currentPage, totalPages, onPageChange, extraClass
     </nav>
   );
 }
-
-EventListPagination.propTypes = {
-  currentPage: PropTypes.number.isRequired,
-  totalPages: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  extraClasses: PropTypes.arrayOf(PropTypes.string),
-};
-
-EventListPagination.defaultProps = {
-  extraClasses: [],
-};
 
 export default EventListPagination;

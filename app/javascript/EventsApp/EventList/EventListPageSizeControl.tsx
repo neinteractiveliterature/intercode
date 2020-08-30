@@ -1,7 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-function EventListPageSizeControl({ pageSize, onPageSizeChange }) {
+export type EventListPageSizeControlProps = {
+  pageSize: number;
+  onPageSizeChange: React.Dispatch<number>;
+};
+
+function EventListPageSizeControl({ pageSize, onPageSizeChange }: EventListPageSizeControlProps) {
   return (
     <div className="form-inline align-items-start">
       <select
@@ -20,10 +24,5 @@ function EventListPageSizeControl({ pageSize, onPageSizeChange }) {
     </div>
   );
 }
-
-EventListPageSizeControl.propTypes = {
-  pageSize: PropTypes.number.isRequired,
-  onPageSizeChange: PropTypes.func.isRequired,
-};
 
 export default EventListPageSizeControl;

@@ -1,12 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { pluralize } from 'inflected';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import PopperDropdown from '../../UIComponents/PopperDropdown';
 import { Transforms } from '../../ComposableFormUtils';
+import { EventListEventsQueryQuery } from './queries.generated';
+import { notEmpty } from '../../ValueUtils';
 
-const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
+type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
+
+export type EventListCategoryDropdownProps = {
+  eventCategories: ConventionType['event_categories'];
+  value: number[];
+  onChange: React.Dispatch<number[]>;
+};
+
+const EventListCategoryDropdown = ({
+  eventCategories,
+  value,
+  onChange,
+}: EventListCategoryDropdownProps) => {
   const currentCategories = eventCategories.filter((category) =>
     (value || []).includes(category.id),
   );
@@ -19,7 +32,7 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
   }
 
   const sortedCategories = [...eventCategories].sort((a, b) =>
-    a.name.localeCompare(b.name, { sensitivity: 'base' }),
+    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   );
   const choiceSetValue =
     (value || []).length > 0
@@ -43,28 +56,13 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
           }))}
           value={choiceSetValue}
           onChange={(integerArray) => {
-            onChange(integerArray.map(Transforms.integer));
+            onChange((integerArray ?? []).map(Transforms.integer).filter(notEmpty));
           }}
           multiple
         />
       </div>
     </PopperDropdown>
   );
-};
-
-EventListCategoryDropdown.propTypes = {
-  eventCategories: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  value: PropTypes.arrayOf(PropTypes.number),
-  onChange: PropTypes.func.isRequired,
-};
-
-EventListCategoryDropdown.defaultProps = {
-  value: null,
 };
 
 export default EventListCategoryDropdown;

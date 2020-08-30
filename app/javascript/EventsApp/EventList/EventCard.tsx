@@ -1,9 +1,10 @@
-import React, { useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo, useContext, ReactNode } from 'react';
 import moment from 'moment-timezone';
+// @ts-ignore
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 
+import { SortingRule } from 'react-table';
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
@@ -13,8 +14,13 @@ import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import Gravatar from '../../Gravatar';
 import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
+import { EventListEventsQueryQuery } from './queries.generated';
+import { notEmpty } from '../../ValueUtils';
 
-function renderFirstRunTime(event, timezoneName) {
+type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
+type EventType = ConventionType['events_paginated']['entries'][0];
+
+function renderFirstRunTime(event: EventType, timezoneName: string) {
   if (event.runs.length > 0) {
     const sortedRuns = getSortedRuns(event);
     if (sortedRuns.length > 4) {
@@ -22,7 +28,7 @@ function renderFirstRunTime(event, timezoneName) {
       return `${sortedRuns.length} runs starting ${firstRunStart.format('dddd h:mma')}`;
     }
 
-    let previousDayName = null;
+    let previousDayName: string;
 
     return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
@@ -46,14 +52,14 @@ function renderFirstRunTime(event, timezoneName) {
   return 'Unscheduled';
 }
 
-function teamIsAllAuthors(author, teamMembers) {
+function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members']) {
   if (!author || !teamMembers) {
     return false;
   }
 
-  const teamMemberNames = teamMembers.map(
-    (teamMember) => teamMember.user_con_profile.name_without_nickname,
-  );
+  const teamMemberNames = teamMembers
+    .map((teamMember) => teamMember.user_con_profile.name_without_nickname)
+    .filter(notEmpty);
 
   if (!teamMemberNames.every((teamMemberName) => author.includes(teamMemberName))) {
     return false;
@@ -66,11 +72,17 @@ function teamIsAllAuthors(author, teamMembers) {
   return true;
 }
 
-const EventCard = ({ event, sorted, canReadSchedule }) => {
+export type EventCardProps = {
+  event: EventType;
+  sorted?: SortingRule[];
+  canReadSchedule?: boolean;
+};
+
+const EventCard = ({ event, sorted, canReadSchedule }: EventCardProps) => {
   const { timezoneName } = useContext(AppRootContext);
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
-  const metadataItems = [];
+  const metadataItems: { key: string; content: ReactNode }[] = [];
   const rateEvent = useRateEvent();
 
   const displayTeamMembers = useMemo(() => teamMembersForDisplay(event), [event]);
@@ -102,11 +114,7 @@ const EventCard = ({ event, sorted, canReadSchedule }) => {
       key: 'team_members',
       content: (
         <>
-          <strong>
-            {teamMemberDescription}
-            {':'}
-          </strong>{' '}
-          {teamMemberList}
+          <strong>{teamMemberDescription}:</strong> {teamMemberList}
         </>
       ),
     });
@@ -122,11 +130,7 @@ const EventCard = ({ event, sorted, canReadSchedule }) => {
       key: 'author',
       content: (
         <>
-          <strong>
-            {authorDescription}
-            {':'}
-          </strong>{' '}
-          {formResponse.author}
+          <strong>{authorDescription}:</strong> {formResponse.author}
         </>
       ),
     });
@@ -177,7 +181,7 @@ const EventCard = ({ event, sorted, canReadSchedule }) => {
           </div>
         </div>
 
-        {sorted.some((sort) => sort.id === 'created_at') ? (
+        {sorted?.some((sort) => sort.id === 'created_at') ? (
           <p className="m-0">
             <strong>
               Added{' '}
@@ -190,38 +194,10 @@ const EventCard = ({ event, sorted, canReadSchedule }) => {
       <div
         className="card-body"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: event.short_blurb_html }}
+        dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
       />
     </div>
   );
-};
-
-EventCard.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    event_category: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      team_member_name: PropTypes.string.isRequired,
-    }).isRequired,
-    title: PropTypes.string,
-    my_rating: PropTypes.number,
-    form_response_attrs_json: PropTypes.string.isRequired,
-    short_blurb_html: PropTypes.string.isRequired,
-    team_members: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    created_at: PropTypes.string.isRequired,
-  }).isRequired,
-  sorted: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      desc: PropTypes.bool.isRequired,
-    }),
-  ),
-  canReadSchedule: PropTypes.bool,
-};
-
-EventCard.defaultProps = {
-  sorted: null,
-  canReadSchedule: false,
 };
 
 export default EventCard;
