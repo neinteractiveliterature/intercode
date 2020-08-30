@@ -87,7 +87,7 @@ class Event < ApplicationRecord
   # All events for a Convention must have a unique title.  Ignore any events
   # that have a status of "Dropped".  If they have a duplicate title we don't
   # care.
-  validates :title, uniqueness: {
+  validates :title, presence: true, uniqueness: {
     scope: :convention,
     conditions: -> { where.not(status: 'dropped') }
   }

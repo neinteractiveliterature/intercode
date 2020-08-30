@@ -1,17 +1,17 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { RunCardRegistrationPolicyFieldsFragment } from '../EventsApp/EventPage/queries.generated';
+import { RunCardRegistrationPolicyFieldsFragment, EventPageRunFieldsFragment } from '../EventsApp/EventPage/queries.generated';
 import { gql } from '@apollo/client';
-import { RunCardRegistrationPolicyFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
+import { RunCardRegistrationPolicyFieldsFragmentDoc, EventPageRunFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import * as Apollo from '@apollo/client';
 export type SignupModerationRunFieldsFragment = (
   { __typename?: 'Run' }
-  & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at'>
-  & { event?: Types.Maybe<(
+  & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at' | 'signup_count_by_state_and_bucket_key_and_counted'>
+  & { event: (
     { __typename?: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
-  )> }
+  ) }
 );
 
 export type SignupModerationSignupRequestFieldsFragment = (
@@ -30,18 +30,19 @@ export type SignupModerationSignupRequestFieldsFragment = (
     ) }
   )>, target_run: (
     { __typename?: 'Run' }
-    & Pick<Types.Run, 'id' | 'signup_count_by_state_and_bucket_key_and_counted'>
-    & { event?: Types.Maybe<(
+    & Pick<Types.Run, 'id'>
+    & { event: (
       { __typename?: 'Event' }
       & Pick<Types.Event, 'id'>
       & { registration_policy?: Types.Maybe<(
         { __typename?: 'RegistrationPolicy' }
+        & Pick<Types.RegistrationPolicy, 'prevent_no_preference_signups'>
         & { buckets: Array<(
           { __typename?: 'RegistrationPolicyBucket' }
-          & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'total_slots' | 'slots_limited' | 'anything'>
+          & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'total_slots' | 'slots_limited' | 'anything' | 'not_counted'>
         )> }
       )> }
-    )> }
+    ) }
     & SignupModerationRunFieldsFragment
   ), result_signup?: Types.Maybe<(
     { __typename?: 'Signup' }
@@ -87,30 +88,27 @@ export type CreateSignupRunCardQueryQuery = (
   { __typename?: 'Query' }
   & { currentAbility: (
     { __typename?: 'Ability' }
-    & Pick<Types.Ability, 'can_read_event_signups'>
+    & Pick<Types.Ability, 'can_read_schedule' | 'can_read_event_signups' | 'can_update_event'>
   ), event: (
     { __typename?: 'Event' }
-    & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list'>
+    & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list' | 'can_play_concurrently'>
     & { registration_policy?: Types.Maybe<(
       { __typename?: 'RegistrationPolicy' }
       & RunCardRegistrationPolicyFieldsFragment
     )>, team_members: Array<(
       { __typename?: 'TeamMember' }
-      & Pick<Types.TeamMember, 'id'>
+      & Pick<Types.TeamMember, 'id' | 'display_team_member'>
       & { user_con_profile: (
         { __typename?: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id'>
+        & Pick<Types.UserConProfile, 'id' | 'gravatar_url' | 'gravatar_enabled' | 'name_without_nickname'>
       ) }
     )>, event_category: (
       { __typename?: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'team_member_name'>
     ), runs: Array<(
       { __typename?: 'Run' }
-      & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix' | 'signup_count_by_state_and_bucket_key_and_counted'>
-      & { rooms: Array<(
-        { __typename?: 'Room' }
-        & Pick<Types.Room, 'id' | 'name'>
-      )> }
+      & Pick<Types.Run, 'id'>
+      & EventPageRunFieldsFragment
     )> }
   ), userConProfile: (
     { __typename?: 'UserConProfile' }
@@ -160,6 +158,7 @@ export const SignupModerationRunFieldsFragmentDoc = gql`
   id
   title_suffix
   starts_at
+  signup_count_by_state_and_bucket_key_and_counted
   event {
     id
     title
@@ -186,7 +185,6 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
   }
   target_run {
     id
-    signup_count_by_state_and_bucket_key_and_counted
     ...SignupModerationRunFields
     event {
       id
@@ -197,7 +195,9 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
           total_slots
           slots_limited
           anything
+          not_counted
         }
+        prevent_no_preference_signups
       }
     }
   }
@@ -261,20 +261,27 @@ export type CreateSignupEventsQueryQueryResult = Apollo.QueryResult<CreateSignup
 export const CreateSignupRunCardQueryDocument = gql`
     query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
   currentAbility {
+    can_read_schedule
     can_read_event_signups(event_id: $eventId)
+    can_update_event(event_id: $eventId)
   }
   event(id: $eventId) {
     id
     title
     length_seconds
     private_signup_list
+    can_play_concurrently
     registration_policy {
       ...RunCardRegistrationPolicyFields
     }
     team_members {
       id
+      display_team_member
       user_con_profile {
         id
+        gravatar_url
+        gravatar_enabled
+        name_without_nickname
       }
     }
     event_category {
@@ -283,13 +290,7 @@ export const CreateSignupRunCardQueryDocument = gql`
     }
     runs {
       id
-      starts_at
-      title_suffix
-      signup_count_by_state_and_bucket_key_and_counted
-      rooms {
-        id
-        name
-      }
+      ...EventPageRunFields
     }
   }
   userConProfile(id: $userConProfileId) {
@@ -312,7 +313,8 @@ export const CreateSignupRunCardQueryDocument = gql`
     }
   }
 }
-    ${RunCardRegistrationPolicyFieldsFragmentDoc}`;
+    ${RunCardRegistrationPolicyFieldsFragmentDoc}
+${EventPageRunFieldsFragmentDoc}`;
 
 /**
  * __useCreateSignupRunCardQueryQuery__
