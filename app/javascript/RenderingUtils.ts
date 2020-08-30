@@ -1,18 +1,20 @@
 import { ReactNode } from 'react';
 import flatMap from 'lodash/flatMap';
 
-export function joinReact(array: ReactNode[], separator: ReactNode) {
+export function joinReact(array: ReactNode[], separator: ReactNode): ReactNode[] {
+  const accumulator = (prev: ReactNode[] | null, curr: ReactNode) =>
+    prev == null ? [curr] : [...prev, separator, curr];
+
   if (array.length > 1) {
-    return array.reduce(
-      (prev: ReactNode[] | null, curr) => (prev == null ? [curr] : [...prev, separator, curr]),
-      null,
-    );
+    const result: ReactNode[] | null = array.reduce<ReactNode[] | null>(accumulator, null);
+
+    return result ?? [];
   }
 
   return array;
 }
 
-export function arrayToSentenceReact(array: ReactNode[]) {
+export function arrayToSentenceReact(array: ReactNode[]): ReactNode[] {
   if (array.length < 2) {
     return array;
   }

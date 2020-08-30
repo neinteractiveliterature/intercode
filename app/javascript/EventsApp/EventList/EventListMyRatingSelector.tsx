@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
@@ -15,13 +14,18 @@ export const RATING_OPTIONS = sortBy(Object.entries(RATING_NAMES), ([rating]) =>
   value: rating.toString(),
 }));
 
+export type EventListMyRatingSelectorProps = {
+  value?: number[];
+  onChange: React.Dispatch<number[]>;
+};
+
 function EventListMyRatingSelector({ value, onChange }) {
   const dismissedRatingsHelp = useMemo(
     () => window.localStorage.getItem('dismissedRatingsHelp') != null,
     [],
   );
 
-  const ratingsHelpVisibleChanged = (newVisible) => {
+  const ratingsHelpVisibleChanged = (newVisible: boolean) => {
     if (!newVisible) {
       window.localStorage.setItem('dismissedRatingsHelp', 'true');
     }
@@ -36,7 +40,7 @@ function EventListMyRatingSelector({ value, onChange }) {
         containerClassName="d-flex flex-wrap"
         value={(value || []).map((integer) => integer.toString())}
         onChange={(integerArray) => {
-          onChange(integerArray.map(Transforms.integer));
+          onChange((integerArray ?? []).map(Transforms.integer));
         }}
         multiple
       />
@@ -51,14 +55,5 @@ function EventListMyRatingSelector({ value, onChange }) {
     </div>
   );
 }
-
-EventListMyRatingSelector.propTypes = {
-  value: PropTypes.arrayOf(PropTypes.number),
-  onChange: PropTypes.func.isRequired,
-};
-
-EventListMyRatingSelector.defaultProps = {
-  value: null,
-};
 
 export default EventListMyRatingSelector;

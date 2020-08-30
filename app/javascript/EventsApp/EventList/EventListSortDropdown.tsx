@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import isEqual from 'lodash/isEqual';
+import { SortingRule } from 'react-table';
 
 import PopperDropdown from '../../UIComponents/PopperDropdown';
 import AppRootContext from '../../AppRootContext';
@@ -12,7 +12,17 @@ const SORT_ORDERS = [
   { sorted: [{ id: 'created_at', desc: true }], caption: 'order added (newest first)' },
 ];
 
-const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
+export type EventListSortDropdownProps = {
+  showConventionOrder: boolean;
+  value?: SortingRule[];
+  onChange: React.Dispatch<SortingRule[]>;
+};
+
+const EventListSortDropdown = ({
+  showConventionOrder,
+  value,
+  onChange,
+}: EventListSortDropdownProps) => {
   const { myProfile } = useContext(AppRootContext);
 
   const mySortOrders = [...SORT_ORDERS];
@@ -57,24 +67,9 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
       )}
       placement="bottom-end"
     >
-      {sortOptions}
+      <>{sortOptions}</>
     </PopperDropdown>
   );
-};
-
-EventListSortDropdown.propTypes = {
-  showConventionOrder: PropTypes.bool.isRequired,
-  value: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      desc: PropTypes.bool,
-    }),
-  ),
-  onChange: PropTypes.func.isRequired,
-};
-
-EventListSortDropdown.defaultProps = {
-  value: null,
 };
 
 export default EventListSortDropdown;

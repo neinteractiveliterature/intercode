@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
+import { Filter } from 'react-table';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
-import { EventListEventsQuery } from './queries';
 import EventListEvents from './EventListEvents';
 import EventListSortDropdown from './EventListSortDropdown';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
@@ -19,6 +19,7 @@ import AppRootContext from '../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../useAsyncFunction';
 import LoadingIndicator from '../../LoadingIndicator';
+import { EventListEventsQueryQuery, useEventListEventsQueryQuery } from './queries.generated';
 
 const PAGE_SIZE = 20;
 
@@ -62,9 +63,11 @@ function EventList() {
         { id: 'title', desc: false },
       ]
     : [{ id: 'title', desc: false }];
-  const [cachedConventionName, setCachedConventionName] = useState(null);
-  const [cachedEventCategories, setCachedEventCategories] = useState(null);
-  const [cachedPageCount, setCachedPageCount] = useState(null);
+  const [cachedConventionName, setCachedConventionName] = useState<string>();
+  const [cachedEventCategories, setCachedEventCategories] = useState<
+    NonNullable<EventListEventsQueryQuery['convention']>['event_categories']
+  >();
+  const [cachedPageCount, setCachedPageCount] = useState<number>();
   const defaultFiltered = myProfile
     ? [
         { id: 'my_rating', value: [1, 0] },
@@ -72,9 +75,9 @@ function EventList() {
       ]
     : [{ id: 'category', value: [] }];
   const effectiveSorted = sorted && sorted.length > 0 ? sorted : defaultSort;
-  const effectiveFiltered = filtered && filtered.length > 0 ? filtered : defaultFiltered;
+  const effectiveFiltered: Filter[] = filtered && filtered.length > 0 ? filtered : defaultFiltered;
 
-  const { data, loading, error, fetchMore } = useQuery(EventListEventsQuery, {
+  const { data, loading, error, fetchMore } = useEventListEventsQueryQuery({
     variables: {
       page: 1,
       pageSize: PAGE_SIZE,
@@ -86,8 +89,10 @@ function EventList() {
     fetchMoreEvents,
   );
 
-  const loadedEntries = loading || error ? 0 : data.convention.events_paginated.entries.length;
-  const totalEntries = loading || error ? null : data.convention.events_paginated.total_entries;
+  const loadedEntries: number =
+    loading || error || !data ? 0 : data.convention?.events_paginated.entries.length ?? 0;
+  const totalEntries: number =
+    loading || error || !data ? 0 : data.convention?.events_paginated.total_entries ?? 0;
 
   const fetchMoreIfNeeded = useCallback(() => {
     if (loadedEntries === 0) {
@@ -122,9 +127,9 @@ function EventList() {
   ]);
 
   useEffect(() => {
-    if (!loading && !error) {
-      setCachedConventionName(data.convention.name);
-      setCachedEventCategories(data.convention.event_categories);
+    if (!loading && !error && data) {
+      setCachedConventionName(data.convention?.name);
+      setCachedEventCategories(data.convention?.event_categories ?? []);
     }
   }, [data, loading, error]);
 
@@ -134,7 +139,13 @@ function EventList() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const eventsPaginated = loading ? { entries: [] } : data.convention.events_paginated;
+  const eventsPaginated = (loading || !data ? undefined : data.convention?.events_paginated) ?? {
+    entries: [],
+    current_page: 1,
+    per_page: 10,
+    total_entries: 0,
+    total_pages: 1,
+  };
 
   if (!loading && cachedPageCount !== eventsPaginated.total_pages) {
     setCachedPageCount(eventsPaginated.total_pages);
@@ -162,7 +173,7 @@ function EventList() {
 
             <div>
               <EventListSortDropdown
-                showConventionOrder={!loading && data.currentAbility.can_read_schedule}
+                showConventionOrder={(!loading && data?.currentAbility.can_read_schedule) ?? false}
                 value={sorted}
                 onChange={onSortedChange}
               />
@@ -189,10 +200,10 @@ function EventList() {
       </div>
 
       <PageLoadingIndicator visible={loading} />
-      {loading ? null : (
+      {loading || !data ? null : (
         <>
           <EventListEvents
-            convention={data.convention}
+            convention={data.convention!}
             eventsPaginated={eventsPaginated}
             sorted={sorted}
             canReadSchedule={data.currentAbility.can_read_schedule}
@@ -203,7 +214,7 @@ function EventList() {
               <LoadingIndicator /> <em className="text-muted">Loading more events...</em>
             </div>
           )}
-          <ErrorDisplay graphQLError={fetchMoreError} />
+          <ErrorDisplay graphQLError={fetchMoreError as ApolloError} />
         </>
       )}
     </>
