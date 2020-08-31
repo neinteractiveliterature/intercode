@@ -1,19 +1,21 @@
 import React, { useMemo } from 'react';
-import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { CommonConventionDataQuery } from '../queries';
 import FakeEventRun from './FakeEventRun';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import LoadingIndicator from '../../LoadingIndicator';
+import { useCommonConventionDataQueryQuery } from '../queries.generated';
+import { SignupStatus } from './StylingUtils';
 
 function CategoryLegend() {
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(CommonConventionDataQuery);
+  const { data, loading, error } = useCommonConventionDataQueryQuery();
   const sortedEventCategories = useMemo(
     () =>
-      error || loading ? null : sortByLocaleString(data.convention.event_categories, (c) => c.name),
+      error || loading || !data
+        ? []
+        : sortByLocaleString(data.convention?.event_categories ?? [], (c) => c.name),
     [error, loading, data],
   );
 
@@ -78,11 +80,11 @@ function CategoryLegend() {
           </div>
 
           <div className="card-body">
-            <FakeEventRun eventCategory={defaultCategory} signupStatus="confirmed">
+            <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Confirmed}>
               <i className="fa fa-user-circle" /> {t('signups.states.confirmed', 'Confirmed')}
             </FakeEventRun>
 
-            <FakeEventRun eventCategory={defaultCategory} signupStatus="waitlisted">
+            <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Waitlisted}>
               <i className="fa fa-hourglass-half" /> {t('signups.states.waitlisted', 'Waitlisted')}
             </FakeEventRun>
 

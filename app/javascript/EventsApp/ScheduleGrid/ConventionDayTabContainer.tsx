@@ -1,6 +1,4 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
-import MomentPropTypes from 'react-moment-proptypes';
 import { NavLink, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 
@@ -8,8 +6,15 @@ import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
 import { ScheduleGridCombinedQuery } from './queries';
 import AppRootContext from '../../AppRootContext';
+import { FiniteTimespan } from '../../Timespan';
 
-function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
+type ConventionDayTabProps = {
+  basename: string;
+  timespan: FiniteTimespan;
+  prefetchTimespan?: (timespan: FiniteTimespan) => Promise<any>;
+};
+
+function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDayTabProps) {
   const location = useLocation();
   const prefetchProps = prefetchTimespan
     ? {
@@ -32,16 +37,12 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
   );
 }
 
-ConventionDayTab.propTypes = {
-  basename: PropTypes.string.isRequired,
-  timespan: PropTypes.shape({
-    start: MomentPropTypes.momentObj.isRequired,
-  }).isRequired,
-  prefetchTimespan: PropTypes.func,
-};
-
-ConventionDayTab.defaultProps = {
-  prefetchTimespan: null,
+export type ConventionDayTabContainerProps = {
+  basename: string;
+  conventionTimespan: FiniteTimespan;
+  children: (timespan: FiniteTimespan) => JSX.Element;
+  prefetchTimespan?: (timespan: FiniteTimespan) => Promise<any>;
+  showExtendedCounts?: boolean;
 };
 
 function ConventionDayTabContainer({
@@ -50,7 +51,7 @@ function ConventionDayTabContainer({
   prefetchTimespan,
   children,
   showExtendedCounts,
-}) {
+}: ConventionDayTabContainerProps) {
   const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();
   const refreshData = useCallback(
@@ -111,22 +112,5 @@ function ConventionDayTabContainer({
     </div>
   );
 }
-
-ConventionDayTabContainer.propTypes = {
-  basename: PropTypes.string.isRequired,
-  conventionTimespan: PropTypes.shape({
-    start: MomentPropTypes.momentObj.isRequired,
-    finish: MomentPropTypes.momentObj.isRequired,
-    isFinite: PropTypes.func.isRequired,
-  }).isRequired,
-  prefetchTimespan: PropTypes.func,
-  children: PropTypes.func.isRequired,
-  showExtendedCounts: PropTypes.bool,
-};
-
-ConventionDayTabContainer.defaultProps = {
-  prefetchTimespan: null,
-  showExtendedCounts: false,
-};
 
 export default ConventionDayTabContainer;

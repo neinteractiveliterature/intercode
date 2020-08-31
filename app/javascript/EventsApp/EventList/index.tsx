@@ -29,23 +29,28 @@ const filterCodecs = buildFieldFilterCodecs({
   title_prefix: FilterCodecs.nonEmptyString,
 });
 
-const fetchMoreEvents = async (fetchMore, page) => {
+type FetchMoreFunction = ReturnType<typeof useEventListEventsQueryQuery>['fetchMore'];
+
+const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
   try {
     await fetchMore({
       variables: { page, pageSize: PAGE_SIZE },
-      updateQuery: (prev, { fetchMoreResult }) => ({
-        ...prev,
-        convention: {
-          ...prev.convention,
-          events_paginated: {
-            ...prev.convention.events_paginated,
-            entries: [
-              ...prev.convention.events_paginated.entries,
-              ...fetchMoreResult.convention.events_paginated.entries,
-            ],
+      updateQuery: (prev, { fetchMoreResult }) => {
+        const updatedQuery: EventListEventsQueryQuery = {
+          ...prev,
+          convention: {
+            ...prev.convention!,
+            events_paginated: {
+              ...prev.convention!.events_paginated,
+              entries: [
+                ...(prev.convention!.events_paginated.entries ?? []),
+                ...(fetchMoreResult?.convention?.events_paginated.entries ?? []),
+              ],
+            },
           },
-        },
-      }),
+        };
+        return updatedQuery;
+      },
     });
   } catch (err) {
     // ignore, see https://github.com/apollographql/apollo-client/issues/4114#issuecomment-502111099

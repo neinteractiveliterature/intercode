@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
+import { FiniteTimespan } from '../../Timespan';
 
 import { getMemoizationKeyForTimespan } from '../../TimespanUtils';
+import Schedule from './Schedule';
 
-export default function useLayoutForTimespan(schedule, timespan) {
+export default function useLayoutForTimespan(schedule: Schedule, timespan: FiniteTimespan) {
   const timespanKey = getMemoizationKeyForTimespan(timespan);
 
   const minTimespan = useMemo(() => {

@@ -1,19 +1,20 @@
 import ColumnReservationSet from './ColumnReservationSet';
 import ScheduleLayoutResult from './ScheduleLayoutResult';
 import RunDimensions from './RunDimensions';
+import ScheduleBlock from './ScheduleBlock';
 
 const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-function computeRunDimensionsWithoutSpanning(scheduleBlock) {
+function computeRunDimensionsWithoutSpanning(scheduleBlock: ScheduleBlock) {
   const columnReservations = new ColumnReservationSet();
-  const myLength = scheduleBlock.timespan.getLength();
+  const myLength = scheduleBlock.timespan.getLength('millisecond');
   let maxColumns = 0;
 
   const runDimensions = scheduleBlock.getTimeSortedEventRuns().map((eventRun) => {
     const now = eventRun.timespan.start;
     columnReservations.expire(now);
 
-    const displayLength = Math.max(MIN_LENGTH, eventRun.timespan.getLength());
+    const displayLength = Math.max(MIN_LENGTH, eventRun.timespan.getLength('millisecond'));
     const displayTimespan = eventRun.timespan.clone();
     displayTimespan.finish = displayTimespan.start.clone().add(displayLength);
 

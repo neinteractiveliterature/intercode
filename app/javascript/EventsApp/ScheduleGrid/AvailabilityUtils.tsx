@@ -1,15 +1,20 @@
 import React from 'react';
 import pluralizeWithCount from '../../pluralizeWithCount';
+import SignupCountData from '../SignupCountData';
+import { ScheduleEvent } from './Schedule';
 
-export function calculateAvailability(event, signupCountData) {
-  let totalSlots;
-  let signupCount;
-  if (event.registration_policy.total_slots > 0) {
+export function calculateAvailability(event: ScheduleEvent, signupCountData: SignupCountData) {
+  let totalSlots: number = 0;
+  let signupCount: number = 0;
+  if (
+    event.registration_policy?.total_slots != null &&
+    event.registration_policy?.total_slots > 0
+  ) {
     signupCount = signupCountData.getConfirmedLimitedSignupCount(event);
-    totalSlots = event.registration_policy.total_slots;
-  } else if (event.registration_policy.only_uncounted) {
+    totalSlots = event.registration_policy?.total_slots ?? 0;
+  } else if (event.registration_policy?.only_uncounted) {
     signupCount = signupCountData.getNotCountedConfirmedSignupCount();
-    totalSlots = event.registration_policy.total_slots_including_not_counted;
+    totalSlots = event.registration_policy?.total_slots_including_not_counted ?? 0;
   }
 
   return {
@@ -17,19 +22,19 @@ export function calculateAvailability(event, signupCountData) {
     signupCount,
     remainingCapacity: totalSlots - signupCount,
     availabilityFraction: 1.0 - signupCount / totalSlots,
-    unlimited: !event.registration_policy.slots_limited,
+    unlimited: event.registration_policy && !event.registration_policy.slots_limited,
     waitlistCount: signupCountData.getWaitlistCount(),
   };
 }
 
-export function describeAvailability(event, signupCountData) {
+export function describeAvailability(event: ScheduleEvent, signupCountData: SignupCountData) {
   if (signupCountData.runFull(event)) {
     return (
       <>
         <strong>Full</strong>
         <span className="text-muted">
           {' ('}
-          {event.registration_policy.total_slots}
+          {event.registration_policy?.total_slots ?? 0}
           {' slots)'}
         </span>
       </>
@@ -51,7 +56,7 @@ export function describeAvailability(event, signupCountData) {
   return `${displayCount} of ${pluralizeWithCount('slot', totalSlots)} filled`;
 }
 
-export function describeWaitlist(event, signupCountData) {
+export function describeWaitlist(event: ScheduleEvent, signupCountData: SignupCountData) {
   if (signupCountData.runFull(event)) {
     return (
       <>
