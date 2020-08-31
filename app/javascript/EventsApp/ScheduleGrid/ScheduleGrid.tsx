@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { DateTime } from 'luxon';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
@@ -10,13 +8,21 @@ import ScheduleBlock from './ScheduleBlock';
 import usePageTitle from '../../usePageTitle';
 import useLayoutForTimespan from './useLayoutForTimespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
+import { FiniteTimespan } from '../../Timespan';
 
-function ScheduleGrid({ timespan }) {
+export type ScheduleGridProps = {
+  timespan: FiniteTimespan;
+};
+
+function ScheduleGrid({ timespan }: ScheduleGridProps) {
   const { config, schedule } = useContext(ScheduleGridContext);
 
   usePageTitle(config.title);
 
   const layout = useLayoutForTimespan(schedule, timespan);
+  if (!layout) {
+    return <></>;
+  }
 
   return (
     <div className="schedule-grid" style={{ overflowX: 'auto' }}>
@@ -48,11 +54,5 @@ function ScheduleGrid({ timespan }) {
     </div>
   );
 }
-
-ScheduleGrid.propTypes = {
-  timespan: PropTypes.shape({
-    clone: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default ScheduleGrid;

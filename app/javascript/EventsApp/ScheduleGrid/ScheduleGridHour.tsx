@@ -1,26 +1,28 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import MomentPropTypes from 'react-moment-proptypes';
+import { Moment } from 'moment';
 
 import ScheduleGridExtendedCounts from './ScheduleGridExtendedCounts';
 import { PIXELS_PER_HOUR } from './LayoutConstants';
 import { ScheduleGridContext } from './ScheduleGridContext';
+import EventRun from './PCSG/EventRun';
 
-function formatTime(time, timezoneName) {
+function formatTime(time: Moment, timezoneName: string) {
   const timeInZone = time.tz(timezoneName);
-  let phrasing;
   if (timeInZone.hour() === 0) {
-    phrasing = 'Midnight';
-  } else if (timeInZone.hour() === 12) {
-    phrasing = 'Noon';
-  } else {
-    phrasing = timeInZone.format('h:mma');
+    return 'Midnight';
   }
-
-  return phrasing;
+  if (timeInZone.hour() === 12) {
+    return 'Noon';
+  }
+  return timeInZone.format('h:mma');
 }
 
-function ScheduleGridHour({ now, eventRuns }) {
+export type ScheduleGridHourProps = {
+  now: Moment;
+  eventRuns: EventRun[];
+};
+
+function ScheduleGridHour({ now, eventRuns }: ScheduleGridHourProps) {
   const { schedule, config } = useContext(ScheduleGridContext);
   return (
     <div
@@ -40,10 +42,5 @@ function ScheduleGridHour({ now, eventRuns }) {
     </div>
   );
 }
-
-ScheduleGridHour.propTypes = {
-  now: MomentPropTypes.momentObj.isRequired,
-  eventRuns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-};
 
 export default ScheduleGridHour;

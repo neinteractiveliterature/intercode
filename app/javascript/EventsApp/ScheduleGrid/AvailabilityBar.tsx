@@ -1,8 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { CSSProperties } from 'react';
 import classNames from 'classnames';
 
-function AvailabilityBar({ availabilityFraction, unlimited, runStyle }) {
+export type AvailabilityBarProps = {
+  availabilityFraction: number;
+  unlimited?: boolean;
+  runStyle?: CSSProperties;
+};
+
+function AvailabilityBar({ availabilityFraction, unlimited, runStyle }: AvailabilityBarProps) {
   const unavailableBarWidth = unlimited ? 100.0 : 100.0 - availabilityFraction * 100.0;
 
   return (
@@ -13,7 +18,7 @@ function AvailabilityBar({ availabilityFraction, unlimited, runStyle }) {
           boxShadow:
             unavailableBarWidth < 100.0
               ? `inset 0 0 2px 2px ${(runStyle || {}).backgroundColor || 'transparent'}`
-              : null,
+              : undefined,
         }}
       />
       <div
@@ -26,16 +31,5 @@ function AvailabilityBar({ availabilityFraction, unlimited, runStyle }) {
     </div>
   );
 }
-
-AvailabilityBar.propTypes = {
-  availabilityFraction: PropTypes.number.isRequired,
-  unlimited: PropTypes.bool,
-  runStyle: PropTypes.shape({}),
-};
-
-AvailabilityBar.defaultProps = {
-  runStyle: null,
-  unlimited: false,
-};
 
 export default AvailabilityBar;

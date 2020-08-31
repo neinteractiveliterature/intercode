@@ -2,9 +2,26 @@ import moment from 'moment-timezone';
 import sortBy from 'lodash/sortBy';
 
 import { normalizeTitle } from '../../../ValueUtils';
+import { FiniteTimespan } from '../../../Timespan';
+import type Schedule from '../Schedule';
+import EventRun from './EventRun';
 
 class ScheduleBlock {
-  constructor(id, timespan, eventRuns, schedule) {
+  id: string;
+
+  eventRuns: EventRun[];
+
+  timespan: FiniteTimespan;
+
+  schedule: Schedule;
+
+  hiddenEventRunsInTimespan: EventRun[];
+
+  hiddenEventsFakeEventRun: EventRun | null;
+
+  interval: moment.Duration;
+
+  constructor(id: string, timespan: FiniteTimespan, eventRuns: EventRun[], schedule: Schedule) {
     this.id = id;
     this.eventRuns = [];
     this.timespan = timespan;
@@ -21,7 +38,7 @@ class ScheduleBlock {
     });
   }
 
-  addEventRun(eventRun) {
+  addEventRun(eventRun: EventRun) {
     let eventRunToAdd = eventRun;
 
     if (!this.schedule.shouldShowRun(eventRun.runId)) {
@@ -94,6 +111,7 @@ class ScheduleBlock {
           // finally, use event title as a tiebreaker
           const titleDiff = normalizeTitle(eventA.title).localeCompare(
             normalizeTitle(eventB.title),
+            undefined,
             { sensitivity: 'base' },
           );
 

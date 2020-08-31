@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 
@@ -10,8 +9,23 @@ import buildEventUrl from '../buildEventUrl';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
+import { PopperDropdownChildrenProps } from '../../UIComponents/PopperDropdown';
+import { ScheduleEvent, ScheduleRun } from './Schedule';
+import RunDimensions from './PCSG/RunDimensions';
+import SignupCountData from '../SignupCountData';
 
-const RunDetails = React.forwardRef(
+export type RunDetailsProps = {
+  popperStyle: PopperDropdownChildrenProps['style'];
+  placement: PopperDropdownChildrenProps['placement'];
+  arrowProps: PopperDropdownChildrenProps['arrowProps'];
+  toggle: PopperDropdownChildrenProps['toggle'];
+  event: ScheduleEvent;
+  run: ScheduleRun;
+  runDimensions: RunDimensions;
+  signupCountData: SignupCountData;
+};
+
+const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
   (
     { popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData },
     ref,
@@ -142,7 +156,7 @@ const RunDetails = React.forwardRef(
             <div
               className="small"
               // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: event.short_blurb_html }}
+              dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
             />
           </div>
         </div>
@@ -150,38 +164,5 @@ const RunDetails = React.forwardRef(
     );
   },
 );
-
-RunDetails.propTypes = {
-  arrowProps: PropTypes.shape({
-    style: PropTypes.shape({}).isRequired,
-    ref: PropTypes.any.isRequired,
-  }).isRequired,
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    my_rating: PropTypes.number,
-    title: PropTypes.string.isRequired,
-    short_blurb_html: PropTypes.string,
-  }).isRequired,
-  placement: PropTypes.string,
-  popperStyle: PropTypes.shape({}).isRequired,
-  run: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    room_names: PropTypes.arrayOf(PropTypes.string).isRequired,
-    title_suffix: PropTypes.string,
-  }).isRequired,
-  runDimensions: PropTypes.shape({
-    eventRun: PropTypes.shape({
-      timespan: PropTypes.shape({
-        humanizeInTimezone: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
-  signupCountData: PropTypes.shape({}).isRequired,
-  toggle: PropTypes.func.isRequired,
-};
-
-RunDetails.defaultProps = {
-  placement: null,
-};
 
 export default RunDetails;

@@ -1,12 +1,14 @@
 import moment from 'moment-timezone';
+import { flatMap } from 'lodash';
 
 import EventRun from './PCSG/EventRun';
 import ScheduleBlock from './PCSG/ScheduleBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
-import { timespanFromConvention } from '../../TimespanUtils';
-import Timespan from '../../Timespan';
+import Timespan, { FiniteTimespan } from '../../Timespan';
+import ScheduleGridConfig, { isCategoryMatchRule, isCatchAllMatchRule } from './ScheduleGridConfig';
+import { ScheduleGridEventFragmentFragment } from './queries.generated';
 
-function expandTimespanToNearestHour(timespan) {
+function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   const start = moment(timespan.start).set({ minute: 0, second: 0, millisecond: 0 });
   const finish = moment(timespan.finish);
 
@@ -15,23 +17,68 @@ function expandTimespanToNearestHour(timespan) {
   }
   finish.set({ minute: 0, second: 0, millisecond: 0 });
 
-  return new Timespan(start, finish);
+  return Timespan.fromMoments(start, finish) as FiniteTimespan;
 }
 
+export type ScheduleEvent = ScheduleGridEventFragmentFragment & {
+  displayTitle?: string;
+  fake?: boolean;
+};
+
+export type ScheduleRun = ScheduleEvent['runs'][0] & {
+  event_id: number;
+  disableDetailsPopup?: boolean;
+};
+
+export type ScheduleGroup = {
+  id: string;
+  eventRuns: EventRun[];
+  flexGrow?: boolean;
+  rowHeader?: string;
+};
+
 export default class Schedule {
-  constructor({ config, convention, events, myRatingFilter, hideConflicts, timezoneName }) {
+  config: ScheduleGridConfig;
+
+  timezoneName: string;
+
+  eventsById: Map<number, ScheduleEvent>;
+
+  runsById: Map<number, ScheduleRun>;
+
+  myRatingFilter?: number[];
+
+  nextFakeEventRunId: number;
+
+  eventRuns: EventRun[];
+
+  runTimespansById: Map<number, FiniteTimespan>;
+
+  hideConflicts: boolean;
+
+  myConflictingRuns: ScheduleRun[];
+
+  constructor({
+    config,
+    events,
+    myRatingFilter,
+    hideConflicts,
+    timezoneName,
+  }: {
+    config: ScheduleGridConfig;
+    events: ScheduleEvent[];
+    myRatingFilter?: number[];
+    hideConflicts: boolean;
+    timezoneName: string;
+  }) {
     this.config = config;
 
     this.timezoneName = timezoneName;
 
     this.eventsById = new Map(events.map((event) => [event.id, event]));
     this.runsById = new Map(
-      events
-        .map((event) => event.runs.map((run) => [run.id, { ...run, event_id: event.id }]))
-        .reduce((runEntries, entriesForEvent) => [...runEntries, ...entriesForEvent], []),
+      flatMap(events, (event) => event.runs.map((run) => [run.id, { ...run, event_id: event.id }])),
     );
-
-    this.conventionTimespan = timespanFromConvention(convention);
 
     this.myRatingFilter = myRatingFilter;
     this.nextFakeEventRunId = -1;
@@ -55,24 +102,24 @@ export default class Schedule {
           ) ||
           (run.my_signup_requests || []).some((request) => request.state === 'pending')
         ) {
-          this.myConflictingRuns.push(run);
+          this.myConflictingRuns.push({ ...run, event_id: event.id });
         }
       });
     });
   }
 
-  getRun = (runId) => this.runsById.get(runId);
+  getRun = (runId: number) => this.runsById.get(runId);
 
-  getEvent = (eventId) => this.eventsById.get(eventId);
+  getEvent = (eventId: number) => this.eventsById.get(eventId);
 
-  getEventRunsOverlapping = (timespan) =>
+  getEventRunsOverlapping = (timespan: Timespan) =>
     this.eventRuns.filter((eventRun) => timespan.overlapsTimespan(eventRun.timespan));
 
-  getRunTimespan = (runId) => this.runTimespansById.get(runId);
+  getRunTimespan = (runId: number) => this.runTimespansById.get(runId);
 
-  groupEventRunsByCategory = (eventRuns) => {
+  groupEventRunsByCategory = (eventRuns: EventRun[]) => {
     const matchRules = this.config.buildCategoryMatchRules();
-    const groups = [];
+    const groups: ScheduleGroup[] = [];
     this.config.categoryGroups.forEach(({ match, ...otherProps }) =>
       groups.push({
         eventRuns: [],
@@ -83,15 +130,25 @@ export default class Schedule {
     eventRuns.forEach((eventRun) => {
       const { runId } = eventRun;
       const run = this.runsById.get(runId);
+      if (!run) {
+        return;
+      }
       const event = this.eventsById.get(run.event_id);
+      if (!event) {
+        return;
+      }
       const { event_category: eventCategory } = event;
 
       const applicableRule = matchRules.find(({ matchRule }) => {
-        if (matchRule.categoryName && eventCategory.name === matchRule.categoryName) {
+        if (
+          isCategoryMatchRule(matchRule) &&
+          matchRule.categoryName &&
+          eventCategory.name === matchRule.categoryName
+        ) {
           return true;
         }
 
-        return matchRule.allRemaining;
+        return isCatchAllMatchRule(matchRule);
       });
 
       if (applicableRule) {
@@ -102,11 +159,14 @@ export default class Schedule {
     return groups;
   };
 
-  groupEventRunsByRoom = (eventRuns) => {
+  groupEventRunsByRoom = (eventRuns: EventRun[]) => {
     const runsByRoomMap = eventRuns.reduce((eventRunsByRoom, eventRun) => {
       const { runId } = eventRun;
       const run = this.runsById.get(runId);
-      let roomNames = run.room_names || (run.rooms || []).map((room) => room.name);
+      if (!run) {
+        return eventRunsByRoom;
+      }
+      let roomNames = run.room_names;
       if (roomNames.length === 0) {
         roomNames = ['-'];
       }
@@ -116,28 +176,31 @@ export default class Schedule {
           eventRunsByRoom.set(roomName, []);
         }
 
-        eventRunsByRoom.set(roomName, [...eventRunsByRoom.get(roomName), eventRun]);
+        eventRunsByRoom.set(roomName, [...(eventRunsByRoom.get(roomName) ?? []), eventRun]);
       });
 
       return eventRunsByRoom;
-    }, new Map());
+    }, new Map<string, EventRun[]>());
 
     const roomNames = [...runsByRoomMap.keys()].sort((a, b) =>
-      a.localeCompare(b, { sensitivity: 'base' }),
+      a.localeCompare(b, undefined, { sensitivity: 'base' }),
     );
 
-    return roomNames.map((roomName) => ({
-      id: roomName,
-      rowHeader: roomName,
-      eventRuns: runsByRoomMap.get(roomName),
-    }));
+    return roomNames.map(
+      (roomName) =>
+        ({
+          id: roomName,
+          rowHeader: roomName,
+          eventRuns: runsByRoomMap.get(roomName) ?? [],
+        } as ScheduleGroup),
+    );
   };
 
-  buildScheduleBlocksFromGroups = (groups, actualTimespan) => {
-    const blocks = groups.map(({ eventRuns, id, ...props }) => [
-      new ScheduleBlock(id, actualTimespan, eventRuns, this),
-      props,
-    ]);
+  buildScheduleBlocksFromGroups = (groups: ScheduleGroup[], actualTimespan: FiniteTimespan) => {
+    const blocks = groups.map(
+      ({ eventRuns, id, ...props }) =>
+        [new ScheduleBlock(id, actualTimespan, eventRuns, this), props] as const,
+    );
 
     if (this.config.filterEmptyGroups) {
       return blocks.filter((scheduleBlock) => scheduleBlock[0].eventRuns.length > 0);
@@ -146,7 +209,7 @@ export default class Schedule {
     return blocks;
   };
 
-  buildLayoutForTimespanRange = (minTimespan, maxTimespan) => {
+  buildLayoutForTimespanRange = (minTimespan: FiniteTimespan, maxTimespan: FiniteTimespan) => {
     const eventRuns = this.getEventRunsOverlapping(maxTimespan);
     const actualTimespan = expandTimespanToNearestHour(
       eventRuns.reduce(
@@ -167,7 +230,7 @@ export default class Schedule {
     );
   };
 
-  buildLayoutForConventionDayTimespan = (conventionDayTimespan) => {
+  buildLayoutForConventionDayTimespan = (conventionDayTimespan: FiniteTimespan) => {
     const minTimespan = conventionDayTimespan.clone();
     minTimespan.start.add(3, 'hours'); // start grid at 9am unless something is earlier
     minTimespan.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
@@ -177,18 +240,26 @@ export default class Schedule {
 
   shouldUseRowHeaders = () => this.config.groupEventsBy === 'room';
 
-  shouldShowRun = (runId) => {
+  shouldShowRun = (runId: number) => {
     const run = this.runsById.get(runId);
+    if (!run) {
+      return false;
+    }
     const event = this.eventsById.get(run.event_id);
+    if (!event) {
+      return false;
+    }
 
     if (this.hideConflicts) {
-      const runTimespan = this.getRunTimespan(runId);
+      const runTimespan = this.getRunTimespan(runId)!;
       const hasConflict = this.myConflictingRuns
         .filter((r) => r.id !== runId)
-        .some((r) => this.getRunTimespan(r.id).overlapsTimespan(runTimespan));
+        .some((r) => this.getRunTimespan(r.id)?.overlapsTimespan(runTimespan));
 
-      const acceptsCountedSignups = event.registration_policy.buckets.some(
-        (bucket) => (!bucket.slots_limited || bucket.total_slots > 0) && !bucket.not_counted,
+      const acceptsCountedSignups = event.registration_policy?.buckets.some(
+        (bucket) =>
+          (!bucket.slots_limited || (bucket.total_slots != null && bucket.total_slots > 0)) &&
+          !bucket.not_counted,
       );
 
       if (hasConflict && acceptsCountedSignups) {
@@ -203,22 +274,25 @@ export default class Schedule {
     return this.myRatingFilter.includes(event.my_rating || 0);
   };
 
-  addFakeEventRun = (timespan, title, displayTitle) => {
+  addFakeEventRun = (timespan: FiniteTimespan, title: string, displayTitle: string) => {
     const fakeEventRunId = this.nextFakeEventRunId;
     this.nextFakeEventRunId -= 1;
 
-    const fakeEventRun = {
+    const fakeEventRun: EventRun = {
       runId: fakeEventRunId,
       timespan,
     };
 
-    const fakeRun = {
+    const fakeRun: ScheduleRun = {
       id: fakeEventRunId,
       disableDetailsPopup: true,
       event_id: fakeEventRunId,
       my_signups: [],
       my_signup_requests: [],
       room_names: [],
+      starts_at: timespan.start.toISOString(),
+      confirmed_signup_count: 0,
+      not_counted_signup_count: 0,
       signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
         confirmed: {},
         waitlisted: {},
@@ -226,12 +300,16 @@ export default class Schedule {
       }),
     };
 
-    const fakeEvent = {
+    const fakeEvent: ScheduleEvent = {
       id: fakeEventRunId,
       title,
       displayTitle,
+      length_seconds: timespan.getLength('second'),
+      can_play_concurrently: false,
       fake: true,
       event_category: {
+        id: 0,
+        name: 'Fake events',
         default_color: 'rgba(0, 0, 0, 0.1)',
         signed_up_color: 'transparent',
       },

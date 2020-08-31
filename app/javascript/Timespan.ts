@@ -1,4 +1,4 @@
-import moment, { Moment, unitOfTime } from 'moment-timezone';
+import moment, { DurationInputArg1, DurationInputArg2, Moment, unitOfTime } from 'moment-timezone';
 import {
   compareTimesAscending,
   compareTimesDescending,
@@ -21,9 +21,9 @@ export interface FiniteTimespan extends Timespan {
   union(other: FiniteTimespan): FiniteTimespan;
   intersection(other: FiniteTimespan): FiniteTimespan;
   expandedToFit(other: FiniteTimespan): FiniteTimespan;
-  expand(...args: Parameters<Moment['add']> & Parameters<Moment['subtract']>): FiniteTimespan;
-  expandStart(...args: Parameters<Moment['subtract']>): FiniteTimespan;
-  expandFinish(...args: Parameters<Moment['add']>): FiniteTimespan;
+  expand(amount: DurationInputArg1, unit: DurationInputArg2): FiniteTimespan;
+  expandStart(amount: DurationInputArg1, unit: DurationInputArg2): FiniteTimespan;
+  expandFinish(amount: DurationInputArg1, unit: DurationInputArg2): FiniteTimespan;
 }
 
 export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
@@ -120,16 +120,19 @@ class Timespan {
     );
   }
 
-  expandStart(...args: Parameters<Moment['subtract']>) {
-    return new Timespan(this.start?.clone().subtract(...args), this.finish);
+  expandStart(amount: DurationInputArg1, unit: DurationInputArg2) {
+    return new Timespan(this.start?.clone().subtract(amount, unit), this.finish);
   }
 
-  expandFinish(...args: Parameters<Moment['add']>) {
-    return new Timespan(this.start, this.finish?.clone().add(...args));
+  expandFinish(amount: DurationInputArg1, unit: DurationInputArg2) {
+    return new Timespan(this.start, this.finish?.clone().add(amount, unit));
   }
 
-  expand(...args: Parameters<Moment['add']> & Parameters<Moment['subtract']>) {
-    return new Timespan(this.start?.clone().subtract(...args), this.finish?.clone().add(...args));
+  expand(amount: DurationInputArg1, unit: DurationInputArg2) {
+    return new Timespan(
+      this.start?.clone().subtract(amount, unit),
+      this.finish?.clone().add(amount, unit),
+    );
   }
 
   expandedToFit = this.union;
@@ -210,7 +213,7 @@ class Timespan {
         timeHop.add(offset);
       }
       timeBlocks.push(timeHop);
-      now.add(duration, unit);
+      now.add(duration!, unit);
     }
 
     return timeBlocks;
@@ -239,13 +242,13 @@ class Timespan {
         if (offset) {
           return Timespan.finiteFromMoments(
             timeHop,
-            timeHop.clone().subtract(offset).add(duration, unit).add(offset),
+            timeHop.clone().subtract(offset).add(duration!, unit).add(offset),
           ).intersection(thisTimespan);
         }
 
         return Timespan.finiteFromMoments(
           timeHop,
-          timeHop.clone().add(duration, unit),
+          timeHop.clone().add(duration!, unit),
         ).intersection(thisTimespan);
       })
       .filter(notEmpty);

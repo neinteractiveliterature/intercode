@@ -1,17 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import EventRatingIcon from '../../EventRatings/EventRatingIcon';
+import { SignupStatus } from './StylingUtils';
 
-function SignupStatusBadge({ signupStatus, myRating }) {
-  if (signupStatus === 'confirmed') {
+export type SignupStatusBadgeProps = {
+  signupStatus?: SignupStatus | null;
+  myRating?: number;
+};
+
+function SignupStatusBadge({ signupStatus, myRating }: SignupStatusBadgeProps) {
+  if (signupStatus === SignupStatus.Confirmed) {
     return <i className="fa fa-user-circle mr-1" title="Confirmed signup" />;
   }
 
-  if (signupStatus === 'waitlisted') {
+  if (signupStatus === SignupStatus.Waitlisted) {
     return <i className="fa fa-hourglass-half mr-1" title="Waitlisted" />;
   }
 
-  if (signupStatus === 'request_pending') {
+  if (signupStatus === SignupStatus.RequestPending) {
     return <i className="fa fa-pause-circle mr-1" title="Signup request pending" />;
   }
 
@@ -23,15 +28,7 @@ function SignupStatusBadge({ signupStatus, myRating }) {
     );
   }
 
-  return null;
+  return <></>;
 }
-
-SignupStatusBadge.propTypes = {
-  signupStatus: PropTypes.string,
-};
-
-SignupStatusBadge.defaultProps = {
-  signupStatus: null,
-};
 
 export default SignupStatusBadge;

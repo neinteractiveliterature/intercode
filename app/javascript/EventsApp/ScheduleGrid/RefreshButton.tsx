@@ -1,11 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import useAsyncFunction from '../../useAsyncFunction';
 
-function RefreshButton({ refreshData }) {
+export type RefreshButtonProps = {
+  refreshData: () => Promise<any>;
+};
+
+function RefreshButton({ refreshData }: RefreshButtonProps) {
   const { t } = useTranslation();
   const [refreshAsync, , refreshInProgress] = useAsyncFunction(refreshData);
 
@@ -21,9 +24,5 @@ function RefreshButton({ refreshData }) {
     </button>
   );
 }
-
-RefreshButton.propTypes = {
-  refreshData: PropTypes.func.isRequired,
-};
 
 export default RefreshButton;

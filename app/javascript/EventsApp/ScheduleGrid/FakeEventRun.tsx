@@ -1,10 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import AvailabilityBar from './AvailabilityBar';
-import { getRunClassificationStyles, getRunClassName } from './StylingUtils';
+import { getRunClassificationStyles, getRunClassName, SignupStatus } from './StylingUtils';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
+
+export type FakeEventRunProps = {
+  eventCategory: {};
+  children: ReactNode;
+  availability?: number;
+  unlimited?: boolean;
+  runFull?: boolean;
+  signupStatus?: SignupStatus;
+  onClick?: () => void;
+  withRef?: React.Ref<HTMLDivElement>;
+  zeroCapacity?: boolean;
+};
 
 function FakeEventRun({
   eventCategory,
@@ -16,9 +27,13 @@ function FakeEventRun({
   onClick,
   withRef,
   zeroCapacity,
-}) {
-  const config = { classifyEventsBy: 'category', showSignedUp: true };
-  const signupCountData = { runFull: () => runFull };
+}: FakeEventRunProps) {
+  const config = { classifyEventsBy: 'category' as const, showSignedUp: true };
+  const signupCountData = {
+    runFull: () => runFull ?? false,
+    getConfirmedLimitedSignupCount: () => 0,
+    getNotCountedConfirmedSignupCount: () => 0,
+  };
   const clickableProps = onClick
     ? {
         tabIndex: 0,
@@ -29,7 +44,7 @@ function FakeEventRun({
 
   const runStyle = {
     zIndex: 0,
-    position: 'relative',
+    position: 'relative' as const,
     height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
     marginBottom: LANE_GUTTER_HEIGHT,
     ...getRunClassificationStyles({
@@ -49,8 +64,13 @@ function FakeEventRun({
           config,
           signupCountData,
           signupStatus,
-          event: {},
-          unlimited,
+          event: {
+            registration_policy: {
+              buckets: [],
+              total_slots_including_not_counted: 0,
+            },
+          },
+          unlimited: unlimited ?? false,
         }),
         {
           'zero-capacity': zeroCapacity,
@@ -63,34 +83,12 @@ function FakeEventRun({
       <div className="schedule-grid-event-content">{children}</div>
 
       <AvailabilityBar
-        availabilityFraction={availability}
+        availabilityFraction={availability ?? 0.0}
         unlimited={unlimited}
         runStyle={runStyle}
       />
     </div>
   );
 }
-
-FakeEventRun.propTypes = {
-  eventCategory: PropTypes.shape({}).isRequired,
-  children: PropTypes.node.isRequired,
-  availability: PropTypes.number,
-  unlimited: PropTypes.bool,
-  runFull: PropTypes.bool,
-  signupStatus: PropTypes.string,
-  onClick: PropTypes.func,
-  withRef: PropTypes.func,
-  zeroCapacity: PropTypes.bool,
-};
-
-FakeEventRun.defaultProps = {
-  availability: 0.0,
-  unlimited: false,
-  runFull: false,
-  signupStatus: null,
-  onClick: undefined,
-  withRef: undefined,
-  zeroCapacity: false,
-};
 
 export default FakeEventRun;

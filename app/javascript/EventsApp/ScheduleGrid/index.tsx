@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +14,7 @@ import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { Transforms } from '../../ComposableFormUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../Tables/FilterUtils';
+import ErrorDisplay from '../../ErrorDisplay';
 
 const filterCodecs = buildFieldFilterCodecs({
   my_rating: FilterCodecs.integerArray,
@@ -26,7 +26,11 @@ const DEFAULT_PERSONAL_FILTERS = [
   { id: 'hide_conflicts', value: false },
 ];
 
-function ScheduleGridApp({ configKey }) {
+export type ScheduleGridAppProps = {
+  configKey: string;
+};
+
+function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const { t } = useTranslation();
   const location = useLocation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
@@ -48,10 +52,10 @@ function ScheduleGridApp({ configKey }) {
   }, [storageKey]);
 
   useEffect(() => {
-    if (config.showPersonalFilters && myProfile && !location.search) {
+    if (config?.showPersonalFilters && myProfile && !location.search) {
       onFilteredChange(loadPersonalFilters());
     }
-  }, [config.showPersonalFilters, loadPersonalFilters, location, myProfile, onFilteredChange]);
+  }, [config?.showPersonalFilters, loadPersonalFilters, location, myProfile, onFilteredChange]);
 
   const ratingFilter = (filtered.find((f) => f.id === 'my_rating') || {}).value;
   const hideConflicts = (filtered.find((f) => f.id === 'hide_conflicts') || {}).value;
@@ -74,6 +78,10 @@ function ScheduleGridApp({ configKey }) {
     onFilteredChange(newFiltered);
     window.localStorage.setItem(storageKey, JSON.stringify(newFiltered));
   };
+
+  if (!config) {
+    return <ErrorDisplay stringError={`Schedule grid configuration "${configKey}" not found`} />;
+  }
 
   return (
     <>
@@ -109,10 +117,11 @@ function ScheduleGridApp({ configKey }) {
             <ScheduleGrid timespan={timespan} />
             <div className="font-italic">
               {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
-                offsetName: DateTime.fromISO(timespan.start.toISOString()).reconfigure({
-                  locale: language,
-                  timezoneName,
-                }).offsetNameLong,
+                offsetName: DateTime.fromISO(timespan.start.toISOString())
+                  .reconfigure({
+                    locale: language,
+                  })
+                  .setZone(timezoneName).offsetNameLong,
               })}
             </div>
           </div>
@@ -120,8 +129,8 @@ function ScheduleGridApp({ configKey }) {
       </ScheduleGridProvider>
       {(config.legends || []).map((legend, i) => {
         if (legend.type === 'text') {
-          // eslint-disable-next-line react/no-array-index-key
           return (
+            // eslint-disable-next-line react/no-array-index-key
             <p key={i} className="font-italic">
               {legend.text}
             </p>
@@ -143,9 +152,5 @@ function ScheduleGridApp({ configKey }) {
     </>
   );
 }
-
-ScheduleGridApp.propTypes = {
-  configKey: PropTypes.string.isRequired,
-};
 
 export default ScheduleGridApp;

@@ -1,4 +1,7 @@
+import { Moment } from 'moment';
+import { FiniteTimespan } from '../../../Timespan';
 import ColumnReservation from './ColumnReservation';
+import EventRun from './EventRun';
 
 // helper function for sorting columns - should help eliminate holes
 // in the schedule by allowing events to span columns if possible
@@ -7,7 +10,7 @@ import ColumnReservation from './ColumnReservation';
 // in case of two reservations starting at the same time, reservations that end
 // later go first.
 // finally, reservations with fewer events go first.
-function compareReservationsForSort(a, b) {
+function compareReservationsForSort(a: ColumnReservation, b: ColumnReservation) {
   if (a == null && b == null) {
     return 0;
   }
@@ -32,6 +35,10 @@ function compareReservationsForSort(a, b) {
 }
 
 class ColumnReservationSet {
+  reservations: (ColumnReservation | null)[];
+
+  columnNumberByRunId: Map<number, number>;
+
   constructor() {
     this.clear();
   }
@@ -41,9 +48,10 @@ class ColumnReservationSet {
     this.columnNumberByRunId = new Map();
   }
 
-  reserve(columnNumber, eventRun, timespan) {
-    if (this.reservations[columnNumber] != null) {
-      this.reservations[columnNumber].addEventRun(eventRun, timespan);
+  reserve(columnNumber: number, eventRun: EventRun, timespan?: FiniteTimespan) {
+    const reservation = this.reservations[columnNumber];
+    if (reservation != null) {
+      reservation.addEventRun(eventRun, timespan);
     } else {
       this.reservations[columnNumber] = new ColumnReservation(eventRun, timespan);
     }
@@ -51,7 +59,7 @@ class ColumnReservationSet {
     this.columnNumberByRunId.set(eventRun.runId, columnNumber);
   }
 
-  getReservationForColumn(columnNumber) {
+  getReservationForColumn(columnNumber: number) {
     return this.reservations[columnNumber];
   }
 
@@ -72,7 +80,7 @@ class ColumnReservationSet {
     return reservedColumnNumbers[reservedColumnNumbers.length - 1];
   }
 
-  expire(cutoff) {
+  expire(cutoff: Moment) {
     this.getReservedColumnNumbers().forEach((columnNumber) => {
       const reservation = this.reservations[columnNumber];
       if (reservation == null) {
@@ -99,7 +107,7 @@ class ColumnReservationSet {
   }
 
   getFinishTime() {
-    let lastFinish;
+    let lastFinish: Moment | undefined;
     this.reservations.forEach((reservation) => {
       if (reservation == null) {
         return;
@@ -113,8 +121,8 @@ class ColumnReservationSet {
     return lastFinish;
   }
 
-  findFreeColumnForEventRun(eventRun) {
-    let columnNumber;
+  findFreeColumnForEventRun(eventRun: EventRun) {
+    let columnNumber: number | undefined;
 
     this.reservations.forEach((reservation, i) => {
       if (columnNumber != null) {
@@ -133,7 +141,7 @@ class ColumnReservationSet {
     return this.reservations.length;
   }
 
-  columnFreeBetween(columnNumber, timespan) {
+  columnFreeBetween(columnNumber: number, timespan: FiniteTimespan) {
     const reservation = this.reservations[columnNumber];
 
     return reservation == null || !reservation.timespan.overlapsTimespan(timespan);
@@ -157,7 +165,7 @@ class ColumnReservationSet {
     this.recalculateRunColumns();
   }
 
-  isColumnReservedForRunId(runId) {
+  isColumnReservedForRunId(runId: number) {
     return this.columnNumberByRunId.has(runId);
   }
 }

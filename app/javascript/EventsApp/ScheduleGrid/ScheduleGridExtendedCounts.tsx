@@ -1,15 +1,17 @@
 import React, { useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import MomentPropTypes from 'react-moment-proptypes';
+import moment, { Moment } from 'moment-timezone';
 
 import SignupCountData from '../SignupCountData';
 import { ScheduleGridContext } from './ScheduleGridContext';
 import Timespan from '../../Timespan';
+import EventRun from './PCSG/EventRun';
+import Schedule from './Schedule';
+import AppRootContext from '../../AppRootContext';
+import { SignupState } from '../../graphqlTypes.generated';
 
-function buildHourRunData(eventRun, schedule) {
-  const run = schedule.getRun(eventRun.runId);
-  const event = schedule.getEvent(run.event_id);
+function buildHourRunData(eventRun: EventRun, schedule: Schedule) {
+  const run = schedule.getRun(eventRun.runId)!;
+  const event = schedule.getEvent(run.event_id)!;
   const signupCountData = SignupCountData.fromRun(run);
   return {
     eventRun,
@@ -19,11 +21,14 @@ function buildHourRunData(eventRun, schedule) {
   };
 }
 
-function ScheduleGridExtendedCounts({ now, eventRuns }) {
-  const {
-    convention: { timezone_name: timezoneName },
-    schedule,
-  } = useContext(ScheduleGridContext);
+export type ScheduleGridExtendedCountsProps = {
+  now: Moment;
+  eventRuns: EventRun[];
+};
+
+function ScheduleGridExtendedCounts({ now, eventRuns }: ScheduleGridExtendedCountsProps) {
+  const { schedule } = useContext(ScheduleGridContext);
+  const { timezoneName } = useContext(AppRootContext);
 
   const nowISOString = now.toISOString();
   const hourTimespan = useMemo(() => {
@@ -40,29 +45,29 @@ function ScheduleGridExtendedCounts({ now, eventRuns }) {
   );
 
   const minimumSlots = hourRunData.reduce(
-    (sum, runData) => sum + runData.event.registration_policy.minimum_slots,
+    (sum, runData) => sum + (runData.event.registration_policy?.minimum_slots ?? 0),
     0,
   );
 
   const preferredSlots = hourRunData.reduce(
-    (sum, runData) => sum + runData.event.registration_policy.preferred_slots,
+    (sum, runData) => sum + (runData.event.registration_policy?.preferred_slots ?? 0),
     0,
   );
 
   const totalSlots = hourRunData.reduce(
-    (sum, runData) => sum + runData.event.registration_policy.total_slots,
+    (sum, runData) => sum + (runData.event.registration_policy?.total_slots ?? 0),
     0,
   );
 
   const confirmedSignups = hourRunData.reduce(
     (sum, { signupCountData }) =>
-      sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: true }),
+      sum + signupCountData.sumSignupCounts({ state: SignupState.Confirmed, counted: true }),
     0,
   );
 
   const notCountedSignups = hourRunData.reduce(
     (sum, { signupCountData }) =>
-      sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: false }),
+      sum + signupCountData.sumSignupCounts({ state: SignupState.Confirmed, counted: false }),
     0,
   );
 
@@ -79,25 +84,13 @@ function ScheduleGridExtendedCounts({ now, eventRuns }) {
         {minimumSlots}/{preferredSlots}/{totalSlots}
       </div>
       <div>
-        <span className="text-success">{confirmedSignups}</span>
-        {'/'}
-        <span className="text-info">{notCountedSignups}</span>
-        {'/'}
+        <span className="text-success">{confirmedSignups}</span>/
+        <span className="text-info">{notCountedSignups}</span>/
         <span className="text-danger">{waitlistedSignups}</span>
       </div>
       <div>Total: {playerCount}</div>
     </div>
   );
 }
-
-ScheduleGridExtendedCounts.propTypes = {
-  now: MomentPropTypes.momentObj.isRequired,
-  eventRuns: PropTypes.arrayOf(
-    PropTypes.shape({
-      runId: PropTypes.number.isRequired,
-      timespan: PropTypes.shape({}).isRequired,
-    }),
-  ).isRequired,
-};
 
 export default ScheduleGridExtendedCounts;

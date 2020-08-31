@@ -1,14 +1,19 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode, useContext } from 'react';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
+import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
 
-function ScheduleGridRowHeader({ layoutResult, rowHeader }) {
+export type ScheduleGridRowHeaderProps = {
+  layoutResult: ScheduleLayoutResult;
+  rowHeader: ReactNode;
+};
+
+function ScheduleGridRowHeader({ layoutResult, rowHeader }: ScheduleGridRowHeaderProps) {
   const { schedule } = useContext(ScheduleGridContext);
 
   if (!schedule.shouldUseRowHeaders()) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -24,16 +29,5 @@ function ScheduleGridRowHeader({ layoutResult, rowHeader }) {
     </div>
   );
 }
-
-ScheduleGridRowHeader.propTypes = {
-  layoutResult: PropTypes.shape({
-    laneCount: PropTypes.number.isRequired,
-  }).isRequired,
-  rowHeader: PropTypes.string,
-};
-
-ScheduleGridRowHeader.defaultProps = {
-  rowHeader: null,
-};
 
 export default ScheduleGridRowHeader;
