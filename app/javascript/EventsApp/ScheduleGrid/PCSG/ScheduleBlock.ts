@@ -3,92 +3,119 @@ import sortBy from 'lodash/sortBy';
 
 import { normalizeTitle } from '../../../ValueUtils';
 import { FiniteTimespan } from '../../../Timespan';
+// eslint-disable-next-line import/no-duplicates
 import type Schedule from '../Schedule';
-import EventRun from './EventRun';
+// eslint-disable-next-line import/no-duplicates
+import type { ScheduleEvent } from '../Schedule';
 
 class ScheduleBlock {
   id: string;
 
-  eventRuns: EventRun[];
+  runIds: number[];
+
+  runTimespans: Map<number, FiniteTimespan>;
 
   timespan: FiniteTimespan;
 
   schedule: Schedule;
 
-  hiddenEventRunsInTimespan: EventRun[];
+  hiddenEventRunIds: number[];
 
-  hiddenEventsFakeEventRun: EventRun | null;
+  hiddenEventsFakeRunId: number | undefined;
 
   interval: moment.Duration;
 
-  constructor(id: string, timespan: FiniteTimespan, eventRuns: EventRun[], schedule: Schedule) {
+  constructor(id: string, timespan: FiniteTimespan, runIds: number[], schedule: Schedule) {
     this.id = id;
-    this.eventRuns = [];
+    this.runIds = [];
+    this.runTimespans = new Map<number, FiniteTimespan>();
     this.timespan = timespan;
-    this.hiddenEventRunsInTimespan = [];
-    this.hiddenEventsFakeEventRun = null;
+    this.hiddenEventRunIds = [];
     this.interval = moment.duration(1, 'hour');
     this.schedule = schedule;
 
-    const sortedEventRuns = sortBy(eventRuns, (eventRun) =>
-      eventRun.timespan.start.toDate().getTime(),
+    const sortedRunIds = sortBy(
+      runIds,
+      (runId) => schedule.getRunTimespan(runId)?.start.toDate().getTime() ?? 0,
     );
-    sortedEventRuns.forEach((eventRun) => {
-      this.addEventRun(eventRun);
+    sortedRunIds.forEach((runId) => {
+      const runTimespan = schedule.getRunTimespan(runId);
+      if (runTimespan) {
+        this.addRun(runId, runTimespan);
+      }
     });
   }
 
-  addEventRun(eventRun: EventRun) {
-    let eventRunToAdd = eventRun;
-
-    if (!this.schedule.shouldShowRun(eventRun.runId)) {
-      if (
-        this.hiddenEventsFakeEventRun &&
-        this.hiddenEventsFakeEventRun.timespan.overlapsTimespan(eventRun.timespan)
-      ) {
-        this.hiddenEventRunsInTimespan.push(eventRun);
-        const run = this.schedule.getRun(this.hiddenEventsFakeEventRun.runId);
-        const event = this.schedule.getEvent(run.event_id);
-        event.title = `+ ${this.hiddenEventRunsInTimespan.length} not shown`;
-        this.hiddenEventsFakeEventRun.timespan = this.hiddenEventsFakeEventRun.timespan.expandedToFit(
-          eventRun.timespan,
-        );
+  addRun(runId: number, timespan: FiniteTimespan) {
+    if (!this.schedule.shouldShowRun(runId)) {
+      const existingFakeRunTimespan = this.hiddenEventsFakeRunId
+        ? this.schedule.getRunTimespan(this.hiddenEventsFakeRunId)
+        : undefined;
+      if (existingFakeRunTimespan?.overlapsTimespan(timespan)) {
+        this.hiddenEventRunIds.push(runId);
+        const run = this.schedule.getRun(this.hiddenEventsFakeRunId!)!;
+        const event = this.schedule.getEvent(run.event_id)!;
+        event.title = `+ ${this.hiddenEventRunIds.length} not shown`;
+        const expandedTimespan = existingFakeRunTimespan.expandedToFit(timespan);
+        this.schedule.runTimespansById.set(this.hiddenEventsFakeRunId!, expandedTimespan);
+        this.runTimespans.set(this.hiddenEventsFakeRunId!, expandedTimespan);
 
         return;
       }
 
-      const fakeEventRun = this.schedule.addFakeEventRun(eventRun.timespan, '+ 1 not shown');
+      const newFakeRunId = this.schedule.addFakeEventRun(timespan, '+ 1 not shown');
 
-      this.hiddenEventsFakeEventRun = fakeEventRun;
-      this.hiddenEventRunsInTimespan = [eventRun];
-      eventRunToAdd = fakeEventRun;
+      this.hiddenEventsFakeRunId = newFakeRunId;
+      this.hiddenEventRunIds = [runId];
+      this.runIds.push(newFakeRunId);
+      this.runTimespans.set(newFakeRunId, timespan);
+    } else {
+      this.runIds.push(runId);
+      this.runTimespans.set(runId, timespan);
     }
 
-    this.eventRuns.push(eventRunToAdd);
-    this.timespan = this.timespan.expandedToFit(eventRunToAdd.timespan);
+    this.timespan = this.timespan.expandedToFit(timespan);
   }
 
-  getRunCountInTimespan(event, timespan) {
+  getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan) {
     return event.runs.filter((run) => {
-      const eventRun = this.eventRuns.find((er) => er.runId === run.id);
-      if (!eventRun) {
+      const runTimespan = this.runTimespans.get(run.id);
+      if (!runTimespan) {
         return false;
       }
 
-      return eventRun.timespan.overlapsTimespan(timespan);
+      return runTimespan.overlapsTimespan(timespan);
     }).length;
   }
 
-  getTimeSortedEventRuns() {
-    return [...this.eventRuns].sort((a, b) => {
-      const timeDiff = a.timespan.start.diff(b.timespan.start);
+  getTimeSortedRunIds() {
+    return [...this.runIds].sort((a, b) => {
+      const aTimespan = this.runTimespans.get(a);
+      const bTimespan = this.runTimespans.get(b);
+      if (aTimespan && !bTimespan) {
+        return 1;
+      }
+      if (!aTimespan && bTimespan) {
+        return -1;
+      }
+      if (!aTimespan || !bTimespan) {
+        return 0;
+      }
+      const timeDiff = aTimespan.start.diff(bTimespan.start);
 
       if (timeDiff === 0) {
         // use number of overlapping runs as a tiebreaker (more runs first)
-        const runA = this.schedule.getRun(a.runId);
-        const runB = this.schedule.getRun(b.runId);
-        const eventA = this.schedule.getEvent(runA.event_id);
-        const eventB = this.schedule.getEvent(runB.event_id);
+        const eventA = this.schedule.getEventForRun(a);
+        const eventB = this.schedule.getEventForRun(b);
+        if (eventA && !eventB) {
+          return 1;
+        }
+        if (!eventA && eventB) {
+          return -1;
+        }
+        if (!eventA || !eventB) {
+          return 0;
+        }
         if (eventA.fake && !eventB.fake) {
           return 1;
         }
@@ -99,25 +126,25 @@ class ScheduleBlock {
 
         const eventAOverlappingRunCount = this.getRunCountInTimespan(
           eventA,
-          b.timespan.expand(1, 'hour'),
+          bTimespan.expand(1, 'hour'),
         );
         const eventBOverlappingRunCount = this.getRunCountInTimespan(
           eventB,
-          a.timespan.expand(1, 'hour'),
+          aTimespan.expand(1, 'hour'),
         );
         const runCountDiff = eventBOverlappingRunCount - eventAOverlappingRunCount;
 
         if (runCountDiff === 0) {
           // finally, use event title as a tiebreaker
-          const titleDiff = normalizeTitle(eventA.title).localeCompare(
-            normalizeTitle(eventB.title),
+          const titleDiff = normalizeTitle(eventA.title ?? '').localeCompare(
+            normalizeTitle(eventB.title ?? ''),
             undefined,
             { sensitivity: 'base' },
           );
 
           if (titleDiff === 0) {
             // as a tiebreaker, sort longer events first
-            const lengthDiff = b.timespan.finish.diff(a.timespan.finish);
+            const lengthDiff = bTimespan.finish.diff(aTimespan.finish);
 
             return lengthDiff;
           }

@@ -26,7 +26,6 @@ import AppRootContext from '../../AppRootContext';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import { TimezoneMode } from '../../graphqlTypes.generated';
 import { ScheduleGridEventFragmentFragment } from './queries.generated';
-import EventRun from './PCSG/EventRun';
 import { FiniteTimespan } from '../../Timespan';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
@@ -121,11 +120,7 @@ export function useScheduleGridProvider(
         }
 
         const runTimespan = schedule.getRunTimespan(runId);
-        const concurrentRunIds = runTimespan
-          ? schedule
-              .getEventRunsOverlapping(runTimespan)
-              .map((eventRun: EventRun) => eventRun.runId)
-          : [];
+        const concurrentRunIds = runTimespan ? schedule.getRunIdsOverlapping(runTimespan) : [];
 
         concurrentRunIds.forEach((concurrentRunId: number) => {
           newVisibleRunDetailsIds.delete(concurrentRunId);

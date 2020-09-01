@@ -271,6 +271,7 @@ export const ConvertToEventProvidedTicketQuery = gql`
         id
         ticket_type {
           id
+          name
         }
       }
     }

@@ -34,7 +34,7 @@ function ScheduleGrid({ timespan }: ScheduleGridProps) {
           {schedule.shouldUseRowHeaders() ? (
             <div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />
           ) : null}
-          <ScheduleGridHeaderBlock timespan={layout.timespan} eventRuns={layout.eventRuns} />
+          <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
         </div>
         {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
           <div

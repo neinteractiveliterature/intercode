@@ -63,11 +63,17 @@ export type ConventionFieldsFragment = (
 
 export type RunFieldsFragment = (
   { __typename?: 'Run' }
-  & Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix'>
+  & Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix' | 'room_names' | 'confirmed_signup_count' | 'not_counted_signup_count' | 'signup_count_by_state_and_bucket_key_and_counted'>
   & { rooms: Array<(
     { __typename?: 'Room' }
     & Pick<Types.Room, 'id'>
     & RoomFieldsFragment
+  )>, my_signups: Array<(
+    { __typename?: 'Signup' }
+    & Pick<Types.Signup, 'id' | 'state'>
+  )>, my_signup_requests: Array<(
+    { __typename?: 'SignupRequest' }
+    & Pick<Types.SignupRequest, 'id' | 'state'>
   )> }
 );
 
@@ -182,9 +188,21 @@ export const RunFieldsFragmentDoc = gql`
   starts_at
   schedule_note
   title_suffix
+  room_names
+  confirmed_signup_count
+  not_counted_signup_count
+  signup_count_by_state_and_bucket_key_and_counted
   rooms {
     id
     ...RoomFields
+  }
+  my_signups {
+    id
+    state
+  }
+  my_signup_requests {
+    id
+    state
   }
 }
     ${RoomFieldsFragmentDoc}`;

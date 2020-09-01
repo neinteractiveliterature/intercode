@@ -37,7 +37,7 @@ export function getConventionDayTimespans(
   });
 }
 
-export function getMemoizationKeyForTimespan(timespan: Timespan) {
+export function getMemoizationKeyForTimespan(timespan?: Timespan) {
   if (!timespan) {
     return '';
   }

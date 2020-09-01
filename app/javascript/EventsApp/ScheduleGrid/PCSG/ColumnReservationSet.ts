@@ -1,7 +1,6 @@
 import { Moment } from 'moment';
 import { FiniteTimespan } from '../../../Timespan';
 import ColumnReservation from './ColumnReservation';
-import EventRun from './EventRun';
 
 // helper function for sorting columns - should help eliminate holes
 // in the schedule by allowing events to span columns if possible
@@ -31,7 +30,7 @@ function compareReservationsForSort(a: ColumnReservation, b: ColumnReservation) 
     return b.timespan.finish.diff(a.timespan.finish);
   }
 
-  return a.eventRuns.length - b.eventRuns.length;
+  return a.runIds.length - b.runIds.length;
 }
 
 class ColumnReservationSet {
@@ -48,15 +47,15 @@ class ColumnReservationSet {
     this.columnNumberByRunId = new Map();
   }
 
-  reserve(columnNumber: number, eventRun: EventRun, timespan?: FiniteTimespan) {
+  reserve(columnNumber: number, runId: number, timespan: FiniteTimespan) {
     const reservation = this.reservations[columnNumber];
     if (reservation != null) {
-      reservation.addEventRun(eventRun, timespan);
+      reservation.addRun(runId, timespan);
     } else {
-      this.reservations[columnNumber] = new ColumnReservation(eventRun, timespan);
+      this.reservations[columnNumber] = new ColumnReservation(runId, timespan);
     }
 
-    this.columnNumberByRunId.set(eventRun.runId, columnNumber);
+    this.columnNumberByRunId.set(runId, columnNumber);
   }
 
   getReservationForColumn(columnNumber: number) {
@@ -121,7 +120,7 @@ class ColumnReservationSet {
     return lastFinish;
   }
 
-  findFreeColumnForEventRun(eventRun: EventRun) {
+  findFreeColumnForTimespan(timespan: FiniteTimespan) {
     let columnNumber: number | undefined;
 
     this.reservations.forEach((reservation, i) => {
@@ -129,7 +128,7 @@ class ColumnReservationSet {
         return;
       }
 
-      if (reservation == null || !reservation.timespan.overlapsTimespan(eventRun.timespan)) {
+      if (reservation == null || !reservation.timespan.overlapsTimespan(timespan)) {
         columnNumber = i;
       }
     });
@@ -154,8 +153,8 @@ class ColumnReservationSet {
         return;
       }
 
-      reservation.eventRuns.forEach((eventRun) => {
-        this.columnNumberByRunId.set(eventRun.runId, columnNumber);
+      reservation.runIds.forEach((runId) => {
+        this.columnNumberByRunId.set(runId, columnNumber);
       });
     });
   }

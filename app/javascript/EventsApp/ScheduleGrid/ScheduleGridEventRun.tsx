@@ -6,8 +6,8 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
 import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
-import RunDimensions from './PCSG/RunDimensions';
-import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
+import { RunDimensions } from './PCSG/RunDimensions';
+import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;
@@ -18,17 +18,13 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }: ScheduleGridEvent
   const { schedule, toggleRunDetailsVisibility, visibleRunDetailsIds } = useContext(
     ScheduleGridContext,
   );
-  const detailsVisible = visibleRunDetailsIds.has(runDimensions.eventRun.runId);
+  const detailsVisible = visibleRunDetailsIds.has(runDimensions.runId);
 
-  const { eventRun } = runDimensions;
-  const run = useMemo(() => schedule.getRun(eventRun.runId), [schedule, eventRun.runId]);
-  const event = useMemo(() => {
-    if (!run) {
-      return null;
-    }
-
-    return schedule.getEvent(run.event_id);
-  }, [schedule, run]);
+  const run = useMemo(() => schedule.getRun(runDimensions.runId), [schedule, runDimensions.runId]);
+  const event = useMemo(() => schedule.getEventForRun(runDimensions.runId), [
+    schedule,
+    runDimensions.runId,
+  ]);
 
   const signupCountData = useMemo(() => {
     if (!run) {

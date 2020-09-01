@@ -11,7 +11,7 @@ import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import { PopperDropdownChildrenProps } from '../../UIComponents/PopperDropdown';
 import { ScheduleEvent, ScheduleRun } from './Schedule';
-import RunDimensions from './PCSG/RunDimensions';
+import { RunDimensions } from './PCSG/RunDimensions';
 import SignupCountData from '../SignupCountData';
 
 export type RunDetailsProps = {
@@ -32,7 +32,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
   ) => {
     const { myProfile } = useContext(AppRootContext);
     const { schedule } = useContext(ScheduleGridContext);
-    const { timespan } = runDimensions.eventRun;
+    const { timespan } = runDimensions;
     const rateEvent = useRateEvent();
     const apolloClient = useApolloClient();
 
