@@ -4,17 +4,15 @@ import moment, { Moment } from 'moment-timezone';
 import SignupCountData from '../SignupCountData';
 import { ScheduleGridContext } from './ScheduleGridContext';
 import Timespan from '../../Timespan';
-import EventRun from './PCSG/EventRun';
 import Schedule from './Schedule';
 import AppRootContext from '../../AppRootContext';
 import { SignupState } from '../../graphqlTypes.generated';
 
-function buildHourRunData(eventRun: EventRun, schedule: Schedule) {
-  const run = schedule.getRun(eventRun.runId)!;
+function buildHourRunData(runId: number, schedule: Schedule) {
+  const run = schedule.getRun(runId)!;
   const event = schedule.getEvent(run.event_id)!;
   const signupCountData = SignupCountData.fromRun(run);
   return {
-    eventRun,
     run,
     event,
     signupCountData,
@@ -23,10 +21,10 @@ function buildHourRunData(eventRun: EventRun, schedule: Schedule) {
 
 export type ScheduleGridExtendedCountsProps = {
   now: Moment;
-  eventRuns: EventRun[];
+  runIds: number[];
 };
 
-function ScheduleGridExtendedCounts({ now, eventRuns }: ScheduleGridExtendedCountsProps) {
+function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsProps) {
   const { schedule } = useContext(ScheduleGridContext);
   const { timezoneName } = useContext(AppRootContext);
 
@@ -35,14 +33,14 @@ function ScheduleGridExtendedCounts({ now, eventRuns }: ScheduleGridExtendedCoun
     const nowMoment = moment.tz(nowISOString, timezoneName);
     return new Timespan(nowMoment, nowMoment.clone().add(1, 'hour'));
   }, [nowISOString, timezoneName]);
-  const hourEventRuns = useMemo(
-    () => eventRuns.filter((eventRun) => hourTimespan.overlapsTimespan(eventRun.timespan)),
-    [eventRuns, hourTimespan],
-  );
-  const hourRunData = useMemo(
-    () => hourEventRuns.map((eventRun) => buildHourRunData(eventRun, schedule)),
-    [hourEventRuns, schedule],
-  );
+  const hourRunIds = useMemo(() => {
+    const runIdsFromSchedule = new Set(schedule.getRunIdsOverlapping(hourTimespan));
+    return runIds.filter((runId) => runIdsFromSchedule.has(runId));
+  }, [hourTimespan, schedule, runIds]);
+  const hourRunData = useMemo(() => hourRunIds.map((runId) => buildHourRunData(runId, schedule)), [
+    hourRunIds,
+    schedule,
+  ]);
 
   const minimumSlots = hourRunData.reduce(
     (sum, runData) => sum + (runData.event.registration_policy?.minimum_slots ?? 0),

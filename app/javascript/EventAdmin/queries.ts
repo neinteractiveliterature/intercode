@@ -96,10 +96,25 @@ export const RunFields = gql`
     starts_at
     schedule_note
     title_suffix
+    room_names
+
+    confirmed_signup_count
+    not_counted_signup_count
+    signup_count_by_state_and_bucket_key_and_counted
 
     rooms {
       id
       ...RoomFields
+    }
+
+    my_signups {
+      id
+      state
+    }
+
+    my_signup_requests {
+      id
+      state
     }
   }
 

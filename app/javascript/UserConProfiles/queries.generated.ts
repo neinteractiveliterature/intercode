@@ -199,7 +199,7 @@ export type ConvertToEventProvidedTicketQueryQuery = (
       & Pick<Types.Ticket, 'id'>
       & { ticket_type: (
         { __typename?: 'TicketType' }
-        & Pick<Types.TicketType, 'id'>
+        & Pick<Types.TicketType, 'id' | 'name'>
       ) }
     )> }
   ) }
@@ -542,6 +542,7 @@ export const ConvertToEventProvidedTicketQueryDocument = gql`
       id
       ticket_type {
         id
+        name
       }
     }
   }

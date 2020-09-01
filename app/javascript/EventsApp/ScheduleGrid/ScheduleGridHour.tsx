@@ -4,7 +4,6 @@ import { Moment } from 'moment';
 import ScheduleGridExtendedCounts from './ScheduleGridExtendedCounts';
 import { PIXELS_PER_HOUR } from './LayoutConstants';
 import { ScheduleGridContext } from './ScheduleGridContext';
-import EventRun from './PCSG/EventRun';
 
 function formatTime(time: Moment, timezoneName: string) {
   const timeInZone = time.tz(timezoneName);
@@ -19,10 +18,10 @@ function formatTime(time: Moment, timezoneName: string) {
 
 export type ScheduleGridHourProps = {
   now: Moment;
-  eventRuns: EventRun[];
+  runIds: number[];
 };
 
-function ScheduleGridHour({ now, eventRuns }: ScheduleGridHourProps) {
+function ScheduleGridHour({ now, runIds }: ScheduleGridHourProps) {
   const { schedule, config } = useContext(ScheduleGridContext);
   return (
     <div
@@ -35,9 +34,7 @@ function ScheduleGridHour({ now, eventRuns }: ScheduleGridHourProps) {
     >
       <div className="small text-muted ml-1">
         {formatTime(now, schedule.timezoneName)}
-        {config.showExtendedCounts && (
-          <ScheduleGridExtendedCounts now={now} eventRuns={eventRuns} />
-        )}
+        {config.showExtendedCounts && <ScheduleGridExtendedCounts now={now} runIds={runIds} />}
       </div>
     </div>
   );

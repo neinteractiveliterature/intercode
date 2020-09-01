@@ -1,20 +1,9 @@
-import EventRun from './EventRun';
+import { FiniteTimespan } from '../../../Timespan';
 
-class RunDimensions {
-  eventRun: EventRun;
-
+export type RunDimensions = {
+  runId: number;
+  timespan: FiniteTimespan;
   laneIndex: number;
-
-  timePlacement: number;
-
-  timeSpan: number;
-
-  constructor(eventRun: EventRun, laneIndex: number, timePlacement: number, timeSpan: number) {
-    this.eventRun = eventRun;
-    this.laneIndex = laneIndex;
-    this.timePlacement = timePlacement;
-    this.timeSpan = timeSpan;
-  }
-}
-
-export default RunDimensions;
+  timeAxisStartPercent: number;
+  timeAxisSizePercent: number;
+};

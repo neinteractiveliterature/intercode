@@ -1,13 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EventRatingIcon from './EventRatingIcon';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 
-function RatingButton({ rating, selected, onClick, padding, size, tooltipContent }) {
-  const defaultPadding = size * 0.5;
-  const actualPadding = padding || defaultPadding;
+type RatingButtonProps = {
+  rating: number;
+  onClick: () => void;
+  tooltipContent: ReactNode;
+  selected?: boolean;
+  size?: number;
+  padding?: number;
+};
+
+function RatingButton({
+  rating,
+  selected,
+  onClick,
+  padding,
+  size,
+  tooltipContent,
+}: RatingButtonProps) {
+  const defaultPadding = (size ?? 1.0) * 0.5;
+  const actualPadding = padding ?? defaultPadding;
   const paddingStyle = {
     padding: `${actualPadding}rem`,
     paddingTop: `${actualPadding * 0.75}rem`,
@@ -36,29 +51,20 @@ function RatingButton({ rating, selected, onClick, padding, size, tooltipContent
   );
 }
 
-RatingButton.propTypes = {
-  rating: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
-  tooltipContent: PropTypes.string.isRequired,
-  selected: PropTypes.bool,
-  size: PropTypes.number,
-  padding: PropTypes.number,
+export type RateEventControlProps = {
+  value?: number | null;
+  onChange: (newValue: number) => void;
+  size?: number;
 };
 
-RatingButton.defaultProps = {
-  selected: false,
-  size: 1.0,
-  padding: null,
-};
-
-function RateEventControl({ value, onChange, size }) {
+function RateEventControl({ value, onChange, size }: RateEventControlProps) {
   const { t } = useTranslation();
   const clearRating = () => {
     onChange(0);
   };
 
   const hasRating = value != null && value !== 0;
-  const buttonSize = size || RatingButton.defaultProps.size;
+  const buttonSize = size ?? 1.0;
   const buttonPadding = buttonSize * 0.5;
   const buttonWidth = buttonSize + buttonPadding * 2.0;
   const width = `calc(${hasRating ? buttonWidth : buttonWidth * 2.0}rem + 2px)`;
@@ -67,7 +73,7 @@ function RateEventControl({ value, onChange, size }) {
     <div className="bg-white border rounded rate-event-control" style={{ width }}>
       {hasRating ? (
         <RatingButton
-          rating={value}
+          rating={value!}
           onClick={clearRating}
           selected
           size={size}
@@ -93,16 +99,5 @@ function RateEventControl({ value, onChange, size }) {
     </div>
   );
 }
-
-RateEventControl.propTypes = {
-  value: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
-  size: PropTypes.number,
-};
-
-RateEventControl.defaultProps = {
-  value: null,
-  size: 1.0,
-};
 
 export default RateEventControl;

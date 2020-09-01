@@ -4,8 +4,8 @@ import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWithoutSpanning';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
 import ScheduleBlockData from './PCSG/ScheduleBlock';
-import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
-import RunDimensions from './PCSG/RunDimensions';
+import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
+import { RunDimensions } from './PCSG/RunDimensions';
 
 export type ScheduleBlockProps = {
   scheduleBlock: ScheduleBlockData;
@@ -33,7 +33,7 @@ function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }: ScheduleBlo
       <div className="schedule-grid-block">
         <div style={blockContentStyle}>
           {layoutResult.runDimensions.map((runDimensions) => (
-            <React.Fragment key={runDimensions.eventRun.runId}>
+            <React.Fragment key={runDimensions.runId}>
               {renderEventRun({ layoutResult, runDimensions })}
             </React.Fragment>
           ))}

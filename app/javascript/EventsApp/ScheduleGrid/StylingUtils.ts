@@ -6,8 +6,8 @@ import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
-import RunDimensions from './PCSG/RunDimensions';
-import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
+import { RunDimensions } from './PCSG/RunDimensions';
+import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
 
 export enum SignupStatus {
   Confirmed = 'confirmed',
@@ -95,8 +95,8 @@ export function getRunPositioningStyles({
   return {
     top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
     height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
-    left: `${runDimensions.timePlacement}%`,
-    width: `${runDimensions.timeSpan}%`,
+    left: `${runDimensions.timeAxisStartPercent}%`,
+    width: `${runDimensions.timeAxisSizePercent}%`,
     position: 'absolute',
     zIndex: runDimensions.laneIndex,
   };

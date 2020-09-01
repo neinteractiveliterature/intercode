@@ -67,14 +67,11 @@ function FakeEventRun({
           event: {
             registration_policy: {
               buckets: [],
-              total_slots_including_not_counted: 0,
+              total_slots_including_not_counted: zeroCapacity ? 0 : 1,
             },
           },
           unlimited: unlimited ?? false,
         }),
-        {
-          'zero-capacity': zeroCapacity,
-        },
       )}
       style={runStyle}
       ref={withRef}
