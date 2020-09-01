@@ -1,3 +1,5 @@
+name: TypeScript type check
+
 on:
   push:
     branches:
