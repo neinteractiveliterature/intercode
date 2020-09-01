@@ -11,7 +11,7 @@ import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import { PopperDropdownChildrenProps } from '../../UIComponents/PopperDropdown';
 import { ScheduleEvent, ScheduleRun } from './Schedule';
-import { RunDimensions } from './PCSG/RunDimensions';
+import { RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import SignupCountData from '../SignupCountData';
 
 export type RunDetailsProps = {

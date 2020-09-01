@@ -36,13 +36,13 @@ function ScheduleGrid({ timespan }: ScheduleGridProps) {
           ) : null}
           <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
         </div>
-        {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
+        {layout.blocksWithOptions.map(([layoutBlock, options]) => (
           <div
             className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
-            key={scheduleBlock.id}
+            key={layoutBlock.id}
           >
             <ScheduleBlock
-              scheduleBlock={scheduleBlock}
+              layoutBlock={layoutBlock}
               rowHeader={options.rowHeader}
               renderEventRun={({ layoutResult, runDimensions }) => (
                 <ScheduleGridEventRun layoutResult={layoutResult} runDimensions={runDimensions} />

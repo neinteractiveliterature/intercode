@@ -1,14 +1,14 @@
 import React, { ReactNode, useMemo } from 'react';
 
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
-import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWithoutSpanning';
+import ScheduleLayoutBlock, {
+  ScheduleLayoutResult,
+  RunDimensions,
+} from './ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
-import ScheduleBlockData from './PCSG/ScheduleBlock';
-import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
-import { RunDimensions } from './PCSG/RunDimensions';
 
 export type ScheduleBlockProps = {
-  scheduleBlock: ScheduleBlockData;
+  layoutBlock: ScheduleLayoutBlock;
   rowHeader: ReactNode;
   renderEventRun: (options: {
     layoutResult: ScheduleLayoutResult;
@@ -16,14 +16,12 @@ export type ScheduleBlockProps = {
   }) => JSX.Element;
 };
 
-function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }: ScheduleBlockProps) {
-  const layoutResult = useMemo(() => computeRunDimensionsWithoutSpanning(scheduleBlock), [
-    scheduleBlock,
-  ]);
+function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlockProps) {
+  const layoutResult = useMemo(() => layoutBlock.computeLayout(), [layoutBlock]);
 
   const blockContentStyle = {
     position: 'relative' as const,
-    width: `${scheduleBlock.timespan.getLength('hour') * PIXELS_PER_HOUR}px`,
+    width: `${layoutBlock.timespan.getLength('hour') * PIXELS_PER_HOUR}px`,
     height: `${layoutResult.laneCount * PIXELS_PER_LANE}px`,
   };
 

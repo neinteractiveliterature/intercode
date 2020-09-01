@@ -24,8 +24,10 @@ import {
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
 import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
-import { RunDimensions } from '../EventsApp/ScheduleGrid/PCSG/RunDimensions';
-import { ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/PCSG/ScheduleLayoutResult';
+import {
+  RunDimensions,
+  ScheduleLayoutResult,
+} from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridConfig from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import {
   useEventAdminEventsQueryQuery,
@@ -34,6 +36,7 @@ import {
 } from './queries.generated';
 import { ScheduleGridEventFragmentFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
+import { notEmpty } from '../ValueUtils';
 
 const SCHEDULE_GRID_CONFIG = new ScheduleGridConfig({
   key: 'con_schedule_by_room',
@@ -183,7 +186,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
         confirmed_signup_count: 0,
         not_counted_signup_count: 0,
         signup_count_by_state_and_bucket_key_and_counted: '{}',
-        room_names: [],
+        room_names: run.rooms.map((room) => room.name).filter(notEmpty),
         my_signups: [],
         my_signup_requests: [],
       })),
@@ -266,13 +269,13 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
             ) : null}
             <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
           </div>
-          {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
+          {layout.blocksWithOptions.map(([layoutBlock, options]) => (
             <div
               className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
-              key={scheduleBlock.id}
+              key={layoutBlock.id}
             >
               <ScheduleBlock
-                scheduleBlock={scheduleBlock}
+                layoutBlock={layoutBlock}
                 rowHeader={options.rowHeader}
                 renderEventRun={({ layoutResult, runDimensions }) => (
                   <ProspectiveRunScheduleEventRun
