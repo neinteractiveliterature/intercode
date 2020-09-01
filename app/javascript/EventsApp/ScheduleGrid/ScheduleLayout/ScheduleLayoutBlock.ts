@@ -7,13 +7,27 @@ import { FiniteTimespan } from '../../../Timespan';
 import type Schedule from '../Schedule';
 // eslint-disable-next-line import/no-duplicates
 import type { ScheduleEvent } from '../Schedule';
+import ColumnReservationSet from './ColumnReservationSet';
 
-class ScheduleBlock {
+const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+export type RunDimensions = {
+  runId: number;
+  timespan: FiniteTimespan;
+  laneIndex: number;
+  timeAxisStartPercent: number;
+  timeAxisSizePercent: number;
+};
+
+export type ScheduleLayoutResult = {
+  runDimensions: RunDimensions[];
+  laneCount: number;
+};
+
+class ScheduleLayoutBlock {
   id: string;
 
   runIds: number[];
-
-  runTimespans: Map<number, FiniteTimespan>;
 
   timespan: FiniteTimespan;
 
@@ -28,7 +42,6 @@ class ScheduleBlock {
   constructor(id: string, timespan: FiniteTimespan, runIds: number[], schedule: Schedule) {
     this.id = id;
     this.runIds = [];
-    this.runTimespans = new Map<number, FiniteTimespan>();
     this.timespan = timespan;
     this.hiddenEventRunIds = [];
     this.interval = moment.duration(1, 'hour');
@@ -58,20 +71,17 @@ class ScheduleBlock {
         event.title = `+ ${this.hiddenEventRunIds.length} not shown`;
         const expandedTimespan = existingFakeRunTimespan.expandedToFit(timespan);
         this.schedule.runTimespansById.set(this.hiddenEventsFakeRunId!, expandedTimespan);
-        this.runTimespans.set(this.hiddenEventsFakeRunId!, expandedTimespan);
 
         return;
       }
 
-      const newFakeRunId = this.schedule.addFakeEventRun(timespan, '+ 1 not shown');
+      const newFakeRunId = this.schedule.addFakeRun(timespan, '+ 1 not shown');
 
       this.hiddenEventsFakeRunId = newFakeRunId;
       this.hiddenEventRunIds = [runId];
       this.runIds.push(newFakeRunId);
-      this.runTimespans.set(newFakeRunId, timespan);
     } else {
       this.runIds.push(runId);
-      this.runTimespans.set(runId, timespan);
     }
 
     this.timespan = this.timespan.expandedToFit(timespan);
@@ -79,7 +89,7 @@ class ScheduleBlock {
 
   getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan) {
     return event.runs.filter((run) => {
-      const runTimespan = this.runTimespans.get(run.id);
+      const runTimespan = this.schedule.getRunTimespan(run.id);
       if (!runTimespan) {
         return false;
       }
@@ -90,8 +100,8 @@ class ScheduleBlock {
 
   getTimeSortedRunIds() {
     return [...this.runIds].sort((a, b) => {
-      const aTimespan = this.runTimespans.get(a);
-      const bTimespan = this.runTimespans.get(b);
+      const aTimespan = this.schedule.getRunTimespan(a);
+      const bTimespan = this.schedule.getRunTimespan(b);
       if (aTimespan && !bTimespan) {
         return 1;
       }
@@ -158,6 +168,39 @@ class ScheduleBlock {
       return timeDiff;
     });
   }
+
+  computeLayout(): ScheduleLayoutResult {
+    const columnReservations = new ColumnReservationSet();
+    const myLength = this.timespan.getLength('millisecond');
+    let maxColumns = 0;
+
+    const runDimensions = this.getTimeSortedRunIds().map((runId) => {
+      const runTimespan = this.schedule.getRunTimespan(runId)!;
+      const now = runTimespan.start;
+      columnReservations.expire(now);
+
+      const displayLength = Math.max(MIN_LENGTH, runTimespan.getLength('millisecond'));
+      const displayTimespan = runTimespan.clone();
+      displayTimespan.finish = displayTimespan.start.clone().add(displayLength);
+
+      const laneIndex = columnReservations.findFreeColumnForTimespan(runTimespan);
+      columnReservations.reserve(laneIndex, runId, displayTimespan);
+
+      if (laneIndex + 1 > maxColumns) {
+        maxColumns = laneIndex + 1;
+      }
+
+      return {
+        runId,
+        timespan: runTimespan,
+        laneIndex,
+        timeAxisStartPercent: (runTimespan.start.diff(this.timespan.start) / myLength) * 100.0,
+        timeAxisSizePercent: (displayLength / myLength) * 100.0,
+      };
+    });
+
+    return { runDimensions, laneCount: maxColumns };
+  }
 }
 
-export default ScheduleBlock;
+export default ScheduleLayoutBlock;

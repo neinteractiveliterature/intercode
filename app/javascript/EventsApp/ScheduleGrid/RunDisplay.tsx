@@ -7,8 +7,7 @@ import AvailabilityBar from './AvailabilityBar';
 import SignupStatusBadge from './SignupStatusBadge';
 import { ScheduleEvent, ScheduleRun } from './Schedule';
 import SignupCountData from '../SignupCountData';
-import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
-import { RunDimensions } from './PCSG/RunDimensions';
+import { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import { SignupState } from '../../graphqlTypes.generated';
 
 export type RunDisplayProps = {

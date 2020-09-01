@@ -6,8 +6,7 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
 import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
-import { RunDimensions } from './PCSG/RunDimensions';
-import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
+import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;

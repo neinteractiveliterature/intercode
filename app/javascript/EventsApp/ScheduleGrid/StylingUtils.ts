@@ -6,8 +6,7 @@ import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
-import { RunDimensions } from './PCSG/RunDimensions';
-import { ScheduleLayoutResult } from './PCSG/ScheduleLayoutResult';
+import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 
 export enum SignupStatus {
   Confirmed = 'confirmed',

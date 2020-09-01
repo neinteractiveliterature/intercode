@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import { flatMap } from 'lodash';
 
-import ScheduleBlock from './PCSG/ScheduleBlock';
+import ScheduleLayoutBlock from './ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
 import Timespan, { FiniteTimespan } from '../../Timespan';
 import ScheduleGridConfig, { isCategoryMatchRule, isCatchAllMatchRule } from './ScheduleGridConfig';
@@ -48,7 +48,7 @@ export default class Schedule {
 
   myRatingFilter?: number[];
 
-  nextFakeEventRunId: number;
+  nextFakeRunId: number;
 
   runTimespansById: Map<number, FiniteTimespan>;
 
@@ -84,7 +84,7 @@ export default class Schedule {
     );
 
     this.myRatingFilter = myRatingFilter;
-    this.nextFakeEventRunId = -1;
+    this.nextFakeRunId = -1;
 
     this.hideConflicts = hideConflicts;
     this.myConflictingRuns = [];
@@ -205,7 +205,7 @@ export default class Schedule {
   buildScheduleBlocksFromGroups = (groups: ScheduleGroup[], actualTimespan: FiniteTimespan) => {
     const blocks = groups.map(
       ({ runIds, id, ...props }) =>
-        [new ScheduleBlock(id, actualTimespan, runIds, this), props] as const,
+        [new ScheduleLayoutBlock(id, actualTimespan, runIds, this), props] as const,
     );
 
     if (this.config.filterEmptyGroups) {
@@ -215,7 +215,10 @@ export default class Schedule {
     return blocks;
   };
 
-  buildLayoutForTimespanRange = (minTimespan: FiniteTimespan, maxTimespan: FiniteTimespan) => {
+  buildLayoutForTimespanRange(
+    minTimespan: FiniteTimespan,
+    maxTimespan: FiniteTimespan,
+  ): ScheduleGridLayout {
     const runIds = this.getRunIdsOverlapping(maxTimespan);
     const actualTimespan = expandTimespanToNearestHour(
       runIds.reduce(
@@ -235,7 +238,7 @@ export default class Schedule {
       actualTimespan,
       this.buildScheduleBlocksFromGroups(groups, actualTimespan),
     );
-  };
+  }
 
   shouldUseRowHeaders = () => this.config.groupEventsBy === 'room';
 
@@ -273,14 +276,14 @@ export default class Schedule {
     return this.myRatingFilter.includes(event.my_rating || 0);
   };
 
-  addFakeEventRun = (timespan: FiniteTimespan, title: string, displayTitle?: string) => {
-    const fakeEventRunId = this.nextFakeEventRunId;
-    this.nextFakeEventRunId -= 1;
+  addFakeRun = (timespan: FiniteTimespan, title: string, displayTitle?: string) => {
+    const fakeRunId = this.nextFakeRunId;
+    this.nextFakeRunId -= 1;
 
     const fakeRun: ScheduleRun = {
-      id: fakeEventRunId,
+      id: fakeRunId,
       disableDetailsPopup: true,
-      event_id: fakeEventRunId,
+      event_id: fakeRunId,
       my_signups: [],
       my_signup_requests: [],
       room_names: [],
@@ -295,7 +298,7 @@ export default class Schedule {
     };
 
     const fakeEvent: ScheduleEvent = {
-      id: fakeEventRunId,
+      id: fakeRunId,
       title,
       displayTitle,
       length_seconds: timespan.getLength('second'),
@@ -315,10 +318,10 @@ export default class Schedule {
       runs: [fakeRun],
     };
 
-    this.eventsById.set(fakeEventRunId, fakeEvent);
-    this.runsById.set(fakeEventRunId, fakeRun);
-    this.runTimespansById.set(fakeEventRunId, timespan);
+    this.eventsById.set(fakeRunId, fakeEvent);
+    this.runsById.set(fakeRunId, fakeRun);
+    this.runTimespansById.set(fakeRunId, timespan);
 
-    return fakeEventRunId;
+    return fakeRunId;
   };
 }
