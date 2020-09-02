@@ -52,6 +52,8 @@ class ScheduleGridConfig {
 
   title: string;
 
+  titlei18nKey: string;
+
   classifyEventsBy: 'category' | 'fullness';
 
   groupEventsBy: 'category' | 'room';

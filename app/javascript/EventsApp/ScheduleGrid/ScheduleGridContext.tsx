@@ -26,7 +26,6 @@ import AppRootContext from '../../AppRootContext';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import { TimezoneMode } from '../../graphqlTypes.generated';
 import { ScheduleGridEventFragmentFragment } from './queries.generated';
-import EventRun from './PCSG/EventRun';
 import { FiniteTimespan } from '../../Timespan';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
@@ -50,7 +49,6 @@ const skeletonScheduleGridConfig = new ScheduleGridConfig({
 
 const skeletonSchedule = new Schedule({
   config: skeletonScheduleGridConfig,
-  convention: { timezone_mode: TimezoneMode.UserLocal },
   events: [],
   timezoneName: 'Etc/UTC',
   myRatingFilter: undefined,
@@ -98,10 +96,9 @@ export function useScheduleGridProvider(
     if (config && convention && events) {
       return new Schedule({
         config,
-        convention,
         events,
         myRatingFilter,
-        hideConflicts,
+        hideConflicts: hideConflicts ?? false,
         timezoneName,
       });
     }
@@ -123,9 +120,7 @@ export function useScheduleGridProvider(
         }
 
         const runTimespan = schedule.getRunTimespan(runId);
-        const concurrentRunIds = schedule
-          .getEventRunsOverlapping(runTimespan)
-          .map((eventRun: EventRun) => eventRun.runId);
+        const concurrentRunIds = runTimespan ? schedule.getRunIdsOverlapping(runTimespan) : [];
 
         concurrentRunIds.forEach((concurrentRunId: number) => {
           newVisibleRunDetailsIds.delete(concurrentRunId);

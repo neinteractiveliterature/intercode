@@ -37,7 +37,7 @@ export const timesAreSameOrBothNull = (a?: Moment | null, b?: Moment | null) => 
     return false;
   }
 
-  return (a == null && b == null) || a!.isSame(b);
+  return (a == null && b == null) || a!.isSame(b ?? undefined);
 };
 
 export const compareTimesAscending = (a: Moment, b: Moment) => {

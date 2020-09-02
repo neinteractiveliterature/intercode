@@ -156,8 +156,8 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   }, [setVisible]);
 
   useEffect(() => {
-    document.addEventListener('keydown', keyDownListener);
-    return () => document.removeEventListener('keydown', keyDownListener);
+    document.addEventListener('keydown', keyDownListener, { capture: true });
+    return () => document.removeEventListener('keydown', keyDownListener, { capture: true });
   }, [keyDownListener]);
 
   const optionSelected = useCallback(

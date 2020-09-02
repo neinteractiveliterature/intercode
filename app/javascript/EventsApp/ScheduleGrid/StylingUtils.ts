@@ -6,9 +6,7 @@ import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
-import { ScheduleGridEventFragmentFragment } from './queries.generated';
-import RunDimensions from './PCSG/RunDimensions';
-import ScheduleLayoutResult from './PCSG/ScheduleLayoutResult';
+import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 
 export enum SignupStatus {
   Confirmed = 'confirmed',
@@ -21,23 +19,34 @@ export function userSignupStatus(run: {
   my_signups: { state: SignupState }[];
   my_signup_requests: { state: SignupRequestState }[];
 }) {
-  if (run.my_signups.some((signup) => signup.state === 'confirmed')) {
-    return 'confirmed';
+  if (run.my_signups.some((signup) => signup.state === SignupState.Confirmed)) {
+    return SignupStatus.Confirmed;
   }
 
-  if (run.my_signups.some((signup) => signup.state === 'waitlisted')) {
-    return 'waitlisted';
+  if (run.my_signups.some((signup) => signup.state === SignupState.Waitlisted)) {
+    return SignupStatus.Waitlisted;
   }
 
-  if (run.my_signup_requests.some((signupRequest) => signupRequest.state === 'pending')) {
-    return 'request_pending';
+  if (
+    run.my_signup_requests.some(
+      (signupRequest) => signupRequest.state === SignupRequestState.Pending,
+    )
+  ) {
+    return SignupStatus.RequestPending;
   }
 
   return null;
 }
 
 export type GetRunClassNameOptions = {
-  event: ScheduleGridEventFragmentFragment & { fake?: boolean };
+  event: Omit<EventForSignupCountData, 'registration_policy'> & {
+    fake?: boolean;
+    registration_policy?:
+      | null
+      | (EventForSignupCountData['registration_policy'] & {
+          total_slots_including_not_counted?: null | number;
+        });
+  };
   signupStatus?: SignupStatus;
   config: Pick<ScheduleGridConfig, 'classifyEventsBy' | 'showSignedUp'>;
   signupCountData: Pick<
@@ -85,8 +94,8 @@ export function getRunPositioningStyles({
   return {
     top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
     height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
-    left: `${runDimensions.timePlacement}%`,
-    width: `${runDimensions.timeSpan}%`,
+    left: `${runDimensions.timeAxisStartPercent}%`,
+    width: `${runDimensions.timeAxisSizePercent}%`,
     position: 'absolute',
     zIndex: runDimensions.laneIndex,
   };

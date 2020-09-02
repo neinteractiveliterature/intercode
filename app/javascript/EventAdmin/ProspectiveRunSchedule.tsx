@@ -24,8 +24,10 @@ import {
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
 import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
-import RunDimensions from '../EventsApp/ScheduleGrid/PCSG/RunDimensions';
-import ScheduleLayoutResult from '../EventsApp/ScheduleGrid/PCSG/ScheduleLayoutResult';
+import {
+  RunDimensions,
+  ScheduleLayoutResult,
+} from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridConfig from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import {
   useEventAdminEventsQueryQuery,
@@ -33,6 +35,8 @@ import {
   RunFieldsFragment,
 } from './queries.generated';
 import { ScheduleGridEventFragmentFragment } from '../EventsApp/ScheduleGrid/queries.generated';
+import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
+import { notEmpty } from '../ValueUtils';
 
 const SCHEDULE_GRID_CONFIG = new ScheduleGridConfig({
   key: 'con_schedule_by_room',
@@ -52,11 +56,15 @@ const FAKE_SIGNUP_COUNT_DATA = {
   getNotCountedConfirmedSignupCount: () => 0,
 };
 
-type ProspectiveRun = RunFieldsFragment & {
+type ProspectiveRun = ScheduleRun & {
   prospectiveRun: true;
 };
 
-function isProspectiveRun(run: RunFieldsFragment): run is ProspectiveRun {
+function isProspectiveRun(run: ScheduleRun | undefined | null): run is ProspectiveRun {
+  if (run == null) {
+    return false;
+  }
+
   return (
     Object.prototype.hasOwnProperty.call(run, 'prospectiveRun') &&
     (run as ProspectiveRun).prospectiveRun === true
@@ -77,12 +85,12 @@ function ProspectiveRunScheduleEventRun({
   layoutResult,
 }: ProspectiveRunScheduleEventRunProps) {
   const { schedule } = useContext(ScheduleGridContext);
-  const { eventRun } = runDimensions;
-  const run = useMemo(() => schedule.getRun(eventRun.runId), [schedule, eventRun.runId]);
+  const { runId } = runDimensions;
+  const run = useMemo(() => schedule.getRun(runId), [schedule, runId]);
   const runRef = useRef<HTMLDivElement>(null);
   const event = useMemo(() => {
     if (!run) {
-      return null;
+      return undefined;
     }
 
     return schedule.getEvent(run.event_id);
@@ -91,9 +99,9 @@ function ProspectiveRunScheduleEventRun({
   const runStyle = useMemo(
     () =>
       getRunStyle({
-        event,
+        event: event ?? {},
         eventCategory:
-          convention.event_categories.find((c) => c.id === event.event_category.id) ?? {},
+          convention.event_categories.find((c) => c.id === event?.event_category.id) ?? {},
         signupStatus: isProspectiveRun(run) ? SignupStatus.Confirmed : null,
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
@@ -144,7 +152,15 @@ function ProspectiveRunScheduleEventRun({
 
 export type ProspectiveRunScheduleProps = {
   day?: Moment;
-  runs: RunFieldsFragment[];
+  runs: Omit<
+    RunFieldsFragment,
+    | 'signup_count_by_state_and_bucket_key_and_counted'
+    | 'confirmed_signup_count'
+    | 'not_counted_signup_count'
+    | 'room_names'
+    | 'my_signups'
+    | 'my_signup_requests'
+  >[];
   event: EventFieldsFragment;
 };
 
@@ -161,34 +177,26 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
     () =>
       runs.map((run) => ({
         id: 0,
+        event_id: event.id,
         starts_at: run.starts_at,
         rooms: run.rooms,
         schedule_note: null,
         title_suffix: null,
         prospectiveRun: true,
+        confirmed_signup_count: 0,
+        not_counted_signup_count: 0,
+        signup_count_by_state_and_bucket_key_and_counted: '{}',
+        room_names: run.rooms.map((room) => room.name).filter(notEmpty),
+        my_signups: [],
+        my_signup_requests: [],
       })),
-    [runs],
+    [runs, event.id],
   );
 
-  const eventsForSchedule: ScheduleGridEventFragmentFragment[] | null = useMemo(() => {
+  const eventsForSchedule: ScheduleGridEventFragmentFragment[] | undefined = useMemo(() => {
     if (error || loading || !data) {
-      return null;
+      return undefined;
     }
-
-    const convertRun = (run: RunFieldsFragment) => ({
-      confirmed_signup_count: 0,
-      not_counted_signup_count: 0,
-      signup_count_by_state_and_bucket_key_and_counted: '{}',
-      room_names: [],
-      my_signups: [],
-      my_signup_requests: [],
-      ...run,
-    });
-
-    const convertEvent = (e: EventFieldsFragment) => ({
-      ...e,
-      runs: e.runs.map(convertRun),
-    });
 
     const filteredEvents = data.events.map((e) => {
       if (e.id === event.id) {
@@ -208,17 +216,17 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
     if (prospectiveRuns) {
       return effectiveEvents.map((e) => {
         if (e.id === event.id) {
-          return convertEvent({
+          return {
             ...e,
             runs: [...e.runs, ...prospectiveRuns],
-          });
+          };
         }
 
-        return convertEvent(e);
+        return e;
       });
     }
 
-    return effectiveEvents.map(convertEvent);
+    return effectiveEvents;
   }, [data, error, loading, event, prospectiveRuns, runs]);
 
   const conventionDayTimespans = useMemo(
@@ -240,7 +248,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
   const scheduleGridProviderValue = useScheduleGridProvider(
     SCHEDULE_GRID_CONFIG,
     data?.convention ?? undefined,
-    eventsForSchedule ?? undefined,
+    eventsForSchedule,
   );
   const layout = useLayoutForTimespan(scheduleGridProviderValue.schedule, conventionDayTimespan);
 
@@ -259,15 +267,15 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
             {scheduleGridProviderValue.schedule.shouldUseRowHeaders() ? (
               <div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />
             ) : null}
-            <ScheduleGridHeaderBlock timespan={layout.timespan} eventRuns={layout.eventRuns} />
+            <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
           </div>
-          {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
+          {layout.blocksWithOptions.map(([layoutBlock, options]) => (
             <div
               className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
-              key={scheduleBlock.id}
+              key={layoutBlock.id}
             >
               <ScheduleBlock
-                scheduleBlock={scheduleBlock}
+                layoutBlock={layoutBlock}
                 rowHeader={options.rowHeader}
                 renderEventRun={({ layoutResult, runDimensions }) => (
                   <ProspectiveRunScheduleEventRun
