@@ -209,7 +209,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "prettier": "^2.0.5",
     "react-test-renderer": "^16.13.1",
-    "ts-node": "^8.10.2",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.0",
     "typescript-plugin-css-modules": "^2.4.0",
     "webpack-dev-server": "^3.11.0"
