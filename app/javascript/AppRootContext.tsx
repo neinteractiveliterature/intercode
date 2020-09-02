@@ -12,6 +12,7 @@ type AppRootContext = {
   currentAbility: AppRootQueryQuery['currentAbility'];
   currentPendingOrder?: AppRootQueryQuery['currentPendingOrder'];
   currentUser?: AppRootQueryQuery['currentUser'];
+  language: string;
   myProfile?: AppRootQueryQuery['myProfile'];
   rootSiteName?: string | null;
   signupMode?: SignupMode;
@@ -59,6 +60,7 @@ const AppRootContext = React.createContext<AppRootContext>({
   },
   currentPendingOrder: null,
   currentUser: null,
+  language: 'en',
   myProfile: null,
   rootSiteName: null,
   siteMode: undefined,

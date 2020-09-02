@@ -10,7 +10,15 @@ module.exports = {
     'jest/globals': true,
   },
 
-  extends: ['airbnb-typescript', 'prettier', 'prettier/react', 'prettier/@typescript-eslint'],
+  extends: [
+    'airbnb-typescript',
+    'prettier',
+    'prettier/react',
+    'prettier/@typescript-eslint',
+    // TODO: turn these on once I feel like getting a raft of errors
+    // 'plugin:@typescript-eslint/recommended',
+    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+  ],
 
   parser: '@typescript-eslint/parser',
   parserOptions: {
