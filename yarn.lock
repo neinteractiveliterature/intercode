@@ -2578,10 +2578,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.159.tgz#61089719dc6fdd9c5cb46efc827f2571d1517065"
   integrity sha512-gF7A72f7WQN33DpqOWw9geApQPh4M3PxluMtaHxWHXEGSN12/WbcEk/eNSqWNQcQhF66VSZ06vCF94CrHwXJDg==
 
-"@types/luxon@^1.24.3":
-  version "1.24.3"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.24.3.tgz#2e360e02b081898f993c52901192224e1f3d6daa"
-  integrity sha512-8lkeHb0Hkpyqmj0lYrZItakKM73jaKTUe4/PMl2e8o96oxTUzagbbz2DUOMn0NpjSovmZQTJvoCheFeI2bwS4g==
+"@types/luxon@^1.24.4":
+  version "1.24.4"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.24.4.tgz#5dbd050b89247dbccab6eaa7744874c1fb7cea85"
+  integrity sha512-ce+P0b4rVq3LNXdD5r7eDqX2ydz2BonmTgVrHrV5yxsNKTt3YpnT5QDrid7xMAThhE/gg1RLAbxqbW1OCdiZog==
 
 "@types/mapbox-gl@^1.11.1":
   version "1.11.1"
