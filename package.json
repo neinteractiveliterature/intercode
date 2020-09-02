@@ -63,7 +63,7 @@
     "@types/moment-timezone": "^0.5.30",
     "@types/react-onclickoutside": "^6.7.3",
     "@types/react-router-dom": "^5.1.5",
-    "@types/react-select": "^3.0.16",
+    "@types/react-select": "^3.0.19",
     "@types/react-table": "^6.8.6",
     "@types/uuid": "^8.0.0",
     "@types/zxcvbn": "^4.4.0",
