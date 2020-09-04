@@ -54,7 +54,7 @@ gem 'pg_search'
 # GraphQL server
 gem 'graphql', '>= 1.10.2'
 gem 'graphql-batch'
-gem 'apollo_upload_server', '2.0.2'
+gem 'apollo_upload_server', '2.0.3'
 gem 'graphql-rails_logger', groups: [:development, :test]
 
 # Not super happy about this, but an ActiveRecord extension to allow us to use PostgreSQL check
@@ -74,7 +74,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.40.0'
+gem 'twilio-ruby', '~> 5.40.1'
 gem 'phonelib'
 
 # Background workers and scheduling
