@@ -1,23 +1,31 @@
 import { useMemo } from 'react';
+import { Event } from '../graphqlTypes.generated';
 import { sortByLocaleString } from '../ValueUtils';
+import { EventAdminEventsQueryQuery } from './queries.generated';
 
-const getNormalizedEventTitle = (event) =>
-  event.title
+function getNormalizedEventTitle<EventType extends Pick<Event, 'title'>>(event: EventType) {
+  return (event.title ?? '')
     .replace(/^(the|a|) /i, '')
     .replace(/[^A-Za-z0-9]/g, '')
     .toLocaleLowerCase();
+}
 
-export default function useEventAdminCategory(data, loading, error, eventCategoryId) {
+export default function useEventAdminCategory(
+  data: EventAdminEventsQueryQuery | undefined,
+  loading: boolean,
+  error: Error | undefined,
+  eventCategoryId: number,
+) {
   const eventCategory = useMemo(
     () =>
-      loading || error
+      loading || error || !data
         ? null
-        : data.convention.event_categories.find((c) => c.id === eventCategoryId),
+        : data.convention!.event_categories.find((c) => c.id === eventCategoryId),
     [data, loading, error, eventCategoryId],
   );
   const filteredEvents = useMemo(
     () =>
-      error || loading
+      error || loading || !data
         ? []
         : data.events.filter(
             (event) => event.event_category.id === eventCategoryId && event.status === 'active',
@@ -28,5 +36,5 @@ export default function useEventAdminCategory(data, loading, error, eventCategor
     filteredEvents,
   ]);
 
-  return [eventCategory, sortedEvents];
+  return [eventCategory, sortedEvents] as const;
 }

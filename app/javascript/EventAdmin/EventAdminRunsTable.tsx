@@ -1,21 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { useQuery } from '@apollo/client';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
-import { EventAdminEventsQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useEventAdminCategory from './useEventAdminCategory';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useEventAdminEventsQueryQuery } from './queries.generated';
 
 function EventAdminRunsTable({ eventCategoryId }) {
-  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   const [eventCategory, sortedEvents] = useEventAdminCategory(
     data,
@@ -24,7 +22,7 @@ function EventAdminRunsTable({ eventCategoryId }) {
     eventCategoryId,
   );
 
-  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
+  usePageTitle(useValueUnless(() => pluralize(eventCategory!.name), error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -41,7 +39,7 @@ function EventAdminRunsTable({ eventCategoryId }) {
         className="btn btn-primary mt-4 mb-2"
       >
         {'Create new '}
-        {eventCategory.name.toLowerCase()}
+        {eventCategory?.name.toLowerCase()}
       </Link>
 
       <table className="table table-striped no-top-border">
@@ -54,23 +52,19 @@ function EventAdminRunsTable({ eventCategoryId }) {
         </thead>
         <tbody>
           {sortedEvents.map((event) => (
-            <EventAdminRow event={event} convention={data.convention} key={event.id} />
+            <EventAdminRow event={event} convention={data!.convention!} key={event.id} />
           ))}
         </tbody>
       </table>
 
       <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
-        <EditRun events={data.events} convention={data.convention} />
+        <EditRun events={data!.events} convention={data!.convention!} />
       </Route>
       <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}>
-        <EditRun events={data.events} convention={data.convention} />
+        <EditRun events={data!.events} convention={data!.convention!} />
       </Route>
     </div>
   );
 }
-
-EventAdminRunsTable.propTypes = {
-  eventCategoryId: PropTypes.number.isRequired,
-};
 
 export default EventAdminRunsTable;

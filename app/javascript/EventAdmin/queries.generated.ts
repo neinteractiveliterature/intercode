@@ -109,11 +109,11 @@ export type EventAdminEventsQueryQuery = (
   & { currentAbility: (
     { __typename?: 'Ability' }
     & Pick<Types.Ability, 'can_override_maximum_event_provided_tickets' | 'can_manage_runs'>
-  ), convention?: Types.Maybe<(
+  ), convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & ConventionFieldsFragment
-  )>, events: Array<(
+  ), events: Array<(
     { __typename?: 'Event' }
     & Pick<Types.Event, 'id'>
     & EventFieldsFragment
@@ -272,7 +272,7 @@ export const EventAdminEventsQueryDocument = gql`
     can_override_maximum_event_provided_tickets
     can_manage_runs
   }
-  convention {
+  convention: assertConvention {
     id
     ...ConventionFields
   }

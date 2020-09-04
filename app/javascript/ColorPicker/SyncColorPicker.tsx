@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { ChromePicker } from 'react-color';
+import { ChromePicker, ColorResult } from 'react-color';
 import tinycolor2 from 'tinycolor2';
 
-function decodeValue(value) {
-  return tinycolor2(value).toRgb();
+function decodeValue(value?: string | null) {
+  return tinycolor2(value ?? undefined).toRgb();
 }
 
-function encodeValue(value) {
+function encodeValue(value: ColorResult) {
   if (value.rgb.a === 1.0) {
     return tinycolor2(value.rgb).toHexString();
   }
@@ -15,7 +14,12 @@ function encodeValue(value) {
   return tinycolor2(value.rgb).toRgbString();
 }
 
-function SyncColorPicker({ value, onChange }) {
+export type SyncColorPickerProps = {
+  value?: string | null;
+  onChange: React.Dispatch<string>;
+};
+
+function SyncColorPicker({ value, onChange }: SyncColorPickerProps) {
   return (
     <ChromePicker
       color={decodeValue(value)}
@@ -25,14 +29,5 @@ function SyncColorPicker({ value, onChange }) {
     />
   );
 }
-
-SyncColorPicker.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-};
-
-SyncColorPicker.defaultProps = {
-  value: null,
-};
 
 export default SyncColorPicker;

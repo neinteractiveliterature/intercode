@@ -1,8 +1,9 @@
-import CodeMirror from 'codemirror';
+import CodeMirror, { EditorConfiguration } from 'codemirror';
 
 // Adapted from https://github.com/CristinaSolana/codemirror-liquid-multiplex
 
-const defineMultiplexingMode = (...modeNames) => (config) =>
+const defineMultiplexingMode = (...modeNames: string[]) => (config: EditorConfiguration) =>
+  // @ts-expect-error
   CodeMirror.multiplexingMode(
     ...modeNames.map((modeName) => CodeMirror.getMode(config, modeName)),
     {

@@ -1,34 +1,48 @@
 import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { propType } from 'graphql-anywhere';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import EditRunModal from './EditRunModal';
-import { ConventionFields, EventFields } from './queries';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
+import {
+  ConventionFieldsFragment,
+  EventFieldsFragment,
+  RunFieldsFragment,
+} from './queries.generated';
 
-function EditRun({ convention, events }) {
-  const match = useRouteMatch();
+export type EditRunProps = {
+  convention: ConventionFieldsFragment;
+  events: EventFieldsFragment[];
+};
+
+function EditRun({ convention, events }: EditRunProps) {
+  const match = useRouteMatch<{ eventId: string; runId: string }>();
   const history = useHistory();
   const event = useMemo(() => {
     if (!match) {
-      return null;
+      return undefined;
     }
 
     return events.find((e) => e.id.toString() === match.params.eventId);
   }, [match, events]);
 
-  const initialRun = useMemo(() => {
-    if (!match) {
-      return null;
+  const initialRun: RunFieldsFragment | undefined = useMemo(() => {
+    if (!match || !event) {
+      return undefined;
     }
 
     if (match.path.endsWith('/new')) {
       return {
-        starts_at: null,
-        title_suffix: null,
-        schedule_note: null,
+        id: 0,
+        my_signups: [],
+        my_signup_requests: [],
+        starts_at: '',
+        title_suffix: undefined,
+        schedule_note: undefined,
         rooms: [],
+        room_names: [],
+        confirmed_signup_count: 0,
+        not_counted_signup_count: 0,
+        signup_count_by_state_and_bucket_key_and_counted: '{}',
       };
     }
 
@@ -36,8 +50,15 @@ function EditRun({ convention, events }) {
   }, [match, event]);
 
   const cancelEditing = () => {
-    const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
-    history.replace(buildEventCategoryUrl(eventCategory));
+    if (!event) {
+      return;
+    }
+    const eventCategoryUrl = buildEventCategoryUrl(
+      convention.event_categories.find((c) => c.id === event.event_category.id),
+    );
+    if (eventCategoryUrl) {
+      history.replace(eventCategoryUrl);
+    }
   };
 
   const [run, setRun] = useState(initialRun);
@@ -49,9 +70,12 @@ function EditRun({ convention, events }) {
     setPrevMatch(match);
   }
 
+  if (!event || !run) {
+    return <></>;
+  }
+
   return (
     <EditRunModal
-      convention={convention}
       editingRunChanged={setRun}
       event={event}
       onCancel={cancelEditing}
@@ -63,10 +87,5 @@ function EditRun({ convention, events }) {
     />
   );
 }
-
-EditRun.propTypes = {
-  convention: propType(ConventionFields).isRequired,
-  events: PropTypes.arrayOf(propType(EventFields)).isRequired,
-};
 
 export default EditRun;
