@@ -81,6 +81,7 @@ module.exports = {
       rules: {
         'react/prop-types': 'off',
         'react/require-default-props': 'off',
+        '@typescript-eslint/no-extra-non-null-assertion': ['error'],
         'no-restricted-imports': [
           'error',
           {
