@@ -1,29 +1,45 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/client';
 
-import { EventAdminEventsQuery, RunFields, EventFields, ConventionFields } from './queries';
-import { CreateRun, UpdateRun, DeleteRun } from './mutations';
+import { EventAdminEventsQuery } from './queries';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
+import {
+  useCreateRunMutation,
+  useDeleteRunMutation,
+  useUpdateRunMutation,
+} from './mutations.generated';
+import {
+  EventAdminEventsQueryQuery,
+  EventFieldsFragment,
+  RunFieldsFragment,
+} from './queries.generated';
+
+export type EditRunModalProps = {
+  run: RunFieldsFragment;
+  event: EventFieldsFragment;
+  editingRunChanged: React.Dispatch<RunFieldsFragment>;
+  onCancel: () => void;
+  onSaveFailed: (error: Error) => void;
+  onSaveSucceeded: () => void;
+  onSaveStart: () => void;
+  onDelete: () => void;
+};
 
 function EditRunModal({
   run,
   event,
-  convention,
   editingRunChanged,
   onCancel,
   onSaveFailed,
   onSaveSucceeded,
   onSaveStart,
   onDelete,
-}) {
-  const [createRun] = useMutation(CreateRun);
-  const [updateRun] = useMutation(UpdateRun);
-  const [deleteMutate] = useMutation(DeleteRun);
+}: EditRunModalProps) {
+  const [createRun] = useCreateRunMutation();
+  const [updateRun] = useUpdateRunMutation();
+  const [deleteMutate] = useDeleteRunMutation();
   const confirm = useConfirm();
 
   const initiateSaveMutation = useCallback(() => {
@@ -36,7 +52,7 @@ function EditRunModal({
       },
     };
 
-    if (run.id) {
+    if (run.id > 0) {
       return updateRun({
         variables: {
           input: {
@@ -54,18 +70,27 @@ function EditRunModal({
           ...commonProps,
         },
       },
-      update: (
-        store,
-        {
+      update: (store, { data }) => {
+        const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+          query: EventAdminEventsQuery,
+        });
+        const newRun = data?.createRun?.run;
+        if (!eventsData || !newRun) {
+          return;
+        }
+        store.writeQuery({
+          query: EventAdminEventsQuery,
           data: {
-            createRun: { run: newRun },
+            ...eventsData,
+            events: eventsData.events.map((e) => {
+              if (e.id === event.id) {
+                return { ...e, runs: [...e.runs, newRun] };
+              }
+
+              return e;
+            }),
           },
-        },
-      ) => {
-        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-        const eventData = eventsData.events.find((e) => e.id === event.id);
-        eventData.runs.push(newRun);
-        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
+        });
       },
     });
   }, [createRun, event, run, updateRun]);
@@ -74,29 +99,46 @@ function EditRunModal({
     onSaveStart();
 
     try {
-      const data = await initiateSaveMutation();
-      onSaveSucceeded(data.run);
+      await initiateSaveMutation();
+      onSaveSucceeded();
     } catch (error) {
       onSaveFailed(error);
     }
   }, [onSaveSucceeded, onSaveFailed, onSaveStart, initiateSaveMutation]);
 
   const deleteRun = useCallback(async () => {
-    const data = await deleteMutate({
+    await deleteMutate({
       variables: {
         input: {
           id: run.id,
         },
       },
       update: (store) => {
-        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-        const eventData = eventsData.events.find((e) => e.id === event.id);
-        const runIndex = eventData.runs.findIndex((r) => r.id === run.id);
-        eventData.runs.splice(runIndex, 1);
-        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
+        const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+          query: EventAdminEventsQuery,
+        });
+        if (!eventsData) {
+          return;
+        }
+        store.writeQuery({
+          query: EventAdminEventsQuery,
+          data: {
+            ...eventsData,
+            events: eventsData.events.map((e) => {
+              if (e.id === event.id) {
+                return {
+                  ...e,
+                  runs: e.runs.filter((r) => r.id !== run.id),
+                };
+              }
+
+              return e;
+            }),
+          },
+        });
       },
     });
-    onDelete(data);
+    onDelete();
   }, [onDelete, deleteMutate, event, run]);
 
   const title = useMemo(() => {
@@ -104,7 +146,7 @@ function EditRunModal({
       return null;
     }
 
-    if (run.id != null) {
+    if (run.id > 0) {
       return `Edit run of ${event.title} `;
     }
 
@@ -119,12 +161,7 @@ function EditRunModal({
         </div>
         {run && (
           <div className="modal-body">
-            <RunFormFields
-              run={run}
-              event={event}
-              convention={convention}
-              onChange={editingRunChanged}
-            />
+            <RunFormFields run={run} event={event} onChange={editingRunChanged} />
           </div>
         )}
         <div className="modal-footer">
@@ -163,22 +200,5 @@ function EditRunModal({
     </div>
   );
 }
-
-EditRunModal.propTypes = {
-  run: propType(RunFields),
-  event: propType(EventFields),
-  convention: propType(ConventionFields).isRequired,
-  editingRunChanged: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onSaveStart: PropTypes.func.isRequired,
-  onSaveSucceeded: PropTypes.func.isRequired,
-  onSaveFailed: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};
-
-EditRunModal.defaultProps = {
-  run: null,
-  event: null,
-};
 
 export default EditRunModal;

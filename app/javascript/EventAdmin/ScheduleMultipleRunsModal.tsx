@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { propType } from 'graphql-anywhere';
+import React, { useState, useMemo, useCallback, useContext, ReactNode } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation } from '@apollo/client';
+import { Moment } from 'moment';
+import { ApolloError } from '@apollo/client';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
@@ -13,26 +12,60 @@ import {
   timespanFromRun,
   getConventionDayTimespans,
 } from '../TimespanUtils';
-import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries';
-import { CreateMultipleRuns } from './mutations';
+import { EventAdminEventsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
 import { timezoneNameForConvention } from '../TimeUtils';
+import { useCreateMultipleRunsMutation } from './mutations.generated';
+import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
+import {
+  ConventionFieldsFragment,
+  EventAdminEventsQueryQuery,
+  EventFieldsFragment,
+  RoomFieldsFragment,
+} from './queries.generated';
 
-function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFinish }) {
-  const [createMutate] = useMutation(CreateMultipleRuns);
+type FuzzyTimeWithoutSecond = Omit<FuzzyTime, 'second'>;
+type CompleteFuzzyTimeWithoutSecond = {
+  hour: number;
+  minute: number;
+};
+
+function timeIsComplete(time: FuzzyTimeWithoutSecond): time is CompleteFuzzyTimeWithoutSecond {
+  return time.hour != null && time.minute != null;
+}
+
+export type ScheduleMultipleRunsModalProps = {
+  convention: ConventionFieldsFragment;
+  event: EventFieldsFragment;
+  visible: boolean;
+  onCancel: () => void;
+  onFinish: () => void;
+};
+
+function ScheduleMultipleRunsModal({
+  convention,
+  event,
+  visible,
+  onCancel,
+  onFinish,
+}: ScheduleMultipleRunsModalProps) {
+  const [createMutate] = useCreateMultipleRunsMutation();
   const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(createMutate);
-  const [day, setDay] = useState(null);
-  const [start, setStart] = useState({ hour: null, minute: null });
-  const [finish, setFinish] = useState({ hour: null, minute: null });
-  const [rooms, setRooms] = useState([]);
+  const [day, setDay] = useState<Moment>();
+  const [start, setStart] = useState<FuzzyTimeWithoutSecond>({});
+  const [finish, setFinish] = useState<FuzzyTimeWithoutSecond>({});
+  const [rooms, setRooms] = useState<RoomFieldsFragment[]>([]);
   const { timezoneName } = useContext(AppRootContext);
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
   const conventionDayTimespans = useMemo(
-    () => getConventionDayTimespans(conventionTimespan, timezoneName),
+    () =>
+      conventionTimespan.isFinite()
+        ? getConventionDayTimespans(conventionTimespan, timezoneName)
+        : [],
     [timezoneName, conventionTimespan],
   );
   const conventionDayTimespan = useMemo(
@@ -40,23 +73,13 @@ function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFin
     [conventionDayTimespans, day],
   );
 
-  const dataComplete = useMemo(
-    () =>
-      day &&
-      start.hour != null &&
-      start.minute != null &&
-      finish.hour != null &&
-      finish.minute != null,
-    [day, start, finish],
-  );
-
   const timespan = useMemo(() => {
-    if (!dataComplete) {
+    if (!day || !start || !finish || !timeIsComplete(start) || !timeIsComplete(finish)) {
       return null;
     }
 
     return new Timespan(day.clone().set(start), day.clone().set(finish));
-  }, [dataComplete, day, start, finish]);
+  }, [day, start, finish]);
 
   const timespansWithinRange = useMemo(() => {
     if (!timespan) {
@@ -96,25 +119,37 @@ function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFin
       variables: {
         input: { event_id: event.id, runs },
       },
-      update: (
-        store,
-        {
+      update: (store, { data }) => {
+        const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+          query: EventAdminEventsQuery,
+        });
+        const newRuns = data?.createMultipleRuns?.runs;
+        if (!eventsData || !newRuns) {
+          return;
+        }
+        store.writeQuery({
+          query: EventAdminEventsQuery,
           data: {
-            createMultipleRuns: { runs: newRuns },
+            ...eventsData,
+            events: eventsData.events.map((e) => {
+              if (e.id === event.id) {
+                return {
+                  ...e,
+                  runs: [...e.runs, ...newRuns],
+                };
+              }
+
+              return e;
+            }),
           },
-        },
-      ) => {
-        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-        const eventData = eventsData.events.find((e) => e.id === event.id);
-        eventData.runs = [...eventData.runs, ...newRuns];
-        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
+        });
       },
     });
     onFinish();
   }, [createMultipleRuns, event, rooms, nonConflictingTimespansWithinRange, onFinish]);
 
   const renderTimeSelects = () => {
-    if (!day) {
+    if (!day || !conventionDayTimespan) {
       return null;
     }
 
@@ -147,7 +182,7 @@ function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFin
     const nonConflictingTimespans = nonConflictingTimespansWithinRange;
 
     const runTimespanItems = runTimespans.map((runTimespan) => {
-      let description = runTimespan.start.format('h:mma');
+      let description: ReactNode = runTimespan.start.format('h:mma');
       const runConflicts =
         nonConflictingTimespans.find((nonConflictingTimespan) =>
           nonConflictingTimespan.isSame(runTimespan),
@@ -204,7 +239,8 @@ function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFin
 
           <ProspectiveRunSchedule
             day={day}
-            runs={nonConflictingTimespansWithinRange.map((t) => ({
+            runs={nonConflictingTimespansWithinRange.map((t, index) => ({
+              id: index * -1,
               starts_at: t.start.toISOString(),
               rooms,
             }))}
@@ -215,7 +251,7 @@ function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFin
             }}
           />
 
-          <ErrorDisplay graphQLError={createError} />
+          <ErrorDisplay graphQLError={createError as ApolloError} />
         </div>
         <div className="modal-footer">
           <div className="d-flex w-100">
@@ -243,13 +279,5 @@ function ScheduleMultipleRunsModal({ convention, event, visible, onCancel, onFin
     </div>
   );
 }
-
-ScheduleMultipleRunsModal.propTypes = {
-  convention: propType(ConventionFields).isRequired,
-  event: propType(EventFields).isRequired,
-  visible: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onFinish: PropTypes.func.isRequired,
-};
 
 export default ScheduleMultipleRunsModal;

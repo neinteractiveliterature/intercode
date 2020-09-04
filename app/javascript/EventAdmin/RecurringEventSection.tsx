@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useCallback, useContext, useMemo } from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
@@ -9,13 +8,26 @@ import useModal from '../ModalDialogs/useModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 import AppRootContext from '../AppRootContext';
+import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
 
-function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
+type RecurringEventSectionBodyProps = {
+  event: EventFieldsFragment;
+  convention: ConventionFieldsFragment;
+  startSchedulingRuns: () => void;
+};
+
+function RecurringEventSectionBody({
+  event,
+  convention,
+  startSchedulingRuns,
+}: RecurringEventSectionBodyProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const conventionDays = getConventionDayTimespans(
-    timespanFromConvention(convention),
-    timezoneName,
-  );
+  const conventionDays = useMemo(() => {
+    const conventionTimespan = timespanFromConvention(convention);
+    return conventionTimespan.isFinite()
+      ? getConventionDayTimespans(conventionTimespan, timezoneName)
+      : [];
+  }, [convention, timezoneName]);
 
   const runLists = conventionDays.map((conventionDay) => {
     const dayRuns = event.runs.filter((run) => conventionDay.includesTime(moment(run.starts_at)));
@@ -62,7 +74,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
         <div
           className="card-body small"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: event.description_html }}
+          dangerouslySetInnerHTML={{ __html: event.description_html ?? '' }}
         />
       </div>
 
@@ -77,26 +89,12 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
   );
 }
 
-RecurringEventSectionBody.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description_html: PropTypes.string.isRequired,
-    runs: PropTypes.arrayOf(
-      PropTypes.shape({
-        starts_at: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    length_seconds: PropTypes.number,
-  }).isRequired,
-  convention: PropTypes.shape({
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-  startSchedulingRuns: PropTypes.func.isRequired,
+export type RecurringEventSectionProps = {
+  event: EventFieldsFragment;
+  convention: ConventionFieldsFragment;
 };
 
-function RecurringEventSection({ event, convention }) {
+function RecurringEventSection({ event, convention }: RecurringEventSectionProps) {
   const [expanded, setExpanded] = useState(false);
   const scheduleRunsModal = useModal();
 
@@ -149,15 +147,5 @@ function RecurringEventSection({ event, convention }) {
     </section>
   );
 }
-
-RecurringEventSection.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    runs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    length_seconds: PropTypes.number,
-  }).isRequired,
-  convention: PropTypes.shape({}).isRequired,
-};
 
 export default RecurringEventSection;

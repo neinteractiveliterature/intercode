@@ -1,16 +1,15 @@
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { EventAdminEventsQuery } from './queries';
-import { RestoreDroppedEvent } from './mutations';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useRestoreDroppedEventMutation } from './mutations.generated';
 
 function DroppedEventAdmin() {
-  const { data, loading, error } = useQuery(EventAdminEventsQuery);
-  const [restoreDroppedEvent] = useMutation(RestoreDroppedEvent);
+  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const [restoreDroppedEvent] = useRestoreDroppedEventMutation();
   const confirm = useConfirm();
 
   usePageTitle('Dropped Events');
@@ -20,16 +19,18 @@ function DroppedEventAdmin() {
   }
 
   if (error) {
-    return <ErrorDisplay error={error} />;
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  const droppedEvents = data.events.filter((event) => {
-    const eventCategory = data.convention.event_categories.find(
+  const droppedEvents = data!.events.filter((event) => {
+    const eventCategory = data!.convention.event_categories.find(
       (c) => c.id === event.event_category.id,
     );
-    return event.status === 'dropped' && eventCategory.scheduling_ui !== 'single_run';
+    return event.status === 'dropped' && eventCategory?.scheduling_ui !== 'single_run';
   });
-  droppedEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
+  droppedEvents.sort((a, b) =>
+    (a.title ?? '').localeCompare(b.title ?? '', undefined, { sensitivity: 'base' }),
+  );
 
   if (droppedEvents.length === 0) {
     return (
