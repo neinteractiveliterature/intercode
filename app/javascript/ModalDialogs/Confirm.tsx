@@ -1,5 +1,4 @@
 import React, { useState, useContext, useMemo, useCallback, ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
 import useModal from './useModal';
@@ -24,7 +23,11 @@ defaultConfirm.visible = false;
 
 const ConfirmContext = React.createContext<ConfirmFunction>(defaultConfirm);
 
-function Confirm({ children }) {
+export type ConfirmProps = {
+  children: ReactNode;
+};
+
+function Confirm({ children }: ConfirmProps) {
   const [actionInProgress, setActionInProgress] = useState(false);
   const modal = useModal<ConfirmModalState>();
 
@@ -80,10 +83,6 @@ function Confirm({ children }) {
     </ConfirmContext.Provider>
   );
 }
-
-Confirm.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export function useConfirm() {
   const confirm = useContext(ConfirmContext);

@@ -1,9 +1,26 @@
 class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field_class Types::BaseField # Camelize fields in this type
 
-  field :convention, Types::ConventionType, null: true
+  field :convention,
+    Types::ConventionType,
+    'Returns the convention associated with the domain name of this request, or null if there \
+is none.',
+    null: true
 
   def convention
+    context[:convention]
+  end
+
+  field :assert_convention,
+    Types::ConventionType,
+    'Returns the convention associated with the domain name of this request.  If one is not \
+present, the request will error out.',
+    null: false
+
+  def assert_convention
+    unless context[:convention]
+      raise ActiveRecord::RecordNotFound, 'This domain does not belong to a convention'
+    end
     context[:convention]
   end
 

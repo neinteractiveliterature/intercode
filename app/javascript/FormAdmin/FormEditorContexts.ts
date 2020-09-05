@@ -1,10 +1,11 @@
 import React from 'react';
 import { FormEditorQueryQuery } from './queries.generated';
 import { FormType, TimezoneMode } from '../graphqlTypes.generated';
-import {
+import type {
   AgeRestrictionsFormItem,
   DateFormItem,
   EventEmailFormItem,
+  FormTypeDefinition,
   FreeTextFormItem,
   MultipleChoiceFormItem,
   ParsedFormItemWithGeneratedIds,
@@ -38,10 +39,7 @@ export type FormEditorContextValue = {
   convention: NonNullable<FormEditorQueryQuery['convention']>;
   currentSection?: FormEditorForm['form_sections'][0];
   form: FormEditorForm;
-  formType:
-    | typeof FormTypes['event']
-    | typeof FormTypes['event_proposal']
-    | typeof FormTypes['user_con_profile'];
+  formType: FormTypeDefinition;
   formItemsById: Map<number, TypedFormItem>;
 };
 

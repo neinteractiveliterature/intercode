@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { ApolloError, ApolloQueryResult } from '@apollo/client';
+import { ApolloError, FetchResult } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import PlainTextDisplay from '../PlainTextDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 
 export type AdminNotesProps = {
-  mutate: (value: string) => Promise<ApolloQueryResult<any>>;
+  mutate: (value: string) => Promise<FetchResult<any>>;
   value?: string;
 };
 

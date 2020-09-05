@@ -2940,6 +2940,12 @@ type ProvideEventTicketPayload {
 
 type Query {
   accountFormContentHtml: String
+
+  """
+  Returns the convention associated with the domain name of this request.  If one is not \
+  present, the request will error out.
+  """
+  assertConvention: Convention!
   assumedIdentityFromProfile: UserConProfile
   cmsContentGroup(id: Int!): CmsContentGroup!
   cmsContentGroups: [CmsContentGroup!]!
@@ -2952,6 +2958,11 @@ type Query {
   cmsParent: CmsParent!
   cmsPartials: [CmsPartial!]!
   cmsVariables: [CmsVariable!]!
+
+  """
+  Returns the convention associated with the domain name of this request, or null if there \
+  is none.
+  """
   convention: Convention
   conventionById(id: Int!): Convention!
   conventions: [Convention!]!

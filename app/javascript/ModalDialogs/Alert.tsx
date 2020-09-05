@@ -1,5 +1,4 @@
 import React, { useContext, ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +12,11 @@ export type AlertFunction = (message?: ReactNode) => void;
 
 const AlertContext = React.createContext<{ alert: AlertFunction }>({ alert: () => {} });
 
-export function AlertProvider({ children }) {
+export type AlertProviderProps = {
+  children: ReactNode;
+};
+
+export function AlertProvider({ children }: AlertProviderProps) {
   const { t } = useTranslation();
   const modal = useModal<AlertState>();
   const alert = modal.open;
@@ -32,10 +35,6 @@ export function AlertProvider({ children }) {
     </AlertContext.Provider>
   );
 }
-
-AlertProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export function useAlert() {
   const { alert } = useContext(AlertContext);

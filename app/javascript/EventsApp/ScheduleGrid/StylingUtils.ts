@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { CSSProperties } from 'react';
+import { assertNever } from 'assert-never';
 
 import getFullnessClass from './getFullnessClass';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
-import ScheduleGridConfig from './ScheduleGridConfig';
+import { ScheduleGridConfig } from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 
@@ -112,13 +113,30 @@ export type GetEventCategoryStylesOptions = {
   variant: EventStyleVariant;
 };
 
+function getColorVariant(
+  eventCategory: GetEventCategoryStylesOptions['eventCategory'],
+  variant: GetEventCategoryStylesOptions['variant'],
+) {
+  switch (variant) {
+    case 'default':
+      return eventCategory.default_color;
+    case 'signed_up':
+      return eventCategory.signed_up_color;
+    case 'full':
+      return eventCategory.full_color;
+    default:
+      assertNever(variant, true);
+      return undefined;
+  }
+}
+
 export function getEventCategoryStyles({
   eventCategory,
   variant,
 }: GetEventCategoryStylesOptions): Partial<
   Pick<CSSStyleDeclaration, 'backgroundColor' | 'borderColor'>
 > {
-  const color = eventCategory[`${variant}_color`];
+  const color = getColorVariant(eventCategory, variant);
 
   if (color) {
     if (variant === 'signed_up') {

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useContext } from 'react';
-import moment from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
@@ -56,18 +56,18 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         : null,
     [conventionTimespan, timezoneName],
   );
-  const [day, setDay] = useState(
-    startsAt && conventionDayTimespans
+  const [day, setDay] = useState<Moment | undefined>(
+    () => startsAt && conventionDayTimespans
       ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt))?.start
-      : null,
+      : undefined,
   );
-  const [hour, setHour] = useState(
-    startsAt && day ? startsAt.diff(day.clone().startOf('day'), 'hours') : null,
+  const [hour, setHour] = useState<number | undefined>(
+    () => startsAt && day ? startsAt.diff(day.clone().startOf('day'), 'hours') : undefined,
   );
-  const [minute, setMinute] = useState(
-    startsAt && hour != null && day != null
+  const [minute, setMinute] = useState<number | undefined>(
+    () => startsAt && hour != null && day != null
       ? startsAt.diff(day.clone().startOf('day').add(hour, 'hours'), 'minutes')
-      : null,
+      : undefined,
   );
   const startTime = useMemo(() => {
     if (day == null || hour == null || minute == null) {
@@ -92,7 +92,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const timeInputChanged = ({ hour: newHour, minute: newMinute }) => {
+  const timeInputChanged = ({ hour: newHour, minute: newMinute }: { hour?: number, minute?: number }) => {
     setHour(newHour);
     setMinute(newMinute);
   };

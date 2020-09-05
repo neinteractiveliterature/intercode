@@ -10,9 +10,9 @@ export type Scalars = {
   Float: number;
   /** Date in ISO8601 format */
   Date: string;
+  BigDecimal: any;
   /** An arbitrary object, serialized as JSON */
   Json: any;
-  BigDecimal: any;
   Upload: any;
 };
 
@@ -3246,6 +3246,11 @@ export type ProvideEventTicketPayload = {
 export type Query = {
   __typename?: 'Query';
   accountFormContentHtml?: Maybe<Scalars['String']>;
+  /**
+   * Returns the convention associated with the domain name of this request.  If one is not \
+   * present, the request will error out.
+   */
+  assertConvention: Convention;
   assumedIdentityFromProfile?: Maybe<UserConProfile>;
   cmsContentGroup: CmsContentGroup;
   cmsContentGroups: Array<CmsContentGroup>;
@@ -3258,6 +3263,10 @@ export type Query = {
   cmsParent: CmsParent;
   cmsPartials: Array<CmsPartial>;
   cmsVariables: Array<CmsVariable>;
+  /**
+   * Returns the convention associated with the domain name of this request, or null if there \
+   * is none.
+   */
   convention?: Maybe<Convention>;
   conventionById: Convention;
   conventions: Array<Convention>;

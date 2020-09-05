@@ -36,8 +36,16 @@ function NewTicketType({ ticketName }) {
       },
     ) => {
       const data = proxy.readQuery({ query: AdminTicketTypesQuery });
-      data.convention.ticket_types.push(newTicketType);
-      proxy.writeQuery({ query: AdminTicketTypesQuery, data });
+      proxy.writeQuery({
+        query: AdminTicketTypesQuery,
+        data: {
+          ...data,
+          convention: {
+            ...data.convention,
+            ticket_types: [...data.convention.ticket_types, newTicketType],
+          },
+        },
+      });
     },
   });
 

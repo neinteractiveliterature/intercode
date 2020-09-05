@@ -55,7 +55,7 @@ export const ScheduleGridEventFragment = gql`
 
 export const ScheduleGridConventionDataQuery = gql`
   query ScheduleGridConventionDataQuery {
-    convention {
+    convention: assertConvention {
       id
       pre_schedule_content_html
       ...CommonConventionData

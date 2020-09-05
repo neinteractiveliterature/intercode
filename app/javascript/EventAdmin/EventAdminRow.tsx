@@ -1,37 +1,45 @@
 import React, { useState, useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import Timespan from '../Timespan';
-import { UpdateEventAdminNotes } from './mutations';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import AppRootContext from '../AppRootContext';
+import {
+  ConventionFieldsFragment,
+  EventFieldsFragment,
+  RunFieldsFragment,
+} from './queries.generated';
+import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 
-function EventAdminRow({ event, convention }) {
+export type EventAdminRowProps = {
+  event: EventFieldsFragment;
+  convention: ConventionFieldsFragment;
+};
+
+function EventAdminRow({ event, convention }: EventAdminRowProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const [updateEventAdminNotes] = useMutation(UpdateEventAdminNotes);
+  const [updateEventAdminNotes] = useUpdateEventAdminNotesMutation();
   const [expanded, setExpanded] = useState(false);
 
   const length = useMemo(() => moment.duration(event.length_seconds, 'seconds'), [
     event.length_seconds,
   ]);
   const eventCategory = useMemo(
-    () => convention.event_categories.find((c) => c.id === event.event_category.id),
+    () => convention.event_categories.find((c) => c.id === event.event_category.id)!,
     [convention.event_categories, event.event_category],
   );
 
-  const renderRun = (run) => {
+  const renderRun = (run: RunFieldsFragment) => {
     const start = moment(run.starts_at);
     const timespan = new Timespan(start, start.clone().add(event.length_seconds, 'seconds'));
 
-    const [titleSuffix, scheduleNote] = [
+    const [titleSuffix, scheduleNote] = ([
       ['title_suffix', 'font-weight-bold'],
       ['schedule_note', 'font-italic'],
-    ].map(([field, className]) => {
+    ] as const).map(([field, className]) => {
       if (run[field]) {
         return (
           <li key={field} className={className}>
@@ -105,44 +113,19 @@ function EventAdminRow({ event, convention }) {
         <small>({eventCategory.name})</small>
         <div className="mt-2">
           <AdminNotes
-            value={event.admin_notes}
-            mutate={(adminNotes) => {
-              updateEventAdminNotes({ variables: { eventId: event.id, adminNotes } });
-            }}
+            value={event.admin_notes ?? undefined}
+            mutate={(adminNotes) =>
+              updateEventAdminNotes({ variables: { eventId: event.id, adminNotes } })
+            }
           />
         </div>
       </td>
       <td>
         {length.hours()}:{length.minutes().toString().padStart(2, '0')}
       </td>
-      <td style={{ minWidth: '29em' }}>{renderRuns(event)}</td>
+      <td style={{ minWidth: '29em' }}>{renderRuns()}</td>
     </tr>
   );
 }
-
-EventAdminRow.propTypes = {
-  event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    length_seconds: PropTypes.number.isRequired,
-    runs: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        starts_at: PropTypes.string.isRequired,
-        title_suffix: PropTypes.string,
-        schedule_note: PropTypes.string,
-        rooms: PropTypes.arrayOf(
-          PropTypes.shape({
-            name: PropTypes.string.isRequired,
-          }).isRequired,
-        ).isRequired,
-      }).isRequired,
-    ).isRequired,
-  }).isRequired,
-
-  convention: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-    event_categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
-};
 
 export default EventAdminRow;

@@ -13,7 +13,9 @@ export default function mountReactComponents(components: {
     }
 
     const component = components[reactClassName];
-    const props = JSON.parse((element.attributes['data-react-props'] || { value: '{}' }).value);
+    const props = JSON.parse(
+      (element.attributes.getNamedItem('data-react-props') || { value: '{}' }).value,
+    );
     const reactElement = React.createElement(component, props);
     ReactDOM.render(reactElement, element);
   });

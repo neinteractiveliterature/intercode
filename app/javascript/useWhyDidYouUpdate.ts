@@ -10,20 +10,24 @@ export default function useWhyDidYouUpdate<P>(name: string, props: P): void {
 
     if (previousValue) {
       // Get all keys from previous and current props
-      const allKeys = Object.keys({ ...previousValue, ...props });
+      const allKeys = Object.keys({ ...previousValue, ...props }) as (keyof P)[];
       // Use this object to keep track of changed props
-      const changesObj = {};
       // Iterate through keys
-      allKeys.forEach((key) => {
+      const changesObj = allKeys.reduce<Partial<P>>((acc, key) => {
         // If previous is different from current
         if (previousValue[key] !== props[key]) {
           // Add to changesObj
-          changesObj[key] = {
-            from: previousValue[key],
-            to: props[key],
+          return {
+            ...acc,
+            [key]: {
+              from: previousValue[key],
+              to: props[key],
+            },
           };
         }
-      });
+
+        return acc;
+      }, {});
 
       // If changesObj not empty then output to console
       if (Object.keys(changesObj).length) {

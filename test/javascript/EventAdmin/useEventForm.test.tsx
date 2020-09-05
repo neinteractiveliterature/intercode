@@ -19,7 +19,10 @@ describe('useEventForm', () => {
       }),
     );
 
-  const renderEventForm = (result, overrideProps = {}) => {
+  const renderEventForm = (
+    result: ReturnType<typeof renderEventFormHook>['result'],
+    overrideProps = {},
+  ) => {
     const renderResult = render(<EventForm {...result.current[0]} {...overrideProps} />);
 
     return {

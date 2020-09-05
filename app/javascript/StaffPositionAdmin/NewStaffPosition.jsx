@@ -22,8 +22,16 @@ function NewStaffPosition() {
       },
     ) => {
       const data = proxy.readQuery({ query: StaffPositionsQuery });
-      data.convention.staff_positions.push(newStaffPosition);
-      proxy.writeQuery({ query: StaffPositionsQuery, data });
+      proxy.writeQuery({
+        query: StaffPositionsQuery,
+        data: {
+          ...data,
+          convention: {
+            ...data.convention,
+            staff_positions: [...data.convention.staff_positions, newStaffPosition],
+          },
+        },
+      });
     },
   });
   const [mutate, error, inProgress] = useAsyncFunction(createMutate);

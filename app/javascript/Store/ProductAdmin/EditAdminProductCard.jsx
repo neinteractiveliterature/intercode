@@ -90,8 +90,16 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
           },
         ) => {
           const data = cache.readQuery({ query: AdminProductsQuery });
-          data.convention.products.push(newProduct);
-          cache.writeQuery({ query: AdminProductsQuery, data });
+          cache.writeQuery({
+            query: AdminProductsQuery,
+            data: {
+              ...data,
+              convention: {
+                ...data.convention,
+                products: [...data.convention.products, newProduct],
+              },
+            },
+          });
         },
       });
     }

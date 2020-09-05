@@ -16,7 +16,7 @@ export type CreateSignupRunCardProps = {
   userConProfileId: number;
 };
 
-function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
+function CreateSignupRunCard({ eventId, runId, userConProfileId }: CreateSignupRunCardProps) {
   const apolloClient = useApolloClient();
   const confirm = useConfirm();
   const alert = useAlert();
