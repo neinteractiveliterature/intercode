@@ -103,7 +103,7 @@
     "font-awesome": "^4.7.0",
     "glob": "^7.1.6",
     "graphiql": "^1.0.3",
-    "graphql": "^14.7.0",
+    "graphql": "^15.3.0",
     "graphql-anywhere": "^4.2.7",
     "html-to-react": "^1.4.3",
     "hypernova": "^2.5.0",
