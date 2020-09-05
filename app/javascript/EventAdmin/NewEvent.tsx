@@ -13,6 +13,7 @@ import useCreateEvent from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useEventAdminEventsQueryQuery, EventAdminEventsQueryQuery } from './queries.generated';
+import { buildEventInput } from './InputBuilders';
 
 type NewEventFormProps = {
   data: EventAdminEventsQueryQuery;
@@ -68,12 +69,15 @@ function NewEventForm({ data }: NewEventFormProps) {
       return;
     }
 
+    const eventForBuildEventInput: Parameters<typeof buildEventInput>[0] = {
+      ...event!,
+      event_category: eventCategory!
+    };
+
     await createMutate({
-      event,
-      eventCategory,
-      eventCategoryId,
+      event: eventForBuildEventInput,
+      eventCategory: eventCategory!,
       run,
-      setRun,
     });
     history.push(donePath);
   };

@@ -68,10 +68,12 @@ export default class SignupCountData {
   filterRows(filters: SignupCountDataFilter) {
     return Object.entries(filters).reduce((filteredData, [field, value]) => {
       if (Array.isArray(value)) {
-        return filteredData.filter((row) => (value as any[]).includes(row[field]));
+        return filteredData.filter((row) =>
+          (value as any[]).includes(row[field as keyof SignupCountDataFilter]),
+        );
       }
 
-      return filteredData.filter((row) => value === row[field]);
+      return filteredData.filter((row) => value === row[field as keyof SignupCountDataFilter]);
     }, this.data);
   }
 

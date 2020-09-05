@@ -6,7 +6,7 @@ export type CookieConsentProps = {
   cookiePolicyUrl: string;
 };
 
-function CookieConsent({ cookiePolicyUrl }) {
+function CookieConsent({ cookiePolicyUrl }: CookieConsentProps) {
   const { t } = useTranslation();
 
   return (

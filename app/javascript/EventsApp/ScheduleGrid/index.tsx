@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import CategoryLegend from './CategoryLegend';
 import FullnessLegend from './FullnessLegend';
 import ScheduleGrid from './ScheduleGrid';
-import ScheduleGridConfig from './ScheduleGridConfig';
+import { getConfig } from './ScheduleGridConfig';
 import { ScheduleGridProvider } from './ScheduleGridContext';
 import { RATING_OPTIONS } from '../EventList/EventListMyRatingSelector';
 import AppRootContext from '../../AppRootContext';
@@ -35,7 +35,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const location = useLocation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
   const { filtered, onFilteredChange } = useReactRouterReactTable({ ...filterCodecs });
-  const config = ScheduleGridConfig.get(configKey);
+  const config = getConfig(configKey);
   const storageKey = `schedule:${configKey}:personalFilters`;
 
   const loadPersonalFilters = useCallback(() => {
@@ -61,11 +61,11 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const hideConflicts = (filtered.find((f) => f.id === 'hide_conflicts') || {}).value;
 
   const choiceSetValue = [
-    ...(ratingFilter || []).map((integer) => integer.toString()),
+    ...(ratingFilter || []).map((integer: number) => integer.toString()),
     ...(hideConflicts ? [] : ['conflicts']),
   ];
 
-  const choiceSetChanged = (newValue) => {
+  const choiceSetChanged = (newValue: string[]) => {
     const integerArray = newValue
       .filter((choice) => choice !== 'conflicts')
       .map(Transforms.integer);

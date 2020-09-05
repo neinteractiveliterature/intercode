@@ -8,6 +8,12 @@ import { Search, TfIdfSearchIndex } from 'js-search';
 import timezoneSelectData from './timezoneSelectData.json';
 import useUniqueId from '../useUniqueId';
 
+function isValidZone(zoneName: string): zoneName is keyof typeof timezoneSelectData['zones'] {
+  return zoneName in timezoneSelectData.zones;
+}
+
+type ZoneData = typeof timezoneSelectData['zones']['America/New_York'];
+
 interface TfIdfSearchIndexWithOverridableCreate extends TfIdfSearchIndex {
   _createCalculateTfIdf(): Function;
 }
@@ -63,13 +69,13 @@ function TimezoneSelect(props: TimezoneSelectProps) {
     return search;
   }, []);
 
-  const loadOptions = (inputValue?: string | null) => {
+  const loadOptions = (inputValue?: string | null): ZoneData[] => {
     if (!inputValue) {
       return [];
     }
 
     const filtered = searchIndex.search(inputValue).slice(0, 50);
-    return filtered;
+    return (filtered as ZoneData[]);
   };
 
   const [options, setOptions] = useState(loadOptions(''));
@@ -84,13 +90,13 @@ function TimezoneSelect(props: TimezoneSelectProps) {
   return (
     <div className="form-group">
       <label htmlFor={selectId}>{label}</label>
-      <Select
+      <Select<ZoneData>
         inputId={selectId}
         options={options}
         isClearable
-        value={value ? timezoneSelectData.zones[value] : undefined}
+        value={(value && isValidZone(value)) ? timezoneSelectData.zones[value] : undefined}
         onInputChange={(input) => filterOptions(input)}
-        onChange={(newValue) => {
+        onChange={(newValue?: ZoneData) => {
           onChange(newValue?.name);
         }}
         getOptionValue={(zone) => zone.name}

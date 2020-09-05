@@ -10,7 +10,7 @@ export type NavigationBrandProps = {
   };
 };
 
-function NavigationBrand({ item }) {
+function NavigationBrand({ item }: NavigationBrandProps) {
   const { hideBrand } = useContext(NavigationBarContext);
 
   return (

@@ -30,10 +30,11 @@ export type ScheduleGridLegendConfig = {
   text?: string;
 };
 
-export type ScheduleGridConfigData = {
+export type ScheduleGridConfig = {
   key: string;
   basename: string;
   title: string;
+  titlei18nKey: string;
   classifyEventsBy: 'category' | 'fullness';
   groupEventsBy: 'category' | 'room';
   showExtendedCounts?: boolean;
@@ -45,69 +46,30 @@ export type ScheduleGridConfigData = {
   legends?: ScheduleGridLegendConfig[];
 };
 
-class ScheduleGridConfig {
-  key: string;
+export const allConfigs = configData as ScheduleGridConfig[];
 
-  basename: string;
+export const allConfigKeys = allConfigs.map((config) => config.key);
 
-  title: string;
+export const getConfig = (key: string) => allConfigs.find((config) => config.key === key);
 
-  titlei18nKey: string;
-
-  classifyEventsBy: 'category' | 'fullness';
-
-  groupEventsBy: 'category' | 'room';
-
-  showExtendedCounts?: boolean;
-
-  showSignedUp?: boolean;
-
-  showSignupStatusBadge?: boolean;
-
-  showPersonalFilters?: boolean;
-
-  categoryGroups: ScheduleGridCategoryGroupConfig[];
-
-  filterEmptyGroups?: boolean;
-
-  legends?: ScheduleGridLegendConfig[];
-
-  static allConfigs = (configData as ScheduleGridConfigData[]).map(
-    (props) => new ScheduleGridConfig(props),
-  );
-
-  static allConfigKeys = ScheduleGridConfig.allConfigs.map((config) => config.key);
-
-  static get = (key: string) => ScheduleGridConfig.allConfigs.find((config) => config.key === key);
-
-  constructor(props: ScheduleGridConfigData) {
-    this.categoryGroups = [];
-    Object.entries(props).forEach(([key, value]) => {
-      this[key] = value;
+export function buildCategoryMatchRules(config: ScheduleGridConfig) {
+  const rules: { matchRule: ScheduleGridMatchRule; targetGroupIndex: number }[] = [];
+  config.categoryGroups?.forEach((categoryGroup, targetGroupIndex) => {
+    categoryGroup.match.forEach((matchRule: ScheduleGridMatchRule) => {
+      rules.push({ matchRule, targetGroupIndex });
     });
-  }
+  });
 
-  buildCategoryMatchRules() {
-    const rules: { matchRule: ScheduleGridMatchRule; targetGroupIndex: number }[] = [];
-    this.categoryGroups.forEach((categoryGroup, targetGroupIndex) => {
-      categoryGroup.match.forEach((matchRule: ScheduleGridMatchRule) => {
-        rules.push({ matchRule, targetGroupIndex });
-      });
-    });
+  // sort all-remaining rules to the end so they get processed last
+  return rules.sort((a, b) => {
+    if (isCatchAllMatchRule(a.matchRule) && !isCatchAllMatchRule(b.matchRule)) {
+      return 1;
+    }
 
-    // sort all-remaining rules to the end so they get processed last
-    return rules.sort((a, b) => {
-      if (isCatchAllMatchRule(a.matchRule) && !isCatchAllMatchRule(b.matchRule)) {
-        return 1;
-      }
+    if (isCatchAllMatchRule(b.matchRule) && !isCatchAllMatchRule(a.matchRule)) {
+      return -1;
+    }
 
-      if (isCatchAllMatchRule(b.matchRule) && !isCatchAllMatchRule(a.matchRule)) {
-        return -1;
-      }
-
-      return 0;
-    });
-  }
+    return 0;
+  });
 }
-
-export default ScheduleGridConfig;

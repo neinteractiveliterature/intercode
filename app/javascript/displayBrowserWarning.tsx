@@ -62,11 +62,22 @@ function getMajorVersion(versionString?: string) {
   return parseInt(parts[0], 10);
 }
 
+function findIosWebviewAppHost(browser: ReturnType<typeof detect>) {
+  const iosWebviewAppHost =
+    browser?.name && browser.name in IOS_WEBVIEW_APP_HOSTS
+      ? IOS_WEBVIEW_APP_HOSTS[browser.name as keyof typeof IOS_WEBVIEW_APP_HOSTS]
+      : undefined;
+
+  return iosWebviewAppHost;
+}
+
 function renderRecommendation(browser: ReturnType<typeof detect>) {
-  if (IOS_WEBVIEW_APP_HOSTS[browser?.name ?? 'unknown']) {
+  const iosWebviewAppHost = findIosWebviewAppHost(browser);
+
+  if (iosWebviewAppHost) {
     return `
       <p class="text-left">
-        ${IOS_WEBVIEW_APP_HOSTS[browser?.name ?? 'unknown']}
+        ${iosWebviewAppHost}
         uses the Safari engine, which ships with iOS itself.  To update it, update your device to
         the latest version of iOS.
       </p>
@@ -138,7 +149,10 @@ function setDontShowCookie() {
 window.setDontShowCookie = setDontShowCookie;
 
 function renderBrowserWarning(browser: ReturnType<typeof detect>) {
-  const browserName = BROWSER_NAMES[browser?.name || 'unknown'] || 'an unknown web browser';
+  const browserName =
+    browser?.name && browser.name in BROWSER_NAMES
+      ? BROWSER_NAMES[browser.name as keyof typeof BROWSER_NAMES]
+      : 'an unknown web browser';
 
   const wrapperDiv = document.createElement('div');
   wrapperDiv.innerHTML = `
@@ -194,7 +208,8 @@ function displayBrowserWarning() {
     return;
   }
 
-  if (IOS_WEBVIEW_APP_HOSTS[browser?.name ?? 'unknown'] && browser?.os === 'iOS') {
+  const iosWebviewAppHost = findIosWebviewAppHost(browser);
+  if (iosWebviewAppHost && browser?.os === 'iOS') {
     // special handling for iOS apps which are actually just a UIWebView
 
     const match = navigator.userAgent.match(/iPhone OS (\d+)/);
@@ -208,8 +223,12 @@ function displayBrowserWarning() {
   }
 
   if (includes(SUPPORTED_BROWSERS, browser?.name)) {
-    const minVersion = MIN_SUPPORTED_VERSION[browser?.name ?? 'unknown'];
-    if (getMajorVersion(browser?.version ?? undefined) >= minVersion) {
+    const minVersion =
+      browser?.name && browser.name in MIN_SUPPORTED_VERSION
+        ? MIN_SUPPORTED_VERSION[browser.name as keyof typeof MIN_SUPPORTED_VERSION]
+        : undefined;
+
+    if (minVersion && getMajorVersion(browser?.version ?? undefined) >= minVersion) {
       return;
     }
   }

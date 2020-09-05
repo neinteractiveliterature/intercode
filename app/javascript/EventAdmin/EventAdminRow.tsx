@@ -36,10 +36,10 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
     const start = moment(run.starts_at);
     const timespan = new Timespan(start, start.clone().add(event.length_seconds, 'seconds'));
 
-    const [titleSuffix, scheduleNote] = [
+    const [titleSuffix, scheduleNote] = ([
       ['title_suffix', 'font-weight-bold'],
       ['schedule_note', 'font-italic'],
-    ].map(([field, className]) => {
+    ] as const).map(([field, className]) => {
       if (run[field]) {
         return (
           <li key={field} className={className}>

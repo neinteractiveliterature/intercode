@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
-import moment from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 import ReactTable, { Column, RowInfo, Filter } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -26,7 +26,7 @@ import {
   UserConProfilesTableUserConProfilesQueryQuery,
   UserConProfilesTableUserConProfilesQueryQueryVariables,
 } from './queries.generated';
-import { TypedFormItem } from '../FormAdmin/FormItemUtils';
+import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
 
 type UserConProfilesTableRow = NonNullable<
@@ -84,7 +84,13 @@ function TicketStatusWithPaymentAmountCell({ value }: TicketStatusWithPaymentAmo
   );
 }
 
-const TicketTypeFilter = ({ filter, onChange }) => {
+const TicketTypeFilter = ({
+  filter,
+  onChange,
+}: {
+  filter: Filter;
+  onChange: React.Dispatch<string[]>;
+}) => {
   const { t } = useTranslation();
   const data = useContext(UserConProfilesTableQueryDataContext);
   const choices = useMemo(
@@ -102,15 +108,6 @@ const TicketTypeFilter = ({ filter, onChange }) => {
   );
 
   return <ChoiceSetFilter choices={choices} onChange={onChange} filter={filter} multiple />;
-};
-
-TicketTypeFilter.propTypes = {
-  filter: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func.isRequired,
-};
-
-TicketTypeFilter.defaultProps = {
-  filter: null,
 };
 
 const privilegeNames = {
@@ -251,10 +248,11 @@ const getPossibleColumns = (
               { ticketName: humanize(data.convention!.ticket_name || 'ticket') },
             ),
             id: 'ticket_updated_at',
-            accessor: (userConProfile) =>
+            accessor: (userConProfile: UserConProfilesTableRow) =>
               userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null,
             filterable: false,
-            Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
+            Cell: ({ value }: { value: Moment | null }) =>
+              value ? value.format('MMM D, YYYY H:mma') : null,
           },
         ]),
     {
@@ -285,7 +283,7 @@ const getPossibleColumns = (
       return;
     }
 
-    const FormItemCell = ({ value }) => (
+    const FormItemCell = ({ value }: { value: FormItemValueType<TypedFormItem> }) => (
       <FormItemDisplay
         formItem={formItem}
         value={value}
@@ -319,7 +317,7 @@ export type UserConProfilesTableProps = {
   defaultVisibleColumns?: string[];
 };
 
-function UserConProfilesTable({ defaultVisibleColumns }) {
+function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTableProps) {
   const { t } = useTranslation();
   const history = useHistory();
   const getPossibleColumnsWithTranslation = useMemo(
