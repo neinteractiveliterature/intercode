@@ -2,10 +2,14 @@ import React from 'react';
 import classnames from 'classnames';
 
 export const RATING_NAMES = {
-  1: 'Favorite',
-  0: 'TBD',
+  '1': 'Favorite',
+  '0': 'TBD',
   '-1': 'Hidden',
 };
+
+function isRating(ratingKey: string): ratingKey is keyof typeof RATING_NAMES {
+  return ratingKey in RATING_NAMES;
+}
 
 function getRatingIconClass(rating: number, selected?: boolean) {
   if (rating === -1) {
@@ -47,6 +51,7 @@ function EventRatingIcon({
   overrideElementSize,
 }: EventRatingIconProps) {
   const size = providedSize ?? 1.0;
+  const ratingKey = `${rating}`;
 
   return (
     <i
@@ -61,7 +66,7 @@ function EventRatingIcon({
         height: overrideElementSize ? `${size}rem` : undefined,
       }}
     >
-      <span className="sr-only">{RATING_NAMES[rating]}</span>
+      <span className="sr-only">{isRating(ratingKey) && RATING_NAMES[ratingKey]}</span>
     </i>
   );
 }

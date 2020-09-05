@@ -11,7 +11,7 @@ if (!argv.from || !argv.to) {
 const from: object = JSON.parse(fs.readFileSync(argv.from, { encoding: 'utf-8' }));
 const to: object = JSON.parse(fs.readFileSync(argv.to, { encoding: 'utf-8' }));
 
-function mergeObjects(source: object, destination: object) {
+function mergeObjects(source: any, destination: any): any {
   return Object.entries(source).reduce((acc, [key, value]) => {
     if (typeof value === 'string') {
       return { ...acc, [key]: value };

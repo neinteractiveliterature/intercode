@@ -12,7 +12,11 @@ import useEventAdminCategory from './useEventAdminCategory';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useEventAdminEventsQueryQuery } from './queries.generated';
 
-function EventAdminRunsTable({ eventCategoryId }) {
+export type EventAdminRunsTableProps = {
+  eventCategoryId: number;
+};
+
+function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsTableProps) {
   const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   const [eventCategory, sortedEvents] = useEventAdminCategory(

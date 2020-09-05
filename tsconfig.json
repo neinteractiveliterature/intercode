@@ -15,7 +15,8 @@
       "app/javascript/@types",
     ],
     "lib": ["DOM", "DOM.Iterable", "ES2015"],
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "skipLibCheck": true
   },
   "include": [
     "./app/javascript/",

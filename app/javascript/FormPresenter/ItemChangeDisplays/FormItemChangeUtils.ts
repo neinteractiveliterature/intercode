@@ -1,3 +1,4 @@
+// @ts-expect-error
 import MD5 from 'md5.js';
 import moment from 'moment-timezone';
 

@@ -11,7 +11,11 @@ import { getSortedFormItems } from '../Models/Form';
 import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 
-function EventProposalDisplay({ eventProposalId }) {
+export type EventProposalDisplayProps = {
+  eventProposalId: number;
+};
+
+function EventProposalDisplay({ eventProposalId }: EventProposalDisplayProps) {
   const { data, loading, error } = useEventProposalQueryWithOwnerQuery({
     variables: { eventProposalId },
   });
@@ -39,7 +43,7 @@ function EventProposalDisplay({ eventProposalId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const renderFormItems = ({ convention }) => {
+  const renderFormItems = () => {
     if (formResponse == null) {
       return null;
     }
@@ -63,7 +67,7 @@ function EventProposalDisplay({ eventProposalId }) {
             <div className="col-md-10">
               <FormItemDisplay
                 formItem={item}
-                convention={convention}
+                convention={data!.convention!}
                 value={formResponse.form_response_attrs[item.identifier]}
                 displayMode="admin"
               />
@@ -102,7 +106,7 @@ function EventProposalDisplay({ eventProposalId }) {
         </div>
       </li>
 
-      {renderFormItems({ convention: data!.convention! })}
+      {renderFormItems()}
     </ul>
   );
 }

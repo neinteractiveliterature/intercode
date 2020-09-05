@@ -8,12 +8,12 @@ import React, {
   ReactNode,
 } from 'react';
 import { detect } from 'detect-browser';
-import { useApolloClient, useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
-import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery } from './queries';
+import { ScheduleGridEventsQuery } from './queries';
 import {
   timespanFromConvention,
   getConventionDayTimespans,
@@ -23,9 +23,13 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
-import ScheduleGridConfig from './ScheduleGridConfig';
+import { ScheduleGridConfig } from './ScheduleGridConfig';
 import { TimezoneMode } from '../../graphqlTypes.generated';
-import { ScheduleGridEventFragmentFragment } from './queries.generated';
+import {
+  ScheduleGridEventFragmentFragment,
+  useScheduleGridConventionDataQueryQuery,
+  useScheduleGridEventsQueryQuery,
+} from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
@@ -39,13 +43,14 @@ export type ScheduleGridContextValue = {
   toggleRunDetailsVisibility: (runId: number) => void;
 };
 
-const skeletonScheduleGridConfig = new ScheduleGridConfig({
+const skeletonScheduleGridConfig: ScheduleGridConfig = {
   basename: 'skeleton',
   key: 'skeleton',
-  title: 'Skeleton config',
+  title: 'Loading...',
+  titlei18nKey: 'schedule.skeletonTitle',
   classifyEventsBy: 'category',
   groupEventsBy: 'category',
-});
+};
 
 const skeletonSchedule = new Schedule({
   config: skeletonScheduleGridConfig,
@@ -194,7 +199,7 @@ function ScheduleGridProviderTabContent({
   afterLoaded,
 }: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
-  const { data, error, loading } = useQuery(ScheduleGridEventsQuery, {
+  const { data, error, loading } = useScheduleGridEventsQueryQuery({
     variables: {
       ...getEventsQueryVariables(timespan, config.showExtendedCounts),
     },
@@ -244,7 +249,7 @@ export function ScheduleGridProvider({
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
-  const { data, loading, error } = useQuery(ScheduleGridConventionDataQuery);
+  const { data, loading, error } = useScheduleGridConventionDataQueryQuery();
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(
@@ -258,19 +263,19 @@ export function ScheduleGridProvider({
     [client, config.showExtendedCounts],
   );
 
-  const convention = loading || error ? null : data.convention;
+  const conventionOrNull = loading || error || !data ? null : data.convention;
 
   const conventionTimespan = useMemo(
-    () => (convention ? timespanFromConvention(convention) : null),
-    [convention],
+    () => (conventionOrNull ? timespanFromConvention(conventionOrNull) : null),
+    [conventionOrNull],
   );
 
   const conventionDayTimespans = useMemo(
     () =>
-      convention && conventionTimespan?.isFinite()
+      conventionOrNull && conventionTimespan?.isFinite()
         ? getConventionDayTimespans(conventionTimespan, timezoneName)
         : [],
-    [convention, conventionTimespan, timezoneName],
+    [conventionOrNull, conventionTimespan, timezoneName],
   );
 
   const afterTabLoaded = useCallback(() => {
@@ -286,6 +291,8 @@ export function ScheduleGridProvider({
   if (loading) {
     return <ScheduleGridSkeleton />;
   }
+
+  const convention = conventionOrNull!;
 
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>

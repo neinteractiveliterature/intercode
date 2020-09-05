@@ -1,6 +1,8 @@
 import React, { Suspense, CSSProperties, ReactNode } from 'react';
 import camelCase from 'lodash/camelCase';
+// @ts-expect-error
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
+// @ts-expect-error
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
 
@@ -23,7 +25,7 @@ export const DEFAULT_COMPONENT_MAP: ComponentMap = {
 
 export type ProcessingInstruction<T> = {
   shouldProcessNode: (node: Node) => boolean;
-  processNode: (node: T, children: Node[], index: number) => ReactNode;
+  processNode: (node: T, children: Node[] | ReactNode[], index: number) => ReactNode;
   replaceChildren?: boolean;
 };
 
@@ -72,7 +74,8 @@ function createStyleJsonFromString(style: string) {
     }
 
     if (key != null && value != null && key.length > 0 && value.length > 0) {
-      jsonStyles[camelCase(key)] = value;
+      const cssKey = camelCase(key) as keyof React.CSSProperties;
+      jsonStyles[cssKey] = value as any;
     }
   }
   return jsonStyles;
@@ -173,12 +176,15 @@ function processReactComponentNode(
   index: number,
   componentMap: ComponentMap,
 ) {
-  const component = componentMap[node.attributes['data-react-class'].value];
+  const componentClass = node.attributes.getNamedItem('data-react-class')?.value;
+  const component = componentMap[componentClass ?? ''];
   if (!component) {
     return processDefaultNode(node, children, index);
   }
 
-  const props = JSON.parse((node.attributes['data-react-props'] || { value: '{}' }).value);
+  const props = JSON.parse(
+    (node.attributes.getNamedItem('data-react-props') || { value: '{}' }).value,
+  );
   return React.createElement(
     Suspense,
     { fallback: <></>, key: index },
@@ -220,7 +226,7 @@ function traverseDom(
   isValidNode: (node: Node) => boolean,
   processingInstructions: ProcessingInstruction<any>[],
   index: number,
-) {
+): ReactNode | false {
   if (isValidNode(node)) {
     const processingInstruction = processingInstructions.find((instruction) =>
       instruction.shouldProcessNode(node),
@@ -250,7 +256,7 @@ function traverseWithInstructions(
   nodes: NodeList,
   isValidNode: (node: Node) => boolean,
   processingInstructions: ProcessingInstruction<any>[],
-): ReactNode[] {
+): ReactNode | ReactNode[] {
   const list = [...nodes].map((domTreeItem, index) =>
     traverseDom(domTreeItem, isValidNode, processingInstructions, index),
   );

@@ -115,6 +115,7 @@ function AppRoot() {
       Settings.defaultLocale = appRootContextValue.language;
 
       if (appRootContextValue.language === 'es') {
+        // @ts-expect-error
         import('moment/locale/es').then(() => moment.locale('es'));
       } else {
         moment.locale('en');

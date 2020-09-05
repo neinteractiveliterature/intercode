@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-expect-error
 import Pagination from 'react-js-pagination';
 import classNames from 'classnames';
 

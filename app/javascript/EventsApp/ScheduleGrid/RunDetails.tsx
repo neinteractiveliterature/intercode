@@ -50,7 +50,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
     ]);
     const roomsDescription = useMemo(() => run.room_names.sort().join(', '), [run.room_names]);
 
-    const ratingChanged = async (rating) => {
+    const ratingChanged = async (rating: number) => {
       await rateEvent(event.id, rating);
       await apolloClient.resetStore();
     };

@@ -13,13 +13,17 @@ import {
 } from '../FormItemUtils';
 
 export type RegistrationPolicyItemEditorProps = FormItemEditorProps<RegistrationPolicyFormItem>;
-function RegistrationPolicyItemEditor({ formItem, setFormItem }) {
+function RegistrationPolicyItemEditor({
+  formItem,
+  setFormItem,
+}: RegistrationPolicyItemEditorProps) {
   const { disabled } = useContext(FormItemEditorContext);
 
-  const generateNewPreset = useCallback(
+  const generateNewPreset: () => RegistrationPolicyPreset = useCallback(
     () => ({
       name: '',
       policy: {
+        prevent_no_preference_signups: false,
         buckets: [],
       },
     }),

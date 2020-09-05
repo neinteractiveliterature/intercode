@@ -195,6 +195,9 @@
     "history": {
       "title": "History"
     },
+    "prospectiveRunSchedule": {
+      "title": "Schedule preview"
+    },
     "ratings": {
       "clearButton": "Clear rating",
       "favoriteButton": "Mark as favorite",
@@ -434,6 +437,7 @@
     }
   },
   "schedule": {
+    "skeletonTitle": "Loading...",
     "legends": {
       "attendeeCounts": {
         "confirmed": "confirmed signups",

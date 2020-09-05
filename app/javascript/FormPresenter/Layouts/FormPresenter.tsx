@@ -35,7 +35,7 @@ function FormPresenter({
   submitButton,
   submitForm,
   footerContent,
-}) {
+}: FormPresenterProps) {
   const { currentSection } = useContext(SectionTraversalContext);
 
   const headerRef = useRef<HTMLDivElement>(null);
