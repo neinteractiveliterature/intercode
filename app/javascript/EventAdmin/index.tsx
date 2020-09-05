@@ -1,11 +1,9 @@
 import React, { useMemo } from 'react';
 import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { humanize } from 'inflected';
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
-import { EventAdminEventsQuery } from './queries';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
@@ -17,6 +15,7 @@ import useAutoClosingDropdownRef from '../NavigationBar/useAutoClosingDropdownRe
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { useEventAdminEventsQueryQuery } from './queries.generated';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
@@ -28,10 +27,10 @@ const adminComponentsBySchedulingUi = {
 
 function EventAdmin() {
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
-  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   const eventCategories = useMemo(
-    () => (loading || error ? null : sortEventCategories(data.convention.event_categories)),
+    () => (loading || error || !data ? [] : sortEventCategories(data.convention.event_categories)),
     [data, loading, error],
   );
 
@@ -47,8 +46,8 @@ function EventAdmin() {
 
   if (authorizationWarning) return authorizationWarning;
 
-  if (data.convention.site_mode === 'single_event') {
-    if (data.events.length === 0) {
+  if (data!.convention.site_mode === 'single_event') {
+    if (data!.events.length === 0) {
       return (
         <Switch>
           <Route path="/admin_events/new">
@@ -64,7 +63,7 @@ function EventAdmin() {
         <Route path="/admin_events/:id/edit">
           <EventAdminEditEvent />
         </Route>
-        <Redirect to={`/admin_events/${data.events[0].id}/edit`} />
+        <Redirect to={`/admin_events/${data!.events[0].id}/edit`} />
       </Switch>
     );
   }
@@ -87,16 +86,18 @@ function EventAdmin() {
             </li>
           )}
         >
-          {eventCategories.map((eventCategory) => (
-            <NavLink
-              className="dropdown-item"
-              key={eventCategory.id}
-              to={buildEventCategoryUrl(eventCategory)}
-            >
-              {eventCategory.name}{' '}
-              <small className="text-muted">({humanize(eventCategory.scheduling_ui)})</small>
-            </NavLink>
-          ))}
+          <>
+            {eventCategories.map((eventCategory) => (
+              <NavLink
+                className="dropdown-item"
+                key={eventCategory.id}
+                to={buildEventCategoryUrl(eventCategory) ?? '/admin_events'}
+              >
+                {eventCategory.name}{' '}
+                <small className="text-muted">({humanize(eventCategory.scheduling_ui)})</small>
+              </NavLink>
+            ))}
+          </>
         </PopperDropdown>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin_events/dropped_events">
@@ -124,7 +125,7 @@ function EventAdmin() {
         <Route path="/admin_events/dropped_events">
           <DroppedEventAdmin />
         </Route>
-        <Redirect to={buildEventCategoryUrl(eventCategories[0])} />
+        <Redirect to={buildEventCategoryUrl(eventCategories[0]) ?? '/admin_events'} />
       </Switch>
     </>
   );

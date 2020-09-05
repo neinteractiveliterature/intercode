@@ -22539,6 +22539,24 @@
               "deprecationReason": null
             },
             {
+              "name": "assertConvention",
+              "description": "Returns the convention associated with the domain name of this request.  If one is not \\\npresent, the request will error out.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Convention",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "assumedIdentityFromProfile",
               "description": null,
               "args": [
@@ -22858,7 +22876,7 @@
             },
             {
               "name": "convention",
-              "description": null,
+              "description": "Returns the convention associated with the domain name of this request, or null if there \\\nis none.",
               "args": [
 
               ],

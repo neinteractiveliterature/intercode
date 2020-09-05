@@ -15,6 +15,7 @@ import {
   UnparsedTimeblockPreference,
 } from '../FormPresenter/TimeblockTypes';
 import { notEmpty } from '../ValueUtils';
+import FormTypes from '../../../config/form_types.json';
 
 const GENERATED_ID_ARRAY_PROPERTIES = [
   'choices',
@@ -308,10 +309,11 @@ export function serializeParsedFormSection(
 
 export function addGeneratedIds<PropertiesType>(properties: PropertiesType) {
   return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
-    if (memo[property] != null) {
+    const value = memo[property as keyof PropertiesType];
+    if (value != null && Array.isArray(value)) {
       return {
         ...memo,
-        [property]: memo[property].map((item: any) => ({
+        [property]: value.map((item: any) => ({
           ...item,
           generatedId: uuidv4(),
         })),
@@ -330,10 +332,11 @@ export function removeGeneratedIds<PropertiesType>(
   }
 
   return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
-    if (memo[property] != null) {
+    const value = memo[property as keyof PropertiesType];
+    if (value != null && Array.isArray(value)) {
       return {
         ...memo,
-        [property]: memo[property].map((item: any) => {
+        [property]: value.map((item: any) => {
           const { generatedId, ...otherItemProperties } = item;
           return otherItemProperties;
         }),
@@ -403,4 +406,40 @@ export function mutationUpdaterForFormSection<ResultDataType>(
       },
     });
   };
+}
+
+export type FormTypeDefinition =
+  | typeof FormTypes['event']
+  | typeof FormTypes['event_proposal']
+  | typeof FormTypes['user_con_profile'];
+
+export type StandardItemIdentifier<
+  FormType extends FormTypeDefinition
+> = keyof FormType['standard_items'];
+
+export type StandardItem = Partial<
+  Omit<
+    FormEditorFormItemFieldsFragment,
+    'id' | '__typename' | 'position' | 'properties' | 'rendered_properties' | 'identifier'
+  >
+> & {
+  description: string;
+  required?: boolean;
+  deprecation_reason?: string;
+  default_properties?: any;
+};
+
+export function findStandardItem(
+  formType?: FormTypeDefinition,
+  identifier?: string | null,
+): StandardItem | undefined {
+  if (!formType || !identifier) {
+    return undefined;
+  }
+
+  if (!(identifier in formType.standard_items)) {
+    return undefined;
+  }
+
+  return formType.standard_items[identifier as keyof FormTypeDefinition['standard_items']];
 }

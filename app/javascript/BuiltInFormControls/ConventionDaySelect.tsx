@@ -13,7 +13,7 @@ export type ConventionDaySelectProps = {
   onChange: React.Dispatch<Moment>;
 };
 
-function ConventionDaySelect({ convention, value, onChange }) {
+function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps) {
   const { timezoneName } = useContext(AppRootContext);
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
   const conventionDays = useMemo(

@@ -30,7 +30,7 @@ export function parseMoneyOrNull(value: string) {
   };
 }
 
-export function forceTimezoneForDatetimeValue(value: string | null | Moment, timezoneName: string) {
+export function forceTimezoneForDatetimeValue(value: string | null | Moment, timezoneName: string): string | null {
   if (value == null) {
     return value;
   }
@@ -130,7 +130,7 @@ export function combineStateChangeCalculators(
   transformsByName: any,
   preprocessState: (state: any) => any = Transforms.identity,
   postprocessState: (state: any) => any = Transforms.identity,
-) {
+): any {
   return Object.keys(transformsByName).reduce((acc, name) => {
     if (transformsByName[name] == null || typeof transformsByName[name] === 'function') {
       return {
@@ -159,7 +159,7 @@ export function stateUpdater<T>(
   getState: () => T,
   setState: (state: T) => void,
   stateChangeCalculators: any,
-) {
+): any {
   return Object.keys(stateChangeCalculators).reduce((acc, name) => {
     if (typeof stateChangeCalculators[name] === 'function') {
       return {
@@ -236,7 +236,7 @@ export function transformsReducer<StateType>(
       case 'change':
         return {
           ...state,
-          [action.key]: (transforms[action.key] || Transforms.identity)(action.value),
+          [action.key]: (transforms[(action.key as keyof StateType)] || Transforms.identity)(action.value),
         };
       default:
         return state;

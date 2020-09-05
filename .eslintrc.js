@@ -77,10 +77,24 @@ module.exports = {
 
   overrides: [
     {
-      files: ['**/*.tsx'],
+      files: ['**/*.ts', '**/*.tsx'],
       rules: {
         'react/prop-types': 'off',
         'react/require-default-props': 'off',
+        '@typescript-eslint/no-extra-non-null-assertion': ['error'],
+        'no-restricted-imports': [
+          'error',
+          {
+            paths: [
+              'graphql-tag',
+              {
+                name: '@apollo/client',
+                importNames: ['useQuery', 'useMutation'],
+                message: 'Please use generated operation-specific hooks instead',
+              },
+            ],
+          },
+        ],
       },
     },
   ],

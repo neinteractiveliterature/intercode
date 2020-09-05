@@ -1,14 +1,19 @@
 import { useCallback } from 'react';
-import { useMutation } from '@apollo/client';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventAdminEventsQuery } from './queries';
-import { UpdateEvent, CreateRun, UpdateRun } from './mutations';
+import {
+  useCreateRunMutation,
+  useUpdateEventMutation,
+  useUpdateRunMutation,
+} from './mutations.generated';
+import { EventAdminEventsQueryQuery } from './queries.generated';
+import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 
 function useUpdateRegularEvent() {
-  const [updateEventMutate] = useMutation(UpdateEvent);
+  const [updateEventMutate] = useUpdateEventMutation();
   const updateEvent = useCallback(
-    ({ event }) =>
+    ({ event }: { event: Parameters<typeof buildEventInput>[0] & { id: number } }) =>
       updateEventMutate({
         variables: {
           input: {
@@ -24,12 +29,18 @@ function useUpdateRegularEvent() {
 }
 
 function useUpdateSingleRunEvent() {
-  const [updateEvent] = useMutation(UpdateEvent);
-  const [createRun] = useMutation(CreateRun);
-  const [updateRun] = useMutation(UpdateRun);
+  const [updateEvent] = useUpdateEventMutation();
+  const [createRun] = useCreateRunMutation();
+  const [updateRun] = useUpdateRunMutation();
 
   return useCallback(
-    async ({ event, run }) => {
+    async ({
+      event,
+      run,
+    }: {
+      event: Parameters<typeof buildEventInput>[0] & { id: number };
+      run: Parameters<typeof buildRunInput>[0] & { id?: number | null };
+    }) => {
       const eventInput = {
         ...buildEventInput(event),
         id: event.id,
@@ -39,7 +50,7 @@ function useUpdateSingleRunEvent() {
 
       const runInput = buildRunInput(run);
 
-      if (run.id) {
+      if (run.id && runInput) {
         await updateRun({
           variables: {
             input: {
@@ -56,15 +67,15 @@ function useUpdateSingleRunEvent() {
               event_id: event.id,
             },
           },
-          update: (
-            store,
-            {
-              data: {
-                createRun: { run: newRun },
-              },
-            },
-          ) => {
-            const eventsData = store.readQuery({ query: EventAdminEventsQuery });
+          update: (store, { data }) => {
+            const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+              query: EventAdminEventsQuery,
+            });
+            const newRun = data?.createRun?.run;
+            if (!newRun || !eventsData) {
+              return;
+            }
+
             store.writeQuery({
               query: EventAdminEventsQuery,
               data: {
@@ -94,12 +105,23 @@ export default function useUpdateEvent() {
   const updateSingleRunEvent = useUpdateSingleRunEvent();
 
   const updateEvent = useCallback(
-    ({ event, eventCategory, ...args }) => {
-      if (eventCategory.scheduling_ui === 'single_run') {
-        return updateSingleRunEvent({ event, ...args });
+    ({
+      event,
+      eventCategory,
+      run,
+    }: {
+      event: Parameters<typeof buildEventInput>[0] & { id: number };
+      eventCategory: Pick<EventCategory, 'scheduling_ui'>;
+      run?: Parameters<typeof buildRunInput>[0] & { id?: number | null };
+    }) => {
+      if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
+        if (!run) {
+          throw new Error('When updating a single-run event, the run must be provided');
+        }
+        return updateSingleRunEvent({ event, run });
       }
 
-      return updateRegularEvent({ event, ...args });
+      return updateRegularEvent({ event });
     },
     [updateRegularEvent, updateSingleRunEvent],
   );

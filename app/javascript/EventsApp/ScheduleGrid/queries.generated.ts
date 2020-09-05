@@ -30,11 +30,11 @@ export type ScheduleGridConventionDataQueryQueryVariables = Types.Exact<{ [key: 
 
 export type ScheduleGridConventionDataQueryQuery = (
   { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
     & CommonConventionDataFragment
-  )> }
+  ) }
 );
 
 export type ScheduleGridEventsQueryQueryVariables = Types.Exact<{
@@ -118,7 +118,7 @@ export const ScheduleGridEventFragmentFragmentDoc = gql`
     ${RunBasicSignupDataFragmentDoc}`;
 export const ScheduleGridConventionDataQueryDocument = gql`
     query ScheduleGridConventionDataQuery {
-  convention {
+  convention: assertConvention {
     id
     pre_schedule_content_html
     ...CommonConventionData

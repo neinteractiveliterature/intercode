@@ -11,6 +11,7 @@ import {
   addGeneratedIds,
   parseTypedFormItemObject,
   TypedFormItem,
+  findStandardItem,
 } from './FormItemUtils';
 import { PreviewFormItemQuery } from './queries';
 import useDebouncedState from '../useDebouncedState';
@@ -58,7 +59,7 @@ function FormItemEditorLayout() {
     150,
   );
 
-  const standardItem = (formType.standard_items || {})[initialFormItem.identifier ?? ''];
+  const standardItem = findStandardItem(formType, initialFormItem?.identifier);
 
   const hasChanges = useMemo(
     () => !isEqual(buildFormItemInput(initialFormItem), buildFormItemInput(formItem)),

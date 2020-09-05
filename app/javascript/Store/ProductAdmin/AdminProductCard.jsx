@@ -23,8 +23,16 @@ function AdminProductCard({ currentAbility, startEditing, product }) {
           variables: { id: product.id },
           update: (cache) => {
             const data = cache.readQuery({ query: AdminProductsQuery });
-            data.convention.products = data.convention.products.filter((p) => p.id !== product.id);
-            cache.writeQuery({ query: AdminProductsQuery, data });
+            cache.writeQuery({
+              query: AdminProductsQuery,
+              data: {
+                ...data,
+                convention: {
+                  ...data.convention,
+                  products: data.convention.products.filter((p) => p.id !== product.id),
+                },
+              },
+            });
           },
         }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,

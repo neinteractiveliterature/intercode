@@ -9,6 +9,7 @@ import {
   mutationUpdaterForFormSection,
   TypedFormItem,
   serializeParsedFormItem,
+  findStandardItem,
 } from './FormItemUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -77,7 +78,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
 
   const [ref, drag, { isDragging }] = useSortable<HTMLDivElement>(index, moveItem, 'formItem');
 
-  const standardItem = ((formType || {}).standard_items || {})[formItem.identifier ?? ''];
+  const standardItem = findStandardItem(formType, formItem.identifier);
 
   return (
     <div

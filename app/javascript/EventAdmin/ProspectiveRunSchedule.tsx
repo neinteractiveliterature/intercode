@@ -28,7 +28,7 @@ import {
   RunDimensions,
   ScheduleLayoutResult,
 } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
-import ScheduleGridConfig from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
+import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import {
   useEventAdminEventsQueryQuery,
   EventFieldsFragment,
@@ -38,17 +38,18 @@ import { ScheduleGridEventFragmentFragment } from '../EventsApp/ScheduleGrid/que
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { notEmpty } from '../ValueUtils';
 
-const SCHEDULE_GRID_CONFIG = new ScheduleGridConfig({
+const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',
   basename: '/events/schedule_by_room',
-  title: 'Con schedule by room',
+  title: 'Schedule preview',
+  titlei18nKey: 'admin.events.prospectiveRunSchedule.title',
   classifyEventsBy: 'category',
   showSignupStatusBadge: true,
   showSignedUp: true,
   groupEventsBy: 'room',
   filterEmptyGroups: true,
   legends: [],
-});
+};
 
 const FAKE_SIGNUP_COUNT_DATA = {
   runFull: () => false,

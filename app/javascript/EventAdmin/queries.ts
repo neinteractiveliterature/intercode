@@ -185,7 +185,7 @@ export const EventAdminEventsQuery = gql`
       can_manage_runs
     }
 
-    convention {
+    convention: assertConvention {
       id
       ...ConventionFields
     }

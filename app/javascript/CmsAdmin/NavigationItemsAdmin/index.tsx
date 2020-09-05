@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+// @ts-expect-error
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin/src';
 import { useApolloClient } from '@apollo/client';
 

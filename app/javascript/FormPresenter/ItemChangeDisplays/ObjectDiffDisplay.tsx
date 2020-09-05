@@ -39,8 +39,8 @@ function ObjectDiffDisplay<T>({
   return (
     <dl className="row mb-0">
       {combinedKeys.map((key) => {
-        const beforeValue = (before ?? {})[key];
-        const afterValue = (after ?? {})[key];
+        const beforeValue = before ? (before as any)[key] : undefined;
+        const afterValue = after ? (after as any)[key] : undefined;
 
         if (!showUnchanged && JSON.stringify(beforeValue) === JSON.stringify(afterValue)) {
           return null;

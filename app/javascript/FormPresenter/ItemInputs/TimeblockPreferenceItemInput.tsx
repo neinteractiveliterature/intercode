@@ -22,13 +22,13 @@ import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 
 function valueIsTimeblockPreferenceValue(
-  value: unknown | undefined | null,
+  value: any | undefined | null,
 ): value is FormItemValueType<TimeblockPreferenceFormItem> {
   if (value == null || typeof value !== 'object') {
     return false;
   }
 
-  return ['start', 'finish', 'label', 'ordinality'].every(
+  return (['start', 'finish', 'label', 'ordinality'] as const).every(
     (field) =>
       Object.prototype.hasOwnProperty.call(value, field) && typeof value![field] === 'string',
   );

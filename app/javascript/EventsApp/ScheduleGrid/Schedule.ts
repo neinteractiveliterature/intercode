@@ -4,7 +4,12 @@ import { flatMap } from 'lodash';
 import ScheduleLayoutBlock from './ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
 import Timespan, { FiniteTimespan } from '../../Timespan';
-import ScheduleGridConfig, { isCategoryMatchRule, isCatchAllMatchRule } from './ScheduleGridConfig';
+import {
+  ScheduleGridConfig,
+  isCategoryMatchRule,
+  isCatchAllMatchRule,
+  buildCategoryMatchRules,
+} from './ScheduleGridConfig';
 import { ScheduleGridEventFragmentFragment } from './queries.generated';
 import { timespanFromRun } from '../../TimespanUtils';
 
@@ -126,9 +131,9 @@ export default class Schedule {
   getRunTimespan = (runId: number) => this.runTimespansById.get(runId);
 
   groupRunIdsByCategory = (runIds: number[]) => {
-    const matchRules = this.config.buildCategoryMatchRules();
+    const matchRules = buildCategoryMatchRules(this.config);
     const groups: ScheduleGroup[] = [];
-    this.config.categoryGroups.forEach(({ match, ...otherProps }) =>
+    this.config.categoryGroups?.forEach(({ match, ...otherProps }) =>
       groups.push({
         runIds: [],
         ...otherProps,

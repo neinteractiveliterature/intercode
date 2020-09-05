@@ -1,4 +1,12 @@
-export const buildEventInput = (event, defaultFormResponseAttrs = {}) => {
+import { FormResponse } from '../FormPresenter/useFormResponse';
+import { EventInput, Run, RunInput } from '../graphqlTypes.generated';
+
+export function buildEventInput(
+  event: FormResponse & {
+    event_category: { id: number };
+  },
+  defaultFormResponseAttrs: any = {},
+): { event: EventInput } {
   const { total_slots: totalSlots, ...formResponseAttrs } = event.form_response_attrs;
 
   return {
@@ -10,11 +18,15 @@ export const buildEventInput = (event, defaultFormResponseAttrs = {}) => {
       }),
     },
   };
-};
+}
 
-export const buildRunInput = (run) => {
+export function buildRunInput(
+  run: Pick<Run, 'starts_at' | 'schedule_note' | 'title_suffix'> & {
+    rooms?: { id: number }[] | null;
+  },
+): { run: RunInput } | undefined {
   if (!run.starts_at) {
-    return null;
+    return undefined;
   }
 
   return {
@@ -25,4 +37,4 @@ export const buildRunInput = (run) => {
       room_ids: (run.rooms || []).map((room) => room.id),
     },
   };
-};
+}

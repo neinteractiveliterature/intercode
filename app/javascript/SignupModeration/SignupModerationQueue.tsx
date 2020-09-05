@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment-timezone';
+// @ts-expect-error
 import Pagination from 'react-js-pagination';
 import { assertNever } from 'assert-never';
 
@@ -127,7 +128,11 @@ function SignupModerationQueue() {
       renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
     });
 
-  const rejectClicked = (signupRequest) =>
+  const rejectClicked = (
+    signupRequest: NonNullable<
+      SignupModerationQueueQueryQuery['convention']
+    >['signup_requests_paginated']['entries'][0],
+  ) =>
     confirm({
       prompt: (
         <p className="mb-0">

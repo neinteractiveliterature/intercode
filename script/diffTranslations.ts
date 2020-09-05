@@ -14,12 +14,12 @@ if (!argv.partial) {
 const translation1Path: string = argv.complete ?? './locales/en.json';
 const translation2Path: string = argv.partial;
 
-const translation1: object = JSON.parse(fs.readFileSync(translation1Path, { encoding: 'utf-8' }));
-const translation2: object = JSON.parse(fs.readFileSync(translation2Path, { encoding: 'utf-8' }));
+const translation1: any = JSON.parse(fs.readFileSync(translation1Path, { encoding: 'utf-8' }));
+const translation2: any = JSON.parse(fs.readFileSync(translation2Path, { encoding: 'utf-8' }));
 
-function diffObjects(o1: object, o2: object) {
-  const diff = mapValues(o1, (value1: string | object, key) => {
-    const value2: string | object | null | undefined = o2[key];
+function diffObjects(o1: any, o2: any): any {
+  const diff = mapValues(o1, (value1: string | any, key) => {
+    const value2: string | any | null | undefined = o2[key];
 
     if (typeof value1 === 'string') {
       if (value2 != null && value2 !== '') {
@@ -31,7 +31,7 @@ function diffObjects(o1: object, o2: object) {
       return value1;
     }
 
-    const recursiveDiff = diffObjects(value1, (value2 as object) ?? {});
+    const recursiveDiff = diffObjects(value1, (value2 as any) ?? {});
     if (isEmpty(recursiveDiff)) {
       return null;
     }

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
+// @ts-expect-error
 import MD5 from 'md5.js';
 import { useTranslation, Trans } from 'react-i18next';
 import { ApolloError } from '@apollo/client';

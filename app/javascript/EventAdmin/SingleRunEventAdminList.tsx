@@ -1,13 +1,9 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { useMutation, useQuery } from '@apollo/client';
 
-import { EventAdminEventsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
-import { DropEvent } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
@@ -17,10 +13,16 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
 import { timezoneNameForConvention } from '../TimeUtils';
+import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useDropEventMutation } from './mutations.generated';
 
-function SingleRunEventAdminList({ eventCategoryId }) {
+export type SingleRunEventAdminListProps = {
+  eventCategoryId: number;
+};
+
+function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(EventAdminEventsQuery);
+  const { data, loading, error } = useEventAdminEventsQueryQuery();
   const [eventCategory, sortedEvents] = useEventAdminCategory(
     data,
     loading,
@@ -28,10 +30,10 @@ function SingleRunEventAdminList({ eventCategoryId }) {
     eventCategoryId,
   );
 
-  const [drop] = useMutation(DropEvent);
+  const [drop] = useDropEventMutation();
   const confirm = useConfirm();
 
-  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error || loading));
+  usePageTitle(useValueUnless(() => pluralize(eventCategory!.name), error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -45,15 +47,15 @@ function SingleRunEventAdminList({ eventCategoryId }) {
     const run = event.runs[0];
     let timespan;
     if (run) {
-      timespan = timespanFromRun(timezoneNameForConvention(data.convention), event, run);
+      timespan = timespanFromRun(timezoneNameForConvention(data!.convention), event, run);
     }
 
     return (
-      <tr className={event.id}>
+      <tr>
         <th scope="row">
           <span
             className="rounded p-1 text-dark"
-            style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+            style={getEventCategoryStyles({ eventCategory: eventCategory!, variant: 'default' })}
           >
             {event.title}
           </span>
@@ -85,7 +87,7 @@ function SingleRunEventAdminList({ eventCategoryId }) {
     <div>
       <Link className="btn btn-primary my-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
         {'Create new '}
-        {eventCategory.name.toLowerCase()}
+        {eventCategory!.name.toLowerCase()}
       </Link>
       <table className="table table-striped">
         <tbody>{eventRows}</tbody>
@@ -93,9 +95,5 @@ function SingleRunEventAdminList({ eventCategoryId }) {
     </div>
   );
 }
-
-SingleRunEventAdminList.propTypes = {
-  eventCategoryId: PropTypes.number.isRequired,
-};
 
 export default SingleRunEventAdminList;
