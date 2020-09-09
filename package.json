@@ -91,7 +91,7 @@
     "codemirror": "^5.57.0",
     "compression-webpack-plugin": "^5.0.2",
     "core-js": "^3.6.5",
-    "css-loader": "^4.2.2",
+    "css-loader": "^4.3.0",
     "csv-string": "^4.0.1",
     "custom-event-polyfill": "^1.0.7",
     "debounce-promise": "^3.1.2",
