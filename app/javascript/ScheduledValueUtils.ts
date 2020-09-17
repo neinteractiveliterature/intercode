@@ -4,21 +4,28 @@ import moment, { MomentInput } from 'moment-timezone';
 import Timespan from './Timespan';
 import { ScheduledValue, ScheduledMoneyValue } from './graphqlTypes.generated';
 
+export type TypedScheduledValueTimespan<ValueType> = {
+  start?: string | null;
+  finish?: string | null;
+  value: ValueType;
+};
+
+export type TypedScheduledValue<ValueType> = {
+  timespans: TypedScheduledValueTimespan<ValueType>[];
+};
+
 type AnyScheduledValue = ScheduledValue | ScheduledMoneyValue;
 
-export function findTimespanIndexAt<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
-  time: MomentInput,
-) {
+export function findTimespanIndexAt(scheduledValue: TypedScheduledValue<any>, time: MomentInput) {
   const timeMoment = moment(time);
-  return scheduledValue.timespans.findIndex((timespanObj: ScheduledValueType['timespans'][0]) => {
+  return scheduledValue.timespans.findIndex((timespanObj) => {
     const timespan = Timespan.fromStrings(timespanObj.start, timespanObj.finish);
     return timespan.includesTime(timeMoment);
   });
 }
 
-export function findTimespanAt<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
+export function findTimespanAt<ValueType>(
+  scheduledValue: TypedScheduledValue<ValueType>,
   time: MomentInput,
 ) {
   const index = findTimespanIndexAt(scheduledValue, time);
@@ -28,28 +35,24 @@ export function findTimespanAt<ScheduledValueType extends AnyScheduledValue>(
   return scheduledValue.timespans[index];
 }
 
-export function findValueAt<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
+export function findValueAt<ValueType>(
+  scheduledValue: TypedScheduledValue<ValueType>,
   time: MomentInput,
 ) {
   const timespan = findTimespanAt(scheduledValue, time);
   return timespan?.value;
 }
 
-export function findCurrentTimespanIndex<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
+export function findCurrentTimespanIndex<ValueType>(
+  scheduledValue: TypedScheduledValue<ValueType>,
 ) {
   return findTimespanIndexAt(scheduledValue, moment());
 }
 
-export function findCurrentTimespan<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
-) {
+export function findCurrentTimespan<ValueType>(scheduledValue: TypedScheduledValue<ValueType>) {
   return findTimespanAt(scheduledValue, moment());
 }
 
-export function findCurrentValue<ScheduledValueType extends AnyScheduledValue>(
-  scheduledValue: Pick<ScheduledValueType, 'timespans'>,
-) {
+export function findCurrentValue<ValueType>(scheduledValue: TypedScheduledValue<ValueType>) {
   return findValueAt(scheduledValue, moment());
 }

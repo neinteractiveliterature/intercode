@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import Checkmark from './Checkmark';
 import { useConfirm } from '../../ModalDialogs/Confirm';
-import PopperDropdown from '../../UIComponents/PopperDropdown';
 import ProvideTicketModal from './ProvideTicketModal';
 import { sortByLocaleString } from '../../ValueUtils';
 import { TeamMembersQuery } from './queries';
@@ -17,6 +16,7 @@ import { useDeleteMutation } from '../../MutationUtils';
 import { DeleteTeamMember } from './mutations';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { TeamMembersQueryQuery, useTeamMembersQueryQuery } from './queries.generated';
+import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryQuery['event']['team_members']) {
   return sortByLocaleString(
@@ -51,13 +51,15 @@ function TeamMemberActionMenu({
   });
 
   return (
-    <PopperDropdown
-      renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-sm btn-primary" ref={ref} onClick={toggle}>
+    <DropdownMenu
+      buttonClassName="btn btn-sm btn-primary"
+      buttonContent={
+        <>
           <i className="fa fa-ellipsis-h" />
           <span className="sr-only">{t('buttons.options', 'Options')}</span>
-        </button>
-      )}
+        </>
+      }
+      popperOptions={{ placement: 'bottom-end' }}
     >
       <>
         <Link to={`${eventPath}/team_members/${teamMember.id}`} className="dropdown-item">
@@ -99,7 +101,7 @@ function TeamMemberActionMenu({
           })}
         </button>
       </>
-    </PopperDropdown>
+    </DropdownMenu>
   );
 }
 

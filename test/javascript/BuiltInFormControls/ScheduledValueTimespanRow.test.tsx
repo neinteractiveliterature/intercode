@@ -4,10 +4,13 @@ import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueTimespanRow, {
   scheduledValueTimespanIsValid,
+  ScheduledValueTimespanRowProps,
 } from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
+import { EditingTimespan } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 
 describe('ScheduledValueTimespanRow', () => {
   const attributeDidChange = jest.fn();
+  const valueDidChange = jest.fn();
   const deleteClicked = jest.fn();
 
   const timespanStart = '2017-01-01T00:00:00Z';
@@ -15,10 +18,14 @@ describe('ScheduledValueTimespanRow', () => {
 
   beforeEach(() => {
     attributeDidChange.mockReset();
+    valueDidChange.mockReset();
     deleteClicked.mockReset();
   });
 
-  const renderScheduledValueTimespanRow = (props, timespanProps) => {
+  const renderScheduledValueTimespanRow = (
+    props: Partial<ScheduledValueTimespanRowProps<string | number>> = {},
+    timespanProps: Partial<EditingTimespan<string | number>> = {},
+  ) => {
     const timespan = {
       start: timespanStart,
       finish: timespanFinish,
@@ -33,9 +40,9 @@ describe('ScheduledValueTimespanRow', () => {
             buildInput={buildTestScheduledValueInput}
             rowIdentifier={42}
             timespan={timespan}
-            otherTimespans={[]}
             timezone="UTC"
             attributeDidChange={attributeDidChange}
+            valueDidChange={valueDidChange}
             deleteClicked={deleteClicked}
             {...props}
           />
@@ -53,7 +60,7 @@ describe('ScheduledValueTimespanRow', () => {
   test('changing value', () => {
     const { getByTestId } = renderScheduledValueTimespanRow();
     fireEvent.change(getByTestId('testInput'), { target: { value: 'newvalue' } });
-    expect(attributeDidChange).toHaveBeenCalledWith(42, 'value', 'newvalue');
+    expect(valueDidChange).toHaveBeenCalledWith(42, 'newvalue');
   });
 
   describe('isValid', () => {

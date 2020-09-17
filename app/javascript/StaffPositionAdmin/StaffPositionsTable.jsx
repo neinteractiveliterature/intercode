@@ -10,7 +10,6 @@ import { DeleteStaffPosition } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
 import { StaffPositionsQuery } from './queries';
-import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
@@ -21,6 +20,7 @@ import AppRootContext from '../AppRootContext';
 
 import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 import { PermissionPropType } from '../Permissions/PermissionPropTypes';
+import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 function UserConProfilesList({ userConProfiles }) {
   const [expanded, setExpanded] = useState(false);
@@ -223,13 +223,15 @@ function StaffPositionsTable() {
         </ul>
       </td>
       <td>
-        <PopperDropdown
-          renderReference={({ ref, toggle }) => (
-            <button type="button" className="btn btn-sm btn-primary" ref={ref} onClick={toggle}>
+        <DropdownMenu
+          buttonClassName="btn btn-sm btn-primary"
+          buttonContent={
+            <>
               <i className="fa fa-ellipsis-h" />
               <span className="sr-only">Options</span>
-            </button>
-          )}
+            </>
+          }
+          popperOptions={{ placement: 'bottom-end' }}
         >
           <Link to={`/staff_positions/${staffPosition.id}/edit`} className="dropdown-item">
             Edit settings
@@ -257,7 +259,7 @@ function StaffPositionsTable() {
               </button>
             )}
           </Confirm.Trigger>
-        </PopperDropdown>
+        </DropdownMenu>
       </td>
     </tr>
   );

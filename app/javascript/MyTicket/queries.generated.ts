@@ -13,14 +13,14 @@ export type TicketPurchaseFormQueryQuery = (
   & { convention?: Types.Maybe<(
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
-    & { products?: Types.Maybe<Array<(
+    & { products: Array<(
       { __typename?: 'Product' }
       & Pick<Types.Product, 'id' | 'name' | 'description_html'>
       & { pricing_structure?: Types.Maybe<(
         { __typename?: 'PricingStructure' }
         & PricingStructureFieldsFragment
       )> }
-    )>>, ticket_types: Array<(
+    )>, ticket_types: Array<(
       { __typename?: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'description' | 'publicly_available'>
       & { pricing_schedule: (

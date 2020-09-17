@@ -22,7 +22,7 @@ export type AdminOrdersQueryQuery = (
   & { currentAbility: (
     { __typename?: 'Ability' }
     & Pick<Types.Ability, 'can_create_orders' | 'can_update_orders'>
-  ), convention?: Types.Maybe<(
+  ), convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
     & { orders_paginated: (
@@ -34,7 +34,7 @@ export type AdminOrdersQueryQuery = (
         & AdminOrderFieldsFragmentFragment
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export type AdminProductsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -42,18 +42,18 @@ export type AdminProductsQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 export type AdminProductsQueryQuery = (
   { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id'>
-    & { products?: Types.Maybe<Array<(
+    & { products: Array<(
       { __typename?: 'Product' }
       & Pick<Types.Product, 'id'>
       & AdminProductFieldsFragment
-    )>>, ticket_types: Array<(
+    )>, ticket_types: Array<(
       { __typename?: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'description'>
     )> }
-  )>, currentAbility: (
+  ), currentAbility: (
     { __typename?: 'Ability' }
     & Pick<Types.Ability, 'can_update_products'>
   ) }
@@ -67,10 +67,10 @@ export type AdminStoreAbilityQueryQuery = (
   & { currentAbility: (
     { __typename?: 'Ability' }
     & Pick<Types.Ability, 'can_update_products' | 'can_update_orders'>
-  ), convention?: Types.Maybe<(
+  ), convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
-  )> }
+  ) }
 );
 
 export type CartQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -81,10 +81,10 @@ export type CartQueryQuery = (
   & { myProfile?: Types.Maybe<(
     { __typename?: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-  )>, convention?: Types.Maybe<(
+  )>, convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
-  )>, currentPendingOrder?: Types.Maybe<(
+  ), currentPendingOrder?: Types.Maybe<(
     { __typename?: 'Order' }
     & Pick<Types.Order, 'id'>
     & CartOrderFieldsFragment
@@ -96,14 +96,14 @@ export type OrderHistoryQueryQueryVariables = Types.Exact<{ [key: string]: never
 
 export type OrderHistoryQueryQuery = (
   { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'timezone_name'>
     & { staff_positions?: Types.Maybe<Array<(
       { __typename?: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name' | 'email'>
     )>> }
-  )>, myProfile?: Types.Maybe<(
+  ), myProfile?: Types.Maybe<(
     { __typename?: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { orders: Array<Types.Maybe<(
@@ -145,10 +145,10 @@ export type OrderSummaryQueryQueryVariables = Types.Exact<{ [key: string]: never
 
 export type OrderSummaryQueryQuery = (
   { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename?: 'Convention' }
     & Pick<Types.Convention, 'id'>
-    & { products?: Types.Maybe<Array<(
+    & { products: Array<(
       { __typename?: 'Product' }
       & Pick<Types.Product, 'id' | 'name'>
       & { order_quantities_by_status: Array<(
@@ -162,8 +162,8 @@ export type OrderSummaryQueryQuery = (
           & Pick<Types.OrderQuantityByStatus, 'status' | 'quantity'>
         )> }
       )> }
-    )>> }
-  )> }
+    )> }
+  ) }
 );
 
 export type OrderFormProductQueryQueryVariables = Types.Exact<{
@@ -203,7 +203,7 @@ export const AdminOrdersQueryDocument = gql`
     can_create_orders
     can_update_orders
   }
-  convention {
+  convention: assertConvention {
     id
     timezone_name
     orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -249,7 +249,7 @@ export type AdminOrdersQueryLazyQueryHookResult = ReturnType<typeof useAdminOrde
 export type AdminOrdersQueryQueryResult = Apollo.QueryResult<AdminOrdersQueryQuery, AdminOrdersQueryQueryVariables>;
 export const AdminProductsQueryDocument = gql`
     query AdminProductsQuery {
-  convention {
+  convention: assertConvention {
     id
     products {
       id
@@ -296,7 +296,7 @@ export const AdminStoreAbilityQueryDocument = gql`
     can_update_products
     can_update_orders
   }
-  convention {
+  convention: assertConvention {
     id
     timezone_name
   }
@@ -333,7 +333,7 @@ export const CartQueryDocument = gql`
     id
     name_without_nickname
   }
-  convention {
+  convention: assertConvention {
     id
     name
   }
@@ -370,7 +370,7 @@ export type CartQueryLazyQueryHookResult = ReturnType<typeof useCartQueryLazyQue
 export type CartQueryQueryResult = Apollo.QueryResult<CartQueryQuery, CartQueryQueryVariables>;
 export const OrderHistoryQueryDocument = gql`
     query OrderHistoryQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     timezone_name
@@ -453,7 +453,7 @@ export type OrderHistoryQueryLazyQueryHookResult = ReturnType<typeof useOrderHis
 export type OrderHistoryQueryQueryResult = Apollo.QueryResult<OrderHistoryQueryQuery, OrderHistoryQueryQueryVariables>;
 export const OrderSummaryQueryDocument = gql`
     query OrderSummaryQuery {
-  convention {
+  convention: assertConvention {
     id
     products {
       id

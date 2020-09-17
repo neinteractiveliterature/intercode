@@ -2,10 +2,10 @@ import React from 'react';
 import { pluralize } from 'inflected';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import PopperDropdown from '../../UIComponents/PopperDropdown';
 import { Transforms } from '../../ComposableFormUtils';
 import { EventListEventsQueryQuery } from './queries.generated';
 import { notEmpty } from '../../ValueUtils';
+import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
 type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
 
@@ -40,28 +40,23 @@ const EventListCategoryDropdown = ({
       : eventCategories.map((c) => c.id.toString());
 
   return (
-    <PopperDropdown
-      renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-link dropdown-toggle" ref={ref} onClick={toggle}>
-          {categoryDescription}
-        </button>
-      )}
-      placement="bottom-end"
+    <DropdownMenu
+      buttonContent={categoryDescription}
+      buttonClassName="btn btn-link dropdown-toggle"
+      dropdownClassName="p-2"
     >
-      <div className="p-2">
-        <ChoiceSet
-          choices={sortedCategories.map((category) => ({
-            label: category.name,
-            value: category.id.toString(),
-          }))}
-          value={choiceSetValue}
-          onChange={(integerArray) => {
-            onChange((integerArray ?? []).map(Transforms.integer).filter(notEmpty));
-          }}
-          multiple
-        />
-      </div>
-    </PopperDropdown>
+      <ChoiceSet
+        choices={sortedCategories.map((category) => ({
+          label: category.name,
+          value: category.id.toString(),
+        }))}
+        value={choiceSetValue}
+        onChange={(integerArray) => {
+          onChange((integerArray ?? []).map(Transforms.integer).filter(notEmpty));
+        }}
+        multiple
+      />
+    </DropdownMenu>
   );
 };
 

@@ -33,7 +33,7 @@ function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelecto
   };
 
   return (
-    <div className="d-flex btn">
+    <div className="d-flex btn cursor-auto">
       <span className="mr-2">Show:</span>
       <ChoiceSet
         choices={RATING_OPTIONS}

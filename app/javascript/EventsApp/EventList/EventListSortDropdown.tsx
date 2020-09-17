@@ -3,8 +3,8 @@ import { humanize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 import { SortingRule } from 'react-table';
 
-import PopperDropdown from '../../UIComponents/PopperDropdown';
 import AppRootContext from '../../AppRootContext';
+import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
 const SORT_ORDERS = [
   { sorted: [{ id: 'title', desc: false }], caption: 'title' },
@@ -59,16 +59,12 @@ const EventListSortDropdown = ({
   ));
 
   return (
-    <PopperDropdown
-      renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-link dropdown-toggle" ref={ref} onClick={toggle}>
-          Sort by {currentSort.caption}
-        </button>
-      )}
-      placement="bottom-end"
+    <DropdownMenu
+      buttonContent={`Sort by ${currentSort.caption}`}
+      buttonClassName="btn btn-link dropdown-toggle"
     >
-      <>{sortOptions}</>
-    </PopperDropdown>
+      {sortOptions}
+    </DropdownMenu>
   );
 };
 

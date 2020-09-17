@@ -1,11 +1,16 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 
-import { useChangeDispatchers } from '../ComposableFormUtils';
+import { TransformsReducerAction, useChangeDispatchers } from '../ComposableFormUtils';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, {
+  ScheduledValueReducerAction,
+} from '../BuiltInFormControls/ScheduledValueEditor';
 import { timezoneNameForConvention } from '../TimeUtils';
+import { ConventionAdminConventionFieldsFragment } from './queries.generated';
+import ScheduledValuePreview from '../UIComponents/ScheduledValuePreview';
+
+type MaximumEventSignupsValue = 'not_yet' | '1' | '2' | '3' | 'unlimited' | 'not_now';
 
 export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
@@ -14,11 +19,52 @@ export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['3', 'Up to 3 events'],
   ['unlimited', 'Signups fully open'],
   ['not_now', 'Signups frozen'],
-];
+] as const;
 
-const buildMaximumEventSignupsInput = (value, onChange) => {
-  const processChangeEvent = (event) => {
-    onChange(event.target.value);
+const MAXIMUM_EVENT_SIGNUPS_CLASSNAMES = {
+  not_yet: 'maximum-event-signups-not-yet',
+  '1': 'maximum-event-signups-1',
+  '2': 'maximum-event-signups-2',
+  '3': 'maximum-event-signups-3',
+  unlimited: 'maximum-event-signups-unlimited',
+  not_now: 'maximum-event-signups-not-now',
+} as const;
+
+function getMaximumEventSignupsClassName(value: string | undefined, nextValue: string | undefined) {
+  const valueClassName =
+    MAXIMUM_EVENT_SIGNUPS_CLASSNAMES[(value ?? 'not_yet') as MaximumEventSignupsValue] ?? '';
+
+  if (value === nextValue || !nextValue) {
+    return valueClassName;
+  }
+
+  const nextValueClassName =
+    MAXIMUM_EVENT_SIGNUPS_CLASSNAMES[nextValue as MaximumEventSignupsValue] ?? '';
+
+  return `${valueClassName} ${nextValueClassName}-transition`;
+}
+
+function getMaximumEventSignupsDescription(value: string | undefined) {
+  return (MAXIMUM_EVENT_SIGNUPS_OPTIONS.find(([v]) => v === value) ?? ['', value])[1];
+}
+
+const buildMaximumEventSignupsInput = (
+  value: MaximumEventSignupsValue | undefined,
+  onChange: React.Dispatch<MaximumEventSignupsValue | undefined>,
+) => {
+  const processChangeEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value: newValue } = event.target;
+    switch (newValue) {
+      case 'not_yet':
+      case '1':
+      case '2':
+      case '3':
+      case 'unlimited':
+      case 'not_now':
+        return onChange(newValue);
+      default:
+        return onChange(undefined);
+    }
   };
 
   const options = MAXIMUM_EVENT_SIGNUPS_OPTIONS.map(([optionValue, label]) => (
@@ -35,7 +81,22 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
   );
 };
 
-function ConventionFormEventsSection({ convention, dispatch, disabled }) {
+type DispatchMaximumEventSignupsAction = {
+  type: 'dispatchMaximumEventSignups';
+  action: ScheduledValueReducerAction<MaximumEventSignupsValue>;
+};
+
+export type ConventionFormEventsSectionProps = {
+  convention: ConventionAdminConventionFieldsFragment;
+  dispatch: (action: TransformsReducerAction | DispatchMaximumEventSignupsAction) => void;
+  disabled: boolean;
+};
+
+function ConventionFormEventsSection({
+  convention,
+  dispatch,
+  disabled,
+}: ConventionFormEventsSectionProps) {
   const timezoneName = timezoneNameForConvention(convention);
   const [
     changeSignupMode,
@@ -52,7 +113,8 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
   ]);
 
   const dispatchMaximumEventSignups = useCallback(
-    (action) => dispatch({ type: 'dispatchMaximumEventSignups', action }),
+    (action: ScheduledValueReducerAction<MaximumEventSignupsValue>) =>
+      dispatch({ type: 'dispatchMaximumEventSignups', action }),
     [dispatch],
   );
 
@@ -88,7 +150,7 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
       <BooleanInput
         name="accepting_proposals"
         caption="Accepting event proposals"
-        value={convention.accepting_proposals}
+        value={convention.accepting_proposals ?? undefined}
         onChange={changeAcceptingProposals}
         disabled={disabled || convention.site_mode === 'single_event'}
       />
@@ -129,42 +191,21 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
 
       <fieldset>
         <legend className="col-form-label">Event signup schedule</legend>
+        <ScheduledValuePreview
+          scheduledValue={convention.maximum_event_signups ?? { timespans: [] }}
+          getClassNameForValue={getMaximumEventSignupsClassName}
+          getDescriptionForValue={getMaximumEventSignupsDescription}
+          timezoneName={timezoneName}
+        />
         <ScheduledValueEditor
-          scheduledValue={convention.maximum_event_signups}
+          scheduledValue={convention.maximum_event_signups ?? { timespans: [] }}
           dispatch={dispatchMaximumEventSignups}
           timezone={timezoneName}
           buildValueInput={buildMaximumEventSignupsInput}
-          disabled={disabled}
         />
       </fieldset>
     </>
   );
 }
-
-ConventionFormEventsSection.propTypes = {
-  convention: PropTypes.shape({
-    accepting_proposals: PropTypes.bool.isRequired,
-    show_schedule: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
-    show_event_list: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
-    maximum_event_signups: PropTypes.shape({
-      timespans: PropTypes.arrayOf(
-        PropTypes.shape({
-          start: PropTypes.string,
-          finish: PropTypes.string,
-          value: PropTypes.string.isRequired,
-        }).isRequired,
-      ).isRequired,
-    }).isRequired,
-    site_mode: PropTypes.oneOf(['convention', 'single_event']).isRequired,
-    signup_mode: PropTypes.oneOf(['self_service', 'moderated']).isRequired,
-    signup_requests_open: PropTypes.bool,
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-};
-
-ConventionFormEventsSection.defaultProps = {
-  disabled: false,
-};
 
 export default ConventionFormEventsSection;

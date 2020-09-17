@@ -1,22 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PopperDropdown from '../UIComponents/PopperDropdown';
+import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }) {
   return (
-    <PopperDropdown
-      renderReference={({ ref, toggle }) => (
-        <button
-          type="button"
-          className="btn btn-outline-primary dropdown-toggle"
-          ref={ref}
-          onClick={toggle}
-        >
-          Actions
-        </button>
-      )}
-    >
+    <DropdownMenu buttonClassName="btn btn-outline-primary dropdown-toggle" buttonContent="Actions">
       <button
         type="button"
         className="dropdown-item"
@@ -25,7 +14,7 @@ function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }) {
       >
         Merge users
       </button>
-    </PopperDropdown>
+    </DropdownMenu>
   );
 }
 

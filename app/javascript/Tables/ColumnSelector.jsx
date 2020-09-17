@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
-import PopperDropdown from '../UIComponents/PopperDropdown';
+import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 function ColumnSelector({
   alwaysVisibleColumns,
@@ -31,32 +31,27 @@ function ColumnSelector({
   };
 
   return (
-    <PopperDropdown
-      placement="bottom-end"
-      renderReference={({ ref, toggle }) => (
-        <button
-          type="button"
-          className="btn btn-outline-primary dropdown-toggle"
-          ref={ref}
-          onClick={toggle}
-        >
+    <DropdownMenu
+      buttonClassName="btn btn-outline-primary dropdown-toggle"
+      popperOptions={{ placement: 'bottom-end' }}
+      buttonContent={
+        <>
           {t('tables.columnSelectorButton', 'Columns')}
           {renderHiddenColumnCount()}
-        </button>
-      )}
+        </>
+      }
+      dropdownClassName="px-2"
     >
-      <div className="px-2">
-        <ChoiceSet
-          name="columns"
-          multiple
-          choices={possibleColumns
-            .filter((column) => !alwaysVisibleColumns.includes(column.id))
-            .map((column) => ({ label: column.Header, value: column.id }))}
-          value={visibleColumnIds}
-          onChange={setVisibleColumnIds}
-        />
-      </div>
-    </PopperDropdown>
+      <ChoiceSet
+        name="columns"
+        multiple
+        choices={possibleColumns
+          .filter((column) => !alwaysVisibleColumns.includes(column.id))
+          .map((column) => ({ label: column.Header, value: column.id }))}
+        value={visibleColumnIds}
+        onChange={setVisibleColumnIds}
+      />
+    </DropdownMenu>
   );
 }
 

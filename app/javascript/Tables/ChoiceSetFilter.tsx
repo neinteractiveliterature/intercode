@@ -1,11 +1,13 @@
 import React, { useMemo, useState, ReactNode } from 'react';
 import classNames from 'classnames';
-import { Manager, Reference, Popper } from 'react-popper';
+import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';
 import { Filter } from 'react-table';
+import max from 'lodash/max';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { FilterCodec } from './FilterUtils';
+import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 
 export type ChoiceSetFilterChoice = {
   label: string;
@@ -50,7 +52,44 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
     ...otherProps
   } = props;
   const { t } = useTranslation();
-  const [collapsed, setCollapsed] = useState(true);
+  const [dropdownButton, setDropdownButton] = useState<HTMLDivElement | null>(null);
+  const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+  const modifiers: Modifier<any>[] = useMemo(
+    () => [
+      {
+        name: 'sameWidth',
+        enabled: true,
+        fn: ({ state }) => ({
+          ...state,
+          styles: {
+            ...state.styles,
+            popper: {
+              ...state.styles.popper,
+              width: `${max([state.rects.reference.width, state.rects.popper.width])}px`,
+            },
+          },
+        }),
+        phase: 'beforeWrite',
+        requires: ['computeStyles'],
+      },
+    ],
+    [],
+  );
+
+  const { styles, attributes, update } = useIntercodePopperWithAutoClosing(
+    dropdownMenu,
+    dropdownButton,
+    undefined,
+    setDropdownOpen,
+    {
+      placement: 'bottom-start',
+      modifiers,
+    },
+  );
+
+  const toggleOpen = useToggleOpen(setDropdownOpen, update);
 
   const filterValue = useMemo(() => {
     const rawFilterValue = (filter || {}).value || [];
@@ -86,16 +125,8 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
     props.onChange(value);
   };
 
-  const uncollapse = () => {
-    setCollapsed(false);
-  };
-
-  const collapse = () => {
-    setCollapsed(true);
-  };
-
   const renderHeaderCaptionWithChoices = () => {
-    if (!collapsed) {
+    if (dropdownOpen) {
       return null;
     }
 
@@ -131,72 +162,44 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
       <button
         type="button"
         className="btn btn-outline-secondary btn-sm py-0 align-self-start"
-        onClick={collapsed ? uncollapse : collapse}
+        onClick={toggleOpen}
       >
         <i
-          className={classNames('fa', { 'fa-caret-down': collapsed, 'fa-caret-up': !collapsed })}
+          className={classNames('fa', {
+            'fa-caret-down': !dropdownOpen,
+            'fa-caret-up': dropdownOpen,
+          })}
         />
       </button>
     </div>
   );
 
   return (
-    <Manager>
-      <Reference>
-        {({ ref }) => (
-          <div className="card" ref={ref}>
-            {renderHeader()}
-          </div>
-        )}
-      </Reference>
-      <Popper
-        placement="bottom-start"
-        modifiers={{
-          matchWidth: {
-            enabled: true,
-            order: 750,
-            fn: (data) => {
-              const { popper, reference } = data.offsets;
-              if (popper.width < reference.width) {
-                popper.width = reference.width;
-              }
-              return data;
-            },
-          },
-          addWidthStyle: {
-            enabled: true,
-            order: 875,
-            fn: (data) => ({
-              ...data,
-              styles: { ...data.styles, width: `${data.offsets.popper.width}px` },
-            }),
-          },
+    <>
+      <div className="card" ref={setDropdownButton}>
+        {renderHeader()}
+      </div>
+      <div
+        className={classNames('card align-items-start', { invisible: !dropdownOpen })}
+        ref={setDropdownMenu}
+        style={{
+          ...styles.popper,
+          marginTop: '-3px',
+          borderTop: 'none',
         }}
+        {...attributes.popper}
       >
-        {({ ref, style, placement }) => (
-          <div
-            className={classNames('card align-items-start', { invisible: collapsed })}
-            ref={ref}
-            style={{
-              ...style,
-              marginTop: '-3px',
-              borderTop: 'none',
-            }}
-            data-placement={placement}
-          >
-            <div className="card-body p-1">
-              <ChoiceSet
-                value={filterValue}
-                choices={choices}
-                onChange={valueChanged}
-                multiple={props.multiple}
-                {...otherProps}
-              />
-            </div>
-          </div>
-        )}
-      </Popper>
-    </Manager>
+        <div className="card-body p-2">
+          <ChoiceSet
+            value={filterValue}
+            choices={choices}
+            onChange={valueChanged}
+            multiple={props.multiple}
+            {...otherProps}
+          />
+        </div>
+      </div>
+    </>
   );
 }
 
