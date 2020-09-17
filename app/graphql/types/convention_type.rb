@@ -109,7 +109,7 @@ class Types::ConventionType < Types::BaseObject
     end
   end
 
-  field :products, [Types::ProductType], null: true do
+  field :products, [Types::ProductType], null: false do
     argument :only_ticket_providing, Boolean, required: false, camelize: false
     argument :only_available, Boolean, required: false, camelize: false
   end

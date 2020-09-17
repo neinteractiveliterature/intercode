@@ -1,12 +1,11 @@
-import React, { useContext, useMemo, useCallback, Ref } from 'react';
-import ReactDOM from 'react-dom';
-import { Manager, Reference, Popper } from 'react-popper';
+import React, { useContext, useMemo, useCallback, Ref, useState } from 'react';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
 import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
 import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
+import { useIntercodePopper } from '../../UIComponents/PopperUtils';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;
@@ -18,6 +17,16 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }: ScheduleGridEvent
     ScheduleGridContext,
   );
   const detailsVisible = visibleRunDetailsIds.has(runDimensions.runId);
+
+  const [runDisplayElement, setRunDisplayElement] = useState<HTMLDivElement | null>(null);
+  const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
+  const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
+
+  const { styles, attributes, state, update } = useIntercodePopper(
+    runDetailsElement,
+    runDisplayElement,
+    arrow,
+  );
 
   const run = useMemo(() => schedule.getRun(runDimensions.runId), [schedule, runDimensions.runId]);
   const event = useMemo(() => schedule.getEventForRun(runDimensions.runId), [
@@ -37,14 +46,15 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }: ScheduleGridEvent
     const runId = run?.id;
     if (runId) {
       toggleRunDetailsVisibility(runId);
+      if (update) {
+        update();
+      }
     }
-  }, [run, toggleRunDetailsVisibility]);
+  }, [run, toggleRunDetailsVisibility, update]);
 
   if (event == null || run == null) {
     return null;
   }
-
-  const popoverParent = document.querySelectorAll('.non-cms-page')[0] || document.body;
 
   const renderRunDisplay = (ref: Ref<HTMLDivElement>) => (
     <RunDisplay
@@ -63,38 +73,23 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }: ScheduleGridEvent
   }
 
   return (
-    <Manager>
-      <Reference>{({ ref }) => renderRunDisplay(ref)}</Reference>
-      {ReactDOM.createPortal(
-        <Popper
-          placement={detailsVisible ? 'bottom' : 'auto'}
-          modifiers={{
-            preventOverflow: { boundariesElement: popoverParent },
-          }}
-        >
-          {({ ref, placement, arrowProps, style: popperStyle }) => {
-            if (!detailsVisible) {
-              return <></>;
-            }
-
-            return (
-              <RunDetails
-                ref={ref}
-                placement={placement}
-                arrowProps={arrowProps}
-                popperStyle={popperStyle}
-                toggle={toggleVisibility}
-                event={event}
-                run={run}
-                runDimensions={runDimensions}
-                signupCountData={signupCountData!}
-              />
-            );
-          }}
-        </Popper>,
-        popoverParent,
+    <>
+      {renderRunDisplay(setRunDisplayElement)}
+      {detailsVisible && (
+        <RunDetails
+          ref={setRunDetailsElement}
+          placement={state?.placement}
+          styles={styles}
+          attributes={attributes}
+          arrowRef={setArrow}
+          toggle={toggleVisibility}
+          event={event}
+          run={run}
+          runDimensions={runDimensions}
+          signupCountData={signupCountData!}
+        />
       )}
-    </Manager>
+    </>
   );
 }
 

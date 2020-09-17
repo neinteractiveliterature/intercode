@@ -1,0 +1,51 @@
+.maximum-event-signups-not-yet {
+  background-color: $light;
+  color: $dark;
+}
+
+.maximum-event-signups-1 {
+  background-color: $danger-light;
+}
+
+.maximum-event-signups-1-transition {
+  background-image: linear-gradient(to right, transparent, $danger-light);
+  font-weight: bold;
+}
+
+.maximum-event-signups-2 {
+  background-color: $warning-light;
+}
+
+.maximum-event-signups-2-transition {
+  background-image: linear-gradient(to right, transparent, $warning-light);
+  font-weight: bold;
+}
+
+.maximum-event-signups-3 {
+  background-color: $info-light;
+}
+
+.maximum-event-signups-3-transition {
+  background-image: linear-gradient(to right, transparent, $info-light);
+  font-weight: bold;
+}
+
+.maximum-event-signups-unlimited {
+  background-color: $success-light;
+}
+
+.maximum-event-signups-unlimited-transition {
+  background-image: linear-gradient(to right, transparent, $success-light);
+  font-weight: bold;
+}
+
+.maximum-event-signups-not-now {
+  background-color: $dark;
+  color: white;
+}
+
+.maximum-event-signups-not-now-transition {
+  color: white;
+  background-image: linear-gradient(to right, transparent, $dark);
+  font-weight: bold;
+}

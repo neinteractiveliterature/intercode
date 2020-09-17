@@ -4,11 +4,12 @@ import moment from 'moment';
 import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueEditor, {
+  ScheduledValueEditorProps,
   scheduledValueIsValid,
 } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 
 describe('ScheduledValueEditor', () => {
-  const renderScheduledValueEditor = (props) =>
+  const renderScheduledValueEditor = (props: Partial<ScheduledValueEditorProps<number | string>>) =>
     render(
       <ScheduledValueEditor
         scheduledValue={{ timespans: [] }}
@@ -32,7 +33,10 @@ describe('ScheduledValueEditor', () => {
 
     // two value rows plus a footer
     expect(getAllByRole('row')).toHaveLength(3);
-    expect(getAllByTestId('testInput').map((input) => input.value)).toEqual(['1', '2']);
+    expect(getAllByTestId('testInput').map((input) => (input as HTMLInputElement).value)).toEqual([
+      '1',
+      '2',
+    ]);
   });
 
   test('adding a row', () => {
@@ -73,6 +77,7 @@ describe('ScheduledValueEditor', () => {
 
   describe('scheduledValueIsValid', () => {
     test('it requires at least one timespan', () => {
+      // @ts-expect-error
       expect(scheduledValueIsValid({ timespans: null })).toBeFalsy();
       expect(scheduledValueIsValid({ timespans: [] })).toBeFalsy();
       expect(scheduledValueIsValid({})).toBeFalsy();

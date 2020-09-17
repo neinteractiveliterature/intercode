@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import PopperDropdown from '../../UIComponents/PopperDropdown';
 import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
+import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
 function AddToCalendarDropdown({ icalSecret, className }) {
   const { t } = useTranslation();
@@ -17,14 +17,15 @@ function AddToCalendarDropdown({ icalSecret, className }) {
   )}`;
 
   return (
-    <PopperDropdown
-      renderReference={({ ref, toggle }) => (
-        <button className={`${className} dropdown-toggle`} type="button" ref={ref} onClick={toggle}>
+    <DropdownMenu
+      buttonClassName={`${className} dropdown-toggle`}
+      buttonContent={
+        <>
           <i className="fa fa-calendar" aria-hidden />
           <span className="sr-only">{t('addToCalendarDropdown.title', 'Add to calendar')}</span>
-        </button>
-      )}
-      placement="bottom-end"
+        </>
+      }
+      popperOptions={{ placement: 'bottom-end' }}
     >
       <a
         className="dropdown-item"
@@ -45,7 +46,7 @@ function AddToCalendarDropdown({ icalSecret, className }) {
         copiedProps={{ className: 'dropdown-item text-success' }}
         defaultText={t('addToCalendarDropdown.copyWebcal', 'Copy webcal:// link')}
       />
-    </PopperDropdown>
+    </DropdownMenu>
   );
 }
 

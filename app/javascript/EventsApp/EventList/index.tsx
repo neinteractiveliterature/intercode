@@ -144,6 +144,13 @@ function EventList() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (cachedEventCategories == null) {
+    // we haven't had the first load yet, don't render the dropdowns because they will get positioned
+    // wrong
+
+    return <PageLoadingIndicator visible />;
+  }
+
   const eventsPaginated = (loading || !data ? undefined : data.convention?.events_paginated) ?? {
     entries: [],
     current_page: 1,

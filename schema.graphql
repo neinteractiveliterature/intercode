@@ -345,7 +345,7 @@ type Convention {
   pages: [Page!]!
   pre_schedule_content_html: String
   privilege_names: [String!]! @deprecated(reason: "Privileges have gone away in favor of permissions")
-  products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]
+  products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
   rooms: [Room!]!
   root_page: Page

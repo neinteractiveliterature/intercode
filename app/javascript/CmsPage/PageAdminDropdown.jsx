@@ -6,9 +6,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import { PageAdminDropdownQuery } from './queries';
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import MenuIcon from '../NavigationBar/MenuIcon';
+import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 function PageAdminDropdown({ showEdit, showDelete, pageId }) {
   const history = useHistory();
@@ -35,15 +35,14 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
 
   return (
     <div>
-      <PopperDropdown
-        renderReference={({ ref, toggle }) => (
-          <button type="button" className="btn btn-dark dropdown-toggle" ref={ref} onClick={toggle}>
-            <i className="fa fa-pencil-square-o">
-              <span className="sr-only">Admin options</span>
-            </i>
-          </button>
-        )}
-        placement="bottom-end"
+      <DropdownMenu
+        buttonClassName="btn btn-dark dropdown-toggle"
+        buttonContent={
+          <i className="fa fa-pencil-square-o">
+            <span className="sr-only">Admin options</span>
+          </i>
+        }
+        popperOptions={{ placement: 'bottom-end' }}
       >
         {showEdit ? (
           <>
@@ -56,7 +55,11 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
               Edit layout
             </Link>
             {data.cmsPage.referenced_partials.map((partial) => (
-              <Link to={`/cms_partials/${partial.id}/edit`} className="dropdown-item">
+              <Link
+                to={`/cms_partials/${partial.id}/edit`}
+                className="dropdown-item"
+                key={partial.id}
+              >
                 <MenuIcon icon="fa-paperclip" />
                 Edit partial “{partial.name}”
               </Link>
@@ -73,7 +76,11 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
               View layout source
             </Link>
             {data.cmsPage.referenced_partials.map((partial) => (
-              <Link to={`/cms_partials/${partial.id}/view_source`} className="dropdown-item">
+              <Link
+                to={`/cms_partials/${partial.id}/view_source`}
+                className="dropdown-item"
+                key={partial.id}
+              >
                 <MenuIcon icon="fa-paperclip" />
                 View partial “{partial.name}”
               </Link>
@@ -99,7 +106,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
             Delete page
           </button>
         ) : null}
-      </PopperDropdown>
+      </DropdownMenu>
     </div>
   );
 }

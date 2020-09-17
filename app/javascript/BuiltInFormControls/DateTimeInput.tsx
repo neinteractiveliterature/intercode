@@ -1,10 +1,13 @@
 import React, { useMemo, useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 
 import AppRootContext from '../AppRootContext';
 
-function dateTimeToISO(date, time, timezoneName) {
+function dateTimeToISO(
+  date: string | null | undefined,
+  time: string | null | undefined,
+  timezoneName: string | null | undefined,
+) {
   if (date == null || time == null || timezoneName == null) {
     return null;
   }
@@ -24,14 +27,22 @@ function dateTimeToISO(date, time, timezoneName) {
   return isoDateTime;
 }
 
-export function DateInput({ value, onChange, ...otherProps }) {
-  const dateChanged = (event) => onChange(event.target.value);
+export type DateInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'type' | 'className' | 'pattern' | 'aria-label'
+> & {
+  value?: string | null;
+  onChange: React.Dispatch<string>;
+};
+
+export function DateInput({ value, onChange, ...otherProps }: DateInputProps) {
+  const dateChanged = (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value);
 
   return (
     <input
       type="date"
       className="form-control mr-1"
-      value={value || ''}
+      value={value ?? ''}
       onChange={dateChanged}
       pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
       aria-label="Date"
@@ -40,17 +51,16 @@ export function DateInput({ value, onChange, ...otherProps }) {
   );
 }
 
-DateInput.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+export type TimeInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'type' | 'className' | 'pattern' | 'aria-label'
+> & {
+  value?: string | null;
+  onChange: React.Dispatch<string>;
 };
 
-DateInput.defaultProps = {
-  value: null,
-};
-
-export function TimeInput({ value, onChange, ...otherProps }) {
-  const timeChanged = (event) => onChange(event.target.value);
+export function TimeInput({ value, onChange, ...otherProps }: TimeInputProps) {
+  const timeChanged = (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value);
 
   return (
     <input
@@ -65,19 +75,27 @@ export function TimeInput({ value, onChange, ...otherProps }) {
   );
 }
 
-TimeInput.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+export type DateTimeInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'type' | 'className' | 'pattern' | 'aria-label'
+> & {
+  value?: string | null;
+  onChange: React.Dispatch<string>;
+  timezoneName?: string;
+  alwaysShowTimezone?: boolean;
 };
 
-TimeInput.defaultProps = {
-  value: null,
-};
-
-function DateTimeInput({ value, timezoneName, onChange, id, alwaysShowTimezone, ...otherProps }) {
+function DateTimeInput({
+  value,
+  timezoneName,
+  onChange,
+  id,
+  alwaysShowTimezone,
+  ...otherProps
+}: DateTimeInputProps) {
   const { timezoneName: appTimezoneName } = useContext(AppRootContext);
   const effectiveTimezoneName = timezoneName || appTimezoneName;
-  const dateTime = useMemo(() => DateTime.fromISO(value).setZone(effectiveTimezoneName), [
+  const dateTime = useMemo(() => DateTime.fromISO(value ?? '').setZone(effectiveTimezoneName), [
     value,
     effectiveTimezoneName,
   ]);
@@ -101,7 +119,7 @@ function DateTimeInput({ value, timezoneName, onChange, id, alwaysShowTimezone, 
     }
   }, [dateTime]);
 
-  const dateChanged = (newDate) => {
+  const dateChanged = (newDate: string) => {
     setDate(newDate);
     const newValue = dateTimeToISO(newDate, time, effectiveTimezoneName);
     if (newValue) {
@@ -109,7 +127,7 @@ function DateTimeInput({ value, timezoneName, onChange, id, alwaysShowTimezone, 
     }
   };
 
-  const timeChanged = (newTime) => {
+  const timeChanged = (newTime: string) => {
     setTime(newTime);
     const newValue = dateTimeToISO(date, newTime, effectiveTimezoneName);
     if (newValue) {
@@ -130,20 +148,5 @@ function DateTimeInput({ value, timezoneName, onChange, id, alwaysShowTimezone, 
     </div>
   );
 }
-
-DateTimeInput.propTypes = {
-  value: PropTypes.string,
-  timezoneName: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  alwaysShowTimezone: PropTypes.bool,
-};
-
-DateTimeInput.defaultProps = {
-  value: null,
-  id: null,
-  timezoneName: null,
-  alwaysShowTimezone: false,
-};
 
 export default DateTimeInput;
