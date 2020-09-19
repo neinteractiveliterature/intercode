@@ -214,7 +214,7 @@
     "prettier": "^2.1.2",
     "react-test-renderer": "^16.13.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.0",
+    "typescript": "^4.0.3",
     "typescript-plugin-css-modules": "^2.5.0",
     "webpack-dev-server": "^3.11.0"
   },
