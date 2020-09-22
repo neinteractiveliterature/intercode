@@ -1,8 +1,15 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import flatMap from 'lodash/flatMap';
 
-import ReactTableExportButton from './ExportButton';
+import ReactTableExportButton, { ReactTableExportButtonProps } from './ExportButton';
+
+export type ReactTableExportButtonWithColumnTransformProps = Omit<
+  ReactTableExportButtonProps,
+  'columns'
+> & {
+  visibleColumnIds: string[];
+  columnTransform: (columnId: string) => string;
+};
 
 function ReactTableExportButtonWithColumnTransform({
   exportUrl,
@@ -10,7 +17,7 @@ function ReactTableExportButtonWithColumnTransform({
   sorted,
   visibleColumnIds,
   columnTransform,
-}) {
+}: ReactTableExportButtonWithColumnTransformProps) {
   const columns = useMemo(() => flatMap(visibleColumnIds, columnTransform), [
     visibleColumnIds,
     columnTransform,
@@ -25,13 +32,5 @@ function ReactTableExportButtonWithColumnTransform({
     />
   );
 }
-
-ReactTableExportButtonWithColumnTransform.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
-  filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  columnTransform: PropTypes.func.isRequired,
-};
 
 export default ReactTableExportButtonWithColumnTransform;

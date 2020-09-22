@@ -1,16 +1,46 @@
+import { assertNever } from 'assert-never';
+import { TFunction } from 'i18next';
 import { humanize, underscore } from 'inflected';
+import { RegistrationPolicyBucket, Signup, SignupState } from '../../graphqlTypes.generated';
 
-export function findBucket(bucketKey, registrationPolicy) {
+export function findBucket<BucketType extends Pick<RegistrationPolicyBucket, 'key'>>(
+  bucketKey: string | null | undefined,
+  registrationPolicy: { buckets: BucketType[] },
+) {
   return registrationPolicy.buckets.find((bucket) => bucket.key === bucketKey);
 }
 
-export function formatBucket(signup, event, t) {
+export type SignupForFormatBucket = Pick<
+  Signup,
+  'bucket_key' | 'counted' | 'state' | 'requested_bucket_key'
+> & {
+  user_con_profile?: { id: number };
+};
+
+export type EventForFormatBucket = {
+  event_category: {
+    team_member_name: string;
+  };
+  registration_policy: {
+    buckets: {
+      key: string;
+      name: string;
+    }[];
+  };
+  team_members: { user_con_profile?: { id: number } }[];
+};
+
+export function formatBucket(
+  signup: SignupForFormatBucket,
+  event: EventForFormatBucket,
+  t: TFunction,
+) {
   const { bucket_key: bucketKey } = signup;
 
   if (!signup.counted) {
     if (bucketKey) {
       return t('signups.states.notCountedWithBucket', '{{ bucketName }} (not counted)', {
-        bucketName: findBucket(bucketKey, event.registration_policy).name,
+        bucketName: findBucket(bucketKey, event.registration_policy)?.name,
       });
     }
 
@@ -64,27 +94,29 @@ export function formatBucket(signup, event, t) {
   return t('signups.states.noBucketName', 'None');
 }
 
-export function formatSignupState(state, t) {
-  if (state === 'confirmed') {
-    return t('signups.states.confirmed', 'Confirmed');
-  }
-
-  if (state === 'waitlisted') {
-    return t('signups.states.waitlisted', 'Waitlisted');
-  }
-
-  if (state === 'withdrawn') {
-    return t('signups.states.withdrawn', 'Withdrawn');
-  }
-
+export function formatSignupState(state: SignupState | undefined | null, t: TFunction) {
   if (state == null) {
     return t('signups.states.notSignedUp', 'Not signed up');
   }
 
-  return state;
+  switch (state) {
+    case SignupState.Confirmed:
+      return t('signups.states.confirmed', 'Confirmed');
+    case SignupState.Waitlisted:
+      return t('signups.states.waitlisted', 'Waitlisted');
+    case SignupState.Withdrawn:
+      return t('signups.states.withdrawn', 'Withdrawn');
+    default:
+      assertNever(state, true);
+      return state;
+  }
 }
 
-export function formatSignupStatus(signup, event, t) {
+export function formatSignupStatus(
+  signup: SignupForFormatBucket,
+  event: EventForFormatBucket,
+  t: TFunction,
+) {
   if (signup.state === 'confirmed') {
     return formatBucket(signup, event, t);
   }

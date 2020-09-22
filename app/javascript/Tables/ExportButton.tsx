@@ -1,24 +1,32 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import QueryString from 'query-string';
 import { useTranslation } from 'react-i18next';
+import { Filter, SortingRule } from 'react-table';
 
 import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
 } from './TableUtils';
 
-function dataToKeyPathValuePairs(data, prependKeys = []) {
+type Scalar = string | number | boolean;
+type CompositeData = null | undefined | Scalar | CompositeData[] | { [key: string]: CompositeData };
+
+function dataToKeyPathValuePairs(
+  data: CompositeData,
+  prependKeys: string[] = [],
+): [string[], string][] {
   if (data == null) {
     return [];
   }
 
   if (typeof data === 'string' || typeof data === 'number') {
-    return [[prependKeys, data]];
+    return [[prependKeys, data.toString()]];
   }
 
-  if (typeof data === 'boolean' && data) {
-    return [[prependKeys, 'true']];
+  if (typeof data === 'boolean') {
+    if (data) {
+      return [[prependKeys, 'true']];
+    }
+    return [];
   }
 
   if (Array.isArray(data)) {
@@ -36,18 +44,26 @@ function dataToKeyPathValuePairs(data, prependKeys = []) {
     .reduce((acc, value) => acc.concat(value), []);
 }
 
-function dataToQueryString(data) {
+function dataToParams(data: CompositeData) {
+  const params = new URLSearchParams();
   const keyPathValuePairs = dataToKeyPathValuePairs(data);
-  const queryStringItems = keyPathValuePairs.map(([keyPath, value]) => {
+  keyPathValuePairs.forEach(([keyPath, value]) => {
     const [first, ...rest] = keyPath;
     const key = `${first}${rest.map((part) => `[${part}]`).join('')}`;
-    return QueryString.stringify({ [key]: value });
+    params.set(key, value);
   });
 
-  return queryStringItems.join('&');
+  return params;
 }
 
-function getExportUrl(baseUrl, { filtered, sorted, columns }) {
+function getExportUrl(
+  baseUrl: string,
+  {
+    filtered,
+    sorted,
+    columns,
+  }: { filtered?: null | Filter[]; sorted: null | SortingRule[]; columns?: string[] | null },
+) {
   const queryParams = {
     filters: reactTableFiltersToTableResultsFilters(filtered),
     sort: reactTableSortToTableResultsSort(sorted),
@@ -56,15 +72,25 @@ function getExportUrl(baseUrl, { filtered, sorted, columns }) {
 
   const url = new URL(baseUrl, window.location.href);
   const search = new URLSearchParams(url.search);
-  new URLSearchParams(dataToQueryString(queryParams)).forEach((value, key) =>
-    search.append(key, value),
-  );
-  url.search = search;
+  dataToParams(queryParams).forEach((value, key) => search.append(key, value));
+  url.search = search.toString();
 
   return url.toString();
 }
 
-function ReactTableExportButton({ exportUrl, filtered, sorted, columns }) {
+export type ReactTableExportButtonProps = {
+  exportUrl: string;
+  filtered: Filter[];
+  sorted: SortingRule[];
+  columns?: string[];
+};
+
+function ReactTableExportButton({
+  exportUrl,
+  filtered,
+  sorted,
+  columns,
+}: ReactTableExportButtonProps) {
   const { t } = useTranslation();
   const href = useMemo(() => getExportUrl(exportUrl, { filtered, sorted, columns }), [
     columns,
@@ -79,16 +105,5 @@ function ReactTableExportButton({ exportUrl, filtered, sorted, columns }) {
     </a>
   );
 }
-
-ReactTableExportButton.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
-  filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  columns: PropTypes.arrayOf(PropTypes.string),
-};
-
-ReactTableExportButton.defaultProps = {
-  columns: null,
-};
 
 export default ReactTableExportButton;
