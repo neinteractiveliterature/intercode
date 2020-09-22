@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-function EmailCell({ value }) {
+export type EmailCellProps = {
+  value?: string | null;
+};
+
+function EmailCell({ value }: EmailCellProps) {
   return (
     <a
       href={`mailto:${value}`}
@@ -13,13 +16,5 @@ function EmailCell({ value }) {
     </a>
   );
 }
-
-EmailCell.propTypes = {
-  value: PropTypes.string,
-};
-
-EmailCell.defaultProps = {
-  value: null,
-};
 
 export default EmailCell;

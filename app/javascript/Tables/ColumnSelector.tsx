@@ -1,16 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
+
+export type ColumnSelectorProps = {
+  alwaysVisibleColumns: string[];
+  possibleColumns: { id: string; Header: ReactNode }[];
+  visibleColumnIds: string[];
+  setVisibleColumnIds: React.Dispatch<string[]>;
+};
 
 function ColumnSelector({
   alwaysVisibleColumns,
   possibleColumns,
   visibleColumnIds,
   setVisibleColumnIds,
-}) {
+}: ColumnSelectorProps) {
   const { t } = useTranslation();
   const renderHiddenColumnCount = () => {
     const count =
@@ -54,16 +60,5 @@ function ColumnSelector({
     </DropdownMenu>
   );
 }
-
-ColumnSelector.propTypes = {
-  alwaysVisibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  possibleColumns: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setVisibleColumnIds: PropTypes.func.isRequired,
-};
 
 export default ColumnSelector;

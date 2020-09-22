@@ -1,9 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
+import { Filter } from 'react-table';
 
 import ChoiceSetFilter from './ChoiceSetFilter';
+import { FilterCodec } from './FilterUtils';
 
-function getBooleanFilterValue(filter) {
+function getBooleanFilterValue(filter: Filter) {
   if (filter == null || filter.value == null) {
     return 'any';
   }
@@ -15,7 +16,14 @@ function getBooleanFilterValue(filter) {
   return 'false';
 }
 
-function BooleanChoiceSetFilter({ filter, onChange, ...otherProps }) {
+export type BooleanChoiceSetFilterProps = {
+  filter: Filter;
+  onChange: React.Dispatch<boolean | null>;
+  renderHeaderCaption?: (value: string) => ReactNode;
+  filterCodec?: FilterCodec<string>;
+};
+
+function BooleanChoiceSetFilter({ filter, onChange, ...otherProps }: BooleanChoiceSetFilterProps) {
   return (
     <ChoiceSetFilter
       choices={[
@@ -32,16 +40,5 @@ function BooleanChoiceSetFilter({ filter, onChange, ...otherProps }) {
     />
   );
 }
-
-BooleanChoiceSetFilter.propTypes = {
-  filter: PropTypes.shape({
-    value: PropTypes.bool,
-  }),
-  onChange: PropTypes.func.isRequired,
-};
-
-BooleanChoiceSetFilter.defaultProps = {
-  filter: null,
-};
 
 export default BooleanChoiceSetFilter;
