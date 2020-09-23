@@ -142,7 +142,7 @@
     "react-dom": "^16.13.1",
     "react-google-recaptcha": "^2.1.0",
     "react-html-id": "^0.1.5",
-    "react-i18next": "^11.7.2",
+    "react-i18next": "^11.7.3",
     "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-moment-proptypes": "^1.7.0",
     "react-onclickoutside": "^6.9.0",
