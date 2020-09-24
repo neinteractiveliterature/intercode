@@ -24,13 +24,16 @@ import { ConventionForTimespanUtils } from '../../TimespanUtils';
 function valueIsTimeblockPreferenceValue(
   value: any | undefined | null,
 ): value is FormItemValueType<TimeblockPreferenceFormItem> {
-  if (value == null || typeof value !== 'object') {
+  if (value == null || !Array.isArray(value)) {
     return false;
   }
 
-  return (['start', 'finish', 'label', 'ordinality'] as const).every(
-    (field) =>
-      Object.prototype.hasOwnProperty.call(value, field) && typeof value![field] === 'string',
+  return value.every((preference) =>
+    (['start', 'finish', 'label', 'ordinality'] as const).every(
+      (field) =>
+        Object.prototype.hasOwnProperty.call(preference, field) &&
+        typeof preference![field] === 'string',
+    ),
   );
 }
 
