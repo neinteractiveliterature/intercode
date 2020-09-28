@@ -159,7 +159,7 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
-    dalli (2.7.10)
+    dalli (2.7.11)
     dante (0.2.0)
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
