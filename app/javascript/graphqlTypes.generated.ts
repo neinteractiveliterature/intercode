@@ -4736,17 +4736,17 @@ export type UserConProfile = {
   email?: Maybe<Scalars['String']>;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
   evening_phone?: Maybe<Scalars['String']>;
-  first_name?: Maybe<Scalars['String']>;
+  first_name: Scalars['String'];
   form_response_attrs_json?: Maybe<Scalars['String']>;
   gravatar_enabled: Scalars['Boolean'];
   gravatar_url: Scalars['String'];
   ical_secret?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
-  last_name?: Maybe<Scalars['String']>;
+  last_name: Scalars['String'];
   mobile_phone?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  name_inverted?: Maybe<Scalars['String']>;
-  name_without_nickname?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  name_inverted: Scalars['String'];
+  name_without_nickname: Scalars['String'];
   nickname?: Maybe<Scalars['String']>;
   order_summary: Scalars['String'];
   orders: Array<Maybe<Order>>;

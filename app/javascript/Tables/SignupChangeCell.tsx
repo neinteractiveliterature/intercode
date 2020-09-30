@@ -1,10 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { assertNever } from 'assert-never';
 
 import SignupStateCell from './SignupStateCell';
+import { SignupChangeAction, SignupState } from '../graphqlTypes.generated';
 
-export function describeAction(action, t) {
+export function describeAction(action: SignupChangeAction, t: TFunction) {
   if (action === 'self_service_signup') {
     return t('tables.signupChange.actions.selfServiceSignup', 'self-service signup');
   }
@@ -33,10 +35,21 @@ export function describeAction(action, t) {
     return t('tables.signupChange.actions.unknown', 'unknown action');
   }
 
+  assertNever(action, true);
   return action;
 }
 
-const SignupChangeCell = ({ value }) => {
+export type SignupChangeCellProps = {
+  value: {
+    action: SignupChangeAction;
+    state?: SignupState | null;
+    previous_signup_change?: {
+      state?: SignupState | null;
+    };
+  };
+};
+
+const SignupChangeCell = ({ value }: SignupChangeCellProps) => {
   const { t } = useTranslation();
 
   return (
@@ -60,16 +73,6 @@ const SignupChangeCell = ({ value }) => {
       )}
     </>
   );
-};
-
-SignupChangeCell.propTypes = {
-  value: PropTypes.shape({
-    action: PropTypes.string.isRequired,
-    previous_signup_change: PropTypes.shape({
-      state: PropTypes.string,
-    }),
-    state: PropTypes.string,
-  }).isRequired,
 };
 
 export default SignupChangeCell;

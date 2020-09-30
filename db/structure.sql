@@ -2505,7 +2505,6 @@ CREATE TABLE public.user_con_profiles (
     id integer NOT NULL,
     user_id integer NOT NULL,
     convention_id integer NOT NULL,
-    registrar boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     first_name character varying NOT NULL,
@@ -5215,6 +5214,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200601160341'),
 ('20200712160144'),
 ('20200807160757'),
-('20200830175919');
+('20200830175919'),
+('20200930160120');
 
 

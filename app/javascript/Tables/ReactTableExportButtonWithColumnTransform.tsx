@@ -8,7 +8,7 @@ export type ReactTableExportButtonWithColumnTransformProps = Omit<
   'columns'
 > & {
   visibleColumnIds: string[];
-  columnTransform: (columnId: string) => string;
+  columnTransform: (columnId: string) => string | string[];
 };
 
 function ReactTableExportButtonWithColumnTransform({

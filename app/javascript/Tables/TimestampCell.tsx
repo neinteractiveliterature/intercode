@@ -1,10 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 
 import { useISODateTimeInAppZone } from '../TimeUtils';
 
-export function SingleLineTimestampCell({ value }) {
+export type SingleLineTimestampCellProps = {
+  value: string;
+};
+
+export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps) {
   const timestamp = useISODateTimeInAppZone(value);
 
   if (!timestamp.isValid) {
@@ -14,11 +17,11 @@ export function SingleLineTimestampCell({ value }) {
   return <>{timestamp.toFormat('yyyy-MM-dd HH:mm')}</>;
 }
 
-SingleLineTimestampCell.propTypes = {
-  value: PropTypes.string.isRequired,
+export type TimestampCellProps = {
+  value: string;
 };
 
-function TimestampCell({ value }) {
+function TimestampCell({ value }: TimestampCellProps) {
   const timestamp = useISODateTimeInAppZone(value);
 
   if (!timestamp.isValid) {
@@ -33,9 +36,5 @@ function TimestampCell({ value }) {
     </>
   );
 }
-
-TimestampCell.propTypes = {
-  value: PropTypes.string.isRequired,
-};
 
 export default TimestampCell;
