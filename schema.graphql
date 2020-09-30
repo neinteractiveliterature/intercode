@@ -4619,17 +4619,17 @@ type UserConProfile {
   day_phone: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")
   email: String
   evening_phone: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")
-  first_name: String
+  first_name: String!
   form_response_attrs_json: String
   gravatar_enabled: Boolean!
   gravatar_url: String!
   ical_secret: String
   id: Int!
-  last_name: String
+  last_name: String!
   mobile_phone: String
-  name: String
-  name_inverted: String
-  name_without_nickname: String
+  name: String!
+  name_inverted: String!
+  name_without_nickname: String!
   nickname: String
   order_summary: String!
   orders: [Order]!

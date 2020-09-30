@@ -1,11 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { assertNever } from 'assert-never';
 
-const SignupStateCell = ({ value, strikeThrough }) => {
+import { SignupState } from '../graphqlTypes.generated';
+
+export type SignupStateCellProps = {
+  value?: SignupState | null;
+  strikeThrough?: boolean | null;
+};
+
+const SignupStateCell = ({ value, strikeThrough }: SignupStateCellProps) => {
   const { t } = useTranslation();
 
-  let text = value;
+  let text: string | null | undefined = value;
   if (value === 'confirmed') {
     text = t('signups.states.confirmed', 'Confirmed');
   } else if (value === 'waitlisted') {
@@ -14,6 +21,8 @@ const SignupStateCell = ({ value, strikeThrough }) => {
     text = t('signups.states.withdrawn', 'Withdrawn');
   } else if (value == null) {
     text = t('signups.states.notSignedUp', 'Not signed up');
+  } else {
+    assertNever(value, true);
   }
 
   return (
@@ -21,16 +30,6 @@ const SignupStateCell = ({ value, strikeThrough }) => {
       {strikeThrough ? <s>{text}</s> : text}
     </div>
   );
-};
-
-SignupStateCell.propTypes = {
-  value: PropTypes.string,
-  strikeThrough: PropTypes.bool,
-};
-
-SignupStateCell.defaultProps = {
-  value: null,
-  strikeThrough: false,
 };
 
 export default SignupStateCell;

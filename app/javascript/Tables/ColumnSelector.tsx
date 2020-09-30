@@ -1,12 +1,13 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Column } from 'react-table';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 export type ColumnSelectorProps = {
   alwaysVisibleColumns: string[];
-  possibleColumns: { id: string; Header: ReactNode }[];
+  possibleColumns: Column<any>[];
   visibleColumnIds: string[];
   setVisibleColumnIds: React.Dispatch<string[]>;
 };
@@ -52,8 +53,8 @@ function ColumnSelector({
         name="columns"
         multiple
         choices={possibleColumns
-          .filter((column) => !alwaysVisibleColumns.includes(column.id))
-          .map((column) => ({ label: column.Header, value: column.id }))}
+          .filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id))
+          .map((column) => ({ label: column.Header, value: column.id! }))}
         value={visibleColumnIds}
         onChange={setVisibleColumnIds}
       />
