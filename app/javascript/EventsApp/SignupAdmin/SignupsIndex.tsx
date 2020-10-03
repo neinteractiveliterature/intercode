@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { NavLink, Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -8,7 +7,13 @@ import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
 import RunSignupChangesTable from './RunSignupChangesTable';
 
-function SignupsIndex({ runId, eventId, runPath }) {
+export type SignupsIndexProps = {
+  runId: number;
+  eventId: number;
+  runPath: string;
+};
+
+function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps) {
   const { t } = useTranslation();
   const signupsTabMatch = useRouteMatch({ path: `${runPath}/admin_signups`, exact: true });
   const signupChangesTabMatch = useRouteMatch({ path: `${runPath}/admin_signups/signup_changes` });
@@ -83,11 +88,5 @@ function SignupsIndex({ runId, eventId, runPath }) {
     </>
   );
 }
-
-SignupsIndex.propTypes = {
-  runId: PropTypes.number.isRequired,
-  eventId: PropTypes.number.isRequired,
-  runPath: PropTypes.string.isRequired,
-};
 
 export default SignupsIndex;

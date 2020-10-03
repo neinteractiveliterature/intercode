@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import useReactTableWithTheWorks, {
   QueryDataContext,
@@ -18,16 +18,22 @@ import TableHeader from '../../Tables/TableHeader';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
+import {
+  RunSignupChangesQueryQuery,
+  RunSignupChangesQueryQueryVariables,
+} from './queries.generated';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
 
-const getPossibleColumns = (t) => [
+type SignupChangeType = RunSignupChangesQueryQuery['run']['signup_changes_paginated']['entries'][0];
+
+const getPossibleColumns = (t: TFunction) => [
   {
     Header: t('events.signupAdmin.history.nameHeader', 'Name'),
     id: 'name',
-    accessor: (signupChange) => signupChange.user_con_profile,
+    accessor: (signupChange: SignupChangeType) => signupChange.user_con_profile,
     sortable: false,
     filterable: true,
     Cell: UserConProfileWithGravatarCell,
@@ -36,7 +42,7 @@ const getPossibleColumns = (t) => [
   {
     Header: t('events.signupAdmin.history.changeHeader', 'Change'),
     id: 'action',
-    accessor: (signupChange) => signupChange,
+    accessor: (signupChange: SignupChangeType) => signupChange,
     sortable: false,
     filterable: true,
     Cell: SignupChangeCell,
@@ -45,7 +51,7 @@ const getPossibleColumns = (t) => [
   {
     Header: t('events.signupAdmin.history.bucketHeader', 'Bucket'),
     id: 'bucket_change',
-    accessor: (signupChange) => signupChange,
+    accessor: (signupChange: SignupChangeType) => signupChange,
     sortable: false,
     filterable: false,
     Cell: BucketChangeCell,
@@ -58,22 +64,30 @@ const getPossibleColumns = (t) => [
     filterable: false,
     width: 130,
     // eslint-disable-next-line react/prop-types
-    Cell: ({ value }) => <TimestampCell value={value} />,
+    Cell: ({ value }: { value: string }) => <TimestampCell value={value} />,
   },
 ];
 
-function RunSignupChangesTable({ runId }) {
+export type RunSignupChangesTableProps = {
+  runId: number;
+};
+
+function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
   const { t } = useTranslation();
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
   const [
     reactTableProps,
     { queryData, tableHeaderProps, columnSelectionProps },
-  ] = useReactTableWithTheWorks({
+  ] = useReactTableWithTheWorks<
+    RunSignupChangesQueryQuery,
+    SignupChangeType,
+    RunSignupChangesQueryQueryVariables
+  >({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: ['name', 'action', 'bucket_change', 'created_at'],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data.run.signup_changes_paginated.entries,
-    getPages: ({ data }) => data.run.signup_changes_paginated.total_pages,
+    getData: ({ data }) => data?.run.signup_changes_paginated.entries ?? [],
+    getPages: ({ data }) => data?.run.signup_changes_paginated.total_pages ?? 0,
     getPossibleColumns: getPossibleColumnsFunc,
     query: RunSignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
@@ -84,14 +98,14 @@ function RunSignupChangesTable({ runId }) {
     useValueUnless(
       () =>
         t('events.signupAdmin.historyPageTitle', 'Signup change history - {{ eventTitle }}', {
-          eventTitle: queryData.run.event.title,
+          eventTitle: queryData?.run.event.title,
         }),
       !queryData,
     ),
   );
 
   return (
-    <QueryDataContext.Provider value={queryData}>
+    <QueryDataContext.Provider value={queryData ?? {}}>
       <ReactTable
         {...reactTableProps}
         className="-striped -highlight"
@@ -117,9 +131,5 @@ function RunSignupChangesTable({ runId }) {
     </QueryDataContext.Provider>
   );
 }
-
-RunSignupChangesTable.propTypes = {
-  runId: PropTypes.number.isRequired,
-};
 
 export default RunSignupChangesTable;

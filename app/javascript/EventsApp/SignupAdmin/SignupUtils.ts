@@ -21,10 +21,10 @@ export type EventForFormatBucket = {
   event_category: {
     team_member_name: string;
   };
-  registration_policy: {
+  registration_policy?: null | {
     buckets: {
       key: string;
-      name: string;
+      name?: string | null;
     }[];
   };
   team_members: { user_con_profile?: { id: number } }[];
@@ -36,11 +36,12 @@ export function formatBucket(
   t: TFunction,
 ) {
   const { bucket_key: bucketKey } = signup;
+  const registrationPolicy = event.registration_policy ?? { buckets: [] };
 
   if (!signup.counted) {
     if (bucketKey) {
       return t('signups.states.notCountedWithBucket', '{{ bucketName }} (not counted)', {
-        bucketName: findBucket(bucketKey, event.registration_policy)?.name,
+        bucketName: findBucket(bucketKey, registrationPolicy)?.name,
       });
     }
 
@@ -55,7 +56,7 @@ export function formatBucket(
     }
 
     if (signup.state === 'waitlisted') {
-      const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy);
+      const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
       if (requestedBucket) {
         return t(
           'signups.states.waitlistedWithRequestedBucket',
@@ -70,8 +71,8 @@ export function formatBucket(
     return t('signups.states.notCounted', 'Not counted');
   }
 
-  const bucket = findBucket(bucketKey, event.registration_policy);
-  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy);
+  const bucket = findBucket(bucketKey, registrationPolicy);
+  const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
 
   if (bucket && requestedBucket && bucket.name === requestedBucket.name) {
     return bucket.name;
@@ -121,7 +122,10 @@ export function formatSignupStatus(
     return formatBucket(signup, event, t);
   }
 
-  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy);
+  const requestedBucket = findBucket(
+    signup.requested_bucket_key,
+    event.registration_policy ?? { buckets: [] },
+  );
   const stateText = formatSignupState(signup.state, t);
 
   if (requestedBucket) {

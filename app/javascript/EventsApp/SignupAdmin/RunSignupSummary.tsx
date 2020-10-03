@@ -1,28 +1,29 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
-import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
 import { findBucket, formatSignupState } from './SignupUtils';
 import RunHeader from './RunHeader';
-import { RunSignupSummaryQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import ErrorDisplay from '../../ErrorDisplay';
 import Gravatar from '../../Gravatar';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { RunSignupSummaryQueryQuery, useRunSignupSummaryQueryQuery } from './queries.generated';
 
-function isTeamMember(signup, teamMembers) {
+type EventType = RunSignupSummaryQueryQuery['event'];
+type SignupType = EventType['run']['signups_paginated']['entries'][0];
+
+function isTeamMember(signup: SignupType, teamMembers: EventType['team_members']) {
   return teamMembers.some(
     (teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id,
   );
 }
 
-function sortSignups(signups, teamMembers) {
+function sortSignups(signups: SignupType[], teamMembers: EventType['team_members']) {
   return [...signups].sort((a, b) => {
     if (a.state === 'waitlisted' && b.state !== 'waitlisted') {
       return 1;
@@ -41,37 +42,53 @@ function sortSignups(signups, teamMembers) {
     }
 
     if (a.state === 'waitlisted') {
-      return a.waitlist_position - b.waitlist_position;
+      return (a.waitlist_position ?? 0) - (b.waitlist_position ?? 0);
     }
 
-    return a.user_con_profile.name_inverted.localeCompare(b.user_con_profile.name_inverted, {
-      sensitivity: 'base',
-    });
+    return a.user_con_profile.name_inverted.localeCompare(
+      b.user_con_profile.name_inverted,
+      undefined,
+      { sensitivity: 'base' },
+    );
   });
 }
 
-function RunSignupSummary({ eventId, runId, eventPath }) {
+export type RunSignupSummaryProps = {
+  eventId: number;
+  runId: number;
+  eventPath: string;
+};
+
+function RunSignupSummary({ eventId, runId, eventPath }: RunSignupSummaryProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(RunSignupSummaryQuery, {
+  const { data, loading, error } = useRunSignupSummaryQueryQuery({
     variables: { eventId, runId },
   });
 
   const signupSummaryTitle = t('events.signupSummary.title', 'Signup summary');
 
   usePageTitle(
-    useValueUnless(() => `${signupSummaryTitle} - ${data.event.title}`, error || loading),
+    useValueUnless(() => `${signupSummaryTitle} - ${data?.event.title}`, error || loading),
   );
 
   const sortedSignups = useMemo(
     () =>
       error || loading
-        ? null
-        : sortSignups(data.event.run.signups_paginated.entries, data.event.team_members),
+        ? []
+        : sortSignups(
+            data?.event.run.signups_paginated.entries ?? [],
+            data?.event.team_members ?? [],
+          ),
     [data, error, loading],
   );
 
-  const renderSignupRow = (signup, registrationPolicy, teamMembers, teamMemberName) => {
-    const bucket = findBucket(signup.bucket_key, registrationPolicy);
+  const renderSignupRow = (
+    signup: SignupType,
+    registrationPolicy: EventType['registration_policy'],
+    teamMembers: EventType['team_members'],
+    teamMemberName: string,
+  ) => {
+    const bucket = findBucket(signup.bucket_key, registrationPolicy ?? { buckets: [] });
     const suffix =
       signup.bucket_key && bucket && bucket.expose_attendees ? ` (${bucket.name})` : null;
     const waitlistPosition = signup.state === 'waitlisted' ? ` #${signup.waitlist_position}` : null;
@@ -121,17 +138,21 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  const { event, convention, currentAbility } = data!;
+
   return (
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <EventBreadcrumbItems
-            event={data.event}
-            convention={data.convention}
-            currentAbility={data.currentAbility}
+            event={event}
+            convention={convention!}
+            currentAbility={currentAbility}
             eventPath={eventPath}
           />
-          <BreadcrumbItem active>{signupSummaryTitle}</BreadcrumbItem>
+          <BreadcrumbItem active to={`${eventPath}/runs/${runId}/signup_summary`}>
+            {signupSummaryTitle}
+          </BreadcrumbItem>
         </ol>
       </nav>
 
@@ -148,9 +169,9 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
           {sortedSignups.map((signup) =>
             renderSignupRow(
               signup,
-              data.event.registration_policy,
-              data.event.team_members,
-              data.event.event_category.team_member_name,
+              event.registration_policy,
+              event.team_members,
+              event.event_category.team_member_name,
             ),
           )}
         </tbody>
@@ -158,11 +179,5 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
     </>
   );
 }
-
-RunSignupSummary.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  runId: PropTypes.number.isRequired,
-  eventPath: PropTypes.string.isRequired,
-};
 
 export default RunSignupSummary;

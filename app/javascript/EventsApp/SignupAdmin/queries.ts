@@ -302,6 +302,7 @@ export const RunSignupSummaryQuery = gql`
 
       runs {
         id
+        starts_at
       }
 
       run(id: $runId) {
