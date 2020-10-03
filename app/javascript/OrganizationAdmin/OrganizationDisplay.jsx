@@ -7,11 +7,11 @@ import { DeleteOrganizationRole } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries';
 import PermissionNames from '../../../config/permission_names.json';
-import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 const OrganizationRolePermissions = PermissionNames.find(
   (group) => group.role_type === 'OrganizationRole',
@@ -92,18 +92,15 @@ function OrganizationDisplay() {
                   .join(', ')}
               </td>
               <td>
-                <PopperDropdown
-                  renderReference={({ ref, toggle }) => (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-primary"
-                      ref={ref}
-                      onClick={toggle}
-                    >
+                <DropdownMenu
+                  buttonClassName="btn btn-sm btn-primary"
+                  buttonContent={
+                    <>
                       <i className="fa fa-ellipsis-h" />
                       <span className="sr-only">Options</span>
-                    </button>
-                  )}
+                    </>
+                  }
+                  popperOptions={{ placement: 'bottom-end' }}
                 >
                   <Link
                     to={`/organizations/${organization.id}/roles/${organizationRole.id}/edit`}
@@ -124,7 +121,7 @@ function OrganizationDisplay() {
                   >
                     Delete
                   </button>
-                </PopperDropdown>
+                </DropdownMenu>
               </td>
             </tr>
           ))}

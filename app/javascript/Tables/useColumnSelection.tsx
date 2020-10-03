@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
 import uniq from 'lodash/uniq';
 import { useHistory, useLocation } from 'react-router-dom';
+import { Column } from 'react-table';
+
+import { notEmpty } from '../ValueUtils';
 
 export type UseColumnSelectionOptions = {
   alwaysVisibleColumns?: string[];
   defaultVisibleColumns?: string[];
-  possibleColumns: { id?: string }[];
+  possibleColumns: Column<any>[];
 };
 
 export default function useColumnSelection({
@@ -15,23 +18,24 @@ export default function useColumnSelection({
 }: UseColumnSelectionOptions) {
   const history = useHistory();
   const location = useLocation();
-  const effectiveAlwaysVisibleColumns = alwaysVisibleColumns || [];
 
   const visibleColumnIds = useMemo(() => {
     const params = new URLSearchParams(location.search);
+
     if (params.get('columns')) {
-      return uniq([...effectiveAlwaysVisibleColumns, ...(params.get('columns')?.split(',') ?? [])]);
+      return uniq([...(alwaysVisibleColumns ?? []), ...(params.get('columns')?.split(',') ?? [])]);
     }
 
     if (defaultVisibleColumns != null) {
-      return uniq([...effectiveAlwaysVisibleColumns, ...defaultVisibleColumns]);
+      return uniq([...(alwaysVisibleColumns ?? []), ...defaultVisibleColumns]);
     }
 
-    return possibleColumns.map((column) => column.id);
-  }, [defaultVisibleColumns, effectiveAlwaysVisibleColumns, location, possibleColumns]);
+    return possibleColumns.map((column) => column.id).filter(notEmpty);
+  }, [defaultVisibleColumns, alwaysVisibleColumns, location, possibleColumns]);
 
   const visibleColumns = useMemo(
-    () => possibleColumns.filter((column) => visibleColumnIds.includes(column.id)),
+    () =>
+      possibleColumns.filter((column) => column.id != null && visibleColumnIds.includes(column.id)),
     [possibleColumns, visibleColumnIds],
   );
 
@@ -44,7 +48,7 @@ export default function useColumnSelection({
   return [
     { columns: visibleColumns }, // reactTableProps
     {
-      alwaysVisibleColumns: effectiveAlwaysVisibleColumns,
+      alwaysVisibleColumns: alwaysVisibleColumns ?? [],
       possibleColumns,
       visibleColumnIds,
       visibleColumns,

@@ -1,30 +1,37 @@
-import React, { Ref, CSSProperties, ReactNode } from 'react';
+import React, { Ref, ReactNode } from 'react';
 import classNames from 'classnames';
-import { PopperProps, PopperArrowProps } from 'react-popper';
+import { usePopper } from 'react-popper';
 
-export type TooltipProps = {
-  withRef: Ref<HTMLDivElement>;
-  style?: CSSProperties;
+export type TooltipProps = Pick<ReturnType<typeof usePopper>, 'styles' | 'attributes' | 'state'> & {
+  popperRef: Ref<HTMLDivElement>;
+  arrowRef: Ref<HTMLDivElement>;
   visible?: boolean;
-  placement: NonNullable<PopperProps['placement']>;
-  arrowProps: PopperArrowProps;
   children: ReactNode;
 };
 
-function Tooltip({ withRef, style, visible, placement, arrowProps, children }: TooltipProps) {
-  const placementClass = (placement || '').split('-')[0];
+function Tooltip({
+  popperRef,
+  arrowRef,
+  styles,
+  visible,
+  attributes,
+  state,
+  children,
+}: TooltipProps) {
+  const placementClass = (state?.placement ?? '').split('-')[0];
 
   return (
     <div
-      ref={withRef}
-      style={{ ...style, ...(visible ? {} : { zIndex: -9999 }) }}
+      ref={popperRef}
+      style={{ ...styles.popper, ...(visible ? {} : { zIndex: -9999 }) }}
       className={classNames(`tooltip bs-tooltip-${placementClass}`, {
         show: visible,
         'd-none': !visible,
       })}
       role="tooltip"
+      {...attributes.popper}
     >
-      <div className="arrow" ref={arrowProps.ref} style={arrowProps.style} />
+      <div className="arrow" ref={arrowRef} style={styles.arrow} />
       <div className="tooltip-inner">{children}</div>
     </div>
   );

@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import zxcvbn from 'zxcvbn';
 import pickBy from 'lodash/pickBy';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import PopperDropdown from '../UIComponents/PopperDropdown';
+import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 
 function PasswordFeedback({ result }) {
   if (!result) {
@@ -24,7 +24,7 @@ function PasswordFeedback({ result }) {
         </>
       )}
       {result.feedback.suggestions && (
-        <ul className="list-unstyled">
+        <ul className="list-unstyled m-0">
           {result.feedback.suggestions.map((suggestion) => (
             <li key={suggestion}>{suggestion}</li>
           ))}
@@ -90,6 +90,20 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     great: t('authentication.passwordInput.great', 'great'),
   }[scoreText];
 
+  const [dropdownButton, setDropdownButton] = useState(null);
+  const [dropdownMenu, setDropdownMenu] = useState(null);
+  const [arrow, setArrow] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const { styles, attributes, state, update } = useIntercodePopperWithAutoClosing(
+    dropdownMenu,
+    dropdownButton,
+    arrow,
+    setDropdownOpen,
+  );
+
+  const toggle = useToggleOpen(setDropdownOpen, update);
+
   return (
     <>
       <div className="rounded" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -105,56 +119,49 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
           style={{ right: 0, top: 0, position: 'absolute' }}
           className={classNames('mr-2', 'mt-2')}
         >
-          <PopperDropdown
-            renderReference={({ ref, toggle }) => (
-              <button
-                type="button"
-                className={classNames('btn btn-link p-0', scoreTextClasses)}
-                aria-haspopup="dialog"
-                disabled={!hasFeedback || value.length === 0}
-                style={{ opacity: 1 }}
-                tabIndex={100 /* eslint-disable-line jsx-a11y/tabindex-no-positive */}
-                ref={ref}
-                onClick={() => (hasFeedback ? toggle() : null)}
-                onKeyDown={(event) => {
-                  if (event.keyCode === 13 || event.keyCode === 32) {
-                    event.preventDefault();
-                    toggle();
-                  }
-                }}
-              >
-                {value.length > 0 && (
+          <button
+            type="button"
+            className={classNames('btn btn-link p-0', scoreTextClasses)}
+            aria-haspopup="dialog"
+            disabled={!hasFeedback || value.length === 0}
+            style={{ opacity: 1 }}
+            tabIndex={100 /* eslint-disable-line jsx-a11y/tabindex-no-positive */}
+            ref={setDropdownButton}
+            onClick={() => (hasFeedback ? toggle() : null)}
+            onKeyDown={(event) => {
+              if (event.keyCode === 13 || event.keyCode === 32) {
+                event.preventDefault();
+                toggle();
+              }
+            }}
+          >
+            {value.length > 0 && (
+              <>
+                {scoreTextTranslated}
+                {hasFeedback && (
                   <>
-                    {scoreTextTranslated}
-                    {hasFeedback && (
-                      <>
-                        {' '}
-                        <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
-                          <span className="sr-only">{t('buttons.help', 'Help')}</span>
-                        </i>
-                      </>
-                    )}
+                    {' '}
+                    <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
+                      <span className="sr-only">{t('buttons.help', 'Help')}</span>
+                    </i>
                   </>
                 )}
-              </button>
+              </>
             )}
+          </button>
+          <div
+            className={classNames('card', 'popover', `bs-popover-${state?.placement}`, {
+              'd-none': !dropdownOpen || !hasFeedback,
+            })}
+            ref={setDropdownMenu}
+            style={styles.popper}
+            {...attributes.popper}
           >
-            {({ placement, visible, arrowProps, ref, style }) => (
-              <div
-                className={classNames('card', 'popover', `bs-popover-${placement}`, {
-                  'd-none': !visible || !hasFeedback,
-                })}
-                ref={ref}
-                style={style}
-                data-placement={placement}
-              >
-                <div className="card-body">
-                  <PasswordFeedback result={passwordStrengthResult} />
-                </div>
-                <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
-              </div>
-            )}
-          </PopperDropdown>
+            <div className="card-body">
+              <PasswordFeedback result={passwordStrengthResult} />
+            </div>
+            <span ref={setArrow} style={styles.arrow} className="arrow" />
+          </div>
         </div>
         <div
           className="progress w-100 bg-transparent"

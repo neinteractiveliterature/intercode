@@ -199,7 +199,7 @@ export type RunHeaderRunInfoQueryQuery = (
       )> }
     )>, run: (
       { __typename?: 'Run' }
-      & Pick<Types.Run, 'id' | 'starts_at'>
+      & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
     ) }
   ) }
 );
@@ -240,7 +240,7 @@ export type RunSignupSummaryQueryQuery = (
       ) }
     )>, runs: Array<(
       { __typename?: 'Run' }
-      & Pick<Types.Run, 'id'>
+      & Pick<Types.Run, 'id' | 'starts_at'>
     )>, run: (
       { __typename?: 'Run' }
       & Pick<Types.Run, 'id'>
@@ -645,6 +645,7 @@ export const RunHeaderRunInfoQueryDocument = gql`
     run(id: $runId) {
       id
       starts_at
+      title_suffix
     }
   }
 }
@@ -707,6 +708,7 @@ export const RunSignupSummaryQueryDocument = gql`
     }
     runs {
       id
+      starts_at
     }
     run(id: $runId) {
       id

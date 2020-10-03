@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
-import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
-
+import React, { useEffect, useMemo, useState } from 'react';
+import { NavLink, Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { humanize } from 'inflected';
+import classNames from 'classnames';
+
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
 import EventAdminRunsTable from './EventAdminRunsTable';
@@ -9,13 +10,12 @@ import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import ErrorDisplay from '../ErrorDisplay';
 import sortEventCategories from './sortEventCategories';
-import PopperDropdown from '../UIComponents/PopperDropdown';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import useAutoClosingDropdownRef from '../NavigationBar/useAutoClosingDropdownRef';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useIntercodePopperWithAutoClosing } from '../UIComponents/PopperUtils';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
@@ -28,13 +28,28 @@ const adminComponentsBySchedulingUi = {
 function EventAdmin() {
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
   const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const location = useLocation();
 
   const eventCategories = useMemo(
     () => (loading || error || !data ? [] : sortEventCategories(data.convention.event_categories)),
     [data, loading, error],
   );
 
-  const dropdownRef = useAutoClosingDropdownRef();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menu, setMenu] = useState<HTMLDivElement | null>(null);
+  const [menuDropdown, setMenuDropdown] = useState<HTMLLIElement | null>(null);
+
+  const { styles, attributes } = useIntercodePopperWithAutoClosing(
+    menu,
+    menuDropdown,
+    undefined,
+    setMenuOpen,
+    { placement: 'bottom-start' },
+  );
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   if (loading) {
     return <PageLoadingIndicator visible />;
@@ -72,21 +87,22 @@ function EventAdmin() {
     <>
       <h1 className="mb-4">Event scheduling</h1>
       <ul className="nav nav-tabs">
-        <PopperDropdown
-          ref={dropdownRef}
-          renderReference={({ ref, toggle }) => (
-            <li className="nav-item dropdown" role="presentation" ref={ref}>
-              <button
-                className="btn btn-link nav-link dropdown-toggle"
-                onClick={toggle}
-                type="button"
-              >
-                Event categories
-              </button>
-            </li>
-          )}
-        >
-          <>
+        <li className="nav-item dropdown" role="presentation" ref={setMenuDropdown}>
+          <button
+            className="btn btn-link nav-link dropdown-toggle"
+            onClick={() => {
+              setMenuOpen((prevValue) => !prevValue);
+            }}
+            type="button"
+          >
+            Event categories
+          </button>
+          <div
+            className={classNames('dropdown-menu', { show: menuOpen })}
+            style={styles.popper}
+            ref={setMenu}
+            {...attributes.popper}
+          >
             {eventCategories.map((eventCategory) => (
               <NavLink
                 className="dropdown-item"
@@ -97,8 +113,8 @@ function EventAdmin() {
                 <small className="text-muted">({humanize(eventCategory.scheduling_ui)})</small>
               </NavLink>
             ))}
-          </>
-        </PopperDropdown>
+          </div>
+        </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin_events/dropped_events">
             Dropped events
