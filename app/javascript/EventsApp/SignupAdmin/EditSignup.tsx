@@ -44,7 +44,7 @@ function getMakeCountedConfirmPrompt(signup: SignupFieldsFragment) {
       <p>
         Are you sure? This will make {'{{ name }}’s'} signup count towards attendee totals for{' '}
         {'{{ eventTitle }}'}. {'{{ eventTitle }}'} will also count towards
-        {'{{ name }}’s'} signup limit if there is a signup cap in place.
+        {' {{ name }}’s'} signup limit if there is a signup cap in place.
       </p>
       <p className="text-danger">
         Caution: this operation does not check whether the signup buckets are already full, and
@@ -59,13 +59,13 @@ function getMakeNotCountedConfirmPrompt(signup: SignupFieldsFragment) {
 
   return (
     <Trans
-      i18nKey="events.signupAdmin.makeCountedConfirmPrompt"
+      i18nKey="events.signupAdmin.makeNotCountedConfirmPrompt"
       values={{ name: userConProfile.name_without_nickname, eventTitle: run.event.title }}
     >
       <p>
         Are you sure? This will make {'{{ name }}’s'} signup not count towards attendee totals for{' '}
         {'{{ eventTitle }}'}. It will also allow
-        {'{{ name }}'} to sign up for an additional event if there is a signup cap in place.
+        {' {{ name }}'} to sign up for an additional event if there is a signup cap in place.
       </p>
       <p className="text-danger">
         Caution: this operation will pull additional attendees into the space freed up by making

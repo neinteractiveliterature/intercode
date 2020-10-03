@@ -1,22 +1,26 @@
 import React, { useMemo, useContext } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
 import { timespanFromRun } from '../../TimespanUtils';
-import { UserConProfileSignupsQuery } from './queries';
-import { WithdrawAllUserConProfileSignups } from './mutations';
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import AddToCalendarDropdown from './AddToCalendarDropdown';
 import AppRootContext from '../../AppRootContext';
+import {
+  UserConProfileSignupsQueryQuery,
+  useUserConProfileSignupsQueryQuery,
+} from './queries.generated';
+import { useWithdrawAllUserConProfileSignupsMutation } from './mutations.generated';
+import { joinReact } from '../../RenderingUtils';
 
-function filterAndSortSignups(signups) {
+function filterAndSortSignups(
+  signups: UserConProfileSignupsQueryQuery['userConProfile']['signups'],
+) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
 
   return filteredSignups.sort(
@@ -24,17 +28,21 @@ function filterAndSortSignups(signups) {
   );
 }
 
-function UserConProfileSignupsCard({ userConProfileId }) {
+export type UserConProfileSignupsCardProps = {
+  userConProfileId: number;
+};
+
+function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCardProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const { data, error, loading } = useQuery(UserConProfileSignupsQuery, {
+  const { data, error, loading } = useUserConProfileSignupsQueryQuery({
     variables: { id: userConProfileId },
   });
-  const [withdrawAllSignups] = useMutation(WithdrawAllUserConProfileSignups);
+  const [withdrawAllSignups] = useWithdrawAllUserConProfileSignupsMutation();
   const confirm = useConfirm();
 
   const signups = useMemo(
-    () => (loading || error ? [] : filterAndSortSignups(data.userConProfile.signups)),
+    () => (loading || error ? [] : filterAndSortSignups(data?.userConProfile.signups ?? [])),
     [data, error, loading],
   );
 
@@ -42,10 +50,10 @@ function UserConProfileSignupsCard({ userConProfileId }) {
     () =>
       loading || error
         ? []
-        : data.userConProfile.team_members
+        : (data?.userConProfile.team_members ?? [])
             .filter(
               (teamMember) =>
-                !data.userConProfile.signups.some(
+                !data?.userConProfile.signups.some(
                   (signup) =>
                     signup.run.event.id === teamMember.event.id && signup.state === 'confirmed',
                 ),
@@ -63,9 +71,13 @@ function UserConProfileSignupsCard({ userConProfileId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const renderEventLink = (event) => <Link to={buildEventUrl(event)}>{event.title}</Link>;
+  const renderEventLink = (event: Parameters<typeof buildEventUrl>[0]) => (
+    <Link to={buildEventUrl(event)}>{event.title}</Link>
+  );
 
-  const renderSignup = (signup) => (
+  const renderSignup = (
+    signup: UserConProfileSignupsQueryQuery['userConProfile']['signups'][0],
+  ) => (
     <li className="list-group-item" key={signup.id}>
       <ul className="list-unstyled">
         <li>
@@ -82,8 +94,8 @@ function UserConProfileSignupsCard({ userConProfileId }) {
         <li>
           <small>
             {signup.run.rooms
-              .map((room) => room.name)
-              .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' }))
+              .map((room) => room.name ?? '')
+              .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
               .join(', ')}
           </small>
         </li>
@@ -91,14 +103,17 @@ function UserConProfileSignupsCard({ userConProfileId }) {
     </li>
   );
 
-  const renderUnSignedUpTeamMemberEvents = (userConProfile, myProfile) => {
+  const renderUnSignedUpTeamMemberEvents = (
+    userConProfile: UserConProfileSignupsQueryQuery['userConProfile'],
+    myProfile: UserConProfileSignupsQueryQuery['myProfile'],
+  ) => {
     if (unSignedUpEvents.length === 0) {
       return null;
     }
 
     return (
       <li className="list-group-item list-group-item-warning">
-        {userConProfile.id === myProfile.id
+        {userConProfile.id === myProfile?.id
           ? t(
               'admin.userConProfiles.signupsCard.unSignedUpYou',
               'You are a team member for the following events, but are not signed up for them:',
@@ -108,20 +123,23 @@ function UserConProfileSignupsCard({ userConProfileId }) {
               '{{ name }} is a team member for the following events, but is not signed up for them:',
               { name: userConProfile.name_without_nickname },
             )}{' '}
-        {unSignedUpEvents
-          .map((event) => renderEventLink(event))
-          .reduce((prev, curr) => [prev, ', ', curr])}
+        {joinReact(
+          unSignedUpEvents.map((event) => renderEventLink(event)),
+          ', ',
+        )}
       </li>
     );
   };
 
+  const { userConProfile, myProfile, convention } = data!;
+
   return (
     <div className="card">
       <div className="card-header">
-        {data.userConProfile.ical_secret && (
+        {userConProfile.ical_secret && (
           <div className="float-right">
             <AddToCalendarDropdown
-              icalSecret={data.userConProfile.ical_secret}
+              icalSecret={userConProfile.ical_secret}
               className="btn btn-outline-secondary btn-sm"
             />
           </div>
@@ -135,9 +153,9 @@ function UserConProfileSignupsCard({ userConProfileId }) {
           </li>
         ) : null}
         {signups.map((signup) => renderSignup(signup))}
-        {renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
+        {renderUnSignedUpTeamMemberEvents(userConProfile, myProfile)}
       </ul>
-      {data.myProfile.ability.can_withdraw_all_user_con_profile_signups && signups.length > 0 ? (
+      {myProfile?.ability?.can_withdraw_all_user_con_profile_signups && signups.length > 0 && (
         <div className="card-footer border-top-0">
           <button
             type="button"
@@ -148,8 +166,8 @@ function UserConProfileSignupsCard({ userConProfileId }) {
                   'admin.userConProfiles.signupsCard.withdrawFromAllConfirmation',
                   'Are you sure you want to withdraw {{ name }} from all their events at {{ conventionName }}?',
                   {
-                    name: data.userConProfile.name_without_nickname,
-                    conventionName: data.convention.name,
+                    name: userConProfile.name_without_nickname,
+                    conventionName: convention?.name,
                   },
                 ),
                 action: () => withdrawAllSignups({ variables: { userConProfileId } }),
@@ -160,13 +178,9 @@ function UserConProfileSignupsCard({ userConProfileId }) {
             {t('admin.userConProfiles.withdrawFromAllButton', 'Withdraw from all')}
           </button>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
-
-UserConProfileSignupsCard.propTypes = {
-  userConProfileId: PropTypes.number.isRequired,
-};
 
 export default UserConProfileSignupsCard;
