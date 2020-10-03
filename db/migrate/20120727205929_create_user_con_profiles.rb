@@ -19,6 +19,7 @@ class CreateUserConProfiles < ActiveRecord::Migration[5.1]
         gm_liaison
         outreach
         con_com
+        registrar
         scheduling
         mail_to_gms
         mail_to_attendees
