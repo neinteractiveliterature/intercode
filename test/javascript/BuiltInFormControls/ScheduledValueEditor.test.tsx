@@ -68,9 +68,8 @@ describe('ScheduledValueEditor', () => {
     });
     fireEvent.change(getByTestId('testInput'), { target: { value: 'something else' } });
     expect(dispatch).toHaveBeenCalledWith({
-      type: 'updateTimespanField',
+      type: 'updateTimespanValue',
       index: 0,
-      field: 'value',
       value: 'something else',
     });
   });

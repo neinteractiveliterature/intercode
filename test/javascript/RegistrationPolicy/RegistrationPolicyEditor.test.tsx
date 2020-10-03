@@ -1,11 +1,16 @@
 import React from 'react';
+import { RenderResult } from '@testing-library/react';
 
 import { act, render, fireEvent, waitFor } from '../testUtils';
 import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
+import {
+  RegistrationPolicy,
+  RegistrationPolicyBucket,
+} from '../../../app/javascript/graphqlTypes.generated';
 
 describe('RegistrationPolicyEditor', () => {
-  const onChange = jest.fn();
+  const onChange = jest.fn<void, [RegistrationPolicy]>();
   beforeEach(onChange.mockReset);
 
   const defaultRegistrationPolicyBucket = {
@@ -17,27 +22,41 @@ describe('RegistrationPolicyEditor', () => {
     minimum_slots: 2,
     slots_limited: true,
     anything: false,
+    expose_attendees: false,
+    not_counted: false,
   };
 
-  const renderRegistrationPolicyEditor = (
-    props,
-    buckets = [defaultRegistrationPolicyBucket],
+  const renderRegistrationPolicyEditor = async (
+    props?: any,
+    buckets: RegistrationPolicyBucket[] = [defaultRegistrationPolicyBucket],
     preventNoPreferenceSignups = false,
-  ) =>
-    render(
-      <RegistrationPolicyEditor
-        registrationPolicy={{ buckets, prevent_no_preference_signups: preventNoPreferenceSignups }}
-        onChange={onChange}
-        lockNameAndDescription={false}
-        lockLimitedBuckets={[]}
-        lockDeleteBuckets={[]}
-        allowCustom
-        {...props}
-      />,
-    );
+  ) => {
+    let result: RenderResult;
 
-  test('basic layout', () => {
-    const { getByText, getByDisplayValue, queryAllByRole } = renderRegistrationPolicyEditor();
+    await act(async () => {
+      result = render(
+        <RegistrationPolicyEditor
+          registrationPolicy={{
+            buckets,
+            prevent_no_preference_signups: preventNoPreferenceSignups,
+          }}
+          onChange={onChange}
+          lockNameAndDescription={false}
+          lockLimitedBuckets={[]}
+          lockDeleteBuckets={[]}
+          allowCustom
+          {...props}
+        />,
+      );
+      await waitFor(() => {}); // TODO: figure out a better way
+    });
+
+    // @ts-expect-error
+    return result;
+  };
+
+  test('basic layout', async () => {
+    const { getByText, getByDisplayValue, queryAllByRole } = await renderRegistrationPolicyEditor();
     expect(getByText('Bucket name/description')).toBeTruthy();
     expect(getByDisplayValue('a bucket for testing')).toBeTruthy();
     expect(queryAllByRole('checkbox')).toHaveLength(3);
@@ -46,8 +65,8 @@ describe('RegistrationPolicyEditor', () => {
     expect(getByText('Add flex bucket')).toBeTruthy();
   });
 
-  test('lockNameAndDescription', () => {
-    const { getByText, queryAllByDisplayValue } = renderRegistrationPolicyEditor({
+  test('lockNameAndDescription', async () => {
+    const { getByText, queryAllByDisplayValue } = await renderRegistrationPolicyEditor({
       lockNameAndDescription: true,
     });
     expect(getByText('Bucket name')).toBeTruthy();
@@ -55,30 +74,30 @@ describe('RegistrationPolicyEditor', () => {
     expect(queryAllByDisplayValue('a bucket for testing')).toHaveLength(0);
   });
 
-  test('lockLimitedBuckets', () => {
-    const { queryAllByRole } = renderRegistrationPolicyEditor({
+  test('lockLimitedBuckets', async () => {
+    const { queryAllByRole } = await renderRegistrationPolicyEditor({
       lockLimitedBuckets: ['testBucket'],
     });
     expect(queryAllByRole('checkbox')).toHaveLength(0);
   });
 
-  test('lockDeleteBuckets', () => {
-    const { queryAllByText } = renderRegistrationPolicyEditor({
+  test('lockDeleteBuckets', async () => {
+    const { queryAllByText } = await renderRegistrationPolicyEditor({
       lockDeleteBuckets: ['testBucket'],
     });
     expect(queryAllByText('Delete bucket')).toHaveLength(0);
   });
 
-  test('add regular bucket', () => {
-    const { getByText } = renderRegistrationPolicyEditor();
+  test('add regular bucket', async () => {
+    const { getByText } = await renderRegistrationPolicyEditor();
     fireEvent.click(getByText('Add regular bucket'));
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(2);
     expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, false]);
   });
 
-  test('add flex bucket', () => {
-    const { getByText } = renderRegistrationPolicyEditor();
+  test('add flex bucket', async () => {
+    const { getByText } = await renderRegistrationPolicyEditor();
     fireEvent.click(getByText('Add flex bucket'));
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(2);
@@ -86,7 +105,7 @@ describe('RegistrationPolicyEditor', () => {
   });
 
   test('delete bucket', async () => {
-    const { getByText } = renderRegistrationPolicyEditor();
+    const { getByText } = await renderRegistrationPolicyEditor();
     fireEvent.click(getByText('Delete bucket'));
     await act(async () => {
       fireEvent.click(getByText('OK'));
@@ -96,8 +115,8 @@ describe('RegistrationPolicyEditor', () => {
     expect(newPolicy.buckets.length).toEqual(0);
   });
 
-  test('change bucket', () => {
-    const { getByLabelText } = renderRegistrationPolicyEditor();
+  test('change bucket', async () => {
+    const { getByLabelText } = await renderRegistrationPolicyEditor();
     fireEvent.change(getByLabelText('Min'), { target: { value: '1' } });
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets[0].minimum_slots).toEqual(1);
@@ -106,14 +125,14 @@ describe('RegistrationPolicyEditor', () => {
   describe('with presets', () => {
     const preset = defaultPresets.find(
       (aPreset) => aPreset.name === 'Limited slots by gender (classic Intercon-style)',
-    );
+    )!;
     const presetBuckets = preset.policy.buckets.map((presetBucket) => ({
       ...defaultRegistrationPolicyBucket,
       ...presetBucket,
     }));
 
-    test('renders the selector by default', () => {
-      const { getByRole, queryAllByRole } = renderRegistrationPolicyEditor(
+    test('renders the selector by default', async () => {
+      const { getByRole, queryAllByRole } = await renderRegistrationPolicyEditor(
         { presets: defaultPresets },
         [],
       );
@@ -121,47 +140,48 @@ describe('RegistrationPolicyEditor', () => {
       expect(queryAllByRole('option')).toHaveLength(7); // number of presets + blank + custom
     });
 
-    test('pre-selects a matching preset', () => {
-      const { getByRole } = renderRegistrationPolicyEditor(
+    test('pre-selects a matching preset', async () => {
+      const { getByRole } = await renderRegistrationPolicyEditor(
         { presets: defaultPresets },
         presetBuckets,
       );
       expect(getByRole('combobox')).toHaveValue(preset.name);
     });
 
-    test('pre-selects "custom" when the buckets do not match any preset', () => {
-      const { getByRole } = renderRegistrationPolicyEditor({ presets: defaultPresets });
+    test('pre-selects "custom" when the buckets do not match any preset', async () => {
+      const { getByRole } = await renderRegistrationPolicyEditor({ presets: defaultPresets });
       expect(getByRole('combobox')).toHaveValue('_custom');
     });
 
-    test('locks name and description for matching buckets when in a preset', () => {
-      const { getByText, queryAllByText, queryAllByDisplayValue } = renderRegistrationPolicyEditor(
-        { presets: defaultPresets },
-        presetBuckets,
-      );
+    test('locks name and description for matching buckets when in a preset', async () => {
+      const {
+        getByText,
+        queryAllByText,
+        queryAllByDisplayValue,
+      } = await renderRegistrationPolicyEditor({ presets: defaultPresets }, presetBuckets);
       expect(getByText('Bucket name')).toBeTruthy();
       expect(queryAllByText('Female role')).not.toHaveLength(0);
       expect(queryAllByDisplayValue('Male characters')).toHaveLength(0);
     });
 
-    test('locks limited for matching buckets when in a preset', () => {
-      const { queryAllByRole } = renderRegistrationPolicyEditor(
+    test('locks limited for matching buckets when in a preset', async () => {
+      const { queryAllByRole } = await renderRegistrationPolicyEditor(
         { presets: defaultPresets },
         presetBuckets,
       );
       expect(queryAllByRole('checkbox')).toHaveLength(0);
     });
 
-    test('locks delete for matching buckets when in a preset', () => {
-      const { queryAllByText } = renderRegistrationPolicyEditor(
+    test('locks delete for matching buckets when in a preset', async () => {
+      const { queryAllByText } = await renderRegistrationPolicyEditor(
         { presets: defaultPresets },
         presetBuckets,
       );
       expect(queryAllByText('Delete bucket')).toHaveLength(0);
     });
 
-    test('locks adding buckets when in a preset', () => {
-      const { queryAllByText } = renderRegistrationPolicyEditor(
+    test('locks adding buckets when in a preset', async () => {
+      const { queryAllByText } = await renderRegistrationPolicyEditor(
         { presets: defaultPresets },
         presetBuckets,
       );
@@ -169,8 +189,8 @@ describe('RegistrationPolicyEditor', () => {
       expect(queryAllByText('Add flex bucket')).toHaveLength(0);
     });
 
-    test('switching to a preset', () => {
-      const { getByRole } = renderRegistrationPolicyEditor({ presets: defaultPresets });
+    test('switching to a preset', async () => {
+      const { getByRole } = await renderRegistrationPolicyEditor({ presets: defaultPresets });
       fireEvent.change(getByRole('combobox'), { target: { value: preset.name } });
       const newPolicy = onChange.mock.calls[0][0];
       expect(newPolicy.buckets.map((bucket) => bucket.name)).toEqual(

@@ -1,3 +1,5 @@
+import { RegistrationPolicyPreset } from '../../../app/javascript/FormAdmin/FormItemUtils';
+
 const presets = [
   {
     name: 'Unlimited slots',
@@ -94,6 +96,6 @@ const presets = [
       ],
     },
   },
-];
+] as RegistrationPolicyPreset[];
 
 export default presets;
