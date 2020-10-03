@@ -9,7 +9,7 @@ import ScheduledValueTimespanRow, {
 import { EditingTimespan } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 
 describe('ScheduledValueTimespanRow', () => {
-  const attributeDidChange = jest.fn();
+  const finishDidChange = jest.fn();
   const valueDidChange = jest.fn();
   const deleteClicked = jest.fn();
 
@@ -17,7 +17,7 @@ describe('ScheduledValueTimespanRow', () => {
   const timespanFinish = '2017-01-02T00:00:00Z';
 
   beforeEach(() => {
-    attributeDidChange.mockReset();
+    finishDidChange.mockReset();
     valueDidChange.mockReset();
     deleteClicked.mockReset();
   });
@@ -41,9 +41,10 @@ describe('ScheduledValueTimespanRow', () => {
             rowIdentifier={42}
             timespan={timespan}
             timezone="UTC"
-            attributeDidChange={attributeDidChange}
+            finishDidChange={finishDidChange}
             valueDidChange={valueDidChange}
             deleteClicked={deleteClicked}
+            isLastTimespan={false}
             {...props}
           />
         </tbody>
@@ -65,7 +66,7 @@ describe('ScheduledValueTimespanRow', () => {
 
   describe('isValid', () => {
     test('it requires a value', () => {
-      expect(scheduledValueTimespanIsValid({})).toBeFalsy();
+      expect(scheduledValueTimespanIsValid({ value: undefined })).toBeFalsy();
       expect(scheduledValueTimespanIsValid({ value: null })).toBeFalsy();
       expect(scheduledValueTimespanIsValid({ value: 6 })).toBeTruthy();
     });
