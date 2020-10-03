@@ -47,6 +47,9 @@
       "ticketType": "Tipo de {{ ticketName }}",
       "userId": "Identificador de usuario",
       "withdrawFromAllButton": "Retirar de todas"
+    },
+    "warnings": {
+      "emptyUserConProfileForm": ""
     }
   },
   "alerts": {

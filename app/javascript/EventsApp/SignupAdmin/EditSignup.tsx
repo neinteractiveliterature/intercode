@@ -1,90 +1,96 @@
 import React, { useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { Trans, useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
-import { AdminSignupQuery } from './queries';
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import ForceConfirmSignupModal from './ForceConfirmSignupModal';
 import Timespan from '../../Timespan';
-import { UpdateSignupCounted } from './mutations';
 import useModal from '../../ModalDialogs/useModal';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import AppRootContext from '../../AppRootContext';
+import { SignupFieldsFragment, useAdminSignupQueryQuery } from './queries.generated';
+import { useUpdateSignupCountedMutation } from './mutations.generated';
 
-function cityState(userConProfile) {
+function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state]
     .filter((item) => item && item.trim() !== '')
     .join(', ');
 }
 
-function cityStateZip(userConProfile) {
+function cityStateZip(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [cityState(userConProfile), userConProfile.zipcode]
     .filter((item) => item && item.trim() !== '')
     .join(' ');
 }
 
-function getMakeCountedConfirmPrompt(signup) {
+function getMakeCountedConfirmPrompt(signup: SignupFieldsFragment) {
   const { user_con_profile: userConProfile, run } = signup;
 
   return (
-    <div>
+    <Trans
+      i18nKey="events.signupAdmin.makeCountedConfirmPrompt"
+      values={{ name: userConProfile.name_without_nickname, eventTitle: run.event.title }}
+    >
       <p>
-        Are you sure? This will make {userConProfile.name_without_nickname}
-        &apos;s signup count towards attendee totals for {run.event.title}. {run.event.title} will
-        also count towards
-        {userConProfile.name_without_nickname}
-        &apos;s signup limit if there is a signup cap in place.
+        Are you sure? This will make {'{{ name }}’s'} signup count towards attendee totals for{' '}
+        {'{{ eventTitle }}'}. {'{{ eventTitle }}'} will also count towards
+        {'{{ name }}’s'} signup limit if there is a signup cap in place.
       </p>
       <p className="text-danger">
         Caution: this operation does not check whether the signup buckets are already full, and
         therefore may result in overfilling a bucket.
       </p>
-    </div>
+    </Trans>
   );
 }
 
-function getMakeNotCountedConfirmPrompt(signup) {
+function getMakeNotCountedConfirmPrompt(signup: SignupFieldsFragment) {
   const { user_con_profile: userConProfile, run } = signup;
 
   return (
-    <div>
+    <Trans
+      i18nKey="events.signupAdmin.makeCountedConfirmPrompt"
+      values={{ name: userConProfile.name_without_nickname, eventTitle: run.event.title }}
+    >
       <p>
-        Are you sure? This will make {userConProfile.name_without_nickname}
-        &apos;s signup not count towards attendee totals for {run.event.title}. It will also allow
-        {userConProfile.name_without_nickname} to sign up for an additional event if there is a
-        signup cap in place.
+        Are you sure? This will make {'{{ name }}’s'} signup not count towards attendee totals for{' '}
+        {'{{ eventTitle }}'}. It will also allow
+        {'{{ name }}'} to sign up for an additional event if there is a signup cap in place.
       </p>
       <p className="text-danger">
         Caution: this operation will pull additional attendees into the space freed up by making
         this signup not count.
       </p>
-    </div>
+    </Trans>
   );
 }
 
-const renderAddressItem = (userConProfile) => {
-  const elements = [
-    ['header', 'Address:'],
+const renderAddressItem = (
+  userConProfile: SignupFieldsFragment['user_con_profile'],
+  t: TFunction,
+) => {
+  const elements = ([
+    ['header', t('events.signupAdmin.addressHeader', 'Address:')],
     ['address', userConProfile.address],
     ['cityStateZip', cityStateZip(userConProfile)],
     ['country', userConProfile.country],
-  ].filter((pair) => pair[1] && pair[1].trim() !== '');
+  ] as const).filter((pair) => pair[1] && pair[1].trim() !== '');
 
   const listItems = elements.map(([key, element]) => <li key={key}>{element}</li>);
   return <ul className="list-unstyled">{listItems}</ul>;
 };
 
-function getToggleCountedConfirmPrompt(signup) {
+function getToggleCountedConfirmPrompt(signup: SignupFieldsFragment) {
   if (signup.counted) {
     return getMakeNotCountedConfirmPrompt(signup);
   }
@@ -92,19 +98,31 @@ function getToggleCountedConfirmPrompt(signup) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-function EditSignup({ teamMembersUrl }) {
+export type EditSignupProps = {
+  teamMembersUrl: string;
+};
+
+function EditSignup({ teamMembersUrl }: EditSignupProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const id = Number.parseInt(useParams().id, 10);
-  const { data, loading, error } = useQuery(AdminSignupQuery, { variables: { id } });
+  const id = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const { data, loading, error } = useAdminSignupQueryQuery({ variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
-  const [updateCountedMutate] = useMutation(UpdateSignupCounted);
+  const [updateCountedMutate] = useUpdateSignupCountedMutation();
   const confirm = useConfirm();
+  const { t } = useTranslation();
 
   usePageTitle(
     useValueUnless(
       () =>
-        `Editing signup for “${data.signup.user_con_profile.name_without_nickname}” - ${data.signup.run.event.title}`,
+        t(
+          'events.signupAdmin.editPageTitle',
+          'Editing signup for “{{ name }}” - {{ eventTitle }}',
+          {
+            name: data?.signup.user_con_profile.name_without_nickname,
+            eventTitle: data?.signup.run.event.title,
+          },
+        ),
       error || loading,
     ),
   );
@@ -129,7 +147,7 @@ function EditSignup({ teamMembersUrl }) {
   }
 
   const renderUserSection = () => {
-    const { signup } = data;
+    const { signup } = data!;
     const { user_con_profile: userConProfile } = signup;
 
     return (
@@ -145,25 +163,34 @@ function EditSignup({ teamMembersUrl }) {
           <div className="lead">{userConProfile.name_without_nickname}</div>
         </div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">Nickname: {userConProfile.nickname}</li>
           <li className="list-group-item">
-            Age at {signup.run.event.title}:{' '}
-            {ageAsOf(moment(userConProfile.birth_date), moment(signup.run.starts_at))}
+            {t('events.signupAdmin.nicknameHeader', 'Nickname:')} {userConProfile.nickname}
+          </li>
+          <li className="list-group-item">
+            {t('events.signupAdmin.ageHeader', 'Age at {{ eventTitle }}:', {
+              eventTitle: signup.run.event.title,
+            })}{' '}
+            {ageAsOf(
+              userConProfile.birth_date ? moment(userConProfile.birth_date) : undefined,
+              moment(signup.run.starts_at),
+            )}
           </li>
           <li className={classNames('list-group-item')}>
-            Email: <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
+            {t('events.signupAdmin.emailHeader', 'Email:')}{' '}
+            <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
           </li>
           <li className="list-group-item">
-            Phone: <a href={`tel:${userConProfile.mobile_phone}`}>{userConProfile.mobile_phone}</a>
+            {t('events.signupAdmin.phoneHeader', 'Phone:')}{' '}
+            <a href={`tel:${userConProfile.mobile_phone}`}>{userConProfile.mobile_phone}</a>
           </li>
-          <li className="list-group-item">{renderAddressItem(userConProfile)}</li>
+          <li className="list-group-item">{renderAddressItem(userConProfile, t)}</li>
         </ul>
       </div>
     );
   };
 
   const renderForceConfirmButton = () => {
-    if (!data.currentAbility.can_force_confirm_signup) {
+    if (!data || !data.currentAbility.can_force_confirm_signup) {
       return null;
     }
 
@@ -183,6 +210,10 @@ function EditSignup({ teamMembersUrl }) {
   };
 
   const renderCountedToggle = () => {
+    if (!data) {
+      return null;
+    }
+
     const { signup } = data;
 
     return (
@@ -212,6 +243,10 @@ function EditSignup({ teamMembersUrl }) {
   };
 
   const renderRunSection = () => {
+    if (!data) {
+      return null;
+    }
+
     const { signup } = data;
     const { run } = signup;
     const { event } = run;
@@ -221,10 +256,10 @@ function EditSignup({ teamMembersUrl }) {
       (tm) => tm.user_con_profile.id === signup.user_con_profile.id,
     );
     const bucket = signup.bucket_key
-      ? registrationPolicy.buckets.find((b) => b.key === signup.bucket_key)
+      ? registrationPolicy?.buckets.find((b) => b.key === signup.bucket_key)
       : null;
     const requestedBucket = signup.requested_bucket_key
-      ? registrationPolicy.buckets.find((b) => b.key === signup.requested_bucket_key)
+      ? registrationPolicy?.buckets.find((b) => b.key === signup.requested_bucket_key)
       : null;
 
     return (
@@ -290,7 +325,11 @@ function EditSignup({ teamMembersUrl }) {
 
   return (
     <>
-      <h1 className="mb-4">Edit signup for {data.signup.run.event.title}</h1>
+      <h1 className="mb-4">
+        {t('events.signupAdmin.editPageHeader', 'Edit signup for {{ eventTitle }}', {
+          eventTitle: data?.signup.run.event.title,
+        })}
+      </h1>
 
       <div className="row">
         <div className="col col-md-6">{renderUserSection()}</div>
@@ -299,22 +338,18 @@ function EditSignup({ teamMembersUrl }) {
       </div>
 
       <ForceConfirmSignupModal
-        signup={forceConfirmModal.visible ? data.signup : null}
+        signup={forceConfirmModal.visible ? data!.signup : undefined}
         onComplete={forceConfirmModal.close}
         onCancel={forceConfirmModal.close}
       />
 
       <ChangeBucketModal
-        signup={changeBucketModal.visible ? data.signup : null}
+        signup={changeBucketModal.visible ? data!.signup : undefined}
         onComplete={changeBucketModal.close}
         onCancel={changeBucketModal.close}
       />
     </>
   );
 }
-
-EditSignup.propTypes = {
-  teamMembersUrl: PropTypes.string.isRequired,
-};
 
 export default EditSignup;

@@ -1,11 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
-function AddToCalendarDropdown({ icalSecret, className }) {
+export type AddToCalendarDropdownProps = {
+  icalSecret: string;
+  className?: string;
+};
+
+function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps) {
   const { t } = useTranslation();
   const icalUrl = new URL(
     `/calendars/user_schedule/${encodeURIComponent(icalSecret)}`,
@@ -13,12 +17,12 @@ function AddToCalendarDropdown({ icalSecret, className }) {
   );
   icalUrl.protocol = 'webcal';
   const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(
-    icalUrl,
+    icalUrl.toString(),
   )}`;
 
   return (
     <DropdownMenu
-      buttonClassName={`${className} dropdown-toggle`}
+      buttonClassName={`${className ?? 'btn btn-outline-secondary'} dropdown-toggle`}
       buttonContent={
         <>
           <i className="fa fa-calendar" aria-hidden />
@@ -36,7 +40,7 @@ function AddToCalendarDropdown({ icalSecret, className }) {
         <i className="fa fa-google" aria-hidden />{' '}
         {t('addToCalendarDropdown.subscribeGoogle', 'Subscribe on Google Calendar')}
       </a>
-      <a className="dropdown-item" href={icalUrl}>
+      <a className="dropdown-item" href={icalUrl.toString()}>
         <i className="fa fa-calendar" aria-hidden />{' '}
         {t('addToCalendarDropdown.subscribeICal', 'Subscribe via iCal')}
       </a>
@@ -49,14 +53,5 @@ function AddToCalendarDropdown({ icalSecret, className }) {
     </DropdownMenu>
   );
 }
-
-AddToCalendarDropdown.propTypes = {
-  icalSecret: PropTypes.string.isRequired,
-  className: PropTypes.string,
-};
-
-AddToCalendarDropdown.defaultProps = {
-  className: 'btn btn-outline-secondary',
-};
 
 export default AddToCalendarDropdown;

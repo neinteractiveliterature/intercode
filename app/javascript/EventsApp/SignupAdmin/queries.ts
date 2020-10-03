@@ -257,6 +257,7 @@ export const RunHeaderRunInfoQuery = gql`
       run(id: $runId) {
         id
         starts_at
+        title_suffix
       }
     }
   }

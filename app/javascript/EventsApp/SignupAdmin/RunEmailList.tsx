@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { pluralize, underscore, humanize } from 'inflected';
-import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
-import { RunSignupsTableSignupsQuery } from './queries';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
+import {
+  RunSignupsTableSignupsQueryQuery,
+  useRunSignupsTableSignupsQueryQuery,
+} from './queries.generated';
 
-function getEmails({ data, includes }) {
+function getEmails({
+  data,
+  includes,
+}: {
+  data: RunSignupsTableSignupsQueryQuery;
+  includes: string[];
+}) {
   const teamMemberUserConProfileIds = data.event.team_members.map(
     (teamMember) => teamMember.user_con_profile.id,
   );
 
-  const includesObject = {};
+  const includesObject: { [field: string]: boolean } = {};
   includes.forEach((value) => {
     includesObject[value] = true;
   });
@@ -41,15 +48,21 @@ function getEmails({ data, includes }) {
   });
 
   return signups.map((signup) => ({
-    email: signup.user_con_profile.email,
+    email: signup.user_con_profile.email ?? '',
     name: signup.user_con_profile.name_without_nickname,
   }));
 }
 
-function RunEmailList({ runId, eventId, separator }) {
+export type RunEmailListProps = {
+  runId: number;
+  eventId: number;
+  separator: ', ' | '; ';
+};
+
+function RunEmailList({ runId, eventId, separator }: RunEmailListProps) {
   const { t } = useTranslation();
   const [includes, setIncludes] = useState(['teamMembers', 'confirmed']);
-  const { data, loading, error } = useQuery(RunSignupsTableSignupsQuery, {
+  const { data, loading, error } = useRunSignupsTableSignupsQueryQuery({
     variables: {
       runId,
       eventId,
@@ -67,7 +80,7 @@ function RunEmailList({ runId, eventId, separator }) {
         separator === '; '
           ? t('events.signupsAdmin.emailsSemicolonTitle', 'Emails (semicolon-separated)')
           : t('events.signupsAdmin.emailsCommaTitle', 'Emails (comma-separated)');
-      return `${mainTitle} - ${data.event.title}`;
+      return `${mainTitle} - ${data?.event.title}`;
     }, error || loading),
   );
 
@@ -81,7 +94,7 @@ function RunEmailList({ runId, eventId, separator }) {
 
   return (
     <EmailList
-      emails={getEmails({ data, includes })}
+      emails={getEmails({ data: data!, includes })}
       separator={separator}
       renderToolbarContent={() => (
         <ChoiceSetFilter
@@ -91,7 +104,7 @@ function RunEmailList({ runId, eventId, separator }) {
               label: t(
                 'events.signupAdmin.emailFilters.teamMembers',
                 'Include {{ teamMemberName }}',
-                { teamMemberName: pluralize(data.event.event_category.team_member_name) },
+                { teamMemberName: pluralize(data!.event.event_category.team_member_name) },
               ),
               value: 'teamMembers',
             },
@@ -104,7 +117,7 @@ function RunEmailList({ runId, eventId, separator }) {
               value: 'waitlisted',
             },
           ]}
-          filter={{ value: includes }}
+          filter={{ id: 'includes', value: includes }}
           onChange={setIncludes}
           renderHeaderCaption={(currentIncludes) => {
             if (currentIncludes.length === 0) {
@@ -116,7 +129,7 @@ function RunEmailList({ runId, eventId, separator }) {
               .map((include) => {
                 if (include === 'teamMembers') {
                   return humanize(
-                    underscore(pluralize(data.event.event_category.team_member_name)),
+                    underscore(pluralize(data!.event.event_category.team_member_name)),
                   );
                 }
 
@@ -129,11 +142,5 @@ function RunEmailList({ runId, eventId, separator }) {
     />
   );
 }
-
-RunEmailList.propTypes = {
-  runId: PropTypes.number.isRequired,
-  eventId: PropTypes.number.isRequired,
-  separator: PropTypes.oneOf([', ', '; ']).isRequired,
-};
 
 export default RunEmailList;
