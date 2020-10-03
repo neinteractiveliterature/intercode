@@ -199,7 +199,7 @@ export type RunHeaderRunInfoQueryQuery = (
       )> }
     )>, run: (
       { __typename?: 'Run' }
-      & Pick<Types.Run, 'id' | 'starts_at'>
+      & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
     ) }
   ) }
 );
@@ -645,6 +645,7 @@ export const RunHeaderRunInfoQueryDocument = gql`
     run(id: $runId) {
       id
       starts_at
+      title_suffix
     }
   }
 }

@@ -47,6 +47,9 @@
       "ticketType": "{{ ticketName }} type",
       "userId": "User ID",
       "withdrawFromAllButton": "Withdraw from all"
+    },
+    "warnings": {
+      "emptyUserConProfileForm": "<0>This convention has no user profile form set up, or the form is empty.</0><1>To create or edit the user profile form, go here.</1><2></2><3>To set it as the user profile form for this convention, go here.</3>"
     }
   },
   "alerts": {
@@ -159,6 +162,9 @@
     "404": "<0>Oops!</0><1>We couldn’t find a page at the location {{pathname}}.</1>",
     "unauthorized": "Sorry, your account is not authorized to view this page."
   },
+  "eventCategorySelect": {
+    "defaultLabel": "Event Category"
+  },
   "eventProposals": {
     "edit": {
       "deleteButton": "Delete proposal",
@@ -195,9 +201,6 @@
     "history": {
       "title": "History"
     },
-    "prospectiveRunSchedule": {
-      "title": "Schedule preview"
-    },
     "ratings": {
       "clearButton": "Clear rating",
       "favoriteButton": "Mark as favorite",
@@ -206,21 +209,31 @@
     "runCapacity": {
       "label": "Capacity",
       "slotCount": "{{ count }} slot",
+      "slotCount_plural": "{{ count }} slots",
       "slotRemainingCount": "{{ filledCount }} of {{ count }} slot filled",
+      "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled",
       "unlimitedSimple": "unlimited",
       "unlimitedWithCount": "unlimited ({{ signupCount }} signed up)",
       "waitlistCount": "Waitlist - {{ waitlistCount }}",
-      "zeroCapacity": "0 slots",
-      "slotCount_plural": "{{ count }} slots",
-      "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled"
+      "zeroCapacity": "0 slots"
     },
     "runHeader": {
-      "maxSignups": "Max signups: {{ count }}"
+      "maxSignups": "Max signups: {{ count }}",
+      "maxSignups_plural": "Max signups: {{ count }}"
     },
     "signupAdmin": {
+      "addressHeader": "Address:",
       "ageCheckHeader": "Age check",
       "ageHeader": "Age",
       "bucketHeader": "Bucket",
+      "bucketInput": {
+        "currentBucketLabel": "current",
+        "userRequestedBucketLabel": "user requested"
+      },
+      "changeBucketHeader": "Change signup bucket",
+      "changeBucketInputCaption": "Please choose a signup bucket for {{ name }}.",
+      "editPageHeader": "Edit signup for {{ eventTitle }}",
+      "editPageTitle": "Editing signup for “{{ name }}” - {{ eventTitle }}",
       "editTitle": "Edit signup",
       "emailFilters": {
         "confirmed": "Include confirmed",
@@ -229,6 +242,11 @@
         "waitlisted": "Include waitlisted"
       },
       "emailHeader": "Email",
+      "forceConfirmSignup": {
+        "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",
+        "header": "Force signup into run",
+        "overfillWarning": "Caution: this operation ignores registration bucket capacity (and therefore can overfill the event run). Doing this may have unexpected effects if other attendees drop out of the event. Adjusting the event capacity after doing this is strongly recommended."
+      },
       "history": {
         "bucketHeader": "Bucket",
         "changeHeader": "Change",
@@ -237,7 +255,10 @@
       },
       "historyPageTitle": "Signup change history - {{ eventTitle }}",
       "indexPageTitle": "Signups - {{ eventTitle }}",
+      "makeCountedConfirmPrompt": "<0>Are you sure? This will make {{ name }}’s signup count towards attendee totals for {{ eventTitle }}. {{ eventTitle }} will also count towards{{ name }}’s signup limit if there is a signup cap in place.</0><1>Caution: this operation does not check whether the signup buckets are already full, and therefore may result in overfilling a bucket.</1>",
       "nameHeader": "Name",
+      "nicknameHeader": "Nickname:",
+      "phoneHeader": "Phone:",
       "sequenceHeader": "Seq",
       "stateHeader": "State",
       "title": "Signups"
@@ -274,6 +295,7 @@
       "nonEventProvidedTicketDescription": "{{ name }} has a {{ ticketType }} {{ ticketName }}.",
       "provideTicketButton": "Provide {{ ticketName }}",
       "provideTicketChoice": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
+      "provideTicketChoice_plural": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
       "provideTicketLink": "Provide {{ ticketName }}",
       "receiveConEmailHeader": "Receive email from con",
       "receiveConEmailLabel": "Receive email from convention",
@@ -289,6 +311,7 @@
       "selectUserConProfilePrompt": "Select a person to continue.",
       "showEmailLabel": "Show individual email address on event page <2>Selecting this option will make the individual email address for this {{teamMemberName}} appear on the event page, but only for logged-in site users.</2>",
       "ticketProvidability": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
+      "ticketProvidability_plural": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
       "unticketedWarning": "{{name}}<1> has no {{ticketName}} for {{conventionName}}.</1> Without a {{ticketName}}, users cannot sign up for events at the convention.",
       "updateButton": "Update {{ teamMemberName }}",
       "userConProfileLabel": "{{ teamMemberName }} to add",
@@ -312,6 +335,7 @@
     "ageRestrictions": {
       "descriptionLabel": "Publicly visible age restrictions text",
       "minimumAgeDescription": "Must be {{ count }} years or older.",
+      "minimumAgeDescription_plural": "Must be {{ count }} years or older.",
       "minimumAgeHelpText": "If specified, the signups list will warn you if someone too young to play has signed up. <2>The site does not enforce age restrictions; you must do so yourself.</2>",
       "minimumAgeLabel": "Minimum age",
       "noRestrictions": "No age restrictions."
@@ -437,7 +461,6 @@
     }
   },
   "schedule": {
-    "skeletonTitle": "Loading...",
     "legends": {
       "attendeeCounts": {
         "confirmed": "confirmed signups",

@@ -1,18 +1,21 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { RunHeaderRunInfoQuery } from './queries';
 import { timespanFromRun } from '../../TimespanUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 import AppRootContext from '../../AppRootContext';
+import { useRunHeaderRunInfoQueryQuery } from './queries.generated';
 
-function RunHeader({ eventId, runId }) {
+export type RunHeaderProps = {
+  eventId: number;
+  runId: number;
+};
+
+function RunHeader({ eventId, runId }: RunHeaderProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(RunHeaderRunInfoQuery, {
+  const { data, loading, error } = useRunHeaderRunInfoQueryQuery({
     variables: { runId, eventId },
   });
 
@@ -24,32 +27,34 @@ function RunHeader({ eventId, runId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  const { event } = data!;
+
   return (
     <div>
       <h1 className="mb-0">
-        {data.event.title}
-        {data.event.run.title_suffix && data.event.run.title_suffix.trim() !== ''
-          ? `- ${data.event.run.title_suffix}`
+        {event.title}
+        {event.run.title_suffix && event.run.title_suffix.trim() !== ''
+          ? `- ${event.run.title_suffix}`
           : ''}
       </h1>
 
       <h3 className="mt-0">
-        {timespanFromRun(timezoneName, data.event, data.event.run).humanizeInTimezone(timezoneName)}
+        {timespanFromRun(timezoneName, event, event.run).humanizeInTimezone(timezoneName)}
       </h3>
 
       <ul className="list-inline">
-        {data.event.registration_policy.slots_limited && (
+        {event.registration_policy?.slots_limited && (
           <li className="list-inline-item">
             {t('events.runHeader.maxSignups', 'Max signups: {{ count }}', {
-              count: data.event.registration_policy.total_slots,
+              count: event.registration_policy.total_slots ?? undefined,
             })}
           </li>
         )}
 
-        {data.event.registration_policy.buckets.length > 1 ? (
+        {(event.registration_policy?.buckets.length ?? 0) > 1 ? (
           <li className="list-inline-item">
             (
-            {data.event.registration_policy.buckets
+            {event.registration_policy?.buckets
               .map((bucket) => `${bucket.name}: ${bucket.total_slots}`)
               .join(', ')}
             )
@@ -59,10 +64,5 @@ function RunHeader({ eventId, runId }) {
     </div>
   );
 }
-
-RunHeader.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  runId: PropTypes.number.isRequired,
-};
 
 export default RunHeader;
