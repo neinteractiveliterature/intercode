@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Switch, Route, Redirect, useParams } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
@@ -34,8 +33,13 @@ function renderScheduleRoutes() {
   ];
 }
 
-function RunRoutes({ eventId, eventPath }) {
-  const runId = Number.parseInt(useParams().runId, 10);
+type RunRoutesProps = {
+  eventId: number;
+  eventPath: string;
+};
+
+function RunRoutes({ eventId, eventPath }: RunRoutesProps) {
+  const runId = Number.parseInt(useParams<{ runId: string }>().runId, 10);
   const runPath = `${eventPath}/runs/${runId}`;
 
   return (
@@ -50,14 +54,9 @@ function RunRoutes({ eventId, eventPath }) {
   );
 }
 
-RunRoutes.propTypes = {
-  eventPath: PropTypes.string.isRequired,
-  eventId: PropTypes.number.isRequired,
-};
-
 function EventRoutes() {
   const { siteMode } = useContext(AppRootContext);
-  const eventIdSegment = useParams().eventId;
+  const eventIdSegment = useParams<{ eventId: string }>().eventId;
   const eventId = Number.parseInt(eventIdSegment, 10);
   const eventPath = `/events/${eventIdSegment}`;
 
