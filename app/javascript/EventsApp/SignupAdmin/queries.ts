@@ -257,6 +257,7 @@ export const RunHeaderRunInfoQuery = gql`
       run(id: $runId) {
         id
         starts_at
+        title_suffix
       }
     }
   }
@@ -301,6 +302,7 @@ export const RunSignupSummaryQuery = gql`
 
       runs {
         id
+        starts_at
       }
 
       run(id: $runId) {

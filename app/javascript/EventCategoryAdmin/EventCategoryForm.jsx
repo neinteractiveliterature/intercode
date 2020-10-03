@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, pluralize } from 'inflected';
 import classNames from 'classnames';
@@ -10,10 +10,10 @@ import ColorPicker from '../ColorPicker';
 import FakeEventRun from '../EventsApp/ScheduleGrid/FakeEventRun';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { mutator, Transforms } from '../ComposableFormUtils';
-import PopperDropdown from '../UIComponents/PopperDropdown';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
+import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 
 function autogenerateColors(eventCategory) {
   if (!eventCategory.default_color) {
@@ -32,6 +32,56 @@ function autogenerateColors(eventCategory) {
     signed_up_color:
       signedUpColor.getAlpha() === 1.0 ? signedUpColor.toHexString() : signedUpColor.toRgbString(),
   };
+}
+
+function EventColorPicker({ variant, eventRunProps, eventCategory, setColor, disabled }) {
+  const [dropdownButton, setDropdownButton] = useState(null);
+  const [tooltip, setTooltip] = useState(null);
+  const [arrow, setArrow] = useState(null);
+  const [visible, setVisible] = useState(false);
+
+  const { styles, attributes, state, update } = useIntercodePopperWithAutoClosing(
+    tooltip,
+    dropdownButton,
+    arrow,
+    setVisible,
+  );
+  const toggle = useToggleOpen(setVisible, update);
+
+  return (
+    <>
+      <div className="col-12 col-md-4 col-lg-3 p-1 cursor-pointer">
+        <FakeEventRun
+          withRef={setDropdownButton}
+          clickable
+          onClick={toggle}
+          eventCategory={eventCategory}
+          availability={variant === 'full' ? 0.0 : 0.5}
+          {...eventRunProps}
+        >
+          <SignupStatusBadge signupStatus={eventRunProps.signupStatus} />
+          {humanize(variant)}
+        </FakeEventRun>
+      </div>
+      <div
+        className={classNames('card', 'popover', `bs-popover-${state?.placement}`, {
+          'd-none': !visible,
+        })}
+        ref={setTooltip}
+        style={styles.popper}
+        {...attributes.popper}
+      >
+        <div className="card-body">
+          <ColorPicker
+            value={eventCategory[`${variant}_color`]}
+            onChange={setColor}
+            disabled={disabled}
+          />
+        </div>
+        <span ref={setArrow} style={styles.arrow} className="arrow" />
+      </div>
+    </>
+  );
 }
 
 function EventCategoryForm({
@@ -130,44 +180,14 @@ function EventCategoryForm({
             { variant: 'signed_up', eventRunProps: { signupStatus: 'confirmed' } },
             { variant: 'full', eventRunProps: { runFull: true } },
           ].map(({ variant, eventRunProps }) => (
-            <PopperDropdown
-              placement="bottom"
-              renderReference={({ ref, toggle }) => (
-                <div className="col-12 col-md-4 col-lg-3 p-1 cursor-pointer">
-                  <FakeEventRun
-                    withRef={ref}
-                    clickable
-                    onClick={toggle}
-                    eventCategory={value}
-                    availability={variant === 'full' ? 0.0 : 0.5}
-                    {...eventRunProps}
-                  >
-                    <SignupStatusBadge signupStatus={eventRunProps.signupStatus} />
-                    {humanize(variant)}
-                  </FakeEventRun>
-                </div>
-              )}
-            >
-              {({ placement, visible, arrowProps, ref, style }) => (
-                <div
-                  className={classNames('card', 'popover', `bs-popover-${placement}`, {
-                    'd-none': !visible,
-                  })}
-                  ref={ref}
-                  style={style}
-                  data-placement={placement}
-                >
-                  <div className="card-body">
-                    <ColorPicker
-                      value={value[`${variant}_color`]}
-                      onChange={valueMutator[`${variant}_color`]}
-                      disabled={disabled}
-                    />
-                  </div>
-                  <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
-                </div>
-              )}
-            </PopperDropdown>
+            <EventColorPicker
+              key={variant}
+              variant={variant}
+              eventRunProps={eventRunProps}
+              eventCategory={value}
+              setColor={valueMutator[`${variant}_color`]}
+              disabled={disabled}
+            />
           ))}
         </div>
 

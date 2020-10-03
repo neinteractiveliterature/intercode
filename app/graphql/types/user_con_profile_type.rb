@@ -26,11 +26,11 @@ class Types::UserConProfileType < Types::BaseObject
   def privileges
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:privileges)
   end
-  field :name, String, null: true
-  field :name_without_nickname, String, null: true
-  field :name_inverted, String, null: true
-  field :first_name, String, null: true
-  field :last_name, String, null: true
+  field :name, String, null: false
+  field :name_without_nickname, String, null: false
+  field :name_inverted, String, null: false
+  field :first_name, String, null: false
+  field :last_name, String, null: false
   field :nickname, String, null: true
   field :gravatar_url, String, null: false
   field :gravatar_enabled, Boolean, null: false

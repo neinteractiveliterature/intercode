@@ -1,7 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
+import { Placement } from 'popper.js';
 
+import { usePopper } from 'react-popper';
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
@@ -9,25 +11,25 @@ import buildEventUrl from '../buildEventUrl';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { PopperDropdownChildrenProps } from '../../UIComponents/PopperDropdown';
 import { ScheduleEvent, ScheduleRun } from './Schedule';
 import { RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import SignupCountData from '../SignupCountData';
 
 export type RunDetailsProps = {
-  popperStyle: PopperDropdownChildrenProps['style'];
-  placement: PopperDropdownChildrenProps['placement'];
-  arrowProps: PopperDropdownChildrenProps['arrowProps'];
-  toggle: PopperDropdownChildrenProps['toggle'];
+  placement?: Placement;
+  styles: ReturnType<typeof usePopper>['styles'];
+  attributes: ReturnType<typeof usePopper>['attributes'];
+  toggle: () => void;
   event: ScheduleEvent;
   run: ScheduleRun;
   runDimensions: RunDimensions;
   signupCountData: SignupCountData;
+  arrowRef: React.Ref<HTMLSpanElement>;
 };
 
 const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
   (
-    { popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData },
+    { styles, placement, attributes, event, run, runDimensions, toggle, signupCountData, arrowRef },
     ref,
   ) => {
     const { myProfile } = useContext(AppRootContext);
@@ -48,7 +50,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
       event,
       signupCountData,
     ]);
-    const roomsDescription = useMemo(() => run.room_names.sort().join(', '), [run.room_names]);
+    const roomsDescription = useMemo(() => [...run.room_names].sort().join(', '), [run.room_names]);
 
     const ratingChanged = async (rating: number) => {
       await rateEvent(event.id, rating);
@@ -59,10 +61,11 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
       <div
         className={`popover schedule-grid-run-details-popover bs-popover-${placement} show`}
         ref={ref}
-        style={popperStyle}
+        style={styles.popper}
         role="tooltip"
+        {...attributes.popper}
       >
-        <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
+        <span ref={arrowRef} style={styles.arrow} className="arrow" />
         <div className="schedule-grid-run-details-content">
           <div className="popover-header">
             <div className="d-flex align-items-center">

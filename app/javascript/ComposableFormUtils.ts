@@ -30,7 +30,10 @@ export function parseMoneyOrNull(value: string) {
   };
 }
 
-export function forceTimezoneForDatetimeValue(value: string | null | Moment, timezoneName: string): string | null {
+export function forceTimezoneForDatetimeValue(
+  value: string | null | Moment,
+  timezoneName: string,
+): string | null {
   if (value == null) {
     return value;
   }
@@ -45,7 +48,10 @@ export function forceTimezoneForDatetimeValue(value: string | null | Moment, tim
   return valueInTimezone.toISOString(true);
 }
 
-export function convertDatetimeValue(value: string | null | Moment, timezoneName?: string) {
+export function convertDatetimeValue(
+  value: string | null | Moment | undefined,
+  timezoneName?: string,
+) {
   if (value == null) {
     return value;
   }
@@ -236,7 +242,9 @@ export function transformsReducer<StateType>(
       case 'change':
         return {
           ...state,
-          [action.key]: (transforms[(action.key as keyof StateType)] || Transforms.identity)(action.value),
+          [action.key]: (transforms[action.key as keyof StateType] || Transforms.identity)(
+            action.value,
+          ),
         };
       default:
         return state;
