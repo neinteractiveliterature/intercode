@@ -1,11 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateStaffPositionPermissions } from './mutations';
-import { StaffPositionsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
@@ -17,17 +14,37 @@ import {
 } from '../Permissions/PermissionUtils';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
+import { StaffPositionsQueryQuery, useStaffPositionsQueryQuery } from './queries.generated';
+import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
+import { useUpdateStaffPositionPermissionsMutation } from './mutations.generated';
+import { notEmpty } from '../ValueUtils';
+import FourOhFourPage from '../FourOhFourPage';
 
-const CmsContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
-const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
-const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
+const CmsContentGroupPermissionNames = getPermissionNamesForModelType(
+  PermissionedModelTypeIndicator.CmsContentGroup,
+);
+const EventCategoryPermissionNames = getPermissionNamesForModelType(
+  PermissionedModelTypeIndicator.EventCategory,
+);
+const ConventionPermissionNames = getPermissionNamesForModelType(
+  PermissionedModelTypeIndicator.Convention,
+);
 
-function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
+type EditStaffPositionPermissionsForm = {
+  convention: StaffPositionsQueryQuery['convention'];
+  staffPosition: StaffPositionsQueryQuery['convention']['staff_positions'][0];
+};
+
+function EditStaffPositionPermissionsForm({
+  staffPosition,
+  convention,
+}: EditStaffPositionPermissionsForm) {
   const history = useHistory();
-  const [changeSet, add, remove] = useChangeSet();
-  const [error, setError] = useState(null);
+  const [changeSet, add, remove] = useChangeSet<PermissionWithId>();
+  const [error, setError] = useState<ApolloError>();
   const [mutationInProgress, setMutationInProgress] = useState(false);
-  const [mutate] = useMutation(UpdateStaffPositionPermissions);
+  const [mutate] = useUpdateStaffPositionPermissionsMutation();
   const tabProps = useTabs([
     {
       id: 'convention',
@@ -52,7 +69,7 @@ function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
           permissionNames={EventCategoryPermissionNames}
           initialPermissions={staffPosition.permissions}
           rowType="model"
-          models={convention.event_categories}
+          rows={convention.event_categories}
           changeSet={changeSet}
           add={add}
           remove={remove}
@@ -76,7 +93,7 @@ function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
           permissionNames={CmsContentGroupPermissionNames}
           initialPermissions={staffPosition.permissions}
           rowType="model"
-          models={convention.cms_content_groups}
+          rows={convention.cms_content_groups}
           changeSet={changeSet}
           add={add}
           remove={remove}
@@ -96,11 +113,14 @@ function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
         variables: {
           staffPositionId: staffPosition.id,
           grantPermissions: changeSet.getAddValues().map(buildPermissionInput),
-          revokePermissions: changeSet.getRemoveIds().map((removeId) => {
-            const existingPermission = staffPosition.permissions.find((p) => p.id === removeId);
+          revokePermissions: changeSet
+            .getRemoveIds()
+            .map((removeId) => {
+              const existingPermission = staffPosition.permissions.find((p) => p.id === removeId);
 
-            return buildPermissionInput(existingPermission);
-          }),
+              return existingPermission ? buildPermissionInput(existingPermission) : undefined;
+            })
+            .filter(notEmpty),
         },
       });
 
@@ -137,42 +157,11 @@ function EditStaffPositionPermissionsForm({ staffPosition, convention }) {
   );
 }
 
-EditStaffPositionPermissionsForm.propTypes = {
-  staffPosition: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    permissions: PropTypes.arrayOf(
-      PropTypes.shape({
-        model: PropTypes.shape({
-          __typename: PropTypes.string.isRequired,
-          id: PropTypes.number.isRequired,
-        }).isRequired,
-        permission: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    event_categories: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    cms_content_groups: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-};
-
 function EditStaffPositionPermissions() {
-  const { id } = useParams();
-  const { data, loading, error } = useQuery(StaffPositionsQuery);
+  const { id } = useParams<{ id: string }>();
+  const { data, loading, error } = useStaffPositionsQueryQuery();
 
-  const convention = useMemo(() => (loading || error ? null : data.convention), [
+  const convention = useMemo(() => (loading || error || !data ? null : data.convention), [
     loading,
     error,
     data,
@@ -191,7 +180,13 @@ function EditStaffPositionPermissions() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return <EditStaffPositionPermissionsForm staffPosition={staffPosition} convention={convention} />;
+  if (!staffPosition) {
+    return <FourOhFourPage />;
+  }
+
+  return (
+    <EditStaffPositionPermissionsForm staffPosition={staffPosition} convention={convention!} />
+  );
 }
 
 export default EditStaffPositionPermissions;

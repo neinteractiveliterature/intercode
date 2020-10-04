@@ -11,15 +11,15 @@ export type RootSiteConventionsAdminTableQueryQueryVariables = Types.Exact<{
 
 
 export type RootSiteConventionsAdminTableQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { conventions_paginated: (
-    { __typename?: 'ConventionsPagination' }
+    { __typename: 'ConventionsPagination' }
     & Pick<Types.ConventionsPagination, 'total_entries' | 'total_pages'>
     & { entries: Array<(
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name'>
       & { organization?: Types.Maybe<(
-        { __typename?: 'Organization' }
+        { __typename: 'Organization' }
         & Pick<Types.Organization, 'id' | 'name'>
       )> }
     )> }
@@ -27,16 +27,16 @@ export type RootSiteConventionsAdminTableQueryQuery = (
 );
 
 export type ConventionDisplayFieldsFragment = (
-  { __typename?: 'Convention' }
+  { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'canceled' | 'timezone_name' | 'domain' | 'site_mode' | 'ticket_mode' | 'show_event_list' | 'show_schedule' | 'email_from'>
   & { maximum_event_signups?: Types.Maybe<(
-    { __typename?: 'ScheduledValue' }
+    { __typename: 'ScheduledValue' }
     & { timespans: Array<(
-      { __typename?: 'TimespanWithValue' }
+      { __typename: 'TimespanWithValue' }
       & Pick<Types.TimespanWithValue, 'start' | 'finish' | 'value'>
     )> }
   )>, organization?: Types.Maybe<(
-    { __typename?: 'Organization' }
+    { __typename: 'Organization' }
     & Pick<Types.Organization, 'id' | 'name'>
   )> }
 );
@@ -47,9 +47,9 @@ export type ConventionDisplayQueryQueryVariables = Types.Exact<{
 
 
 export type ConventionDisplayQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & ConventionDisplayFieldsFragment
   ) }
@@ -59,9 +59,9 @@ export type NewConventionModalQueryQueryVariables = Types.Exact<{ [key: string]:
 
 
 export type NewConventionModalQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { organizations: Array<(
-    { __typename?: 'Organization' }
+    { __typename: 'Organization' }
     & Pick<Types.Organization, 'id' | 'name'>
   )> }
 );

@@ -4,10 +4,10 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type AdminDepartmentFieldsFragment = (
-  { __typename?: 'Department' }
+  { __typename: 'Department' }
   & Pick<Types.Department, 'id' | 'name' | 'proposal_description'>
   & { event_categories: Array<(
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
   )> }
 );
@@ -16,15 +16,15 @@ export type DepartmentAdminQueryQueryVariables = Types.Exact<{ [key: string]: ne
 
 
 export type DepartmentAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_update_departments'>
   ), convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { departments: Array<(
-      { __typename?: 'Department' }
+      { __typename: 'Department' }
       & Pick<Types.Department, 'id'>
       & AdminDepartmentFieldsFragment
     )> }

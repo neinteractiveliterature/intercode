@@ -11,11 +11,11 @@ export type CreateCouponMutationVariables = Types.Exact<{
 
 
 export type CreateCouponMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCoupon?: Types.Maybe<(
-    { __typename?: 'CreateCouponPayload' }
+    { __typename: 'CreateCouponPayload' }
     & { coupon: (
-      { __typename?: 'Coupon' }
+      { __typename: 'Coupon' }
       & Pick<Types.Coupon, 'id'>
       & AdminCouponFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateCouponMutationVariables = Types.Exact<{
 
 
 export type UpdateCouponMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateCoupon?: Types.Maybe<(
-    { __typename?: 'UpdateCouponPayload' }
+    { __typename: 'UpdateCouponPayload' }
     & { coupon: (
-      { __typename?: 'Coupon' }
+      { __typename: 'Coupon' }
       & Pick<Types.Coupon, 'id'>
       & AdminCouponFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeleteCouponMutationVariables = Types.Exact<{
 
 
 export type DeleteCouponMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCoupon?: Types.Maybe<(
-    { __typename?: 'DeleteCouponPayload' }
+    { __typename: 'DeleteCouponPayload' }
     & Pick<Types.DeleteCouponPayload, 'clientMutationId'>
   )> }
 );

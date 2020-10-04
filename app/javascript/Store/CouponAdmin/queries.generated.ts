@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from '../couponFields.generated';
 import * as Apollo from '@apollo/client';
 export type AdminCouponFieldsFragment = (
-  { __typename?: 'Coupon' }
+  { __typename: 'Coupon' }
   & Pick<Types.Coupon, 'id' | 'usage_limit' | 'expires_at'>
   & CouponFieldsFragment
 );
@@ -20,15 +20,15 @@ export type AdminCouponsQueryQueryVariables = Types.Exact<{
 
 
 export type AdminCouponsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { coupons_paginated: (
-      { __typename?: 'CouponsPagination' }
+      { __typename: 'CouponsPagination' }
       & Pick<Types.CouponsPagination, 'current_page' | 'total_pages'>
       & { entries: Array<(
-        { __typename?: 'Coupon' }
+        { __typename: 'Coupon' }
         & Pick<Types.Coupon, 'id'>
         & AdminCouponFieldsFragment
       )> }

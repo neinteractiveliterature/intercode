@@ -7,9 +7,9 @@ export type ReportsMenuQueryQueryVariables = Types.Exact<{ [key: string]: never;
 
 
 export type ReportsMenuQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_mode' | 'ticket_name'>
   )> }
 );
@@ -18,34 +18,34 @@ export type AttendanceByPaymentAmountQueryQueryVariables = Types.Exact<{ [key: s
 
 
 export type AttendanceByPaymentAmountQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name'>
     & { reports: (
-      { __typename?: 'ConventionReports' }
+      { __typename: 'ConventionReports' }
       & { ticket_count_by_type_and_payment_amount: Array<(
-        { __typename?: 'TicketCountByTypeAndPaymentAmount' }
+        { __typename: 'TicketCountByTypeAndPaymentAmount' }
         & Pick<Types.TicketCountByTypeAndPaymentAmount, 'count'>
         & { ticket_type: (
-          { __typename?: 'TicketType' }
+          { __typename: 'TicketType' }
           & Pick<Types.TicketType, 'id' | 'name' | 'description'>
           & { pricing_schedule: (
-            { __typename?: 'ScheduledMoneyValue' }
+            { __typename: 'ScheduledMoneyValue' }
             & { timespans: Array<(
-              { __typename?: 'TimespanWithMoneyValue' }
+              { __typename: 'TimespanWithMoneyValue' }
               & { value: (
-                { __typename?: 'Money' }
+                { __typename: 'Money' }
                 & Pick<Types.Money, 'fractional' | 'currency_code'>
               ) }
             )> }
           ) }
         ), payment_amount: (
-          { __typename?: 'Money' }
+          { __typename: 'Money' }
           & Pick<Types.Money, 'fractional' | 'currency_code'>
         ) }
       )>, total_revenue: (
-        { __typename?: 'Money' }
+        { __typename: 'Money' }
         & Pick<Types.Money, 'fractional' | 'currency_code'>
       ) }
     ) }
@@ -56,25 +56,25 @@ export type EventProvidedTicketsQueryQueryVariables = Types.Exact<{ [key: string
 
 
 export type EventProvidedTicketsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name'>
     & { reports: (
-      { __typename?: 'ConventionReports' }
+      { __typename: 'ConventionReports' }
       & { event_provided_tickets: Array<(
-        { __typename?: 'EventProvidedTicketList' }
+        { __typename: 'EventProvidedTicketList' }
         & { provided_by_event: (
-          { __typename?: 'Event' }
+          { __typename: 'Event' }
           & Pick<Types.Event, 'id' | 'title'>
         ), tickets: Array<(
-          { __typename?: 'Ticket' }
+          { __typename: 'Ticket' }
           & Pick<Types.Ticket, 'id'>
           & { user_con_profile: (
-            { __typename?: 'UserConProfile' }
+            { __typename: 'UserConProfile' }
             & Pick<Types.UserConProfile, 'id' | 'name_inverted'>
           ), ticket_type: (
-            { __typename?: 'TicketType' }
+            { __typename: 'TicketType' }
             & Pick<Types.TicketType, 'id' | 'description'>
           ) }
         )> }
@@ -87,19 +87,19 @@ export type EventsByChoiceQueryQueryVariables = Types.Exact<{ [key: string]: nev
 
 
 export type EventsByChoiceQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { reports: (
-      { __typename?: 'ConventionReports' }
+      { __typename: 'ConventionReports' }
       & { events_by_choice: Array<(
-        { __typename?: 'EventWithChoiceCounts' }
+        { __typename: 'EventWithChoiceCounts' }
         & { event: (
-          { __typename?: 'Event' }
+          { __typename: 'Event' }
           & Pick<Types.Event, 'id' | 'title'>
         ), choice_counts: Array<(
-          { __typename?: 'ChoiceCount' }
+          { __typename: 'ChoiceCount' }
           & Pick<Types.ChoiceCount, 'state' | 'choice' | 'count'>
         )> }
       )> }
@@ -111,12 +111,12 @@ export type SignupCountsByStateQueryQueryVariables = Types.Exact<{ [key: string]
 
 
 export type SignupCountsByStateQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { signup_counts_by_state: Array<(
-      { __typename?: 'SignupCountByState' }
+      { __typename: 'SignupCountByState' }
       & Pick<Types.SignupCountByState, 'state' | 'count'>
     )> }
   )> }
@@ -130,48 +130,48 @@ export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
 
 
 export type SignupSpySignupChangesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
     & { signup_changes_paginated: (
-      { __typename?: 'SignupChangesPagination' }
+      { __typename: 'SignupChangesPagination' }
       & Pick<Types.SignupChangesPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
       & { entries: Array<(
-        { __typename?: 'SignupChange' }
+        { __typename: 'SignupChange' }
         & Pick<Types.SignupChange, 'id' | 'state' | 'counted' | 'bucket_key' | 'action' | 'created_at'>
         & { previous_signup_change?: Types.Maybe<(
-          { __typename?: 'SignupChange' }
+          { __typename: 'SignupChange' }
           & Pick<Types.SignupChange, 'id' | 'state' | 'counted' | 'bucket_key'>
         )>, signup: (
-          { __typename?: 'Signup' }
+          { __typename: 'Signup' }
           & Pick<Types.Signup, 'id' | 'choice'>
         ), run: (
-          { __typename?: 'Run' }
+          { __typename: 'Run' }
           & Pick<Types.Run, 'id'>
           & { event: (
-            { __typename?: 'Event' }
+            { __typename: 'Event' }
             & Pick<Types.Event, 'id' | 'title'>
             & { event_category: (
-              { __typename?: 'EventCategory' }
+              { __typename: 'EventCategory' }
               & Pick<Types.EventCategory, 'id' | 'team_member_name'>
             ), registration_policy?: Types.Maybe<(
-              { __typename?: 'RegistrationPolicy' }
+              { __typename: 'RegistrationPolicy' }
               & { buckets: Array<(
-                { __typename?: 'RegistrationPolicyBucket' }
+                { __typename: 'RegistrationPolicyBucket' }
                 & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'anything'>
               )> }
             )>, team_members: Array<(
-              { __typename?: 'TeamMember' }
+              { __typename: 'TeamMember' }
               & Pick<Types.TeamMember, 'id'>
               & { user_con_profile: (
-                { __typename?: 'UserConProfile' }
+                { __typename: 'UserConProfile' }
                 & Pick<Types.UserConProfile, 'id'>
               ) }
             )> }
           ) }
         ), user_con_profile: (
-          { __typename?: 'UserConProfile' }
+          { __typename: 'UserConProfile' }
           & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
         ) }
       )> }

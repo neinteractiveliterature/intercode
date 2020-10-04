@@ -12,31 +12,31 @@ export type UsersTableUsersQueryQueryVariables = Types.Exact<{
 
 
 export type UsersTableUsersQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { users_paginated: (
-    { __typename?: 'UsersPagination' }
+    { __typename: 'UsersPagination' }
     & Pick<Types.UsersPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
     & { entries: Array<(
-      { __typename?: 'User' }
+      { __typename: 'User' }
       & Pick<Types.User, 'id' | 'name_inverted' | 'first_name' | 'last_name' | 'email' | 'privileges'>
     )> }
   ), currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_user_con_profiles'>
   ) }
 );
 
 export type DetailedUserFieldsFragment = (
-  { __typename?: 'User' }
+  { __typename: 'User' }
   & Pick<Types.User, 'id' | 'name' | 'first_name' | 'last_name' | 'email' | 'privileges'>
   & { user_con_profiles: Array<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
     & { convention?: Types.Maybe<(
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'starts_at' | 'ticket_name' | 'timezone_name'>
     )>, staff_positions: Array<(
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name'>
     )> }
   )> }
@@ -48,9 +48,9 @@ export type UserAdminQueryQueryVariables = Types.Exact<{
 
 
 export type UserAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { user: (
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id'>
     & DetailedUserFieldsFragment
   ) }
@@ -62,9 +62,9 @@ export type MergeUsersModalQueryQueryVariables = Types.Exact<{
 
 
 export type MergeUsersModalQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { users: Array<(
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id'>
     & DetailedUserFieldsFragment
   )> }

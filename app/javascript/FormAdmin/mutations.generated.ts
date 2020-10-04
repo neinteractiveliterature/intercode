@@ -14,11 +14,11 @@ export type CreateFormWithJsonMutationVariables = Types.Exact<{
 
 
 export type CreateFormWithJsonMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createFormWithJSON?: Types.Maybe<(
-    { __typename?: 'CreateFormWithJSONPayload' }
+    { __typename: 'CreateFormWithJSONPayload' }
     & { form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & FormFieldsFragment
     ) }
@@ -32,11 +32,11 @@ export type UpdateFormWithJsonMutationVariables = Types.Exact<{
 
 
 export type UpdateFormWithJsonMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateFormWithJSON?: Types.Maybe<(
-    { __typename?: 'UpdateFormWithJSONPayload' }
+    { __typename: 'UpdateFormWithJSONPayload' }
     & { form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & FormFieldsFragment
     ) }
@@ -50,11 +50,11 @@ export type CreateFormMutationVariables = Types.Exact<{
 
 
 export type CreateFormMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createForm?: Types.Maybe<(
-    { __typename?: 'CreateFormPayload' }
+    { __typename: 'CreateFormPayload' }
     & { form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & FormFieldsFragment
     ) }
@@ -68,11 +68,11 @@ export type UpdateFormMutationVariables = Types.Exact<{
 
 
 export type UpdateFormMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateForm?: Types.Maybe<(
-    { __typename?: 'UpdateFormPayload' }
+    { __typename: 'UpdateFormPayload' }
     & { form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & FormEditorDataFragment
     ) }
@@ -85,9 +85,9 @@ export type DeleteFormMutationVariables = Types.Exact<{
 
 
 export type DeleteFormMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteForm?: Types.Maybe<(
-    { __typename?: 'DeleteFormPayload' }
+    { __typename: 'DeleteFormPayload' }
     & Pick<Types.DeleteFormPayload, 'clientMutationId'>
   )> }
 );
@@ -99,14 +99,14 @@ export type CreateFormSectionMutationVariables = Types.Exact<{
 
 
 export type CreateFormSectionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createFormSection?: Types.Maybe<(
-    { __typename?: 'CreateFormSectionPayload' }
+    { __typename: 'CreateFormSectionPayload' }
     & { form_section: (
-      { __typename?: 'FormSection' }
+      { __typename: 'FormSection' }
       & Pick<Types.FormSection, 'id'>
       & { form_items: Array<(
-        { __typename?: 'FormItem' }
+        { __typename: 'FormItem' }
         & Pick<Types.FormItem, 'id'>
         & FormEditorFormItemFieldsFragment
       )> }
@@ -122,14 +122,14 @@ export type UpdateFormSectionMutationVariables = Types.Exact<{
 
 
 export type UpdateFormSectionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateFormSection?: Types.Maybe<(
-    { __typename?: 'UpdateFormSectionPayload' }
+    { __typename: 'UpdateFormSectionPayload' }
     & { form_section: (
-      { __typename?: 'FormSection' }
+      { __typename: 'FormSection' }
       & Pick<Types.FormSection, 'id'>
       & { form_items: Array<(
-        { __typename?: 'FormItem' }
+        { __typename: 'FormItem' }
         & Pick<Types.FormItem, 'id'>
         & FormEditorFormItemFieldsFragment
       )> }
@@ -144,9 +144,9 @@ export type DeleteFormSectionMutationVariables = Types.Exact<{
 
 
 export type DeleteFormSectionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteFormSection?: Types.Maybe<(
-    { __typename?: 'DeleteFormSectionPayload' }
+    { __typename: 'DeleteFormSectionPayload' }
     & Pick<Types.DeleteFormSectionPayload, 'clientMutationId'>
   )> }
 );
@@ -158,11 +158,11 @@ export type MoveFormSectionMutationVariables = Types.Exact<{
 
 
 export type MoveFormSectionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { moveFormSection?: Types.Maybe<(
-    { __typename?: 'MoveFormSectionPayload' }
+    { __typename: 'MoveFormSectionPayload' }
     & { form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & FormEditorDataFragment
     ) }
@@ -176,11 +176,11 @@ export type CreateFormItemMutationVariables = Types.Exact<{
 
 
 export type CreateFormItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createFormItem?: Types.Maybe<(
-    { __typename?: 'CreateFormItemPayload' }
+    { __typename: 'CreateFormItemPayload' }
     & { form_item: (
-      { __typename?: 'FormItem' }
+      { __typename: 'FormItem' }
       & Pick<Types.FormItem, 'id'>
       & FormEditorFormItemFieldsFragment
     ) }
@@ -194,11 +194,11 @@ export type UpdateFormItemMutationVariables = Types.Exact<{
 
 
 export type UpdateFormItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateFormItem?: Types.Maybe<(
-    { __typename?: 'UpdateFormItemPayload' }
+    { __typename: 'UpdateFormItemPayload' }
     & { form_item: (
-      { __typename?: 'FormItem' }
+      { __typename: 'FormItem' }
       & Pick<Types.FormItem, 'id'>
       & FormEditorFormItemFieldsFragment
     ) }
@@ -211,9 +211,9 @@ export type DeleteFormItemMutationVariables = Types.Exact<{
 
 
 export type DeleteFormItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteFormItem?: Types.Maybe<(
-    { __typename?: 'DeleteFormItemPayload' }
+    { __typename: 'DeleteFormItemPayload' }
     & Pick<Types.DeleteFormItemPayload, 'clientMutationId'>
   )> }
 );
@@ -226,14 +226,14 @@ export type MoveFormItemMutationVariables = Types.Exact<{
 
 
 export type MoveFormItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { moveFormItem?: Types.Maybe<(
-    { __typename?: 'MoveFormItemPayload' }
+    { __typename: 'MoveFormItemPayload' }
     & { form_section: (
-      { __typename?: 'FormSection' }
+      { __typename: 'FormSection' }
       & Pick<Types.FormSection, 'id'>
       & { form_items: Array<(
-        { __typename?: 'FormItem' }
+        { __typename: 'FormItem' }
         & Pick<Types.FormItem, 'id'>
         & FormEditorFormItemFieldsFragment
       )> }

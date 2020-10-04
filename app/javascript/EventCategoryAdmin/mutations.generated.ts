@@ -11,11 +11,11 @@ export type CreateEventCategoryMutationVariables = Types.Exact<{
 
 
 export type CreateEventCategoryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createEventCategory?: Types.Maybe<(
-    { __typename?: 'CreateEventCategoryPayload' }
+    { __typename: 'CreateEventCategoryPayload' }
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id'>
       & EventCategoryFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateEventCategoryMutationVariables = Types.Exact<{
 
 
 export type UpdateEventCategoryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEventCategory?: Types.Maybe<(
-    { __typename?: 'UpdateEventCategoryPayload' }
+    { __typename: 'UpdateEventCategoryPayload' }
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id'>
       & EventCategoryFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeleteEventCategoryMutationVariables = Types.Exact<{
 
 
 export type DeleteEventCategoryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteEventCategory?: Types.Maybe<(
-    { __typename?: 'DeleteEventCategoryPayload' }
+    { __typename: 'DeleteEventCategoryPayload' }
     & Pick<Types.DeleteEventCategoryPayload, 'clientMutationId'>
   )> }
 );

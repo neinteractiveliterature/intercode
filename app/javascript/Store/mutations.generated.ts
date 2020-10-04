@@ -13,11 +13,11 @@ export type MarkOrderPaidMutationVariables = Types.Exact<{
 
 
 export type MarkOrderPaidMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { markOrderPaid?: Types.Maybe<(
-    { __typename?: 'MarkOrderPaidPayload' }
+    { __typename: 'MarkOrderPaidPayload' }
     & { order: (
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
       & AdminOrderFieldsFragmentFragment
     ) }
@@ -31,11 +31,11 @@ export type CancelOrderMutationVariables = Types.Exact<{
 
 
 export type CancelOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { cancelOrder?: Types.Maybe<(
-    { __typename?: 'CancelOrderPayload' }
+    { __typename: 'CancelOrderPayload' }
     & { order: (
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
       & AdminOrderFieldsFragmentFragment
     ) }
@@ -51,11 +51,11 @@ export type CreateOrderMutationVariables = Types.Exact<{
 
 
 export type CreateOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createOrder?: Types.Maybe<(
-    { __typename?: 'CreateOrderPayload' }
+    { __typename: 'CreateOrderPayload' }
     & { order: (
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
       & AdminOrderFieldsFragmentFragment
     ) }
@@ -69,11 +69,11 @@ export type AdminUpdateOrderMutationVariables = Types.Exact<{
 
 
 export type AdminUpdateOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateOrder?: Types.Maybe<(
-    { __typename?: 'UpdateOrderPayload' }
+    { __typename: 'UpdateOrderPayload' }
     & { order: (
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
       & AdminOrderFieldsFragmentFragment
     ) }
@@ -86,11 +86,11 @@ export type CreateProductMutationVariables = Types.Exact<{
 
 
 export type CreateProductMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createProduct?: Types.Maybe<(
-    { __typename?: 'CreateProductPayload' }
+    { __typename: 'CreateProductPayload' }
     & { product: (
-      { __typename?: 'Product' }
+      { __typename: 'Product' }
       & Pick<Types.Product, 'id'>
       & AdminProductFieldsFragment
     ) }
@@ -104,11 +104,11 @@ export type UpdateProductMutationVariables = Types.Exact<{
 
 
 export type UpdateProductMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateProduct?: Types.Maybe<(
-    { __typename?: 'UpdateProductPayload' }
+    { __typename: 'UpdateProductPayload' }
     & { product: (
-      { __typename?: 'Product' }
+      { __typename: 'Product' }
       & Pick<Types.Product, 'id'>
       & AdminProductFieldsFragment
     ) }
@@ -121,11 +121,11 @@ export type DeleteProductMutationVariables = Types.Exact<{
 
 
 export type DeleteProductMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteProduct?: Types.Maybe<(
-    { __typename?: 'DeleteProductPayload' }
+    { __typename: 'DeleteProductPayload' }
     & { product: (
-      { __typename?: 'Product' }
+      { __typename: 'Product' }
       & Pick<Types.Product, 'id'>
       & AdminProductFieldsFragment
     ) }
@@ -138,14 +138,14 @@ export type AdminCreateOrderEntryMutationVariables = Types.Exact<{
 
 
 export type AdminCreateOrderEntryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createOrderEntry?: Types.Maybe<(
-    { __typename?: 'CreateOrderEntryPayload' }
+    { __typename: 'CreateOrderEntryPayload' }
     & { order_entry: (
-      { __typename?: 'OrderEntry' }
+      { __typename: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id'>
       & { order: (
-        { __typename?: 'Order' }
+        { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
         & AdminOrderFieldsFragmentFragment
       ) }
@@ -160,14 +160,14 @@ export type AdminUpdateOrderEntryMutationVariables = Types.Exact<{
 
 
 export type AdminUpdateOrderEntryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateOrderEntry?: Types.Maybe<(
-    { __typename?: 'UpdateOrderEntryPayload' }
+    { __typename: 'UpdateOrderEntryPayload' }
     & { order_entry: (
-      { __typename?: 'OrderEntry' }
+      { __typename: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id'>
       & { order: (
-        { __typename?: 'Order' }
+        { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
         & AdminOrderFieldsFragmentFragment
       ) }
@@ -182,11 +182,11 @@ export type UpdateOrderEntryMutationVariables = Types.Exact<{
 
 
 export type UpdateOrderEntryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateOrderEntry?: Types.Maybe<(
-    { __typename?: 'UpdateOrderEntryPayload' }
+    { __typename: 'UpdateOrderEntryPayload' }
     & { order_entry: (
-      { __typename?: 'OrderEntry' }
+      { __typename: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id'>
       & OrderEntryFieldsFragment
     ) }
@@ -199,11 +199,11 @@ export type DeleteOrderEntryMutationVariables = Types.Exact<{
 
 
 export type DeleteOrderEntryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteOrderEntry?: Types.Maybe<(
-    { __typename?: 'DeleteOrderEntryPayload' }
+    { __typename: 'DeleteOrderEntryPayload' }
     & { order_entry: (
-      { __typename?: 'OrderEntry' }
+      { __typename: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id'>
     ) }
   )> }
@@ -215,14 +215,14 @@ export type AdminDeleteOrderEntryMutationVariables = Types.Exact<{
 
 
 export type AdminDeleteOrderEntryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteOrderEntry?: Types.Maybe<(
-    { __typename?: 'DeleteOrderEntryPayload' }
+    { __typename: 'DeleteOrderEntryPayload' }
     & { order_entry: (
-      { __typename?: 'OrderEntry' }
+      { __typename: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id'>
       & { order: (
-        { __typename?: 'Order' }
+        { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
         & AdminOrderFieldsFragmentFragment
       ) }
@@ -236,11 +236,11 @@ export type SubmitOrderMutationVariables = Types.Exact<{
 
 
 export type SubmitOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { submitOrder?: Types.Maybe<(
-    { __typename?: 'SubmitOrderPayload' }
+    { __typename: 'SubmitOrderPayload' }
     & { order: (
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id' | 'status'>
     ) }
   )> }
@@ -254,11 +254,11 @@ export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
 
 
 export type AddOrderEntryToCurrentPendingOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { addOrderEntryToCurrentPendingOrder?: Types.Maybe<(
-    { __typename?: 'AddOrderEntryToCurrentPendingOrderPayload' }
+    { __typename: 'AddOrderEntryToCurrentPendingOrderPayload' }
     & { order_entry: (
-      { __typename?: 'OrderEntry' }
+      { __typename: 'OrderEntry' }
       & Pick<Types.OrderEntry, 'id'>
     ) }
   )> }
@@ -271,14 +271,14 @@ export type CreateCouponApplicationMutationVariables = Types.Exact<{
 
 
 export type CreateCouponApplicationMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCouponApplication?: Types.Maybe<(
-    { __typename?: 'CreateCouponApplicationPayload' }
+    { __typename: 'CreateCouponApplicationPayload' }
     & { coupon_application: (
-      { __typename?: 'CouponApplication' }
+      { __typename: 'CouponApplication' }
       & Pick<Types.CouponApplication, 'id'>
       & { order: (
-        { __typename?: 'Order' }
+        { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
         & CartOrderFieldsFragment
       ) }
@@ -292,14 +292,14 @@ export type DeleteCouponApplicationMutationVariables = Types.Exact<{
 
 
 export type DeleteCouponApplicationMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCouponApplication?: Types.Maybe<(
-    { __typename?: 'DeleteCouponApplicationPayload' }
+    { __typename: 'DeleteCouponApplicationPayload' }
     & { coupon_application: (
-      { __typename?: 'CouponApplication' }
+      { __typename: 'CouponApplication' }
       & Pick<Types.CouponApplication, 'id'>
       & { order: (
-        { __typename?: 'Order' }
+        { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
         & CartOrderFieldsFragment
       ) }

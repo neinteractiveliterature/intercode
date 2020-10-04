@@ -13,11 +13,11 @@ export type MergeUsersMutationVariables = Types.Exact<{
 
 
 export type MergeUsersMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mergeUsers?: Types.Maybe<(
-    { __typename?: 'MergeUsersPayload' }
+    { __typename: 'MergeUsersPayload' }
     & { user: (
-      { __typename?: 'User' }
+      { __typename: 'User' }
       & Pick<Types.User, 'id'>
       & DetailedUserFieldsFragment
     ) }

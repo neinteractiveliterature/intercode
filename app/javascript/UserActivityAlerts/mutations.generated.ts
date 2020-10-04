@@ -12,11 +12,11 @@ export type CreateUserActivityAlertMutationVariables = Types.Exact<{
 
 
 export type CreateUserActivityAlertMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createUserActivityAlert?: Types.Maybe<(
-    { __typename?: 'CreateUserActivityAlertPayload' }
+    { __typename: 'CreateUserActivityAlertPayload' }
     & { user_activity_alert: (
-      { __typename?: 'UserActivityAlert' }
+      { __typename: 'UserActivityAlert' }
       & Pick<Types.UserActivityAlert, 'id'>
       & UserActivityAlertFieldsFragment
     ) }
@@ -32,11 +32,11 @@ export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
 
 
 export type UpdateUserActivityAlertMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateUserActivityAlert?: Types.Maybe<(
-    { __typename?: 'UpdateUserActivityAlertPayload' }
+    { __typename: 'UpdateUserActivityAlertPayload' }
     & { user_activity_alert: (
-      { __typename?: 'UserActivityAlert' }
+      { __typename: 'UserActivityAlert' }
       & Pick<Types.UserActivityAlert, 'id'>
       & UserActivityAlertFieldsFragment
     ) }
@@ -49,11 +49,11 @@ export type DeleteUserActivityAlertMutationVariables = Types.Exact<{
 
 
 export type DeleteUserActivityAlertMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteUserActivityAlert?: Types.Maybe<(
-    { __typename?: 'DeleteUserActivityAlertPayload' }
+    { __typename: 'DeleteUserActivityAlertPayload' }
     & { user_activity_alert: (
-      { __typename?: 'UserActivityAlert' }
+      { __typename: 'UserActivityAlert' }
       & Pick<Types.UserActivityAlert, 'id'>
       & UserActivityAlertFieldsFragment
     ) }

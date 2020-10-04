@@ -11,11 +11,11 @@ export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
 
 
 export type CreateCmsGraphqlQueryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCmsGraphqlQuery?: Types.Maybe<(
-    { __typename?: 'CreateCmsGraphqlQueryPayload' }
+    { __typename: 'CreateCmsGraphqlQueryPayload' }
     & { query: (
-      { __typename?: 'CmsGraphqlQuery' }
+      { __typename: 'CmsGraphqlQuery' }
       & Pick<Types.CmsGraphqlQuery, 'id'>
       & CmsGraphqlQueryFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
 
 
 export type UpdateCmsGraphqlQueryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateCmsGraphqlQuery?: Types.Maybe<(
-    { __typename?: 'UpdateCmsGraphqlQueryPayload' }
+    { __typename: 'UpdateCmsGraphqlQueryPayload' }
     & { query: (
-      { __typename?: 'CmsGraphqlQuery' }
+      { __typename: 'CmsGraphqlQuery' }
       & Pick<Types.CmsGraphqlQuery, 'id'>
       & CmsGraphqlQueryFieldsFragment
     ) }
@@ -46,11 +46,11 @@ export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
 
 
 export type DeleteCmsGraphqlQueryMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCmsGraphqlQuery?: Types.Maybe<(
-    { __typename?: 'DeleteCmsGraphqlQueryPayload' }
+    { __typename: 'DeleteCmsGraphqlQueryPayload' }
     & { query: (
-      { __typename?: 'CmsGraphqlQuery' }
+      { __typename: 'CmsGraphqlQuery' }
       & Pick<Types.CmsGraphqlQuery, 'id'>
     ) }
   )> }

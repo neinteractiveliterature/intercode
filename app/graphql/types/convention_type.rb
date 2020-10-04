@@ -39,7 +39,7 @@ class Types::ConventionType < Types::BaseObject
   field :pages, [Types::PageType], null: false
   field :rooms, [Types::RoomType], null: false
   field :root_page, Types::PageType, null: true
-  field :staff_positions, [Types::StaffPositionType], null: true
+  field :staff_positions, [Types::StaffPositionType], null: false
   field :catch_all_staff_position, Types::StaffPositionType, null: true
   field :ticket_types, [Types::TicketTypeType], null: false
   field :organization, Types::OrganizationType, null: true

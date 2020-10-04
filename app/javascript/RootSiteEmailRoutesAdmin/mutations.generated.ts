@@ -11,11 +11,11 @@ export type CreateEmailRouteMutationVariables = Types.Exact<{
 
 
 export type CreateEmailRouteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createEmailRoute?: Types.Maybe<(
-    { __typename?: 'CreateEmailRoutePayload' }
+    { __typename: 'CreateEmailRoutePayload' }
     & { email_route: (
-      { __typename?: 'EmailRoute' }
+      { __typename: 'EmailRoute' }
       & Pick<Types.EmailRoute, 'id'>
       & EmailRouteFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateEmailRouteMutationVariables = Types.Exact<{
 
 
 export type UpdateEmailRouteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEmailRoute?: Types.Maybe<(
-    { __typename?: 'UpdateEmailRoutePayload' }
+    { __typename: 'UpdateEmailRoutePayload' }
     & { email_route: (
-      { __typename?: 'EmailRoute' }
+      { __typename: 'EmailRoute' }
       & Pick<Types.EmailRoute, 'id'>
       & EmailRouteFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeleteEmailRouteMutationVariables = Types.Exact<{
 
 
 export type DeleteEmailRouteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteEmailRoute?: Types.Maybe<(
-    { __typename?: 'DeleteEmailRoutePayload' }
+    { __typename: 'DeleteEmailRoutePayload' }
     & Pick<Types.DeleteEmailRoutePayload, 'clientMutationId'>
   )> }
 );

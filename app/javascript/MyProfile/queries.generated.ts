@@ -9,25 +9,25 @@ export type MyProfileQueryQueryVariables = Types.Exact<{ [key: string]: never; }
 
 
 export type MyProfileQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
     & { user_con_profile_form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & { form_sections: Array<(
-        { __typename?: 'FormSection' }
+        { __typename: 'FormSection' }
         & Pick<Types.FormSection, 'id'>
         & { form_items: Array<(
-          { __typename?: 'FormItem' }
+          { __typename: 'FormItem' }
           & Pick<Types.FormItem, 'id' | 'admin_description'>
         )> }
       )> }
       & CommonFormFieldsFragment
     ) }
   )>, myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'email' | 'form_response_attrs_json' | 'can_have_bio' | 'gravatar_url' | 'gravatar_enabled' | 'bio' | 'show_nickname_in_bio' | 'bio_name' | 'bio_html'>
   )> }
 );

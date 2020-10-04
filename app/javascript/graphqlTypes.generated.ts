@@ -438,7 +438,7 @@ export type Convention = {
   /** @deprecated Use signup_changes_paginated instead */
   signup_spy_paginated: SignupsPagination;
   site_mode: SiteMode;
-  staff_positions?: Maybe<Array<StaffPosition>>;
+  staff_positions: Array<StaffPosition>;
   starts_at?: Maybe<Scalars['Date']>;
   stripe_publishable_key?: Maybe<Scalars['String']>;
   ticket_mode: TicketMode;
@@ -3897,7 +3897,7 @@ export type StaffPosition = {
   id: Scalars['Int'];
   name: Scalars['String'];
   permissions: Array<Permission>;
-  user_con_profiles?: Maybe<Array<UserConProfile>>;
+  user_con_profiles: Array<UserConProfile>;
   visible?: Maybe<Scalars['Boolean']>;
 };
 

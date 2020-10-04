@@ -28,3 +28,4 @@ generates:
       withHooks: true
       documentMode: graphQLTag
       gqlImport: '@apollo/client#gql'
+      nonOptionalTypename: true

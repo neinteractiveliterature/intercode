@@ -11,11 +11,11 @@ export type UpdateConventionMutationVariables = Types.Exact<{
 
 
 export type UpdateConventionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateConvention?: Types.Maybe<(
-    { __typename?: 'UpdateConventionPayload' }
+    { __typename: 'UpdateConventionPayload' }
     & { convention: (
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & Pick<Types.Convention, 'id'>
       & ConventionAdminConventionFieldsFragment
     ) }

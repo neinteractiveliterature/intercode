@@ -4,15 +4,15 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type ContactEmailFieldsFragment = (
-  { __typename?: 'ContactEmail' }
+  { __typename: 'ContactEmail' }
   & Pick<Types.ContactEmail, 'email' | 'formatted_address' | 'name' | 'metadata_json'>
 );
 
 export type MailingListsResultFieldsFragment = (
-  { __typename?: 'MailingListsResult' }
+  { __typename: 'MailingListsResult' }
   & Pick<Types.MailingListsResult, 'metadata_fields'>
   & { emails: Array<(
-    { __typename?: 'ContactEmail' }
+    { __typename: 'ContactEmail' }
     & ContactEmailFieldsFragment
   )> }
 );
@@ -21,9 +21,9 @@ export type MailingListsMenuQueryQueryVariables = Types.Exact<{ [key: string]: n
 
 
 export type MailingListsMenuQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_mode' | 'ticket_name'>
   )> }
 );
@@ -32,14 +32,14 @@ export type TicketedAttendeesQueryQueryVariables = Types.Exact<{ [key: string]: 
 
 
 export type TicketedAttendeesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
     & { mailing_lists: (
-      { __typename?: 'MailingLists' }
+      { __typename: 'MailingLists' }
       & { ticketed_attendees: (
-        { __typename?: 'MailingListsResult' }
+        { __typename: 'MailingListsResult' }
         & MailingListsResultFieldsFragment
       ) }
     ) }
@@ -50,14 +50,14 @@ export type EventProposersQueryQueryVariables = Types.Exact<{ [key: string]: nev
 
 
 export type EventProposersQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
-      { __typename?: 'MailingLists' }
+      { __typename: 'MailingLists' }
       & { event_proposers: (
-        { __typename?: 'MailingListsResult' }
+        { __typename: 'MailingListsResult' }
         & MailingListsResultFieldsFragment
       ) }
     ) }
@@ -68,14 +68,14 @@ export type TeamMembersMailingListQueryQueryVariables = Types.Exact<{ [key: stri
 
 
 export type TeamMembersMailingListQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
-      { __typename?: 'MailingLists' }
+      { __typename: 'MailingLists' }
       & { team_members: (
-        { __typename?: 'MailingListsResult' }
+        { __typename: 'MailingListsResult' }
         & MailingListsResultFieldsFragment
       ) }
     ) }
@@ -86,14 +86,14 @@ export type UsersWithPendingBioQueryQueryVariables = Types.Exact<{ [key: string]
 
 
 export type UsersWithPendingBioQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
-      { __typename?: 'MailingLists' }
+      { __typename: 'MailingLists' }
       & { users_with_pending_bio: (
-        { __typename?: 'MailingListsResult' }
+        { __typename: 'MailingListsResult' }
         & MailingListsResultFieldsFragment
       ) }
     ) }
@@ -104,23 +104,23 @@ export type WaitlistMailingListsQueryQueryVariables = Types.Exact<{ [key: string
 
 
 export type WaitlistMailingListsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'timezone_name'>
     & { mailing_lists: (
-      { __typename?: 'MailingLists' }
+      { __typename: 'MailingLists' }
       & { waitlists: Array<(
-        { __typename?: 'MailingListsWaitlistsResult' }
+        { __typename: 'MailingListsWaitlistsResult' }
         & Pick<Types.MailingListsWaitlistsResult, 'metadata_fields'>
         & { emails: Array<(
-          { __typename?: 'ContactEmail' }
+          { __typename: 'ContactEmail' }
           & ContactEmailFieldsFragment
         )>, run: (
-          { __typename?: 'Run' }
+          { __typename: 'Run' }
           & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
           & { event: (
-            { __typename?: 'Event' }
+            { __typename: 'Event' }
             & Pick<Types.Event, 'id' | 'title'>
           ) }
         ) }
@@ -133,9 +133,9 @@ export type WhosFreeFormConventionQueryQueryVariables = Types.Exact<{ [key: stri
 
 
 export type WhosFreeFormConventionQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name'>
   )> }
 );
@@ -147,14 +147,14 @@ export type WhosFreeQueryQueryVariables = Types.Exact<{
 
 
 export type WhosFreeQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { mailing_lists: (
-      { __typename?: 'MailingLists' }
+      { __typename: 'MailingLists' }
       & { whos_free: (
-        { __typename?: 'MailingListsResult' }
+        { __typename: 'MailingListsResult' }
         & MailingListsResultFieldsFragment
       ) }
     ) }

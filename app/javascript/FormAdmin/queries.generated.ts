@@ -6,34 +6,34 @@ import { gql } from '@apollo/client';
 import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 export type FormFieldsFragment = (
-  { __typename?: 'Form' }
+  { __typename: 'Form' }
   & Pick<Types.Form, 'id' | 'title' | 'form_type' | 'export_json'>
   & { event_categories: Array<(
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
   )>, proposal_event_categories: Array<(
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
   )>, user_con_profile_conventions: Array<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )> }
 );
 
 export type FormEditorFormItemFieldsFragment = (
-  { __typename?: 'FormItem' }
+  { __typename: 'FormItem' }
   & Pick<Types.FormItem, 'id' | 'admin_description' | 'public_description' | 'properties'>
   & CommonFormItemFieldsFragment
 );
 
 export type FormEditorDataFragment = (
-  { __typename?: 'Form' }
+  { __typename: 'Form' }
   & Pick<Types.Form, 'id'>
   & { form_sections: Array<(
-    { __typename?: 'FormSection' }
+    { __typename: 'FormSection' }
     & Pick<Types.FormSection, 'id'>
     & { form_items: Array<(
-      { __typename?: 'FormItem' }
+      { __typename: 'FormItem' }
       & Pick<Types.FormItem, 'id'>
       & FormEditorFormItemFieldsFragment
     )> }
@@ -45,12 +45,12 @@ export type FormAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }
 
 
 export type FormAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { forms: Array<(
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & FormFieldsFragment
     )> }
@@ -63,12 +63,12 @@ export type FormEditorQueryQueryVariables = Types.Exact<{
 
 
 export type FormEditorQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
   )>, form: (
-    { __typename?: 'Form' }
+    { __typename: 'Form' }
     & Pick<Types.Form, 'id'>
     & FormEditorDataFragment
   ) }
@@ -81,9 +81,9 @@ export type PreviewFormItemQueryQueryVariables = Types.Exact<{
 
 
 export type PreviewFormItemQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { previewFormItem: (
-    { __typename?: 'FormItem' }
+    { __typename: 'FormItem' }
     & Pick<Types.FormItem, 'id'>
     & FormEditorFormItemFieldsFragment
   ) }

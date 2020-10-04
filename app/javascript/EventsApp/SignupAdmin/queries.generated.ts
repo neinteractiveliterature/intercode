@@ -6,75 +6,75 @@ import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 export type SignupFieldsFragment = (
-  { __typename?: 'Signup' }
+  { __typename: 'Signup' }
   & Pick<Types.Signup, 'id' | 'state' | 'counted' | 'bucket_key' | 'requested_bucket_key'>
   & { run: (
-    { __typename?: 'Run' }
+    { __typename: 'Run' }
     & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at' | 'ends_at'>
     & { rooms: Array<(
-      { __typename?: 'Room' }
+      { __typename: 'Room' }
       & Pick<Types.Room, 'id' | 'name'>
     )>, event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'title'>
       & { event_category: (
-        { __typename?: 'EventCategory' }
+        { __typename: 'EventCategory' }
         & Pick<Types.EventCategory, 'id' | 'team_member_name'>
       ), registration_policy?: Types.Maybe<(
-        { __typename?: 'RegistrationPolicy' }
+        { __typename: 'RegistrationPolicy' }
         & { buckets: Array<(
-          { __typename?: 'RegistrationPolicyBucket' }
+          { __typename: 'RegistrationPolicyBucket' }
           & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'anything'>
         )> }
       )>, team_members: Array<(
-        { __typename?: 'TeamMember' }
+        { __typename: 'TeamMember' }
         & Pick<Types.TeamMember, 'id'>
         & { user_con_profile: (
-          { __typename?: 'UserConProfile' }
+          { __typename: 'UserConProfile' }
           & Pick<Types.UserConProfile, 'id'>
         ) }
       )> }
     ) }
   ), user_con_profile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'nickname' | 'birth_date' | 'email' | 'address' | 'city' | 'state' | 'zipcode' | 'country' | 'mobile_phone' | 'gravatar_enabled' | 'gravatar_url'>
   ) }
 );
 
 export type UserConProfileSignupsFragmentFragment = (
-  { __typename?: 'UserConProfile' }
+  { __typename: 'UserConProfile' }
   & Pick<Types.UserConProfile, 'id'>
   & { signups: Array<(
-    { __typename?: 'Signup' }
+    { __typename: 'Signup' }
     & Pick<Types.Signup, 'id' | 'state' | 'counted' | 'bucket_key' | 'requested_bucket_key'>
     & { user_con_profile: (
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id'>
     ), run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id' | 'starts_at'>
       & { event: (
-        { __typename?: 'Event' }
+        { __typename: 'Event' }
         & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
         & { event_category: (
-          { __typename?: 'EventCategory' }
+          { __typename: 'EventCategory' }
           & Pick<Types.EventCategory, 'id' | 'team_member_name'>
         ), registration_policy?: Types.Maybe<(
-          { __typename?: 'RegistrationPolicy' }
+          { __typename: 'RegistrationPolicy' }
           & { buckets: Array<(
-            { __typename?: 'RegistrationPolicyBucket' }
+            { __typename: 'RegistrationPolicyBucket' }
             & Pick<Types.RegistrationPolicyBucket, 'key' | 'name'>
           )> }
         )>, team_members: Array<(
-          { __typename?: 'TeamMember' }
+          { __typename: 'TeamMember' }
           & Pick<Types.TeamMember, 'id'>
           & { user_con_profile: (
-            { __typename?: 'UserConProfile' }
+            { __typename: 'UserConProfile' }
             & Pick<Types.UserConProfile, 'id'>
           ) }
         )> }
       ), rooms: Array<(
-        { __typename?: 'Room' }
+        { __typename: 'Room' }
         & Pick<Types.Room, 'id' | 'name'>
       )> }
     ) }
@@ -87,13 +87,13 @@ export type SignupAdminEventQueryQueryVariables = Types.Exact<{
 
 
 export type SignupAdminEventQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & CommonConventionDataFragment
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
   ) }
 );
@@ -104,16 +104,16 @@ export type AdminSignupQueryQueryVariables = Types.Exact<{
 
 
 export type AdminSignupQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & CommonConventionDataFragment
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_update_bucket_signup' | 'can_force_confirm_signup' | 'can_update_counted_signup'>
   ), signup: (
-    { __typename?: 'Signup' }
+    { __typename: 'Signup' }
     & Pick<Types.Signup, 'id'>
     & SignupFieldsFragment
   ) }
@@ -130,43 +130,43 @@ export type RunSignupsTableSignupsQueryQueryVariables = Types.Exact<{
 
 
 export type RunSignupsTableSignupsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'team_member_name'>
     ), team_members: Array<(
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & { user_con_profile: (
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id'>
       ) }
     )>, registration_policy?: Types.Maybe<(
-      { __typename?: 'RegistrationPolicy' }
+      { __typename: 'RegistrationPolicy' }
       & { buckets: Array<(
-        { __typename?: 'RegistrationPolicyBucket' }
+        { __typename: 'RegistrationPolicyBucket' }
         & Pick<Types.RegistrationPolicyBucket, 'key' | 'name'>
       )> }
     )>, run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & { signups_paginated: (
-        { __typename?: 'SignupsPagination' }
+        { __typename: 'SignupsPagination' }
         & Pick<Types.SignupsPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
         & { entries: Array<(
-          { __typename?: 'Signup' }
+          { __typename: 'Signup' }
           & Pick<Types.Signup, 'id' | 'state' | 'counted' | 'bucket_key' | 'requested_bucket_key' | 'age_restrictions_check'>
           & { run: (
-            { __typename?: 'Run' }
+            { __typename: 'Run' }
             & Pick<Types.Run, 'id' | 'starts_at'>
           ), user_con_profile: (
-            { __typename?: 'UserConProfile' }
+            { __typename: 'UserConProfile' }
             & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'name_without_nickname' | 'gravatar_enabled' | 'gravatar_url' | 'email' | 'birth_date'>
           ) }
         )> }
@@ -182,23 +182,23 @@ export type RunHeaderRunInfoQueryQueryVariables = Types.Exact<{
 
 
 export type RunHeaderRunInfoQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & CommonConventionDataFragment
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
     & { registration_policy?: Types.Maybe<(
-      { __typename?: 'RegistrationPolicy' }
+      { __typename: 'RegistrationPolicy' }
       & Pick<Types.RegistrationPolicy, 'total_slots' | 'slots_limited'>
       & { buckets: Array<(
-        { __typename?: 'RegistrationPolicyBucket' }
+        { __typename: 'RegistrationPolicyBucket' }
         & Pick<Types.RegistrationPolicyBucket, 'name' | 'total_slots'>
       )> }
     )>, run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
     ) }
   ) }
@@ -211,46 +211,46 @@ export type RunSignupSummaryQueryQueryVariables = Types.Exact<{
 
 
 export type RunSignupSummaryQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & CommonConventionDataFragment
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_read_schedule'>
   ), event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'team_member_name'>
     ), registration_policy?: Types.Maybe<(
-      { __typename?: 'RegistrationPolicy' }
+      { __typename: 'RegistrationPolicy' }
       & { buckets: Array<(
-        { __typename?: 'RegistrationPolicyBucket' }
+        { __typename: 'RegistrationPolicyBucket' }
         & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'expose_attendees'>
       )> }
     )>, team_members: Array<(
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & { user_con_profile: (
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id'>
       ) }
     )>, runs: Array<(
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id' | 'starts_at'>
     )>, run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & { signups_paginated: (
-        { __typename?: 'SignupsPagination' }
+        { __typename: 'SignupsPagination' }
         & { entries: Array<(
-          { __typename?: 'Signup' }
+          { __typename: 'Signup' }
           & Pick<Types.Signup, 'id' | 'state' | 'bucket_key' | 'waitlist_position'>
           & { user_con_profile: (
-            { __typename?: 'UserConProfile' }
+            { __typename: 'UserConProfile' }
             & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
           ) }
         )> }
@@ -265,26 +265,26 @@ export type UserConProfileSignupsQueryQueryVariables = Types.Exact<{
 
 
 export type UserConProfileSignupsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & CommonConventionDataFragment
   )>, myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
     & { ability?: Types.Maybe<(
-      { __typename?: 'Ability' }
+      { __typename: 'Ability' }
       & Pick<Types.Ability, 'can_withdraw_all_user_con_profile_signups'>
     )> }
   )>, userConProfile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'ical_secret'>
     & { team_members: Array<(
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & { event: (
-        { __typename?: 'Event' }
+        { __typename: 'Event' }
         & Pick<Types.Event, 'id' | 'title' | 'status'>
       ) }
     )> }
@@ -302,51 +302,51 @@ export type RunSignupChangesQueryQueryVariables = Types.Exact<{
 
 
 export type RunSignupChangesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
   )>, run: (
-    { __typename?: 'Run' }
+    { __typename: 'Run' }
     & Pick<Types.Run, 'id'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'title'>
     ), signup_changes_paginated: (
-      { __typename?: 'SignupChangesPagination' }
+      { __typename: 'SignupChangesPagination' }
       & Pick<Types.SignupChangesPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
       & { entries: Array<(
-        { __typename?: 'SignupChange' }
+        { __typename: 'SignupChange' }
         & Pick<Types.SignupChange, 'id' | 'state' | 'counted' | 'bucket_key' | 'action' | 'created_at'>
         & { previous_signup_change?: Types.Maybe<(
-          { __typename?: 'SignupChange' }
+          { __typename: 'SignupChange' }
           & Pick<Types.SignupChange, 'id' | 'state' | 'counted' | 'bucket_key'>
         )>, run: (
-          { __typename?: 'Run' }
+          { __typename: 'Run' }
           & Pick<Types.Run, 'id'>
           & { event: (
-            { __typename?: 'Event' }
+            { __typename: 'Event' }
             & Pick<Types.Event, 'id' | 'title'>
             & { event_category: (
-              { __typename?: 'EventCategory' }
+              { __typename: 'EventCategory' }
               & Pick<Types.EventCategory, 'id' | 'team_member_name'>
             ), registration_policy?: Types.Maybe<(
-              { __typename?: 'RegistrationPolicy' }
+              { __typename: 'RegistrationPolicy' }
               & { buckets: Array<(
-                { __typename?: 'RegistrationPolicyBucket' }
+                { __typename: 'RegistrationPolicyBucket' }
                 & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'anything'>
               )> }
             )>, team_members: Array<(
-              { __typename?: 'TeamMember' }
+              { __typename: 'TeamMember' }
               & Pick<Types.TeamMember, 'id'>
               & { user_con_profile: (
-                { __typename?: 'UserConProfile' }
+                { __typename: 'UserConProfile' }
                 & Pick<Types.UserConProfile, 'id'>
               ) }
             )> }
           ) }
         ), user_con_profile: (
-          { __typename?: 'UserConProfile' }
+          { __typename: 'UserConProfile' }
           & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
         ) }
       )> }
