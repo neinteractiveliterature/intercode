@@ -4,13 +4,18 @@ import classNames from 'classnames';
 
 import PermissionsTableCell from './PermissionsTableCell';
 import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePermissionsChangeSet';
+import { PermissionedModel, PermissionedRole } from '../graphqlTypes.generated';
 
 type PermissionName = {
   name: string;
   permission: string;
 };
 
-type PermissionsTableInputProps<RowType extends { id: number }> = UsePermissionsChangeSetOptions & {
+type BaseRowType =
+  | Pick<PermissionedModel, '__typename' | 'id'>
+  | Pick<PermissionedRole, '__typename' | 'id'>;
+
+type PermissionsTableInputProps<RowType extends BaseRowType> = UsePermissionsChangeSetOptions & {
   permissionNames: PermissionName[];
   rows: RowType[];
   rowType: 'model' | 'role';
@@ -19,7 +24,7 @@ type PermissionsTableInputProps<RowType extends { id: number }> = UsePermissions
   readOnly?: boolean;
 };
 
-function PermissionsTableInput<RowType extends { id: number }>({
+function PermissionsTableInput<RowType extends BaseRowType>({
   permissionNames,
   initialPermissions,
   changeSet,
@@ -65,8 +70,16 @@ function PermissionsTableInput<RowType extends { id: number }>({
                 currentPermissions={currentPermissions}
                 changeSet={changeSet}
                 rowType={rowType}
-                model={rowType === 'model' ? row : undefined}
-                role={rowType === 'role' ? row : undefined}
+                model={
+                  rowType === 'model'
+                    ? (row as Pick<PermissionedModel, 'id' | '__typename'>)
+                    : undefined
+                }
+                role={
+                  rowType === 'role'
+                    ? (row as Pick<PermissionedRole, 'id' | '__typename'>)
+                    : undefined
+                }
                 permission={permission}
                 grantPermission={grantPermission}
                 revokePermission={revokePermission}

@@ -54,6 +54,7 @@ function FormSectionNav() {
           destinationIndex: hoverIndex,
         },
         optimisticResponse: {
+          __typename: 'Mutation',
           moveFormSection: {
             __typename: 'MoveFormSectionPayload',
             form: {

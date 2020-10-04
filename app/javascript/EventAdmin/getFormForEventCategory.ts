@@ -3,6 +3,7 @@ import { FormType, EventCategory } from '../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 
 const BLANK_FORM: NonNullable<EventPageQueryQuery['event']['form']> = {
+  __typename: 'Form',
   id: 0,
   title: '',
   form_type: FormType.Event,

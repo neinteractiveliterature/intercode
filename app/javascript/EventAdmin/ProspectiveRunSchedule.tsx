@@ -177,6 +177,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
   const prospectiveRuns: ProspectiveRun[] = useMemo(
     () =>
       runs.map((run) => ({
+        __typename: 'Run',
         id: 0,
         event_id: event.id,
         starts_at: run.starts_at,

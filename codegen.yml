@@ -10,6 +10,7 @@ generates:
           content: '/* eslint-disable */'
       - typescript
     config:
+      nonOptionalTypename: true
       scalars:
         Date: string
   app/javascript/:

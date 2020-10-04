@@ -139,10 +139,12 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
         <RunFormFields
           run={run}
           event={{
+            __typename: 'Event',
             id: event.id,
             length_seconds: event.form_response_attrs.length_seconds,
             can_play_concurrently: false,
             event_category: {
+              __typename: 'EventCategory',
               id: 0,
               name: 'fake category for single-run event UI',
             },

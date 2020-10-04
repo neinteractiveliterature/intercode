@@ -71,7 +71,7 @@ function NewEventForm({ data }: NewEventFormProps) {
 
     const eventForBuildEventInput: Parameters<typeof buildEventInput>[0] = {
       ...event!,
-      event_category: eventCategory!
+      event_category: eventCategory!,
     };
 
     await createMutate({
@@ -95,8 +95,9 @@ function NewEventForm({ data }: NewEventFormProps) {
           eventCategory.scheduling_ui === 'single_run' &&
           event.form_response_attrs.length_seconds && (
             <RunFormFields
-              run={run ?? { id: -1, rooms: [], starts_at: '' }}
+              run={run ?? { __typename: 'Run', id: -1, rooms: [], starts_at: '' }}
               event={{
+                __typename: 'Event',
                 id: -1,
                 can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
                 title: event.form_response_attrs.title,

@@ -20,7 +20,7 @@ import { Run } from '../graphqlTypes.generated';
 
 export type RunForRunFormFields = Pick<
   Run,
-  'id' | 'starts_at' | 'title_suffix' | 'schedule_note'
+  '__typename' | 'id' | 'starts_at' | 'title_suffix' | 'schedule_note'
 > & {
   rooms: RoomForSelect[];
 };
@@ -56,16 +56,16 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         : null,
     [conventionTimespan, timezoneName],
   );
-  const [day, setDay] = useState<Moment | undefined>(
-    () => startsAt && conventionDayTimespans
+  const [day, setDay] = useState<Moment | undefined>(() =>
+    startsAt && conventionDayTimespans
       ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt))?.start
       : undefined,
   );
-  const [hour, setHour] = useState<number | undefined>(
-    () => startsAt && day ? startsAt.diff(day.clone().startOf('day'), 'hours') : undefined,
+  const [hour, setHour] = useState<number | undefined>(() =>
+    startsAt && day ? startsAt.diff(day.clone().startOf('day'), 'hours') : undefined,
   );
-  const [minute, setMinute] = useState<number | undefined>(
-    () => startsAt && hour != null && day != null
+  const [minute, setMinute] = useState<number | undefined>(() =>
+    startsAt && hour != null && day != null
       ? startsAt.diff(day.clone().startOf('day').add(hour, 'hours'), 'minutes')
       : undefined,
   );
@@ -92,7 +92,13 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const timeInputChanged = ({ hour: newHour, minute: newMinute }: { hour?: number, minute?: number }) => {
+  const timeInputChanged = ({
+    hour: newHour,
+    minute: newMinute,
+  }: {
+    hour?: number;
+    minute?: number;
+  }) => {
     setHour(newHour);
     setMinute(newMinute);
   };
