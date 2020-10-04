@@ -1,27 +1,27 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { PermissionedModelFields_CmsContentGroup_Fragment, PermissionedModelFields_Convention_Fragment, PermissionedModelFields_EventCategory_Fragment } from '../Permissions/fragments.generated';
+import { PermissionedModelFields_CmsContentGroup_Fragment, PermissionedModelFields_Convention_Fragment, PermissionedModelFields_EventCategory_Fragment, PermissionedRoleFields_OrganizationRole_Fragment, PermissionedRoleFields_StaffPosition_Fragment } from '../Permissions/fragments.generated';
 import { gql } from '@apollo/client';
-import { PermissionedModelFieldsFragmentDoc } from '../Permissions/fragments.generated';
+import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
 export type StaffPositionFieldsFragment = (
-  { __typename?: 'StaffPosition' }
+  { __typename: 'StaffPosition' }
   & Pick<Types.StaffPosition, 'id' | 'name' | 'email' | 'visible' | 'email_aliases' | 'cc_addresses'>
-  & { user_con_profiles?: Types.Maybe<Array<(
-    { __typename?: 'UserConProfile' }
+  & { user_con_profiles: Array<(
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'gravatar_url' | 'gravatar_enabled'>
-  )>>, permissions: Array<(
-    { __typename?: 'Permission' }
+  )>, permissions: Array<(
+    { __typename: 'Permission' }
     & Pick<Types.Permission, 'id' | 'permission'>
     & { model: (
-      { __typename?: 'CmsContentGroup' }
+      { __typename: 'CmsContentGroup' }
       & PermissionedModelFields_CmsContentGroup_Fragment
     ) | (
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & PermissionedModelFields_Convention_Fragment
     ) | (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & PermissionedModelFields_EventCategory_Fragment
     ) }
   )> }
@@ -31,22 +31,22 @@ export type StaffPositionsQueryQueryVariables = Types.Exact<{ [key: string]: nev
 
 
 export type StaffPositionsQueryQuery = (
-  { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+  { __typename: 'Query' }
+  & { convention: (
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { event_categories: Array<(
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'name' | 'default_color'>
     )>, cms_content_groups: Array<(
-      { __typename?: 'CmsContentGroup' }
+      { __typename: 'CmsContentGroup' }
       & Pick<Types.CmsContentGroup, 'id' | 'name'>
-    )>, staff_positions?: Types.Maybe<Array<(
-      { __typename?: 'StaffPosition' }
+    )>, staff_positions: Array<(
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id'>
       & StaffPositionFieldsFragment
-    )>> }
-  )> }
+    )> }
+  ) }
 );
 
 export const StaffPositionFieldsFragmentDoc = gql`
@@ -74,7 +74,7 @@ export const StaffPositionFieldsFragmentDoc = gql`
     ${PermissionedModelFieldsFragmentDoc}`;
 export const StaffPositionsQueryDocument = gql`
     query StaffPositionsQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     event_categories {

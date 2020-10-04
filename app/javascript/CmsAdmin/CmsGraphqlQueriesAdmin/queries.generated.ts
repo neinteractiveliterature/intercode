@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type CmsGraphqlQueryFieldsFragment = (
-  { __typename?: 'CmsGraphqlQuery' }
+  { __typename: 'CmsGraphqlQuery' }
   & Pick<Types.CmsGraphqlQuery, 'id' | 'identifier' | 'query' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>
 );
 
@@ -12,13 +12,13 @@ export type CmsGraphqlQueriesQueryQueryVariables = Types.Exact<{ [key: string]: 
 
 
 export type CmsGraphqlQueriesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cmsGraphqlQueries: Array<(
-    { __typename?: 'CmsGraphqlQuery' }
+    { __typename: 'CmsGraphqlQuery' }
     & Pick<Types.CmsGraphqlQuery, 'id'>
     & CmsGraphqlQueryFieldsFragment
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_cms_graphql_queries'>
   ) }
 );

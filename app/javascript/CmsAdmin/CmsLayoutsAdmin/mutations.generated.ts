@@ -11,11 +11,11 @@ export type CreateLayoutMutationVariables = Types.Exact<{
 
 
 export type CreateLayoutMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCmsLayout?: Types.Maybe<(
-    { __typename?: 'CreateCmsLayoutPayload' }
+    { __typename: 'CreateCmsLayoutPayload' }
     & { cms_layout: (
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id'>
       & CmsLayoutFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 
 
 export type UpdateLayoutMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateCmsLayout?: Types.Maybe<(
-    { __typename?: 'UpdateCmsLayoutPayload' }
+    { __typename: 'UpdateCmsLayoutPayload' }
     & { cms_layout: (
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id'>
       & CmsLayoutFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeleteLayoutMutationVariables = Types.Exact<{
 
 
 export type DeleteLayoutMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCmsLayout?: Types.Maybe<(
-    { __typename?: 'DeleteCmsLayoutPayload' }
+    { __typename: 'DeleteCmsLayoutPayload' }
     & Pick<Types.DeleteCmsLayoutPayload, 'clientMutationId'>
   )> }
 );

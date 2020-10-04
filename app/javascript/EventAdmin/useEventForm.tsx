@@ -15,8 +15,10 @@ import { getSortedParsedFormItems } from '../Models/Form';
 
 function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): RegistrationPolicy {
   return {
+    __typename: 'RegistrationPolicy',
     buckets: [
       {
+        __typename: 'RegistrationPolicyBucket',
         key: 'signups',
         name: 'Signups',
         description: 'Signups for this event',

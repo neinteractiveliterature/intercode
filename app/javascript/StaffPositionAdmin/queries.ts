@@ -32,7 +32,7 @@ export const StaffPositionFields = gql`
 
 export const StaffPositionsQuery = gql`
   query StaffPositionsQuery {
-    convention {
+    convention: assertConvention {
       id
       name
 

@@ -3,10 +3,10 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 export type PricingStructureFieldsFragment = (
-  { __typename?: 'PricingStructure' }
+  { __typename: 'PricingStructure' }
   & Pick<Types.PricingStructure, 'pricing_strategy'>
   & { price?: Types.Maybe<(
-    { __typename?: 'Money' }
+    { __typename: 'Money' }
     & Pick<Types.Money, 'fractional' | 'currency_code'>
   )>, value: (
     { __typename: 'Money' }
@@ -14,10 +14,10 @@ export type PricingStructureFieldsFragment = (
   ) | (
     { __typename: 'ScheduledMoneyValue' }
     & { timespans: Array<(
-      { __typename?: 'TimespanWithMoneyValue' }
+      { __typename: 'TimespanWithMoneyValue' }
       & Pick<Types.TimespanWithMoneyValue, 'start' | 'finish'>
       & { value: (
-        { __typename?: 'Money' }
+        { __typename: 'Money' }
         & Pick<Types.Money, 'fractional' | 'currency_code'>
       ) }
     )> }

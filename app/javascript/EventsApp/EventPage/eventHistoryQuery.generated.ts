@@ -11,34 +11,34 @@ export type EventHistoryQueryQueryVariables = Types.Exact<{
 
 
 export type EventHistoryQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id'>
       & { event_form: (
-        { __typename?: 'Form' }
+        { __typename: 'Form' }
         & Pick<Types.Form, 'id'>
         & { form_sections: Array<(
-          { __typename?: 'FormSection' }
+          { __typename: 'FormSection' }
           & Pick<Types.FormSection, 'id'>
           & { form_items: Array<(
-            { __typename?: 'FormItem' }
+            { __typename: 'FormItem' }
             & Pick<Types.FormItem, 'id' | 'admin_description'>
           )> }
         )> }
         & CommonFormFieldsFragment
       ) }
     ), form_response_changes: Array<(
-      { __typename?: 'FormResponseChange' }
+      { __typename: 'FormResponseChange' }
       & Pick<Types.FormResponseChange, 'field_identifier' | 'previous_value' | 'new_value' | 'created_at' | 'updated_at'>
       & { user_con_profile: (
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
       ) }
     )> }

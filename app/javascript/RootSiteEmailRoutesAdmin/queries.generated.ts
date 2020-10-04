@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type EmailRouteFieldsFragment = (
-  { __typename?: 'EmailRoute' }
+  { __typename: 'EmailRoute' }
   & Pick<Types.EmailRoute, 'id' | 'receiver_address' | 'forward_addresses'>
 );
 
@@ -16,12 +16,12 @@ export type RootSiteEmailRoutesAdminTableQueryQueryVariables = Types.Exact<{
 
 
 export type RootSiteEmailRoutesAdminTableQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { email_routes_paginated: (
-    { __typename?: 'EmailRoutesPagination' }
+    { __typename: 'EmailRoutesPagination' }
     & Pick<Types.EmailRoutesPagination, 'total_entries' | 'total_pages'>
     & { entries: Array<(
-      { __typename?: 'EmailRoute' }
+      { __typename: 'EmailRoute' }
       & Pick<Types.EmailRoute, 'id'>
       & EmailRouteFieldsFragment
     )> }

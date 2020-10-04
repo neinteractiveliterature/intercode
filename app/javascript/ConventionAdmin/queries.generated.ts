@@ -4,31 +4,31 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type ConventionAdminConventionFieldsFragment = (
-  { __typename?: 'Convention' }
+  { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'accepting_proposals' | 'starts_at' | 'ends_at' | 'canceled' | 'name' | 'domain' | 'email_from' | 'email_mode' | 'event_mailing_list_domain' | 'location' | 'language' | 'timezone_name' | 'timezone_mode' | 'show_schedule' | 'show_event_list' | 'hidden' | 'maximum_tickets' | 'ticket_name' | 'stripe_publishable_key' | 'masked_stripe_secret_key' | 'clickwrap_agreement' | 'ticket_mode' | 'site_mode' | 'signup_mode' | 'signup_requests_open'>
   & { maximum_event_signups?: Types.Maybe<(
-    { __typename?: 'ScheduledValue' }
+    { __typename: 'ScheduledValue' }
     & { timespans: Array<(
-      { __typename?: 'TimespanWithValue' }
+      { __typename: 'TimespanWithValue' }
       & Pick<Types.TimespanWithValue, 'start' | 'finish' | 'value'>
     )> }
   )>, default_layout?: Types.Maybe<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id' | 'name'>
   )>, cms_layouts?: Types.Maybe<Array<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id' | 'name'>
   )>>, root_page?: Types.Maybe<(
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id' | 'name'>
   )>, pages: Array<(
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id' | 'name'>
-  )>, staff_positions?: Types.Maybe<Array<(
-    { __typename?: 'StaffPosition' }
+  )>, staff_positions: Array<(
+    { __typename: 'StaffPosition' }
     & Pick<Types.StaffPosition, 'id' | 'name'>
-  )>>, catch_all_staff_position?: Types.Maybe<(
-    { __typename?: 'StaffPosition' }
+  )>, catch_all_staff_position?: Types.Maybe<(
+    { __typename: 'StaffPosition' }
     & Pick<Types.StaffPosition, 'id' | 'name'>
   )> }
 );
@@ -37,13 +37,13 @@ export type ConventionAdminConventionQueryQueryVariables = Types.Exact<{ [key: s
 
 
 export type ConventionAdminConventionQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & ConventionAdminConventionFieldsFragment
   )>, rootSite: (
-    { __typename?: 'RootSite' }
+    { __typename: 'RootSite' }
     & Pick<Types.RootSite, 'id' | 'url'>
   ) }
 );

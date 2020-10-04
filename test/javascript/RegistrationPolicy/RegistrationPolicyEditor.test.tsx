@@ -13,7 +13,8 @@ describe('RegistrationPolicyEditor', () => {
   const onChange = jest.fn<void, [RegistrationPolicy]>();
   beforeEach(onChange.mockReset);
 
-  const defaultRegistrationPolicyBucket = {
+  const defaultRegistrationPolicyBucket: RegistrationPolicyBucket = {
+    __typename: 'RegistrationPolicyBucket',
     key: 'testBucket',
     name: 'test',
     description: 'a bucket for testing',

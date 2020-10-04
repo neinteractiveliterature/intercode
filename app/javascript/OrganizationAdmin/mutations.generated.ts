@@ -14,11 +14,11 @@ export type CreateOrganizationRoleMutationVariables = Types.Exact<{
 
 
 export type CreateOrganizationRoleMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createOrganizationRole?: Types.Maybe<(
-    { __typename?: 'CreateOrganizationRolePayload' }
+    { __typename: 'CreateOrganizationRolePayload' }
     & { organization_role: (
-      { __typename?: 'OrganizationRole' }
+      { __typename: 'OrganizationRole' }
       & Pick<Types.OrganizationRole, 'id'>
       & OrganizationRoleFieldsFragment
     ) }
@@ -36,11 +36,11 @@ export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
 
 
 export type UpdateOrganizationRoleMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateOrganizationRole?: Types.Maybe<(
-    { __typename?: 'UpdateOrganizationRolePayload' }
+    { __typename: 'UpdateOrganizationRolePayload' }
     & { organization_role: (
-      { __typename?: 'OrganizationRole' }
+      { __typename: 'OrganizationRole' }
       & Pick<Types.OrganizationRole, 'id'>
       & OrganizationRoleFieldsFragment
     ) }
@@ -53,9 +53,9 @@ export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
 
 
 export type DeleteOrganizationRoleMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteOrganizationRole?: Types.Maybe<(
-    { __typename?: 'DeleteOrganizationRolePayload' }
+    { __typename: 'DeleteOrganizationRolePayload' }
     & Pick<Types.DeleteOrganizationRolePayload, 'clientMutationId'>
   )> }
 );

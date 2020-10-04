@@ -3,25 +3,25 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 export type CommonFormItemFieldsFragment = (
-  { __typename?: 'FormItem' }
+  { __typename: 'FormItem' }
   & Pick<Types.FormItem, 'id' | 'position' | 'identifier' | 'item_type' | 'rendered_properties' | 'default_value'>
 );
 
 export type CommonFormSectionFieldsFragment = (
-  { __typename?: 'FormSection' }
+  { __typename: 'FormSection' }
   & Pick<Types.FormSection, 'id' | 'title' | 'position'>
   & { form_items: Array<(
-    { __typename?: 'FormItem' }
+    { __typename: 'FormItem' }
     & Pick<Types.FormItem, 'id'>
     & CommonFormItemFieldsFragment
   )> }
 );
 
 export type CommonFormFieldsFragment = (
-  { __typename?: 'Form' }
+  { __typename: 'Form' }
   & Pick<Types.Form, 'id' | 'title' | 'form_type'>
   & { form_sections: Array<(
-    { __typename?: 'FormSection' }
+    { __typename: 'FormSection' }
     & Pick<Types.FormSection, 'id'>
     & CommonFormSectionFieldsFragment
   )> }

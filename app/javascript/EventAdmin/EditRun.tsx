@@ -32,6 +32,7 @@ function EditRun({ convention, events }: EditRunProps) {
 
     if (match.path.endsWith('/new')) {
       return {
+        __typename: 'Run',
         id: 0,
         my_signups: [],
         my_signup_requests: [],

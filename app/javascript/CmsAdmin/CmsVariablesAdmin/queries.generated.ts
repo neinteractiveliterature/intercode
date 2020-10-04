@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type CmsVariableFieldsFragment = (
-  { __typename?: 'CmsVariable' }
+  { __typename: 'CmsVariable' }
   & Pick<Types.CmsVariable, 'id' | 'key' | 'value_json' | 'current_ability_can_update' | 'current_ability_can_delete'>
 );
 
@@ -12,13 +12,13 @@ export type CmsVariablesQueryQueryVariables = Types.Exact<{ [key: string]: never
 
 
 export type CmsVariablesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cmsVariables: Array<(
-    { __typename?: 'CmsVariable' }
+    { __typename: 'CmsVariable' }
     & Pick<Types.CmsVariable, 'id'>
     & CmsVariableFieldsFragment
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_cms_variables'>
   ) }
 );
@@ -30,11 +30,11 @@ export type SetCmsVariableMutationMutationVariables = Types.Exact<{
 
 
 export type SetCmsVariableMutationMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { setCmsVariable?: Types.Maybe<(
-    { __typename?: 'SetCmsVariablePayload' }
+    { __typename: 'SetCmsVariablePayload' }
     & { cms_variable: (
-      { __typename?: 'CmsVariable' }
+      { __typename: 'CmsVariable' }
       & Pick<Types.CmsVariable, 'id'>
       & CmsVariableFieldsFragment
     ) }
@@ -47,11 +47,11 @@ export type DeleteCmsVariableMutationMutationVariables = Types.Exact<{
 
 
 export type DeleteCmsVariableMutationMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCmsVariable?: Types.Maybe<(
-    { __typename?: 'DeleteCmsVariablePayload' }
+    { __typename: 'DeleteCmsVariablePayload' }
     & { cms_variable: (
-      { __typename?: 'CmsVariable' }
+      { __typename: 'CmsVariable' }
       & Pick<Types.CmsVariable, 'id'>
       & CmsVariableFieldsFragment
     ) }

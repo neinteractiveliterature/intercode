@@ -9,14 +9,14 @@ export type DefaultEventsQueryQueryVariables = Types.Exact<{
 
 
 export type DefaultEventsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { events_paginated: (
-      { __typename?: 'EventsPagination' }
+      { __typename: 'EventsPagination' }
       & { entries: Array<(
-        { __typename?: 'Event' }
+        { __typename: 'Event' }
         & Pick<Types.Event, 'id' | 'title'>
       )> }
     ) }
@@ -29,14 +29,14 @@ export type DefaultUserConProfilesQueryQueryVariables = Types.Exact<{
 
 
 export type DefaultUserConProfilesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { user_con_profiles_paginated: (
-      { __typename?: 'UserConProfilesPagination' }
+      { __typename: 'UserConProfilesPagination' }
       & { entries: Array<(
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'email'>
       )> }
     ) }
@@ -49,11 +49,11 @@ export type DefaultUsersQueryQueryVariables = Types.Exact<{
 
 
 export type DefaultUsersQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { users_paginated: (
-    { __typename?: 'UsersPagination' }
+    { __typename: 'UsersPagination' }
     & { entries: Array<(
-      { __typename?: 'User' }
+      { __typename: 'User' }
       & Pick<Types.User, 'id' | 'name' | 'email'>
     )> }
   ) }

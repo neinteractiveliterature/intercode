@@ -40,7 +40,6 @@ function StandaloneEditEventForm({
   currentAbility,
 }: StandaloneEditEventFormProps) {
   const history = useHistory();
-  const queryOptions = { variables: { eventId: initialEvent.id } };
   const apolloClient = useApolloClient();
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
@@ -64,12 +63,17 @@ function StandaloneEditEventForm({
     await apolloClient.resetStore();
   }, [apolloClient, event, updateEventMutate]);
 
+  const [createMutate] = useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation();
+  const [updateMutate] = useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation();
+  const [deleteMutate] = useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation();
+
   const meptoMutations = useMEPTOMutations({
-    createMutate: useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation()[0],
-    updateMutate: useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation()[0],
-    deleteMutate: useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation()[0],
+    createMutate,
+    updateMutate,
+    deleteMutate,
     createUpdater: useCallback(
       (store, updatedEventId, override) => {
+        const queryOptions = { variables: { eventId: initialEvent.id } };
         const storeData = store.readQuery<StandaloneEditEventQueryQuery>({
           query: StandaloneEditEventQueryDocument,
           ...queryOptions,
@@ -92,10 +96,11 @@ function StandaloneEditEventForm({
           },
         });
       },
-      [queryOptions],
+      [initialEvent.id],
     ),
     deleteUpdater: useCallback(
       (store, id) => {
+        const queryOptions = { variables: { eventId: initialEvent.id } };
         const storeData = store.readQuery<StandaloneEditEventQueryQuery>({
           query: StandaloneEditEventQueryDocument,
           ...queryOptions,
@@ -117,7 +122,7 @@ function StandaloneEditEventForm({
           },
         });
       },
-      [queryOptions],
+      [initialEvent.id],
     ),
   });
 

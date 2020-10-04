@@ -6,46 +6,46 @@ import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFieldsFragmentDoc, EventPageRunFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import * as Apollo from '@apollo/client';
 export type SignupModerationRunFieldsFragment = (
-  { __typename?: 'Run' }
+  { __typename: 'Run' }
   & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at' | 'signup_count_by_state_and_bucket_key_and_counted'>
   & { event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
   ) }
 );
 
 export type SignupModerationSignupRequestFieldsFragment = (
-  { __typename?: 'SignupRequest' }
+  { __typename: 'SignupRequest' }
   & Pick<Types.SignupRequest, 'id' | 'state' | 'requested_bucket_key' | 'created_at'>
   & { user_con_profile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name'>
   ), replace_signup?: Types.Maybe<(
-    { __typename?: 'Signup' }
+    { __typename: 'Signup' }
     & Pick<Types.Signup, 'id'>
     & { run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & SignupModerationRunFieldsFragment
     ) }
   )>, target_run: (
-    { __typename?: 'Run' }
+    { __typename: 'Run' }
     & Pick<Types.Run, 'id'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id'>
       & { registration_policy?: Types.Maybe<(
-        { __typename?: 'RegistrationPolicy' }
+        { __typename: 'RegistrationPolicy' }
         & Pick<Types.RegistrationPolicy, 'prevent_no_preference_signups'>
         & { buckets: Array<(
-          { __typename?: 'RegistrationPolicyBucket' }
+          { __typename: 'RegistrationPolicyBucket' }
           & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'total_slots' | 'slots_limited' | 'anything' | 'not_counted'>
         )> }
       )> }
     ) }
     & SignupModerationRunFieldsFragment
   ), result_signup?: Types.Maybe<(
-    { __typename?: 'Signup' }
+    { __typename: 'Signup' }
     & Pick<Types.Signup, 'id' | 'state' | 'waitlist_position'>
   )> }
 );
@@ -56,20 +56,20 @@ export type CreateSignupEventsQueryQueryVariables = Types.Exact<{
 
 
 export type CreateSignupEventsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { events_paginated: (
-      { __typename?: 'EventsPagination' }
+      { __typename: 'EventsPagination' }
       & { entries: Array<(
-        { __typename?: 'Event' }
+        { __typename: 'Event' }
         & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list'>
         & { runs: Array<(
-          { __typename?: 'Run' }
+          { __typename: 'Run' }
           & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
           & { rooms: Array<(
-            { __typename?: 'Room' }
+            { __typename: 'Room' }
             & Pick<Types.Room, 'id' | 'name'>
           )> }
         )> }
@@ -85,46 +85,46 @@ export type CreateSignupRunCardQueryQueryVariables = Types.Exact<{
 
 
 export type CreateSignupRunCardQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_read_schedule' | 'can_read_event_signups' | 'can_update_event'>
   ), event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list' | 'can_play_concurrently'>
     & { registration_policy?: Types.Maybe<(
-      { __typename?: 'RegistrationPolicy' }
+      { __typename: 'RegistrationPolicy' }
       & RunCardRegistrationPolicyFieldsFragment
     )>, team_members: Array<(
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id' | 'display_team_member'>
       & { user_con_profile: (
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id' | 'gravatar_url' | 'gravatar_enabled' | 'name_without_nickname'>
       ) }
     )>, event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'team_member_name'>
     ), runs: Array<(
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & EventPageRunFieldsFragment
     )> }
   ), userConProfile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { signups: Array<(
-      { __typename?: 'Signup' }
+      { __typename: 'Signup' }
       & Pick<Types.Signup, 'id' | 'state' | 'waitlist_position'>
       & { run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
       ) }
     )>, signup_requests: Array<(
-      { __typename?: 'SignupRequest' }
+      { __typename: 'SignupRequest' }
       & Pick<Types.SignupRequest, 'id' | 'state'>
       & { target_run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
       ) }
     )> }
@@ -137,15 +137,15 @@ export type SignupModerationQueueQueryQueryVariables = Types.Exact<{
 
 
 export type SignupModerationQueueQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { signup_requests_paginated: (
-      { __typename?: 'SignupRequestsPagination' }
+      { __typename: 'SignupRequestsPagination' }
       & Pick<Types.SignupRequestsPagination, 'total_pages'>
       & { entries: Array<(
-        { __typename?: 'SignupRequest' }
+        { __typename: 'SignupRequest' }
         & Pick<Types.SignupRequest, 'id'>
         & SignupModerationSignupRequestFieldsFragment
       )> }

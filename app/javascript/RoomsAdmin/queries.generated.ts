@@ -7,15 +7,15 @@ export type RoomsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; 
 
 
 export type RoomsAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { rooms: Array<(
-      { __typename?: 'Room' }
+      { __typename: 'Room' }
       & Pick<Types.Room, 'id' | 'name'>
       & { runs: Array<(
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
       )> }
     )> }

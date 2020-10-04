@@ -14,11 +14,11 @@ export type CreateConventionMutationVariables = Types.Exact<{
 
 
 export type CreateConventionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createConvention?: Types.Maybe<(
-    { __typename?: 'CreateConventionPayload' }
+    { __typename: 'CreateConventionPayload' }
     & { convention: (
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & Pick<Types.Convention, 'id'>
       & ConventionDisplayFieldsFragment
     ) }
@@ -32,11 +32,11 @@ export type SetConventionCanceledMutationVariables = Types.Exact<{
 
 
 export type SetConventionCanceledMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { setConventionCanceled?: Types.Maybe<(
-    { __typename?: 'SetConventionCanceledPayload' }
+    { __typename: 'SetConventionCanceledPayload' }
     & { convention: (
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & Pick<Types.Convention, 'id'>
       & ConventionDisplayFieldsFragment
     ) }

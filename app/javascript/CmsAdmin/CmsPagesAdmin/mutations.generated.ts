@@ -11,11 +11,11 @@ export type CreatePageMutationVariables = Types.Exact<{
 
 
 export type CreatePageMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createPage?: Types.Maybe<(
-    { __typename?: 'CreatePagePayload' }
+    { __typename: 'CreatePagePayload' }
     & { page: (
-      { __typename?: 'Page' }
+      { __typename: 'Page' }
       & Pick<Types.Page, 'id'>
       & CmsPageFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdatePageMutationVariables = Types.Exact<{
 
 
 export type UpdatePageMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updatePage?: Types.Maybe<(
-    { __typename?: 'UpdatePagePayload' }
+    { __typename: 'UpdatePagePayload' }
     & { page: (
-      { __typename?: 'Page' }
+      { __typename: 'Page' }
       & Pick<Types.Page, 'id'>
       & CmsPageFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeletePageMutationVariables = Types.Exact<{
 
 
 export type DeletePageMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deletePage?: Types.Maybe<(
-    { __typename?: 'DeletePagePayload' }
+    { __typename: 'DeletePagePayload' }
     & Pick<Types.DeletePagePayload, 'clientMutationId'>
   )> }
 );

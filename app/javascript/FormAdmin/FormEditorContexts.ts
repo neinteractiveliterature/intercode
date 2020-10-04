@@ -45,12 +45,14 @@ export type FormEditorContextValue = {
 
 export const FormEditorContext = React.createContext<FormEditorContextValue>({
   convention: {
+    __typename: 'Convention',
     id: 0,
     name: '',
     timezone_mode: TimezoneMode.UserLocal,
   },
   currentSection: undefined,
   form: {
+    __typename: 'Form',
     id: 0,
     title: '',
     form_type: FormType.Event,
@@ -70,6 +72,7 @@ export type FormItemEditorContextValue = {
 
 export const FormItemEditorContext = React.createContext<FormItemEditorContextValue>({
   formItem: {
+    __typename: 'FormItem',
     id: 0,
     item_type: 'static_text',
     properties: {
@@ -82,6 +85,7 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
     },
   },
   previewFormItem: {
+    __typename: 'FormItem',
     id: 0,
     item_type: 'static_text',
     rendered_properties: {

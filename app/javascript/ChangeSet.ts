@@ -115,5 +115,5 @@ export function useChangeSetWithSelect<T extends ChangeTrackable>() {
     }
   };
 
-  return [changeSet, onChange];
+  return [changeSet, onChange] as const;
 }

@@ -16,14 +16,14 @@ export type ChangeSignupBucketMutationVariables = Types.Exact<{
 
 
 export type ChangeSignupBucketMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateSignupBucket?: Types.Maybe<(
-    { __typename?: 'UpdateSignupBucketPayload' }
+    { __typename: 'UpdateSignupBucketPayload' }
     & { signup: (
-      { __typename?: 'Signup' }
+      { __typename: 'Signup' }
       & Pick<Types.Signup, 'id'>
       & { run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
         & EventPageRunFieldsFragment
         & RunBasicSignupDataFragment
@@ -40,14 +40,14 @@ export type ForceConfirmSignupMutationVariables = Types.Exact<{
 
 
 export type ForceConfirmSignupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { forceConfirmSignup?: Types.Maybe<(
-    { __typename?: 'ForceConfirmSignupPayload' }
+    { __typename: 'ForceConfirmSignupPayload' }
     & { signup: (
-      { __typename?: 'Signup' }
+      { __typename: 'Signup' }
       & Pick<Types.Signup, 'id'>
       & { run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
         & EventPageRunFieldsFragment
         & RunBasicSignupDataFragment
@@ -64,14 +64,14 @@ export type UpdateSignupCountedMutationVariables = Types.Exact<{
 
 
 export type UpdateSignupCountedMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateSignupCounted?: Types.Maybe<(
-    { __typename?: 'UpdateSignupCountedPayload' }
+    { __typename: 'UpdateSignupCountedPayload' }
     & { signup: (
-      { __typename?: 'Signup' }
+      { __typename: 'Signup' }
       & Pick<Types.Signup, 'id'>
       & { run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
         & EventPageRunFieldsFragment
         & RunBasicSignupDataFragment
@@ -87,11 +87,11 @@ export type WithdrawAllUserConProfileSignupsMutationVariables = Types.Exact<{
 
 
 export type WithdrawAllUserConProfileSignupsMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { withdrawAllUserConProfileSignups?: Types.Maybe<(
-    { __typename?: 'WithdrawAllUserConProfileSignupsPayload' }
+    { __typename: 'WithdrawAllUserConProfileSignupsPayload' }
     & { user_con_profile: (
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id'>
       & UserConProfileSignupsFragmentFragment
     ) }

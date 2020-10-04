@@ -240,6 +240,7 @@ function ScheduleMultipleRunsModal({
           <ProspectiveRunSchedule
             day={day}
             runs={nonConflictingTimespansWithinRange.map((t, index) => ({
+              __typename: 'Run',
               id: index * -1,
               starts_at: t.start.toISOString(),
               rooms,

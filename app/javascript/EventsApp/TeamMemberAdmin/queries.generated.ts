@@ -6,55 +6,55 @@ import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 export type TeamMemberTicketFieldsFragment = (
-  { __typename?: 'Ticket' }
+  { __typename: 'Ticket' }
   & Pick<Types.Ticket, 'id'>
   & { user_con_profile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
   ), ticket_type: (
-    { __typename?: 'TicketType' }
+    { __typename: 'TicketType' }
     & Pick<Types.TicketType, 'id' | 'name'>
   ), provided_by_event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
   )> }
 );
 
 export type TeamMemberUserConProfileFieldsFragment = (
-  { __typename?: 'UserConProfile' }
+  { __typename: 'UserConProfile' }
   & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'name_inverted' | 'email' | 'mobile_phone'>
   & { ticket?: Types.Maybe<(
-    { __typename?: 'Ticket' }
+    { __typename: 'Ticket' }
     & Pick<Types.Ticket, 'id'>
     & TeamMemberTicketFieldsFragment
   )> }
 );
 
 export type TeamMemberUserConProfileSearchFieldsFragment = (
-  { __typename?: 'UserConProfile' }
+  { __typename: 'UserConProfile' }
   & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'name_inverted' | 'email'>
   & { ticket?: Types.Maybe<(
-    { __typename?: 'Ticket' }
+    { __typename: 'Ticket' }
     & Pick<Types.Ticket, 'id'>
     & TeamMemberTicketFieldsFragment
   )> }
 );
 
 export type TeamMemberFieldsFragment = (
-  { __typename?: 'TeamMember' }
+  { __typename: 'TeamMember' }
   & Pick<Types.TeamMember, 'id' | 'display_team_member' | 'show_email' | 'receive_con_email' | 'receive_signup_email'>
   & { user_con_profile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
     & TeamMemberUserConProfileFieldsFragment
   ) }
 );
 
 export type TeamMemberFieldsWithoutPersonalInfoFragment = (
-  { __typename?: 'TeamMember' }
+  { __typename: 'TeamMember' }
   & Pick<Types.TeamMember, 'id' | 'display_team_member' | 'show_email' | 'receive_con_email' | 'receive_signup_email'>
   & { user_con_profile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
     & TeamMemberUserConProfileSearchFieldsFragment
   ) }
@@ -66,27 +66,27 @@ export type TeamMembersQueryQueryVariables = Types.Exact<{
 
 
 export type TeamMembersQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name'>
     & { ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'name' | 'description' | 'maximum_event_provided_tickets'>
     )> }
     & CommonConventionDataFragment
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'can_provide_tickets' | 'team_member_name'>
     ), provided_tickets: Array<(
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & TeamMemberTicketFieldsFragment
     )>, team_members: Array<(
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & TeamMemberFieldsFragment
     )> }
@@ -99,14 +99,14 @@ export type TeamMemberUserConProfilesQueryQueryVariables = Types.Exact<{
 
 
 export type TeamMemberUserConProfilesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { user_con_profiles_paginated: (
-      { __typename?: 'UserConProfilesPagination' }
+      { __typename: 'UserConProfilesPagination' }
       & { entries: Array<(
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id'>
         & TeamMemberUserConProfileSearchFieldsFragment
       )> }

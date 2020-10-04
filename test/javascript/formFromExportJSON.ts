@@ -25,6 +25,7 @@ export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFra
       } = item;
 
       formItems.push({
+        __typename: 'FormItem',
         id: formItemId,
         position: formItemId,
         item_type: itemType,
@@ -46,6 +47,7 @@ export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFra
   });
 
   return {
+    __typename: 'Form',
     id: 1,
     title: exportJSON.title,
     form_type: exportJSON.form_type,
