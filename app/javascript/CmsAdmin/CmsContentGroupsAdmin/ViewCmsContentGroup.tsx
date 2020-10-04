@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
-import { useQuery } from '@apollo/client';
 import { useRouteMatch } from 'react-router-dom';
 
-import { CmsContentGroupsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsContentGroupsAdminQueryQuery } from './queries.generated';
+import FourOhFourPage from '../../FourOhFourPage';
 
 function ViewCmsContentGroup() {
-  const { params } = useRouteMatch();
-  const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
+  const { params } = useRouteMatch<{ id: string }>();
+  const { data, loading, error } = useCmsContentGroupsAdminQueryQuery();
   const contentGroup = useMemo(() => {
-    if (loading || error) {
+    if (loading || error || !data) {
       return null;
     }
 
@@ -29,13 +29,17 @@ function ViewCmsContentGroup() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!contentGroup) {
+    return <FourOhFourPage />;
+  }
+
   return (
     <>
       <h3 className="mb-4">{contentGroup.name}</h3>
 
       <CmsContentGroupFormFields
         contentGroup={contentGroup}
-        convention={data.convention}
+        convention={data!.convention}
         readOnly
       />
     </>

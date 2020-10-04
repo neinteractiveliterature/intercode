@@ -54,7 +54,7 @@ export const CmsContentGroupFields = gql`
 
 export const CmsContentGroupsAdminQuery = gql`
   query CmsContentGroupsAdminQuery {
-    convention: assertConvention {
+    convention {
       id
       name
 
