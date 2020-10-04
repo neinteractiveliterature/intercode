@@ -1,31 +1,41 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useMutation, useApolloClient, useQuery } from '@apollo/client';
+import { useApolloClient, ApolloError } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { CmsContentGroupsAdminQuery } from './queries';
 import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
-import { UpdateContentGroup } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import {
+  CmsContentGroupsAdminQueryQuery,
+  useCmsContentGroupsAdminQueryQuery,
+} from './queries.generated';
+import { notEmpty } from '../../ValueUtils';
+import FourOhFourPage from '../../FourOhFourPage';
+import { useUpdateContentGroupMutation } from './mutations.generated';
+import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 
-function EditCmsContentGroupForm({ convention, initialContentGroup }) {
+type EditCmsContentGroupFormProps = {
+  convention: CmsContentGroupsAdminQueryQuery['convention'];
+  initialContentGroup: CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0];
+};
+
+function EditCmsContentGroupForm({
+  convention,
+  initialContentGroup,
+}: EditCmsContentGroupFormProps) {
   const history = useHistory();
-  const [updateCmsContentGroup] = useMutation(UpdateContentGroup);
-  const [contentGroup, setContentGroup] = useState({
-    name: '',
-    contents: [],
-    permissions: [],
-    ...(initialContentGroup || {}),
-  });
-  const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
+  const [updateCmsContentGroup] = useUpdateContentGroupMutation();
+  const [contentGroup, setContentGroup] = useState(initialContentGroup);
+  const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<
+    CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0]['permissions'][0]
+  >();
   const apolloClient = useApolloClient();
 
-  const formSubmitted = async (event) => {
+  const formSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
 
     await updateCmsContentGroup({
@@ -35,17 +45,17 @@ function EditCmsContentGroupForm({ convention, initialContentGroup }) {
           name: contentGroup.name,
           contents: contentGroup.contents.map(({ id, __typename }) => ({
             id,
-            content_type: __typename,
+            content_type: __typename as CmsContentTypeIndicator,
           })),
         },
         grantPermissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
         revokePermissions: permissionsChangeSet
           .getRemoveIds()
-          .map((removeId) =>
-            buildPermissionInput(
-              initialContentGroup.permissions.find((perm) => perm.id === removeId),
-            ),
-          ),
+          .map((removeId) => {
+            const permission = initialContentGroup.permissions.find((perm) => perm.id === removeId);
+            return permission ? buildPermissionInput(permission) : undefined;
+          })
+          .filter(notEmpty),
       },
     });
 
@@ -61,7 +71,9 @@ function EditCmsContentGroupForm({ convention, initialContentGroup }) {
 
       <CmsContentGroupFormFields
         contentGroup={contentGroup}
-        setContentGroup={setContentGroup}
+        setContentGroup={(newValue) =>
+          setContentGroup((prevValue) => ({ ...prevValue, ...newValue }))
+        }
         disabled={submitInProgress}
         convention={convention}
         permissionsChangeSet={permissionsChangeSet}
@@ -69,7 +81,7 @@ function EditCmsContentGroupForm({ convention, initialContentGroup }) {
         removePermission={removePermission}
       />
 
-      <ErrorDisplay graphQLError={submitError} />
+      <ErrorDisplay graphQLError={submitError as ApolloError} />
 
       <input
         type="submit"
@@ -82,24 +94,11 @@ function EditCmsContentGroupForm({ convention, initialContentGroup }) {
   );
 }
 
-EditCmsContentGroupForm.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
-  initialContentGroup: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    permissions: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-};
-
 function EditCmsContentGroup() {
-  const params = useParams();
-  const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
+  const params = useParams<{ id: string }>();
+  const { data, loading, error } = useCmsContentGroupsAdminQueryQuery();
   const initialContentGroup = useMemo(() => {
-    if (loading || error) {
+    if (loading || error || !data) {
       return null;
     }
 
@@ -116,10 +115,14 @@ function EditCmsContentGroup() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!initialContentGroup) {
+    return <FourOhFourPage />;
+  }
+
   return (
     <EditCmsContentGroupForm
       initialContentGroup={initialContentGroup}
-      convention={data.convention}
+      convention={data!.convention}
     />
   );
 }

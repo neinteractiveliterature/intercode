@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { CmsContentGroupsAdminQuery } from './queries';
 import { DeleteContentGroup } from './mutations';
@@ -10,9 +9,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsContentGroupsAdminQueryQuery } from './queries.generated';
 
 function CmsContentGroupsAdminTable() {
-  const { data, loading, error } = useQuery(CmsContentGroupsAdminQuery);
+  const { data, loading, error } = useCmsContentGroupsAdminQueryQuery();
   const confirm = useConfirm();
   const deleteContentGroupMutate = useDeleteMutation(DeleteContentGroup, {
     query: CmsContentGroupsAdminQuery,
@@ -23,7 +23,7 @@ function CmsContentGroupsAdminTable() {
   usePageTitle('CMS Content Groups');
 
   const contentGroupsSorted = useMemo(() => {
-    if (loading || error) {
+    if (loading || error || !data) {
       return [];
     }
 
@@ -38,7 +38,7 @@ function CmsContentGroupsAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deleteContentGroup = (id) => deleteContentGroupMutate({ variables: { id } });
+  const deleteContentGroup = (id: number) => deleteContentGroupMutate({ variables: { id } });
 
   return (
     <>
@@ -46,15 +46,7 @@ function CmsContentGroupsAdminTable() {
         <tbody>
           {contentGroupsSorted.map((contentGroup) => (
             <tr key={contentGroup.id}>
-              <td>
-                {contentGroup.name}
-                {contentGroup.admin_notes && contentGroup.admin_notes.trim() !== '' && (
-                  <>
-                    <br />
-                    <small>{contentGroup.admin_notes}</small>
-                  </>
-                )}
-              </td>
+              <td>{contentGroup.name}</td>
               <td className="text-right">
                 {contentGroup.current_ability_can_update ? (
                   <Link
@@ -92,7 +84,7 @@ function CmsContentGroupsAdminTable() {
         </tbody>
       </table>
 
-      {data.currentAbility.can_create_cms_content_groups && (
+      {data!.currentAbility.can_create_cms_content_groups && (
         <Link to="/cms_content_groups/new" className="btn btn-secondary">
           New content group
         </Link>

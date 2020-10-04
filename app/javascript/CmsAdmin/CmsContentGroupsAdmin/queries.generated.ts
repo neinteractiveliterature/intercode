@@ -61,14 +61,14 @@ export type CmsContentGroupsAdminQueryQueryVariables = Types.Exact<{ [key: strin
 
 export type CmsContentGroupsAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention: (
+  & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { staff_positions: Array<(
       { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name'>
     )> }
-  ), cmsContentGroups: Array<(
+  )>, cmsContentGroups: Array<(
     { __typename: 'CmsContentGroup' }
     & Pick<Types.CmsContentGroup, 'id'>
     & CmsContentGroupFieldsFragment
@@ -139,7 +139,7 @@ ${PermissionedModelFieldsFragmentDoc}
 ${PermissionedRoleFieldsFragmentDoc}`;
 export const CmsContentGroupsAdminQueryDocument = gql`
     query CmsContentGroupsAdminQuery {
-  convention: assertConvention {
+  convention {
     id
     name
     staff_positions {
