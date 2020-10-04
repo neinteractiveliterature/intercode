@@ -32,6 +32,7 @@ const AppRootContext = React.createContext<AppRootContext>({
   conventionName: null,
   conventionDomain: null,
   currentAbility: {
+    __typename: 'Ability',
     can_list_events: false,
     can_manage_any_cms_content: false,
     can_manage_conventions: false,

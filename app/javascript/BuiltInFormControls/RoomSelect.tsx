@@ -2,7 +2,7 @@ import React from 'react';
 import Select, { Props } from 'react-select';
 import { Room } from '../graphqlTypes.generated';
 
-export type RoomForSelect = Pick<Room, 'id' | 'name'>;
+export type RoomForSelect = Pick<Room, '__typename' | 'id' | 'name'>;
 export type RoomSelectProps = Omit<
   Props<RoomForSelect>,
   'options' | 'getOptionValue' | 'getOptionLabel' | 'styles'

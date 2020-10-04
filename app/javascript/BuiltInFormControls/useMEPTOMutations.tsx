@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ApolloCache } from '@apollo/client';
+import { ApolloCache, MutationUpdaterFn } from '@apollo/client';
 import { MEPTOEditorProps } from './MaximumEventProvidedTicketsOverrideEditor';
 
 export type UseMEPTOMutationsProps<OverrideType> = {
@@ -12,16 +12,13 @@ export type UseMEPTOMutationsProps<OverrideType> = {
       };
     };
 
-    update: (
-      store: ApolloCache<any>,
-      result: {
-        data: {
-          createMaximumEventProvidedTicketsOverride: {
-            maximum_event_provided_tickets_override: OverrideType;
-          };
-        };
-      },
-    ) => void;
+    update: MutationUpdaterFn<{
+      __typename: any;
+      createMaximumEventProvidedTicketsOverride: {
+        __typename: any;
+        maximum_event_provided_tickets_override: OverrideType;
+      };
+    }>;
   }) => Promise<any>;
 
   updateMutate: (options: {
@@ -69,16 +66,16 @@ export default function useMEPTOMutations<OverrideType>({
           },
         },
 
-        update: (
-          store,
-          {
-            data: {
-              createMaximumEventProvidedTicketsOverride: {
-                maximum_event_provided_tickets_override: override,
-              },
-            },
-          },
-        ) => createUpdater(store, eventId, override),
+        update: (store, { data }) => {
+          if (data) {
+            createUpdater(
+              store,
+              eventId,
+              data.createMaximumEventProvidedTicketsOverride
+                .maximum_event_provided_tickets_override,
+            );
+          }
+        },
       }),
     [createMutate, createUpdater],
   );

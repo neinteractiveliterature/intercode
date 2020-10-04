@@ -38,7 +38,7 @@ export type ParsedFormResponseChange<
 
 export type ParseableFormResponseChange = Pick<
   FormResponseChange,
-  'field_identifier' | 'previous_value' | 'new_value' | 'created_at' | 'updated_at'
+  '__typename' | 'field_identifier' | 'previous_value' | 'new_value' | 'created_at' | 'updated_at'
 > & {
   user_con_profile: Partial<UserConProfile>;
 };
