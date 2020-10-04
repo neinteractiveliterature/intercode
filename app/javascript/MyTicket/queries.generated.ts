@@ -9,37 +9,37 @@ export type TicketPurchaseFormQueryQueryVariables = Types.Exact<{ [key: string]:
 
 
 export type TicketPurchaseFormQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
     & { products: Array<(
-      { __typename?: 'Product' }
+      { __typename: 'Product' }
       & Pick<Types.Product, 'id' | 'name' | 'description_html'>
       & { pricing_structure?: Types.Maybe<(
-        { __typename?: 'PricingStructure' }
+        { __typename: 'PricingStructure' }
         & PricingStructureFieldsFragment
       )> }
     )>, ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'description' | 'publicly_available'>
       & { pricing_schedule: (
-        { __typename?: 'ScheduledMoneyValue' }
+        { __typename: 'ScheduledMoneyValue' }
         & { timespans: Array<(
-          { __typename?: 'TimespanWithMoneyValue' }
+          { __typename: 'TimespanWithMoneyValue' }
           & Pick<Types.TimespanWithMoneyValue, 'start' | 'finish'>
           & { value: (
-            { __typename?: 'Money' }
+            { __typename: 'Money' }
             & Pick<Types.Money, 'fractional' | 'currency_code'>
           ) }
         )> }
       ) }
     )> }
   )>, myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { ticket?: Types.Maybe<(
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
     )> }
   )> }
@@ -49,31 +49,31 @@ export type MyTicketDisplayQueryQueryVariables = Types.Exact<{ [key: string]: ne
 
 
 export type MyTicketDisplayQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name' | 'timezone_name'>
   )>, myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { ticket?: Types.Maybe<(
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id' | 'created_at' | 'updated_at'>
       & { order_entry?: Types.Maybe<(
-        { __typename?: 'OrderEntry' }
+        { __typename: 'OrderEntry' }
         & Pick<Types.OrderEntry, 'id'>
         & { order: (
-          { __typename?: 'Order' }
+          { __typename: 'Order' }
           & Pick<Types.Order, 'id' | 'charge_id'>
         ), price_per_item: (
-          { __typename?: 'Money' }
+          { __typename: 'Money' }
           & Pick<Types.Money, 'fractional' | 'currency_code'>
         ) }
       )>, ticket_type: (
-        { __typename?: 'TicketType' }
+        { __typename: 'TicketType' }
         & Pick<Types.TicketType, 'id' | 'description'>
       ), provided_by_event?: Types.Maybe<(
-        { __typename?: 'Event' }
+        { __typename: 'Event' }
         & Pick<Types.Event, 'id' | 'title'>
       )> }
     )> }

@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { PermissionedRoleFields_OrganizationRole_Fragment, PermissionedRoleFields_StaffPosition_Fragment } from '../../Permissions/fragments.generated';
+import { PermissionedModelFields_CmsContentGroup_Fragment, PermissionedModelFields_Convention_Fragment, PermissionedModelFields_EventCategory_Fragment, PermissionedRoleFields_OrganizationRole_Fragment, PermissionedRoleFields_StaffPosition_Fragment } from '../../Permissions/fragments.generated';
 import { gql } from '@apollo/client';
-import { PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
+import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
 export type CmsContentFields_CmsLayout_Fragment = (
   { __typename: 'CmsLayout' }
@@ -23,25 +23,34 @@ export type CmsContentFields_Page_Fragment = (
 export type CmsContentFieldsFragment = CmsContentFields_CmsLayout_Fragment | CmsContentFields_CmsPartial_Fragment | CmsContentFields_Page_Fragment;
 
 export type CmsContentGroupFieldsFragment = (
-  { __typename?: 'CmsContentGroup' }
+  { __typename: 'CmsContentGroup' }
   & Pick<Types.CmsContentGroup, 'id' | 'name' | 'current_ability_can_update' | 'current_ability_can_delete'>
   & { contents: Array<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & CmsContentFields_CmsLayout_Fragment
   ) | (
-    { __typename?: 'CmsPartial' }
+    { __typename: 'CmsPartial' }
     & CmsContentFields_CmsPartial_Fragment
   ) | (
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & CmsContentFields_Page_Fragment
   )>, permissions: Array<(
-    { __typename?: 'Permission' }
+    { __typename: 'Permission' }
     & Pick<Types.Permission, 'id' | 'permission'>
-    & { role: (
-      { __typename?: 'OrganizationRole' }
+    & { model: (
+      { __typename: 'CmsContentGroup' }
+      & PermissionedModelFields_CmsContentGroup_Fragment
+    ) | (
+      { __typename: 'Convention' }
+      & PermissionedModelFields_Convention_Fragment
+    ) | (
+      { __typename: 'EventCategory' }
+      & PermissionedModelFields_EventCategory_Fragment
+    ), role: (
+      { __typename: 'OrganizationRole' }
       & PermissionedRoleFields_OrganizationRole_Fragment
     ) | (
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & PermissionedRoleFields_StaffPosition_Fragment
     ) }
   )> }
@@ -51,20 +60,20 @@ export type CmsContentGroupsAdminQueryQueryVariables = Types.Exact<{ [key: strin
 
 
 export type CmsContentGroupsAdminQueryQuery = (
-  { __typename?: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+  { __typename: 'Query' }
+  & { convention: (
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
-    & { staff_positions?: Types.Maybe<Array<(
-      { __typename?: 'StaffPosition' }
+    & { staff_positions: Array<(
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name'>
-    )>> }
-  )>, cmsContentGroups: Array<(
-    { __typename?: 'CmsContentGroup' }
+    )> }
+  ), cmsContentGroups: Array<(
+    { __typename: 'CmsContentGroup' }
     & Pick<Types.CmsContentGroup, 'id'>
     & CmsContentGroupFieldsFragment
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_cms_content_groups'>
   ) }
 );
@@ -75,15 +84,15 @@ export type SearchCmsContentQueryQueryVariables = Types.Exact<{
 
 
 export type SearchCmsContentQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { searchCmsContent: Array<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & CmsContentFields_CmsLayout_Fragment
   ) | (
-    { __typename?: 'CmsPartial' }
+    { __typename: 'CmsPartial' }
     & CmsContentFields_CmsPartial_Fragment
   ) | (
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & CmsContentFields_Page_Fragment
   )> }
 );
@@ -117,16 +126,20 @@ export const CmsContentGroupFieldsFragmentDoc = gql`
   permissions {
     id
     permission
+    model {
+      ...PermissionedModelFields
+    }
     role {
       ...PermissionedRoleFields
     }
   }
 }
     ${CmsContentFieldsFragmentDoc}
+${PermissionedModelFieldsFragmentDoc}
 ${PermissionedRoleFieldsFragmentDoc}`;
 export const CmsContentGroupsAdminQueryDocument = gql`
     query CmsContentGroupsAdminQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     staff_positions {

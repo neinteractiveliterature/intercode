@@ -4,13 +4,13 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type AdminNavigationItemFieldsFragment = (
-  { __typename?: 'CmsNavigationItem' }
+  { __typename: 'CmsNavigationItem' }
   & Pick<Types.CmsNavigationItem, 'id' | 'position' | 'title'>
   & { page?: Types.Maybe<(
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id'>
   )>, navigation_section?: Types.Maybe<(
-    { __typename?: 'CmsNavigationItem' }
+    { __typename: 'CmsNavigationItem' }
     & Pick<Types.CmsNavigationItem, 'id'>
   )> }
 );
@@ -19,15 +19,15 @@ export type NavigationItemsAdminQueryQueryVariables = Types.Exact<{ [key: string
 
 
 export type NavigationItemsAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, cmsPages: Array<(
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id' | 'name'>
   )>, cmsNavigationItems: Array<(
-    { __typename?: 'CmsNavigationItem' }
+    { __typename: 'CmsNavigationItem' }
     & Pick<Types.CmsNavigationItem, 'id'>
     & AdminNavigationItemFieldsFragment
   )> }

@@ -11,11 +11,11 @@ export type CreateTeamMemberMutationVariables = Types.Exact<{
 
 
 export type CreateTeamMemberMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createTeamMember?: Types.Maybe<(
-    { __typename?: 'CreateTeamMemberPayload' }
+    { __typename: 'CreateTeamMemberPayload' }
     & { team_member: (
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & TeamMemberFieldsFragment
     ) }
@@ -28,11 +28,11 @@ export type DeleteTeamMemberMutationVariables = Types.Exact<{
 
 
 export type DeleteTeamMemberMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteTeamMember?: Types.Maybe<(
-    { __typename?: 'DeleteTeamMemberPayload' }
+    { __typename: 'DeleteTeamMemberPayload' }
     & { team_member: (
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & TeamMemberFieldsWithoutPersonalInfoFragment
     ) }
@@ -45,11 +45,11 @@ export type UpdateTeamMemberMutationVariables = Types.Exact<{
 
 
 export type UpdateTeamMemberMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateTeamMember?: Types.Maybe<(
-    { __typename?: 'UpdateTeamMemberPayload' }
+    { __typename: 'UpdateTeamMemberPayload' }
     & { team_member: (
-      { __typename?: 'TeamMember' }
+      { __typename: 'TeamMember' }
       & Pick<Types.TeamMember, 'id'>
       & TeamMemberFieldsWithoutPersonalInfoFragment
     ) }
@@ -64,11 +64,11 @@ export type ProvideEventTicketMutationVariables = Types.Exact<{
 
 
 export type ProvideEventTicketMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { provideEventTicket?: Types.Maybe<(
-    { __typename?: 'ProvideEventTicketPayload' }
+    { __typename: 'ProvideEventTicketPayload' }
     & { ticket: (
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & TeamMemberTicketFieldsFragment
     ) }

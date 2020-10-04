@@ -12,11 +12,11 @@ export type CreateEventProposalMutationVariables = Types.Exact<{
 
 
 export type CreateEventProposalMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createEventProposal?: Types.Maybe<(
-    { __typename?: 'CreateEventProposalPayload' }
+    { __typename: 'CreateEventProposalPayload' }
     & { event_proposal: (
-      { __typename?: 'EventProposal' }
+      { __typename: 'EventProposal' }
       & Pick<Types.EventProposal, 'id'>
     ) }
   )> }
@@ -28,11 +28,11 @@ export type UpdateEventProposalMutationVariables = Types.Exact<{
 
 
 export type UpdateEventProposalMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEventProposal?: Types.Maybe<(
-    { __typename?: 'UpdateEventProposalPayload' }
+    { __typename: 'UpdateEventProposalPayload' }
     & { event_proposal: (
-      { __typename?: 'EventProposal' }
+      { __typename: 'EventProposal' }
       & Pick<Types.EventProposal, 'id'>
       & EventProposalFieldsFragment
     ) }
@@ -45,9 +45,9 @@ export type DeleteEventProposalMutationVariables = Types.Exact<{
 
 
 export type DeleteEventProposalMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteEventProposal?: Types.Maybe<(
-    { __typename?: 'DeleteEventProposalPayload' }
+    { __typename: 'DeleteEventProposalPayload' }
     & Pick<Types.DeleteEventProposalPayload, 'clientMutationId'>
   )> }
 );
@@ -58,11 +58,11 @@ export type SubmitEventProposalMutationVariables = Types.Exact<{
 
 
 export type SubmitEventProposalMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { submitEventProposal?: Types.Maybe<(
-    { __typename?: 'SubmitEventProposalPayload' }
+    { __typename: 'SubmitEventProposalPayload' }
     & { event_proposal: (
-      { __typename?: 'EventProposal' }
+      { __typename: 'EventProposal' }
       & Pick<Types.EventProposal, 'id'>
       & EventProposalFieldsFragment
     ) }
@@ -77,11 +77,11 @@ export type TransitionEventProposalMutationVariables = Types.Exact<{
 
 
 export type TransitionEventProposalMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { transitionEventProposal?: Types.Maybe<(
-    { __typename?: 'TransitionEventProposalPayload' }
+    { __typename: 'TransitionEventProposalPayload' }
     & { event_proposal: (
-      { __typename?: 'EventProposal' }
+      { __typename: 'EventProposal' }
       & Pick<Types.EventProposal, 'id'>
       & EventProposalFieldsFragment
     ) }
@@ -95,11 +95,11 @@ export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
 
 
 export type UpdateEventProposalAdminNotesMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEventProposalAdminNotes?: Types.Maybe<(
-    { __typename?: 'UpdateEventProposalAdminNotesPayload' }
+    { __typename: 'UpdateEventProposalAdminNotesPayload' }
     & { event_proposal: (
-      { __typename?: 'EventProposal' }
+      { __typename: 'EventProposal' }
       & Pick<Types.EventProposal, 'id'>
       & EventProposalFieldsFragment
     ) }

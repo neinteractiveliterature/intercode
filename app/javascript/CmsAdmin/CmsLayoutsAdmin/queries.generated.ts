@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type CmsLayoutFieldsFragment = (
-  { __typename?: 'CmsLayout' }
+  { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name' | 'content' | 'navbar_classes' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>
 );
 
@@ -12,15 +12,15 @@ export type CmsLayoutsAdminQueryQueryVariables = Types.Exact<{ [key: string]: ne
 
 
 export type CmsLayoutsAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_cms_layouts'>
   ), cmsLayouts: Array<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id'>
     & CmsLayoutFieldsFragment
   )> }

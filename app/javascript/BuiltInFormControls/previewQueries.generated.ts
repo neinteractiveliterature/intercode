@@ -9,7 +9,7 @@ export type PreviewLiquidQueryQueryVariables = Types.Exact<{
 
 
 export type PreviewLiquidQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & Pick<Types.Query, 'previewLiquid'>
 );
 
@@ -19,7 +19,7 @@ export type PreviewMarkdownQueryQueryVariables = Types.Exact<{
 
 
 export type PreviewMarkdownQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & Pick<Types.Query, 'previewMarkdown'>
 );
 
@@ -30,7 +30,7 @@ export type PreviewNotifierLiquidQueryQueryVariables = Types.Exact<{
 
 
 export type PreviewNotifierLiquidQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { previewLiquid: Types.Query['previewNotifierLiquid'] }
 );
 

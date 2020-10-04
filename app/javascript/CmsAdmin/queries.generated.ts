@@ -7,12 +7,12 @@ export type CmsAdminBaseQueryQueryVariables = Types.Exact<{ [key: string]: never
 
 
 export type CmsAdminBaseQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_cms_navigation_items'>
   ) }
 );

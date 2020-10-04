@@ -6,36 +6,36 @@ import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 export type TicketTypeFieldsFragment = (
-  { __typename?: 'TicketType' }
+  { __typename: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>
 );
 
 export type MaximumEventProvidedTicketsOverrideFieldsFragment = (
-  { __typename?: 'MaximumEventProvidedTicketsOverride' }
+  { __typename: 'MaximumEventProvidedTicketsOverride' }
   & Pick<Types.MaximumEventProvidedTicketsOverride, 'id' | 'override_value'>
   & { ticket_type: (
-    { __typename?: 'TicketType' }
+    { __typename: 'TicketType' }
     & Pick<Types.TicketType, 'id'>
     & TicketTypeFieldsFragment
   ) }
 );
 
 export type RoomFieldsFragment = (
-  { __typename?: 'Room' }
+  { __typename: 'Room' }
   & Pick<Types.Room, 'id' | 'name'>
 );
 
 export type EventPageEventCategoryFieldsFragment = (
-  { __typename?: 'EventCategory' }
+  { __typename: 'EventCategory' }
   & Pick<Types.EventCategory, 'id' | 'name' | 'scheduling_ui' | 'default_color' | 'full_color' | 'signed_up_color'>
   & { event_form: (
-    { __typename?: 'Form' }
+    { __typename: 'Form' }
     & Pick<Types.Form, 'id'>
     & { form_sections: Array<(
-      { __typename?: 'FormSection' }
+      { __typename: 'FormSection' }
       & Pick<Types.FormSection, 'id'>
       & { form_items: Array<(
-        { __typename?: 'FormItem' }
+        { __typename: 'FormItem' }
         & Pick<Types.FormItem, 'id' | 'admin_description'>
       )> }
     )> }
@@ -44,58 +44,58 @@ export type EventPageEventCategoryFieldsFragment = (
 );
 
 export type ConventionFieldsFragment = (
-  { __typename?: 'Convention' }
+  { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain' | 'site_mode' | 'ticket_name' | 'ticket_mode'>
   & { event_categories: Array<(
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id'>
     & EventPageEventCategoryFieldsFragment
   )>, rooms: Array<(
-    { __typename?: 'Room' }
+    { __typename: 'Room' }
     & Pick<Types.Room, 'id'>
     & RoomFieldsFragment
   )>, ticket_types: Array<(
-    { __typename?: 'TicketType' }
+    { __typename: 'TicketType' }
     & Pick<Types.TicketType, 'id'>
     & TicketTypeFieldsFragment
   )> }
 );
 
 export type RunFieldsFragment = (
-  { __typename?: 'Run' }
+  { __typename: 'Run' }
   & Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix' | 'room_names' | 'confirmed_signup_count' | 'not_counted_signup_count' | 'signup_count_by_state_and_bucket_key_and_counted'>
   & { rooms: Array<(
-    { __typename?: 'Room' }
+    { __typename: 'Room' }
     & Pick<Types.Room, 'id'>
     & RoomFieldsFragment
   )>, my_signups: Array<(
-    { __typename?: 'Signup' }
+    { __typename: 'Signup' }
     & Pick<Types.Signup, 'id' | 'state'>
   )>, my_signup_requests: Array<(
-    { __typename?: 'SignupRequest' }
+    { __typename: 'SignupRequest' }
     & Pick<Types.SignupRequest, 'id' | 'state'>
   )> }
 );
 
 export type EventFieldsFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'author' | 'description' | 'organization' | 'url' | 'con_mail_destination' | 'can_play_concurrently' | 'short_blurb' | 'participant_communications' | 'age_restrictions' | 'content_warnings' | 'email' | 'length_seconds' | 'status' | 'description_html' | 'form_response_attrs_json' | 'admin_notes'>
   & { event_category: (
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
   ), registration_policy?: Types.Maybe<(
-    { __typename?: 'RegistrationPolicy' }
+    { __typename: 'RegistrationPolicy' }
     & Pick<Types.RegistrationPolicy, 'slots_limited' | 'prevent_no_preference_signups'>
     & { buckets: Array<(
-      { __typename?: 'RegistrationPolicyBucket' }
+      { __typename: 'RegistrationPolicyBucket' }
       & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'description' | 'minimum_slots' | 'preferred_slots' | 'total_slots' | 'slots_limited' | 'anything' | 'not_counted'>
     )> }
   )>, runs: Array<(
-    { __typename?: 'Run' }
+    { __typename: 'Run' }
     & Pick<Types.Run, 'id'>
     & RunFieldsFragment
   )>, maximum_event_provided_tickets_overrides: Array<(
-    { __typename?: 'MaximumEventProvidedTicketsOverride' }
+    { __typename: 'MaximumEventProvidedTicketsOverride' }
     & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
     & MaximumEventProvidedTicketsOverrideFieldsFragment
   )> }
@@ -105,16 +105,16 @@ export type EventAdminEventsQueryQueryVariables = Types.Exact<{ [key: string]: n
 
 
 export type EventAdminEventsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_override_maximum_event_provided_tickets' | 'can_manage_runs'>
   ), convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & ConventionFieldsFragment
   ), events: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
     & EventFieldsFragment
   )> }

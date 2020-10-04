@@ -10,11 +10,11 @@ export type RateEventMutationVariables = Types.Exact<{
 
 
 export type RateEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { rateEvent?: Types.Maybe<(
-    { __typename?: 'RateEventPayload' }
+    { __typename: 'RateEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'my_rating'>
     ) }
   )> }

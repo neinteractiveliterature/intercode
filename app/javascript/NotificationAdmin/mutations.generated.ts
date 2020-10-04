@@ -12,11 +12,11 @@ export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
 
 
 export type UpdateNotificationTemplateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateNotificationTemplate?: Types.Maybe<(
-    { __typename?: 'UpdateNotificationTemplatePayload' }
+    { __typename: 'UpdateNotificationTemplatePayload' }
     & { notification_template: (
-      { __typename?: 'NotificationTemplate' }
+      { __typename: 'NotificationTemplate' }
       & Pick<Types.NotificationTemplate, 'id'>
       & NotificationTemplateFieldsFragment
     ) }

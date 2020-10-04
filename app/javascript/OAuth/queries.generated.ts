@@ -9,10 +9,10 @@ export type OAuthAuthorizationPromptQueryQueryVariables = Types.Exact<{
 
 
 export type OAuthAuthorizationPromptQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & Pick<Types.Query, 'oauthPreAuth'>
   & { currentUser?: Types.Maybe<(
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id'>
   )> }
 );
@@ -21,9 +21,9 @@ export type OAuthAuthorizedApplicationsQueryQueryVariables = Types.Exact<{ [key:
 
 
 export type OAuthAuthorizedApplicationsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { myAuthorizedApplications: Array<(
-    { __typename?: 'AuthorizedApplication' }
+    { __typename: 'AuthorizedApplication' }
     & Pick<Types.AuthorizedApplication, 'uid' | 'name' | 'scopes'>
   )> }
 );

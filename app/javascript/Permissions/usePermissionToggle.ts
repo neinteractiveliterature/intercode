@@ -1,7 +1,23 @@
 import { useMemo } from 'react';
 import classNames from 'classnames';
 
-import { findPermission, permissionEquals } from './PermissionUtils';
+import { findPermission, PartialPolymorphicPermission, permissionEquals } from './PermissionUtils';
+import {
+  UsePermissionsChangeSetOptions,
+  UsePermissionsChangeSetResult,
+} from './usePermissionsChangeSet';
+
+export type UsePermissionToggleOptions = UsePermissionsChangeSetResult &
+  Pick<UsePermissionsChangeSetOptions, 'initialPermissions' | 'changeSet'> &
+  PartialPolymorphicPermission & {
+    readOnly: boolean;
+  };
+
+export type UsePermissionToggleResult = {
+  hasPermission: boolean;
+  toggle: () => void;
+  className: string;
+};
 
 export default function usePermissionToggle({
   grantPermission,
@@ -13,8 +29,8 @@ export default function usePermissionToggle({
   changeSet,
   currentPermissions,
   readOnly,
-}) {
-  const setPermission = (value) => {
+}: UsePermissionToggleOptions) {
+  const setPermission = (value: boolean) => {
     if (value) {
       grantPermission({ role, model, permission });
     } else {
@@ -35,18 +51,19 @@ export default function usePermissionToggle({
         'table-success':
           changeSet &&
           changeSet.changes.some(
-            ({ changeType, value }) =>
-              changeType === 'add' && permissionEquals(value, { role, model, permission }),
+            (change) =>
+              change.changeType === 'add' &&
+              permissionEquals(change.value, { role, model, permission }),
           ),
         'table-danger':
           existingPermission &&
           changeSet &&
           changeSet.changes.some(
-            ({ changeType, id }) => changeType === 'remove' && existingPermission.id === id,
+            (change) => change.changeType === 'remove' && existingPermission.id === change.id,
           ),
       }),
     [changeSet, readOnly, existingPermission, role, model, permission],
   );
 
-  return { hasPermission, toggle, className };
+  return { hasPermission, toggle, className } as const;
 }

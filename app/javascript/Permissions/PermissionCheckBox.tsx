@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-function PermissionCheckBox({ hasPermission }) {
+export type PermissionCheckBoxProps = {
+  hasPermission: boolean;
+};
+
+function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps) {
   if (hasPermission) {
     return (
       <i className="fa fa-check-square-o">
@@ -16,9 +19,5 @@ function PermissionCheckBox({ hasPermission }) {
     </i>
   );
 }
-
-PermissionCheckBox.propTypes = {
-  hasPermission: PropTypes.bool.isRequired,
-};
 
 export default PermissionCheckBox;

@@ -11,11 +11,11 @@ export type CreateStaffPositionMutationVariables = Types.Exact<{
 
 
 export type CreateStaffPositionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createStaffPosition?: Types.Maybe<(
-    { __typename?: 'CreateStaffPositionPayload' }
+    { __typename: 'CreateStaffPositionPayload' }
     & { staff_position: (
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id'>
       & StaffPositionFieldsFragment
     ) }
@@ -28,11 +28,11 @@ export type UpdateStaffPositionMutationVariables = Types.Exact<{
 
 
 export type UpdateStaffPositionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateStaffPosition?: Types.Maybe<(
-    { __typename?: 'UpdateStaffPositionPayload' }
+    { __typename: 'UpdateStaffPositionPayload' }
     & { staff_position: (
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id'>
       & StaffPositionFieldsFragment
     ) }
@@ -47,11 +47,11 @@ export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
 
 
 export type UpdateStaffPositionPermissionsMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateStaffPositionPermissions?: Types.Maybe<(
-    { __typename?: 'UpdateStaffPositionPermissionsPayload' }
+    { __typename: 'UpdateStaffPositionPermissionsPayload' }
     & { staff_position: (
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id'>
       & StaffPositionFieldsFragment
     ) }
@@ -64,11 +64,11 @@ export type DeleteStaffPositionMutationVariables = Types.Exact<{
 
 
 export type DeleteStaffPositionMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteStaffPosition?: Types.Maybe<(
-    { __typename?: 'DeleteStaffPositionPayload' }
+    { __typename: 'DeleteStaffPositionPayload' }
     & { staff_position: (
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id'>
     ) }
   )> }

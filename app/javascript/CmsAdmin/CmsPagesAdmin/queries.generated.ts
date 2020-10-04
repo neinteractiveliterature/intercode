@@ -4,15 +4,15 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type CmsPageAdminLayoutFieldsFragment = (
-  { __typename?: 'CmsLayout' }
+  { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name'>
 );
 
 export type CmsPageFieldsFragment = (
-  { __typename?: 'Page' }
+  { __typename: 'Page' }
   & Pick<Types.Page, 'id' | 'name' | 'slug' | 'content' | 'admin_notes' | 'skip_clickwrap_agreement' | 'hidden_from_search' | 'current_ability_can_update' | 'current_ability_can_delete'>
   & { cms_layout?: Types.Maybe<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id'>
     & CmsPageAdminLayoutFieldsFragment
   )> }
@@ -22,35 +22,35 @@ export type CmsPagesAdminQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type CmsPagesAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_pages'>
   ), cmsPages: Array<(
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id'>
     & CmsPageFieldsFragment
   )>, cmsParent: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { default_layout?: Types.Maybe<(
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id'>
       & CmsPageAdminLayoutFieldsFragment
     )> }
   ) | (
-    { __typename?: 'RootSite' }
+    { __typename: 'RootSite' }
     & Pick<Types.RootSite, 'id'>
     & { root_site_default_layout: (
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id'>
       & CmsPageAdminLayoutFieldsFragment
     ) }
   ), cmsLayouts: Array<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id'>
     & CmsPageAdminLayoutFieldsFragment
   )> }

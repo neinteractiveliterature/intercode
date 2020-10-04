@@ -4,13 +4,13 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type OrganizationRoleFieldsFragment = (
-  { __typename?: 'OrganizationRole' }
+  { __typename: 'OrganizationRole' }
   & Pick<Types.OrganizationRole, 'id' | 'name'>
   & { users: Array<(
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id' | 'name' | 'email'>
   )>, permissions: Array<(
-    { __typename?: 'Permission' }
+    { __typename: 'Permission' }
     & Pick<Types.Permission, 'id' | 'permission'>
   )> }
 );
@@ -19,15 +19,15 @@ export type OrganizationAdminOrganizationsQueryQueryVariables = Types.Exact<{ [k
 
 
 export type OrganizationAdminOrganizationsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { organizations: Array<(
-    { __typename?: 'Organization' }
+    { __typename: 'Organization' }
     & Pick<Types.Organization, 'id' | 'name' | 'current_ability_can_manage_access'>
     & { conventions: Array<(
-      { __typename?: 'Convention' }
+      { __typename: 'Convention' }
       & Pick<Types.Convention, 'id' | 'name' | 'starts_at'>
     )>, organization_roles: Array<(
-      { __typename?: 'OrganizationRole' }
+      { __typename: 'OrganizationRole' }
       & Pick<Types.OrganizationRole, 'id'>
       & OrganizationRoleFieldsFragment
     )> }

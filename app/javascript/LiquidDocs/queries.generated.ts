@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type LiquidAssignFieldsFragment = (
-  { __typename?: 'LiquidAssign' }
+  { __typename: 'LiquidAssign' }
   & Pick<Types.LiquidAssign, 'name' | 'drop_class_name' | 'cms_variable_value_json'>
 );
 
@@ -12,9 +12,9 @@ export type LiquidAssignsQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type LiquidAssignsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { liquidAssigns: Array<(
-    { __typename?: 'LiquidAssign' }
+    { __typename: 'LiquidAssign' }
     & LiquidAssignFieldsFragment
   )> }
 );
@@ -25,9 +25,9 @@ export type NotifierLiquidAssignsQueryQueryVariables = Types.Exact<{
 
 
 export type NotifierLiquidAssignsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { liquidAssigns: Array<(
-    { __typename?: 'LiquidAssign' }
+    { __typename: 'LiquidAssign' }
     & LiquidAssignFieldsFragment
   )> }
 );

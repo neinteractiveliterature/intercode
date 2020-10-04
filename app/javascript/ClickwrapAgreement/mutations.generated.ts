@@ -7,11 +7,11 @@ export type AcceptClickwrapAgreementMutationVariables = Types.Exact<{ [key: stri
 
 
 export type AcceptClickwrapAgreementMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { acceptClickwrapAgreement?: Types.Maybe<(
-    { __typename?: 'AcceptClickwrapAgreementPayload' }
+    { __typename: 'AcceptClickwrapAgreementPayload' }
     & { my_profile: (
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id' | 'accepted_clickwrap_agreement'>
     ) }
   )> }

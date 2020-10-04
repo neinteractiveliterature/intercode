@@ -8,33 +8,33 @@ import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, Common
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 export type StandaloneEditEvent_TicketTypeFieldsFragment = (
-  { __typename?: 'TicketType' }
+  { __typename: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>
 );
 
 export type StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment = (
-  { __typename?: 'MaximumEventProvidedTicketsOverride' }
+  { __typename: 'MaximumEventProvidedTicketsOverride' }
   & Pick<Types.MaximumEventProvidedTicketsOverride, 'id' | 'override_value'>
   & { ticket_type: (
-    { __typename?: 'TicketType' }
+    { __typename: 'TicketType' }
     & Pick<Types.TicketType, 'id'>
     & StandaloneEditEvent_TicketTypeFieldsFragment
   ) }
 );
 
 export type StandaloneEditEvent_EventFieldsFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'form_response_attrs_json'>
   & { event_category: (
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
     & { event_form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & CommonFormFieldsFragment
     ) }
   ), maximum_event_provided_tickets_overrides: Array<(
-    { __typename?: 'MaximumEventProvidedTicketsOverride' }
+    { __typename: 'MaximumEventProvidedTicketsOverride' }
     & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
     & StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment
   )> }
@@ -46,21 +46,21 @@ export type StandaloneEditEventQueryQueryVariables = Types.Exact<{
 
 
 export type StandaloneEditEventQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_override_maximum_event_provided_tickets' | 'can_delete_event' | 'can_update_event'>
   ), convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name' | 'event_mailing_list_domain'>
     & { ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
       & StandaloneEditEvent_TicketTypeFieldsFragment
     )> }
     & CommonConventionDataFragment
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
     & StandaloneEditEvent_EventFieldsFragment
   ) }

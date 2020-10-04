@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type CmsFileFieldsFragment = (
-  { __typename?: 'CmsFile' }
+  { __typename: 'CmsFile' }
   & Pick<Types.CmsFile, 'id' | 'filename' | 'url' | 'content_type' | 'size' | 'current_ability_can_delete'>
 );
 
@@ -12,15 +12,15 @@ export type CmsFilesAdminQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type CmsFilesAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_cms_files'>
   ), cmsFiles: Array<(
-    { __typename?: 'CmsFile' }
+    { __typename: 'CmsFile' }
     & Pick<Types.CmsFile, 'id'>
     & CmsFileFieldsFragment
   )> }

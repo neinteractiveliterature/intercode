@@ -11,11 +11,11 @@ export type CreateDepartmentMutationVariables = Types.Exact<{
 
 
 export type CreateDepartmentMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createDepartment?: Types.Maybe<(
-    { __typename?: 'CreateDepartmentPayload' }
+    { __typename: 'CreateDepartmentPayload' }
     & { department: (
-      { __typename?: 'Department' }
+      { __typename: 'Department' }
       & Pick<Types.Department, 'id'>
       & AdminDepartmentFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateDepartmentMutationVariables = Types.Exact<{
 
 
 export type UpdateDepartmentMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateDepartment?: Types.Maybe<(
-    { __typename?: 'UpdateDepartmentPayload' }
+    { __typename: 'UpdateDepartmentPayload' }
     & { department: (
-      { __typename?: 'Department' }
+      { __typename: 'Department' }
       & Pick<Types.Department, 'id'>
       & AdminDepartmentFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeleteDepartmentMutationVariables = Types.Exact<{
 
 
 export type DeleteDepartmentMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteDepartment?: Types.Maybe<(
-    { __typename?: 'DeleteDepartmentPayload' }
+    { __typename: 'DeleteDepartmentPayload' }
     & Pick<Types.DeleteDepartmentPayload, 'clientMutationId'>
   )> }
 );

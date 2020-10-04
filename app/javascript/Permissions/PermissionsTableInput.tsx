@@ -1,38 +1,42 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { titleize } from 'inflected';
 import classNames from 'classnames';
 
 import PermissionsTableCell from './PermissionsTableCell';
-import usePermissionsChangeSet from './usePermissionsChangeSet';
-import {
-  PermissionNamePropType,
-  PermissionPropType,
-  ModelPropType,
-  RolePropType,
-} from './PermissionPropTypes';
+import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePermissionsChangeSet';
 
-function PermissionsTableInput({
+type PermissionName = {
+  name: string;
+  permission: string;
+};
+
+type PermissionsTableInputProps<RowType extends { id: number }> = UsePermissionsChangeSetOptions & {
+  permissionNames: PermissionName[];
+  rows: RowType[];
+  rowType: 'model' | 'role';
+  formatRowHeader: (row: RowType) => React.ReactNode;
+  rowsHeader?: React.ReactNode;
+  readOnly?: boolean;
+};
+
+function PermissionsTableInput<RowType extends { id: number }>({
   permissionNames,
   initialPermissions,
-  rowType,
-  models,
-  roles,
   changeSet,
   add,
   remove,
   rowsHeader,
   formatRowHeader,
   readOnly,
-}) {
+  rows,
+  rowType,
+}: PermissionsTableInputProps<RowType>) {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions,
     changeSet,
     add,
     remove,
   });
-
-  const rows = rowType === 'role' ? roles : models;
 
   return (
     <table
@@ -61,12 +65,12 @@ function PermissionsTableInput({
                 currentPermissions={currentPermissions}
                 changeSet={changeSet}
                 rowType={rowType}
-                model={rowType === 'model' ? row : null}
-                role={rowType === 'role' ? row : null}
+                model={rowType === 'model' ? row : undefined}
+                role={rowType === 'role' ? row : undefined}
                 permission={permission}
                 grantPermission={grantPermission}
                 revokePermission={revokePermission}
-                readOnly={readOnly}
+                readOnly={readOnly ?? false}
               />
             ))}
           </tr>
@@ -75,28 +79,5 @@ function PermissionsTableInput({
     </table>
   );
 }
-
-PermissionsTableInput.propTypes = {
-  permissionNames: PropTypes.arrayOf(PermissionNamePropType).isRequired,
-  initialPermissions: PropTypes.arrayOf(PermissionPropType.isRequired).isRequired,
-  rowType: PropTypes.oneOf(['model', 'role']).isRequired,
-  models: PropTypes.arrayOf(ModelPropType),
-  roles: PropTypes.arrayOf(RolePropType),
-  changeSet: PropTypes.shape({
-    apply: PropTypes.shape.isRequired,
-  }).isRequired,
-  add: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired,
-  rowsHeader: PropTypes.node,
-  formatRowHeader: PropTypes.func.isRequired,
-  readOnly: PropTypes.bool,
-};
-
-PermissionsTableInput.defaultProps = {
-  rowsHeader: null,
-  models: null,
-  roles: null,
-  readOnly: false,
-};
 
 export default PermissionsTableInput;
