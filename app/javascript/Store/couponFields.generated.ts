@@ -3,13 +3,13 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 export type CouponFieldsFragment = (
-  { __typename?: 'Coupon' }
+  { __typename: 'Coupon' }
   & Pick<Types.Coupon, 'id' | 'code' | 'percent_discount'>
   & { fixed_amount?: Types.Maybe<(
-    { __typename?: 'Money' }
+    { __typename: 'Money' }
     & Pick<Types.Money, 'fractional' | 'currency_code'>
   )>, provides_product?: Types.Maybe<(
-    { __typename?: 'Product' }
+    { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'name'>
   )> }
 );

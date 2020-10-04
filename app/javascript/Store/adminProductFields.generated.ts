@@ -5,20 +5,20 @@ import { PricingStructureFieldsFragment } from './pricingStructureFields.generat
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.generated';
 export type AdminProductFieldsFragment = (
-  { __typename?: 'Product' }
+  { __typename: 'Product' }
   & Pick<Types.Product, 'id' | 'name' | 'description' | 'description_html' | 'image_url' | 'available' | 'payment_options'>
   & { pricing_structure?: Types.Maybe<(
-    { __typename?: 'PricingStructure' }
+    { __typename: 'PricingStructure' }
     & PricingStructureFieldsFragment
   )>, product_variants: Array<(
-    { __typename?: 'ProductVariant' }
+    { __typename: 'ProductVariant' }
     & Pick<Types.ProductVariant, 'id' | 'name' | 'description' | 'image_url' | 'position'>
     & { override_pricing_structure?: Types.Maybe<(
-      { __typename?: 'PricingStructure' }
+      { __typename: 'PricingStructure' }
       & PricingStructureFieldsFragment
     )> }
   )>, provides_ticket_type?: Types.Maybe<(
-    { __typename?: 'TicketType' }
+    { __typename: 'TicketType' }
     & Pick<Types.TicketType, 'id' | 'description'>
   )> }
 );

@@ -13,11 +13,11 @@ export type UpdateRootSiteMutationVariables = Types.Exact<{
 
 
 export type UpdateRootSiteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateRootSite?: Types.Maybe<(
-    { __typename?: 'UpdateRootSitePayload' }
+    { __typename: 'UpdateRootSitePayload' }
     & { root_site: (
-      { __typename?: 'RootSite' }
+      { __typename: 'RootSite' }
       & Pick<Types.RootSite, 'id'>
       & RootSiteFieldsFragment
     ) }

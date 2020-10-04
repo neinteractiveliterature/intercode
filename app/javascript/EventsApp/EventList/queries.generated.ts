@@ -14,30 +14,30 @@ export type EventListEventsQueryQueryVariables = Types.Exact<{
 
 
 export type EventListEventsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_read_schedule'>
   ), convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { events_paginated: (
-      { __typename?: 'EventsPagination' }
+      { __typename: 'EventsPagination' }
       & Pick<Types.EventsPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
       & { entries: Array<(
-        { __typename?: 'Event' }
+        { __typename: 'Event' }
         & Pick<Types.Event, 'id' | 'title' | 'created_at' | 'short_blurb_html' | 'form_response_attrs_json' | 'my_rating'>
         & { event_category: (
-          { __typename?: 'EventCategory' }
+          { __typename: 'EventCategory' }
           & Pick<Types.EventCategory, 'id' | 'name' | 'team_member_name'>
         ), runs: Array<(
-          { __typename?: 'Run' }
+          { __typename: 'Run' }
           & Pick<Types.Run, 'id' | 'starts_at'>
         )>, team_members: Array<(
-          { __typename?: 'TeamMember' }
+          { __typename: 'TeamMember' }
           & Pick<Types.TeamMember, 'id' | 'display_team_member'>
           & { user_con_profile: (
-            { __typename?: 'UserConProfile' }
+            { __typename: 'UserConProfile' }
             & Pick<Types.UserConProfile, 'id' | 'last_name' | 'name_without_nickname' | 'gravatar_enabled' | 'gravatar_url'>
           ) }
         )> }

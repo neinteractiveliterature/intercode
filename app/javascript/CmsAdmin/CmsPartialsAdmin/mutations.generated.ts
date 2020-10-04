@@ -11,11 +11,11 @@ export type CreatePartialMutationVariables = Types.Exact<{
 
 
 export type CreatePartialMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCmsPartial?: Types.Maybe<(
-    { __typename?: 'CreateCmsPartialPayload' }
+    { __typename: 'CreateCmsPartialPayload' }
     & { cms_partial: (
-      { __typename?: 'CmsPartial' }
+      { __typename: 'CmsPartial' }
       & Pick<Types.CmsPartial, 'id'>
       & CmsPartialFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdatePartialMutationVariables = Types.Exact<{
 
 
 export type UpdatePartialMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateCmsPartial?: Types.Maybe<(
-    { __typename?: 'UpdateCmsPartialPayload' }
+    { __typename: 'UpdateCmsPartialPayload' }
     & { cms_partial: (
-      { __typename?: 'CmsPartial' }
+      { __typename: 'CmsPartial' }
       & Pick<Types.CmsPartial, 'id'>
       & CmsPartialFieldsFragment
     ) }
@@ -46,9 +46,9 @@ export type DeletePartialMutationVariables = Types.Exact<{
 
 
 export type DeletePartialMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCmsPartial?: Types.Maybe<(
-    { __typename?: 'DeleteCmsPartialPayload' }
+    { __typename: 'DeleteCmsPartialPayload' }
     & Pick<Types.DeleteCmsPartialPayload, 'clientMutationId'>
   )> }
 );

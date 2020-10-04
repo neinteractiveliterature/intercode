@@ -10,6 +10,7 @@ generates:
           content: '/* eslint-disable */'
       - typescript
     config:
+      nonOptionalTypename: true
       scalars:
         Date: string
   app/javascript/:
@@ -28,3 +29,4 @@ generates:
       withHooks: true
       documentMode: graphQLTag
       gqlImport: '@apollo/client#gql'
+      nonOptionalTypename: true

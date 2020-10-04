@@ -6,23 +6,23 @@ import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
 export type TicketTypeAdmin_TicketTypeFieldsFragment = (
-  { __typename?: 'TicketType' }
+  { __typename: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'name' | 'description' | 'counts_towards_convention_maximum' | 'allows_event_signups' | 'maximum_event_provided_tickets'>
   & { pricing_schedule: (
-    { __typename?: 'ScheduledMoneyValue' }
+    { __typename: 'ScheduledMoneyValue' }
     & { timespans: Array<(
-      { __typename?: 'TimespanWithMoneyValue' }
+      { __typename: 'TimespanWithMoneyValue' }
       & Pick<Types.TimespanWithMoneyValue, 'start' | 'finish'>
       & { value: (
-        { __typename?: 'Money' }
+        { __typename: 'Money' }
         & Pick<Types.Money, 'fractional' | 'currency_code'>
       ) }
     )> }
   ), providing_products: Array<(
-    { __typename?: 'Product' }
+    { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'name' | 'available'>
     & { pricing_structure?: Types.Maybe<(
-      { __typename?: 'PricingStructure' }
+      { __typename: 'PricingStructure' }
       & PricingStructureFieldsFragment
     )> }
   )> }
@@ -32,12 +32,12 @@ export type AdminTicketTypesQueryQueryVariables = Types.Exact<{ [key: string]: n
 
 
 export type AdminTicketTypesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name' | 'timezone_name'>
     & { ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
       & TicketTypeAdmin_TicketTypeFieldsFragment
     )> }

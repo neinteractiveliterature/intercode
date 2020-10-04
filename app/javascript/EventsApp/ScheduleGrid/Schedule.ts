@@ -286,6 +286,7 @@ export default class Schedule {
     this.nextFakeRunId -= 1;
 
     const fakeRun: ScheduleRun = {
+      __typename: 'Run',
       id: fakeRunId,
       disableDetailsPopup: true,
       event_id: fakeRunId,
@@ -303,6 +304,7 @@ export default class Schedule {
     };
 
     const fakeEvent: ScheduleEvent = {
+      __typename: 'Event',
       id: fakeRunId,
       title,
       displayTitle,
@@ -310,12 +312,14 @@ export default class Schedule {
       can_play_concurrently: false,
       fake: true,
       event_category: {
+        __typename: 'EventCategory',
         id: 0,
         name: 'Fake events',
         default_color: 'rgba(0, 0, 0, 0.1)',
         signed_up_color: 'transparent',
       },
       registration_policy: {
+        __typename: 'RegistrationPolicy',
         buckets: [],
         total_slots: 0,
         slots_limited: true,

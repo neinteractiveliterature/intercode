@@ -12,11 +12,11 @@ export type CreateContentGroupMutationVariables = Types.Exact<{
 
 
 export type CreateContentGroupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCmsContentGroup?: Types.Maybe<(
-    { __typename?: 'CreateCmsContentGroupPayload' }
+    { __typename: 'CreateCmsContentGroupPayload' }
     & { cms_content_group: (
-      { __typename?: 'CmsContentGroup' }
+      { __typename: 'CmsContentGroup' }
       & Pick<Types.CmsContentGroup, 'id'>
       & CmsContentGroupFieldsFragment
     ) }
@@ -32,11 +32,11 @@ export type UpdateContentGroupMutationVariables = Types.Exact<{
 
 
 export type UpdateContentGroupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateCmsContentGroup?: Types.Maybe<(
-    { __typename?: 'UpdateCmsContentGroupPayload' }
+    { __typename: 'UpdateCmsContentGroupPayload' }
     & { cms_content_group: (
-      { __typename?: 'CmsContentGroup' }
+      { __typename: 'CmsContentGroup' }
       & Pick<Types.CmsContentGroup, 'id'>
       & CmsContentGroupFieldsFragment
     ) }
@@ -49,9 +49,9 @@ export type DeleteContentGroupMutationVariables = Types.Exact<{
 
 
 export type DeleteContentGroupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCmsContentGroup?: Types.Maybe<(
-    { __typename?: 'DeleteCmsContentGroupPayload' }
+    { __typename: 'DeleteCmsContentGroupPayload' }
     & Pick<Types.DeleteCmsContentGroupPayload, 'clientMutationId'>
   )> }
 );

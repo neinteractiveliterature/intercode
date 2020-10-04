@@ -15,14 +15,14 @@ export type CreateMySignupMutationVariables = Types.Exact<{
 
 
 export type CreateMySignupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createMySignup?: Types.Maybe<(
-    { __typename?: 'CreateMySignupPayload' }
+    { __typename: 'CreateMySignupPayload' }
     & { signup: (
-      { __typename?: 'Signup' }
+      { __typename: 'Signup' }
       & Pick<Types.Signup, 'id'>
       & { run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
         & EventPageRunFieldsFragment
         & RunBasicSignupDataFragment
@@ -38,14 +38,14 @@ export type WithdrawMySignupMutationVariables = Types.Exact<{
 
 
 export type WithdrawMySignupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { withdrawMySignup?: Types.Maybe<(
-    { __typename?: 'WithdrawMySignupPayload' }
+    { __typename: 'WithdrawMySignupPayload' }
     & { signup: (
-      { __typename?: 'Signup' }
+      { __typename: 'Signup' }
       & Pick<Types.Signup, 'id'>
       & { run: (
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
         & EventPageRunFieldsFragment
         & RunBasicSignupDataFragment
@@ -63,11 +63,11 @@ export type CreateSignupRequestMutationVariables = Types.Exact<{
 
 
 export type CreateSignupRequestMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createSignupRequest?: Types.Maybe<(
-    { __typename?: 'CreateSignupRequestPayload' }
+    { __typename: 'CreateSignupRequestPayload' }
     & { signup_request: (
-      { __typename?: 'SignupRequest' }
+      { __typename: 'SignupRequest' }
       & Pick<Types.SignupRequest, 'id'>
       & MySignupRequestFieldsFragment
     ) }
@@ -80,11 +80,11 @@ export type WithdrawSignupRequestMutationVariables = Types.Exact<{
 
 
 export type WithdrawSignupRequestMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { withdrawSignupRequest?: Types.Maybe<(
-    { __typename?: 'WithdrawSignupRequestPayload' }
+    { __typename: 'WithdrawSignupRequestPayload' }
     & { signup_request: (
-      { __typename?: 'SignupRequest' }
+      { __typename: 'SignupRequest' }
       & Pick<Types.SignupRequest, 'id'>
       & MySignupRequestFieldsFragment
     ) }

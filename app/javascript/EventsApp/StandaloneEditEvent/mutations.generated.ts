@@ -11,11 +11,11 @@ export type StandaloneDropEventMutationVariables = Types.Exact<{
 
 
 export type StandaloneDropEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { dropEvent?: Types.Maybe<(
-    { __typename?: 'DropEventPayload' }
+    { __typename: 'DropEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'status'>
     ) }
   )> }
@@ -27,11 +27,11 @@ export type StandaloneUpdateEventMutationVariables = Types.Exact<{
 
 
 export type StandaloneUpdateEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEvent?: Types.Maybe<(
-    { __typename?: 'UpdateEventPayload' }
+    { __typename: 'UpdateEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id'>
       & StandaloneEditEvent_EventFieldsFragment
     ) }
@@ -44,11 +44,11 @@ export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables
 
 
 export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename?: 'CreateMaximumEventProvidedTicketsOverridePayload' }
+    { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload' }
     & { maximum_event_provided_tickets_override: (
-      { __typename?: 'MaximumEventProvidedTicketsOverride' }
+      { __typename: 'MaximumEventProvidedTicketsOverride' }
       & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
       & StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment
     ) }
@@ -61,11 +61,11 @@ export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables
 
 
 export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename?: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
+    { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
     & { maximum_event_provided_tickets_override: (
-      { __typename?: 'MaximumEventProvidedTicketsOverride' }
+      { __typename: 'MaximumEventProvidedTicketsOverride' }
       & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
       & StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment
     ) }
@@ -78,11 +78,11 @@ export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables
 
 
 export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename?: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
+    { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
     & { maximum_event_provided_tickets_override: (
-      { __typename?: 'MaximumEventProvidedTicketsOverride' }
+      { __typename: 'MaximumEventProvidedTicketsOverride' }
       & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
       & StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment
     ) }

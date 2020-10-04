@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { PermissionedRoleFields } from '../../Permissions/fragments';
+import { PermissionedRoleFields, PermissionedModelFields } from '../../Permissions/fragments';
 
 export const CmsContentFields = gql`
   fragment CmsContentFields on CmsContent {
@@ -37,6 +37,10 @@ export const CmsContentGroupFields = gql`
       id
       permission
 
+      model {
+        ...PermissionedModelFields
+      }
+
       role {
         ...PermissionedRoleFields
       }
@@ -45,11 +49,12 @@ export const CmsContentGroupFields = gql`
 
   ${CmsContentFields}
   ${PermissionedRoleFields}
+  ${PermissionedModelFields}
 `;
 
 export const CmsContentGroupsAdminQuery = gql`
   query CmsContentGroupsAdminQuery {
-    convention {
+    convention: assertConvention {
       id
       name
 

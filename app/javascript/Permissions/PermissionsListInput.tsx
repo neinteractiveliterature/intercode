@@ -1,11 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { titleize } from 'inflected';
 
 import PermissionCheckBox from './PermissionCheckBox';
-import usePermissionsChangeSet from './usePermissionsChangeSet';
-import { PermissionNamePropType, PermissionPropType, ModelPropType } from './PermissionPropTypes';
-import usePermissionToggle from './usePermissionToggle';
+import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePermissionsChangeSet';
+import usePermissionToggle, { UsePermissionToggleOptions } from './usePermissionToggle';
+import { PolymorphicPermission } from './PermissionUtils';
+
+type PermissionsListRowProps = Omit<UsePermissionToggleOptions, 'role'> & {
+  name: string;
+};
 
 function PermissionsListRow({
   grantPermission,
@@ -16,7 +19,8 @@ function PermissionsListRow({
   initialPermissions,
   changeSet,
   currentPermissions,
-}) {
+  readOnly,
+}: PermissionsListRowProps) {
   const { toggle, hasPermission, className } = usePermissionToggle({
     grantPermission,
     revokePermission,
@@ -25,6 +29,7 @@ function PermissionsListRow({
     initialPermissions,
     changeSet,
     currentPermissions,
+    readOnly,
   });
 
   return (
@@ -48,17 +53,11 @@ function PermissionsListRow({
   );
 }
 
-PermissionsListRow.propTypes = {
-  model: ModelPropType.isRequired,
-  permission: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  initialPermissions: PropTypes.arrayOf(PermissionPropType).isRequired,
-  currentPermissions: PropTypes.arrayOf(PermissionPropType).isRequired,
-  changeSet: PropTypes.shape({
-    changes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
-  grantPermission: PropTypes.func.isRequired,
-  revokePermission: PropTypes.func.isRequired,
+export type PermissionsListInputProps = UsePermissionsChangeSetOptions & {
+  model: PolymorphicPermission['model'];
+  permissionNames: { permission: string; name: string }[];
+  header?: React.ReactNode;
+  readOnly?: boolean;
 };
 
 function PermissionsListInput({
@@ -69,7 +68,8 @@ function PermissionsListInput({
   add,
   remove,
   header,
-}) {
+  readOnly,
+}: PermissionsListInputProps) {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions,
     changeSet,
@@ -81,7 +81,7 @@ function PermissionsListInput({
     <table className="table table-hover table-sm table-striped w-auto" role="grid">
       <thead>
         <tr>
-          <th colSpan="2">{header}</th>
+          <th colSpan={2}>{header}</th>
         </tr>
       </thead>
 
@@ -97,27 +97,12 @@ function PermissionsListInput({
             name={name}
             grantPermission={grantPermission}
             revokePermission={revokePermission}
+            readOnly={readOnly ?? false}
           />
         ))}
       </tbody>
     </table>
   );
 }
-
-PermissionsListInput.propTypes = {
-  permissionNames: PropTypes.arrayOf(PermissionNamePropType).isRequired,
-  initialPermissions: PropTypes.arrayOf(PermissionPropType.isRequired).isRequired,
-  model: ModelPropType.isRequired,
-  changeSet: PropTypes.shape({
-    apply: PropTypes.shape.isRequired,
-  }).isRequired,
-  add: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired,
-  header: PropTypes.node,
-};
-
-PermissionsListInput.defaultProps = {
-  header: null,
-};
 
 export default PermissionsListInput;

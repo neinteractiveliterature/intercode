@@ -9,14 +9,14 @@ export type CreateRoomMutationVariables = Types.Exact<{
 
 
 export type CreateRoomMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createRoom?: Types.Maybe<(
-    { __typename?: 'CreateRoomPayload' }
+    { __typename: 'CreateRoomPayload' }
     & { room: (
-      { __typename?: 'Room' }
+      { __typename: 'Room' }
       & Pick<Types.Room, 'id' | 'name'>
       & { runs: Array<(
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
       )> }
     ) }
@@ -29,14 +29,14 @@ export type UpdateRoomMutationVariables = Types.Exact<{
 
 
 export type UpdateRoomMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateRoom?: Types.Maybe<(
-    { __typename?: 'UpdateRoomPayload' }
+    { __typename: 'UpdateRoomPayload' }
     & { room: (
-      { __typename?: 'Room' }
+      { __typename: 'Room' }
       & Pick<Types.Room, 'id' | 'name'>
       & { runs: Array<(
-        { __typename?: 'Run' }
+        { __typename: 'Run' }
         & Pick<Types.Run, 'id'>
       )> }
     ) }
@@ -49,11 +49,11 @@ export type DeleteRoomMutationVariables = Types.Exact<{
 
 
 export type DeleteRoomMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteRoom?: Types.Maybe<(
-    { __typename?: 'DeleteRoomPayload' }
+    { __typename: 'DeleteRoomPayload' }
     & { room: (
-      { __typename?: 'Room' }
+      { __typename: 'Room' }
       & Pick<Types.Room, 'id'>
     ) }
   )> }

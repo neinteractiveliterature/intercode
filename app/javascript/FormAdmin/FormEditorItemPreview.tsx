@@ -63,6 +63,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
           destinationIndex: hoverIndex,
         },
         optimisticResponse: {
+          __typename: 'Mutation',
           moveFormItem: {
             __typename: 'MoveFormItemPayload',
             form_section: {

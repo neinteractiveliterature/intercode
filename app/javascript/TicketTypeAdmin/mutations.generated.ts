@@ -11,11 +11,11 @@ export type CreateTicketTypeMutationVariables = Types.Exact<{
 
 
 export type CreateTicketTypeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createTicketType?: Types.Maybe<(
-    { __typename?: 'CreateTicketTypePayload' }
+    { __typename: 'CreateTicketTypePayload' }
     & { ticket_type: (
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
       & TicketTypeAdmin_TicketTypeFieldsFragment
     ) }
@@ -28,11 +28,11 @@ export type UpdateTicketTypeMutationVariables = Types.Exact<{
 
 
 export type UpdateTicketTypeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateTicketType?: Types.Maybe<(
-    { __typename?: 'UpdateTicketTypePayload' }
+    { __typename: 'UpdateTicketTypePayload' }
     & { ticket_type: (
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
       & TicketTypeAdmin_TicketTypeFieldsFragment
     ) }
@@ -45,11 +45,11 @@ export type DeleteTicketTypeMutationVariables = Types.Exact<{
 
 
 export type DeleteTicketTypeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteTicketType?: Types.Maybe<(
-    { __typename?: 'DeleteTicketTypePayload' }
+    { __typename: 'DeleteTicketTypePayload' }
     & { ticket_type: (
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
     ) }
   )> }

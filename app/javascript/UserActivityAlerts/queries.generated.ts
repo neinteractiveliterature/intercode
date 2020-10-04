@@ -4,28 +4,28 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type UserActivityAlertsAdminConventionFieldsFragment = (
-  { __typename?: 'Convention' }
+  { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>
-  & { staff_positions?: Types.Maybe<Array<(
-    { __typename?: 'StaffPosition' }
+  & { staff_positions: Array<(
+    { __typename: 'StaffPosition' }
     & Pick<Types.StaffPosition, 'id' | 'name'>
-  )>> }
+  )> }
 );
 
 export type UserActivityAlertFieldsFragment = (
-  { __typename?: 'UserActivityAlert' }
+  { __typename: 'UserActivityAlert' }
   & Pick<Types.UserActivityAlert, 'id' | 'email' | 'partial_name' | 'trigger_on_user_con_profile_create' | 'trigger_on_ticket_create'>
   & { user?: Types.Maybe<(
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id' | 'name'>
   )>, notification_destinations: Array<(
-    { __typename?: 'NotificationDestination' }
+    { __typename: 'NotificationDestination' }
     & Pick<Types.NotificationDestination, 'id'>
     & { staff_position?: Types.Maybe<(
-      { __typename?: 'StaffPosition' }
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name'>
     )>, user_con_profile?: Types.Maybe<(
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     )> }
   )> }
@@ -35,9 +35,9 @@ export type ConventionTicketNameQueryQueryVariables = Types.Exact<{ [key: string
 
 
 export type ConventionTicketNameQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & UserActivityAlertsAdminConventionFieldsFragment
   )> }
@@ -49,12 +49,12 @@ export type UserActivityAlertQueryQueryVariables = Types.Exact<{
 
 
 export type UserActivityAlertQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { user_activity_alert: (
-      { __typename?: 'UserActivityAlert' }
+      { __typename: 'UserActivityAlert' }
       & Pick<Types.UserActivityAlert, 'id'>
       & UserActivityAlertFieldsFragment
     ) }
@@ -66,12 +66,12 @@ export type UserActivityAlertsAdminQueryQueryVariables = Types.Exact<{ [key: str
 
 
 export type UserActivityAlertsAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>
     & { user_activity_alerts: Array<Types.Maybe<(
-      { __typename?: 'UserActivityAlert' }
+      { __typename: 'UserActivityAlert' }
       & Pick<Types.UserActivityAlert, 'id'>
       & UserActivityAlertFieldsFragment
     )>> }

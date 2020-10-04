@@ -11,11 +11,11 @@ export type CreateNavigationItemMutationVariables = Types.Exact<{
 
 
 export type CreateNavigationItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createCmsNavigationItem?: Types.Maybe<(
-    { __typename?: 'CreateCmsNavigationItemPayload' }
+    { __typename: 'CreateCmsNavigationItemPayload' }
     & { cms_navigation_item: (
-      { __typename?: 'CmsNavigationItem' }
+      { __typename: 'CmsNavigationItem' }
       & Pick<Types.CmsNavigationItem, 'id'>
       & AdminNavigationItemFieldsFragment
     ) }
@@ -29,11 +29,11 @@ export type UpdateNavigationItemMutationVariables = Types.Exact<{
 
 
 export type UpdateNavigationItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateCmsNavigationItem?: Types.Maybe<(
-    { __typename?: 'UpdateCmsNavigationItemPayload' }
+    { __typename: 'UpdateCmsNavigationItemPayload' }
     & { cms_navigation_item: (
-      { __typename?: 'CmsNavigationItem' }
+      { __typename: 'CmsNavigationItem' }
       & Pick<Types.CmsNavigationItem, 'id'>
       & AdminNavigationItemFieldsFragment
     ) }
@@ -46,11 +46,11 @@ export type DeleteNavigationItemMutationVariables = Types.Exact<{
 
 
 export type DeleteNavigationItemMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteCmsNavigationItem?: Types.Maybe<(
-    { __typename?: 'DeleteCmsNavigationItemPayload' }
+    { __typename: 'DeleteCmsNavigationItemPayload' }
     & { cms_navigation_item: (
-      { __typename?: 'CmsNavigationItem' }
+      { __typename: 'CmsNavigationItem' }
       & Pick<Types.CmsNavigationItem, 'id'>
     ) }
   )> }
@@ -62,9 +62,9 @@ export type SortNavigationItemsMutationVariables = Types.Exact<{
 
 
 export type SortNavigationItemsMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { sortCmsNavigationItems?: Types.Maybe<(
-    { __typename?: 'SortCmsNavigationItemsPayload' }
+    { __typename: 'SortCmsNavigationItemsPayload' }
     & Pick<Types.SortCmsNavigationItemsPayload, 'clientMutationId'>
   )> }
 );

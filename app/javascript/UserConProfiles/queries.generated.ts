@@ -10,39 +10,39 @@ import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartO
 import { AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import * as Apollo from '@apollo/client';
 export type UserConProfileFormDataFragment = (
-  { __typename?: 'Convention' }
+  { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
   & { user_con_profile_form: (
-    { __typename?: 'Form' }
+    { __typename: 'Form' }
     & Pick<Types.Form, 'id'>
     & CommonFormFieldsFragment
   ) }
 );
 
 export type UserConProfileFieldsFragment = (
-  { __typename?: 'UserConProfile' }
+  { __typename: 'UserConProfile' }
   & Pick<Types.UserConProfile, 'id' | 'name' | 'privileges' | 'form_response_attrs_json' | 'gravatar_enabled' | 'gravatar_url'>
 );
 
 export type UserConProfileAdminTicketFieldsFragment = (
-  { __typename?: 'Ticket' }
+  { __typename: 'Ticket' }
   & Pick<Types.Ticket, 'id' | 'created_at' | 'updated_at'>
   & { order_entry?: Types.Maybe<(
-    { __typename?: 'OrderEntry' }
+    { __typename: 'OrderEntry' }
     & Pick<Types.OrderEntry, 'id'>
     & { order: (
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
       & AdminOrderFieldsFragmentFragment
     ), price_per_item: (
-      { __typename?: 'Money' }
+      { __typename: 'Money' }
       & Pick<Types.Money, 'fractional' | 'currency_code'>
     ) }
   )>, ticket_type: (
-    { __typename?: 'TicketType' }
+    { __typename: 'TicketType' }
     & Pick<Types.TicketType, 'id' | 'description' | 'name'>
   ), provided_by_event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
   )> }
 );
@@ -53,13 +53,13 @@ export type UserConProfileQueryQueryVariables = Types.Exact<{
 
 
 export type UserConProfileQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & UserConProfileFormDataFragment
   )>, userConProfile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
     & UserConProfileFieldsFragment
   ) }
@@ -71,43 +71,43 @@ export type UserConProfileAdminQueryQueryVariables = Types.Exact<{
 
 
 export type UserConProfileAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id'>
     & { ability?: Types.Maybe<(
-      { __typename?: 'Ability' }
+      { __typename: 'Ability' }
       & Pick<Types.Ability, 'can_read_signups' | 'can_update_user_con_profile' | 'can_delete_user_con_profile' | 'can_become_user_con_profile'>
     )> }
   )>, convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
     & { user_con_profile_form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & { form_sections: Array<(
-        { __typename?: 'FormSection' }
+        { __typename: 'FormSection' }
         & Pick<Types.FormSection, 'id'>
         & { form_items: Array<(
-          { __typename?: 'FormItem' }
+          { __typename: 'FormItem' }
           & Pick<Types.FormItem, 'id' | 'admin_description'>
         )> }
       )> }
       & CommonFormFieldsFragment
     ), ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'description' | 'name' | 'publicly_available' | 'maximum_event_provided_tickets'>
       & { providing_products: Array<(
-        { __typename?: 'Product' }
+        { __typename: 'Product' }
         & Pick<Types.Product, 'id'>
         & AdminProductFieldsFragment
       )> }
     )> }
   )>, userConProfile: (
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'email' | 'user_id' | 'name' | 'name_without_nickname' | 'form_response_attrs_json' | 'gravatar_enabled' | 'gravatar_url'>
     & { ticket?: Types.Maybe<(
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & UserConProfileAdminTicketFieldsFragment
     )> }
@@ -123,53 +123,53 @@ export type UserConProfilesTableUserConProfilesQueryQueryVariables = Types.Exact
 
 
 export type UserConProfilesTableUserConProfilesQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
     & { ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'name'>
     )>, user_con_profile_form: (
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id'>
       & { form_sections: Array<(
-        { __typename?: 'FormSection' }
+        { __typename: 'FormSection' }
         & Pick<Types.FormSection, 'id'>
         & { form_items: Array<(
-          { __typename?: 'FormItem' }
+          { __typename: 'FormItem' }
           & Pick<Types.FormItem, 'id' | 'admin_description'>
         )> }
       )> }
       & CommonFormFieldsFragment
     ), user_con_profiles_paginated: (
-      { __typename?: 'UserConProfilesPagination' }
+      { __typename: 'UserConProfilesPagination' }
       & Pick<Types.UserConProfilesPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
       & { entries: Array<(
-        { __typename?: 'UserConProfile' }
+        { __typename: 'UserConProfile' }
         & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'first_name' | 'last_name' | 'email' | 'privileges' | 'form_response_attrs_json' | 'order_summary' | 'gravatar_enabled' | 'gravatar_url' | 'user_id'>
         & { team_members: Array<(
-          { __typename?: 'TeamMember' }
+          { __typename: 'TeamMember' }
           & Pick<Types.TeamMember, 'id'>
         )>, ticket?: Types.Maybe<(
-          { __typename?: 'Ticket' }
+          { __typename: 'Ticket' }
           & Pick<Types.Ticket, 'id' | 'updated_at'>
           & { order_entry?: Types.Maybe<(
-            { __typename?: 'OrderEntry' }
+            { __typename: 'OrderEntry' }
             & Pick<Types.OrderEntry, 'id'>
             & { price_per_item: (
-              { __typename?: 'Money' }
+              { __typename: 'Money' }
               & Pick<Types.Money, 'fractional' | 'currency_code'>
             ) }
           )>, ticket_type: (
-            { __typename?: 'TicketType' }
+            { __typename: 'TicketType' }
             & Pick<Types.TicketType, 'id' | 'name'>
           ) }
         )> }
       )> }
     ) }
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_user_con_profiles'>
   ) }
 );
@@ -180,25 +180,25 @@ export type ConvertToEventProvidedTicketQueryQueryVariables = Types.Exact<{
 
 
 export type ConvertToEventProvidedTicketQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name'>
     & { ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'maximum_event_provided_tickets' | 'description' | 'name'>
     )> }
   )>, event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
     & { event_category: (
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'can_provide_tickets'>
     ), provided_tickets: Array<(
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & { ticket_type: (
-        { __typename?: 'TicketType' }
+        { __typename: 'TicketType' }
         & Pick<Types.TicketType, 'id' | 'name'>
       ) }
     )> }
@@ -211,11 +211,11 @@ export type AddAttendeeUsersQueryQueryVariables = Types.Exact<{
 
 
 export type AddAttendeeUsersQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { users_paginated: (
-    { __typename?: 'UsersPagination' }
+    { __typename: 'UsersPagination' }
     & { entries: Array<(
-      { __typename?: 'User' }
+      { __typename: 'User' }
       & Pick<Types.User, 'id' | 'name' | 'email' | 'first_name' | 'last_name'>
     )> }
   ) }
@@ -225,9 +225,9 @@ export type TicketAdminWithoutTicketAbilityQueryQueryVariables = Types.Exact<{ [
 
 
 export type TicketAdminWithoutTicketAbilityQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_tickets'>
   ) }
 );
@@ -238,9 +238,9 @@ export type TicketAdminWithTicketAbilityQueryQueryVariables = Types.Exact<{
 
 
 export type TicketAdminWithTicketAbilityQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_tickets' | 'can_update_ticket' | 'can_delete_ticket'>
   ) }
 );

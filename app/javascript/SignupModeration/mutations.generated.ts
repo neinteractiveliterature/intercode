@@ -14,9 +14,9 @@ export type CreateUserSignupMutationVariables = Types.Exact<{
 
 
 export type CreateUserSignupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createUserSignup?: Types.Maybe<(
-    { __typename?: 'CreateUserSignupPayload' }
+    { __typename: 'CreateUserSignupPayload' }
     & Pick<Types.CreateUserSignupPayload, 'clientMutationId'>
   )> }
 );
@@ -28,9 +28,9 @@ export type WithdrawUserSignupMutationVariables = Types.Exact<{
 
 
 export type WithdrawUserSignupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { withdrawUserSignup?: Types.Maybe<(
-    { __typename?: 'WithdrawUserSignupPayload' }
+    { __typename: 'WithdrawUserSignupPayload' }
     & Pick<Types.WithdrawUserSignupPayload, 'clientMutationId'>
   )> }
 );
@@ -41,11 +41,11 @@ export type AcceptSignupRequestMutationVariables = Types.Exact<{
 
 
 export type AcceptSignupRequestMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { acceptSignupRequest?: Types.Maybe<(
-    { __typename?: 'AcceptSignupRequestPayload' }
+    { __typename: 'AcceptSignupRequestPayload' }
     & { signup_request: (
-      { __typename?: 'SignupRequest' }
+      { __typename: 'SignupRequest' }
       & Pick<Types.SignupRequest, 'id'>
       & SignupModerationSignupRequestFieldsFragment
     ) }
@@ -58,11 +58,11 @@ export type RejectSignupRequestMutationVariables = Types.Exact<{
 
 
 export type RejectSignupRequestMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { rejectSignupRequest?: Types.Maybe<(
-    { __typename?: 'RejectSignupRequestPayload' }
+    { __typename: 'RejectSignupRequestPayload' }
     & { signup_request: (
-      { __typename?: 'SignupRequest' }
+      { __typename: 'SignupRequest' }
       & Pick<Types.SignupRequest, 'id'>
       & SignupModerationSignupRequestFieldsFragment
     ) }

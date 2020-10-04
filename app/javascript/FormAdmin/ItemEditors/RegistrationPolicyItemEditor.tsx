@@ -23,6 +23,7 @@ function RegistrationPolicyItemEditor({
     () => ({
       name: '',
       policy: {
+        __typename: 'RegistrationPolicy',
         prevent_no_preference_signups: false,
         buckets: [],
       },

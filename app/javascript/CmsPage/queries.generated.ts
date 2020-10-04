@@ -10,18 +10,18 @@ export type CmsPageQueryQueryVariables = Types.Exact<{
 
 
 export type CmsPageQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'clickwrap_agreement'>
   )>, currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_manage_any_cms_content'>
   ), myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'accepted_clickwrap_agreement'>
   )>, cmsPage: (
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id' | 'name' | 'content_html' | 'current_ability_can_update' | 'current_ability_can_delete' | 'skip_clickwrap_agreement'>
   ) }
 );
@@ -32,29 +32,29 @@ export type PageAdminDropdownQueryQueryVariables = Types.Exact<{
 
 
 export type PageAdminDropdownQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cmsParent: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { default_layout?: Types.Maybe<(
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id' | 'name'>
     )> }
   ) | (
-    { __typename?: 'RootSite' }
+    { __typename: 'RootSite' }
     & Pick<Types.RootSite, 'id'>
     & { root_site_default_layout: (
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id' | 'name'>
     ) }
   ), cmsPage: (
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id'>
     & { cms_layout?: Types.Maybe<(
-      { __typename?: 'CmsLayout' }
+      { __typename: 'CmsLayout' }
       & Pick<Types.CmsLayout, 'id' | 'name'>
     )>, referenced_partials: Array<(
-      { __typename?: 'CmsPartial' }
+      { __typename: 'CmsPartial' }
       & Pick<Types.CmsPartial, 'id' | 'name'>
     )> }
   ) }

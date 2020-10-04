@@ -9,12 +9,12 @@ export type SiteSearchQueryQueryVariables = Types.Exact<{
 
 
 export type SiteSearchQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { siteSearch: (
-    { __typename?: 'SearchResult' }
+    { __typename: 'SearchResult' }
     & Pick<Types.SearchResult, 'total_entries'>
     & { entries: Array<(
-      { __typename?: 'SearchResultEntry' }
+      { __typename: 'SearchResultEntry' }
       & Pick<Types.SearchResultEntry, 'title' | 'highlight'>
       & { model: (
         { __typename: 'Event' }

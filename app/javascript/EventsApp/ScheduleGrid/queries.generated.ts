@@ -6,20 +6,20 @@ import { gql } from '@apollo/client';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 export type ScheduleGridEventFragmentFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'short_blurb_html' | 'my_rating' | 'can_play_concurrently'>
   & { event_category: (
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name' | 'default_color' | 'signed_up_color' | 'full_color'>
   ), registration_policy?: Types.Maybe<(
-    { __typename?: 'RegistrationPolicy' }
+    { __typename: 'RegistrationPolicy' }
     & Pick<Types.RegistrationPolicy, 'slots_limited' | 'only_uncounted' | 'total_slots' | 'total_slots_including_not_counted' | 'preferred_slots' | 'preferred_slots_including_not_counted' | 'minimum_slots' | 'minimum_slots_including_not_counted'>
     & { buckets: Array<(
-      { __typename?: 'RegistrationPolicyBucket' }
+      { __typename: 'RegistrationPolicyBucket' }
       & Pick<Types.RegistrationPolicyBucket, 'key' | 'not_counted' | 'total_slots' | 'slots_limited'>
     )> }
   )>, runs: Array<(
-    { __typename?: 'Run' }
+    { __typename: 'Run' }
     & Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix' | 'confirmed_signup_count' | 'not_counted_signup_count' | 'room_names'>
     & RunBasicSignupDataFragment
   )> }
@@ -29,9 +29,9 @@ export type ScheduleGridConventionDataQueryQueryVariables = Types.Exact<{ [key: 
 
 
 export type ScheduleGridConventionDataQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
     & CommonConventionDataFragment
   ) }
@@ -45,9 +45,9 @@ export type ScheduleGridEventsQueryQueryVariables = Types.Exact<{
 
 
 export type ScheduleGridEventsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { events: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
     & ScheduleGridEventFragmentFragment
   )> }
@@ -61,13 +61,13 @@ export type ScheduleGridCombinedQueryQueryVariables = Types.Exact<{
 
 
 export type ScheduleGridCombinedQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
     & CommonConventionDataFragment
   )>, events: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
     & ScheduleGridEventFragmentFragment
   )> }

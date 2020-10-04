@@ -1,12 +1,10 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
-import { useMutation, useQuery } from '@apollo/client';
+import { assertNever } from 'assert-never';
 
-import Confirm from '../ModalDialogs/Confirm';
-import { DeleteStaffPosition } from './mutations';
+import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
 import { StaffPositionsQuery } from './queries';
@@ -19,10 +17,16 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
 
 import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
-import { PermissionPropType } from '../Permissions/PermissionPropTypes';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
+import { StaffPositionsQueryQuery, useStaffPositionsQueryQuery } from './queries.generated';
+import { PolymorphicPermission } from '../Permissions/PermissionUtils';
+import { useDeleteStaffPositionMutation } from './mutations.generated';
 
-function UserConProfilesList({ userConProfiles }) {
+type UserConProfilesListProps = {
+  userConProfiles: StaffPositionsQueryQuery['convention']['staff_positions'][0]['user_con_profiles'];
+};
+
+function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
   const [expanded, setExpanded] = useState(false);
   const userConProfilesSorted = useMemo(
     () => sortByLocaleString(userConProfiles, (ucp) => ucp.name_without_nickname),
@@ -42,7 +46,7 @@ function UserConProfilesList({ userConProfiles }) {
   ));
 
   if (userConProfiles.length < 3) {
-    return joinReact(fullList, ', ');
+    return <>{joinReact(fullList, ', ')}</>;
   }
 
   return (
@@ -60,11 +64,9 @@ function UserConProfilesList({ userConProfiles }) {
   );
 }
 
-UserConProfilesList.propTypes = {
-  userConProfiles: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-};
-
-function describePermissionAbilities(modelPermissions) {
+function describePermissionAbilities(
+  modelPermissions: Pick<PolymorphicPermission, 'model' | 'permission'>[],
+) {
   const typename = modelPermissions[0].model.__typename;
   const permissionNameGroups = PermissionNames.filter((group) => group.model_type === typename);
   const permissionNamesForType = flatMap(permissionNameGroups, (group) => group.permissions);
@@ -83,7 +85,9 @@ function describePermissionAbilities(modelPermissions) {
   return abilities.join(', ');
 }
 
-function describePermissionModel(model) {
+function describePermissionModel(
+  model: StaffPositionsQueryQuery['convention']['staff_positions'][0]['permissions'][0]['model'],
+) {
   switch (model.__typename) {
     case 'CmsContentGroup':
       return (
@@ -105,11 +109,16 @@ function describePermissionModel(model) {
         </span>
       );
     default:
+      assertNever(model, true);
       return `${model.__typename} ${model.id}`;
   }
 }
 
-function PermissionsDescription({ permissions }) {
+type PermissionsDescriptionProps = {
+  permissions: StaffPositionsQueryQuery['convention']['staff_positions'][0]['permissions'];
+};
+
+function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   const [expanded, setExpanded] = useState(false);
   const descriptions = useMemo(() => {
     const permissionsByModel = groupBy(permissions, ({ model }) => [model.__typename, model.id]);
@@ -155,21 +164,24 @@ function PermissionsDescription({ permissions }) {
   );
 }
 
-PermissionsDescription.propTypes = {
-  permissions: PropTypes.arrayOf(PermissionPropType).isRequired,
-};
-
 function StaffPositionsTable() {
   const { conventionDomain } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(StaffPositionsQuery);
+  const { data, loading, error } = useStaffPositionsQueryQuery();
+  const confirm = useConfirm();
 
-  const [deleteMutate] = useMutation(DeleteStaffPosition);
+  const [deleteMutate] = useDeleteStaffPositionMutation();
   const deleteStaffPosition = useCallback(
     (id) =>
       deleteMutate({
         variables: { input: { id } },
         update: (proxy) => {
-          const storeData = proxy.readQuery({ query: StaffPositionsQuery });
+          const storeData = proxy.readQuery<StaffPositionsQueryQuery>({
+            query: StaffPositionsQuery,
+          });
+          if (storeData == null) {
+            return;
+          }
+
           proxy.writeQuery({
             query: StaffPositionsQuery,
             data: {
@@ -197,7 +209,9 @@ function StaffPositionsTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const renderRow = (staffPosition) => (
+  const renderRow = (
+    staffPosition: StaffPositionsQueryQuery['convention']['staff_positions'][0],
+  ) => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
       <td>{staffPosition.visible ? <i className="fa fa-check" /> : null}</td>
@@ -242,29 +256,25 @@ function StaffPositionsTable() {
           >
             Edit permissions
           </Link>
-          <Confirm.Trigger>
-            {(confirm) => (
-              <button
-                className="dropdown-item cursor-pointer text-danger"
-                type="button"
-                onClick={() =>
-                  confirm({
-                    prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
-                    action: () => deleteStaffPosition(staffPosition.id),
-                    renderError: (e) => <ErrorDisplay graphQLError={e} />,
-                  })
-                }
-              >
-                Delete
-              </button>
-            )}
-          </Confirm.Trigger>
+          <button
+            className="dropdown-item cursor-pointer text-danger"
+            type="button"
+            onClick={() =>
+              confirm({
+                prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
+                action: () => deleteStaffPosition(staffPosition.id),
+                renderError: (e) => <ErrorDisplay graphQLError={e} />,
+              })
+            }
+          >
+            Delete
+          </button>
         </DropdownMenu>
       </td>
     </tr>
   );
 
-  const staffPositions = data.convention.staff_positions;
+  const staffPositions = data!.convention.staff_positions;
   const sortedStaffPositions = sortByLocaleString(staffPositions, (position) => position.name);
 
   return (

@@ -11,11 +11,11 @@ export type CreateEventMutationVariables = Types.Exact<{
 
 
 export type CreateEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createEvent?: Types.Maybe<(
-    { __typename?: 'CreateEventPayload' }
+    { __typename: 'CreateEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id'>
       & EventFieldsFragment
     ) }
@@ -28,11 +28,11 @@ export type CreateFillerEventMutationVariables = Types.Exact<{
 
 
 export type CreateFillerEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createFillerEvent?: Types.Maybe<(
-    { __typename?: 'CreateFillerEventPayload' }
+    { __typename: 'CreateFillerEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id'>
       & EventFieldsFragment
     ) }
@@ -45,11 +45,11 @@ export type DropEventMutationVariables = Types.Exact<{
 
 
 export type DropEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { dropEvent?: Types.Maybe<(
-    { __typename?: 'DropEventPayload' }
+    { __typename: 'DropEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'status'>
     ) }
   )> }
@@ -61,11 +61,11 @@ export type RestoreDroppedEventMutationVariables = Types.Exact<{
 
 
 export type RestoreDroppedEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { restoreDroppedEvent?: Types.Maybe<(
-    { __typename?: 'RestoreDroppedEventPayload' }
+    { __typename: 'RestoreDroppedEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'status'>
     ) }
   )> }
@@ -77,11 +77,11 @@ export type UpdateEventMutationVariables = Types.Exact<{
 
 
 export type UpdateEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEvent?: Types.Maybe<(
-    { __typename?: 'UpdateEventPayload' }
+    { __typename: 'UpdateEventPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id'>
       & EventFieldsFragment
     ) }
@@ -94,11 +94,11 @@ export type CreateRunMutationVariables = Types.Exact<{
 
 
 export type CreateRunMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createRun?: Types.Maybe<(
-    { __typename?: 'CreateRunPayload' }
+    { __typename: 'CreateRunPayload' }
     & { run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & RunFieldsFragment
     ) }
@@ -111,11 +111,11 @@ export type CreateMultipleRunsMutationVariables = Types.Exact<{
 
 
 export type CreateMultipleRunsMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createMultipleRuns?: Types.Maybe<(
-    { __typename?: 'CreateMultipleRunsPayload' }
+    { __typename: 'CreateMultipleRunsPayload' }
     & { runs: Array<(
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & RunFieldsFragment
     )> }
@@ -128,11 +128,11 @@ export type UpdateRunMutationVariables = Types.Exact<{
 
 
 export type UpdateRunMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateRun?: Types.Maybe<(
-    { __typename?: 'UpdateRunPayload' }
+    { __typename: 'UpdateRunPayload' }
     & { run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & RunFieldsFragment
     ) }
@@ -145,11 +145,11 @@ export type DeleteRunMutationVariables = Types.Exact<{
 
 
 export type DeleteRunMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteRun?: Types.Maybe<(
-    { __typename?: 'DeleteRunPayload' }
+    { __typename: 'DeleteRunPayload' }
     & { run: (
-      { __typename?: 'Run' }
+      { __typename: 'Run' }
       & Pick<Types.Run, 'id'>
       & RunFieldsFragment
     ) }
@@ -162,11 +162,11 @@ export type CreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 
 
 export type CreateMaximumEventProvidedTicketsOverrideMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename?: 'CreateMaximumEventProvidedTicketsOverridePayload' }
+    { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload' }
     & { maximum_event_provided_tickets_override: (
-      { __typename?: 'MaximumEventProvidedTicketsOverride' }
+      { __typename: 'MaximumEventProvidedTicketsOverride' }
       & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
       & MaximumEventProvidedTicketsOverrideFieldsFragment
     ) }
@@ -179,11 +179,11 @@ export type DeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 
 
 export type DeleteMaximumEventProvidedTicketsOverrideMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename?: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
+    { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
     & { maximum_event_provided_tickets_override: (
-      { __typename?: 'MaximumEventProvidedTicketsOverride' }
+      { __typename: 'MaximumEventProvidedTicketsOverride' }
       & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
       & MaximumEventProvidedTicketsOverrideFieldsFragment
     ) }
@@ -196,11 +196,11 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 
 
 export type UpdateMaximumEventProvidedTicketsOverrideMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename?: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
+    { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
     & { maximum_event_provided_tickets_override: (
-      { __typename?: 'MaximumEventProvidedTicketsOverride' }
+      { __typename: 'MaximumEventProvidedTicketsOverride' }
       & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
       & MaximumEventProvidedTicketsOverrideFieldsFragment
     ) }
@@ -214,11 +214,11 @@ export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
 
 
 export type UpdateEventAdminNotesMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateEventAdminNotes?: Types.Maybe<(
-    { __typename?: 'UpdateEventAdminNotesPayload' }
+    { __typename: 'UpdateEventAdminNotesPayload' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id'>
       & EventFieldsFragment
     ) }

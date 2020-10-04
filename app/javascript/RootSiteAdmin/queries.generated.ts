@@ -4,24 +4,24 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type PageFieldsFragment = (
-  { __typename?: 'Page' }
+  { __typename: 'Page' }
   & Pick<Types.Page, 'id' | 'name'>
 );
 
 export type RootSiteAdminLayoutFieldsFragment = (
-  { __typename?: 'CmsLayout' }
+  { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name'>
 );
 
 export type RootSiteFieldsFragment = (
-  { __typename?: 'RootSite' }
+  { __typename: 'RootSite' }
   & Pick<Types.RootSite, 'id' | 'site_name'>
   & { root_page: (
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id'>
     & PageFieldsFragment
   ), default_layout: (
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id'>
     & RootSiteAdminLayoutFieldsFragment
   ) }
@@ -31,17 +31,17 @@ export type RootSiteAdminQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type RootSiteAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { rootSite: (
-    { __typename?: 'RootSite' }
+    { __typename: 'RootSite' }
     & Pick<Types.RootSite, 'id'>
     & RootSiteFieldsFragment
   ), cmsPages: Array<(
-    { __typename?: 'Page' }
+    { __typename: 'Page' }
     & Pick<Types.Page, 'id'>
     & PageFieldsFragment
   )>, cmsLayouts: Array<(
-    { __typename?: 'CmsLayout' }
+    { __typename: 'CmsLayout' }
     & Pick<Types.CmsLayout, 'id'>
     & RootSiteAdminLayoutFieldsFragment
   )> }

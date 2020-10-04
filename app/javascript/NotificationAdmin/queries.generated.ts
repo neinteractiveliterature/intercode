@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type NotificationTemplateFieldsFragment = (
-  { __typename?: 'NotificationTemplate' }
+  { __typename: 'NotificationTemplate' }
   & Pick<Types.NotificationTemplate, 'id' | 'event_key' | 'subject' | 'body_html' | 'body_text' | 'body_sms'>
 );
 
@@ -12,12 +12,12 @@ export type NotificationAdminQueryQueryVariables = Types.Exact<{ [key: string]: 
 
 
 export type NotificationAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { notification_templates: Array<(
-      { __typename?: 'NotificationTemplate' }
+      { __typename: 'NotificationTemplate' }
       & Pick<Types.NotificationTemplate, 'id'>
       & NotificationTemplateFieldsFragment
     )> }

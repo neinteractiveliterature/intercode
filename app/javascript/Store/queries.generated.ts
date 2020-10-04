@@ -18,18 +18,18 @@ export type AdminOrdersQueryQueryVariables = Types.Exact<{
 
 
 export type AdminOrdersQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_create_orders' | 'can_update_orders'>
   ), convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
     & { orders_paginated: (
-      { __typename?: 'OrdersPagination' }
+      { __typename: 'OrdersPagination' }
       & Pick<Types.OrdersPagination, 'current_page' | 'per_page' | 'total_pages'>
       & { entries: Array<(
-        { __typename?: 'Order' }
+        { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
         & AdminOrderFieldsFragmentFragment
       )> }
@@ -41,20 +41,20 @@ export type AdminProductsQueryQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type AdminProductsQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { products: Array<(
-      { __typename?: 'Product' }
+      { __typename: 'Product' }
       & Pick<Types.Product, 'id'>
       & AdminProductFieldsFragment
     )>, ticket_types: Array<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'description'>
     )> }
   ), currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_update_products'>
   ) }
 );
@@ -63,12 +63,12 @@ export type AdminStoreAbilityQueryQueryVariables = Types.Exact<{ [key: string]: 
 
 
 export type AdminStoreAbilityQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentAbility: (
-    { __typename?: 'Ability' }
+    { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_update_products' | 'can_update_orders'>
   ), convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
   ) }
 );
@@ -77,15 +77,15 @@ export type CartQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type CartQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
   )>, convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   ), currentPendingOrder?: Types.Maybe<(
-    { __typename?: 'Order' }
+    { __typename: 'Order' }
     & Pick<Types.Order, 'id'>
     & CartOrderFieldsFragment
   )> }
@@ -95,44 +95,44 @@ export type OrderHistoryQueryQueryVariables = Types.Exact<{ [key: string]: never
 
 
 export type OrderHistoryQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'timezone_name'>
-    & { staff_positions?: Types.Maybe<Array<(
-      { __typename?: 'StaffPosition' }
+    & { staff_positions: Array<(
+      { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name' | 'email'>
-    )>> }
+    )> }
   ), myProfile?: Types.Maybe<(
-    { __typename?: 'UserConProfile' }
+    { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { orders: Array<Types.Maybe<(
-      { __typename?: 'Order' }
+      { __typename: 'Order' }
       & Pick<Types.Order, 'id' | 'status' | 'submitted_at'>
       & { total_price: (
-        { __typename?: 'Money' }
+        { __typename: 'Money' }
         & Pick<Types.Money, 'fractional' | 'currency_code'>
       ), payment_amount?: Types.Maybe<(
-        { __typename?: 'Money' }
+        { __typename: 'Money' }
         & Pick<Types.Money, 'fractional' | 'currency_code'>
       )>, coupon_applications: Array<(
-        { __typename?: 'CouponApplication' }
+        { __typename: 'CouponApplication' }
         & Pick<Types.CouponApplication, 'id'>
         & CouponApplicationFieldsFragment
       )>, order_entries: Array<(
-        { __typename?: 'OrderEntry' }
+        { __typename: 'OrderEntry' }
         & Pick<Types.OrderEntry, 'id' | 'quantity'>
         & { product: (
-          { __typename?: 'Product' }
+          { __typename: 'Product' }
           & Pick<Types.Product, 'id' | 'name' | 'image_url' | 'payment_options'>
         ), product_variant?: Types.Maybe<(
-          { __typename?: 'ProductVariant' }
+          { __typename: 'ProductVariant' }
           & Pick<Types.ProductVariant, 'id' | 'name' | 'image_url'>
         )>, price_per_item: (
-          { __typename?: 'Money' }
+          { __typename: 'Money' }
           & Pick<Types.Money, 'fractional' | 'currency_code'>
         ), price: (
-          { __typename?: 'Money' }
+          { __typename: 'Money' }
           & Pick<Types.Money, 'fractional' | 'currency_code'>
         ) }
       )> }
@@ -144,21 +144,21 @@ export type OrderSummaryQueryQueryVariables = Types.Exact<{ [key: string]: never
 
 
 export type OrderSummaryQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention: (
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { products: Array<(
-      { __typename?: 'Product' }
+      { __typename: 'Product' }
       & Pick<Types.Product, 'id' | 'name'>
       & { order_quantities_by_status: Array<(
-        { __typename?: 'OrderQuantityByStatus' }
+        { __typename: 'OrderQuantityByStatus' }
         & Pick<Types.OrderQuantityByStatus, 'status' | 'quantity'>
       )>, product_variants: Array<(
-        { __typename?: 'ProductVariant' }
+        { __typename: 'ProductVariant' }
         & Pick<Types.ProductVariant, 'id' | 'name'>
         & { order_quantities_by_status: Array<(
-          { __typename?: 'OrderQuantityByStatus' }
+          { __typename: 'OrderQuantityByStatus' }
           & Pick<Types.OrderQuantityByStatus, 'status' | 'quantity'>
         )> }
       )> }
@@ -172,24 +172,24 @@ export type OrderFormProductQueryQueryVariables = Types.Exact<{
 
 
 export type OrderFormProductQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { currentUser?: Types.Maybe<(
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id'>
   )>, product: (
-    { __typename?: 'Product' }
+    { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'image_url' | 'name' | 'description_html'>
     & { pricing_structure?: Types.Maybe<(
-      { __typename?: 'PricingStructure' }
+      { __typename: 'PricingStructure' }
       & PricingStructureFieldsFragment
     )>, provides_ticket_type?: Types.Maybe<(
-      { __typename?: 'TicketType' }
+      { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
     )>, product_variants: Array<(
-      { __typename?: 'ProductVariant' }
+      { __typename: 'ProductVariant' }
       & Pick<Types.ProductVariant, 'id' | 'name' | 'position'>
       & { override_pricing_structure?: Types.Maybe<(
-        { __typename?: 'PricingStructure' }
+        { __typename: 'PricingStructure' }
         & PricingStructureFieldsFragment
       )> }
     )> }

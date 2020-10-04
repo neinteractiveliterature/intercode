@@ -6,6 +6,8 @@ import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
+import { OrganizationAdminOrganizationsQueryQuery } from './queries.generated';
+import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
 
 const OrganizationRolePermissionNames = flatMap(
   PermissionNames.filter(
@@ -14,16 +16,20 @@ const OrganizationRolePermissionNames = flatMap(
   (permissionNameGroup) => permissionNameGroup.permissions,
 );
 
-export default function useOrganizationRoleForm(initialOrganizationRole) {
+type OrganizationRoleType = OrganizationAdminOrganizationsQueryQuery['organizations'][0]['organization_roles'][0];
+
+export default function useOrganizationRoleForm(initialOrganizationRole: OrganizationRoleType) {
   const [name, onNameChange] = useState(initialOrganizationRole.name);
-  const [usersChangeSet, onChangeUsers] = useChangeSetWithSelect();
-  const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
+  const [usersChangeSet, onChangeUsers] = useChangeSetWithSelect<
+    OrganizationRoleType['users'][0]
+  >();
+  const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<PermissionWithId>();
 
   const initialPermissions = useMemo(
     () =>
       initialOrganizationRole.permissions.map((permission) => ({
         ...permission,
-        model: initialOrganizationRole,
+        role: initialOrganizationRole,
       })),
     [initialOrganizationRole],
   );
@@ -48,8 +54,8 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         <PermissionsTableInput
           permissionNames={OrganizationRolePermissionNames}
           initialPermissions={initialPermissions}
-          rowType="model"
-          models={[initialOrganizationRole]}
+          rowType="role"
+          rows={[initialOrganizationRole]}
           changeSet={permissionsChangeSet}
           add={addPermission}
           remove={removePermission}
@@ -66,5 +72,5 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
       usersChangeSet,
       permissionsChangeSet,
     },
-  };
+  } as const;
 }

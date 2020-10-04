@@ -4,22 +4,22 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type CommonConventionDataFragment = (
-  { __typename?: 'Convention' }
+  { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'site_mode' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
   & { event_categories: Array<(
-    { __typename?: 'EventCategory' }
+    { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name' | 'scheduling_ui' | 'default_color' | 'full_color' | 'signed_up_color'>
   )> }
 );
 
 export type RunBasicSignupDataFragment = (
-  { __typename?: 'Run' }
+  { __typename: 'Run' }
   & Pick<Types.Run, 'id' | 'signup_count_by_state_and_bucket_key_and_counted'>
   & { my_signups: Array<(
-    { __typename?: 'Signup' }
+    { __typename: 'Signup' }
     & Pick<Types.Signup, 'id' | 'state'>
   )>, my_signup_requests: Array<(
-    { __typename?: 'SignupRequest' }
+    { __typename: 'SignupRequest' }
     & Pick<Types.SignupRequest, 'id' | 'state'>
   )> }
 );
@@ -28,9 +28,9 @@ export type CommonConventionDataQueryQueryVariables = Types.Exact<{ [key: string
 
 
 export type CommonConventionDataQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & CommonConventionDataFragment
   )> }

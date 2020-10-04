@@ -9,9 +9,9 @@ export type RevokeAuthorizedApplicationMutationVariables = Types.Exact<{
 
 
 export type RevokeAuthorizedApplicationMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { revokeAuthorizedApplication?: Types.Maybe<(
-    { __typename?: 'RevokeAuthorizedApplicationPayload' }
+    { __typename: 'RevokeAuthorizedApplicationPayload' }
     & Pick<Types.RevokeAuthorizedApplicationPayload, 'clientMutationId'>
   )> }
 );

@@ -29,6 +29,7 @@ function FormEditor() {
   const form: FormEditorForm = useMemo(() => {
     if (loading || error || !data) {
       return {
+        __typename: 'Form',
         id: 0,
         form_type: FormType.Event,
         title: '',

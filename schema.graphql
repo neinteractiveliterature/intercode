@@ -358,7 +358,7 @@ type Convention {
   signup_requests_paginated(filters: SignupRequestFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupRequestsPagination!
   signup_spy_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupsPagination! @deprecated(reason: "Use signup_changes_paginated instead")
   site_mode: SiteMode!
-  staff_positions: [StaffPosition!]
+  staff_positions: [StaffPosition!]!
   starts_at: Date
   stripe_publishable_key: String
   ticket_mode: TicketMode!
@@ -3507,7 +3507,7 @@ type StaffPosition {
   id: Int!
   name: String!
   permissions: [Permission!]!
-  user_con_profiles: [UserConProfile!]
+  user_con_profiles: [UserConProfile!]!
   visible: Boolean
 }
 

@@ -152,6 +152,7 @@ function EventList() {
   }
 
   const eventsPaginated = (loading || !data ? undefined : data.convention?.events_paginated) ?? {
+    __typename: 'EventsPagination',
     entries: [],
     current_page: 1,
     per_page: 10,

@@ -4,7 +4,7 @@ class Types::StaffPositionType < Types::BaseObject
   field :email, String, null: true
   field :email_aliases, [String], null: false
   field :visible, Boolean, null: true
-  field :user_con_profiles, [Types::UserConProfileType], null: true
+  field :user_con_profiles, [Types::UserConProfileType], null: false
   field :permissions, [Types::PermissionType], null: false
   field :cc_addresses, [String], null: false
 

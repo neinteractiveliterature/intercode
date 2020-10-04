@@ -4,19 +4,19 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type EventCategoryFieldsFragment = (
-  { __typename?: 'EventCategory' }
+  { __typename: 'EventCategory' }
   & Pick<Types.EventCategory, 'id' | 'name' | 'team_member_name' | 'proposal_description' | 'scheduling_ui' | 'default_color' | 'signed_up_color' | 'full_color' | 'can_provide_tickets'>
   & { events_paginated: (
-    { __typename?: 'EventsPagination' }
+    { __typename: 'EventsPagination' }
     & Pick<Types.EventsPagination, 'total_entries'>
   ), department?: Types.Maybe<(
-    { __typename?: 'Department' }
+    { __typename: 'Department' }
     & Pick<Types.Department, 'id' | 'name'>
   )>, event_form: (
-    { __typename?: 'Form' }
+    { __typename: 'Form' }
     & Pick<Types.Form, 'id' | 'title'>
   ), event_proposal_form?: Types.Maybe<(
-    { __typename?: 'Form' }
+    { __typename: 'Form' }
     & Pick<Types.Form, 'id' | 'title'>
   )> }
 );
@@ -25,19 +25,19 @@ export type EventCategoryAdminQueryQueryVariables = Types.Exact<{ [key: string]:
 
 
 export type EventCategoryAdminQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name' | 'ticket_mode'>
     & { departments: Array<(
-      { __typename?: 'Department' }
+      { __typename: 'Department' }
       & Pick<Types.Department, 'id' | 'name'>
     )>, event_categories: Array<(
-      { __typename?: 'EventCategory' }
+      { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id'>
       & EventCategoryFieldsFragment
     )>, forms: Array<(
-      { __typename?: 'Form' }
+      { __typename: 'Form' }
       & Pick<Types.Form, 'id' | 'title' | 'form_type'>
     )> }
   )> }

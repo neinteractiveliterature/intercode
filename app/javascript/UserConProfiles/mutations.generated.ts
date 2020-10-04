@@ -12,11 +12,11 @@ export type CreateUserConProfileMutationVariables = Types.Exact<{
 
 
 export type CreateUserConProfileMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createUserConProfile?: Types.Maybe<(
-    { __typename?: 'CreateUserConProfilePayload' }
+    { __typename: 'CreateUserConProfilePayload' }
     & { user_con_profile: (
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id'>
     ) }
   )> }
@@ -28,11 +28,11 @@ export type UpdateUserConProfileMutationVariables = Types.Exact<{
 
 
 export type UpdateUserConProfileMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateUserConProfile?: Types.Maybe<(
-    { __typename?: 'UpdateUserConProfilePayload' }
+    { __typename: 'UpdateUserConProfilePayload' }
     & { user_con_profile: (
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id'>
       & UserConProfileFieldsFragment
     ) }
@@ -45,11 +45,11 @@ export type DeleteUserConProfileMutationVariables = Types.Exact<{
 
 
 export type DeleteUserConProfileMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteUserConProfile?: Types.Maybe<(
-    { __typename?: 'DeleteUserConProfilePayload' }
+    { __typename: 'DeleteUserConProfilePayload' }
     & { user_con_profile: (
-      { __typename?: 'UserConProfile' }
+      { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id'>
     ) }
   )> }
@@ -62,11 +62,11 @@ export type CreateTicketMutationVariables = Types.Exact<{
 
 
 export type CreateTicketMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { createTicket?: Types.Maybe<(
-    { __typename?: 'CreateTicketPayload' }
+    { __typename: 'CreateTicketPayload' }
     & { ticket: (
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & UserConProfileAdminTicketFieldsFragment
     ) }
@@ -80,11 +80,11 @@ export type UpdateTicketMutationVariables = Types.Exact<{
 
 
 export type UpdateTicketMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { updateTicket?: Types.Maybe<(
-    { __typename?: 'UpdateTicketPayload' }
+    { __typename: 'UpdateTicketPayload' }
     & { ticket: (
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & UserConProfileAdminTicketFieldsFragment
     ) }
@@ -98,11 +98,11 @@ export type DeleteTicketMutationVariables = Types.Exact<{
 
 
 export type DeleteTicketMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { deleteTicket?: Types.Maybe<(
-    { __typename?: 'DeleteTicketPayload' }
+    { __typename: 'DeleteTicketPayload' }
     & { ticket: (
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
     ) }
   )> }
@@ -116,11 +116,11 @@ export type ConvertTicketToEventProvidedMutationVariables = Types.Exact<{
 
 
 export type ConvertTicketToEventProvidedMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { convertTicketToEventProvided?: Types.Maybe<(
-    { __typename?: 'ConvertTicketToEventProvidedPayload' }
+    { __typename: 'ConvertTicketToEventProvidedPayload' }
     & { ticket: (
-      { __typename?: 'Ticket' }
+      { __typename: 'Ticket' }
       & Pick<Types.Ticket, 'id'>
       & UserConProfileAdminTicketFieldsFragment
     ) }

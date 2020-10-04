@@ -7,7 +7,7 @@ export type AccountFormContentQueryQueryVariables = Types.Exact<{ [key: string]:
 
 
 export type AccountFormContentQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & Pick<Types.Query, 'accountFormContentHtml'>
 );
 
@@ -15,12 +15,12 @@ export type EditUserQueryQueryVariables = Types.Exact<{ [key: string]: never; }>
 
 
 export type EditUserQueryQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { convention?: Types.Maybe<(
-    { __typename?: 'Convention' }
+    { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
   )>, currentUser?: Types.Maybe<(
-    { __typename?: 'User' }
+    { __typename: 'User' }
     & Pick<Types.User, 'id' | 'first_name' | 'last_name' | 'email'>
   )> }
 );
