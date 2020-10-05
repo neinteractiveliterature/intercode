@@ -1,20 +1,20 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CmsGraphqlQueriesQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 
 import 'graphiql/graphiql.css';
+import { useCmsGraphqlQueriesQueryQuery } from './queries.generated';
+import FourOhFourPage from '../../FourOhFourPage';
 
 function ViewCmsGraphqlQuerySource() {
-  const { id } = useParams();
-  const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
+  const { id } = useParams<{ id: string }>();
+  const { data, loading, error } = useCmsGraphqlQueriesQueryQuery();
   const query =
-    loading || error ? null : data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
+    loading || error ? null : data?.cmsGraphqlQueries.find((q) => q.id.toString() === id);
 
   usePageTitle(`View “${(query || {}).identifier}” Source`);
 
@@ -24,6 +24,10 @@ function ViewCmsGraphqlQuerySource() {
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (!query) {
+    return <FourOhFourPage />;
   }
 
   return (
