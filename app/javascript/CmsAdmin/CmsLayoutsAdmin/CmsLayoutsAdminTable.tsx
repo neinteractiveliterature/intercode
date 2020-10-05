@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { CmsLayoutsAdminQuery } from './queries';
 import { DeleteLayout } from './mutations';
@@ -10,9 +9,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsLayoutsAdminQueryQuery } from './queries.generated';
 
 function CmsLayoutsAdminTable() {
-  const { data, loading, error } = useQuery(CmsLayoutsAdminQuery);
+  const { data, loading, error } = useCmsLayoutsAdminQueryQuery();
   const confirm = useConfirm();
   const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
     query: CmsLayoutsAdminQuery,
@@ -21,11 +21,11 @@ function CmsLayoutsAdminTable() {
   });
 
   const layoutsSorted = useMemo(() => {
-    if (loading || error) {
+    if (loading || error || !data) {
       return [];
     }
 
-    return sortByLocaleString(data.cmsLayouts, (layout) => layout.name);
+    return sortByLocaleString(data.cmsLayouts, (layout) => layout.name ?? '');
   }, [data, loading, error]);
 
   usePageTitle('CMS Layouts');
@@ -38,7 +38,7 @@ function CmsLayoutsAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deleteLayout = (id) => deleteLayoutMutate({ variables: { id } });
+  const deleteLayout = (id: number) => deleteLayoutMutate({ variables: { id } });
 
   return (
     <>
@@ -89,7 +89,7 @@ function CmsLayoutsAdminTable() {
         </tbody>
       </table>
 
-      {data.currentAbility.can_create_cms_layouts && (
+      {data!.currentAbility.can_create_cms_layouts && (
         <Link to="/cms_layouts/new" className="btn btn-secondary">
           New layout
         </Link>

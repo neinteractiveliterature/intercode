@@ -1,22 +1,26 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useApolloClient, useMutation, useQuery } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CmsGraphqlQueriesQuery } from './queries';
-import { UpdateCmsGraphqlQuery } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 import 'graphiql/graphiql.css';
+import { CmsGraphqlQueriesQueryQuery, useCmsGraphqlQueriesQueryQuery } from './queries.generated';
+import FourOhFourPage from '../../FourOhFourPage';
+import { useUpdateCmsGraphqlQueryMutation } from './mutations.generated';
 
-function EditCmsGraphqlQueryForm({ initialQuery }) {
+type EditCmsGraphqlQueryForm = {
+  initialQuery: CmsGraphqlQueriesQueryQuery['cmsGraphqlQueries'][0];
+};
+
+function EditCmsGraphqlQueryForm({ initialQuery }: EditCmsGraphqlQueryForm) {
   const history = useHistory();
   const [query, setQuery] = useState(initialQuery);
-  const [updateMutate] = useMutation(UpdateCmsGraphqlQuery);
+  const [updateMutate] = useUpdateCmsGraphqlQueryMutation();
   const apolloClient = useApolloClient();
 
   const saveClicked = async () => {
@@ -47,7 +51,7 @@ function EditCmsGraphqlQueryForm({ initialQuery }) {
         <CmsGraphqlQueryForm value={query} readOnly={saveInProgress} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={saveError} />
+      <ErrorDisplay graphQLError={saveError as ApolloError} />
 
       <button type="button" className="btn btn-primary" disabled={saveInProgress} onClick={save}>
         Save GraphQL query
@@ -56,22 +60,20 @@ function EditCmsGraphqlQueryForm({ initialQuery }) {
   );
 }
 
-EditCmsGraphqlQueryForm.propTypes = {
-  initialQuery: PropTypes.shape({
-    identifier: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
 function EditCmsGraphqlQuery() {
-  const { id } = useParams();
-  const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
+  const { id } = useParams<{ id: string }>();
+  const { data, loading, error } = useCmsGraphqlQueriesQueryQuery();
   const initialQuery = useMemo(
-    () => (error || loading ? null : data.cmsGraphqlQueries.find((q) => q.id.toString() === id)),
+    () => (error || loading ? null : data?.cmsGraphqlQueries.find((q) => q.id.toString() === id)),
     [data, loading, error, id],
   );
 
   if (loading) {
     return <PageLoadingIndicator visible />;
+  }
+
+  if (!initialQuery) {
+    return <FourOhFourPage />;
   }
 
   return <EditCmsGraphqlQueryForm initialQuery={initialQuery} />;

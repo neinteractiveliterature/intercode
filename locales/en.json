@@ -141,6 +141,9 @@
       "title": "Upload a file",
       "uploadFileButton": "Upload"
     },
+    "layoutForm": {
+      "navbarClassesHelpText": "Overrides the default CSS classes for the Bootstrap navigation bar (by default, <2>{{ defaultClasses }}</2>)"
+    },
     "liquidInput": {
       "addFileButton": "Add file…",
       "help": {

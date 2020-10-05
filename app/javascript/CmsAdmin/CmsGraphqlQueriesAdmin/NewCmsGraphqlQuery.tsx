@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 import { CmsGraphqlQueriesQuery } from './queries';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
@@ -46,7 +47,7 @@ function NewCmsGraphqlQuery() {
         <CmsGraphqlQueryForm value={query} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={createError} />
+      <ErrorDisplay graphQLError={createError as ApolloError} />
 
       <button
         type="button"

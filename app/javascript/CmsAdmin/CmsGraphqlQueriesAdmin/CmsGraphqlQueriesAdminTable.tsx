@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { CmsGraphqlQueriesQuery } from './queries';
 import { useConfirm } from '../../ModalDialogs/Confirm';
@@ -9,9 +8,10 @@ import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import { useDeleteMutation } from '../../MutationUtils';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsGraphqlQueriesQueryQuery } from './queries.generated';
 
 function CmsGraphqlQueriesAdminTable() {
-  const { data, loading, error } = useQuery(CmsGraphqlQueriesQuery);
+  const { data, loading, error } = useCmsGraphqlQueriesQueryQuery(); // lolcry
   const deleteCmsGraphqlQuery = useDeleteMutation(DeleteCmsGraphqlQuery, {
     query: CmsGraphqlQueriesQuery,
     idVariablePath: ['id'],
@@ -33,7 +33,7 @@ function CmsGraphqlQueriesAdminTable() {
     <>
       <table className="table table-striped">
         <tbody>
-          {data.cmsGraphqlQueries.map((query) => (
+          {data!.cmsGraphqlQueries.map((query) => (
             <tr key={query.id}>
               <td>
                 <code>{query.identifier}</code>
@@ -83,7 +83,7 @@ function CmsGraphqlQueriesAdminTable() {
           ))}
         </tbody>
       </table>
-      {data.currentAbility.can_create_cms_graphql_queries && (
+      {data!.currentAbility.can_create_cms_graphql_queries && (
         <Link to="/cms_graphql_queries/new" className="btn btn-primary">
           New GraphQL query
         </Link>
