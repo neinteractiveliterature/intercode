@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { CmsPartialsAdminQuery } from './queries';
 import { DeletePartial } from './mutations';
@@ -10,9 +9,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsPartialsAdminQueryQuery } from './queries.generated';
 
 function CmsPartialsAdminTable() {
-  const { data, loading, error } = useQuery(CmsPartialsAdminQuery);
+  const { data, loading, error } = useCmsPartialsAdminQueryQuery();
   const confirm = useConfirm();
   const deletePartialMutate = useDeleteMutation(DeletePartial, {
     query: CmsPartialsAdminQuery,
@@ -23,11 +23,11 @@ function CmsPartialsAdminTable() {
   usePageTitle('CMS Partials');
 
   const partialsSorted = useMemo(() => {
-    if (error || loading) {
+    if (error || loading || !data) {
       return [];
     }
 
-    return sortByLocaleString(data.cmsPartials, (partial) => partial.name);
+    return sortByLocaleString(data.cmsPartials, (partial) => partial.name ?? '');
   }, [data, loading, error]);
 
   if (loading) {
@@ -38,7 +38,7 @@ function CmsPartialsAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deletePartial = (id) => deletePartialMutate({ variables: { id } });
+  const deletePartial = (id: number) => deletePartialMutate({ variables: { id } });
 
   return (
     <>
@@ -92,7 +92,7 @@ function CmsPartialsAdminTable() {
         </tbody>
       </table>
 
-      {data.currentAbility.can_create_cms_partials && (
+      {data!.currentAbility.can_create_cms_partials && (
         <Link to="/cms_partials/new" className="btn btn-secondary">
           New partial
         </Link>

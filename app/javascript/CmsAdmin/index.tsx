@@ -1,11 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
-import { CmsAdminBaseQuery } from './queries';
 import NavigationItemsAdmin from './NavigationItemsAdmin';
 import ErrorDisplay from '../ErrorDisplay';
 import CmsContentGroupsAdmin from './CmsContentGroupsAdmin';
@@ -17,8 +14,15 @@ import RootSiteAdmin from '../RootSiteAdmin';
 import LoadingIndicator from '../LoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import MenuIcon from '../NavigationBar/MenuIcon';
+import { useCmsAdminBaseQueryQuery } from './queries.generated';
 
-function CmsAdminNavTab({ path, children, icon }) {
+type CmsAdminNavTabProps = {
+  path: string;
+  children: ReactNode;
+  icon?: string;
+};
+
+function CmsAdminNavTab({ path, children, icon }: CmsAdminNavTabProps) {
   return (
     <li className="nav-item">
       <NavLink to={path} className="nav-link" role="presentation">
@@ -29,19 +33,9 @@ function CmsAdminNavTab({ path, children, icon }) {
   );
 }
 
-CmsAdminNavTab.propTypes = {
-  path: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  icon: PropTypes.string,
-};
-
-CmsAdminNavTab.defaultProps = {
-  icon: null,
-};
-
 function CmsAdmin() {
   const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
-  const { data, loading, error } = useQuery(CmsAdminBaseQuery);
+  const { data, loading, error } = useCmsAdminBaseQueryQuery();
 
   if (loading) {
     return <LoadingIndicator />;
@@ -67,7 +61,7 @@ function CmsAdmin() {
         <CmsAdminNavTab path="/cms_files" icon="fa-file-image-o">
           Files
         </CmsAdminNavTab>
-        {data.currentAbility.can_create_cms_navigation_items && (
+        {data?.currentAbility.can_create_cms_navigation_items && (
           <CmsAdminNavTab path="/cms_navigation_items" icon="fa-map-o">
             Navigation
           </CmsAdminNavTab>
@@ -84,7 +78,7 @@ function CmsAdmin() {
         <CmsAdminNavTab path="/cms_content_groups" icon="fa-group">
           Content groups
         </CmsAdminNavTab>
-        {!data.convention && (
+        {data && !data.convention && (
           <CmsAdminNavTab path="/root_site" icon="fa-cogs">
             Root site settings
           </CmsAdminNavTab>
@@ -103,7 +97,7 @@ function CmsAdmin() {
         <Route path="/cms_files">
           <CmsFilesAdmin />
         </Route>
-        {data.currentAbility.can_create_cms_navigation_items ? (
+        {data?.currentAbility.can_create_cms_navigation_items ? (
           <Route path="/cms_navigation_items">
             <NavigationItemsAdmin />
           </Route>
@@ -124,9 +118,11 @@ function CmsAdmin() {
         <Route path="/cms_content_groups">
           <CmsContentGroupsAdmin />
         </Route>
-        <Route path="/root_site">
-          <RootSiteAdmin />
-        </Route>
+        {data && !data.convention && (
+          <Route path="/root_site">
+            <RootSiteAdmin />
+          </Route>
+        )}
       </Switch>
     </>
   );

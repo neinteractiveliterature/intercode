@@ -9,7 +9,7 @@ import PageLoadingIndicator from './PageLoadingIndicator';
 export function LoadSingleValueFromCollectionWrapper<TData, TValue>(
   useLoadData: () => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,
-  WrappedComponent: React.ComponentType<{ value: TValue }>,
+  WrappedComponent: React.ComponentType<{ value: TValue; data: TData }>,
 ): React.FunctionComponent<{}> {
   const Wrapper = () => {
     const { id } = useParams<{ id: string }>();
@@ -28,7 +28,7 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue>(
       return <FourOhFourPage />;
     }
 
-    return <WrappedComponent value={value} />;
+    return <WrappedComponent value={value} data={data!} />;
   };
 
   const wrappedComponentDisplayName =

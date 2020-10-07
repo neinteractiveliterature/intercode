@@ -10,12 +10,16 @@ export default function useStatePropertyUpdater<T>(setState: Dispatch<SetStateAc
 
 export function usePartialState<T, F extends keyof T>(
   state: T,
-  setState: Dispatch<SetStateAction<T>>,
+  setState: Dispatch<SetStateAction<T>> | undefined,
   property: F,
 ) {
   const propertyValue = state[property];
   const setProperty = useCallback(
     (valueOrUpdater: SetStateAction<T[F]>) => {
+      if (setState == null) {
+        return;
+      }
+
       setState((prevState) => {
         if (typeof valueOrUpdater === 'function') {
           return {

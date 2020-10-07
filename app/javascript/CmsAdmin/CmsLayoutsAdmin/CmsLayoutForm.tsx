@@ -8,8 +8,6 @@ import { usePartialState } from '../../useStatePropertyUpdater';
 
 type CmsLayoutFields = Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>;
 
-function noop() {}
-
 export type CmsLayoutFormProps<T extends CmsLayoutFields> = {
   layout: T;
   onChange?: React.Dispatch<React.SetStateAction<T>>;
@@ -21,14 +19,10 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
   onChange,
   readOnly,
 }: CmsLayoutFormProps<T>) {
-  const [name, setName] = usePartialState(layout, onChange ?? noop, 'name');
-  const [adminNotes, setAdminNotes] = usePartialState(layout, onChange ?? noop, 'admin_notes');
-  const [navbarClasses, setNavbarClasses] = usePartialState(
-    layout,
-    onChange ?? noop,
-    'navbar_classes',
-  );
-  const [content, setContent] = usePartialState(layout, onChange ?? noop, 'content');
+  const [name, setName] = usePartialState(layout, onChange, 'name');
+  const [adminNotes, setAdminNotes] = usePartialState(layout, onChange, 'admin_notes');
+  const [navbarClasses, setNavbarClasses] = usePartialState(layout, onChange, 'navbar_classes');
+  const [content, setContent] = usePartialState(layout, onChange, 'content');
 
   return (
     <>

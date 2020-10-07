@@ -1,16 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import ErrorDisplay from '../../ErrorDisplay';
-import { CmsVariablesQuery, DeleteCmsVariableMutation, SetCmsVariableMutation } from './queries';
+import { CmsVariablesQuery, DeleteCmsVariableMutation } from './queries';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useDeleteMutation } from '../../MutationUtils';
+import { CmsVariablesQueryQuery, useSetCmsVariableMutationMutation } from './queries.generated';
 
-function ExistingVariableRow({ variable }) {
-  const [setVariableMutate] = useMutation(SetCmsVariableMutation);
+export type ExistingVariableRowProps = {
+  variable: CmsVariablesQueryQuery['cmsVariables'][0];
+};
+
+function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
+  const [setVariableMutate] = useSetCmsVariableMutationMutation();
   const [setVariable, setVariableError, , clearSetVariableError] = useAsyncFunction(
     setVariableMutate,
   );
@@ -32,7 +36,7 @@ function ExistingVariableRow({ variable }) {
     clearDeleteVariableError();
   };
 
-  const commitVariable = async (value) => {
+  const commitVariable = async (value: string) => {
     await setVariable({
       variables: {
         key: variable.key,
@@ -90,22 +94,13 @@ function ExistingVariableRow({ variable }) {
       </tr>
       {error ? (
         <tr>
-          <td colSpan="3">
-            <ErrorDisplay graphQLError={error} />
+          <td colSpan={3}>
+            <ErrorDisplay graphQLError={error as ApolloError} />
           </td>
         </tr>
       ) : null}
     </>
   );
 }
-
-ExistingVariableRow.propTypes = {
-  variable: PropTypes.shape({
-    key: PropTypes.string.isRequired,
-    value_json: PropTypes.string.isRequired,
-    current_ability_can_update: PropTypes.bool.isRequired,
-    current_ability_can_delete: PropTypes.bool.isRequired,
-  }).isRequired,
-};
 
 export default ExistingVariableRow;

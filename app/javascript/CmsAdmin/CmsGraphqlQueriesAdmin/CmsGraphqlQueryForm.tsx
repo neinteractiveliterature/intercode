@@ -15,8 +15,6 @@ const GraphiQL = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: 'graphiql' */ 'graphiql'),
 );
 
-function noop() {}
-
 type CmsGraphqlQueryFormFields = {
   identifier: string;
   admin_notes?: string | null;
@@ -35,9 +33,9 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   readOnly,
 }: CmsGraphqlQueryFormProps<T>) {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
-  const [identifier, setIdentifier] = usePartialState(value, onChange ?? noop, 'identifier');
-  const [adminNotes, setAdminNotes] = usePartialState(value, onChange ?? noop, 'admin_notes');
-  const [query, setQuery] = usePartialState(value, onChange ?? noop, 'query');
+  const [identifier, setIdentifier] = usePartialState(value, onChange, 'identifier');
+  const [adminNotes, setAdminNotes] = usePartialState(value, onChange, 'admin_notes');
+  const [query, setQuery] = usePartialState(value, onChange, 'query');
   const link = useIntercodeApolloLink(authenticityToken);
 
   // Serious shenanigans going on in here, we have to majorly circumvent type checking
