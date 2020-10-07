@@ -1,20 +1,20 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { CmsPagesAdminQuery } from './queries';
 import { DeletePage } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
-import { useConfirm } from '../../ModalDialogs/Confirm';
+import { useGraphQLConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsPagesAdminQueryQuery } from './queries.generated';
 
 function CmsPagesAdminTable() {
-  const { data, loading, error } = useQuery(CmsPagesAdminQuery);
-  const confirm = useConfirm();
+  const { data, loading, error } = useCmsPagesAdminQueryQuery();
+  const confirm = useGraphQLConfirm();
   const deletePageMutate = useDeleteMutation(DeletePage, {
     query: CmsPagesAdminQuery,
     arrayPath: ['cmsPages'],
@@ -24,11 +24,11 @@ function CmsPagesAdminTable() {
   usePageTitle(useValueUnless(() => 'CMS Pages', error || loading));
 
   const pagesSorted = useMemo(() => {
-    if (error || loading) {
+    if (error || loading || !data) {
       return [];
     }
 
-    return sortByLocaleString(data.cmsPages, (page) => page.name);
+    return sortByLocaleString(data.cmsPages, (page) => page.name ?? '');
   }, [data, loading, error]);
 
   if (loading) {
@@ -39,7 +39,7 @@ function CmsPagesAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deletePage = (id) => deletePageMutate({ variables: { id } });
+  const deletePage = (id: number) => deletePageMutate({ variables: { id } });
 
   return (
     <>
@@ -81,7 +81,6 @@ function CmsPagesAdminTable() {
                       confirm({
                         prompt: `Are you sure you want to delete ${page.name}?`,
                         action: () => deletePage(page.id),
-                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
                     className="btn btn-danger btn-sm ml-1"
@@ -95,7 +94,7 @@ function CmsPagesAdminTable() {
         </tbody>
       </table>
 
-      {data.currentAbility.can_create_pages && (
+      {data!.currentAbility.can_create_pages && (
         <Link to="/cms_pages/new" className="btn btn-secondary">
           New Page
         </Link>

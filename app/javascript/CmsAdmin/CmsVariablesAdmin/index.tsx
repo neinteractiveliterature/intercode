@@ -1,26 +1,28 @@
 import React, { useState, useCallback } from 'react';
-import { useQuery } from '@apollo/client';
 
-import AddVariableRow from './AddVariableRow';
+import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
-import { CmsVariablesQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { useCmsVariablesQueryQuery } from './queries.generated';
 
 function CmsVariablesAdmin() {
-  const { data, loading, error } = useQuery(CmsVariablesQuery);
-  const [addingVariables, setAddingVariables] = useState([]);
+  const { data, loading, error } = useCmsVariablesQueryQuery();
+  const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
   const addVariable = useCallback(
     () =>
       setAddingVariables((prevAddingVariables) => [
         ...prevAddingVariables,
         {
+          __typename: 'CmsVariable',
           key: '',
           value_json: '',
           generatedId: new Date().getTime(),
+          current_ability_can_delete: true,
+          current_ability_can_update: true,
         },
       ]),
     [],
@@ -58,7 +60,7 @@ function CmsVariablesAdmin() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { cmsVariables } = data;
+  const { cmsVariables } = data!;
 
   return (
     <table className="table">
@@ -84,16 +86,16 @@ function CmsVariablesAdmin() {
         ))}
         {cmsVariables.length + addingVariables.length === 0 ? (
           <tr>
-            <td colSpan="3" className="font-italic">
+            <td colSpan={3} className="font-italic">
               No variables defined.
             </td>
           </tr>
         ) : null}
       </tbody>
-      {data.currentAbility.can_create_cms_variables && (
+      {data!.currentAbility.can_create_cms_variables && (
         <tfoot>
           <tr>
-            <td colSpan="3">
+            <td colSpan={3}>
               <button type="button" className="btn btn-primary" onClick={addVariable}>
                 Add variable
               </button>

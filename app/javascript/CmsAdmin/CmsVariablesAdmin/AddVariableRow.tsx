@@ -1,14 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 
 import ErrorDisplay from '../../ErrorDisplay';
-import { SetCmsVariableMutation } from './queries';
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
+import { CmsVariablesQueryQuery, useSetCmsVariableMutationMutation } from './queries.generated';
 
-function AddVariableRow({ variable, onChange, onSave, onCancel }) {
-  const [setCmsVariableMutate] = useMutation(SetCmsVariableMutation);
+export type AddingVariable = Omit<CmsVariablesQueryQuery['cmsVariables'][0], 'id'> & {
+  generatedId: number;
+};
+
+export type AddVariableRowProps = {
+  variable: AddingVariable;
+  onChange: React.Dispatch<AddingVariable>;
+  onSave: (id: number) => void;
+  onCancel: (id: number) => void;
+};
+
+function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRowProps) {
+  const [setCmsVariableMutate] = useSetCmsVariableMutationMutation();
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();
 
@@ -25,7 +35,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }) {
     return onSave(variable.generatedId);
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case 'Enter':
         event.preventDefault();
@@ -83,24 +93,13 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }) {
       </tr>
       {setError ? (
         <tr>
-          <td colSpan="3">
-            <ErrorDisplay graphQLError={setError} />
+          <td colSpan={3}>
+            <ErrorDisplay graphQLError={setError as ApolloError} />
           </td>
         </tr>
       ) : null}
     </>
   );
 }
-
-AddVariableRow.propTypes = {
-  variable: PropTypes.shape({
-    generatedId: PropTypes.number.isRequired,
-    key: PropTypes.string.isRequired,
-    value_json: PropTypes.string.isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-};
 
 export default AddVariableRow;

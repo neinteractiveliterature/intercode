@@ -1,5 +1,6 @@
-import React, { useReducer } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 import buildPartialInput from './buildPartialInput';
 import { CmsPartialsAdminQuery } from './queries';
@@ -7,12 +8,12 @@ import { CreatePartial } from './mutations';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
-import CmsPartialForm, { partialReducer } from './CmsPartialForm';
+import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
 
 function NewCmsPartial() {
   const history = useHistory();
-  const [partial, dispatch] = useReducer(partialReducer, {});
+  const [partial, setPartial] = useState<CmsPartialFormFields>({});
   const [createPartial, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreatePartial, {
       query: CmsPartialsAdminQuery,
@@ -23,7 +24,7 @@ function NewCmsPartial() {
 
   usePageTitle('New Partial');
 
-  const formSubmitted = async (event) => {
+  const formSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
     await createPartial({
       variables: {
@@ -36,9 +37,9 @@ function NewCmsPartial() {
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsPartialForm partial={partial} dispatch={dispatch} />
+        <CmsPartialForm partial={partial} onChange={setPartial} />
 
-        <ErrorDisplay graphQLError={createError} />
+        <ErrorDisplay graphQLError={createError as ApolloError} />
 
         <input
           type="submit"
