@@ -1,11 +1,22 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import MomentPropTypes from 'react-moment-proptypes';
+import React, { ReactNode, useMemo } from 'react';
 
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import useUniqueId from '../useUniqueId';
+import { FiniteTimespan } from '../Timespan';
 
-function TimeSelect({ value, timespan, onChange, children }) {
+export type TimeValues = {
+  hour?: number;
+  minute?: number;
+};
+
+export type TimeSelectProps = {
+  value: TimeValues;
+  onChange: React.Dispatch<TimeValues>;
+  timespan: FiniteTimespan;
+  children?: ReactNode;
+};
+
+function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
   const hourValues = useMemo(
     () => {
       let hourOffset = 0;
@@ -32,7 +43,7 @@ function TimeSelect({ value, timespan, onChange, children }) {
     [getMemoizationKeyForTimespan(timespan)],
   );
 
-  const inputChanged = (event) => {
+  const inputChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = event.target.value;
 
     if (newValue && newValue !== '') {
@@ -61,10 +72,10 @@ function TimeSelect({ value, timespan, onChange, children }) {
   const hourInputId = useUniqueId('hour-');
   const minuteInputId = useUniqueId('minute-');
 
-  const [hourSelect, minuteSelect] = [
+  const [hourSelect, minuteSelect] = ([
     ['Hour', 'hour', hourOptions, hourInputId],
     ['Minute', 'minute', minuteOptions, minuteInputId],
-  ].map(([label, name, options, selectId]) => (
+  ] as const).map(([label, name, options, selectId]) => (
     <label key={name} htmlFor={selectId}>
       <span className="sr-only">{label}</span>
       <select
@@ -90,22 +101,5 @@ function TimeSelect({ value, timespan, onChange, children }) {
     </div>
   );
 }
-
-TimeSelect.propTypes = {
-  value: PropTypes.shape({
-    hour: PropTypes.number,
-    minute: PropTypes.number,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  timespan: PropTypes.shape({
-    start: MomentPropTypes.momentObj,
-    finish: MomentPropTypes.momentObj,
-  }).isRequired,
-  children: PropTypes.node,
-};
-
-TimeSelect.defaultProps = {
-  children: null,
-};
 
 export default TimeSelect;
