@@ -36,7 +36,7 @@ function CurrentPendingOrderButton() {
     <li className="nav-item">
       <DropdownMenu
         buttonClassName="btn btn-link nav-link mr-2"
-        buttonStyle={{ zIndex: 1100 }}
+        buttonStyle={{ zIndex: 1100, position: 'relative' }}
         popperOptions={{ placement: 'bottom-end' }}
         buttonContent={
           <>
