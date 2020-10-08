@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
+import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
+import { PaymentRequest } from '@stripe/stripe-js';
 
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
@@ -36,6 +38,29 @@ function OrderPaymentModalContents({
     paymentOptions.includes('pay_at_convention') ? undefined : PaymentMode.Now,
   );
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({ name: initialName ?? '' });
+  const stripe = useStripe();
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>();
+
+  useEffect(() => {
+    if (stripe) {
+      const pr = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+          label: 'Total',
+          amount: totalPrice.fractional,
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+
+      pr.canMakePayment().then((result) => {
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
+    }
+  }, [stripe, totalPrice.fractional]);
 
   const submitOrder = useSubmitOrder();
   const [submitCheckOut, error, submitting] = useAsyncFunction(
@@ -89,6 +114,7 @@ function OrderPaymentModalContents({
               onChange={setPaymentDetails}
               disabled={submitting}
             />
+            {paymentRequest && <PaymentRequestButtonElement options={{ paymentRequest }} />}
           </>
         ) : null}
         <ErrorDisplay graphQLError={error as ApolloError} />
