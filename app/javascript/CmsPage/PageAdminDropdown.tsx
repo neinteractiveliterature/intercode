@@ -1,20 +1,40 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
 
-import { PageAdminDropdownQuery } from './queries';
-import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
+import { useDeletePageMutation } from '../CmsAdmin/CmsPagesAdmin/mutations.generated';
+import { PageAdminDropdownQueryQuery, usePageAdminDropdownQueryQuery } from './queries.generated';
 
-function PageAdminDropdown({ showEdit, showDelete, pageId }) {
+export type PageAdminDropdownProps = {
+  showEdit: boolean;
+  showDelete: boolean;
+  pageId: number;
+};
+
+function getEffectiveLayout(
+  cmsPage: PageAdminDropdownQueryQuery['cmsPage'],
+  cmsParent: PageAdminDropdownQueryQuery['cmsParent'],
+) {
+  const specificLayout = cmsPage.cms_layout;
+  if (specificLayout) {
+    return specificLayout;
+  }
+
+  if (cmsParent.__typename === 'Convention') {
+    return cmsParent.default_layout;
+  }
+
+  return cmsParent.root_site_default_layout;
+}
+
+function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownProps) {
   const history = useHistory();
   const confirm = useGraphQLConfirm();
-  const [deletePage] = useMutation(DeletePage);
-  const { data, loading, error } = useQuery(PageAdminDropdownQuery, { variables: { id: pageId } });
+  const [deletePage] = useDeletePageMutation();
+  const { data, loading, error } = usePageAdminDropdownQueryQuery({ variables: { id: pageId } });
 
   const deleteConfirmed = useCallback(async () => {
     await deletePage({ variables: { id: pageId } });
@@ -29,9 +49,9 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const layoutId = data.cmsPage.cms_layout
-    ? data.cmsPage.cms_layout.id
-    : data.cmsParent.default_layout?.id ?? data.cmsParent.root_site_default_layout?.id;
+  const { cmsParent, cmsPage } = data!;
+
+  const layoutId = getEffectiveLayout(cmsPage, cmsParent)?.id;
 
   return (
     <div>
@@ -54,7 +74,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
               <MenuIcon icon="fa-columns" />
               Edit layout
             </Link>
-            {data.cmsPage.referenced_partials.map((partial) => (
+            {cmsPage.referenced_partials.map((partial) => (
               <Link
                 to={`/cms_partials/${partial.id}/edit`}
                 className="dropdown-item"
@@ -75,7 +95,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
               <MenuIcon icon="fa-columns" />
               View layout source
             </Link>
-            {data.cmsPage.referenced_partials.map((partial) => (
+            {cmsPage.referenced_partials.map((partial) => (
               <Link
                 to={`/cms_partials/${partial.id}/view_source`}
                 className="dropdown-item"
@@ -110,11 +130,5 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }) {
     </div>
   );
 }
-
-PageAdminDropdown.propTypes = {
-  showEdit: PropTypes.bool.isRequired,
-  showDelete: PropTypes.bool.isRequired,
-  pageId: PropTypes.number.isRequired,
-};
 
 export default PageAdminDropdown;

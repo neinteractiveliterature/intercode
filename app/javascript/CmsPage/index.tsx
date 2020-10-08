@@ -1,9 +1,6 @@
 import React, { useMemo, useEffect, Suspense } from 'react';
-import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import { CmsPageQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useValueUnless from '../useValueUnless';
@@ -11,17 +8,23 @@ import usePageTitle from '../usePageTitle';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 import FourOhFourPage from '../FourOhFourPage';
 import parseCmsContent from '../parseCmsContent';
+import { useCmsPageQueryQuery } from './queries.generated';
 
-const PageAdminDropdown = lazyWithBundleHashCheck(() =>
-  import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'),
+const PageAdminDropdown = lazyWithBundleHashCheck(
+  () => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'),
 );
 
-function CmsPage({ slug, rootPage }) {
+export type CmsPageProps = {
+  slug?: string;
+  rootPage?: boolean;
+};
+
+function CmsPage({ slug, rootPage }: CmsPageProps) {
   const history = useHistory();
   const location = useLocation();
-  const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
+  const { data, loading, error } = useCmsPageQueryQuery({ variables: { slug, rootPage } });
   const content = useMemo(() => {
-    if (loading || error) {
+    if (loading || error || !data) {
       return null;
     }
 
@@ -37,8 +40,8 @@ function CmsPage({ slug, rootPage }) {
     if (
       !loading &&
       !error &&
-      data.myProfile &&
-      ((data.convention || {}).clickwrap_agreement || '').trim() !== '' &&
+      data?.myProfile &&
+      (data?.convention?.clickwrap_agreement ?? '').trim() !== '' &&
       !data.myProfile.accepted_clickwrap_agreement &&
       !data.cmsPage.skip_clickwrap_agreement
     ) {
@@ -47,7 +50,7 @@ function CmsPage({ slug, rootPage }) {
   }, [data, error, history, loading, location]);
 
   usePageTitle(
-    useValueUnless(() => (location.pathname === '/' ? '' : data.cmsPage.name), error || loading),
+    useValueUnless(() => (location.pathname === '/' ? '' : data?.cmsPage.name), error || loading),
   );
 
   if (error) {
@@ -61,7 +64,7 @@ function CmsPage({ slug, rootPage }) {
   return (
     <>
       <PageLoadingIndicator visible={loading} />
-      {!loading && (
+      {!loading && data && (
         <>
           {data.currentAbility.can_manage_any_cms_content && (
             <div className="page-admin-dropdown">
@@ -80,15 +83,5 @@ function CmsPage({ slug, rootPage }) {
     </>
   );
 }
-
-CmsPage.propTypes = {
-  slug: PropTypes.string,
-  rootPage: PropTypes.bool,
-};
-
-CmsPage.defaultProps = {
-  slug: null,
-  rootPage: false,
-};
 
 export default CmsPage;
