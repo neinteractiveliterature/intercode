@@ -43,6 +43,7 @@ class PayOrderService < CivilService::Service
         customer: customer.id,
         amount: order.total_price.fractional,
         description: "#{description} for #{convention.name}",
+        statement_descriptor_suffix: convention.name,
         currency: order.total_price.currency.iso_code.downcase
       },
       api_key: convention.stripe_secret_key
