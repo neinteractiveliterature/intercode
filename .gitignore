@@ -30,6 +30,10 @@
 /log/*.log.*
 /tmp
 
+# Ignore generated dev certificates
+/dev_certificate.crt
+/dev_certificate.key
+
 public/uploads
 public/product_images
 .rbenv-version

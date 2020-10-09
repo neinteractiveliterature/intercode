@@ -1,5 +1,56 @@
 require 'tmpdir'
 
+tool 'setup_tls' do
+  desc 'Generate TLS key and certificate for local dev environment'
+
+  include :exec, exit_on_nonzero_status: true
+
+  def run
+    require 'openssl'
+
+    key = OpenSSL::PKey::RSA.generate(2048)
+
+    cert = OpenSSL::X509::Certificate.new
+    cert.version = 2
+    cert.serial = 0x0
+    cert.subject = OpenSSL::X509::Name.new([
+      ['O', 'New England Interactive Literature'],
+      ['emailAddress', 'webmaster@intercode.test'],
+      ['CN', 'intercode.test']
+    ])
+    cert.issuer = cert.subject
+    cert.public_key = key.public_key
+    cert.not_before = Time.now # rubocop:disable Rails/TimeZone
+    cert.not_after = cert.not_before + (365 * 24 * 60 * 60)
+
+    ef = OpenSSL::X509::ExtensionFactory.new
+    ef.subject_certificate = cert
+    ef.issuer_certificate = cert
+    cert.extensions = [
+      ef.create_extension('subjectKeyIdentifier', 'hash'),
+      ef.create_extension(
+        'subjectAltName',
+        ['DNS:intercode.test', 'DNS:*.intercode.test', 'DNS:localhost'].join(',')
+      )
+    ]
+    cert.add_extension ef.create_extension('authorityKeyIdentifier', 'keyid:always,issuer:always')
+
+    cert.sign key, OpenSSL::Digest::SHA256.new
+
+    File.open('dev_certificate.key', 'wb') { |f| f.write(key.to_pem) }
+    File.open('dev_certificate.crt', 'wb') { |f| f.write(cert.to_pem) }
+
+    puts 'Wrote dev_certificate.key and dev_certificate.crt'
+
+    if File.file?('/usr/bin/security') && File.exist?('/Library/Keychains/System.keychain')
+      puts 'Adding to system keychain, you may be prompted for your password'
+      sh 'sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain dev_certificate.crt'
+    else
+      puts 'You will have to add dev_certificate.crt to your trusted certificates manually'
+    end
+  end
+end
+
 tool 'update_schema' do
   desc 'Regenerate the GraphQL schema and documentation'
 

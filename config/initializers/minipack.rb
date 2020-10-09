@@ -6,7 +6,7 @@ Minipack.configuration do |c|
 
   # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = if Rails.env.development?
-    'http://localhost:3135/packs/manifest.json'
+    'https://localhost:3135/packs/manifest.json'
   else
     Rails.root.join('public', 'packs', 'manifest.json')
   end
@@ -56,4 +56,23 @@ Minipack.configuration do |c|
   #
   # If you prefer `yarn`:
   c.pkg_install_command = 'yarn install'
+end
+
+if Rails.env.development?
+  # HAX: patch Minipack to support our self-signed dev certificate
+
+  class Minipack::Manifest
+    def load_data
+      u = URI.parse(@path)
+      data = nil
+      if u.scheme == 'file' || u.path == @path  # file path
+        raise(FileNotFoundError, "#{@path}: no such manifest found") unless File.exist?(@path)
+        data = File.read(@path)
+      else
+        # http url
+        data = u.read({ ssl_ca_cert: 'dev_certificate.crt' })
+      end
+      JSON.parse(data)
+    end
+  end
 end
