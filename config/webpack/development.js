@@ -13,7 +13,7 @@ module.exports = {
     ...environment.output,
     crossOriginLoading: 'anonymous',
     pathinfo: true,
-    publicPath: 'http://localhost:3135/packs/',
+    publicPath: 'https://localhost:3135/packs/',
   },
   devServer: {
     clientLogLevel: 'none',

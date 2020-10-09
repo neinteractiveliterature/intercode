@@ -15,6 +15,9 @@ Rails.application.configure do
   # Shoryuken is a pain in the ass for local development; just use the async thread pool
   config.active_job.queue_adapter = :async
 
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?

@@ -15,7 +15,7 @@
     "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
     "i18next:parse": "i18next -c i18next-parser-english.config.js && i18next -c i18next-parser-non-english.config.js",
     "lint": "eslint app/javascript --cache --ext .js,.jsx,.ts,.tsx,.gql,.graphql",
-    "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
+    "start": "webpack-dev-server --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135 --https --cert dev_certificate.crt --key dev_certificate.key",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
