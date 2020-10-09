@@ -100,7 +100,7 @@
     "detect-browser": "^5.1.1",
     "diff": "^4.0.2",
     "fast-diff": "^1.2.0",
-    "file-loader": "^6.1.0",
+    "file-loader": "^6.1.1",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "glob": "^7.1.6",
