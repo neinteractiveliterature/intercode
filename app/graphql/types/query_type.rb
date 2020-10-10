@@ -403,6 +403,24 @@ present, the request will error out.',
     context[:current_pending_order]
   end
 
+  field :current_pending_order_payment_intent_client_secret, String, null: false
+
+  def current_pending_order_payment_intent_client_secret
+    description = current_pending_order.order_entries.map(&:describe_products).to_sentence
+    intent = Stripe::PaymentIntent.create(
+      {
+        amount: current_pending_order.total_price.fractional,
+        currency: current_pending_order.total_price.currency,
+        description: "#{description} for #{convention.name}",
+        statement_descriptor_suffix: convention.name,
+        metadata: { order_id: current_pending_order.id }
+      },
+      api_key: convention.stripe_secret_key
+    )
+
+    intent.client_secret
+  end
+
   field :organizations, [Types::OrganizationType], null: false
 
   def organizations

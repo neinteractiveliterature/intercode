@@ -41,7 +41,7 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
   end
 
   def refund_order
-    return [nil, :not_refunded] unless order.charge_id
+    return [nil, :not_refunded] if skip_refund || order.charge_id.blank?
 
     charge = Stripe::Charge.retrieve(order.charge_id, api_key: convention.stripe_secret_key)
 

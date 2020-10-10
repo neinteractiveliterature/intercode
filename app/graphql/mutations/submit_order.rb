@@ -4,12 +4,16 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :payment_mode, Types::PaymentModeType, required: true, camelize: false
   argument :stripe_token, String, required: false, camelize: false
+  argument :payment_intent_id, String, required: false, camelize: false
 
   load_and_authorize_model_with_id Order, :id, :submit
 
   def resolve(**args)
     service = SubmitOrderService.new(
-      order, payment_mode: args[:payment_mode], stripe_token: args[:stripe_token]
+      order,
+      payment_mode: args[:payment_mode],
+      stripe_token: args[:stripe_token],
+      payment_intent_id: args[:payment_intent_id]
     )
     result = service.call
 

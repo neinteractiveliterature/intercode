@@ -196,6 +196,14 @@ export type OrderFormProductQueryQuery = (
   ) }
 );
 
+export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type CurrentPendingOrderPaymentIntentClientSecretQueryQuery = (
+  { __typename: 'Query' }
+  & Pick<Types.Query, 'currentPendingOrderPaymentIntentClientSecret'>
+);
+
 
 export const AdminOrdersQueryDocument = gql`
     query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
@@ -552,3 +560,33 @@ export function useOrderFormProductQueryLazyQuery(baseOptions?: Apollo.LazyQuery
 export type OrderFormProductQueryQueryHookResult = ReturnType<typeof useOrderFormProductQueryQuery>;
 export type OrderFormProductQueryLazyQueryHookResult = ReturnType<typeof useOrderFormProductQueryLazyQuery>;
 export type OrderFormProductQueryQueryResult = Apollo.QueryResult<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>;
+export const CurrentPendingOrderPaymentIntentClientSecretQueryDocument = gql`
+    query CurrentPendingOrderPaymentIntentClientSecretQuery {
+  currentPendingOrderPaymentIntentClientSecret
+}
+    `;
+
+/**
+ * __useCurrentPendingOrderPaymentIntentClientSecretQueryQuery__
+ *
+ * To run a query within a React component, call `useCurrentPendingOrderPaymentIntentClientSecretQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentPendingOrderPaymentIntentClientSecretQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentPendingOrderPaymentIntentClientSecretQueryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentPendingOrderPaymentIntentClientSecretQueryQuery(baseOptions?: Apollo.QueryHookOptions<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>) {
+        return Apollo.useQuery<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, baseOptions);
+      }
+export function useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, baseOptions);
+        }
+export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQueryQuery>;
+export type CurrentPendingOrderPaymentIntentClientSecretQueryLazyQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery>;
+export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryResult = Apollo.QueryResult<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>;

@@ -1,5 +1,99 @@
 require 'tmpdir'
 
+tool 'setup_tls' do
+  desc 'Generate TLS key and certificate for local dev environment'
+
+  include :exec, exit_on_nonzero_status: true
+  flag :force_rebuild_ca
+
+  def obtain_ca(force_rebuild)
+    if File.exist?('dev_ca.crt') && File.exist?('dev_ca.key') && !force_rebuild
+      ca_key = OpenSSL::PKey::RSA.new(File.read('dev_ca.key'))
+      ca_cert = OpenSSL::X509::Certificate.new(File.read('dev_ca.crt'))
+      [ca_key, ca_cert]
+    else
+      ca_key = OpenSSL::PKey::RSA.generate(2048)
+
+      ca_cert = OpenSSL::X509::Certificate.new
+      ca_cert.version = 2
+      ca_cert.serial = Time.now.to_i
+      ca_cert.subject = OpenSSL::X509::Name.new([
+        ['O', 'New England Interactive Literature'],
+        ['emailAddress', 'webmaster@intercode.test'],
+        ['CN', 'Intercode development CA']
+      ])
+      ca_cert.issuer = ca_cert.subject
+      ca_cert.public_key = ca_key.public_key
+      ca_cert.not_before = Time.now # rubocop:disable Rails/TimeZone
+      ca_cert.not_after = ca_cert.not_before + (365 * 24 * 60 * 60)
+      ef = OpenSSL::X509::ExtensionFactory.new
+      ef.subject_certificate = ca_cert
+      ef.issuer_certificate = ca_cert
+      ca_cert.extensions = [
+        ef.create_extension('keyUsage', 'cRLSign,keyCertSign'),
+        ef.create_extension('basicConstraints', 'CA:true')
+      ]
+
+      ca_cert.sign ca_key, OpenSSL::Digest::SHA256.new
+
+      File.open('dev_ca.key', 'wb') { |f| f.write(ca_key.to_pem) }
+      File.chmod(0600, 'dev_ca.key')
+      File.open('dev_ca.crt', 'wb') { |f| f.write(ca_cert.to_pem) }
+
+      puts 'Wrote dev_ca.key and dev_ca.crt'
+
+      if File.exist?('/usr/bin/security') && File.exist?('/Library/Keychains/System.keychain')
+        puts 'Adding to system keychain, you may be prompted for your password'
+        sh 'sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain dev_ca.crt'
+      else
+        puts 'You will have to add dev_ca.crt to your trusted certificates manually'
+      end
+
+      [ca_key, ca_cert]
+    end
+  end
+
+  def run
+    require 'openssl'
+
+    ca_key, ca_cert = obtain_ca(force_rebuild_ca)
+    key = OpenSSL::PKey::RSA.generate(2048)
+
+    cert = OpenSSL::X509::Certificate.new
+    cert.version = 2
+    cert.serial = Time.now.to_i
+    cert.subject = OpenSSL::X509::Name.new([
+      ['O', 'New England Interactive Literature'],
+      ['emailAddress', 'webmaster@intercode.test'],
+      ['CN', 'intercode.test']
+    ])
+    cert.issuer = ca_cert.subject
+    cert.public_key = key.public_key
+    cert.not_before = Time.now # rubocop:disable Rails/TimeZone
+    cert.not_after = cert.not_before + (365 * 24 * 60 * 60)
+
+    ef = OpenSSL::X509::ExtensionFactory.new
+    ef.subject_certificate = cert
+    ef.issuer_certificate = ca_cert
+    cert.extensions = [
+      ef.create_extension('subjectKeyIdentifier', 'hash'),
+      ef.create_extension(
+        'subjectAltName',
+        ['DNS:intercode.test', 'DNS:*.intercode.test', 'DNS:interconu.intercode.test', 'DNS:localhost'].join(',')
+      )
+    ]
+    cert.add_extension ef.create_extension('authorityKeyIdentifier', 'keyid,issuer')
+
+    cert.sign ca_key, OpenSSL::Digest::SHA256.new
+
+    File.open('dev_certificate.key', 'wb') { |f| f.write(key.to_pem) }
+    File.chmod(0600, 'dev_certificate.key')
+    File.open('dev_certificate.crt', 'wb') { |f| f.write(cert.to_pem) }
+
+    puts 'Wrote dev_certificate.key and dev_certificate.crt'
+  end
+end
+
 tool 'update_schema' do
   desc 'Regenerate the GraphQL schema and documentation'
 
