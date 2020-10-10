@@ -974,8 +974,6 @@ CREATE TABLE public.conventions (
     user_con_profile_form_id bigint,
     ticket_name character varying DEFAULT 'ticket'::character varying NOT NULL,
     event_mailing_list_domain text,
-    stripe_publishable_key text,
-    stripe_secret_key text,
     clickwrap_agreement text,
     show_event_list character varying DEFAULT 'no'::character varying NOT NULL,
     organization_id bigint,
@@ -990,7 +988,8 @@ CREATE TABLE public.conventions (
     location jsonb,
     timezone_mode character varying NOT NULL,
     hidden boolean DEFAULT false NOT NULL,
-    language character varying NOT NULL
+    language character varying NOT NULL,
+    stripe_account_id text
 );
 
 
@@ -5215,6 +5214,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200712160144'),
 ('20200807160757'),
 ('20200830175919'),
-('20200930160120');
+('20200930160120'),
+('20201010180459'),
+('20201010181146');
 
 

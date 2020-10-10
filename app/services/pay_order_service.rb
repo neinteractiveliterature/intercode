@@ -35,7 +35,7 @@ class PayOrderService < CivilService::Service
         email: order.user_con_profile.email,
         source: stripe_token
       },
-      api_key: convention.stripe_secret_key
+      stripe_account: convention.stripe_account_id
     )
 
     Stripe::Charge.create(
@@ -46,7 +46,7 @@ class PayOrderService < CivilService::Service
         statement_descriptor_suffix: convention.name,
         currency: order.total_price.currency.iso_code.downcase
       },
-      api_key: convention.stripe_secret_key
+      stripe_account: convention.stripe_account_id
     )
   end
 

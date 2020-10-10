@@ -27,7 +27,10 @@ class SubmitOrderService < CivilService::Service
     elsif payment_mode == 'free'
       order.update!(status: 'paid', submitted_at: Time.zone.now)
     elsif payment_mode == 'payment_intent'
-      pi = Stripe::PaymentIntent.retrieve(payment_intent_id, api_key: convention.stripe_secret_key)
+      pi = Stripe::PaymentIntent.retrieve(
+        payment_intent_id,
+        stripe_account: convention.stripe_account_id
+      )
       if pi.status == 'succeeded'
         charge = pi.charges.first
         order.update!(
