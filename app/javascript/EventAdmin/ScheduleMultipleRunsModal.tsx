@@ -153,7 +153,7 @@ function ScheduleMultipleRunsModal({
       return null;
     }
 
-    const timespanForFinish = new Timespan(
+    const timespanForFinish = Timespan.finiteFromMoments(
       conventionDayTimespan.start,
       conventionDayTimespan.finish.clone().add(1, 'hour'),
     );
