@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
-import { PaymentRequest } from '@stripe/stripe-js';
+import { PaymentRequest, PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js';
 
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
@@ -13,6 +13,9 @@ import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 import { Money, PaymentMode } from '../graphqlTypes.generated';
+import { CurrentPendingOrderPaymentIntentClientSecretQueryQuery } from './queries.generated';
+import { CurrentPendingOrderPaymentIntentClientSecret } from './queries';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 // eslint-disable-next-line global-require
 const PoweredByStripeLogo = require('../images/powered_by_stripe.svg').default as string;
@@ -40,9 +43,65 @@ function OrderPaymentModalContents({
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({ name: initialName ?? '' });
   const stripe = useStripe();
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>();
+  const [awaitingPaymentRequestResult, setAwaitingPaymentRequestResult] = useState(true);
+  const [choseManualCardEntry, setChoseManualCardEntry] = useState(false);
+  const apolloClient = useApolloClient();
+  const submitOrder = useSubmitOrder();
+
+  const onPaymentMethod = useCallback(
+    async (ev: PaymentRequestPaymentMethodEvent) => {
+      if (!stripe) {
+        throw new Error('Stripe not initialized');
+      }
+
+      const detailsFromEvent: PaymentDetails = {
+        name: ev.payerName!,
+      };
+
+      let clientSecret: string = '';
+
+      try {
+        const { data } = await apolloClient.query<
+          CurrentPendingOrderPaymentIntentClientSecretQueryQuery
+        >({ query: CurrentPendingOrderPaymentIntentClientSecret });
+
+        clientSecret = data.currentPendingOrderPaymentIntentClientSecret;
+      } catch (error) {
+        ev.complete('fail');
+      }
+
+      const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
+        clientSecret,
+        { payment_method: ev.paymentMethod.id },
+        { handleActions: false },
+      );
+
+      if (confirmError || !paymentIntent) {
+        ev.complete('fail');
+      } else {
+        ev.complete('success');
+
+        if (paymentIntent.status === 'requires_action') {
+          const { error } = await stripe.confirmCardPayment(clientSecret);
+          if (error) {
+            throw new Error(error.message);
+          } else {
+            await submitOrder(orderId, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
+            onComplete();
+          }
+        } else {
+          await submitOrder(orderId, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
+          onComplete();
+        }
+      }
+    },
+    [apolloClient, onComplete, orderId, stripe, submitOrder],
+  );
 
   useEffect(() => {
-    if (stripe) {
+    if (stripe && paymentMode === 'now') {
+      setAwaitingPaymentRequestResult(true);
+
       const pr = stripe.paymentRequest({
         country: 'US',
         currency: 'usd',
@@ -52,17 +111,22 @@ function OrderPaymentModalContents({
         },
         requestPayerName: true,
         requestPayerEmail: true,
+        requestPayerPhone: false,
+        requestShipping: false,
       });
 
-      pr.canMakePayment().then((result) => {
+      pr.canMakePayment().then(async (result) => {
+        setAwaitingPaymentRequestResult(false);
+
         if (result) {
           setPaymentRequest(pr);
+
+          pr.on('paymentmethod', onPaymentMethod);
         }
       });
     }
-  }, [stripe, totalPrice.fractional]);
+  }, [stripe, totalPrice, onPaymentMethod, paymentMode]);
 
-  const submitOrder = useSubmitOrder();
   const [submitCheckOut, error, submitting] = useAsyncFunction(
     useCallback(async () => {
       const actualPaymentMode = totalPrice.fractional === 0 ? PaymentMode.Free : paymentMode;
@@ -109,12 +173,31 @@ function OrderPaymentModalContents({
         {paymentModeSelect}
         {paymentMode === 'now' ? (
           <>
-            <OrderPaymentForm
-              paymentDetails={paymentDetails}
-              onChange={setPaymentDetails}
-              disabled={submitting}
-            />
-            {paymentRequest && <PaymentRequestButtonElement options={{ paymentRequest }} />}
+            {awaitingPaymentRequestResult ? (
+              <PageLoadingIndicator visible />
+            ) : (
+              <>
+                {(!paymentRequest || choseManualCardEntry) && (
+                  <OrderPaymentForm
+                    paymentDetails={paymentDetails}
+                    onChange={setPaymentDetails}
+                    disabled={submitting}
+                  />
+                )}
+                {paymentRequest && !choseManualCardEntry && (
+                  <>
+                    <PaymentRequestButtonElement options={{ paymentRequest }} />
+                    <button
+                      className="btn btn-link"
+                      type="button"
+                      onClick={() => setChoseManualCardEntry(true)}
+                    >
+                      Or, enter card details manually
+                    </button>
+                  </>
+                )}
+              </>
+            )}
           </>
         ) : null}
         <ErrorDisplay graphQLError={error as ApolloError} />
@@ -141,14 +224,18 @@ function OrderPaymentModalContents({
           >
             Cancel
           </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={submitCheckOut}
-            disabled={disabled}
-          >
-            {totalPrice.fractional === 0 ? 'Submit order (free)' : `Pay ${formatMoney(totalPrice)}`}
-          </button>
+          {awaitingPaymentRequestResult || (paymentRequest && !choseManualCardEntry) ? null : (
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={submitCheckOut}
+              disabled={disabled}
+            >
+              {totalPrice.fractional === 0
+                ? 'Submit order (free)'
+                : `Pay ${formatMoney(totalPrice)}`}
+            </button>
+          )}
         </div>
       </div>
     </>

@@ -70,7 +70,7 @@ if Rails.env.development?
         data = File.read(@path)
       else
         # http url
-        data = u.read({ ssl_ca_cert: 'dev_certificate.crt' })
+        data = u.read({ ssl_ca_cert: 'dev_ca.crt' })
       end
       JSON.parse(data)
     end
