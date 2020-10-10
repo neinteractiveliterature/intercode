@@ -3113,7 +3113,8 @@ export type PaginationInterface = {
 export enum PaymentMode {
   Free = 'free',
   Later = 'later',
-  Now = 'now'
+  Now = 'now',
+  PaymentIntent = 'payment_intent'
 }
 
 export type Permission = {
@@ -3273,6 +3274,7 @@ export type Query = {
   conventions_paginated: ConventionsPagination;
   currentAbility: Ability;
   currentPendingOrder?: Maybe<Order>;
+  currentPendingOrderPaymentIntentClientSecret: Scalars['String'];
   currentUser?: Maybe<User>;
   effectiveCmsLayout: CmsLayout;
   email_routes_paginated: EmailRoutesPagination;
@@ -3930,6 +3932,7 @@ export type SubmitOrderInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  payment_intent_id?: Maybe<Scalars['String']>;
   payment_mode: PaymentMode;
   stripe_token?: Maybe<Scalars['String']>;
 };

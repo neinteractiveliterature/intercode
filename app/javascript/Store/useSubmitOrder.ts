@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { useApolloClient } from '@apollo/client';
+import { PaymentIntent } from '@stripe/stripe-js';
 
 import { useSubmitOrderMutation } from './mutations.generated';
 import { PaymentDetails } from './OrderPaymentForm';
@@ -12,13 +13,18 @@ export default function useSubmitOrder() {
   const apolloClient = useApolloClient();
   const [mutate] = useSubmitOrderMutation();
   const submitOrder = useCallback(
-    async (orderId: number, paymentMode: PaymentMode, stripeToken?: string) => {
+    async (
+      orderId: number,
+      paymentMode: PaymentMode,
+      { stripeToken, paymentIntentId }: { stripeToken?: string; paymentIntentId?: string },
+    ) => {
       await mutate({
         variables: {
           input: {
             id: orderId,
             payment_mode: paymentMode,
             stripe_token: stripeToken,
+            payment_intent_id: paymentIntentId,
           },
         },
       });
@@ -50,24 +56,31 @@ export default function useSubmitOrder() {
         throw tokenError;
       }
 
-      await submitOrder(orderId, paymentMode, token!.id);
+      await submitOrder(orderId, paymentMode, { stripeToken: token!.id });
     },
     [stripe, submitOrder, elements],
   );
 
   const submitCheckOutWithoutStripe = useCallback(
-    (orderId: number, paymentMode: PaymentMode) => submitOrder(orderId, paymentMode),
+    (orderId: number, paymentMode: PaymentMode) => submitOrder(orderId, paymentMode, {}),
     [submitOrder],
   );
 
   return useCallback(
-    async (orderId: number, paymentMode: PaymentMode, paymentDetails: PaymentDetails) => {
-      if (paymentMode === 'now') {
+    async (
+      orderId: number,
+      paymentMode: PaymentMode,
+      paymentDetails: PaymentDetails,
+      paymentIntent?: PaymentIntent,
+    ) => {
+      if (paymentMode === PaymentMode.Now) {
         await submitCheckOutViaStripe(orderId, paymentMode, paymentDetails);
+      } else if (paymentMode === PaymentMode.PaymentIntent) {
+        await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent!.id });
       } else {
         await submitCheckOutWithoutStripe(orderId, paymentMode);
       }
     },
-    [submitCheckOutViaStripe, submitCheckOutWithoutStripe],
+    [submitCheckOutViaStripe, submitCheckOutWithoutStripe, submitOrder],
   );
 }

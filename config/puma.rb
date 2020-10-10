@@ -11,7 +11,7 @@ threads min_threads_count, max_threads_count
 # Specifies the `port` that Puma will listen on to receive requests; default is 5000.
 #
 bind(ENV.fetch("PUMA_BIND") do
-  "ssl://0.0.0.0:#{ENV.fetch("PORT") { 5000 }}?key=dev_certificate.key&cert=dev_certificate.crt"
+  "ssl://0.0.0.0:#{ENV.fetch("PORT") { 5000 }}?key=dev_certificate.key&cert=dev_certificate.crt&ca=dev_ca.crt"
 end)
 
 # Specifies the `environment` that Puma will run in.
