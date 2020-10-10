@@ -415,7 +415,7 @@ present, the request will error out.',
         statement_descriptor_suffix: convention.name,
         metadata: { order_id: current_pending_order.id }
       },
-      api_key: convention.stripe_secret_key
+      stripe_account: convention.stripe_account_id
     )
 
     intent.client_secret
