@@ -6,16 +6,7 @@ module Intercode
     end
 
     def call(env)
-      host = env['HTTP_HOST']&.split(':')&.first
-      return :all unless host
-
-      app_level_host = app_level_domain(host)
-      env['rack.session.options'][:domain] = if app_level_host.include?('.')
-        app_level_host
-      else
-        :all
-      end
-
+      env['rack.session.options'][:domain] = cookie_domain(env)
       @app.call(env)
     end
 
@@ -27,6 +18,27 @@ module Intercode
       end
 
       host.split('.').reverse.take(levels).reverse.join('.')
+    end
+
+    def cookie_domain(env)
+      host = env['HTTP_HOST']&.split(':')&.first
+      return :all unless host
+
+      # Safari blocks cross-domain cookies on .test domains :(
+      if host =~ /\.test$/
+        user_agent = env['HTTP_USER_AGENT']
+        if user_agent.present?
+          client = DeviceDetector.new(user_agent)
+          return host if client.name == 'Safari'
+        end
+      end
+
+      app_level_host = app_level_domain(host)
+      if app_level_host.include?('.')
+        app_level_host
+      else
+        :all
+      end
     end
   end
 end

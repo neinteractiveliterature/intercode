@@ -2808,6 +2808,7 @@ enum PaymentMode {
   free
   later
   now
+  payment_intent
 }
 
 type Permission {
@@ -2969,6 +2970,7 @@ type Query {
   conventions_paginated(filters: ConventionFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): ConventionsPagination!
   currentAbility: Ability!
   currentPendingOrder: Order
+  currentPendingOrderPaymentIntentClientSecret: String!
   currentUser: User
   effectiveCmsLayout(path: String!): CmsLayout!
   email_routes_paginated(filters: EmailRouteFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EmailRoutesPagination!
@@ -3551,6 +3553,7 @@ input SubmitOrderInput {
   """
   clientMutationId: String
   id: Int!
+  payment_intent_id: String
   payment_mode: PaymentMode!
   stripe_token: String
 }

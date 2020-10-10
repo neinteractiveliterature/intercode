@@ -20,7 +20,9 @@ const ContentGroupPermissionNames = getPermissionNamesForModelType(
   PermissionedModelTypeIndicator.CmsContentGroup,
 );
 
-type ContentGroupType = CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0];
+type ContentGroupTypeWithRequiredId = CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0];
+type ContentGroupType = Omit<ContentGroupTypeWithRequiredId, 'id'> &
+  Partial<Pick<ContentGroupTypeWithRequiredId, 'id'>>;
 type PermissionType = ContentGroupType['permissions'][0];
 type RoleType = PermissionType['role'];
 
@@ -112,7 +114,7 @@ function CmsContentGroupFormFields({
           {!readOnly && (
             <SelectWithLabel
               label="Add staff position"
-              options={convention.staff_positions}
+              options={convention?.staff_positions ?? []}
               getOptionValue={(staffPosition) => staffPosition.id.toString()}
               getOptionLabel={(staffPosition) => staffPosition.name}
               onChange={addRole}

@@ -222,3 +222,9 @@ export const OrderFormProductQuery = gql`
 
   ${PricingStructureFields}
 `;
+
+export const CurrentPendingOrderPaymentIntentClientSecret = gql`
+  query CurrentPendingOrderPaymentIntentClientSecretQuery {
+    currentPendingOrderPaymentIntentClientSecret
+  }
+`;
