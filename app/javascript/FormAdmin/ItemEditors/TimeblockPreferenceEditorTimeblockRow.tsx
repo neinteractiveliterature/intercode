@@ -52,7 +52,7 @@ function TimeblockPreferenceEditorTimeblockRow({
 
   const selectTimespan = useMemo(
     () =>
-      new Timespan(
+      Timespan.finiteFromMoments(
         moment.tz({ hour: 0 }, timezoneName),
         moment.tz({ hour: 0 }, timezoneName).add(31, 'hours'),
       ),

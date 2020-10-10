@@ -31,6 +31,8 @@
 /tmp
 
 # Ignore generated dev certificates
+/dev_ca.crt
+/dev_ca.key
 /dev_certificate.crt
 /dev_certificate.key
 
