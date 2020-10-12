@@ -989,7 +989,8 @@ CREATE TABLE public.conventions (
     timezone_mode character varying NOT NULL,
     hidden boolean DEFAULT false NOT NULL,
     language character varying NOT NULL,
-    stripe_account_id text
+    stripe_account_id text,
+    stripe_account_ready_to_charge boolean DEFAULT false NOT NULL
 );
 
 

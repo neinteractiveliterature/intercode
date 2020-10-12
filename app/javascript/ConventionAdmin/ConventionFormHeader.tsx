@@ -1,13 +1,18 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
 import { findCurrentValue } from '../ScheduledValueUtils';
-import { MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './ConventionFormEventsSection';
+import {
+  MaximumEventSignupsValue,
+  MAXIMUM_EVENT_SIGNUPS_OPTIONS,
+} from './ConventionFormEventsSection';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { timezoneNameForConvention } from '../TimeUtils';
+import { ShowSchedule } from '../graphqlTypes.generated';
+import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
+import { ConventionAdminConventionQueryQuery } from './queries.generated';
 
-function describeEventVisibility(visibility) {
+function describeEventVisibility(visibility: ShowSchedule | null | undefined) {
   switch (visibility) {
     case 'no':
       return 'Hidden';
@@ -22,7 +27,13 @@ function describeEventVisibility(visibility) {
   }
 }
 
-function describeMaximumEventSignups(scheduledValue) {
+function describeMaximumEventSignups(
+  scheduledValue: EditingScheduledValue<MaximumEventSignupsValue> | null | undefined,
+) {
+  if (!scheduledValue) {
+    return 'Signup schedule not configured yet';
+  }
+
   const currentValue = findCurrentValue(scheduledValue);
 
   if (!currentValue) {
@@ -37,7 +48,12 @@ function describeMaximumEventSignups(scheduledValue) {
   return currentOption[1];
 }
 
-function describeConventionTiming(startsAt, endsAt, timezoneName, canceled) {
+function describeConventionTiming(
+  startsAt: string | null | undefined,
+  endsAt: string | null | undefined,
+  timezoneName: string,
+  canceled: boolean,
+) {
   if (canceled) {
     return 'is canceled';
   }
@@ -62,7 +78,12 @@ function describeConventionTiming(startsAt, endsAt, timezoneName, canceled) {
   return `${isMultiDay ? 'ends' : 'is'} today`;
 }
 
-function ConventionFormHeader({ convention, compact }) {
+export type ConventionFormHeaderProps = {
+  convention: ConventionAdminConventionQueryQuery['convention'];
+  compact?: boolean;
+};
+
+function ConventionFormHeader({ convention, compact }: ConventionFormHeaderProps) {
   const conventionTiming = useMemo(
     () =>
       describeConventionTiming(
@@ -75,7 +96,13 @@ function ConventionFormHeader({ convention, compact }) {
   );
 
   const signupsDescription = useMemo(
-    () => describeMaximumEventSignups(convention.maximum_event_signups),
+    () =>
+      describeMaximumEventSignups(
+        convention.maximum_event_signups as
+          | EditingScheduledValue<MaximumEventSignupsValue>
+          | null
+          | undefined,
+      ),
     [convention.maximum_event_signups],
   );
 
@@ -121,33 +148,6 @@ function ConventionFormHeader({ convention, compact }) {
     </header>
   );
 }
-
-ConventionFormHeader.propTypes = {
-  convention: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-    canceled: PropTypes.bool.isRequired,
-    timezone_name: PropTypes.string.isRequired,
-    show_event_list: PropTypes.string.isRequired,
-    show_schedule: PropTypes.string.isRequired,
-    site_mode: PropTypes.string.isRequired,
-    maximum_event_signups: PropTypes.shape({
-      timespans: PropTypes.arrayOf(
-        PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          start: PropTypes.string,
-          finish: PropTypes.string,
-        }),
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-  compact: PropTypes.bool,
-};
-
-ConventionFormHeader.defaultProps = {
-  compact: false,
-};
 
 export default React.memo(
   ConventionFormHeader,

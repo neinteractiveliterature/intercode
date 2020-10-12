@@ -1,9 +1,9 @@
-import React from 'react';
-import { useApolloClient } from '@apollo/client';
+import React, { useMemo } from 'react';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import pick from 'lodash/pick';
 
-import ConventionForm from './ConventionForm';
+import ConventionForm, { ConventionFormConvention } from './ConventionForm';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import ConventionFormHeader from './ConventionFormHeader';
@@ -12,6 +12,9 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useConventionAdminConventionQueryQuery } from './queries.generated';
 import { useUpdateConventionMutation } from './mutations.generated';
+import { ConventionInput } from '../graphqlTypes.generated';
+import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
+import { MaximumEventSignupsValue } from './ConventionFormEventsSection';
 
 function ConventionAdmin() {
   const history = useHistory();
@@ -21,12 +24,25 @@ function ConventionAdmin() {
   const apolloClient = useApolloClient();
   const authorizationWarning = useAuthorizationRequired('can_update_convention');
 
+  const initialConvention: ConventionFormConvention | undefined = useMemo(() => {
+    if (loading || error || !data) {
+      return undefined;
+    }
+
+    return {
+      ...data.convention,
+      maximum_event_signups: data.convention.maximum_event_signups
+        ? (data.convention.maximum_event_signups as EditingScheduledValue<MaximumEventSignupsValue>)
+        : { timespans: [] },
+    };
+  }, [data, loading, error]);
+
   usePageTitle('Convention Settings');
 
   if (authorizationWarning) return authorizationWarning;
 
-  const saveConvention = async (convention) => {
-    const conventionInput = {
+  const saveConvention = async (convention: ConventionFormConvention) => {
+    const conventionInput: ConventionInput = {
       ...pick(convention, [
         'accepting_proposals',
         'starts_at',
@@ -61,8 +77,6 @@ function ConventionAdmin() {
       default_layout_id: (convention.default_layout || {}).id,
       root_page_id: (convention.root_page || {}).id,
       catch_all_staff_position_id: (convention.catch_all_staff_position || {}).id,
-      stripe_publishable_key: convention.stripe_publishable_key,
-      ...(convention.stripe_secret_key ? { stripe_secret_key: convention.stripe_secret_key } : {}),
     };
     await mutate({
       variables: {
@@ -87,18 +101,18 @@ function ConventionAdmin() {
   return (
     <div className="mb-4">
       <div className="mb-4">
-        <ConventionFormHeader convention={data.convention} compact />
+        <ConventionFormHeader convention={data!.convention} compact />
       </div>
 
       <ConventionForm
-        initialConvention={{ ...data.convention }}
+        initialConvention={initialConvention!}
         saveConvention={saveConvention}
-        cmsLayouts={data.convention.cms_layouts}
-        pages={data.convention.pages}
-        rootSite={data.rootSite}
+        cmsLayouts={data!.convention.cms_layouts}
+        pages={data!.convention.pages}
+        rootSite={data!.rootSite}
       />
 
-      <ErrorDisplay error={mutationError} />
+      <ErrorDisplay graphQLError={mutationError as ApolloError} />
     </div>
   );
 }

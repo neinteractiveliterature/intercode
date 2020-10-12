@@ -1,10 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 
-function ConventionLanguageInput({ value, onChange, disabled }) {
+export type ConventionLanguageInputProps = {
+  value: string | null | undefined;
+  onChange: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  disabled?: boolean;
+};
+
+function ConventionLanguageInput({ value, onChange, disabled }: ConventionLanguageInputProps) {
   const { t } = useTranslation();
 
   return (
@@ -26,16 +31,5 @@ function ConventionLanguageInput({ value, onChange, disabled }) {
     />
   );
 }
-
-ConventionLanguageInput.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-};
-
-ConventionLanguageInput.defaultProps = {
-  value: undefined,
-  disabled: undefined,
-};
 
 export default ConventionLanguageInput;

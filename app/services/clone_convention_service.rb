@@ -18,8 +18,7 @@ class CloneConventionService < CivilService::Service
       ticket_mode
       timezone_name
       timezone_mode
-      stripe_publishable_key
-      stripe_secret_key
+      stripe_account_id
       clickwrap_agreement
       hidden
     ])).merge(new_convention_attributes.symbolize_keys)

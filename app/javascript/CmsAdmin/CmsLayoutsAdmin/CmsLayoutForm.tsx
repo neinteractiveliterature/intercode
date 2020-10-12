@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { CmsLayout } from '../../graphqlTypes.generated';
-import { usePartialState } from '../../useStatePropertyUpdater';
+import { usePartialState, usePartialStateFactory } from '../../usePartialState';
 
 type CmsLayoutFields = Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>;
 
@@ -19,10 +19,11 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
   onChange,
   readOnly,
 }: CmsLayoutFormProps<T>) {
-  const [name, setName] = usePartialState(layout, onChange, 'name');
-  const [adminNotes, setAdminNotes] = usePartialState(layout, onChange, 'admin_notes');
-  const [navbarClasses, setNavbarClasses] = usePartialState(layout, onChange, 'navbar_classes');
-  const [content, setContent] = usePartialState(layout, onChange, 'content');
+  const factory = usePartialStateFactory(layout, onChange);
+  const [name, setName] = usePartialState(factory, 'name');
+  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
+  const [navbarClasses, setNavbarClasses] = usePartialState(factory, 'navbar_classes');
+  const [content, setContent] = usePartialState(factory, 'content');
 
   return (
     <>

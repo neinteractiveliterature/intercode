@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import useStatePropertyUpdater from '../useStatePropertyUpdater';
+import { usePartialState, usePartialStateFactory } from '../usePartialState';
 
 export type UserFormState = {
   first_name?: string;
@@ -18,20 +18,23 @@ export type UserFormFieldsProps = {
 
 function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFieldsProps) {
   const { t } = useTranslation();
-  const setFormField = useStatePropertyUpdater(setFormState);
+  const factory = usePartialStateFactory(formState, setFormState);
+  const [firstName, setFirstName] = usePartialState(factory, 'first_name');
+  const [lastName, setLastName] = usePartialState(factory, 'last_name');
+  const [email, setEmail] = usePartialState(factory, 'email');
 
   return (
     <>
       <fieldset>
         <BootstrapFormInput
           label={t('authentication.userForm.firstNameLabel', 'First name')}
-          value={formState.first_name || ''}
-          onTextChange={setFormField('first_name')}
+          value={firstName ?? ''}
+          onTextChange={setFirstName}
         />
         <BootstrapFormInput
           label={t('authentication.userForm.lastNameLabel', 'Last name')}
-          value={formState.last_name || ''}
-          onTextChange={setFormField('last_name')}
+          value={lastName ?? ''}
+          onTextChange={setLastName}
         />
         {showNameWarning && (
           <div className="alert alert-warning">
@@ -51,8 +54,8 @@ function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFi
         <BootstrapFormInput
           label={t('authentication.userForm.emailLabel', 'Email')}
           type="email"
-          value={formState.email || ''}
-          onTextChange={setFormField('email')}
+          value={email ?? ''}
+          onTextChange={setEmail}
         />
       </fieldset>
     </>
