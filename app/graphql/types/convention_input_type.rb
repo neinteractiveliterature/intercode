@@ -23,8 +23,6 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :root_page_id, Integer, required: false, camelize: false
   argument :default_layout_id, Integer, required: false, camelize: false
   argument :catch_all_staff_position_id, Integer, required: false, camelize: false
-  argument :stripe_publishable_key, String, required: false, camelize: false
-  argument :stripe_secret_key, String, required: false, camelize: false
   argument :clickwrap_agreement, String, required: false, camelize: false
   argument :maximum_event_signups, Types::ScheduledValueInputType, required: false, camelize: false
 end

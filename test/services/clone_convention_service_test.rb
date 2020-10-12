@@ -28,8 +28,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       maximum_tickets: 500,
       ticket_name: 'penguin',
       timezone_name: 'America/Chicago',
-      stripe_publishable_key: 'pk_test_12345',
-      stripe_secret_key: 'sk_test_12345',
+      stripe_account_id: 'acct_12345',
       clickwrap_agreement: 'I agree to abide by the {{ convention.name }} code of conduct.'
     )
     result = service.call
@@ -42,8 +41,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal 500, result.convention.maximum_tickets
     assert_equal 'penguin', result.convention.ticket_name
     assert_equal 'America/Chicago', result.convention.timezone_name
-    assert_equal 'pk_test_12345', result.convention.stripe_publishable_key
-    assert_equal 'sk_test_12345', result.convention.stripe_secret_key
+    assert_equal 'acct_12345', result.convention.stripe_account_id
     assert_equal(
       'I agree to abide by the {{ convention.name }} code of conduct.',
       result.convention.clickwrap_agreement

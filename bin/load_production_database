@@ -20,8 +20,8 @@ echo 'Changing convention domains and names for development'
 echo "UPDATE staff_positions SET email = regexp_replace(email, '@.*', '@' || regexp_replace(lower(conventions.name), '[^a-z0-9]', '', 'g') || '.intercode.test') FROM conventions WHERE staff_positions.convention_id = conventions.id;" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
 echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test', name = name || ' [dev]';" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
 
-echo 'Changing Stripe keys for development'
-echo "UPDATE conventions SET stripe_publishable_key = 'pk_test_uD3hl7sRFOjcbdSG6KaH9olQ', stripe_secret_key = 'sk_test_VRD1WlpRoaPdwhmzRTIoqRrr';" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
+# echo 'Changing Stripe account IDs for development'
+# echo "UPDATE conventions SET stripe_publishable_key = 'pk_test_uD3hl7sRFOjcbdSG6KaH9olQ', stripe_secret_key = 'sk_test_VRD1WlpRoaPdwhmzRTIoqRrr';" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
 
 echo 'Dropping intercode_development database'
 dropdb --if-exists $PG_OPTIONS -U postgres -w intercode_development

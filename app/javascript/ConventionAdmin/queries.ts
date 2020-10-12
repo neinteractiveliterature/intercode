@@ -21,13 +21,19 @@ export const ConventionAdminConventionFields = gql`
     hidden
     maximum_tickets
     ticket_name
-    stripe_publishable_key
-    masked_stripe_secret_key
     clickwrap_agreement
     ticket_mode
     site_mode
     signup_mode
     signup_requests_open
+    stripe_account_ready_to_charge
+
+    stripe_account {
+      id
+      email
+      charges_enabled
+      display_name
+    }
 
     maximum_event_signups {
       timespans {
@@ -71,7 +77,7 @@ export const ConventionAdminConventionFields = gql`
 
 export const ConventionAdminConventionQuery = gql`
   query ConventionAdminConventionQuery {
-    convention {
+    convention: assertConvention {
       id
       ...ConventionAdminConventionFields
     }

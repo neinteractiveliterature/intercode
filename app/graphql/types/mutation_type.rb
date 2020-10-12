@@ -58,6 +58,7 @@ class Types::MutationType < Types::BaseObject
   field :createConvention, mutation: Mutations::CreateConvention
   field :updateConvention, mutation: Mutations::UpdateConvention
   field :setConventionCanceled, mutation: Mutations::SetConventionCanceled
+  field :createConventionStripeAccount, mutation: Mutations::CreateConventionStripeAccount
 
   ### Coupon
   field :createCoupon, mutation: Mutations::CreateCoupon

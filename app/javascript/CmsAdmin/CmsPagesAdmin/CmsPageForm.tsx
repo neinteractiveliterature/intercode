@@ -8,7 +8,7 @@ import { sortByLocaleString } from '../../ValueUtils';
 import useUniqueId from '../../useUniqueId';
 import { CmsLayout, Page } from '../../graphqlTypes.generated';
 import { CmsPagesAdminQueryQuery } from './queries.generated';
-import { usePartialState } from '../../useStatePropertyUpdater';
+import { usePartialState, usePartialStateFactory } from '../../usePartialState';
 import { onChangeSingleValue } from '../../ReactSelectUtils';
 
 export type PageFormFields = Pick<
@@ -31,21 +31,17 @@ function CmsPageForm<T extends PageFormFields>({
   cmsLayouts,
   readOnly,
 }: CmsPageFormProps<T>) {
-  const [name, setName] = usePartialState(page, onChange, 'name');
-  const [adminNotes, setAdminNotes] = usePartialState(page, onChange, 'admin_notes');
-  const [slug, setSlug] = usePartialState(page, onChange, 'slug');
+  const factory = usePartialStateFactory(page, onChange);
+  const [name, setName] = usePartialState(factory, 'name');
+  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
+  const [slug, setSlug] = usePartialState(factory, 'slug');
   const [skipClickwrapAgreement, setSkipClickwrapAgreement] = usePartialState(
-    page,
-    onChange,
+    factory,
     'skip_clickwrap_agreement',
   );
-  const [hiddenFromSearch, setHiddenFromSearch] = usePartialState(
-    page,
-    onChange,
-    'hidden_from_search',
-  );
-  const [cmsLayout, setCmsLayout] = usePartialState(page, onChange, 'cms_layout');
-  const [content, setContent] = usePartialState(page, onChange, 'content');
+  const [hiddenFromSearch, setHiddenFromSearch] = usePartialState(factory, 'hidden_from_search');
+  const [cmsLayout, setCmsLayout] = usePartialState(factory, 'cms_layout');
+  const [content, setContent] = usePartialState(factory, 'content');
 
   const slugInputId = useUniqueId('slug-');
   const defaultLayout =

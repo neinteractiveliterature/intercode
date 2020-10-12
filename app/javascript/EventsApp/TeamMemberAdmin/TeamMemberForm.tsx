@@ -5,7 +5,7 @@ import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckb
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import HelpPopover from '../../UIComponents/HelpPopover';
-import useStatePropertyUpdater from '../../useStatePropertyUpdater';
+import { usePartialState, usePartialStateFactory } from '../../usePartialState';
 import { TeamMembersQueryQuery } from './queries.generated';
 
 export type TeamMemberFormProps = {
@@ -17,7 +17,14 @@ export type TeamMemberFormProps = {
 
 function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps) {
   const { t } = useTranslation();
-  const setTeamMemberState = useStatePropertyUpdater(onChange);
+  const factory = usePartialStateFactory(value, onChange);
+  const [displayTeamMember, setDisplayTeamMember] = usePartialState(factory, 'display_team_member');
+  const [showEmail, setShowEmail] = usePartialState(factory, 'show_email');
+  const [receiveConEmail, setReceiveConEmail] = usePartialState(factory, 'receive_con_email');
+  const [receiveSignupEmail, setReceiveSignupEmail] = usePartialState(
+    factory,
+    'receive_signup_email',
+  );
 
   const teamMemberName = event.event_category.team_member_name;
   const checkboxProperties = [
@@ -26,6 +33,8 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       label: t('events.teamMemberAdmin.displayLabel', 'Display as {{ teamMemberName }}', {
         teamMemberName,
       }),
+      value: displayTeamMember,
+      onChange: setDisplayTeamMember,
     },
     {
       name: 'show_email',
@@ -38,24 +47,28 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
           </HelpPopover>
         </Trans>
       ),
+      value: showEmail,
+      onChange: setShowEmail,
     },
     {
       name: 'receive_con_email',
       label: t('events.teamMemberAdmin.receiveConEmailLabel', 'Receive email from convention'),
+      value: receiveConEmail,
+      onChange: setReceiveConEmail,
     },
   ] as const;
 
   return (
     <>
-      {checkboxProperties.map(({ name, label }) => (
+      {checkboxProperties.map(({ name, label, value: checkboxValue, onChange: checkboxChange }) => (
         <BootstrapFormCheckbox
           key={name}
           type="checkbox"
           label={label}
           name={name}
           disabled={disabled}
-          checked={value[name] ?? false}
-          onCheckedChange={setTeamMemberState(name)}
+          checked={checkboxValue ?? false}
+          onCheckedChange={checkboxChange}
         />
       ))}
 
@@ -81,10 +94,8 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
           },
           { label: t('events.teamMemberAdmin.receiveSignupEmail.noEmail', 'No'), value: 'NO' },
         ]}
-        value={value.receive_signup_email}
-        onChange={(newValue: ReceiveSignupEmail) =>
-          setTeamMemberState('receive_signup_email')(newValue)
-        }
+        value={receiveSignupEmail}
+        onChange={(newValue: ReceiveSignupEmail) => setReceiveSignupEmail(newValue)}
       />
     </>
   );

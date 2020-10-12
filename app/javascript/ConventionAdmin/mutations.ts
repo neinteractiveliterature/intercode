@@ -14,3 +14,14 @@ export const UpdateConvention = gql`
 
   ${ConventionAdminConventionFields}
 `;
+
+export const CreateConventionStripeAccount = gql`
+  mutation CreateConventionStripeAccount($baseUrl: String!) {
+    createConventionStripeAccount(input: {}) {
+      stripe_account {
+        id
+        account_onboarding_link(base_url: $baseUrl)
+      }
+    }
+  }
+`;

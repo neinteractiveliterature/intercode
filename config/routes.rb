@@ -50,6 +50,9 @@ Intercode::Application.routes.draw do
       get :signup_changes
       get :user_con_profiles
     end
+
+    get 'stripe_account/return' => 'stripe_account#return', as: :stripe_account_return
+    get 'stripe_account/refresh' => 'stripe_account#refresh', as: :stripe_account_refresh
   end
 
   get 'csv_exports/users' => 'csv_exports#users'
