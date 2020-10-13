@@ -3,12 +3,9 @@ class StripeAccountController < ApplicationController
 
   def return
     acct = Stripe::Account.retrieve(convention.stripe_account_id)
+    convention.update!(stripe_account_ready_to_charge: true) if acct.charges_enabled
 
-    if acct.charges_enabled
-      convention.update!(stripe_account_ready_to_charge: true)
-    end
-
-    redirect_to '/convention/edit'
+    redirect_to '/convention/edit#payments'
   end
 
   def refresh

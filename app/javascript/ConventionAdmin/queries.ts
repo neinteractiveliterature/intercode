@@ -90,3 +90,16 @@ export const ConventionAdminConventionQuery = gql`
 
   ${ConventionAdminConventionFields}
 `;
+
+export const StripeAccountOnboardingLinkQuery = gql`
+  query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
+    convention: assertConvention {
+      id
+
+      stripe_account {
+        id
+        account_onboarding_link(base_url: $baseUrl)
+      }
+    }
+  }
+`;
