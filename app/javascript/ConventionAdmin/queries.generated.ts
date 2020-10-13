@@ -51,6 +51,23 @@ export type ConventionAdminConventionQueryQuery = (
   ) }
 );
 
+export type StripeAccountOnboardingLinkQueryQueryVariables = Types.Exact<{
+  baseUrl: Types.Scalars['String'];
+}>;
+
+
+export type StripeAccountOnboardingLinkQueryQuery = (
+  { __typename: 'Query' }
+  & { convention: (
+    { __typename: 'Convention' }
+    & Pick<Types.Convention, 'id'>
+    & { stripe_account?: Types.Maybe<(
+      { __typename: 'StripeAccount' }
+      & Pick<Types.StripeAccount, 'id' | 'account_onboarding_link'>
+    )> }
+  ) }
+);
+
 export const ConventionAdminConventionFieldsFragmentDoc = gql`
     fragment ConventionAdminConventionFields on Convention {
   id
@@ -154,3 +171,40 @@ export function useConventionAdminConventionQueryLazyQuery(baseOptions?: Apollo.
 export type ConventionAdminConventionQueryQueryHookResult = ReturnType<typeof useConventionAdminConventionQueryQuery>;
 export type ConventionAdminConventionQueryLazyQueryHookResult = ReturnType<typeof useConventionAdminConventionQueryLazyQuery>;
 export type ConventionAdminConventionQueryQueryResult = Apollo.QueryResult<ConventionAdminConventionQueryQuery, ConventionAdminConventionQueryQueryVariables>;
+export const StripeAccountOnboardingLinkQueryDocument = gql`
+    query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
+  convention: assertConvention {
+    id
+    stripe_account {
+      id
+      account_onboarding_link(base_url: $baseUrl)
+    }
+  }
+}
+    `;
+
+/**
+ * __useStripeAccountOnboardingLinkQueryQuery__
+ *
+ * To run a query within a React component, call `useStripeAccountOnboardingLinkQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStripeAccountOnboardingLinkQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStripeAccountOnboardingLinkQueryQuery({
+ *   variables: {
+ *      baseUrl: // value for 'baseUrl'
+ *   },
+ * });
+ */
+export function useStripeAccountOnboardingLinkQueryQuery(baseOptions?: Apollo.QueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {
+        return Apollo.useQuery<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>(StripeAccountOnboardingLinkQueryDocument, baseOptions);
+      }
+export function useStripeAccountOnboardingLinkQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {
+          return Apollo.useLazyQuery<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>(StripeAccountOnboardingLinkQueryDocument, baseOptions);
+        }
+export type StripeAccountOnboardingLinkQueryQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQueryQuery>;
+export type StripeAccountOnboardingLinkQueryLazyQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQueryLazyQuery>;
+export type StripeAccountOnboardingLinkQueryQueryResult = Apollo.QueryResult<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>;
