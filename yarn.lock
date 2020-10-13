@@ -13927,10 +13927,10 @@ typescript@^4.0.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.3.tgz#153bbd468ef07725c1df9c77e8b453f8d36abba5"
   integrity sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
 
-tzdata@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/tzdata/-/tzdata-1.0.19.tgz#8103cd131d51f1411017d505597def9f8ac8186b"
-  integrity sha512-e+ojEv6zc+mNcU2mXfUK3VVXtbK8nXjG1vYdzEVGuU9fxL/CyDcp6Vl0HvArr4A9plxWMkNv9T58bW4HbfIA2Q==
+tzdata@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/tzdata/-/tzdata-1.0.20.tgz#a16fafab808d7e474c5494348611e3f99676e1a8"
+  integrity sha512-lll5QulYqP/0xFmaMG2teIp/ocVRFsvL+K1srWkrV1NMqLpqX2NZCBbbvRgiSKp78ENdajWCBXzHSKHw8T9UHQ==
 
 ua-parser-js@^0.7.18:
   version "0.7.21"
