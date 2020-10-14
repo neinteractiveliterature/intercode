@@ -3,20 +3,25 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { MockedProvider } from '@apollo/client/testing';
 import { render, queries } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router-dom';
 
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
 
 function TestWrapper({ apolloMocks, stripePublishableKey, children }) {
+  const history = useMemo(() => createMemoryHistory(), []);
   const lazyStripeProviderValue = useMemo(() => ({ publishableKey: stripePublishableKey }), [
     stripePublishableKey,
   ]);
   return (
-    <MockedProvider mocks={apolloMocks}>
-      <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-        <Confirm>{children}</Confirm>
-      </LazyStripeContext.Provider>
-    </MockedProvider>
+    <Router history={history}>
+      <MockedProvider mocks={apolloMocks}>
+        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+          <Confirm>{children}</Confirm>
+        </LazyStripeContext.Provider>
+      </MockedProvider>
+    </Router>
   );
 }
 
