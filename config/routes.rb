@@ -14,6 +14,8 @@ Intercode::Application.routes.draw do
   }
   get '/authenticity_tokens', to: 'authenticity_tokens#show'
   post '/sns_notifications', to: 'sns_notifications#create'
+  post '/stripe_webhook/account', to: 'stripe_webhooks#account'
+  post '/stripe_webhook/connect', to: 'stripe_webhooks#connect'
 
   # CMS stuff
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
