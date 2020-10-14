@@ -23,6 +23,7 @@ export type AppWrapperProps = {
   };
   mapboxAccessToken: string;
   recaptchaSiteKey: string;
+  stripeAccountId?: string;
   stripePublishableKey: string;
 };
 
@@ -32,6 +33,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
       authenticityTokens,
       mapboxAccessToken,
       recaptchaSiteKey,
+      stripeAccountId,
       stripePublishableKey,
       ...otherProps
     } = props;
@@ -76,7 +78,9 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
     return (
       <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
         <DndProvider options={HTML5toTouch}>
-          <LazyStripeContext.Provider value={{ publishableKey: stripePublishableKey }}>
+          <LazyStripeContext.Provider
+            value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
+          >
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
               <MapboxContext.Provider value={mapboxContextValue}>
                 <ApolloProvider client={apolloClient}>
