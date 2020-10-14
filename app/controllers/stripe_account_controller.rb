@@ -3,7 +3,7 @@ class StripeAccountController < ApplicationController
 
   def return
     acct = Stripe::Account.retrieve(convention.stripe_account_id)
-    convention.update!(stripe_account_ready_to_charge: true) if acct.charges_enabled
+    ConnectStripeAccountService.new(convention: convention, account: acct).call!
 
     redirect_to '/convention/edit#payments'
   end
