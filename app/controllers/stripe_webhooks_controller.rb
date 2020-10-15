@@ -10,11 +10,11 @@ class StripeWebhooksController < ApplicationController
       return
     end
 
-    case event.type
-      # This is where handlers would go if we had any yet
-    else
-      Rollbar.warn("Unhandled event type for account webhook listener: #{event.type}")
-    end
+    # case event.type
+    # This is where handlers would go if we had any yet
+    # else
+    Rollbar.warn("Unhandled event type for account webhook listener: #{event.type}")
+    # end
 
     head :ok
   end
