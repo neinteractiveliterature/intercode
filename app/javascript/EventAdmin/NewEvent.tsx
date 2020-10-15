@@ -59,7 +59,12 @@ function NewEventForm({ data }: NewEventFormProps) {
     schedulingUi: initialEventCategory ? initialEventCategory.scheduling_ui : null,
     initialEvent,
   });
-  const [run, setRun] = useState<RunForRunFormFields>();
+  const [run, setRun] = useState<RunForRunFormFields>({
+    __typename: 'Run',
+    id: -1,
+    rooms: [],
+    starts_at: '',
+  });
 
   const donePath =
     convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/';
@@ -95,7 +100,7 @@ function NewEventForm({ data }: NewEventFormProps) {
           eventCategory.scheduling_ui === 'single_run' &&
           event.form_response_attrs.length_seconds && (
             <RunFormFields
-              run={run ?? { __typename: 'Run', id: -1, rooms: [], starts_at: '' }}
+              run={run}
               event={{
                 __typename: 'Event',
                 id: -1,
