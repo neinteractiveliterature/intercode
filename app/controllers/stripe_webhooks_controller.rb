@@ -38,7 +38,7 @@ class StripeWebhooksController < ApplicationController
       conventions = Convention.where(stripe_account_id: account.id)
       conventions.each do |convention|
         if convention && !convention.stripe_account_ready_to_charge
-          ConnectStripeAccountService.new(convention: convention, account: acct).call!
+          ConnectStripeAccountService.new(convention: convention, account: account).call!
         end
       end
     else
