@@ -3,7 +3,7 @@ class StripeWebhooksController < ApplicationController
 
   def account
     begin
-      construct_event(ENV['STRIPE_ACCOUNT_ENDPOINT_SECRET'])
+      event = construct_event(ENV['STRIPE_ACCOUNT_ENDPOINT_SECRET'])
     rescue JSON::ParserError => e
       Rollbar.warn(e)
       head :not_acceptable
@@ -21,7 +21,7 @@ class StripeWebhooksController < ApplicationController
 
   def connect
     begin
-      construct_event(ENV['STRIPE_CONNECT_ENDPOINT_SECRET'])
+      event = construct_event(ENV['STRIPE_CONNECT_ENDPOINT_SECRET'])
     rescue JSON::ParserError => e
       Rollbar.warn(e)
       head :not_acceptable
