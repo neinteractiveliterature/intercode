@@ -54,10 +54,6 @@ class StripeWebhooksController < ApplicationController
     payload = request.body.read
     sig_header = request.headers['Stripe-Signature']
 
-    Stripe::Event.construct_event(
-      JSON.parse(payload, symbolize_names: true),
-      sig_header,
-      endpoint_secret
-    )
+    Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
   end
 end
