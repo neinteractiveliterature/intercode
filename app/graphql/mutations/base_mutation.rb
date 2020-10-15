@@ -24,8 +24,8 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   end
 
   def self.define_authorization_check(message: 'Unauthorized mutation', &block)
-    define_method :authorized? do |args|
-      auth_result = instance_exec(args, &block)
+    define_method :authorized? do |*args, **kwargs|
+      auth_result = instance_exec(*args, **kwargs, &block)
       self.class.return_true_or_not_authorized_error(auth_result, current_user, message: message)
     end
   end

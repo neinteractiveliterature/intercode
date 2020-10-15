@@ -43,7 +43,7 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
   def refund_order
     return [nil, :not_refunded] if skip_refund || order.charge_id.blank?
 
-    charge = Stripe::Charge.retrieve(order.charge_id, api_key: convention.stripe_secret_key)
+    charge = Stripe::Charge.retrieve(order.charge_id, stripe_account: convention.stripe_account_id)
 
     if charge.refunded
       [charge.refunds.first, :already_refunded]
@@ -53,7 +53,7 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
           charge: order.charge_id,
           amount: order.payment_amount.fractional
         },
-        api_key: convention.stripe_secret_key
+        stripe_account: convention.stripe_account_id
       )
       [refund, :refunded]
     end

@@ -1,10 +1,8 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
-import { useChangeDispatchers } from '../ComposableFormUtils';
 import useUniqueId from '../useUniqueId';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import LocationSelect from '../Maps/LocationSelect';
@@ -14,41 +12,44 @@ import MapboxContext from '../MapboxContext';
 import EnumTypes from '../enumTypes.json';
 import { timezoneNameForConvention } from '../TimeUtils';
 import ConventionLanguageInput from './ConventionLanguageInput';
+import type { ConventionFormConvention } from './ConventionForm';
+import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { SiteMode, TimezoneMode } from '../graphqlTypes.generated';
 
-function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
+export type ConventionFormGeneralSectionProps = {
+  convention: ConventionFormConvention;
+  setConvention: React.Dispatch<React.SetStateAction<ConventionFormConvention>>;
+  disabled: boolean;
+};
+
+function ConventionFormGeneralSection({
+  convention,
+  setConvention,
+  disabled,
+}: ConventionFormGeneralSectionProps) {
   const { mapboxAccessToken } = useContext(MapboxContext);
-  const [
-    changeName,
-    changeSiteMode,
-    changeDomain,
-    changeTimezoneName,
-    changeStartsAt,
-    changeEndsAt,
-    changeLocation,
-    changeTimezoneMode,
-    changeLanguage,
-  ] = useChangeDispatchers(dispatch, [
-    'name',
-    'site_mode',
-    'domain',
-    'timezone_name',
-    'starts_at',
-    'ends_at',
-    'location',
-    'timezone_mode',
-    'language',
-  ]);
+  const factory = usePartialStateFactory(convention, setConvention);
+  const [name, setName] = usePartialState(factory, 'name');
+  const [siteMode, setSiteMode] = usePartialState(factory, 'site_mode');
+  const [domain, setDomain] = usePartialState(factory, 'domain');
+  const [timezoneName, setTimezoneName] = usePartialState(factory, 'timezone_name');
+  const [startsAt, setStartsAt] = usePartialState(factory, 'starts_at');
+  const [endsAt, setEndsAt] = usePartialState(factory, 'ends_at');
+  const [location, setLocation] = usePartialState(factory, 'location');
+  const [timezoneMode, setTimezoneMode] = usePartialState(factory, 'timezone_mode');
+  const [language, setLanguage] = usePartialState(factory, 'language');
+
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
 
-  const startEndFields = [
-    ['starts_at', 'Convention starts', changeStartsAt, startId],
-    ['ends_at', 'Convention ends', changeEndsAt, endId],
-  ].map(([name, label, onChange, inputId]) => (
-    <div className="col-md-6" key={name}>
+  const startEndFields = ([
+    ['starts_at', 'Convention starts', startsAt, setStartsAt, startId],
+    ['ends_at', 'Convention ends', endsAt, setEndsAt, endId],
+  ] as const).map(([fieldName, label, value, onChange, inputId]) => (
+    <div className="col-md-6" key={fieldName}>
       <label htmlFor={inputId}>{label}</label>
       <DateTimeInput
-        value={convention[name]}
+        value={value}
         timezoneName={timezoneNameForConvention(convention)}
         onChange={onChange}
         id={inputId}
@@ -57,20 +58,17 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
     </div>
   ));
 
-  const conventionLocation = useMemo(
-    () => (convention.location ? JSON.parse(convention.location) : null),
-    [convention.location],
-  );
+  const conventionLocation = useMemo(() => (location ? JSON.parse(location) : null), [location]);
 
-  const setLocation = async (location) => {
-    changeLocation(location ? JSON.stringify(location) : null);
-    if (location?.center) {
-      const uri = `https://api.mapbox.com/v4/examples.4ze9z6tv/tilequery/${location.center[0]},${location.center[1]}.json?access_token=${mapboxAccessToken}`;
+  const locationSelectChanged = async (newValue: any) => {
+    setLocation(newValue ? JSON.stringify(newValue) : null);
+    if (newValue?.center) {
+      const uri = `https://api.mapbox.com/v4/examples.4ze9z6tv/tilequery/${newValue.center[0]},${newValue.center[1]}.json?access_token=${mapboxAccessToken}`;
       const response = await fetch(uri);
       const json = await response.json();
       const tzid = json.features[0]?.properties?.TZID;
       if (tzid) {
-        changeTimezoneName(tzid);
+        setTimezoneName(tzid);
       }
     }
   };
@@ -80,8 +78,8 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
       <BootstrapFormInput
         name="name"
         label="Name"
-        value={convention.name || ''}
-        onTextChange={changeName}
+        value={name ?? ''}
+        onTextChange={setName}
         disabled={disabled}
       />
 
@@ -97,22 +95,18 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
             label: 'Site behaves as a single standalone event',
           },
         ]}
-        value={convention.site_mode}
-        onChange={changeSiteMode}
+        value={siteMode}
+        onChange={(newValue: string) => setSiteMode(newValue as SiteMode)}
         disabled={disabled}
       />
 
-      <ConventionLanguageInput
-        value={convention.language}
-        onChange={changeLanguage}
-        disabled={disabled}
-      />
+      <ConventionLanguageInput value={language} onChange={setLanguage} disabled={disabled} />
 
       <BootstrapFormInput
         name="domain"
         label="Convention domain name"
-        value={convention.domain || ''}
-        onTextChange={changeDomain}
+        value={domain ?? ''}
+        onTextChange={setDomain}
         disabled={disabled}
       />
 
@@ -122,8 +116,8 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
           value: enumValue.name,
           label: enumValue.description,
         }))}
-        value={convention.timezone_mode}
-        onChange={changeTimezoneMode}
+        value={timezoneMode}
+        onChange={(newValue: string) => setTimezoneMode(newValue as TimezoneMode)}
         disabled={disabled}
       />
 
@@ -135,7 +129,7 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
                 <LocationSelect
                   inputId={id}
                   value={conventionLocation}
-                  onChange={setLocation}
+                  onChange={locationSelectChanged}
                   disabled={disabled}
                   isClearable
                 />
@@ -151,13 +145,7 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
             )}
           </FormGroupWithLabel>
 
-          <TimezoneSelect
-            name="timezone_name"
-            label="Time zone"
-            value={convention.timezone_name}
-            onChange={changeTimezoneName}
-            disabled={disabled}
-          />
+          <TimezoneSelect label="Time zone" value={timezoneName} onChange={setTimezoneName} />
         </>
       )}
 
@@ -165,25 +153,5 @@ function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
     </>
   );
 }
-
-ConventionFormGeneralSection.propTypes = {
-  convention: PropTypes.shape({
-    name: PropTypes.string,
-    domain: PropTypes.string,
-    language: PropTypes.string,
-    location: PropTypes.string,
-    timezone_name: PropTypes.string,
-    timezone_mode: PropTypes.string,
-    site_mode: PropTypes.string,
-    starts_at: PropTypes.string,
-    ends_at: PropTypes.string,
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-};
-
-ConventionFormGeneralSection.defaultProps = {
-  disabled: false,
-};
 
 export default ConventionFormGeneralSection;

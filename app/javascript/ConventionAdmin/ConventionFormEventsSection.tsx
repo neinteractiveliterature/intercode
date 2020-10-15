@@ -1,16 +1,18 @@
 import React, { useCallback } from 'react';
 
-import { TransformsReducerAction, useChangeDispatchers } from '../ComposableFormUtils';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor, {
+  scheduledValueReducer,
   ScheduledValueReducerAction,
 } from '../BuiltInFormControls/ScheduledValueEditor';
 import { timezoneNameForConvention } from '../TimeUtils';
-import { ConventionAdminConventionFieldsFragment } from './queries.generated';
 import ScheduledValuePreview from '../UIComponents/ScheduledValuePreview';
+import type { ConventionFormConvention } from './ConventionForm';
+import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { ShowSchedule, SignupMode } from '../graphqlTypes.generated';
 
-type MaximumEventSignupsValue = 'not_yet' | '1' | '2' | '3' | 'unlimited' | 'not_now';
+export type MaximumEventSignupsValue = 'not_yet' | '1' | '2' | '3' | 'unlimited' | 'not_now';
 
 export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
@@ -81,41 +83,39 @@ const buildMaximumEventSignupsInput = (
   );
 };
 
-type DispatchMaximumEventSignupsAction = {
-  type: 'dispatchMaximumEventSignups';
-  action: ScheduledValueReducerAction<MaximumEventSignupsValue>;
-};
-
 export type ConventionFormEventsSectionProps = {
-  convention: ConventionAdminConventionFieldsFragment;
-  dispatch: (action: TransformsReducerAction | DispatchMaximumEventSignupsAction) => void;
+  convention: ConventionFormConvention;
+  setConvention: React.Dispatch<React.SetStateAction<ConventionFormConvention>>;
   disabled: boolean;
 };
 
 function ConventionFormEventsSection({
   convention,
-  dispatch,
+  setConvention,
   disabled,
 }: ConventionFormEventsSectionProps) {
   const timezoneName = timezoneNameForConvention(convention);
-  const [
-    changeSignupMode,
-    changeSignupRequestsOpen,
-    changeAcceptingProposals,
-    changeShowEventList,
-    changeShowSchedule,
-  ] = useChangeDispatchers(dispatch, [
-    'signup_mode',
+  const factory = usePartialStateFactory(convention, setConvention);
+  const [signupMode, setSignupMode] = usePartialState(factory, 'signup_mode');
+  const [signupRequestsOpen, setSignupRequestsOpen] = usePartialState(
+    factory,
     'signup_requests_open',
+  );
+  const [acceptingProposals, setAcceptingProposals] = usePartialState(
+    factory,
     'accepting_proposals',
-    'show_event_list',
-    'show_schedule',
-  ]);
-
+  );
+  const [showEventList, setShowEventList] = usePartialState(factory, 'show_event_list');
+  const [showSchedule, setShowSchedule] = usePartialState(factory, 'show_schedule');
+  const [maximumEventSignups, setMaximumEventSignups] = usePartialState(
+    factory,
+    'maximum_event_signups',
+  );
   const dispatchMaximumEventSignups = useCallback(
-    (action: ScheduledValueReducerAction<MaximumEventSignupsValue>) =>
-      dispatch({ type: 'dispatchMaximumEventSignups', action }),
-    [dispatch],
+    (action: ScheduledValueReducerAction<MaximumEventSignupsValue>) => {
+      setMaximumEventSignups((prevState) => scheduledValueReducer(prevState, action));
+    },
+    [setMaximumEventSignups],
   );
 
   return (
@@ -134,24 +134,24 @@ function ConventionFormEventsSection({
               'Moderated (attendees can request signups and signup changes but con staff must approve them)',
           },
         ]}
-        value={convention.signup_mode}
-        onChange={changeSignupMode}
+        value={signupMode}
+        onChange={(newValue: string) => setSignupMode(newValue as SignupMode)}
         disabled={disabled}
       />
 
       <BooleanInput
         name="signup_requests_open"
         caption="Signup requests open"
-        value={convention.signup_requests_open}
-        onChange={changeSignupRequestsOpen}
+        value={signupRequestsOpen}
+        onChange={setSignupRequestsOpen}
         disabled={disabled || convention.signup_mode !== 'moderated'}
       />
 
       <BooleanInput
         name="accepting_proposals"
         caption="Accepting event proposals"
-        value={convention.accepting_proposals ?? undefined}
-        onChange={changeAcceptingProposals}
+        value={acceptingProposals ?? undefined}
+        onChange={setAcceptingProposals}
         disabled={disabled || convention.site_mode === 'single_event'}
       />
 
@@ -167,8 +167,8 @@ function ConventionFormEventsSection({
           },
           { value: 'yes', label: 'Yes, to everyone' },
         ]}
-        value={convention.show_event_list}
-        onChange={changeShowEventList}
+        value={showEventList}
+        onChange={(newValue: string) => setShowEventList(newValue as ShowSchedule)}
         disabled={disabled || convention.site_mode === 'single_event'}
       />
 
@@ -184,21 +184,21 @@ function ConventionFormEventsSection({
           },
           { value: 'yes', label: 'Yes, to everyone' },
         ]}
-        value={convention.show_schedule}
-        onChange={changeShowSchedule}
+        value={showSchedule}
+        onChange={(newValue: string) => setShowSchedule(newValue as ShowSchedule)}
         disabled={disabled || convention.site_mode === 'single_event'}
       />
 
       <fieldset>
         <legend className="col-form-label">Event signup schedule</legend>
         <ScheduledValuePreview
-          scheduledValue={convention.maximum_event_signups ?? { timespans: [] }}
+          scheduledValue={maximumEventSignups ?? { timespans: [] }}
           getClassNameForValue={getMaximumEventSignupsClassName}
           getDescriptionForValue={getMaximumEventSignupsDescription}
           timezoneName={timezoneName}
         />
         <ScheduledValueEditor
-          scheduledValue={convention.maximum_event_signups ?? { timespans: [] }}
+          scheduledValue={maximumEventSignups ?? { timespans: [] }}
           dispatch={dispatchMaximumEventSignups}
           timezone={timezoneName}
           buildValueInput={buildMaximumEventSignupsInput}

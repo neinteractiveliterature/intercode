@@ -14,6 +14,8 @@ Intercode::Application.routes.draw do
   }
   get '/authenticity_tokens', to: 'authenticity_tokens#show'
   post '/sns_notifications', to: 'sns_notifications#create'
+  post '/stripe_webhook/account', to: 'stripe_webhooks#account'
+  post '/stripe_webhook/connect', to: 'stripe_webhooks#connect'
 
   # CMS stuff
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
@@ -50,6 +52,9 @@ Intercode::Application.routes.draw do
       get :signup_changes
       get :user_con_profiles
     end
+
+    get 'stripe_account/return' => 'stripe_account#return', as: :stripe_account_return
+    get 'stripe_account/refresh' => 'stripe_account#refresh', as: :stripe_account_refresh
   end
 
   get 'csv_exports/users' => 'csv_exports#users'

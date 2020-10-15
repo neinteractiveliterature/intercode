@@ -2,7 +2,7 @@ import React from 'react';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import { usePartialState } from '../../useStatePropertyUpdater';
+import { usePartialState, usePartialStateFactory } from '../../usePartialState';
 import { CmsPartial } from '../../graphqlTypes.generated';
 
 export type CmsPartialFormFields = Pick<CmsPartial, 'name' | 'admin_notes' | 'content'>;
@@ -18,9 +18,10 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
   onChange,
   readOnly,
 }: CmsPartialFormProps<T>) {
-  const [name, setName] = usePartialState(partial, onChange, 'name');
-  const [adminNotes, setAdminNotes] = usePartialState(partial, onChange, 'admin_notes');
-  const [content, setContent] = usePartialState(partial, onChange, 'content');
+  const factory = usePartialStateFactory(partial, onChange);
+  const [name, setName] = usePartialState(factory, 'name');
+  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
+  const [content, setContent] = usePartialState(factory, 'content');
 
   return (
     <>

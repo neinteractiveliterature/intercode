@@ -1,5 +1,6 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export type TabProps = {
   id: string;
@@ -11,6 +12,28 @@ export function useTabs(tabs: TabProps[], initialTabId?: string) {
   const [selectedTab, setSelectedTab] = useState(initialTabId ?? tabs[0].id);
 
   return { tabs, selectedTab, setSelectedTab };
+}
+
+export function useTabsWithRouter(tabs: TabProps[], basePath: string, defaultTabId?: string) {
+  const location = useLocation();
+  const history = useHistory();
+  const setSelectedTab = useCallback(
+    (tabId: string) => {
+      history.replace(`${basePath}#${tabId}`);
+    },
+    [history, basePath],
+  );
+
+  const tabFromHash = useMemo(() => tabs.find((tab) => `#${tab.id}` === location.hash), [
+    location.hash,
+    tabs,
+  ]);
+
+  return {
+    tabs,
+    selectedTab: tabFromHash ? tabFromHash.id : defaultTabId ?? tabs[0].id,
+    setSelectedTab,
+  };
 }
 
 export type TabListProps = {

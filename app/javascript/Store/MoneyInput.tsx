@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { ChangeEvent, ReactNode, useState } from 'react';
 
 import formatMoney from '../formatMoney';
 import { parseFloatOrNull } from '../ComposableFormUtils';
+import { Money } from '../graphqlTypes.generated';
 
-const MoneyInput = React.forwardRef(
+export type MoneyInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'type' | 'className' | 'value' | 'onChange'
+> & {
+  value?: Money | null;
+  onChange: React.Dispatch<Money | null | undefined>;
+  appendContent?: ReactNode;
+  inputGroupClassName?: string;
+};
+
+const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
   ({ value, onChange, appendContent, inputGroupClassName, ...inputProps }, ref) => {
     const [inputValue, setInputValue] = useState(formatMoney(value, false));
-    const inputChanged = (event) => {
+    const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
       setInputValue(newValue);
 
       const floatValue = parseFloatOrNull(newValue);
       if (floatValue != null) {
         onChange({
+          __typename: 'Money',
           fractional: Math.floor(floatValue * 100.0),
           currency_code: 'USD',
         });
@@ -41,21 +52,5 @@ const MoneyInput = React.forwardRef(
     );
   },
 );
-
-MoneyInput.propTypes = {
-  value: PropTypes.shape({
-    fractional: PropTypes.number.isRequired,
-    currency_code: PropTypes.string.isRequired,
-  }),
-  onChange: PropTypes.func.isRequired,
-  appendContent: PropTypes.node,
-  inputGroupClassName: PropTypes.string,
-};
-
-MoneyInput.defaultProps = {
-  value: null,
-  appendContent: null,
-  inputGroupClassName: null,
-};
 
 export default MoneyInput;
