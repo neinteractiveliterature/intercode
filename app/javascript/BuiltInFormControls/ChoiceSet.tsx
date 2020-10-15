@@ -9,7 +9,7 @@ export type ChoiceSetChoice = {
 
 export interface ChoiceSetBaseProps {
   name?: string;
-  choices: ChoiceSetChoice[];
+  choices: readonly ChoiceSetChoice[];
   value?: string | string[] | null;
   multiple?: boolean;
   containerClassName?: string;

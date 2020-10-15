@@ -9,7 +9,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../../checkBundleHash';
 import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
 import AuthenticityTokensContext from '../../AuthenticityTokensContext';
-import { usePartialState } from '../../useStatePropertyUpdater';
+import { usePartialState, usePartialStateFactory } from '../../usePartialState';
 
 const GraphiQL = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: 'graphiql' */ 'graphiql'),
@@ -33,9 +33,10 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   readOnly,
 }: CmsGraphqlQueryFormProps<T>) {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
-  const [identifier, setIdentifier] = usePartialState(value, onChange, 'identifier');
-  const [adminNotes, setAdminNotes] = usePartialState(value, onChange, 'admin_notes');
-  const [query, setQuery] = usePartialState(value, onChange, 'query');
+  const factory = usePartialStateFactory(value, onChange);
+  const [identifier, setIdentifier] = usePartialState(factory, 'identifier');
+  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
+  const [query, setQuery] = usePartialState(factory, 'query');
   const link = useIntercodeApolloLink(authenticityToken);
 
   // Serious shenanigans going on in here, we have to majorly circumvent type checking

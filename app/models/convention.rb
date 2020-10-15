@@ -105,10 +105,9 @@ class Convention < ApplicationRecord
     ConventionDrop.new(self)
   end
 
-  def masked_stripe_secret_key
-    return stripe_secret_key if stripe_secret_key.blank?
-
-    "#{stripe_secret_key[0..7]}...#{stripe_secret_key[-4..-1]}"
+  def stripe_account
+    return nil unless stripe_account_id
+    @stripe_account ||= Stripe::Account.retrieve(stripe_account_id)
   end
 
   def timespan

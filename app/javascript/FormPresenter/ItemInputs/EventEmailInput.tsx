@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import { mutator, Transforms } from '../../ComposableFormUtils';
 import RequiredIndicator from './RequiredIndicator';
 import EmailAliasInput from '../../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
@@ -46,33 +45,29 @@ function EventEmailInput({
     onInteract,
   ]);
 
-  const valueMutator = mutator({
-    getState: () => value,
-    setState: (state) => {
+  const updateValue = useCallback(
+    (newValue: EventEmailValue) => {
       userDidInteract();
       if (emailBehavior === 'team_mailing_list') {
         onChange({
           // always send something Ruby will consider truthy if the email behavior is to use
           // a team mailing list
           team_mailing_list_name: '',
-          ...state,
+          ...newValue,
           email:
-            state.team_mailing_list_name && state.team_mailing_list_name.trim() !== ''
-              ? `${state.team_mailing_list_name}@${convention.event_mailing_list_domain}`
+            newValue.team_mailing_list_name && newValue.team_mailing_list_name.trim() !== ''
+              ? `${newValue.team_mailing_list_name}@${convention.event_mailing_list_domain}`
               : null,
         });
       } else {
         onChange({
-          ...state,
+          ...newValue,
           team_mailing_list_name: null,
         });
       }
     },
-    transforms: {
-      team_mailing_list_name: Transforms.identity,
-      email: Transforms.identity,
-    },
-  });
+    [emailBehavior, convention.event_mailing_list_domain, userDidInteract, onChange],
+  );
 
   const emailBehaviorChanged = (newBehavior: EventEmailBehavior) => {
     setEmailBehavior(newBehavior);
@@ -109,7 +104,7 @@ function EventEmailInput({
           {(id) => (
             <EmailAliasInput
               value={(value || {}).team_mailing_list_name}
-              onTextChange={valueMutator.team_mailing_list_name}
+              onTextChange={(newName) => updateValue({ ...value, team_mailing_list_name: newName })}
               id={id}
               aria-label={t(
                 'forms.eventEmail.mailingListAliasLabel',
@@ -132,7 +127,7 @@ function EventEmailInput({
         }
         name={`${formItem.identifier}.email`}
         value={(value || {}).email || ''}
-        onTextChange={valueMutator.email}
+        onTextChange={(newEmail) => updateValue({ ...value, email: newEmail })}
         disabled={emailBehavior == null}
       />
     );

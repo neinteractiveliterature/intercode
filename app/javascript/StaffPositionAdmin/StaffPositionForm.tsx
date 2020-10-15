@@ -3,12 +3,12 @@ import React, { useContext } from 'react';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { mutator, Transforms } from '../ComposableFormUtils';
 import AppRootContext from '../AppRootContext';
 import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { StaffPosition } from '../graphqlTypes.generated';
+import { usePartialState, usePartialStateFactory } from '../usePartialState';
 
 export type StaffPositionFormProps = {
   staffPosition: StaffPosition;
@@ -17,16 +17,11 @@ export type StaffPositionFormProps = {
 
 function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
   const { conventionDomain } = useContext(AppRootContext);
-  const formMutator = mutator({
-    getState: () => staffPosition,
-    setState: onChange,
-    transforms: {
-      name: Transforms.identity,
-      email: Transforms.identity,
-      visible: Transforms.identity,
-      user_con_profiles: Transforms.identity,
-    },
-  });
+  const factory = usePartialStateFactory(staffPosition, onChange);
+  const [name, setName] = usePartialState(factory, 'name');
+  const [email, setEmail] = usePartialState(factory, 'email');
+  const [visible, setVisible] = usePartialState(factory, 'visible');
+  const [userConProfiles, setUserConProfiles] = usePartialState(factory, 'user_con_profiles');
 
   const setEmailAliases = (emailAliases: StaffPosition['email_aliases']) =>
     onChange({
@@ -44,16 +39,16 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
       <BootstrapFormInput
         name="name"
         label="Position name"
-        value={staffPosition.name || ''}
-        onTextChange={formMutator.name}
+        value={name ?? ''}
+        onTextChange={setName}
       />
 
       <BootstrapFormInput
         name="email"
         type="email"
         label="Contact email"
-        value={staffPosition.email || ''}
-        onTextChange={formMutator.email}
+        value={email ?? ''}
+        onTextChange={setEmail}
         helpText={`If this address ends in @${conventionDomain}, email will be automatically forwarded to staff members.`}
       />
 
@@ -94,8 +89,8 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
       <BooleanInput
         name="visible"
         caption="Visible in CMS content?"
-        value={staffPosition.visible ?? undefined}
-        onChange={formMutator.visible}
+        value={visible ?? undefined}
+        onChange={setVisible}
       />
 
       <FormGroupWithLabel label="People" name="user-con-profiles">
@@ -103,8 +98,8 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
           <UserConProfileSelect
             id={id}
             isMulti
-            value={staffPosition.user_con_profiles}
-            onChange={formMutator.user_con_profiles}
+            value={userConProfiles}
+            onChange={setUserConProfiles}
           />
         )}
       </FormGroupWithLabel>

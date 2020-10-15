@@ -26,12 +26,8 @@ class Types::ConventionType < Types::BaseObject
   field :ticket_mode, Types::TicketModeType, null: false
   field :user_con_profile_form, Types::FormType, null: false
   field :clickwrap_agreement, String, null: true
-  field :stripe_publishable_key, String, null: true
-  field :masked_stripe_secret_key, String, null: true do
-    authorize_action :update
-  end
   field :forms, [Types::FormType], null: false
-  field :cms_layouts, [Types::CmsLayoutType], null: true
+  field :cms_layouts, [Types::CmsLayoutType], null: false
   field :cms_content_groups, [Types::CmsContentGroupType], null: false
   field :default_layout, Types::CmsLayoutType, null: true
   field :departments, [Types::DepartmentType], null: false
@@ -172,6 +168,11 @@ class Types::ConventionType < Types::BaseObject
   def orders
     object.orders.where.not(status: 'pending')
       .includes(order_entries: [:product, :product_variant])
+  end
+
+  field :stripe_account_ready_to_charge, Boolean, null: false
+  field :stripe_account, Types::StripeAccountType, null: true do
+    authorize_action :update
   end
 
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType,

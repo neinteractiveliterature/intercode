@@ -9,7 +9,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import { AdminProductsQueryQuery } from '../Store/queries.generated';
 
 export type ProductSelectProps<QueryType extends AdminProductsQueryQuery> = SelectProps<
-  QueryType['convention']['products'][0]
+  Pick<QueryType['convention']['products'][0], '__typename' | 'id' | 'name'>
 > & {
   productsQuery?: DocumentNode;
 };
