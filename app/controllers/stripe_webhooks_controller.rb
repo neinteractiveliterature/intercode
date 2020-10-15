@@ -31,15 +31,15 @@ class StripeWebhooksController < ApplicationController
     case event.type
     when 'account.application.deauthorized'
       account = event.data.object
-      convention = Convention.find_by(stripe_account_id: account.id)
-      if convention
-        convention.update!(stripe_account_id: nil, stripe_account_ready_to_charge: false)
-      end
+      conventions = Convention.where(stripe_account_id: account.id)
+      conventions.update_all(stripe_account_id: nil, stripe_account_ready_to_charge: false)
     when 'account.application.authorized', 'account.updated'
       account = event.data.object
-      convention = Convention.find_by(stripe_account_id: account.id)
-      if convention && !convention.stripe_account_ready_to_charge
-        ConnectStripeAccountService.new(convention: convention, account: acct).call!
+      conventions = Convention.where(stripe_account_id: account.id)
+      conventions.each do |convention|
+        if convention && !convention.stripe_account_ready_to_charge
+          ConnectStripeAccountService.new(convention: convention, account: acct).call!
+        end
       end
     else
       Rollbar.warn("Unhandled event type for Connect webhook listener: #{event.type}")
