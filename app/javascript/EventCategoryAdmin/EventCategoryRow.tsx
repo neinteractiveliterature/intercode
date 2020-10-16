@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { DeleteEventCategory } from './mutations';
@@ -10,8 +9,13 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
+import { EventCategoryAdminQueryQuery } from './queries.generated';
 
-function EventCategoryRow({ eventCategory }) {
+export type EventCategoryRowProps = {
+  eventCategory: EventCategoryAdminQueryQuery['convention']['event_categories'][0];
+};
+
+function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
   const confirm = useConfirm();
   const deleteEventCategory = useDeleteMutation(DeleteEventCategory, {
     query: EventCategoryAdminQuery,
@@ -73,14 +77,5 @@ function EventCategoryRow({ eventCategory }) {
     </tr>
   );
 }
-
-EventCategoryRow.propTypes = {
-  eventCategory: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    events_paginated: PropTypes.shape({
-      total_entries: PropTypes.number.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default EventCategoryRow;

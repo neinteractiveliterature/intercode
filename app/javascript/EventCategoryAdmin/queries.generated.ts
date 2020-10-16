@@ -14,10 +14,10 @@ export type EventCategoryFieldsFragment = (
     & Pick<Types.Department, 'id' | 'name'>
   )>, event_form: (
     { __typename: 'Form' }
-    & Pick<Types.Form, 'id' | 'title'>
+    & Pick<Types.Form, 'id' | 'title' | 'form_type'>
   ), event_proposal_form?: Types.Maybe<(
     { __typename: 'Form' }
-    & Pick<Types.Form, 'id' | 'title'>
+    & Pick<Types.Form, 'id' | 'title' | 'form_type'>
   )> }
 );
 
@@ -26,7 +26,7 @@ export type EventCategoryAdminQueryQueryVariables = Types.Exact<{ [key: string]:
 
 export type EventCategoryAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name' | 'ticket_mode'>
     & { departments: Array<(
@@ -40,7 +40,7 @@ export type EventCategoryAdminQueryQuery = (
       { __typename: 'Form' }
       & Pick<Types.Form, 'id' | 'title' | 'form_type'>
     )> }
-  )> }
+  ) }
 );
 
 export const EventCategoryFieldsFragmentDoc = gql`
@@ -64,16 +64,18 @@ export const EventCategoryFieldsFragmentDoc = gql`
   event_form {
     id
     title
+    form_type
   }
   event_proposal_form {
     id
     title
+    form_type
   }
 }
     `;
 export const EventCategoryAdminQueryDocument = gql`
     query EventCategoryAdminQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     ticket_name

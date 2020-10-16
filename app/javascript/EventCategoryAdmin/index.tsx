@@ -24,11 +24,15 @@ function EventCategoryAdmin() {
         </RouteActivatedBreadcrumbItem>
 
         <Route path="/event_categories/new">
-          <BreadcrumbItem active>New event category</BreadcrumbItem>
+          <BreadcrumbItem active to="/event_categories/new">
+            New event category
+          </BreadcrumbItem>
         </Route>
 
         <Route path="/event_categories/:id/edit">
-          <BreadcrumbItem active>Edit event category</BreadcrumbItem>
+          <BreadcrumbItem active to="/event_categories/:id/edit">
+            Edit event category
+          </BreadcrumbItem>
         </Route>
       </ol>
 
