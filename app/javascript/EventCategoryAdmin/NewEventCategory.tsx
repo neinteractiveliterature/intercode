@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import { CreateEventCategory } from './mutations';
 import { EventCategoryAdminQuery } from './queries';
-import EventCategoryForm from './EventCategoryForm';
+import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useEventCategoryAdminQueryQuery } from './queries.generated';
 
 function NewEventCategory() {
   const history = useHistory();
-  const { data, loading, error } = useQuery(EventCategoryAdminQuery);
+  const { data, loading, error } = useEventCategoryAdminQueryQuery();
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateEventCategory, {
       query: EventCategoryAdminQuery,
@@ -23,10 +24,10 @@ function NewEventCategory() {
     }),
   );
 
-  const [eventCategory, setEventCategory] = useState({
+  const [eventCategory, setEventCategory] = useState<EventCategoryForForm>({
     name: '',
     team_member_name: 'team member',
-    scheduling_ui: null,
+    scheduling_ui: undefined,
     can_provide_tickets: false,
     default_color: '#d4f5fa',
     full_color: 'rgba(23, 162, 184, 0.7)',
@@ -53,7 +54,7 @@ function NewEventCategory() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { forms, ticket_name: ticketName, ticket_mode: ticketMode } = data.convention;
+  const { forms, departments, ticket_name: ticketName, ticket_mode: ticketMode } = data!.convention;
 
   return (
     <>
@@ -66,9 +67,10 @@ function NewEventCategory() {
         ticketName={ticketName}
         ticketMode={ticketMode}
         disabled={createInProgress}
+        departments={departments}
       />
 
-      <ErrorDisplay graphQLError={createError} />
+      <ErrorDisplay graphQLError={createError as ApolloError} />
 
       <button
         type="button"

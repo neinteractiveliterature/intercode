@@ -24,18 +24,20 @@ export const EventCategoryFields = gql`
     event_form {
       id
       title
+      form_type
     }
 
     event_proposal_form {
       id
       title
+      form_type
     }
   }
 `;
 
 export const EventCategoryAdminQuery = gql`
   query EventCategoryAdminQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       ticket_name
