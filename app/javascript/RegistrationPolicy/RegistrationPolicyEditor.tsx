@@ -1,10 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import { bucketSortCompare, findPreset } from './RegistrationPolicyUtils';
-import RegistrationBucketRow from './RegistrationBucketRow';
+import RegistrationBucketRow, { EditingRegistrationBucket } from './RegistrationBucketRow';
 import {
-  RegistrationPolicyPropType,
   addRegistrationPolicyBucket,
   getRegistrationPolicySlotsLimited,
   sumMinimumSlots,
@@ -17,8 +15,32 @@ import {
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 import RegistrationPolicyPresetSelector from './RegistrationPolicyPresetSelector';
 import PreventNoPreferenceSignupRow from './PreventNoPreferenceSignupRow';
+import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 
-function RegistrationPolicyEditor(props) {
+type EditingRegistrationPolicy<BucketType extends EditingRegistrationBucket> = {
+  buckets: BucketType[];
+  prevent_no_preference_signups: boolean;
+};
+
+export type RegistrationPolicyEditorProps<
+  BucketType extends EditingRegistrationBucket,
+  T extends EditingRegistrationPolicy<BucketType>
+> = {
+  registrationPolicy?: T;
+  onChange: React.Dispatch<T>;
+  lockCounts?: boolean;
+  lockNameAndDescription?: boolean;
+  lockLimitedBuckets?: string[];
+  lockDeleteBuckets?: string[];
+  presets?: RegistrationPolicyPreset[];
+  allowCustom?: boolean;
+  validateComplete?: boolean;
+};
+
+function RegistrationPolicyEditor<
+  BucketType extends EditingRegistrationBucket,
+  T extends EditingRegistrationPolicy<BucketType>
+>(props: RegistrationPolicyEditorProps<BucketType, T>) {
   const {
     allowCustom,
     lockCounts,
@@ -29,9 +51,14 @@ function RegistrationPolicyEditor(props) {
     presets,
     validateComplete,
   } = props;
-  const registrationPolicy = props.registrationPolicy || { buckets: [] };
+  const registrationPolicy: T =
+    props.registrationPolicy ??
+    (({
+      buckets: [],
+      prevent_no_preference_signups: false,
+    } as unknown) as T);
 
-  const [preset, setPreset] = useState(() => findPreset(registrationPolicy, presets));
+  const [preset, setPreset] = useState(() => findPreset(registrationPolicy, presets ?? []));
   const [custom, setCustom] = useState(
     () => presets && !preset && (registrationPolicy.buckets || []).length > 0,
   );
@@ -45,7 +72,7 @@ function RegistrationPolicyEditor(props) {
     [lockNameAndDescription, preset],
   );
 
-  const addBucketClicked = (event) => {
+  const addBucketClicked = (event: React.MouseEvent) => {
     event.preventDefault();
 
     const customBucketKeyNumbers = (registrationPolicy.buckets || [])
@@ -65,11 +92,11 @@ function RegistrationPolicyEditor(props) {
         slots_limited: true,
         not_counted: false,
         expose_attendees: false,
-      }),
+      } as Omit<BucketType, 'key'>),
     );
   };
 
-  const addFlexBucketClicked = (event) => {
+  const addFlexBucketClicked = (event: React.MouseEvent) => {
     event.preventDefault();
     onChange(
       addRegistrationPolicyBucket(registrationPolicy, 'flex', {
@@ -77,26 +104,26 @@ function RegistrationPolicyEditor(props) {
         description: 'Characters that can be in any other limited bucket',
         slots_limited: true,
         anything: true,
-      }),
+      } as Omit<BucketType, 'key'>),
     );
   };
 
-  const bucketChanged = (key, newBucket) => {
+  const bucketChanged = (key: string, newBucket: BucketType) => {
     onChange(updateRegistrationPolicyBucket(registrationPolicy, key, newBucket));
   };
 
-  const preventNoPreferenceSignupsChanged = (newValue) => {
+  const preventNoPreferenceSignupsChanged = (newValue: string) => {
     onChange({
       ...registrationPolicy,
       prevent_no_preference_signups: newValue === 'true',
     });
   };
 
-  const deleteBucket = (key) => {
+  const deleteBucket = (key: string) => {
     onChange(removeRegistrationPolicyBucket(registrationPolicy, key));
   };
 
-  const presetSelected = (event) => {
+  const presetSelected = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (!presets) {
       return;
     }
@@ -104,7 +131,10 @@ function RegistrationPolicyEditor(props) {
     const name = event.target.value;
 
     if (name === '_custom') {
-      onChange({ buckets: registrationPolicy.buckets || [] });
+      onChange({
+        buckets: registrationPolicy.buckets ?? [],
+        prevent_no_preference_signups: false,
+      } as T);
       setPreset(undefined);
       setCustom(true);
     } else {
@@ -112,9 +142,9 @@ function RegistrationPolicyEditor(props) {
       setPreset(newPreset);
       setCustom(false);
       if (newPreset) {
-        onChange(newPreset.policy);
+        onChange((newPreset.policy as unknown) as T);
       } else {
-        onChange({ buckets: [], prevent_no_preference_signups: false });
+        onChange(({ buckets: [], prevent_no_preference_signups: false } as unknown) as T);
       }
     }
   };
@@ -140,7 +170,7 @@ function RegistrationPolicyEditor(props) {
       </ul>
     );
 
-  const renderBucketRow = (bucket) => {
+  const renderBucketRow = (bucket: BucketType) => {
     const bucketInPreset =
       preset && !!preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key);
 
@@ -229,8 +259,8 @@ function RegistrationPolicyEditor(props) {
           <RegistrationPolicyPresetSelector
             presets={presets}
             preset={preset}
-            custom={custom}
-            allowCustom={allowCustom}
+            custom={custom ?? false}
+            allowCustom={allowCustom ?? false}
             presetSelected={presetSelected}
           />
           {(preset || custom) && (
@@ -265,33 +295,5 @@ function RegistrationPolicyEditor(props) {
     </div>
   );
 }
-
-RegistrationPolicyEditor.propTypes = {
-  registrationPolicy: RegistrationPolicyPropType,
-  onChange: PropTypes.func.isRequired,
-  lockCounts: PropTypes.bool,
-  lockNameAndDescription: PropTypes.bool,
-  lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-  lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-  presets: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      policy: RegistrationPolicyPropType.isRequired,
-    }).isRequired,
-  ),
-  allowCustom: PropTypes.bool,
-  validateComplete: PropTypes.bool,
-};
-
-RegistrationPolicyEditor.defaultProps = {
-  registrationPolicy: null,
-  lockCounts: false,
-  lockNameAndDescription: false,
-  lockLimitedBuckets: null,
-  lockDeleteBuckets: null,
-  presets: null,
-  allowCustom: false,
-  validateComplete: false,
-};
 
 export default RegistrationPolicyEditor;

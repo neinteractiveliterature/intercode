@@ -2,12 +2,27 @@ import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 export type PartialStateFactory<T> = {
   state: T;
-  setState: Dispatch<SetStateAction<T>>;
+  setState: Dispatch<(prevState: T) => T>;
 };
+
+export function usePartialStateFactoryWithValueSetter<T>(
+  state: T,
+  setState: Dispatch<T> | undefined,
+): PartialStateFactory<T> {
+  const factory: PartialStateFactory<T> = useMemo(
+    () => ({
+      state,
+      setState: setState ? (updater: (prevState: T) => T) => setState(updater(state)) : () => {},
+    }),
+    [state, setState],
+  );
+
+  return factory;
+}
 
 export function usePartialStateFactory<T>(
   state: T,
-  setState: Dispatch<SetStateAction<T>> | undefined,
+  setState: Dispatch<(prevState: T) => T> | undefined,
 ): PartialStateFactory<T> {
   const factory = useMemo(
     () => ({
@@ -31,20 +46,25 @@ export function usePartialState<T, F extends keyof T>(
 ): PartialStateTuple<T, F> {
   const { state, setState } = factory;
   const propertyValue = state[property];
+  const calculateNewState = useCallback(
+    (prevState: T, valueOrUpdater: SetStateAction<T[F]>): T => {
+      if (typeof valueOrUpdater === 'function') {
+        return {
+          ...prevState,
+          [property]: (valueOrUpdater as (prevState: T[F]) => T[F])(state[property]),
+        };
+      }
+
+      return { ...prevState, [property]: valueOrUpdater };
+    },
+    [state, property],
+  );
+
   const setProperty = useCallback(
     (valueOrUpdater: SetStateAction<T[F]>) => {
-      setState((prevState) => {
-        if (typeof valueOrUpdater === 'function') {
-          return {
-            ...prevState,
-            [property]: (valueOrUpdater as React.Dispatch<T[F]>)(state[property]),
-          };
-        }
-
-        return { ...prevState, [property]: valueOrUpdater };
-      });
+      setState((prevState) => calculateNewState(prevState, valueOrUpdater));
     },
-    [property, state, setState],
+    [calculateNewState, setState],
   );
 
   return [propertyValue, setProperty] as const;

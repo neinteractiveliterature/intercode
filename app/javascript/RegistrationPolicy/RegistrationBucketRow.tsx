@@ -1,30 +1,42 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
 
-import Confirm from '../ModalDialogs/Confirm';
+import { useConfirm } from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
-import { mutator, Transforms } from '../ComposableFormUtils';
-import {
-  RegistrationPolicyBucketPropType,
-  checkBucketFieldMinimums,
-} from './RegistrationPolicyBucket';
+import { parseIntOrNull } from '../ComposableFormUtils';
+import { checkBucketFieldMinimums } from './RegistrationPolicyBucket';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useUniqueId from '../useUniqueId';
+import { usePartialState, usePartialStateFactoryWithValueSetter } from '../usePartialState';
+import { RegistrationPolicyBucket } from '../graphqlTypes.generated';
 
-const bucketTransforms = {
-  name: Transforms.identity,
-  description: Transforms.identity,
-  slots_limited: Transforms.negate(Transforms.identity),
-  not_counted: Transforms.negate(Transforms.identity),
-  expose_attendees: Transforms.identity,
-  minimum_slots: Transforms.integer,
-  preferred_slots: Transforms.integer,
-  total_slots: Transforms.integer,
+export type EditingRegistrationBucket = Pick<
+  RegistrationPolicyBucket,
+  | 'key'
+  | 'name'
+  | 'description'
+  | 'slots_limited'
+  | 'not_counted'
+  | 'expose_attendees'
+  | 'minimum_slots'
+  | 'preferred_slots'
+  | 'total_slots'
+  | 'anything'
+>;
+
+export type RegistrationBucketRowProps<T extends EditingRegistrationBucket> = {
+  registrationBucket: T;
+  onChange: (key: string, bucket: T) => void;
+  lockLimited?: boolean;
+  lockCounts?: boolean;
+  lockNameAndDescription?: boolean;
+  lockDelete?: boolean;
+  validateComplete?: boolean;
+  onDelete: (key: string) => void;
 };
 
-function RegistrationBucketRow({
+function RegistrationBucketRow<T extends EditingRegistrationBucket>({
   registrationBucket,
   onChange,
   lockLimited,
@@ -33,17 +45,22 @@ function RegistrationBucketRow({
   validateComplete,
   lockDelete,
   onDelete,
-}) {
-  const bucketMutator = useMemo(
-    () =>
-      mutator({
-        getState: () => registrationBucket,
-        setState: (newState) =>
-          onChange(registrationBucket.key, { ...registrationBucket, ...newState }),
-        transforms: bucketTransforms,
-      }),
-    [onChange, registrationBucket],
-  );
+}: RegistrationBucketRowProps<T>) {
+  const updateBucket = useCallback((newValue: T) => onChange(registrationBucket.key, newValue), [
+    registrationBucket.key,
+    onChange,
+  ]);
+  const factory = usePartialStateFactoryWithValueSetter(registrationBucket, updateBucket);
+  const [name, setName] = usePartialState(factory, 'name');
+  const [description, setDescription] = usePartialState(factory, 'description');
+  const [slotsLimited, setSlotsLimited] = usePartialState(factory, 'slots_limited');
+  const [notCounted, setNotCounted] = usePartialState(factory, 'not_counted');
+  const [exposeAttendees, setExposeAttendees] = usePartialState(factory, 'expose_attendees');
+  const [minimumSlots, setMinimumSlots] = usePartialState(factory, 'minimum_slots');
+  const [preferredSlots, setPreferredSlots] = usePartialState(factory, 'preferred_slots');
+  const [totalSlots, setTotalSlots] = usePartialState(factory, 'total_slots');
+
+  const confirm = useConfirm();
 
   const unlimitedId = useUniqueId('unlimited-');
   const countedId = useUniqueId('counted-');
@@ -67,10 +84,8 @@ function RegistrationBucketRow({
               id={unlimitedId}
               className="form-check-input"
               type="checkbox"
-              checked={!registrationBucket.slots_limited}
-              onChange={(event) => {
-                bucketMutator.slots_limited(event.target.checked);
-              }}
+              checked={!slotsLimited}
+              onChange={(event) => setSlotsLimited(!event.target.checked)}
               aria-label="Unlimited?"
             />
             Unlimited?
@@ -83,10 +98,8 @@ function RegistrationBucketRow({
               id={countedId}
               className="form-check-input"
               type="checkbox"
-              checked={!registrationBucket.not_counted}
-              onChange={(event) => {
-                bucketMutator.not_counted(event.target.checked);
-              }}
+              checked={!notCounted}
+              onChange={(event) => setNotCounted(!event.target.checked)}
               aria-label="Counted for signups?"
             />
             Counted for signups?{' '}
@@ -105,10 +118,8 @@ function RegistrationBucketRow({
                 id={exposeAttendeesId}
                 className="form-check-input"
                 type="checkbox"
-                checked={registrationBucket.expose_attendees}
-                onChange={(event) => {
-                  bucketMutator.expose_attendees(event.target.checked);
-                }}
+                checked={exposeAttendees}
+                onChange={(event) => setExposeAttendees(event.target.checked)}
                 aria-label="Show bucket name in signup list?"
               />
               Show bucket name in signup list?{' '}
@@ -133,41 +144,45 @@ function RegistrationBucketRow({
       return null;
     }
 
-    const slotControls = [
+    const slotControls = ([
       {
         label: 'Min',
         field: 'minimum_slots',
         min: 0,
         inputId: minId,
+        value: minimumSlots,
+        setValue: setMinimumSlots,
       },
       {
         label: 'Pref',
         field: 'preferred_slots',
         min: 0,
         inputId: preferredId,
+        value: preferredSlots,
+        setValue: setPreferredSlots,
       },
       {
         label: 'Max',
         field: 'total_slots',
         min: 0,
         inputId: maxId,
+        value: totalSlots,
+        setValue: setTotalSlots,
       },
-    ].map(({ label, field, min, inputId }) => (
-      <div key={field} className={lockLimited ? 'd-inline mr-2' : null}>
+    ] as const).map(({ label, field, min, inputId, value, setValue }) => (
+      <div key={field} className={lockLimited ? 'd-inline mr-2' : undefined}>
         <label htmlFor={inputId} className="d-inline">
           {label}
         </label>
         <input
           id={inputId}
           type="number"
-          size="2"
+          size={2}
           className="form-control form-control-sm d-inline ml-1"
           min={min}
           placeholder={label}
-          value={registrationBucket[field] == null ? '' : registrationBucket[field]}
-          onChange={(event) => {
-            bucketMutator[field](event.target.value);
-          }}
+          value={value?.toString()}
+          onChange={(event) => setValue(parseIntOrNull(event.target.value))}
           style={{ width: '4em' }}
           aria-label={label}
         />
@@ -184,15 +199,15 @@ function RegistrationBucketRow({
 
   const renderNameAndDescription = () => {
     if (lockNameAndDescription) {
-      return <td title={registrationBucket.description}>{registrationBucket.name}</td>;
+      return <td title={registrationBucket.description ?? undefined}>{registrationBucket.name}</td>;
     }
 
     return [
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
           <BootstrapFormInput
-            value={registrationBucket.name || ''}
-            onTextChange={bucketMutator.name}
+            value={name ?? ''}
+            onTextChange={setName}
             placeholder="Bucket name"
             label="Bucket name"
             hideLabel
@@ -204,11 +219,11 @@ function RegistrationBucketRow({
         </div>
 
         <BootstrapFormTextarea
-          rows="2"
-          value={registrationBucket.description || ''}
+          rows={2}
+          value={description ?? ''}
           label="Bucket description"
           hideLabel
-          onTextChange={bucketMutator.description}
+          onTextChange={setDescription}
           placeholder="Bucket description"
           className={classNames('form-control', {
             'is-invalid': validateComplete && !registrationBucket.description,
@@ -226,23 +241,19 @@ function RegistrationBucketRow({
 
     return (
       <td style={{ width: '30px' }}>
-        <Confirm.Trigger>
-          {(confirm) => (
-            <button
-              className="btn btn-sm btn-secondary"
-              type="button"
-              onClick={() =>
-                confirm({
-                  prompt: 'Are you sure you wish to delete this registration bucket?',
-                  action: () => onDelete(registrationBucket.key),
-                })
-              }
-            >
-              <i className="fa fa-trash-o" />
-              <span className="sr-only">Delete bucket</span>
-            </button>
-          )}
-        </Confirm.Trigger>
+        <button
+          className="btn btn-sm btn-secondary"
+          type="button"
+          onClick={() =>
+            confirm({
+              prompt: 'Are you sure you wish to delete this registration bucket?',
+              action: () => onDelete(registrationBucket.key),
+            })
+          }
+        >
+          <i className="fa fa-trash-o" />
+          <span className="sr-only">Delete bucket</span>
+        </button>
       </td>
     );
   };
@@ -260,24 +271,5 @@ function RegistrationBucketRow({
     </tr>
   );
 }
-
-RegistrationBucketRow.propTypes = {
-  registrationBucket: RegistrationPolicyBucketPropType.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  lockCounts: PropTypes.bool,
-  lockNameAndDescription: PropTypes.bool,
-  lockLimited: PropTypes.bool,
-  lockDelete: PropTypes.bool,
-  validateComplete: PropTypes.bool,
-};
-
-RegistrationBucketRow.defaultProps = {
-  lockCounts: false,
-  lockNameAndDescription: false,
-  lockLimited: false,
-  lockDelete: false,
-  validateComplete: false,
-};
 
 export default RegistrationBucketRow;

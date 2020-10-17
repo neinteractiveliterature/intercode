@@ -1,8 +1,8 @@
-import React, { InputHTMLAttributes, ReactNode } from 'react';
+import React, { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react';
 import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';
 
-type BootstrapFormTextareaPropsCommon = InputHTMLAttributes<HTMLTextAreaElement> & {
+type BootstrapFormTextareaPropsCommon = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label: ReactNode;
   hideLabel?: boolean;
   helpText?: ReactNode;
