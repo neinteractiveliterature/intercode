@@ -11695,10 +11695,10 @@ react-color@^2.18.1:
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
 
-react-cookie-consent@^5.1.4:
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-5.1.4.tgz#05793d42f71b12b8e12d73d3a7a6516fa8e5d7b9"
-  integrity sha512-nEE1DPkdcMXje7FhoyKNCIye+0SH2J5b6tQXTK1Mvce5nZU3gAFXaleKg+EO+ShVJCMhZoEy0TNwTwKZayP0ug==
+react-cookie-consent@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-5.2.0.tgz#c2c62e4fd77ec96d18c8dbb772e4281f0c12e131"
+  integrity sha512-iRIDynmivejZgLICcpfGbQl94qLn6cjdEHZP0e+ibxzQ7t3zXzdDhsGDSYax8Qu6nGJnlv0bCBd8K0UJUQ5zwQ==
   dependencies:
     js-cookie "^2.2.1"
 
