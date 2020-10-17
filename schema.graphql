@@ -4645,7 +4645,7 @@ type UserConProfile {
   can_have_bio: Boolean!
   can_override_maximum_event_provided_tickets: Boolean!
   city: String
-  convention: Convention
+  convention: Convention!
   country: String
   day_phone: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")
   email: String

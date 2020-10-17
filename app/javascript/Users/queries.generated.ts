@@ -31,11 +31,17 @@ export type DetailedUserFieldsFragment = (
   & Pick<Types.User, 'id' | 'name' | 'first_name' | 'last_name' | 'email' | 'privileges'>
   & { user_con_profiles: Array<(
     { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id'>
-    & { convention?: Types.Maybe<(
+    & Pick<Types.UserConProfile, 'id' | 'email'>
+    & { ticket?: Types.Maybe<(
+      { __typename: 'Ticket' }
+      & Pick<Types.Ticket, 'id'>
+    )>, signups: Array<(
+      { __typename: 'Signup' }
+      & Pick<Types.Signup, 'id' | 'state'>
+    )>, convention: (
       { __typename: 'Convention' }
       & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'starts_at' | 'ticket_name' | 'timezone_name'>
-    )>, staff_positions: Array<(
+    ), staff_positions: Array<(
       { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name'>
     )> }
@@ -80,6 +86,14 @@ export const DetailedUserFieldsFragmentDoc = gql`
   privileges
   user_con_profiles {
     id
+    email
+    ticket {
+      id
+    }
+    signups {
+      id
+      state
+    }
     convention {
       id
       name

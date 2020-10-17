@@ -4764,7 +4764,7 @@ export type UserConProfile = {
   can_have_bio: Scalars['Boolean'];
   can_override_maximum_event_provided_tickets: Scalars['Boolean'];
   city?: Maybe<Scalars['String']>;
-  convention?: Maybe<Convention>;
+  convention: Convention;
   country?: Maybe<Scalars['String']>;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
   day_phone?: Maybe<Scalars['String']>;

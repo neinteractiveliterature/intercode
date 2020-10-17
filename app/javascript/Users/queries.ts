@@ -40,6 +40,16 @@ export const DetailedUserFields = gql`
 
     user_con_profiles {
       id
+      email
+
+      ticket {
+        id
+      }
+
+      signups {
+        id
+        state
+      }
 
       convention {
         id
