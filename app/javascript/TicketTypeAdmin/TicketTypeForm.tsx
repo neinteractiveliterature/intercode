@@ -4,7 +4,7 @@ import { pluralize } from 'inflected';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { parseIntOrNull } from '../ComposableFormUtils';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePartialState, usePartialStateFactoryWithValueSetter } from '../usePartialState';
 import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 
 export type EditingTicketType = Omit<
@@ -21,7 +21,7 @@ export type TicketTypeForm = {
 };
 
 function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeForm) {
-  const factory = usePartialStateFactory(ticketType, onChange);
+  const factory = usePartialStateFactoryWithValueSetter(ticketType, onChange);
   const [name, setName] = usePartialState(factory, 'name');
   const [description, setDescription] = usePartialState(factory, 'description');
   const [countsTowardsConventionMaximum, setCountsTowardsConventionMaximum] = usePartialState(

@@ -6,6 +6,32 @@ import ErrorDisplay from './ErrorDisplay';
 import FourOhFourPage from './FourOhFourPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
+export function LoadQueryWrapper<TData>(
+  useLoadData: () => QueryResult<TData>,
+  WrappedComponent: React.ComponentType<{ data: TData }>,
+): React.FunctionComponent<{}> {
+  const Wrapper = () => {
+    const { data, loading, error } = useLoadData();
+
+    if (loading) {
+      return <PageLoadingIndicator visible />;
+    }
+
+    if (error) {
+      return <ErrorDisplay graphQLError={error} />;
+    }
+
+    return <WrappedComponent data={data!} />;
+  };
+
+  const wrappedComponentDisplayName =
+    WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+  Wrapper.displayName = `LoadQueryWrapper(${wrappedComponentDisplayName})`;
+
+  return Wrapper;
+}
+
 export function LoadSingleValueFromCollectionWrapper<TData, TValue>(
   useLoadData: () => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,

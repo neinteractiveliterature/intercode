@@ -2,7 +2,7 @@ import React from 'react';
 
 import HelpPopover from '../UIComponents/HelpPopover';
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
-import { RegistrationPolicyPropType } from './RegistrationPolicy';
+import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
 
 const NO_PREFERENCE_HELP_TEXT =
   'For events that have more than one registration bucket with ' +
@@ -10,7 +10,11 @@ const NO_PREFERENCE_HELP_TEXT =
   ' using that option will be placed in whatever limited-slot bucket has availability, and moved ' +
   'between buckets to make space as necessary.';
 
-function NoPreferenceHelpPopover({ registrationPolicy }) {
+export type NoPreferenceHelpPopoverProps = {
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
+};
+
+function NoPreferenceHelpPopover({ registrationPolicy }: NoPreferenceHelpPopoverProps) {
   if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
     return (
       <HelpPopover className="ml-1">
@@ -25,9 +29,5 @@ function NoPreferenceHelpPopover({ registrationPolicy }) {
 
   return <HelpPopover>{NO_PREFERENCE_HELP_TEXT}</HelpPopover>;
 }
-
-NoPreferenceHelpPopover.propTypes = {
-  registrationPolicy: RegistrationPolicyPropType.isRequired,
-};
 
 export default NoPreferenceHelpPopover;

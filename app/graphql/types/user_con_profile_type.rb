@@ -18,7 +18,7 @@ class Types::UserConProfileType < Types::BaseObject
   authorize_record
 
   field :id, Integer, null: false
-  field :convention, Types::ConventionType, null: true
+  field :convention, Types::ConventionType, null: false
   field :privileges, [String, null: true],
     null: true,
     deprecation_reason: 'Privileges are deprecated in favor of permissions and staff positions'

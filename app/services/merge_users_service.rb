@@ -4,6 +4,17 @@ class MergeUsersService < CivilService::Service
   end
   self.result_class = Result
 
+  USER_CON_PROFILE_REFERENCES = [
+    { model: EventProposal, field: :owner_id },
+    { model: EventRating, field: :user_con_profile_id },
+    { model: FormResponseChange, field: :user_con_profile_id },
+    { model: Order, field: :user_con_profile_id },
+    { model: Signup, field: :user_con_profile_id },
+    { model: SignupRequest, field: :user_con_profile_id },
+    { model: TeamMember, field: :user_con_profile_id },
+    { model: Ticket, field: :user_con_profile_id }
+  ]
+
   RECORD_KEEPING_FIELDS = [
     { model: CmsFile, field: :uploader_id },
     { model: Convention, field: :updated_by_id },
@@ -11,6 +22,7 @@ class MergeUsersService < CivilService::Service
     { model: Event, field: :owner_id },
     { model: Run, field: :updated_by_id },
     { model: Signup, field: :updated_by_id },
+    { model: SignupChange, field: :updated_by_id },
     { model: UserActivityAlert, field: :user_id }
   ]
 
@@ -58,7 +70,16 @@ class MergeUsersService < CivilService::Service
     winning_profile_for_convention = winning_profiles_by_convention_id[profile.convention_id]
     return if winning_profile_for_convention.id == profile.id
 
-    profile.orders.update_all(user_con_profile_id: winning_profile_for_convention.id)
+    USER_CON_PROFILE_REFERENCES.each do |reference|
+      model = reference[:model]
+      field = reference[:field]
+      model.where(field => profile.id).update_all(field => winning_profile_for_convention.id)
+    end
+
+    profile.staff_positions.each do |staff_position|
+      winning_profile_for_convention.staff_positions << staff_position
+    end
+
     profile.destroy!
   end
 
