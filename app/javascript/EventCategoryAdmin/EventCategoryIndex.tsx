@@ -1,28 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
-import { EventCategoryAdminQuery } from './queries';
 import EventCategoryRow from './EventCategoryRow';
 import { sortByLocaleString } from '../ValueUtils';
-import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useEventCategoryAdminQueryQuery } from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function EventCategoryIndex() {
-  const { data, loading, error } = useQuery(EventCategoryAdminQuery);
-
+export default LoadQueryWrapper(useEventCategoryAdminQueryQuery, function EventCategoryIndex({
+  data,
+}) {
   usePageTitle('Event Categories');
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { event_categories: eventCategories } = data.convention;
+  const { event_categories: eventCategories } = data!.convention;
 
   return (
     <>
@@ -43,6 +33,4 @@ function EventCategoryIndex() {
       </Link>
     </>
   );
-}
-
-export default EventCategoryIndex;
+});

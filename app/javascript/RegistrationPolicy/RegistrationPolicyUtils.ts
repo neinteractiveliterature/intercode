@@ -1,6 +1,14 @@
-import { getRegistrationPolicyBucket } from './RegistrationPolicy';
+import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
+import {
+  BucketForRegistrationPolicyUtils,
+  getRegistrationPolicyBucket,
+  RegistrationPolicyForRegistrationPolicyUtils,
+} from './RegistrationPolicy';
 
-export function presetMatchesPolicy(registrationPolicy, preset) {
+export function presetMatchesPolicy(
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
+  preset: RegistrationPolicyPreset,
+) {
   if (
     Boolean(registrationPolicy.prevent_no_preference_signups) !==
     Boolean(preset.policy.prevent_no_preference_signups)
@@ -32,19 +40,25 @@ export function presetMatchesPolicy(registrationPolicy, preset) {
   return true;
 }
 
-export function findPreset(registrationPolicy, presets) {
+export function findPreset(
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
+  presets: RegistrationPolicyPreset[],
+): RegistrationPolicyPreset | undefined {
   if (!Array.isArray(presets)) {
-    return null;
+    return undefined;
   }
 
   if (!registrationPolicy) {
-    return null;
+    return undefined;
   }
 
   return presets.find((preset) => presetMatchesPolicy(registrationPolicy, preset));
 }
 
-export function bucketSortCompare(a, b) {
+export function bucketSortCompare(
+  a: BucketForRegistrationPolicyUtils,
+  b: BucketForRegistrationPolicyUtils,
+) {
   if (a.anything && !b.anything) {
     return 1;
   }
@@ -53,9 +67,11 @@ export function bucketSortCompare(a, b) {
     return -1;
   }
 
-  return a.name.localeCompare(b.name, { sensitivity: 'base' });
+  return (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' });
 }
 
-export function isPreventNoPreferenceSignupsApplicable(registrationPolicy) {
+export function isPreventNoPreferenceSignupsApplicable(
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
+) {
   return (registrationPolicy.buckets || []).filter((bucket) => bucket.slots_limited).length > 1;
 }

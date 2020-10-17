@@ -1,11 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
+import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
+import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
 
-function PreventNoPreferenceSignupRow({ columnCount, onChange, preset, registrationPolicy }) {
+export type PreventNoPreferenceSignupRowProps = {
+  columnCount: number;
+  onChange: React.Dispatch<string>;
+  preset?: RegistrationPolicyPreset;
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
+};
+
+function PreventNoPreferenceSignupRow({
+  columnCount,
+  onChange,
+  preset,
+  registrationPolicy,
+}: PreventNoPreferenceSignupRowProps) {
   const renderPreventNoPreferenceSignupsDescription = () => {
     if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
       return (
@@ -66,18 +79,5 @@ function PreventNoPreferenceSignupRow({ columnCount, onChange, preset, registrat
     </tr>
   );
 }
-
-PreventNoPreferenceSignupRow.propTypes = {
-  columnCount: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
-  preset: PropTypes.shape({}),
-  registrationPolicy: PropTypes.shape({
-    prevent_no_preference_signups: PropTypes.bool,
-  }).isRequired,
-};
-
-PreventNoPreferenceSignupRow.defaultProps = {
-  preset: null,
-};
 
 export default PreventNoPreferenceSignupRow;

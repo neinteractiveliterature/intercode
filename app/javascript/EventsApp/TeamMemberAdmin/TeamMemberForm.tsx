@@ -5,7 +5,7 @@ import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckb
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import HelpPopover from '../../UIComponents/HelpPopover';
-import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { usePartialState, usePartialStateFactoryWithValueSetter } from '../../usePartialState';
 import { TeamMembersQueryQuery } from './queries.generated';
 
 export type TeamMemberFormProps = {
@@ -17,7 +17,7 @@ export type TeamMemberFormProps = {
 
 function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps) {
   const { t } = useTranslation();
-  const factory = usePartialStateFactory(value, onChange);
+  const factory = usePartialStateFactoryWithValueSetter(value, onChange);
   const [displayTeamMember, setDisplayTeamMember] = usePartialState(factory, 'display_team_member');
   const [showEmail, setShowEmail] = usePartialState(factory, 'show_email');
   const [receiveConEmail, setReceiveConEmail] = usePartialState(factory, 'receive_con_email');

@@ -1,6 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import useUniqueId from '../useUniqueId';
+import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
+
+export type RegistrationPolicyPresetSelectorProps = {
+  presets?: RegistrationPolicyPreset[];
+  preset?: RegistrationPolicyPreset;
+  presetSelected: React.Dispatch<React.ChangeEvent<HTMLSelectElement>>;
+  allowCustom: boolean;
+  custom: boolean;
+};
 
 function RegistrationPolicyPresetSelector({
   presets,
@@ -8,7 +17,7 @@ function RegistrationPolicyPresetSelector({
   presetSelected,
   allowCustom,
   custom,
-}) {
+}: RegistrationPolicyPresetSelectorProps) {
   const presetSelectorId = useUniqueId('preset-');
 
   if (!presets) {
@@ -58,24 +67,5 @@ function RegistrationPolicyPresetSelector({
     </div>
   );
 }
-
-RegistrationPolicyPresetSelector.propTypes = {
-  presets: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }),
-  ),
-  preset: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }),
-  presetSelected: PropTypes.func.isRequired,
-  allowCustom: PropTypes.bool.isRequired,
-  custom: PropTypes.bool.isRequired,
-};
-
-RegistrationPolicyPresetSelector.defaultProps = {
-  presets: null,
-  preset: null,
-};
 
 export default RegistrationPolicyPresetSelector;

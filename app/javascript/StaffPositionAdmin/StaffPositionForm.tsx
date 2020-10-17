@@ -8,7 +8,7 @@ import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { StaffPosition } from '../graphqlTypes.generated';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePartialState, usePartialStateFactoryWithValueSetter } from '../usePartialState';
 
 export type StaffPositionFormProps = {
   staffPosition: StaffPosition;
@@ -17,7 +17,7 @@ export type StaffPositionFormProps = {
 
 function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
   const { conventionDomain } = useContext(AppRootContext);
-  const factory = usePartialStateFactory(staffPosition, onChange);
+  const factory = usePartialStateFactoryWithValueSetter(staffPosition, onChange);
   const [name, setName] = usePartialState(factory, 'name');
   const [email, setEmail] = usePartialState(factory, 'email');
   const [visible, setVisible] = usePartialState(factory, 'visible');

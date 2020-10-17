@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 
 import buildBlankSignupCountsFromRegistrationPolicy from '../EventsApp/EventPage/buildBlankSignupCountsFromRegistrationPolicy';
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import SignupButtons from '../EventsApp/EventPage/SignupButtons';
-import { RegistrationPolicyPropType } from './RegistrationPolicy';
+import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
 
-function RegistrationPolicyPreview({ registrationPolicy }) {
+export type RegistrationPolicyPreviewProps = {
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
+};
+
+function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPreviewProps) {
   const blankSignupCounts = buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy);
-  const signupOptions = buildSignupOptions({ registration_policy: registrationPolicy }, null);
+  const registrationPolicyForDisplay = useMemo(() => {
+    const { buckets, ...otherProps } = registrationPolicy;
+    return {
+      __typename: 'RegistrationPolicy' as const,
+      buckets: buckets.map((bucket) => ({
+        __typename: 'RegistrationPolicyBucket' as const,
+        ...bucket,
+      })),
+      ...otherProps,
+    };
+  }, [registrationPolicy]);
+  const signupOptions = useMemo(() => {
+    return buildSignupOptions(
+      {
+        registration_policy: registrationPolicyForDisplay,
+        team_members: [],
+        event_category: {
+          team_member_name: 'team member',
+        },
+      },
+      undefined,
+    );
+  }, [registrationPolicyForDisplay]);
 
   return (
     <div className="col-lg-4 col-12 bg-secondary d-flex justify-content-center">
@@ -25,7 +52,9 @@ function RegistrationPolicyPreview({ registrationPolicy }) {
 
           <div className="card-body text-center">
             <RunCapacityGraph
-              event={{ registration_policy: registrationPolicy }}
+              event={{
+                registration_policy: registrationPolicyForDisplay,
+              }}
               run={{
                 signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
                   confirmed: blankSignupCounts,
@@ -52,7 +81,7 @@ function RegistrationPolicyPreview({ registrationPolicy }) {
 }
 
 RegistrationPolicyPreview.propTypes = {
-  registrationPolicy: RegistrationPolicyPropType.isRequired,
+  registrationPolicy: PropTypes.shape({}).isRequired,
 };
 
 export default RegistrationPolicyPreview;
