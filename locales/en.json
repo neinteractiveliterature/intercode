@@ -72,7 +72,7 @@
     "forgotPasswordForm": {
       "emailLabel": "Email",
       "header": "Forgot your password?",
-      "successMessage": "<0>Please check your email.  You should receive instructions on how to reset your password shortly.</0><1>If you don&rsquo;t receive instructions, please email <2>our web team</2> for help resetting your password.</1>"
+      "successMessage": "<0>Please check your email.  You should receive instructions on how to reset your password shortly.</0><1>If you don’t receive instructions, please email <2>our web team</2> for help resetting your password.</1>"
     },
     "forgotPasswordLink": "Forgot your password?",
     "logInLink": "Log in to an existing account",
