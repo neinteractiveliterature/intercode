@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   bucketSortCompare,
@@ -8,14 +7,16 @@ import {
 } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import {
-  RegistrationPolicyPropType,
+  BucketForRegistrationPolicyUtils,
+  RegistrationPolicyForRegistrationPolicyUtils,
   sumMinimumSlots,
   sumPreferredSlots,
   sumTotalSlots,
 } from './RegistrationPolicy';
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
+import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 
-function renderPresetName(preset) {
+function renderPresetName(preset: RegistrationPolicyPreset | undefined) {
   if (preset) {
     return preset.name;
   }
@@ -23,20 +24,23 @@ function renderPresetName(preset) {
   return 'Custom registration policy';
 }
 
-function renderBucketOptions(bucket, preset) {
+function renderBucketOptions(
+  bucket: BucketForRegistrationPolicyUtils,
+  preset: RegistrationPolicyPreset | undefined,
+) {
   if (preset) {
     return null;
   }
 
   const bucketOptions = [
     bucket.not_counted ? 'Not counted' : 'Counted',
-    bucket.expose_atendees ? 'Display attendees' : null,
+    bucket.expose_attendees ? 'Display attendees' : null,
   ].filter((option) => option != null);
 
   return (
     <div className="ml-2">
-      {bucketOptions.map((option) => (
-        <span className="badge badge-secondary" key={option}>
+      {bucketOptions.map((option, i) => (
+        <span className="badge badge-secondary" key={option ?? i}>
           {option}
         </span>
       ))}
@@ -44,7 +48,15 @@ function renderBucketOptions(bucket, preset) {
   );
 }
 
-function RegistrationPolicyDisplayBucketRow({ bucket, preset }) {
+type RegistrationPolicyDisplayBucketRowProps = {
+  bucket: BucketForRegistrationPolicyUtils;
+  preset?: RegistrationPolicyPreset;
+};
+
+function RegistrationPolicyDisplayBucketRow({
+  bucket,
+  preset,
+}: RegistrationPolicyDisplayBucketRowProps) {
   return (
     <tr>
       <td>{bucket.name}</td>
@@ -61,23 +73,16 @@ function RegistrationPolicyDisplayBucketRow({ bucket, preset }) {
   );
 }
 
-RegistrationPolicyDisplayBucketRow.propTypes = {
-  bucket: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    minimum_slots: PropTypes.number,
-    preferred_slots: PropTypes.number,
-    total_slots: PropTypes.number,
-  }).isRequired,
-  preset: PropTypes.shape({}),
+export type RegistrationPolicyDisplayProps = {
+  presets?: RegistrationPolicyPreset[];
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
 };
 
-RegistrationPolicyDisplayBucketRow.defaultProps = {
-  preset: null,
-};
-
-function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
-  const preset = useMemo(() => findPreset(registrationPolicy, presets), [
+function RegistrationPolicyDisplay({
+  presets,
+  registrationPolicy,
+}: RegistrationPolicyDisplayProps) {
+  const preset = useMemo(() => findPreset(registrationPolicy, presets ?? []), [
     presets,
     registrationPolicy,
   ]);
@@ -171,19 +176,5 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
     </div>
   );
 }
-
-RegistrationPolicyDisplay.propTypes = {
-  presets: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      policy: RegistrationPolicyPropType.isRequired,
-    }).isRequired,
-  ),
-  registrationPolicy: RegistrationPolicyPropType.isRequired,
-};
-
-RegistrationPolicyDisplay.defaultProps = {
-  presets: null,
-};
 
 export default RegistrationPolicyDisplay;

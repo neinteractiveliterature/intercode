@@ -49,7 +49,7 @@ function RegistrationPolicyItemInput({
         })}
       >
         <RegistrationPolicyEditor
-          registrationPolicy={effectiveValue}
+          registrationPolicy={effectiveValue ?? undefined}
           onChange={valueChanged}
           presets={formItem.rendered_properties.presets}
           allowCustom={formItem.rendered_properties.allow_custom}
