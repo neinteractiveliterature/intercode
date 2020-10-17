@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { useQuery, useMutation } from '@apollo/client';
 import flatMap from 'lodash/flatMap';
-import keyBy from 'lodash/keyBy';
-import mapValues from 'lodash/mapValues';
-import pickBy from 'lodash/pickBy';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import { humanize } from 'inflected';
+import { ApolloError } from '@apollo/client';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import { MergeUsers } from './mutations';
-import { MergeUsersModalQuery } from './queries';
 import pluralizeWithCount from '../pluralizeWithCount';
+import { MergeUsersModalQueryQuery, useMergeUsersModalQueryQuery } from './queries.generated';
+import { useMergeUsersMutation } from './mutations.generated';
 
-function renderIfQueryReady(render, { loading, error }) {
+function renderIfQueryReady(
+  render: () => JSX.Element,
+  { loading, error }: { loading: boolean; error?: ApolloError },
+) {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
@@ -30,23 +29,33 @@ function renderIfQueryReady(render, { loading, error }) {
   return render();
 }
 
-function MergeUsersModal({ closeModal, visible, userIds }) {
-  const { data, loading, error } = useQuery(MergeUsersModalQuery, {
+type UserType = MergeUsersModalQueryQuery['users'][0];
+type UserConProfileType = UserType['user_con_profiles'][0];
+type ConventionType = UserConProfileType['convention'];
+
+export type MergeUsersModalProps = {
+  closeModal: () => void;
+  visible: boolean;
+  userIds?: number[];
+};
+
+function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps) {
+  const { data, loading, error } = useMergeUsersModalQueryQuery({
     variables: { ids: userIds || [] },
   });
-  const [winningUserId, setWinningUserId] = useState(null);
-  const [winningProfileIds, setWinningProfileIds] = useState({});
-  const [mutate, { error: mutationError, loading: mutationInProgress }] = useMutation(MergeUsers);
+  const [winningUserId, setWinningUserId] = useState<number>();
+  const [winningProfileIds, setWinningProfileIds] = useState(new Map<number, number>());
+  const [mutate, { error: mutationError, loading: mutationInProgress }] = useMergeUsersMutation();
 
   const performMerge = async () => {
     await mutate({
       variables: {
-        userIds,
-        winningUserId: Number.parseInt(winningUserId, 10),
-        winningUserConProfiles: Object.entries(winningProfileIds).map(
+        userIds: userIds!,
+        winningUserId: winningUserId!,
+        winningUserConProfiles: [...winningProfileIds.entries()].map(
           ([conventionId, userConProfileId]) => ({
-            conventionId: Number.parseInt(conventionId, 10),
-            userConProfileId: Number.parseInt(userConProfileId, 10),
+            conventionId,
+            userConProfileId,
           }),
         ),
       },
@@ -54,42 +63,43 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
     closeModal();
   };
 
-  if (loading || error) {
-    if (winningUserId !== null) {
-      setWinningUserId(null);
-      setWinningProfileIds({});
+  useEffect(() => {
+    if (loading || error) {
+      if (winningUserId !== null) {
+        setWinningUserId(undefined);
+        setWinningProfileIds(new Map<number, number>());
+      }
     }
-  }
+  }, [error, loading, winningUserId]);
 
-  let allConventions = [];
-  let profilesByConventionId = {};
-  if (!loading && !error) {
+  let allConventions: ConventionType[] = [];
+  const profilesByConventionId = new Map<number, UserConProfileType[]>();
+  if (!loading && !error && data) {
     allConventions = sortBy(
       uniqBy(
         flatMap(data.users, (user) => user.user_con_profiles.map((profile) => profile.convention)),
         (convention) => convention.id,
       ),
-      (convention) => new Date(convention.starts_at).getTime(),
+      (convention) => (convention.starts_at ? new Date(convention.starts_at).getTime() : 0),
     );
     allConventions.reverse();
 
-    profilesByConventionId = mapValues(
-      keyBy(allConventions, (convention) => convention.id),
-      (convention) =>
-        flatMap(data.users, (user) =>
-          user.user_con_profiles
-            .map((profile) => ({ ...profile, email: user.email }))
-            .filter((profile) => profile.convention.id === convention.id),
-        ),
-    );
+    allConventions.forEach((convention) => {
+      const profiles = flatMap(data.users, (user) =>
+        user.user_con_profiles
+          .map((profile) => ({ ...profile, email: user.email }))
+          .filter((profile) => profile.convention.id === convention.id),
+      );
+      profilesByConventionId.set(convention.id, profiles);
+    });
   }
 
-  const ambiguousProfileConventionIds = Object.keys(
-    pickBy(profilesByConventionId, (profiles) => profiles.length > 1),
-  );
+  const ambiguousProfileConventionIds = [...profilesByConventionId.entries()]
+    .filter(([, profiles]) => profiles.length > 1)
+    .map(([conventionId]) => conventionId);
 
-  const fullyDisambiguated = ambiguousProfileConventionIds.every(
-    (conventionId) => winningProfileIds[conventionId],
+  const fullyDisambiguated = ambiguousProfileConventionIds.every((conventionId) =>
+    winningProfileIds.get(conventionId),
   );
 
   const renderMergePreview = () => {
@@ -97,15 +107,15 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       return null;
     }
 
-    const winningUser = data.users.find((user) => user.id.toString() === winningUserId);
+    const winningUser = data!.users.find((user) => user.id === winningUserId);
     if (!winningUser) {
       return null;
     }
 
-    const allPrivileges = uniq(flatMap(data.users, (user) => user.privileges));
+    const allPrivileges = uniq(flatMap(data!.users, (user) => user.privileges));
 
-    const renderConventionRow = (convention) => {
-      const userConProfiles = profilesByConventionId[convention.id];
+    const renderConventionRow = (convention: ConventionType) => {
+      const userConProfiles = profilesByConventionId.get(convention.id) ?? [];
 
       if (userConProfiles.length === 1) {
         return (
@@ -135,11 +145,12 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
                 value: profile.id.toString(),
               };
             })}
-            value={winningProfileIds[convention.id]}
-            onChange={(value) =>
-              setWinningProfileIds({
-                ...winningProfileIds,
-                [convention.id]: value,
+            value={winningProfileIds.get(convention.id)?.toString()}
+            onChange={(value: string) =>
+              setWinningProfileIds((prevWinningProfileIds) => {
+                const newWinningProfileIds = new Map(prevWinningProfileIds);
+                newWinningProfileIds.set(convention.id, Number.parseInt(value, 10));
+                return newWinningProfileIds;
               })
             }
           />
@@ -166,7 +177,9 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
           <dd className="col-sm-9">{winningUser.email}</dd>
 
           <dt className="col-sm-3">Privileges</dt>
-          <dd className="col-sm-9">{allPrivileges.map(humanize).join(', ')}</dd>
+          <dd className="col-sm-9">
+            {allPrivileges.map((priv) => humanize(priv ?? '')).join(', ')}
+          </dd>
 
           <dt className="col-sm-3">Conventions</dt>
           <dd className="col-sm-9">
@@ -186,12 +199,12 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       <p>Please select a user account to merge others into:</p>
 
       <ChoiceSet
-        choices={sortBy(data.users, (user) => user.id).map((user) => ({
+        choices={sortBy(data!.users, (user) => user.id).map((user) => ({
           label: `${user.id} (${user.name}, ${user.email})`,
           value: user.id.toString(),
         }))}
-        value={winningUserId}
-        onChange={setWinningUserId}
+        value={winningUserId?.toString()}
+        onChange={(newValue: string) => setWinningUserId(Number.parseInt(newValue, 10))}
       />
 
       {renderMergePreview()}
@@ -224,15 +237,5 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
     </Modal>
   );
 }
-
-MergeUsersModal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-  visible: PropTypes.bool.isRequired,
-  userIds: PropTypes.arrayOf(PropTypes.number),
-};
-
-MergeUsersModal.defaultProps = {
-  userIds: null,
-};
 
 export default MergeUsersModal;
