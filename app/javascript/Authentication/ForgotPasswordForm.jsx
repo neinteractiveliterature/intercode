@@ -1,12 +1,25 @@
 import React, { useState, useContext } from 'react';
 import fetch from 'unfetch';
 import { useTranslation, Trans } from 'react-i18next';
+import { humanize } from 'inflected';
+import flatMap from 'lodash/flatMap';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+
+function parseRailsErrorHash(errors) {
+  if (!errors) {
+    return undefined;
+  }
+
+  return flatMap(
+    Object.entries(errors),
+    ([key, keyErrors]) => keyErrors.map((keyError) => `${humanize(key)} ${keyError}`)
+  ).join(', ');
+}
 
 async function resetPassword(authenticityToken, email) {
   const formData = new FormData();
@@ -25,7 +38,7 @@ async function resetPassword(authenticityToken, email) {
   const responseJson = await response.json();
 
   if (!response.ok) {
-    throw new Error(responseJson.error);
+    throw new Error(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
   }
 
   return responseJson;
@@ -65,7 +78,7 @@ function ForgotPasswordForm() {
               </p>
 
               <p>
-                If you don&rsquo;t receive instructions, please email{' '}
+                If you don’t receive instructions, please email{' '}
                 <a href="mailto:webmaster@interactiveliterature.org">our web team</a> for help
                 resetting your password.
               </p>
@@ -79,9 +92,9 @@ function ForgotPasswordForm() {
               disabled={resetPasswordInProgress}
             />
           )}
-        </div>
 
-        <ErrorDisplay stringError={(resetPasswordError || {}).message} />
+          <ErrorDisplay stringError={(resetPasswordError || {}).message} />
+        </div>
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1 d-flex flex-column align-items-start">
