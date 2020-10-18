@@ -79,7 +79,7 @@ export type UserConProfileAdminQueryQuery = (
       { __typename: 'Ability' }
       & Pick<Types.Ability, 'can_read_signups' | 'can_update_user_con_profile' | 'can_delete_user_con_profile' | 'can_become_user_con_profile'>
     )> }
-  )>, convention?: Types.Maybe<(
+  )>, convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
     & { user_con_profile_form: (
@@ -96,14 +96,14 @@ export type UserConProfileAdminQueryQuery = (
       & CommonFormFieldsFragment
     ), ticket_types: Array<(
       { __typename: 'TicketType' }
-      & Pick<Types.TicketType, 'id' | 'description' | 'name' | 'publicly_available' | 'maximum_event_provided_tickets'>
+      & Pick<Types.TicketType, 'id' | 'description' | 'name' | 'maximum_event_provided_tickets'>
       & { providing_products: Array<(
         { __typename: 'Product' }
         & Pick<Types.Product, 'id'>
         & AdminProductFieldsFragment
       )> }
     )> }
-  )>, userConProfile: (
+  ), userConProfile: (
     { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'email' | 'user_id' | 'name' | 'name_without_nickname' | 'form_response_attrs_json' | 'gravatar_enabled' | 'gravatar_url'>
     & { ticket?: Types.Maybe<(
@@ -345,7 +345,7 @@ export const UserConProfileAdminQueryDocument = gql`
       can_become_user_con_profile(user_con_profile_id: $id)
     }
   }
-  convention {
+  convention: assertConvention {
     id
     name
     starts_at
@@ -369,7 +369,6 @@ export const UserConProfileAdminQueryDocument = gql`
       id
       description
       name
-      publicly_available
       maximum_event_provided_tickets
       providing_products {
         id

@@ -2634,7 +2634,7 @@ input NotificationTemplateInput {
 type Order {
   charge_id: String
   coupon_applications: [CouponApplication!]!
-  id: Int
+  id: Int!
   order_entries: [OrderEntry!]!
   paid_at: Date
   payment_amount: Money
@@ -2663,7 +2663,7 @@ type OrderEdge {
 
 type OrderEntry {
   describe_products: String!
-  id: Int
+  id: Int!
   order: Order!
   price: Money!
   price_per_item: Money!

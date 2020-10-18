@@ -1,32 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
 
 import AdminOrderForm from './AdminOrderForm';
-import { CreateOrder, CreateCouponApplication } from './mutations';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import {
+  CouponApplication,
+  Money,
+  OrderEntry,
+  OrderEntryInput,
+  OrderInput,
+  OrderStatus,
+  Product,
+  ProductVariant,
+  UserConProfile,
+} from '../graphqlTypes.generated';
+import { useCreateCouponApplicationMutation, useCreateOrderMutation } from './mutations.generated';
 
-const BLANK_ORDER = {
+export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
+  status: OrderStatus;
+  payment_amount: Money;
+  order_entries: (Pick<OrderEntry, 'price_per_item' | 'quantity'> &
+    Pick<OrderEntryInput, 'ticket_id'> & {
+      product: Pick<Product, 'id' | '__typename' | 'name'>;
+      product_variant?: Pick<ProductVariant, 'id' | '__typename' | 'name'> | null;
+      generatedId: string;
+    })[];
+  coupon_applications: (Partial<Pick<CouponApplication, 'id' | 'discount'>> & {
+    coupon: {
+      code: string;
+    };
+  })[];
+  user_con_profile?: Pick<UserConProfile, 'id' | 'name_without_nickname'>;
+};
+
+type OrderEntryType = CreatingOrder['order_entries'][0];
+
+const BLANK_ORDER: CreatingOrder = {
   payment_amount: {
+    __typename: 'Money',
     fractional: 0,
     currency_code: 'USD',
   },
   payment_note: '',
-  status: 'paid',
+  status: OrderStatus.Paid,
   order_entries: [],
   coupon_applications: [],
 };
 
-function NewOrderModal({ visible, close, initialOrder }) {
+export type NewOrderModalProps = {
+  visible: boolean;
+  close: () => void;
+  initialOrder?: CreatingOrder;
+};
+
+function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps) {
   const confirm = useConfirm();
-  const [order, setOrder] = useState(initialOrder || BLANK_ORDER);
-  const [createMutate] = useMutation(CreateOrder);
-  const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
+  const [order, setOrder] = useState(initialOrder ?? BLANK_ORDER);
+  const [createMutate] = useCreateOrderMutation();
+  const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
   const apolloClient = useApolloClient();
 
   useEffect(() => {
@@ -36,40 +72,35 @@ function NewOrderModal({ visible, close, initialOrder }) {
   }, [visible, initialOrder]);
 
   const createOrder = async () => {
-    const {
-      data: {
-        createOrder: {
-          order: { id: orderId },
-        },
-      },
-    } = await createMutate({
+    const userConProfile = order.user_con_profile;
+    const paymentAmount = order.payment_amount;
+    if (!userConProfile || !paymentAmount) {
+      return;
+    }
+
+    const { data } = await createMutate({
       variables: {
-        userConProfileId: order.user_con_profile?.id,
+        userConProfileId: userConProfile.id,
         order: {
-          payment_amount: {
-            fractional: order.payment_amount?.fractional,
-            currency_code: order.payment_amount?.currency_code,
-          },
+          payment_amount: paymentAmount,
           payment_note: order.payment_note,
         },
         status: order.status,
         orderEntries: order.order_entries.map((orderEntry) => ({
-          product_id: orderEntry.product?.id,
+          product_id: orderEntry.product.id,
           product_variant_id: orderEntry.product_variant?.id,
           quantity: orderEntry.quantity,
-          price_per_item: {
-            fractional: orderEntry.price_per_item.fractional,
-            currency_code: orderEntry.price_per_item.currency_code,
-          },
+          price_per_item: orderEntry.price_per_item,
           ticket_id: orderEntry.ticket_id,
         })),
       },
     });
+
     await Promise.all(
       order.coupon_applications.map((application) =>
         createCouponApplicationMutate({
           variables: {
-            orderId,
+            orderId: data!.createOrder!.order.id!,
             couponCode: application.coupon.code,
           },
         }),
@@ -84,15 +115,19 @@ function NewOrderModal({ visible, close, initialOrder }) {
     close();
   };
 
-  const updateOrder = (attributes) => setOrder((prevOrder) => ({ ...prevOrder, ...attributes }));
+  const updateOrder = (attributes: Partial<CreatingOrder>) =>
+    setOrder((prevOrder) => ({ ...prevOrder, ...attributes }));
 
-  const createOrderEntry = (orderEntry) =>
+  const createOrderEntry = async (orderEntry: OrderEntryType) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
       order_entries: [...prevOrder.order_entries, { ...orderEntry, generatedId: uuidv4() }],
     }));
 
-  const updateOrderEntry = (orderEntry, attributes) =>
+  const updateOrderEntry = async (
+    orderEntry: OrderEntryType,
+    attributes: Partial<OrderEntryType>,
+  ) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
       order_entries: prevOrder.order_entries.map((entry) => {
@@ -104,7 +139,7 @@ function NewOrderModal({ visible, close, initialOrder }) {
       }),
     }));
 
-  const deleteOrderEntry = (orderEntry) =>
+  const deleteOrderEntry = async (orderEntry: OrderEntryType) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
       order_entries: prevOrder.order_entries.filter(
@@ -112,16 +147,18 @@ function NewOrderModal({ visible, close, initialOrder }) {
       ),
     }));
 
-  const createCouponApplication = (couponCode) =>
+  const createCouponApplication = async (couponCode: string) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
       coupon_applications: [...prevOrder.coupon_applications, { coupon: { code: couponCode } }],
     }));
 
-  const deleteCouponApplication = (couponApplication) =>
+  const deleteCouponApplication = async (
+    couponApplication: CreatingOrder['coupon_applications'][0],
+  ) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
-      order_entries: prevOrder.coupon_applications.filter(
+      coupon_applications: prevOrder.coupon_applications.filter(
         (application) => application.coupon.code !== couponApplication.coupon.code,
       ),
     }));
@@ -143,7 +180,7 @@ function NewOrderModal({ visible, close, initialOrder }) {
           />
         </section>
 
-        <ErrorDisplay graphQLError={createOrderError} />
+        <ErrorDisplay graphQLError={createOrderError as ApolloError} />
       </div>
       <div className="modal-footer">
         <button
@@ -166,15 +203,5 @@ function NewOrderModal({ visible, close, initialOrder }) {
     </Modal>
   );
 }
-
-NewOrderModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-  initialOrder: PropTypes.shape({}),
-};
-
-NewOrderModal.defaultProps = {
-  initialOrder: null,
-};
 
 export default NewOrderModal;

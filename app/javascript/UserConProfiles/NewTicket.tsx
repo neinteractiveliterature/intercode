@@ -1,34 +1,29 @@
 import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
 
-import { CreateTicket } from './mutations';
-import ErrorDisplay from '../ErrorDisplay';
 import TicketForm from './TicketForm';
 import { UserConProfileAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import {
+  UserConProfileAdminQueryQuery,
+  useUserConProfileAdminQueryQuery,
+} from './queries.generated';
+import { useCreateTicketMutation } from './mutations.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function NewTicket() {
-  const userConProfileId = Number.parseInt(useParams().id, 10);
+export default LoadQueryWrapper(useUserConProfileAdminQueryQuery, function NewTicket({ data }) {
+  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
   const history = useHistory();
-  const { data, loading, error } = useQuery(UserConProfileAdminQuery, {
-    variables: { id: userConProfileId },
-  });
-  const [createTicket] = useMutation(CreateTicket, {
-    update: (
-      cache,
-      {
-        data: {
-          createTicket: { ticket },
-        },
-      },
-    ) => {
-      const cacheData = cache.readQuery({
+  const [createTicket] = useCreateTicketMutation({
+    update: (cache, result) => {
+      const cacheData = cache.readQuery<UserConProfileAdminQueryQuery>({
         query: UserConProfileAdminQuery,
         variables: { id: userConProfileId },
       });
+      if (!cacheData) {
+        return;
+      }
+
       cache.writeQuery({
         query: UserConProfileAdminQuery,
         variables: { id: userConProfileId },
@@ -36,7 +31,7 @@ function NewTicket() {
           ...cacheData,
           userConProfile: {
             ...cacheData.userConProfile,
-            ticket,
+            ticket: result.data?.createTicket?.ticket,
           },
         },
       });
@@ -56,20 +51,7 @@ function NewTicket() {
     [createTicket, history, userConProfileId],
   );
 
-  usePageTitle(
-    useValueUnless(
-      () => `New ${data.convention.ticket_name} for ${data.userConProfile.name}`,
-      loading || error,
-    ),
-  );
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(`New ${data.convention.ticket_name} for ${data.userConProfile.name}`);
 
   const { convention, userConProfile } = data;
 
@@ -85,19 +67,13 @@ function NewTicket() {
       <TicketForm
         convention={convention}
         initialTicket={{
-          ticket_type: null,
-          payment_amount: {
-            fractional: 0,
-            currency_code: 'USD',
-          },
-          payment_note: '',
+          ticket_type: undefined,
           provided_by_event: null,
         }}
         onSubmit={onSubmit}
         submitCaption={`Create ${convention.ticket_name}`}
+        userConProfile={userConProfile}
       />
     </>
   );
-}
-
-export default NewTicket;
+});

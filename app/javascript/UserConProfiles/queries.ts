@@ -96,7 +96,7 @@ export const UserConProfileAdminQuery = gql`
       }
     }
 
-    convention {
+    convention: assertConvention {
       id
       name
       starts_at
@@ -123,7 +123,6 @@ export const UserConProfileAdminQuery = gql`
         id
         description
         name
-        publicly_available
         maximum_event_provided_tickets
 
         providing_products {

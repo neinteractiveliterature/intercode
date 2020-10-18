@@ -1,15 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import MoneyInput from './MoneyInput';
+import MoneyInput, { MoneyInputProps } from './MoneyInput';
 import formatMoney from '../formatMoney';
 
-function InPlaceMoneyEditor({ value, children, ...props }) {
+export type InPlaceMoneyEditorProps = MoneyInputProps & {
+  children?: React.ReactNode;
+};
+
+function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorProps) {
   return (
     <InPlaceEditor
       value={value}
-      renderInput={({ commitEditing, cancelEditing, inputProps, committing }) => (
+      renderInput={({ commitEditing, cancelEditing, inputProps }) => (
         <MoneyInput
           {...inputProps}
           inputGroupClassName="input-group input-group-sm"
@@ -21,7 +24,7 @@ function InPlaceMoneyEditor({ value, children, ...props }) {
                 className="btn btn-sm btn-outline-secondary"
                 onClick={cancelEditing}
                 aria-label="Cancel editing"
-                disabled={committing}
+                disabled={inputProps.committing}
               >
                 <i className="fa fa-times" />
               </button>
@@ -30,7 +33,7 @@ function InPlaceMoneyEditor({ value, children, ...props }) {
                 className="btn btn-sm btn-primary"
                 onClick={commitEditing}
                 aria-label="Commit changes"
-                disabled={committing}
+                disabled={inputProps.committing}
               >
                 <i className="fa fa-check" />
               </button>
@@ -44,15 +47,5 @@ function InPlaceMoneyEditor({ value, children, ...props }) {
     </InPlaceEditor>
   );
 }
-
-InPlaceMoneyEditor.propTypes = {
-  value: PropTypes.shape({}),
-  children: PropTypes.node,
-};
-
-InPlaceMoneyEditor.defaultProps = {
-  value: null,
-  children: null,
-};
 
 export default InPlaceMoneyEditor;

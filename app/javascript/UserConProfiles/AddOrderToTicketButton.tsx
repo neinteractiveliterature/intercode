@@ -3,7 +3,7 @@ import React, { useContext, useMemo } from 'react';
 import NewOrderModal from '../Store/NewOrderModal';
 import useModal from '../ModalDialogs/useModal';
 import AppRootContext from '../AppRootContext';
-import { Money } from '../graphqlTypes.generated';
+import { Money, OrderStatus, Product, UserConProfile } from '../graphqlTypes.generated';
 
 export type AddOrderToTicketButtonProps = {
   className?: string;
@@ -16,14 +16,14 @@ export type AddOrderToTicketButtonProps = {
   convention: {
     ticket_types: {
       id: number;
-      providing_products: {
+      providing_products: (Pick<Product, 'id' | 'name' | '__typename'> & {
         pricing_structure?: null | {
           price?: Money | null;
         };
-      }[];
+      })[];
     }[];
   };
-  userConProfile: {};
+  userConProfile: Pick<UserConProfile, 'id' | 'name_without_nickname'>;
 };
 
 function AddOrderToTicketButton({
@@ -62,16 +62,25 @@ function AddOrderToTicketButton({
         close={newOrderModal.close}
         initialOrder={{
           user_con_profile: userConProfile,
-          payment_amount: providingProduct.pricing_structure?.price,
-          status: 'paid',
+          payment_amount: providingProduct.pricing_structure?.price ?? {
+            __typename: 'Money',
+            currency_code: 'USD',
+            fractional: 0,
+          },
+          status: OrderStatus.Paid,
           payment_note: `Entered manually by ${myProfile!.name_without_nickname}`,
+          coupon_applications: [],
           order_entries: [
             {
               generatedId: 'ticket',
               product: providingProduct,
               product_variant: null,
               quantity: 1,
-              price_per_item: providingProduct.pricing_structure?.price,
+              price_per_item: providingProduct.pricing_structure?.price ?? {
+                __typename: 'Money',
+                currency_code: 'USD',
+                fractional: 0,
+              },
               ticket_id: ticket.id,
             },
           ],

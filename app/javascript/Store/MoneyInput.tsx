@@ -6,7 +6,7 @@ import { Money } from '../graphqlTypes.generated';
 
 export type MoneyInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'type' | 'className' | 'value' | 'onChange'
+  'type' | 'value' | 'onChange'
 > & {
   value?: Money | null;
   onChange: React.Dispatch<Money | null | undefined>;
@@ -15,7 +15,7 @@ export type MoneyInputProps = Omit<
 };
 
 const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
-  ({ value, onChange, appendContent, inputGroupClassName, ...inputProps }, ref) => {
+  ({ value, onChange, appendContent, inputGroupClassName, className, ...inputProps }, ref) => {
     const [inputValue, setInputValue] = useState(formatMoney(value, false));
     const inputChanged = (event: ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
@@ -41,7 +41,7 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <input
           type="text"
-          className="form-control"
+          className={className ?? 'form-control'}
           value={inputValue}
           onChange={inputChanged}
           ref={ref}
