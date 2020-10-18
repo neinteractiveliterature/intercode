@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
 import moment, { Moment } from 'moment-timezone';
@@ -259,7 +258,6 @@ const getPossibleColumns = (
       Header: t('admin.userConProfiles.privileges', 'Privileges'),
       id: 'privileges',
       accessor: 'privileges',
-      // eslint-disable-next-line react/prop-types
       Cell: ({ value }) => <PrivilegesCell value={value} />,
       Filter: PrivilegesFilter,
     },
@@ -291,14 +289,6 @@ const getPossibleColumns = (
         displayMode="admin"
       />
     );
-
-    FormItemCell.propTypes = {
-      value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-    };
-
-    FormItemCell.defaultProps = {
-      value: null,
-    };
 
     columns.push({
       Header: formItem.admin_description || humanize(identifier),

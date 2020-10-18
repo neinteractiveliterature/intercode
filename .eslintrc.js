@@ -87,6 +87,7 @@ module.exports = {
           {
             paths: [
               'graphql-tag',
+              'prop-types',
               {
                 name: '@apollo/client',
                 importNames: ['useQuery', 'useMutation'],
