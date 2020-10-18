@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { useApolloClient, ApolloError } from '@apollo/client';
 
-import { UpdateEmailRoute, DeleteEmailRoute } from './mutations';
 import EmailRouteForm from './EmailRouteForm';
 import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import ErrorDisplay from '../ErrorDisplay';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import { RootSiteEmailRoutesAdminTableQueryQuery } from './queries.generated';
+import { useDeleteEmailRouteMutation, useUpdateEmailRouteMutation } from './mutations.generated';
 
-function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
+export type EditEmailRouteModalProps = {
+  visible: boolean;
+  close: () => void;
+  initialEmailRoute?: RootSiteEmailRoutesAdminTableQueryQuery['email_routes_paginated']['entries'][0];
+};
+
+function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRouteModalProps) {
   const confirm = useConfirm();
   const [emailRoute, setEmailRoute] = useState(initialEmailRoute);
   const apolloClient = useApolloClient();
 
-  const [updateMutate] = useMutation(UpdateEmailRoute);
+  const [updateMutate] = useUpdateEmailRouteMutation();
   const update = async () => {
+    if (!initialEmailRoute) {
+      return;
+    }
+
     await updateMutate({
       variables: {
         id: initialEmailRoute.id,
@@ -27,8 +37,12 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
   };
   const [updateClicked, error, inProgress] = useAsyncFunction(update);
 
-  const [deleteMutate] = useMutation(DeleteEmailRoute);
+  const [deleteMutate] = useDeleteEmailRouteMutation();
   const deleteConfirmed = async () => {
+    if (!initialEmailRoute) {
+      return;
+    }
+
     await deleteMutate({ variables: { id: initialEmailRoute.id } });
     await apolloClient.resetStore();
     close();
@@ -47,7 +61,7 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
           type="button"
           onClick={() =>
             confirm({
-              prompt: `Are you sure you want to delete the email route for ${initialEmailRoute.receiver_address}?`,
+              prompt: `Are you sure you want to delete the email route for ${initialEmailRoute?.receiver_address}?`,
               action: deleteConfirmed,
               renderError: (e) => <ErrorDisplay graphQLError={e} />,
             })
@@ -60,7 +74,7 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
       <div className="modal-body">
         {emailRoute && <EmailRouteForm emailRoute={emailRoute} onChange={setEmailRoute} />}
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -80,14 +94,5 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }) {
     </Modal>
   );
 }
-
-EditEmailRouteModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-  initialEmailRoute: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    receiver_address: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default EditEmailRouteModal;

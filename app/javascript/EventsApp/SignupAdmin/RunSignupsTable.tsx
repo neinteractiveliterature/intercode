@@ -11,7 +11,6 @@ import EmailCell from '../../Tables/EmailCell';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
-import { RunSignupsTableSignupsQuery } from './queries';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import useReactTableWithTheWorks, {
@@ -24,7 +23,7 @@ import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGrava
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import {
   RunSignupsTableSignupsQueryQuery,
-  RunSignupsTableSignupsQueryQueryVariables,
+  useRunSignupsTableSignupsQueryQuery,
   useSignupAdminEventQueryQuery,
 } from './queries.generated';
 
@@ -180,18 +179,14 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
   const { data, loading, error } = useSignupAdminEventQueryQuery({ variables: { eventId } });
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
 
-  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks<
-    RunSignupsTableSignupsQueryQuery,
-    SignupType,
-    RunSignupsTableSignupsQueryQueryVariables
-  >({
+  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
-    getData: ({ data: tableData }) => tableData?.event.run.signups_paginated.entries ?? [],
-    getPages: ({ data: tableData }) => tableData?.event.run.signups_paginated.total_pages ?? 0,
+    getData: ({ data: tableData }) => tableData.event.run.signups_paginated.entries,
+    getPages: ({ data: tableData }) => tableData.event.run.signups_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
-    query: RunSignupsTableSignupsQuery,
+    useQuery: useRunSignupsTableSignupsQueryQuery,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId, runId },
   });

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Filter, SortingRule } from 'react-table';
 import { FieldFilterCodecs } from './FilterUtils';
 
-export type UseReactRouterReactTableOptions = FieldFilterCodecs & {
+export type UseReactRouterReactTableOptions = Partial<FieldFilterCodecs> & {
   onPageChange?: (newPage: number) => void;
   onFilteredChange?: (newFiltered: Filter[]) => void;
   onSortedChange?: (newSorted: SortingRule[]) => void;
@@ -15,6 +15,10 @@ export type ReactRouterReactTableState = {
   sorted: SortingRule[];
 };
 
+function identityCodec(field: string, value: string): string {
+  return value;
+}
+
 export default function useReactRouterReactTable({
   encodeFilterValue,
   decodeFilterValue,
@@ -23,8 +27,8 @@ export default function useReactRouterReactTable({
   onSortedChange,
 }: UseReactRouterReactTableOptions) {
   const history = useHistory();
-  const encode = encodeFilterValue || ((field, value) => value);
-  const decode = decodeFilterValue || ((field, value) => value);
+  const encode = useMemo(() => encodeFilterValue ?? identityCodec, [encodeFilterValue]);
+  const decode = useMemo(() => decodeFilterValue ?? identityCodec, [decodeFilterValue]);
 
   const decodeSearchParams = useCallback(
     (search: string) => {

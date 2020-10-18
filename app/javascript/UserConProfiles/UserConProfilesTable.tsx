@@ -19,11 +19,10 @@ import useReactTableWithTheWorks, {
   createQueryDataContext,
 } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
-import { UserConProfilesTableUserConProfilesQuery } from './queries';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import {
   UserConProfilesTableUserConProfilesQueryQuery,
-  UserConProfilesTableUserConProfilesQueryQueryVariables,
+  useUserConProfilesTableUserConProfilesQueryQuery,
 } from './queries.generated';
 import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
@@ -315,18 +314,14 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
       getPossibleColumns(data, t, getSortedParsedFormItems(data.convention!.user_con_profile_form)),
     [t],
   );
-  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks<
-    UserConProfilesTableUserConProfilesQueryQuery,
-    UserConProfilesTableRow,
-    UserConProfilesTableUserConProfilesQueryQueryVariables
-  >({
+  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data!.convention!.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data!.convention!.user_con_profiles_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
-    query: UserConProfilesTableUserConProfilesQuery,
+    useQuery: useUserConProfilesTableUserConProfilesQueryQuery,
     storageKeyPrefix: 'userConProfiles',
   });
 

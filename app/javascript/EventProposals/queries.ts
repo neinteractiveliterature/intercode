@@ -162,7 +162,7 @@ export const EventProposalsAdminQuery = gql`
     $filters: EventProposalFiltersInput
     $sort: [SortInput!]
   ) {
-    convention {
+    convention: assertConvention {
       id
       timezone_name
 

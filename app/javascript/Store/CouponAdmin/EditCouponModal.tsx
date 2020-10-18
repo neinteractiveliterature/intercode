@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { useApolloClient, ApolloError } from '@apollo/client';
 
 import CouponForm from './CouponForm';
-import { UpdateCoupon, DeleteCoupon } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 import buildCouponInput from './buildCouponInput';
 import { useGraphQLConfirm } from '../../ModalDialogs/Confirm';
+import { AdminCouponFieldsFragment } from './queries.generated';
+import { useDeleteCouponMutation, useUpdateCouponMutation } from './mutations.generated';
 
-function EditCouponModal({ initialCoupon, visible, close }) {
+export type EditCouponModalProps = {
+  initialCoupon?: AdminCouponFieldsFragment;
+  visible: boolean;
+  close: () => void;
+};
+
+function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps) {
   const confirm = useGraphQLConfirm();
   const [coupon, setCoupon] = useState(initialCoupon);
-  const [updateCoupon] = useMutation(UpdateCoupon);
+  const [updateCoupon] = useUpdateCouponMutation();
   const [updateCouponAsync, error, inProgress] = useAsyncFunction(updateCoupon);
-  const [deleteCoupon] = useMutation(DeleteCoupon);
+  const [deleteCoupon] = useDeleteCouponMutation();
   const apolloClient = useApolloClient();
 
   useEffect(() => {
@@ -23,6 +29,9 @@ function EditCouponModal({ initialCoupon, visible, close }) {
   }, [initialCoupon]);
 
   const saveClicked = async () => {
+    if (!initialCoupon || !coupon) {
+      return;
+    }
     await updateCouponAsync({
       variables: { id: initialCoupon.id, coupon: buildCouponInput(coupon) },
     });
@@ -31,6 +40,9 @@ function EditCouponModal({ initialCoupon, visible, close }) {
   };
 
   const deleteConfirmed = async () => {
+    if (!initialCoupon) {
+      return;
+    }
     await deleteCoupon({ variables: { id: initialCoupon.id } });
     await apolloClient.resetStore();
     close();
@@ -56,8 +68,8 @@ function EditCouponModal({ initialCoupon, visible, close }) {
         </div>
       </div>
       <div className="modal-body">
-        {coupon && <CouponForm value={coupon} onChange={setCoupon} />}
-        <ErrorDisplay graphQLError={error} />
+        {coupon && <CouponForm<AdminCouponFieldsFragment> value={coupon} onChange={setCoupon} />}
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
@@ -75,17 +87,5 @@ function EditCouponModal({ initialCoupon, visible, close }) {
     </Modal>
   );
 }
-
-EditCouponModal.propTypes = {
-  initialCoupon: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }),
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-};
-
-EditCouponModal.defaultProps = {
-  initialCoupon: null,
-};
 
 export default EditCouponModal;

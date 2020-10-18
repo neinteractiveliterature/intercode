@@ -17,7 +17,7 @@ export type RootSiteConventionsAdminTableQueryQuery = (
     & Pick<Types.ConventionsPagination, 'total_entries' | 'total_pages'>
     & { entries: Array<(
       { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name'>
+      & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
       & { organization?: Types.Maybe<(
         { __typename: 'Organization' }
         & Pick<Types.Organization, 'id' | 'name'>
@@ -104,6 +104,7 @@ export const RootSiteConventionsAdminTableQueryDocument = gql`
       starts_at
       ends_at
       timezone_name
+      timezone_mode
       organization {
         id
         name
