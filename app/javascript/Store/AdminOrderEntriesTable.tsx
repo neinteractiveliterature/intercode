@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Select from 'react-select';
+import { ApolloError } from '@apollo/client';
 
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
@@ -12,45 +12,127 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import ProductSelect from '../BuiltInFormControls/ProductSelect';
 import useAsyncFunction from '../useAsyncFunction';
 import ApplyCouponControl from './ApplyCouponControl';
+import {
+  Coupon,
+  CouponApplication,
+  Money,
+  OrderEntry,
+  PricingStructure,
+  Product,
+  ProductVariant,
+} from '../graphqlTypes.generated';
 
-function AdminOrderEntriesTable({
+type ProductVariantType = Pick<ProductVariant, '__typename' | 'id' | 'name'> & {
+  override_pricing_structure?: Pick<PricingStructure, 'price'> | null;
+};
+
+type CommonOrderEntryProps = Pick<OrderEntry, 'quantity' | 'price_per_item'> & {
+  product: Pick<Product, '__typename' | 'name'> & {
+    product_variants?: ProductVariantType[] | null;
+    pricing_structure?: Pick<PricingStructure, 'price'> | null;
+  };
+  product_variant?: ProductVariantType | null;
+};
+
+export type AdminOrderEntryWithIdType = CommonOrderEntryProps & {
+  id: number;
+};
+
+type OrderEntryWithGeneratedIdType = CommonOrderEntryProps & {
+  generatedId: string;
+};
+
+export type AdminOrderEntryType = AdminOrderEntryWithIdType | OrderEntryWithGeneratedIdType;
+
+type AddingOrderEntry<T extends AdminOrderEntryType> = Omit<T, 'product' | 'price_per_item'> & {
+  product?: T['product'] | null;
+  price_per_item?: T['price_per_item'] | null;
+};
+
+function orderEntryHasId(orderEntry: AdminOrderEntryType): orderEntry is AdminOrderEntryWithIdType {
+  return 'id' in orderEntry && orderEntry.id != null;
+}
+
+function getEffectiveId(orderEntry: AdminOrderEntryType) {
+  if (orderEntryHasId(orderEntry)) {
+    return orderEntry.id;
+  }
+
+  return orderEntry.generatedId;
+}
+
+type CouponApplicationForOrderEntriesTable = Partial<Pick<CouponApplication, 'id' | 'discount'>> & {
+  coupon: Pick<Coupon, 'code'>;
+};
+
+export type AdminOrderEntriesTableProps<
+  T extends AdminOrderEntryType,
+  CouponApplicationType extends CouponApplicationForOrderEntriesTable
+> = {
+  order: {
+    order_entries: T[];
+    total_price?: Money;
+    coupon_applications: CouponApplicationType[];
+  };
+  createOrderEntry: (orderEntry: T) => Promise<any>;
+  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => Promise<any>;
+  deleteOrderEntry: (orderEntry: T) => Promise<any>;
+  createCouponApplication: (code: string) => Promise<any>;
+  deleteCouponApplication: (couponApplication: CouponApplicationType) => Promise<any>;
+};
+
+function AdminOrderEntriesTable<
+  T extends AdminOrderEntryType,
+  CouponApplicationType extends CouponApplicationForOrderEntriesTable
+>({
   order,
   createOrderEntry,
   updateOrderEntry,
   deleteOrderEntry,
   createCouponApplication,
   deleteCouponApplication,
-}) {
+}: AdminOrderEntriesTableProps<T, CouponApplicationType>) {
   const confirm = useConfirm();
-  const [addingItem, setAddingItem] = useState(null);
-  const [applyingCoupon, setApplyingCoupon] = useState(null);
+  const [addingItem, setAddingItem] = useState<AddingOrderEntry<T>>();
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
   const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(createOrderEntry);
 
-  const applyCoupon = async (...args) => {
-    await createCouponApplication(...args);
+  const applyCoupon = async (code: string) => {
+    await createCouponApplication(code);
     setApplyingCoupon(false);
   };
 
-  const setAddingItemProduct = (product) => {
-    setAddingItem((prevAddingItem) => ({
-      ...prevAddingItem,
-      product,
-      product_variant: null,
-      price_per_item: product?.pricing_structure?.price,
-    }));
+  const setAddingItemProduct = (product: T['product']) => {
+    setAddingItem(
+      (prevAddingItem) =>
+        ({
+          ...prevAddingItem,
+          product,
+          product_variant: null,
+          price_per_item: product?.pricing_structure?.price,
+        } as T),
+    );
   };
 
-  const setAddingItemProductVariant = (variant) => {
-    setAddingItem((prevAddingItem) => ({
-      ...prevAddingItem,
-      product_variant: variant,
-      price_per_item: variant?.override_pricing_structure?.price || prevAddingItem.price_per_item,
-    }));
+  const setAddingItemProductVariant = (variant: T['product_variant']) => {
+    setAddingItem(
+      (prevAddingItem) =>
+        ({
+          ...prevAddingItem,
+          product_variant: variant,
+          price_per_item:
+            variant?.override_pricing_structure?.price ?? prevAddingItem?.price_per_item,
+        } as T),
+    );
   };
 
   const saveAddingItem = async () => {
-    createOrderEntryAsync(addingItem);
-    setAddingItem(null);
+    if (!addingItem || !addingItem.product) {
+      return;
+    }
+
+    createOrderEntryAsync(addingItem as T);
+    setAddingItem(undefined);
   };
 
   return (
@@ -65,7 +147,7 @@ function AdminOrderEntriesTable({
       </thead>
       <tbody>
         {order.order_entries.map((orderEntry) => (
-          <tr key={orderEntry.id || orderEntry.generatedId}>
+          <tr key={getEffectiveId(orderEntry)}>
             <td>
               {orderEntry.product.name}
               {orderEntry.product_variant && ` (${orderEntry.product_variant.name})`}
@@ -74,7 +156,7 @@ function AdminOrderEntriesTable({
               <InPlaceEditor
                 value={orderEntry.quantity.toString()}
                 onChange={(newValue) =>
-                  updateOrderEntry(orderEntry, { quantity: parseIntOrNull(newValue) })
+                  updateOrderEntry(orderEntry, { quantity: parseIntOrNull(newValue) } as Partial<T>)
                 }
               />
             </td>
@@ -82,12 +164,7 @@ function AdminOrderEntriesTable({
               <InPlaceMoneyEditor
                 value={orderEntry.price_per_item}
                 onChange={(value) =>
-                  updateOrderEntry(orderEntry, {
-                    price_per_item: {
-                      fractional: value.fractional,
-                      currency_code: value.currency_code,
-                    },
-                  })
+                  updateOrderEntry(orderEntry, { price_per_item: value } as Partial<T>)
                 }
               >
                 {formatMoney(orderEntry.price_per_item)}
@@ -151,12 +228,12 @@ function AdminOrderEntriesTable({
                 isClearable
                 disabled={createInProgress}
               />
-              {addingItem.product?.product_variants?.length > 0 && (
+              {(addingItem.product?.product_variants?.length ?? 0) > 0 && (
                 <Select
-                  options={addingItem.product.product_variants}
+                  options={addingItem.product?.product_variants ?? []}
                   value={addingItem.product_variant}
                   onChange={setAddingItemProductVariant}
-                  getOptionValue={(variant) => variant.id}
+                  getOptionValue={(variant) => variant.id?.toString() ?? ''}
                   getOptionLabel={(variant) => variant.name}
                   isClearable
                   disabled={createInProgress}
@@ -167,18 +244,22 @@ function AdminOrderEntriesTable({
               <InPlaceEditor
                 value={addingItem.quantity.toString()}
                 onChange={(newValue) =>
-                  setAddingItem((prev) => ({
-                    ...prev,
-                    quantity: parseIntOrNull(newValue),
-                  }))
+                  setAddingItem(
+                    (prev) =>
+                      ({
+                        ...prev,
+                        quantity: parseIntOrNull(newValue),
+                      } as T),
+                  )
                 }
-                disabled={createInProgress}
               />
             </td>
             <td>
               <InPlaceMoneyEditor
                 value={addingItem.price_per_item}
-                onChange={(value) => setAddingItem((prev) => ({ ...prev, price_per_item: value }))}
+                onChange={(value) =>
+                  setAddingItem((prev) => ({ ...prev, price_per_item: value } as T))
+                }
                 disabled={createInProgress}
               >
                 {formatMoney(addingItem.price_per_item)}
@@ -200,7 +281,7 @@ function AdminOrderEntriesTable({
         {createError && (
           <tr>
             <td colSpan={4}>
-              <ErrorDisplay graphQLError={createError} />
+              <ErrorDisplay graphQLError={createError as ApolloError} />
             </td>
           </tr>
         )}
@@ -219,11 +300,11 @@ function AdminOrderEntriesTable({
                 type="button"
                 onClick={() =>
                   setAddingItem({
-                    product: null,
-                    product_variant: null,
+                    product: undefined,
+                    product_variant: undefined,
                     quantity: 1,
-                    price_per_item: null,
-                  })
+                    price_per_item: undefined,
+                  } as AddingOrderEntry<T>)
                 }
               >
                 Add item(s)
@@ -247,18 +328,5 @@ function AdminOrderEntriesTable({
     </table>
   );
 }
-
-AdminOrderEntriesTable.propTypes = {
-  order: PropTypes.shape({
-    order_entries: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    total_price: PropTypes.shape({}),
-    coupon_applications: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
-  createOrderEntry: PropTypes.func.isRequired,
-  updateOrderEntry: PropTypes.func.isRequired,
-  deleteOrderEntry: PropTypes.func.isRequired,
-  createCouponApplication: PropTypes.func.isRequired,
-  deleteCouponApplication: PropTypes.func.isRequired,
-};
 
 export default AdminOrderEntriesTable;

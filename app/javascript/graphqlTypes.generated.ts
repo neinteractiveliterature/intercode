@@ -2970,7 +2970,7 @@ export type Order = {
   __typename: 'Order';
   charge_id?: Maybe<Scalars['String']>;
   coupon_applications: Array<CouponApplication>;
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   order_entries: Array<OrderEntry>;
   paid_at?: Maybe<Scalars['Date']>;
   payment_amount?: Maybe<Money>;
@@ -2994,7 +2994,7 @@ export type OrderEdge = {
 export type OrderEntry = {
   __typename: 'OrderEntry';
   describe_products: Scalars['String'];
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   order: Order;
   price: Money;
   price_per_item: Money;

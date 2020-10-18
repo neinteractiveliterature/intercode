@@ -1,12 +1,9 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
-import { useMutation } from '@apollo/client';
 import classNames from 'classnames';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { MarkOrderPaid, CancelOrder } from './mutations';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
@@ -14,16 +11,38 @@ import InPlaceMoneyEditor from './InPlaceMoneyEditor';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import EnumTypes from '../enumTypes.json';
+import { Order, OrderStatus, UserConProfile } from '../graphqlTypes.generated';
+import { useCancelOrderMutation, useMarkOrderPaidMutation } from './mutations.generated';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
   .filter((choice) => choice.value !== 'pending');
 
-function CancelOrderButton({ order, skipRefund }) {
-  const [cancelOrder] = useMutation(CancelOrder);
+export type AdminOrderType = Pick<
+  Order,
+  'status' | 'charge_id' | 'paid_at' | 'payment_amount' | 'payment_note'
+> & {
+  user_con_profile?: Pick<UserConProfile, 'name_without_nickname'>;
+};
+
+export type AdminOrderTypeWithId = AdminOrderType & { id: number };
+
+export function adminOrderHasId(
+  order: AdminOrderType | AdminOrderTypeWithId,
+): order is AdminOrderTypeWithId {
+  return 'id' in order && order.id != null;
+}
+
+type CancelOrderButtonProps = {
+  order: AdminOrderTypeWithId;
+  skipRefund: boolean;
+};
+
+function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
+  const [cancelOrder] = useCancelOrderMutation();
   const confirm = useConfirm();
-  let prompt;
-  let buttonCaption;
+  let prompt: React.ReactNode;
+  let buttonCaption: string;
 
   if (order.charge_id && !skipRefund) {
     prompt = (
@@ -81,26 +100,13 @@ function CancelOrderButton({ order, skipRefund }) {
   );
 }
 
-CancelOrderButton.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    status: PropTypes.string.isRequired,
-    charge_id: PropTypes.string,
-    user_con_profile: PropTypes.shape({
-      name_without_nickname: PropTypes.string.isRequired,
-    }).isRequired,
-    order_entries: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  skipRefund: PropTypes.bool.isRequired,
+type OrderActionsProps = {
+  order: AdminOrderTypeWithId;
 };
 
-function OrderActions({ order }) {
+function OrderActions({ order }: OrderActionsProps) {
   const confirm = useConfirm();
-  const [markOrderPaid] = useMutation(MarkOrderPaid);
+  const [markOrderPaid] = useMarkOrderPaidMutation();
 
   const buttons = [];
 
@@ -131,10 +137,15 @@ function OrderActions({ order }) {
     }
   }
 
-  return buttons;
+  return <>{buttons}</>;
 }
 
-function AdminOrderForm({ order, updateOrder }) {
+export type AdminOrderFormProps<T extends AdminOrderType> = {
+  order: T;
+  updateOrder: React.Dispatch<Partial<T>>;
+};
+
+function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>) {
   const { timezoneName } = useContext(AppRootContext);
 
   return (
@@ -142,12 +153,14 @@ function AdminOrderForm({ order, updateOrder }) {
       <dl className="row m-0">
         <dt className="col-md-3">Customer name</dt>
         <dd className="col-md-9">
-          {order.id ? (
+          {adminOrderHasId(order) ? (
             order.user_con_profile?.name_without_nickname
           ) : (
             <UserConProfileSelect
               value={order.user_con_profile}
-              onChange={(value) => updateOrder({ user_con_profile: value })}
+              onChange={(value: T['user_con_profile']) =>
+                updateOrder({ user_con_profile: value } as Partial<T>)
+              }
             />
           )}
         </dd>
@@ -156,20 +169,13 @@ function AdminOrderForm({ order, updateOrder }) {
         <dd className="col-md-9">
           <InPlaceMoneyEditor
             value={order.payment_amount}
-            onChange={(value) =>
-              updateOrder({
-                payment_amount: {
-                  fractional: value.fractional,
-                  currency_code: value.currency_code,
-                },
-              })
-            }
+            onChange={(value) => updateOrder({ payment_amount: value } as Partial<T>)}
           />
         </dd>
 
         <dt className="col-md-3">Order status</dt>
         <dd className="col-md-9">
-          {order.id ? (
+          {adminOrderHasId(order) ? (
             <ul className="list-inline m-0">
               <li className="list-inline-item">
                 {humanize(order.status)}
@@ -187,7 +193,7 @@ function AdminOrderForm({ order, updateOrder }) {
             <ChoiceSet
               choices={ORDER_STATUS_CHOICES}
               value={order.status}
-              onChange={(status) => updateOrder({ status })}
+              onChange={(status: OrderStatus) => updateOrder({ status } as Partial<T>)}
               choiceClassName="form-check-inline"
             />
           )}
@@ -209,33 +215,12 @@ function AdminOrderForm({ order, updateOrder }) {
                 {buttons}
               </>
             )}
-            onChange={(value) => updateOrder({ payment_note: value })}
+            onChange={(value) => updateOrder({ payment_note: value } as Partial<T>)}
           />
         </dd>
       </dl>
     </div>
   );
 }
-
-AdminOrderForm.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.number,
-    status: PropTypes.string.isRequired,
-    charge_id: PropTypes.string,
-    user_con_profile: PropTypes.shape({
-      name_without_nickname: PropTypes.string.isRequired,
-    }).isRequired,
-    order_entries: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-      }),
-    ).isRequired,
-    total_price: PropTypes.shape({}),
-    payment_amount: PropTypes.shape({}),
-    paid_at: PropTypes.string,
-    payment_note: PropTypes.string,
-  }).isRequired,
-  updateOrder: PropTypes.func.isRequired,
-};
 
 export default AdminOrderForm;

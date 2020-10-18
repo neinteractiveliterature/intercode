@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+// eslint-disable-next-line no-restricted-imports
 import { useQuery } from '@apollo/client';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -33,6 +34,7 @@ type TicketAdminControlsProps = {
   userConProfile: {
     id: number;
     name?: string | null;
+    name_without_nickname: string;
     ticket?: null | {
       id: number;
       provided_by_event?: null | {

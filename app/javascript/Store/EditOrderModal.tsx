@@ -1,34 +1,45 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 
-import AdminOrderForm from './AdminOrderForm';
-import {
-  AdminUpdateOrder,
-  AdminCreateOrderEntry,
-  AdminUpdateOrderEntry,
-  AdminDeleteOrderEntry,
-  CreateCouponApplication,
-  DeleteCouponApplication,
-} from './mutations';
+import AdminOrderForm, { AdminOrderTypeWithId } from './AdminOrderForm';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import AdminOrderEntriesTable from './AdminOrderEntriesTable';
+import AdminOrderEntriesTable, { AdminOrderEntryWithIdType } from './AdminOrderEntriesTable';
+import {
+  useAdminCreateOrderEntryMutation,
+  useAdminDeleteOrderEntryMutation,
+  useAdminUpdateOrderEntryMutation,
+  useAdminUpdateOrderMutation,
+  useCreateCouponApplicationMutation,
+  useDeleteCouponApplicationMutation,
+} from './mutations.generated';
+import { Coupon, CouponApplication, Product } from '../graphqlTypes.generated';
 
-function EditOrderModal({ order, closeModal }) {
+export type EditOrderModalProps = {
+  order?: AdminOrderTypeWithId & {
+    order_entries: (Omit<AdminOrderEntryWithIdType, 'product'> & {
+      product: NonNullable<AdminOrderEntryWithIdType['product']> & Pick<Product, 'id'>;
+    })[];
+    coupon_applications: (Pick<CouponApplication, 'id' | 'discount'> & {
+      coupon: Pick<Coupon, 'code'>;
+    })[];
+  };
+  closeModal: () => void;
+};
+
+function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
   const confirm = useConfirm();
-  const [updateMutate] = useMutation(AdminUpdateOrder);
-  const [createOrderEntryMutate] = useMutation(AdminCreateOrderEntry);
-  const [updateOrderEntryMutate] = useMutation(AdminUpdateOrderEntry);
-  const [deleteOrderEntryMutate] = useMutation(AdminDeleteOrderEntry);
-  const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
-  const [deleteCouponApplicationMutate] = useMutation(DeleteCouponApplication);
+  const [updateMutate] = useAdminUpdateOrderMutation();
+  const [createOrderEntryMutate] = useAdminCreateOrderEntryMutation();
+  const [updateOrderEntryMutate] = useAdminUpdateOrderEntryMutation();
+  const [deleteOrderEntryMutate] = useAdminDeleteOrderEntryMutation();
+  const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
+  const [deleteCouponApplicationMutate] = useDeleteCouponApplicationMutation();
 
   const updateOrder = useCallback(
     (attributes) =>
       updateMutate({
         variables: {
-          id: order?.id,
+          id: order!.id,
           order: attributes,
         },
       }),
@@ -36,19 +47,16 @@ function EditOrderModal({ order, closeModal }) {
   );
 
   const createOrderEntry = useCallback(
-    (orderEntry) =>
+    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
       createOrderEntryMutate({
         variables: {
           input: {
-            order_id: order.id,
+            order_id: order!.id,
             order_entry: {
-              product_id: orderEntry.product?.id,
+              product_id: orderEntry.product.id,
               product_variant_id: orderEntry.product_variant?.id,
               quantity: orderEntry.quantity,
-              price_per_item: {
-                fractional: orderEntry.price_per_item?.fractional,
-                currency_code: orderEntry.price_per_item?.currency_code,
-              },
+              price_per_item: orderEntry.price_per_item,
             },
           },
         },
@@ -78,7 +86,7 @@ function EditOrderModal({ order, closeModal }) {
     (couponCode) =>
       createCouponApplicationMutate({
         variables: {
-          orderId: order?.id,
+          orderId: order!.id,
           couponCode,
         },
       }),
@@ -122,16 +130,5 @@ function EditOrderModal({ order, closeModal }) {
     </Modal>
   );
 }
-
-EditOrderModal.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }),
-  closeModal: PropTypes.func.isRequired,
-};
-
-EditOrderModal.defaultProps = {
-  order: null,
-};
 
 export default EditOrderModal;

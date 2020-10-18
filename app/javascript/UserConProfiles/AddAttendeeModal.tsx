@@ -1,33 +1,41 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import { AddAttendeeUsersQuery } from './queries';
-import { CreateUserConProfile } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import useAsyncFunction from '../useAsyncFunction';
+import { useCreateUserConProfileMutation } from './mutations.generated';
+import { AddAttendeeUsersQueryQuery } from './queries.generated';
+import { FormResponse } from '../FormPresenter/useFormResponse';
 
-function AddAttendeeModal({ conventionName, visible }) {
+export type AddAttendeeModalProps = {
+  conventionName: string;
+  visible: boolean;
+};
+
+type UserType = AddAttendeeUsersQueryQuery['users_paginated']['entries'][0];
+
+function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps) {
   const { t } = useTranslation();
   const history = useHistory();
   const apolloClient = useApolloClient();
-  const [user, setUser] = useState(null);
-  const [userConProfile, setUserConProfile] = useState(null);
-  const [createUserConProfileMutate] = useMutation(CreateUserConProfile);
+  const [user, setUser] = useState<UserType>();
+  const [userConProfile, setUserConProfile] = useState<FormResponse>();
+  const [createUserConProfileMutate] = useCreateUserConProfileMutation();
   const [createUserConProfile, error, inProgress] = useAsyncFunction(createUserConProfileMutate);
 
   const close = () => {
-    setUser(null);
-    setUserConProfile(null);
+    setUser(undefined);
+    setUserConProfile(undefined);
     history.replace('/user_con_profiles');
   };
 
-  const userSelected = (newUser) => {
+  const userSelected = (newUser: UserType) => {
     setUser(newUser);
     setUserConProfile({
       form_response_attrs: {
@@ -38,6 +46,10 @@ function AddAttendeeModal({ conventionName, visible }) {
   };
 
   const createClicked = async () => {
+    if (!user || !userConProfile) {
+      return;
+    }
+
     await createUserConProfile({
       variables: {
         user_id: user.id,
@@ -66,7 +78,11 @@ function AddAttendeeModal({ conventionName, visible }) {
           )}
         </p>
 
-        <UserSelect value={user} onChange={userSelected} usersQuery={AddAttendeeUsersQuery} />
+        <UserSelect<AddAttendeeUsersQueryQuery>
+          value={user}
+          onChange={userSelected}
+          usersQuery={AddAttendeeUsersQuery}
+        />
 
         {user && (
           <div className="mt-4">
@@ -79,7 +95,7 @@ function AddAttendeeModal({ conventionName, visible }) {
           </div>
         )}
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -102,10 +118,5 @@ function AddAttendeeModal({ conventionName, visible }) {
     </Modal>
   );
 }
-
-AddAttendeeModal.propTypes = {
-  conventionName: PropTypes.string.isRequired,
-  visible: PropTypes.bool.isRequired,
-};
 
 export default AddAttendeeModal;
