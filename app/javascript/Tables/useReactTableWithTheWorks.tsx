@@ -20,11 +20,11 @@ export function createQueryDataContext<DataType>() {
 export const QueryDataContext = React.createContext({});
 
 export type UseReactTableWithTheWorksOptions<
-  QueryData,
   RowType extends object,
+  QueryData,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
 > = Omit<UseColumnSelectionOptions, 'possibleColumns'> &
-  UseGraphQLReactTableOptions<QueryData, RowType, Variables> &
+  UseGraphQLReactTableOptions<RowType, QueryData, Variables> &
   UseLocalStorageReactTableOptions &
   UseReactRouterReactTableOptions & {
     getPossibleColumns: (queryData: QueryData) => Column[];
@@ -47,10 +47,10 @@ export default function useReactTableWithTheWorks<
   onPageSizeChange,
   onFilteredChange,
   onSortedChange,
-  query,
+  useQuery,
   storageKeyPrefix,
   variables,
-}: UseReactTableWithTheWorksOptions<QueryData, RowType, Variables>) {
+}: UseReactTableWithTheWorksOptions<RowType, QueryData, Variables>) {
   const localStorageReactTableProps = useLocalStorageReactTable(storageKeyPrefix, {
     onPageSizeChange,
   });
@@ -64,7 +64,7 @@ export default function useReactTableWithTheWorks<
   const [graphQLReactTableProps, { queryResult, queryData }] = useGraphQLReactTable({
     getData,
     getPages,
-    query,
+    useQuery,
     variables,
     page: reactRouterReactTableProps.page,
     pageSize: localStorageReactTableProps.pageSize,

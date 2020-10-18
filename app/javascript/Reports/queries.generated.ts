@@ -8,10 +8,10 @@ export type ReportsMenuQueryQueryVariables = Types.Exact<{ [key: string]: never;
 
 export type ReportsMenuQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_mode' | 'ticket_name'>
-  )> }
+  ) }
 );
 
 export type AttendanceByPaymentAmountQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -19,7 +19,7 @@ export type AttendanceByPaymentAmountQueryQueryVariables = Types.Exact<{ [key: s
 
 export type AttendanceByPaymentAmountQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name'>
     & { reports: (
@@ -49,7 +49,7 @@ export type AttendanceByPaymentAmountQueryQuery = (
         & Pick<Types.Money, 'fractional' | 'currency_code'>
       ) }
     ) }
-  )> }
+  ) }
 );
 
 export type EventProvidedTicketsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -57,7 +57,7 @@ export type EventProvidedTicketsQueryQueryVariables = Types.Exact<{ [key: string
 
 export type EventProvidedTicketsQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name'>
     & { reports: (
@@ -80,7 +80,7 @@ export type EventProvidedTicketsQueryQuery = (
         )> }
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export type EventsByChoiceQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -88,7 +88,7 @@ export type EventsByChoiceQueryQueryVariables = Types.Exact<{ [key: string]: nev
 
 export type EventsByChoiceQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { reports: (
@@ -104,7 +104,7 @@ export type EventsByChoiceQueryQuery = (
         )> }
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export type SignupCountsByStateQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -112,14 +112,14 @@ export type SignupCountsByStateQueryQueryVariables = Types.Exact<{ [key: string]
 
 export type SignupCountsByStateQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { signup_counts_by_state: Array<(
       { __typename: 'SignupCountByState' }
       & Pick<Types.SignupCountByState, 'state' | 'count'>
     )> }
-  )> }
+  ) }
 );
 
 export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
@@ -131,7 +131,7 @@ export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
 
 export type SignupSpySignupChangesQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
     & { signup_changes_paginated: (
@@ -176,13 +176,13 @@ export type SignupSpySignupChangesQueryQuery = (
         ) }
       )> }
     ) }
-  )> }
+  ) }
 );
 
 
 export const ReportsMenuQueryDocument = gql`
     query ReportsMenuQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_mode
     ticket_name
@@ -216,7 +216,7 @@ export type ReportsMenuQueryLazyQueryHookResult = ReturnType<typeof useReportsMe
 export type ReportsMenuQueryQueryResult = Apollo.QueryResult<ReportsMenuQueryQuery, ReportsMenuQueryQueryVariables>;
 export const AttendanceByPaymentAmountQueryDocument = gql`
     query AttendanceByPaymentAmountQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_name
     reports {
@@ -275,7 +275,7 @@ export type AttendanceByPaymentAmountQueryLazyQueryHookResult = ReturnType<typeo
 export type AttendanceByPaymentAmountQueryQueryResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryQuery, AttendanceByPaymentAmountQueryQueryVariables>;
 export const EventProvidedTicketsQueryDocument = gql`
     query EventProvidedTicketsQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_name
     reports {
@@ -327,7 +327,7 @@ export type EventProvidedTicketsQueryLazyQueryHookResult = ReturnType<typeof use
 export type EventProvidedTicketsQueryQueryResult = Apollo.QueryResult<EventProvidedTicketsQueryQuery, EventProvidedTicketsQueryQueryVariables>;
 export const EventsByChoiceQueryDocument = gql`
     query EventsByChoiceQuery {
-  convention {
+  convention: assertConvention {
     id
     reports {
       events_by_choice {
@@ -372,7 +372,7 @@ export type EventsByChoiceQueryLazyQueryHookResult = ReturnType<typeof useEvents
 export type EventsByChoiceQueryQueryResult = Apollo.QueryResult<EventsByChoiceQueryQuery, EventsByChoiceQueryQueryVariables>;
 export const SignupCountsByStateQueryDocument = gql`
     query SignupCountsByStateQuery {
-  convention {
+  convention: assertConvention {
     id
     signup_counts_by_state {
       state
@@ -408,7 +408,7 @@ export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useS
 export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
     query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int) {
-  convention {
+  convention: assertConvention {
     id
     timezone_name
     signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: [{field: "created_at", desc: true}]) {

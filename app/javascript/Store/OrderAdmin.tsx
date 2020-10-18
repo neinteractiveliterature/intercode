@@ -1,11 +1,9 @@
 import React, { useState, useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import ReactTable from 'react-table';
+import ReactTable, { RowInfo } from 'react-table';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
-import { AdminOrdersQuery } from './queries';
-import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
+import ChoiceSetFilter, { ChoiceSetFilterMultipleProps } from '../Tables/ChoiceSetFilter';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import MoneyCell from '../Tables/MoneyCell';
 import TableHeader from '../Tables/TableHeader';
@@ -16,14 +14,18 @@ import useModal from '../ModalDialogs/useModal';
 import EditOrderModal from './EditOrderModal';
 import NewOrderModal from './NewOrderModal';
 import AppRootContext from '../AppRootContext';
+import { AdminOrdersQueryQuery, useAdminOrdersQueryQuery } from './queries.generated';
+
+type OrderType = AdminOrdersQueryQuery['convention']['orders_paginated']['entries'][0];
 
 const fieldFilterCodecs = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
 });
 
-const StatusFilter = ({ filter, onChange }) => (
+type StatusFilterProps = Pick<ChoiceSetFilterMultipleProps, 'filter' | 'onChange'>;
+
+const StatusFilter = ({ filter, onChange }: StatusFilterProps) => (
   <ChoiceSetFilter
-    name="status"
     choices={[
       { label: 'Paid', value: 'paid' },
       { label: 'Unpaid', value: 'unpaid' },
@@ -35,33 +37,18 @@ const StatusFilter = ({ filter, onChange }) => (
   />
 );
 
-StatusFilter.propTypes = {
-  filter: PropTypes.shape({
-    value: PropTypes.string,
-  }),
-  onChange: PropTypes.func.isRequired,
+type SubmittedAtCellProps = {
+  value?: string | null;
 };
 
-StatusFilter.defaultProps = {
-  filter: null,
-};
-
-const SubmittedAtCell = ({ value }) => {
+const SubmittedAtCell = ({ value }: SubmittedAtCellProps) => {
   const { timezoneName } = useContext(AppRootContext);
 
   if (!value) {
-    return '';
+    return <></>;
   }
 
-  return moment(value).tz(timezoneName).format('MMM D, YYYY h:mma');
-};
-
-SubmittedAtCell.propTypes = {
-  value: PropTypes.string,
-};
-
-SubmittedAtCell.defaultProps = {
-  value: null,
+  return <>{moment(value).tz(timezoneName).format('MMM D, YYYY h:mma')}</>;
 };
 
 const getPossibleColumns = () => [
@@ -75,7 +62,7 @@ const getPossibleColumns = () => [
   {
     Header: 'User',
     id: 'user_name',
-    accessor: (order) => order.user_con_profile.name_without_nickname,
+    accessor: (order: OrderType) => order.user_con_profile.name_without_nickname,
     Filter: FreeTextFilter,
   },
   {
@@ -89,14 +76,14 @@ const getPossibleColumns = () => [
     id: 'submitted_at',
     accessor: 'submitted_at',
     filterable: false,
-    Cell: (props) => <SubmittedAtCell {...props} />,
+    Cell: ({ value }: { value: OrderType['submitted_at'] }) => <SubmittedAtCell value={value} />,
   },
   {
     Header: 'Products',
     id: 'describe_products',
     filterable: false,
     sortable: false,
-    accessor: (order) => order.order_entries.map((entry) => entry.describe_products),
+    accessor: (order: OrderType) => order.order_entries.map((entry) => entry.describe_products),
     Cell: ArrayToSentenceCell,
   },
   {
@@ -111,15 +98,15 @@ const getPossibleColumns = () => [
 
 function OrderAdmin() {
   const newOrderModal = useModal();
-  const [editingOrderId, setEditingOrderId] = useState(null);
+  const [editingOrderId, setEditingOrderId] = useState<number>();
   usePageTitle('Orders');
 
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
-    getData: ({ data }) => data.convention.orders_paginated.entries,
-    getPages: ({ data }) => data.convention.orders_paginated.total_pages,
+    getData: ({ data }) => data!.convention.orders_paginated.entries,
+    getPages: ({ data }) => data!.convention.orders_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'orderAdmin',
-    query: AdminOrdersQuery,
+    useQuery: useAdminOrdersQueryQuery,
     decodeFilterValue: fieldFilterCodecs.decodeFilterValue,
     encodeFilterValue: fieldFilterCodecs.encodeFilterValue,
   });
@@ -128,15 +115,16 @@ function OrderAdmin() {
   // if we don't do it this way, the order doesn't update in the EditOrderModal after it changes
   const editingOrder = useMemo(
     () =>
-      editingOrderId &&
-      queryData?.convention?.orders_paginated?.entries?.find(
-        (order) => order.id === editingOrderId,
-      ),
+      editingOrderId
+        ? queryData?.convention?.orders_paginated?.entries?.find(
+            (order) => order.id === editingOrderId,
+          )
+        : undefined,
     [queryData, editingOrderId],
   );
 
   return (
-    <QueryDataContext.Provider value={queryData}>
+    <QueryDataContext.Provider value={queryData ?? {}}>
       <div className="mb-4">
         <TableHeader
           {...tableHeaderProps}
@@ -158,7 +146,7 @@ function OrderAdmin() {
           {...reactTableProps}
           className="-striped -highlight"
           getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-          getTrProps={(state, rowInfo) => {
+          getTrProps={(state: any, rowInfo: RowInfo) => {
             if (queryData?.currentAbility?.can_update_orders) {
               return {
                 style: { cursor: 'pointer' },
@@ -173,7 +161,7 @@ function OrderAdmin() {
         />
 
         <NewOrderModal visible={newOrderModal.visible} close={newOrderModal.close} />
-        <EditOrderModal order={editingOrder} closeModal={() => setEditingOrderId(null)} />
+        <EditOrderModal order={editingOrder} closeModal={() => setEditingOrderId(undefined)} />
       </div>
     </QueryDataContext.Provider>
   );

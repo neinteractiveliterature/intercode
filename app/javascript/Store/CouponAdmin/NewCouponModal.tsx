@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 
 import CouponForm from './CouponForm';
-import { CreateCoupon } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 import buildCouponInput from './buildCouponInput';
+import { AdminCouponFieldsFragment } from './queries.generated';
+import { useCreateCouponMutation } from './mutations.generated';
 
-function NewCouponModal({ visible, close }) {
-  const [coupon, setCoupon] = useState({
+export type NewCouponModalProps = {
+  visible: boolean;
+  close: () => void;
+};
+
+function NewCouponModal({ visible, close }: NewCouponModalProps) {
+  const [coupon, setCoupon] = useState<Omit<AdminCouponFieldsFragment, 'id'>>({
+    __typename: 'Coupon',
     code: '',
     fixed_amount: null,
     percent_discount: null,
@@ -18,7 +24,7 @@ function NewCouponModal({ visible, close }) {
     usage_limit: null,
     expires_at: null,
   });
-  const [createCoupon] = useMutation(CreateCoupon);
+  const [createCoupon] = useCreateCouponMutation();
   const [createCouponAsync, error, inProgress] = useAsyncFunction(createCoupon);
   const apolloClient = useApolloClient();
 
@@ -33,7 +39,7 @@ function NewCouponModal({ visible, close }) {
       <div className="modal-header">New coupon</div>
       <div className="modal-body">
         <CouponForm value={coupon} onChange={setCoupon} />
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
@@ -51,10 +57,5 @@ function NewCouponModal({ visible, close }) {
     </Modal>
   );
 }
-
-NewCouponModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-};
 
 export default NewCouponModal;

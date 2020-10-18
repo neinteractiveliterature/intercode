@@ -16,6 +16,7 @@ export const RootSiteConventionsAdminTableQuery = gql`
         starts_at
         ends_at
         timezone_name
+        timezone_mode
 
         organization {
           id

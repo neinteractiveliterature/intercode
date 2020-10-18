@@ -12,6 +12,7 @@ generates:
     config:
       nonOptionalTypename: true
       scalars:
+        BigDecimal: string
         Date: string
   app/javascript/:
     preset: near-operation-file

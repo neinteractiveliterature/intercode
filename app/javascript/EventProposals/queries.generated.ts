@@ -144,7 +144,7 @@ export type EventProposalsAdminQueryQueryVariables = Types.Exact<{
 
 export type EventProposalsAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'timezone_name'>
     & { event_categories: Array<(
@@ -168,7 +168,7 @@ export type EventProposalsAdminQueryQuery = (
         ) }
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export type EventProposalHistoryQueryQueryVariables = Types.Exact<{
@@ -444,7 +444,7 @@ export type ProposeEventButtonQueryLazyQueryHookResult = ReturnType<typeof usePr
 export type ProposeEventButtonQueryQueryResult = Apollo.QueryResult<ProposeEventButtonQueryQuery, ProposeEventButtonQueryQueryVariables>;
 export const EventProposalsAdminQueryDocument = gql`
     query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
-  convention {
+  convention: assertConvention {
     id
     timezone_name
     event_categories(current_ability_can_read_event_proposals: true) {

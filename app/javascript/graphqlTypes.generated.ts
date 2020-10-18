@@ -8,7 +8,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  BigDecimal: any;
+  BigDecimal: string;
   /** Date in ISO8601 format */
   Date: string;
   /** An arbitrary object, serialized as JSON */

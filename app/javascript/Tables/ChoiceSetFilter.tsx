@@ -15,7 +15,7 @@ export type ChoiceSetFilterChoice = {
   disabled?: boolean;
 };
 
-function sortChoices(choices: ChoiceSetFilterChoice[]) {
+function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
   return [...choices].sort(({ label: labelA }, { label: labelB }) =>
     labelA.localeCompare(labelB, undefined, { sensitivity: 'base' }),
   );
@@ -24,18 +24,18 @@ function sortChoices(choices: ChoiceSetFilterChoice[]) {
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
 type ChoiceSetFilterCommonProps = {
-  choices: ChoiceSetFilterChoice[];
+  choices: readonly ChoiceSetFilterChoice[];
   filter?: Filter;
   filterCodec?: FilterCodec<ChoiceSetFilterValue>;
 };
 
-type ChoiceSetFilterSingleProps = ChoiceSetFilterCommonProps & {
+export type ChoiceSetFilterSingleProps = ChoiceSetFilterCommonProps & {
   onChange: React.Dispatch<ChoiceSetFilterValue>;
   multiple: false;
   renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
 };
 
-type ChoiceSetFilterMultipleProps = ChoiceSetFilterCommonProps & {
+export type ChoiceSetFilterMultipleProps = ChoiceSetFilterCommonProps & {
   onChange: React.Dispatch<ChoiceSetFilterValue[]>;
   multiple: true;
   renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;

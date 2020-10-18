@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import ReactTable from 'react-table';
+import ReactTable, { RowInfo } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';
 
@@ -8,15 +7,20 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import { timespanFromConvention } from '../TimespanUtils';
-import { RootSiteConventionsAdminTableQuery } from './queries';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import useModal from '../ModalDialogs/useModal';
 import NewConventionModal from './NewConventionModal';
+import {
+  RootSiteConventionsAdminTableQueryQuery,
+  useRootSiteConventionsAdminTableQueryQuery,
+} from './queries.generated';
+
+type ConventionType = RootSiteConventionsAdminTableQueryQuery['conventions_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-function ConventionDatesCell({ value }) {
+function ConventionDatesCell({ value }: { value: ConventionType }) {
   const timespan = useMemo(() => timespanFromConvention(value), [value]);
 
   const datesDescription = useMemo(() => {
@@ -34,7 +38,11 @@ function ConventionDatesCell({ value }) {
       return `${timespan.start.format(startFormat)} - ${timespan.finish.format(finishFormat)}`;
     }
 
-    return timespan.humanizeInTimezone(value.timezone_name, 'MMMM D, YYYY', 'MMMM D, YYYY');
+    return timespan.humanizeInTimezone(
+      value.timezone_name ?? 'Etc/UTC',
+      'MMMM D, YYYY',
+      'MMMM D, YYYY',
+    );
   }, [timespan, value.timezone_name]);
 
   const now = moment();
@@ -48,7 +56,7 @@ function ConventionDatesCell({ value }) {
     );
   }
 
-  if (timespan.start.isAfter(now)) {
+  if (timespan.isFinite() && timespan.start.isAfter(now)) {
     return (
       <>
         <i className="fa fa-arrow-circle-right" aria-label="Future convention" /> {datesDescription}
@@ -63,12 +71,6 @@ function ConventionDatesCell({ value }) {
   );
 }
 
-ConventionDatesCell.propTypes = {
-  value: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
 const getPossibleColumns = () => [
   {
     Header: 'Name',
@@ -79,13 +81,13 @@ const getPossibleColumns = () => [
   {
     Header: 'Organization name',
     id: 'organization_name',
-    accessor: (convention) => convention.organization?.name,
+    accessor: (convention: ConventionType) => convention.organization?.name,
     Filter: FreeTextFilter,
   },
   {
     Header: 'Dates',
     id: 'starts_at',
-    accessor: (convention) => convention,
+    accessor: (convention: ConventionType) => convention,
     Cell: ConventionDatesCell,
     filterable: false,
   },
@@ -102,7 +104,7 @@ function RootSiteConventionsAdminTable() {
     getPages: ({ data }) => data.conventions_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'conventions',
-    query: RootSiteConventionsAdminTableQuery,
+    useQuery: useRootSiteConventionsAdminTableQueryQuery,
   });
   usePageTitle('Conventions');
 
@@ -128,7 +130,7 @@ function RootSiteConventionsAdminTable() {
       <ReactTable
         {...reactTableProps}
         className="-striped -highlight"
-        getTrProps={(state, rowInfo) => ({
+        getTrProps={(state: any, rowInfo: RowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
             history.push(`/conventions/${rowInfo.original.id}`);

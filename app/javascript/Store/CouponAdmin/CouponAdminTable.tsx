@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactTable from 'react-table';
+import ReactTable, { RowInfo } from 'react-table';
 
-import { AdminCouponsQuery } from './queries';
 import describeCoupon from '../describeCoupon';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
@@ -11,8 +10,11 @@ import useModal from '../../ModalDialogs/useModal';
 import NewCouponModal from './NewCouponModal';
 import EditCouponModal from './EditCouponModal';
 import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';
+import { AdminCouponsQueryQuery, useAdminCouponsQueryQuery } from './queries.generated';
 
-const transformColumnIdForExport = (columnId) => {
+type CouponType = AdminCouponsQueryQuery['convention']['coupons_paginated']['entries'][0];
+
+const transformColumnIdForExport = (columnId: string) => {
   if (columnId === 'effect') {
     return ['fixed_amount', 'percent_discount', 'provides_product'];
   }
@@ -30,8 +32,8 @@ const getPossibleColumns = () => [
   {
     Header: 'Effect',
     id: 'effect',
-    accessor: (coupon) => coupon,
-    Cell: ({ value }) => describeCoupon(value),
+    accessor: (coupon: CouponType) => coupon,
+    Cell: ({ value }: { value: CouponType }) => describeCoupon(value),
     filterable: false,
     sortable: false,
   },
@@ -41,8 +43,8 @@ const getPossibleColumns = () => [
     accessor: 'usage_limit',
     filterable: false,
     sortable: false,
-    // eslint-disable-next-line react/prop-types
-    Cell: ({ value }) => (value ? `${pluralizeWithCount('use', value)}` : <em>Unlimited uses</em>),
+    Cell: ({ value }: { value: CouponType['usage_limit'] }) =>
+      value ? `${pluralizeWithCount('use', value)}` : <em>Unlimited uses</em>,
   },
   {
     Header: 'Expiration date',
@@ -55,13 +57,13 @@ const getPossibleColumns = () => [
 
 function CouponAdminTable() {
   const newCouponModal = useModal();
-  const editCouponModal = useModal();
+  const editCouponModal = useModal<{ initialCoupon: CouponType }>();
 
   const [reactTableProps, { tableHeaderProps, columnSelectionProps }] = useReactTableWithTheWorks({
-    getData: ({ data }) => data.convention.coupons_paginated.entries,
-    getPages: ({ data }) => data.convention.coupons_paginated.total_pages,
+    getData: ({ data }) => data!.convention.coupons_paginated.entries,
+    getPages: ({ data }) => data!.convention.coupons_paginated.total_pages,
     getPossibleColumns,
-    query: AdminCouponsQuery,
+    useQuery: useAdminCouponsQueryQuery,
     storageKeyPrefix: 'coupons',
   });
 
@@ -92,7 +94,7 @@ function CouponAdminTable() {
       <ReactTable
         {...reactTableProps}
         className="-striped -highlight"
-        getTrProps={(state, rowInfo) => ({
+        getTrProps={(state: any, rowInfo: RowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
             editCouponModal.open({ initialCoupon: rowInfo.original });

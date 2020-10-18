@@ -18,28 +18,36 @@ const DISCOUNT_MODE_CHOICES = [
 ] as const;
 
 const DISCOUNT_MODES = DISCOUNT_MODE_CHOICES.map((choice) => choice.value);
+type DiscountMode = typeof DISCOUNT_MODES[0];
 
 const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> = {
   __typename: 'Product',
   name: '',
 };
 
-const BLANK_VALUES = {
+const BLANK_VALUES: {
+  fixed_amount: NonNullable<AdminCouponFieldsFragment['fixed_amount']>;
+  percent_discount: NonNullable<AdminCouponFieldsFragment['percent_discount']>;
+  provides_product: NonNullable<AdminCouponFieldsFragment['provides_product']>;
+} = {
   fixed_amount: {
     __typename: 'Money',
     fractional: 0,
     currency_code: 'USD',
   },
-  percent_discount: 0.0,
+  percent_discount: '0',
   provides_product: blankProduct,
 } as const;
 
-export type CouponFormProps = {
-  value: AdminCouponFieldsFragment;
-  onChange: React.Dispatch<React.SetStateAction<AdminCouponFieldsFragment>>;
+export type CouponFormProps<T extends Omit<AdminCouponFieldsFragment, 'id'>> = {
+  value: T;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
 };
 
-function CouponForm({ value, onChange }: CouponFormProps) {
+function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
+  value,
+  onChange,
+}: CouponFormProps<T>) {
   const factory = usePartialStateFactory(value, onChange);
   const [code, setCode] = usePartialState(factory, 'code');
   const [fixedAmount, setFixedAmount] = usePartialState(factory, 'fixed_amount');
@@ -49,10 +57,11 @@ function CouponForm({ value, onChange }: CouponFormProps) {
   const [usageLimit, setUsageLimit] = usePartialState(factory, 'usage_limit');
   const discountMode = useMemo(() => DISCOUNT_MODES.find((mode) => value[mode] != null), [value]);
 
-  const setDiscountMode = (newDiscountMode: typeof DISCOUNT_MODES[0]) => {
-    const discountFields = DISCOUNT_MODES.reduce<
-      Pick<AdminCouponFieldsFragment, 'fixed_amount' | 'percent_discount' | 'provides_product'>
-    >((fields, mode) => ({ ...fields, [mode]: null }), {});
+  const setDiscountMode = <F extends DiscountMode>(newDiscountMode: F) => {
+    const discountFields = DISCOUNT_MODES.reduce<Pick<AdminCouponFieldsFragment, DiscountMode>>(
+      (fields, mode) => ({ ...fields, [mode]: null }),
+      {},
+    );
     discountFields[newDiscountMode] = BLANK_VALUES[newDiscountMode];
     onChange((prevValue) => ({ ...prevValue, ...discountFields }));
   };
@@ -93,7 +102,7 @@ function CouponForm({ value, onChange }: CouponFormProps) {
           type="number"
           min={0}
           max={100}
-          value={percentDiscount.toString()}
+          value={percentDiscount ?? ''}
           onTextChange={setPercentDiscount}
         />
       )}

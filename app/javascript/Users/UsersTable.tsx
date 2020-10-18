@@ -1,23 +1,26 @@
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import ReactTable from 'react-table';
+import ReactTable, { Column, RowInfo } from 'react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
-import { UsersTableUsersQuery } from './queries';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import useModal from '../ModalDialogs/useModal';
 import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
+import { UsersTableUsersQueryQuery, useUsersTableUsersQueryQuery } from './queries.generated';
+
+type UserType = UsersTableUsersQueryQuery['users_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
-const CheckedUserIdsContext = React.createContext([[], () => {}]);
+const CheckedUserIdsContext = React.createContext<
+  [Set<number>, React.Dispatch<React.SetStateAction<Set<number>>>]
+>([new Set<number>(), () => {}]);
 
-function CheckboxCell({ original }) {
+function CheckboxCell({ original }: { original: UserType }) {
   const [checkedUserIds, setCheckedUserIds] = useContext(CheckedUserIdsContext);
   return (
     <input
@@ -41,14 +44,6 @@ function CheckboxCell({ original }) {
   );
 }
 
-CheckboxCell.propTypes = {
-  original: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-  }).isRequired,
-};
-
 const getPossibleColumns = () => [
   {
     Header: '',
@@ -70,7 +65,7 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: (user) => user.name_inverted,
+    accessor: (user: UserType) => user.name_inverted,
     Filter: FreeTextFilter,
   },
   {
@@ -96,8 +91,8 @@ const getPossibleColumns = () => [
 
 function UsersTable() {
   const history = useHistory();
-  const [checkedUserIds, setCheckedUserIds] = useState(new Set());
-  const mergeModal = useModal();
+  const [checkedUserIds, setCheckedUserIds] = useState(new Set<number>());
+  const mergeModal = useModal<{ userIds: number[] }>();
   usePageTitle('Users');
 
   const [reactTableProps, { queryResult, tableHeaderProps }] = useReactTableWithTheWorks({
@@ -112,7 +107,7 @@ function UsersTable() {
     onFilteredChange: () => {
       setCheckedUserIds(new Set());
     },
-    query: UsersTableUsersQuery,
+    useQuery: useUsersTableUsersQueryQuery,
   });
 
   return (
@@ -136,17 +131,17 @@ function UsersTable() {
         <ReactTable
           {...reactTableProps}
           className="-striped -highlight"
-          getTrProps={(state, rowInfo) => ({
+          getTrProps={(state: any, rowInfo: RowInfo) => ({
             style: { cursor: 'pointer' },
             onClick: () => {
               history.push(`/users/${rowInfo.original.id}`);
             },
           })}
-          getTdProps={(state, rowInfo, column) => {
+          getTdProps={(state: any, rowInfo: RowInfo, column: Column) => {
             if (column.id === '_checkbox') {
               return {
                 style: { cursor: 'default' },
-                onClick: (e) => {
+                onClick: (e: React.MouseEvent) => {
                   e.stopPropagation();
                 },
               };
@@ -164,7 +159,7 @@ function UsersTable() {
             queryResult.refetch();
             setCheckedUserIds(new Set());
           }}
-          userIds={(mergeModal.state || {}).userIds}
+          userIds={mergeModal.state?.userIds}
         />
       </div>
     </CheckedUserIdsContext.Provider>
