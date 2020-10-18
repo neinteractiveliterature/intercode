@@ -3226,7 +3226,7 @@ export type ProductVariant = {
   __typename: 'ProductVariant';
   description?: Maybe<Scalars['String']>;
   description_html?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   image_url?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   order_quantities_by_status: Array<OrderQuantityByStatus>;
