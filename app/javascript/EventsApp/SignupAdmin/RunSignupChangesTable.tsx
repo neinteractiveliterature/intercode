@@ -63,7 +63,6 @@ const getPossibleColumns = (t: TFunction) => [
     sortable: false,
     filterable: false,
     width: 130,
-    // eslint-disable-next-line react/prop-types
     Cell: ({ value }: { value: string }) => <TimestampCell value={value} />,
   },
 ];
