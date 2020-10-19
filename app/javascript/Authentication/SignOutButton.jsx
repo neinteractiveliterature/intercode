@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import fetch from 'unfetch';
 import { useHistory } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';

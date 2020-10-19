@@ -4610,7 +4610,7 @@ type User {
   last_name: String
   name: String
   name_inverted: String
-  privileges: [String]
+  privileges: [String!]
   user_con_profiles: [UserConProfile!]!
 }
 

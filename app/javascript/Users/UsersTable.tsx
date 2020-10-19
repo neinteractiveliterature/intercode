@@ -104,9 +104,7 @@ function UsersTable() {
     getPages: ({ data }) => data.users_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'users',
-    onFilteredChange: () => {
-      setCheckedUserIds(new Set());
-    },
+    onFilteredChange: () => setCheckedUserIds(new Set()),
     useQuery: useUsersTableUsersQueryQuery,
   });
 
@@ -121,7 +119,7 @@ function UsersTable() {
           renderLeftContent={() => (
             <div className="ml-2 mb-2 d-inline-block align-top">
               <MultiUserActionsDropdown
-                selectedUserIds={[...checkedUserIds]}
+                selectedUserIds={checkedUserIds}
                 onClickMerge={() => mergeModal.open({ userIds: [...checkedUserIds] })}
               />
             </div>

@@ -58,6 +58,7 @@ export const DetailedUserFields = gql`
         starts_at
         ticket_name
         timezone_name
+        timezone_mode
       }
 
       staff_positions {

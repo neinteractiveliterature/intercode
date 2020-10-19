@@ -1,5 +1,4 @@
 import { lazy, ComponentType } from 'react';
-import fetch from 'unfetch';
 
 let bundleHash: string;
 
