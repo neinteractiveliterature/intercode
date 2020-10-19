@@ -2891,11 +2891,11 @@ type Product {
   available: Boolean!
   description: String
   description_html: String
-  id: Int
+  id: Int!
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
-  payment_options: [String]!
+  payment_options: [String!]!
   price: Money! @deprecated(reason: "Use pricing_structure instead")
   pricing_structure: PricingStructure
   product_variants: [ProductVariant!]!

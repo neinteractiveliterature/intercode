@@ -3198,11 +3198,11 @@ export type Product = {
   available: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
   description_html?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   image_url?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   order_quantities_by_status: Array<OrderQuantityByStatus>;
-  payment_options: Array<Maybe<Scalars['String']>>;
+  payment_options: Array<Scalars['String']>;
   /** @deprecated Use pricing_structure instead */
   price: Money;
   pricing_structure?: Maybe<PricingStructure>;

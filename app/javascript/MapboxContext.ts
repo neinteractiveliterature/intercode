@@ -54,6 +54,7 @@ export function useMapboxContext({
       result.accessToken = mapboxAccessToken;
       setMapboxgl({
         Map: result.Map,
+        Marker: result.Marker,
       });
     });
     loadingPromise.current = promise;

@@ -6,11 +6,8 @@ import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckb
 import usePropertyUpdater from './usePropertyUpdater';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
-import {
-  RegistrationPolicyFormItem,
-  RegistrationPolicyPreset,
-  WithGeneratedId,
-} from '../FormItemUtils';
+import { RegistrationPolicyFormItem, RegistrationPolicyPreset } from '../FormItemUtils';
+import { WithGeneratedId } from '../../GeneratedIdUtils';
 
 export type RegistrationPolicyItemEditorProps = FormItemEditorProps<RegistrationPolicyFormItem>;
 function RegistrationPolicyItemEditor({
@@ -34,7 +31,7 @@ function RegistrationPolicyItemEditor({
   const allowCustomChanged = usePropertyUpdater(setFormItem, 'allow_custom');
 
   const [addPreset, presetChanged, deletePreset, movePreset] = useArrayProperty<
-    WithGeneratedId<RegistrationPolicyPreset>,
+    WithGeneratedId<RegistrationPolicyPreset, string>,
     typeof formItem,
     'presets'
   >('presets', setFormItem, generateNewPreset);

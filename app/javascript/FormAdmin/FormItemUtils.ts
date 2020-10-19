@@ -16,6 +16,7 @@ import {
 } from '../FormPresenter/TimeblockTypes';
 import { notEmpty } from '../ValueUtils';
 import FormTypes from '../../../config/form_types.json';
+import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
 
 const GENERATED_ID_ARRAY_PROPERTIES = [
   'choices',
@@ -55,24 +56,18 @@ export type WithRequiredIdentifier<T extends ParsedFormItem<any, any>> = Omit<T,
   identifier: NonNullable<T['identifier']>;
 };
 
-export type WithGeneratedId<T> = T & { generatedId: string };
-
-export type WithoutGeneratedId<T> = Omit<T, 'generatedId'>;
-
-export type ArrayWithGeneratedIds<T> = T extends any[] ? WithGeneratedId<T[0]>[] : never;
-
-export type ArrayWithoutGeneratedIds<T> = T extends WithGeneratedId<any>[]
-  ? WithoutGeneratedId<T[0]>[]
-  : never;
-
 export type PropertiesWithGeneratedIds<T> = T extends undefined
   ? undefined
   : {
-      [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithGeneratedIds<T[K]> : T[K];
+      [K in keyof T]: K extends GeneratedIdArrayProperty
+        ? ArrayWithGeneratedIds<T[K], string>
+        : T[K];
     };
 
 export type PropertiesWithoutGeneratedIds<T> = {
-  [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithoutGeneratedIds<T[K]> : T[K];
+  [K in keyof T]: K extends GeneratedIdArrayProperty
+    ? ArrayWithoutGeneratedIds<T[K], string>
+    : T[K];
 };
 
 export type WithRequiredProperties<T extends ParsedFormItem<any, any>> = Omit<T, 'properties'> & {
