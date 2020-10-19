@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import fetch from 'unfetch';
 import { useTranslation, Trans } from 'react-i18next';
 import { humanize } from 'inflected';
 import flatMap from 'lodash/flatMap';

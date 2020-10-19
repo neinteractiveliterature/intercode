@@ -1,18 +1,26 @@
 import React, { useContext, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import type { LngLat, Map, Marker } from 'mapbox-gl';
 
 import MapboxContext from '../MapboxContext';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
-function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom }) {
-  const containerRef = useRef();
-  const mapRef = useRef();
-  const markerRef = useRef();
+export type MapboxMapProps = {
+  center?: LngLat;
+  zoom?: number;
+  markerLocation?: LngLat;
+  setCenter?: React.Dispatch<LngLat>;
+  setZoom?: React.Dispatch<number>;
+};
+
+function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom }: MapboxMapProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<Map | null>(null);
+  const markerRef = useRef<Marker | null>(null);
   const { getMapboxGL, mapboxAccessToken } = useContext(MapboxContext);
   const mapboxgl = getMapboxGL();
 
   useEffect(() => {
-    if (mapboxgl == null) {
+    if (mapboxgl == null || containerRef.current == null) {
       return undefined;
     }
 
@@ -44,7 +52,7 @@ function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom }) {
   }, [center, zoom]);
 
   useEffect(() => {
-    if (!mapRef.current) {
+    if (!mapRef.current || !mapboxgl) {
       return;
     }
 
@@ -81,21 +89,5 @@ function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom }) {
     </div>
   );
 }
-
-MapboxMap.propTypes = {
-  center: PropTypes.arrayOf(PropTypes.number),
-  zoom: PropTypes.number,
-  markerLocation: PropTypes.arrayOf(PropTypes.number),
-  setCenter: PropTypes.func,
-  setZoom: PropTypes.func,
-};
-
-MapboxMap.defaultProps = {
-  center: null,
-  zoom: null,
-  markerLocation: null,
-  setCenter: null,
-  setZoom: null,
-};
 
 export default MapboxMap;

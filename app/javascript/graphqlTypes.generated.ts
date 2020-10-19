@@ -4726,7 +4726,7 @@ export type User = {
   last_name?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   name_inverted?: Maybe<Scalars['String']>;
-  privileges?: Maybe<Array<Maybe<Scalars['String']>>>;
+  privileges?: Maybe<Array<Scalars['String']>>;
   user_con_profiles: Array<UserConProfile>;
 };
 

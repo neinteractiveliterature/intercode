@@ -2,7 +2,7 @@ class Types::UserType < Types::BaseObject
   authorize_record
 
   field :id, Integer, null: false
-  field :privileges, [String, null: true], null: true
+  field :privileges, [String], null: true
   field :name, String, null: true
   field :name_inverted, String, null: true
   field :first_name, String, null: true

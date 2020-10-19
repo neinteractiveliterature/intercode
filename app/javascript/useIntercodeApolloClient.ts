@@ -2,7 +2,6 @@ import { useRef, useMemo, useEffect, RefObject } from 'react';
 import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
-import fetch from 'unfetch';
 import { DateTime } from 'luxon';
 
 import possibleTypes from './possibleTypes.json';

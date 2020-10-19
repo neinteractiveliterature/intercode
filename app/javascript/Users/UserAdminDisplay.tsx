@@ -2,22 +2,19 @@ import React, { useMemo } from 'react';
 import { humanize, titleize } from 'inflected';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
-import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
 
-import ErrorDisplay from '../ErrorDisplay';
-import { UserAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
-import LoadingIndicator from '../LoadingIndicator';
 import { timezoneNameForConvention } from '../TimeUtils';
+import { UserAdminQueryQuery, useUserAdminQueryQuery } from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function sortByConventionDate(profiles) {
+function sortByConventionDate(profiles: UserAdminQueryQuery['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
 }
 
-function buildProfileUrl(profile) {
+function buildProfileUrl(profile: UserAdminQueryQuery['user']['user_con_profiles'][0]) {
   const profileUrl = new URL(
     `//${profile.convention.domain}/user_con_profiles/${profile.id}`,
     window.location.href,
@@ -26,24 +23,15 @@ function buildProfileUrl(profile) {
   return profileUrl.toString();
 }
 
-function UserAdminDisplay() {
-  const userId = Number.parseInt(useParams().id, 10);
-  const { data, loading, error } = useQuery(UserAdminQuery, { variables: { id: userId } });
+function useLoadUserAdminData() {
+  const userId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  return useUserAdminQueryQuery({ variables: { id: userId } });
+}
 
-  usePageTitle(useValueUnless(() => data.user.name, error || loading));
+export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay({ data }) {
+  usePageTitle(data.user.name);
 
-  const userConProfiles = useMemo(
-    () => (loading || error ? null : sortByConventionDate(data.user.user_con_profiles)),
-    [data, error, loading],
-  );
-
-  if (loading) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  const userConProfiles = useMemo(() => sortByConventionDate(data.user.user_con_profiles), [data]);
 
   return (
     <div className="row">
@@ -51,7 +39,7 @@ function UserAdminDisplay() {
         <h1>{data.user.name}</h1>
         <table className="table table-sm table-striped my-4">
           <tbody>
-            {['first_name', 'last_name', 'email'].map((field) => (
+            {(['first_name', 'last_name', 'email'] as const).map((field) => (
               <tr key={field}>
                 <th scope="row" className="pr-2">
                   {humanize(field)}
@@ -65,8 +53,8 @@ function UserAdminDisplay() {
                 Privileges
               </th>
               <td>
-                {data.user.privileges.length > 0
-                  ? data.user.privileges.map((priv) => titleize(priv)).join(', ')
+                {(data.user.privileges?.length ?? 0) > 0
+                  ? data.user.privileges!.map(titleize).join(', ')
                   : 'none'}
               </td>
             </tr>
@@ -114,6 +102,4 @@ function UserAdminDisplay() {
       <div className="col-lg-3">{/* this.renderUserAdminSection(data) */}</div>
     </div>
   );
-}
-
-export default UserAdminDisplay;
+});
