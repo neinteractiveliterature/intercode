@@ -412,12 +412,24 @@ export type StandardItemIdentifier<
   FormType extends FormTypeDefinition
 > = keyof FormType['standard_items'];
 
+export type AnyStandardItemIdentifier =
+  | StandardItemIdentifier<typeof FormTypes['event']>
+  | StandardItemIdentifier<typeof FormTypes['event_proposal']>
+  | StandardItemIdentifier<typeof FormTypes['user_con_profile']>;
+
 export type StandardItem = Partial<
   Omit<
     FormEditorFormItemFieldsFragment,
-    'id' | '__typename' | 'position' | 'properties' | 'rendered_properties' | 'identifier'
+    | 'id'
+    | '__typename'
+    | 'item_type'
+    | 'position'
+    | 'properties'
+    | 'rendered_properties'
+    | 'identifier'
   >
 > & {
+  item_type?: TypedFormItem['item_type'];
   description: string;
   required?: boolean;
   deprecation_reason?: string;

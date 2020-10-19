@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
+// @ts-expect-error
 import { capitalize } from 'inflected';
 import { useHistory } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
@@ -12,12 +13,24 @@ import FormTypes from '../../../config/form_types.json';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
+import { FormAdminQueryQuery, FormAdminQueryQueryVariables } from './queries.generated';
+import { CreateFormMutation, CreateFormMutationVariables } from './mutations.generated';
 
-function NewFormModal({ visible, close }) {
+export type NewFormModalProps = {
+  visible: boolean;
+  close: () => void;
+};
+
+function NewFormModal({ visible, close }: NewFormModalProps) {
   const history = useHistory();
   const [title, setTitle] = useState('');
   const [formType, setFormType] = useState('');
-  const createFormMutate = useCreateMutation(CreateForm, {
+  const createFormMutate = useCreateMutation<
+    FormAdminQueryQuery,
+    FormAdminQueryQueryVariables,
+    CreateFormMutationVariables,
+    CreateFormMutation
+  >(CreateForm, {
     query: FormAdminQuery,
     arrayPath: ['convention', 'forms'],
     newObjectPath: ['createForm', 'form'],
@@ -28,7 +41,10 @@ function NewFormModal({ visible, close }) {
       const { data } = await createFormMutate({
         variables: { form: { title: t }, formType: ft },
       });
-      history.push(`/admin_forms/${data.createForm.form.id}/edit`);
+      const form = data?.createForm?.form;
+      if (form) {
+        history.push(`/admin_forms/${form.id}/edit`);
+      }
     },
     [createFormMutate, history],
   );
@@ -64,7 +80,7 @@ function NewFormModal({ visible, close }) {
           ))}
         </BootstrapFormSelect>
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -83,10 +99,5 @@ function NewFormModal({ visible, close }) {
     </Modal>
   );
 }
-
-NewFormModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-};
 
 export default NewFormModal;
