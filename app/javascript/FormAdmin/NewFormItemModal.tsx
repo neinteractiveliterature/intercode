@@ -1,12 +1,12 @@
 import React, { useContext, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
+import { ApolloError } from '@apollo/client';
 
 import { FormEditorContext } from './FormEditorContexts';
-import { sortByLocaleString } from '../ValueUtils';
+import { notEmpty, sortByLocaleString } from '../ValueUtils';
 import FormItemDefaultProperties from '../../../config/form_item_default_properties.json';
 import buildNewFormItem from './buildNewFormItem';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
@@ -15,6 +15,12 @@ import FormItemIdentifierInput from './ItemEditors/FormItemIdentifierInput';
 import HelpPopover from '../UIComponents/HelpPopover';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import {
+  FormTypeDefinition,
+  StandardItem,
+  StandardItemIdentifier,
+  TypedFormItem,
+} from './FormItemUtils';
 
 const customItemTypes = Object.keys(FormItemDefaultProperties).filter(
   (itemType) => itemType !== 'static_text',
@@ -22,7 +28,7 @@ const customItemTypes = Object.keys(FormItemDefaultProperties).filter(
 
 const NO_CAPTION_ITEM_TYPES = ['event_email', 'registration_policy'];
 
-const standardItemProperties = (standardItem, itemType) => {
+const standardItemProperties = (standardItem: StandardItem | undefined, itemType: string) => {
   if (!standardItem) {
     return {};
   }
@@ -33,14 +39,29 @@ const standardItemProperties = (standardItem, itemType) => {
   };
 };
 
-function NewFormItemModal({ visible, close, createFormItem }) {
-  const { form, formType } = useContext(FormEditorContext);
-  const [itemType, setItemType] = useState(null);
-  const [standardItem, setStandardItem] = useState(null);
-  const [identifier, setIdentifier] = useState(null);
+export type NewFormItemModalProps<FormType extends FormTypeDefinition> = {
+  visible: boolean;
+  close: () => void;
+  createFormItem: (item: TypedFormItem) => Promise<any>;
+  formType: FormType;
+};
+
+function NewFormItemModal<FormType extends FormTypeDefinition>({
+  visible,
+  close,
+  createFormItem,
+  formType,
+}: NewFormItemModalProps<FormType>) {
+  const { form } = useContext(FormEditorContext);
+  const [itemType, setItemType] = useState<TypedFormItem['item_type']>();
+  const [standardItem, setStandardItem] = useState<StandardItem>();
+  const [identifier, setIdentifier] = useState<string>();
   const [createAsync, createError, createInProgress] = useAsyncFunction(createFormItem);
 
-  const standardItems = formType.standard_items;
+  const standardItems: Record<string, StandardItem> = formType.standard_items as Record<
+    string,
+    StandardItem
+  >;
 
   const existingStandardItemIdentifiers = useMemo(
     () =>
@@ -48,8 +69,10 @@ function NewFormItemModal({ visible, close, createFormItem }) {
         flatMap(
           form.form_sections.map((section) =>
             section.form_items
-              .filter((item) => standardItems[item.identifier])
-              .map((item) => item.identifier),
+              .map((item) => item.identifier)
+              .filter(notEmpty)
+              .filter((itemIdentifier) => itemIdentifier in standardItems)
+              .map((itemIdentifier) => itemIdentifier as StandardItemIdentifier<FormType>),
           ),
         ),
       ),
@@ -80,30 +103,36 @@ function NewFormItemModal({ visible, close, createFormItem }) {
 
   const standardItemIdentifierOrCustomItemType = standardItem ? identifier : `_custom_${itemType}`;
 
-  const setStandardItemIdentifierOrCustomItemType = (value) => {
+  const setStandardItemIdentifierOrCustomItemType = (value: string) => {
     const match = value && value.match(/^_custom_(\w+)/);
     if (match) {
-      setStandardItem(null);
-      setItemType(match[1]);
-      setIdentifier(null);
-    } else {
-      const newStandardItem = formType.standard_items[value];
+      setStandardItem(undefined);
+      setItemType(match[1] as TypedFormItem['item_type']);
+      setIdentifier(undefined);
+    } else if (value in formType.standard_items) {
+      const newStandardItem = formType.standard_items[
+        value as keyof typeof formType.standard_items
+      ] as StandardItem;
       if (newStandardItem) {
         setStandardItem(newStandardItem);
         setItemType(newStandardItem.item_type);
         setIdentifier(value);
       } else {
-        setStandardItem(null);
-        setItemType(null);
-        setIdentifier(null);
+        setStandardItem(undefined);
+        setItemType(undefined);
+        setIdentifier(undefined);
       }
     }
   };
 
   const addClicked = async () => {
+    if (!itemType || !identifier) {
+      return;
+    }
     const newFormItem = buildNewFormItem(itemType);
     await createAsync({
       ...newFormItem,
+      __typename: 'FormItem',
       identifier,
       default_value: (standardItem || {}).default_value,
       admin_description: (standardItem || {}).admin_description,
@@ -141,9 +170,13 @@ function NewFormItemModal({ visible, close, createFormItem }) {
                       setStandardItemIdentifierOrCustomItemType(item.identifier);
                     }
                   }}
-                  disabled={existingStandardItemIdentifiers.has(item.identifier)}
+                  disabled={existingStandardItemIdentifiers.has(
+                    item.identifier as keyof FormType['standard_items'],
+                  )}
                   className={classNames({
-                    'text-muted': existingStandardItemIdentifiers.has(item.identifier),
+                    'text-muted': existingStandardItemIdentifiers.has(
+                      item.identifier as keyof FormType['standard_items'],
+                    ),
                   })}
                 />
               ))}
@@ -167,9 +200,13 @@ function NewFormItemModal({ visible, close, createFormItem }) {
                         setStandardItemIdentifierOrCustomItemType(item.identifier);
                       }
                     }}
-                    disabled={existingStandardItemIdentifiers.has(item.identifier)}
+                    disabled={existingStandardItemIdentifiers.has(
+                      item.identifier as keyof FormType['standard_items'],
+                    )}
                     className={classNames({
-                      'text-muted': existingStandardItemIdentifiers.has(item.identifier),
+                      'text-muted': existingStandardItemIdentifiers.has(
+                        item.identifier as keyof FormType['standard_items'],
+                      ),
                     })}
                   />
                 ))}
@@ -204,7 +241,11 @@ function NewFormItemModal({ visible, close, createFormItem }) {
         )}
 
         {standardItem && !standardItem.item_type && (
-          <BootstrapFormSelect label="Item type" value={itemType || ''} onValueChange={setItemType}>
+          <BootstrapFormSelect
+            label="Item type"
+            value={itemType || ''}
+            onValueChange={(newValue: TypedFormItem['item_type']) => setItemType(newValue)}
+          >
             <option aria-hidden value="">
               Choose an item type...
             </option>
@@ -216,7 +257,7 @@ function NewFormItemModal({ visible, close, createFormItem }) {
           </BootstrapFormSelect>
         )}
 
-        <ErrorDisplay graphQLError={createError} />
+        <ErrorDisplay graphQLError={createError as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -240,11 +281,5 @@ function NewFormItemModal({ visible, close, createFormItem }) {
     </Modal>
   );
 }
-
-NewFormItemModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-  createFormItem: PropTypes.func.isRequired,
-};
 
 export default NewFormItemModal;

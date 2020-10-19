@@ -46,7 +46,7 @@ export type FormAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }
 
 export type FormAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { forms: Array<(
@@ -54,7 +54,7 @@ export type FormAdminQueryQuery = (
       & Pick<Types.Form, 'id'>
       & FormFieldsFragment
     )> }
-  )> }
+  ) }
 );
 
 export type FormEditorQueryQueryVariables = Types.Exact<{
@@ -64,10 +64,10 @@ export type FormEditorQueryQueryVariables = Types.Exact<{
 
 export type FormEditorQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
-  )>, form: (
+  ), form: (
     { __typename: 'Form' }
     & Pick<Types.Form, 'id'>
     & FormEditorDataFragment
@@ -134,7 +134,7 @@ export const FormEditorDataFragmentDoc = gql`
 ${FormEditorFormItemFieldsFragmentDoc}`;
 export const FormAdminQueryDocument = gql`
     query FormAdminQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     forms {
@@ -171,7 +171,7 @@ export type FormAdminQueryLazyQueryHookResult = ReturnType<typeof useFormAdminQu
 export type FormAdminQueryQueryResult = Apollo.QueryResult<FormAdminQueryQuery, FormAdminQueryQueryVariables>;
 export const FormEditorQueryDocument = gql`
     query FormEditorQuery($id: Int!) {
-  convention {
+  convention: assertConvention {
     id
     name
     starts_at

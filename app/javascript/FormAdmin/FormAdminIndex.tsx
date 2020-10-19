@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
-import { useQuery } from '@apollo/client';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteForm } from './mutations';
@@ -12,9 +11,10 @@ import usePageTitle from '../usePageTitle';
 import { useDeleteMutation } from '../MutationUtils';
 import useModal from '../ModalDialogs/useModal';
 import NewFormModal from './NewFormModal';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { FormAdminQueryQuery, useFormAdminQueryQuery } from './queries.generated';
 
-function describeFormUsers(form) {
+function describeFormUsers(form: FormAdminQueryQuery['convention']['forms'][0]) {
   return [
     ...form.user_con_profile_conventions
       .map((convention) => `User profile form for ${convention.name}`)
@@ -28,8 +28,7 @@ function describeFormUsers(form) {
   ];
 }
 
-function FormAdminIndex() {
-  const { data, loading, error } = useQuery(FormAdminQuery);
+export default LoadQueryWrapper(useFormAdminQueryQuery, function FormAdminIndex({ data }) {
   const confirm = useConfirm();
   const deleteForm = useDeleteMutation(DeleteForm, {
     query: FormAdminQuery,
@@ -38,20 +37,11 @@ function FormAdminIndex() {
   });
   const newFormModal = useModal();
   const sortedForms = useMemo(
-    () =>
-      error || loading ? null : sortByLocaleString(data.convention.forms, (form) => form.title),
-    [data, error, loading],
+    () => sortByLocaleString(data.convention.forms, (form) => form.title),
+    [data],
   );
 
   usePageTitle('Forms');
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -119,6 +109,4 @@ function FormAdminIndex() {
       <NewFormModal visible={newFormModal.visible} close={newFormModal.close} />
     </>
   );
-}
-
-export default FormAdminIndex;
+});
