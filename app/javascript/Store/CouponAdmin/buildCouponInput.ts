@@ -8,9 +8,12 @@ export default function buildCouponInput(
     'code' | 'provides_product' | 'fixed_amount' | 'percent_discount' | 'usage_limit' | 'expires_at'
   >,
 ): CouponInput {
+  const providesProductId = coupon.provides_product?.id;
+
   return {
     code: coupon.code,
-    provides_product_id: coupon.provides_product?.id,
+    // blankProduct uses 0 as its ID
+    provides_product_id: providesProductId === 0 ? undefined : providesProductId,
     fixed_amount: buildMoneyInput(coupon.fixed_amount),
     percent_discount: coupon.percent_discount,
     usage_limit: coupon.usage_limit,

@@ -1,14 +1,11 @@
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
+import { ApolloError } from '@apollo/client';
 
-import { useMutation } from '@apollo/client';
 import { AdminProductsQuery } from '../queries';
-import AdminProductVariantsTable from '../AdminProductVariantsTable';
-import { CreateProduct, UpdateProduct } from '../mutations';
+import AdminProductVariantsTable from './AdminProductVariantsTable';
 import ErrorDisplay from '../../ErrorDisplay';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
-import { mutator, Transforms } from '../../ComposableFormUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import useUniqueId from '../../useUniqueId';
 import PricingStructureInput from '../PricingStructureInput';
@@ -16,8 +13,15 @@ import buildProductInput from '../buildProductInput';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import AppRootContext from '../../AppRootContext';
+import { AdminProductsQueryQuery } from '../queries.generated';
+import { useCreateProductMutation, useUpdateProductMutation } from '../mutations.generated';
+import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { EditingProduct } from './EditingProductTypes';
+import { hasRealId } from '../../GeneratedIdUtils';
 
-function duplicateProductForEditing(product) {
+function duplicateProductForEditing(
+  product: AdminProductsQueryQuery['convention']['products'][0],
+): EditingProduct {
   return {
     ...product,
     product_variants: product.product_variants.map((variant) => ({ ...variant })),
@@ -25,26 +29,27 @@ function duplicateProductForEditing(product) {
   };
 }
 
-function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
-  const { ticketName } = useContext(AppRootContext);
-  const [createProduct] = useMutation(CreateProduct);
-  const [updateProduct] = useMutation(UpdateProduct);
-  const [product, setProduct] = useState(() => duplicateProductForEditing(initialProduct));
-  const editingProductMutator = mutator({
-    getState: () => product,
-    setState: setProduct,
-    transforms: {
-      available: Transforms.identity,
-      description: Transforms.identity,
-      name: Transforms.identity,
-      payment_options: Transforms.identity,
-      pricing_structure: Transforms.identity,
-      product_variants: Transforms.identity,
-    },
-  });
+export type EditAdminProductCardProps = {
+  initialProduct: AdminProductsQueryQuery['convention']['products'][0];
+  close: () => void;
+  ticketTypes: AdminProductsQueryQuery['convention']['ticket_types'];
+};
 
-  const imageChanged = (event) => {
-    const file = event.target.files[0];
+function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps) {
+  const { ticketName } = useContext(AppRootContext);
+  const [createProduct] = useCreateProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
+  const [product, setProduct] = useState(() => duplicateProductForEditing(initialProduct));
+  const factory = usePartialStateFactory(product, setProduct);
+  const [available, setAvailable] = usePartialState(factory, 'available');
+  const [description, setDescription] = usePartialState(factory, 'description');
+  const [name, setName] = usePartialState(factory, 'name');
+  const [paymentOptions, setPaymentOptions] = usePartialState(factory, 'payment_options');
+  const [pricingStructure, setPricingStructure] = usePartialState(factory, 'pricing_structure');
+  const [, setProductVariants] = usePartialState(factory, 'product_variants');
+
+  const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files![0];
     if (!file) {
       return;
     }
@@ -58,13 +63,13 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
     reader.addEventListener('load', () => {
       setProduct((prevEditingProduct) => ({
         ...prevEditingProduct,
-        image_url: reader.result,
+        image_url: reader.result?.toString(),
       }));
     });
     reader.readAsDataURL(file);
   };
 
-  const deleteVariant = (variantId) => {
+  const deleteVariant = (variantId: number) => {
     setProduct((prevEditingProduct) => ({
       ...prevEditingProduct,
       delete_variant_ids: [...prevEditingProduct.delete_variant_ids, variantId],
@@ -74,23 +79,20 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
   const saveProduct = async () => {
     const productInput = buildProductInput(product);
 
-    if (product.id) {
+    if (hasRealId(product)) {
       await updateProduct({
         variables: { id: product.id, product: productInput },
       });
     } else {
       await createProduct({
         variables: { product: productInput },
-        update: (
-          cache,
-          {
-            data: {
-              createProduct: { product: newProduct },
-            },
-          },
-        ) => {
-          const data = cache.readQuery({ query: AdminProductsQuery });
-          cache.writeQuery({
+        update: (cache, result) => {
+          const data = cache.readQuery<AdminProductsQueryQuery>({ query: AdminProductsQuery });
+          const newProduct = result.data?.createProduct?.product;
+          if (!data || !newProduct) {
+            return;
+          }
+          cache.writeQuery<AdminProductsQueryQuery>({
             query: AdminProductsQuery,
             data: {
               ...data,
@@ -141,10 +143,8 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
               className="form-control"
               placeholder="Product name"
               name="name"
-              value={product.name}
-              onChange={(event) => {
-                editingProductMutator.name(event.target.value);
-              }}
+              value={name}
+              onChange={(event) => setName(event.target.value)}
             />
           </div>
           <div className="mr-2">
@@ -167,8 +167,8 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
             <BooleanInput
               name="available"
               caption="Available for purchase"
-              value={product.available}
-              onChange={editingProductMutator.available}
+              value={available}
+              onChange={setAvailable}
             />
           </div>
           <div className="mr-4">
@@ -177,8 +177,8 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
               caption="Payment options"
               choices={paymentOptionChoices}
               multiple
-              value={product.payment_options}
-              onChange={editingProductMutator.payment_options}
+              value={paymentOptions}
+              onChange={(newValue: string[]) => setPaymentOptions(newValue)}
               choiceClassName="form-check-inline"
             />
           </div>
@@ -193,7 +193,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
                 }))
               }
             >
-              <option value={null}>No {ticketName}</option>
+              <option value={undefined}>No {ticketName}</option>
               {ticketTypes.map((ticketType) => (
                 <option value={ticketType.id} key={ticketType.id}>
                   {ticketType.description}
@@ -205,7 +205,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
       </div>
 
       <div className="card-body">
-        <ErrorDisplay graphQLError={saveError} />
+        <ErrorDisplay graphQLError={saveError as ApolloError} />
 
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
           <div className="d-flex flex-column align-items-center">
@@ -230,18 +230,15 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
           <div className="ml-lg-4 col-lg">
             <div className="d-flex">
               <strong className="mr-1">Base price:</strong>
-              <PricingStructureInput
-                value={product.pricing_structure}
-                onChange={editingProductMutator.pricing_structure}
-              />
+              <PricingStructureInput value={pricingStructure} onChange={setPricingStructure} />
             </div>
 
-            <LiquidInput value={product.description} onChange={editingProductMutator.description} />
+            <LiquidInput value={description ?? ''} onChange={setDescription} />
 
             <AdminProductVariantsTable
               product={product}
               editing
-              onChange={editingProductMutator.product_variants}
+              onChange={setProductVariants}
               deleteVariant={deleteVariant}
             />
           </div>
@@ -250,39 +247,5 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }) {
     </div>
   );
 }
-
-EditAdminProductCard.propTypes = {
-  initialProduct: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    description_html: PropTypes.string.isRequired,
-    image_url: PropTypes.string,
-    payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
-    pricing_structure: PropTypes.shape({}),
-    product_variants: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        override_price: PropTypes.shape({
-          fractional: PropTypes.number.isRequired,
-          currency_code: PropTypes.string.isRequired,
-        }),
-      }).isRequired,
-    ).isRequired,
-    available: PropTypes.bool.isRequired,
-  }).isRequired,
-  currentAbility: PropTypes.shape({
-    can_update_products: PropTypes.bool.isRequired,
-  }).isRequired,
-  close: PropTypes.func.isRequired,
-  ticketTypes: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      description: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-};
 
 export default EditAdminProductCard;

@@ -27,7 +27,7 @@ type ProductVariantType = Pick<ProductVariant, '__typename' | 'id' | 'name'> & {
 };
 
 type CommonOrderEntryProps = Pick<OrderEntry, 'quantity' | 'price_per_item'> & {
-  product: Pick<Product, '__typename' | 'name'> & {
+  product: Pick<Product, '__typename' | 'id' | 'name'> & {
     product_variants?: ProductVariantType[] | null;
     pricing_structure?: Pick<PricingStructure, 'price'> | null;
   };

@@ -4,9 +4,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
 import useModal from '../../ModalDialogs/useModal';
 import RegistrationPolicyItemEditorPresetModal from './RegistrationPolicyItemEditorPresetModal';
-import { WithGeneratedId, RegistrationPolicyPreset } from '../FormItemUtils';
+import { RegistrationPolicyPreset } from '../FormItemUtils';
+import { WithGeneratedId } from '../../GeneratedIdUtils';
 
-type PresetWithId = WithGeneratedId<RegistrationPolicyPreset>;
+type PresetWithId = WithGeneratedId<RegistrationPolicyPreset, string>;
 
 function usePresetPropertyUpdater(
   onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void,

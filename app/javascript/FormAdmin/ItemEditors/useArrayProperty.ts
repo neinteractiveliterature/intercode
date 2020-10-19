@@ -2,7 +2,8 @@ import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import usePropertyUpdater from './usePropertyUpdater';
-import { ParsedFormItem, WithoutGeneratedId } from '../FormItemUtils';
+import { ParsedFormItem } from '../FormItemUtils';
+import { WithoutGeneratedId } from '../../GeneratedIdUtils';
 
 // https://stackoverflow.com/questions/46583883/typescript-pick-properties-with-a-defined-type
 type KeysOfType<T, U> = {

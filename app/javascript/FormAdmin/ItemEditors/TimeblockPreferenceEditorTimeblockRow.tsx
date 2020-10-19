@@ -7,7 +7,7 @@ import Timespan from '../../Timespan';
 import useSortable from '../../useSortable';
 import AppRootContext from '../../AppRootContext';
 import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
-import { WithGeneratedId } from '../FormItemUtils';
+import { WithGeneratedId } from '../../GeneratedIdUtils';
 
 function useTimeblockPropertyUpdater(
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void,
@@ -25,7 +25,7 @@ function useTimeblockPropertyUpdater(
 }
 
 export type TimeblockPreferenceEditorTimeblockRowProps = {
-  timeblock: WithGeneratedId<TimeblockDefinition>;
+  timeblock: WithGeneratedId<TimeblockDefinition, string>;
   index: number;
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void;
   deleteTimeblock: (generatedId: string) => void;

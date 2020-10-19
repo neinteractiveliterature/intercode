@@ -23,6 +23,7 @@ type DiscountMode = typeof DISCOUNT_MODES[0];
 const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> = {
   __typename: 'Product',
   name: '',
+  id: 0,
 };
 
 const BLANK_VALUES: {
