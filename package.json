@@ -59,7 +59,7 @@
     "@types/js-search": "^1.4.0",
     "@types/lodash": "^4.14.161",
     "@types/luxon": "^1.25.0",
-    "@types/mapbox-gl": "^1.12.3",
+    "@types/mapbox-gl": "^1.12.5",
     "@types/minimist": "^1.2.0",
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.30",
