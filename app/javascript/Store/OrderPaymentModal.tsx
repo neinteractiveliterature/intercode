@@ -43,7 +43,7 @@ function OrderPaymentModalContents({
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({ name: initialName ?? '' });
   const stripe = useStripe();
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>();
-  const [awaitingPaymentRequestResult, setAwaitingPaymentRequestResult] = useState(true);
+  const [awaitingPaymentRequestResult, setAwaitingPaymentRequestResult] = useState(false);
   const [choseManualCardEntry, setChoseManualCardEntry] = useState(false);
   const apolloClient = useApolloClient();
   const submitOrder = useSubmitOrder();
@@ -99,7 +99,7 @@ function OrderPaymentModalContents({
   );
 
   useEffect(() => {
-    if (stripe && paymentMode === 'now') {
+    if (stripe && paymentMode === 'now' && totalPrice.fractional !== 0) {
       setAwaitingPaymentRequestResult(true);
 
       const pr = stripe.paymentRequest({
@@ -115,15 +115,19 @@ function OrderPaymentModalContents({
         requestShipping: false,
       });
 
-      pr.canMakePayment().then(async (result) => {
-        setAwaitingPaymentRequestResult(false);
+      pr.canMakePayment()
+        .then(async (result) => {
+          setAwaitingPaymentRequestResult(false);
 
-        if (result) {
-          setPaymentRequest(pr);
+          if (result) {
+            setPaymentRequest(pr);
 
-          pr.on('paymentmethod', onPaymentMethod);
-        }
-      });
+            pr.on('paymentmethod', onPaymentMethod);
+          }
+        })
+        .catch(() => {
+          setAwaitingPaymentRequestResult(false);
+        });
     }
   }, [stripe, totalPrice, onPaymentMethod, paymentMode]);
 
