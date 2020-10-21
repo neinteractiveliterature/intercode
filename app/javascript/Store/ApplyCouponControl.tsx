@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { ApolloError } from '@apollo/client';
 
 import useUniqueId from '../useUniqueId';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 
-function ApplyCouponControl({ createCouponApplication }) {
+export type ApplyCouponControlProps = {
+  createCouponApplication: (code: string) => Promise<any>;
+};
+
+function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps) {
   const [couponCode, setCouponCode] = useState('');
   const couponCodeInputId = useUniqueId('coupon-code-');
   const [applyCoupon, applyError, applyInProgress] = useAsyncFunction(createCouponApplication);
@@ -15,7 +19,7 @@ function ApplyCouponControl({ createCouponApplication }) {
     setCouponCode('');
   };
 
-  const keyDownInCodeInput = (event) => {
+  const keyDownInCodeInput = (event: React.KeyboardEvent) => {
     if (event.keyCode === 13 || event.keyCode === 32) {
       event.preventDefault();
       applyClicked();
@@ -45,13 +49,9 @@ function ApplyCouponControl({ createCouponApplication }) {
       >
         Apply
       </button>
-      <ErrorDisplay graphQLError={applyError} />
+      <ErrorDisplay graphQLError={applyError as ApolloError} />
     </>
   );
 }
-
-ApplyCouponControl.propTypes = {
-  createCouponApplication: PropTypes.func.isRequired,
-};
 
 export default ApplyCouponControl;

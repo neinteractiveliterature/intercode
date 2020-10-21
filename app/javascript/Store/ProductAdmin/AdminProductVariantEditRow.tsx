@@ -4,7 +4,7 @@ import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { usePartialState, usePartialStateFactoryWithValueSetter } from '../../usePartialState';
 import useSortable from '../../useSortable';
-import PricingStructureInput from '../PricingStructureInput';
+import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';
 
 export type AdminProductVariantEditRowProps = {

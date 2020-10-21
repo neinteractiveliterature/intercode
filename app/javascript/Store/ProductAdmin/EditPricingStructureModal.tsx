@@ -1,52 +1,80 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import EnumTypes from '../enumTypes.json';
-import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
-import MoneyInput from './MoneyInput';
+import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
+import EnumTypes from '../../enumTypes.json';
+import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
+import MoneyInput from '../MoneyInput';
 import ScheduledValueEditor, {
   scheduledValueReducer,
-} from '../BuiltInFormControls/ScheduledValueEditor';
-import AppRootContext from '../AppRootContext';
+} from '../../BuiltInFormControls/ScheduledValueEditor';
+import AppRootContext from '../../AppRootContext';
+import {
+  Money,
+  PricingStrategy,
+  PricingStructure,
+  ScheduledMoneyValue,
+} from '../../graphqlTypes.generated';
+import { ModalData } from '../../ModalDialogs/useModal';
 
 const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, description }) => ({
   value: name,
   label: description,
 }));
 
-export const PricingStructureModalContext = React.createContext({
+type EditingPricingStructure = Omit<Partial<PricingStructure>, '__typename'>;
+
+export type PricingStructureModalState = {
+  value: EditingPricingStructure;
+  onChange: React.Dispatch<EditingPricingStructure | undefined>;
+};
+
+export type PricingStructureModalContextValue = ModalData<PricingStructureModalState>;
+
+export const PricingStructureModalContext = React.createContext<PricingStructureModalContextValue>({
   visible: false,
-  value: null,
-  onChange: () => {},
+  state: undefined,
+  open: () => {},
   close: () => {},
+  setState: () => {},
 });
 
-const buildScheduledMoneyValueInput = (value, onChange) => (
-  <MoneyInput value={value} onChange={onChange} />
-);
+const buildScheduledMoneyValueInput = (
+  value: Money | null | undefined,
+  onChange: React.Dispatch<Money>,
+) => <MoneyInput value={value} onChange={onChange} />;
 
-function EditPricingStructureModal({ visible, value, onChange, close }) {
+export type EditPricingStructureModalProps = Pick<
+  PricingStructureModalContextValue,
+  'visible' | 'state' | 'close'
+>;
+
+function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const [pricingStructure, setPricingStructure] = useState(value);
+  const [pricingStructure, setPricingStructure] = useState(state?.value);
 
   useEffect(() => {
-    setPricingStructure(value);
-  }, [value]);
+    setPricingStructure(state?.value);
+  }, [state?.value]);
 
   const dispatchScheduledValue = useCallback(
     (action) => {
-      setPricingStructure((prev) => ({
-        ...prev,
-        value: scheduledValueReducer(pricingStructure.value, action),
-      }));
+      if (!pricingStructure) {
+        return;
+      }
+
+      setPricingStructure({
+        ...pricingStructure,
+        value: scheduledValueReducer(pricingStructure.value as ScheduledMoneyValue, action),
+      });
     },
     [pricingStructure],
   );
 
   const okClicked = () => {
-    onChange(pricingStructure);
+    if (pricingStructure && state?.onChange) {
+      state.onChange(pricingStructure);
+    }
     close();
   };
 
@@ -61,7 +89,7 @@ function EditPricingStructureModal({ visible, value, onChange, close }) {
               caption="Pricing strategy"
               choices={PRICING_STRATEGIES}
               value={pricingStructure.pricing_strategy}
-              onChange={(strategy) =>
+              onChange={(strategy: PricingStrategy) =>
                 setPricingStructure((prev) => ({
                   ...prev,
                   pricing_strategy: strategy,
@@ -74,7 +102,7 @@ function EditPricingStructureModal({ visible, value, onChange, close }) {
                 {(id) => (
                   <MoneyInput
                     id={id}
-                    value={pricingStructure.value}
+                    value={pricingStructure.value as Money}
                     onChange={(price) => setPricingStructure((prev) => ({ ...prev, value: price }))}
                   />
                 )}
@@ -84,7 +112,7 @@ function EditPricingStructureModal({ visible, value, onChange, close }) {
             {pricingStructure.pricing_strategy === 'scheduled_value' && (
               <ScheduledValueEditor
                 timezone={timezoneName}
-                scheduledValue={pricingStructure.value}
+                scheduledValue={pricingStructure.value as ScheduledMoneyValue}
                 dispatch={dispatchScheduledValue}
                 buildValueInput={buildScheduledMoneyValueInput}
               />
@@ -105,17 +133,5 @@ function EditPricingStructureModal({ visible, value, onChange, close }) {
     </Modal>
   );
 }
-
-EditPricingStructureModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-  onChange: PropTypes.func,
-  value: PropTypes.shape({}),
-};
-
-EditPricingStructureModal.defaultProps = {
-  onChange: null,
-  value: null,
-};
 
 export default EditPricingStructureModal;

@@ -8,7 +8,7 @@ import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import useAsyncFunction from '../../useAsyncFunction';
 import useUniqueId from '../../useUniqueId';
-import PricingStructureInput from '../PricingStructureInput';
+import PricingStructureInput from './PricingStructureInput';
 import buildProductInput from '../buildProductInput';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
@@ -19,18 +19,8 @@ import { usePartialState, usePartialStateFactory } from '../../usePartialState';
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
 
-function duplicateProductForEditing(
-  product: AdminProductsQueryQuery['convention']['products'][0],
-): EditingProduct {
-  return {
-    ...product,
-    product_variants: product.product_variants.map((variant) => ({ ...variant })),
-    delete_variant_ids: [],
-  };
-}
-
 export type EditAdminProductCardProps = {
-  initialProduct: AdminProductsQueryQuery['convention']['products'][0];
+  initialProduct: EditingProduct;
   close: () => void;
   ticketTypes: AdminProductsQueryQuery['convention']['ticket_types'];
 };
@@ -39,7 +29,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   const { ticketName } = useContext(AppRootContext);
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
-  const [product, setProduct] = useState(() => duplicateProductForEditing(initialProduct));
+  const [product, setProduct] = useState(initialProduct);
   const factory = usePartialStateFactory(product, setProduct);
   const [available, setAvailable] = usePartialState(factory, 'available');
   const [description, setDescription] = usePartialState(factory, 'description');

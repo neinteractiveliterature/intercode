@@ -1,10 +1,15 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
-import { describeAdminPricingStructure } from './describePricingStructure';
+import { describeAdminPricingStructure } from '../describePricingStructure';
 import { PricingStructureModalContext } from './EditPricingStructureModal';
+import { EditingPricingStructure } from './EditingProductTypes';
 
-function PricingStructureInput({ value, onChange }) {
+export type PricingStructureInputProps = {
+  value: EditingPricingStructure;
+  onChange: React.Dispatch<EditingPricingStructure>;
+};
+
+function PricingStructureInput({ value, onChange }: PricingStructureInputProps) {
   const pricingStructureModal = useContext(PricingStructureModalContext);
 
   return (
@@ -13,7 +18,7 @@ function PricingStructureInput({ value, onChange }) {
       <button
         type="button"
         className="btn btn-link py-0"
-        onClick={() => pricingStructureModal.open({ value: value || {}, onChange })}
+        onClick={() => pricingStructureModal.open({ value, onChange })}
       >
         <i className="fa fa-pencil" />
         <span className="sr-only">Edit</span>
@@ -21,14 +26,5 @@ function PricingStructureInput({ value, onChange }) {
     </>
   );
 }
-
-PricingStructureInput.propTypes = {
-  value: PropTypes.shape({}),
-  onChange: PropTypes.func.isRequired,
-};
-
-PricingStructureInput.defaultProps = {
-  value: null,
-};
 
 export default PricingStructureInput;

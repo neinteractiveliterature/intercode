@@ -9,7 +9,7 @@ export type MoneyInputProps = Omit<
   'type' | 'value' | 'onChange'
 > & {
   value?: Money | null;
-  onChange: React.Dispatch<Money | null | undefined>;
+  onChange: React.Dispatch<Money | undefined>;
   appendContent?: ReactNode;
   inputGroupClassName?: string;
 };
@@ -29,7 +29,7 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
           currency_code: 'USD',
         });
       } else {
-        onChange(null);
+        onChange(undefined);
       }
     };
 

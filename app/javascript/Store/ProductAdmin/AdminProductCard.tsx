@@ -1,19 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { humanize } from 'inflected';
 
-import { useMutation } from '@apollo/client';
 import { AdminProductsQuery } from '../queries';
-import AdminProductVariantsTable from '../AdminProductVariantsTable';
-import { DeleteProduct } from '../mutations';
+import AdminProductVariantsTable from './AdminProductVariantsTable';
 import ErrorDisplay from '../../ErrorDisplay';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { describeAdminPricingStructure } from '../describePricingStructure';
+import { useDeleteProductMutation } from '../mutations.generated';
+import { AdminProductsQueryQuery } from '../queries.generated';
+import { EditingProductWithRealId } from './EditingProductTypes';
 
-function AdminProductCard({ currentAbility, startEditing, product }) {
+export type AdminProductCardProps = {
+  currentAbility: AdminProductsQueryQuery['currentAbility'];
+  startEditing: () => void;
+  product: EditingProductWithRealId;
+};
+
+function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps) {
   const confirm = useConfirm();
-  const [deleteProduct] = useMutation(DeleteProduct);
+  const [deleteProduct] = useDeleteProductMutation();
 
   const deleteClicked = () => {
     confirm({
@@ -22,7 +28,11 @@ function AdminProductCard({ currentAbility, startEditing, product }) {
         deleteProduct({
           variables: { id: product.id },
           update: (cache) => {
-            const data = cache.readQuery({ query: AdminProductsQuery });
+            const data = cache.readQuery<AdminProductsQueryQuery>({ query: AdminProductsQuery });
+            if (!data) {
+              return;
+            }
+
             cache.writeQuery({
               query: AdminProductsQuery,
               data: {
@@ -104,7 +114,7 @@ function AdminProductCard({ currentAbility, startEditing, product }) {
               </strong>
             </p>
             {/* eslint-disable-next-line react/no-danger */}
-            <div dangerouslySetInnerHTML={{ __html: product.description_html }} />
+            <div dangerouslySetInnerHTML={{ __html: product.description_html ?? '' }} />
             <AdminProductVariantsTable product={product} editing={false} />
           </div>
         </div>
@@ -112,36 +122,5 @@ function AdminProductCard({ currentAbility, startEditing, product }) {
     </div>
   );
 }
-
-AdminProductCard.propTypes = {
-  product: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    description_html: PropTypes.string.isRequired,
-    image_url: PropTypes.string,
-    payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
-    pricing_structure: PropTypes.shape({}),
-    product_variants: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        override_price: PropTypes.shape({
-          fractional: PropTypes.number.isRequired,
-          currency_code: PropTypes.string.isRequired,
-        }),
-      }).isRequired,
-    ).isRequired,
-    available: PropTypes.bool.isRequired,
-    provides_ticket_type: PropTypes.shape({
-      description: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-  currentAbility: PropTypes.shape({
-    can_update_products: PropTypes.bool.isRequired,
-  }).isRequired,
-  startEditing: PropTypes.func.isRequired,
-};
 
 export default AdminProductCard;

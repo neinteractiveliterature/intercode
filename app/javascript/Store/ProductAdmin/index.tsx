@@ -1,64 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import AdminProductCard from './AdminProductCard';
-import { AdminProductsQuery } from '../queries';
-import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import usePageTitle from '../../usePageTitle';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useModal from '../../ModalDialogs/useModal';
 import EditPricingStructureModal, {
   PricingStructureModalContext,
-} from '../EditPricingStructureModal';
+  PricingStructureModalState,
+} from './EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
+import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
+import { useAdminProductsQueryQuery } from '../queries.generated';
+import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
+import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 
-function ProductAdmin() {
-  const { data, loading, error } = useQuery(AdminProductsQuery);
-  const [newProducts, setNewProducts] = useState([]);
-  const [editingProductIds, setEditingProductIds] = useState([]);
-  const pricingStructureModal = useModal();
+const blankProduct: EditingProduct = {
+  __typename: 'Product',
+  delete_variant_ids: [],
+  payment_options: [],
+  generatedId: new Date().getTime(),
+  name: '',
+  description: '',
+  image_url: null,
+  product_variants: [],
+  available: true,
+};
+
+export default LoadQueryWrapper(useAdminProductsQueryQuery, function ProductAdmin({ data }) {
+  const [newProducts, setNewProducts] = useState<EditingProduct[]>([]);
+  const [editingProductIds, setEditingProductIds] = useState<number[]>([]);
+  const pricingStructureModal = useModal<PricingStructureModalState>();
+
+  const existingProducts = useMemo(
+    () =>
+      sortByLocaleString(data.convention.products, (product) => product.name).map(
+        duplicateProductForEditing,
+      ),
+    [data.convention.products],
+  );
 
   usePageTitle('Products');
 
   const newProductClicked = () =>
-    setNewProducts((prevNewProducts) => [
-      ...prevNewProducts,
-      {
-        generatedId: new Date().getTime(),
-        name: '',
-        description: '',
-        image_url: null,
-        price: null,
-        product_variants: [],
-        available: true,
-      },
-    ]);
+    setNewProducts((prevNewProducts) => [...prevNewProducts, blankProduct]);
 
-  const removeNewProduct = (product) =>
+  const removeNewProduct = (product: EditingProduct) =>
     setNewProducts((prevNewProducts) =>
-      prevNewProducts.filter((newProduct) => newProduct.generatedId !== product.generatedId),
+      prevNewProducts.filter((newProduct) => !realOrGeneratedIdsMatch(product, newProduct)),
     );
 
+  // first successful load only
   useEffect(() => {
-    if (!loading && !error) {
-      scrollToLocationHash();
-    }
-  }, [loading, error]);
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+    scrollToLocationHash();
+  }, []);
 
   return (
     <PricingStructureModalContext.Provider value={pricingStructureModal}>
       <div>
-        {sortByLocaleString(data.convention.products, (product) => product.name).map((product) =>
+        {existingProducts.map((product) =>
           editingProductIds.includes(product.id) ? (
             <EditAdminProductCard
               key={product.id}
@@ -77,7 +77,7 @@ function ProductAdmin() {
         )}
         {newProducts.map((newProduct) => (
           <EditAdminProductCard
-            key={newProduct.generatedId}
+            key={getRealOrGeneratedId(newProduct)}
             initialProduct={newProduct}
             close={() => removeNewProduct(newProduct)}
             ticketTypes={data.convention.ticket_types}
@@ -94,12 +94,9 @@ function ProductAdmin() {
 
       <EditPricingStructureModal
         visible={pricingStructureModal.visible}
-        value={pricingStructureModal.state?.value}
-        onChange={pricingStructureModal.state?.onChange}
+        state={pricingStructureModal.state}
         close={pricingStructureModal.close}
       />
     </PricingStructureModalContext.Provider>
   );
-}
-
-export default ProductAdmin;
+});

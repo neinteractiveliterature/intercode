@@ -6,11 +6,11 @@ import ErrorDisplay from './ErrorDisplay';
 import FourOhFourPage from './FourOhFourPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
-export function LoadQueryWrapper<TData>(
+export function LoadQueryWrapper<TData, TProps>(
   useLoadData: () => QueryResult<TData>,
-  WrappedComponent: React.ComponentType<{ data: TData }>,
-): React.FunctionComponent<{}> {
-  const Wrapper = () => {
+  WrappedComponent: React.ComponentType<TProps & { data: TData }>,
+): React.FunctionComponent<TProps> {
+  const Wrapper = (props: TProps) => {
     const { data, loading, error } = useLoadData();
 
     if (loading) {
@@ -21,7 +21,7 @@ export function LoadQueryWrapper<TData>(
       return <ErrorDisplay graphQLError={error} />;
     }
 
-    return <WrappedComponent data={data!} />;
+    return <WrappedComponent data={data!} {...props} />;
   };
 
   const wrappedComponentDisplayName =
@@ -32,12 +32,12 @@ export function LoadQueryWrapper<TData>(
   return Wrapper;
 }
 
-export function LoadSingleValueFromCollectionWrapper<TData, TValue>(
+export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
   useLoadData: () => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,
-  WrappedComponent: React.ComponentType<{ value: TValue; data: TData }>,
-): React.FunctionComponent<{}> {
-  const Wrapper = () => {
+  WrappedComponent: React.ComponentType<TProps & { value: TValue; data: TData }>,
+): React.FunctionComponent<TProps> {
+  const Wrapper = (props: TProps) => {
     const { id } = useParams<{ id: string }>();
     const { data, loading, error } = useLoadData();
     const value = error || loading || !data ? undefined : getValue(data, id);
@@ -54,7 +54,7 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue>(
       return <FourOhFourPage />;
     }
 
-    return <WrappedComponent value={value} data={data!} />;
+    return <WrappedComponent value={value} data={data!} {...props} />;
   };
 
   const wrappedComponentDisplayName =
