@@ -24,26 +24,37 @@ function updateVariant(
   setProductVariants(newVariants);
 }
 
-export type AdminProductVariantsTableProps = {
+type AdminProductVariantsTableCommonProps = {
   product: EditingProduct;
+};
+
+type AdminProductVariantsTableEditingProps = AdminProductVariantsTableCommonProps & {
   editing: boolean;
   onChange: React.Dispatch<EditingVariant[]>;
   deleteVariant: React.Dispatch<number>;
 };
 
-function AdminProductVariantsTable({
-  product,
-  editing,
-  onChange,
-  deleteVariant,
-}: AdminProductVariantsTableProps) {
+type AdminProductVariantsTableViewingProps = AdminProductVariantsTableCommonProps & {
+  editing: false;
+};
+
+export type AdminProductVariantsTableProps =
+  | AdminProductVariantsTableEditingProps
+  | AdminProductVariantsTableViewingProps;
+
+function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
+  const { product } = props;
   const tableRef = useRef<HTMLTableElement>(null);
 
   const addVariantClicked = () => {
+    if (!props.editing) {
+      return;
+    }
+
     const position =
       Math.max(0, ...product.product_variants.map((variant) => variant.position ?? 0)) + 1;
 
-    onChange([
+    props.onChange([
       ...product.product_variants,
       {
         __typename: 'ProductVariant',
@@ -56,10 +67,14 @@ function AdminProductVariantsTable({
   };
 
   const deleteVariantClicked = (variant: EditingVariant) => {
+    if (!props.editing) {
+      return;
+    }
+
     if (hasRealId(variant)) {
-      deleteVariant(variant.id);
+      props.deleteVariant(variant.id);
     } else {
-      onChange(
+      props.onChange(
         product.product_variants.filter(
           (existingVariant) => !realOrGeneratedIdsMatch(variant, existingVariant),
         ),
@@ -68,6 +83,10 @@ function AdminProductVariantsTable({
   };
 
   const moveVariant = (dragIndex: number, hoverIndex: number) => {
+    if (!props.editing) {
+      return;
+    }
+
     const variants = sortProductVariants(product.product_variants);
     const dragVariant = variants[dragIndex];
     const hoverVariant = variants[hoverIndex];
@@ -84,7 +103,7 @@ function AdminProductVariantsTable({
       return variant;
     });
 
-    onChange(newVariants);
+    props.onChange(newVariants);
   };
 
   const generatePreview: PreviewGenerator<{ index: number }> = ({
@@ -115,7 +134,7 @@ function AdminProductVariantsTable({
   };
 
   const renderAddVariantButton = () => {
-    if (!editing) {
+    if (!props.editing) {
       return null;
     }
 
@@ -136,7 +155,7 @@ function AdminProductVariantsTable({
   }
 
   let variants;
-  if (editing) {
+  if (props.editing) {
     variants = product.product_variants.filter(
       (variant) => !(hasRealId(variant) && product.delete_variant_ids.includes(variant.id)),
     );
@@ -145,9 +164,9 @@ function AdminProductVariantsTable({
   }
 
   const rows = sortProductVariants(variants).map((variant, index) => {
-    if (editing) {
+    if (props.editing) {
       const variantUpdater = (newValue: EditingVariant) =>
-        updateVariant(product.product_variants, onChange, variant, newValue);
+        updateVariant(product.product_variants, props.onChange, variant, newValue);
 
       return (
         <AdminProductVariantEditRow

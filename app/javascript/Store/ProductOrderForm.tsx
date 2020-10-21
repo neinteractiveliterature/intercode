@@ -1,32 +1,38 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
-import { AddOrderEntryToCurrentPendingOrder } from './mutations';
-import { CartQuery, OrderFormProductQuery } from './queries';
+import { CartQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
-import { Transforms, useTransformedState } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useOrderFormProductQueryQuery } from './queries.generated';
+import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
+import { Money } from '../graphqlTypes.generated';
 
-function ProductOrderForm({ productId }) {
+export type ProductOrderFormProps = {
+  productId: number;
+};
+
+function ProductOrderForm({ productId }: ProductOrderFormProps) {
   const history = useHistory();
-  const { data, loading, error } = useQuery(OrderFormProductQuery, { variables: { productId } });
-  const [addOrderEntryToCurrentPendingOrder] = useMutation(AddOrderEntryToCurrentPendingOrder, {
+  const { data, loading, error } = useOrderFormProductQueryQuery({ variables: { productId } });
+  const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
     refetchQueries: [{ query: CartQuery }],
   });
 
-  const [productVariantId, productVariantIdChanged] = useTransformedState(null, Transforms.integer);
-  const [quantity, quantityChanged] = useTransformedState(1, Transforms.integer);
+  const [productVariantId, setProductVariantId] = useState<number>();
+  const [quantity, setQuantity] = useState(1);
 
   const dataComplete = useMemo(
     () =>
       !error &&
       !loading &&
+      data?.product.product_variants != null &&
       (data.product.product_variants.length < 1 || productVariantId != null) &&
       quantity > 0,
     [data, error, loading, productVariantId, quantity],
@@ -47,19 +53,21 @@ function ProductOrderForm({ productId }) {
     return <PageLoadingIndicator visible />;
   }
 
+  const { product } = data!;
+
   const renderVariantSelect = () => {
-    if (data.product.product_variants.length < 1) {
+    if (product.product_variants.length < 1) {
       return null;
     }
 
-    const variants = sortProductVariants(data.product.product_variants);
+    const variants = sortProductVariants(product.product_variants);
     const options = variants.map((variant) => {
       const { id, name, override_pricing_structure: overridePricingStructure } = variant;
-      const { price } = data.product.pricing_structure;
+      const { price } = product.pricing_structure;
       const overridePrice = overridePricingStructure?.price;
 
       let overridePriceDescription = '';
-      if (overridePrice && overridePrice.fractional !== price.fractional) {
+      if (overridePrice && price && overridePrice.fractional !== price.fractional) {
         const diff = {
           ...price,
           fractional: overridePrice.fractional - price.fractional,
@@ -79,8 +87,8 @@ function ProductOrderForm({ productId }) {
     return (
       <select
         className="form-control mb-3"
-        value={productVariantId || ''}
-        onChange={(event) => productVariantIdChanged(event.target.value)}
+        value={productVariantId ?? ''}
+        onChange={(event) => setProductVariantId(parseIntOrNull(event.target.value) ?? undefined)}
       >
         <option disabled value="">
           Select...
@@ -98,31 +106,37 @@ function ProductOrderForm({ productId }) {
         min="1"
         className="form-control"
         value={quantity == null ? '' : quantity}
-        onChange={(event) => quantityChanged(event.target.value)}
+        onChange={(event) => {
+          const newQuantity = parseIntOrNull(event.target.value);
+          if (newQuantity != null) {
+            setQuantity(newQuantity);
+          }
+        }}
         aria-label="Quantity"
       />
     </label>
   );
 
   const renderTotalAmount = () => {
-    if (!dataComplete) {
+    if (!dataComplete || product.pricing_structure.price == null) {
       return null;
     }
 
-    let pricePerItem = data.product.pricing_structure.price.fractional;
+    let pricePerItem = product.pricing_structure.price.fractional;
     if (productVariantId) {
-      const productVariant = data.product.product_variants.find(
+      const productVariant = product.product_variants.find(
         (variant) => variant.id === productVariantId,
       );
 
-      if (productVariant.override_pricing_structure != null) {
+      if (productVariant?.override_pricing_structure?.price != null) {
         pricePerItem = productVariant.override_pricing_structure.price.fractional;
       }
     }
 
-    const totalPrice = {
+    const totalPrice: Money = {
+      __typename: 'Money',
       fractional: pricePerItem * quantity,
-      currency_code: data.product.pricing_structure.price.currency_code,
+      currency_code: product.pricing_structure.price.currency_code,
     };
 
     return <strong>Total: {formatMoney(totalPrice)}</strong>;
@@ -132,7 +146,7 @@ function ProductOrderForm({ productId }) {
     <div className="card bg-light">
       <div className="card-body">
         {renderVariantSelect()}
-        {!data.product.provides_ticket_type && renderQuantity()}
+        {!product.provides_ticket_type && renderQuantity()}
         <div className="row align-items-baseline">
           <div className="col-6">{renderTotalAmount()}</div>
           <div className="col-6 mb-2">
@@ -147,14 +161,10 @@ function ProductOrderForm({ productId }) {
             </button>
           </div>
         </div>
-        <ErrorDisplay graphQLError={addToCartError} />
+        <ErrorDisplay graphQLError={addToCartError as ApolloError} />
       </div>
     </div>
   );
 }
-
-ProductOrderForm.propTypes = {
-  productId: PropTypes.number.isRequired,
-};
 
 export default ProductOrderForm;

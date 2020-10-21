@@ -2897,7 +2897,7 @@ type Product {
   order_quantities_by_status: [OrderQuantityByStatus!]!
   payment_options: [String!]!
   price: Money! @deprecated(reason: "Use pricing_structure instead")
-  pricing_structure: PricingStructure
+  pricing_structure: PricingStructure!
   product_variants: [ProductVariant!]!
   provides_ticket_type: TicketType
 }
@@ -4663,7 +4663,7 @@ type UserConProfile {
   name_without_nickname: String!
   nickname: String
   order_summary: String!
-  orders: [Order]!
+  orders: [Order!]!
   preferred_contact: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")
   privileges: [String] @deprecated(reason: "Privileges are deprecated in favor of permissions and staff positions")
   show_nickname_in_bio: Boolean

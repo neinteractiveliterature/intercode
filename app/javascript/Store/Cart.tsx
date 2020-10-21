@@ -1,31 +1,33 @@
 import React, { useCallback } from 'react';
 import intersection from 'lodash/intersection';
 import { useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
 import { CartQuery } from './queries';
-import {
-  DeleteOrderEntry,
-  UpdateOrderEntry,
-  CreateCouponApplication,
-  DeleteCouponApplication,
-} from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import OrderPaymentModal from './OrderPaymentModal';
 import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import CartContents from './CartContents';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { CartQueryQuery, useCartQueryQuery } from './queries.generated';
+import {
+  useCreateCouponApplicationMutation,
+  useDeleteCouponApplicationMutation,
+  useDeleteOrderEntryMutation,
+  useUpdateOrderEntryMutation,
+} from './mutations.generated';
 
-function Cart() {
+type OrderEntryType = NonNullable<CartQueryQuery['currentPendingOrder']>['order_entries'][0];
+
+export default LoadQueryWrapper(useCartQueryQuery, function Cart({ data }) {
   const history = useHistory();
-  const { data, loading, error } = useQuery(CartQuery);
-  const [updateMutate] = useMutation(UpdateOrderEntry);
-  const [deleteMutate] = useMutation(DeleteOrderEntry);
-  const [createCouponApplicationMutate] = useMutation(CreateCouponApplication);
-  const [deleteCouponApplicationMutate] = useMutation(DeleteCouponApplication);
+  const [updateMutate] = useUpdateOrderEntryMutation();
+  const [deleteMutate] = useDeleteOrderEntryMutation();
+  const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
+  const [deleteCouponApplicationMutate] = useDeleteCouponApplicationMutation();
   const checkOutModal = useModal();
   const confirm = useConfirm();
 
@@ -44,7 +46,10 @@ function Cart() {
       deleteMutate({
         variables: { input: { id } },
         update: (proxy) => {
-          const storeData = proxy.readQuery({ query: CartQuery });
+          const storeData = proxy.readQuery<CartQueryQuery>({ query: CartQuery });
+          if (!storeData || !storeData.currentPendingOrder) {
+            return;
+          }
 
           proxy.writeQuery({
             query: CartQuery,
@@ -65,12 +70,7 @@ function Cart() {
 
   const [changeQuantity, changeQuantityError] = useAsyncFunction(
     useCallback(
-      async (orderEntryId, newQuantityString) => {
-        const newQuantity = Number.parseInt(newQuantityString, 10);
-        if (Number.isNaN(newQuantity)) {
-          return;
-        }
-
+      async (orderEntryId: number, newQuantity: number) => {
         if (newQuantity === 0) {
           await deleteOrderEntry(orderEntryId);
         } else {
@@ -82,13 +82,14 @@ function Cart() {
   );
 
   const createCouponApplication = useCallback(
-    (couponCode) =>
-      createCouponApplicationMutate({
-        variables: {
-          orderId: data.currentPendingOrder?.id,
-          couponCode,
-        },
-      }),
+    async (couponCode) => {
+      const orderId = data.currentPendingOrder?.id;
+      if (orderId) {
+        await createCouponApplicationMutate({
+          variables: { orderId, couponCode },
+        });
+      }
+    },
     [createCouponApplicationMutate, data],
   );
 
@@ -100,38 +101,37 @@ function Cart() {
     [deleteCouponApplicationMutate],
   );
 
+  const removeFromCart = useCallback(
+    (entry: OrderEntryType) => {
+      let { name } = entry.product;
+      if (entry.product_variant) {
+        name += ` (${entry.product_variant.name})`;
+      }
+
+      confirm({
+        prompt: `Are you sure you want to remove ${name} from your cart?`,
+        action: () => deleteOrderEntry(entry.id),
+        renderError: (e) => <ErrorDisplay graphQLError={e} />,
+      });
+    },
+    [deleteOrderEntry, confirm],
+  );
+
   const checkOutComplete = () => {
     history.push('/order_history');
   };
-
-  if (error) {
-    return <ErrorDisplay error={error} />;
-  }
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
 
   return (
     <div>
       <h1 className="mb-4">Shopping cart</h1>
 
-      <ErrorDisplay graphQLError={changeQuantityError} />
+      <ErrorDisplay graphQLError={changeQuantityError as ApolloError} />
 
       <CartContents
-        removeFromCart={(entry) => {
-          let { name } = entry.product;
-          if (entry.product_variant) {
-            name += ` (${entry.product_variant.name})`;
-          }
-
-          confirm({
-            prompt: `Are you sure you want to remove ${name} from your cart?`,
-            action: () => deleteOrderEntry(entry.id),
-            renderError: (e) => <ErrorDisplay graphQLError={e} />,
-          });
-        }}
-        changeQuantity={(entry, quantity) => changeQuantity(entry.id, quantity)}
+        removeFromCart={removeFromCart}
+        changeQuantity={(entry: OrderEntryType, quantity: number) =>
+          changeQuantity(entry.id, quantity)
+        }
         checkOutButton={
           <button type="button" className="btn btn-primary mt-2" onClick={checkOutModal.open}>
             <i className="fa fa-shopping-cart" /> Check out
@@ -144,7 +144,7 @@ function Cart() {
       <OrderPaymentModal
         visible={checkOutModal.visible}
         onCancel={checkOutModal.close}
-        initialName={data.myProfile.name_without_nickname}
+        initialName={data.myProfile?.name_without_nickname}
         orderId={(data.currentPendingOrder || {}).id}
         onComplete={checkOutComplete}
         paymentOptions={intersection(
@@ -152,10 +152,14 @@ function Cart() {
             (entry) => entry.product.payment_options,
           ),
         )}
-        totalPrice={data.currentPendingOrder?.total_price ?? { fractional: 0 }}
+        totalPrice={
+          data.currentPendingOrder?.total_price ?? {
+            fractional: 0,
+            __typename: 'Money',
+            currency_code: 'USD',
+          }
+        }
       />
     </div>
   );
-}
-
-export default Cart;
+});

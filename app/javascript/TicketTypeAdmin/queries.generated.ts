@@ -21,10 +21,10 @@ export type TicketTypeAdmin_TicketTypeFieldsFragment = (
   ), providing_products: Array<(
     { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'name' | 'available'>
-    & { pricing_structure?: Types.Maybe<(
+    & { pricing_structure: (
       { __typename: 'PricingStructure' }
       & PricingStructureFieldsFragment
-    )> }
+    ) }
   )> }
 );
 

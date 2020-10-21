@@ -1,36 +1,28 @@
 import React, { useContext } from 'react';
-import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
-import ErrorDisplay from '../ErrorDisplay';
-import { OrderFormProductQuery } from './queries';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import parseCmsContent from '../parseCmsContent';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { describeUserPricingStructure } from './describePricingStructure';
 import AppRootContext from '../AppRootContext';
+import { useOrderFormProductQueryQuery } from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function ProductPage() {
-  const { timezoneName } = useContext(AppRootContext);
-  const { id } = useParams();
-  const { data, loading, error } = useQuery(OrderFormProductQuery, {
+function useLoadProduct() {
+  const { id } = useParams<{ id: string }>();
+  return useOrderFormProductQueryQuery({
     variables: { productId: Number.parseInt(id, 10) },
   });
+}
 
-  usePageTitle(useValueUnless(() => data.product.name, error || loading));
+export default LoadQueryWrapper(useLoadProduct, function ProductPage({
+  data: { product, currentUser },
+}) {
+  const { timezoneName } = useContext(AppRootContext);
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { product, currentUser } = data;
+  usePageTitle(product.name);
 
   return (
     <>
@@ -66,6 +58,4 @@ function ProductPage() {
       )}
     </>
   );
-}
-
-export default ProductPage;
+});

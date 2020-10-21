@@ -246,8 +246,9 @@ function OrderPaymentModalContents({
   );
 }
 
-export type OrderPaymentModalProps = OrderPaymentModalContentsProps & {
+export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'orderId'> & {
   visible: boolean;
+  orderId?: OrderPaymentModalContentsProps['orderId'];
 };
 
 function OrderPaymentModal({
@@ -260,8 +261,8 @@ function OrderPaymentModal({
   totalPrice,
 }: OrderPaymentModalProps) {
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
-      {visible && (
+    <Modal visible={visible && orderId != null} dialogClassName="modal-lg">
+      {visible && orderId != null && (
         <LazyStripeElementsContainer>
           <OrderPaymentModalContents
             onCancel={onCancel}

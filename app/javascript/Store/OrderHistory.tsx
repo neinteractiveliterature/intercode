@@ -1,22 +1,29 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import intersection from 'lodash/intersection';
-import { useQuery } from '@apollo/client';
 
-import { OrderHistoryQuery } from './queries';
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
-import ErrorDisplay from '../ErrorDisplay';
-import useModal from '../ModalDialogs/useModal';
+import useModal, { ModalData } from '../ModalDialogs/useModal';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { OrderHistoryQueryQuery, useOrderHistoryQueryQuery } from './queries.generated';
+import useLoginRequired from '../Authentication/useLoginRequired';
 
-function OrderHistoryOrderEntry({ orderEntry }) {
-  const productVariant = orderEntry.product_variant || {};
-  const name = orderEntry.product.name + (productVariant.name ? ` (${productVariant.name})` : '');
-  const imageUrl = productVariant.image_url || orderEntry.product.image_url;
+type OrderType = NonNullable<OrderHistoryQueryQuery['myProfile']>['orders'][0];
+type PaymentModalState = {
+  order: OrderType;
+};
+
+type OrderHistoryOrderEntryProps = {
+  orderEntry: OrderType['order_entries'][0];
+};
+
+function OrderHistoryOrderEntry({ orderEntry }: OrderHistoryOrderEntryProps) {
+  const productVariant = orderEntry.product_variant;
+  const name = orderEntry.product.name + (productVariant?.name ? ` (${productVariant.name})` : '');
+  const imageUrl = productVariant?.image_url ?? orderEntry.product.image_url;
 
   return (
     <tr>
@@ -36,22 +43,11 @@ function OrderHistoryOrderEntry({ orderEntry }) {
   );
 }
 
-OrderHistoryOrderEntry.propTypes = {
-  orderEntry: PropTypes.shape({
-    product: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      image_url: PropTypes.string,
-    }).isRequired,
-    product_variant: PropTypes.shape({
-      name: PropTypes.string,
-      image_url: PropTypes.string,
-    }),
-    quantity: PropTypes.number.isRequired,
-    price: PropTypes.shape({}).isRequired,
-  }).isRequired,
+type OrderHistoryCouponApplicationProps = {
+  couponApplication: OrderType['coupon_applications'][0];
 };
 
-function OrderHistoryCouponApplication({ couponApplication }) {
+function OrderHistoryCouponApplication({ couponApplication }: OrderHistoryCouponApplicationProps) {
   return (
     <tr className="bg-light">
       <td colSpan={2} className="pl-4">
@@ -63,16 +59,17 @@ function OrderHistoryCouponApplication({ couponApplication }) {
   );
 }
 
-OrderHistoryCouponApplication.propTypes = {
-  couponApplication: PropTypes.shape({
-    coupon: PropTypes.shape({
-      code: PropTypes.string.isRequired,
-    }).isRequired,
-    discount: PropTypes.shape({}).isRequired,
-  }).isRequired,
+type OrderHistoryOrderStatusProps = {
+  order: OrderType;
+  convention: OrderHistoryQueryQuery['convention'];
+  paymentModal: ModalData<PaymentModalState>;
 };
 
-function OrderHistoryOrderStatus({ order, convention, paymentModal }) {
+function OrderHistoryOrderStatus({
+  order,
+  convention,
+  paymentModal,
+}: OrderHistoryOrderStatusProps) {
   if (order.status === 'paid') {
     const opsPosition = convention.staff_positions.find(
       (staffPosition) => staffPosition.name === 'Operations Coordinator',
@@ -81,23 +78,24 @@ function OrderHistoryOrderStatus({ order, convention, paymentModal }) {
     const emailSubject = `[${convention.name}] Cancellation request: order ${order.id}`;
     const emailBody = `I would like to request that order ${order.id} be canceled.`;
 
-    return [
-      <div key="status">
-        <div className="badge badge-success">
-          <div className="lead">Paid</div>
+    return (
+      <>
+        <div>
+          <div className="badge badge-success">
+            <div className="lead">Paid</div>
+          </div>
         </div>
-      </div>,
-      opsEmail ? (
-        <a
-          href={`mailto:${opsEmail}?subject=${encodeURIComponent(
-            emailSubject,
-          )}&body=${encodeURIComponent(emailBody)}`}
-          key="cancellation-link"
-        >
-          <small>Request cancellation</small>
-        </a>
-      ) : null,
-    ];
+        {opsEmail && (
+          <a
+            href={`mailto:${opsEmail}?subject=${encodeURIComponent(
+              emailSubject,
+            )}&body=${encodeURIComponent(emailBody)}`}
+          >
+            <small>Request cancellation</small>
+          </a>
+        )}
+      </>
+    );
   }
 
   if (order.status === 'cancelled') {
@@ -130,35 +128,24 @@ function OrderHistoryOrderStatus({ order, convention, paymentModal }) {
   );
 }
 
-OrderHistoryOrderStatus.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    status: PropTypes.string.isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    staff_positions: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        email: PropTypes.string,
-      }),
-    ).isRequired,
-  }).isRequired,
-  paymentModal: PropTypes.shape({
-    open: PropTypes.func.isRequired,
-  }).isRequired,
+type OrderHistoryOrderProps = {
+  order: OrderType;
+  convention: OrderHistoryQueryQuery['convention'];
+  paymentModal: ModalData<PaymentModalState>;
 };
 
-function OrderHistoryOrder({ order, convention, paymentModal }) {
+function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrderProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const submittedTime = moment(order.submitted_at).tz(timezoneName);
+  const submittedTime = order.submitted_at
+    ? moment(order.submitted_at).tz(timezoneName)
+    : undefined;
 
   return (
     <li key={order.id} className="card mb-4">
       <div className="d-flex card-header border-bottom-0">
         <div className="col pl-0">
           <h3>Order #{order.id}</h3>
-          <small>{submittedTime.format('dddd, MMMM D, YYYY, h:mma')}</small>
+          <small>{submittedTime?.format('dddd, MMMM D, YYYY, h:mma')}</small>
         </div>
         <div className="text-right">
           <OrderHistoryOrderStatus
@@ -191,45 +178,15 @@ function OrderHistoryOrder({ order, convention, paymentModal }) {
   );
 }
 
-OrderHistoryOrder.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    submitted_at: PropTypes.string.isRequired,
-    total_price: PropTypes.shape({}).isRequired,
-    order_entries: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-    coupon_applications: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-  paymentModal: PropTypes.shape({}).isRequired,
-};
-
-function OrderHistory() {
-  const { data, loading, error } = useQuery(OrderHistoryQuery);
-  const paymentModal = useModal();
+export default LoadQueryWrapper(useOrderHistoryQueryQuery, function OrderHistory({ data }) {
+  const paymentModal = useModal<PaymentModalState>();
 
   usePageTitle('My order history');
+  useLoginRequired();
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
+  const orders = data.myProfile?.orders;
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { orders } = data.myProfile;
-
-  if (orders?.length > 0) {
+  if (orders && orders?.length > 0) {
     return (
       <>
         <h1 className="mb-4">My order history</h1>
@@ -246,7 +203,7 @@ function OrderHistory() {
           <OrderPaymentModal
             visible={paymentModal.visible}
             onCancel={paymentModal.close}
-            initialName={data.myProfile.name_without_nickname}
+            initialName={data.myProfile!.name_without_nickname}
             orderId={paymentModal.state?.order?.id ?? 0}
             onComplete={paymentModal.close}
             paymentOptions={
@@ -258,7 +215,13 @@ function OrderHistory() {
                   ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
                 : []
             }
-            totalPrice={paymentModal.state?.order?.total_price ?? { fractional: 0 }}
+            totalPrice={
+              paymentModal.state?.order?.total_price ?? {
+                currency_code: 'USD',
+                fractional: 0,
+                __typename: 'Money',
+              }
+            }
           />
         </ul>
       </>
@@ -271,6 +234,4 @@ function OrderHistory() {
       <p>No orders to display.</p>
     </>
   );
-}
-
-export default OrderHistory;
+});

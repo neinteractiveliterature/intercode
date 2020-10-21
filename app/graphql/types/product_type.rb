@@ -21,7 +21,7 @@ class Types::ProductType < Types::BaseObject
   end
 
   field :price, Types::MoneyType, null: false, deprecation_reason: 'Use pricing_structure instead'
-  field :pricing_structure, Types::PricingStructureType, null: true
+  field :pricing_structure, Types::PricingStructureType, null: false
   field :payment_options, [String], null: false
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 

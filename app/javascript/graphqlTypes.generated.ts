@@ -3205,7 +3205,7 @@ export type Product = {
   payment_options: Array<Scalars['String']>;
   /** @deprecated Use pricing_structure instead */
   price: Money;
-  pricing_structure?: Maybe<PricingStructure>;
+  pricing_structure: PricingStructure;
   product_variants: Array<ProductVariant>;
   provides_ticket_type?: Maybe<TicketType>;
 };
@@ -4784,7 +4784,7 @@ export type UserConProfile = {
   name_without_nickname: Scalars['String'];
   nickname?: Maybe<Scalars['String']>;
   order_summary: Scalars['String'];
-  orders: Array<Maybe<Order>>;
+  orders: Array<Order>;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
   preferred_contact?: Maybe<Scalars['String']>;
   /** @deprecated Privileges are deprecated in favor of permissions and staff positions */

@@ -1,16 +1,17 @@
 import React from 'react';
 import flatten from 'lodash/flatten';
 import { humanize } from 'inflected';
-import { useQuery } from '@apollo/client';
 
-import { OrderSummaryQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { OrderSummaryQueryQuery, useOrderSummaryQueryQuery } from './queries.generated';
 
-const ORDER_STATUSES = ['paid', 'unpaid', 'cancelled'];
+const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 
-function statusClass(status) {
+type ProductType = OrderSummaryQueryQuery['convention']['products'][0];
+
+function statusClass(status: OrderStatus) {
   switch (status) {
     case 'paid':
       return 'table-success';
@@ -23,20 +24,24 @@ function statusClass(status) {
   }
 }
 
-function OrderSummary() {
+export default LoadQueryWrapper(useOrderSummaryQueryQuery, function OrderSummary({ data }) {
   usePageTitle('Order summary');
-  const { data, loading, error } = useQuery(OrderSummaryQuery);
 
-  const renderQuantityCell = (quantitiesByStatus, status) => {
-    const { quantity } = quantitiesByStatus.find((qbs) => qbs.status === status);
+  const renderQuantityCell = (quantitiesByStatus: OrderQuantityByStatus[], status: OrderStatus) => {
+    const quantityByStatus = quantitiesByStatus.find((qbs) => qbs.status === status);
+
+    if (!quantityByStatus) {
+      return <td key={status} />;
+    }
+
     return (
       <td key={status} className={statusClass(status)}>
-        {quantity}
+        {quantityByStatus.quantity}
       </td>
     );
   };
 
-  const renderTotalToPurchaseCell = (quantitiesByStatus) => {
+  const renderTotalToPurchaseCell = (quantitiesByStatus: OrderQuantityByStatus[]) => {
     const total = quantitiesByStatus.reduce((acc, qbs) => {
       if (qbs.status === 'cancelled') {
         return acc;
@@ -52,7 +57,7 @@ function OrderSummary() {
     );
   };
 
-  const renderVariant = (variant) => {
+  const renderVariant = (variant: ProductType['product_variants'][0]) => {
     const quantityCells = ORDER_STATUSES.map((status) =>
       renderQuantityCell(variant.order_quantities_by_status, status),
     );
@@ -68,7 +73,7 @@ function OrderSummary() {
     );
   };
 
-  const renderProduct = (product) => {
+  const renderProduct = (product: ProductType) => {
     if (product.product_variants.length > 0) {
       return [
         <tr key={`product-${product.id}`}>
@@ -92,14 +97,6 @@ function OrderSummary() {
     ];
   };
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   const products = data.convention.products.map((product) => renderProduct(product));
 
   return (
@@ -118,6 +115,4 @@ function OrderSummary() {
       <tbody>{flatten(products)}</tbody>
     </table>
   );
-}
-
-export default OrderSummary;
+});
