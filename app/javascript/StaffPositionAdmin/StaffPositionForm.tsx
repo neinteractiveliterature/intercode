@@ -8,7 +8,7 @@ import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { StaffPosition } from '../graphqlTypes.generated';
-import { usePartialState, usePartialStateFactoryWithValueSetter } from '../usePartialState';
+import { usePropertySetters, useFunctionalStateUpdater } from '../usePropertySetters';
 
 export type StaffPositionFormProps = {
   staffPosition: StaffPosition;
@@ -17,11 +17,14 @@ export type StaffPositionFormProps = {
 
 function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
   const { conventionDomain } = useContext(AppRootContext);
-  const factory = usePartialStateFactoryWithValueSetter(staffPosition, onChange);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [email, setEmail] = usePartialState(factory, 'email');
-  const [visible, setVisible] = usePartialState(factory, 'visible');
-  const [userConProfiles, setUserConProfiles] = usePartialState(factory, 'user_con_profiles');
+  const setStaffPosition = useFunctionalStateUpdater(staffPosition, onChange);
+  const [setName, setEmail, setVisible, setUserConProfiles] = usePropertySetters(
+    setStaffPosition,
+    'name',
+    'email',
+    'visible',
+    'user_con_profiles',
+  );
 
   const setEmailAliases = (emailAliases: StaffPosition['email_aliases']) =>
     onChange({
@@ -39,7 +42,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
       <BootstrapFormInput
         name="name"
         label="Position name"
-        value={name ?? ''}
+        value={staffPosition.name ?? ''}
         onTextChange={setName}
       />
 
@@ -47,7 +50,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
         name="email"
         type="email"
         label="Contact email"
-        value={email ?? ''}
+        value={staffPosition.email ?? ''}
         onTextChange={setEmail}
         helpText={`If this address ends in @${conventionDomain}, email will be automatically forwarded to staff members.`}
       />
@@ -89,7 +92,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
       <BooleanInput
         name="visible"
         caption="Visible in CMS content?"
-        value={visible ?? undefined}
+        value={staffPosition.visible ?? undefined}
         onChange={setVisible}
       />
 
@@ -98,7 +101,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
           <UserConProfileSelect
             id={id}
             isMulti
-            value={userConProfiles}
+            value={staffPosition.user_con_profiles}
             onChange={setUserConProfiles}
           />
         )}

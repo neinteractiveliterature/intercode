@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import Select from 'react-select';
 
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
@@ -9,6 +8,25 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import useUniqueId from '../useUniqueId';
+import { usePropertySetters } from '../usePropertySetters';
+import { DefaultUserConProfilesQueryQuery } from '../BuiltInFormControls/selectDefaultQueries.generated';
+import { UserActivityAlertQueryQuery } from './queries.generated';
+
+type AlertType = UserActivityAlertQueryQuery['convention']['user_activity_alert'];
+
+export type UserActivityAlertFormProps = {
+  convention: Pick<
+    UserActivityAlertQueryQuery['convention'],
+    'ticket_name' | 'ticket_mode' | 'staff_positions'
+  >;
+  disabled?: boolean;
+  userActivityAlert: AlertType;
+  onChange: React.Dispatch<React.SetStateAction<AlertType>>;
+  onAddNotificationDestination: React.Dispatch<
+    Omit<AlertType['notification_destinations'][number], 'id'>
+  >;
+  onRemoveNotificationDestination: React.Dispatch<number>;
+};
 
 function UserActivityAlertForm({
   userActivityAlert,
@@ -17,17 +35,27 @@ function UserActivityAlertForm({
   onRemoveNotificationDestination,
   convention,
   disabled,
-}) {
+}: UserActivityAlertFormProps) {
   const userSelectId = useUniqueId('user-');
   const confirm = useConfirm();
-  const [addDestinationType, setAddDestinationType] = useState(null);
-  const addStaffPositionDestination = (staffPosition) => {
-    onAddNotificationDestination({ staff_position: staffPosition });
+  const [addDestinationType, setAddDestinationType] = useState<string | null>(null);
+  const addStaffPositionDestination = (staffPosition: typeof convention['staff_positions'][0]) => {
+    onAddNotificationDestination({
+      __typename: 'NotificationDestination',
+      staff_position: staffPosition,
+    });
     setAddDestinationType(null);
   };
 
-  const addUserConProfileDestination = (userConProfile) => {
-    onAddNotificationDestination({ user_con_profile: userConProfile });
+  const addUserConProfileDestination = (
+    userConProfile: NonNullable<
+      DefaultUserConProfilesQueryQuery['convention']
+    >['user_con_profiles_paginated']['entries'][0],
+  ) => {
+    onAddNotificationDestination({
+      __typename: 'NotificationDestination',
+      user_con_profile: userConProfile,
+    });
     setAddDestinationType(null);
   };
 
@@ -37,16 +65,13 @@ function UserActivityAlertForm({
     setUser,
     setTriggerOnUserConProfileCreate,
     setTriggerOnTicketCreate,
-  ] = useMemo(
-    () =>
-      [
-        'partial_name',
-        'email',
-        'user',
-        'trigger_on_user_con_profile_create',
-        'trigger_on_ticket_create',
-      ].map((field) => (value) => onChange({ ...userActivityAlert, [field]: value })),
-    [onChange, userActivityAlert],
+  ] = usePropertySetters(
+    onChange,
+    'partial_name',
+    'email',
+    'user',
+    'trigger_on_user_con_profile_create',
+    'trigger_on_ticket_create',
   );
 
   return (
@@ -130,7 +155,7 @@ function UserActivityAlertForm({
                   ) : (
                     <>
                       <strong>User:</strong>{' '}
-                      {notificationDestination.user_con_profile.name_without_nickname}
+                      {notificationDestination.user_con_profile?.name_without_nickname}
                     </>
                   )}
                 </div>
@@ -169,7 +194,7 @@ function UserActivityAlertForm({
               <Select
                 options={convention.staff_positions}
                 isClearable
-                getOptionValue={(option) => option.id}
+                getOptionValue={(option) => option.id.toString()}
                 getOptionLabel={(option) => option.name}
                 value={null}
                 onChange={addStaffPositionDestination}
@@ -190,48 +215,5 @@ function UserActivityAlertForm({
     </>
   );
 }
-
-UserActivityAlertForm.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  onAddNotificationDestination: PropTypes.func.isRequired,
-  onRemoveNotificationDestination: PropTypes.func.isRequired,
-  userActivityAlert: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    partial_name: PropTypes.string,
-    email: PropTypes.string,
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-    trigger_on_ticket_create: PropTypes.bool,
-    trigger_on_user_con_profile_create: PropTypes.bool,
-    notification_destinations: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        staff_position: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-        }),
-        user_con_profile: PropTypes.shape({
-          name_without_nickname: PropTypes.string,
-        }),
-      }),
-    ).isRequired,
-  }).isRequired,
-  convention: PropTypes.shape({
-    staff_positions: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    ticket_name: PropTypes.string.isRequired,
-    ticket_mode: PropTypes.string.isRequired,
-  }).isRequired,
-  disabled: PropTypes.bool,
-};
-
-UserActivityAlertForm.defaultProps = {
-  disabled: false,
-};
 
 export default UserActivityAlertForm;

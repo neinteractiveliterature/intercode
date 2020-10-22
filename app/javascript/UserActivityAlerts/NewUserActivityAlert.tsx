@@ -1,24 +1,33 @@
 import React, { useState, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import { CreateUserActivityAlert } from './mutations';
-import { ConventionTicketNameQuery, UserActivityAlertsAdminQuery } from './queries';
+import { UserActivityAlertsAdminQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import { useCreateMutation } from '../MutationUtils';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import {
+  useConventionTicketNameQueryQuery,
+  UserActivityAlertQueryQuery,
+} from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function NewUserActivityAlert() {
+export default LoadQueryWrapper(useConventionTicketNameQueryQuery, function NewUserActivityAlert({
+  data,
+}) {
   const history = useHistory();
   usePageTitle('New user activity alert');
-  const { data, loading, error } = useQuery(ConventionTicketNameQuery);
 
-  const [userActivityAlert, setUserActivityAlert] = useState({
+  const [userActivityAlert, setUserActivityAlert] = useState<
+    UserActivityAlertQueryQuery['convention']['user_activity_alert']
+  >({
+    __typename: 'UserActivityAlert',
+    id: 0,
     email: null,
     partial_name: null,
     user: null,
@@ -30,7 +39,9 @@ function NewUserActivityAlert() {
     notificationDestinationChangeSet,
     addNotificationDestination,
     removeNotificationDestination,
-  ] = useChangeSet();
+  ] = useChangeSet<
+    UserActivityAlertQueryQuery['convention']['user_activity_alert']['notification_destinations'][number]
+  >();
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateUserActivityAlert, {
       query: UserActivityAlertsAdminQuery,
@@ -48,16 +59,6 @@ function NewUserActivityAlert() {
     [notificationDestinationChangeSet, userActivityAlert],
   );
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { convention } = data;
-
   const saveClicked = async () => {
     await create({
       variables: {
@@ -68,7 +69,7 @@ function NewUserActivityAlert() {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };
             }
-            return { user_con_profile_id: addValue.user_con_profile.id };
+            return { user_con_profile_id: addValue.user_con_profile!.id };
           }),
       },
     });
@@ -82,14 +83,14 @@ function NewUserActivityAlert() {
 
       <UserActivityAlertForm
         userActivityAlert={combinedUserActivityAlert}
-        convention={convention}
+        convention={data.convention}
         onChange={setUserActivityAlert}
         onAddNotificationDestination={addNotificationDestination}
         onRemoveNotificationDestination={removeNotificationDestination}
         disabled={createInProgress}
       />
 
-      <ErrorDisplay graphQLError={createError} />
+      <ErrorDisplay graphQLError={createError as ApolloError} />
 
       <button
         className="btn btn-primary mt-4"
@@ -101,6 +102,4 @@ function NewUserActivityAlert() {
       </button>
     </>
   );
-}
-
-export default NewUserActivityAlert;
+});

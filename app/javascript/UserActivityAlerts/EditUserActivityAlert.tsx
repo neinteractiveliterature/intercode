@@ -1,29 +1,38 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { DeleteUserActivityAlert, UpdateUserActivityAlert } from './mutations';
+import { DeleteUserActivityAlert } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import { UserActivityAlertsAdminQuery, UserActivityAlertQuery } from './queries';
+import { UserActivityAlertsAdminQuery } from './queries';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import useAsyncFunction from '../useAsyncFunction';
 import { useDeleteMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useUserActivityAlertQueryQuery } from './queries.generated';
+import { useUpdateUserActivityAlertMutation } from './mutations.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
+function useLoadUserActivityAlert() {
+  const userActivityAlertId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  return useUserActivityAlertQueryQuery({ variables: { id: userActivityAlertId } });
+}
+
+export default LoadQueryWrapper(useLoadUserActivityAlert, function EditUserActivityAlertForm({
+  data,
+}) {
+  usePageTitle('Editing user activity alert');
   const history = useHistory();
-  const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
+  const [userActivityAlert, setUserActivityAlert] = useState(data.convention.user_activity_alert);
   const [
     notificationDestinationChangeSet,
     addNotificationDestination,
     removeNotificationDestination,
-  ] = useChangeSet();
-  const [updateMutate] = useMutation(UpdateUserActivityAlert);
+  ] = useChangeSet<typeof userActivityAlert['notification_destinations'][0]>();
+  const [updateMutate] = useUpdateUserActivityAlertMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const deleteMutate = useDeleteMutation(DeleteUserActivityAlert, {
     query: UserActivityAlertsAdminQuery,
@@ -43,7 +52,6 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
 
   const saveClicked = async () => {
     await update({
-      mutation: UpdateUserActivityAlert,
       variables: {
         id: userActivityAlert.id,
         userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
@@ -53,7 +61,7 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
             if (addValue.staff_position) {
               return { staff_position_id: addValue.staff_position.id };
             }
-            return { user_con_profile_id: addValue.user_con_profile.id };
+            return { user_con_profile_id: addValue.user_con_profile!.id };
           }),
         removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
       },
@@ -69,6 +77,7 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
 
   return (
     <>
+      .{' '}
       <div className="d-flex align-items-start mb-4">
         <h1 className="flex-grow-1">Edit user activity alert</h1>
         <button
@@ -84,18 +93,15 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
           <i className="fa fa-trash-o" /> Delete
         </button>
       </div>
-
       <UserActivityAlertForm
         userActivityAlert={combinedUserActivityAlert}
-        convention={convention}
+        convention={data.convention}
         onChange={setUserActivityAlert}
         onAddNotificationDestination={addNotificationDestination}
         onRemoveNotificationDestination={removeNotificationDestination}
         disabled={updateInProgress}
       />
-
-      <ErrorDisplay graphQLError={updateError} />
-
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
       <button
         className="btn btn-primary mt-4"
         type="button"
@@ -106,39 +112,4 @@ function EditUserActivityAlertForm({ initialUserActivityAlert, convention }) {
       </button>
     </>
   );
-}
-
-EditUserActivityAlertForm.propTypes = {
-  initialUserActivityAlert: PropTypes.shape({}).isRequired,
-  convention: PropTypes.shape({}).isRequired,
-};
-
-function EditUserActivityAlert() {
-  const userActivityAlertId = Number.parseInt(useParams().id, 10);
-  usePageTitle('Editing user activity alert');
-
-  const { data, loading, error } = useQuery(UserActivityAlertQuery, {
-    variables: { id: userActivityAlertId },
-  });
-  const initialUserActivityAlert = useMemo(
-    () => (error || loading ? null : data.convention.user_activity_alert),
-    [data, error, loading],
-  );
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <EditUserActivityAlertForm
-      initialUserActivityAlert={initialUserActivityAlert}
-      convention={data.convention}
-    />
-  );
-}
-
-export default EditUserActivityAlert;
+});

@@ -8,7 +8,7 @@ import { sortByLocaleString } from '../../ValueUtils';
 import useUniqueId from '../../useUniqueId';
 import { CmsLayout, Page } from '../../graphqlTypes.generated';
 import { CmsPagesAdminQueryQuery } from './queries.generated';
-import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { usePropertySetters } from '../../usePropertySetters';
 import { onChangeSingleValue } from '../../ReactSelectUtils';
 
 export type PageFormFields = Pick<
@@ -31,17 +31,24 @@ function CmsPageForm<T extends PageFormFields>({
   cmsLayouts,
   readOnly,
 }: CmsPageFormProps<T>) {
-  const factory = usePartialStateFactory(page, onChange);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
-  const [slug, setSlug] = usePartialState(factory, 'slug');
-  const [skipClickwrapAgreement, setSkipClickwrapAgreement] = usePartialState(
-    factory,
+  const [
+    setName,
+    setAdminNotes,
+    setSlug,
+    setSkipClickwrapAgreement,
+    setHiddenFromSearch,
+    setCmsLayout,
+    setContent,
+  ] = usePropertySetters(
+    onChange,
+    'name',
+    'admin_notes',
+    'slug',
     'skip_clickwrap_agreement',
+    'hidden_from_search',
+    'cms_layout',
+    'content',
   );
-  const [hiddenFromSearch, setHiddenFromSearch] = usePartialState(factory, 'hidden_from_search');
-  const [cmsLayout, setCmsLayout] = usePartialState(factory, 'cms_layout');
-  const [content, setContent] = usePartialState(factory, 'content');
 
   const slugInputId = useUniqueId('slug-');
   const defaultLayout =
@@ -72,14 +79,14 @@ function CmsPageForm<T extends PageFormFields>({
     <>
       <BootstrapFormInput
         label="Name"
-        value={name ?? ''}
+        value={page.name ?? ''}
         onTextChange={setName}
         readOnly={readOnly}
       />
 
       <BootstrapFormInput
         label="Admin notes"
-        value={adminNotes ?? ''}
+        value={page.admin_notes ?? ''}
         onTextChange={setAdminNotes}
         readOnly={readOnly}
       />
@@ -96,7 +103,7 @@ function CmsPageForm<T extends PageFormFields>({
           <input
             id={slugInputId}
             className="form-control"
-            value={slug ?? ''}
+            value={page.slug ?? ''}
             onChange={(event) => setSlug(event.target.value)}
             readOnly={readOnly}
           />
@@ -106,7 +113,7 @@ function CmsPageForm<T extends PageFormFields>({
       <BooleanInput
         caption="Skip clickwrap agreement"
         helpText="If selected, this page will not check whether the user has accepted the site clickwrap agreement."
-        value={skipClickwrapAgreement ?? false}
+        value={page.skip_clickwrap_agreement ?? false}
         onChange={setSkipClickwrapAgreement}
         disabled={readOnly}
       />
@@ -114,14 +121,14 @@ function CmsPageForm<T extends PageFormFields>({
       <BooleanInput
         caption="Hidden from search"
         helpText="If selected, this page will not appear in site search results."
-        value={hiddenFromSearch ?? false}
+        value={page.hidden_from_search ?? false}
         onChange={setHiddenFromSearch}
         disabled={readOnly}
       />
 
       <SelectWithLabel<T['cms_layout']>
         label="Layout"
-        value={cmsLayout}
+        value={page.cms_layout}
         isClearable
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
@@ -133,7 +140,11 @@ function CmsPageForm<T extends PageFormFields>({
 
       <div className="form-group">
         <legend className="col-form-label">Content</legend>
-        <LiquidInput value={content ?? ''} onChange={setContent} codeMirrorOptions={{ readOnly }} />
+        <LiquidInput
+          value={page.content ?? ''}
+          onChange={setContent}
+          codeMirrorOptions={{ readOnly }}
+        />
       </div>
     </>
   );

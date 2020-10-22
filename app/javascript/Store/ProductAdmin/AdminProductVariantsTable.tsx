@@ -9,7 +9,7 @@ import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../
 
 function updateVariant(
   productVariants: EditingVariant[],
-  setProductVariants: React.Dispatch<EditingVariant[]>,
+  setProductVariants: React.Dispatch<React.SetStateAction<EditingVariant[]>>,
   variant: EditingVariant,
   newValue: Partial<EditingVariant>,
 ) {

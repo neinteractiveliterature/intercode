@@ -5,7 +5,7 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { ConventionAdminConventionQueryQuery } from './queries.generated';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePropertySetters } from '../usePropertySetters';
 import { EmailMode } from '../graphqlTypes.generated';
 
 export type ConventionFormEmailSectionProps = {
@@ -21,24 +21,25 @@ function ConventionFormEmailSection({
   disabled,
   staffPositions,
 }: ConventionFormEmailSectionProps) {
-  const factory = usePartialStateFactory(convention, setConvention);
-  const [eventMailingListDomain, setEventMailingListDomain] = usePartialState(
-    factory,
+  const [
+    setEventMailingListDomain,
+    setEmailFrom,
+    setCatchAllStaffPosition,
+    setEmailMode,
+  ] = usePropertySetters(
+    setConvention,
     'event_mailing_list_domain',
-  );
-  const [emailFrom, setEmailFrom] = usePartialState(factory, 'email_from');
-  const [catchAllStaffPosition, setCatchAllStaffPosition] = usePartialState(
-    factory,
+    'email_from',
     'catch_all_staff_position',
+    'email_mode',
   );
-  const [emailMode, setEmailMode] = usePartialState(factory, 'email_mode');
 
   return (
     <>
       <BootstrapFormInput
         name="email_from"
         label="Email from"
-        value={emailFrom ?? ''}
+        value={convention.email_from ?? ''}
         helpText="Site-generated emails will come from this address."
         onTextChange={setEmailFrom}
         disabled={disabled}
@@ -47,7 +48,7 @@ function ConventionFormEmailSection({
       <BootstrapFormInput
         name="event_mailing_list_domain"
         label="Event mailing list domain name"
-        value={eventMailingListDomain ?? ''}
+        value={convention.event_mailing_list_domain ?? ''}
         helpText="If present, event teams can use this domain name to create automatically-managed mailing lists for their team."
         onTextChange={setEventMailingListDomain}
         disabled={disabled}
@@ -60,9 +61,11 @@ function ConventionFormEmailSection({
         options={staffPositions}
         getOptionLabel={(staffPosition) => staffPosition.name}
         getOptionValue={(staffPosition) => staffPosition.id.toString()}
-        value={catchAllStaffPosition}
+        value={convention.catch_all_staff_position}
         isClearable
-        onChange={(newValue: typeof catchAllStaffPosition) => setCatchAllStaffPosition(newValue)}
+        onChange={(newValue: typeof convention.catch_all_staff_position) =>
+          setCatchAllStaffPosition(newValue)
+        }
       />
 
       <MultipleChoiceInput
@@ -77,7 +80,7 @@ function ConventionFormEmailSection({
             label: `Forward all @${convention.domain} emails to the catch-all staff position`,
           },
         ]}
-        value={emailMode}
+        value={convention.email_mode}
         onChange={(newValue: string) => setEmailMode(newValue as EmailMode)}
         disabled={disabled}
       />

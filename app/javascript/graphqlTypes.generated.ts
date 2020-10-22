@@ -449,7 +449,7 @@ export type Convention = {
   timezone_name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['Date']>;
   user_activity_alert: UserActivityAlert;
-  user_activity_alerts: Array<Maybe<UserActivityAlert>>;
+  user_activity_alerts: Array<UserActivityAlert>;
   user_con_profile_form: Form;
   user_con_profiles_paginated: UserConProfilesPagination;
 };

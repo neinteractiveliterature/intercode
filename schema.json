@@ -4711,9 +4711,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "UserActivityAlert",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "UserActivityAlert",
+                      "ofType": null
+                    }
                   }
                 }
               },

@@ -5,7 +5,7 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { ConventionAdminConventionQueryQuery } from './queries.generated';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePropertySetters } from '../usePropertySetters';
 
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
 // dropdown menu so that the text in the CodeMirror doesn't cover it
@@ -30,26 +30,25 @@ function ConventionFormWebsiteSection({
   pages,
   disabled,
 }: ConventionFormWebsiteSectionProps) {
-  const factory = usePartialStateFactory(convention, setConvention);
-  const [defaultLayout, setDefaultLayout] = usePartialState(factory, 'default_layout');
-  const [rootPage, setRootPage] = usePartialState(factory, 'root_page');
-  const [clickwrapAgreement, setClickwrapAgreement] = usePartialState(
-    factory,
+  const [setDefaultLayout, setRootPage, setClickwrapAgreement, setHidden] = usePropertySetters(
+    setConvention,
+    'default_layout',
+    'root_page',
     'clickwrap_agreement',
+    'hidden',
   );
-  const [hidden, setHidden] = usePartialState(factory, 'hidden');
 
   return (
     <>
       <SelectWithLabel
         name="default_layout_id"
         label="Default layout for pages"
-        value={defaultLayout}
+        value={convention.default_layout}
         isClearable
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={cmsLayouts}
-        onChange={(newValue: typeof defaultLayout) => setDefaultLayout(newValue)}
+        onChange={(newValue: typeof convention.default_layout) => setDefaultLayout(newValue)}
         styles={selectStyles}
         disabled={disabled}
       />
@@ -62,7 +61,7 @@ function ConventionFormWebsiteSection({
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={pages}
-        onChange={(newValue: typeof rootPage) => setRootPage(newValue)}
+        onChange={(newValue: typeof convention.root_page) => setRootPage(newValue)}
         styles={selectStyles}
         disabled={disabled}
       />
@@ -77,7 +76,7 @@ function ConventionFormWebsiteSection({
             ?
           </>
         }
-        value={hidden}
+        value={convention.hidden}
         onChange={setHidden}
       />
 
@@ -87,7 +86,7 @@ function ConventionFormWebsiteSection({
           before using the site)
         </legend>
         <LiquidInput
-          value={clickwrapAgreement || ''}
+          value={convention.clickwrap_agreement ?? ''}
           onChange={setClickwrapAgreement}
           disabled={disabled}
         />
