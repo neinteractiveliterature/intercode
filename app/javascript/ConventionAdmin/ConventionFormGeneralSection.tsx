@@ -13,7 +13,7 @@ import EnumTypes from '../enumTypes.json';
 import { timezoneNameForConvention } from '../TimeUtils';
 import ConventionLanguageInput from './ConventionLanguageInput';
 import type { ConventionFormConvention } from './ConventionForm';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePropertySetters } from '../usePropertySetters';
 import { SiteMode, TimezoneMode } from '../graphqlTypes.generated';
 
 export type ConventionFormGeneralSectionProps = {
@@ -28,23 +28,35 @@ function ConventionFormGeneralSection({
   disabled,
 }: ConventionFormGeneralSectionProps) {
   const { mapboxAccessToken } = useContext(MapboxContext);
-  const factory = usePartialStateFactory(convention, setConvention);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [siteMode, setSiteMode] = usePartialState(factory, 'site_mode');
-  const [domain, setDomain] = usePartialState(factory, 'domain');
-  const [timezoneName, setTimezoneName] = usePartialState(factory, 'timezone_name');
-  const [startsAt, setStartsAt] = usePartialState(factory, 'starts_at');
-  const [endsAt, setEndsAt] = usePartialState(factory, 'ends_at');
-  const [location, setLocation] = usePartialState(factory, 'location');
-  const [timezoneMode, setTimezoneMode] = usePartialState(factory, 'timezone_mode');
-  const [language, setLanguage] = usePartialState(factory, 'language');
+  const [
+    setName,
+    setSiteMode,
+    setDomain,
+    setTimezoneName,
+    setStartsAt,
+    setEndsAt,
+    setLocation,
+    setTimezoneMode,
+    setLanguage,
+  ] = usePropertySetters(
+    setConvention,
+    'name',
+    'site_mode',
+    'domain',
+    'timezone_name',
+    'starts_at',
+    'ends_at',
+    'location',
+    'timezone_mode',
+    'language',
+  );
 
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
 
   const startEndFields = ([
-    ['starts_at', 'Convention starts', startsAt, setStartsAt, startId],
-    ['ends_at', 'Convention ends', endsAt, setEndsAt, endId],
+    ['starts_at', 'Convention starts', convention.starts_at, setStartsAt, startId],
+    ['ends_at', 'Convention ends', convention.ends_at, setEndsAt, endId],
   ] as const).map(([fieldName, label, value, onChange, inputId]) => (
     <div className="col-md-6" key={fieldName}>
       <label htmlFor={inputId}>{label}</label>
@@ -58,7 +70,10 @@ function ConventionFormGeneralSection({
     </div>
   ));
 
-  const conventionLocation = useMemo(() => (location ? JSON.parse(location) : null), [location]);
+  const conventionLocation = useMemo(
+    () => (convention.location ? JSON.parse(convention.location) : null),
+    [convention.location],
+  );
 
   const locationSelectChanged = async (newValue: any) => {
     setLocation(newValue ? JSON.stringify(newValue) : null);
@@ -78,7 +93,7 @@ function ConventionFormGeneralSection({
       <BootstrapFormInput
         name="name"
         label="Name"
-        value={name ?? ''}
+        value={convention.name ?? ''}
         onTextChange={setName}
         disabled={disabled}
       />
@@ -95,17 +110,21 @@ function ConventionFormGeneralSection({
             label: 'Site behaves as a single standalone event',
           },
         ]}
-        value={siteMode}
+        value={convention.site_mode}
         onChange={(newValue: string) => setSiteMode(newValue as SiteMode)}
         disabled={disabled}
       />
 
-      <ConventionLanguageInput value={language} onChange={setLanguage} disabled={disabled} />
+      <ConventionLanguageInput
+        value={convention.language}
+        onChange={setLanguage}
+        disabled={disabled}
+      />
 
       <BootstrapFormInput
         name="domain"
         label="Convention domain name"
-        value={domain ?? ''}
+        value={convention.domain ?? ''}
         onTextChange={setDomain}
         disabled={disabled}
       />
@@ -116,7 +135,7 @@ function ConventionFormGeneralSection({
           value: enumValue.name,
           label: enumValue.description,
         }))}
-        value={timezoneMode}
+        value={convention.timezone_mode}
         onChange={(newValue: string) => setTimezoneMode(newValue as TimezoneMode)}
         disabled={disabled}
       />
@@ -145,7 +164,11 @@ function ConventionFormGeneralSection({
             )}
           </FormGroupWithLabel>
 
-          <TimezoneSelect label="Time zone" value={timezoneName} onChange={setTimezoneName} />
+          <TimezoneSelect
+            label="Time zone"
+            value={convention.timezone_name}
+            onChange={setTimezoneName}
+          />
         </>
       )}
 

@@ -8,7 +8,7 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { useCreateConventionStripeAccountMutation } from './mutations.generated';
 import type { ConventionFormConvention } from './ConventionForm';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePropertySetters } from '../usePropertySetters';
 import { TicketMode } from '../graphqlTypes.generated';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
@@ -30,10 +30,12 @@ function ConventionFormBillingSection({
   setConvention,
   disabled,
 }: ConventionFormBillingSectionProps) {
-  const factory = usePartialStateFactory(convention, setConvention);
-  const [ticketName, setTicketName] = usePartialState(factory, 'ticket_name');
-  const [maximumTickets, setMaximumTickets] = usePartialState(factory, 'maximum_tickets');
-  const [ticketMode, setTicketMode] = usePartialState(factory, 'ticket_mode');
+  const [setTicketName, setMaximumTickets, setTicketMode] = usePropertySetters(
+    setConvention,
+    'ticket_name',
+    'maximum_tickets',
+    'ticket_mode',
+  );
   const [createConventionStripeAccount] = useCreateConventionStripeAccountMutation();
   const apolloClient = useApolloClient();
 
@@ -78,18 +80,20 @@ function ConventionFormBillingSection({
   return (
     <>
       <MultipleChoiceInput
-        caption={`${capitalize(ticketName)} sales`}
+        caption={`${capitalize(convention.ticket_name)} sales`}
         choices={[
           {
             value: 'disabled',
-            label: `Convention does not sell ${pluralize(ticketName)}`,
+            label: `Convention does not sell ${pluralize(convention.ticket_name)}`,
           },
           {
             value: 'required_for_signup',
-            label: `${pluralize(capitalize(ticketName))} are sold and required for event signups`,
+            label: `${pluralize(
+              capitalize(convention.ticket_name),
+            )} are sold and required for event signups`,
           },
         ]}
-        value={ticketMode}
+        value={convention.ticket_mode}
         onChange={(newValue: string) => {
           setTicketMode(newValue as TicketMode);
         }}
@@ -101,13 +105,14 @@ function ConventionFormBillingSection({
 
         <div className="card-body">
           <p>
-            In order to sell {pluralize(ticketName)} and/or products, a Stripe account is required.{' '}
+            In order to sell {pluralize(convention.ticket_name)} and/or products, a Stripe account
+            is required.{' '}
             {convention.stripe_account && (
               <>
                 {convention.stripe_account.charges_enabled ? (
                   <>
                     {convention.name} is connected to a Stripe account and is able to sell{' '}
-                    {pluralize(ticketName)} and/or products.
+                    {pluralize(convention.ticket_name)} and/or products.
                   </>
                 ) : (
                   <>
@@ -172,16 +177,16 @@ function ConventionFormBillingSection({
         name="ticket_name"
         label={'Name for "ticket" at this convention'}
         type="text"
-        value={ticketName ?? ''}
+        value={convention.ticket_name ?? ''}
         onTextChange={setTicketName}
         disabled={disabled || convention.ticket_mode === 'disabled'}
       />
 
       <BootstrapFormInput
         name="maximum_tickets"
-        label={`Maximum ${pluralize(ticketName)}`}
+        label={`Maximum ${pluralize(convention.ticket_name)}`}
         type="number"
-        value={(maximumTickets ?? '').toString()}
+        value={(convention.maximum_tickets ?? '').toString()}
         onTextChange={(newValue) => setMaximumTickets(Transforms.integer(newValue))}
         disabled={disabled || convention.ticket_mode === 'disabled'}
       />

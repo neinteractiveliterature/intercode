@@ -15,9 +15,10 @@ import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import AppRootContext from '../../AppRootContext';
 import { AdminProductsQueryQuery } from '../queries.generated';
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations.generated';
-import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { usePropertySetters } from '../../usePropertySetters';
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
+import { PricingStrategy } from '../../graphqlTypes.generated';
 
 export type EditAdminProductCardProps = {
   initialProduct: EditingProduct;
@@ -30,13 +31,22 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
   const [product, setProduct] = useState(initialProduct);
-  const factory = usePartialStateFactory(product, setProduct);
-  const [available, setAvailable] = usePartialState(factory, 'available');
-  const [description, setDescription] = usePartialState(factory, 'description');
-  const [name, setName] = usePartialState(factory, 'name');
-  const [paymentOptions, setPaymentOptions] = usePartialState(factory, 'payment_options');
-  const [pricingStructure, setPricingStructure] = usePartialState(factory, 'pricing_structure');
-  const [, setProductVariants] = usePartialState(factory, 'product_variants');
+  const [
+    setAvailable,
+    setDescription,
+    setName,
+    setPaymentOptions,
+    setPricingStructure,
+    setProductVariants,
+  ] = usePropertySetters(
+    setProduct,
+    'available',
+    'description',
+    'name',
+    'payment_options',
+    'pricing_structure',
+    'product_variants',
+  );
 
   const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files![0];
@@ -133,7 +143,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               className="form-control"
               placeholder="Product name"
               name="name"
-              value={name}
+              value={product.name}
               onChange={(event) => setName(event.target.value)}
             />
           </div>
@@ -157,7 +167,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
             <BooleanInput
               name="available"
               caption="Available for purchase"
-              value={available}
+              value={product.available}
               onChange={setAvailable}
             />
           </div>
@@ -167,7 +177,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               caption="Payment options"
               choices={paymentOptionChoices}
               multiple
-              value={paymentOptions}
+              value={product.payment_options}
               onChange={(newValue: string[]) => setPaymentOptions(newValue)}
               choiceClassName="form-check-inline"
             />
@@ -220,10 +230,23 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
           <div className="ml-lg-4 col-lg">
             <div className="d-flex">
               <strong className="mr-1">Base price:</strong>
-              <PricingStructureInput value={pricingStructure} onChange={setPricingStructure} />
+              <PricingStructureInput
+                value={
+                  product.pricing_structure ?? {
+                    __typename: 'PricingStructure',
+                    pricing_strategy: PricingStrategy.Fixed,
+                    value: {
+                      __typename: 'Money',
+                      currency_code: 'USD',
+                      fractional: 0,
+                    },
+                  }
+                }
+                onChange={setPricingStructure}
+              />
             </div>
 
-            <LiquidInput value={description ?? ''} onChange={setDescription} />
+            <LiquidInput value={product.description ?? ''} onChange={setDescription} />
 
             <AdminProductVariantsTable
               product={product}

@@ -9,7 +9,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../../checkBundleHash';
 import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
 import AuthenticityTokensContext from '../../AuthenticityTokensContext';
-import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { usePropertySetters } from '../../usePropertySetters';
 
 const GraphiQL = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: 'graphiql' */ 'graphiql'),
@@ -33,10 +33,12 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   readOnly,
 }: CmsGraphqlQueryFormProps<T>) {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
-  const factory = usePartialStateFactory(value, onChange);
-  const [identifier, setIdentifier] = usePartialState(factory, 'identifier');
-  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
-  const [query, setQuery] = usePartialState(factory, 'query');
+  const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(
+    onChange,
+    'identifier',
+    'admin_notes',
+    'query',
+  );
   const link = useIntercodeApolloLink(authenticityToken);
 
   // Serious shenanigans going on in here, we have to majorly circumvent type checking
@@ -56,7 +58,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
         name="identifier"
         label="Identifier"
         className="form-control text-monospace"
-        value={identifier}
+        value={value.identifier}
         onTextChange={setIdentifier}
         readOnly={readOnly}
       />
@@ -64,7 +66,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
       <BootstrapFormTextarea
         name="admin_notes"
         label="Admin notes"
-        value={adminNotes ?? ''}
+        value={value.admin_notes ?? ''}
         onTextChange={setAdminNotes}
         readOnly={readOnly}
       />
@@ -72,7 +74,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
       <div className="border" style={{ height: '40em' }}>
         <Suspense fallback={<LoadingIndicator />}>
           <GraphiQL
-            query={query}
+            query={value.query}
             onEditQuery={setQuery}
             fetcher={fetcher}
             readOnly={readOnly}

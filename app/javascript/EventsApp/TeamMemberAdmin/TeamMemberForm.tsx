@@ -5,7 +5,7 @@ import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckb
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import HelpPopover from '../../UIComponents/HelpPopover';
-import { usePartialState, usePartialStateFactoryWithValueSetter } from '../../usePartialState';
+import { usePropertySetters, useFunctionalStateUpdater } from '../../usePropertySetters';
 import { TeamMembersQueryQuery } from './queries.generated';
 
 export type TeamMemberFormProps = {
@@ -17,12 +17,17 @@ export type TeamMemberFormProps = {
 
 function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps) {
   const { t } = useTranslation();
-  const factory = usePartialStateFactoryWithValueSetter(value, onChange);
-  const [displayTeamMember, setDisplayTeamMember] = usePartialState(factory, 'display_team_member');
-  const [showEmail, setShowEmail] = usePartialState(factory, 'show_email');
-  const [receiveConEmail, setReceiveConEmail] = usePartialState(factory, 'receive_con_email');
-  const [receiveSignupEmail, setReceiveSignupEmail] = usePartialState(
-    factory,
+  const setValue = useFunctionalStateUpdater(value, onChange);
+  const [
+    setDisplayTeamMember,
+    setShowEmail,
+    setReceiveConEmail,
+    setReceiveSignupEmail,
+  ] = usePropertySetters(
+    setValue,
+    'display_team_member',
+    'show_email',
+    'receive_con_email',
     'receive_signup_email',
   );
 
@@ -33,7 +38,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       label: t('events.teamMemberAdmin.displayLabel', 'Display as {{ teamMemberName }}', {
         teamMemberName,
       }),
-      value: displayTeamMember,
+      value: value.display_team_member,
       onChange: setDisplayTeamMember,
     },
     {
@@ -47,13 +52,13 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
           </HelpPopover>
         </Trans>
       ),
-      value: showEmail,
+      value: value.show_email,
       onChange: setShowEmail,
     },
     {
       name: 'receive_con_email',
       label: t('events.teamMemberAdmin.receiveConEmailLabel', 'Receive email from convention'),
-      value: receiveConEmail,
+      value: value.receive_con_email,
       onChange: setReceiveConEmail,
     },
   ] as const;
@@ -94,7 +99,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
           },
           { label: t('events.teamMemberAdmin.receiveSignupEmail.noEmail', 'No'), value: 'NO' },
         ]}
-        value={receiveSignupEmail}
+        value={value.receive_signup_email}
         onChange={(newValue: ReceiveSignupEmail) => setReceiveSignupEmail(newValue)}
       />
     </>

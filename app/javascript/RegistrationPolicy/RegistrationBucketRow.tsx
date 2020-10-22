@@ -8,7 +8,7 @@ import { checkBucketFieldMinimums } from './RegistrationPolicyBucket';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useUniqueId from '../useUniqueId';
-import { usePartialState, usePartialStateFactoryWithValueSetter } from '../usePartialState';
+import { useFunctionalStateUpdater, usePropertySetters } from '../usePropertySetters';
 import { RegistrationPolicyBucket } from '../graphqlTypes.generated';
 
 export type EditingRegistrationBucket = Pick<
@@ -50,15 +50,27 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
     registrationBucket.key,
     onChange,
   ]);
-  const factory = usePartialStateFactoryWithValueSetter(registrationBucket, updateBucket);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [description, setDescription] = usePartialState(factory, 'description');
-  const [slotsLimited, setSlotsLimited] = usePartialState(factory, 'slots_limited');
-  const [notCounted, setNotCounted] = usePartialState(factory, 'not_counted');
-  const [exposeAttendees, setExposeAttendees] = usePartialState(factory, 'expose_attendees');
-  const [minimumSlots, setMinimumSlots] = usePartialState(factory, 'minimum_slots');
-  const [preferredSlots, setPreferredSlots] = usePartialState(factory, 'preferred_slots');
-  const [totalSlots, setTotalSlots] = usePartialState(factory, 'total_slots');
+  const setBucket = useFunctionalStateUpdater(registrationBucket, updateBucket);
+  const [
+    setName,
+    setDescription,
+    setSlotsLimited,
+    setNotCounted,
+    setExposeAttendees,
+    setMinimumSlots,
+    setPreferredSlots,
+    setTotalSlots,
+  ] = usePropertySetters(
+    setBucket,
+    'name',
+    'description',
+    'slots_limited',
+    'not_counted',
+    'expose_attendees',
+    'minimum_slots',
+    'preferred_slots',
+    'total_slots',
+  );
 
   const confirm = useConfirm();
 
@@ -84,7 +96,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
               id={unlimitedId}
               className="form-check-input"
               type="checkbox"
-              checked={!slotsLimited}
+              checked={!registrationBucket.slots_limited}
               onChange={(event) => setSlotsLimited(!event.target.checked)}
               aria-label="Unlimited?"
             />
@@ -98,7 +110,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
               id={countedId}
               className="form-check-input"
               type="checkbox"
-              checked={!notCounted}
+              checked={!registrationBucket.not_counted}
               onChange={(event) => setNotCounted(!event.target.checked)}
               aria-label="Counted for signups?"
             />
@@ -118,7 +130,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
                 id={exposeAttendeesId}
                 className="form-check-input"
                 type="checkbox"
-                checked={exposeAttendees}
+                checked={registrationBucket.expose_attendees}
                 onChange={(event) => setExposeAttendees(event.target.checked)}
                 aria-label="Show bucket name in signup list?"
               />
@@ -150,7 +162,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
         field: 'minimum_slots',
         min: 0,
         inputId: minId,
-        value: minimumSlots,
+        value: registrationBucket.minimum_slots,
         setValue: setMinimumSlots,
       },
       {
@@ -158,7 +170,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
         field: 'preferred_slots',
         min: 0,
         inputId: preferredId,
-        value: preferredSlots,
+        value: registrationBucket.preferred_slots,
         setValue: setPreferredSlots,
       },
       {
@@ -166,7 +178,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
         field: 'total_slots',
         min: 0,
         inputId: maxId,
-        value: totalSlots,
+        value: registrationBucket.total_slots,
         setValue: setTotalSlots,
       },
     ] as const).map(({ label, field, min, inputId, value, setValue }) => (
@@ -206,7 +218,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
           <BootstrapFormInput
-            value={name ?? ''}
+            value={registrationBucket.name ?? ''}
             onTextChange={setName}
             placeholder="Bucket name"
             label="Bucket name"
@@ -220,7 +232,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
 
         <BootstrapFormTextarea
           rows={2}
-          value={description ?? ''}
+          value={registrationBucket.description ?? ''}
           label="Bucket description"
           hideLabel
           onTextChange={setDescription}

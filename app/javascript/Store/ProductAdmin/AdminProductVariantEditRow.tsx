@@ -2,14 +2,15 @@ import React from 'react';
 
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import { usePartialState, usePartialStateFactoryWithValueSetter } from '../../usePartialState';
+import { usePropertySetters } from '../../usePropertySetters';
 import useSortable from '../../useSortable';
 import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';
+import { PricingStrategy } from '../../graphqlTypes.generated';
 
 export type AdminProductVariantEditRowProps = {
   variant: EditingVariant;
-  updateVariant: React.Dispatch<EditingVariant>;
+  updateVariant: React.Dispatch<React.SetStateAction<EditingVariant>>;
   deleteVariant: () => void;
   moveVariant: (dragIndex: number, hoverIndex: number) => void;
   index: number;
@@ -27,11 +28,10 @@ function AdminProductVariantEditRow({
     moveVariant,
     'PRODUCT_VARIANT',
   );
-  const factory = usePartialStateFactoryWithValueSetter(variant, updateVariant);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [description, setDescription] = usePartialState(factory, 'description');
-  const [overridePricingStructure, setOverridePricingStructure] = usePartialState(
-    factory,
+  const [setName, setDescription, setOverridePricingStructure] = usePropertySetters(
+    updateVariant,
+    'name',
+    'description',
     'override_pricing_structure',
   );
 
@@ -43,12 +43,12 @@ function AdminProductVariantEditRow({
         </i>
       </td>
       <td>
-        <InPlaceEditor value={name ?? ''} onChange={setName} />
+        <InPlaceEditor value={variant.name ?? ''} onChange={setName} />
       </td>
       <td>
-        <InPlaceEditor<typeof description>
+        <InPlaceEditor<typeof variant.description>
           className="d-flex align-items-start"
-          value={description ?? ''}
+          value={variant.description ?? ''}
           onChange={setDescription}
           renderInput={({ buttons, inputProps: { value, onChange } }) => (
             <>
@@ -60,7 +60,13 @@ function AdminProductVariantEditRow({
       </td>
       <td>
         <PricingStructureInput
-          value={overridePricingStructure ?? {}}
+          value={
+            variant.override_pricing_structure ?? {
+              __typename: 'PricingStructure',
+              pricing_strategy: PricingStrategy.Fixed,
+              value: { __typename: 'Money', currency_code: 'USD', fractional: 0 },
+            }
+          }
           onChange={setOverridePricingStructure}
         />
       </td>

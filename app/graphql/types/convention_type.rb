@@ -39,7 +39,7 @@ class Types::ConventionType < Types::BaseObject
   field :catch_all_staff_position, Types::StaffPositionType, null: true
   field :ticket_types, [Types::TicketTypeType], null: false
   field :organization, Types::OrganizationType, null: true
-  field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: false
+  field :user_activity_alerts, [Types::UserActivityAlertType], null: false
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end

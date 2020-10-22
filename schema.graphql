@@ -369,7 +369,7 @@ type Convention {
   timezone_name: String
   updated_at: Date
   user_activity_alert(id: Int!): UserActivityAlert!
-  user_activity_alerts: [UserActivityAlert]!
+  user_activity_alerts: [UserActivityAlert!]!
   user_con_profile_form: Form!
   user_con_profiles_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UserConProfilesPagination!
 }
