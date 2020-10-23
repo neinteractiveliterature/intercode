@@ -1,20 +1,23 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+// @ts-expect-error
 import { capitalize } from 'inflected';
 
 import { AdminTicketTypesQuery } from './queries';
 import { DeleteTicketType } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import TicketTypePropType from './TicketTypePropType';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { describeAdminPricingStructure } from '../Store/describePricingStructure';
 import { useDeleteMutation } from '../MutationUtils';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { AdminTicketTypesQueryQuery, useAdminTicketTypesQueryQuery } from './queries.generated';
 
-function cardClassForTicketType(ticketType) {
+type TicketTypeType = AdminTicketTypesQueryQuery['convention']['ticket_types'][0];
+
+function cardClassForTicketType(ticketType: TicketTypeType) {
   if (ticketType.providing_products.filter((product) => product.available).length > 0) {
     return '';
   }
@@ -26,7 +29,7 @@ function cardClassForTicketType(ticketType) {
   return 'bg-dark text-white';
 }
 
-function describeTicketTypeOptions(ticketType, ticketName) {
+function describeTicketTypeOptions(ticketType: TicketTypeType, ticketName: string) {
   let eventProvidedDescription;
   if (ticketType.maximum_event_provided_tickets > 0) {
     eventProvidedDescription = `events can provide up to ${pluralizeWithCount(
@@ -42,7 +45,11 @@ function describeTicketTypeOptions(ticketType, ticketName) {
   return null;
 }
 
-function TicketTypesList({ ticketTypes, ticketName }) {
+export default LoadQueryWrapper(useAdminTicketTypesQueryQuery, function TicketTypesList({
+  data: {
+    convention: { ticket_name: ticketName, ticket_types: ticketTypes },
+  },
+}) {
   usePageTitle(`${capitalize(ticketName)} types`);
 
   const confirm = useConfirm();
@@ -52,7 +59,7 @@ function TicketTypesList({ ticketTypes, ticketName }) {
     arrayPath: ['convention', 'ticket_types'],
   });
 
-  const renderTicketTypeDisplay = (ticketType) => (
+  const renderTicketTypeDisplay = (ticketType: TicketTypeType) => (
     <div
       className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`}
       key={ticketType.id}
@@ -61,7 +68,7 @@ function TicketTypesList({ ticketTypes, ticketName }) {
         <div className="row">
           <div className="col-md-8">
             <strong>{ticketType.description}</strong>
-            <tt> ({ticketType.name})</tt>
+            <code> ({ticketType.name})</code>
           </div>
           <div className="col-md-4 text-right">
             <button
@@ -131,11 +138,4 @@ function TicketTypesList({ ticketTypes, ticketName }) {
       </Link>
     </div>
   );
-}
-
-TicketTypesList.propTypes = {
-  ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
-  ticketName: PropTypes.string.isRequired,
-};
-
-export default TicketTypesList;
+});
