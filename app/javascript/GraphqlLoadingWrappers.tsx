@@ -9,7 +9,7 @@ import PageLoadingIndicator from './PageLoadingIndicator';
 export function LoadQueryWrapper<TData, TProps>(
   useLoadData: () => QueryResult<TData>,
   WrappedComponent: React.ComponentType<TProps & { data: TData }>,
-): React.FunctionComponent<TProps> {
+): (props: TProps) => JSX.Element {
   const Wrapper = (props: TProps) => {
     const { data, loading, error } = useLoadData();
 
@@ -36,7 +36,7 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
   useLoadData: () => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,
   WrappedComponent: React.ComponentType<TProps & { value: TValue; data: TData }>,
-): React.FunctionComponent<TProps> {
+): (props: TProps) => JSX.Element {
   const Wrapper = (props: TProps) => {
     const { id } = useParams<{ id: string }>();
     const { data, loading, error } = useLoadData();
