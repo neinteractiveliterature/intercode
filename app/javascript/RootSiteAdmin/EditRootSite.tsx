@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
-import { RootSiteAdminQuery } from './queries';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import { UpdateRootSite } from './mutations';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useRootSiteAdminQueryQuery } from './queries.generated';
+import { useUpdateRootSiteMutation } from './mutations.generated';
 
-function useDirtyState(initialState, setDirty) {
+function useDirtyState<T>(initialState: T, setDirty: () => void) {
   const [value, setValue] = useState(initialState);
   return [
     value,
-    (newValue) => {
+    (newValue: React.SetStateAction<T>) => {
       setValue(newValue);
       setDirty();
     },
-  ];
+  ] as const;
 }
 
-function EditRootSite() {
-  const { data, loading, error } = useQuery(RootSiteAdminQuery);
-  const [updateMutate] = useMutation(UpdateRootSite);
+export default LoadQueryWrapper(useRootSiteAdminQueryQuery, function EditRootSite({ data }) {
+  const [updateMutate] = useUpdateRootSiteMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   const [edited, setEdited] = useState(false);
@@ -33,28 +32,11 @@ function EditRootSite() {
     setEdited(true);
   };
 
-  const [siteName, setSiteName] = useDirtyState(
-    error || loading ? null : data.rootSite.site_name,
-    setDirty,
-  );
-  const [defaultLayout, setDefaultLayout] = useDirtyState(
-    error || loading ? null : data.rootSite.default_layout,
-    setDirty,
-  );
-  const [rootPage, setRootPage] = useDirtyState(
-    error || loading ? null : data.rootSite.root_page,
-    setDirty,
-  );
+  const [siteName, setSiteName] = useDirtyState(data.rootSite.site_name, setDirty);
+  const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.default_layout, setDirty);
+  const [rootPage, setRootPage] = useDirtyState(data.rootSite.root_page, setDirty);
 
   usePageTitle('Root Site Settings');
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const saveClicked = async () => {
     setSuccess(false);
@@ -86,10 +68,10 @@ function EditRootSite() {
         label="Default layout for pages"
         value={defaultLayout}
         isClearable
-        getOptionValue={(option) => option.id}
-        getOptionLabel={(option) => option.name}
+        getOptionValue={(option) => option.id.toString()}
+        getOptionLabel={(option) => option.name ?? ''}
         options={data.cmsLayouts}
-        onChange={setDefaultLayout}
+        onChange={(newValue: typeof data['cmsLayouts'][0]) => setDefaultLayout(newValue)}
         disabled={updateInProgress}
       />
 
@@ -98,14 +80,14 @@ function EditRootSite() {
         label="Root page"
         value={rootPage}
         isClearable
-        getOptionValue={(option) => option.id}
-        getOptionLabel={(option) => option.name}
+        getOptionValue={(option) => option.id.toString()}
+        getOptionLabel={(option) => option.name ?? ''}
         options={data.cmsPages}
-        onChange={setRootPage}
+        onChange={(newValue: typeof data['rootSite']['root_page']) => setRootPage(newValue)}
         disabled={updateInProgress}
       />
 
-      <ErrorDisplay graphQLError={updateError} />
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
 
       <button
         className="btn btn-primary"
@@ -119,6 +101,4 @@ function EditRootSite() {
       {success ? ' Saved!' : null}
     </>
   );
-}
-
-export default EditRootSite;
+});

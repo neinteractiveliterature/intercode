@@ -1,25 +1,41 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
-import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations';
+import { CreateRoom, DeleteRoom } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { RoomsAdminQuery } from './queries';
-import { useConfirm } from '../ModalDialogs/Confirm';
+import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useCreateMutation, useDeleteMutation } from '../MutationUtils';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import {
+  RoomsAdminQueryQuery,
+  RoomsAdminQueryQueryVariables,
+  useRoomsAdminQueryQuery,
+} from './queries.generated';
+import {
+  CreateRoomMutation,
+  CreateRoomMutationVariables,
+  DeleteRoomMutation,
+  DeleteRoomMutationVariables,
+  useUpdateRoomMutation,
+} from './mutations.generated';
 
-function RoomsAdmin() {
+export default LoadQueryWrapper(useRoomsAdminQueryQuery, function RoomsAdmin({ data }) {
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
-  const { data, loading, error } = useQuery(RoomsAdminQuery);
-  const [updateMutate] = useMutation(UpdateRoom);
+  const [updateMutate] = useUpdateRoomMutation();
   const [createRoom, createError] = useAsyncFunction(
-    useCreateMutation(CreateRoom, {
+    useCreateMutation<
+      RoomsAdminQueryQuery,
+      RoomsAdminQueryQueryVariables,
+      CreateRoomMutationVariables,
+      CreateRoomMutation
+    >(CreateRoom, {
       query: RoomsAdminQuery,
       arrayPath: ['convention', 'rooms'],
       newObjectPath: ['createRoom', 'room'],
@@ -27,34 +43,26 @@ function RoomsAdmin() {
   );
   const [updateRoom, updateError] = useAsyncFunction(updateMutate);
   const [deleteRoom, deleteError] = useAsyncFunction(
-    useDeleteMutation(DeleteRoom, {
+    useDeleteMutation<DeleteRoomMutation, DeleteRoomMutationVariables>(DeleteRoom, {
       query: RoomsAdminQuery,
       arrayPath: ['convention', 'rooms'],
       idVariablePath: ['input', 'id'],
     }),
   );
-  const confirm = useConfirm();
+  const confirm = useGraphQLConfirm();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
 
   usePageTitle('Rooms');
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   if (authorizationWarning) return authorizationWarning;
 
-  const roomNameDidChange = (id, name) =>
+  const roomNameDidChange = (id: number, name: string) =>
     updateRoom({
       variables: { input: { id, room: { name } } },
     });
 
-  const createRoomWasClicked = async (event) => {
+  const createRoomWasClicked = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     await createRoom({
       variables: { input: { room: { name: creatingRoomName } } },
@@ -62,18 +70,18 @@ function RoomsAdmin() {
     setCreatingRoomName('');
   };
 
-  const keyDownInCreatingRoom = (event) => {
+  const keyDownInCreatingRoom = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       createRoomWasClicked(event);
     }
   };
 
-  const deleteRoomConfirmed = (roomId) =>
+  const deleteRoomConfirmed = (roomId: number) =>
     deleteRoom({
       variables: { input: { id: roomId } },
     });
 
-  const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name);
+  const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name ?? '');
 
   const roomRows = sortedRooms.map((room) => (
     <li className="list-group-item" key={room.id}>
@@ -82,7 +90,7 @@ function RoomsAdmin() {
           <InPlaceEditor
             value={room.name}
             onChange={(newName) => {
-              roomNameDidChange(room.id, newName);
+              roomNameDidChange(room.id, newName ?? '');
             }}
           />
         </div>
@@ -100,7 +108,6 @@ function RoomsAdmin() {
             confirm({
               prompt: 'Are you sure you want to delete this room?',
               action: () => deleteRoomConfirmed(room.id),
-              renderError: (e) => <ErrorDisplay error={e} />,
             })
           }
           type="button"
@@ -142,10 +149,10 @@ function RoomsAdmin() {
           </li>
         </ul>
 
-        <ErrorDisplay graphQLError={createError || updateError || deleteError} />
+        <ErrorDisplay
+          graphQLError={(createError || updateError || deleteError) as ApolloError | undefined}
+        />
       </div>
     </>
   );
-}
-
-export default RoomsAdmin;
+});
