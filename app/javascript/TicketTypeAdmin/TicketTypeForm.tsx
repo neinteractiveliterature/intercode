@@ -14,13 +14,13 @@ export type EditingTicketType = Omit<
   maximum_event_provided_tickets?: number | null;
 };
 
-export type TicketTypeForm = {
+export type TicketTypeFormProps = {
   ticketType: EditingTicketType;
   onChange: React.Dispatch<React.SetStateAction<EditingTicketType>>;
   ticketName: string;
 };
 
-function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeForm) {
+function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeFormProps) {
   const [
     setName,
     setDescription,

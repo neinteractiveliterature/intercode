@@ -33,7 +33,7 @@ export type AdminTicketTypesQueryQueryVariables = Types.Exact<{ [key: string]: n
 
 export type AdminTicketTypesQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name' | 'timezone_name'>
     & { ticket_types: Array<(
@@ -41,7 +41,7 @@ export type AdminTicketTypesQueryQuery = (
       & Pick<Types.TicketType, 'id'>
       & TicketTypeAdmin_TicketTypeFieldsFragment
     )> }
-  )> }
+  ) }
 );
 
 export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
@@ -74,7 +74,7 @@ export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     ${PricingStructureFieldsFragmentDoc}`;
 export const AdminTicketTypesQueryDocument = gql`
     query AdminTicketTypesQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_types {
       id
