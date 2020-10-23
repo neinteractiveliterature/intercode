@@ -7,12 +7,14 @@ import AppRootContext from '../AppRootContext';
 import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
-import { StaffPosition } from '../graphqlTypes.generated';
 import { usePropertySetters, useFunctionalStateUpdater } from '../usePropertySetters';
+import { StaffPositionsQueryQuery } from './queries.generated';
+
+export type EditingStaffPosition = StaffPositionsQueryQuery['convention']['staff_positions'][0];
 
 export type StaffPositionFormProps = {
-  staffPosition: StaffPosition;
-  onChange: React.Dispatch<StaffPosition>;
+  staffPosition: EditingStaffPosition;
+  onChange: React.Dispatch<EditingStaffPosition>;
 };
 
 function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
@@ -26,12 +28,12 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
     'user_con_profiles',
   );
 
-  const setEmailAliases = (emailAliases: StaffPosition['email_aliases']) =>
+  const setEmailAliases = (emailAliases: EditingStaffPosition['email_aliases']) =>
     onChange({
       ...staffPosition,
       email_aliases: emailAliases,
     });
-  const setCcAddresses = (ccAddresses: StaffPosition['cc_addresses']) =>
+  const setCcAddresses = (ccAddresses: EditingStaffPosition['cc_addresses']) =>
     onChange({
       ...staffPosition,
       cc_addresses: ccAddresses,

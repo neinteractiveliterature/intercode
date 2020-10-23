@@ -15,8 +15,8 @@ function ConventionBreadcrumb() {
   if (loading) {
     return <LoadingIndicator />;
   }
-  if (error) {
-    return 'Convention';
+  if (error || !data) {
+    return <>Convention</>;
   }
 
   return <BreadcrumbItem active>{data.convention.name}</BreadcrumbItem>;

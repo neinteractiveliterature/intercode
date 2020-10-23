@@ -1,27 +1,26 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
-import { CreateStaffPosition } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import StaffPositionForm from './StaffPositionForm';
+import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import { StaffPositionsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
+import { useCreateStaffPositionMutation } from './mutations.generated';
+import { StaffPositionsQueryQuery } from './queries.generated';
 
 function NewStaffPosition() {
   const history = useHistory();
-  const [createMutate] = useMutation(CreateStaffPosition, {
-    update: (
-      proxy,
-      {
-        data: {
-          createStaffPosition: { staff_position: newStaffPosition },
-        },
-      },
-    ) => {
-      const data = proxy.readQuery({ query: StaffPositionsQuery });
+  const [createMutate] = useCreateStaffPositionMutation({
+    update: (proxy, result) => {
+      const data = proxy.readQuery<StaffPositionsQueryQuery>({ query: StaffPositionsQuery });
+      const newStaffPosition = result.data?.createStaffPosition?.staff_position;
+      if (!data || !newStaffPosition) {
+        return;
+      }
+
       proxy.writeQuery({
         query: StaffPositionsQuery,
         data: {
@@ -36,12 +35,15 @@ function NewStaffPosition() {
   });
   const [mutate, error, inProgress] = useAsyncFunction(createMutate);
 
-  const [staffPosition, setStaffPosition] = useState({
+  const [staffPosition, setStaffPosition] = useState<EditingStaffPosition>({
+    __typename: 'StaffPosition',
+    id: 0,
     name: '',
     email: '',
     user_con_profiles: [],
     cc_addresses: [],
     email_aliases: [],
+    permissions: [],
   });
 
   const saveClicked = useCallback(async () => {
@@ -53,7 +55,7 @@ function NewStaffPosition() {
       },
     });
     history.replace(
-      `/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`,
+      `/staff_positions/${response!.data!.createStaffPosition!.staff_position.id}/edit_permissions`,
     );
   }, [history, mutate, staffPosition]);
 
@@ -63,7 +65,7 @@ function NewStaffPosition() {
     <div>
       <h1 className="mb-4">New staff position</h1>
       <StaffPositionForm staffPosition={staffPosition} onChange={setStaffPosition} />
-      <ErrorDisplay graphQLError={error} />
+      <ErrorDisplay graphQLError={error as ApolloError} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save
       </button>
