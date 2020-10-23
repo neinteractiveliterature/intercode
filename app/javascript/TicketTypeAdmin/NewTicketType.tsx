@@ -1,41 +1,47 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 
 import { AdminTicketTypesQuery } from './queries';
 import buildTicketTypeInput from './buildTicketTypeInput';
-import { CreateTicketType } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
-import TicketTypeForm from './TicketTypeForm';
+import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
+import { useCreateTicketTypeMutation } from './mutations.generated';
+import { AdminTicketTypesQueryQuery } from './queries.generated';
 
-function NewTicketType({ ticketName }) {
+export type NewTicketTypeProps = {
+  ticketName: string;
+};
+
+function NewTicketType({ ticketName }: NewTicketTypeProps) {
   const history = useHistory();
   usePageTitle(`New ${ticketName} type`);
 
-  const [ticketType, setTicketType] = useState({
+  const [ticketType, setTicketType] = useState<EditingTicketType>({
+    __typename: 'TicketType',
+    allows_event_signups: true,
+    id: 0,
+    providing_products: [],
     name: '',
     description: '',
-    publicly_available: false,
     maximum_event_provided_tickets: 0,
     counts_towards_convention_maximum: true,
     pricing_schedule: {
+      __typename: 'ScheduledMoneyValue',
       timespans: [],
     },
   });
 
-  const [mutate] = useMutation(CreateTicketType, {
-    update: (
-      proxy,
-      {
-        data: {
-          createTicketType: { ticket_type: newTicketType },
-        },
-      },
-    ) => {
-      const data = proxy.readQuery({ query: AdminTicketTypesQuery });
+  const [mutate] = useCreateTicketTypeMutation({
+    update: (proxy, result) => {
+      const data = proxy.readQuery<AdminTicketTypesQueryQuery>({ query: AdminTicketTypesQuery });
+      const newTicketType = result.data?.createTicketType?.ticket_type;
+      if (!data || !newTicketType) {
+        return;
+      }
+
       proxy.writeQuery({
         query: AdminTicketTypesQuery,
         data: {
@@ -69,13 +75,9 @@ function NewTicketType({ ticketName }) {
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save
       </button>
-      <ErrorDisplay graphQLError={error} />
+      <ErrorDisplay graphQLError={error as ApolloError} />
     </div>
   );
 }
-
-NewTicketType.propTypes = {
-  ticketName: PropTypes.string.isRequired,
-};
 
 export default NewTicketType;

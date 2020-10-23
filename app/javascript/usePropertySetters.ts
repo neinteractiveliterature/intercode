@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
-export type PartialStateFactory<T> = Dispatch<(prevState: T) => T>;
+export type FunctionalStateUpdater<T> = Dispatch<(prevState: T) => T>;
 
 export function useFunctionalStateUpdater<T>(
   state: T,
   setState: Dispatch<T> | undefined,
-): PartialStateFactory<T> {
-  const factory: PartialStateFactory<T> = useMemo(
+): FunctionalStateUpdater<T> {
+  const factory: FunctionalStateUpdater<T> = useMemo(
     () => (setState ? (updater: (prevState: T) => T) => setState(updater(state)) : () => {}),
     [state, setState],
   );
@@ -16,7 +16,10 @@ export function useFunctionalStateUpdater<T>(
 
 export type PropertySetter<T, F extends keyof T> = Dispatch<SetStateAction<T[F]>>;
 
-function buildPropertySetter<T, F extends keyof T>(setState: PartialStateFactory<T>, property: F) {
+function buildPropertySetter<T, F extends keyof T>(
+  setState: FunctionalStateUpdater<T>,
+  property: F,
+) {
   const calculateNewState = (prevState: T, valueOrUpdater: SetStateAction<T[F]>): T => {
     if (typeof valueOrUpdater === 'function') {
       return {
@@ -43,7 +46,7 @@ type PropertySetterTuple<T, Properties extends readonly (keyof T)[]> = {
 };
 
 export function usePropertySetters<T, Properties extends readonly (keyof T)[]>(
-  onChange: PartialStateFactory<T> | undefined | null,
+  onChange: FunctionalStateUpdater<T> | undefined | null,
   ...properties: Properties
 ): PropertySetterTuple<T, Properties> {
   const setters = useMemo(
