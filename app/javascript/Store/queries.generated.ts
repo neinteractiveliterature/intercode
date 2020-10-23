@@ -106,7 +106,7 @@ export type OrderHistoryQueryQuery = (
   ), myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-    & { orders: Array<Types.Maybe<(
+    & { orders: Array<(
       { __typename: 'Order' }
       & Pick<Types.Order, 'id' | 'status' | 'submitted_at'>
       & { total_price: (
@@ -136,7 +136,7 @@ export type OrderHistoryQueryQuery = (
           & Pick<Types.Money, 'fractional' | 'currency_code'>
         ) }
       )> }
-    )>> }
+    )> }
   )> }
 );
 
@@ -179,10 +179,10 @@ export type OrderFormProductQueryQuery = (
   )>, product: (
     { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'image_url' | 'name' | 'description_html'>
-    & { pricing_structure?: Types.Maybe<(
+    & { pricing_structure: (
       { __typename: 'PricingStructure' }
       & PricingStructureFieldsFragment
-    )>, provides_ticket_type?: Types.Maybe<(
+    ), provides_ticket_type?: Types.Maybe<(
       { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
     )>, product_variants: Array<(

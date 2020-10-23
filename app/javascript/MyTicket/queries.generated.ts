@@ -16,10 +16,10 @@ export type TicketPurchaseFormQueryQuery = (
     & { products: Array<(
       { __typename: 'Product' }
       & Pick<Types.Product, 'id' | 'name' | 'description_html'>
-      & { pricing_structure?: Types.Maybe<(
+      & { pricing_structure: (
         { __typename: 'PricingStructure' }
         & PricingStructureFieldsFragment
-      )> }
+      ) }
     )>, ticket_types: Array<(
       { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id' | 'description' | 'publicly_available'>

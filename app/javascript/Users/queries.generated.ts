@@ -40,7 +40,7 @@ export type DetailedUserFieldsFragment = (
       & Pick<Types.Signup, 'id' | 'state'>
     )>, convention: (
       { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'starts_at' | 'ticket_name' | 'timezone_name'>
+      & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'starts_at' | 'ticket_name' | 'timezone_name' | 'timezone_mode'>
     ), staff_positions: Array<(
       { __typename: 'StaffPosition' }
       & Pick<Types.StaffPosition, 'id' | 'name'>
@@ -101,6 +101,7 @@ export const DetailedUserFieldsFragmentDoc = gql`
       starts_at
       ticket_name
       timezone_name
+      timezone_mode
     }
     staff_positions {
       id

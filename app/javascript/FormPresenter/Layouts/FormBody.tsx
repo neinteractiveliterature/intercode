@@ -22,17 +22,7 @@ export type FormBodyImperativeHandle = {
 };
 
 const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(
-  (
-    {
-      // eslint-disable-next-line react/prop-types
-      convention,
-      formItems,
-      response,
-      responseValuesChanged,
-      errors,
-    },
-    ref,
-  ) => {
+  ({ convention, formItems, response, responseValuesChanged, errors }, ref) => {
     const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
     const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
 

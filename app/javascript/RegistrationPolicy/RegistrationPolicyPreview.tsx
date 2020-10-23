@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import buildBlankSignupCountsFromRegistrationPolicy from '../EventsApp/EventPage/buildBlankSignupCountsFromRegistrationPolicy';
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
@@ -79,9 +78,5 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
     </div>
   );
 }
-
-RegistrationPolicyPreview.propTypes = {
-  registrationPolicy: PropTypes.shape({}).isRequired,
-};
 
 export default RegistrationPolicyPreview;

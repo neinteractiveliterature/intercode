@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { CmsLayout } from '../../graphqlTypes.generated';
-import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { usePropertySetters } from '../../usePropertySetters';
 
 type CmsLayoutFields = Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>;
 
@@ -19,24 +19,26 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
   onChange,
   readOnly,
 }: CmsLayoutFormProps<T>) {
-  const factory = usePartialStateFactory(layout, onChange);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [adminNotes, setAdminNotes] = usePartialState(factory, 'admin_notes');
-  const [navbarClasses, setNavbarClasses] = usePartialState(factory, 'navbar_classes');
-  const [content, setContent] = usePartialState(factory, 'content');
+  const [setName, setAdminNotes, setNavbarClasses, setContent] = usePropertySetters(
+    onChange,
+    'name',
+    'admin_notes',
+    'navbar_classes',
+    'content',
+  );
 
   return (
     <>
       <BootstrapFormInput
         label="Name"
-        value={name ?? ''}
+        value={layout.name ?? ''}
         onTextChange={setName}
         readOnly={readOnly}
       />
 
       <BootstrapFormInput
         label="Admin notes"
-        value={adminNotes ?? ''}
+        value={layout.admin_notes ?? ''}
         onTextChange={setAdminNotes}
         readOnly={readOnly}
       />
@@ -44,7 +46,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
       <BootstrapFormInput
         label="Navigation bar CSS classes"
         className="form-control text-monospace"
-        value={navbarClasses ?? ''}
+        value={layout.navbar_classes ?? ''}
         onTextChange={setNavbarClasses}
         helpText={
           <Trans
@@ -64,7 +66,11 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
 
       <div className="form-group">
         <legend className="col-form-label">Content</legend>
-        <LiquidInput value={content ?? ''} onChange={setContent} codeMirrorOptions={{ readOnly }} />
+        <LiquidInput
+          value={layout.content ?? ''}
+          onChange={setContent}
+          codeMirrorOptions={{ readOnly }}
+        />
       </div>
     </>
   );

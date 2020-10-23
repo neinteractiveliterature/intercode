@@ -36,11 +36,11 @@ export type ConventionTicketNameQueryQueryVariables = Types.Exact<{ [key: string
 
 export type ConventionTicketNameQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & UserActivityAlertsAdminConventionFieldsFragment
-  )> }
+  ) }
 );
 
 export type UserActivityAlertQueryQueryVariables = Types.Exact<{
@@ -50,7 +50,7 @@ export type UserActivityAlertQueryQueryVariables = Types.Exact<{
 
 export type UserActivityAlertQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { user_activity_alert: (
@@ -59,7 +59,7 @@ export type UserActivityAlertQueryQuery = (
       & UserActivityAlertFieldsFragment
     ) }
     & UserActivityAlertsAdminConventionFieldsFragment
-  )> }
+  ) }
 );
 
 export type UserActivityAlertsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -67,15 +67,15 @@ export type UserActivityAlertsAdminQueryQueryVariables = Types.Exact<{ [key: str
 
 export type UserActivityAlertsAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>
-    & { user_activity_alerts: Array<Types.Maybe<(
+    & { user_activity_alerts: Array<(
       { __typename: 'UserActivityAlert' }
       & Pick<Types.UserActivityAlert, 'id'>
       & UserActivityAlertFieldsFragment
-    )>> }
-  )> }
+    )> }
+  ) }
 );
 
 export const UserActivityAlertsAdminConventionFieldsFragmentDoc = gql`
@@ -115,7 +115,7 @@ export const UserActivityAlertFieldsFragmentDoc = gql`
     `;
 export const ConventionTicketNameQueryDocument = gql`
     query ConventionTicketNameQuery {
-  convention {
+  convention: assertConvention {
     id
     ...UserActivityAlertsAdminConventionFields
   }
@@ -148,7 +148,7 @@ export type ConventionTicketNameQueryLazyQueryHookResult = ReturnType<typeof use
 export type ConventionTicketNameQueryQueryResult = Apollo.QueryResult<ConventionTicketNameQueryQuery, ConventionTicketNameQueryQueryVariables>;
 export const UserActivityAlertQueryDocument = gql`
     query UserActivityAlertQuery($id: Int!) {
-  convention {
+  convention: assertConvention {
     id
     ...UserActivityAlertsAdminConventionFields
     user_activity_alert(id: $id) {
@@ -187,7 +187,7 @@ export type UserActivityAlertQueryLazyQueryHookResult = ReturnType<typeof useUse
 export type UserActivityAlertQueryQueryResult = Apollo.QueryResult<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>;
 export const UserActivityAlertsAdminQueryDocument = gql`
     query UserActivityAlertsAdminQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_name
     ticket_mode

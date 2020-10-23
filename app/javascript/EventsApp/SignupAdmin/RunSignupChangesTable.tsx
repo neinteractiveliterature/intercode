@@ -6,7 +6,6 @@ import { TFunction } from 'i18next';
 import useReactTableWithTheWorks, {
   QueryDataContext,
 } from '../../Tables/useReactTableWithTheWorks';
-import { RunSignupChangesQuery } from './queries';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
@@ -18,10 +17,7 @@ import TableHeader from '../../Tables/TableHeader';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
-import {
-  RunSignupChangesQueryQuery,
-  RunSignupChangesQueryQueryVariables,
-} from './queries.generated';
+import { RunSignupChangesQueryQuery, useRunSignupChangesQueryQuery } from './queries.generated';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -63,7 +59,6 @@ const getPossibleColumns = (t: TFunction) => [
     sortable: false,
     filterable: false,
     width: 130,
-    // eslint-disable-next-line react/prop-types
     Cell: ({ value }: { value: string }) => <TimestampCell value={value} />,
   },
 ];
@@ -78,18 +73,14 @@ function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
   const [
     reactTableProps,
     { queryData, tableHeaderProps, columnSelectionProps },
-  ] = useReactTableWithTheWorks<
-    RunSignupChangesQueryQuery,
-    SignupChangeType,
-    RunSignupChangesQueryQueryVariables
-  >({
+  ] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: ['name', 'action', 'bucket_change', 'created_at'],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data?.run.signup_changes_paginated.entries ?? [],
-    getPages: ({ data }) => data?.run.signup_changes_paginated.total_pages ?? 0,
+    getData: ({ data }) => data.run.signup_changes_paginated.entries,
+    getPages: ({ data }) => data.run.signup_changes_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
-    query: RunSignupChangesQuery,
+    useQuery: useRunSignupChangesQueryQuery,
     storageKeyPrefix: 'signupSpy',
     variables: { runId },
   });

@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
 import moment, { Moment } from 'moment-timezone';
@@ -20,11 +19,10 @@ import useReactTableWithTheWorks, {
   createQueryDataContext,
 } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
-import { UserConProfilesTableUserConProfilesQuery } from './queries';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import {
   UserConProfilesTableUserConProfilesQueryQuery,
-  UserConProfilesTableUserConProfilesQueryQueryVariables,
+  useUserConProfilesTableUserConProfilesQueryQuery,
 } from './queries.generated';
 import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
@@ -259,7 +257,6 @@ const getPossibleColumns = (
       Header: t('admin.userConProfiles.privileges', 'Privileges'),
       id: 'privileges',
       accessor: 'privileges',
-      // eslint-disable-next-line react/prop-types
       Cell: ({ value }) => <PrivilegesCell value={value} />,
       Filter: PrivilegesFilter,
     },
@@ -292,14 +289,6 @@ const getPossibleColumns = (
       />
     );
 
-    FormItemCell.propTypes = {
-      value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-    };
-
-    FormItemCell.defaultProps = {
-      value: null,
-    };
-
     columns.push({
       Header: formItem.admin_description || humanize(identifier),
       id: identifier,
@@ -325,18 +314,14 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
       getPossibleColumns(data, t, getSortedParsedFormItems(data.convention!.user_con_profile_form)),
     [t],
   );
-  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks<
-    UserConProfilesTableUserConProfilesQueryQuery,
-    UserConProfilesTableRow,
-    UserConProfilesTableUserConProfilesQueryQueryVariables
-  >({
+  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data!.convention!.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data!.convention!.user_con_profiles_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
-    query: UserConProfilesTableUserConProfilesQuery,
+    useQuery: useUserConProfilesTableUserConProfilesQueryQuery,
     storageKeyPrefix: 'userConProfiles',
   });
 

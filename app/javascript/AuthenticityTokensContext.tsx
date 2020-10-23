@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import fetch from 'unfetch';
 import isEqual from 'lodash/isEqual';
 
 export type AuthenticityTokensContextValue = {

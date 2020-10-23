@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
@@ -110,9 +109,5 @@ function EventProposalDisplay({ eventProposalId }: EventProposalDisplayProps) {
     </ul>
   );
 }
-
-EventProposalDisplay.propTypes = {
-  eventProposalId: PropTypes.number.isRequired,
-};
 
 export default EventProposalDisplay;

@@ -36,7 +36,7 @@ function EventSpecificSection({
   disabled,
 }: EventSpecificSectionProps) {
   const { data, loading, error } = useConvertToEventProvidedTicketQueryQuery({
-    variables: { eventId: event.id }, // eslint-disable-line react/prop-types
+    variables: { eventId: event.id },
   });
 
   if (loading) {

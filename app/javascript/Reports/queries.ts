@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const ReportsMenuQuery = gql`
   query ReportsMenuQuery {
-    convention {
+    convention: assertConvention {
       id
       ticket_mode
       ticket_name
@@ -12,7 +12,7 @@ export const ReportsMenuQuery = gql`
 
 export const AttendanceByPaymentAmountQuery = gql`
   query AttendanceByPaymentAmountQuery {
-    convention {
+    convention: assertConvention {
       id
       ticket_name
 
@@ -52,7 +52,7 @@ export const AttendanceByPaymentAmountQuery = gql`
 
 export const EventProvidedTicketsQuery = gql`
   query EventProvidedTicketsQuery {
-    convention {
+    convention: assertConvention {
       id
       ticket_name
 
@@ -84,7 +84,7 @@ export const EventProvidedTicketsQuery = gql`
 
 export const EventsByChoiceQuery = gql`
   query EventsByChoiceQuery {
-    convention {
+    convention: assertConvention {
       id
 
       reports {
@@ -107,7 +107,7 @@ export const EventsByChoiceQuery = gql`
 
 export const SignupCountsByStateQuery = gql`
   query SignupCountsByStateQuery {
-    convention {
+    convention: assertConvention {
       id
       signup_counts_by_state {
         state
@@ -119,7 +119,7 @@ export const SignupCountsByStateQuery = gql`
 
 export const SignupSpySignupChangesQuery = gql`
   query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int) {
-    convention {
+    convention: assertConvention {
       id
       timezone_name
 

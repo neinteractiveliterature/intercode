@@ -369,7 +369,7 @@ type Convention {
   timezone_name: String
   updated_at: Date
   user_activity_alert(id: Int!): UserActivityAlert!
-  user_activity_alerts: [UserActivityAlert]!
+  user_activity_alerts: [UserActivityAlert!]!
   user_con_profile_form: Form!
   user_con_profiles_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UserConProfilesPagination!
 }
@@ -2634,7 +2634,7 @@ input NotificationTemplateInput {
 type Order {
   charge_id: String
   coupon_applications: [CouponApplication!]!
-  id: Int
+  id: Int!
   order_entries: [OrderEntry!]!
   paid_at: Date
   payment_amount: Money
@@ -2663,7 +2663,7 @@ type OrderEdge {
 
 type OrderEntry {
   describe_products: String!
-  id: Int
+  id: Int!
   order: Order!
   price: Money!
   price_per_item: Money!
@@ -2891,13 +2891,13 @@ type Product {
   available: Boolean!
   description: String
   description_html: String
-  id: Int
+  id: Int!
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
-  payment_options: [String]!
+  payment_options: [String!]!
   price: Money! @deprecated(reason: "Use pricing_structure instead")
-  pricing_structure: PricingStructure
+  pricing_structure: PricingStructure!
   product_variants: [ProductVariant!]!
   provides_ticket_type: TicketType
 }
@@ -2917,7 +2917,7 @@ input ProductInput {
 type ProductVariant {
   description: String
   description_html: String
-  id: Int
+  id: Int!
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
@@ -4610,7 +4610,7 @@ type User {
   last_name: String
   name: String
   name_inverted: String
-  privileges: [String]
+  privileges: [String!]
   user_con_profiles: [UserConProfile!]!
 }
 
@@ -4663,7 +4663,7 @@ type UserConProfile {
   name_without_nickname: String!
   nickname: String
   order_summary: String!
-  orders: [Order]!
+  orders: [Order!]!
   preferred_contact: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")
   privileges: [String] @deprecated(reason: "Privileges are deprecated in favor of permissions and staff positions")
   show_nickname_in_bio: Boolean

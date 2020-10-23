@@ -7,10 +7,10 @@ import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.gene
 export type AdminProductFieldsFragment = (
   { __typename: 'Product' }
   & Pick<Types.Product, 'id' | 'name' | 'description' | 'description_html' | 'image_url' | 'available' | 'payment_options'>
-  & { pricing_structure?: Types.Maybe<(
+  & { pricing_structure: (
     { __typename: 'PricingStructure' }
     & PricingStructureFieldsFragment
-  )>, product_variants: Array<(
+  ), product_variants: Array<(
     { __typename: 'ProductVariant' }
     & Pick<Types.ProductVariant, 'id' | 'name' | 'description' | 'image_url' | 'position'>
     & { override_pricing_structure?: Types.Maybe<(

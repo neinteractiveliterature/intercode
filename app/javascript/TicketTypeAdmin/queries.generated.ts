@@ -21,10 +21,10 @@ export type TicketTypeAdmin_TicketTypeFieldsFragment = (
   ), providing_products: Array<(
     { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'name' | 'available'>
-    & { pricing_structure?: Types.Maybe<(
+    & { pricing_structure: (
       { __typename: 'PricingStructure' }
       & PricingStructureFieldsFragment
-    )> }
+    ) }
   )> }
 );
 
@@ -33,7 +33,7 @@ export type AdminTicketTypesQueryQueryVariables = Types.Exact<{ [key: string]: n
 
 export type AdminTicketTypesQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_name' | 'timezone_name'>
     & { ticket_types: Array<(
@@ -41,7 +41,7 @@ export type AdminTicketTypesQueryQuery = (
       & Pick<Types.TicketType, 'id'>
       & TicketTypeAdmin_TicketTypeFieldsFragment
     )> }
-  )> }
+  ) }
 );
 
 export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
@@ -74,7 +74,7 @@ export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     ${PricingStructureFieldsFragmentDoc}`;
 export const AdminTicketTypesQueryDocument = gql`
     query AdminTicketTypesQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_types {
       id

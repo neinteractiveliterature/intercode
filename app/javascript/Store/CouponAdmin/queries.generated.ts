@@ -21,7 +21,7 @@ export type AdminCouponsQueryQueryVariables = Types.Exact<{
 
 export type AdminCouponsQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { coupons_paginated: (
@@ -33,7 +33,7 @@ export type AdminCouponsQueryQuery = (
         & AdminCouponFieldsFragment
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export const AdminCouponFieldsFragmentDoc = gql`
@@ -46,7 +46,7 @@ export const AdminCouponFieldsFragmentDoc = gql`
     ${CouponFieldsFragmentDoc}`;
 export const AdminCouponsQueryDocument = gql`
     query AdminCouponsQuery($filters: CouponFiltersInput, $sort: [SortInput!], $page: Int, $per_page: Int) {
-  convention {
+  convention: assertConvention {
     id
     coupons_paginated(filters: $filters, sort: $sort, page: $page, per_page: $per_page) {
       current_page

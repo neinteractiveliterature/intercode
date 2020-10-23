@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import TextDiffDisplay from './TextDiffDisplay';
 import { describeTimespan } from '../ItemDisplays/TimespanItemDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
