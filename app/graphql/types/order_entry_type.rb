@@ -1,5 +1,5 @@
 class Types::OrderEntryType < Types::BaseObject
-  field :id, Integer, null: true
+  field :id, Integer, null: false
   field :order, Types::OrderType, null: false
   field :product, Types::ProductType, null: false
   field :product_variant, Types::ProductVariantType, null: true

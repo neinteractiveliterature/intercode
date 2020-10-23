@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import { usePartialState, usePartialStateFactory } from '../../usePartialState';
+import { usePropertySetters } from '../../usePropertySetters';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import MoneyInput from '../MoneyInput';
 import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
@@ -18,41 +18,60 @@ const DISCOUNT_MODE_CHOICES = [
 ] as const;
 
 const DISCOUNT_MODES = DISCOUNT_MODE_CHOICES.map((choice) => choice.value);
+type DiscountMode = typeof DISCOUNT_MODES[0];
 
 const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> = {
   __typename: 'Product',
   name: '',
+  id: 0,
 };
 
-const BLANK_VALUES = {
+const BLANK_VALUES: {
+  fixed_amount: NonNullable<AdminCouponFieldsFragment['fixed_amount']>;
+  percent_discount: NonNullable<AdminCouponFieldsFragment['percent_discount']>;
+  provides_product: NonNullable<AdminCouponFieldsFragment['provides_product']>;
+} = {
   fixed_amount: {
     __typename: 'Money',
     fractional: 0,
     currency_code: 'USD',
   },
-  percent_discount: 0.0,
+  percent_discount: '0',
   provides_product: blankProduct,
 } as const;
 
-export type CouponFormProps = {
-  value: AdminCouponFieldsFragment;
-  onChange: React.Dispatch<React.SetStateAction<AdminCouponFieldsFragment>>;
+export type CouponFormProps<T extends Omit<AdminCouponFieldsFragment, 'id'>> = {
+  value: T;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
 };
 
-function CouponForm({ value, onChange }: CouponFormProps) {
-  const factory = usePartialStateFactory(value, onChange);
-  const [code, setCode] = usePartialState(factory, 'code');
-  const [fixedAmount, setFixedAmount] = usePartialState(factory, 'fixed_amount');
-  const [percentDiscount, setPercentDiscount] = usePartialState(factory, 'percent_discount');
-  const [providesProduct, setProvidesProduct] = usePartialState(factory, 'provides_product');
-  const [expiresAt, setExpiresAt] = usePartialState(factory, 'expires_at');
-  const [usageLimit, setUsageLimit] = usePartialState(factory, 'usage_limit');
+function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
+  value,
+  onChange,
+}: CouponFormProps<T>) {
+  const [
+    setCode,
+    setFixedAmount,
+    setPercentDiscount,
+    setProvidesProduct,
+    setExpiresAt,
+    setUsageLimit,
+  ] = usePropertySetters(
+    onChange,
+    'code',
+    'fixed_amount',
+    'percent_discount',
+    'provides_product',
+    'expires_at',
+    'usage_limit',
+  );
   const discountMode = useMemo(() => DISCOUNT_MODES.find((mode) => value[mode] != null), [value]);
 
-  const setDiscountMode = (newDiscountMode: typeof DISCOUNT_MODES[0]) => {
-    const discountFields = DISCOUNT_MODES.reduce<
-      Pick<AdminCouponFieldsFragment, 'fixed_amount' | 'percent_discount' | 'provides_product'>
-    >((fields, mode) => ({ ...fields, [mode]: null }), {});
+  const setDiscountMode = <F extends DiscountMode>(newDiscountMode: F) => {
+    const discountFields = DISCOUNT_MODES.reduce<Pick<AdminCouponFieldsFragment, DiscountMode>>(
+      (fields, mode) => ({ ...fields, [mode]: null }),
+      {},
+    );
     discountFields[newDiscountMode] = BLANK_VALUES[newDiscountMode];
     onChange((prevValue) => ({ ...prevValue, ...discountFields }));
   };
@@ -61,7 +80,7 @@ function CouponForm({ value, onChange }: CouponFormProps) {
     <>
       <BootstrapFormInput
         label="Coupon code"
-        value={code ?? ''}
+        value={value.code ?? ''}
         onTextChange={setCode}
         helpText="If you leave this blank, a random coupon code will be generated automatically."
       />
@@ -78,7 +97,7 @@ function CouponForm({ value, onChange }: CouponFormProps) {
           {(id) => (
             <MoneyInput
               id={id}
-              value={fixedAmount}
+              value={value.fixed_amount}
               onChange={(newFixedAmount) => {
                 setFixedAmount(newFixedAmount ?? BLANK_VALUES.fixed_amount);
               }}
@@ -93,7 +112,7 @@ function CouponForm({ value, onChange }: CouponFormProps) {
           type="number"
           min={0}
           max={100}
-          value={percentDiscount.toString()}
+          value={value.percent_discount ?? ''}
           onTextChange={setPercentDiscount}
         />
       )}
@@ -104,8 +123,8 @@ function CouponForm({ value, onChange }: CouponFormProps) {
             <ProductSelect
               isClearable
               id={id}
-              value={providesProduct}
-              onChange={(newProduct: typeof providesProduct) => {
+              value={value.provides_product}
+              onChange={(newProduct: typeof value.provides_product) => {
                 setProvidesProduct(newProduct ?? BLANK_VALUES.provides_product);
               }}
             />
@@ -116,7 +135,7 @@ function CouponForm({ value, onChange }: CouponFormProps) {
       <FormGroupWithLabel label="Expiration date">
         {(id) => (
           <>
-            <DateTimeInput id={id} value={expiresAt} onChange={setExpiresAt} />
+            <DateTimeInput id={id} value={value.expires_at} onChange={setExpiresAt} />
             <HelpText>If blank, coupon never expires.</HelpText>
           </>
         )}
@@ -124,7 +143,7 @@ function CouponForm({ value, onChange }: CouponFormProps) {
 
       <BootstrapFormInput
         label="Usage limit"
-        value={usageLimit ?? ''}
+        value={value.usage_limit ?? ''}
         type="number"
         onTextChange={(newLimit) => setUsageLimit(parseIntOrNull(newLimit))}
         helpText="If blank, coupon can be used an unlimited number of times."

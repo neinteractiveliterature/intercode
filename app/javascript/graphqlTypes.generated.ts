@@ -8,7 +8,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  BigDecimal: any;
+  BigDecimal: string;
   /** Date in ISO8601 format */
   Date: string;
   /** An arbitrary object, serialized as JSON */
@@ -449,7 +449,7 @@ export type Convention = {
   timezone_name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['Date']>;
   user_activity_alert: UserActivityAlert;
-  user_activity_alerts: Array<Maybe<UserActivityAlert>>;
+  user_activity_alerts: Array<UserActivityAlert>;
   user_con_profile_form: Form;
   user_con_profiles_paginated: UserConProfilesPagination;
 };
@@ -2970,7 +2970,7 @@ export type Order = {
   __typename: 'Order';
   charge_id?: Maybe<Scalars['String']>;
   coupon_applications: Array<CouponApplication>;
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   order_entries: Array<OrderEntry>;
   paid_at?: Maybe<Scalars['Date']>;
   payment_amount?: Maybe<Money>;
@@ -2994,7 +2994,7 @@ export type OrderEdge = {
 export type OrderEntry = {
   __typename: 'OrderEntry';
   describe_products: Scalars['String'];
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   order: Order;
   price: Money;
   price_per_item: Money;
@@ -3198,14 +3198,14 @@ export type Product = {
   available: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
   description_html?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   image_url?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   order_quantities_by_status: Array<OrderQuantityByStatus>;
-  payment_options: Array<Maybe<Scalars['String']>>;
+  payment_options: Array<Scalars['String']>;
   /** @deprecated Use pricing_structure instead */
   price: Money;
-  pricing_structure?: Maybe<PricingStructure>;
+  pricing_structure: PricingStructure;
   product_variants: Array<ProductVariant>;
   provides_ticket_type?: Maybe<TicketType>;
 };
@@ -3226,7 +3226,7 @@ export type ProductVariant = {
   __typename: 'ProductVariant';
   description?: Maybe<Scalars['String']>;
   description_html?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
   image_url?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   order_quantities_by_status: Array<OrderQuantityByStatus>;
@@ -4726,7 +4726,7 @@ export type User = {
   last_name?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   name_inverted?: Maybe<Scalars['String']>;
-  privileges?: Maybe<Array<Maybe<Scalars['String']>>>;
+  privileges?: Maybe<Array<Scalars['String']>>;
   user_con_profiles: Array<UserConProfile>;
 };
 
@@ -4784,7 +4784,7 @@ export type UserConProfile = {
   name_without_nickname: Scalars['String'];
   nickname?: Maybe<Scalars['String']>;
   order_summary: Scalars['String'];
-  orders: Array<Maybe<Order>>;
+  orders: Array<Order>;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
   preferred_contact?: Maybe<Scalars['String']>;
   /** @deprecated Privileges are deprecated in favor of permissions and staff positions */

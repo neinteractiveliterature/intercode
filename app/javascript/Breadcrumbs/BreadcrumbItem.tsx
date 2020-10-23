@@ -1,20 +1,27 @@
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
-export type BreadcrumbItemProps = {
+type BreadcrumbItemRegularProps = {
   active?: boolean;
   children: ReactNode;
   to: string;
 };
 
-function BreadcrumbItem({ active, children, to }: BreadcrumbItemProps) {
-  if (active) {
-    return <li className="breadcrumb-item active">{children}</li>;
+type BreadcrumbItemAlwaysActiveProps = {
+  active: true;
+  children: ReactNode;
+};
+
+export type BreadcrumbItemProps = BreadcrumbItemRegularProps | BreadcrumbItemAlwaysActiveProps;
+
+function BreadcrumbItem(props: BreadcrumbItemProps) {
+  if (props.active) {
+    return <li className="breadcrumb-item active">{props.children}</li>;
   }
 
   return (
     <li className="breadcrumb-item">
-      <Link to={to}>{children}</Link>
+      <Link to={props.to}>{props.children}</Link>
     </li>
   );
 }

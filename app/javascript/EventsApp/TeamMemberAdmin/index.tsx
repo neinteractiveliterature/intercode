@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
 
@@ -86,10 +85,5 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps) {
     </>
   );
 }
-
-TeamMemberAdmin.propTypes = {
-  eventId: PropTypes.number.isRequired,
-  eventPath: PropTypes.string.isRequired,
-};
 
 export default TeamMemberAdmin;

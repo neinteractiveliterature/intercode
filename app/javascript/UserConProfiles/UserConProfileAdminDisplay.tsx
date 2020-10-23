@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 import { humanize } from 'inflected';
-import fetch from 'unfetch';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 import { useConfirm } from '../ModalDialogs/Confirm';

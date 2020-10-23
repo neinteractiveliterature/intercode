@@ -1,7 +1,7 @@
 class Types::OrderType < Types::BaseObject
   authorize_record
 
-  field :id, Integer, null: true
+  field :id, Integer, null: false
   field :user_con_profile, Types::UserConProfileType, null: false
   field :status, Types::OrderStatusType, null: false
   field :total_price_before_discounts, Types::MoneyType, null: false

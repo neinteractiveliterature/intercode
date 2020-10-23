@@ -1,0 +1,105 @@
+import React, { useMemo } from 'react';
+import { humanize, titleize } from 'inflected';
+import reverse from 'lodash/reverse';
+import sortBy from 'lodash/sortBy';
+import { useParams } from 'react-router-dom';
+import moment from 'moment-timezone';
+
+import usePageTitle from '../usePageTitle';
+import { timezoneNameForConvention } from '../TimeUtils';
+import { UserAdminQueryQuery, useUserAdminQueryQuery } from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+
+function sortByConventionDate(profiles: UserAdminQueryQuery['user']['user_con_profiles']) {
+  return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
+}
+
+function buildProfileUrl(profile: UserAdminQueryQuery['user']['user_con_profiles'][0]) {
+  const profileUrl = new URL(
+    `//${profile.convention.domain}/user_con_profiles/${profile.id}`,
+    window.location.href,
+  );
+  profileUrl.port = window.location.port;
+  return profileUrl.toString();
+}
+
+function useLoadUserAdminData() {
+  const userId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  return useUserAdminQueryQuery({ variables: { id: userId } });
+}
+
+export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay({ data }) {
+  usePageTitle(data.user.name);
+
+  const userConProfiles = useMemo(() => sortByConventionDate(data.user.user_con_profiles), [data]);
+
+  return (
+    <div className="row">
+      <div className="col-lg-9">
+        <h1>{data.user.name}</h1>
+        <table className="table table-sm table-striped my-4">
+          <tbody>
+            {(['first_name', 'last_name', 'email'] as const).map((field) => (
+              <tr key={field}>
+                <th scope="row" className="pr-2">
+                  {humanize(field)}
+                </th>
+                <td className="col-md-9">{data.user[field]}</td>
+              </tr>
+            ))}
+
+            <tr>
+              <th scope="row" className="pr-2">
+                Privileges
+              </th>
+              <td>
+                {(data.user.privileges?.length ?? 0) > 0
+                  ? data.user.privileges!.map(titleize).join(', ')
+                  : 'none'}
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row" className="pr-2">
+                Convention profiles
+              </th>
+              <td>
+                {data.user.user_con_profiles.length > 0 ? (
+                  <ul className="list-unstyled mb-0">
+                    {userConProfiles.map((profile) => (
+                      <li key={profile.id}>
+                        <a href={buildProfileUrl(profile)}>
+                          {profile.convention.name}{' '}
+                          <small>
+                            (
+                            {moment
+                              .tz(
+                                profile.convention.starts_at,
+                                timezoneNameForConvention(profile.convention),
+                              )
+                              .format('YYYY')}
+                            )
+                          </small>
+                        </a>
+                        {profile.staff_positions.length > 0
+                          ? ` (${profile.staff_positions
+                              .map((pos) => pos.name)
+                              .sort()
+                              .join(', ')})`
+                          : null}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'none'
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="col-lg-3">{/* this.renderUserAdminSection(data) */}</div>
+    </div>
+  );
+});

@@ -1,0 +1,69 @@
+import React, { useState, useCallback, useRef } from 'react';
+import type MapboxGL from 'mapbox-gl';
+
+export type MapboxInterface = {
+  Map: typeof MapboxGL.Map;
+  Marker: typeof MapboxGL.Marker;
+};
+
+export type MapboxContextValue = {
+  getMapboxGL: () => MapboxInterface | undefined;
+  mapboxAccessToken?: string;
+};
+
+export default React.createContext<MapboxContextValue>({
+  getMapboxGL: () => undefined,
+  mapboxAccessToken: undefined,
+});
+
+export type UseMapboxContextOptions = {
+  mapboxAccessToken?: string;
+};
+
+export function useMapboxContext({
+  mapboxAccessToken,
+}: UseMapboxContextOptions): MapboxContextValue {
+  const [mapboxgl, setMapboxgl] = useState<MapboxInterface>();
+  const loadingPromise = useRef<Promise<any>>();
+
+  const loadMapboxGL = useCallback(async () => {
+    const [module] = await Promise.all([
+      import(/* webpackChunkName: 'mapbox-gl' */ 'mapbox-gl'),
+      // @ts-expect-error
+      import(/* webpackChunkName: 'mapbox-gl' */ 'mapbox-gl/dist/mapbox-gl.css'),
+    ]);
+    return module.default;
+  }, []);
+
+  const getMapboxGL = useCallback(() => {
+    if (!mapboxAccessToken) {
+      return undefined;
+    }
+
+    if (mapboxgl) {
+      return mapboxgl;
+    }
+
+    if (loadingPromise.current) {
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw loadingPromise.current;
+    }
+
+    const promise = loadMapboxGL().then((result) => {
+      // eslint-disable-next-line no-param-reassign
+      result.accessToken = mapboxAccessToken;
+      setMapboxgl({
+        Map: result.Map,
+        Marker: result.Marker,
+      });
+    });
+    loadingPromise.current = promise;
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    throw promise;
+  }, [mapboxgl, loadMapboxGL, mapboxAccessToken]);
+
+  return {
+    getMapboxGL,
+    mapboxAccessToken,
+  };
+}

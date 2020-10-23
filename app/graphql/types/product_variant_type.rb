@@ -1,5 +1,5 @@
 class Types::ProductVariantType < Types::BaseObject
-  field :id, Integer, null: true
+  field :id, Integer, null: false
   field :product, Types::ProductType, null: false
 
   association_loaders ProductVariant, :product

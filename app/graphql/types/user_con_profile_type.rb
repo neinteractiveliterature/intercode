@@ -143,7 +143,7 @@ class Types::UserConProfileType < Types::BaseObject
     end
   end
 
-  field :orders, [Types::OrderType, null: true], null: false
+  field :orders, [Types::OrderType], null: false
   field :order_summary, String, null: false
 
   def order_summary

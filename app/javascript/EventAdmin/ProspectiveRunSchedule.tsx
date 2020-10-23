@@ -188,7 +188,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
         confirmed_signup_count: 0,
         not_counted_signup_count: 0,
         signup_count_by_state_and_bucket_key_and_counted: '{}',
-        room_names: run.rooms.map((room) => room.name).filter(notEmpty),
+        room_names: (run.rooms ?? []).map((room) => room.name).filter(notEmpty),
         my_signups: [],
         my_signup_requests: [],
       })),

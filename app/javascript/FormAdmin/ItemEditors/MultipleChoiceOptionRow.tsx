@@ -3,9 +3,13 @@ import classnames from 'classnames';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
-import { WithGeneratedId, MultipleChoiceFormItem } from '../FormItemUtils';
+import { MultipleChoiceFormItem } from '../FormItemUtils';
+import { WithGeneratedId } from '../../GeneratedIdUtils';
 
-type Choice = WithGeneratedId<NonNullable<MultipleChoiceFormItem['properties']>['choices'][0]>;
+type Choice = WithGeneratedId<
+  NonNullable<MultipleChoiceFormItem['properties']>['choices'][0],
+  string
+>;
 
 function useChoicePropertyUpdater(
   choiceChanged: (generatedId: string, choice: (prevChoice: Choice) => Choice) => void,

@@ -1,4 +1,4 @@
-import { useQuery, DocumentNode, QueryResult } from '@apollo/client';
+import { QueryResult, QueryHookOptions } from '@apollo/client';
 import { Filter, SortingRule } from 'react-table';
 
 import {
@@ -14,14 +14,24 @@ export type GraphQLReactTableVariables = {
   sort?: { field: string; desc: boolean }[] | null;
 };
 
+type QueryResultWithData<QueryData, Variables> = Omit<QueryResult<QueryData, Variables>, 'data'> & {
+  data: NonNullable<QueryResult<QueryData, Variables>['data']>;
+};
+
+function queryResultHasData<QueryData, Variables>(
+  queryResult: QueryResult<QueryData, Variables>,
+): queryResult is QueryResultWithData<QueryData, Variables> {
+  return queryResult.data != null;
+}
+
 export type UseGraphQLReactTableOptions<
-  QueryData,
   RowType extends object,
+  QueryData,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
 > = {
-  getData: (queryData: QueryResult<QueryData, Variables>) => RowType[];
-  getPages: (queryData: QueryResult<QueryData, Variables>) => number;
-  query: DocumentNode;
+  getData: (queryData: QueryResultWithData<QueryData, Variables>) => RowType[];
+  getPages: (queryData: QueryResultWithData<QueryData, Variables>) => number;
+  useQuery: (options?: QueryHookOptions<QueryData, Variables>) => QueryResult<QueryData, Variables>;
   variables?: Variables;
   filtered?: Filter[];
   sorted?: SortingRule[];
@@ -30,20 +40,20 @@ export type UseGraphQLReactTableOptions<
 };
 
 export default function useGraphQLReactTable<
-  QueryData,
   RowType extends object,
+  QueryData,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
 >({
   getData,
   getPages,
-  query,
+  useQuery,
   variables,
   filtered,
   sorted,
   page,
   pageSize,
-}: UseGraphQLReactTableOptions<QueryData, RowType, Variables>) {
-  const queryResult = useQuery<QueryData, Variables>(query, {
+}: UseGraphQLReactTableOptions<RowType, QueryData, Variables>) {
+  const queryResult = useQuery({
     variables: {
       ...(variables as Variables),
       page: (page ?? 0) + 1,
@@ -54,16 +64,21 @@ export default function useGraphQLReactTable<
     fetchPolicy: 'network-only',
   });
   const { error, loading } = queryResult;
-  const pages = useCachedLoadableValue(loading, error, () => getPages(queryResult), [
-    getPages,
-    queryResult,
-  ]);
+  const pages = useCachedLoadableValue(
+    loading,
+    error,
+    () => (queryResultHasData(queryResult) ? getPages(queryResult) : null),
+    [getPages, queryResult],
+  );
   const queryData = useCachedLoadableValue(loading, error, () => queryResult.data, [
     queryResult.data,
   ]);
-  const tableData = useCachedLoadableValue(loading, error, () => getData(queryResult), [
-    queryResult,
-  ]);
+  const tableData = useCachedLoadableValue(
+    loading,
+    error,
+    () => (queryResultHasData(queryResult) ? getData(queryResult) : null),
+    [queryResult],
+  );
 
   const reactTableProps = {
     data: tableData ?? [],

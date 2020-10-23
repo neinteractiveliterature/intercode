@@ -1,5 +1,5 @@
 class Types::ProductType < Types::BaseObject
-  field :id, Integer, null: true
+  field :id, Integer, null: false
   field :product_variants, [Types::ProductVariantType], null: false
   field :available, Boolean, null: false
   field :name, String, null: false
@@ -21,8 +21,8 @@ class Types::ProductType < Types::BaseObject
   end
 
   field :price, Types::MoneyType, null: false, deprecation_reason: 'Use pricing_structure instead'
-  field :pricing_structure, Types::PricingStructureType, null: true
-  field :payment_options, [String, null: true], null: false
+  field :pricing_structure, Types::PricingStructureType, null: false
+  field :payment_options, [String], null: false
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 
   def order_quantities_by_status

@@ -19,7 +19,7 @@ import {
   SchedulingUi,
   TicketMode,
 } from '../graphqlTypes.generated';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePropertySetters } from '../usePropertySetters';
 import { SignupStatus } from '../EventsApp/ScheduleGrid/StylingUtils';
 
 export type EventCategoryForForm = Pick<
@@ -138,28 +138,39 @@ function EventCategoryForm<T extends EventCategoryForForm>({
   ticketName,
   ticketMode,
 }: EventCategoryFormProps<T>) {
-  const factory = usePartialStateFactory(value, onChange);
-  const [name, setName] = usePartialState(factory, 'name');
-  const [teamMemberName, setTeamMemberName] = usePartialState(factory, 'team_member_name');
-  const [proposalDescription, setProposalDescription] = usePartialState(
-    factory,
+  const [
+    setName,
+    setTeamMemberName,
+    setDepartment,
+    setSchedulingUi,
+    setDefaultColor,
+    setSignedUpColor,
+    setFullColor,
+    setEventForm,
+    setEventProposalForm,
+    setCanProvideTickets,
+    setProposalDescription,
+  ] = usePropertySetters(
+    onChange,
+    'name',
+    'team_member_name',
+    'department',
+    'scheduling_ui',
+    'default_color',
+    'signed_up_color',
+    'full_color',
+    'event_form',
+    'event_proposal_form',
+    'can_provide_tickets',
     'proposal_description',
   );
-  const [department, setDepartment] = usePartialState(factory, 'department');
-  const [schedulingUi, setSchedulingUi] = usePartialState(factory, 'scheduling_ui');
-  const [defaultColor, setDefaultColor] = usePartialState(factory, 'default_color');
-  const [signedUpColor, setSignedUpColor] = usePartialState(factory, 'signed_up_color');
-  const [fullColor, setFullColor] = usePartialState(factory, 'full_color');
-  const [eventForm, setEventForm] = usePartialState(factory, 'event_form');
-  const [eventProposalForm, setEventProposalForm] = usePartialState(factory, 'event_proposal_form');
-  const [canProvideTickets, setCanProvideTickets] = usePartialState(factory, 'can_provide_tickets');
 
   return (
     <>
       <BootstrapFormInput
         name="name"
         label="Name"
-        value={name}
+        value={value.name}
         onTextChange={setName}
         disabled={disabled}
       />
@@ -167,7 +178,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
       <BootstrapFormInput
         name="team_member_name"
         label="Team member name"
-        value={teamMemberName ?? ''}
+        value={value.team_member_name ?? ''}
         onTextChange={setTeamMemberName}
         helpText={`
           This is the word the site will use to refer to team members of this event, e.g.
@@ -181,7 +192,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         options={departments}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
-        value={department}
+        value={value.department}
         onChange={(newValue: T['department'] | null | undefined) => setDepartment(newValue)}
         disabled={disabled}
         isClearable
@@ -190,7 +201,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
       <BootstrapFormTextarea
         name="proposal_description"
         label="Proposal dialog description"
-        value={proposalDescription ?? ''}
+        value={value.proposal_description ?? ''}
         onTextChange={setProposalDescription}
         helpText={`
           When attendees propose an event and select this category, the proposal dialog will show
@@ -204,7 +215,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
       <MultipleChoiceInput
         name="scheduling_ui"
         caption="Scheduling UI"
-        value={schedulingUi}
+        value={value.scheduling_ui}
         onChange={(newValue: SchedulingUi) => setSchedulingUi(newValue)}
         choices={[
           { value: 'regular', label: 'Regular (multi-run)' },
@@ -221,19 +232,19 @@ function EventCategoryForm<T extends EventCategoryForForm>({
           {([
             {
               variant: 'default',
-              color: defaultColor,
+              color: value.default_color,
               setColor: setDefaultColor,
               eventRunProps: {},
             },
             {
               variant: 'signed_up',
-              color: signedUpColor,
+              color: value.signed_up_color,
               setColor: setSignedUpColor,
               eventRunProps: { signupStatus: SignupStatus.Confirmed },
             },
             {
               variant: 'full',
-              color: fullColor,
+              color: value.full_color,
               setColor: setFullColor,
               eventRunProps: { runFull: true },
             },
@@ -264,7 +275,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         options={forms.filter((form) => form?.form_type === 'event')}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
-        value={eventForm}
+        value={value.event_form}
         onChange={(newValue: T['event_form']) => setEventForm(newValue)}
         disabled={disabled}
       />
@@ -274,7 +285,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         options={forms.filter((form) => form?.form_type === 'event_proposal')}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
-        value={eventProposalForm}
+        value={value.event_proposal_form}
         onChange={(newValue: T['event_proposal_form'] | null | undefined) =>
           setEventProposalForm(newValue)
         }
@@ -286,7 +297,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         <BooleanInput
           name="can_provide_tickets"
           caption={`Can provide ${pluralize(ticketName)}?`}
-          value={canProvideTickets ?? false}
+          value={value.can_provide_tickets ?? false}
           onChange={setCanProvideTickets}
         />
       )}

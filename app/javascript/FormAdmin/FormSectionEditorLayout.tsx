@@ -1,8 +1,6 @@
 import React, { useContext, useRef, useCallback } from 'react';
-import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
-import { CreateFormItem } from './mutations';
 import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import buildNewFormItem from './buildNewFormItem';
@@ -10,10 +8,12 @@ import { FormEditorContext } from './FormEditorContexts';
 import { buildFormItemInput, mutationUpdaterForFormSection } from './FormItemUtils';
 import useModal from '../ModalDialogs/useModal';
 import NewFormItemModal from './NewFormItemModal';
+import { useCreateFormItemMutation } from './mutations.generated';
+import { notEmpty } from '../ValueUtils';
 
 function FormSectionEditorLayout() {
-  const { currentSection, form } = useContext(FormEditorContext);
-  const [createFormItemMutate] = useMutation(CreateFormItem);
+  const { currentSection, form, formType } = useContext(FormEditorContext);
+  const [createFormItemMutate] = useCreateFormItemMutation();
   const sectionBottomRef = useRef<HTMLDivElement>(null);
   const newFormItemModal = useModal();
   const history = useHistory();
@@ -28,16 +28,12 @@ function FormSectionEditorLayout() {
         update: mutationUpdaterForFormSection(
           form.id,
           currentSection!.id,
-          (
-            formSection,
-            {
-              data: {
-                createFormItem: { form_item: formItem },
-              },
-            },
-          ) => ({
+          (formSection, result) => ({
             ...formSection,
-            form_items: [...formSection.form_items, formItem],
+            form_items: [
+              ...formSection.form_items,
+              ...[result.data?.createFormItem?.form_item].filter(notEmpty),
+            ],
           }),
         ),
       });
@@ -51,11 +47,10 @@ function FormSectionEditorLayout() {
 
   const createStaticText = useCallback(async () => {
     const response = await createFormItem(buildNewFormItem('static_text'));
-    history.push(
-      `/admin_forms/${form.id}/edit/section/${currentSection!.id}/item/${
-        response.data.createFormItem.form_item.id
-      }`,
-    );
+    const formItemId = response.data?.createFormItem?.form_item.id;
+    if (formItemId) {
+      history.push(`/admin_forms/${form.id}/edit/section/${currentSection!.id}/item/${formItemId}`);
+    }
   }, [createFormItem, currentSection, form.id, history]);
 
   return (
@@ -87,6 +82,7 @@ function FormSectionEditorLayout() {
           visible={newFormItemModal.visible}
           close={newFormItemModal.close}
           createFormItem={createFormItem}
+          formType={formType}
         />
       </div>
     </>

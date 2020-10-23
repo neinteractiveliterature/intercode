@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import { usePartialState, usePartialStateFactory } from '../usePartialState';
+import { usePropertySetters } from '../usePropertySetters';
 
 export type UserFormState = {
   first_name?: string;
@@ -18,22 +18,24 @@ export type UserFormFieldsProps = {
 
 function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFieldsProps) {
   const { t } = useTranslation();
-  const factory = usePartialStateFactory(formState, setFormState);
-  const [firstName, setFirstName] = usePartialState(factory, 'first_name');
-  const [lastName, setLastName] = usePartialState(factory, 'last_name');
-  const [email, setEmail] = usePartialState(factory, 'email');
+  const [setFirstName, setLastName, setEmail] = usePropertySetters(
+    setFormState,
+    'first_name',
+    'last_name',
+    'email',
+  );
 
   return (
     <>
       <fieldset>
         <BootstrapFormInput
           label={t('authentication.userForm.firstNameLabel', 'First name')}
-          value={firstName ?? ''}
+          value={formState.first_name ?? ''}
           onTextChange={setFirstName}
         />
         <BootstrapFormInput
           label={t('authentication.userForm.lastNameLabel', 'Last name')}
-          value={lastName ?? ''}
+          value={formState.last_name ?? ''}
           onTextChange={setLastName}
         />
         {showNameWarning && (
@@ -54,7 +56,7 @@ function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFi
         <BootstrapFormInput
           label={t('authentication.userForm.emailLabel', 'Email')}
           type="email"
-          value={email ?? ''}
+          value={formState.email ?? ''}
           onTextChange={setEmail}
         />
       </fieldset>

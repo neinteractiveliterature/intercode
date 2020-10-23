@@ -31,7 +31,10 @@ export function scheduledValueIsValid(scheduledValue: Partial<EditingScheduledVa
   });
 }
 
-function addTimespanToScheduledValue<ValueType>(scheduledValue: EditingScheduledValue<ValueType>) {
+function addTimespanToScheduledValue<
+  ValueType,
+  ScheduledValueType extends EditingScheduledValue<ValueType>
+>(scheduledValue: ScheduledValueType) {
   const newTimespans = [...(scheduledValue.timespans || [])];
   const lastTimespan = maxBy(newTimespans, (timespan) =>
     timespan.finish ? moment(timespan.finish).toDate() : 0,
@@ -113,10 +116,10 @@ export type ScheduledValueReducerAction<ValueType> =
   | UpdateTimespanValueAction<ValueType>
   | UpdateTimespanFinishAction;
 
-export function scheduledValueReducer<ValueType>(
-  state: EditingScheduledValue<ValueType>,
-  action: ScheduledValueReducerAction<ValueType>,
-): EditingScheduledValue<ValueType> {
+export function scheduledValueReducer<
+  ValueType,
+  ScheduledValueType extends EditingScheduledValue<ValueType>
+>(state: ScheduledValueType, action: ScheduledValueReducerAction<ValueType>): ScheduledValueType {
   switch (action.type) {
     case 'addTimespan':
       return addTimespanToScheduledValue(state);
