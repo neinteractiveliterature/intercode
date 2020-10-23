@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 
 export const RoomsAdminQuery = gql`
   query RoomsAdminQuery {
-    convention {
+    convention: assertConvention {
       id
       rooms {
         id
