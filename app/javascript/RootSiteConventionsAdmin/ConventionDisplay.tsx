@@ -1,40 +1,31 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { humanize } from 'inflected';
-import { useMutation } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useConventionQueryFromIdParam } from './conventionQueryHooks';
 import useModal from '../ModalDialogs/useModal';
 import NewConventionModal from './NewConventionModal';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { SetConventionCanceled } from './mutations';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useSetConventionCanceledMutation } from './mutations.generated';
 
-function ConventionDisplay() {
+export default LoadQueryWrapper(useConventionQueryFromIdParam, function ConventionDisplay({
+  data,
+}) {
   const confirm = useConfirm();
   const cloneModal = useModal();
-  const { id } = useParams();
-  const { data, loading, error } = useConventionQueryFromIdParam();
-  const [setConventionCanceled] = useMutation(SetConventionCanceled);
+  const [setConventionCanceled] = useSetConventionCanceledMutation();
+  const location = useLocation();
 
   const { close: closeCloneModal } = cloneModal;
 
-  usePageTitle(useValueUnless(() => data.convention.name, error || loading));
+  usePageTitle(data.convention.name);
   useEffect(() => {
     closeCloneModal();
-  }, [closeCloneModal, id]);
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  }, [closeCloneModal, location.pathname]);
 
   const { convention } = data;
   const { organization } = convention;
@@ -122,6 +113,4 @@ function ConventionDisplay() {
       />
     </>
   );
-}
-
-export default ConventionDisplay;
+});

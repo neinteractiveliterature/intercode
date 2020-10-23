@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useMutation, useApolloClient } from '@apollo/client';
+import { useApolloClient, ApolloError } from '@apollo/client';
 
-import { CreateEmailRoute } from './mutations';
 import EmailRouteForm from './EmailRouteForm';
 import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import ErrorDisplay from '../ErrorDisplay';
+import { useCreateEmailRouteMutation } from './mutations.generated';
+import { EmailRoute } from '../graphqlTypes.generated';
 
-function NewEmailRouteModal({ visible, close }) {
-  const [emailRoute, setEmailRoute] = useState({
+export type NewEmailRouteModalProps = {
+  visible: boolean;
+  close: () => void;
+};
+
+function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps) {
+  const [emailRoute, setEmailRoute] = useState<EmailRoute>({
+    __typename: 'EmailRoute',
+    id: 0,
     receiver_address: '',
     forward_addresses: [],
   });
   const apolloClient = useApolloClient();
-  const [createMutate] = useMutation(CreateEmailRoute);
+  const [createMutate] = useCreateEmailRouteMutation();
   const create = async () => {
     await createMutate({
       variables: {
@@ -34,7 +41,7 @@ function NewEmailRouteModal({ visible, close }) {
       <div className="modal-body">
         <EmailRouteForm emailRoute={emailRoute} onChange={setEmailRoute} />
 
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
 
       <div className="modal-footer">
@@ -54,10 +61,5 @@ function NewEmailRouteModal({ visible, close }) {
     </Modal>
   );
 }
-
-NewEmailRouteModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-};
 
 export default NewEmailRouteModal;
