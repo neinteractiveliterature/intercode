@@ -5,21 +5,27 @@ import mapValues from 'lodash/mapValues';
 import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import sum from 'lodash/sum';
+// @ts-expect-error
 import { capitalize } from 'inflected';
-import { useQuery } from '@apollo/client';
 
-import ErrorDisplay from '../ErrorDisplay';
-import { EventsByChoiceQuery } from './queries';
 import { titleSort } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useEventsByChoiceQueryQuery } from './queries.generated';
 
-function renderChoiceCounts(choiceData) {
+type ProcessedChoiceCount = {
+  confirmed?: number;
+  waitlisted?: number;
+  withdrawn?: number;
+  total?: number;
+};
+
+function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   if (!choiceData) {
     return null;
   }
 
-  const title = ['confirmed', 'waitlisted', 'withdrawn']
+  const title = (['confirmed', 'waitlisted', 'withdrawn'] as const)
     .map((state) => `${capitalize(state)}: ${choiceData[state] || 0}`)
     .join('  ');
 
@@ -30,30 +36,21 @@ function renderChoiceCounts(choiceData) {
   );
 }
 
-function EventsByChoice() {
-  const { data, loading, error } = useQuery(EventsByChoiceQuery);
-
+export default LoadQueryWrapper(useEventsByChoiceQueryQuery, function EventsByChoice({ data }) {
   const choiceColumns = useMemo(() => {
-    if (loading || error) {
-      return 0;
-    }
-
     const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) =>
       eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice),
     );
 
-    return Array.from({ length: max(choices) }, (element, index) => index + 1);
-  }, [data, loading, error]);
+    return Array.from({ length: max(choices) ?? 0 }, (element, index) => index + 1);
+  }, [data]);
 
   const filteredRows = useMemo(
-    () =>
-      loading || error
-        ? []
-        : data.convention.reports.events_by_choice.filter((row) => row.choice_counts.length > 0),
-    [data, loading, error],
+    () => data.convention.reports.events_by_choice.filter((row) => row.choice_counts.length > 0),
+    [data],
   );
 
-  const sortedRows = useMemo(() => titleSort(filteredRows, (row) => row.event.title), [
+  const sortedRows = useMemo(() => titleSort(filteredRows, (row) => row.event.title ?? ''), [
     filteredRows,
   ]);
 
@@ -85,14 +82,6 @@ function EventsByChoice() {
   );
 
   usePageTitle('Events by choice');
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -132,6 +121,4 @@ function EventsByChoice() {
       </table>
     </>
   );
-}
-
-export default EventsByChoice;
+});
