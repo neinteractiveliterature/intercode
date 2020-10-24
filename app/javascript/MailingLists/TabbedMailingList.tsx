@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
+
 import { humanize } from 'inflected';
 import { stringify as csvStringify } from 'csv-string';
 import { saveAs } from 'file-saver';
@@ -7,14 +7,26 @@ import { saveAs } from 'file-saver';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { useTabs, TabBody, TabList } from '../UIComponents/Tabs';
 import EmailList from '../UIComponents/EmailList';
+import { ContactEmail } from '../graphqlTypes.generated';
 
-function TabbedMailingList({ emails, id, metadataFields, csvFilename }) {
+export type TabbedMailingListProps = {
+  emails: ContactEmail[];
+  csvFilename: string;
+  id?: string;
+  metadataFields?: string[];
+};
+
+function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMailingListProps) {
   const exportCSV = useCallback(() => {
     const data = [
-      ['Email', 'Name', ...metadataFields.map((fieldName) => humanize(fieldName))],
+      ['Email', 'Name', ...(metadataFields ?? []).map((fieldName) => humanize(fieldName))],
       ...emails.map((email) => {
         const metadata = JSON.parse(email.metadata_json);
-        return [email.email, email.name, ...metadataFields.map((fieldName) => metadata[fieldName])];
+        return [
+          email.email,
+          email.name,
+          ...(metadataFields ?? []).map((fieldName) => metadata[fieldName]),
+        ];
       }),
     ];
     const blob = new Blob([csvStringify(data)], { type: 'text/csv; charset=utf-8' });
@@ -38,7 +50,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }) {
                 <tr>
                   <th>Email</th>
                   <th>Name</th>
-                  {metadataFields.map((fieldName) => (
+                  {(metadataFields ?? []).map((fieldName) => (
                     <th key={fieldName}>{humanize(fieldName)}</th>
                   ))}
                 </tr>
@@ -52,7 +64,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }) {
                         <a href={`mailto:${email.formatted_address}`}>{email.email}</a>
                       </td>
                       <td>{email.name}</td>
-                      {metadataFields.map((fieldName) => (
+                      {(metadataFields ?? []).map((fieldName) => (
                         <td key={fieldName}>{metadata[fieldName]}</td>
                       ))}
                     </tr>
@@ -94,24 +106,5 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }) {
     </>
   );
 }
-
-TabbedMailingList.propTypes = {
-  emails: PropTypes.arrayOf(
-    PropTypes.shape({
-      email: PropTypes.string.isRequired,
-      formatted_address: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      metadata_json: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  id: PropTypes.string,
-  csvFilename: PropTypes.string.isRequired,
-  metadataFields: PropTypes.arrayOf(PropTypes.string),
-};
-
-TabbedMailingList.defaultProps = {
-  id: null,
-  metadataFields: [],
-};
 
 export default TabbedMailingList;

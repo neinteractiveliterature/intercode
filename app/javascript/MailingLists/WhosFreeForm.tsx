@@ -1,19 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
+import { Moment, MomentSetObject } from 'moment';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import { WhosFreeFormConventionQuery } from './queries';
 import LoadingIndicator from '../LoadingIndicator';
+import { useWhosFreeFormConventionQueryQuery } from './queries.generated';
 
-const momentToTimeObject = (momentValue) => {
+const momentToTimeObject = (momentValue?: Moment | null) => {
   if (momentValue == null) {
     return {
-      hour: null,
-      minute: null,
+      hour: undefined,
+      minute: undefined,
     };
   }
 
@@ -23,23 +22,27 @@ const momentToTimeObject = (momentValue) => {
   };
 };
 
-function makeTimeOfDay(prevTime, day, newTime) {
+function makeTimeOfDay(prevTime: Moment | null | undefined, day: Moment, newTime: MomentSetObject) {
   return (prevTime || day).clone().set(newTime);
 }
 
-function WhosFreeForm({ onSubmit }) {
-  const { data, loading, error } = useQuery(WhosFreeFormConventionQuery);
-  const [start, setStart] = useState(null);
-  const [finish, setFinish] = useState(null);
-  const [day, setDay] = useState(null);
+export type WhosFreeFormProps = {
+  onSubmit: (options: { start: Moment; finish: Moment }) => void;
+};
+
+function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
+  const { data, loading, error } = useWhosFreeFormConventionQueryQuery();
+  const [start, setStart] = useState<Moment>();
+  const [finish, setFinish] = useState<Moment>();
+  const [day, setDay] = useState<Moment>();
 
   const renderTimeSelects = useCallback(() => {
     if (day == null) {
       return null;
     }
 
-    const startTimespan = new Timespan(day, day.clone().add(1, 'day'));
-    const finishTimespan = new Timespan(start || day, startTimespan.finish);
+    const startTimespan = Timespan.finiteFromMoments(day, day.clone().add(1, 'day'));
+    const finishTimespan = Timespan.finiteFromMoments(start ?? day, startTimespan.finish);
 
     return (
       <div className="d-flex mb-4">
@@ -65,14 +68,16 @@ function WhosFreeForm({ onSubmit }) {
 
   const dayChanged = useCallback((newDay) => {
     setDay(newDay);
-    setStart(null);
-    setFinish(null);
+    setStart(undefined);
+    setFinish(undefined);
   }, []);
 
   const search = useCallback(
     (event) => {
       event.preventDefault();
-      onSubmit({ start, finish });
+      if (start && finish) {
+        onSubmit({ start, finish });
+      }
     },
     [onSubmit, start, finish],
   );
@@ -81,7 +86,7 @@ function WhosFreeForm({ onSubmit }) {
     return <LoadingIndicator />;
   }
 
-  if (error) {
+  if (error || !data) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
@@ -110,9 +115,5 @@ function WhosFreeForm({ onSubmit }) {
     </div>
   );
 }
-
-WhosFreeForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
 
 export default WhosFreeForm;
