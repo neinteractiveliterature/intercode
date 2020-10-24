@@ -1,35 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { useRouteMatch, useHistory } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { NotificationAdminQuery } from './queries';
 import NotificationsConfig from '../../../config/notifications.json';
 import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
-import { UpdateNotificationTemplate } from './mutations';
-import useAsyncFunction from '../useAsyncFunction';
+import { useNotificationAdminQueryQuery } from './queries.generated';
+import { useUpdateNotificationTemplateMutation } from './mutations.generated';
+import { usePropertySetters } from '../usePropertySetters';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import FourOhFourPage from '../FourOhFourPage';
 
-function NotificationConfiguration() {
-  const match = useRouteMatch();
+export default LoadQueryWrapper(useNotificationAdminQueryQuery, function NotificationConfiguration({
+  data,
+}) {
+  const params = useParams<{ category: string; event: string }>();
   const history = useHistory();
-  const category = NotificationsConfig.categories.find((c) => c.key === match.params.category);
-  const event = category.events.find((e) => e.key === match.params.event);
-
-  const { data, loading, error } = useQuery(NotificationAdminQuery);
-  const [updateMutate] = useMutation(UpdateNotificationTemplate);
-  const [updateNotificationTemplate, updateError, updateInProgress] = useAsyncFunction(
-    updateMutate,
+  const category = useMemo(
+    () => NotificationsConfig.categories.find((c) => c.key === params.category)!,
+    [params.category],
   );
+  const event = useMemo(() => category.events.find((e) => e.key === params.event)!, [
+    category,
+    params.event,
+  ]);
+
+  const [
+    updateNotificationTemplate,
+    { loading: updateInProgress, error: updateError },
+  ] = useUpdateNotificationTemplateMutation();
 
   const eventKey = `${category.key}/${event.key}`;
 
-  const initialNotificationTemplate =
-    loading || error
-      ? null
-      : data.convention.notification_templates.find((t) => t.event_key === eventKey);
-
+  const initialNotificationTemplate = data.convention.notification_templates.find(
+    (t) => t.event_key === eventKey,
+  )!;
   const [notificationTemplate, setNotificationTemplate] = useState(initialNotificationTemplate);
+
+  const [setSubject, setBodyHtml, setBodyText, setBodySms] = usePropertySetters(
+    setNotificationTemplate,
+    'subject',
+    'body_html',
+    'body_text',
+    'body_sms',
+  );
 
   // if the page changes and we're still mounted
   useEffect(() => setNotificationTemplate(initialNotificationTemplate), [
@@ -37,6 +50,10 @@ function NotificationConfiguration() {
   ]);
 
   const saveClicked = async () => {
+    if (!notificationTemplate) {
+      return;
+    }
+
     await updateNotificationTemplate({
       variables: {
         eventKey,
@@ -52,12 +69,8 @@ function NotificationConfiguration() {
     history.push('/admin_notifications');
   };
 
-  if (loading || !notificationTemplate) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
+  if (!notificationTemplate) {
+    return <FourOhFourPage />;
   }
 
   return (
@@ -72,8 +85,8 @@ function NotificationConfiguration() {
       <div className="form-group">
         <legend className="col-form-label">Subject line</legend>
         <LiquidInput
-          value={notificationTemplate.subject}
-          onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, subject: value }))}
+          value={notificationTemplate.subject ?? ''}
+          onChange={setSubject}
           notifierEventKey={eventKey}
           renderPreview={(previewContent) => <>{previewContent}</>}
           lines={1}
@@ -84,8 +97,8 @@ function NotificationConfiguration() {
       <div className="form-group">
         <legend className="col-form-label">Notification body (HTML)</legend>
         <LiquidInput
-          value={notificationTemplate.body_html}
-          onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_html: value }))}
+          value={notificationTemplate.body_html ?? ''}
+          onChange={setBodyHtml}
           notifierEventKey={eventKey}
           disabled={updateInProgress}
         />
@@ -94,8 +107,8 @@ function NotificationConfiguration() {
       <div className="form-group">
         <legend className="col-form-label">Notification body (plain text)</legend>
         <LiquidInput
-          value={notificationTemplate.body_text}
-          onChange={(value) => setNotificationTemplate((prev) => ({ ...prev, body_text: value }))}
+          value={notificationTemplate.body_text ?? ''}
+          onChange={setBodyText}
           notifierEventKey={eventKey}
           renderPreview={(previewContent) => (
             <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
@@ -108,13 +121,8 @@ function NotificationConfiguration() {
         <div className="form-group">
           <legend className="col-form-label">Notification body (SMS text message)</legend>
           <LiquidInput
-            value={notificationTemplate.body_sms}
-            onChange={(value) =>
-              setNotificationTemplate((prev) => ({
-                ...prev,
-                body_sms: value,
-              }))
-            }
+            value={notificationTemplate.body_sms ?? ''}
+            onChange={setBodySms}
             notifierEventKey={eventKey}
             renderPreview={(previewContent) => (
               <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
@@ -140,6 +148,4 @@ function NotificationConfiguration() {
       </button>
     </>
   );
-}
-
-export default NotificationConfiguration;
+});

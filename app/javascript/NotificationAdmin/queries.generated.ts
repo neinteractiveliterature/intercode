@@ -13,7 +13,7 @@ export type NotificationAdminQueryQueryVariables = Types.Exact<{ [key: string]: 
 
 export type NotificationAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { notification_templates: Array<(
@@ -21,7 +21,7 @@ export type NotificationAdminQueryQuery = (
       & Pick<Types.NotificationTemplate, 'id'>
       & NotificationTemplateFieldsFragment
     )> }
-  )> }
+  ) }
 );
 
 export const NotificationTemplateFieldsFragmentDoc = gql`
@@ -36,7 +36,7 @@ export const NotificationTemplateFieldsFragmentDoc = gql`
     `;
 export const NotificationAdminQueryDocument = gql`
     query NotificationAdminQuery {
-  convention {
+  convention: assertConvention {
     id
     notification_templates {
       id
