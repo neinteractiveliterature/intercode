@@ -1,14 +1,29 @@
 import React, { useMemo, useContext } from 'react';
-import { useQuery } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
-import { OAuthAuthorizationPromptQuery } from './queries';
 import PermissionsPrompt from './PermissionsPrompt';
 import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
+import { useOAuthAuthorizationPromptQueryQuery } from './queries.generated';
+
+type AuthorizationParams = {
+  client_id?: string;
+  redirect_uri?: string;
+  state?: string;
+  response_type?: string;
+  scope?: string;
+  nonce?: string;
+  code_challenge?: string;
+  code_challenge_method?: string;
+};
+
+type PreAuth = AuthorizationParams & {
+  client_name: string;
+  scope: string;
+};
 
 function AuthorizationPrompt() {
   const location = useLocation();
@@ -22,15 +37,15 @@ function AuthorizationPrompt() {
       ),
     [location.search],
   );
-  const { data, loading, error } = useQuery(OAuthAuthorizationPromptQuery, {
+  const { data, loading, error } = useOAuthAuthorizationPromptQueryQuery({
     variables: { queryParams: preAuthParamsJSON },
   });
   const preAuth = useMemo(() => {
-    if (error || loading) {
+    if (error || loading || !data) {
       return null;
     }
 
-    return JSON.parse(data.oauthPreAuth);
+    return JSON.parse(data.oauthPreAuth) as PreAuth;
   }, [data, loading, error]);
   const scopes = useMemo(() => {
     if (!preAuth) {
@@ -41,12 +56,12 @@ function AuthorizationPrompt() {
   }, [preAuth]);
 
   const authenticityTokens = useContext(AuthenticityTokensContext);
-  const authorizationParams = useMemo(() => {
+  const authorizationParams: AuthorizationParams | null = useMemo(() => {
     if (!preAuth) {
       return null;
     }
 
-    return [
+    return ([
       'client_id',
       'redirect_uri',
       'state',
@@ -55,7 +70,7 @@ function AuthorizationPrompt() {
       'nonce',
       'code_challenge',
       'code_challenge_method',
-    ].reduce(
+    ] as const).reduce(
       (params, field) => ({
         ...params,
         [field]: preAuth[field],
@@ -75,7 +90,7 @@ function AuthorizationPrompt() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  if (!data.currentUser) {
+  if (!data?.currentUser) {
     if (!authenticationModal.visible) {
       authenticationModal.open({ currentView: 'signIn' });
       authenticationModal.setAfterSignInPath(window.location.href);
@@ -86,7 +101,7 @@ function AuthorizationPrompt() {
 
   // doing this with a hidden form we create and submit because fetch will try to follow the
   // redirect and probably fail because of CORS
-  const buildHiddenInput = (name, value) => {
+  const buildHiddenInput = (name: string, value: string) => {
     const input = document.createElement('input');
     input.setAttribute('type', 'hidden');
     input.setAttribute('name', name);
@@ -94,7 +109,11 @@ function AuthorizationPrompt() {
     return input;
   };
 
-  const buildAndSubmitForm = (method, authenticityToken, params) => {
+  const buildAndSubmitForm = (
+    method: string,
+    authenticityToken: string,
+    params: AuthorizationParams,
+  ) => {
     const form = document.createElement('form');
     form.setAttribute('method', 'POST');
     form.setAttribute('action', '/oauth/authorize');
@@ -110,11 +129,11 @@ function AuthorizationPrompt() {
   };
 
   const grantAuthorization = () => {
-    buildAndSubmitForm('POST', authenticityTokens.grantAuthorization, authorizationParams);
+    buildAndSubmitForm('POST', authenticityTokens.grantAuthorization!, authorizationParams!);
   };
 
   const denyAuthorization = async () => {
-    buildAndSubmitForm('DELETE', authenticityTokens.denyAuthorization, authorizationParams);
+    buildAndSubmitForm('DELETE', authenticityTokens.denyAuthorization!, authorizationParams!);
   };
 
   return (
@@ -127,16 +146,16 @@ function AuthorizationPrompt() {
         <div className="card-body">
           <p className="h4">
             {'Authorize '}
-            <strong>{preAuth.client_name}</strong>
+            <strong>{preAuth?.client_name}</strong>
             {' to use your account?'}
           </p>
 
           <p>
-            This will allow {preAuth.client_name} to access your convention profile and information
+            This will allow {preAuth?.client_name} to access your convention profile and information
             about events you can access.
           </p>
 
-          {scopes.length > 0 && <PermissionsPrompt scopeNames={scopes} />}
+          {scopes && scopes.length > 0 && <PermissionsPrompt scopeNames={scopes} />}
         </div>
 
         <div className="card-footer">
