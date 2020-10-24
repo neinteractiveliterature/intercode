@@ -1,9 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Gravatar from '../Gravatar';
 
-function BioDisplay({ userConProfile }) {
+import Gravatar from '../Gravatar';
+import { UserConProfile } from '../graphqlTypes.generated';
+
+export type BioDisplayProps = {
+  userConProfile: Pick<
+    UserConProfile,
+    'gravatar_enabled' | 'gravatar_url' | 'bio_name' | 'bio_html' | 'bio'
+  >;
+};
+
+function BioDisplay({ userConProfile }: BioDisplayProps) {
   return (
     <section className="mt-4">
       <h2 className="mb-4">My Bio</h2>
@@ -19,7 +27,7 @@ function BioDisplay({ userConProfile }) {
         <div className="media-body">
           <h5 className="mt-0">{userConProfile.bio_name}</h5>
           {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: userConProfile.bio_html }} />
+          <div dangerouslySetInnerHTML={{ __html: userConProfile.bio_html ?? '' }} />
         </div>
       </div>
 
@@ -37,15 +45,5 @@ function BioDisplay({ userConProfile }) {
     </section>
   );
 }
-
-BioDisplay.propTypes = {
-  userConProfile: PropTypes.shape({
-    gravatar_url: PropTypes.string.isRequired,
-    gravatar_enabled: PropTypes.bool.isRequired,
-    bio: PropTypes.string,
-    bio_name: PropTypes.string,
-    bio_html: PropTypes.string,
-  }).isRequired,
-};
 
 export default BioDisplay;
