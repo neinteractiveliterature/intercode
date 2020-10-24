@@ -1,39 +1,27 @@
 import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
-import { useQuery } from '@apollo/client';
 
-import { MyTicketDisplayQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
-import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
-import LoadingIndicator from '../LoadingIndicator';
 import AppRootContext from '../AppRootContext';
+import { useMyTicketDisplayQueryQuery } from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 const dateFormat = 'dddd, MMMM D, YYYY [at] h:mma z';
 
-function MyTicketDisplay() {
+export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketDisplay({ data }) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(MyTicketDisplayQuery);
 
-  usePageTitle(useValueUnless(() => `My ${data.convention.ticket_name} receipt`, error || loading));
-
-  if (loading) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!(data.myProfile && data.myProfile.ticket)) {
-    return <Redirect to="/new" />;
-  }
+  usePageTitle(`My ${data.convention.ticket_name} receipt`);
 
   const { convention, myProfile } = data;
-  const { ticket } = myProfile;
+  const ticket = myProfile?.ticket;
   const paymentAmount = ticket?.order_entry?.price_per_item;
+
+  if (!myProfile || !ticket) {
+    return <Redirect to="/new" />;
+  }
 
   return (
     <>
@@ -87,6 +75,4 @@ function MyTicketDisplay() {
       </div>
     </>
   );
-}
-
-export default MyTicketDisplay;
+});
