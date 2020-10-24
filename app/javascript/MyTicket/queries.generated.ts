@@ -10,7 +10,7 @@ export type TicketPurchaseFormQueryQueryVariables = Types.Exact<{ [key: string]:
 
 export type TicketPurchaseFormQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
     & { products: Array<(
@@ -22,20 +22,13 @@ export type TicketPurchaseFormQueryQuery = (
       ) }
     )>, ticket_types: Array<(
       { __typename: 'TicketType' }
-      & Pick<Types.TicketType, 'id' | 'description' | 'publicly_available'>
-      & { pricing_schedule: (
-        { __typename: 'ScheduledMoneyValue' }
-        & { timespans: Array<(
-          { __typename: 'TimespanWithMoneyValue' }
-          & Pick<Types.TimespanWithMoneyValue, 'start' | 'finish'>
-          & { value: (
-            { __typename: 'Money' }
-            & Pick<Types.Money, 'fractional' | 'currency_code'>
-          ) }
-        )> }
-      ) }
+      & Pick<Types.TicketType, 'id' | 'description'>
+      & { providing_products: Array<(
+        { __typename: 'Product' }
+        & Pick<Types.Product, 'id'>
+      )> }
     )> }
-  )>, myProfile?: Types.Maybe<(
+  ), myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { ticket?: Types.Maybe<(
@@ -50,10 +43,10 @@ export type MyTicketDisplayQueryQueryVariables = Types.Exact<{ [key: string]: ne
 
 export type MyTicketDisplayQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name' | 'timezone_name'>
-  )>, myProfile?: Types.Maybe<(
+  ), myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
     & { ticket?: Types.Maybe<(
@@ -83,7 +76,7 @@ export type MyTicketDisplayQueryQuery = (
 
 export const TicketPurchaseFormQueryDocument = gql`
     query TicketPurchaseFormQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     ticket_name
@@ -98,16 +91,8 @@ export const TicketPurchaseFormQueryDocument = gql`
     ticket_types {
       id
       description
-      publicly_available
-      pricing_schedule {
-        timespans {
-          start
-          finish
-          value {
-            fractional
-            currency_code
-          }
-        }
+      providing_products {
+        id
       }
     }
   }
@@ -147,7 +132,7 @@ export type TicketPurchaseFormQueryLazyQueryHookResult = ReturnType<typeof useTi
 export type TicketPurchaseFormQueryQueryResult = Apollo.QueryResult<TicketPurchaseFormQueryQuery, TicketPurchaseFormQueryQueryVariables>;
 export const MyTicketDisplayQueryDocument = gql`
     query MyTicketDisplayQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     ticket_name

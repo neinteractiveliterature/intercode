@@ -1,42 +1,36 @@
 import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+// @ts-expect-error
 import { capitalize } from 'inflected';
 
 import AppRootContext from '../AppRootContext';
-import ErrorDisplay from '../ErrorDisplay';
-import { TicketPurchaseFormQuery } from './queries';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { describeUserPricingStructure } from '../Store/describePricingStructure';
 import ProductOrderForm from '../Store/ProductOrderForm';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { TicketPurchaseFormQueryQuery, useTicketPurchaseFormQueryQuery } from './queries.generated';
 
-function TicketPurchaseForm() {
+export default LoadQueryWrapper(useTicketPurchaseFormQueryQuery, function TicketPurchaseForm({
+  data,
+}) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error: queryError } = useQuery(TicketPurchaseFormQuery);
-  const availableProducts = queryError || loading ? [] : data.convention.products;
-  const [product, setProduct] = useState(null);
+  const availableProducts = data.convention.products;
+  const [product, setProduct] = useState<
+    TicketPurchaseFormQueryQuery['convention']['products'][0]
+  >();
+  const [focusedProduct, setFocusedProduct] = useState<
+    TicketPurchaseFormQueryQuery['convention']['products'][0]
+  >();
 
   useEffect(() => {
-    if (!loading) {
-      if (availableProducts.length === 1) {
-        setProduct(availableProducts[0]);
-      }
+    if (availableProducts.length === 1) {
+      setProduct(availableProducts[0]);
     }
-  }, [availableProducts, loading]);
+  }, [availableProducts]);
 
-  usePageTitle(useValueUnless(() => `Buy a ${data.convention.ticket_name}`, queryError || loading));
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (queryError) {
-    return <ErrorDisplay graphQLError={queryError} />;
-  }
+  usePageTitle(`Buy a ${data.convention.ticket_name}`);
 
   if (data.myProfile && data.myProfile.ticket) {
     return <Redirect to="/" />;
@@ -54,18 +48,18 @@ function TicketPurchaseForm() {
           <label
             className={classNames('btn text-left btn-outline-primary', {
               active: product?.id === id,
+              focus: focusedProduct?.id === id,
             })}
-            onClick={() => {
-              setProduct(availableProduct);
-            }}
           >
             <input
               type="radio"
               name="product"
               checked={product?.id === id}
-              onChange={() => {
-                setProduct(availableProduct);
-              }}
+              onChange={() => setProduct(availableProduct)}
+              onFocus={() => setFocusedProduct(availableProduct)}
+              onBlur={() =>
+                setFocusedProduct((prev) => (prev?.id === availableProduct.id ? undefined : prev))
+              }
               aria-labelledby={`product-label-${id}`}
             />
             <div className="d-flex align-items-center" id={`product-label-${id}`}>
@@ -104,6 +98,4 @@ function TicketPurchaseForm() {
       )}
     </>
   );
-}
-
-export default TicketPurchaseForm;
+});
