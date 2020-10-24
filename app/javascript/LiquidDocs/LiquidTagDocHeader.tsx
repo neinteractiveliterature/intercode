@@ -1,9 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { YardClass } from './DocData';
 
 import findLiquidTagName from './findLiquidTagName';
 
-function LiquidTagDocHeader({ liquidTag }) {
+export type LiquidTagDocHeaderProps = {
+  liquidTag: YardClass;
+};
+
+function LiquidTagDocHeader({ liquidTag }: LiquidTagDocHeaderProps) {
   const liquidTagName = findLiquidTagName(liquidTag);
 
   return (
@@ -19,9 +23,5 @@ function LiquidTagDocHeader({ liquidTag }) {
     </>
   );
 }
-
-LiquidTagDocHeader.propTypes = {
-  liquidTag: PropTypes.shape({}).isRequired,
-};
 
 export default LiquidTagDocHeader;

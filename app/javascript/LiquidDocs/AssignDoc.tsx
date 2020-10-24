@@ -8,8 +8,14 @@ import escapeRegExp from './escapeRegExp';
 import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import MethodDoc from './MethodDoc';
+import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
 
-function AssignDoc({ assign, prefix = null }) {
+export type AssignDocProps = {
+  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0];
+  prefix?: string;
+};
+
+function AssignDoc({ assign, prefix }: AssignDocProps) {
   const location = useLocation();
 
   const assignClass = findClass(assign.drop_class_name);
@@ -18,7 +24,7 @@ function AssignDoc({ assign, prefix = null }) {
   }
 
   const sortedMethods = assignClass.methods.sort((a, b) =>
-    a.name.localeCompare(b.name, { sensitivity: 'base' }),
+    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   );
   const prefixParts = (prefix || '').split('.').filter((part) => part.length > 0);
 
@@ -28,7 +34,7 @@ function AssignDoc({ assign, prefix = null }) {
         const { returnClassName, assignName } = findMethodReturnClass(method);
         const returnClass = findClass(returnClassName);
 
-        if (returnClass) {
+        if (returnClass && returnClassName) {
           return (
             <Route
               path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${
@@ -37,7 +43,11 @@ function AssignDoc({ assign, prefix = null }) {
               key={method.name}
             >
               <AssignDoc
-                assign={{ name: assignName, drop_class_name: returnClassName }}
+                assign={{
+                  __typename: 'LiquidAssign',
+                  name: assignName,
+                  drop_class_name: returnClassName,
+                }}
                 prefix={buildMemberPrefix(assign.name, prefix)}
               />
             </Route>
@@ -97,18 +107,5 @@ function AssignDoc({ assign, prefix = null }) {
     </Switch>
   );
 }
-
-AssignDoc.propTypes = {
-  assign: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    drop_class_name: PropTypes.string.isRequired,
-    cms_variable_value_json: PropTypes.string,
-  }).isRequired,
-  prefix: PropTypes.string,
-};
-
-AssignDoc.defaultProps = {
-  prefix: null,
-};
 
 export default AssignDoc;

@@ -1,12 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
 import findClass from './findClass';
+import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
 
-function AssignDocLink({ assign, compact = false, prefix = null, preAssignNameContent = null }) {
+export type AssignDocLinkProps = {
+  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0];
+  compact?: boolean;
+  prefix?: string;
+  preAssignNameContent?: React.ReactNode;
+};
+
+function AssignDocLink({
+  assign,
+  compact = false,
+  prefix,
+  preAssignNameContent,
+}: AssignDocLinkProps) {
   const location = useLocation();
 
   const renderCard = () => (
@@ -39,20 +51,5 @@ function AssignDocLink({ assign, compact = false, prefix = null, preAssignNameCo
     </Link>
   );
 }
-
-AssignDocLink.propTypes = {
-  assign: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  compact: PropTypes.bool,
-  prefix: PropTypes.string,
-  preAssignNameContent: PropTypes.node,
-};
-
-AssignDocLink.defaultProps = {
-  compact: false,
-  prefix: null,
-  preAssignNameContent: null,
-};
 
 export default AssignDocLink;

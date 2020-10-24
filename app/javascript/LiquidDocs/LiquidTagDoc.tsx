@@ -1,11 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 
 import LiquidTagDocHeader from './LiquidTagDocHeader';
 import TagDoc from './TagDoc';
+import { YardClass } from './DocData';
 
-function LiquidTagDoc({ liquidTag }) {
+export type LiquidTagDocProps = {
+  liquidTag: YardClass;
+};
+
+function LiquidTagDoc({ liquidTag }: LiquidTagDocProps) {
   const location = useLocation();
 
   return (
@@ -40,11 +44,5 @@ function LiquidTagDoc({ liquidTag }) {
     </>
   );
 }
-
-LiquidTagDoc.propTypes = {
-  liquidTag: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default LiquidTagDoc;

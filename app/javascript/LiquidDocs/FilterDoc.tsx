@@ -1,10 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 
 import MethodDoc from './MethodDoc';
+import { YardMethod } from './DocData';
 
-function FilterDoc({ filter }) {
+export type FilterDocHeaderProps = {
+  filter: YardMethod;
+};
+
+function FilterDoc({ filter }: FilterDocHeaderProps) {
   const location = useLocation();
 
   return (
@@ -31,11 +35,5 @@ function FilterDoc({ filter }) {
     </>
   );
 }
-
-FilterDoc.propTypes = {
-  filter: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default FilterDoc;

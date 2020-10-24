@@ -1,43 +1,33 @@
 import React, { useMemo } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';
-import DocData from '../../../liquid_doc.json';
+import DocData from './DocData';
 import findLiquidTagName from './findLiquidTagName';
 import FilterDoc from './FilterDoc';
 import FilterDocLink from './FilterDocLink';
-import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries';
 import LiquidTagDoc from './LiquidTagDoc';
 import LiquidTagDocLink from './LiquidTagDocLink';
 import LoadingIndicator from '../LoadingIndicator';
 import ErrorDisplay from '../ErrorDisplay';
+import useLiquidAssignsQueryFromLocation from './useLiquidAssignsQueryFromLocation';
 
-function sortByName(items) {
-  return [...items].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
+function sortByName<T extends { name: string }>(items: T[]) {
+  return [...items].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+  );
 }
 
 const LiquidDocsContext = React.createContext({});
 
 function LiquidDocs() {
-  const location = useLocation();
-  const notifierEventKey = location.search
-    ? new URLSearchParams(location.search).get('notifier_event_key')
-    : null;
+  const [{ data, loading, error }, notifierEventKey] = useLiquidAssignsQueryFromLocation();
 
-  const { data, error, loading } = useQuery(
-    notifierEventKey ? NotifierLiquidAssignsQuery : LiquidAssignsQuery,
-    {
-      variables: notifierEventKey ? { eventKey: notifierEventKey } : {},
-    },
+  const sortedAssigns = useMemo(
+    () => (loading || error || !data ? [] : sortByName(data.liquidAssigns)),
+    [error, data, loading],
   );
-
-  const sortedAssigns = useMemo(() => (loading || error ? [] : sortByName(data.liquidAssigns)), [
-    error,
-    data,
-    loading,
-  ]);
 
   const sortedFilters = useMemo(() => sortByName(DocData.filter_methods), []);
 
@@ -103,7 +93,7 @@ function LiquidDocs() {
               <h2 className="mb-2">Filters</h2>
               <ul className="list-group">
                 {sortedFilters.map((filter) => (
-                  <FilterDocLink compact filter={filter} key={filter.name} />
+                  <FilterDocLink filter={filter} key={filter.name} />
                 ))}
               </ul>
             </section>
@@ -112,7 +102,7 @@ function LiquidDocs() {
               <h2 className="mb-2">Tags</h2>
 
               {sortedTags.map((liquidTag) => (
-                <LiquidTagDocLink compact liquidTag={liquidTag} key={liquidTag.name} />
+                <LiquidTagDocLink liquidTag={liquidTag} key={liquidTag.name} />
               ))}
             </section>
           </>
