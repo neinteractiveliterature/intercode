@@ -1,10 +1,8 @@
 import React from 'react';
 import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import EditOrganizationRole from './EditOrganizationRole';
 import NewOrganizationRole from './NewOrganizationRole';
-import { OrganizationAdminOrganizationsQuery } from './queries';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 import ErrorDisplay from '../ErrorDisplay';
@@ -12,11 +10,12 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { useOrganizationAdminOrganizationsQueryQuery } from './queries.generated';
 
 function OrganizationWithIdBreadcrumbs() {
   const match = useRouteMatch();
-  const { id } = useParams();
-  const { data, loading, error } = useQuery(OrganizationAdminOrganizationsQuery);
+  const { id } = useParams<{ id: string }>();
+  const { data, loading, error } = useOrganizationAdminOrganizationsQueryQuery();
 
   if (loading) {
     return (
@@ -30,12 +29,12 @@ function OrganizationWithIdBreadcrumbs() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const organization = data.organizations.find((org) => org.id.toString() === id);
+  const organization = data?.organizations.find((org) => org.id.toString() === id);
 
   return (
     <>
       <BreadcrumbItem to={`/organizations/${id}`} active={match.isExact}>
-        {organization.name}
+        {organization?.name ?? 'Organization'}
       </BreadcrumbItem>
 
       <Route path="/organizations/:id/roles/new">
@@ -69,7 +68,7 @@ function OrganizationAdmin() {
       </ol>
 
       <Switch>
-        <Route path="/organizations/:organizationId/roles/new">
+        <Route path="/organizations/:id/roles/new">
           <NewOrganizationRole />
         </Route>
         <Route path="/organizations/:organizationId/roles/:organizationRoleId/edit">
