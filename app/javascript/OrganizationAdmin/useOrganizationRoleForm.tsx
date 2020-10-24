@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import flatMap from 'lodash/flatMap';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
-import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
+import ChangeSet, { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
@@ -17,6 +17,11 @@ const OrganizationRolePermissionNames = flatMap(
 );
 
 type OrganizationRoleType = OrganizationAdminOrganizationsQueryQuery['organizations'][0]['organization_roles'][0];
+export type OrganizationRoleFormState = {
+  name: string;
+  usersChangeSet: ChangeSet<OrganizationRoleType['users'][0]>;
+  permissionsChangeSet: ChangeSet<PermissionWithId>;
+};
 
 export default function useOrganizationRoleForm(initialOrganizationRole: OrganizationRoleType) {
   const [name, onNameChange] = useState(initialOrganizationRole.name);
@@ -38,6 +43,11 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
     usersChangeSet,
     initialOrganizationRole,
   ]);
+
+  const formState: OrganizationRoleFormState = useMemo(
+    () => ({ name, usersChangeSet, permissionsChangeSet }),
+    [name, usersChangeSet, permissionsChangeSet],
+  );
 
   const renderForm = () => (
     <>
@@ -65,12 +75,5 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
     </>
   );
 
-  return {
-    renderForm,
-    formState: {
-      name,
-      usersChangeSet,
-      permissionsChangeSet,
-    },
-  } as const;
+  return { renderForm, formState } as const;
 }
