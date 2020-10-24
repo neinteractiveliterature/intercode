@@ -1,30 +1,18 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { useQuery } from '@apollo/client';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
-import { ReportsMenuQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';
 import EventsByChoice from './EventsByChoice';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useReportsMenuQueryQuery } from './queries.generated';
 
-function ReportsMenu() {
-  const { data, loading, error } = useQuery(ReportsMenuQuery);
-
+const ReportsMenu = LoadQueryWrapper(useReportsMenuQueryQuery, function ReportsMenu({ data }) {
   usePageTitle('Reports');
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -85,6 +73,7 @@ function ReportsMenu() {
               </a>
             </li>
             <li>
+              .{' '}
               <a href="/reports/volunteer_events" target="_blank" rel="noopener noreferrer">
                 Volunteer event signups
               </a>
@@ -94,7 +83,7 @@ function ReportsMenu() {
       </div>
     </>
   );
-}
+});
 
 function Reports() {
   const authorizationWarning = useAuthorizationRequired('can_read_reports');
