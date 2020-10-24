@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-export type EmailListEntry = { email: string; name: string };
+export type EmailListEntry = { email: string; name?: string | null };
 
 function formatEmail({ email, name }: EmailListEntry) {
-  if (name.match(/[^0-9A-Za-z ]/)) {
+  if (name?.match(/[^0-9A-Za-z ]/)) {
     return `"${name.replace(/"/g, '\\"')}" <${email}>`;
   }
 

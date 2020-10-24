@@ -1,27 +1,18 @@
 import React, { useContext } from 'react';
 import moment from 'moment-timezone';
-import { useQuery } from '@apollo/client';
 
-import ErrorDisplay from '../ErrorDisplay';
-import { WaitlistMailingListsQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useWaitlistMailingListsQueryQuery } from './queries.generated';
 
-function WaitlistMailingLists() {
+export default LoadQueryWrapper(useWaitlistMailingListsQueryQuery, function WaitlistMailingLists({
+  data,
+}) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(WaitlistMailingListsQuery);
 
   usePageTitle('Waitlists');
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -54,6 +45,4 @@ function WaitlistMailingLists() {
       })}
     </>
   );
-}
-
-export default WaitlistMailingLists;
+});

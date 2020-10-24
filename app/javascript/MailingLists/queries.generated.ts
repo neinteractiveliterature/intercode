@@ -22,10 +22,10 @@ export type MailingListsMenuQueryQueryVariables = Types.Exact<{ [key: string]: n
 
 export type MailingListsMenuQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'ticket_mode' | 'ticket_name'>
-  )> }
+  ) }
 );
 
 export type TicketedAttendeesQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -33,7 +33,7 @@ export type TicketedAttendeesQueryQueryVariables = Types.Exact<{ [key: string]: 
 
 export type TicketedAttendeesQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
     & { mailing_lists: (
@@ -43,7 +43,7 @@ export type TicketedAttendeesQueryQuery = (
         & MailingListsResultFieldsFragment
       ) }
     ) }
-  )> }
+  ) }
 );
 
 export type EventProposersQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -51,7 +51,7 @@ export type EventProposersQueryQueryVariables = Types.Exact<{ [key: string]: nev
 
 export type EventProposersQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
@@ -61,7 +61,7 @@ export type EventProposersQueryQuery = (
         & MailingListsResultFieldsFragment
       ) }
     ) }
-  )> }
+  ) }
 );
 
 export type TeamMembersMailingListQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -69,7 +69,7 @@ export type TeamMembersMailingListQueryQueryVariables = Types.Exact<{ [key: stri
 
 export type TeamMembersMailingListQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
@@ -79,7 +79,7 @@ export type TeamMembersMailingListQueryQuery = (
         & MailingListsResultFieldsFragment
       ) }
     ) }
-  )> }
+  ) }
 );
 
 export type UsersWithPendingBioQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -87,7 +87,7 @@ export type UsersWithPendingBioQueryQueryVariables = Types.Exact<{ [key: string]
 
 export type UsersWithPendingBioQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
@@ -97,7 +97,7 @@ export type UsersWithPendingBioQueryQuery = (
         & MailingListsResultFieldsFragment
       ) }
     ) }
-  )> }
+  ) }
 );
 
 export type WaitlistMailingListsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -105,7 +105,7 @@ export type WaitlistMailingListsQueryQueryVariables = Types.Exact<{ [key: string
 
 export type WaitlistMailingListsQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'timezone_name'>
     & { mailing_lists: (
@@ -126,7 +126,7 @@ export type WaitlistMailingListsQueryQuery = (
         ) }
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export type WhosFreeFormConventionQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -134,10 +134,10 @@ export type WhosFreeFormConventionQueryQueryVariables = Types.Exact<{ [key: stri
 
 export type WhosFreeFormConventionQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name'>
-  )> }
+    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
+  ) }
 );
 
 export type WhosFreeQueryQueryVariables = Types.Exact<{
@@ -148,9 +148,9 @@ export type WhosFreeQueryQueryVariables = Types.Exact<{
 
 export type WhosFreeQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
+    & Pick<Types.Convention, 'id' | 'name'>
     & { mailing_lists: (
       { __typename: 'MailingLists' }
       & { whos_free: (
@@ -158,7 +158,7 @@ export type WhosFreeQueryQuery = (
         & MailingListsResultFieldsFragment
       ) }
     ) }
-  )> }
+  ) }
 );
 
 export const ContactEmailFieldsFragmentDoc = gql`
@@ -179,7 +179,7 @@ export const MailingListsResultFieldsFragmentDoc = gql`
     ${ContactEmailFieldsFragmentDoc}`;
 export const MailingListsMenuQueryDocument = gql`
     query MailingListsMenuQuery {
-  convention {
+  convention: assertConvention {
     id
     ticket_mode
     ticket_name
@@ -213,7 +213,7 @@ export type MailingListsMenuQueryLazyQueryHookResult = ReturnType<typeof useMail
 export type MailingListsMenuQueryQueryResult = Apollo.QueryResult<MailingListsMenuQueryQuery, MailingListsMenuQueryQueryVariables>;
 export const TicketedAttendeesQueryDocument = gql`
     query TicketedAttendeesQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     ticket_name
@@ -252,7 +252,7 @@ export type TicketedAttendeesQueryLazyQueryHookResult = ReturnType<typeof useTic
 export type TicketedAttendeesQueryQueryResult = Apollo.QueryResult<TicketedAttendeesQueryQuery, TicketedAttendeesQueryQueryVariables>;
 export const EventProposersQueryDocument = gql`
     query EventProposersQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     mailing_lists {
@@ -290,7 +290,7 @@ export type EventProposersQueryLazyQueryHookResult = ReturnType<typeof useEventP
 export type EventProposersQueryQueryResult = Apollo.QueryResult<EventProposersQueryQuery, EventProposersQueryQueryVariables>;
 export const TeamMembersMailingListQueryDocument = gql`
     query TeamMembersMailingListQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     mailing_lists {
@@ -328,7 +328,7 @@ export type TeamMembersMailingListQueryLazyQueryHookResult = ReturnType<typeof u
 export type TeamMembersMailingListQueryQueryResult = Apollo.QueryResult<TeamMembersMailingListQueryQuery, TeamMembersMailingListQueryQueryVariables>;
 export const UsersWithPendingBioQueryDocument = gql`
     query UsersWithPendingBioQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     mailing_lists {
@@ -366,7 +366,7 @@ export type UsersWithPendingBioQueryLazyQueryHookResult = ReturnType<typeof useU
 export type UsersWithPendingBioQueryQueryResult = Apollo.QueryResult<UsersWithPendingBioQueryQuery, UsersWithPendingBioQueryQueryVariables>;
 export const WaitlistMailingListsQueryDocument = gql`
     query WaitlistMailingListsQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     timezone_name
@@ -417,12 +417,13 @@ export type WaitlistMailingListsQueryLazyQueryHookResult = ReturnType<typeof use
 export type WaitlistMailingListsQueryQueryResult = Apollo.QueryResult<WaitlistMailingListsQueryQuery, WaitlistMailingListsQueryQueryVariables>;
 export const WhosFreeFormConventionQueryDocument = gql`
     query WhosFreeFormConventionQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     starts_at
     ends_at
     timezone_name
+    timezone_mode
   }
 }
     `;
@@ -453,8 +454,9 @@ export type WhosFreeFormConventionQueryLazyQueryHookResult = ReturnType<typeof u
 export type WhosFreeFormConventionQueryQueryResult = Apollo.QueryResult<WhosFreeFormConventionQueryQuery, WhosFreeFormConventionQueryQueryVariables>;
 export const WhosFreeQueryDocument = gql`
     query WhosFreeQuery($start: Date!, $finish: Date!) {
-  convention {
+  convention: assertConvention {
     id
+    name
     mailing_lists {
       whos_free(start: $start, finish: $finish) {
         ...MailingListsResultFields

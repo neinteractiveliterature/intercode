@@ -1,24 +1,14 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
 
-import ErrorDisplay from '../ErrorDisplay';
-import { UsersWithPendingBioQuery } from './queries';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useUsersWithPendingBioQueryQuery } from './queries.generated';
 
-function UsersWithPendingBio() {
-  const { data, loading, error } = useQuery(UsersWithPendingBioQuery);
-
+export default LoadQueryWrapper(useUsersWithPendingBioQueryQuery, function UsersWithPendingBio({
+  data,
+}) {
   usePageTitle('Users with pending bio');
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -31,6 +21,4 @@ function UsersWithPendingBio() {
       />
     </>
   );
-}
-
-export default UsersWithPendingBio;
+});

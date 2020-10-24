@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import MomentPropTypes from 'react-moment-proptypes';
-import { useQuery } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import TabbedMailingList from './TabbedMailingList';
-import Timespan from '../Timespan';
+import Timespan, { FiniteTimespan } from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
-import { WhosFreeQuery } from './queries';
 import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
+import { useWhosFreeQueryQuery } from './queries.generated';
 
-function WhosFreeResults({ timespan }) {
-  const { data, loading, error } = useQuery(WhosFreeQuery, {
+function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
+  const { data, loading, error } = useWhosFreeQueryQuery({
     variables: { start: timespan.start.toISOString(), finish: timespan.finish.toISOString() },
   });
 
@@ -20,7 +17,7 @@ function WhosFreeResults({ timespan }) {
     return <LoadingIndicator />;
   }
 
-  if (error) {
+  if (error || !data) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
@@ -33,22 +30,17 @@ function WhosFreeResults({ timespan }) {
   );
 }
 
-WhosFreeResults.propTypes = {
-  timespan: PropTypes.shape({
-    start: MomentPropTypes.momentObj.isRequired,
-    finish: MomentPropTypes.momentObj.isRequired,
-  }).isRequired,
-};
-
 function WhosFree() {
-  const [timespan, setTimespan] = useState(null);
+  const [timespan, setTimespan] = useState<FiniteTimespan>();
 
   usePageTitle('Who‘s free');
 
   return (
     <>
       <h1 className="mb-4">Who&rsquo;s free?</h1>
-      <WhosFreeForm onSubmit={({ start, finish }) => setTimespan(new Timespan(start, finish))} />
+      <WhosFreeForm
+        onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromMoments(start, finish))}
+      />
       {timespan && <WhosFreeResults timespan={timespan} />}
     </>
   );
