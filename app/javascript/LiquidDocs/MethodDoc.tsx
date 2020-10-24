@@ -1,10 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import AssignName from './AssignName';
 import TagDoc from './TagDoc';
+import { YardMethod } from './DocData';
 
-function MethodDoc({ method, prefix = null }) {
+export type MethodDocProps = {
+  method: YardMethod;
+  prefix?: string;
+};
+
+function MethodDoc({ method, prefix }: MethodDocProps) {
   if (method.tags.some((tag) => tag.tag_name === 'api')) {
     return null;
   }
@@ -41,22 +46,5 @@ function MethodDoc({ method, prefix = null }) {
     </li>
   );
 }
-
-MethodDoc.propTypes = {
-  method: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(
-      PropTypes.shape({
-        tag_name: PropTypes.string,
-      }),
-    ).isRequired,
-    docstring: PropTypes.string,
-  }).isRequired,
-  prefix: PropTypes.string,
-};
-
-MethodDoc.defaultProps = {
-  prefix: null,
-};
 
 export default MethodDoc;

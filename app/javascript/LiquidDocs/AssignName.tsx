@@ -1,7 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { YardMethod } from './DocData';
+import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
 
-function AssignName({ assign, prefix = null }) {
+export type AssignNameProps = {
+  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0] | YardMethod;
+  prefix?: string;
+};
+
+function AssignName({ assign, prefix }: AssignNameProps) {
   const concatenatedName = `${prefix || ''}${assign.name}`;
   const rawParts = concatenatedName.split('.');
   const parts = rawParts.map((part, i) => (
@@ -20,16 +26,5 @@ function AssignName({ assign, prefix = null }) {
     </>
   );
 }
-
-AssignName.propTypes = {
-  assign: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  prefix: PropTypes.string,
-};
-
-AssignName.defaultProps = {
-  prefix: null,
-};
 
 export default AssignName;

@@ -1,4 +1,4 @@
-export default function buildMemberPrefix(name, prefix) {
+export default function buildMemberPrefix(name: string, prefix?: string | null) {
   let memberPrefix = `${name}.`;
   if (prefix) {
     memberPrefix = `${prefix}${memberPrefix}`;

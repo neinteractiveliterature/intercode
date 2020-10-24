@@ -1,12 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 
 import AssignDocLink from './AssignDocLink';
 import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
+import { YardMethod, YardTag } from './DocData';
 
-const ExampleTagDoc = ({ tag }) => (
+export type BaseTagDocProps = {
+  tag: YardTag;
+};
+
+const ExampleTagDoc = ({ tag }: BaseTagDocProps) => (
   <li>
     <div className="card mt-4 border-success">
       <div className="card-header bg-success-light">
@@ -26,22 +30,26 @@ const ExampleTagDoc = ({ tag }) => (
   </li>
 );
 
-ExampleTagDoc.propTypes = {
-  tag: PropTypes.shape({
-    name: PropTypes.string,
-    text: PropTypes.string,
-  }).isRequired,
+export type ReturnTagWithClassDocProps = BaseTagDocProps & {
+  assignName: string;
+  returnClassName: string;
+  prefix?: string;
 };
 
-const ReturnTagWithClassDoc = ({ tag, assignName, returnClassName, prefix }) => (
+const ReturnTagWithClassDoc = ({
+  tag,
+  assignName,
+  returnClassName,
+  prefix,
+}: ReturnTagWithClassDocProps) => (
   <>
     <p className="mb-1">
-      <strong>Return:</strong> <em>{tag.types.join(', ')}</em>
+      <strong>Return:</strong> <em>{(tag.types ?? []).join(', ')}</em>
     </p>
     <div className="d-flex align-items-start">
       <div className="h3 mr-1">↳</div>
       <AssignDocLink
-        assign={{ name: assignName, drop_class_name: returnClassName }}
+        assign={{ __typename: 'LiquidAssign', name: assignName, drop_class_name: returnClassName }}
         compact
         prefix={prefix}
       />
@@ -49,33 +57,13 @@ const ReturnTagWithClassDoc = ({ tag, assignName, returnClassName, prefix }) => 
   </>
 );
 
-ReturnTagWithClassDoc.propTypes = {
-  tag: PropTypes.shape({
-    types: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }).isRequired,
-  assignName: PropTypes.string.isRequired,
-  returnClassName: PropTypes.string.isRequired,
-  prefix: PropTypes.string,
-};
-
-ReturnTagWithClassDoc.defaultProps = {
-  prefix: null,
-};
-
-const SeeTagDoc = ({ tag }) => (
+const SeeTagDoc = ({ tag }: BaseTagDocProps) => (
   <li>
     <strong>See:</strong> {tag.name ? <a href={tag.name}>{tag.text}</a> : tag.text}
   </li>
 );
 
-SeeTagDoc.propTypes = {
-  tag: PropTypes.shape({
-    name: PropTypes.string,
-    text: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-const FallbackTagDoc = ({ tag }) => (
+const FallbackTagDoc = ({ tag }: BaseTagDocProps) => (
   <li>
     <strong>{humanize(tag.tag_name)}</strong>
     {tag.types ? (
@@ -88,23 +76,20 @@ const FallbackTagDoc = ({ tag }) => (
   </li>
 );
 
-FallbackTagDoc.propTypes = {
-  tag: PropTypes.shape({
-    tag_name: PropTypes.string.isRequired,
-    types: PropTypes.arrayOf(PropTypes.string),
-    text: PropTypes.string,
-  }).isRequired,
+export type TagDocProps = BaseTagDocProps & {
+  method?: YardMethod;
+  prefix?: string;
 };
 
-function TagDoc({ tag, method = null, prefix = null }) {
+function TagDoc({ tag, method, prefix }: TagDocProps) {
   if (tag.tag_name === 'example') {
     return <ExampleTagDoc tag={tag} />;
   }
 
-  if (tag.tag_name === 'return') {
+  if (tag.tag_name === 'return' && method) {
     const { returnClassName, assignName } = findMethodReturnClass(method);
 
-    if (findClass(returnClassName)) {
+    if (returnClassName && findClass(returnClassName)) {
       return (
         <ReturnTagWithClassDoc
           tag={tag}
@@ -122,21 +107,5 @@ function TagDoc({ tag, method = null, prefix = null }) {
 
   return <FallbackTagDoc tag={tag} />;
 }
-
-TagDoc.propTypes = {
-  tag: PropTypes.shape({
-    tag_name: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    types: PropTypes.arrayOf(PropTypes.string),
-    text: PropTypes.string,
-  }).isRequired,
-  method: PropTypes.shape({}),
-  prefix: PropTypes.string,
-};
-
-TagDoc.defaultProps = {
-  method: null,
-  prefix: null,
-};
 
 export default TagDoc;

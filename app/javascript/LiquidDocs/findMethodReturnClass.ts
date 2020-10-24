@@ -1,4 +1,6 @@
-export default function findMethodReturnClass(method) {
+import { YardMethod } from './DocData';
+
+export default function findMethodReturnClass(method: YardMethod) {
   const returnClassTag = method.tags.find((tag) => tag.tag_name === 'return');
   let returnClassName = returnClassTag ? (returnClassTag.types || [])[0] : null;
   let assignName = method.name;

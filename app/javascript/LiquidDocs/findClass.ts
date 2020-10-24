@@ -1,10 +1,10 @@
-import DocData from '../../../liquid_doc.json';
+import DocData, { YardClass } from './DocData';
 
-let classesByName = null;
+let classesByName: Map<string, YardClass> | null = null;
 
-export default function findClass(className) {
+export default function findClass(className?: string | null): YardClass | undefined {
   if (className == null) {
-    return null;
+    return undefined;
   }
 
   if (classesByName == null) {

@@ -1,11 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
+import { YardClass } from './DocData';
 
 import findLiquidTagName from './findLiquidTagName';
 import LiquidTagDocHeader from './LiquidTagDocHeader';
 
-function LiquidTagDocLink({ liquidTag }) {
+export type LiquidTagDocLinkProps = {
+  liquidTag: YardClass;
+};
+
+function LiquidTagDocLink({ liquidTag }: LiquidTagDocLinkProps) {
   const location = useLocation();
   const liquidTagName = findLiquidTagName(liquidTag);
 
@@ -22,9 +26,5 @@ function LiquidTagDocLink({ liquidTag }) {
     </Link>
   );
 }
-
-LiquidTagDocLink.propTypes = {
-  liquidTag: PropTypes.shape({}).isRequired,
-};
 
 export default LiquidTagDocLink;

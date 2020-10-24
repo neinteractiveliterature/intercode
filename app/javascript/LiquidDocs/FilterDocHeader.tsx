@@ -1,7 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { YardMethod } from './DocData';
 
-function FilterDocHeader({ filter }) {
+export type FilterDocHeaderProps = {
+  filter: YardMethod;
+};
+
+function FilterDocHeader({ filter }: FilterDocHeaderProps) {
   return (
     <>
       <div>
@@ -15,9 +19,5 @@ function FilterDocHeader({ filter }) {
     </>
   );
 }
-
-FilterDocHeader.propTypes = {
-  filter: PropTypes.shape({}).isRequired,
-};
 
 export default FilterDocHeader;

@@ -1,10 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import AssignName from './AssignName';
 import findClass from './findClass';
+import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
 
-function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = null }) {
+export type CompactAssignDocHeaderProps = {
+  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0];
+  prefix?: string;
+  preAssignNameContent?: React.ReactNode;
+};
+
+function CompactAssignDocHeader({
+  assign,
+  prefix,
+  preAssignNameContent,
+}: CompactAssignDocHeaderProps) {
   const assignClass = findClass(assign.drop_class_name);
 
   return (
@@ -24,23 +34,9 @@ function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = 
           </>
         ) : null}
       </div>
-      {(assignClass || {}).docstring ? <p className="mt-2 mb-0">{assignClass.docstring}</p> : null}
+      {assignClass?.docstring ? <p className="mt-2 mb-0">{assignClass.docstring}</p> : null}
     </>
   );
 }
-
-CompactAssignDocHeader.propTypes = {
-  assign: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    drop_class_name: PropTypes.string.isRequired,
-  }).isRequired,
-  prefix: PropTypes.string,
-  preAssignNameContent: PropTypes.node,
-};
-
-CompactAssignDocHeader.defaultProps = {
-  prefix: null,
-  preAssignNameContent: null,
-};
 
 export default CompactAssignDocHeader;
