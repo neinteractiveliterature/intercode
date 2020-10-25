@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { ApolloError } from '@apollo/client';
+
 import useAsyncFunction from '../useAsyncFunction';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 import ErrorDisplay from '../ErrorDisplay';
+import { Department, DepartmentInput } from '../graphqlTypes.generated';
 
-function DepartmentForm({ initialDepartment, onSave }) {
+export type DepartmentFormProps = {
+  initialDepartment: Pick<Department, 'name' | 'proposal_description'>;
+  onSave: (departmentInput: DepartmentInput) => Promise<any>;
+};
+
+function DepartmentForm({ initialDepartment, onSave }: DepartmentFormProps) {
   const [name, setName] = useState(initialDepartment.name);
   const [proposalDescription, setProposalDescription] = useState(
     initialDepartment.proposal_description,
@@ -34,7 +41,7 @@ function DepartmentForm({ initialDepartment, onSave }) {
         disabled={saveInProgress}
       />
 
-      <ErrorDisplay graphQLError={saveError} />
+      <ErrorDisplay graphQLError={saveError as ApolloError} />
 
       <button
         type="button"
@@ -47,13 +54,5 @@ function DepartmentForm({ initialDepartment, onSave }) {
     </>
   );
 }
-
-DepartmentForm.propTypes = {
-  initialDepartment: PropTypes.shape({
-    name: PropTypes.string,
-    proposal_description: PropTypes.string,
-  }).isRequired,
-  onSave: PropTypes.func.isRequired,
-};
 
 export default DepartmentForm;

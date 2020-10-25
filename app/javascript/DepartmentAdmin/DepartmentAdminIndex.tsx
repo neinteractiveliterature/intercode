@@ -1,33 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 
 import { DepartmentAdminQuery } from './queries';
 import { DeleteDepartment } from './mutations';
-import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
+
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
-import { useConfirm } from '../ModalDialogs/Confirm';
+import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useDepartmentAdminQueryQuery } from './queries.generated';
 
-function DepartmentAdminIndex() {
-  const { data, loading, error } = useQuery(DepartmentAdminQuery);
-  const confirm = useConfirm();
+export default LoadQueryWrapper(useDepartmentAdminQueryQuery, function DepartmentAdminIndex({
+  data,
+}) {
+  const confirm = useGraphQLConfirm();
   const deleteDepartment = useDeleteMutation(DeleteDepartment, {
     query: DepartmentAdminQuery,
     arrayPath: ['convention', 'departments'],
     idVariablePath: ['id'],
   });
   usePageTitle('Departments');
-
-  if (loading) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -59,7 +52,6 @@ function DepartmentAdminIndex() {
                     confirm({
                       action: () => deleteDepartment({ variables: { id: department.id } }),
                       prompt: `Are you sure you want to delete the department “${department.name}”?`,
-                      renderError: (err) => <ErrorDisplay graphQLError={err} />,
                     })
                   }
                 >
@@ -83,6 +75,4 @@ function DepartmentAdminIndex() {
       </Link>
     </>
   );
-}
-
-export default DepartmentAdminIndex;
+});
