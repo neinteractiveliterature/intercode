@@ -45,11 +45,11 @@ export type EventProposalQueryQuery = (
   & { currentAbility: (
     { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_delete_event_proposal'>
-  ), convention?: Types.Maybe<(
+  ), convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & EventProposalFormDataFragment
-  )>, eventProposal: (
+  ), eventProposal: (
     { __typename: 'EventProposal' }
     & Pick<Types.EventProposal, 'id'>
     & EventProposalFieldsFragment
@@ -63,11 +63,11 @@ export type EventProposalQueryWithOwnerQueryVariables = Types.Exact<{
 
 export type EventProposalQueryWithOwnerQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & EventProposalFormDataFragment
-  )>, eventProposal: (
+  ), eventProposal: (
     { __typename: 'EventProposal' }
     & Pick<Types.EventProposal, 'id'>
     & { owner: (
@@ -117,12 +117,16 @@ export type ProposeEventButtonQueryQuery = (
         ) }
       )> }
     )> }
-  )>, convention?: Types.Maybe<(
+  )>, convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { departments: Array<(
       { __typename: 'Department' }
       & Pick<Types.Department, 'id' | 'name' | 'proposal_description'>
+      & { event_categories: Array<(
+        { __typename: 'EventCategory' }
+        & Pick<Types.EventCategory, 'id'>
+      )> }
     )>, event_categories: Array<(
       { __typename: 'EventCategory' }
       & Pick<Types.EventCategory, 'id' | 'name' | 'proposable' | 'proposal_description'>
@@ -131,7 +135,7 @@ export type ProposeEventButtonQueryQuery = (
         & Pick<Types.Department, 'id'>
       )> }
     )> }
-  )> }
+  ) }
 );
 
 export type EventProposalsAdminQueryQueryVariables = Types.Exact<{
@@ -178,10 +182,10 @@ export type EventProposalHistoryQueryQueryVariables = Types.Exact<{
 
 export type EventProposalHistoryQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
-  )>, eventProposal: (
+  ), eventProposal: (
     { __typename: 'EventProposal' }
     & Pick<Types.EventProposal, 'id' | 'title'>
     & { owner: (
@@ -255,7 +259,7 @@ export const EventProposalQueryDocument = gql`
   currentAbility {
     can_delete_event_proposal(event_proposal_id: $eventProposalId)
   }
-  convention {
+  convention: assertConvention {
     id
     ...EventProposalFormData
   }
@@ -294,7 +298,7 @@ export type EventProposalQueryLazyQueryHookResult = ReturnType<typeof useEventPr
 export type EventProposalQueryQueryResult = Apollo.QueryResult<EventProposalQueryQuery, EventProposalQueryQueryVariables>;
 export const EventProposalQueryWithOwnerDocument = gql`
     query EventProposalQueryWithOwner($eventProposalId: Int!) {
-  convention {
+  convention: assertConvention {
     id
     ...EventProposalFormData
   }
@@ -398,12 +402,15 @@ export const ProposeEventButtonQueryDocument = gql`
       }
     }
   }
-  convention {
+  convention: assertConvention {
     id
     departments {
       id
       name
       proposal_description
+      event_categories {
+        id
+      }
     }
     event_categories {
       id
@@ -516,7 +523,7 @@ export type EventProposalsAdminQueryLazyQueryHookResult = ReturnType<typeof useE
 export type EventProposalsAdminQueryQueryResult = Apollo.QueryResult<EventProposalsAdminQueryQuery, EventProposalsAdminQueryQueryVariables>;
 export const EventProposalHistoryQueryDocument = gql`
     query EventProposalHistoryQuery($id: Int!) {
-  convention {
+  convention: assertConvention {
     id
     starts_at
     ends_at

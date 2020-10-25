@@ -1,41 +1,50 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
 import { humanize } from 'inflected';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
-import { EventProposalQueryWithOwner, EventProposalAdminNotesQuery } from './queries';
-import { UpdateEventProposalAdminNotes } from './mutations';
+import { EventProposalAdminNotesQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import LoadingIndicator from '../LoadingIndicator';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import {
+  EventProposalAdminNotesQueryQuery,
+  useEventProposalAdminNotesQueryQuery,
+  useEventProposalQueryWithOwnerQuery,
+} from './queries.generated';
+import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-function EventProposalAdminNotes({ eventProposalId }) {
-  const { data, loading, error } = useQuery(EventProposalAdminNotesQuery, {
+export type EventProposalAdminNotesProps = {
+  eventProposalId: number;
+};
+
+function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesProps) {
+  const { data, loading, error } = useEventProposalAdminNotesQueryQuery({
     variables: { eventProposalId },
   });
 
-  const [updateAdminNotesMutate] = useMutation(UpdateEventProposalAdminNotes);
+  const [updateAdminNotesMutate] = useUpdateEventProposalAdminNotesMutation();
   const updateAdminNotes = useCallback(
     (adminNotes) =>
       updateAdminNotesMutate({
         variables: { eventProposalId, adminNotes },
         update: (cache) => {
-          const { eventProposal } = cache.readQuery({
+          const queryData = cache.readQuery<EventProposalAdminNotesQueryQuery>({
             query: EventProposalAdminNotesQuery,
             variables: { eventProposalId },
           });
+          if (!queryData) {
+            return;
+          }
           cache.writeQuery({
             query: EventProposalAdminNotesQuery,
             variables: { eventProposalId },
             data: {
               eventProposal: {
-                ...eventProposal,
+                ...queryData.eventProposal,
                 admin_notes: adminNotes,
               },
             },
@@ -53,27 +62,18 @@ function EventProposalAdminNotes({ eventProposalId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return <AdminNotes value={data.eventProposal.admin_notes} mutate={updateAdminNotes} />;
+  return <AdminNotes value={data?.eventProposal.admin_notes ?? ''} mutate={updateAdminNotes} />;
 }
 
-EventProposalAdminNotes.propTypes = {
-  eventProposalId: PropTypes.number.isRequired,
-};
+function useLoadEventProposal() {
+  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  return useEventProposalQueryWithOwnerQuery({ variables: { eventProposalId } });
+}
 
-function EventProposalAdminDisplay() {
-  const eventProposalId = Number.parseInt(useParams().id, 10);
-  const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
-    variables: { eventProposalId },
-  });
-  usePageTitle(useValueUnless(() => data.eventProposal.title, error || loading));
+export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdminDisplay({ data }) {
+  usePageTitle(data.eventProposal.title);
 
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  const eventProposalId = data.eventProposal.id;
 
   return (
     <>
@@ -122,6 +122,4 @@ function EventProposalAdminDisplay() {
       <EventProposalDisplay eventProposalId={eventProposalId} />
     </>
   );
-}
-
-export default EventProposalAdminDisplay;
+});

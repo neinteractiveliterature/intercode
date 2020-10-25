@@ -1,14 +1,28 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { CreateEventProposal } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import useAsyncFunction from '../useAsyncFunction';
 import { sortByLocaleString } from '../ValueUtils';
+import { ProposeEventButtonQueryQuery } from './queries.generated';
+import { CreateEventProposalMutation, useCreateEventProposalMutation } from './mutations.generated';
+
+export type CreateEventProposalModalProps = {
+  onCreate: (
+    newEventProposal: NonNullable<
+      CreateEventProposalMutation['createEventProposal']
+    >['event_proposal'],
+  ) => void;
+  cancel: () => void;
+  visible: boolean;
+  userEventProposals: NonNullable<
+    NonNullable<ProposeEventButtonQueryQuery['myProfile']>['user']
+  >['event_proposals'];
+  proposableEventCategories: ProposeEventButtonQueryQuery['convention']['event_categories'];
+  departments: ProposeEventButtonQueryQuery['convention']['departments'];
+};
 
 function CreateEventProposalModal({
   onCreate,
@@ -17,9 +31,9 @@ function CreateEventProposalModal({
   userEventProposals,
   proposableEventCategories,
   departments,
-}) {
+}: CreateEventProposalModalProps) {
   const { t } = useTranslation();
-  const [cloneEventProposal, setCloneEventProposal] = useState(null);
+  const [cloneEventProposal, setCloneEventProposal] = useState<typeof userEventProposals[0]>();
   const topLevelEventCategories = useMemo(
     () => proposableEventCategories.filter((category) => !category.department),
     [proposableEventCategories],
@@ -28,12 +42,20 @@ function CreateEventProposalModal({
     () => sortByLocaleString([...topLevelEventCategories, ...departments], (entity) => entity.name),
     [departments, topLevelEventCategories],
   );
-  const [department, setDepartment] = useState(topLevelEntities.length > 1 ? null : departments[0]);
-  const [eventCategory, setEventCategory] = useState(() =>
-    department && department.event_categories.length === 1 ? department.event_categories[0] : null,
+  const [department, setDepartment] = useState(
+    topLevelEntities.length > 1 ? undefined : departments[0],
   );
-  const [createMutate] = useMutation(CreateEventProposal);
-  const [createProposal, createError, createInProgress] = useAsyncFunction(createMutate);
+  const [eventCategory, setEventCategory] = useState(() =>
+    department && department.event_categories.length === 1
+      ? proposableEventCategories.find(
+          (category) => category.id === department.event_categories[0].id,
+        )
+      : undefined,
+  );
+  const [
+    createProposal,
+    { loading: createInProgress, error: createError },
+  ] = useCreateEventProposalMutation();
   const apolloClient = useApolloClient();
 
   const departmentEventCategories = useMemo(
@@ -50,19 +72,18 @@ function CreateEventProposalModal({
   );
 
   const createClicked = async () => {
-    const {
-      data: {
-        createEventProposal: { event_proposal: eventProposal },
-      },
-    } = await createProposal({
+    if (!eventCategory) {
+      return;
+    }
+    const { data } = await createProposal({
       variables: {
-        cloneEventProposalId: (cloneEventProposal || {}).id,
+        cloneEventProposalId: cloneEventProposal?.id,
         eventCategoryId: eventCategory.id,
       },
     });
     await apolloClient.clearStore();
 
-    onCreate(eventProposal);
+    onCreate(data!.createEventProposal!.event_proposal);
   };
 
   return (
@@ -84,15 +105,15 @@ function CreateEventProposalModal({
           }
           getOptionValue={(option) => `${option.__typename}:${option.id}`}
           getOptionLabel={(option) => option.name}
-          onChange={(entity) => {
+          onChange={(entity: typeof topLevelEntities[0]) => {
             if (!entity) {
-              setDepartment(null);
-              setEventCategory(null);
+              setDepartment(undefined);
+              setEventCategory(undefined);
             } else if (entity.__typename === 'Department') {
               setDepartment(entity);
-              setEventCategory(null);
+              setEventCategory(undefined);
             } else if (entity.__typename === 'EventCategory') {
-              setDepartment(null);
+              setDepartment(undefined);
               setEventCategory(entity);
             }
           }}
@@ -114,9 +135,9 @@ function CreateEventProposalModal({
               isClearable
               isDisabled={createInProgress}
               value={eventCategory}
-              getOptionValue={(option) => option.id}
+              getOptionValue={(option) => option.id.toString()}
               getOptionLabel={(option) => option.name}
-              onChange={(category) => {
+              onChange={(category: typeof departmentEventCategories[0]) => {
                 setEventCategory(category);
               }}
             />
@@ -147,11 +168,11 @@ function CreateEventProposalModal({
           isClearable
           isDisabled={createInProgress}
           value={cloneEventProposal}
-          getOptionValue={(option) => option.id}
+          getOptionValue={(option) => option.id.toString()}
           getOptionLabel={(option) =>
             `${option.title} (${option.event_category.name}, ${option.convention.name})`
           }
-          onChange={(proposal) => {
+          onChange={(proposal: typeof userEventProposals[0]) => {
             setCloneEventProposal(proposal);
           }}
         />
@@ -199,36 +220,5 @@ function CreateEventProposalModal({
     </Modal>
   );
 }
-
-CreateEventProposalModal.propTypes = {
-  onCreate: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired,
-  visible: PropTypes.bool.isRequired,
-  departments: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      proposal_description: PropTypes.string,
-    }),
-  ).isRequired,
-  userEventProposals: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      status: PropTypes.string.isRequired,
-      created_at: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      convention: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-    }),
-  ).isRequired,
-  proposableEventCategories: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      proposable: PropTypes.bool.isRequired,
-    }),
-  ).isRequired,
-};
 
 export default CreateEventProposalModal;
