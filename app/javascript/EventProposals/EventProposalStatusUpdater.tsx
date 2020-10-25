@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 
-import { useMutation, useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import { TransitionEventProposal } from './mutations';
 import useModal from '../ModalDialogs/useModal';
-import useAsyncFunction from '../useAsyncFunction';
+import { EventProposalQueryWithOwnerQuery } from './queries.generated';
+import { useTransitionEventProposalMutation } from './mutations.generated';
 
 const STATUSES = [
   { key: 'proposed', transitionLabel: 'Update', buttonClass: 'btn-primary' },
@@ -30,19 +29,23 @@ const STATUSES = [
   },
 ];
 
-function getStatus(key) {
+function getStatus(key: string) {
   return STATUSES.find((status) => status.key === key);
 }
 
-function EventProposalStatusUpdater({ eventProposal }) {
+export type EventProposalStatusUpdaterProps = {
+  eventProposal: EventProposalQueryWithOwnerQuery['eventProposal'];
+};
+
+function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdaterProps) {
   const [status, setStatus] = useState(eventProposal.status);
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();
   const apolloClient = useApolloClient();
-  const [transitionMutate] = useMutation(TransitionEventProposal);
-  const [transitionEventProposal, transitionError, transitionInProgress] = useAsyncFunction(
-    transitionMutate,
-  );
+  const [
+    transitionEventProposal,
+    { loading: transitionInProgress, error: transitionError },
+  ] = useTransitionEventProposalMutation();
 
   const performTransition = async () => {
     await transitionEventProposal({
@@ -84,7 +87,7 @@ function EventProposalStatusUpdater({ eventProposal }) {
               value: s,
             }))}
             value={status}
-            onChange={(newStatus) => {
+            onChange={(newStatus: string) => {
               setStatus(newStatus);
               setDropEvent(false);
             }}
@@ -98,7 +101,7 @@ function EventProposalStatusUpdater({ eventProposal }) {
             </p>
           ) : null}
 
-          {getStatus(status).offerDropEvent && eventProposal.event ? (
+          {getStatus(status)?.offerDropEvent && eventProposal.event ? (
             <BooleanInput
               caption="Drop event?"
               value={dropEvent}
@@ -122,25 +125,16 @@ function EventProposalStatusUpdater({ eventProposal }) {
 
           <button
             type="button"
-            className={`btn ${getStatus(status).buttonClass}`}
+            className={`btn ${getStatus(status)?.buttonClass}`}
             onClick={performTransition}
             disabled={transitionInProgress || status === eventProposal.status}
           >
-            {getStatus(status).transitionLabel}
+            {getStatus(status)?.transitionLabel}
           </button>
         </div>
       </Modal>
     </div>
   );
 }
-
-EventProposalStatusUpdater.propTypes = {
-  eventProposal: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string,
-    status: PropTypes.string.isRequired,
-    event: PropTypes.shape({}),
-  }).isRequired,
-};
 
 export default EventProposalStatusUpdater;

@@ -51,7 +51,7 @@ export const EventProposalQuery = gql`
       can_delete_event_proposal(event_proposal_id: $eventProposalId)
     }
 
-    convention {
+    convention: assertConvention {
       id
       ...EventProposalFormData
     }
@@ -68,7 +68,7 @@ export const EventProposalQuery = gql`
 
 export const EventProposalQueryWithOwner = gql`
   query EventProposalQueryWithOwner($eventProposalId: Int!) {
-    convention {
+    convention: assertConvention {
       id
       ...EventProposalFormData
     }
@@ -132,13 +132,17 @@ export const ProposeEventButtonQuery = gql`
       }
     }
 
-    convention {
+    convention: assertConvention {
       id
 
       departments {
         id
         name
         proposal_description
+
+        event_categories {
+          id
+        }
       }
 
       event_categories {
@@ -212,7 +216,7 @@ export const EventProposalsAdminQuery = gql`
 
 export const EventProposalHistoryQuery = gql`
   query EventProposalHistoryQuery($id: Int!) {
-    convention {
+    convention: assertConvention {
       id
       starts_at
       ends_at

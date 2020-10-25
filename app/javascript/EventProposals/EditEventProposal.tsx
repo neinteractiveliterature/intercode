@@ -1,47 +1,39 @@
 import React from 'react';
-import { useApolloClient, useMutation, useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { Redirect, useHistory, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { DeleteEventProposal } from './mutations';
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposalForm from './EventProposalForm';
-import { EventProposalQuery } from './queries';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
-import PageLoadingIndicator from '../PageLoadingIndicator';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useDeleteEventProposalMutation } from './mutations.generated';
+import { useEventProposalQueryQuery } from './queries.generated';
 
-function EditEventProposal() {
+function useLoadEventProposal() {
+  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  return useEventProposalQueryQuery({ variables: { eventProposalId } });
+}
+
+export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal({ data }) {
   const { t } = useTranslation();
   const history = useHistory();
-  const eventProposalId = Number.parseInt(useParams().id, 10);
-  const { data, loading, error } = useQuery(EventProposalQuery, { variables: { eventProposalId } });
-  const [deleteProposal] = useMutation(DeleteEventProposal);
+  const [deleteProposal] = useDeleteEventProposalMutation();
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
 
   usePageTitle(
-    useValueUnless(
-      () =>
-        t('general.pageTitles.editing', 'Editing “{{ title }}”', {
-          title: data.eventProposal.title,
-        }),
-      error || loading,
-    ),
+    t('general.pageTitles.editing', 'Editing “{{ title }}”', {
+      title: data.eventProposal.title,
+    }),
   );
-
-  if (loading) {
-    return <PageLoadingIndicator visible />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   if (data.eventProposal.event) {
     return <Redirect to={`/events/${data.eventProposal.event.id}/edit`} />;
   }
+
+  const eventProposalId = data.eventProposal.id;
 
   const canDelete = data.currentAbility.can_delete_event_proposal;
   const deleteButtonProps = {
@@ -94,6 +86,4 @@ function EditEventProposal() {
       />
     </>
   );
-}
-
-export default EditEventProposal;
+});

@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link, Switch, Route, useParams, useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import EventProposalAdminDisplay from './EventProposalAdminDisplay';
 import EventProposalForm from './EventProposalForm';
-import { EventProposalQuery, EventProposalQueryWithOwner } from './queries';
 import EventProposalsAdminTable from './EventProposalsAdminTable';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
@@ -15,12 +13,16 @@ import EventProposalHistory from './EventProposalHistory';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import {
+  useEventProposalQueryQuery,
+  useEventProposalQueryWithOwnerQuery,
+} from './queries.generated';
 
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const eventProposalId = Number.parseInt(params.id, 10);
-  const { data, loading, error } = useQuery(EventProposalQueryWithOwner, {
+  const { data, loading, error } = useEventProposalQueryWithOwnerQuery({
     variables: { eventProposalId },
   });
 
@@ -42,7 +44,7 @@ function SingleProposalBreadcrumbs() {
         matchProps={{ path: '/admin_event_proposals/:id', exact: true }}
         to={`/admin_event_proposals/${params.id}`}
       >
-        {data.eventProposal.title}
+        {data?.eventProposal.title}
       </RouteActivatedBreadcrumbItem>
 
       <Route path="/admin_event_proposals/:id/edit">
@@ -59,14 +61,14 @@ function SingleProposalBreadcrumbs() {
 function AdminEditEventProposal() {
   const { t } = useTranslation();
   const history = useHistory();
-  const eventProposalId = Number.parseInt(useParams().id, 10);
-  const { data, loading, error } = useQuery(EventProposalQuery, { variables: { eventProposalId } });
+  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const { data, loading, error } = useEventProposalQueryQuery({ variables: { eventProposalId } });
 
   usePageTitle(
     useValueUnless(
       () =>
         t('general.pageTitles.editing', 'Editing “{{ title }}”', {
-          title: data.eventProposal.title,
+          title: data?.eventProposal.title,
         }),
       error || loading,
     ),
