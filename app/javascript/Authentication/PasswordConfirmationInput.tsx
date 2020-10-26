@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
-function PasswordConfirmationInput({ value, onChange, password }) {
+export type PasswordConfirmationInputProps = {
+  value: string;
+  onChange: React.Dispatch<string>;
+  password: string;
+};
+
+function PasswordConfirmationInput({ value, onChange, password }: PasswordConfirmationInputProps) {
   const { t } = useTranslation();
   const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
 
@@ -25,11 +30,5 @@ function PasswordConfirmationInput({ value, onChange, password }) {
     />
   );
 }
-
-PasswordConfirmationInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  password: PropTypes.string.isRequired,
-};
 
 export default PasswordConfirmationInput;
