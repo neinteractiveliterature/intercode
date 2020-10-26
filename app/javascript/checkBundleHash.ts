@@ -41,6 +41,8 @@ export function checkBundleHashOnError<T>(func: () => Promise<T>) {
   });
 }
 
-export function lazyWithBundleHashCheck(func: () => Promise<{ default: ComponentType<any> }>) {
+export function lazyWithBundleHashCheck<Props>(
+  func: () => Promise<{ default: ComponentType<Props> }>,
+) {
   return lazy(() => checkBundleHashOnError(func));
 }

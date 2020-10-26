@@ -16,11 +16,14 @@ import UserFormFields from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { useEditUserQueryQuery } from './queries.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() =>
-  import(
-    /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
-  ),
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
+  () =>
+    import(
+      /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
+    ),
 );
 
 async function updateUser(
@@ -66,7 +69,9 @@ async function updateUser(
   }
 }
 
-function EditUserForm({ initialFormState }) {
+export default LoadQueryWrapper(useEditUserQueryQuery, function EditUserForm({
+  data: { currentUser: initialFormState },
+}) {
   const { t } = useTranslation();
   const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
   const [formState, setFormState] = useState(initialFormState);
@@ -75,6 +80,7 @@ function EditUserForm({ initialFormState }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
   const passwordFieldId = useUniqueId('password-');
+  usePageTitle('Update Your Account');
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -152,26 +158,4 @@ function EditUserForm({ initialFormState }) {
       </form>
     </>
   );
-}
-
-EditUserForm.propTypes = {
-  initialFormState: PropTypes.shape({}).isRequired,
-};
-
-function EditUser() {
-  const { data, loading, error } = useQuery(EditUserQuery);
-
-  usePageTitle('Update Your Account');
-
-  if (loading) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return <EditUserForm initialFormState={data.currentUser} />;
-}
-
-export default EditUser;
+});

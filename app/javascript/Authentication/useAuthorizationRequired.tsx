@@ -44,18 +44,18 @@ export function AuthorizationWrapper({ abilities, children }: AuthorizationWrapp
   const authorizationRequired = useAuthorizationRequired(...abilities);
 
   if (authorizationRequired) {
-    return authorizationRequired;
+    return <>{authorizationRequired}</>;
   }
 
-  return children;
+  return <>{children}</>;
 }
 
 export function NoLoginAuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps) {
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
   if (authorizationRequired) {
-    return authorizationRequired;
+    return <>{authorizationRequired}</>;
   }
 
-  return children;
+  return <>{children}</>;
 }
