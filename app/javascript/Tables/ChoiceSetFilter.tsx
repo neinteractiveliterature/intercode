@@ -92,14 +92,21 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
   const toggleOpen = useToggleOpen(setDropdownOpen, update);
 
   const filterValue = useMemo(() => {
-    const rawFilterValue = (filter || {}).value || [];
-    if (props.multiple && props.filterCodec) {
-      return rawFilterValue.map((singleValue: string) => props.filterCodec!.encode(singleValue));
+    const rawFilterValue = filter?.value ?? (props.multiple ? [] : undefined);
+    if (props.filterCodec) {
+      if (props.multiple) {
+        return rawFilterValue.map((singleValue: any) =>
+          props.filterCodec!.encode(singleValue)?.toString(),
+        );
+      }
+      return props.filterCodec.encode(rawFilterValue)?.toString();
     }
-    if (!props.multiple && props.filterCodec) {
-      return props.filterCodec.encode(rawFilterValue);
+
+    if (props.multiple) {
+      return rawFilterValue.map((singleValue: any) => singleValue?.toString());
     }
-    return rawFilterValue;
+
+    return rawFilterValue?.toString();
   }, [filter, props.filterCodec, props.multiple]);
 
   const choices = useMemo(() => {
