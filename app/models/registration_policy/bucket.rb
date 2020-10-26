@@ -20,6 +20,11 @@ class RegistrationPolicy::Bucket
     end
   end
 
+  def __typename=(value)
+    # These can come in from parsed form_response_values_json built from GraphQL responses,
+    # but shouldn't actually wind up in the database
+  end
+
   def slots_unlimited=(value)
     self.slots_limited = !value
   end
