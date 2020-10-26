@@ -93,6 +93,7 @@ class RegistrationPolicy
       case key.to_sym
       when :buckets then self.buckets = value
       when :prevent_no_preference_signups then self.prevent_no_preference_signups = value
+      when :__typename then next
       else raise ActiveModel::MissingAttributeError.new("No attribute called #{key.inspect}", key)
       end
     end
