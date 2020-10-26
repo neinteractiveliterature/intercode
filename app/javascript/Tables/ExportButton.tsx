@@ -50,7 +50,7 @@ function dataToParams(data: CompositeData) {
   keyPathValuePairs.forEach(([keyPath, value]) => {
     const [first, ...rest] = keyPath;
     const key = `${first}${rest.map((part) => `[${part}]`).join('')}`;
-    params.set(key, value);
+    params.append(key, value); // we actually want some duplicate keys, for array params, so not .set
   });
 
   return params;
