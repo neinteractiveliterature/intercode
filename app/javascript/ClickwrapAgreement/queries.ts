@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 
 export const ClickwrapAgreementQuery = gql`
   query ClickwrapAgreementQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       clickwrap_agreement_html

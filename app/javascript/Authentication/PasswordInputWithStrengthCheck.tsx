@@ -1,13 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import zxcvbn from 'zxcvbn';
-import pickBy from 'lodash/pickBy';
+import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 
-function PasswordFeedback({ result }) {
+type PasswordFeedbackProps = {
+  result?: ZXCVBNResult | null;
+};
+
+function PasswordFeedback({ result }: PasswordFeedbackProps) {
   if (!result) {
     return null;
   }
@@ -34,20 +36,35 @@ function PasswordFeedback({ result }) {
   );
 }
 
-PasswordFeedback.propTypes = {
-  result: PropTypes.shape({
-    feedback: PropTypes.shape({
-      warning: PropTypes.string,
-      suggestions: PropTypes.arrayOf(PropTypes.string),
-    }),
-  }),
+type ScoreText = 'insecure' | 'fair' | 'good' | 'great';
+
+function getTextForScore(score: number) {
+  if (score < 2) {
+    return 'insecure';
+  }
+
+  if (score < 3) {
+    return 'fair';
+  }
+
+  if (score < 4) {
+    return 'good';
+  }
+
+  return 'great';
+}
+
+export type PasswordInputWithStrengthCheckProps = {
+  id?: string;
+  value: string;
+  onChange: React.Dispatch<string>;
 };
 
-PasswordFeedback.defaultProps = {
-  result: null,
-};
-
-function PasswordInputWithStrengthCheck({ id, value, onChange }) {
+function PasswordInputWithStrengthCheck({
+  id,
+  value,
+  onChange,
+}: PasswordInputWithStrengthCheckProps) {
   const { t } = useTranslation();
   const passwordStrengthResult = useMemo(() => zxcvbn(value), [value]);
   const hasFeedback = useMemo(
@@ -66,17 +83,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     'bg-primary': score === 3,
     'bg-success': score >= 4,
   };
-  const scoreText = Object.keys(
-    pickBy(
-      {
-        insecure: score < 2,
-        fair: score === 2,
-        good: score === 3,
-        great: score >= 4,
-      },
-      (matches) => matches,
-    ),
-  )[0];
+  const scoreText = getTextForScore(score);
   const scoreTextClasses = {
     'text-danger': score < 2,
     'text-warning': score === 2,
@@ -90,9 +97,9 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     great: t('authentication.passwordInput.great', 'great'),
   }[scoreText];
 
-  const [dropdownButton, setDropdownButton] = useState(null);
-  const [dropdownMenu, setDropdownMenu] = useState(null);
-  const [arrow, setArrow] = useState(null);
+  const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
+  const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
+  const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { styles, attributes, state, update } = useIntercodePopperWithAutoClosing(
@@ -177,8 +184,8 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
             aria-valuenow={score}
             style={{ width: `${value.length > 0 ? ((score + 1) / 5) * 100 : 0}%` }}
             className={classNames('progress-bar', scoreProgressClasses)}
-            aria-valuemin="0"
-            aria-valuemax="4"
+            aria-valuemin={0}
+            aria-valuemax={4}
             aria-label={t('authentication.passwordInput.strengthMeterLabel', 'Password strength')}
           />
         </div>
@@ -186,15 +193,5 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     </>
   );
 }
-
-PasswordInputWithStrengthCheck.propTypes = {
-  id: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
-PasswordInputWithStrengthCheck.defaultProps = {
-  id: null,
-};
 
 export default PasswordInputWithStrengthCheck;

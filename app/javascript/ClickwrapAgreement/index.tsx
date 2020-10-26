@@ -1,23 +1,25 @@
 import React, { useContext } from 'react';
-import { useMutation, useQuery, useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { AcceptClickwrapAgreement } from './mutations';
-import { ClickwrapAgreementQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
-import useAsyncFunction from '../useAsyncFunction';
 import parseCmsContent from '../parseCmsContent';
-import LoadingIndicator from '../LoadingIndicator';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
+import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
+import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { useClickwrapAgreementQueryQuery } from './queries.generated';
 
-function ClickwrapAgreement() {
+export default LoadQueryWrapper(useClickwrapAgreementQueryQuery, function ClickwrapAgreement({
+  data,
+}) {
   const { t } = useTranslation();
   const history = useHistory();
-  const { data, loading, error } = useQuery(ClickwrapAgreementQuery);
-  const [acceptMutate] = useMutation(AcceptClickwrapAgreement);
-  const [accept, acceptError, acceptInProgress] = useAsyncFunction(acceptMutate);
+  const [
+    accept,
+    { error: acceptError, loading: acceptInProgress },
+  ] = useAcceptClickwrapAgreementMutation();
   const { refresh } = useContext(AuthenticityTokensContext);
   const apolloClient = useApolloClient();
   const loginRequired = useLoginRequired();
@@ -32,14 +34,6 @@ function ClickwrapAgreement() {
       throw err;
     }
   };
-
-  if (loading) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphqlError={error} />;
-  }
 
   if (loginRequired) {
     return <></>;
@@ -69,7 +63,7 @@ function ClickwrapAgreement() {
             })}
           </div>
           <div className="card-body">
-            {parseCmsContent(convention.clickwrap_agreement_html).bodyComponents}
+            {parseCmsContent(convention.clickwrap_agreement_html ?? 'p').bodyComponents}
 
             <ErrorDisplay graphQLError={acceptError} />
           </div>
@@ -87,6 +81,4 @@ function ClickwrapAgreement() {
       </div>
     </>
   );
-}
-
-export default ClickwrapAgreement;
+});

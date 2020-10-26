@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from './useLoginRequired';
 
-export function useAuthorizationRequiredWithoutLogin(...abilities) {
+type AbilityType = AppRootContext['currentAbility'];
+type AbilityName = keyof AbilityType;
+
+export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]) {
   const { t } = useTranslation();
   const { currentAbility } = useContext(AppRootContext);
 
@@ -19,7 +22,7 @@ export function useAuthorizationRequiredWithoutLogin(...abilities) {
   return false;
 }
 
-export default function useAuthorizationRequired(...abilities) {
+export default function useAuthorizationRequired(...abilities: AbilityName[]) {
   const loginRequired = useLoginRequired();
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
@@ -32,8 +35,13 @@ export default function useAuthorizationRequired(...abilities) {
   return authorizationRequired;
 }
 
-export function AuthorizationWrapper({ abilities, children }) {
-  const authorizationRequired = useAuthorizationRequired(abilities);
+export type AuthorizationWrapperProps = {
+  abilities: AbilityName[];
+  children: React.ReactNode;
+};
+
+export function AuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps) {
+  const authorizationRequired = useAuthorizationRequired(...abilities);
 
   if (authorizationRequired) {
     return authorizationRequired;
@@ -42,8 +50,8 @@ export function AuthorizationWrapper({ abilities, children }) {
   return children;
 }
 
-export function NoLoginAuthorizationWrapper({ abilities, children }) {
-  const authorizationRequired = useAuthorizationRequiredWithoutLogin(abilities);
+export function NoLoginAuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps) {
+  const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
   if (authorizationRequired) {
     return authorizationRequired;
