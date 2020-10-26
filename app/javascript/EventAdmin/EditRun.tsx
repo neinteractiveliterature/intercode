@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import EditRunModal from './EditRunModal';
@@ -26,7 +26,7 @@ function EditRun({ convention, events }: EditRunProps) {
   }, [match, events]);
 
   const initialRun: RunFieldsFragment | undefined = useMemo(() => {
-    if (!match || !event) {
+    if (!event) {
       return undefined;
     }
 
@@ -48,7 +48,7 @@ function EditRun({ convention, events }: EditRunProps) {
     }
 
     return event.runs.find((r) => r.id.toString() === match.params.runId);
-  }, [match, event]);
+  }, [match.path, match.params.runId, event]);
 
   const cancelEditing = () => {
     if (!event) {
@@ -63,13 +63,11 @@ function EditRun({ convention, events }: EditRunProps) {
   };
 
   const [run, setRun] = useState(initialRun);
-  const [prevMatch, setPrevMatch] = useState(match);
 
-  if (prevMatch !== match) {
+  useEffect(() => {
     // navigation happened, reset the run state
     setRun(initialRun);
-    setPrevMatch(match);
-  }
+  }, [match.path, initialRun]);
 
   if (!event || !run) {
     return <></>;
