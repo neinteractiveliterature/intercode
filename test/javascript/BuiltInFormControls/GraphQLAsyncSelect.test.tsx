@@ -1,8 +1,12 @@
 import React from 'react';
 import { gql } from '@apollo/client'; // eslint-disable-line no-restricted-imports
+import { MockedResponse } from '@apollo/client/testing';
 
 import { render, fireEvent, act, waitFor } from '../testUtils';
-import GraphQLAsyncSelect from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
+import GraphQLAsyncSelect, {
+  GraphQLAsyncSelectProps,
+} from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
+import { UserConProfile } from '../../../app/javascript/graphqlTypes.generated';
 
 const FakeQuery = gql`
   query FakeQuery($name: String) {
@@ -48,13 +52,16 @@ describe('GraphQLAsyncSelect', () => {
     },
   ];
 
-  const renderUserConProfileSelect = (props, mocks) =>
+  const renderUserConProfileSelect = (
+    props?: Partial<GraphQLAsyncSelectProps<any, any>>,
+    mocks?: MockedResponse[],
+  ) =>
     render(
       <GraphQLAsyncSelect
         query={FakeQuery}
         getOptions={(data) => data.convention.user_con_profiles_paginated.entries}
-        getOptionLabel={(option) => option.name_without_nickname}
-        getOptionValue={(option) => option.id}
+        getOptionLabel={(option: UserConProfile) => option.name_without_nickname}
+        getOptionValue={(option: UserConProfile) => option.id}
         getVariables={(input) => ({ name: input })}
         {...props}
       />,

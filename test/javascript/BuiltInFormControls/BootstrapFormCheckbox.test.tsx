@@ -9,6 +9,7 @@ describe('BootstrapFormCheckbox', () => {
   const renderComponent = (overrideProps = {}) =>
     render(
       <BootstrapFormCheckbox
+        type="checkbox"
         name="my_checkbox"
         label="check me"
         checked={false}
@@ -25,7 +26,7 @@ describe('BootstrapFormCheckbox', () => {
     expect(onChange.mock.calls).toHaveLength(1);
   });
 
-  test('it defaults to rendering as a checkbox', () => {
+  test('it renders as a checkbox', () => {
     const { getByLabelText } = renderComponent();
     expect(getByLabelText('check me')).toHaveAttribute('type', 'checkbox');
   });

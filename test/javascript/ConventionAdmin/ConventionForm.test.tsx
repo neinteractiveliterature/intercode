@@ -2,39 +2,61 @@ import React from 'react';
 import moment from 'moment-timezone';
 
 import { act, waitFor, render, fireEvent } from '../testUtils';
-import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
+import ConventionForm, {
+  ConventionFormConvention,
+  ConventionFormProps,
+} from '../../../app/javascript/ConventionAdmin/ConventionForm';
+import {
+  EmailMode,
+  ShowSchedule,
+  SignupMode,
+  SiteMode,
+  TicketMode,
+  TimezoneMode,
+} from '../../../app/javascript/graphqlTypes.generated';
 
 describe('ConventionForm', () => {
-  const defaultInitialConvention = {
+  const defaultInitialConvention: ConventionFormConvention = {
+    __typename: 'Convention',
+    canceled: false,
+    cms_layouts: [],
+    email_from: 'noreply@convention.test',
+    id: 0,
+    language: 'en',
+    pages: [],
+    signup_requests_open: false,
+    stripe_account_ready_to_charge: true,
+    ticket_mode: TicketMode.RequiredForSignup,
     starts_at: '',
     ends_at: '',
     name: '',
-    domain: '',
+    domain: 'convention.test',
     timezone_name: 'America/New_York',
-    timezone_mode: 'convention_local',
-    site_mode: 'convention',
-    signup_mode: 'self_service',
+    timezone_mode: TimezoneMode.ConventionLocal,
+    site_mode: SiteMode.Convention,
+    signup_mode: SignupMode.SelfService,
     accepting_proposals: false,
-    show_schedule: 'no',
-    show_event_list: 'no',
+    show_schedule: ShowSchedule.No,
+    show_event_list: ShowSchedule.No,
     hidden: false,
     maximum_event_signups: {
       timespans: [{ start: null, finish: null, value: 'unlimited' }],
     },
     maximum_tickets: null,
     ticket_name: 'ticket',
-    default_layout_id: null,
-    root_page_id: null,
     staff_positions: [],
-    email_mode: 'forward',
+    email_mode: EmailMode.Forward,
   };
 
-  const renderConventionForm = (props, initialConventionProps) =>
+  const renderConventionForm = (
+    props?: Partial<ConventionFormProps>,
+    initialConventionProps?: Partial<ConventionFormConvention>,
+  ) =>
     render(
       <ConventionForm
         initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
-        rootSite={{ url: 'https://example.com', id: 'singleton' }}
-        saveConvention={() => {}}
+        rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: 123 }}
+        saveConvention={async () => {}}
         cmsLayouts={[]}
         pages={[]}
         {...props}
@@ -53,7 +75,7 @@ describe('ConventionForm', () => {
         domain: 'myDomain',
         timezone_name: 'Etc/UTC',
         accepting_proposals: true,
-        show_schedule: 'gms',
+        show_schedule: ShowSchedule.Gms,
         maximum_event_signups: {
           timespans: [
             { start: null, finish: now, value: 'not_yet' },
@@ -64,37 +86,39 @@ describe('ConventionForm', () => {
       },
     );
 
-    expect(getByLabelText('Convention starts').value).toEqual('2019-04-18');
-    expect(getByLabelText('Convention ends').value).toEqual('2019-04-18');
-    expect(getByLabelText('Name').value).toEqual('myName');
-    expect(getByLabelText('Convention domain name').value).toEqual('myDomain');
+    expect((getByLabelText('Convention starts') as HTMLInputElement).value).toEqual('2019-04-18');
+    expect((getByLabelText('Convention ends') as HTMLInputElement).value).toEqual('2019-04-18');
+    expect((getByLabelText('Name') as HTMLInputElement).value).toEqual('myName');
+    expect((getByLabelText('Convention domain name') as HTMLInputElement).value).toEqual(
+      'myDomain',
+    );
     expect(getByLabelText('Time zone').closest('.form-group')).toHaveTextContent(
       'Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)',
     );
 
     fireEvent.click(getByText('Events'));
 
-    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
+    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(true);
     expect(
       getMultipleChoiceInput(
         'Show event schedule',
         'Only to event team members and users with any schedule viewing permissions',
-      ).checked,
+      )?.checked,
     ).toBe(true);
 
     fireEvent.click(getByText('Payments'));
-    expect(getByLabelText('Maximum tickets').value).toEqual('100');
+    expect((getByLabelText('Maximum tickets') as HTMLInputElement).value).toEqual('100');
   });
 
   test('mutating form fields', () => {
     const { getByText, getMultipleChoiceInput } = renderConventionForm();
 
     fireEvent.click(getByText('Events'));
-    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(false);
-    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), {
+    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(false);
+    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes')!, {
       target: { checked: true },
     });
-    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
+    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(true);
   });
 
   test('onClickSave', async () => {

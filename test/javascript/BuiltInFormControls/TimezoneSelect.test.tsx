@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { render, fireEvent, waitFor } from '../testUtils';
-import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
+import TimezoneSelect, {
+  TimezoneSelectProps,
+} from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
 describe('TimezoneSelect', () => {
-  const renderComponent = (overrideProps) =>
+  const renderComponent = (overrideProps?: Partial<TimezoneSelectProps>) =>
     render(<TimezoneSelect label="Timezone" onChange={() => {}} {...overrideProps} />);
 
   test('it renders', () => {

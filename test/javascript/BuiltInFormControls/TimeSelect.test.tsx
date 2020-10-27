@@ -2,21 +2,24 @@ import React from 'react';
 import moment from 'moment-timezone';
 
 import { render, fireEvent, queries } from '../testUtils';
-import TimeSelect from '../../../app/javascript/BuiltInFormControls/TimeSelect';
+import TimeSelect, {
+  TimeSelectProps,
+} from '../../../app/javascript/BuiltInFormControls/TimeSelect';
+import Timespan from '../../../app/javascript/Timespan';
 
 const START_TIME = '2017-01-01T00:00:00Z';
 const FINISH_TIME = '2017-01-02T00:00:00Z';
 
 describe('TimeSelect', () => {
-  const renderTimeSelect = (props) =>
+  const renderTimeSelect = (props?: Partial<TimeSelectProps>) =>
     render(
       <TimeSelect
         value={{}}
         onChange={() => {}}
-        timespan={{
-          start: moment.tz(START_TIME, 'UTC'),
-          finish: moment.tz(FINISH_TIME, 'UTC'),
-        }}
+        timespan={Timespan.finiteFromMoments(
+          moment.tz(START_TIME, 'UTC'),
+          moment.tz(FINISH_TIME, 'UTC'),
+        )}
         {...props}
       />,
     );
@@ -36,10 +39,10 @@ describe('TimeSelect', () => {
 
   test('it renders +days options', () => {
     const { getByLabelText } = renderTimeSelect({
-      timespan: {
-        start: moment.tz('2017-01-01T00:00:00Z', 'UTC'),
-        finish: moment.tz('2017-01-04T00:00:00Z', 'UTC'),
-      },
+      timespan: Timespan.finiteFromMoments(
+        moment.tz('2017-01-01T00:00:00Z', 'UTC'),
+        moment.tz('2017-01-04T00:00:00Z', 'UTC'),
+      ),
     });
     const hourSelect = getByLabelText(/Hour/);
     const hourOptions = queries.getAllByRole(hourSelect, 'option');

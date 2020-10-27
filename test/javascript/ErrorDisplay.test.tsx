@@ -9,11 +9,31 @@ test('it renders a string error', () => {
   expect(container.innerHTML).toMatch(/everything is borked/);
 });
 
+const APOLLO_ERROR_FIELDS = {
+  extensions: undefined,
+  locations: [],
+  name: '',
+  nodes: undefined,
+  originalError: null,
+  path: undefined,
+  positions: undefined,
+  source: undefined,
+};
 test('it renders a graphql error', () => {
   const { getAllByText } = render(
     <ErrorDisplay
       graphQLError={{
-        graphQLErrors: [{ message: 'everything ' }, { message: 'is borked' }],
+        graphQLErrors: [
+          {
+            ...APOLLO_ERROR_FIELDS,
+            message: 'everything ',
+          },
+          { ...APOLLO_ERROR_FIELDS, message: 'is borked' },
+        ],
+        extraInfo: undefined,
+        message: 'everything is fine',
+        name: '',
+        networkError: null,
       }}
     />,
   );
@@ -26,5 +46,6 @@ test('it renders nothing by default', () => {
   const { getByTestId } = render(<ErrorDisplay />, {
     wrapper: () => <div data-testid="wrapper" />,
   });
-  expect(getByTestId('wrapper').children.length).toEqual(0);
+  const wrapper: HTMLDivElement = getByTestId('wrapper') as HTMLDivElement;
+  expect(wrapper.children.length).toEqual(0);
 });

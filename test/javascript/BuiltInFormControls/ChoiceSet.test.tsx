@@ -1,12 +1,19 @@
 import React from 'react';
 import { render, fireEvent } from '../testUtils';
-import ChoiceSet from '../../../app/javascript/BuiltInFormControls/ChoiceSet';
+import ChoiceSet, {
+  ChoiceSetMultipleChoiceProps,
+  ChoiceSetSingleChoiceProps,
+} from '../../../app/javascript/BuiltInFormControls/ChoiceSet';
 
 describe('ChoiceSet', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderChoiceSet = (props) =>
+  const renderChoiceSet = (
+    props?:
+      | Partial<ChoiceSetSingleChoiceProps>
+      | ({ multiple: true } & Partial<ChoiceSetMultipleChoiceProps>),
+  ) =>
     render(
       <ChoiceSet
         name="pickSomething"
