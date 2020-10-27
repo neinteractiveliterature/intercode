@@ -10,17 +10,18 @@ import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() =>
-  import(
-    /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
-  ),
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
+  () =>
+    import(
+      /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
+    ),
 );
 
 async function changePassword(
-  authenticityToken,
-  resetPasswordToken,
-  password,
-  passwordConfirmation,
+  authenticityToken: string,
+  resetPasswordToken: string,
+  password: string,
+  passwordConfirmation: string,
 ) {
   const formData = new FormData();
   formData.append('user[reset_password_token]', resetPasswordToken);
@@ -46,21 +47,19 @@ function ResetPassword() {
   const { t } = useTranslation();
   const location = useLocation();
   const resetPasswordToken = useMemo(
-    () => new URLSearchParams(location.search).get('reset_password_token'),
+    () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
     [location.search],
   );
   const authenticityToken = useContext(AuthenticityTokensContext).changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useUniqueId('password-');
-  const [changePasswordAsync, changePasswordError, changePasswordInProgress] = useAsyncFunction(
-    changePassword,
-  );
+  const [changePasswordAsync, changePasswordError] = useAsyncFunction(changePassword);
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     await changePasswordAsync(
-      authenticityToken,
+      authenticityToken!,
       resetPasswordToken,
       password,
       passwordConfirmation,
@@ -84,7 +83,6 @@ function ResetPassword() {
                   value={password}
                   onChange={setPassword}
                   id={passwordId}
-                  disabled={changePasswordInProgress}
                 />
               </Suspense>
             </div>
@@ -92,7 +90,6 @@ function ResetPassword() {
               value={passwordConfirmation}
               onChange={setPasswordConfirmation}
               password={password}
-              disabled={changePasswordInProgress}
             />
 
             <ErrorDisplay stringError={(changePasswordError || {}).message} />
@@ -101,7 +98,7 @@ function ResetPassword() {
           <div className="card-footer text-right">
             <input
               type="submit"
-              value={t('authentication.resetPassword.setPasswordButton', 'Set password')}
+              value={t('authentication.resetPassword.setPasswordButton', 'Set password').toString()}
               className="btn btn-primary"
               aria-label={t('authentication.resetPassword.setPasswordButton', 'Set password')}
             />

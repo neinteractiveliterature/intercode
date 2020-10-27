@@ -9,18 +9,17 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 
-function parseRailsErrorHash(errors) {
+function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
   if (!errors) {
     return undefined;
   }
 
-  return flatMap(
-    Object.entries(errors),
-    ([key, keyErrors]) => keyErrors.map((keyError) => `${humanize(key)} ${keyError}`)
+  return flatMap(Object.entries(errors), ([key, keyErrors]) =>
+    keyErrors.map((keyError) => `${humanize(key)} ${keyError}`),
   ).join(', ');
 }
 
-async function resetPassword(authenticityToken, email) {
+async function resetPassword(authenticityToken: string, email: string) {
   const formData = new FormData();
   formData.append('user[email]', email);
 
@@ -37,7 +36,9 @@ async function resetPassword(authenticityToken, email) {
   const responseJson = await response.json();
 
   if (!response.ok) {
-    throw new Error(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
+    throw new Error(
+      responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText,
+    );
   }
 
   return responseJson;
@@ -53,9 +54,9 @@ function ForgotPasswordForm() {
     resetPassword,
   );
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await resetPasswordAsync(authenticityToken, email);
+    await resetPasswordAsync(authenticityToken!, email);
     setSuccess(true);
   };
 
@@ -133,7 +134,7 @@ function ForgotPasswordForm() {
                 value={t(
                   'authentication.forgotPassword.sendInstructionsButton',
                   'Send instructions',
-                )}
+                ).toString()}
                 aria-label={t(
                   'authentication.forgotPassword.sendInstructionsButton',
                   'Send instructions',

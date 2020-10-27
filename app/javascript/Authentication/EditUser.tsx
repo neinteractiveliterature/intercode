@@ -1,10 +1,8 @@
 import React, { useState, useContext, Suspense } from 'react';
-import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
-import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { EditUserQuery } from './queries';
+import { Redirect } from 'react-router-dom';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useUniqueId from '../useUniqueId';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -12,7 +10,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 import AccountFormContent from './AccountFormContent';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import UserFormFields from './UserFormFields';
+import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
@@ -27,16 +25,16 @@ const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
 );
 
 async function updateUser(
-  authenticityToken,
-  formState,
-  password,
-  passwordConfirmation,
-  currentPassword,
+  authenticityToken: string,
+  formState: UserFormState,
+  password: string,
+  passwordConfirmation: string,
+  currentPassword: string,
 ) {
   const formData = new FormData();
-  formData.append('user[first_name]', formState.first_name);
-  formData.append('user[last_name]', formState.last_name);
-  formData.append('user[email]', formState.email);
+  formData.append('user[first_name]', formState.first_name ?? '');
+  formData.append('user[last_name]', formState.last_name ?? '');
+  formData.append('user[email]', formState.email ?? '');
   if (password.length > 0) {
     formData.append('user[password]', password);
   }
@@ -74,7 +72,9 @@ export default LoadQueryWrapper(useEditUserQueryQuery, function EditUserForm({
 }) {
   const { t } = useTranslation();
   const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
-  const [formState, setFormState] = useState(initialFormState);
+  const [formState, setFormState] = useState<UserFormState | undefined>(
+    initialFormState ?? undefined,
+  );
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -82,10 +82,17 @@ export default LoadQueryWrapper(useEditUserQueryQuery, function EditUserForm({
   const passwordFieldId = useUniqueId('password-');
   usePageTitle('Update Your Account');
 
-  const onSubmit = async (event) => {
+  if (!formState) {
+    return <Redirect to="/" />;
+  }
+
+  const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    if (!formState) {
+      return;
+    }
     await updateUserAsync(
-      authenticityToken,
+      authenticityToken!,
       formState,
       password,
       passwordConfirmation,
@@ -150,7 +157,7 @@ export default LoadQueryWrapper(useEditUserQueryQuery, function EditUserForm({
               type="submit"
               className="btn btn-primary"
               disabled={updateUserInProgress}
-              value={t('authentication.editUser.updateAccountButton', 'Update account')}
+              value={t('authentication.editUser.updateAccountButton', 'Update account').toString()}
               aria-label={t('authentication.editUser.updateAccountButton', 'Update account')}
             />
           </div>

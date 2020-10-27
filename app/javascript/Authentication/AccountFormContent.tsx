@@ -10,7 +10,7 @@ function AccountFormContent() {
     return <></>;
   }
 
-  return parseCmsContent(data?.accountFormContentHtml ?? '').bodyComponents;
+  return <>{parseCmsContent(data?.accountFormContentHtml ?? '').bodyComponents}</>;
 }
 
 export default AccountFormContent;
