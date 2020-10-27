@@ -154,10 +154,7 @@ class Event < ApplicationRecord
   end
 
   scope :with_runs_between, ->(convention, start, finish) do
-    run_scope = convention.runs
-    run_scope = run_scope.where('starts_at >= ?', start) if start
-    run_scope = run_scope.where('starts_at < ?', finish) if finish
-    where(id: run_scope.select(:event_id))
+    where(id: convention.runs.between(start, finish).select(:event_id))
   end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')

@@ -225,13 +225,14 @@ export default class Schedule {
     maxTimespan: FiniteTimespan,
   ): ScheduleGridLayout {
     const runIds = this.getRunIdsOverlapping(maxTimespan);
-    const actualTimespan = expandTimespanToNearestHour(
+    const allRunsTimespan = expandTimespanToNearestHour(
       runIds.reduce(
         (currentMaxTimespan, runId) =>
           currentMaxTimespan.expandedToFit(this.getRunTimespan(runId)!),
         minTimespan,
       ),
     );
+    const actualTimespan = allRunsTimespan.intersection(maxTimespan);
 
     const groups =
       this.config.groupEventsBy === 'room'

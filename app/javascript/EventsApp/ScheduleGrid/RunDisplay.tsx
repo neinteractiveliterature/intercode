@@ -95,6 +95,7 @@ const RunDisplay = React.memo(
             config,
             signupCountData,
             unlimited: unlimited ?? false,
+            runDimensions,
           })}
           style={runStyle}
           role={run.disableDetailsPopup ? undefined : 'button'}
@@ -114,8 +115,20 @@ const RunDisplay = React.memo(
           {renderExtendedCounts()}
           <div className="schedule-grid-event-content">
             {!event.fake && renderAvailabilityBar()}
-            {renderSignupStatusBadge()}
-            {event.displayTitle || event.title}
+            {runDimensions.fullTimespan.start.isBefore(runDimensions.timespan.start) && (
+              <div className="schedule-grid-event-truncation-label truncation-label-start">
+                starts {runDimensions.fullTimespan.start.format('ddd h:mma')}
+              </div>
+            )}
+            <div className="schedule-grid-event-content-main">
+              {renderSignupStatusBadge()}
+              {event.displayTitle || event.title}
+            </div>
+            {runDimensions.fullTimespan.finish.isAfter(runDimensions.timespan.finish) && (
+              <div className="schedule-grid-event-truncation-label truncation-label-finish">
+                ends {runDimensions.fullTimespan.finish.format('ddd h:mma')}
+              </div>
+            )}
           </div>
         </div>
       );

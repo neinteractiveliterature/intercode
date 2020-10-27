@@ -132,6 +132,7 @@ function ProspectiveRunScheduleEventRun({
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
         unlimited: !event.registration_policy?.slots_limited,
+        runDimensions,
       })}
       style={{
         ...runStyle,
