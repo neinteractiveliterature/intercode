@@ -1,7 +1,6 @@
 import React, { useContext, useState, Suspense } from 'react';
-import { useHistory } from 'react-router-dom';
-// eslint-disable-next-line import/no-named-as-default
 import ReCAPTCHA from 'react-google-recaptcha';
+// @ts-expect-error
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
@@ -11,24 +10,31 @@ import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AccountFormContent from './AccountFormContent';
-import UserFormFields from './UserFormFields';
+import UserFormFields, { UserFormState } from './UserFormFields';
 import useUniqueId from '../useUniqueId';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 import LoadingIndicator from '../LoadingIndicator';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(() =>
-  import(
-    /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
-  ),
+const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
+  () =>
+    import(
+      /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
+    ),
 );
 
-async function signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue) {
+async function signUp(
+  authenticityToken: string,
+  formState: UserFormState,
+  password: string,
+  passwordConfirmation: string,
+  captchaValue: string,
+) {
   const formData = new FormData();
-  formData.append('user[first_name]', formState.first_name);
-  formData.append('user[last_name]', formState.last_name);
-  formData.append('user[email]', formState.email);
+  formData.append('user[first_name]', formState.first_name ?? '');
+  formData.append('user[last_name]', formState.last_name ?? '');
+  formData.append('user[email]', formState.email ?? '');
   formData.append('user[password]', password);
   formData.append('user[password_confirmation]', passwordConfirmation);
   formData.append('g-recaptcha-response', captchaValue);
@@ -64,18 +70,17 @@ function SignUpForm() {
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(
     AuthenticationModalContext,
   );
-  const history = useHistory();
   const authenticityToken = useContext(AuthenticityTokensContext).signUp;
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [captchaValue, setCaptchaValue] = useState(null);
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const passwordFieldId = useUniqueId('password-');
-  const afterSessionChange = useAfterSessionChange(history);
+  const afterSessionChange = useAfterSessionChange();
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue);
+    await signUp(authenticityToken!, formState, password, passwordConfirmation, captchaValue ?? '');
     await afterSessionChange(window.location.href);
   };
 
@@ -108,7 +113,7 @@ function SignUpForm() {
             value={passwordConfirmation}
             onChange={setPasswordConfirmation}
           />
-          <ReCAPTCHA sitekey={recaptchaSiteKey} onChange={setCaptchaValue} />
+          <ReCAPTCHA sitekey={recaptchaSiteKey ?? ''} onChange={setCaptchaValue} />
 
           <ErrorDisplay stringError={(submitError || {}).message} />
         </div>
@@ -147,7 +152,7 @@ function SignUpForm() {
               type="submit"
               className="btn btn-primary"
               disabled={submitInProgress}
-              value={t('authentication.signUpForm.signUpButton', 'Sign up')}
+              value={t('authentication.signUpForm.signUpButton', 'Sign up').toString()}
               aria-label={t('authentication.signUpForm.signUpButton', 'Sign up')}
             />
           </div>

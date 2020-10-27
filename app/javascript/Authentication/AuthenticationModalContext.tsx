@@ -17,6 +17,8 @@ export type AuthenticationModalContextData = {
   open: (state: AuthenticationModalState) => void;
   close: () => void;
   recaptchaSiteKey?: string;
+  unauthenticatedError: boolean;
+  setUnauthenticatedError: React.Dispatch<boolean>;
 };
 
 const AuthenticationModalContext = React.createContext<AuthenticationModalContextData>({
@@ -25,6 +27,8 @@ const AuthenticationModalContext = React.createContext<AuthenticationModalContex
   setCurrentView: () => {},
   open: () => {},
   close: () => {},
+  unauthenticatedError: false,
+  setUnauthenticatedError: () => {},
 });
 
 export function useAuthenticationModalProvider(recaptchaSiteKey?: string) {

@@ -12,7 +12,12 @@ import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 import useAfterSessionChange from './useAfterSessionChange';
 
-async function signIn(authenticityToken, email, password, rememberMe) {
+async function signIn(
+  authenticityToken: string,
+  email: string,
+  password: string,
+  rememberMe: boolean,
+) {
   const formData = new FormData();
   formData.append('user[email]', email);
   formData.append('user[password]', password);
@@ -31,7 +36,7 @@ async function signIn(authenticityToken, email, password, rememberMe) {
   });
 
   if (!response.ok) {
-    if (response.headers.get('Content-type').startsWith('application/json')) {
+    if (response.headers.get('Content-type')?.startsWith('application/json')) {
       throw new Error((await response.json()).error || response.statusText);
     }
 
@@ -55,12 +60,12 @@ function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const afterSessionChange = useAfterSessionChange(history);
+  const afterSessionChange = useAfterSessionChange();
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
-      const location = await signIn(authenticityToken, email, password, rememberMe);
+      const location = await signIn(authenticityToken!, email, password, rememberMe);
       await afterSessionChange(afterSignInPath || location);
     } catch (e) {
       if (!e.message.match(/invalid email or password/i)) {
@@ -75,7 +80,7 @@ function SignInForm() {
     }
   };
 
-  const onCancel = (event) => {
+  const onCancel = (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (unauthenticatedError) {
       history.push('/');
@@ -115,6 +120,7 @@ function SignInForm() {
           />
 
           <BootstrapFormCheckbox
+            type="checkbox"
             label={t('authentication.signInForm.rememberMeLabel', 'Remember me')}
             checked={rememberMe}
             onCheckedChange={setRememberMe}
@@ -158,7 +164,7 @@ function SignInForm() {
               type="submit"
               className="btn btn-primary"
               disabled={submitInProgress}
-              value={t('authentication.signInForm.logInButton', 'Log in')}
+              value={t('authentication.signInForm.logInButton', 'Log in').toString()}
               aria-label={t('authentication.signInForm.logInButton', 'Log in')}
             />
           </div>

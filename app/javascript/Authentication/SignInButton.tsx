@@ -1,9 +1,15 @@
 import React, { useContext, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 
-function SignInButton({ className, caption, initiallyOpen, afterSignInPath }) {
+export type SignInButtonProps = {
+  className?: string;
+  caption?: React.ReactNode;
+  initiallyOpen?: boolean;
+  afterSignInPath?: string;
+};
+
+function SignInButton({ className, caption, initiallyOpen, afterSignInPath }: SignInButtonProps) {
   const { open, setAfterSignInPath } = useContext(AuthenticationModalContext);
   const openModal = useCallback(() => {
     open({ currentView: 'signIn' });
@@ -19,24 +25,10 @@ function SignInButton({ className, caption, initiallyOpen, afterSignInPath }) {
   }, [initiallyOpen, openModal]);
 
   return (
-    <button className={className} type="button" onClick={openModal}>
-      {caption}
+    <button className={className ?? 'btn btn-link'} type="button" onClick={openModal}>
+      {caption ?? 'Log in'}
     </button>
   );
 }
-
-SignInButton.propTypes = {
-  initiallyOpen: PropTypes.bool,
-  className: PropTypes.string,
-  caption: PropTypes.node,
-  afterSignInPath: PropTypes.string,
-};
-
-SignInButton.defaultProps = {
-  initiallyOpen: false,
-  className: 'btn btn-link',
-  caption: 'Log in',
-  afterSignInPath: null,
-};
 
 export default SignInButton;

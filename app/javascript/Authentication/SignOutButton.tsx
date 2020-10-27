@@ -1,11 +1,9 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAfterSessionChange from './useAfterSessionChange';
 
-async function signOut(authenticityToken) {
+async function signOut(authenticityToken: string) {
   const response = await fetch('/users/sign_out', {
     method: 'DELETE',
     credentials: 'include',
@@ -21,32 +19,26 @@ async function signOut(authenticityToken) {
   }
 }
 
-function SignOutButton({ className, caption }) {
-  const history = useHistory();
-  const { signOut: authenticityToken } = useContext(AuthenticityTokensContext);
-  const afterSessionChange = useAfterSessionChange(history);
+export type SignOutButtonProps = {
+  className?: string;
+  caption?: React.ReactNode;
+};
 
-  const onClick = async (event) => {
+function SignOutButton({ className, caption }: SignOutButtonProps) {
+  const { signOut: authenticityToken } = useContext(AuthenticityTokensContext);
+  const afterSessionChange = useAfterSessionChange();
+
+  const onClick = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await signOut(authenticityToken);
+    await signOut(authenticityToken ?? '');
     await afterSessionChange('/');
   };
 
   return (
-    <button className={className} type="button" onClick={onClick}>
-      {caption}
+    <button className={className ?? 'btn btn-link'} type="button" onClick={onClick}>
+      {caption ?? 'Log out'}
     </button>
   );
 }
-
-SignOutButton.propTypes = {
-  className: PropTypes.string,
-  caption: PropTypes.node,
-};
-
-SignOutButton.defaultProps = {
-  className: 'btn btn-link',
-  caption: 'Log out',
-};
 
 export default SignOutButton;
