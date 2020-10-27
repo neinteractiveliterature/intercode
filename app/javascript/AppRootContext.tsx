@@ -24,7 +24,7 @@ type AppRootContext = {
   timezoneName: string;
 };
 
-const AppRootContext = React.createContext<AppRootContext>({
+export const appRootContextDefaultValue: AppRootContext = {
   assumedIdentityFromProfile: null,
   cmsNavigationItems: [],
   conventionAcceptingProposals: null,
@@ -71,6 +71,8 @@ const AppRootContext = React.createContext<AppRootContext>({
   ticketName: 'ticket',
   ticketTypes: [],
   timezoneName: 'Etc/UTC',
-});
+};
+
+const AppRootContext = React.createContext<AppRootContext>(appRootContextDefaultValue);
 
 export default AppRootContext;

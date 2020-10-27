@@ -20,7 +20,7 @@ export type DepartmentAdminQueryQuery = (
   & { currentAbility: (
     { __typename: 'Ability' }
     & Pick<Types.Ability, 'can_update_departments'>
-  ), convention?: Types.Maybe<(
+  ), convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { departments: Array<(
@@ -28,7 +28,7 @@ export type DepartmentAdminQueryQuery = (
       & Pick<Types.Department, 'id'>
       & AdminDepartmentFieldsFragment
     )> }
-  )> }
+  ) }
 );
 
 export const AdminDepartmentFieldsFragmentDoc = gql`
@@ -47,7 +47,7 @@ export const DepartmentAdminQueryDocument = gql`
   currentAbility {
     can_update_departments
   }
-  convention {
+  convention: assertConvention {
     id
     departments {
       id

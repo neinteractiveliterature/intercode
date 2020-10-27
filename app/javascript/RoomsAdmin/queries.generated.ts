@@ -8,7 +8,7 @@ export type RoomsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; 
 
 export type RoomsAdminQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { rooms: Array<(
@@ -19,13 +19,13 @@ export type RoomsAdminQueryQuery = (
         & Pick<Types.Run, 'id'>
       )> }
     )> }
-  )> }
+  ) }
 );
 
 
 export const RoomsAdminQueryDocument = gql`
     query RoomsAdminQuery {
-  convention {
+  convention: assertConvention {
     id
     rooms {
       id

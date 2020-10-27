@@ -79,7 +79,21 @@ function describeConventionTiming(
 }
 
 export type ConventionFormHeaderProps = {
-  convention: ConventionAdminConventionQueryQuery['convention'];
+  convention: Pick<
+    ConventionAdminConventionQueryQuery['convention'],
+    | 'id'
+    | 'name'
+    | 'starts_at'
+    | 'ends_at'
+    | 'timezone_name'
+    | 'timezone_mode'
+    | 'site_mode'
+    | 'show_event_list'
+    | 'show_schedule'
+    | 'canceled'
+  > & {
+    maximum_event_signups?: EditingScheduledValue<string> | null;
+  };
   compact?: boolean;
 };
 

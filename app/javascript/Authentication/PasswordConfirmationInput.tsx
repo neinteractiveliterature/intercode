@@ -1,0 +1,34 @@
+import React, { useState } from 'react';
+import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+
+export type PasswordConfirmationInputProps = {
+  value: string;
+  onChange: React.Dispatch<string>;
+  password: string;
+};
+
+function PasswordConfirmationInput({ value, onChange, password }: PasswordConfirmationInputProps) {
+  const { t } = useTranslation();
+  const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
+
+  const confirmationInvalid =
+    (interactedWithConfirmation || value.length >= password.length) && value !== password;
+
+  return (
+    <BootstrapFormInput
+      type="password"
+      label={t('authentication.confirmPasswordLabel', 'Confirm password')}
+      className={classNames('form-control', { 'is-invalid': confirmationInvalid })}
+      value={value}
+      onTextChange={onChange}
+      onBlur={() => {
+        setInteractedWithConfirmation(true);
+      }}
+    />
+  );
+}
+
+export default PasswordConfirmationInput;

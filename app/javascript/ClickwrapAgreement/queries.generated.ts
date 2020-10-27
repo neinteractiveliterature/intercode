@@ -8,10 +8,10 @@ export type ClickwrapAgreementQueryQueryVariables = Types.Exact<{ [key: string]:
 
 export type ClickwrapAgreementQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'name' | 'clickwrap_agreement_html'>
-  )>, myProfile?: Types.Maybe<(
+  ), myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
     & Pick<Types.UserConProfile, 'id' | 'accepted_clickwrap_agreement'>
   )> }
@@ -20,7 +20,7 @@ export type ClickwrapAgreementQueryQuery = (
 
 export const ClickwrapAgreementQueryDocument = gql`
     query ClickwrapAgreementQuery {
-  convention {
+  convention: assertConvention {
     id
     name
     clickwrap_agreement_html

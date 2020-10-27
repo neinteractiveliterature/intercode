@@ -23,7 +23,7 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRou
 
   const [updateMutate] = useUpdateEmailRouteMutation();
   const update = async () => {
-    if (!initialEmailRoute) {
+    if (!initialEmailRoute || !emailRoute) {
       return;
     }
 

@@ -13,7 +13,7 @@ export const NotificationTemplateFields = gql`
 
 export const NotificationAdminQuery = gql`
   query NotificationAdminQuery {
-    convention {
+    convention: assertConvention {
       id
 
       notification_templates {

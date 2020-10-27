@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { QueryResult } from '@apollo/client';
+import { QueryHookOptions, QueryResult } from '@apollo/client';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import ErrorDisplay from './ErrorDisplay';
@@ -7,7 +7,7 @@ import FourOhFourPage from './FourOhFourPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
 export function LoadQueryWrapper<TData, TProps>(
-  useLoadData: () => QueryResult<TData>,
+  useLoadData: (baseOptions?: QueryHookOptions<TData, {}>) => QueryResult<TData>,
   WrappedComponent: React.ComponentType<TProps & { data: TData }>,
 ): (props: TProps) => JSX.Element {
   const Wrapper = (props: TProps) => {
@@ -33,7 +33,7 @@ export function LoadQueryWrapper<TData, TProps>(
 }
 
 export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
-  useLoadData: () => QueryResult<TData>,
+  useLoadData: (baseOptions?: QueryHookOptions<TData, {}>) => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,
   WrappedComponent: React.ComponentType<TProps & { value: TValue; data: TData }>,
 ): (props: TProps) => JSX.Element {
