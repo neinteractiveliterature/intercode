@@ -9,9 +9,9 @@ class EventRunsLoader < GraphQL::Batch::Loader
   end
 
   def perform(keys)
-    run_scope = Run.includes(event: [:convention]).where(event_id: keys.map(&:id))
-    run_scope = run_scope.where('runs.starts_at >= ?', start) if start
-    run_scope = run_scope.where('runs.starts_at < ?', finish) if finish
+    run_scope = Run
+      .includes(event: [:convention]).where(event_id: keys.map(&:id))
+      .between(start, finish)
 
     runs_by_event_id = run_scope.to_a.group_by(&:event_id)
     # if I can read one run I can read any run
