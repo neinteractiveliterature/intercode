@@ -3,7 +3,7 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 
 export const TicketPurchaseFormQuery = gql`
   query TicketPurchaseFormQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       ticket_name
@@ -21,16 +21,9 @@ export const TicketPurchaseFormQuery = gql`
       ticket_types {
         id
         description
-        publicly_available
-        pricing_schedule {
-          timespans {
-            start
-            finish
-            value {
-              fractional
-              currency_code
-            }
-          }
+
+        providing_products {
+          id
         }
       }
     }
@@ -50,7 +43,7 @@ export const TicketPurchaseFormQuery = gql`
 
 export const MyTicketDisplayQuery = gql`
   query MyTicketDisplayQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       ticket_name

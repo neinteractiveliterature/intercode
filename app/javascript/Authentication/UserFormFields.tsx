@@ -5,9 +5,9 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { usePropertySetters } from '../usePropertySetters';
 
 export type UserFormState = {
-  first_name?: string;
-  last_name?: string;
-  email?: string;
+  first_name?: string | null;
+  last_name?: string | null;
+  email?: string | null;
 };
 
 export type UserFormFieldsProps = {

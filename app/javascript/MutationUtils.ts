@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import get from 'lodash/fp/get';
 import set from 'lodash/fp/set';
+// eslint-disable-next-line no-restricted-imports
 import { useMutation, MutationHookOptions, ApolloCache, OperationVariables } from '@apollo/client';
 import { DocumentNode, ExecutionResult } from 'graphql';
 

@@ -35,12 +35,15 @@ export const ConventionDisplayFields = gql`
     ends_at
     canceled
     timezone_name
+    timezone_mode
     domain
     site_mode
     ticket_mode
     show_event_list
     show_schedule
     email_from
+    hidden
+    language
 
     maximum_event_signups {
       timespans {

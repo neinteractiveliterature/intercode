@@ -113,8 +113,10 @@
     "add": "Add",
     "cancel": "Cancel",
     "close": "Close",
+    "collapse": "Collapse",
     "composeEmail": "Compose email",
     "edit": "Edit",
+    "expand": "Expand",
     "help": "Help",
     "ok": "OK",
     "options": "Options",
@@ -462,6 +464,29 @@
       "myAccount": "My Account",
       "myOrderHistory": "My Order History",
       "myProfile": "My {{ conventionName }} Profile"
+    }
+  },
+  "oauth": {
+    "permissionGroups": {
+      "manage": "Read/write access to personal data",
+      "readPrivate": "Read-only access to personal data",
+      "readPublic": "Read-only access to public data"
+    },
+    "permissions": {
+      "manage_conventions": "Update conventions you manage",
+      "manage_email_routing": "Update sitewide email routing rules",
+      "manage_events": "Update events and event proposals you manage",
+      "manage_organizations": "Update privileged data about organizations on the site",
+      "manage_profile": "Update your personal profile data",
+      "manage_signups": "Sign you up and withdraw you from events",
+      "openid": "Authenticate you using your account",
+      "public": "Access your public data, and public data about conventions you are signed up for",
+      "read_conventions": "Access privileged data about the conventions you manage (e.g. user profiles)",
+      "read_email_routing": "Read sitewide email routing rules",
+      "read_events": "Access data about the events and event proposals you manage",
+      "read_organizations": "Access privileged data about organizations on the site",
+      "read_profile": "Access your personal profile data",
+      "read_signups": "Access data about your signups"
     }
   },
   "schedule": {

@@ -22,7 +22,7 @@ export const MailingListsResultFields = gql`
 
 export const MailingListsMenuQuery = gql`
   query MailingListsMenuQuery {
-    convention {
+    convention: assertConvention {
       id
       ticket_mode
       ticket_name
@@ -32,7 +32,7 @@ export const MailingListsMenuQuery = gql`
 
 export const TicketedAttendeesQuery = gql`
   query TicketedAttendeesQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       ticket_name
@@ -50,7 +50,7 @@ export const TicketedAttendeesQuery = gql`
 
 export const EventProposersQuery = gql`
   query EventProposersQuery {
-    convention {
+    convention: assertConvention {
       id
       name
 
@@ -67,7 +67,7 @@ export const EventProposersQuery = gql`
 
 export const TeamMembersMailingListQuery = gql`
   query TeamMembersMailingListQuery {
-    convention {
+    convention: assertConvention {
       id
       name
 
@@ -84,7 +84,7 @@ export const TeamMembersMailingListQuery = gql`
 
 export const UsersWithPendingBioQuery = gql`
   query UsersWithPendingBioQuery {
-    convention {
+    convention: assertConvention {
       id
       name
 
@@ -101,7 +101,7 @@ export const UsersWithPendingBioQuery = gql`
 
 export const WaitlistMailingListsQuery = gql`
   query WaitlistMailingListsQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       timezone_name
@@ -131,20 +131,22 @@ export const WaitlistMailingListsQuery = gql`
 
 export const WhosFreeFormConventionQuery = gql`
   query WhosFreeFormConventionQuery {
-    convention {
+    convention: assertConvention {
       id
       name
       starts_at
       ends_at
       timezone_name
+      timezone_mode
     }
   }
 `;
 
 export const WhosFreeQuery = gql`
   query WhosFreeQuery($start: Date!, $finish: Date!) {
-    convention {
+    convention: assertConvention {
       id
+      name
 
       mailing_lists {
         whos_free(start: $start, finish: $finish) {
