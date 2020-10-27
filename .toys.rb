@@ -137,7 +137,7 @@ tool 'pull_production_db' do
       include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"'
     )
     sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:12.2 \
-pg_dump #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
+pg_dump --exclude-table-data=\"sessions\" #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
 -f /out/intercode_production.sql"
 
     exec_tool("load_production_db #{docker_compose ? '--docker-compose' : ''}")
