@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 import sortBy from 'lodash/sortBy';
 
 import { normalizeTitle } from '../../../ValueUtils';
-import { FiniteTimespan } from '../../../Timespan';
+import Timespan, { FiniteTimespan } from '../../../Timespan';
 // eslint-disable-next-line import/no-duplicates
 import type Schedule from '../Schedule';
 // eslint-disable-next-line import/no-duplicates
@@ -14,6 +14,7 @@ const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
 export type RunDimensions = {
   runId: number;
   timespan: FiniteTimespan;
+  fullTimespan: FiniteTimespan;
   laneIndex: number;
   timeAxisStartPercent: number;
   timeAxisSizePercent: number;
@@ -83,8 +84,6 @@ class ScheduleLayoutBlock {
     } else {
       this.runIds.push(runId);
     }
-
-    this.timespan = this.timespan.expandedToFit(timespan);
   }
 
   getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan) {
@@ -175,15 +174,15 @@ class ScheduleLayoutBlock {
     let maxColumns = 0;
 
     const runDimensions = this.getTimeSortedRunIds().map((runId) => {
-      const runTimespan = this.schedule.getRunTimespan(runId)!;
-      const now = runTimespan.start;
-      columnReservations.expire(now);
+      const fullTimespan = this.schedule.getRunTimespan(runId)!;
+      const maxDisplayLength = Math.max(MIN_LENGTH, fullTimespan.getLength('millisecond'));
+      const displayTimespan = Timespan.finiteFromMoments(
+        fullTimespan.start,
+        fullTimespan.start.clone().add(maxDisplayLength),
+      ).intersection(this.timespan);
 
-      const displayLength = Math.max(MIN_LENGTH, runTimespan.getLength('millisecond'));
-      const displayTimespan = runTimespan.clone();
-      displayTimespan.finish = displayTimespan.start.clone().add(displayLength);
-
-      const laneIndex = columnReservations.findFreeColumnForTimespan(runTimespan);
+      columnReservations.expire(displayTimespan.start);
+      const laneIndex = columnReservations.findFreeColumnForTimespan(displayTimespan);
       columnReservations.reserve(laneIndex, runId, displayTimespan);
 
       if (laneIndex + 1 > maxColumns) {
@@ -192,10 +191,11 @@ class ScheduleLayoutBlock {
 
       return {
         runId,
-        timespan: runTimespan,
+        timespan: displayTimespan,
+        fullTimespan,
         laneIndex,
-        timeAxisStartPercent: (runTimespan.start.diff(this.timespan.start) / myLength) * 100.0,
-        timeAxisSizePercent: (displayLength / myLength) * 100.0,
+        timeAxisStartPercent: (displayTimespan.start.diff(this.timespan.start) / myLength) * 100.0,
+        timeAxisSizePercent: (displayTimespan.getLength('millisecond') / myLength) * 100.0,
       };
     });
 

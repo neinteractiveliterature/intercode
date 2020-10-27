@@ -55,6 +55,7 @@ export type GetRunClassNameOptions = {
     'runFull' | 'getConfirmedLimitedSignupCount' | 'getNotCountedConfirmedSignupCount'
   >;
   unlimited: boolean;
+  runDimensions: RunDimensions;
 };
 
 export function getRunClassName({
@@ -63,6 +64,7 @@ export function getRunClassName({
   config,
   signupCountData,
   unlimited,
+  runDimensions,
 }: GetRunClassNameOptions) {
   return classNames(
     'schedule-grid-event',
@@ -79,6 +81,8 @@ export function getRunClassName({
         signupStatus == null,
       fake: event.fake,
       unlimited,
+      'truncated-start': runDimensions.fullTimespan.start.isBefore(runDimensions.timespan.start),
+      'truncated-finish': runDimensions.fullTimespan.finish.isAfter(runDimensions.timespan.finish),
     },
   );
 }
