@@ -4,7 +4,7 @@ import { render } from '../testUtils';
 import MultipleChoiceInput from '../../../app/javascript/BuiltInFormControls/MultipleChoiceInput';
 
 describe('MultipleChoiceInput', () => {
-  const renderMultipleChoiceInput = (props) =>
+  const renderMultipleChoiceInput = () =>
     render(
       <MultipleChoiceInput
         name="pickSomething"
@@ -15,7 +15,6 @@ describe('MultipleChoiceInput', () => {
           { label: 'c', value: '3' },
         ]}
         caption="Hello there"
-        {...props}
       />,
     );
 

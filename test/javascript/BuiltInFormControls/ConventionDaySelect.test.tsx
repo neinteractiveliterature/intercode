@@ -2,18 +2,23 @@ import React from 'react';
 import moment from 'moment';
 
 import { render, fireEvent } from '../testUtils';
-import ConventionDaySelect from '../../../app/javascript/BuiltInFormControls/ConventionDaySelect';
-import AppRootContext from '../../../app/javascript/AppRootContext';
+import ConventionDaySelect, {
+  ConventionDaySelectProps,
+} from '../../../app/javascript/BuiltInFormControls/ConventionDaySelect';
+import AppRootContext, { appRootContextDefaultValue } from '../../../app/javascript/AppRootContext';
+import { TimezoneMode } from '../../../app/javascript/graphqlTypes.generated';
 
 describe('ConventionDaySelect', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderConventionDaySelect = (props) =>
+  const renderConventionDaySelect = (props?: Partial<ConventionDaySelectProps>) =>
     render(
-      <AppRootContext.Provider value={{ timezoneName: 'Etc/UTC' }}>
+      <AppRootContext.Provider value={{ ...appRootContextDefaultValue, timezoneName: 'Etc/UTC' }}>
         <ConventionDaySelect
           convention={{
+            timezone_mode: TimezoneMode.ConventionLocal,
+            timezone_name: 'Etc/UTC',
             starts_at: '2017-01-01T00:00:00.000Z',
             ends_at: '2017-01-04T00:00:00.000Z',
           }}
@@ -25,7 +30,7 @@ describe('ConventionDaySelect', () => {
 
   test('it renders an option for each convention day', () => {
     const { getAllByRole } = renderConventionDaySelect();
-    expect(getAllByRole('radio').map((input) => input.value)).toEqual([
+    expect(getAllByRole('radio').map((input: HTMLInputElement) => input.value)).toEqual([
       '2017-01-01T06:00:00.000Z',
       '2017-01-02T06:00:00.000Z',
       '2017-01-03T06:00:00.000Z',

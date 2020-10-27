@@ -1,12 +1,12 @@
 /* eslint-disable import/first */
-import i18n from 'i18next';
+import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import './tempPolyfills';
 import '@testing-library/jest-dom/extend-expect';
 
 import englishTranslations from '../../locales/en.json';
 
-i18n
+i18next
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources: {

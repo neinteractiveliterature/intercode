@@ -7,6 +7,14 @@ test('TicketTypeForm matches snapshot', () => {
   const { asFragment } = render(
     <TicketTypeForm
       ticketType={{
+        __typename: 'TicketType',
+        allows_event_signups: true,
+        id: 0,
+        pricing_schedule: {
+          __typename: 'ScheduledMoneyValue',
+          timespans: [],
+        },
+        providing_products: [],
         name: '',
         description: '',
         maximum_event_provided_tickets: 0,

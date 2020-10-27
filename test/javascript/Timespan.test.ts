@@ -1,16 +1,16 @@
 import moment from 'moment-timezone';
-import Timespan from '../../app/javascript/Timespan';
+import Timespan, { FiniteTimespan } from '../../app/javascript/Timespan';
 
 describe('Timespan', () => {
-  const defaultTimespan = new Timespan(
+  const defaultTimespan = Timespan.finiteFromMoments(
     moment('2010-01-01T00:00:00Z'),
     moment('2010-01-02T00:00:00Z'),
   );
   const infiniteTimespan = new Timespan(null, null);
-  const beginningOfTime = defaultTimespan.clone();
+  const beginningOfTime: Timespan = defaultTimespan.clone();
   beginningOfTime.start = null;
 
-  const endOfTime = defaultTimespan.clone();
+  const endOfTime: Timespan = defaultTimespan.clone();
   endOfTime.finish = null;
 
   it('checks that finish is after start', () => {
@@ -21,7 +21,7 @@ describe('Timespan', () => {
   });
 
   it('constructs from strings', () => {
-    const timespan = Timespan.fromStrings('2010-01-01T00:00:00Z', '2010-01-02T00:00:00Z');
+    const timespan = Timespan.finiteFromStrings('2010-01-01T00:00:00Z', '2010-01-02T00:00:00Z');
     expect(timespan.start.isSame('2010-01-01T00:00:00Z')).toBeTruthy();
     expect(timespan.finish.isSame('2010-01-02T00:00:00Z')).toBeTruthy();
   });
@@ -34,7 +34,7 @@ describe('Timespan', () => {
 
   describe('tz', () => {
     it('converts time zone correctly', () => {
-      const timespan = defaultTimespan.tz('US/Eastern');
+      const timespan = defaultTimespan.tz('US/Eastern') as FiniteTimespan;
       expect(timespan.start.hour()).toEqual(19);
       expect(timespan.finish.hour()).toEqual(19);
       expect(timespan.start.isSame('2010-01-01T00:00:00Z')).toBeTruthy();
@@ -234,11 +234,11 @@ describe('Timespan', () => {
     it('handles open ends', () => {
       [beginningOfTime, endOfTime, infiniteTimespan].forEach((timespan) => {
         const intersection = timespan.intersection(defaultTimespan);
-        expect(intersection.isSame(defaultTimespan)).toBeTruthy();
+        expect(intersection?.isSame(defaultTimespan)).toBeTruthy();
       });
 
-      expect(beginningOfTime.intersection(infiniteTimespan).isSame(beginningOfTime)).toBeTruthy();
-      expect(endOfTime.intersection(infiniteTimespan).isSame(endOfTime)).toBeTruthy();
+      expect(beginningOfTime.intersection(infiniteTimespan)?.isSame(beginningOfTime)).toBeTruthy();
+      expect(endOfTime.intersection(infiniteTimespan)?.isSame(endOfTime)).toBeTruthy();
     });
   });
 

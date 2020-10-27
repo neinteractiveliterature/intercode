@@ -52,6 +52,7 @@ exports[`TicketTypeForm matches snapshot 1`] = `
           for="allows_event_signups-3"
         >
           <input
+            checked=""
             class="form-check-input"
             id="allows_event_signups-3"
             name="allows_event_signups"

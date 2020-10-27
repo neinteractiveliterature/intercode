@@ -24,7 +24,7 @@ module.exports = {
     'regenerator-runtime/runtime',
   ],
   setupFilesAfterEnv: [
-    './test/javascript/setupTests.js',
+    './test/javascript/setupTests.ts',
   ],
   testEnvironment: 'jest-environment-jsdom-sixteen',
   testPathIgnorePatterns: [

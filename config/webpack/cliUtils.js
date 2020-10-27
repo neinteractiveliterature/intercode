@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     diffTranslations: './script/diffTranslations.ts',
     mergeTranslations: './script/mergeTranslations.ts',
-    renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.jsx',
+    renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.tsx',
   },
   devtool: 'cheap-source-map',
   output: {
