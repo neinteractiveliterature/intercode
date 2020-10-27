@@ -62,17 +62,50 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
   &.fake {
     border-radius: 0;
   }
+
+  &.truncated-start {
+    border-left-width: 0;
+    mask-image: linear-gradient(to right, transparent 0%, black 7px, black 100%);
+  }
+
+  &.truncated-finish {
+    border-right-width: 0;
+    mask-image: linear-gradient(to left, transparent 0%, black 7px, black 100%);
+  }
+
+  &.truncated-start.truncated-finish {
+    border-left-width: 0;
+    border-right-width: 0;
+    mask-image: linear-gradient(to right, transparent 0%, black 7px, black calc(100% - 7px), transparent 100%);
+  }
 }
 
 .schedule-grid-event-content {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   position: relative;
   flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.schedule-grid-event-content-main {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   min-width: 0;
   padding: $spacer * 0.25;
   padding-left: $spacer * 0.5;
+  flex-grow: 1;
+}
+
+.schedule-grid-event-truncation-label {
+  padding-left: $spacer * 0.5;
+  padding-right: $spacer * 0.75;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
 }
 
 .schedule-grid-row-header {

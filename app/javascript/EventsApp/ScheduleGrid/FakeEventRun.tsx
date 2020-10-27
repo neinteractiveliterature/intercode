@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import AvailabilityBar from './AvailabilityBar';
 import { getRunClassificationStyles, getRunClassName, SignupStatus } from './StylingUtils';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
+import Timespan from '../../Timespan';
 
 export type FakeEventRunProps = {
   eventCategory: {};
@@ -71,6 +72,17 @@ function FakeEventRun({
             },
           },
           unlimited: unlimited ?? false,
+          runDimensions: {
+            fullTimespan: Timespan.finiteFromStrings(
+              '1970-01-01T00:00:00Z',
+              '1970-01-01T00:00:00Z',
+            ),
+            timespan: Timespan.finiteFromStrings('1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z'),
+            laneIndex: 0,
+            runId: 0,
+            timeAxisSizePercent: 100,
+            timeAxisStartPercent: 0,
+          },
         }),
       )}
       style={runStyle}
