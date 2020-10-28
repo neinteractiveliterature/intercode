@@ -127,6 +127,7 @@ export type FreeTextProperties = CommonQuestionProperties & {
   lines: number;
   free_text_type: 'text' | 'email' | 'number' | 'tel' | 'url' | null;
   format: 'text' | 'markdown';
+  hide_from_public?: boolean;
 };
 
 export type FreeTextFormItem = WithRequiredIdentifier<

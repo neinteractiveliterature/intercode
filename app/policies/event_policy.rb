@@ -70,6 +70,13 @@ class EventPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
+  def view_hidden_values?
+    confirmed_for_event?(record) ||
+      team_member_for_event?(record) ||
+      has_applicable_permission?('update_events') ||
+      site_admin_manage?
+  end
+
   private
 
   def has_applicable_permission?(*permissions)

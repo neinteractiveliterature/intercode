@@ -74,6 +74,10 @@ class EventProposalPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
+  def view_hidden_values?
+    user_is_owner? || update?
+  end
+
   private
 
   def has_applicable_permission?(*permissions)
