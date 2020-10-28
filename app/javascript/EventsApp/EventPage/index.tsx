@@ -71,24 +71,27 @@ function EventPage({ eventId, eventPath }: EventPageProps) {
           )}
 
           <EventAdminMenu eventId={eventId} />
+
+          {secretFormItems.map((item) =>
+            formResponse[item.identifier ?? ''] &&
+            formResponse[item.identifier ?? ''].trim() !== '' ? (
+              <section
+                className="my-2 card bg-light"
+                id={item.identifier ?? `item${item.id}`}
+                key={item.identifier ?? `item${item.id}`}
+              >
+                <div className="card-header">
+                  <strong>{item.public_description}</strong>
+                </div>
+
+                <div className="card-body">
+                  {parsePageContent(formResponse[item.identifier ?? '']).bodyComponents}
+                </div>
+              </section>
+            ) : null,
+          )}
         </div>
       </div>
-
-      {secretFormItems.map((item) =>
-        formResponse[item.identifier ?? ''] && formResponse[item.identifier ?? ''].trim() !== '' ? (
-          <section
-            className="my-2 rounded bg-light shadow-sm p-2"
-            id={item.identifier ?? `item${item.id}`}
-            key={item.identifier ?? `item${item.id}`}
-          >
-            <h5>
-              <strong>{item.public_description}</strong>
-            </h5>
-
-            {parsePageContent(formResponse[item.identifier ?? '']).bodyComponents}
-          </section>
-        ) : null,
-      )}
 
       <section className="my-4">
         <RunsSection eventId={eventId} />

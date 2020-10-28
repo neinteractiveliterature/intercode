@@ -1,4 +1,13 @@
 class MarkdownPresenter
+  class MarkdownRenderer < Redcarpet::Render::HTML
+    include Redcarpet::Render::SmartyPants
+    include ActionView::Helpers::AssetTagHelper
+
+    def image(link, title, alt_text)
+      image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
+    end
+  end
+
   ALLOWED_LIQUID_NODE_CLASSES = [
     String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube
   ]
@@ -8,7 +17,7 @@ class MarkdownPresenter
 
   def self.markdown_processor
     @markdown_processor ||= Redcarpet::Markdown.new(
-      Redcarpet::Render::HTML.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
+      MarkdownRenderer.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
       no_intra_emphasis: true,
       autolink: true,
       footnotes: true
