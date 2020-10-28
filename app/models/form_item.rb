@@ -24,7 +24,8 @@ class FormItem < ApplicationRecord
       lines: :required,
       free_text_type: :optional,
       required: :optional,
-      format: :optional
+      format: :optional,
+      hide_from_public: :optional
     },
     multiple_choice: {
       identifier: :required,

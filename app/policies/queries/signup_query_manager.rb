@@ -9,8 +9,18 @@ class Queries::SignupQueryManager < Queries::QueryManager
     my_active_signup_run_ids.include?(run.id)
   end
 
+  def confirmed_for_event?(event)
+    return false unless event && user
+
+    my_confirmed_signup_event_ids.include?(event.id)
+  end
+
   def my_active_signup_run_ids
     @my_active_signup_run_ids ||= Set.new(my_active_signups.pluck(:run_id))
+  end
+
+  def my_confirmed_signup_event_ids
+    @my_active_signup_event_ids ||= Set.new(runs_where_confirmed.pluck(:event_id))
   end
 
   def my_active_signups
@@ -23,6 +33,10 @@ class Queries::SignupQueryManager < Queries::QueryManager
 
   def runs_where_signed_up
     Run.where(id: my_active_signups.select(:run_id))
+  end
+
+  def runs_where_confirmed
+    Run.where(id: my_active_signups.where(state: 'confirmed').select(:run_id))
   end
 
   def user_con_profiles_in_signed_up_runs

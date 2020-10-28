@@ -1,9 +1,10 @@
 class FormResponsePresenter
-  attr_reader :form, :response
+  attr_reader :form, :response, :can_view_hidden_values
 
-  def initialize(form, response)
+  def initialize(form, response, can_view_hidden_values: false)
     @form = form
     @response = response
+    @can_view_hidden_values = can_view_hidden_values
   end
 
   def as_json
@@ -18,9 +19,18 @@ class FormResponsePresenter
   def as_json_with_rendered_markdown(group_cache_key, object_cache_key, default_content)
     raw_json = as_json
     render_promises = form.form_items.map do |form_item|
+      field = form_item.identifier.to_s
+
+      if form_item.properties['hide_from_public'] && !can_view_hidden_values
+        if form_item.item_type == 'free_text' && form_item.properties['format'] == 'markdown'
+          next [field, '<em>This information is only available to confirmed attendees.</em>']
+        else
+          next [field, 'This information is only available to confirmed attendees.']
+        end
+      end
+
       next unless form_item.item_type == 'free_text' && form_item.properties['format'] == 'markdown'
 
-      field = form_item.identifier.to_s
       markdown = raw_json[field]
       render_markdown_for_field(
         field,

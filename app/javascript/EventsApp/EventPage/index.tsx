@@ -13,6 +13,8 @@ import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useEventPageQueryQuery } from './queries.generated';
+import useSectionizedFormItems from './useSectionizedFormItems';
+import parsePageContent from '../../parsePageContent';
 
 export type EventPageProps = {
   eventId: number;
@@ -23,6 +25,7 @@ function EventPage({ eventId, eventPath }: EventPageProps) {
   const { myProfile } = useContext(AppRootContext);
   const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
   const rateEvent = useRateEvent();
+  const { secretFormItems, formResponse } = useSectionizedFormItems(data?.event);
 
   usePageTitle(useValueUnless(() => data!.event.title, error || loading));
 
@@ -70,6 +73,22 @@ function EventPage({ eventId, eventPath }: EventPageProps) {
           <EventAdminMenu eventId={eventId} />
         </div>
       </div>
+
+      {secretFormItems.map((item) =>
+        formResponse[item.identifier ?? ''] && formResponse[item.identifier ?? ''].trim() !== '' ? (
+          <section
+            className="my-2 rounded bg-light shadow-sm p-2"
+            id={item.identifier ?? `item${item.id}`}
+            key={item.identifier ?? `item${item.id}`}
+          >
+            <h5>
+              <strong>{item.public_description}</strong>
+            </h5>
+
+            {parsePageContent(formResponse[item.identifier ?? '']).bodyComponents}
+          </section>
+        ) : null,
+      )}
 
       <section className="my-4">
         <RunsSection eventId={eventId} />
