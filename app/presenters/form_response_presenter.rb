@@ -21,7 +21,7 @@ class FormResponsePresenter
     render_promises = form.form_items.map do |form_item|
       field = form_item.identifier.to_s
 
-      if form_item.properties['hide_from_public'] && !can_view_hidden_values
+      if form_item.properties['hide_from_public'] && !can_view_hidden_values && raw_json[field].present?
         if form_item.item_type == 'free_text' && form_item.properties['format'] == 'markdown'
           next [field, '<em>This information is only available to confirmed attendees.</em>']
         else
