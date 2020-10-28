@@ -340,7 +340,7 @@ GEM
     pg_search (2.3.4)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    phonelib (0.6.45)
+    phonelib (0.6.46)
     platform-api (3.2.0)
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
