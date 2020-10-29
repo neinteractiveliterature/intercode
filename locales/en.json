@@ -191,7 +191,7 @@
       "editLink": "Edit event",
       "editTeamMembersLink": "Edit {{ teamMemberNamePlural }}",
       "header": "Event Admin",
-      "historyLink": "Vew edit history"
+      "historyLink": "View edit history"
     },
     "edit": {
       "dropButton": "Drop event",
