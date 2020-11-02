@@ -111,7 +111,7 @@
     "graphql": "^15.3.0",
     "graphql-anywhere": "^4.2.7",
     "history": "^4.9.0",
-    "html-to-react": "^1.4.4",
+    "html-to-react": "^1.4.5",
     "hypernova": "^2.5.0",
     "i18next": "^19.8.2",
     "inflected": "^2.1.0",
