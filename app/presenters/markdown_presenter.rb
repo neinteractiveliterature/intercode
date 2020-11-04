@@ -10,7 +10,8 @@ class MarkdownPresenter
     @markdown_processor ||= Redcarpet::Markdown.new(
       Redcarpet::Render::HTML.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
       no_intra_emphasis: true,
-      autolink: true
+      autolink: true,
+      footnotes: true
     )
   end
 
@@ -77,7 +78,7 @@ class MarkdownPresenter
   def sanitize_html(html, sanitize_content: true)
     if sanitize_content
       # Loofah will automatically sanitize CSS for us
-      sanitize(html, attributes: Rails::Html::SafeListSanitizer.allowed_attributes + ['style'])
+      sanitize(html, attributes: Rails::Html::SafeListSanitizer.allowed_attributes + %w[style id])
     else
       sanitize(html, scrubber: Rails::Html::TargetScrubber.new) # target nothing for removal
     end
