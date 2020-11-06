@@ -47,7 +47,7 @@ function EventAdminMenu({ eventId }: EventAdminMenuProps) {
         </li>
         <li className="list-group-item">
           <Link to={`${eventPath}/history`}>
-            {t('events.adminMenu.historyLink', 'Vew edit history')}
+            {t('events.adminMenu.historyLink', 'View edit history')}
           </Link>
         </li>
       </ul>

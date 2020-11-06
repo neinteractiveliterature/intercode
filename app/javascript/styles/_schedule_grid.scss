@@ -65,11 +65,15 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 
   &.truncated-start {
     border-left-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     mask-image: linear-gradient(to right, transparent 0%, black 7px, black 100%);
   }
 
   &.truncated-finish {
     border-right-width: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     mask-image: linear-gradient(to left, transparent 0%, black 7px, black 100%);
   }
 

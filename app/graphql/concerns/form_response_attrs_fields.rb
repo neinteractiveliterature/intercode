@@ -17,7 +17,9 @@ module FormResponseAttrsFields
   def form_response_attrs_json_with_rendered_markdown
     form.then do |form|
       AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
-        FormResponsePresenter.new(form, object).as_json_with_rendered_markdown('event', object, '')
+        can_view_hidden_values = Pundit.policy(context[:pundit_user], object).view_hidden_values?
+        FormResponsePresenter.new(form, object, can_view_hidden_values: can_view_hidden_values)
+          .as_json_with_rendered_markdown('event', object, '')
       end
     end
   end
