@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { ApolloError } from '@apollo/client';
 
 export type ErrorDisplayProps = {

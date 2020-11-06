@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import { FormEditorContext } from './FormEditorContexts';
 import FormEditorItemPreview from './FormEditorItemPreview';

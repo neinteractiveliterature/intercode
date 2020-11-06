@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { ResizeObserver } from '@juggle/resize-observer';
 

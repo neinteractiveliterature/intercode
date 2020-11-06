@@ -1,5 +1,3 @@
-import React from 'react';
-
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';

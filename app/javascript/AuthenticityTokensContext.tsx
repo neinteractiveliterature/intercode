@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import { createContext, useState, useCallback, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 
 export type AuthenticityTokensContextValue = {
@@ -14,7 +14,7 @@ export type AuthenticityTokensContextValue = {
   updateUser?: string;
 };
 
-const AuthenticityTokensContext = React.createContext<AuthenticityTokensContextValue>({
+const AuthenticityTokensContext = createContext<AuthenticityTokensContextValue>({
   refresh: () => Promise.resolve(),
   graphql: 'fakeAuthenticityToken',
 });

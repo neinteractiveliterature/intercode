@@ -1,4 +1,3 @@
-import React from 'react';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import SignupCountData from '../SignupCountData';
 import { ScheduleEvent } from './Schedule';

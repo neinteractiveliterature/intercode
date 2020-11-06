@@ -1,5 +1,4 @@
-import React from 'react';
-import { gql } from '@apollo/client'; // eslint-disable-line no-restricted-imports
+import { gql } from '@apollo/client';
 import { MockedResponse } from '@apollo/client/testing';
 
 import { render, fireEvent, act, waitFor } from '../testUtils';

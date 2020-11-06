@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 
 import ErrorDisplay from '../../ErrorDisplay';

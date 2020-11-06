@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 

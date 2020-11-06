@@ -1,4 +1,5 @@
-import React, { useMemo, useState, useEffect, useContext } from 'react';
+import { useMemo, useState, useEffect, useContext } from 'react';
+import * as React from 'react';
 import moment, { Moment } from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 

@@ -1,4 +1,5 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { Placement } from 'popper.js';

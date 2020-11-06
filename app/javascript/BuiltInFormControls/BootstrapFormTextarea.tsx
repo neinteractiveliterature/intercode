@@ -1,4 +1,5 @@
-import React, { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react';
+import { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react';
+import * as React from 'react';
 import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';
 

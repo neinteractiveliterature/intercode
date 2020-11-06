@@ -1,4 +1,3 @@
-import React from 'react';
 import { assertNever } from 'assert-never';
 
 import AgeRestrictionsDisplay from './AgeRestrictionsDisplay';

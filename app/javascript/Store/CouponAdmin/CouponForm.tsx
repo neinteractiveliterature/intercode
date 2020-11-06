@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import * as React from 'react';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { usePropertySetters } from '../../usePropertySetters';

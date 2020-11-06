@@ -1,5 +1,4 @@
 import { RenderResult } from '@testing-library/react';
-import React from 'react';
 
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 import { render, act, fireEvent, waitFor } from '../testUtils';

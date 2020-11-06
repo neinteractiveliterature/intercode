@@ -1,4 +1,3 @@
-import React from 'react';
 import EventRatingIcon from '../../EventRatings/EventRatingIcon';
 import { SignupStatus } from './StylingUtils';
 

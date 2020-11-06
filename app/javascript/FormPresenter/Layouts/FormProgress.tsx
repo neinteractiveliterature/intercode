@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { findIndex } from 'lodash';
 
 import { SectionTraversalContext } from '../SectionTraversalContext';

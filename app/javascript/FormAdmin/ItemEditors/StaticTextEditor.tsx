@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';

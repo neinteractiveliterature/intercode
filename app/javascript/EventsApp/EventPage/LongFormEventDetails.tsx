@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ErrorDisplay from '../../ErrorDisplay';
 import parsePageContent from '../../parsePageContent';
 import useSectionizedFormItems from './useSectionizedFormItems';

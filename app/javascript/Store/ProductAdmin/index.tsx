@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import AdminProductCard from './AdminProductCard';
 import { sortByLocaleString } from '../../ValueUtils';

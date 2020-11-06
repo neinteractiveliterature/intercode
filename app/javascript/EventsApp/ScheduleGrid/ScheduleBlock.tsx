@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import { Fragment, ReactNode, useMemo } from 'react';
 
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import ScheduleLayoutBlock, {
@@ -25,20 +25,18 @@ function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlock
     height: `${layoutResult.laneCount * PIXELS_PER_LANE}px`,
   };
 
-  return (
-    <>
-      <ScheduleGridRowHeader layoutResult={layoutResult} rowHeader={rowHeader} />
-      <div className="schedule-grid-block">
-        <div style={blockContentStyle}>
-          {layoutResult.runDimensions.map((runDimensions) => (
-            <React.Fragment key={runDimensions.runId}>
-              {renderEventRun({ layoutResult, runDimensions })}
-            </React.Fragment>
-          ))}
-        </div>
+  return <>
+    <ScheduleGridRowHeader layoutResult={layoutResult} rowHeader={rowHeader} />
+    <div className="schedule-grid-block">
+      <div style={blockContentStyle}>
+        {layoutResult.runDimensions.map((runDimensions) => (
+          <Fragment key={runDimensions.runId}>
+            {renderEventRun({ layoutResult, runDimensions })}
+          </Fragment>
+        ))}
       </div>
-    </>
-  );
+    </div>
+  </>;
 }
 
 export default ScheduleBlock;

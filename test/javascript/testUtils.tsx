@@ -1,5 +1,7 @@
 /* eslint-disable import/export */
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+
+import * as React from 'react';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing';
 import { render, queries, Queries, RenderOptions, RenderResult } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

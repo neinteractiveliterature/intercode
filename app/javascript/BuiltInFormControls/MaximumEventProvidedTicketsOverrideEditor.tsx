@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import * as React from 'react';
 // @ts-ignore
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';

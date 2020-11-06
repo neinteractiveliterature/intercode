@@ -1,4 +1,3 @@
-import React from 'react';
 import flatten from 'lodash/flatten';
 import { humanize } from 'inflected';
 

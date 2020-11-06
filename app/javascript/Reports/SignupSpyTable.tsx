@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactTable from 'react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';

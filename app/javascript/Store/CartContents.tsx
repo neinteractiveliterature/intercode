@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';

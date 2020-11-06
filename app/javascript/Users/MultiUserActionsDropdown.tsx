@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 export type MultiUserActionsDropdownProps = {

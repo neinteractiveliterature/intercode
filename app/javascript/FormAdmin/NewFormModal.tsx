@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import Modal from 'react-bootstrap4-modal';
 // @ts-expect-error
 import { capitalize } from 'inflected';

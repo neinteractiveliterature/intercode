@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { humanize } from 'inflected';
 import { stringify as csvStringify } from 'csv-string';

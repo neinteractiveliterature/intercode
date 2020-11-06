@@ -1,5 +1,3 @@
-import React from 'react';
-
 import AssignName from './AssignName';
 import TagDoc from './TagDoc';
 import { YardMethod } from './DocData';

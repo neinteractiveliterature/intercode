@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { pluralize, humanize, underscore } from 'inflected';
 import { useTranslation } from 'react-i18next';
 
@@ -50,7 +50,7 @@ function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
       {shortFormItems
         .filter((item) => formResponseValueIsComplete(item, formResponse[item.identifier ?? '']))
         .map((item) => (
-          <React.Fragment key={item.identifier ?? item.id}>
+          <Fragment key={item.identifier ?? item.id}>
             <dt className="col-md-3">{item.public_description}</dt>
             <dd className="col-md-9">
               <FormItemDisplay
@@ -60,7 +60,7 @@ function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
                 displayMode="public"
               />
             </dd>
-          </React.Fragment>
+          </Fragment>
         ))}
       {displayTeamMembers.length > 0 ? (
         <>

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export type MenuIconProps = {
   icon: string;
   colorClass?: string;

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 // @ts-expect-error
 import { pluralize, capitalize } from 'inflected';
 import flatMap from 'lodash/flatMap';

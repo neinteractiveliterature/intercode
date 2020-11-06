@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 import ScheduleGridHour from './ScheduleGridHour';
 import { FiniteTimespan } from '../../Timespan';
@@ -19,4 +19,4 @@ function ScheduleGridHeaderBlock({ timespan, runIds }: ScheduleGridHeaderBlockPr
   return <>{hourDivs}</>;
 }
 
-export default React.memo(ScheduleGridHeaderBlock);
+export default memo(ScheduleGridHeaderBlock);

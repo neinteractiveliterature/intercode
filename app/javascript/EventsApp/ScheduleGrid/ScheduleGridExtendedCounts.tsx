@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import { useMemo, useContext } from 'react';
 import moment, { Moment } from 'moment-timezone';
 
 import SignupCountData from '../SignupCountData';

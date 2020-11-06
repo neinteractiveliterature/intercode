@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Filter } from 'react-table';
 

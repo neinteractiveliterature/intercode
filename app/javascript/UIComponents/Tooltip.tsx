@@ -1,4 +1,4 @@
-import React, { Ref, ReactNode } from 'react';
+import { Ref, ReactNode } from 'react';
 import classNames from 'classnames';
 import { usePopper } from 'react-popper';
 

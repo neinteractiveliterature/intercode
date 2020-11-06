@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Moment, MomentSetObject } from 'moment';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';

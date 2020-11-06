@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { memo, forwardRef, useContext } from 'react';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { userSignupStatus, getRunStyle, getRunClassName } from './StylingUtils';
@@ -19,8 +19,8 @@ export type RunDisplayProps = {
   layoutResult: ScheduleLayoutResult;
 };
 
-const RunDisplay = React.memo(
-  React.forwardRef<HTMLDivElement, RunDisplayProps>(
+const RunDisplay = memo(
+  forwardRef<HTMLDivElement, RunDisplayProps>(
     ({ event, run, signupCountData, toggle, runDimensions, layoutResult }, ref) => {
       const { config } = useContext(ScheduleGridContext);
       const signupStatus = userSignupStatus(run);

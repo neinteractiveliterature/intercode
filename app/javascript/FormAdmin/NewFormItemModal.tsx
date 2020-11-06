@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import { humanize } from 'inflected';

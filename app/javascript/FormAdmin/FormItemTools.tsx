@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
 import { useMutation, ApolloError } from '@apollo/client';

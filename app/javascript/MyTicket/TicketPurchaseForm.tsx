@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
 // @ts-expect-error

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { useTranslation } from 'react-i18next';
 

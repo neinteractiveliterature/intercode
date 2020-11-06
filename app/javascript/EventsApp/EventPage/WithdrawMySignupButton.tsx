@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 

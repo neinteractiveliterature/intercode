@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import NotificationsConfig from '../../../config/notifications.json';

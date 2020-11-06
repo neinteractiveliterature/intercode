@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, ReactNode } from 'react';
+import { useMemo, useEffect, ReactNode } from 'react';
 
 import useEventCategorySelection from './useEventCategorySelection';
 import useEventForm, { EventForm, EventFormProps } from './useEventForm';

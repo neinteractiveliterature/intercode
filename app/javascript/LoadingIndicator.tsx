@@ -1,5 +1,3 @@
-import React from 'react';
-
 export type LoadingIndicatorProps = { size?: number };
 
 const LoadingIndicator = ({ size = 5 }: LoadingIndicatorProps) => (

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import AdminOrderForm, { AdminOrderTypeWithId } from './AdminOrderForm';

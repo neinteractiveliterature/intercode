@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { StaticTextFormItem } from '../FormAdmin/FormItemUtils';
 
 export type StaticTextItemProps = {

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import CreateSignup from './CreateSignup';
 import SignupModerationQueue from './SignupModerationQueue';

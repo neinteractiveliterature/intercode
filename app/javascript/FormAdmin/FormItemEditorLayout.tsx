@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useCallback } from 'react';
+import { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';

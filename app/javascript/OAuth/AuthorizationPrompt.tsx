@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import { useMemo, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';

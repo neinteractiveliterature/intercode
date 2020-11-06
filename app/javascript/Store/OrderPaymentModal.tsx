@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';

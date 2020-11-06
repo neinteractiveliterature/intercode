@@ -1,5 +1,3 @@
-import React from 'react';
-
 import HelpPopover from '../UIComponents/HelpPopover';
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
 import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
