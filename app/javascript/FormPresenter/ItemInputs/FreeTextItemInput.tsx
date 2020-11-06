@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
@@ -7,6 +7,59 @@ import useUniqueId from '../../useUniqueId';
 import CaptionLabel from './CaptionLabel';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';
+
+function getLimitClass(count: number, limit: number) {
+  const warningThreshold = Math.min(limit * 0.9, limit - 10);
+  if (count < warningThreshold) {
+    return 'text-success';
+  }
+
+  if (count <= limit) {
+    return 'text-warning';
+  }
+
+  return 'text-danger';
+}
+
+type AdvisoryLimitDisplayProps = {
+  content: string;
+  advisoryWordLimit?: number;
+  advisoryCharacterLimit?: number;
+};
+
+function AdvisoryLimitDisplay({
+  content,
+  advisoryCharacterLimit,
+  advisoryWordLimit,
+}: AdvisoryLimitDisplayProps) {
+  const characterCount = content.length;
+  const wordCount = useMemo(() => content.split(/\s+/).filter((word) => word.length > 0).length, [
+    content,
+  ]);
+  const showLabels = advisoryCharacterLimit != null && advisoryWordLimit != null;
+
+  return (
+    <div style={{ position: 'absolute', bottom: '0.5rem', right: '0.5rem', textAlign: 'right' }}>
+      {advisoryCharacterLimit && (
+        <>
+          <span className={getLimitClass(characterCount, advisoryCharacterLimit)}>
+            {characterCount}/{advisoryCharacterLimit}
+            {showLabels && ' characters'}
+          </span>
+          {advisoryWordLimit && <br />}
+        </>
+      )}
+      {advisoryWordLimit && (
+        <>
+          <span className={getLimitClass(wordCount, advisoryWordLimit)}>
+            {wordCount}/{advisoryWordLimit}
+            {showLabels && ' words'}
+          </span>
+        </>
+      )}
+    </div>
+  );
+}
 
 export type FreeTextItemInputProps = CommonFormItemInputProps<FreeTextFormItem>;
 
@@ -31,43 +84,64 @@ function FreeTextItemInput(props: FreeTextItemInputProps) {
   const renderInput = () => {
     if (formItem.rendered_properties.format === 'markdown') {
       return (
-        <MarkdownInput
-          value={value || ''}
-          onChange={valueChanged}
-          onBlur={userInteracted}
-          lines={formItem.rendered_properties.lines}
-          formControlClassName={classNames({ 'is-invalid': valueInvalid })}
-        >
-          <FieldRequiredFeedback valueInvalid={valueInvalid} />
-        </MarkdownInput>
+        <div className="position-relative">
+          <MarkdownInput
+            value={value || ''}
+            onChange={valueChanged}
+            onBlur={userInteracted}
+            lines={formItem.rendered_properties.lines}
+            formControlClassName={classNames({ 'is-invalid': valueInvalid })}
+          >
+            <FieldRequiredFeedback valueInvalid={valueInvalid} />
+          </MarkdownInput>
+          <AdvisoryLimitDisplay
+            content={value}
+            advisoryCharacterLimit={formItem.rendered_properties.advisory_character_limit}
+            advisoryWordLimit={formItem.rendered_properties.advisory_word_limit}
+          />
+        </div>
       );
     }
     if (formItem.rendered_properties.lines === 1) {
       return (
-        // eslint-disable-next-line jsx-a11y/control-has-associated-label
-        <input
+        <div className="position-relative">
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <input
+            id={domId}
+            name={formItem.identifier}
+            type={formItem.rendered_properties.free_text_type || 'text'}
+            className={classNames('form-control', { 'is-invalid': valueInvalid })}
+            value={value || ''}
+            onChange={(event) => valueChanged(event.target.value)}
+            onBlur={userInteracted}
+          />
+          <AdvisoryLimitDisplay
+            content={value}
+            advisoryCharacterLimit={formItem.rendered_properties.advisory_character_limit}
+            advisoryWordLimit={formItem.rendered_properties.advisory_word_limit}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="position-relative">
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <textarea
           id={domId}
           name={formItem.identifier}
-          type={formItem.rendered_properties.free_text_type || 'text'}
+          rows={formItem.rendered_properties.lines}
           className={classNames('form-control', { 'is-invalid': valueInvalid })}
           value={value || ''}
           onChange={(event) => valueChanged(event.target.value)}
           onBlur={userInteracted}
         />
-      );
-    }
-
-    return (
-      // eslint-disable-next-line jsx-a11y/control-has-associated-label
-      <textarea
-        id={domId}
-        name={formItem.identifier}
-        rows={formItem.rendered_properties.lines}
-        className={classNames('form-control', { 'is-invalid': valueInvalid })}
-        value={value || ''}
-        onChange={(event) => valueChanged(event.target.value)}
-        onBlur={userInteracted}
-      />
+        <AdvisoryLimitDisplay
+          content={value}
+          advisoryCharacterLimit={formItem.rendered_properties.advisory_character_limit}
+          advisoryWordLimit={formItem.rendered_properties.advisory_word_limit}
+        />
+      </div>
     );
   };
 

@@ -5,7 +5,7 @@ import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import { Transforms } from '../../ComposableFormUtils';
+import { parseIntOrNull, Transforms } from '../../ComposableFormUtils';
 import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
@@ -54,6 +54,51 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {
         min="1"
         label="Lines"
       />
+
+      <fieldset className="card bg-light">
+        <div className="card-header">
+          <legend className="col-form-label pt-0">Advisory limits</legend>
+          <small className="helptext">
+            You can specify an advisory character or word limit for this field. These limits won’t
+            be enforced, but will appear when filling out the form along with a word or character
+            counter.
+          </small>
+        </div>
+
+        <div className="card-body">
+          <div className="row">
+            <div className="col-6">
+              <BootstrapFormInput
+                disabled={disabled}
+                value={(formItem.properties.advisory_character_limit || '').toString()}
+                onTextChange={(value) =>
+                  formItemPropertyUpdater(
+                    'advisory_character_limit',
+                    setFormItem,
+                  )(parseIntOrNull(value))
+                }
+                type="number"
+                min="1"
+                label="Advisory character limit"
+              />
+            </div>
+
+            <div className="col-6">
+              <BootstrapFormInput
+                disabled={disabled}
+                value={(formItem.properties.advisory_word_limit || '').toString()}
+                onTextChange={(value) =>
+                  formItemPropertyUpdater('advisory_word_limit', setFormItem)(parseIntOrNull(value))
+                }
+                type="number"
+                min="1"
+                label="Advisory word limit"
+              />
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
       {form.form_type === 'event' && (
         <BooleanInput
           disabled={disabled}
