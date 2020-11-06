@@ -34,6 +34,10 @@ export function DropdownMenu({
     setDropdownOpen,
     {
       placement: 'bottom-start',
+      modifiers: [
+        { name: 'offset', options: { offset: [0, 2] } },
+        ...(popperOptions?.modifiers ?? []),
+      ],
       ...popperOptions,
     },
   );
@@ -53,7 +57,7 @@ export function DropdownMenu({
         {buttonContent}
       </button>
       <div
-        className={classNames('dropdown-menu', dropdownClassName, { show: dropdownOpen })}
+        className={classNames('dropdown-menu m-0', dropdownClassName, { show: dropdownOpen })}
         ref={setDropdownMenu}
         style={{ ...styles.popper, ...dropdownStyle }}
         {...attributes.popper}

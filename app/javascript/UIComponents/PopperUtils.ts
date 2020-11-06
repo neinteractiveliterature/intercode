@@ -26,7 +26,9 @@ export function useIntercodePopper(
   return usePopper(referenceElement, popperElement, {
     placement: 'bottom',
     strategy: 'fixed',
-    modifiers: arrowElement ? [{ name: 'arrow', options: { element: arrowElement } }] : [],
+    modifiers: arrowElement
+      ? [{ name: 'arrow', options: { element: arrowElement } }, ...(options?.modifiers ?? [])]
+      : options?.modifiers,
     ...options,
   });
 }
