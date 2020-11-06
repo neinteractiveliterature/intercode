@@ -52,6 +52,8 @@ module.exports = {
     'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'react/destructuring-assignment': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     'jsx-a11y/label-has-for': 'off',
     'jsx-a11y/label-has-associated-control': [
       'error',
