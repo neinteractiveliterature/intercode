@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 import useAutoCloseOnNavigate from './useAutoCloseOnNavigate';
