@@ -1,5 +1,3 @@
-import React from 'react';
-
 import MarkdownDisplay from './MarkdownDisplay';
 import { FormItemDisplayMode } from './FormItemDisplayMode';
 import { AgeRestrictionsValue } from '../../FormAdmin/FormItemUtils';

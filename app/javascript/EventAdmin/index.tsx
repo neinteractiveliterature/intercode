@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { humanize } from 'inflected';
 import classNames from 'classnames';

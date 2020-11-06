@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';

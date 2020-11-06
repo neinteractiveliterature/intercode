@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';

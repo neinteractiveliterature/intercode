@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Convention } from '../../graphqlTypes.generated';
 import { FormItemDisplayMode } from './FormItemDisplayMode';
 import { EventEmailValue } from '../../FormAdmin/FormItemUtils';

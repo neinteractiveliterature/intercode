@@ -1,5 +1,3 @@
-import React from 'react';
-
 import CommonQuestionFields from './CommonQuestionFields';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { EventEmailFormItem } from '../FormItemUtils';

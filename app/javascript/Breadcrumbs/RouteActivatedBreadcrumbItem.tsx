@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useRouteMatch, RouteProps } from 'react-router-dom';
 
 import BreadcrumbItem from './BreadcrumbItem';

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';

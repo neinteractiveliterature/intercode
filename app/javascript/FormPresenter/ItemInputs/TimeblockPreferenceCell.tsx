@@ -1,4 +1,4 @@
-import React, { useMemo, ChangeEvent } from 'react';
+import { useMemo, ChangeEvent } from 'react';
 import { Moment } from 'moment-timezone';
 
 import {

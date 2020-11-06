@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';

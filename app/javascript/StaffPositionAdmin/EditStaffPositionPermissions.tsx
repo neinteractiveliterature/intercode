@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 

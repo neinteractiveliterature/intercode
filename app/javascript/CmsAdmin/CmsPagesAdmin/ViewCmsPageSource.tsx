@@ -1,5 +1,3 @@
-import React from 'react';
-
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';

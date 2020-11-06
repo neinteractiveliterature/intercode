@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 // @ts-expect-error
 import Pagination from 'react-js-pagination';
 import classNames from 'classnames';

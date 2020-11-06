@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import TextDiffDisplay from './TextDiffDisplay';
 import { describeTimespan } from '../ItemDisplays/TimespanItemDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';

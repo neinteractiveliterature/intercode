@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';

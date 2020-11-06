@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Fragment, useCallback, useContext, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
@@ -136,32 +136,30 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
     return <></>;
   }
 
-  return (
-    <>
-      <button
-        className="hidden-button text-left"
-        type="button"
-        onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
-      >
-        <DisclosureTriangle expanded={expanded} />{' '}
-        {joinReact(
-          descriptions.map(({ key, model }) => <React.Fragment key={key}>{model}</React.Fragment>),
-          ', ',
-        )}
-      </button>
-      {expanded && (
-        <ul className="list-unstyled">
-          {descriptions.map(({ key, model, abilities }) => (
-            <li key={key}>
-              {model}
-              {': '}
-              {abilities}
-            </li>
-          ))}
-        </ul>
+  return <>
+    <button
+      className="hidden-button text-left"
+      type="button"
+      onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
+    >
+      <DisclosureTriangle expanded={expanded} />{' '}
+      {joinReact(
+        descriptions.map(({ key, model }) => <Fragment key={key}>{model}</Fragment>),
+        ', ',
       )}
-    </>
-  );
+    </button>
+    {expanded && (
+      <ul className="list-unstyled">
+        {descriptions.map(({ key, model, abilities }) => (
+          <li key={key}>
+            {model}
+            {': '}
+            {abilities}
+          </li>
+        ))}
+      </ul>
+    )}
+  </>;
 }
 
 function StaffPositionsTable() {

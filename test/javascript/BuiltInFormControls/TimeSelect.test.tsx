@@ -1,4 +1,3 @@
-import React from 'react';
 import moment from 'moment-timezone';
 
 import { render, fireEvent, queries } from '../testUtils';

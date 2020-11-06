@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from './testUtils';
 import LoadingIndicator from '../../app/javascript/LoadingIndicator';
 

@@ -1,4 +1,4 @@
-import React, { useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +10,7 @@ export type AlertState = {
 
 export type AlertFunction = (message?: ReactNode) => void;
 
-const AlertContext = React.createContext<{ alert: AlertFunction }>({ alert: () => {} });
+const AlertContext = createContext<{ alert: AlertFunction }>({ alert: () => {} });
 
 export type AlertProviderProps = {
   children: ReactNode;

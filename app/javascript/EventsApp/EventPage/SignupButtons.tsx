@@ -1,5 +1,3 @@
-import React from 'react';
-
 import SignupButtonDisplay from './SignupButtonDisplay';
 import { SignupOption } from './buildSignupOptions';
 

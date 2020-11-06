@@ -1,4 +1,5 @@
-import React, { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
+import { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
+import * as React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd-multi-backend';

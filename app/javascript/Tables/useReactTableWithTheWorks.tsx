@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 import { Column } from 'react-table';
 
 import useColumnSelection, { UseColumnSelectionOptions } from './useColumnSelection';
@@ -15,9 +15,9 @@ import useReactRouterReactTable, {
 import useCachedLoadableValue from '../useCachedLoadableValue';
 
 export function createQueryDataContext<DataType>() {
-  return React.createContext<DataType | null | undefined>(undefined);
+  return createContext<DataType | null | undefined>(undefined);
 }
-export const QueryDataContext = React.createContext({});
+export const QueryDataContext = createContext({});
 
 export type UseReactTableWithTheWorksOptions<
   RowType extends object,

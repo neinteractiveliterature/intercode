@@ -1,5 +1,3 @@
-import React from 'react';
-
 import TextDiffDisplay from './TextDiffDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import formatMoney from '../formatMoney';
 import { Money } from '../graphqlTypes.generated';
 

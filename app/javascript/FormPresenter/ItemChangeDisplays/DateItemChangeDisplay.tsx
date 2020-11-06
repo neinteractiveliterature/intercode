@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import { useMemo, useContext } from 'react';
 import TextDiffDisplay from './TextDiffDisplay';
 
 import { describeDate } from '../ItemDisplays/DateItemDisplay';

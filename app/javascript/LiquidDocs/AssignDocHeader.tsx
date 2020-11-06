@@ -1,5 +1,3 @@
-import React from 'react';
-
 import AssignName from './AssignName';
 import findClass from './findClass';
 import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';

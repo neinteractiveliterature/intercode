@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useRef, useEffect } from 'react';
+import { useMemo, useContext, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 
 import { Moment } from 'moment-timezone';

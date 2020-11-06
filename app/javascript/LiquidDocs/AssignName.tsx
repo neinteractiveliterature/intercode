@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { YardMethod } from './DocData';
 import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
 
@@ -12,10 +12,10 @@ function AssignName({ assign, prefix }: AssignNameProps) {
   const rawParts = concatenatedName.split('.');
   const parts = rawParts.map((part, i) => (
     // eslint-disable-next-line react/no-array-index-key
-    <React.Fragment key={i}>
+    <Fragment key={i}>
       <span className="text-nowrap">{part}</span>
       {i < rawParts.length - 1 ? <>&#8203;.</> : null}
-    </React.Fragment>
+    </Fragment>
   ));
 
   return (

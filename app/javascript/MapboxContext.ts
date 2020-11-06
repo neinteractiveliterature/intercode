@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import { createContext, useState, useCallback, useRef } from 'react';
 import type MapboxGL from 'mapbox-gl';
 
 export type MapboxInterface = {
@@ -11,7 +11,7 @@ export type MapboxContextValue = {
   mapboxAccessToken?: string;
 };
 
-export default React.createContext<MapboxContextValue>({
+export default createContext<MapboxContextValue>({
   getMapboxGL: () => undefined,
   mapboxAccessToken: undefined,
 });

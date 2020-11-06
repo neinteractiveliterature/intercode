@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import { useMemo, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import ReactTable, { RowInfo } from 'react-table';
 

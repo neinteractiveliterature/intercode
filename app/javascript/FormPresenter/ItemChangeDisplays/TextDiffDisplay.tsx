@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { diffWords, diffSentences } from 'diff';
 import PlainTextDisplay from '../../PlainTextDisplay';
 

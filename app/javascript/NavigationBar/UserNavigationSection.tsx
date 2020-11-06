@@ -1,4 +1,5 @@
-import React, { forwardRef, useContext, useState } from 'react';
+import { forwardRef, useContext, useState } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import classNames from 'classnames';

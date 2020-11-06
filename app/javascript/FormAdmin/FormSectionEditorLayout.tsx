@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useCallback } from 'react';
+import { useContext, useRef, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import FormSectionNav from './FormSectionNav';

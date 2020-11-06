@@ -1,4 +1,5 @@
-import React, { ChangeEvent, ReactNode, useState } from 'react';
+import { ChangeEvent, ReactNode, useState } from 'react';
+import * as React from 'react';
 
 import formatMoney from '../formatMoney';
 import { parseFloatOrNull } from '../ComposableFormUtils';

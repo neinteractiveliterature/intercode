@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import moment from 'moment-timezone';
 // @ts-expect-error
 import Pagination from 'react-js-pagination';

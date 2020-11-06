@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryQuery } from './appRootQueries.generated';
 
@@ -73,6 +73,6 @@ export const appRootContextDefaultValue: AppRootContext = {
   timezoneName: 'Etc/UTC',
 };
 
-const AppRootContext = React.createContext<AppRootContext>(appRootContextDefaultValue);
+const AppRootContext = createContext<AppRootContext>(appRootContextDefaultValue);
 
 export default AppRootContext;

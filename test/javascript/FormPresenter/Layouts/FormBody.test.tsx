@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { render, fireEvent } from '../../testUtils';
 import { convention, minimalForm } from '../../EventAdmin/formMockData';
 import FormBody, { FormBodyProps } from '../../../../app/javascript/FormPresenter/Layouts/FormBody';

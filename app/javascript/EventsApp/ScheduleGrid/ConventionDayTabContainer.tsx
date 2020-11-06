@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useContext } from 'react';
+import { useCallback, useMemo, useContext } from 'react';
 import { NavLink, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 

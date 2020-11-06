@@ -1,4 +1,3 @@
-import React from 'react';
 import { Filter } from 'react-table';
 
 import CommitableInput, { CommitableInputProps } from '../BuiltInFormControls/CommitableInput';

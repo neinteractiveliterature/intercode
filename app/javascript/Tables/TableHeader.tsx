@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Filter, SortingRule } from 'react-table';
 
 import ColumnSelector from './ColumnSelector';

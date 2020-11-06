@@ -1,4 +1,4 @@
-import React, { ReactNode, HTMLAttributes } from 'react';
+import { ReactNode, HTMLAttributes } from 'react';
 import useUniqueId from '../useUniqueId';
 import useDebouncedState from '../useDebouncedState';
 

@@ -1,4 +1,5 @@
-import React, { useMemo, ReactNode } from 'react';
+import { useMemo, ReactNode } from 'react';
+import * as React from 'react';
 import MultipleChoiceInput, { MultipleChoiceInputProps } from './MultipleChoiceInput';
 
 export type BooleanInputProps = Omit<

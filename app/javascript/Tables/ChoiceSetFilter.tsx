@@ -1,4 +1,5 @@
-import React, { useMemo, useState, ReactNode } from 'react';
+import { useMemo, useState, ReactNode } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';

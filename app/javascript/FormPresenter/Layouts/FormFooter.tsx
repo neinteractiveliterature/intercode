@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, ReactNode, useMemo } from 'react';
+import { useContext, useCallback, ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SectionTraversalContext } from '../SectionTraversalContext';

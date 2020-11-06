@@ -1,4 +1,5 @@
-import React, { useCallback, useState, ReactNode, useMemo } from 'react';
+import { useCallback, useState, ReactNode, useMemo } from 'react';
+import * as React from 'react';
 
 import useFormResponse, { FormResponse } from '../FormPresenter/useFormResponse';
 import useValidatableForm from '../FormPresenter/useValidatableForm';

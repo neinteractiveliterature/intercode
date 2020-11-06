@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import moment from 'moment-timezone';
 import { Link, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

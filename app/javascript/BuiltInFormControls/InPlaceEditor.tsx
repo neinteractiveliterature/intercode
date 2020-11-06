@@ -1,4 +1,5 @@
-import React, { useState, useRef, useLayoutEffect, useCallback, ReactNode, RefObject } from 'react';
+import { useState, useRef, useLayoutEffect, useCallback, ReactNode, RefObject } from 'react';
+import * as React from 'react';
 import useIsMounted from '../useIsMounted';
 
 export type InPlaceEditorInputProps<T> = {

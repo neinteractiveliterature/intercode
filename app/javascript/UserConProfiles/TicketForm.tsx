@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 // @ts-expect-error
 import { capitalize } from 'inflected';
 import { ApolloError } from '@apollo/client';

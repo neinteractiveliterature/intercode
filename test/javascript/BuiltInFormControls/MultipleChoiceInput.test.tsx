@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { render } from '../testUtils';
 import MultipleChoiceInput from '../../../app/javascript/BuiltInFormControls/MultipleChoiceInput';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { YardMethod } from './DocData';
 
 export type FilterDocHeaderProps = {

@@ -1,4 +1,3 @@
-import React from 'react';
 import TextDiffDisplay from './TextDiffDisplay';
 import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';

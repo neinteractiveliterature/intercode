@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import intersection from 'lodash/intersection';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';

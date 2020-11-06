@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import * as React from 'react';
 // @ts-expect-error
 import { pluralize, capitalize } from 'inflected';
 import { ApolloError, useApolloClient } from '@apollo/client';

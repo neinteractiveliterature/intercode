@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import { useRef, useContext, useEffect } from 'react';
 
 import FormHeader, { FormHeaderProps } from './FormHeader';
 import FormFooter, { FormFooterProps } from './FormFooter';

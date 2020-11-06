@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ReactNode, useMemo } from 'react';
+import { createContext, useState, useCallback, ReactNode, useMemo } from 'react';
 import { findIndex, keyBy } from 'lodash';
 import { getSortedFormSections } from '../Models/Form';
 import {
@@ -17,7 +17,7 @@ export type SectionTraversalContextValue = {
   sectionCount: number;
 };
 
-export const SectionTraversalContext = React.createContext<SectionTraversalContextValue>({
+export const SectionTraversalContext = createContext<SectionTraversalContextValue>({
   currentSection: undefined,
   currentSectionId: undefined,
   currentSectionIndex: undefined,

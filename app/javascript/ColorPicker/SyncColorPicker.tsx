@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
 import tinycolor2 from 'tinycolor2';
 

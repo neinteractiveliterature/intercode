@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import classNames from 'classnames';
 
 import { ScheduleGridContext } from './ScheduleGridContext';

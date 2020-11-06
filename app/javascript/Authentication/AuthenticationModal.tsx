@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import { Suspense, useContext } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import AuthenticationModalContext from './AuthenticationModalContext';

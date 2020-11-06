@@ -1,5 +1,3 @@
-import React from 'react';
-// @ts-expect-error
 import { capitalize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 

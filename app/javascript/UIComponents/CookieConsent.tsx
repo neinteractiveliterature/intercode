@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactCookieConsent from 'react-cookie-consent';
 import { Trans, useTranslation } from 'react-i18next';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 import { usePreviewMarkdownQueryQuery } from '../../BuiltInFormControls/previewQueries.generated';

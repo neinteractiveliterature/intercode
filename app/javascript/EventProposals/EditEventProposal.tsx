@@ -1,4 +1,3 @@
-import React from 'react';
 import { useApolloClient } from '@apollo/client';
 import { Redirect, useHistory, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

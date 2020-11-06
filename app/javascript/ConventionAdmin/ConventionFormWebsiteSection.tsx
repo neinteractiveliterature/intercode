@@ -1,4 +1,5 @@
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
+import * as React from 'react';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';

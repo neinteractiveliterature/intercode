@@ -1,5 +1,3 @@
-import React from 'react';
-
 function iconForContentType(contentType: string) {
   if (contentType.match(/^audio\//)) {
     return 'file-audio-o';

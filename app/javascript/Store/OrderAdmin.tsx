@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import moment from 'moment-timezone';
 import ReactTable, { RowInfo } from 'react-table';
 

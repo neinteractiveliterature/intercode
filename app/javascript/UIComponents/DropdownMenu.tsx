@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useState } from 'react';
+import { CSSProperties, ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
 import { useIntercodePopperWithAutoClosing, useToggleOpen } from './PopperUtils';

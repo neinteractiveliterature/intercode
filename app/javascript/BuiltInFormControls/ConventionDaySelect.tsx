@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useContext } from 'react';
+import { useCallback, useMemo, useContext } from 'react';
+import * as React from 'react';
 import moment, { Moment } from 'moment-timezone';
 import {
   timespanFromConvention,

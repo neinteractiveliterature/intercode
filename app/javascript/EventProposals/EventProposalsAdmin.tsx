@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, Switch, Route, useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
