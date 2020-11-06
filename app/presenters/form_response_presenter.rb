@@ -56,9 +56,9 @@ class FormResponsePresenter
     return if can_view_hidden_values
 
     if form_item.item_type == 'free_text' && form_item.properties['format'] == 'markdown'
-      Promise.resolve([field, '<em>This information is only available to confirmed attendees.</em>'])
+      Promise.resolve([field, "<em>#{I18n.t('forms.hidden_from_public_text')}</em>"])
     else
-      Promise.resolve([field, 'This information is only available to confirmed attendees.'])
+      Promise.resolve([field, I18n.t('forms.hidden_from_public_text')])
     end
   end
 

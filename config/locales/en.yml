@@ -51,3 +51,5 @@ en:
       manage_events: 'Update events and event proposals you manage'
       manage_conventions: 'Update conventions you manage'
       manage_organizations: 'Update privileged data about organizations on the site'
+  forms:
+    hidden_from_public_text: 'This information is only available to confirmed attendees.'
