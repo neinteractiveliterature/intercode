@@ -26,6 +26,7 @@
 *.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
+/yarn-error.log
 /log/*.log
 /log/*.log.*
 /tmp

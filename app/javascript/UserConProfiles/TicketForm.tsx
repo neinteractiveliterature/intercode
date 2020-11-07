@@ -15,7 +15,7 @@ import EditOrderModal from '../Store/EditOrderModal';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import { UserConProfileAdminQueryQuery } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 
 type TicketFromQuery = NonNullable<UserConProfileAdminQueryQuery['userConProfile']['ticket']>;
 type EditingTicket = Omit<

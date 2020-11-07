@@ -8,7 +8,7 @@ import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import { parseIntOrNull } from '../../ComposableFormUtils';
+import { parseIntOrNull } from '../../ValueUtils';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { AgeRestrictionsFormItem, AgeRestrictionsValue } from '../../FormAdmin/FormItemUtils';
 

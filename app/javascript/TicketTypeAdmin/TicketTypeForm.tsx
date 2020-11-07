@@ -3,7 +3,7 @@ import { pluralize } from 'inflected';
 
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import { usePropertySetters } from '../usePropertySetters';
 import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 

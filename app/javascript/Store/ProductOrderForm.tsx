@@ -6,7 +6,7 @@ import { CartQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import PageLoadingIndicator from '../PageLoadingIndicator';
