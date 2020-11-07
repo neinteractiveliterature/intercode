@@ -1,20 +1,20 @@
 import { useContext, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
-import { useMutation, ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
-import { MoveFormItem } from './mutations';
 import { FormEditorQuery } from './queries';
 import useCollapse from '../NavigationBar/useCollapse';
 import useUniqueId from '../useUniqueId';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import useModal from '../ModalDialogs/useModal';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import { useMoveFormItemMutation } from './mutations.generated';
 
 function StandardItemMetadata() {
   const { formType } = useContext(FormEditorContext);
@@ -79,11 +79,15 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
   const { form, currentSection } = useContext(FormEditorContext);
   const { formItem } = useContext(FormItemEditorContext);
   const [destinationSectionId, setDestinationSectionId] = useState<number>();
-  const [moveFormItemMutate] = useMutation(MoveFormItem);
+  const [moveFormItemMutate] = useMoveFormItemMutation();
   const [moveFormItem, error, inProgress] = useAsyncFunction(moveFormItemMutate);
   const history = useHistory();
 
   const moveConfirmed = async () => {
+    if (destinationSectionId == null) {
+      return;
+    }
+
     await moveFormItem({
       variables: {
         id: formItem.id,

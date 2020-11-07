@@ -2,9 +2,8 @@ import * as React from 'react';
 import { pluralize } from 'inflected';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import { Transforms } from '../../ComposableFormUtils';
 import { EventListEventsQueryQuery } from './queries.generated';
-import { notEmpty } from '../../ValueUtils';
+import { notEmpty, parseIntOrNull } from '../../ValueUtils';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
 type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
@@ -52,7 +51,7 @@ const EventListCategoryDropdown = ({
         }))}
         value={choiceSetValue}
         onChange={(integerArray) => {
-          onChange((integerArray ?? []).map(Transforms.integer).filter(notEmpty));
+          onChange((integerArray ?? []).map(parseIntOrNull).filter(notEmpty));
         }}
         multiple
       />

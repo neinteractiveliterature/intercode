@@ -9,7 +9,7 @@ import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
 import ProductSelect from '../../BuiltInFormControls/ProductSelect';
 import DateTimeInput from '../../BuiltInFormControls/DateTimeInput';
 import HelpText from '../../BuiltInFormControls/HelpText';
-import { parseIntOrNull } from '../../ComposableFormUtils';
+import { parseIntOrNull } from '../../ValueUtils';
 import { AdminCouponFieldsFragment } from './queries.generated';
 
 const DISCOUNT_MODE_CHOICES = [

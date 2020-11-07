@@ -8,7 +8,7 @@ import { useConfirm } from '../ModalDialogs/Confirm';
 import ApplyCouponControl from './ApplyCouponControl';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { CartQueryQuery, useCartQueryQuery } from './queries.generated';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 
 type OrderType = NonNullable<CartQueryQuery['currentPendingOrder']>;
 type OrderEntryType = OrderType['order_entries'][0];
