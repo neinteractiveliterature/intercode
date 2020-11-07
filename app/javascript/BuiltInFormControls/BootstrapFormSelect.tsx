@@ -1,4 +1,5 @@
-import React, { SelectHTMLAttributes, ReactNode } from 'react';
+import { SelectHTMLAttributes, ReactNode } from 'react';
+import * as React from 'react';
 import useUniqueId from '../useUniqueId';
 
 type BootstrapFormSelectPropsCommon = SelectHTMLAttributes<HTMLSelectElement> & {

@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent } from 'react';
+import { useCallback, ChangeEvent } from 'react';
 import classNames from 'classnames';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';

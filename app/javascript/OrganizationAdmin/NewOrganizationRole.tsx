@@ -1,4 +1,3 @@
-import React from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';

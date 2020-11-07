@@ -63,7 +63,9 @@ export type DeleteOrganizationRoleMutation = (
 
 export const CreateOrganizationRoleDocument = gql`
     mutation CreateOrganizationRole($organizationId: Int!, $name: String!, $userIds: [Int!]!, $permissions: [PermissionInput!]!) {
-  createOrganizationRole(input: {organization_id: $organizationId, organization_role: {name: $name}, user_ids: $userIds, permissions: $permissions}) {
+  createOrganizationRole(
+    input: {organization_id: $organizationId, organization_role: {name: $name}, user_ids: $userIds, permissions: $permissions}
+  ) {
     organization_role {
       id
       ...OrganizationRoleFields
@@ -101,7 +103,9 @@ export type CreateOrganizationRoleMutationResult = Apollo.MutationResult<CreateO
 export type CreateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationRoleMutation, CreateOrganizationRoleMutationVariables>;
 export const UpdateOrganizationRoleDocument = gql`
     mutation UpdateOrganizationRole($id: Int!, $name: String, $addUserIds: [Int!], $removeUserIds: [Int!], $addPermissions: [PermissionInput!], $removePermissionIds: [Int!]) {
-  updateOrganizationRole(input: {id: $id, organization_role: {name: $name}, add_user_ids: $addUserIds, remove_user_ids: $removeUserIds, add_permissions: $addPermissions, remove_permission_ids: $removePermissionIds}) {
+  updateOrganizationRole(
+    input: {id: $id, organization_role: {name: $name}, add_user_ids: $addUserIds, remove_user_ids: $removeUserIds, add_permissions: $addPermissions, remove_permission_ids: $removePermissionIds}
+  ) {
     organization_role {
       id
       ...OrganizationRoleFields

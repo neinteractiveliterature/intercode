@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useRef } from 'react';
+import { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { FormEditorContext } from './FormEditorContexts';

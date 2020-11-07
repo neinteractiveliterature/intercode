@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import { createContext, useState, useCallback, useMemo } from 'react';
 
 export type ItemInteractionTrackerContextValue = {
   interactWithItem: (itemId: string) => void;
@@ -6,7 +6,7 @@ export type ItemInteractionTrackerContextValue = {
   interactedItemIds: Set<string>;
 };
 
-export const ItemInteractionTrackerContext = React.createContext<
+export const ItemInteractionTrackerContext = createContext<
   ItemInteractionTrackerContextValue
 >({
   interactWithItem: () => {},

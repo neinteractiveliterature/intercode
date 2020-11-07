@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, Suspense } from 'react';
+import { useMemo, useEffect, Suspense } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';

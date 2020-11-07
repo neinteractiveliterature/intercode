@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -118,7 +118,7 @@ function MyProfileDisplay() {
             {formItems.map(
               (item) =>
                 item.identifier && (
-                  <React.Fragment key={item.id}>
+                  <Fragment key={item.id}>
                     <dt className="col-md-3 mb-2">
                       <AdminCaption formItem={item} />
                     </dt>
@@ -130,7 +130,7 @@ function MyProfileDisplay() {
                         displayMode="admin"
                       />
                     </dd>
-                  </React.Fragment>
+                  </Fragment>
                 ),
             )}
           </dl>

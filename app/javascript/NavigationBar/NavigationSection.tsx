@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 import useAutoCloseOnNavigate from './useAutoCloseOnNavigate';
@@ -20,6 +20,7 @@ function NavigationSection({ children, label }: NavigationSectionProps) {
     undefined,
     setDropdownOpen,
     {
+      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
       placement: 'bottom-start',
     },
   );
@@ -35,7 +36,7 @@ function NavigationSection({ children, label }: NavigationSectionProps) {
         </button>
       </li>
       <div
-        className={classNames('dropdown-menu', { show: dropdownOpen })}
+        className={classNames('dropdown-menu m-0', { show: dropdownOpen })}
         ref={setDropdownMenu}
         style={{
           zIndex: 1100,

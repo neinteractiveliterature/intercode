@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import ReactTable, { RowInfo } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';

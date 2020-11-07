@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import RegistrationPolicyItemEditorPresetRow from './RegistrationPolicyItemEditorPresetRow';
 import useArrayProperty from './useArrayProperty';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { RenderResult } from '@testing-library/react';
 
 import { act, render, fireEvent, waitFor } from '../testUtils';

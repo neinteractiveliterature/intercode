@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactTable, { RowInfo } from 'react-table';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';

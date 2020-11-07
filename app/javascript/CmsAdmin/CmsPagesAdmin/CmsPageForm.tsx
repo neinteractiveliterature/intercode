@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import * as React from 'react';
 
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';

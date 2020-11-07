@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-for */
 
-import React, { useState, useMemo, ReactNode, SetStateAction } from 'react';
+import { useState, useMemo, ReactNode, SetStateAction } from 'react';
+
+import * as React from 'react';
 import Select from 'react-select';
 import { IANAZone } from 'luxon';
 import { Search, TfIdfSearchIndex } from 'js-search';

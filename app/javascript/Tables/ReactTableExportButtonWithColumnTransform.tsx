@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import flatMap from 'lodash/flatMap';
 
 import ReactTableExportButton, { ReactTableExportButtonProps } from './ExportButton';

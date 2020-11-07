@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormItemValueType, MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
 
 type SingleCastedValue = string | null;

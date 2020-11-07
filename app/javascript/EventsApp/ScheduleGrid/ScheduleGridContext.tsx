@@ -1,4 +1,5 @@
-import React, {
+import {
+  createContext,
   Suspense,
   useState,
   useMemo,
@@ -64,7 +65,7 @@ const skeletonConvention = {
   timezone_mode: TimezoneMode.UserLocal,
 };
 
-export const ScheduleGridContext = React.createContext<ScheduleGridContextValue>({
+export const ScheduleGridContext = createContext<ScheduleGridContextValue>({
   schedule: skeletonSchedule,
   config: skeletonScheduleGridConfig,
   convention: skeletonConvention,
@@ -78,7 +79,7 @@ export type ScheduleGridFiltersContextValue = {
   hideConflicts: boolean;
 };
 
-const ScheduleGridFiltersContext = React.createContext<ScheduleGridFiltersContextValue>({
+const ScheduleGridFiltersContext = createContext<ScheduleGridFiltersContextValue>({
   myRatingFilter: undefined,
   hideConflicts: false,
 });

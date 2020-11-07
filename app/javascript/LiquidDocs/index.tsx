@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { createContext, useMemo } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 
 import AssignDoc from './AssignDoc';
@@ -19,10 +19,11 @@ function sortByName<T extends { name: string }>(items: T[]) {
   );
 }
 
-const LiquidDocsContext = React.createContext({});
+const LiquidDocsContext = createContext({});
 
 function LiquidDocs() {
   const [{ data, loading, error }, notifierEventKey] = useLiquidAssignsQueryFromLocation();
+  const location = useLocation();
 
   const sortedAssigns = useMemo(
     () => (loading || error || !data ? [] : sortByName(data.liquidAssigns)),

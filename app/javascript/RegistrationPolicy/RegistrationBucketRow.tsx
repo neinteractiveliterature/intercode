@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import classNames from 'classnames';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import { checkBucketFieldMinimums } from './RegistrationPolicyBucket';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';

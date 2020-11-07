@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { render, fireEvent, waitFor } from '../testUtils';
 import TimezoneSelect, {
   TimezoneSelectProps,

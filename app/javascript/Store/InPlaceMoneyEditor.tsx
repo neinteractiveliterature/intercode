@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import MoneyInput, { MoneyInputProps } from './MoneyInput';

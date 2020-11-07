@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useRef, ReactNode, InputHTMLAttributes } from 'react';
+import { useState, useCallback, useRef, ReactNode, InputHTMLAttributes } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 
 type CommitableInputChangeHandler = React.Dispatch<string> | ((value: string) => Promise<void>);

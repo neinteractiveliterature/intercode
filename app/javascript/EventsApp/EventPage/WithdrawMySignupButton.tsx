@@ -1,12 +1,10 @@
-import React from 'react';
-import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
-import { WithdrawMySignup } from './mutations';
 import WithdrawSignupButton, { WithdrawSignupButtonProps } from './WithdrawSignupButton';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import { EventPageQueryQuery } from './queries.generated';
+import { useWithdrawMySignupMutation } from './mutations.generated';
 
 export type WithdrawMySignupButtonProps = Omit<WithdrawSignupButtonProps, 'withdrawSignup'> & {
   run: EventPageQueryQuery['event']['runs'][0];
@@ -21,7 +19,7 @@ function WithdrawMySignupButton({
   ...otherProps
 }: WithdrawMySignupButtonProps) {
   const { t } = useTranslation();
-  const [withdrawMutate] = useMutation(WithdrawMySignup);
+  const [withdrawMutate] = useWithdrawMySignupMutation();
   const confirm = useConfirm();
   const withdrawSignup = () =>
     confirm({

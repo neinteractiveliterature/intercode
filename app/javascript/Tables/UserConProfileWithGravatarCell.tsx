@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Gravatar from '../Gravatar';
 import { UserConProfile } from '../graphqlTypes.generated';
 

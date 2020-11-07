@@ -270,7 +270,7 @@ ${EventPageRunFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useEventPageQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {
+export function useEventPageQueryQuery(baseOptions: Apollo.QueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {
         return Apollo.useQuery<EventPageQueryQuery, EventPageQueryQueryVariables>(EventPageQueryDocument, baseOptions);
       }
 export function useEventPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventPageQueryQuery, EventPageQueryQueryVariables>) {

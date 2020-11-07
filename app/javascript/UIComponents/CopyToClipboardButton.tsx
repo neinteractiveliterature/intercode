@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import { useState, ReactNode } from 'react';
 import ClipboardButton from 'react-clipboard.js';
 import { useTranslation } from 'react-i18next';
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import buildBlankSignupCountsFromRegistrationPolicy from '../EventsApp/EventPage/buildBlankSignupCountsFromRegistrationPolicy';
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';

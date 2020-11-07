@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Filter } from 'react-table';
 

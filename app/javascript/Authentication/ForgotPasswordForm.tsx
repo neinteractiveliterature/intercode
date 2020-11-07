@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
+import * as React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { humanize } from 'inflected';
 import flatMap from 'lodash/flatMap';

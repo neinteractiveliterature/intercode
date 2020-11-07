@@ -1,4 +1,3 @@
-import React from 'react';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 

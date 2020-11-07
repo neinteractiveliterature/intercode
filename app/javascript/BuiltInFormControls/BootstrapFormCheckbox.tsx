@@ -1,4 +1,4 @@
-import React, { ReactNode, ChangeEventHandler, ChangeEvent, InputHTMLAttributes } from 'react';
+import { ReactNode, ChangeEventHandler, ChangeEvent, InputHTMLAttributes } from 'react';
 import classnames from 'classnames';
 
 import useUniqueId from '../useUniqueId';

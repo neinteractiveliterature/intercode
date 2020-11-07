@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, ReactNode } from 'react';
+import { useCallback, useState, useMemo, ReactNode } from 'react';
 import isEqual from 'lodash/isEqual';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';

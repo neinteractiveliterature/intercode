@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { sortByLocaleString } from '../ValueUtils';
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';

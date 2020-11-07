@@ -1,5 +1,3 @@
-import React from 'react';
-
 import usePermissionToggle, { UsePermissionToggleOptions } from './usePermissionToggle';
 import PermissionCheckBox from './PermissionCheckBox';
 

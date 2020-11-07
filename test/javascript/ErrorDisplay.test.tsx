@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { render } from './testUtils';
 import ErrorDisplay from '../../app/javascript/ErrorDisplay';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import EventRatingIcon from './EventRatingIcon';
 
 function RatingsHelp() {

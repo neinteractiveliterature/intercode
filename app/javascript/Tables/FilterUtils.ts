@@ -1,4 +1,4 @@
-import { Transforms } from '../ComposableFormUtils';
+import { parseIntOrNull, parseFloatOrNull } from '../ValueUtils';
 
 export function encodeStringArray(value?: string[] | null) {
   const encoded = (value || []).join(',');
@@ -30,7 +30,7 @@ export function decodeIntegerArray(value?: string | null) {
   }
   const decoded = value
     .split(',')
-    .map(Transforms.integer)
+    .map(parseIntOrNull)
     .filter((integer) => integer != null);
   if (decoded.length === 0) {
     return null;
@@ -89,11 +89,11 @@ const booleanCodec: FilterCodec<boolean> = {
 };
 const floatCodec: FilterCodec<number> = {
   encode: toStringOrNull,
-  decode: Transforms.float,
+  decode: parseFloatOrNull,
 };
 const integerCodec: FilterCodec<number> = {
   encode: toStringOrNull,
-  decode: Transforms.integer,
+  decode: parseIntOrNull,
 };
 const nonEmptyStringCodec: FilterCodec<string> = {
   encode: nonEmptyString,

@@ -287,7 +287,7 @@ ${EventProposalFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useEventProposalQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventProposalQueryQuery, EventProposalQueryQueryVariables>) {
+export function useEventProposalQueryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryQuery, EventProposalQueryQueryVariables>) {
         return Apollo.useQuery<EventProposalQueryQuery, EventProposalQueryQueryVariables>(EventProposalQueryDocument, baseOptions);
       }
 export function useEventProposalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalQueryQuery, EventProposalQueryQueryVariables>) {
@@ -337,7 +337,7 @@ ${EventProposalFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useEventProposalQueryWithOwnerQuery(baseOptions?: Apollo.QueryHookOptions<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>) {
+export function useEventProposalQueryWithOwnerQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>) {
         return Apollo.useQuery<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, baseOptions);
       }
 export function useEventProposalQueryWithOwnerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>) {
@@ -371,7 +371,7 @@ export const EventProposalAdminNotesQueryDocument = gql`
  *   },
  * });
  */
-export function useEventProposalAdminNotesQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>) {
+export function useEventProposalAdminNotesQueryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>) {
         return Apollo.useQuery<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>(EventProposalAdminNotesQueryDocument, baseOptions);
       }
 export function useEventProposalAdminNotesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>) {
@@ -459,7 +459,12 @@ export const EventProposalsAdminQueryDocument = gql`
       name
       default_color
     }
-    event_proposals_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+    event_proposals_paginated(
+      page: $page
+      per_page: $perPage
+      filters: $filters
+      sort: $sort
+    ) {
       total_entries
       total_pages
       current_page
@@ -581,7 +586,7 @@ export const EventProposalHistoryQueryDocument = gql`
  *   },
  * });
  */
-export function useEventProposalHistoryQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>) {
+export function useEventProposalHistoryQueryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>) {
         return Apollo.useQuery<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>(EventProposalHistoryQueryDocument, baseOptions);
       }
 export function useEventProposalHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>) {

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useContext } from 'react';
+import { useMemo, useCallback, useContext } from 'react';
 import { ApolloCache, useApolloClient } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
 

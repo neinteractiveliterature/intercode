@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, ApolloError } from '@apollo/client';
 

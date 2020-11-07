@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, ReactNode } from 'react';
+import { Fragment, useMemo, useContext, ReactNode } from 'react';
 import moment from 'moment-timezone';
 // @ts-ignore
 import { capitalize } from 'inflected';
@@ -40,10 +40,10 @@ function renderFirstRunTime(event: EventType, timezoneName: string) {
 
         previousDayName = dayName;
         return (
-          <React.Fragment key={runStart.toISOString()}>
+          <Fragment key={runStart.toISOString()}>
             <span className="d-lg-none text-nowrap">{runStart.format('ddd h:mma')}</span>
             <span className="d-none d-lg-inline text-nowrap">{runStart.format('dddd h:mma')}</span>
-          </React.Fragment>
+          </Fragment>
         );
       }),
     ]);
@@ -87,7 +87,7 @@ const EventCard = ({ event, sorted, canReadSchedule }: EventCardProps) => {
 
   const displayTeamMembers = useMemo(() => teamMembersForDisplay(event), [event]);
   const teamMemberNames = displayTeamMembers.map((teamMember) => (
-    <React.Fragment key={teamMember.id}>
+    <Fragment key={teamMember.id}>
       {teamMember.user_con_profile.gravatar_enabled && (
         <>
           <Gravatar
@@ -99,7 +99,7 @@ const EventCard = ({ event, sorted, canReadSchedule }: EventCardProps) => {
         </>
       )}
       {teamMember.user_con_profile.name_without_nickname}
-    </React.Fragment>
+    </Fragment>
   ));
   const teamMemberList = joinReact(teamMemberNames, ', ');
 

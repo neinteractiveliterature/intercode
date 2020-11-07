@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { CardElement } from '@stripe/react-stripe-js';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';

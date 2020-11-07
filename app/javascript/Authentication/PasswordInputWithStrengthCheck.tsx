@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import * as React from 'react';
 import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';

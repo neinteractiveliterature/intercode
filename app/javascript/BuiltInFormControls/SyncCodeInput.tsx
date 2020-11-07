@@ -1,4 +1,5 @@
-import React, { useState, useCallback, ReactNode } from 'react';
+import { useState, useCallback, ReactNode } from 'react';
+import * as React from 'react';
 import { Controlled as CodeMirror, IControlledCodeMirror, DomEvent } from 'react-codemirror2';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';

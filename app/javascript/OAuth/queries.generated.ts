@@ -54,7 +54,7 @@ export const OAuthAuthorizationPromptQueryDocument = gql`
  *   },
  * });
  */
-export function useOAuthAuthorizationPromptQueryQuery(baseOptions?: Apollo.QueryHookOptions<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>) {
+export function useOAuthAuthorizationPromptQueryQuery(baseOptions: Apollo.QueryHookOptions<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>) {
         return Apollo.useQuery<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>(OAuthAuthorizationPromptQueryDocument, baseOptions);
       }
 export function useOAuthAuthorizationPromptQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>) {

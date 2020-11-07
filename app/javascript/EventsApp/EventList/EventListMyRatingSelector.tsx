@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import * as React from 'react';
 import sortBy from 'lodash/sortBy';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import { Transforms } from '../../ComposableFormUtils';
 import { RATING_NAMES } from '../../EventRatings/EventRatingIcon';
 import HelpPopover from '../../UIComponents/HelpPopover';
 import RatingsHelp from '../../EventRatings/RatingsHelp';
-import { notEmpty } from '../../ValueUtils';
+import { notEmpty, parseIntOrNull } from '../../ValueUtils';
 
 export const RATING_OPTIONS = sortBy(Object.entries(RATING_NAMES), ([rating]) =>
   ['1', '0', '-1'].indexOf(rating),
@@ -41,7 +41,7 @@ function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelecto
         containerClassName="d-flex flex-wrap"
         value={(value || []).map((integer: number) => integer.toString())}
         onChange={(integerArray) => {
-          onChange((integerArray ?? []).map(Transforms.integer).filter(notEmpty));
+          onChange((integerArray ?? []).map(parseIntOrNull).filter(notEmpty));
         }}
         multiple
       />

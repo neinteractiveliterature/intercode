@@ -1,4 +1,3 @@
-import React from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';

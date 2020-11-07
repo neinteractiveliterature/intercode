@@ -1,4 +1,3 @@
-import React from 'react';
 import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
 
 import EditOrganizationRole from './EditOrganizationRole';

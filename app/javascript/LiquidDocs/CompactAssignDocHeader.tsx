@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import AssignName from './AssignName';
 import findClass from './findClass';

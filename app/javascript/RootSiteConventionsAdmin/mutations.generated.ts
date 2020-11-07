@@ -46,7 +46,9 @@ export type SetConventionCanceledMutation = (
 
 export const CreateConventionDocument = gql`
     mutation CreateConvention($convention: ConventionInput!, $cloneConventionId: Int, $organizationId: Int, $cmsContentSetName: String) {
-  createConvention(input: {convention: $convention, clone_convention_id: $cloneConventionId, organization_id: $organizationId, cms_content_set_name: $cmsContentSetName}) {
+  createConvention(
+    input: {convention: $convention, clone_convention_id: $cloneConventionId, organization_id: $organizationId, cms_content_set_name: $cmsContentSetName}
+  ) {
     convention {
       id
       ...ConventionDisplayFields

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { ApolloError } from '@apollo/client';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';

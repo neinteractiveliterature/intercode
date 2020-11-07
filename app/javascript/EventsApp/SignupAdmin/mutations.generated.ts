@@ -230,7 +230,9 @@ export type UpdateSignupCountedMutationResult = Apollo.MutationResult<UpdateSign
 export type UpdateSignupCountedMutationOptions = Apollo.BaseMutationOptions<UpdateSignupCountedMutation, UpdateSignupCountedMutationVariables>;
 export const WithdrawAllUserConProfileSignupsDocument = gql`
     mutation WithdrawAllUserConProfileSignups($userConProfileId: Int!) {
-  withdrawAllUserConProfileSignups(input: {user_con_profile_id: $userConProfileId}) {
+  withdrawAllUserConProfileSignups(
+    input: {user_con_profile_id: $userConProfileId}
+  ) {
     user_con_profile {
       id
       ...UserConProfileSignupsFragment

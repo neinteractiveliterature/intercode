@@ -1,7 +1,7 @@
-import React from 'react';
 // @ts-expect-error
 import { capitalize } from 'inflected';
 import isEqual from 'lodash/isEqual';
+import flatMap from 'lodash/flatMap';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
@@ -25,9 +25,14 @@ function descriptionCell(
   ticketType: RowType['ticket_type'],
   paymentAmount: RowType['payment_amount'],
 ) {
-  if (
-    ticketType.pricing_schedule.timespans.some((timespan) => isEqual(timespan.value, paymentAmount))
-  ) {
+  const allPrices = flatMap(ticketType.providing_products, (product) => {
+    if (product.pricing_structure.value.__typename === 'Money') {
+      return product.pricing_structure.value;
+    }
+    return product.pricing_structure.value.timespans.map((timespan) => timespan.value);
+  });
+
+  if (allPrices.some((price) => isEqual(price, paymentAmount))) {
     return <td>{describeRow(ticketType, paymentAmount)}</td>;
   }
 

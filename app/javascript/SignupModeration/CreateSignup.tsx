@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import { CreateSignupEventsQuery } from './queries';
 import CreateSignupRunCard from './CreateSignupRunCard';

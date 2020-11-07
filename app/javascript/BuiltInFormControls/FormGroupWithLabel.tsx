@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';

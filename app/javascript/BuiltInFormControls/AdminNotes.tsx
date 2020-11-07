@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { ApolloError, FetchResult } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';

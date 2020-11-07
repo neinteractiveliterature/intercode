@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import React, { ReactNode, ErrorInfo } from 'react';
+import { Component, ReactNode, ErrorInfo } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import ErrorDisplay from './ErrorDisplay';
@@ -14,7 +14,7 @@ type ErrorBoundaryState = {
   error: Error | null;
 };
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   static getDerivedStateFromError(error: any) {
     return { error };
   }

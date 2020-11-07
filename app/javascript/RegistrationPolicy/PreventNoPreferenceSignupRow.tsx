@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { QueryHookOptions, QueryResult } from '@apollo/client';
-import React from 'react';
+import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import ErrorDisplay from './ErrorDisplay';
 import FourOhFourPage from './FourOhFourPage';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import RegistrationPolicyDisplay from '../../RegistrationPolicy/RegistrationPolicyDisplay';
 import { RegistrationPolicyFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 

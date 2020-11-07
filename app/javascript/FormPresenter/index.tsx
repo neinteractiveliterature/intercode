@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { SectionTraversalProvider } from './SectionTraversalContext';
 import {
   useItemInteractionTracking,

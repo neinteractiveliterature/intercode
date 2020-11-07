@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import ErrorDisplay from '../ErrorDisplay';
 import TabbedMailingList from './TabbedMailingList';

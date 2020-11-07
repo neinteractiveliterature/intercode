@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { PricingStructureFields } from '../Store/pricingStructureFields';
 
 export const ReportsMenuQuery = gql`
   query ReportsMenuQuery {
@@ -25,12 +26,10 @@ export const AttendanceByPaymentAmountQuery = gql`
             name
             description
 
-            pricing_schedule {
-              timespans {
-                value {
-                  fractional
-                  currency_code
-                }
+            providing_products {
+              id
+              pricing_structure {
+                ...PricingStructureFields
               }
             }
           }
@@ -48,6 +47,8 @@ export const AttendanceByPaymentAmountQuery = gql`
       }
     }
   }
+
+  ${PricingStructureFields}
 `;
 
 export const EventProvidedTicketsQuery = gql`

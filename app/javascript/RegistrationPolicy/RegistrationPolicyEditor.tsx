@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import * as React from 'react';
 
 import { bucketSortCompare, findPreset } from './RegistrationPolicyUtils';
 import RegistrationBucketRow, { EditingRegistrationBucket } from './RegistrationBucketRow';

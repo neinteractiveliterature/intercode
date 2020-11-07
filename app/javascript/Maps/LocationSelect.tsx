@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import AsyncSelect, { Props } from 'react-select/async';
 
 import MapboxContext from '../MapboxContext';
@@ -34,14 +34,12 @@ function LocationSelect({ ...props }: LocationSelectProps) {
           return option.place_name;
         }
 
-        return (
-          <>
-            {option.text}{' '}
-            <small className="text-muted">
-              {option.place_name.replace(option.text, '').replace(/^,/, '').trim()}
-            </small>
-          </>
-        );
+        return <>
+          {option.text}{' '}
+          <small className="text-muted">
+            {option.place_name.replace(option.text, '').replace(/^,/, '').trim()}
+          </small>
+        </>;
       }}
       getOptionValue={(option) => option.id}
       {...props}

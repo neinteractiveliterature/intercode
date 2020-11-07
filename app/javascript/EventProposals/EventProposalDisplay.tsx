@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';

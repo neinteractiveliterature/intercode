@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { render, fireEvent } from '../testUtils';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 

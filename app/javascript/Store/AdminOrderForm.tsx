@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import * as React from 'react';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import classNames from 'classnames';

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';

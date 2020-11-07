@@ -1,4 +1,5 @@
-import React, { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { useIntercodePopperWithAutoClosing } from './PopperUtils';
 

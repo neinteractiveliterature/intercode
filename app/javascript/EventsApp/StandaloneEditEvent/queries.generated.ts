@@ -145,7 +145,7 @@ ${StandaloneEditEvent_EventFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useStandaloneEditEventQueryQuery(baseOptions?: Apollo.QueryHookOptions<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>) {
+export function useStandaloneEditEventQueryQuery(baseOptions: Apollo.QueryHookOptions<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>) {
         return Apollo.useQuery<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>(StandaloneEditEventQueryDocument, baseOptions);
       }
 export function useStandaloneEditEventQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>) {

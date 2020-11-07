@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';

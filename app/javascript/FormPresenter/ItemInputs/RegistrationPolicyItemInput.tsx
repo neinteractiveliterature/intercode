@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import classNames from 'classnames';
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';

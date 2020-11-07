@@ -1,4 +1,5 @@
-import React, { forwardRef, useContext, useState } from 'react';
+import { forwardRef, useContext, useState } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import classNames from 'classnames';
@@ -169,6 +170,7 @@ function UserNavigationSection() {
     undefined,
     setDropdownOpen,
     {
+      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
       placement: 'bottom-end',
     },
   );
@@ -188,7 +190,7 @@ function UserNavigationSection() {
               visible={dropdownOpen}
             />
             <div
-              className={classNames('dropdown-menu', { show: dropdownOpen })}
+              className={classNames('dropdown-menu m-0', { show: dropdownOpen })}
               ref={setDropdownMenu}
               style={{
                 zIndex: 1100,
@@ -263,7 +265,7 @@ function UserNavigationSection() {
         </span>
       </button>
       <div
-        className={classNames('dropdown-menu', { show: dropdownOpen })}
+        className={classNames('dropdown-menu m-0', { show: dropdownOpen })}
         ref={setDropdownMenu}
         style={{
           zIndex: 1100,

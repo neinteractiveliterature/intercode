@@ -1,4 +1,3 @@
-import React from 'react';
 import type { OptionTypeBase } from 'react-select';
 import type { DocumentNode } from 'graphql';
 

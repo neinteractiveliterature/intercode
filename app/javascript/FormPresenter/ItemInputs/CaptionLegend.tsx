@@ -1,4 +1,3 @@
-import React from 'react';
 import RequiredIndicator from './RequiredIndicator';
 import { ParsedFormItem } from '../../FormAdmin/FormItemUtils';
 

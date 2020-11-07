@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, ReactNode } from 'react';
+import { forwardRef, useContext, ReactNode } from 'react';
 
 import LoadingIndicator from '../../LoadingIndicator';
 import { SectionTraversalContext } from '../SectionTraversalContext';

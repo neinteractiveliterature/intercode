@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import ReactTable from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';

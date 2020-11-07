@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { OAuthAuthorizedApplicationsQuery } from './queries';
 import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import PermissionsPrompt from './PermissionsPrompt';

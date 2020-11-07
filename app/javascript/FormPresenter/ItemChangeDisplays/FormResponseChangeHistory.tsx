@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { Fragment, useContext, useMemo } from 'react';
 
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeDisplay, { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
@@ -43,7 +43,7 @@ function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupPro
       </h3>
       <dl>
         {changeGroup.changes.map((change) => (
-          <React.Fragment key={change.id}>
+          <Fragment key={change.id}>
             <dt>{describeFormItem(change.formItem, change.field_identifier)}</dt>
             <dd>
               {change.formItem ? (
@@ -59,7 +59,7 @@ function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupPro
                 />
               )}
             </dd>
-          </React.Fragment>
+          </Fragment>
         ))}
       </dl>
     </section>

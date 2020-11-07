@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 import uniq from 'lodash/uniq';
 
 import TextDiffDisplay from './TextDiffDisplay';
@@ -47,10 +47,10 @@ function ObjectDiffDisplay<T>({
         }
 
         return (
-          <React.Fragment key={key}>
+          <Fragment key={key}>
             <dt className="col-sm-3">{keyRenderer(key, beforeValue, afterValue)}</dt>
             <dd className="col-sm-9">{valueRenderer(key, beforeValue, afterValue)}</dd>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </dl>

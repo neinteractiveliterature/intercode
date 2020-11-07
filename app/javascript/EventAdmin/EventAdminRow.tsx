@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 

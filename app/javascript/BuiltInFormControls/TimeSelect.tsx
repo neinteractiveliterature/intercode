@@ -1,4 +1,5 @@
-import React, { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
+import * as React from 'react';
 
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import useUniqueId from '../useUniqueId';

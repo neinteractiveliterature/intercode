@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';

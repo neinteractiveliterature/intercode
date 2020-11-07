@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import ErrorDisplay from '../../ErrorDisplay';

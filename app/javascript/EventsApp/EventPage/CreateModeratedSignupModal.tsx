@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import classnames from 'classnames';

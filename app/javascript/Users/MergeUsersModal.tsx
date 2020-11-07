@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import sortBy from 'lodash/sortBy';

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 
@@ -28,10 +28,6 @@ function NewTicketType({ ticketName }: NewTicketTypeProps) {
     description: '',
     maximum_event_provided_tickets: 0,
     counts_towards_convention_maximum: true,
-    pricing_schedule: {
-      __typename: 'ScheduledMoneyValue',
-      timespans: [],
-    },
   });
 
   const [mutate] = useCreateTicketTypeMutation({

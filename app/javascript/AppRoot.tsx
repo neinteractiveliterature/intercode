@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo, useState, useEffect } from 'react';
+import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';
 import { Settings } from 'luxon';
