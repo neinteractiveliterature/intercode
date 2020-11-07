@@ -20,7 +20,7 @@ class Tables::SignupChangesTableResultsPresenter < Tables::TableResultsPresenter
       registration_policy = signup_change.run.event.registration_policy
       Tables::SignupsTableResultsPresenter.format_bucket(
         registration_policy.bucket_with_key(signup_change.bucket_key),
-        registration_policy.bucket_with_key(signup_change.requested_bucket_key),
+        registration_policy.bucket_with_key(signup_change.requested_bucket_key)
       )
     end
   end
@@ -32,7 +32,7 @@ class Tables::SignupChangesTableResultsPresenter < Tables::TableResultsPresenter
       registration_policy = signup_change.run.event.registration_policy
       Tables::SignupsTableResultsPresenter.format_bucket(
         registration_policy.bucket_with_key(previous_signup_change.bucket_key),
-        registration_policy.bucket_with_key(previous_signup_change.requested_bucket_key),
+        registration_policy.bucket_with_key(previous_signup_change.requested_bucket_key)
       )
     end
   end

@@ -31,9 +31,7 @@ class SignupChangePolicy < ApplicationPolicy
           dw.add(user_con_profile: UserConProfile.where(user_id: user.id))
         end
 
-        if oauth_scope?(:read_events)
-          dw.add(run: Run.where(event: events_where_team_member))
-        end
+        dw.add(run: Run.where(event: events_where_team_member)) if oauth_scope?(:read_events)
 
         if oauth_scope?(:read_conventions)
           dw.add(
