@@ -176,7 +176,7 @@ ${UserActivityAlertFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useUserActivityAlertQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>) {
+export function useUserActivityAlertQueryQuery(baseOptions: Apollo.QueryHookOptions<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>) {
         return Apollo.useQuery<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>(UserActivityAlertQueryDocument, baseOptions);
       }
 export function useUserActivityAlertQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>) {

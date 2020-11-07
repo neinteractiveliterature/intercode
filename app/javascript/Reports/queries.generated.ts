@@ -1,7 +1,9 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
+import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.generated';
 import { gql } from '@apollo/client';
+import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
 export type ReportsMenuQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -30,16 +32,14 @@ export type AttendanceByPaymentAmountQueryQuery = (
         & { ticket_type: (
           { __typename: 'TicketType' }
           & Pick<Types.TicketType, 'id' | 'name' | 'description'>
-          & { pricing_schedule: (
-            { __typename: 'ScheduledMoneyValue' }
-            & { timespans: Array<(
-              { __typename: 'TimespanWithMoneyValue' }
-              & { value: (
-                { __typename: 'Money' }
-                & Pick<Types.Money, 'fractional' | 'currency_code'>
-              ) }
-            )> }
-          ) }
+          & { providing_products: Array<(
+            { __typename: 'Product' }
+            & Pick<Types.Product, 'id'>
+            & { pricing_structure: (
+              { __typename: 'PricingStructure' }
+              & PricingStructureFieldsFragment
+            ) }
+          )> }
         ), payment_amount: (
           { __typename: 'Money' }
           & Pick<Types.Money, 'fractional' | 'currency_code'>
@@ -226,12 +226,10 @@ export const AttendanceByPaymentAmountQueryDocument = gql`
           id
           name
           description
-          pricing_schedule {
-            timespans {
-              value {
-                fractional
-                currency_code
-              }
+          providing_products {
+            id
+            pricing_structure {
+              ...PricingStructureFields
             }
           }
         }
@@ -247,7 +245,7 @@ export const AttendanceByPaymentAmountQueryDocument = gql`
     }
   }
 }
-    `;
+    ${PricingStructureFieldsFragmentDoc}`;
 
 /**
  * __useAttendanceByPaymentAmountQueryQuery__
@@ -411,7 +409,12 @@ export const SignupSpySignupChangesQueryDocument = gql`
   convention: assertConvention {
     id
     timezone_name
-    signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: [{field: "created_at", desc: true}]) {
+    signup_changes_paginated(
+      page: $page
+      per_page: $perPage
+      filters: $filters
+      sort: [{field: "created_at", desc: true}]
+    ) {
       total_entries
       total_pages
       current_page

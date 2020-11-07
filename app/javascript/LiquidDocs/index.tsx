@@ -23,6 +23,7 @@ const LiquidDocsContext = createContext({});
 
 function LiquidDocs() {
   const [{ data, loading, error }, notifierEventKey] = useLiquidAssignsQueryFromLocation();
+  const location = useLocation();
 
   const sortedAssigns = useMemo(
     () => (loading || error || !data ? [] : sortByName(data.liquidAssigns)),

@@ -21,7 +21,7 @@ export type UserConProfileFormDataFragment = (
 
 export type UserConProfileFieldsFragment = (
   { __typename: 'UserConProfile' }
-  & Pick<Types.UserConProfile, 'id' | 'name' | 'privileges' | 'form_response_attrs_json' | 'gravatar_enabled' | 'gravatar_url'>
+  & Pick<Types.UserConProfile, 'id' | 'name' | 'form_response_attrs_json' | 'gravatar_enabled' | 'gravatar_url'>
 );
 
 export type UserConProfileAdminTicketFieldsFragment = (
@@ -147,7 +147,7 @@ export type UserConProfilesTableUserConProfilesQueryQuery = (
       & Pick<Types.UserConProfilesPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
       & { entries: Array<(
         { __typename: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'first_name' | 'last_name' | 'email' | 'privileges' | 'form_response_attrs_json' | 'order_summary' | 'gravatar_enabled' | 'gravatar_url' | 'user_id'>
+        & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'first_name' | 'last_name' | 'email' | 'site_admin' | 'form_response_attrs_json' | 'order_summary' | 'gravatar_enabled' | 'gravatar_url' | 'user_id'>
         & { team_members: Array<(
           { __typename: 'TeamMember' }
           & Pick<Types.TeamMember, 'id'>
@@ -262,7 +262,6 @@ export const UserConProfileFieldsFragmentDoc = gql`
     fragment UserConProfileFields on UserConProfile {
   id
   name
-  privileges
   form_response_attrs_json
   gravatar_enabled
   gravatar_url
@@ -325,7 +324,7 @@ ${UserConProfileFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useUserConProfileQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>) {
+export function useUserConProfileQueryQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>) {
         return Apollo.useQuery<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>(UserConProfileQueryDocument, baseOptions);
       }
 export function useUserConProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>) {
@@ -411,7 +410,7 @@ ${UserConProfileAdminTicketFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useUserConProfileAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>) {
+export function useUserConProfileAdminQueryQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>) {
         return Apollo.useQuery<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>(UserConProfileAdminQueryDocument, baseOptions);
       }
 export function useUserConProfileAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>) {
@@ -446,7 +445,12 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
         }
       }
     }
-    user_con_profiles_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+    user_con_profiles_paginated(
+      page: $page
+      per_page: $perPage
+      filters: $filters
+      sort: $sort
+    ) {
       total_entries
       total_pages
       current_page
@@ -457,7 +461,7 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
         first_name
         last_name
         email
-        privileges
+        site_admin
         form_response_attrs_json
         order_summary
         gravatar_enabled
@@ -564,7 +568,7 @@ export const ConvertToEventProvidedTicketQueryDocument = gql`
  *   },
  * });
  */
-export function useConvertToEventProvidedTicketQueryQuery(baseOptions?: Apollo.QueryHookOptions<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>) {
+export function useConvertToEventProvidedTicketQueryQuery(baseOptions: Apollo.QueryHookOptions<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>) {
         return Apollo.useQuery<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>(ConvertToEventProvidedTicketQueryDocument, baseOptions);
       }
 export function useConvertToEventProvidedTicketQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>) {
@@ -670,7 +674,7 @@ export const TicketAdminWithTicketAbilityQueryDocument = gql`
  *   },
  * });
  */
-export function useTicketAdminWithTicketAbilityQueryQuery(baseOptions?: Apollo.QueryHookOptions<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>) {
+export function useTicketAdminWithTicketAbilityQueryQuery(baseOptions: Apollo.QueryHookOptions<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>) {
         return Apollo.useQuery<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>(TicketAdminWithTicketAbilityQueryDocument, baseOptions);
       }
 export function useTicketAdminWithTicketAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>) {

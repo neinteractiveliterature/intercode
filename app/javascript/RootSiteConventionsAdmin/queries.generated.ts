@@ -169,7 +169,7 @@ export const ConventionDisplayQueryDocument = gql`
  *   },
  * });
  */
-export function useConventionDisplayQueryQuery(baseOptions?: Apollo.QueryHookOptions<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>) {
+export function useConventionDisplayQueryQuery(baseOptions: Apollo.QueryHookOptions<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>) {
         return Apollo.useQuery<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>(ConventionDisplayQueryDocument, baseOptions);
       }
 export function useConventionDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>) {

@@ -147,7 +147,9 @@ export type UpdateStaffPositionMutationResult = Apollo.MutationResult<UpdateStaf
 export type UpdateStaffPositionMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionMutation, UpdateStaffPositionMutationVariables>;
 export const UpdateStaffPositionPermissionsDocument = gql`
     mutation UpdateStaffPositionPermissions($staffPositionId: Int!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
-  updateStaffPositionPermissions(input: {staff_position_id: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}) {
+  updateStaffPositionPermissions(
+    input: {staff_position_id: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
+  ) {
     staff_position {
       id
       ...StaffPositionFields

@@ -4792,6 +4792,7 @@ export type UserConProfile = {
   show_nickname_in_bio?: Maybe<Scalars['Boolean']>;
   signup_requests: Array<SignupRequest>;
   signups: Array<Signup>;
+  site_admin: Scalars['Boolean'];
   staff_positions: Array<StaffPosition>;
   state?: Maybe<Scalars['String']>;
   team_members: Array<TeamMember>;

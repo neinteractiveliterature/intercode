@@ -2,17 +2,17 @@ import { useCallback, useState } from 'react';
 // @ts-ignore
 import { capitalize, pluralize } from 'inflected';
 import Modal from 'react-bootstrap4-modal';
-import { ApolloError, useMutation } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 import ErrorDisplay from '../../ErrorDisplay';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
-import { ProvideEventTicket } from './mutations';
 import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
 import { TeamMembersQueryQuery, TeamMembersQueryQueryVariables } from './queries.generated';
+import { useProvideEventTicketMutation } from './mutations.generated';
 
 export type ProvideTicketModalProps = {
   event: TeamMembersQueryQuery['event'];
@@ -31,25 +31,19 @@ function ProvideTicketModal({
 }: ProvideTicketModalProps) {
   const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState<number>();
-  const [provideTicketMutate] = useMutation(ProvideEventTicket);
+  const [provideTicketMutate] = useProvideEventTicketMutation();
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
 
   const provideTicket = useCallback(
     (args) =>
       provideTicketAsync({
         ...args,
-        update: (
-          store,
-          {
-            data: {
-              provideEventTicket: { ticket },
-            },
-          },
-        ) => {
+        update: (store, result) => {
           const data = store.readQuery<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>({
             query: TeamMembersQuery,
             variables: { eventId: event.id },
           });
+          const ticket = result.data?.provideEventTicket?.ticket;
 
           store.writeQuery({
             query: TeamMembersQuery,

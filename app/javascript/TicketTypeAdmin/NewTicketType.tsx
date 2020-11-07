@@ -28,10 +28,6 @@ function NewTicketType({ ticketName }: NewTicketTypeProps) {
     description: '',
     maximum_event_provided_tickets: 0,
     counts_towards_convention_maximum: true,
-    pricing_schedule: {
-      __typename: 'ScheduledMoneyValue',
-      timespans: [],
-    },
   });
 
   const [mutate] = useCreateTicketTypeMutation({

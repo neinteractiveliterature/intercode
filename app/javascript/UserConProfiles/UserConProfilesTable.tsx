@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
 import moment, { Moment } from 'moment-timezone';
-import ReactTable, { Column, RowInfo, Filter } from 'react-table';
+import ReactTable, { Column, RowInfo, Filter, FilterRender } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -109,22 +109,17 @@ const TicketTypeFilter = ({
   return <ChoiceSetFilter choices={choices} onChange={onChange} filter={filter} multiple />;
 };
 
-const privilegeNames = {
-  site_admin: (t: TFunction) => t('tables.privileges.siteAdmin', 'Global admin'),
-};
-
 type PrivilegesCellProps = {
-  value: (keyof typeof privilegeNames)[];
+  value: UserConProfilesTableRow;
 };
 
 const PrivilegesCell = ({ value }: PrivilegesCellProps) => {
   const { t } = useTranslation();
-  const privsString = [...value]
-    .map((priv) => privilegeNames[priv](t))
-    .sort()
-    .join(', ');
+  if (value.site_admin) {
+    return <>{t('tables.privileges.siteAdmin', 'Global admin')}</>;
+  }
 
-  return <>{privsString}</>;
+  return <></>;
 };
 
 type PrivilegesFilterProps = {
@@ -132,14 +127,17 @@ type PrivilegesFilterProps = {
   onChange: (value: string[]) => void;
 };
 
-const PrivilegesFilter = ({ filter, onChange }: PrivilegesFilterProps) => (
-  <ChoiceSetFilter
-    choices={[{ label: 'Global admin', value: 'site_admin' }]}
-    onChange={onChange}
-    filter={filter}
-    multiple
-  />
-);
+const PrivilegesFilter = ({ filter, onChange }: PrivilegesFilterProps) => {
+  const { t } = useTranslation();
+  return (
+    <ChoiceSetFilter
+      choices={[{ label: t('tables.privileges.siteAdmin', 'Global admin'), value: 'site_admin' }]}
+      onChange={onChange}
+      filter={filter}
+      multiple
+    />
+  );
+};
 
 const getPossibleColumns = (
   data: UserConProfilesTableUserConProfilesQueryQuery,
@@ -198,7 +196,9 @@ const getPossibleColumns = (
             accessor: 'ticket',
             width: 150,
             Cell: TicketStatusWithPaymentAmountCell,
-            Filter: TicketTypeFilter,
+            Filter: ({ filter, onChange }: Parameters<FilterRender>[0]) => (
+              <TicketTypeFilter filter={filter} onChange={onChange} />
+            ),
           },
           {
             Header: t('admin.userConProfiles.ticketType', '{{ ticketName }} type', {
@@ -208,7 +208,9 @@ const getPossibleColumns = (
             accessor: 'ticket',
             width: 150,
             Cell: TicketStatusCell,
-            Filter: TicketTypeFilter,
+            Filter: ({ filter, onChange }: Parameters<FilterRender>[0]) => (
+              <TicketTypeFilter filter={filter} onChange={onChange} />
+            ),
           },
           {
             Header: t('admin.userConProfiles.paymentAmount', 'Payment amount'),
@@ -257,9 +259,9 @@ const getPossibleColumns = (
     {
       Header: t('admin.userConProfiles.privileges', 'Privileges'),
       id: 'privileges',
-      accessor: 'privileges',
-      Cell: ({ value }) => <PrivilegesCell value={value} />,
-      Filter: PrivilegesFilter,
+      accessor: (row: UserConProfilesTableRow) => row,
+      Cell: ({ value }: { value: UserConProfilesTableRow }) => <PrivilegesCell value={value} />,
+      Filter: ({ filter, onChange }) => <PrivilegesFilter filter={filter} onChange={onChange} />,
     },
     {
       Header: t('admin.userConProfiles.orderSummary', 'Order summary'),

@@ -63,7 +63,9 @@ export type DeleteUserActivityAlertMutation = (
 
 export const CreateUserActivityAlertDocument = gql`
     mutation CreateUserActivityAlert($userActivityAlert: UserActivityAlertInput!, $notificationDestinations: [NotificationDestinationInput!]!) {
-  createUserActivityAlert(input: {user_activity_alert: $userActivityAlert, notification_destinations: $notificationDestinations}) {
+  createUserActivityAlert(
+    input: {user_activity_alert: $userActivityAlert, notification_destinations: $notificationDestinations}
+  ) {
     user_activity_alert {
       id
       ...UserActivityAlertFields
@@ -99,7 +101,9 @@ export type CreateUserActivityAlertMutationResult = Apollo.MutationResult<Create
 export type CreateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<CreateUserActivityAlertMutation, CreateUserActivityAlertMutationVariables>;
 export const UpdateUserActivityAlertDocument = gql`
     mutation UpdateUserActivityAlert($id: Int!, $userActivityAlert: UserActivityAlertInput!, $addNotificationDestinations: [NotificationDestinationInput!]!, $removeNotificationDestinationIds: [Int!]!) {
-  updateUserActivityAlert(input: {id: $id, user_activity_alert: $userActivityAlert, add_notification_destinations: $addNotificationDestinations, remove_notification_destination_ids: $removeNotificationDestinationIds}) {
+  updateUserActivityAlert(
+    input: {id: $id, user_activity_alert: $userActivityAlert, add_notification_destinations: $addNotificationDestinations, remove_notification_destination_ids: $removeNotificationDestinationIds}
+  ) {
     user_activity_alert {
       id
       ...UserActivityAlertFields

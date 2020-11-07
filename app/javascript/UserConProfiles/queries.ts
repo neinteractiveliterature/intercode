@@ -24,7 +24,6 @@ export const UserConProfileFields = gql`
   fragment UserConProfileFields on UserConProfile {
     id
     name
-    privileges
     form_response_attrs_json
     gravatar_enabled
     gravatar_url
@@ -202,7 +201,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
           first_name
           last_name
           email
-          privileges
+          site_admin
           form_response_attrs_json
           order_summary
           gravatar_enabled

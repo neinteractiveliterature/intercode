@@ -26,7 +26,9 @@ export type UpdateNotificationTemplateMutation = (
 
 export const UpdateNotificationTemplateDocument = gql`
     mutation UpdateNotificationTemplate($eventKey: String!, $notificationTemplate: NotificationTemplateInput!) {
-  updateNotificationTemplate(input: {event_key: $eventKey, notification_template: $notificationTemplate}) {
+  updateNotificationTemplate(
+    input: {event_key: $eventKey, notification_template: $notificationTemplate}
+  ) {
     notification_template {
       id
       ...NotificationTemplateFields

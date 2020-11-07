@@ -199,7 +199,7 @@ export const StripeAccountOnboardingLinkQueryDocument = gql`
  *   },
  * });
  */
-export function useStripeAccountOnboardingLinkQueryQuery(baseOptions?: Apollo.QueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {
+export function useStripeAccountOnboardingLinkQueryQuery(baseOptions: Apollo.QueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {
         return Apollo.useQuery<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>(StripeAccountOnboardingLinkQueryDocument, baseOptions);
       }
 export function useStripeAccountOnboardingLinkQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {

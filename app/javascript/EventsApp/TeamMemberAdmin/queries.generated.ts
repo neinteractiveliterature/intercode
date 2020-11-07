@@ -232,7 +232,7 @@ ${TeamMemberFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useTeamMembersQueryQuery(baseOptions?: Apollo.QueryHookOptions<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>) {
+export function useTeamMembersQueryQuery(baseOptions: Apollo.QueryHookOptions<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>) {
         return Apollo.useQuery<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>(TeamMembersQueryDocument, baseOptions);
       }
 export function useTeamMembersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>) {

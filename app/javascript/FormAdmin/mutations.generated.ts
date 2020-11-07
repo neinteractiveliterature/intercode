@@ -674,7 +674,9 @@ export type DeleteFormItemMutationResult = Apollo.MutationResult<DeleteFormItemM
 export type DeleteFormItemMutationOptions = Apollo.BaseMutationOptions<DeleteFormItemMutation, DeleteFormItemMutationVariables>;
 export const MoveFormItemDocument = gql`
     mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
-  moveFormItem(input: {id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex}) {
+  moveFormItem(
+    input: {id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex}
+  ) {
     form_section {
       id
       form_items {

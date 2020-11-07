@@ -2,7 +2,7 @@ import { ChangeEvent, ReactNode, useState } from 'react';
 import * as React from 'react';
 
 import formatMoney from '../formatMoney';
-import { parseFloatOrNull } from '../ComposableFormUtils';
+import { parseFloatOrNull } from '../ValueUtils';
 import { Money } from '../graphqlTypes.generated';
 
 export type MoneyInputProps = Omit<
