@@ -80,7 +80,7 @@ export const SiteSearchQueryDocument = gql`
  *   },
  * });
  */
-export function useSiteSearchQueryQuery(baseOptions?: Apollo.QueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
+export function useSiteSearchQueryQuery(baseOptions: Apollo.QueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
         return Apollo.useQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
       }
 export function useSiteSearchQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {

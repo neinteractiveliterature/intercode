@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { TFunction } from 'i18next';
 
@@ -34,7 +34,9 @@ export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictions
 function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   const { t } = useTranslation();
   const { formItem, onChange, onInteract, valueInvalid } = props;
-  const value = valueIsAgeRestrictionsValue(props.value) ? props.value : {};
+  const value = useMemo(() => (valueIsAgeRestrictionsValue(props.value) ? props.value : {}), [
+    props.value,
+  ]);
 
   const descriptionId = useUniqueId(`${formItem.identifier}-description-`);
 

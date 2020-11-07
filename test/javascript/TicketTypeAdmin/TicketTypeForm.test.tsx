@@ -8,10 +8,6 @@ test('TicketTypeForm matches snapshot', () => {
         __typename: 'TicketType',
         allows_event_signups: true,
         id: 0,
-        pricing_schedule: {
-          __typename: 'ScheduledMoneyValue',
-          timespans: [],
-        },
         providing_products: [],
         name: '',
         description: '',

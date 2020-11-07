@@ -214,7 +214,12 @@ export const AdminOrdersQueryDocument = gql`
   convention: assertConvention {
     id
     timezone_name
-    orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+    orders_paginated(
+      page: $page
+      per_page: $perPage
+      filters: $filters
+      sort: $sort
+    ) {
       current_page
       per_page
       total_pages
@@ -551,7 +556,7 @@ export const OrderFormProductQueryDocument = gql`
  *   },
  * });
  */
-export function useOrderFormProductQueryQuery(baseOptions?: Apollo.QueryHookOptions<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>) {
+export function useOrderFormProductQueryQuery(baseOptions: Apollo.QueryHookOptions<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>) {
         return Apollo.useQuery<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>(OrderFormProductQueryDocument, baseOptions);
       }
 export function useOrderFormProductQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>) {

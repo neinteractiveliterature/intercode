@@ -95,7 +95,7 @@ export const NotifierLiquidAssignsQueryDocument = gql`
  *   },
  * });
  */
-export function useNotifierLiquidAssignsQueryQuery(baseOptions?: Apollo.QueryHookOptions<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>) {
+export function useNotifierLiquidAssignsQueryQuery(baseOptions: Apollo.QueryHookOptions<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>) {
         return Apollo.useQuery<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>(NotifierLiquidAssignsQueryDocument, baseOptions);
       }
 export function useNotifierLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>) {

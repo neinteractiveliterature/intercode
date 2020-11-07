@@ -482,7 +482,7 @@ export const SignupAdminEventQueryDocument = gql`
  *   },
  * });
  */
-export function useSignupAdminEventQueryQuery(baseOptions?: Apollo.QueryHookOptions<SignupAdminEventQueryQuery, SignupAdminEventQueryQueryVariables>) {
+export function useSignupAdminEventQueryQuery(baseOptions: Apollo.QueryHookOptions<SignupAdminEventQueryQuery, SignupAdminEventQueryQueryVariables>) {
         return Apollo.useQuery<SignupAdminEventQueryQuery, SignupAdminEventQueryQueryVariables>(SignupAdminEventQueryDocument, baseOptions);
       }
 export function useSignupAdminEventQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupAdminEventQueryQuery, SignupAdminEventQueryQueryVariables>) {
@@ -526,7 +526,7 @@ ${SignupFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useAdminSignupQueryQuery(baseOptions?: Apollo.QueryHookOptions<AdminSignupQueryQuery, AdminSignupQueryQueryVariables>) {
+export function useAdminSignupQueryQuery(baseOptions: Apollo.QueryHookOptions<AdminSignupQueryQuery, AdminSignupQueryQueryVariables>) {
         return Apollo.useQuery<AdminSignupQueryQuery, AdminSignupQueryQueryVariables>(AdminSignupQueryDocument, baseOptions);
       }
 export function useAdminSignupQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminSignupQueryQuery, AdminSignupQueryQueryVariables>) {
@@ -562,7 +562,12 @@ export const RunSignupsTableSignupsQueryDocument = gql`
     }
     run(id: $runId) {
       id
-      signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+      signups_paginated(
+        page: $page
+        per_page: $perPage
+        filters: $filters
+        sort: $sort
+      ) {
         total_entries
         total_pages
         current_page
@@ -615,7 +620,7 @@ export const RunSignupsTableSignupsQueryDocument = gql`
  *   },
  * });
  */
-export function useRunSignupsTableSignupsQueryQuery(baseOptions?: Apollo.QueryHookOptions<RunSignupsTableSignupsQueryQuery, RunSignupsTableSignupsQueryQueryVariables>) {
+export function useRunSignupsTableSignupsQueryQuery(baseOptions: Apollo.QueryHookOptions<RunSignupsTableSignupsQueryQuery, RunSignupsTableSignupsQueryQueryVariables>) {
         return Apollo.useQuery<RunSignupsTableSignupsQueryQuery, RunSignupsTableSignupsQueryQueryVariables>(RunSignupsTableSignupsQueryDocument, baseOptions);
       }
 export function useRunSignupsTableSignupsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RunSignupsTableSignupsQueryQuery, RunSignupsTableSignupsQueryQueryVariables>) {
@@ -668,7 +673,7 @@ export const RunHeaderRunInfoQueryDocument = gql`
  *   },
  * });
  */
-export function useRunHeaderRunInfoQueryQuery(baseOptions?: Apollo.QueryHookOptions<RunHeaderRunInfoQueryQuery, RunHeaderRunInfoQueryQueryVariables>) {
+export function useRunHeaderRunInfoQueryQuery(baseOptions: Apollo.QueryHookOptions<RunHeaderRunInfoQueryQuery, RunHeaderRunInfoQueryQueryVariables>) {
         return Apollo.useQuery<RunHeaderRunInfoQueryQuery, RunHeaderRunInfoQueryQueryVariables>(RunHeaderRunInfoQueryDocument, baseOptions);
       }
 export function useRunHeaderRunInfoQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RunHeaderRunInfoQueryQuery, RunHeaderRunInfoQueryQueryVariables>) {
@@ -748,7 +753,7 @@ export const RunSignupSummaryQueryDocument = gql`
  *   },
  * });
  */
-export function useRunSignupSummaryQueryQuery(baseOptions?: Apollo.QueryHookOptions<RunSignupSummaryQueryQuery, RunSignupSummaryQueryQueryVariables>) {
+export function useRunSignupSummaryQueryQuery(baseOptions: Apollo.QueryHookOptions<RunSignupSummaryQueryQuery, RunSignupSummaryQueryQueryVariables>) {
         return Apollo.useQuery<RunSignupSummaryQueryQuery, RunSignupSummaryQueryQueryVariables>(RunSignupSummaryQueryDocument, baseOptions);
       }
 export function useRunSignupSummaryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RunSignupSummaryQueryQuery, RunSignupSummaryQueryQueryVariables>) {
@@ -803,7 +808,7 @@ ${UserConProfileSignupsFragmentFragmentDoc}`;
  *   },
  * });
  */
-export function useUserConProfileSignupsQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserConProfileSignupsQueryQuery, UserConProfileSignupsQueryQueryVariables>) {
+export function useUserConProfileSignupsQueryQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileSignupsQueryQuery, UserConProfileSignupsQueryQueryVariables>) {
         return Apollo.useQuery<UserConProfileSignupsQueryQuery, UserConProfileSignupsQueryQueryVariables>(UserConProfileSignupsQueryDocument, baseOptions);
       }
 export function useUserConProfileSignupsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileSignupsQueryQuery, UserConProfileSignupsQueryQueryVariables>) {
@@ -824,7 +829,12 @@ export const RunSignupChangesQueryDocument = gql`
       id
       title
     }
-    signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+    signup_changes_paginated(
+      page: $page
+      per_page: $perPage
+      filters: $filters
+      sort: $sort
+    ) {
       total_entries
       total_pages
       current_page
@@ -898,7 +908,7 @@ export const RunSignupChangesQueryDocument = gql`
  *   },
  * });
  */
-export function useRunSignupChangesQueryQuery(baseOptions?: Apollo.QueryHookOptions<RunSignupChangesQueryQuery, RunSignupChangesQueryQueryVariables>) {
+export function useRunSignupChangesQueryQuery(baseOptions: Apollo.QueryHookOptions<RunSignupChangesQueryQuery, RunSignupChangesQueryQueryVariables>) {
         return Apollo.useQuery<RunSignupChangesQueryQuery, RunSignupChangesQueryQueryVariables>(RunSignupChangesQueryDocument, baseOptions);
       }
 export function useRunSignupChangesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RunSignupChangesQueryQuery, RunSignupChangesQueryQueryVariables>) {

@@ -183,7 +183,9 @@ export type UpdateTeamMemberMutationResult = Apollo.MutationResult<UpdateTeamMem
 export type UpdateTeamMemberMutationOptions = Apollo.BaseMutationOptions<UpdateTeamMemberMutation, UpdateTeamMemberMutationVariables>;
 export const ProvideEventTicketDocument = gql`
     mutation ProvideEventTicket($eventId: Int!, $userConProfileId: Int!, $ticketTypeId: Int!) {
-  provideEventTicket(input: {event_id: $eventId, user_con_profile_id: $userConProfileId, ticket_type_id: $ticketTypeId}) {
+  provideEventTicket(
+    input: {event_id: $eventId, user_con_profile_id: $userConProfileId, ticket_type_id: $ticketTypeId}
+  ) {
     ticket {
       id
       ...TeamMemberTicketFields

@@ -4669,6 +4669,7 @@ type UserConProfile {
   show_nickname_in_bio: Boolean
   signup_requests: [SignupRequest!]!
   signups: [Signup!]!
+  site_admin: Boolean!
   staff_positions: [StaffPosition!]!
   state: String
   team_members: [TeamMember!]!

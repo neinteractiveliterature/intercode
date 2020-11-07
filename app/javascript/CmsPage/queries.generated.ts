@@ -160,7 +160,7 @@ export const PageAdminDropdownQueryDocument = gql`
  *   },
  * });
  */
-export function usePageAdminDropdownQueryQuery(baseOptions?: Apollo.QueryHookOptions<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>) {
+export function usePageAdminDropdownQueryQuery(baseOptions: Apollo.QueryHookOptions<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>) {
         return Apollo.useQuery<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>(PageAdminDropdownQueryDocument, baseOptions);
       }
 export function usePageAdminDropdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>) {

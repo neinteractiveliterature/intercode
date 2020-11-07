@@ -381,7 +381,9 @@ export type CancelOrderMutationResult = Apollo.MutationResult<CancelOrderMutatio
 export type CancelOrderMutationOptions = Apollo.BaseMutationOptions<CancelOrderMutation, CancelOrderMutationVariables>;
 export const CreateOrderDocument = gql`
     mutation CreateOrder($userConProfileId: Int!, $order: OrderInput!, $status: OrderStatus!, $orderEntries: [OrderEntryInput!]) {
-  createOrder(input: {user_con_profile_id: $userConProfileId, order: $order, status: $status, order_entries: $orderEntries}) {
+  createOrder(
+    input: {user_con_profile_id: $userConProfileId, order: $order, status: $status, order_entries: $orderEntries}
+  ) {
     order {
       id
       ...AdminOrderFieldsFragment
@@ -783,7 +785,9 @@ export type SubmitOrderMutationResult = Apollo.MutationResult<SubmitOrderMutatio
 export type SubmitOrderMutationOptions = Apollo.BaseMutationOptions<SubmitOrderMutation, SubmitOrderMutationVariables>;
 export const AddOrderEntryToCurrentPendingOrderDocument = gql`
     mutation AddOrderEntryToCurrentPendingOrder($productId: Int!, $productVariantId: Int, $quantity: Int!) {
-  addOrderEntryToCurrentPendingOrder(input: {order_entry: {product_id: $productId, product_variant_id: $productVariantId, quantity: $quantity}}) {
+  addOrderEntryToCurrentPendingOrder(
+    input: {order_entry: {product_id: $productId, product_variant_id: $productVariantId, quantity: $quantity}}
+  ) {
     order_entry {
       id
     }

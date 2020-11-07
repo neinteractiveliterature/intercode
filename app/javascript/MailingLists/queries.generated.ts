@@ -483,7 +483,7 @@ export const WhosFreeQueryDocument = gql`
  *   },
  * });
  */
-export function useWhosFreeQueryQuery(baseOptions?: Apollo.QueryHookOptions<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>) {
+export function useWhosFreeQueryQuery(baseOptions: Apollo.QueryHookOptions<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>) {
         return Apollo.useQuery<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>(WhosFreeQueryDocument, baseOptions);
       }
 export function useWhosFreeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>) {

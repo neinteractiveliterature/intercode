@@ -130,7 +130,9 @@ export type ConvertTicketToEventProvidedMutation = (
 
 export const CreateUserConProfileDocument = gql`
     mutation CreateUserConProfile($user_id: Int!, $user_con_profile: UserConProfileInput!) {
-  createUserConProfile(input: {user_id: $user_id, user_con_profile: $user_con_profile}) {
+  createUserConProfile(
+    input: {user_id: $user_id, user_con_profile: $user_con_profile}
+  ) {
     user_con_profile {
       id
     }
@@ -341,7 +343,9 @@ export type DeleteTicketMutationResult = Apollo.MutationResult<DeleteTicketMutat
 export type DeleteTicketMutationOptions = Apollo.BaseMutationOptions<DeleteTicketMutation, DeleteTicketMutationVariables>;
 export const ConvertTicketToEventProvidedDocument = gql`
     mutation ConvertTicketToEventProvided($eventId: Int!, $ticketTypeId: Int!, $userConProfileId: Int!) {
-  convertTicketToEventProvided(input: {event_id: $eventId, ticket_type_id: $ticketTypeId, user_con_profile_id: $userConProfileId}) {
+  convertTicketToEventProvided(
+    input: {event_id: $eventId, ticket_type_id: $ticketTypeId, user_con_profile_id: $userConProfileId}
+  ) {
     ticket {
       id
       ...UserConProfileAdminTicketFields

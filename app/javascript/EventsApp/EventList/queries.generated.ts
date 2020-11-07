@@ -56,7 +56,12 @@ export const EventListEventsQueryDocument = gql`
   convention {
     id
     ...CommonConventionData
-    events_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
+    events_paginated(
+      page: $page
+      per_page: $pageSize
+      filters: $filters
+      sort: $sort
+    ) {
       total_entries
       total_pages
       current_page

@@ -333,7 +333,7 @@ ${EventPageRunFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useCreateSignupRunCardQueryQuery(baseOptions?: Apollo.QueryHookOptions<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>) {
+export function useCreateSignupRunCardQueryQuery(baseOptions: Apollo.QueryHookOptions<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>) {
         return Apollo.useQuery<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>(CreateSignupRunCardQueryDocument, baseOptions);
       }
 export function useCreateSignupRunCardQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>) {
@@ -346,7 +346,11 @@ export const SignupModerationQueueQueryDocument = gql`
     query SignupModerationQueueQuery($page: Int) {
   convention {
     id
-    signup_requests_paginated(sort: [{field: "state", desc: false}, {field: "created_at", desc: false}], page: $page, per_page: 10) {
+    signup_requests_paginated(
+      sort: [{field: "state", desc: false}, {field: "created_at", desc: false}]
+      page: $page
+      per_page: 10
+    ) {
       total_pages
       entries {
         id

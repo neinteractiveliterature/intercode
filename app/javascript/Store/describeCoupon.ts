@@ -1,4 +1,4 @@
-import { parseFloatOrNull } from '../ComposableFormUtils';
+import { parseFloatOrNull } from '../ValueUtils';
 import formatMoney from '../formatMoney';
 import { Coupon, Product } from '../graphqlTypes.generated';
 

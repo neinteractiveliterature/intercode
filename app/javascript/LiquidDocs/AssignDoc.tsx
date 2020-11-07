@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Link, Switch, Route, useLocation } from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
