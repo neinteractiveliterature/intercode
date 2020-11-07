@@ -101,3 +101,19 @@ export function notFalse<TValue>(value: TValue | false): value is TValue {
 export type UnwrapPromise<T> = T extends PromiseLike<infer ValueType> ? ValueType : T;
 
 export type OmitStrict<T, K extends keyof T> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
+
+export function parseIntOrNull(stringValue: string) {
+  const intValue = parseInt(stringValue, 10);
+  if (Number.isNaN(intValue)) {
+    return null;
+  }
+  return intValue;
+}
+
+export function parseFloatOrNull(stringValue: string) {
+  const floatValue = parseFloat(stringValue);
+  if (Number.isNaN(floatValue)) {
+    return null;
+  }
+  return floatValue;
+}

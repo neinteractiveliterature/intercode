@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { humanize } from 'inflected';
 import { Link, useHistory, useParams } from 'react-router-dom';
 

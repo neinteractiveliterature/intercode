@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 import NewOrderModal from '../Store/NewOrderModal';
 import useModal from '../ModalDialogs/useModal';

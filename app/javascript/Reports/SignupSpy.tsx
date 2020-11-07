@@ -1,5 +1,3 @@
-import React from 'react';
-
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';

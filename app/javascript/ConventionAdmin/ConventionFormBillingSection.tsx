@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import * as React from 'react';
 // @ts-expect-error
 import { pluralize, capitalize } from 'inflected';
 import { ApolloError, useApolloClient } from '@apollo/client';
 
-import { Transforms } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { useCreateConventionStripeAccountMutation } from './mutations.generated';
@@ -187,7 +188,7 @@ function ConventionFormBillingSection({
         label={`Maximum ${pluralize(convention.ticket_name)}`}
         type="number"
         value={(convention.maximum_tickets ?? '').toString()}
-        onTextChange={(newValue) => setMaximumTickets(Transforms.integer(newValue))}
+        onTextChange={(newValue) => setMaximumTickets(parseIntOrNull(newValue))}
         disabled={disabled || convention.ticket_mode === 'disabled'}
       />
     </>

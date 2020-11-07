@@ -1,4 +1,5 @@
-import React, { useState, ReactNode } from 'react';
+import { useState, ReactNode } from 'react';
+import * as React from 'react';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';

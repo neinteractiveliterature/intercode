@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { humanize, pluralize, titleize, underscore } from 'inflected';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

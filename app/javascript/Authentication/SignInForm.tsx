@@ -1,6 +1,8 @@
 /* global Rollbar */
 
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
+
+import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 

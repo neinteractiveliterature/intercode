@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useApolloClient } from '@apollo/client';
 
 import buildSignupOptions, { SignupOption } from '../EventsApp/EventPage/buildSignupOptions';

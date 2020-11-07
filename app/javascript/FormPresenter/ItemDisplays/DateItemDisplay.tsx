@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import { useMemo, useContext } from 'react';
 import moment from 'moment-timezone';
 import AppRootContext from '../../AppRootContext';
 

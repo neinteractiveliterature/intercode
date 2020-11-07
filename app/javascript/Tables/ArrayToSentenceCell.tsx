@@ -1,4 +1,3 @@
-import React from 'react';
 // @ts-expect-error
 import arrayToSentence from 'array-to-sentence';
 

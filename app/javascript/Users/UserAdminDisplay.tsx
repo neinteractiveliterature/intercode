@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { humanize, titleize } from 'inflected';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';

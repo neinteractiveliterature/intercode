@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react';
+import { useContext, useCallback } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import classnames from 'classnames';
 

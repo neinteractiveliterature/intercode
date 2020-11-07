@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { StaticTextFormItem } from '../FormAdmin/FormItemUtils';
 
 export type StaticTextItemProps = {
@@ -9,10 +7,10 @@ export type StaticTextItemProps = {
 const StaticTextItem = ({ formItem }: StaticTextItemProps) => {
   switch (formItem.rendered_properties.style) {
     case 'subhead':
-      // eslint-disable-next-line react/no-danger
       return (
         <div
           className="lead mb-3"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.content }}
         />
       );

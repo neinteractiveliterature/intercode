@@ -1,4 +1,4 @@
-import React, { useState, useMemo, ChangeEvent } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import classNames from 'classnames';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { components, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import * as React from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';

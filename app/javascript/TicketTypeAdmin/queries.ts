@@ -11,17 +11,6 @@ export const TicketTypeAdmin_TicketTypeFields = gql`
     allows_event_signups
     maximum_event_provided_tickets
 
-    pricing_schedule {
-      timespans {
-        start
-        finish
-        value {
-          fractional
-          currency_code
-        }
-      }
-    }
-
     providing_products {
       id
       name

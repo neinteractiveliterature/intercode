@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PlainTextDisplay from '../../PlainTextDisplay';
 import MarkdownDisplay from './MarkdownDisplay';
 import { FreeTextFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';

@@ -57,7 +57,7 @@ export const PreviewLiquidQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewLiquidQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
+export function usePreviewLiquidQueryQuery(baseOptions: Apollo.QueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
         return Apollo.useQuery<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>(PreviewLiquidQueryDocument, baseOptions);
       }
 export function usePreviewLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewLiquidQueryQuery, PreviewLiquidQueryQueryVariables>) {
@@ -88,7 +88,7 @@ export const PreviewMarkdownQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewMarkdownQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
+export function usePreviewMarkdownQueryQuery(baseOptions: Apollo.QueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
         return Apollo.useQuery<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>(PreviewMarkdownQueryDocument, baseOptions);
       }
 export function usePreviewMarkdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewMarkdownQueryQuery, PreviewMarkdownQueryQueryVariables>) {
@@ -120,7 +120,7 @@ export const PreviewNotifierLiquidQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewNotifierLiquidQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {
+export function usePreviewNotifierLiquidQueryQuery(baseOptions: Apollo.QueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {
         return Apollo.useQuery<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>(PreviewNotifierLiquidQueryDocument, baseOptions);
       }
 export function usePreviewNotifierLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewNotifierLiquidQueryQuery, PreviewNotifierLiquidQueryQueryVariables>) {

@@ -26,6 +26,12 @@ class Types::UserConProfileType < Types::BaseObject
   def privileges
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:privileges)
   end
+
+  field :site_admin, Boolean, null: false
+  def site_admin
+    AssociationLoader.for(UserConProfile, :user).load(object).then(&:site_admin?)
+  end
+
   field :name, String, null: false
   field :name_without_nickname, String, null: false
   field :name_inverted, String, null: false

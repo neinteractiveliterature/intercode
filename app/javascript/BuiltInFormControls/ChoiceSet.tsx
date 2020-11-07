@@ -1,4 +1,4 @@
-import React, { ReactNode, ChangeEvent } from 'react';
+import { ReactNode, ChangeEvent } from 'react';
 import BootstrapFormCheckbox from './BootstrapFormCheckbox';
 
 export type ChoiceSetChoice = {

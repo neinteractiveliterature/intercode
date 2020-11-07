@@ -1,4 +1,3 @@
-import React from 'react';
 import { humanize } from 'inflected';
 
 import AssignDocLink from './AssignDocLink';

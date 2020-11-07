@@ -1,4 +1,5 @@
-import React, { useState, useContext, Suspense } from 'react';
+import { useState, useContext, Suspense } from 'react';
+import * as React from 'react';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 

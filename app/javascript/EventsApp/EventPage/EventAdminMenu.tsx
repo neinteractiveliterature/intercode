@@ -1,4 +1,3 @@
-import React from 'react';
 import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
 

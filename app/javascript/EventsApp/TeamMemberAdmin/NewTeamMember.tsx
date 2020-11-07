@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { humanize, titleize, underscore } from 'inflected';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

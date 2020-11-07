@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useCallback, Ref, useState } from 'react';
+import { useContext, useMemo, useCallback, Ref, useState } from 'react';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';

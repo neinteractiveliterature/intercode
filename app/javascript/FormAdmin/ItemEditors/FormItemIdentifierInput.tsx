@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { pluralize } from 'inflected';
 
@@ -12,11 +13,10 @@ export type FormItemIdentifierInputProps = {
 };
 
 function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifierInputProps) {
-  const standardItems = formType.standard_items || {};
-  const standardIdentifiers = useMemo(
-    () => Object.entries(standardItems).map(([identifier]) => identifier),
-    [standardItems],
-  );
+  const standardIdentifiers = useMemo(() => {
+    const standardItems = formType.standard_items || {};
+    return Object.entries(standardItems).map(([identifier]) => identifier);
+  }, [formType.standard_items]);
 
   const normalizedIdentifier = value ?? '';
   const identifierIsReserved = standardIdentifiers.includes(normalizedIdentifier.toLowerCase());

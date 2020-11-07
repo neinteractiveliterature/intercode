@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from 'react';
+import { ReactNode, useContext } from 'react';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';

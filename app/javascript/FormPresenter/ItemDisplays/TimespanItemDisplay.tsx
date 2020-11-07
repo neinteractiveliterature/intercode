@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { breakValueIntoUnitQuantities } from '../TimespanItemUtils';
 import pluralizeWithCount from '../../pluralizeWithCount';

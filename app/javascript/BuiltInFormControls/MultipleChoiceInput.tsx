@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import ChoiceSet, { ChoiceSetProps } from './ChoiceSet';
 import HelpText from './HelpText';

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import { humanize, pluralize } from 'inflected';
 import classNames from 'classnames';
 import tinycolor2 from 'tinycolor2';

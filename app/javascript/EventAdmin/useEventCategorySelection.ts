@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from 'react';
-import { Transforms } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import {
   getEventFormForEventCategoryId,
   getProposalFormForEventCategoryId,
@@ -65,7 +65,7 @@ export default function useEventCategorySelection<
   );
 
   const eventCategorySelectChanged = useCallback(
-    (e) => setEventCategoryId(Transforms.integer(e) ?? undefined),
+    (e) => setEventCategoryId(parseIntOrNull(e) ?? undefined),
     [setEventCategoryId],
   );
 

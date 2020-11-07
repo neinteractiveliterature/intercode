@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import TicketForm from './TicketForm';

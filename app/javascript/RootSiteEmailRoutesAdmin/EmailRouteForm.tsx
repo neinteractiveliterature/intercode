@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';

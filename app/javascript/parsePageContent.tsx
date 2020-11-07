@@ -1,4 +1,5 @@
-import React, { Suspense, CSSProperties, ReactNode } from 'react';
+import { Suspense, CSSProperties, ReactNode } from 'react';
+import * as React from 'react';
 import camelCase from 'lodash/camelCase';
 // @ts-expect-error
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';

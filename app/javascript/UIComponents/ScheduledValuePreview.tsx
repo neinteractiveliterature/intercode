@@ -1,4 +1,4 @@
-import React, { ReactNode, RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, ReactNode, RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import { maxBy, minBy } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 
@@ -226,7 +226,7 @@ function ScheduledValuePreviewCalendar<ValueType>({
   return <>{monthPreviews}</>;
 }
 
-const MemoizedScheduledValuePreviewCalendar = React.memo(ScheduledValuePreviewCalendar);
+const MemoizedScheduledValuePreviewCalendar = memo(ScheduledValuePreviewCalendar);
 
 export type ScheduledValuePreviewProps<ValueType> = {
   scheduledValue: EditingScheduledValue<ValueType>;

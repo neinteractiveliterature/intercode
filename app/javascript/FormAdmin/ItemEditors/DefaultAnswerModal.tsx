@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import FormItemInput from '../../FormPresenter/ItemInputs/FormItemInput';

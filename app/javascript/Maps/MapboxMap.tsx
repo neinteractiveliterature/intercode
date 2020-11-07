@@ -1,4 +1,5 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect } from 'react';
+import * as React from 'react';
 import type { LngLat, Map, Marker } from 'mapbox-gl';
 
 import MapboxContext from '../MapboxContext';

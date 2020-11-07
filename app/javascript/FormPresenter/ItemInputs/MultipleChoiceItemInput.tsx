@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, ChangeEvent } from 'react';
+import { useMemo, useCallback, ChangeEvent } from 'react';
 import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';

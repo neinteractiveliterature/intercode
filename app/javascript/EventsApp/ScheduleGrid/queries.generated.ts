@@ -177,7 +177,7 @@ export const ScheduleGridEventsQueryDocument = gql`
  *   },
  * });
  */
-export function useScheduleGridEventsQueryQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
+export function useScheduleGridEventsQueryQuery(baseOptions: Apollo.QueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
         return Apollo.useQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(ScheduleGridEventsQueryDocument, baseOptions);
       }
 export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
@@ -219,7 +219,7 @@ ${ScheduleGridEventFragmentFragmentDoc}`;
  *   },
  * });
  */
-export function useScheduleGridCombinedQueryQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {
+export function useScheduleGridCombinedQueryQuery(baseOptions: Apollo.QueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {
         return Apollo.useQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(ScheduleGridCombinedQueryDocument, baseOptions);
       }
 export function useScheduleGridCombinedQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {

@@ -103,7 +103,7 @@ export const EventHistoryQueryDocument = gql`
  *   },
  * });
  */
-export function useEventHistoryQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
+export function useEventHistoryQueryQuery(baseOptions: Apollo.QueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
         return Apollo.useQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
       }
 export function useEventHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import { useContext, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ import { ScheduleGridProvider } from './ScheduleGridContext';
 import { RATING_OPTIONS } from '../EventList/EventListMyRatingSelector';
 import AppRootContext from '../../AppRootContext';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import { Transforms } from '../../ComposableFormUtils';
+import { parseIntOrNull } from '../../ValueUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -66,9 +66,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   ];
 
   const choiceSetChanged = (newValue: string[]) => {
-    const integerArray = newValue
-      .filter((choice) => choice !== 'conflicts')
-      .map(Transforms.integer);
+    const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(parseIntOrNull);
 
     const newFiltered = [
       { id: 'my_rating', value: integerArray },

@@ -1,4 +1,3 @@
-import React from 'react';
 import { YardClass } from './DocData';
 
 import findLiquidTagName from './findLiquidTagName';

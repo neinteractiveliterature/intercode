@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { titleize, underscore } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';

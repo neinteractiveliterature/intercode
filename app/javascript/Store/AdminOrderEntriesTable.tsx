@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Select from 'react-select';
 import { ApolloError } from '@apollo/client';
 
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import InPlaceMoneyEditor from './InPlaceMoneyEditor';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';

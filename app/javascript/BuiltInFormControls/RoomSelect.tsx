@@ -1,4 +1,3 @@
-import React from 'react';
 import Select, { Props } from 'react-select';
 import { Room } from '../graphqlTypes.generated';
 

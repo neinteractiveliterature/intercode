@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import uniqWith from 'lodash/uniqWith';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
 import { Fetcher } from 'graphiql/dist/components/GraphiQL';

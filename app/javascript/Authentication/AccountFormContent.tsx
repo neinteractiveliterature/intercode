@@ -1,5 +1,3 @@
-import React from 'react';
-
 import parseCmsContent from '../parseCmsContent';
 import { useAccountFormContentQueryQuery } from './queries.generated';
 

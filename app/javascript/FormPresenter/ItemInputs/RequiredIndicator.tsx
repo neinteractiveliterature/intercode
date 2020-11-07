@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ParsedFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type RequiredIndicatorProps<PropertiesType extends { required?: boolean }> = {

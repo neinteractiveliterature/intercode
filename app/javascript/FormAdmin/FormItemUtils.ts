@@ -311,7 +311,7 @@ export function addGeneratedIds<PropertiesType>(properties: PropertiesType) {
     if (value != null && Array.isArray(value)) {
       return {
         ...memo,
-        [property]: value.map((item: any) => ({
+        [property]: (value as any[]).map((item) => ({
           ...item,
           generatedId: uuidv4(),
         })),
@@ -334,7 +334,7 @@ export function removeGeneratedIds<PropertiesType>(
     if (value != null && Array.isArray(value)) {
       return {
         ...memo,
-        [property]: value.map((item: any) => {
+        [property]: (value as any[]).map((item) => {
           const { generatedId, ...otherItemProperties } = item;
           return otherItemProperties;
         }),

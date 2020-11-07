@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Trans, useTranslation } from 'react-i18next';
 import { humanize } from 'inflected';
 import { TeamMembersQueryQuery } from './queries.generated';

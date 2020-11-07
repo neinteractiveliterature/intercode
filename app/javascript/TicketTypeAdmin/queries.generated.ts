@@ -8,17 +8,7 @@ import * as Apollo from '@apollo/client';
 export type TicketTypeAdmin_TicketTypeFieldsFragment = (
   { __typename: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'name' | 'description' | 'counts_towards_convention_maximum' | 'allows_event_signups' | 'maximum_event_provided_tickets'>
-  & { pricing_schedule: (
-    { __typename: 'ScheduledMoneyValue' }
-    & { timespans: Array<(
-      { __typename: 'TimespanWithMoneyValue' }
-      & Pick<Types.TimespanWithMoneyValue, 'start' | 'finish'>
-      & { value: (
-        { __typename: 'Money' }
-        & Pick<Types.Money, 'fractional' | 'currency_code'>
-      ) }
-    )> }
-  ), providing_products: Array<(
+  & { providing_products: Array<(
     { __typename: 'Product' }
     & Pick<Types.Product, 'id' | 'name' | 'available'>
     & { pricing_structure: (
@@ -52,16 +42,6 @@ export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
   counts_towards_convention_maximum
   allows_event_signups
   maximum_event_provided_tickets
-  pricing_schedule {
-    timespans {
-      start
-      finish
-      value {
-        fractional
-        currency_code
-      }
-    }
-  }
   providing_products {
     id
     name

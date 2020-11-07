@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import Select from 'react-select';
 
 import { timespanFromRun } from '../TimespanUtils';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { render, fireEvent } from '../testUtils';
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useCallback, ReactNode } from 'react';
+import { createContext, useState, useContext, useMemo, useCallback, ReactNode } from 'react';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
 import useModal from './useModal';
@@ -21,7 +21,7 @@ export type ConfirmFunction = {
 function defaultConfirm() {}
 defaultConfirm.visible = false;
 
-const ConfirmContext = React.createContext<ConfirmFunction>(defaultConfirm);
+const ConfirmContext = createContext<ConfirmFunction>(defaultConfirm);
 
 export type ConfirmProps = {
   children: ReactNode;

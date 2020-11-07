@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { FormEditorQueryQuery } from './queries.generated';
 import { FormType, TimezoneMode } from '../graphqlTypes.generated';
 import type {

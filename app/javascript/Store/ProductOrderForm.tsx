@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 
@@ -6,7 +6,7 @@ import { CartQuery } from './queries';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
-import { parseIntOrNull } from '../ComposableFormUtils';
+import { parseIntOrNull } from '../ValueUtils';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import PageLoadingIndicator from '../PageLoadingIndicator';

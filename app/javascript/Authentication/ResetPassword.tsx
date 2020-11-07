@@ -1,4 +1,5 @@
-import React, { useState, useContext, useMemo, Suspense } from 'react';
+import { useState, useContext, useMemo, Suspense } from 'react';
+import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

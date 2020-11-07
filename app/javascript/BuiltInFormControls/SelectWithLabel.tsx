@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import Select, { Props } from 'react-select';
 
 import FormGroupWithLabel from './FormGroupWithLabel';

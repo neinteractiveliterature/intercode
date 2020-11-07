@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, lazy, useContext, useState, useEffect, ReactNode } from 'react';
 import type { Stripe } from '@stripe/stripe-js';
 import ErrorDisplay from './ErrorDisplay';
 
@@ -9,11 +9,11 @@ export type LazyStripeContext = {
   publishableKey?: string;
 };
 
-export const LazyStripeContext = React.createContext<LazyStripeContext>({
+export const LazyStripeContext = createContext<LazyStripeContext>({
   accountId: undefined,
   publishableKey: undefined,
 });
-export const LazyElements = React.lazy(() => import('./SyncStripeElements'));
+export const LazyElements = lazy(() => import('./SyncStripeElements'));
 
 async function lazyLoadStripe(publishableKey: string, accountId: string) {
   const { loadStripe } = await StripeJs();

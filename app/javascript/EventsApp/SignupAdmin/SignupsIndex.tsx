@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink, Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 

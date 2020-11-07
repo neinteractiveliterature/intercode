@@ -1,4 +1,4 @@
-import React, { useState, useContext, Suspense, useEffect, ReactNode } from 'react';
+import { useState, useContext, Suspense, useEffect, ReactNode } from 'react';
 import { Switch, Route, Redirect, useLocation, useParams } from 'react-router-dom';
 
 import PageLoadingIndicator from './PageLoadingIndicator';

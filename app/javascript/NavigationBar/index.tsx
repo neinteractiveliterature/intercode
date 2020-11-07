@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useEffect, useState } from 'react';
+import { memo, useContext, useMemo, useRef, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import sortBy from 'lodash/sortBy';
 import { useLocation } from 'react-router-dom';
@@ -131,7 +131,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
   );
 }
 
-const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
+const MemoizedNavigationBarContent = memo(NavigationBarContent);
 
 export type NavigationBarProps = {
   navbarClasses: string;

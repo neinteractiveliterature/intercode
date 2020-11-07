@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import { parseIntOrNull, Transforms } from '../../ComposableFormUtils';
+import { parseIntOrNull } from '../../ValueUtils';
 import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
@@ -48,7 +48,7 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {
         disabled={disabled}
         value={(formItem.properties.lines || '').toString()}
         onTextChange={(value) =>
-          formItemPropertyUpdater('lines', setFormItem)(Transforms.integer(value))
+          formItemPropertyUpdater('lines', setFormItem)(parseIntOrNull(value))
         }
         type="number"
         min="1"

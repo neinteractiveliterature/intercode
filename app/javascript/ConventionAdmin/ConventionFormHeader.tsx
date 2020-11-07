@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { memo, Fragment, useMemo } from 'react';
 import moment from 'moment-timezone';
 
 import { findCurrentValue } from '../ScheduledValueUtils';
@@ -152,10 +152,10 @@ function ConventionFormHeader({ convention, compact }: ConventionFormHeaderProps
       ) : (
         <dl className="row mb-0">
           {metadata.map(({ label, value }) => (
-            <React.Fragment key={label}>
+            <Fragment key={label}>
               <dt className="col-md-3">{label}</dt>
               <dd className="col-md-9">{value}</dd>
-            </React.Fragment>
+            </Fragment>
           ))}
         </dl>
       )}
@@ -163,7 +163,7 @@ function ConventionFormHeader({ convention, compact }: ConventionFormHeaderProps
   );
 }
 
-export default React.memo(
+export default memo(
   ConventionFormHeader,
   (prevProps, nextProps) =>
     prevProps.compact === nextProps.compact &&

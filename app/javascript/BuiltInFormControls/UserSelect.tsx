@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { components, OptionTypeBase } from 'react-select';
 import type { DocumentNode } from 'graphql';
 

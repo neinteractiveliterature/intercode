@@ -183,7 +183,7 @@ export const AppRootQueryDocument = gql`
  *   },
  * });
  */
-export function useAppRootQueryQuery(baseOptions?: Apollo.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
+export function useAppRootQueryQuery(baseOptions: Apollo.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
         return Apollo.useQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
       }
 export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {

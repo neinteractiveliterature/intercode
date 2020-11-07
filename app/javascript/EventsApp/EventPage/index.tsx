@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
 import RunsSection from './RunsSection';

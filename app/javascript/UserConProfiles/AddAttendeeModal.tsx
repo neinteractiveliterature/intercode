@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
 import { ApolloError, useApolloClient } from '@apollo/client';

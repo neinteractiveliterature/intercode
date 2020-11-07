@@ -203,7 +203,7 @@ export const FormEditorQueryDocument = gql`
  *   },
  * });
  */
-export function useFormEditorQueryQuery(baseOptions?: Apollo.QueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
+export function useFormEditorQueryQuery(baseOptions: Apollo.QueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
         return Apollo.useQuery<FormEditorQueryQuery, FormEditorQueryQueryVariables>(FormEditorQueryDocument, baseOptions);
       }
 export function useFormEditorQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FormEditorQueryQuery, FormEditorQueryQueryVariables>) {
@@ -238,7 +238,7 @@ export const PreviewFormItemQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewFormItemQueryQuery(baseOptions?: Apollo.QueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {
+export function usePreviewFormItemQueryQuery(baseOptions: Apollo.QueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {
         return Apollo.useQuery<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>(PreviewFormItemQueryDocument, baseOptions);
       }
 export function usePreviewFormItemQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewFormItemQueryQuery, PreviewFormItemQueryQueryVariables>) {

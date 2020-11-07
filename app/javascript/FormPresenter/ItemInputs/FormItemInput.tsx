@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 import DateItemInput from './DateItemInput';
 import EventEmailInput from './EventEmailInput';
@@ -66,7 +66,7 @@ function FormItemInput({
   }
 }
 
-export default React.memo(
+export default memo(
   FormItemInput,
   (prevProps, nextProps) =>
     nextProps.value === prevProps.value &&

@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import * as React from 'react';
 // @ts-ignore
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
@@ -6,9 +7,8 @@ import { ApolloError } from '@apollo/client';
 
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from './InPlaceEditor';
-import { parseIntOrNull } from '../ComposableFormUtils';
 import useAsyncFunction from '../useAsyncFunction';
-import { sortByLocaleString } from '../ValueUtils';
+import { sortByLocaleString, parseIntOrNull } from '../ValueUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { TicketType, MaximumEventProvidedTicketsOverride } from '../graphqlTypes.generated';
 

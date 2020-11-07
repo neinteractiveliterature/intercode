@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import uniq from 'lodash/uniq';
 import { humanize } from 'inflected';
 
@@ -22,7 +22,7 @@ function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemC
     <div className="border rounded p-1">
       <dl className="row mb-0">
         {combinedBucketKeys.map((key) => (
-          <React.Fragment key={key}>
+          <Fragment key={key}>
             <dt className="col-sm-3">
               {(change.new_value.buckets.find((b) => b.key === key) || {}).name}
             </dt>
@@ -34,7 +34,7 @@ function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemC
                 after={(newBuckets || []).find((b) => b.key === key) || {}}
               />
             </dd>
-          </React.Fragment>
+          </Fragment>
         ))}
       </dl>
       <ObjectDiffDisplay before={otherPrev} after={otherNew} renderKey={(key) => humanize(key)} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
@@ -44,7 +44,7 @@ function EventAdmin() {
     menuDropdown,
     undefined,
     setMenuOpen,
-    { placement: 'bottom-start' },
+    { placement: 'bottom-start', modifiers: [{ name: 'offset', options: { offset: [0, 2] } }] },
   );
 
   useEffect(() => {
@@ -98,7 +98,7 @@ function EventAdmin() {
             Event categories
           </button>
           <div
-            className={classNames('dropdown-menu', { show: menuOpen })}
+            className={classNames('dropdown-menu m-0', { show: menuOpen })}
             style={styles.popper}
             ref={setMenu}
             {...attributes.popper}
