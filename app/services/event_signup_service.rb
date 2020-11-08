@@ -4,7 +4,7 @@ class EventSignupService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit,
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :whodunit,
     :suppress_notifications, :allow_non_self_service_signups, :action
   delegate :event, to: :run
   delegate :convention, to: :event
@@ -15,7 +15,7 @@ class EventSignupService < CivilService::Service
   validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket_if_required
-  validate :require_valid_bucket
+  validate :require_valid_bucket, unless: :team_member?
   validate :require_no_bucket_for_team_member
 
   include SkippableAdvisoryLock
@@ -98,18 +98,21 @@ class EventSignupService < CivilService::Service
 
   def must_not_have_conflicting_signups
     return unless !event.can_play_concurrently? && conflicting_signups.any?
+
+    verb = (conflicting_signups.size > 1) ? 'conflict' : 'conflicts'
+    errors.add :base,
+      "You are already #{conflict_descriptions}, which #{verb} with #{event.title}."
+  end
+
+  def conflict_descriptions
     confirmed_titles = conflicting_signups.select(&:confirmed?).map { |signup| signup.event.title }
     waitlisted_titles = conflicting_signups.select(&:waitlisted?).map do |signup|
       signup.event.title
     end
-    conflict_descriptions = [
+    [
       confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
       waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
     ].compact.join(' and ')
-    verb = (conflicting_signups.size > 1) ? 'conflict' : 'conflicts'
-    errors.add :base,
-      "You are already #{conflict_descriptions}, which #{verb} \
-with #{event.title}."
   end
 
   def must_have_ticket_if_required
@@ -140,14 +143,13 @@ sign up for events."
 
   def require_valid_bucket
     return if run.registration_policy.allow_no_preference_signups? && !requested_bucket_key
-    return if team_member?
 
     requested_bucket = run.registration_policy.bucket_with_key(requested_bucket_key)
-    return unless !requested_bucket || requested_bucket.anything?
+    return if requested_bucket && !requested_bucket.anything?
 
-    other_buckets = run.registration_policy.buckets.reject(&:anything?)
+    non_anything_buckets = run.registration_policy.buckets.reject(&:anything?)
     errors.add :base,
-      "Please choose one of the following buckets: #{other_buckets.map(&:name).join(', ')}."
+      "Please choose one of the following buckets: #{non_anything_buckets.map(&:name).join(', ')}."
   end
 
   def require_no_bucket_for_team_member
