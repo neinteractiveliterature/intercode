@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import ReactTable from 'react-table';
+import ReactTable, { FilterRender } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -41,8 +41,8 @@ const getPossibleColumns = (t: TFunction) => [
     accessor: (signupChange: SignupChangeType) => signupChange,
     sortable: false,
     filterable: true,
-    Cell: SignupChangeCell,
-    Filter: SignupChangeActionFilter,
+    Cell: ({ value }: { value: SignupChangeType }) => <SignupChangeCell value={value} />,
+    Filter: ({ filter, onChange }: Parameters<FilterRender>[0]) => <SignupChangeActionFilter filter={filter} onChange={onChange} />,
   },
   {
     Header: t('events.signupAdmin.history.bucketHeader', 'Bucket'),
@@ -50,7 +50,7 @@ const getPossibleColumns = (t: TFunction) => [
     accessor: (signupChange: SignupChangeType) => signupChange,
     sortable: false,
     filterable: false,
-    Cell: BucketChangeCell,
+    Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
   },
   {
     Header: t('events.signupAdmin.history.timestampHeader', 'Timestamp'),

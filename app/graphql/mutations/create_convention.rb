@@ -12,7 +12,12 @@ class Mutations::CreateConvention < Mutations::BaseMutation
     policy(Convention.new).create?
   end
 
-  def resolve(convention:, clone_convention_id: nil, cms_content_set_name: nil, organization_id: nil)
+  def resolve(
+    convention:,
+    clone_convention_id: nil,
+    cms_content_set_name: nil,
+    organization_id: nil
+  )
     convention_data = convention.to_h.merge(
       'organization_id' => organization_id,
       'updated_by' => current_user

@@ -104,22 +104,39 @@ class ReceiveEmailService < CivilService::Service
     TeamMember.where(event_id: events.map(&:id)).includes(user_con_profile: :user).to_a
   end
 
-  def transform_email_for_forwarding(original_recipient, new_recipients)
-    from_addresses = email.from.map { |from| EmailRoute.parse_address(from) }.compact
-    if from_addresses.empty?
-      Rails.logger.warn(
-        "Dropping message #{message_id} because it has no parseable From: addresses.  Original \
-  header: #{email.from}"
-      )
-      return nil
-    end
+  def headers_for_forwarding(forward_message)
+    {
+      'X-Intercode-Original-Return-Path' => forward_message.header['Return-Path'],
+      'Return-Path' => "bounces@#{mailer_host}",
+      'X-Intercode-Original-Sender' => forward_message.header['Sender'],
+      'Sender' => nil,
+      'X-Intercode-Original-Source' => forward_message.header['Source'],
+      'Source' => nil,
+      'DKIM-Signature' => nil, # SES will re-sign the message for us
+      'X-SES-CONFIGURATION-SET' => 'default',
+      'X-Intercode-Message-ID' => message_id
+    }
+  end
 
-    transformed_from_addresses = from_addresses.map do |from_address|
+  def from_addresses_for_forwarding(original_recipient)
+    from_addresses = email.from.map { |from| EmailRoute.parse_address(from) }.compact
+    from_addresses.map do |from_address|
       address = from_address.dup
       display_name = address.display_name || address.address
       address.display_name = "#{display_name} via #{original_recipient.address}"
       address.address = original_recipient.address
       address
+    end
+  end
+
+  def transform_email_for_forwarding(original_recipient, new_recipients)
+    transformed_from_addresses = from_addresses_for_forwarding(original_recipient)
+    if transformed_from_addresses.empty?
+      Rails.logger.warn(
+        "Dropping message #{message_id} because it has no parseable From: addresses.  Original \
+header: #{email.from}"
+      )
+      return nil
     end
 
     forward_message = email.dup
@@ -128,17 +145,9 @@ class ReceiveEmailService < CivilService::Service
     forward_message.to = new_recipients
     forward_message.cc = nil
     forward_message.bcc = nil
-    forward_message.header['X-Intercode-Original-Return-Path'] = (
-      forward_message.header['Return-Path']
-    )
-    forward_message.header['Return-Path'] = "bounces@#{mailer_host}"
-    forward_message.header['X-Intercode-Original-Sender'] = forward_message.header['Sender']
-    forward_message.header['Sender'] = nil
-    forward_message.header['X-Intercode-Original-Source'] = forward_message.header['Source']
-    forward_message.header['Source'] = nil
-    forward_message.header['DKIM-Signature'] = nil # SES will re-sign the message for us
-    forward_message.header['X-SES-CONFIGURATION-SET'] = 'default'
-    forward_message.header['X-Intercode-Message-ID'] = message_id
+    headers_for_forwarding(forward_message).each do |key, value|
+      forward_message.header[key] = value
+    end
 
     forward_message
   end

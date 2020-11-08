@@ -32,20 +32,25 @@ class Types::SignupChangeType < Types::BaseObject
     end
   end
 
+  def counted
+    !!object.counted
+  end
+
   # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
   # you can't actually read it
   def bucket_key
     return nil unless object.bucket_key
 
-    signup.then do |signup|
-      registration_policy = object.run.event.registration_policy
-      expose_attendees = registration_policy.bucket_with_key(object.bucket_key)&.expose_attendees?
-      return unless expose_attendees || policy(signup).read_requested_bucket_key?
-      object.bucket_key
-    end
+    signup.then { |signup| bucket_key_for_signup(signup) }
   end
 
-  def counted
-    !!object.counted
+  private
+
+  def bucket_key_for_signup(signup)
+    registration_policy = object.run.event.registration_policy
+    expose_attendees = registration_policy.bucket_with_key(object.bucket_key)&.expose_attendees?
+    return unless expose_attendees || policy(signup).read_requested_bucket_key?
+
+    object.bucket_key
   end
 end
