@@ -1,4 +1,4 @@
-import ReactTable from 'react-table';
+import ReactTable, { FilterRender } from 'react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -47,8 +47,8 @@ const getPossibleColumns = () => [
     accessor: (signupChange: SignupChangeType) => signupChange,
     sortable: false,
     filterable: true,
-    Cell: SignupChangeCell,
-    Filter: SignupChangeActionFilter,
+    Cell: ({ value }: { value: SignupChangeType }) => <SignupChangeCell value={value} />,
+    Filter: ({ filter, onChange }: Parameters<FilterRender>[0]) => <SignupChangeActionFilter filter={filter} onChange={onChange} />,
   },
   {
     Header: 'Bucket',
@@ -56,7 +56,7 @@ const getPossibleColumns = () => [
     accessor: (signupChange: SignupChangeType) => signupChange,
     sortable: false,
     filterable: false,
-    Cell: BucketChangeCell,
+    Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
   },
   {
     Header: 'Timestamp',

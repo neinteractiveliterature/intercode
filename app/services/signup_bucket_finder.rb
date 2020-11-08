@@ -30,15 +30,9 @@ class SignupBucketFinder
   def prioritized_buckets
     @prioritized_buckets ||= begin
       if requested_bucket_key
-        requested_bucket = registration_policy.bucket_with_key(requested_bucket_key)
-        [
-          requested_bucket,
-          (requested_bucket&.not_counted? ? nil : registration_policy.anything_bucket)
-        ].compact
+        prioritized_buckets_with_requested_bucket
       else
-        registration_policy.buckets.select(&:counted?).select(&:slots_limited?).sort_by do |bucket|
-          bucket.anything? ? 0 : 1
-        end
+        prioritized_buckets_without_requested_bucket
       end
     end
   end
@@ -61,5 +55,21 @@ class SignupBucketFinder
       other_signups,
       allow_movement: allow_movement
     )
+  end
+
+  private
+
+  def prioritized_buckets_with_requested_bucket
+    requested_bucket = registration_policy.bucket_with_key(requested_bucket_key)
+    [
+      requested_bucket,
+      (requested_bucket&.not_counted? ? nil : registration_policy.anything_bucket)
+    ].compact
+  end
+
+  def prioritized_buckets_without_requested_bucket
+    registration_policy.buckets.select(&:counted?).select(&:slots_limited?).sort_by do |bucket|
+      bucket.anything? ? 0 : 1
+    end
   end
 end

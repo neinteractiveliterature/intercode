@@ -44,7 +44,7 @@ export type SignupChangeCellProps = {
     state?: SignupState | null;
     previous_signup_change?: {
       state?: SignupState | null;
-    };
+    } | null;
   };
 };
 

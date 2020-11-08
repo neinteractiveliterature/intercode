@@ -8,7 +8,7 @@ import {
 
 export type BucketChangeCellProps = {
   value: SignupForFormatBucket & {
-    previous_signup_change?: SignupForFormatBucket;
+    previous_signup_change?: SignupForFormatBucket | null;
     run: {
       event: EventForFormatBucket;
     };

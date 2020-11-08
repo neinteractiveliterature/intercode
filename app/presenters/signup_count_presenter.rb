@@ -163,22 +163,17 @@ class SignupCountPresenter
   end
 
   def signup_count(state: nil, bucket_key: nil, counted: nil)
-    bucket_key_and_counted_hashes = begin
-      signup_count_by_state_and_bucket_key_and_counted.select do |state_key, _hash|
-        state.nil? || state == state_key
-      end.values
-    end
+    bucket_key_and_counted_hashes = unpack_hash(
+      signup_count_by_state_and_bucket_key_and_counted,
+      state
+    )
 
     counted_hashes = bucket_key_and_counted_hashes.flat_map do |hash|
-      hash.select do |bucket_key_key, _hash|
-        bucket_key.nil? || bucket_key == bucket_key_key
-      end.values
+      unpack_hash(hash, bucket_key)
     end
 
     counts = counted_hashes.flat_map do |hash|
-      hash.select do |counted_key, _count|
-        counted.nil? || counted == counted_key
-      end.values
+      unpack_hash(hash, counted)
     end
 
     counts.sum
@@ -222,5 +217,10 @@ class SignupCountPresenter
 
   def registration_policy
     @registration_policy ||= run.registration_policy
+  end
+
+  def unpack_hash(hash, selector)
+    return hash.values if selector.nil?
+    hash.select { |key, _hash| selector == key }.values
   end
 end

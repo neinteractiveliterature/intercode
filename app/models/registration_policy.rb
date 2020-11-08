@@ -113,7 +113,7 @@ class RegistrationPolicy
     return self == other.to_unsafe_h if other.is_a?(ActionController::Parameters)
     return false unless other.is_a?(RegistrationPolicy)
     return false unless prevent_no_preference_signups == other.prevent_no_preference_signups
-    return false unless buckets.map(&:key).sort == other.buckets.map(&:key).sort
+    return false unless buckets.size == other.buckets.size
 
     buckets.all? { |bucket| bucket == other.bucket_with_key(bucket.key) }
   end
