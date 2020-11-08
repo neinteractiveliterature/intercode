@@ -37,8 +37,14 @@ class CalendarsController < ApplicationController
   end
 
   def set_event_properties_from_signup(event, signup, tzid)
-    event.dtstart = Icalendar::Values::DateTime.new(signup.run.starts_at.in_time_zone(tzid), 'tzid' => tzid)
-    event.dtend = Icalendar::Values::DateTime.new(signup.run.ends_at.in_time_zone(tzid), 'tzid' => tzid)
+    event.dtstart = Icalendar::Values::DateTime.new(
+      signup.run.starts_at.in_time_zone(tzid),
+      'tzid' => tzid
+    )
+    event.dtend = Icalendar::Values::DateTime.new(
+      signup.run.ends_at.in_time_zone(tzid),
+      'tzid' => tzid
+    )
     event.summary = event_summary_from_signup(signup)
     event.location = event_location_from_signup(signup)
     event.description = signup.event.short_blurb

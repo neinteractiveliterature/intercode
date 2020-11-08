@@ -9,16 +9,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     return {} unless convention && user
 
     @all_model_permissions_in_convention.get(convention.id) do
-      select_all_permissions_in_convention_with_model_type_and_id(convention)
-        .group_by { |(_permission, model_type, _model_id)| model_type }
-        .transform_values do |model_type_rows|
-          rows_by_model_id = model_type_rows
-            .group_by { |(_permission, _model_type, model_id)| model_id }
-
-          rows_by_model_id.transform_values do |model_id_rows|
-            Set.new(model_id_rows.map { |(permission, _model_type, _model_id)| permission })
-          end
-        end
+      load_all_model_permissions_in_convention(convention)
     end
   end
 
@@ -150,6 +141,19 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
 
       [permission, model_type, model_id]
     end
+  end
+
+  def load_all_model_permissions_in_convention(convention)
+    select_all_permissions_in_convention_with_model_type_and_id(convention)
+      .group_by { |(_permission, model_type, _model_id)| model_type }
+      .transform_values do |model_type_rows|
+        rows_by_model_id = model_type_rows
+          .group_by { |(_permission, _model_type, model_id)| model_id }
+
+        rows_by_model_id.transform_values do |model_id_rows|
+          Set.new(model_id_rows.map { |(permission, _model_type, _model_id)| permission })
+        end
+      end
   end
 
   def convention_for_model(model_type, model)
