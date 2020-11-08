@@ -5,7 +5,8 @@ class Types::FormType < Types::BaseObject
   field :form_api_json, Types::JSON,
     null: false,
     camelize: false,
-    deprecation_reason: 'The old form API export is deprecated; please use the "form" field and its subfields instead'
+    deprecation_reason: "The old form API export is deprecated; please use the \"form\" field \
+and its subfields instead"
   field :form_type, Types::FormTypeType, null: false, camelize: false
   field :export_json, Types::JSON, null: false, camelize: false
   field :event_categories, [Types::EventCategoryType], null: false, camelize: false

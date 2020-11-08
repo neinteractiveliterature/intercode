@@ -177,9 +177,14 @@ class SignupOptionsPresenter
     end
   end
 
+  # If there are no auxiliary options, all options are main
+  def all_options_main?
+    no_preference_options.none? && not_counted_options.none?
+  end
+
   def main_option?(option)
     return false if option.bucket&.anything?
-    return true if no_preference_options.none? && not_counted_options.none?
+    return true if all_options_main?
 
     option.no_preference? || (option.bucket&.slots_limited? && option.counted?)
   end
