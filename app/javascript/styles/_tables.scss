@@ -6,3 +6,80 @@
     }
   }
 }
+
+.react-table {
+  // fake table styling for react-table stuff, copied from Bootstrap's _tables.scss
+  [role=columnheader],
+  [role=cell] {
+    padding: $table-cell-padding;
+    vertical-align: top;
+    border-top: $table-border-width solid $table-border-color;
+  }
+
+  [role=columnheader] {
+    vertical-align: bottom;
+    border-bottom: (2 * $table-border-width) solid $table-border-color;
+  }
+
+  [role=rowgroup] + [role=rowgroup] {
+    border-top: (2 * $table-border-width) solid $table-border-color;
+  }
+
+  &.table-bordered {
+    border: $table-border-width solid $table-border-color;
+
+    [role=columnheader],
+    [role=cell] {
+      border: $table-border-width solid $table-border-color;
+    }
+
+    .thead {
+      [role=columnheader],
+      [role=cell] {
+        border-bottom-width: 2 * $table-border-width;
+      }
+    }
+  }
+
+  &.table-borderless {
+    [role=columnheader],
+    [role=cell],
+    .thead [role=columnheader],
+    [role=rowgroup] + [role=rowgroup] {
+      border: 0;
+    }
+  }
+
+  &.table-striped {
+    [role=rowgroup] [role=row]:nth-of-type(#{$table-striped-order}) {
+      background-color: $table-accent-bg;
+    }
+  }
+
+  &.table-hover {
+    [role=rowgroup] [role=row] {
+      @include hover() {
+        color: $table-hover-color;
+        background-color: $table-hover-bg;
+      }
+    }
+  }
+
+  .resizer {
+    display: inline-block;
+    background: $table-border-color;
+    width: $table-border-width;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    /* prevents from scrolling while dragging on touch devices */
+    touch-action:none;
+    opacity: 50%;
+    &:hover, &.isResizing {
+      opacity: 100%;
+    }
+  }
+}
+

@@ -66,6 +66,10 @@ module.exports = {
       2,
       {
         ignoreElements: ['th'],
+        required: {
+          some: ['nesting', 'id'],
+        },
+        allowChildren: false,
       },
     ],
     'no-restricted-imports': ['error', 'graphql-tag'],

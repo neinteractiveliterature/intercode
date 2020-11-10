@@ -1,48 +1,43 @@
 import { useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Filter, SortingRule } from 'react-table';
-import { FieldFilterCodecs } from './FilterUtils';
+import { Filters, SortingRule } from 'react-table';
 
-export type UseReactRouterReactTableOptions = Partial<FieldFilterCodecs> & {
-  onPageChange?: (newPage: number) => void;
-  onFilteredChange?: (newFiltered: Filter[]) => void;
-  onSortedChange?: (newSorted: SortingRule[]) => void;
+import { FieldFilterCodecs } from './FilterUtils';
+import useWhyDidYouUpdate from '../useWhyDidYouUpdate';
+
+export type UseReactRouterReactTableOptions<RowType extends object> = Partial<FieldFilterCodecs> & {
+  defaultState?: Partial<ReactRouterReactTableState<RowType>>;
 };
 
-export type ReactRouterReactTableState = {
+export type ReactRouterReactTableState<RowType extends object> = {
   page: number;
-  filtered: Filter[];
-  sorted: SortingRule[];
+  filters: Filters<RowType>;
+  sortBy: SortingRule<RowType>[];
 };
 
 function identityCodec(field: string, value: string): string {
   return value;
 }
 
-export default function useReactRouterReactTable({
+export default function useReactRouterReactTable<RowType extends object>({
+  defaultState,
   encodeFilterValue,
   decodeFilterValue,
-  onPageChange,
-  onFilteredChange,
-  onSortedChange,
-}: UseReactRouterReactTableOptions) {
+}: UseReactRouterReactTableOptions<RowType>) {
   const history = useHistory();
   const encode = useMemo(() => encodeFilterValue ?? identityCodec, [encodeFilterValue]);
   const decode = useMemo(() => decodeFilterValue ?? identityCodec, [decodeFilterValue]);
 
   const decodeSearchParams = useCallback(
     (search: string) => {
-      const state: ReactRouterReactTableState = {
-        page: 0,
-        filtered: [],
-        sorted: [],
-      };
-
       const params = new URLSearchParams(search);
+      let page: number | undefined;
+      const filters: Filters<RowType> = [];
+      const sortBy: SortingRule<RowType>[] = [];
 
       Array.from(params.entries()).forEach(([key, value]) => {
         if (key === 'page') {
-          state.page = Number.parseInt(value, 10) - 1;
+          page = Number.parseInt(value, 10) - 1;
           return;
         }
 
@@ -50,7 +45,7 @@ export default function useReactRouterReactTable({
         if (filterMatch) {
           const filterValue = decode(filterMatch[1], value);
           if (filterValue != null) {
-            state.filtered.push({
+            filters.push({
               id: filterMatch[1],
               value: filterValue,
             });
@@ -60,17 +55,21 @@ export default function useReactRouterReactTable({
 
         const sortMatch = key.match(/^sort\.(.*)$/);
         if (sortMatch) {
-          state.sorted.push({ id: sortMatch[1], desc: value === 'desc' });
+          sortBy.push({ id: sortMatch[1], desc: value === 'desc' });
         }
       });
 
-      return state;
+      return {
+        page: page ?? defaultState?.page ?? 0,
+        filters: filters.length > 0 ? filters : defaultState?.filters ?? [],
+        sortBy: sortBy.length > 0 ? sortBy : defaultState?.sortBy ?? [],
+      };
     },
-    [decode],
+    [decode, defaultState],
   );
 
   const encodeSearchParams = useCallback(
-    ({ page, filtered, sorted }: ReactRouterReactTableState, existingQuery: string) => {
+    ({ page, filters, sortBy }: ReactRouterReactTableState<RowType>, existingQuery: string) => {
       const params = new URLSearchParams(existingQuery);
 
       if (page != null) {
@@ -84,7 +83,7 @@ export default function useReactRouterReactTable({
         }
       });
 
-      filtered.forEach(({ id, value }) => {
+      filters.forEach(({ id, value }) => {
         const encoded = encode(id, value);
         if (encoded != null) {
           params.set(`filters.${id}`, encoded);
@@ -93,7 +92,7 @@ export default function useReactRouterReactTable({
         }
       });
 
-      sorted.forEach(({ id, desc }) => {
+      sortBy.forEach(({ id, desc }) => {
         params.set(`sort.${id}`, desc ? 'desc' : 'asc');
       });
 
@@ -103,10 +102,12 @@ export default function useReactRouterReactTable({
   );
 
   const updateSearch = useCallback(
-    (newState: Partial<ReactRouterReactTableState>) => {
+    (newState: Partial<ReactRouterReactTableState<RowType>>) => {
       const oldState = decodeSearchParams(history.location.search);
       const newSearch = encodeSearchParams({ ...oldState, ...newState }, history.location.search);
-      history.replace(`${history.location.pathname}?${newSearch}`);
+      if (newSearch !== history.location.search.replace(/^\?/, '')) {
+        history.replace(`${history.location.pathname}?${newSearch}`);
+      }
     },
     [decodeSearchParams, encodeSearchParams, history],
   );
@@ -116,57 +117,15 @@ export default function useReactRouterReactTable({
     history.location.search,
   ]);
 
-  const wrappedOnPageChange = useCallback(
-    (pageOrUpdateFunc: React.SetStateAction<number>) => {
-      const pageChangeCallback = onPageChange || (() => {});
-      let page = pageOrUpdateFunc;
-      if (typeof page === 'function') {
-        page = (pageOrUpdateFunc as (newPage: number) => number)(tableState.page);
-      }
-      updateSearch({ page });
-      pageChangeCallback(page);
-    },
-    [onPageChange, tableState.page, updateSearch],
-  );
+  useWhyDidYouUpdate('decodeSearchParamsDeps', { decode, defaultState });
 
-  const wrappedOnFilteredChange = useCallback(
-    (filteredOrUpdateFunc: React.SetStateAction<Filter[]>) => {
-      const filteredChangeCallback = onFilteredChange || (() => {});
-      let filtered = filteredOrUpdateFunc;
-      if (typeof filtered === 'function') {
-        filtered = (filteredOrUpdateFunc as (newFiltered: Filter[]) => Filter[])(
-          tableState.filtered,
-        );
-      }
-      updateSearch({ filtered, page: 0 });
-      filteredChangeCallback(filtered);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onFilteredChange, JSON.stringify(tableState.filtered), updateSearch],
+  return useMemo(
+    () => ({
+      page: tableState.page,
+      filters: tableState.filters,
+      sortBy: tableState.sortBy,
+      updateSearch,
+    }),
+    [tableState.filters, tableState.page, tableState.sortBy, updateSearch],
   );
-
-  const wrappedOnSortedChange = useCallback(
-    (sortedOrUpdateFunc: React.SetStateAction<SortingRule[]>) => {
-      const sortedChangeCallback = onSortedChange || (() => {});
-      let sorted = sortedOrUpdateFunc;
-      if (typeof sorted === 'function') {
-        sorted = (sortedOrUpdateFunc as (newSorted: SortingRule[]) => SortingRule[])(
-          tableState.sorted,
-        );
-      }
-      updateSearch({ sorted, page: 0 });
-      sortedChangeCallback(sorted);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onSortedChange, JSON.stringify(tableState.sorted), updateSearch],
-  );
-
-  return {
-    page: tableState.page,
-    filtered: tableState.filtered,
-    sorted: tableState.sorted,
-    onPageChange: wrappedOnPageChange,
-    onFilteredChange: wrappedOnFilteredChange,
-    onSortedChange: wrappedOnSortedChange,
-  };
 }

@@ -1,16 +1,14 @@
-export type SignupChoiceCellProps = {
-  value?: number | null;
-  original: {
-    counted?: boolean | null;
-  };
-};
+import { CellProps } from 'react-table';
 
-const SignupChoiceCell = ({ value, original }: SignupChoiceCellProps) => {
+function SignupChoiceCell<RowType extends { counted?: boolean | null }, ValueType>({
+  value,
+  row: { original },
+}: CellProps<RowType, ValueType>) {
   if (original.counted) {
     return <>{value}</>;
   }
 
   return <>N/C</>;
-};
+}
 
 export default SignupChoiceCell;
