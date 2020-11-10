@@ -1,4 +1,4 @@
-import ReactTable, { FilterRender } from 'react-table';
+import { Column } from 'react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -12,6 +12,7 @@ import SignupChangeCell from '../Tables/SignupChangeCell';
 import BucketChangeCell from '../Tables/BucketChangeCell';
 import TableHeader from '../Tables/TableHeader';
 import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
+import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import {
   SignupSpySignupChangesQueryQuery,
   useSignupSpySignupChangesQueryQuery,
@@ -23,111 +24,105 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
 
-const getPossibleColumns = () => [
+const columns: Column<SignupChangeType>[] = [
   {
     Header: 'Name',
     id: 'name',
     accessor: (signupChange: SignupChangeType) => signupChange.user_con_profile,
-    sortable: false,
-    filterable: true,
     Cell: UserConProfileWithGravatarCell,
     Filter: FreeTextFilter,
+    defaultCanFilter: true,
   },
   {
     Header: 'Event',
     id: 'event_title',
     accessor: (signupChange: SignupChangeType) => signupChange.run.event.title,
-    sortable: false,
-    filterable: true,
     Filter: FreeTextFilter,
+    defaultCanFilter: true,
   },
   {
     Header: 'Change',
     id: 'action',
     accessor: (signupChange: SignupChangeType) => signupChange,
-    sortable: false,
-    filterable: true,
     Cell: ({ value }: { value: SignupChangeType }) => <SignupChangeCell value={value} />,
-    Filter: ({ filter, onChange }: Parameters<FilterRender>[0]) => <SignupChangeActionFilter filter={filter} onChange={onChange} />,
+    Filter: SignupChangeActionFilter,
+    defaultCanFilter: true,
   },
   {
     Header: 'Bucket',
     id: 'bucket_change',
     accessor: (signupChange: SignupChangeType) => signupChange,
-    sortable: false,
-    filterable: false,
     Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
   },
   {
     Header: 'Timestamp',
     id: 'created_at',
     accessor: 'created_at',
-    sortable: false,
-    filterable: false,
     width: 130,
-    // eslint-disable-next-line react/prop-types
     Cell: ({ value }: { value: SignupChangeType['created_at'] }) => <TimestampCell value={value} />,
+    disableSortBy: false,
   },
   {
     Header: 'Choice',
     id: 'choice',
     width: 100,
     accessor: (signupChange: SignupChangeType) => signupChange.signup.choice,
-    sortable: false,
-    filterable: false,
     Cell: SignupChoiceCell,
   },
 ];
 
+const defaultVisibleColumns = [
+  'name',
+  'event_title',
+  'action',
+  'bucket_change',
+  'created_at',
+  'choice',
+];
+
+const defaultState = {
+  sortBy: [{ id: 'created_at', desc: true }],
+};
+
 function SignupSpyTable() {
-  const [
-    reactTableProps,
-    { columnSelectionProps, queryResult, queryData, tableHeaderProps },
-  ] = useReactTableWithTheWorks({
+  const {
+    columnSelectionProps,
+    refetch,
+    queryData,
+    loading,
+    tableHeaderProps,
+    tableInstance,
+  } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultVisibleColumns: [
-      'name',
-      'event_title',
-      'action',
-      'bucket_change',
-      'created_at',
-      'choice',
-    ],
+    defaultState,
+    defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data }) => data.convention.signup_changes_paginated.entries,
     getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: () => columns,
     useQuery: useSignupSpySignupChangesQueryQuery,
     storageKeyPrefix: 'signupSpy',
   });
 
-  const { filtered, sorted } = tableHeaderProps;
+  const { filters, sortBy } = tableHeaderProps;
 
   return (
     <QueryDataContext.Provider value={queryData ?? {}}>
-      <ReactTable
-        {...reactTableProps}
-        className="-striped -highlight"
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-      >
-        {(state, makeTable) => (
-          <div className="mb-4">
-            <TableHeader
-              {...tableHeaderProps}
-              renderLeftContent={() => <RefreshButton refreshData={() => queryResult.refetch()} />}
-              exportButton={
-                <SignupChangesTableExportButton
-                  exportUrl="/csv_exports/signup_changes"
-                  filtered={filtered}
-                  sorted={sorted}
-                  visibleColumnIds={columnSelectionProps.visibleColumnIds}
-                />
-              }
+      <div className="mb-4">
+        <TableHeader
+          {...tableHeaderProps}
+          renderLeftContent={() => <RefreshButton refreshData={() => refetch()} />}
+          exportButton={
+            <SignupChangesTableExportButton
+              exportUrl="/csv_exports/signup_changes"
+              filters={filters}
+              sortBy={sortBy}
+              visibleColumnIds={columnSelectionProps.visibleColumnIds}
             />
-            {makeTable()}
-          </div>
-        )}
-      </ReactTable>
+          }
+        />
+        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+      </div>
     </QueryDataContext.Provider>
   );
 }

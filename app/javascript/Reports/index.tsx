@@ -72,7 +72,6 @@ const ReportsMenu = LoadQueryWrapper(useReportsMenuQueryQuery, function ReportsM
               </a>
             </li>
             <li>
-              .{' '}
               <a href="/reports/volunteer_events" target="_blank" rel="noopener noreferrer">
                 Volunteer event signups
               </a>

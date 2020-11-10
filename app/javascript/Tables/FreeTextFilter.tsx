@@ -1,13 +1,11 @@
-import { Filter } from 'react-table';
+import { FilterProps } from 'react-table';
 
-import CommitableInput, { CommitableInputProps } from '../BuiltInFormControls/CommitableInput';
+import CommitableInput from '../BuiltInFormControls/CommitableInput';
 
-export type FreeTextFilterProps = CommitableInputProps & {
-  filter?: Filter;
-};
-
-function FreeTextFilter({ filter, ...otherProps }: FreeTextFilterProps) {
-  return <CommitableInput value={filter?.value} {...otherProps} />;
+function FreeTextFilter<RowType extends object>({
+  column: { filterValue, setFilter },
+}: FilterProps<RowType>) {
+  return <CommitableInput value={filterValue} onChange={setFilter} />;
 }
 
 export default FreeTextFilter;

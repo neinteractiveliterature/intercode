@@ -126,6 +126,7 @@ export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
+  sort?: Types.Maybe<Array<Types.SortInput>>;
 }>;
 
 
@@ -405,7 +406,7 @@ export type SignupCountsByStateQueryQueryHookResult = ReturnType<typeof useSignu
 export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useSignupCountsByStateQueryLazyQuery>;
 export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
-    query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int) {
+    query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int, $sort: [SortInput!]) {
   convention: assertConvention {
     id
     timezone_name
@@ -413,7 +414,7 @@ export const SignupSpySignupChangesQueryDocument = gql`
       page: $page
       per_page: $perPage
       filters: $filters
-      sort: [{field: "created_at", desc: true}]
+      sort: $sort
     ) {
       total_entries
       total_pages
@@ -487,6 +488,7 @@ export const SignupSpySignupChangesQueryDocument = gql`
  *      filters: // value for 'filters'
  *      page: // value for 'page'
  *      perPage: // value for 'perPage'
+ *      sort: // value for 'sort'
  *   },
  * });
  */

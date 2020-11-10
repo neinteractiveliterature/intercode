@@ -5,19 +5,19 @@ import { Column } from 'react-table';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
-export type ColumnSelectorProps = {
+export type ColumnSelectorProps<RowType extends object> = {
   alwaysVisibleColumns: string[];
-  possibleColumns: Column<any>[];
+  possibleColumns: Column<RowType>[];
   visibleColumnIds: string[];
   setVisibleColumnIds: React.Dispatch<string[]>;
 };
 
-function ColumnSelector({
+function ColumnSelector<RowType extends object>({
   alwaysVisibleColumns,
   possibleColumns,
   visibleColumnIds,
   setVisibleColumnIds,
-}: ColumnSelectorProps) {
+}: ColumnSelectorProps<RowType>) {
   const { t } = useTranslation();
   const renderHiddenColumnCount = () => {
     const count =

@@ -1,9 +1,8 @@
 import { useMemo, useState, ReactNode } from 'react';
-import * as React from 'react';
 import classNames from 'classnames';
 import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';
-import { Filter } from 'react-table';
+import { FilterProps } from 'react-table';
 import max from 'lodash/max';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
@@ -24,31 +23,33 @@ function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
 
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
-type ChoiceSetFilterCommonProps = {
+type ChoiceSetFilterCommonProps<RowType extends object> = FilterProps<RowType> & {
   choices: readonly ChoiceSetFilterChoice[];
-  filter?: Filter;
   filterCodec?: FilterCodec<ChoiceSetFilterValue>;
 };
 
-export type ChoiceSetFilterSingleProps = ChoiceSetFilterCommonProps & {
-  onChange: React.Dispatch<ChoiceSetFilterValue>;
+export type ChoiceSetFilterSingleProps<RowType extends object> = ChoiceSetFilterCommonProps<
+  RowType
+> & {
   multiple: false;
   renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
 };
 
-export type ChoiceSetFilterMultipleProps = ChoiceSetFilterCommonProps & {
-  onChange: React.Dispatch<ChoiceSetFilterValue[]>;
+export type ChoiceSetFilterMultipleProps<RowType extends object> = ChoiceSetFilterCommonProps<
+  RowType
+> & {
   multiple: true;
   renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
 };
 
-export type ChoiceSetFilterProps = ChoiceSetFilterSingleProps | ChoiceSetFilterMultipleProps;
+export type ChoiceSetFilterProps<RowType extends object> =
+  | ChoiceSetFilterSingleProps<RowType>
+  | ChoiceSetFilterMultipleProps<RowType>;
 
-function ChoiceSetFilter(props: ChoiceSetFilterProps) {
+function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<RowType>) {
   const {
     choices: rawChoices,
-    filter,
-    onChange: originalOnChange,
+    column: { filterValue: filterValueFromColumn, setFilter },
     multiple: originalMultiple,
     ...otherProps
   } = props;
@@ -75,6 +76,10 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
         phase: 'beforeWrite',
         requires: ['computeStyles'],
       },
+      {
+        name: 'offset',
+        options: { offset: [0, -3] },
+      },
     ],
     [],
   );
@@ -93,7 +98,7 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
   const toggleOpen = useToggleOpen(setDropdownOpen, update);
 
   const filterValue = useMemo(() => {
-    const rawFilterValue = filter?.value ?? (props.multiple ? [] : undefined);
+    const rawFilterValue = filterValueFromColumn ?? (props.multiple ? [] : undefined);
     if (props.filterCodec) {
       if (props.multiple) {
         return rawFilterValue.map((singleValue: any) =>
@@ -108,7 +113,7 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
     }
 
     return rawFilterValue?.toString();
-  }, [filter, props.filterCodec, props.multiple]);
+  }, [filterValueFromColumn, props.filterCodec, props.multiple]);
 
   const choices = useMemo(() => {
     if (props.filterCodec) {
@@ -125,12 +130,12 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
 
   const valueChanged = (value: any) => {
     if (props.multiple && props.filterCodec) {
-      props.onChange(value.map((singleValue: string) => props.filterCodec!.decode(singleValue)));
+      setFilter(value.map((singleValue: string) => props.filterCodec!.decode(singleValue)));
     }
     if (!props.multiple && props.filterCodec) {
-      props.onChange(props.filterCodec.decode(value)!);
+      setFilter(props.filterCodec.decode(value)!);
     }
-    props.onChange(value);
+    setFilter(value);
   };
 
   const renderHeaderCaptionWithChoices = () => {
@@ -192,8 +197,8 @@ function ChoiceSetFilter(props: ChoiceSetFilterProps) {
         ref={setDropdownMenu}
         style={{
           ...styles.popper,
-          marginTop: '-3px',
           borderTop: 'none',
+          zIndex: 1100,
         }}
         {...attributes.popper}
       >
