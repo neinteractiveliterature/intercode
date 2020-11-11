@@ -136,7 +136,7 @@ export default function useReactTableWithTheWorks<
   const possibleColumns = useCachedLoadableValue(
     loading,
     error,
-    () => getPossibleColumns(queryData!),
+    () => (queryData ? getPossibleColumns(queryData) : []),
     [queryData],
   );
 
