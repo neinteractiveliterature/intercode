@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, HTMLAttributes } from 'react';
 import classNames from 'classnames';
-import { ColumnInstance } from 'react-table';
+import { ColumnInstance, Row } from 'react-table';
 
 import { UseReactTableWithTheWorksResult } from './useReactTableWithTheWorks';
 import { GraphQLReactTableVariables } from './useGraphQLReactTable';
@@ -32,6 +32,17 @@ function Resizer<RowType extends object>({ column }: { column: ColumnInstance<Ro
   );
 }
 
+export type ReactTableWithTheWorksProps<
+  QueryData,
+  RowType extends object,
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+> = Pick<
+  UseReactTableWithTheWorksResult<QueryData, RowType, Variables>,
+  'tableInstance' | 'loading'
+> & {
+  onClickRow?: React.Dispatch<Row<RowType>>;
+};
+
 function ReactTableWithTheWorks<
   QueryData,
   RowType extends object,
@@ -39,10 +50,8 @@ function ReactTableWithTheWorks<
 >({
   tableInstance,
   loading,
-}: Pick<
-  UseReactTableWithTheWorksResult<QueryData, RowType, Variables>,
-  'tableInstance' | 'loading'
->) {
+  onClickRow,
+}: ReactTableWithTheWorksProps<QueryData, RowType, Variables>) {
   const {
     getTableProps,
     headerGroups,
@@ -147,13 +156,34 @@ function ReactTableWithTheWorks<
           : rows.map((row) => {
               prepareRow(row);
               return (
-                <div {...row.getRowProps()}>
+                <div
+                  {...mergeProps<HTMLAttributes<HTMLDivElement>>(
+                    row.getRowProps(),
+                    onClickRow
+                      ? {
+                          style: { cursor: 'pointer' },
+                          onClick: () => onClickRow(row),
+                        }
+                      : {},
+                  )}
+                >
                   {row.cells.map((cell) => {
                     return (
                       <div
-                        {...mergeProps<HTMLAttributes<HTMLDivElement>>(cell.getCellProps(), {
-                          style: { position: 'relative' },
-                        })}
+                        {...mergeProps<HTMLAttributes<HTMLDivElement>>(
+                          cell.getCellProps(),
+                          {
+                            style: { position: 'relative' },
+                          },
+                          cell.column.id === '_selected'
+                            ? {
+                                onClick: (event) => {
+                                  event.stopPropagation();
+                                  row.toggleRowSelected(!row.isSelected);
+                                },
+                              }
+                            : {},
+                        )}
                       >
                         {cell.render('Cell')}
                         <Resizer column={cell.column} />

@@ -30,11 +30,11 @@ import {
   UseResizeColumnsColumnProps,
   UseResizeColumnsOptions,
   UseResizeColumnsState,
-  // UseRowSelectHooks,
-  // UseRowSelectInstanceProps,
-  // UseRowSelectOptions,
-  // UseRowSelectRowProps,
-  // UseRowSelectState,
+  UseRowSelectHooks,
+  UseRowSelectInstanceProps,
+  UseRowSelectOptions,
+  UseRowSelectRowProps,
+  UseRowSelectState,
   // UseRowStateCellProps,
   // UseRowStateInstanceProps,
   // UseRowStateOptions,
@@ -57,7 +57,7 @@ declare module 'react-table' {
       // UseGroupByOptions<D>,
       UsePaginationOptions<D>,
       UseResizeColumnsOptions<D>,
-      // UseRowSelectOptions<D>,
+      UseRowSelectOptions<D>,
       // UseRowStateOptions<D>,
       UseSortByOptions<D> {
     // note that having Record here allows you to add anything to the options, this matches the spirit of the
@@ -68,7 +68,7 @@ declare module 'react-table' {
 
   export interface Hooks<D extends Record<string, unknown> = Record<string, unknown>> // UseExpandedHooks<D>,
     extends UseGroupByHooks<D>,
-      // UseRowSelectHooks<D>,
+      UseRowSelectHooks<D>,
       UseSortByHooks<D> {}
 
   export interface TableInstance<D extends Record<string, unknown> = Record<string, unknown>> // UseColumnOrderInstanceProps<D>,
@@ -88,7 +88,7 @@ declare module 'react-table' {
       // UseGroupByState<D>,
       UsePaginationState<D>,
       UseResizeColumnsState<D>,
-      // UseRowSelectState<D>,
+      UseRowSelectState<D>,
       // UseRowStateState<D>,
       UseSortByState<D> {}
 
