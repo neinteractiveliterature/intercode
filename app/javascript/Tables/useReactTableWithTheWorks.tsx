@@ -1,7 +1,8 @@
-import { createContext, useMemo, useEffect } from 'react';
+import React, { createContext, useMemo, useEffect, InputHTMLAttributes } from 'react';
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import {
   Column,
+  CellProps,
   TableInstance,
   TableState,
   useTable,
@@ -10,6 +11,7 @@ import {
   usePagination,
   useResizeColumns,
   useFlexLayout,
+  useRowSelect,
 } from 'react-table';
 
 import useColumnSelection, {
@@ -35,6 +37,31 @@ export function createQueryDataContext<DataType>() {
 }
 export const QueryDataContext = createContext({});
 
+const IndeterminateCheckbox = React.forwardRef<
+  HTMLInputElement,
+  InputHTMLAttributes<HTMLInputElement> & { indeterminate?: boolean }
+>(({ indeterminate, ...rest }, ref) => {
+  const defaultRef = React.useRef<HTMLInputElement>(null);
+  const resolvedRef = ref ?? defaultRef;
+
+  React.useEffect(() => {
+    if (typeof resolvedRef !== 'function' && resolvedRef.current) {
+      resolvedRef.current.indeterminate = indeterminate ?? false;
+    }
+  }, [resolvedRef, indeterminate]);
+
+  return (
+    <>
+      <input
+        type="checkbox"
+        className="custom-control custom-checkbox"
+        ref={resolvedRef}
+        {...rest}
+      />
+    </>
+  );
+});
+
 export type UseReactTableWithTheWorksOptions<
   RowType extends object,
   QueryData,
@@ -46,6 +73,7 @@ export type UseReactTableWithTheWorksOptions<
     defaultState?: Partial<TableState<RowType>>;
     getPossibleColumns: (queryData: QueryData) => Column<RowType>[];
     storageKeyPrefix: string;
+    rowSelect?: boolean;
   };
 
 export type UseReactTableWithTheWorksResult<
@@ -76,6 +104,7 @@ export default function useReactTableWithTheWorks<
   getPages,
   getPossibleColumns,
   useQuery,
+  rowSelect,
   storageKeyPrefix,
   variables,
 }: UseReactTableWithTheWorksOptions<
@@ -146,8 +175,44 @@ export default function useReactTableWithTheWorks<
     useResizeColumns,
     usePagination,
     useFlexLayout,
+    useRowSelect,
+    (hooks) => {
+      if (rowSelect) {
+        hooks.visibleColumns.push((columns) => [
+          {
+            id: '_selected',
+            width: 20,
+            // The header can use the table's getToggleAllRowsSelectedProps method
+            // to render a checkbox
+            Header: ({ getToggleAllPageRowsSelectedProps }) => (
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+            ),
+            // The cell can use the individual row's getToggleRowSelectedProps method
+            // to the render a checkbox
+            Cell: ({ row }: CellProps<RowType>) => {
+              const { toggleRowSelected, isSelected } = row;
+              const toggle = (event: React.SyntheticEvent) => {
+                event.stopPropagation();
+                toggleRowSelected(!isSelected);
+              };
+
+              return (
+                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} onChange={toggle} />
+              );
+            },
+          },
+          ...columns,
+        ]);
+      }
+    },
   );
 
+  useWhyDidYouUpdate('updateSearchDeps', {
+    filters: tableInstance.state.filters,
+    sortBy: tableInstance.state.sortBy,
+    pageIndex: tableInstance.state.pageIndex,
+    updateSearch,
+  });
   useEffect(() => {
     updateSearch({
       filters: tableInstance.state.filters,

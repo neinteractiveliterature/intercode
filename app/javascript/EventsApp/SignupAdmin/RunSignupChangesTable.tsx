@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import ReactTable, { FilterRender } from 'react-table';
+import { Column } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -18,6 +18,7 @@ import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
 import { RunSignupChangesQueryQuery, useRunSignupChangesQueryQuery } from './queries.generated';
+import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -25,39 +26,33 @@ const FILTER_CODECS = buildFieldFilterCodecs({
 
 type SignupChangeType = RunSignupChangesQueryQuery['run']['signup_changes_paginated']['entries'][0];
 
-const getPossibleColumns = (t: TFunction) => [
+const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => [
   {
-    Header: t('events.signupAdmin.history.nameHeader', 'Name'),
+    Header: <>{t('events.signupAdmin.history.nameHeader', 'Name')}</>,
     id: 'name',
     accessor: (signupChange: SignupChangeType) => signupChange.user_con_profile,
-    sortable: false,
-    filterable: true,
+    disableFilters: false,
     Cell: UserConProfileWithGravatarCell,
     Filter: FreeTextFilter,
   },
   {
-    Header: t('events.signupAdmin.history.changeHeader', 'Change'),
+    Header: <>{t('events.signupAdmin.history.changeHeader', 'Change')}</>,
     id: 'action',
     accessor: (signupChange: SignupChangeType) => signupChange,
-    sortable: false,
-    filterable: true,
+    disableFilters: false,
     Cell: ({ value }: { value: SignupChangeType }) => <SignupChangeCell value={value} />,
-    Filter: ({ filter, onChange }: Parameters<FilterRender>[0]) => <SignupChangeActionFilter filter={filter} onChange={onChange} />,
+    Filter: SignupChangeActionFilter,
   },
   {
-    Header: t('events.signupAdmin.history.bucketHeader', 'Bucket'),
+    Header: <>{t('events.signupAdmin.history.bucketHeader', 'Bucket')}</>,
     id: 'bucket_change',
     accessor: (signupChange: SignupChangeType) => signupChange,
-    sortable: false,
-    filterable: false,
     Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
   },
   {
-    Header: t('events.signupAdmin.history.timestampHeader', 'Timestamp'),
+    Header: <>{t('events.signupAdmin.history.timestampHeader', 'Timestamp')}</>,
     id: 'created_at',
     accessor: 'created_at',
-    sortable: false,
-    filterable: false,
     width: 130,
     Cell: ({ value }: { value: string }) => <TimestampCell value={value} />,
   },
@@ -67,15 +62,20 @@ export type RunSignupChangesTableProps = {
   runId: number;
 };
 
+const defaultVisibleColumns = ['name', 'action', 'bucket_change', 'created_at'];
+
 function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
   const { t } = useTranslation();
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
-  const [
-    reactTableProps,
-    { queryData, tableHeaderProps, columnSelectionProps },
-  ] = useReactTableWithTheWorks({
+  const {
+    tableInstance,
+    loading,
+    queryData,
+    tableHeaderProps,
+    columnSelectionProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultVisibleColumns: ['name', 'action', 'bucket_change', 'created_at'],
+    defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data }) => data.run.signup_changes_paginated.entries,
     getPages: ({ data }) => data.run.signup_changes_paginated.total_pages,
@@ -97,28 +97,20 @@ function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
 
   return (
     <QueryDataContext.Provider value={queryData ?? {}}>
-      <ReactTable
-        {...reactTableProps}
-        className="-striped -highlight"
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-      >
-        {(state, makeTable) => (
-          <div className="mb-4">
-            <TableHeader
-              {...tableHeaderProps}
-              exportButton={
-                <SignupChangesTableExportButton
-                  exportUrl={`/csv_exports/run_signup_changes?run_id=${runId}`}
-                  filtered={tableHeaderProps.filtered}
-                  sorted={tableHeaderProps.sorted}
-                  visibleColumnIds={columnSelectionProps.visibleColumnIds}
-                />
-              }
+      <div className="mb-4">
+        <TableHeader
+          {...tableHeaderProps}
+          exportButton={
+            <SignupChangesTableExportButton
+              exportUrl={`/csv_exports/run_signup_changes?run_id=${runId}`}
+              filters={tableHeaderProps.filters}
+              sortBy={tableHeaderProps.sortBy}
+              visibleColumnIds={columnSelectionProps.visibleColumnIds}
             />
-            {makeTable()}
-          </div>
-        )}
-      </ReactTable>
+          }
+        />
+        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+      </div>
     </QueryDataContext.Provider>
   );
 }
