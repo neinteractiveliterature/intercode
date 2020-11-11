@@ -1489,14 +1489,14 @@
     "@graphql-codegen/plugin-helpers" "^1.17.9"
     tslib "~2.0.1"
 
-"@graphql-codegen/near-operation-file-preset@^1.17.7":
-  version "1.17.11"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/near-operation-file-preset/-/near-operation-file-preset-1.17.11.tgz#6866a0f1c7bba421f8f4ecc20fd30f3f00077cd5"
-  integrity sha512-mB2IK45pBT9/w8FNxQali3GaFYz10Jk1BlobhN767IigIiViND+nztzXKonFz1Je+Ua/PMqfkIcL7jm4U9bmkg==
+"@graphql-codegen/near-operation-file-preset@^1.17.12":
+  version "1.17.12"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/near-operation-file-preset/-/near-operation-file-preset-1.17.12.tgz#149fca6275762002f66c604fe8427ae7f5003987"
+  integrity sha512-Gk+yqqQbbBoLkoAbfhFRmwZqr7BwsOH6qJLM/fOGRV2ksKPIk1mDJBILUKt+xfRKPE3ob0cJajRHRZK260xBnw==
   dependencies:
     "@graphql-codegen/add" "^2.0.1"
-    "@graphql-codegen/plugin-helpers" "^1.17.8"
-    "@graphql-codegen/visitor-plugin-common" "^1.17.14"
+    "@graphql-codegen/plugin-helpers" "^1.18.1"
+    "@graphql-codegen/visitor-plugin-common" "^1.17.17"
     parse-filepath "^1.0.2"
     tslib "~2.0.1"
 
@@ -1550,7 +1550,7 @@
     auto-bind "~4.0.0"
     tslib "~2.0.1"
 
-"@graphql-codegen/visitor-plugin-common@^1.17.13", "@graphql-codegen/visitor-plugin-common@^1.17.14", "@graphql-codegen/visitor-plugin-common@^1.17.15", "@graphql-codegen/visitor-plugin-common@^1.17.17":
+"@graphql-codegen/visitor-plugin-common@^1.17.13", "@graphql-codegen/visitor-plugin-common@^1.17.15", "@graphql-codegen/visitor-plugin-common@^1.17.17":
   version "1.17.17"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-1.17.17.tgz#8966903786c58e809e1b9bd093684da3c7c4ccf4"
   integrity sha512-UGstk36jlGSUXg2Z1/22B8qeVTY18mW6kuQVNY32kB5sy1wIVDi4eNS3OJdBTYDvL5MGTHjeWXk7EhSt3NP7gQ==
