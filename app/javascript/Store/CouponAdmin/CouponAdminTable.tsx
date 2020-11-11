@@ -1,4 +1,4 @@
-import ReactTable, { RowInfo } from 'react-table';
+import { Column } from 'react-table';
 
 import describeCoupon from '../describeCoupon';
 import pluralizeWithCount from '../../pluralizeWithCount';
@@ -10,6 +10,7 @@ import NewCouponModal from './NewCouponModal';
 import EditCouponModal from './EditCouponModal';
 import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';
 import { AdminCouponsQueryQuery, useAdminCouponsQueryQuery } from './queries.generated';
+import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 
 type CouponType = AdminCouponsQueryQuery['convention']['coupons_paginated']['entries'][0];
 
@@ -21,44 +22,50 @@ const transformColumnIdForExport = (columnId: string) => {
   return columnId;
 };
 
-const getPossibleColumns = () => [
-  {
-    Header: 'Code',
-    id: 'code',
-    accessor: 'code',
-    width: 250,
-  },
-  {
-    Header: 'Effect',
-    id: 'effect',
-    accessor: (coupon: CouponType) => coupon,
-    Cell: ({ value }: { value: CouponType }) => describeCoupon(value),
-    filterable: false,
-    sortable: false,
-  },
-  {
-    Header: 'Usage limit',
-    id: 'usage_limit',
-    accessor: 'usage_limit',
-    filterable: false,
-    sortable: false,
-    Cell: ({ value }: { value: CouponType['usage_limit'] }) =>
-      value ? `${pluralizeWithCount('use', value)}` : <em>Unlimited uses</em>,
-  },
-  {
-    Header: 'Expiration date',
-    id: 'expires_at',
-    accessor: 'expires_at',
-    width: 150,
-    Cell: SingleLineTimestampCell,
-  },
-];
+function getPossibleColumns(): Column<CouponType>[] {
+  return [
+    {
+      Header: 'Code',
+      id: 'code',
+      accessor: 'code',
+      width: 250,
+      disableSortBy: false,
+    },
+    {
+      Header: 'Effect',
+      id: 'effect',
+      accessor: (coupon: CouponType) => coupon,
+      Cell: ({ value }: { value: CouponType }) => describeCoupon(value),
+    },
+    {
+      Header: 'Usage limit',
+      id: 'usage_limit',
+      accessor: 'usage_limit',
+      disableSortBy: false,
+      Cell: ({ value }: { value: CouponType['usage_limit'] }) =>
+        value ? `${pluralizeWithCount('use', value)}` : <em>Unlimited uses</em>,
+    },
+    {
+      Header: 'Expiration date',
+      id: 'expires_at',
+      accessor: 'expires_at',
+      width: 150,
+      Cell: SingleLineTimestampCell,
+      disableSortBy: false,
+    },
+  ];
+}
 
 function CouponAdminTable() {
   const newCouponModal = useModal();
   const editCouponModal = useModal<{ initialCoupon: CouponType }>();
 
-  const [reactTableProps, { tableHeaderProps, columnSelectionProps }] = useReactTableWithTheWorks({
+  const {
+    tableHeaderProps,
+    columnSelectionProps,
+    tableInstance,
+    loading,
+  } = useReactTableWithTheWorks({
     getData: ({ data }) => data!.convention.coupons_paginated.entries,
     getPages: ({ data }) => data!.convention.coupons_paginated.total_pages,
     getPossibleColumns,
@@ -82,24 +89,18 @@ function CouponAdminTable() {
         exportButton={
           <ReactTableExportButtonWithColumnTransform
             exportUrl="/csv_exports/coupons"
-            filtered={tableHeaderProps.filtered}
-            sorted={tableHeaderProps.sorted}
+            filters={tableHeaderProps.filters}
+            sortBy={tableHeaderProps.sortBy}
             visibleColumnIds={columnSelectionProps.visibleColumnIds}
             columnTransform={transformColumnIdForExport}
           />
         }
       />
 
-      <ReactTable
-        {...reactTableProps}
-        className="-striped -highlight"
-        getTrProps={(state: any, rowInfo: RowInfo) => ({
-          style: { cursor: 'pointer' },
-          onClick: () => {
-            editCouponModal.open({ initialCoupon: rowInfo.original });
-          },
-        })}
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+      <ReactTableWithTheWorks
+        tableInstance={tableInstance}
+        loading={loading}
+        onClickRow={(row) => editCouponModal.open({ initialCoupon: row.original })}
       />
 
       <NewCouponModal visible={newCouponModal.visible} close={newCouponModal.close} />
