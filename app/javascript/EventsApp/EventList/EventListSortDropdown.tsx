@@ -13,17 +13,17 @@ const SORT_ORDERS = [
   { sorted: [{ id: 'created_at', desc: true }], caption: 'order added (newest first)' },
 ];
 
-export type EventListSortDropdownProps = {
+export type EventListSortDropdownProps<D extends object> = {
   showConventionOrder: boolean;
-  value?: SortingRule[];
-  onChange: React.Dispatch<SortingRule[]>;
+  value?: SortingRule<D>[];
+  onChange: React.Dispatch<SortingRule<D>[]>;
 };
 
-const EventListSortDropdown = ({
+function EventListSortDropdown<D extends object>({
   showConventionOrder,
   value,
   onChange,
-}: EventListSortDropdownProps) => {
+}: EventListSortDropdownProps<D>) {
   const { myProfile } = useContext(AppRootContext);
 
   const mySortOrders = [...SORT_ORDERS];
@@ -67,6 +67,6 @@ const EventListSortDropdown = ({
       {sortOptions}
     </DropdownMenu>
   );
-};
+}
 
 export default EventListSortDropdown;

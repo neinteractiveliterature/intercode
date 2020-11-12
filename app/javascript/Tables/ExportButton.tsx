@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Filter, SortingRule } from 'react-table';
+import { Filters, SortingRule } from 'react-table';
 
 import {
   reactTableFiltersToTableResultsFilters,
@@ -56,17 +56,17 @@ function dataToParams(data: CompositeData) {
   return params;
 }
 
-function getExportUrl(
+function getExportUrl<RowType extends object>(
   baseUrl: string,
   {
-    filtered,
-    sorted,
+    filters,
+    sortBy,
     columns,
-  }: { filtered?: null | Filter[]; sorted: null | SortingRule[]; columns?: string[] | null },
+  }: { filters?: null | Filters<RowType>; sortBy: null | SortingRule<RowType>[]; columns?: string[] | null },
 ) {
   const queryParams = {
-    filters: reactTableFiltersToTableResultsFilters(filtered),
-    sort: reactTableSortToTableResultsSort(sorted),
+    filters: reactTableFiltersToTableResultsFilters(filters),
+    sort: reactTableSortToTableResultsSort(sortBy),
     ...(columns ? { columns } : {}),
   };
 
@@ -78,25 +78,25 @@ function getExportUrl(
   return url.toString();
 }
 
-export type ReactTableExportButtonProps = {
+export type ReactTableExportButtonProps<RowType extends object> = {
   exportUrl: string;
-  filtered: Filter[];
-  sorted: SortingRule[];
+  filters: Filters<RowType>;
+  sortBy: SortingRule<RowType>[];
   columns?: string[];
 };
 
-function ReactTableExportButton({
+function ReactTableExportButton<RowType extends object>({
   exportUrl,
-  filtered,
-  sorted,
+  filters,
+  sortBy,
   columns,
-}: ReactTableExportButtonProps) {
+}: ReactTableExportButtonProps<RowType>) {
   const { t } = useTranslation();
-  const href = useMemo(() => getExportUrl(exportUrl, { filtered, sorted, columns }), [
+  const href = useMemo(() => getExportUrl(exportUrl, { filters, sortBy, columns }), [
     columns,
     exportUrl,
-    filtered,
-    sorted,
+    filters,
+    sortBy,
   ]);
 
   return (

@@ -1,29 +1,29 @@
 import { ReactNode } from 'react';
-import { Filter, SortingRule } from 'react-table';
+import { Filters, SortingRule } from 'react-table';
 
 import ColumnSelector from './ColumnSelector';
 import ExportButton from './ExportButton';
-import useColumnSelection from './useColumnSelection';
+import { UseColumnSelectionResult } from './useColumnSelection';
 
-export type TableHeaderProps = {
-  columnSelectionProps: ReturnType<typeof useColumnSelection>[1];
+export type TableHeaderProps<RowType extends object> = {
+  columnSelectionProps: UseColumnSelectionResult<RowType>;
   exportButton?: ReactNode;
   exportUrl?: string;
-  filtered: Filter[];
+  filters: Filters<RowType>;
   renderLeftContent?: () => ReactNode;
   renderRightContent?: () => ReactNode;
-  sorted: SortingRule[];
+  sortBy: SortingRule<RowType>[];
 };
 
-function TableHeader({
+function TableHeader<RowType extends object>({
   columnSelectionProps,
   exportButton,
   exportUrl,
-  filtered,
+  filters,
   renderLeftContent,
   renderRightContent,
-  sorted,
-}: TableHeaderProps) {
+  sortBy,
+}: TableHeaderProps<RowType>) {
   return (
     <div className="d-flex mb-2">
       <div className="flex-grow-1">
@@ -31,8 +31,8 @@ function TableHeader({
           (exportUrl && (
             <ExportButton
               exportUrl={exportUrl}
-              filtered={filtered}
-              sorted={sorted}
+              filters={filters}
+              sortBy={sortBy}
               columns={columnSelectionProps.visibleColumnIds}
             />
           ))}

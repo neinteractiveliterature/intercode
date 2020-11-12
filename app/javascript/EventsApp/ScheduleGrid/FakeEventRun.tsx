@@ -90,7 +90,9 @@ function FakeEventRun({
       ref={withRef}
       {...clickableProps}
     >
-      <div className="schedule-grid-event-content">{children}</div>
+      <div className="schedule-grid-event-content">
+        <div className="schedule-grid-event-content-main">{children}</div>
+      </div>
 
       <AvailabilityBar
         availabilityFraction={availability ?? 0.0}

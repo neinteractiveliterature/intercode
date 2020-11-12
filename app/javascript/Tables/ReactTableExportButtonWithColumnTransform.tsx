@@ -3,21 +3,19 @@ import flatMap from 'lodash/flatMap';
 
 import ReactTableExportButton, { ReactTableExportButtonProps } from './ExportButton';
 
-export type ReactTableExportButtonWithColumnTransformProps = Omit<
-  ReactTableExportButtonProps,
+export type ReactTableExportButtonWithColumnTransformProps<RowType extends object> = Omit<
+  ReactTableExportButtonProps<RowType>,
   'columns'
 > & {
   visibleColumnIds: string[];
   columnTransform: (columnId: string) => string | string[];
 };
 
-function ReactTableExportButtonWithColumnTransform({
-  exportUrl,
-  filtered,
-  sorted,
+function ReactTableExportButtonWithColumnTransform<RowType extends object>({
   visibleColumnIds,
   columnTransform,
-}: ReactTableExportButtonWithColumnTransformProps) {
+  ...otherProps
+}: ReactTableExportButtonWithColumnTransformProps<RowType>) {
   const columns = useMemo(() => flatMap(visibleColumnIds, columnTransform), [
     visibleColumnIds,
     columnTransform,
@@ -25,9 +23,7 @@ function ReactTableExportButtonWithColumnTransform({
 
   return (
     <ReactTableExportButton
-      exportUrl={exportUrl}
-      filtered={filtered}
-      sorted={sorted}
+      {...otherProps}
       columns={columns}
     />
   );

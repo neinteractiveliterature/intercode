@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import ReactTable, { RowInfo } from 'react-table';
+import { Column } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import { timespanFromConvention } from '../TimespanUtils';
@@ -71,34 +72,42 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
   );
 }
 
-const getPossibleColumns = () => [
-  {
-    Header: 'Name',
-    id: 'name',
-    accessor: 'name',
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Organization name',
-    id: 'organization_name',
-    accessor: (convention: ConventionType) => convention.organization?.name,
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Dates',
-    id: 'starts_at',
-    accessor: (convention: ConventionType) => convention,
-    Cell: ConventionDatesCell,
-    filterable: false,
-  },
-];
+function getPossibleColumns(): Column<ConventionType>[] {
+  return [
+    {
+      Header: 'Name',
+      id: 'name',
+      accessor: 'name',
+      Filter: FreeTextFilter,
+      disableFilters: false,
+      disableSortBy: false,
+    },
+    {
+      Header: 'Organization name',
+      id: 'organization_name',
+      accessor: (convention: ConventionType) => convention.organization?.name,
+      Filter: FreeTextFilter,
+      disableFilters: false,
+      disableSortBy: false,
+    },
+    {
+      Header: 'Dates',
+      id: 'starts_at',
+      accessor: (convention: ConventionType) => convention,
+      Cell: ConventionDatesCell,
+      disableSortBy: false,
+    },
+  ];
+}
+
+const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
 function RootSiteConventionsAdminTable() {
   const newConventionModal = useModal();
   const history = useHistory();
-  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+  const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
     decodeFilterValue,
-    defaultVisibleColumns: ['name', 'organization_name', 'starts_at'],
+    defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.conventions_paginated.entries,
     getPages: ({ data }) => data.conventions_paginated.total_pages,
@@ -127,16 +136,10 @@ function RootSiteConventionsAdminTable() {
         )}
       />
 
-      <ReactTable
-        {...reactTableProps}
-        className="-striped -highlight"
-        getTrProps={(state: any, rowInfo: RowInfo) => ({
-          style: { cursor: 'pointer' },
-          onClick: () => {
-            history.push(`/conventions/${rowInfo.original.id}`);
-          },
-        })}
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+      <ReactTableWithTheWorks
+        tableInstance={tableInstance}
+        loading={loading}
+        onClickRow={(row) => history.push(`/conventions/${row.original.id}`)}
       />
 
       <NewConventionModal visible={newConventionModal.visible} close={newConventionModal.close} />

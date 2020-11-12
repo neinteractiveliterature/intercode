@@ -119,17 +119,17 @@ export const SignupCountsByStateQuery = gql`
 `;
 
 export const SignupSpySignupChangesQuery = gql`
-  query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int) {
+  query SignupSpySignupChangesQuery(
+    $filters: SignupChangeFiltersInput
+    $page: Int
+    $perPage: Int
+    $sort: [SortInput!]
+  ) {
     convention: assertConvention {
       id
       timezone_name
 
-      signup_changes_paginated(
-        page: $page
-        per_page: $perPage
-        filters: $filters
-        sort: [{ field: "created_at", desc: true }]
-      ) {
+      signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
         total_entries
         total_pages
         current_page

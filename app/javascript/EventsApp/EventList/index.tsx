@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import { ApolloError } from '@apollo/client';
-import { Filter } from 'react-table';
+import { Filters } from 'react-table';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -30,6 +30,9 @@ const filterCodecs = buildFieldFilterCodecs({
 });
 
 type FetchMoreFunction = ReturnType<typeof useEventListEventsQueryQuery>['fetchMore'];
+type EventType = NonNullable<
+  EventListEventsQueryQuery['convention']
+>['events_paginated']['entries'][number];
 
 const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
   try {
@@ -58,7 +61,7 @@ const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
 };
 
 function EventList() {
-  const { sorted, filtered, onSortedChange, onFilteredChange } = useReactRouterReactTable({
+  const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,
   });
   const { myProfile } = useContext(AppRootContext);
@@ -79,15 +82,16 @@ function EventList() {
         { id: 'category', value: [] },
       ]
     : [{ id: 'category', value: [] }];
-  const effectiveSorted = sorted && sorted.length > 0 ? sorted : defaultSort;
-  const effectiveFiltered: Filter[] = filtered && filtered.length > 0 ? filtered : defaultFiltered;
+  const effectiveSortBy = sortBy && sortBy.length > 0 ? sortBy : defaultSort;
+  const effectiveFilters: Filters<EventType> =
+    filters && filters.length > 0 ? filters : defaultFiltered;
 
   const { data, loading, error, fetchMore } = useEventListEventsQueryQuery({
     variables: {
       page: 1,
       pageSize: PAGE_SIZE,
-      sort: reactTableSortToTableResultsSort(effectiveSorted),
-      filters: reactTableFiltersToTableResultsFilters(effectiveFiltered),
+      sort: reactTableSortToTableResultsSort(effectiveSortBy),
+      filters: reactTableFiltersToTableResultsFilters(effectiveFilters),
     },
   });
   const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(
@@ -111,12 +115,11 @@ function EventList() {
 
   const changeFilterValue = useCallback(
     (fieldId, value) => {
-      onFilteredChange((prevFiltered) => [
-        ...(prevFiltered || []).filter(({ id }) => id !== fieldId),
-        { id: fieldId, value },
-      ]);
+      updateSearch({
+        filters: [...filters.filter(({ id }) => id !== fieldId), { id: fieldId, value }],
+      });
     },
-    [onFilteredChange],
+    [updateSearch, filters],
   );
 
   const categoryChanged = useCallback((value) => changeFilterValue('category', value), [
@@ -178,7 +181,7 @@ function EventList() {
               {cachedEventCategories && (
                 <EventListCategoryDropdown
                   eventCategories={cachedEventCategories}
-                  value={(effectiveFiltered.find(({ id }) => id === 'category') || {}).value}
+                  value={(effectiveFilters.find(({ id }) => id === 'category') || {}).value}
                   onChange={categoryChanged}
                 />
               )}
@@ -187,8 +190,10 @@ function EventList() {
             <div>
               <EventListSortDropdown
                 showConventionOrder={(!loading && data?.currentAbility.can_read_schedule) ?? false}
-                value={sorted}
-                onChange={onSortedChange}
+                value={sortBy}
+                onChange={(newSortBy) => {
+                  updateSearch({ sortBy: newSortBy });
+                }}
               />
             </div>
           </div>
@@ -196,7 +201,7 @@ function EventList() {
           <div className="ml-2 flex-grow-1">
             <SearchInput
               label="Search"
-              value={(effectiveFiltered.find(({ id }) => id === 'title_prefix') || {}).value}
+              value={(effectiveFilters.find(({ id }) => id === 'title_prefix') || {}).value}
               onChange={titlePrefixChanged}
             />
           </div>
@@ -205,7 +210,7 @@ function EventList() {
         {myProfile && (
           <>
             <EventListMyRatingSelector
-              value={(effectiveFiltered.find(({ id }) => id === 'my_rating') || {}).value}
+              value={(effectiveFilters.find(({ id }) => id === 'my_rating') || {}).value}
               onChange={myRatingFilterChanged}
             />
           </>
@@ -218,7 +223,7 @@ function EventList() {
           <EventListEvents
             convention={data.convention!}
             eventsPaginated={eventsPaginated}
-            sorted={sorted}
+            sortBy={sortBy}
             canReadSchedule={data.currentAbility.can_read_schedule}
             fetchMoreIfNeeded={fetchMoreIfNeeded}
           />
