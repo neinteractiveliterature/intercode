@@ -2,7 +2,7 @@ const environment = require('./environment');
 const process = require('process');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 if (process.env.ANALYZE_BUNDLE_SIZE) {
   const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -31,18 +31,16 @@ module.exports = {
   plugins: [
     ...environment.plugins,
     new CompressionPlugin({
-      filename: '[path].gz[query]',
+      filename: '[path][base].gz[query]',
       algorithm: 'gzip',
       test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
     }),
-    new OptimizeCSSAssetsPlugin(),
+    new CssMinimizerPlugin(),
   ],
   optimization: {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        cache: true,
-        sourceMap: true,
         terserOptions: {
           parse: {
             // Let uglify-js parse ecma 8 code but always output

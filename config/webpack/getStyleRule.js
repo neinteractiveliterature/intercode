@@ -14,7 +14,6 @@ const getStyleRule = (test, preprocessors = []) => {
     {
       loader: 'postcss-loader',
       options: {
-        config: { path: resolve() },
         sourceMap: true,
       },
     },
