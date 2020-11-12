@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Moment } from 'moment';
+import { Moment } from 'moment-timezone';
 
 import ScheduleGridExtendedCounts from './ScheduleGridExtendedCounts';
 import { PIXELS_PER_HOUR } from './LayoutConstants';
