@@ -1,10 +1,12 @@
 const environment = require('./environment');
+const fs = require('fs');
 
 module.exports = {
   ...environment,
   mode: 'development',
   cache: true,
   devtool: 'cheap-module-source-map',
+  target: 'web',
   entry: {
     ...environment.entry,
     'dev-mode-graphiql': './app/javascript/DevModeGraphiql',
@@ -32,5 +34,9 @@ module.exports = {
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
     transportMode: 'ws',
+    https: true,
+    key: fs.readFileSync('./dev_certificate.key'),
+    cert: fs.readFileSync('./dev_certificate.crt'),
+    ca: fs.readFileSync('./dev_ca.crt'),
   },
 };

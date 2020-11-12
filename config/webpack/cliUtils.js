@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const environment = require('./environment');
 
 module.exports = {
@@ -23,12 +23,14 @@ module.exports = {
       banner: '#!/usr/bin/env node',
       raw: true,
     }),
-    new WebpackShellPlugin({
-      onBuildEnd: [
-        'chmod +x bin/diffTranslations',
-        'chmod +x bin/mergeTranslations',
-        'chmod +x bin/renderFormResponseChangeGroup',
-      ],
+    new WebpackShellPluginNext({
+      onBuildEnd: {
+        scripts: [
+          'chmod +x bin/diffTranslations',
+          'chmod +x bin/mergeTranslations',
+          'chmod +x bin/renderFormResponseChangeGroup',
+        ],
+      },
     }),
   ],
 };
