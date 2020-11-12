@@ -7,7 +7,6 @@ import {
   reactTableSortToTableResultsSort,
 } from './TableUtils';
 import useCachedLoadableValue from '../useCachedLoadableValue';
-import useWhyDidYouUpdate from '../useWhyDidYouUpdate';
 
 export type GraphQLReactTableVariables = {
   page?: number | null;
@@ -65,7 +64,6 @@ export default function useGraphQLReactTable<
     }),
     [variables, page, pageSize, sortBy, filters],
   );
-  useWhyDidYouUpdate('effectiveVariables', { variables, page, pageSize, sortBy, filters });
   const queryResult = useQuery({
     variables: effectiveVariables,
     fetchPolicy: 'network-only',

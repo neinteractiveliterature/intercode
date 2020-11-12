@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { Filters, SortingRule } from 'react-table';
 
 import { FieldFilterCodecs } from './FilterUtils';
-import useWhyDidYouUpdate from '../useWhyDidYouUpdate';
 
 export type UseReactRouterReactTableOptions<RowType extends object> = Partial<FieldFilterCodecs> & {
   defaultState?: Partial<ReactRouterReactTableState<RowType>>;
@@ -116,8 +115,6 @@ export default function useReactRouterReactTable<RowType extends object>({
     decodeSearchParams,
     history.location.search,
   ]);
-
-  useWhyDidYouUpdate('decodeSearchParamsDeps', { decode, defaultState });
 
   return useMemo(
     () => ({

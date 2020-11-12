@@ -74,11 +74,13 @@ function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members
 
 export type EventCardProps = {
   event: EventType;
-  sorted?: SortingRule[];
+  sortBy?: SortingRule<
+    NonNullable<EventListEventsQueryQuery['convention']>['events_paginated']['entries'][number]
+  >[];
   canReadSchedule?: boolean;
 };
 
-const EventCard = ({ event, sorted, canReadSchedule }: EventCardProps) => {
+const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
   const { timezoneName } = useContext(AppRootContext);
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
@@ -181,7 +183,7 @@ const EventCard = ({ event, sorted, canReadSchedule }: EventCardProps) => {
           </div>
         </div>
 
-        {sorted?.some((sort) => sort.id === 'created_at') ? (
+        {sortBy?.some((sort) => sort.id === 'created_at') ? (
           <p className="m-0">
             <strong>
               Added{' '}

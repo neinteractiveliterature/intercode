@@ -34,7 +34,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const { t } = useTranslation();
   const location = useLocation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
-  const { filtered, onFilteredChange } = useReactRouterReactTable({ ...filterCodecs });
+  const { filters, updateSearch } = useReactRouterReactTable({ ...filterCodecs });
   const config = getConfig(configKey);
   const storageKey = `schedule:${configKey}:personalFilters`;
 
@@ -53,12 +53,12 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
 
   useEffect(() => {
     if (config?.showPersonalFilters && myProfile && !location.search) {
-      onFilteredChange(loadPersonalFilters());
+      updateSearch({ filters: loadPersonalFilters() });
     }
-  }, [config?.showPersonalFilters, loadPersonalFilters, location, myProfile, onFilteredChange]);
+  }, [config?.showPersonalFilters, loadPersonalFilters, location, myProfile, updateSearch]);
 
-  const ratingFilter = (filtered.find((f) => f.id === 'my_rating') || {}).value;
-  const hideConflicts = (filtered.find((f) => f.id === 'hide_conflicts') || {}).value;
+  const ratingFilter = (filters.find((f) => f.id === 'my_rating') || {}).value;
+  const hideConflicts = (filters.find((f) => f.id === 'hide_conflicts') || {}).value;
 
   const choiceSetValue = [
     ...(ratingFilter || []).map((integer: number) => integer.toString()),
@@ -68,13 +68,13 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const choiceSetChanged = (newValue: string[]) => {
     const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(parseIntOrNull);
 
-    const newFiltered = [
+    const newFilters = [
       { id: 'my_rating', value: integerArray },
       { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
     ];
 
-    onFilteredChange(newFiltered);
-    window.localStorage.setItem(storageKey, JSON.stringify(newFiltered));
+    updateSearch({ filters: newFilters });
+    window.localStorage.setItem(storageKey, JSON.stringify(newFilters));
   };
 
   if (!config) {
