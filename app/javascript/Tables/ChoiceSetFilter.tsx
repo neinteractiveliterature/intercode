@@ -197,7 +197,7 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
         {renderHeader()}
       </div>
       <div
-        className={classNames('card align-items-start', { invisible: !dropdownOpen })}
+        className={classNames('card align-items-stretch', { invisible: !dropdownOpen })}
         ref={setDropdownMenu}
         style={{
           ...styles.popper,
@@ -215,6 +215,22 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
             {...otherProps}
           />
         </div>
+
+        {props.multiple && (
+          <div className="card-footer p-2 bg-light">
+            <button
+              type="button"
+              className="btn btn-link btn-sm"
+              onClick={() => valueChanged(choices.map((c) => c.value))}
+            >
+              Select all
+            </button>
+
+            <button type="button" className="btn btn-link btn-sm" onClick={() => valueChanged([])}>
+              Select none
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
