@@ -12,6 +12,7 @@ export type DropdownMenuProps = {
   dropdownClassName?: string;
   dropdownStyle?: CSSProperties;
   popperOptions?: Parameters<typeof useIntercodePopperWithAutoClosing>[4];
+  shouldAutoCloseOnNavigate?: Parameters<typeof useAutoCloseOnNavigate>[1];
 };
 
 export function DropdownMenu({
@@ -22,6 +23,7 @@ export function DropdownMenu({
   dropdownClassName,
   dropdownStyle,
   popperOptions,
+  shouldAutoCloseOnNavigate,
 }: DropdownMenuProps) {
   const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
@@ -43,7 +45,7 @@ export function DropdownMenu({
   );
 
   const toggleOpen = useToggleOpen(setDropdownOpen, update);
-  useAutoCloseOnNavigate(setDropdownOpen);
+  useAutoCloseOnNavigate(setDropdownOpen, shouldAutoCloseOnNavigate);
 
   return (
     <>
