@@ -23,7 +23,11 @@ function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
 
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
-type ChoiceSetFilterCommonProps<RowType extends object> = FilterProps<RowType> & {
+type LenientFilterProps<RowType extends object> = {
+  column: Pick<FilterProps<RowType>['column'], 'filterValue' | 'setFilter'>;
+};
+
+type ChoiceSetFilterCommonProps<RowType extends object> = LenientFilterProps<RowType> & {
   choices: readonly ChoiceSetFilterChoice[];
   filterCodec?: FilterCodec<ChoiceSetFilterValue>;
 };

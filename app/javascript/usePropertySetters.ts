@@ -51,7 +51,8 @@ export function usePropertySetters<T, Properties extends readonly (keyof T)[]>(
 ): PropertySetterTuple<T, Properties> {
   const setters = useMemo(
     () => properties.map((property) => buildPropertySetter(onChange ?? (() => {}), property)),
-    [properties, onChange],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(properties), onChange],
   );
 
   // TODO: figure out if there is an actual way to do this and make it type check properly

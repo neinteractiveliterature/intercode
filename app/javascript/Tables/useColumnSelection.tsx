@@ -39,7 +39,7 @@ export default function useColumnSelection<RowType extends object>({
     }
 
     return possibleColumns.map((column) => column.id).filter(notEmpty);
-  }, [defaultVisibleColumns, alwaysVisibleColumns, location, possibleColumns]);
+  }, [defaultVisibleColumns, alwaysVisibleColumns, location.search, possibleColumns]);
 
   const visibleColumns: Column<RowType>[] = useMemo(
     () =>

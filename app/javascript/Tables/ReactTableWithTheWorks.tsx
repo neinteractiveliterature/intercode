@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, HTMLAttributes } from 'react';
+import React, { useState, useCallback, useEffect, HTMLAttributes } from 'react';
 import classNames from 'classnames';
 import { ColumnInstance, Row } from 'react-table';
 
@@ -89,12 +89,15 @@ function ReactTableWithTheWorks<
   return (
     <div
       {...mergeProps(getTableProps(), {
-        className: 'table react-table table-striped table-highlight table-borderless border',
+        className: classNames(
+          'table react-table table-striped table-highlight table-borderless border',
+          { 'table-hover': onClickRow != null },
+        ),
       })}
     >
       <div className="thead">
         {headerGroups.map((headerGroup) => (
-          <>
+          <React.Fragment key={headerGroup.getHeaderGroupProps().key}>
             <div {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <div
@@ -138,7 +141,7 @@ function ReactTableWithTheWorks<
                 ))}
               </div>
             )}
-          </>
+          </React.Fragment>
         ))}
       </div>
       <div

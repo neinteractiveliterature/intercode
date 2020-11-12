@@ -13,7 +13,9 @@ import { FiniteTimespan } from '../../Timespan';
 export type EventListEventsProps = {
   convention: NonNullable<EventListEventsQueryQuery['convention']>;
   eventsPaginated: NonNullable<EventListEventsQueryQuery['convention']>['events_paginated'];
-  sorted?: SortingRule[];
+  sortBy?: SortingRule<
+    NonNullable<EventListEventsQueryQuery['convention']>['events_paginated']['entries'][number]
+  >[];
   canReadSchedule: boolean;
   fetchMoreIfNeeded: () => void;
 };
@@ -21,7 +23,7 @@ export type EventListEventsProps = {
 function EventListEvents({
   convention,
   eventsPaginated,
-  sorted,
+  sortBy,
   canReadSchedule,
   fetchMoreIfNeeded,
 }: EventListEventsProps) {
@@ -33,43 +35,45 @@ function EventListEvents({
     conventionDayTimespans = getConventionDayTimespans(conventionTimespan, timezoneName);
   }
 
-  return <>
-    {eventsPaginated.entries.map((event, index) => {
-      let preamble: ReactNode = null;
-      if (sorted?.some((sort) => sort.id === 'first_scheduled_run_start')) {
-        const runs = getSortedRuns(event);
-        if (runs.length > 0) {
-          const conventionDay = conventionDayTimespans.find((timespan) =>
-            timespan.includesTime(moment.tz(runs[0].starts_at, timezoneName)),
-          );
-          if (
-            conventionDay &&
-            (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
-          ) {
-            preamble = <h3 className="mt-4">{conventionDay.start.format('dddd, MMMM D')}</h3>;
-            previousConventionDay = conventionDay;
+  return (
+    <>
+      {eventsPaginated.entries.map((event, index) => {
+        let preamble: ReactNode = null;
+        if (sortBy?.some((sort) => sort.id === 'first_scheduled_run_start')) {
+          const runs = getSortedRuns(event);
+          if (runs.length > 0) {
+            const conventionDay = conventionDayTimespans.find((timespan) =>
+              timespan.includesTime(moment.tz(runs[0].starts_at, timezoneName)),
+            );
+            if (
+              conventionDay &&
+              (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
+            ) {
+              preamble = <h3 className="mt-4">{conventionDay.start.format('dddd, MMMM D')}</h3>;
+              previousConventionDay = conventionDay;
+            }
           }
         }
-      }
 
-      const eventContent = (
-        <Fragment key={event.id}>
-          {preamble}
-          <EventCard event={event} sorted={sorted} canReadSchedule={canReadSchedule} />
-        </Fragment>
-      );
-
-      if (index === eventsPaginated.entries.length - 5) {
-        return (
-          <Waypoint fireOnRapidScroll onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
-            <div>{eventContent}</div>
-          </Waypoint>
+        const eventContent = (
+          <Fragment key={event.id}>
+            {preamble}
+            <EventCard event={event} sortBy={sortBy} canReadSchedule={canReadSchedule} />
+          </Fragment>
         );
-      }
 
-      return eventContent;
-    })}
-  </>;
+        if (index === eventsPaginated.entries.length - 5) {
+          return (
+            <Waypoint fireOnRapidScroll onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
+              <div>{eventContent}</div>
+            </Waypoint>
+          );
+        }
+
+        return eventContent;
+      })}
+    </>
+  );
 }
 
 export default EventListEvents;

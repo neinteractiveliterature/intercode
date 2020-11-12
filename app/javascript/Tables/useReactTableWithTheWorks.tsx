@@ -30,7 +30,6 @@ import useReactRouterReactTable, {
 } from './useReactRouterReactTable';
 import useCachedLoadableValue from '../useCachedLoadableValue';
 import type { TableHeaderProps } from './TableHeader';
-import useWhyDidYouUpdate from '../useWhyDidYouUpdate';
 
 export function createQueryDataContext<DataType>() {
   return createContext<DataType | null | undefined>(undefined);
@@ -140,10 +139,12 @@ export default function useReactTableWithTheWorks<
     [queryData],
   );
 
+  const memoizedPossibleColumns = useMemo(() => possibleColumns ?? [], [possibleColumns]);
+
   const columnSelectionProps = useColumnSelection<RowType>({
     alwaysVisibleColumns,
     defaultVisibleColumns,
-    possibleColumns: possibleColumns || [],
+    possibleColumns: memoizedPossibleColumns,
   });
 
   const tableHeaderProps: TableHeaderProps<RowType> = useMemo(
@@ -207,12 +208,6 @@ export default function useReactTableWithTheWorks<
     },
   );
 
-  useWhyDidYouUpdate('updateSearchDeps', {
-    filters: tableInstance.state.filters,
-    sortBy: tableInstance.state.sortBy,
-    pageIndex: tableInstance.state.pageIndex,
-    updateSearch,
-  });
   useEffect(() => {
     updateSearch({
       filters: tableInstance.state.filters,
@@ -226,10 +221,6 @@ export default function useReactTableWithTheWorks<
     tableInstance.state.pageIndex,
   ]);
 
-  useWhyDidYouUpdate('pageSizeEffect', {
-    setAndStorePageSize,
-    pageSize: tableInstance.state.pageSize,
-  });
   useEffect(() => {
     setAndStorePageSize(tableInstance.state.pageSize);
   }, [setAndStorePageSize, tableInstance.state.pageSize]);

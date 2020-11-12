@@ -1,43 +1,36 @@
-import { ReactNode } from 'react';
-import * as React from 'react';
-import { Filter } from 'react-table';
+import ChoiceSetFilter, { ChoiceSetFilterSingleProps } from './ChoiceSetFilter';
 
-import ChoiceSetFilter from './ChoiceSetFilter';
-import { FilterCodec } from './FilterUtils';
-
-function getBooleanFilterValue(filter: Filter) {
-  if (filter == null || filter.value == null) {
+function getBooleanFilterValue(filterValue: boolean | null | undefined) {
+  if (filterValue == null) {
     return 'any';
   }
 
-  if (filter.value) {
+  if (filterValue) {
     return 'true';
   }
 
   return 'false';
 }
 
-export type BooleanChoiceSetFilterProps = {
-  filter: Filter;
-  onChange: React.Dispatch<boolean | null>;
-  renderHeaderCaption?: (value: string) => ReactNode;
-  filterCodec?: FilterCodec<string>;
-};
-
-function BooleanChoiceSetFilter({ filter, onChange, ...otherProps }: BooleanChoiceSetFilterProps) {
+function BooleanChoiceSetFilter<RowType extends object>(
+  props: ChoiceSetFilterSingleProps<RowType>,
+) {
   return (
     <ChoiceSetFilter
+      {...props}
       choices={[
         { label: 'any', value: 'any' },
         { label: 'yes', value: 'true' },
         { label: 'no', value: 'false' },
       ]}
       multiple={false}
-      onChange={(value) => {
-        onChange(value === 'any' ? null : value === 'true');
+      column={{
+        ...props.column,
+        filterValue: getBooleanFilterValue(props.column.filterValue),
+        setFilter: (value) => {
+          props.column.setFilter(value === 'any' ? null : value === 'true');
+        },
       }}
-      filter={{ ...filter, value: getBooleanFilterValue(filter) }}
-      {...otherProps}
     />
   );
 }
