@@ -1,12 +1,13 @@
 import { useMemo, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import ReactTable, { RowInfo } from 'react-table';
+import { Column, FilterProps, CellProps } from 'react-table';
 
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
-import ChoiceSetFilter, { ChoiceSetFilterMultipleProps } from '../Tables/ChoiceSetFilter';
+import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
+import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
@@ -72,11 +73,8 @@ function DurationCell({ value }: { value: NonNullable<EventProposalType['length_
   );
 }
 
-function StatusFilter({
-  filter,
-  onChange,
-}: Pick<ChoiceSetFilterMultipleProps, 'filter' | 'onChange'>) {
-  return <ChoiceSetFilter choices={STATUS_OPTIONS} onChange={onChange} filter={filter} multiple />;
+function StatusFilter(props: FilterProps<EventProposalType>) {
+  return <ChoiceSetFilter {...props} choices={STATUS_OPTIONS} multiple />;
 }
 
 function StatusCell({ value }: { value: EventProposalType['status'] }) {
@@ -84,7 +82,7 @@ function StatusCell({ value }: { value: EventProposalType['status'] }) {
   return <div className={`badge ${statusOption?.badgeClass}`}>{statusOption?.label || value}</div>;
 }
 
-function ExtraCell({ original }: { original: EventProposalType }) {
+function ExtraCell({ row: { original } }: CellProps<EventProposalType>) {
   return (
     <Link
       to={`/admin_event_proposals/${original.id}`}
@@ -101,10 +99,7 @@ function ExtraCell({ original }: { original: EventProposalType }) {
   );
 }
 
-const EventCategoryFilter = ({
-  filter,
-  onChange,
-}: Pick<ChoiceSetFilterMultipleProps, 'filter' | 'onChange'>) => {
+const EventCategoryFilter = (props: FilterProps<EventProposalType>) => {
   const data = useContext(QueryDataContext) as EventProposalsAdminQueryQuery;
   const choices = useMemo(
     () =>
@@ -117,98 +112,107 @@ const EventCategoryFilter = ({
     [data],
   );
 
-  return <ChoiceSetFilter choices={choices} onChange={onChange} filter={filter} multiple />;
+  return <ChoiceSetFilter {...props} choices={choices} multiple />;
 };
 
-const getPossibleColumns = () => [
-  {
-    Header: 'Category',
-    id: 'event_category',
-    accessor: 'event_category',
-    width: 100,
-    Cell: EventCategoryCell,
-    Filter: EventCategoryFilter,
-  },
-  {
-    Header: 'Title',
-    id: 'title',
-    accessor: 'title',
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Submitted by',
-    id: 'owner',
-    accessor: (eventProposal: EventProposalType) => eventProposal.owner,
-    Filter: FreeTextFilter,
-    Cell: UserConProfileWithGravatarCell,
-  },
-  {
-    Header: 'Capacity',
-    id: 'total_slots',
-    width: 80,
-    accessor: (eventProposal: EventProposalType) => eventProposal.registration_policy,
-    filterable: false,
-    sortable: false,
-    Cell: CapacityCell,
-  },
-  {
-    Header: 'Duration',
-    id: 'length_seconds',
-    accessor: 'length_seconds',
-    width: 80,
-    filterable: false,
-    Cell: DurationCell,
-  },
-  {
-    Header: 'Status',
-    id: 'status',
-    accessor: 'status',
-    width: 85,
-    Filter: StatusFilter,
-    Cell: StatusCell,
-  },
-  {
-    Header: 'Submitted',
-    id: 'submitted_at',
-    accessor: 'submitted_at',
-    width: 150,
-    filterable: false,
-    Cell: SingleLineTimestampCell,
-  },
-  {
-    Header: 'Updated',
-    id: 'updated_at',
-    accessor: 'updated_at',
-    width: 150,
-    filterable: false,
-    Cell: SingleLineTimestampCell,
-  },
-  {
-    Header: '',
-    id: '_extra',
-    accessor: () => {},
-    width: 30,
-    filterable: false,
-    sortable: false,
-    Cell: ExtraCell,
-  },
+function getPossibleColumns(): Column<EventProposalType>[] {
+  return [
+    {
+      Header: 'Category',
+      id: 'event_category',
+      accessor: 'event_category',
+      width: 100,
+      Cell: EventCategoryCell,
+      Filter: EventCategoryFilter,
+      disableFilters: false,
+      disableSortBy: false,
+    },
+    {
+      Header: 'Title',
+      id: 'title',
+      accessor: 'title',
+      Filter: FreeTextFilter,
+      disableFilters: false,
+      disableSortBy: false,
+    },
+    {
+      Header: 'Submitted by',
+      id: 'owner',
+      accessor: (eventProposal: EventProposalType) => eventProposal.owner,
+      Filter: FreeTextFilter,
+      Cell: UserConProfileWithGravatarCell,
+      disableFilters: false,
+      disableSortBy: false,
+    },
+    {
+      Header: 'Capacity',
+      id: 'total_slots',
+      width: 80,
+      accessor: (eventProposal: EventProposalType) => eventProposal.registration_policy,
+      Cell: CapacityCell,
+    },
+    {
+      Header: 'Duration',
+      id: 'length_seconds',
+      accessor: 'length_seconds',
+      width: 80,
+      disableSortBy: false,
+      Cell: DurationCell,
+    },
+    {
+      Header: 'Status',
+      id: 'status',
+      accessor: 'status',
+      width: 85,
+      disableFilters: false,
+      disableSortBy: false,
+      Filter: StatusFilter,
+      Cell: StatusCell,
+    },
+    {
+      Header: 'Submitted',
+      id: 'submitted_at',
+      accessor: 'submitted_at',
+      width: 150,
+      disableSortBy: false,
+      Cell: SingleLineTimestampCell,
+    },
+    {
+      Header: 'Updated',
+      id: 'updated_at',
+      accessor: 'updated_at',
+      width: 150,
+      disableSortBy: false,
+      Cell: SingleLineTimestampCell,
+    },
+    {
+      Header: '',
+      id: '_extra',
+      accessor: () => {},
+      width: 30,
+      Cell: ExtraCell,
+    },
+  ];
+}
+
+const defaultVisibleColumns = [
+  'event_category',
+  'title',
+  'owner',
+  'total_slots',
+  'length_seconds',
+  'status',
+  'submitted_at',
+  'updated_at',
 ];
+const alwaysVisibleColumns = ['_extra'];
 
 function EventProposalsAdminTable() {
   const history = useHistory();
-  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
+  const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultVisibleColumns: [
-      'event_category',
-      'title',
-      'owner',
-      'total_slots',
-      'length_seconds',
-      'status',
-      'submitted_at',
-      'updated_at',
-    ],
-    alwaysVisibleColumns: ['_extra'],
+    defaultVisibleColumns,
+    alwaysVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages,
@@ -225,16 +229,10 @@ function EventProposalsAdminTable() {
       <div className="mb-4">
         <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/event_proposals" />
 
-        <ReactTable
-          {...reactTableProps}
-          className="-striped -highlight"
-          getTrProps={(state: any, rowInfo: RowInfo) => ({
-            style: { cursor: 'pointer' },
-            onClick: () => {
-              history.push(`/admin_event_proposals/${rowInfo.original.id}`);
-            },
-          })}
-          getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+        <ReactTableWithTheWorks
+          tableInstance={tableInstance}
+          loading={loading}
+          onClickRow={(row) => history.push(`/admin_event_proposals/${row.original.id}`)}
         />
       </div>
     </QueryDataContext.Provider>

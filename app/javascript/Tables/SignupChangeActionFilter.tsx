@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Filter } from 'react-table';
+import { FilterProps } from 'react-table';
 
 import ChoiceSetFilter from './ChoiceSetFilter';
 import EnumTypes from '../enumTypes.json';
@@ -12,19 +11,14 @@ const ACTIONS = EnumTypes.SignupChangeAction.enumValues.map(
   (value) => value.name as SignupChangeAction,
 );
 
-export type SignupChangeActionFilterProps = {
-  filter?: Filter;
-  onChange: React.Dispatch<string[]>;
-};
-
-const SignupChangeActionFilter = ({ filter, onChange }: SignupChangeActionFilterProps) => {
+function SignupChangeActionFilter<RowType extends object>(props: FilterProps<RowType>) {
   const { t } = useTranslation();
   const choices = useMemo(
     () => ACTIONS.map((action) => ({ value: action, label: describeAction(action, t) })),
     [t],
   );
 
-  return <ChoiceSetFilter choices={choices} onChange={onChange} filter={filter} multiple />;
-};
+  return <ChoiceSetFilter {...props} choices={choices} multiple />;
+}
 
 export default SignupChangeActionFilter;

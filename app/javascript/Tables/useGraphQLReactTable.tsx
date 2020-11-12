@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { QueryResult, QueryHookOptions } from '@apollo/client';
-import { Filter, SortingRule } from 'react-table';
+import { Filters, SortingRule } from 'react-table';
 
 import {
   reactTableFiltersToTableResultsFilters,
@@ -33,8 +34,8 @@ export type UseGraphQLReactTableOptions<
   getPages: (queryData: QueryResultWithData<QueryData, Variables>) => number;
   useQuery: (options?: QueryHookOptions<QueryData, Variables>) => QueryResult<QueryData, Variables>;
   variables?: Variables;
-  filtered?: Filter[];
-  sorted?: SortingRule[];
+  filters?: Filters<RowType>;
+  sortBy?: SortingRule<RowType>[];
   page?: number;
   pageSize?: number;
 };
@@ -48,27 +49,31 @@ export default function useGraphQLReactTable<
   getPages,
   useQuery,
   variables,
-  filtered,
-  sorted,
+  filters,
+  sortBy,
   page,
   pageSize,
 }: UseGraphQLReactTableOptions<RowType, QueryData, Variables>) {
-  const queryResult = useQuery({
-    variables: {
+  const effectiveVariables = useMemo(
+    () => ({
       ...(variables as Variables),
       page: (page ?? 0) + 1,
       perPage: pageSize,
-      filters: reactTableFiltersToTableResultsFilters(filtered),
-      sort: reactTableSortToTableResultsSort(sorted),
-    },
+      filters: reactTableFiltersToTableResultsFilters(filters),
+      sort: reactTableSortToTableResultsSort(sortBy),
+    }),
+    [variables, page, pageSize, sortBy, filters],
+  );
+  const queryResult = useQuery({
+    variables: effectiveVariables,
     fetchPolicy: 'network-only',
   });
-  const { error, loading } = queryResult;
+  const { error, loading, refetch } = queryResult;
   const pages = useCachedLoadableValue(
     loading,
     error,
     () => (queryResultHasData(queryResult) ? getPages(queryResult) : null),
-    [getPages, queryResult],
+    [queryResult.data],
   );
   const queryData = useCachedLoadableValue(loading, error, () => queryResult.data, [
     queryResult.data,
@@ -80,13 +85,10 @@ export default function useGraphQLReactTable<
     [queryResult],
   );
 
-  const reactTableProps = {
-    data: tableData ?? [],
-    pages: pages ?? 0,
-    manual: true,
-    filterable: true,
-    loading,
-  };
+  const result = useMemo(
+    () => ({ data: tableData ?? [], pages: pages ?? 0, refetch, loading, error, queryData }),
+    [tableData, pages, refetch, loading, error, queryData],
+  );
 
-  return [reactTableProps, { queryResult, queryData }] as const;
+  return result;
 }

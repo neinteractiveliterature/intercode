@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import moment from 'moment-timezone';
-import ReactTable, { Filter, RowInfo } from 'react-table';
+import { Column, FilterProps, CellProps } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -13,6 +13,7 @@ import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
+import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks, {
   QueryDataContext,
 } from '../../Tables/useReactTableWithTheWorks';
@@ -34,32 +35,22 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
 
 type SignupType = RunSignupsTableSignupsQueryQuery['event']['run']['signups_paginated']['entries'][0];
 
-type SignupStateFilterProps = {
-  filter?: Filter;
-  onChange: (value: string[]) => void;
-};
-
-const SignupStateFilter = ({ filter, onChange }: SignupStateFilterProps) => {
+const SignupStateFilter = (props: FilterProps<SignupType>) => {
   const { t } = useTranslation();
   return (
     <ChoiceSetFilter
+      {...props}
       multiple
       choices={[
         { value: 'confirmed', label: t('signups.states.confirmed', 'Confirmed') },
         { value: 'waitlisted', label: t('signups.states.waitlisted', 'Waitlisted') },
         { value: 'withdrawn', label: t('signups.states.withdrawn', 'Withdrawn') },
       ]}
-      onChange={onChange}
-      filter={filter}
     />
   );
 };
 
-type AgeRestrictionsCheckCellProps = {
-  value: string;
-};
-
-const AgeRestrictionsCheckCell = ({ value }: AgeRestrictionsCheckCellProps) => {
+const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
   const { t } = useTranslation();
   let badgeClass = 'badge-danger';
   let text = value;
@@ -77,22 +68,13 @@ const AgeRestrictionsCheckCell = ({ value }: AgeRestrictionsCheckCellProps) => {
   return <span className={`badge ${badgeClass}`}>{text}</span>;
 };
 
-type BucketCellProps = {
-  original: SignupType;
-};
-
-const BucketCell = ({ original }: BucketCellProps) => {
+const BucketCell = ({ row: { original } }: CellProps<SignupType>) => {
   const { t } = useTranslation();
   const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryQuery;
   return <>{formatBucket(original, data.event, t)}</>;
 };
 
-type BucketFilterProps = {
-  filter?: Filter;
-  onChange: (value: string[]) => void;
-};
-
-const BucketFilter = ({ filter, onChange }: BucketFilterProps) => {
+const BucketFilter = (props: FilterProps<SignupType>) => {
   const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryQuery;
   const choices = useMemo(
     () =>
@@ -105,66 +87,78 @@ const BucketFilter = ({ filter, onChange }: BucketFilterProps) => {
     [data],
   );
 
-  return <ChoiceSetFilter multiple choices={choices} onChange={onChange} filter={filter} />;
+  return <ChoiceSetFilter {...props} multiple choices={choices} />;
 };
 
-const getPossibleColumns = (t: TFunction) => [
-  {
-    Header: t('events.signupAdmin.sequenceHeader', 'Seq'),
-    id: 'id',
-    accessor: 'id',
-    filterable: false,
-    width: 65,
-  },
-  {
-    Header: t('events.signupAdmin.stateHeader', 'State'),
-    id: 'state',
-    accessor: 'state',
-    width: 130,
-    Filter: SignupStateFilter,
-    Cell: SignupStateCell,
-  },
-  {
-    Header: t('events.signupAdmin.nameHeader', 'Name'),
-    id: 'name',
-    accessor: (signup: SignupType) => signup.user_con_profile,
-    Filter: FreeTextFilter,
-    Cell: UserConProfileWithGravatarCell,
-  },
-  {
-    Header: t('events.signupAdmin.bucketHeader', 'Bucket'),
-    id: 'bucket',
-    accessor: (signup: SignupType) => signup.bucket_key,
-    Cell: (props: BucketCellProps) => <BucketCell {...props} />,
-    Filter: BucketFilter,
-  },
-  {
-    Header: t('events.signupAdmin.ageCheckHeader', 'Age check'),
-    id: 'age_restrictions_check',
-    accessor: 'age_restrictions_check',
-    width: 100,
-    filterable: false,
-    Cell: AgeRestrictionsCheckCell,
-  },
-  {
-    Header: t('events.signupAdmin.ageHeader', 'Age'),
-    id: 'age',
-    width: 40,
-    accessor: (signup: SignupType) =>
-      ageAsOf(
-        signup.user_con_profile.birth_date ? moment(signup.user_con_profile.birth_date) : undefined,
-        moment(signup.run.starts_at),
-      ),
-    filterable: false,
-  },
-  {
-    Header: t('events.signupAdmin.emailHeader', 'Email'),
-    id: 'email',
-    accessor: (signup: SignupType) => signup.user_con_profile.email,
-    Cell: EmailCell,
-    Filter: FreeTextFilter,
-  },
-];
+function getPossibleColumns(t: TFunction): Column<SignupType>[] {
+  return [
+    {
+      Header: <>{t('events.signupAdmin.sequenceHeader', 'Seq')}</>,
+      id: 'id',
+      accessor: 'id',
+      disableSortBy: false,
+      width: 65,
+    },
+    {
+      Header: <>{t('events.signupAdmin.stateHeader', 'State')}</>,
+      id: 'state',
+      accessor: 'state',
+      width: 130,
+      disableFilters: false,
+      disableSortBy: false,
+      Filter: SignupStateFilter,
+      Cell: SignupStateCell,
+    },
+    {
+      Header: <>{t('events.signupAdmin.nameHeader', 'Name')}</>,
+      id: 'name',
+      accessor: (signup: SignupType) => signup.user_con_profile,
+      disableFilters: false,
+      disableSortBy: false,
+      Filter: FreeTextFilter,
+      Cell: UserConProfileWithGravatarCell,
+    },
+    {
+      Header: <>{t('events.signupAdmin.bucketHeader', 'Bucket')}</>,
+      id: 'bucket',
+      accessor: (signup: SignupType) => signup.bucket_key,
+      Cell: BucketCell,
+      disableFilters: false,
+      disableSortBy: false,
+      Filter: BucketFilter,
+    },
+    {
+      Header: <>{t('events.signupAdmin.ageCheckHeader', 'Age check')}</>,
+      id: 'age_restrictions_check',
+      accessor: 'age_restrictions_check',
+      width: 100,
+      disableSortBy: false,
+      Cell: AgeRestrictionsCheckCell,
+    },
+    {
+      Header: <>{t('events.signupAdmin.ageHeader', 'Age')}</>,
+      id: 'age',
+      width: 40,
+      accessor: (signup: SignupType) =>
+        ageAsOf(
+          signup.user_con_profile.birth_date
+            ? moment(signup.user_con_profile.birth_date)
+            : undefined,
+          moment(signup.run.starts_at),
+        ),
+      disableSortBy: false,
+    },
+    {
+      Header: <>{t('events.signupAdmin.emailHeader', 'Email')}</>,
+      id: 'email',
+      accessor: (signup: SignupType) => signup.user_con_profile.email,
+      Cell: EmailCell,
+      Filter: FreeTextFilter,
+      disableFilters: false,
+      disableSortBy: false,
+    },
+  ];
+}
 
 export type RunSignupsTableProps = {
   defaultVisibleColumns: string[];
@@ -179,7 +173,12 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
   const { data, loading, error } = useSignupAdminEventQueryQuery({ variables: { eventId } });
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
 
-  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
+  const {
+    tableInstance,
+    loading: tableLoading,
+    tableHeaderProps,
+    queryData,
+  } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -213,16 +212,10 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     <QueryDataContext.Provider value={queryData ?? {}}>
       <div className="mb-4">
         <TableHeader {...tableHeaderProps} exportUrl={`/csv_exports/run_signups?run_id=${runId}`} />
-        <ReactTable
-          {...reactTableProps}
-          className="-striped -highlight"
-          getTrProps={(state: any, rowInfo: RowInfo) => ({
-            style: { cursor: 'pointer' },
-            onClick: () => {
-              history.push(`${runPath}/admin_signups/${rowInfo.original.id}/edit`);
-            },
-          })}
-          getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+        <ReactTableWithTheWorks
+          tableInstance={tableInstance}
+          loading={tableLoading}
+          onClickRow={(row) => history.push(`${runPath}/admin_signups/${row.original.id}/edit`)}
         />
       </div>
     </QueryDataContext.Provider>

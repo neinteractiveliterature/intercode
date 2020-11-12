@@ -117,8 +117,10 @@ function RunEmailList({ runId, eventId, separator }: RunEmailListProps) {
               value: 'waitlisted',
             },
           ]}
-          filter={{ id: 'includes', value: includes }}
-          onChange={setIncludes}
+          column={{
+            setFilter: setIncludes,
+            filterValue: includes,
+          }}
           renderHeaderCaption={(currentIncludes) => {
             if (currentIncludes.length === 0) {
               return t('events.signupAdmin.emailFilters.nobody', 'Nobody');
