@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useContext, ReactNode } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Moment } from 'moment';
+import { Moment } from 'moment-timezone';
 import { ApolloError } from '@apollo/client';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
