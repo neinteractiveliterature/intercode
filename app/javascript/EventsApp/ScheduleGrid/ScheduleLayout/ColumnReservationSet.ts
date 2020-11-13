@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import { Moment } from 'moment-timezone';
 import { FiniteTimespan } from '../../../Timespan';
 import ColumnReservation from './ColumnReservation';
 

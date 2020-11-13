@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Moment, MomentSetObject } from 'moment';
+import { Moment, MomentSetObject } from 'moment-timezone';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';

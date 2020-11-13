@@ -75,8 +75,7 @@ function createStyleJsonFromString(style: string) {
     }
 
     if (key != null && value != null && key.length > 0 && value.length > 0) {
-      const cssKey = camelCase(key) as keyof React.CSSProperties;
-      jsonStyles[cssKey] = value as any;
+      (jsonStyles as any)[camelCase(key)] = value as any;
     }
   }
   return jsonStyles;

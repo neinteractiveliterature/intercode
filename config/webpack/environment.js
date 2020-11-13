@@ -20,6 +20,10 @@ module.exports = {
     path: path.resolve('public/packs'),
     publicPath: '/packs/',
   },
+  cache: {
+    type: 'filesystem',
+    cacheDirectory: path.resolve(CACHE_PATH, 'cache-loader'),
+  },
   module: {
     rules: [
       {
@@ -29,19 +33,13 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[path][name]-[hash].[ext]',
-              context: path.join('app/javascript'),
+              context: path.resolve('app/javascript'),
             },
           },
         ],
       },
       getStyleRule(/\.(css)$/i),
       getStyleRule(/\.(scss|sass)$/i, [
-        {
-          loader: 'cache-loader',
-          options: {
-            cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
-          },
-        },
         {
           loader: 'sass-loader',
           options: { sourceMap: true },
@@ -56,15 +54,9 @@ module.exports = {
         test: /displayBrowserWarning\.jsx$/,
         use: [
           {
-            loader: 'cache-loader',
-            options: {
-              cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
-            },
-          },
-          {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
+              cacheDirectory: path.resolve(CACHE_PATH, 'babel-loader'),
               presets: [
                 [
                   '@babel/env',
@@ -80,20 +72,14 @@ module.exports = {
         ],
       },
       {
-        test: /\.(mjs|js\.flow|jsx)$/,
-        include: /node_modules/,
+        test: /\.(jsx)$/,
+        include: /node_modules\/cadmus-navbar-admin/,
         type: 'javascript/auto',
         use: [
           {
-            loader: 'cache-loader',
-            options: {
-              cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
-            },
-          },
-          {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
+              cacheDirectory: path.resolve(CACHE_PATH, 'babel-loader'),
             },
           },
         ],
@@ -103,15 +89,9 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'cache-loader',
-            options: {
-              cacheDirectory: path.join(CACHE_PATH, 'cache-loader'),
-            },
-          },
-          {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.join(CACHE_PATH, 'babel-loader'),
+              cacheDirectory: path.resolve(CACHE_PATH, 'babel-loader'),
             },
           },
         ],
@@ -136,6 +116,9 @@ module.exports = {
     alias: {
       'lodash.isequal': 'lodash-es/isEqual',
     },
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+    },
   },
   plugins: [
     new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
@@ -149,13 +132,9 @@ module.exports = {
       publicPath: true,
     }),
     // don't load all of moment's locales
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
+    }),
   ],
-  node: {
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty',
-  },
 };

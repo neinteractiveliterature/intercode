@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { pluralize, humanize, underscore } from 'inflected';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
