@@ -1,6 +1,5 @@
 import { useContext, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
 import CategoryLegend from './CategoryLegend';
@@ -15,6 +14,7 @@ import { parseIntOrNull } from '../../ValueUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
+import { dayjs, useGetOffsetName } from '../../TimeUtils';
 
 const filterCodecs = buildFieldFilterCodecs({
   my_rating: FilterCodecs.integerArray,
@@ -33,10 +33,11 @@ export type ScheduleGridAppProps = {
 function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const { t } = useTranslation();
   const location = useLocation();
-  const { myProfile, timezoneName, language } = useContext(AppRootContext);
+  const { myProfile, timezoneName } = useContext(AppRootContext);
   const { filters, updateSearch } = useReactRouterReactTable({ ...filterCodecs });
   const config = getConfig(configKey);
   const storageKey = `schedule:${configKey}:personalFilters`;
+  const getOffsetName = useGetOffsetName();
 
   const loadPersonalFilters = useCallback(() => {
     const storedValue = window.localStorage.getItem(storageKey);
@@ -115,11 +116,11 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
             <ScheduleGrid timespan={timespan} />
             <div className="font-italic">
               {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
-                offsetName: DateTime.fromISO(timespan.start.toISOString())
-                  .reconfigure({
-                    locale: language,
-                  })
-                  .setZone(timezoneName).offsetNameLong,
+                offsetName: getOffsetName(
+                  timezoneName,
+                  dayjs(timespan.start.toISOString()),
+                  'long',
+                ),
               })}
             </div>
           </div>

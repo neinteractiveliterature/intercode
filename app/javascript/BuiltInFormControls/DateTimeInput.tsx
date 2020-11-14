@@ -1,8 +1,8 @@
 import { useMemo, useContext, useState, useEffect } from 'react';
 import * as React from 'react';
-import { DateTime } from 'luxon';
 
 import AppRootContext from '../AppRootContext';
+import { dayjs, useGetOffsetName } from '../TimeUtils';
 
 function dateTimeToISO(
   date: string | null | undefined,
@@ -13,13 +13,13 @@ function dateTimeToISO(
     return null;
   }
 
-  const newDateTime = DateTime.fromISO(`${date}T${time}`, { zone: timezoneName });
+  const newDateTime = dayjs.tz(`${date}T${time}`, timezoneName);
 
-  if (!newDateTime.isValid) {
+  if (!newDateTime.isValid()) {
     return null;
   }
 
-  const isoDateTime = newDateTime.toISO();
+  const isoDateTime = newDateTime.toISOString();
   if (isoDateTime) {
     // work around Luxon issue: https://github.com/moment/luxon/issues/632
     return isoDateTime.replace(/\.\d+$/, '');
@@ -96,27 +96,23 @@ function DateTimeInput({
 }: DateTimeInputProps) {
   const { timezoneName: appTimezoneName } = useContext(AppRootContext);
   const effectiveTimezoneName = timezoneName || appTimezoneName;
-  const dateTime = useMemo(() => DateTime.fromISO(value ?? '').setZone(effectiveTimezoneName), [
+  const dateTime = useMemo(() => dayjs(value ?? '').tz(effectiveTimezoneName), [
     value,
     effectiveTimezoneName,
   ]);
-  const [date, setDate] = useState(() => dateTime.toISODate());
-  const [time, setTime] = useState(() =>
-    dateTime.toISOTime({
-      suppressMilliseconds: true,
-      includeOffset: false,
-    }),
-  );
-  const userTimezoneName = DateTime.local().zoneName;
+  const [date, setDate] = useState(() => dateTime.format('YYYY-MM-DD'));
+  const [time, setTime] = useState(() => dateTime.format('HH:mm:ss'));
+  const userTimezoneName = dayjs.tz.guess();
   const showZone =
     alwaysShowTimezone ||
     effectiveTimezoneName !== appTimezoneName ||
     effectiveTimezoneName !== userTimezoneName;
+  const getOffsetName = useGetOffsetName();
 
   useEffect(() => {
-    if (dateTime.isValid) {
-      setDate(dateTime.toISODate());
-      setTime(dateTime.toISOTime({ suppressMilliseconds: true, includeOffset: false }));
+    if (dateTime.isValid()) {
+      setDate(dateTime.format('YYYY-MM-DD'));
+      setTime(dateTime.format('HH:mm:ss'));
     }
   }, [dateTime]);
 
@@ -141,10 +137,7 @@ function DateTimeInput({
       <DateInput value={date} onChange={dateChanged} id={id} {...otherProps} />
       <TimeInput value={time} onChange={timeChanged} {...otherProps} />
       {showZone && (
-        <span className="ml-2">
-          {dateTime.offsetNameShort ??
-            DateTime.fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
-        </span>
+        <span className="ml-2">{getOffsetName(effectiveTimezoneName, dateTime, 'short')}</span>
       )}
     </div>
   );

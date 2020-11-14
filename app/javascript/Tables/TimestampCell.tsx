@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon';
-
 import { useISODateTimeInAppZone } from '../TimeUtils';
 
 export type SingleLineTimestampCellProps = {
@@ -13,7 +11,7 @@ export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps)
     return null;
   }
 
-  return <>{timestamp.toFormat('yyyy-MM-dd HH:mm')}</>;
+  return <>{timestamp.format('YYYY-MM-DD HH:mm')}</>;
 }
 
 export type TimestampCellProps = {
@@ -29,9 +27,9 @@ function TimestampCell({ value }: TimestampCellProps) {
 
   return (
     <>
-      {timestamp.toLocaleString(DateTime.DATE_MED)}
+      {timestamp.format('ll')}
       <br />
-      {timestamp.toFormat('h:mm:ssa').toLowerCase()}
+      {timestamp.format('h:mm:ssa')}
     </>
   );
 }

@@ -99,6 +99,10 @@ module.exports = {
                 importNames: ['useQuery', 'useMutation'],
                 message: 'Please use generated operation-specific hooks instead',
               },
+              {
+                name: 'dayjs',
+                message: 'Please use the version from TimeUtils instead',
+              },
             ],
           },
         ],

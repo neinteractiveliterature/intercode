@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { DateTime } from 'luxon';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { timespanFromConvention } from '../TimespanUtils';
@@ -27,6 +26,7 @@ import { usePropertySetters } from '../usePropertySetters';
 import { Convention, Organization, TimezoneMode } from '../graphqlTypes.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useCreateConventionMutation } from './mutations.generated';
+import { dayjs } from '../TimeUtils';
 
 type CreatingConvention = Pick<
   Convention,
@@ -156,7 +156,7 @@ export default LoadQueryWrapper<NewConventionModalQueryQuery, NewConventionModal
       history.push(`/conventions/${result.data!.createConvention!.convention.id}`);
     };
 
-    const timezoneNameForInputs = convention.timezone_name ?? DateTime.local().zoneName;
+    const timezoneNameForInputs = convention.timezone_name ?? dayjs.tz.guess();
 
     const [createClicked, createError, createInProgress] = useAsyncFunction(create);
 

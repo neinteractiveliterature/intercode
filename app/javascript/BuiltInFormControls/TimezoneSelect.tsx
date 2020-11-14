@@ -4,8 +4,8 @@ import { useState, useMemo, ReactNode, SetStateAction } from 'react';
 
 import * as React from 'react';
 import Select from 'react-select';
-import { IANAZone } from 'luxon';
 import { Search, TfIdfSearchIndex } from 'js-search';
+import getTimezoneOffset from 'get-timezone-offset';
 
 import timezoneSelectData from './timezoneSelectData.json';
 import useUniqueId from '../useUniqueId';
@@ -24,7 +24,8 @@ type BoostableDocument = {
   $boost?: number;
 };
 
-class BoostableTfIdfSearchIndex extends TfIdfSearchIndex
+class BoostableTfIdfSearchIndex
+  extends TfIdfSearchIndex
   implements TfIdfSearchIndexWithOverridableCreate {
   _createCalculateTfIdf() {
     /* eslint-disable-next-line no-underscore-dangle */ /* @ts-ignore */
@@ -37,12 +38,11 @@ class BoostableTfIdfSearchIndex extends TfIdfSearchIndex
   }
 }
 
-const NOW = new Date().getTime();
+const NOW = new Date();
 
 function getFormattedOffset(zoneName: string) {
-  const zone = IANAZone.create(zoneName);
-  let offset = zone.offset(NOW);
-  if (zone.name.startsWith('Etc/')) {
+  let offset = getTimezoneOffset(zoneName, NOW);
+  if (!zoneName.startsWith('Etc/')) {
     // POSIX offsets are inverted
     offset *= -1;
   }
@@ -77,7 +77,7 @@ function TimezoneSelect(props: TimezoneSelectProps) {
     }
 
     const filtered = searchIndex.search(inputValue).slice(0, 50);
-    return (filtered as ZoneData[]);
+    return filtered as ZoneData[];
   };
 
   const [options, setOptions] = useState(loadOptions(''));
@@ -96,7 +96,7 @@ function TimezoneSelect(props: TimezoneSelectProps) {
         inputId={selectId}
         options={options}
         isClearable
-        value={(value && isValidZone(value)) ? timezoneSelectData.zones[value] : undefined}
+        value={value && isValidZone(value) ? timezoneSelectData.zones[value] : undefined}
         onInputChange={(input) => filterOptions(input)}
         onChange={(newValue?: ZoneData) => {
           onChange(newValue?.name);

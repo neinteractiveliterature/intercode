@@ -5062,6 +5062,11 @@ dateformat@3.0.2:
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.2.tgz#9a4df4bff158ac2f34bc637abdb15471607e1659"
   integrity sha1-mk30v/FYrC80vGN6vbFUcWB+Flk=
 
+dayjs@^1.9.6:
+  version "1.9.6"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.9.6.tgz#6f0c77d76ac1ff63720dd1197e5cb87b67943d70"
+  integrity sha512-HngNLtPEBWRo8EFVmHFmSXAjtCX8rGNqeXQI0Gh7wCTSqwaKgPIDqu9m07wABVopNwzvOeCb+2711vQhDlcIXw==
+
 de-indent@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/de-indent/-/de-indent-1.0.2.tgz#b2038e846dc33baa5796128d0804b455b8c1e21d"
@@ -6736,6 +6741,11 @@ get-stream@^5.0.0, get-stream@^5.1.0:
   integrity sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==
   dependencies:
     pump "^3.0.0"
+
+get-timezone-offset@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/get-timezone-offset/-/get-timezone-offset-1.0.4.tgz#0ea8320b6d52dee6491ee0b9c4691f122169fc10"
+  integrity sha512-fN1Nlr2dX8u+Tn4Rrbpoy4HKW6gB6TnkK0aIuLnzIw0thxdamNTZJrutF+7PmUIKDxMJJcQhTBM392uTBsDwnQ==
 
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
