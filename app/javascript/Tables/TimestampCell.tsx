@@ -1,7 +1,5 @@
-// import { DateTime } from 'luxon';
-import { parseISO, isValid, format, Locale } from 'date-fns';
-
-// import { useISODateTimeInAppZone } from '../TimeUtils';
+import { parseISO, isValid } from 'date-fns';
+import { useAppTimezoneFormat } from '../TimeUtils';
 
 export type SingleLineTimestampCellProps = {
   value: string;
@@ -9,6 +7,7 @@ export type SingleLineTimestampCellProps = {
 
 export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps) {
   const timestamp = parseISO(value);
+  const format = useAppTimezoneFormat();
 
   if (!isValid(timestamp)) {
     return null;
@@ -23,6 +22,7 @@ export type TimestampCellProps = {
 
 function TimestampCell({ value }: TimestampCellProps) {
   const timestamp = parseISO(value);
+  const format = useAppTimezoneFormat();
 
   if (!isValid(timestamp)) {
     return null;
@@ -30,9 +30,9 @@ function TimestampCell({ value }: TimestampCellProps) {
 
   return (
     <>
-      {timestamp.toLocaleString(DateTime.DATE_MED)}
+      {format(timestamp, 'PP')}
       <br />
-      {timestamp.toFormat('h:mm:ssa').toLowerCase()}
+      {format(timestamp, 'h:mm:ssa').toLowerCase()}
     </>
   );
 }

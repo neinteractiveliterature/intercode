@@ -99,6 +99,11 @@ module.exports = {
                 importNames: ['useQuery', 'useMutation'],
                 message: 'Please use generated operation-specific hooks instead',
               },
+              {
+                name: 'date-fns',
+                importNames: ['format'],
+                message: "Please use date-fns-tz's format instead",
+              },
             ],
           },
         ],

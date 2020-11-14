@@ -1,9 +1,10 @@
-// import { useContext, useMemo } from 'react';
+import { useContext, useCallback } from 'react';
 import { DateTime } from 'luxon';
+import { format, OptionsWithTZ } from 'date-fns-tz';
 import { Moment } from 'moment-timezone';
 
 import { onlyOneIsNull } from './ValueUtils';
-// import AppRootContext from './AppRootContext';
+import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 
 export const timeIsOnTheHour = (time: Moment) =>
@@ -74,6 +75,22 @@ export function timezoneNameForConvention(
   }
 
   return DateTime.local().zoneName;
+}
+
+export function useAppTimezoneFormat() {
+  const { timezoneName } = useContext(AppRootContext);
+  const appTimezoneFormat = useCallback(
+    (
+      date: string | number | Date,
+      formatStr: string,
+      options?: Omit<OptionsWithTZ, 'timeZone'>,
+    ) => {
+      debugger;
+      return format(date, formatStr, { ...options, timeZone: timezoneName });
+    },
+    [timezoneName],
+  );
+  return appTimezoneFormat;
 }
 
 // export function useISODateTimeInAppZone(isoValue: string) {
