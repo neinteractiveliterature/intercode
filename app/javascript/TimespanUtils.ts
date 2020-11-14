@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
-import { DateTime } from 'luxon';
+
 import Timespan, { FiniteTimespan } from './Timespan';
-import { timezoneNameForConvention } from './TimeUtils';
+import { dayjs, timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
 import { Convention, Event, Run } from './graphqlTypes.generated';
 
@@ -50,15 +50,15 @@ export function getMemoizationKeyForTimespan(timespan?: Timespan) {
 
 export function describeInterval(
   timespan: Timespan,
-  formatDateTime: (dateTime: DateTime) => string,
+  formatDate: (date: dayjs.Dayjs) => string,
   timeZone: string,
 ) {
   const start = timespan.start
-    ? formatDateTime(DateTime.fromISO(timespan.start.toISOString()).setZone(timeZone))
+    ? formatDate(dayjs(timespan.start.toISOString()).tz(timeZone))
     : 'anytime';
 
   const finish = timespan.finish
-    ? formatDateTime(DateTime.fromISO(timespan.finish.toISOString()).setZone(timeZone))
+    ? formatDate(dayjs(timespan.finish.toISOString()).tz(timeZone))
     : 'indefinitely';
 
   const [dedupedStart, dedupedFinish] = removeCommonStringMiddle(start, finish);

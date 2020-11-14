@@ -1,18 +1,15 @@
 import { useContext, useMemo, useCallback } from 'react';
-import { DateTime } from 'luxon';
 import { Moment } from 'moment-timezone';
 // eslint-disable-next-line no-restricted-imports
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import TimezonePlugin from 'dayjs/plugin/timezone';
 import UtcPlugin from 'dayjs/plugin/utc';
-import AdvancedFormatPlugin from 'dayjs/plugin/advancedFormat';
 
 import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 
-dayjs.extend(AdvancedFormatPlugin);
 dayjs.extend(LocalizedFormat);
 dayjs.extend(TimezonePlugin);
 dayjs.extend(UtcPlugin);
@@ -85,7 +82,7 @@ export function timezoneNameForConvention(
     return convention.timezone_name!;
   }
 
-  return DateTime.local().zoneName;
+  return dayjs.tz.guess();
 }
 
 export function useISODateTimeInAppZone(isoValue: string) {
@@ -101,11 +98,15 @@ export function getOffsetName(
   date: dayjs.Dayjs,
   type: 'long' | 'short',
 ) {
+  if (!date.isValid()) {
+    return undefined;
+  }
+
   const format = new Intl.DateTimeFormat(language, {
     timeZone: timezoneName,
     timeZoneName: type,
   });
-  return format.formatToParts(date.toDate()).find((part) => part.type === 'timeZoneName')?.value;
+  return format.formatToParts(date.valueOf()).find((part) => part.type === 'timeZoneName')?.value;
 }
 
 export function useGetOffsetName() {

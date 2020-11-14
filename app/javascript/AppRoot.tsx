@@ -1,7 +1,6 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';
-import { Settings } from 'luxon';
 
 import { useAppRootQueryQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
@@ -12,7 +11,7 @@ import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
-import { timezoneNameForConvention } from './TimeUtils';
+import { timezoneNameForConvention, dayjs } from './TimeUtils';
 import i18n from './setupI18Next';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
@@ -112,11 +111,11 @@ function AppRoot() {
   useEffect(() => {
     if (appRootContextValue?.language) {
       i18n.changeLanguage(appRootContextValue.language);
-      Settings.defaultLocale = appRootContextValue.language;
 
       if (appRootContextValue.language === 'es') {
         // @ts-expect-error
         import('moment/locale/es').then(() => moment.locale('es'));
+        import('dayjs/locale/es').then(() => dayjs.locale('es'));
       } else {
         moment.locale('en');
       }
