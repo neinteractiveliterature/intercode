@@ -1,9 +1,9 @@
-import { useContext, useMemo } from 'react';
+// import { useContext, useMemo } from 'react';
 import { DateTime } from 'luxon';
 import { Moment } from 'moment-timezone';
 
 import { onlyOneIsNull } from './ValueUtils';
-import AppRootContext from './AppRootContext';
+// import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 
 export const timeIsOnTheHour = (time: Moment) =>
@@ -76,12 +76,12 @@ export function timezoneNameForConvention(
   return DateTime.local().zoneName;
 }
 
-export function useISODateTimeInAppZone(isoValue: string) {
-  const { timezoneName } = useContext(AppRootContext);
-  const timestamp = useMemo(() => DateTime.fromISO(isoValue).setZone(timezoneName), [
-    isoValue,
-    timezoneName,
-  ]);
+// export function useISODateTimeInAppZone(isoValue: string) {
+//   const { timezoneName } = useContext(AppRootContext);
+//   const timestamp = useMemo(() => DateTime.fromISO(isoValue).setZone(timezoneName), [
+//     isoValue,
+//     timezoneName,
+//   ]);
 
-  return timestamp;
-}
+//   return timestamp;
+// }

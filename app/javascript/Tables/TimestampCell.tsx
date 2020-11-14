@@ -1,19 +1,20 @@
-import { DateTime } from 'luxon';
+// import { DateTime } from 'luxon';
+import { parseISO, isValid, format, Locale } from 'date-fns';
 
-import { useISODateTimeInAppZone } from '../TimeUtils';
+// import { useISODateTimeInAppZone } from '../TimeUtils';
 
 export type SingleLineTimestampCellProps = {
   value: string;
 };
 
 export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps) {
-  const timestamp = useISODateTimeInAppZone(value);
+  const timestamp = parseISO(value);
 
-  if (!timestamp.isValid) {
+  if (!isValid(timestamp)) {
     return null;
   }
 
-  return <>{timestamp.toFormat('yyyy-MM-dd HH:mm')}</>;
+  return <>{format(timestamp, 'YYYY-MM-DD HH:mm')}</>;
 }
 
 export type TimestampCellProps = {
@@ -21,9 +22,9 @@ export type TimestampCellProps = {
 };
 
 function TimestampCell({ value }: TimestampCellProps) {
-  const timestamp = useISODateTimeInAppZone(value);
+  const timestamp = parseISO(value);
 
-  if (!timestamp.isValid) {
+  if (!isValid(timestamp)) {
     return null;
   }
 
