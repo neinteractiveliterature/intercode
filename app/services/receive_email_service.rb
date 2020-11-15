@@ -140,7 +140,7 @@ header: #{email.from}"
     end
 
     forward_message = email.dup
-    forward_message.reply_to = transformed_from_addresses.map(&:to_s)
+    forward_message.reply_to = email.from
     forward_message.from = transformed_from_addresses.map(&:to_s)
     forward_message.to = new_recipients
     forward_message.cc = nil
