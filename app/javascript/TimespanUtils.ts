@@ -1,5 +1,3 @@
-import moment from 'moment-timezone';
-
 import Timespan, { FiniteTimespan } from './Timespan';
 import { dayjs, timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
@@ -21,10 +19,10 @@ export function timespanFromRun(
   event: Pick<Event, 'length_seconds'>,
   run: Pick<Run, 'starts_at'>,
 ) {
-  const start = moment(run.starts_at).tz(timezoneName);
-  const finish = start.clone().add(event.length_seconds, 'seconds');
+  const start = dayjs(run.starts_at).tz(timezoneName);
+  const finish = start.clone().add(event.length_seconds, 'second');
 
-  return Timespan.fromMoments(start, finish) as FiniteTimespan;
+  return Timespan.finiteFromDays(start, finish);
 }
 
 export function getConventionDayTimespans(
@@ -33,7 +31,7 @@ export function getConventionDayTimespans(
 ) {
   return conventionTimespan.getTimespansWithin(timezoneName, {
     unit: 'day',
-    offset: moment.duration(6, 'hours'), // start convention days at 6:00am
+    offset: dayjs.duration(6, 'hours'), // start convention days at 6:00am
   });
 }
 

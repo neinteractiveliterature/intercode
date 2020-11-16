@@ -1,7 +1,8 @@
 import { useContext, useMemo, useCallback } from 'react';
-import { Moment } from 'moment-timezone';
+
 // eslint-disable-next-line no-restricted-imports
 import dayjs from 'dayjs';
+import DurationPlugin from 'dayjs/plugin/duration';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import TimezonePlugin from 'dayjs/plugin/timezone';
 import UtcPlugin from 'dayjs/plugin/utc';
@@ -10,15 +11,16 @@ import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 
+dayjs.extend(DurationPlugin);
 dayjs.extend(LocalizedFormat);
 dayjs.extend(TimezonePlugin);
 dayjs.extend(UtcPlugin);
 export { dayjs };
 
-export const timeIsOnTheHour = (time: Moment) =>
+export const timeIsOnTheHour = (time: dayjs.Dayjs) =>
   time.millisecond() === 0 && time.second() === 0 && time.minute() === 0;
 
-export const humanTimeFormat = (time: Moment) => {
+export const humanTimeFormat = (time: dayjs.Dayjs) => {
   if (timeIsOnTheHour(time)) {
     if (time.hour() === 0) {
       return '[midnight]';
@@ -32,7 +34,7 @@ export const humanTimeFormat = (time: Moment) => {
   return 'h:mma';
 };
 
-export const humanizeTime = (time: Moment, includeDay?: boolean) => {
+export const humanizeTime = (time: dayjs.Dayjs, includeDay?: boolean) => {
   let timeFormat = humanTimeFormat(time);
   if (includeDay) {
     timeFormat = `ddd ${timeFormat}`;
@@ -41,15 +43,15 @@ export const humanizeTime = (time: Moment, includeDay?: boolean) => {
   return time.format(timeFormat);
 };
 
-export const timesAreSameOrBothNull = (a?: Moment | null, b?: Moment | null) => {
+export const timesAreSameOrBothNull = (a?: dayjs.Dayjs | null, b?: dayjs.Dayjs | null) => {
   if (onlyOneIsNull(a, b)) {
     return false;
   }
 
-  return (a == null && b == null) || a!.isSame(b ?? undefined);
+  return (a == null && b == null) || a!.isSame(b!);
 };
 
-export const compareTimesAscending = (a: Moment, b: Moment) => {
+export const compareTimesAscending = (a: dayjs.Dayjs, b: dayjs.Dayjs) => {
   if (a.isBefore(b)) {
     return -1;
   }
@@ -61,9 +63,10 @@ export const compareTimesAscending = (a: Moment, b: Moment) => {
   return 0;
 };
 
-export const compareTimesDescending = (a: Moment, b: Moment) => compareTimesAscending(b, a);
+export const compareTimesDescending = (a: dayjs.Dayjs, b: dayjs.Dayjs) =>
+  compareTimesAscending(b, a);
 
-export function ageAsOf(birthDate?: Moment | null, date?: Moment | null) {
+export function ageAsOf(birthDate?: dayjs.Dayjs | null, date?: dayjs.Dayjs | null) {
   if (!birthDate || !date || !birthDate.isValid() || !date.isValid()) {
     return null;
   }
@@ -102,11 +105,9 @@ export function getOffsetName(
     return undefined;
   }
 
-  const format = new Intl.DateTimeFormat(language, {
-    timeZone: timezoneName,
-    timeZoneName: type,
-  });
-  return format.formatToParts(date.valueOf()).find((part) => part.type === 'timeZoneName')?.value;
+  // dayjs is missing offsetName in its typescript definitions... maybe I'll file a github issue
+  // @ts-expect-error
+  return date.locale(language).tz(timezoneName).offsetName(type);
 }
 
 export function useGetOffsetName() {

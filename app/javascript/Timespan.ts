@@ -1,29 +1,30 @@
-import moment, { DurationInputArg1, DurationInputArg2, Moment, unitOfTime } from 'moment-timezone';
+import type { Duration } from 'dayjs/plugin/duration';
 import {
   compareTimesAscending,
   compareTimesDescending,
   humanizeTime,
   timesAreSameOrBothNull,
+  dayjs,
 } from './TimeUtils';
 import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
 
 export type TimeHopOptions = {
-  unit: unitOfTime.Base;
-  offset?: moment.DurationInputArg1 | null;
-  duration?: moment.DurationInputArg1 | null;
+  unit: dayjs.OpUnitType;
+  offset?: Duration | null;
+  duration?: number | null;
 };
 
 export interface FiniteTimespan extends Timespan {
-  start: Moment;
-  finish: Moment;
+  start: dayjs.Dayjs;
+  finish: dayjs.Dayjs;
   clone(): FiniteTimespan;
-  getLength(unit: unitOfTime.Diff): number;
+  getLength(unit: dayjs.OpUnitType | dayjs.QUnitType): number;
   union(other: FiniteTimespan): FiniteTimespan;
   intersection(other: FiniteTimespan): FiniteTimespan;
   expandedToFit(other: FiniteTimespan): FiniteTimespan;
-  expand(amount: DurationInputArg1, unit: DurationInputArg2): FiniteTimespan;
-  expandStart(amount: DurationInputArg1, unit: DurationInputArg2): FiniteTimespan;
-  expandFinish(amount: DurationInputArg1, unit: DurationInputArg2): FiniteTimespan;
+  expand(amount: number, unit: dayjs.OpUnitType): FiniteTimespan;
+  expandStart(amount: number, unit: dayjs.OpUnitType): FiniteTimespan;
+  expandFinish(amount: number, unit: dayjs.OpUnitType): FiniteTimespan;
 }
 
 export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
@@ -31,30 +32,27 @@ export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
 }
 
 class Timespan {
-  start: Moment | null | undefined;
+  start: dayjs.Dayjs | null | undefined;
 
-  finish: Moment | null | undefined;
+  finish: dayjs.Dayjs | null | undefined;
 
   static finiteFromStrings(start: string, finish: string): FiniteTimespan {
-    return new Timespan(moment(start), moment(finish)) as FiniteTimespan;
+    return new Timespan(dayjs(start), dayjs(finish)) as FiniteTimespan;
   }
 
   static fromStrings(start?: string | null, finish?: string | null): Timespan {
-    return new Timespan(
-      start != null ? moment(start) : null,
-      finish != null ? moment(finish) : null,
-    );
+    return new Timespan(start != null ? dayjs(start) : null, finish != null ? dayjs(finish) : null);
   }
 
-  static finiteFromMoments(start: Moment, finish: Moment): FiniteTimespan {
+  static finiteFromDays(start: dayjs.Dayjs, finish: dayjs.Dayjs): FiniteTimespan {
     return new Timespan(start, finish) as FiniteTimespan;
   }
 
-  static fromMoments(start?: Moment | null, finish?: Moment | null): Timespan {
+  static fromDays(start?: dayjs.Dayjs | null, finish?: dayjs.Dayjs | null): Timespan {
     return new Timespan(start, finish);
   }
 
-  constructor(start?: Moment | null, finish?: Moment | null) {
+  constructor(start?: dayjs.Dayjs | null, finish?: dayjs.Dayjs | null) {
     if (start && finish && start.isAfter(finish)) {
       throw new Error('Start cannot be after finish');
     }
@@ -74,17 +72,21 @@ class Timespan {
     return isFinite(this);
   }
 
-  includesTime(time: Moment) {
+  includesTime(time: dayjs.Dayjs) {
     return (
-      (this.start == null || this.start.isSameOrBefore(time)) &&
+      (this.start == null || this.start.isBefore(time) || this.start.isSame(time)) &&
       (this.finish == null || this.finish.isAfter(time))
     );
   }
 
   includesTimespan(other: Timespan) {
     return (
-      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start))) &&
-      (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
+      (this.start == null ||
+        (other.start != null &&
+          (this.start.isBefore(other.start) || this.start.isSame(other.start)))) &&
+      (this.finish == null ||
+        (other.finish != null &&
+          (this.finish.isAfter(other.finish) || this.finish.isSame(other.finish))))
     );
   }
 
@@ -120,15 +122,15 @@ class Timespan {
     );
   }
 
-  expandStart(amount: DurationInputArg1, unit: DurationInputArg2) {
+  expandStart(amount: number, unit: dayjs.OpUnitType) {
     return new Timespan(this.start?.clone().subtract(amount, unit), this.finish);
   }
 
-  expandFinish(amount: DurationInputArg1, unit: DurationInputArg2) {
+  expandFinish(amount: number, unit: dayjs.OpUnitType) {
     return new Timespan(this.start, this.finish?.clone().add(amount, unit));
   }
 
-  expand(amount: DurationInputArg1, unit: DurationInputArg2) {
+  expand(amount: number, unit: dayjs.OpUnitType) {
     return new Timespan(
       this.start?.clone().subtract(amount, unit),
       this.finish?.clone().add(amount, unit),
@@ -137,7 +139,7 @@ class Timespan {
 
   expandedToFit = this.union;
 
-  getLength(unit: unitOfTime.Diff = 'millisecond') {
+  getLength(unit: dayjs.OpUnitType | dayjs.QUnitType = 'millisecond') {
     if (!this.isFinite()) {
       return null;
     }
@@ -198,22 +200,37 @@ class Timespan {
     return `${start} - ${finish}`;
   }
 
-  getTimeHopsWithin(timezoneName: string, { unit, offset = 0, duration = 1 }: TimeHopOptions) {
+  getTimeHopsWithin(
+    timezoneName: string,
+    { unit, offset = undefined, duration = 1 }: TimeHopOptions,
+  ) {
     if (!this.isFinite()) {
       throw new Error(
         `getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`,
       );
     }
 
-    const timeBlocks: Moment[] = [];
-    const now = this.start.clone().tz(timezoneName).startOf(unit);
+    const offsetMillis = offset?.milliseconds();
+    const timeBlocks: dayjs.Dayjs[] = [];
+    debugger;
+    let now = this.start.tz(timezoneName).startOf(unit);
+    // work around https://github.com/iamkun/dayjs/issues/1212
+    // @ts-expect-error
+    now.$x.$timezone = this.start.$x.$timezone;
+    console.log([
+      this.start.toISOString(),
+      this.start.tz(timezoneName).toISOString(),
+      this.start.$d,
+      now.toISOString(),
+      now.$d,
+    ]);
     while (now.isBefore(this.finish)) {
-      const timeHop = now.clone();
-      if (offset) {
-        timeHop.add(offset);
+      let timeHop = now;
+      if (offsetMillis) {
+        timeHop = timeHop.add(offsetMillis, 'millisecond');
       }
       timeBlocks.push(timeHop);
-      now.add(duration!, unit);
+      now = now.add(duration!, unit);
     }
 
     return timeBlocks;
@@ -221,7 +238,7 @@ class Timespan {
 
   getTimespansWithin(
     timezoneName: string,
-    { unit, offset = 0, duration = 1 }: TimeHopOptions,
+    { unit, offset = undefined, duration = 1 }: TimeHopOptions,
   ): FiniteTimespan[] {
     const thisTimespan = this;
     if (!thisTimespan.isFinite()) {
@@ -236,20 +253,23 @@ class Timespan {
     return timeHops
       .map((timeHop, i) => {
         if (i < timeHops.length - 1) {
-          return Timespan.finiteFromMoments(timeHop, timeHops[i + 1]).intersection(thisTimespan);
+          return Timespan.finiteFromDays(timeHop, timeHops[i + 1]).intersection(thisTimespan);
         }
 
         if (offset) {
-          return Timespan.finiteFromMoments(
+          return Timespan.finiteFromDays(
             timeHop,
-            timeHop.clone().subtract(offset).add(duration!, unit).add(offset),
+            timeHop
+              .clone()
+              .subtract(offset.milliseconds(), 'millisecond')
+              .add(duration!, unit)
+              .add(offset.milliseconds(), 'millisecond'),
           ).intersection(thisTimespan);
         }
 
-        return Timespan.finiteFromMoments(
-          timeHop,
-          timeHop.clone().add(duration!, unit),
-        ).intersection(thisTimespan);
+        return Timespan.finiteFromDays(timeHop, timeHop.clone().add(duration!, unit)).intersection(
+          thisTimespan,
+        );
       })
       .filter(notEmpty);
   }
