@@ -3,9 +3,9 @@ import moment from 'moment-timezone';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { DateTime } from 'luxon';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { getUserTimezoneName } from '../TimeUtils';
 import { timespanFromConvention } from '../TimespanUtils';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
@@ -156,7 +156,7 @@ export default LoadQueryWrapper<NewConventionModalQueryQuery, NewConventionModal
       history.push(`/conventions/${result.data!.createConvention!.convention.id}`);
     };
 
-    const timezoneNameForInputs = convention.timezone_name ?? DateTime.local().zoneName;
+    const timezoneNameForInputs = convention.timezone_name ?? getUserTimezoneName();
 
     const [createClicked, createError, createInProgress] = useAsyncFunction(create);
 

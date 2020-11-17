@@ -1,5 +1,5 @@
 import { parseISO, isValid } from 'date-fns';
-import { useAppTimezoneFormat } from '../TimeUtils';
+import { useAppDateFormat } from '../TimeUtils';
 
 export type SingleLineTimestampCellProps = {
   value: string;
@@ -7,7 +7,7 @@ export type SingleLineTimestampCellProps = {
 
 export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps) {
   const timestamp = parseISO(value);
-  const format = useAppTimezoneFormat();
+  const format = useAppDateFormat();
 
   if (!isValid(timestamp)) {
     return null;
@@ -22,7 +22,7 @@ export type TimestampCellProps = {
 
 function TimestampCell({ value }: TimestampCellProps) {
   const timestamp = parseISO(value);
-  const format = useAppTimezoneFormat();
+  const format = useAppDateFormat();
 
   if (!isValid(timestamp)) {
     return null;

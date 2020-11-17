@@ -3,13 +3,16 @@ const webpack = require('webpack');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const environment = require('./environment');
 
+const entryPoints = {
+  buildTimezoneData: './script/buildTimezoneData.ts',
+  diffTranslations: './script/diffTranslations.ts',
+  mergeTranslations: './script/mergeTranslations.ts',
+  renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.tsx',
+};
+
 module.exports = {
   ...environment,
-  entry: {
-    diffTranslations: './script/diffTranslations.ts',
-    mergeTranslations: './script/mergeTranslations.ts',
-    renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.tsx',
-  },
+  entry: entryPoints,
   devtool: 'cheap-source-map',
   output: {
     filename: '[name]',
@@ -25,11 +28,7 @@ module.exports = {
     }),
     new WebpackShellPluginNext({
       onBuildEnd: {
-        scripts: [
-          'chmod +x bin/diffTranslations',
-          'chmod +x bin/mergeTranslations',
-          'chmod +x bin/renderFormResponseChangeGroup',
-        ],
+        scripts: Object.keys(entryPoints).map((entryPoint) => `chmod +x bin/${entryPoint}`),
       },
     }),
   ],

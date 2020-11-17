@@ -1,7 +1,7 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import moment from 'moment-timezone';
-import { Settings } from 'luxon';
+import type { Locale } from 'date-fns';
 
 import { useAppRootQueryQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
@@ -36,6 +36,7 @@ function AppRoot() {
   const { data, loading, error } = useAppRootQueryQuery({
     variables: { path: normalizePathForLayout(location.pathname) },
   });
+  const [dateFnsLocale, setDateFnsLocale] = useState<Locale>();
 
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<number>();
   const [layoutChanged, setLayoutChanged] = useState(false);
@@ -68,6 +69,7 @@ function AppRoot() {
       currentAbility: data!.currentAbility,
       currentPendingOrder: data!.currentPendingOrder,
       currentUser: data!.currentUser,
+      dateFnsLocale,
       language: data!.convention?.language ?? 'en',
       myProfile: data!.myProfile,
       rootSiteName: data!.rootSite?.site_name,
@@ -112,13 +114,14 @@ function AppRoot() {
   useEffect(() => {
     if (appRootContextValue?.language) {
       i18n.changeLanguage(appRootContextValue.language);
-      Settings.defaultLocale = appRootContextValue.language;
 
       if (appRootContextValue.language === 'es') {
         // @ts-expect-error
         import('moment/locale/es').then(() => moment.locale('es'));
+        import('date-fns/locale/es').then((locale) => setDateFnsLocale(locale.default));
       } else {
         moment.locale('en');
+        import('date-fns/locale/en-US').then((locale) => setDateFnsLocale(locale.default));
       }
     }
   }, [appRootContextValue]);

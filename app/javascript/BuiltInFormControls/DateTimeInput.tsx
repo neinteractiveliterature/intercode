@@ -1,6 +1,8 @@
 import { useMemo, useContext, useState, useEffect } from 'react';
 import * as React from 'react';
-import { DateTime } from 'luxon';
+import { formatISO, Locale } from 'date-fns';
+import { format, toDate, utcToZonedTime } from 'date-fns-tz';
+import { getUserTimezoneName } from '../TimeUtils';
 
 import AppRootContext from '../AppRootContext';
 
@@ -13,17 +15,17 @@ function dateTimeToISO(
     return null;
   }
 
-  const newDateTime = DateTime.fromISO(`${date}T${time}`, { zone: timezoneName });
+  const newDateTime = toDate(`${date}T${time}`, { timeZone: timezoneName });
 
-  if (!newDateTime.isValid) {
+  if (Number.isNaN(newDateTime.valueOf())) {
     return null;
   }
 
-  const isoDateTime = newDateTime.toISO();
-  if (isoDateTime) {
-    // work around Luxon issue: https://github.com/moment/luxon/issues/632
-    return isoDateTime.replace(/\.\d+$/, '');
-  }
+  const isoDateTime = formatISO(newDateTime);
+  // if (isoDateTime) {
+  //   // work around Luxon issue: https://github.com/moment/luxon/issues/632
+  //   return isoDateTime.replace(/\.\d+$/, '');
+  // }
 
   return isoDateTime;
 }
@@ -86,6 +88,33 @@ export type DateTimeInputProps = Omit<
   alwaysShowTimezone?: boolean;
 };
 
+function formatDate(dateTime: Date) {
+  if (Number.isNaN(dateTime.valueOf())) {
+    return '';
+  }
+
+  return formatISO(dateTime, { representation: 'date' });
+}
+
+function formatTime(dateTime: Date) {
+  if (Number.isNaN(dateTime.valueOf())) {
+    return '';
+  }
+
+  return format(dateTime, 'HH:mm:ss');
+}
+
+function formatShortZoneName(dateTime: Date, timezoneName: string, locale?: Locale) {
+  if (Number.isNaN(dateTime.valueOf())) {
+    return format(utcToZonedTime(new Date(), timezoneName), 'zzz', {
+      locale,
+      timeZone: timezoneName,
+    });
+  }
+
+  return format(dateTime, 'zzz', { locale, timeZone: timezoneName });
+}
+
 function DateTimeInput({
   value,
   timezoneName,
@@ -94,29 +123,23 @@ function DateTimeInput({
   alwaysShowTimezone,
   ...otherProps
 }: DateTimeInputProps) {
-  const { timezoneName: appTimezoneName } = useContext(AppRootContext);
+  const { timezoneName: appTimezoneName, dateFnsLocale } = useContext(AppRootContext);
   const effectiveTimezoneName = timezoneName || appTimezoneName;
-  const dateTime = useMemo(() => DateTime.fromISO(value ?? '').setZone(effectiveTimezoneName), [
-    value,
-    effectiveTimezoneName,
-  ]);
-  const [date, setDate] = useState(() => dateTime.toISODate());
-  const [time, setTime] = useState(() =>
-    dateTime.toISOTime({
-      suppressMilliseconds: true,
-      includeOffset: false,
-    }),
+  const dateTime = useMemo(
+    () => (value ? utcToZonedTime(new Date(value), effectiveTimezoneName) : new Date(NaN)),
+    [value, effectiveTimezoneName],
   );
-  const userTimezoneName = DateTime.local().zoneName;
+  const [date, setDate] = useState(() => formatDate(dateTime));
+  const [time, setTime] = useState(() => formatTime(dateTime));
   const showZone =
     alwaysShowTimezone ||
     effectiveTimezoneName !== appTimezoneName ||
-    effectiveTimezoneName !== userTimezoneName;
+    effectiveTimezoneName !== getUserTimezoneName();
 
   useEffect(() => {
-    if (dateTime.isValid) {
-      setDate(dateTime.toISODate());
-      setTime(dateTime.toISOTime({ suppressMilliseconds: true, includeOffset: false }));
+    if (!Number.isNaN(dateTime.valueOf())) {
+      setDate(formatDate(dateTime));
+      setTime(formatTime(dateTime));
     }
   }, [dateTime]);
 
@@ -142,8 +165,7 @@ function DateTimeInput({
       <TimeInput value={time} onChange={timeChanged} {...otherProps} />
       {showZone && (
         <span className="ml-2">
-          {dateTime.offsetNameShort ??
-            DateTime.fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
+          {formatShortZoneName(dateTime, effectiveTimezoneName, dateFnsLocale)}
         </span>
       )}
     </div>

@@ -1,7 +1,8 @@
-const tzdata = require('tzdata');
-const fs = require('fs');
-const keyBy = require('lodash/keyBy');
-const { DateTime, IANAZone } = require('luxon');
+import tzdata from 'tzdata/timezone-data.json';
+import fs from 'fs';
+import keyBy from 'lodash/keyBy';
+import { subDays } from 'date-fns';
+import { format } from 'date-fns-tz';
 
 const DAY_STEP = 90;
 
@@ -12,24 +13,28 @@ const BOOST_ZONES = new Set([
   'America/Los_Angeles',
 ]);
 
-function getAllOffsetNames(zoneName) {
+// stolen from Luxon
+function isValidZone(zone: string) {
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: zone }).format();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function getAllOffsetNames(zoneName: string) {
   // hackkkkkkk alert: iterate through all days in the past year and find all offset names
   // during that time
   const shortOffsetNames = new Set();
   const longOffsetNames = new Set();
 
-  let currentTime = DateTime.fromObject({ zone: zoneName });
-  if (currentTime.isOffsetFixed) {
-    return {
-      shortOffsetNames: [currentTime.offsetNameShort],
-      longOffsetNames: [currentTime.offsetNameLong],
-    };
-  }
+  let currentTime = new Date();
 
   for (let i = 0; i < 366; i += DAY_STEP) {
-    shortOffsetNames.add(currentTime.offsetNameShort);
-    longOffsetNames.add(currentTime.offsetNameLong);
-    currentTime = currentTime.minus({ days: DAY_STEP });
+    shortOffsetNames.add(format(currentTime, 'zzz', { timeZone: zoneName }));
+    longOffsetNames.add(format(currentTime, 'zzzz', { timeZone: zoneName }));
+    currentTime = subDays(currentTime, DAY_STEP);
   }
   return {
     shortOffsetNames: [...shortOffsetNames],
@@ -37,7 +42,7 @@ function getAllOffsetNames(zoneName) {
   };
 }
 
-const getBoostForTimezone = (zoneName) => {
+const getBoostForTimezone = (zoneName: string) => {
   if (BOOST_ZONES.has(zoneName)) {
     return 2.0;
   }
@@ -51,8 +56,8 @@ const getBoostForTimezone = (zoneName) => {
 };
 
 const timezoneOptions = Object.keys(tzdata.zones)
-  .filter((zoneName) => IANAZone.isValidZone(zoneName))
-  .filter((zoneName) => typeof tzdata.zones[zoneName] !== 'string')
+  .filter(isValidZone)
+  .filter((zoneName) => typeof tzdata.zones[zoneName as keyof typeof tzdata.zones] !== 'string')
   .map((zoneName) => ({
     name: zoneName,
     nameKeywords: zoneName.replace(/[/_]/g, ' '),
@@ -62,11 +67,7 @@ const timezoneOptions = Object.keys(tzdata.zones)
 
 fs.writeFile(
   './app/javascript/BuiltInFormControls/timezoneSelectData.json',
-  JSON.stringify(
-    { zones: keyBy(timezoneOptions, (zone) => zone.name) },
-    null,
-    2,
-  ),
+  JSON.stringify({ zones: keyBy(timezoneOptions, (zone) => zone.name) }, null, 2),
   (err) => {
     if (err) {
       console.error('Error writing timezone data', err);

@@ -1,6 +1,6 @@
-import { Settings } from 'luxon';
 import * as TimespanUtils from '../../app/javascript/TimespanUtils';
 import { TimezoneMode } from '../../app/javascript/graphqlTypes.generated';
+import { getUserTimezoneName, setUserTimezoneName } from '../../app/javascript/TimeUtils';
 
 describe('timespanFromRun', () => {
   test('staying in the same time zone', () => {
@@ -30,11 +30,11 @@ describe('user_local timezone mode', () => {
   let originalDefaultZoneName: string;
 
   beforeEach(() => {
-    originalDefaultZoneName = Settings.defaultZoneName;
-    Settings.defaultZoneName = 'America/Chicago';
+    originalDefaultZoneName = getUserTimezoneName();
+    setUserTimezoneName('America/Chicago');
   });
   afterEach(() => {
-    Settings.defaultZoneName = originalDefaultZoneName;
+    setUserTimezoneName(originalDefaultZoneName);
   });
 
   test('timespanFromConvention converts to timezone correctly', () => {

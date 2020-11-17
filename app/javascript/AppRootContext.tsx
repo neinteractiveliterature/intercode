@@ -1,8 +1,10 @@
 import { createContext } from 'react';
+import type { Locale } from 'date-fns';
+
 import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryQuery } from './appRootQueries.generated';
 
-type AppRootContext = {
+type AppRootContextValue = {
   assumedIdentityFromProfile?: AppRootQueryQuery['assumedIdentityFromProfile'];
   cmsNavigationItems: AppRootQueryQuery['cmsNavigationItems'];
   conventionAcceptingProposals?: boolean | null;
@@ -12,6 +14,7 @@ type AppRootContext = {
   currentAbility: AppRootQueryQuery['currentAbility'];
   currentPendingOrder?: AppRootQueryQuery['currentPendingOrder'];
   currentUser?: AppRootQueryQuery['currentUser'];
+  dateFnsLocale?: Locale;
   language: string;
   myProfile?: AppRootQueryQuery['myProfile'];
   rootSiteName?: string | null;
@@ -24,7 +27,7 @@ type AppRootContext = {
   timezoneName: string;
 };
 
-export const appRootContextDefaultValue: AppRootContext = {
+export const appRootContextDefaultValue: AppRootContextValue = {
   assumedIdentityFromProfile: null,
   cmsNavigationItems: [],
   conventionAcceptingProposals: null,
@@ -61,6 +64,7 @@ export const appRootContextDefaultValue: AppRootContext = {
   },
   currentPendingOrder: null,
   currentUser: null,
+  dateFnsLocale: undefined,
   language: 'en',
   myProfile: null,
   rootSiteName: null,
@@ -73,6 +77,6 @@ export const appRootContextDefaultValue: AppRootContext = {
   timezoneName: 'Etc/UTC',
 };
 
-const AppRootContext = createContext<AppRootContext>(appRootContextDefaultValue);
+const AppRootContext = createContext<AppRootContextValue>(appRootContextDefaultValue);
 
 export default AppRootContext;

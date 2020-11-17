@@ -1,6 +1,5 @@
 import { useContext, useCallback } from 'react';
-import { DateTime } from 'luxon';
-import { format, OptionsWithTZ } from 'date-fns-tz';
+import { format, utcToZonedTime, OptionsWithTZ } from 'date-fns-tz';
 import { Moment } from 'moment-timezone';
 
 import { onlyOneIsNull } from './ValueUtils';
@@ -67,6 +66,16 @@ export function ageAsOf(birthDate?: Moment | null, date?: Moment | null) {
   return date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1);
 }
 
+let userTimezoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export function getUserTimezoneName() {
+  return userTimezoneName;
+}
+
+export function setUserTimezoneName(value: string) {
+  userTimezoneName = value;
+}
+
 export function timezoneNameForConvention(
   convention?: Pick<Convention, 'timezone_mode' | 'timezone_name'> | null,
 ) {
@@ -74,31 +83,29 @@ export function timezoneNameForConvention(
     return convention.timezone_name!;
   }
 
-  return DateTime.local().zoneName;
+  return userTimezoneName;
 }
 
-export function useAppTimezoneFormat() {
-  const { timezoneName } = useContext(AppRootContext);
-  const appTimezoneFormat = useCallback(
+export function formatInTimezone(
+  date: string | number | Date,
+  formatStr: string,
+  timeZone: string,
+  options?: Omit<OptionsWithTZ, 'timeZone'>,
+) {
+  return format(utcToZonedTime(date, timeZone), formatStr, { ...options, timeZone });
+}
+
+export function useAppDateFormat() {
+  const { timezoneName, dateFnsLocale } = useContext(AppRootContext);
+  const appDateFormat = useCallback(
     (
       date: string | number | Date,
       formatStr: string,
-      options?: Omit<OptionsWithTZ, 'timeZone'>,
+      options?: Omit<OptionsWithTZ, 'timeZone' | 'locale'>,
     ) => {
-      debugger;
-      return format(date, formatStr, { ...options, timeZone: timezoneName });
+      return formatInTimezone(date, formatStr, timezoneName, { ...options, locale: dateFnsLocale });
     },
-    [timezoneName],
+    [timezoneName, dateFnsLocale],
   );
-  return appTimezoneFormat;
+  return appDateFormat;
 }
-
-// export function useISODateTimeInAppZone(isoValue: string) {
-//   const { timezoneName } = useContext(AppRootContext);
-//   const timestamp = useMemo(() => DateTime.fromISO(isoValue).setZone(timezoneName), [
-//     isoValue,
-//     timezoneName,
-//   ]);
-
-//   return timestamp;
-// }

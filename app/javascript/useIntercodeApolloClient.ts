@@ -2,9 +2,9 @@ import { useRef, useMemo, useEffect, RefObject } from 'react';
 import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
-import { DateTime } from 'luxon';
 
 import possibleTypes from './possibleTypes.json';
+import { getUserTimezoneName } from './TimeUtils';
 
 export function useIntercodeApolloLink(
   authenticityToken: string,
@@ -35,12 +35,11 @@ export function useIntercodeApolloLink(
   const AddTimezoneLink = useMemo(
     () =>
       new ApolloLink((operation: Operation, next: NextLink) => {
-        const localTime = DateTime.local();
         operation.setContext((context: Record<string, any>) => ({
           ...context,
           headers: {
             ...context.headers,
-            'X-Intercode-User-Timezone': localTime.zoneName,
+            'X-Intercode-User-Timezone': getUserTimezoneName(),
           },
         }));
 

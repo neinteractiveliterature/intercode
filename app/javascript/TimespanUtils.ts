@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { DateTime } from 'luxon';
+
 import Timespan, { FiniteTimespan } from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
@@ -48,17 +48,11 @@ export function getMemoizationKeyForTimespan(timespan?: Timespan) {
   ].join('/');
 }
 
-export function describeInterval(
-  timespan: Timespan,
-  formatDateTime: (dateTime: DateTime) => string,
-  timeZone: string,
-) {
-  const start = timespan.start
-    ? formatDateTime(DateTime.fromISO(timespan.start.toISOString()).setZone(timeZone))
-    : 'anytime';
+export function describeInterval(timespan: Timespan, formatDate: (date: Date) => string) {
+  const start = timespan.start ? formatDate(new Date(timespan.start.toISOString())) : 'anytime';
 
   const finish = timespan.finish
-    ? formatDateTime(DateTime.fromISO(timespan.finish.toISOString()).setZone(timeZone))
+    ? formatDate(new Date(timespan.finish.toISOString()))
     : 'indefinitely';
 
   const [dedupedStart, dedupedFinish] = removeCommonStringMiddle(start, finish);
