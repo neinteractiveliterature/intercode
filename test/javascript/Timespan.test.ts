@@ -349,7 +349,7 @@ describe('Timespan', () => {
       ).toEqual(-5 * 60);
     });
 
-    it('handles offset', () => {
+    it.only('handles offset', () => {
       const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', {
         unit: 'hour',
         offset: dayjs.duration(2, 'hours'),

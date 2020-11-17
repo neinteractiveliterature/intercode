@@ -1,3 +1,8 @@
+/// <reference path="../../node_modules/dayjs/plugin/duration.d.ts" />
+/// <reference path="../../node_modules/dayjs/plugin/localizedFormat.d.ts" />
+/// <reference path="../../node_modules/dayjs/plugin/timezone.d.ts" />
+/// <reference path="../../node_modules/dayjs/plugin/utc.d.ts" />
+
 import { useContext, useMemo, useCallback } from 'react';
 
 // eslint-disable-next-line no-restricted-imports

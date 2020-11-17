@@ -210,20 +210,9 @@ class Timespan {
       );
     }
 
-    const offsetMillis = offset?.milliseconds();
+    const offsetMillis = offset?.asMilliseconds();
     const timeBlocks: dayjs.Dayjs[] = [];
-    debugger;
     let now = this.start.tz(timezoneName).startOf(unit);
-    // work around https://github.com/iamkun/dayjs/issues/1212
-    // @ts-expect-error
-    now.$x.$timezone = this.start.$x.$timezone;
-    console.log([
-      this.start.toISOString(),
-      this.start.tz(timezoneName).toISOString(),
-      this.start.$d,
-      now.toISOString(),
-      now.$d,
-    ]);
     while (now.isBefore(this.finish)) {
       let timeHop = now;
       if (offsetMillis) {
