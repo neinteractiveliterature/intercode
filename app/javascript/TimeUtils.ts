@@ -1,69 +1,97 @@
 import { useContext, useCallback } from 'react';
 import { format, utcToZonedTime, OptionsWithTZ } from 'date-fns-tz';
-import { Moment } from 'moment-timezone';
+import {
+  getMilliseconds,
+  getSeconds,
+  getMinutes,
+  getHours,
+  getDate,
+  getMonth,
+  getYear,
+  isEqual,
+  isBefore,
+  isValid,
+} from 'date-fns';
 
 import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 
-export const timeIsOnTheHour = (time: Moment) =>
-  time.millisecond() === 0 && time.second() === 0 && time.minute() === 0;
-
-export const humanTimeFormat = (time: Moment) => {
-  if (timeIsOnTheHour(time)) {
-    if (time.hour() === 0) {
-      return '[midnight]';
+// pull this out when https://github.com/date-fns/date-fns/pull/2016 is merged
+export const formatWithLowercaseMeridiemHack = (
+  date: string | number | Date,
+  formatStr: string,
+  options?: OptionsWithTZ,
+) => {
+  const hackedFormat = formatStr.replace(/a+/g, (substring) => {
+    if (substring === 'aaa') {
+      return `'${format(date, 'a', options).toLowerCase()}'`;
     }
 
-    if (time.hour() === 12) {
-      return '[noon]';
+    return substring;
+  });
+
+  return format(date, hackedFormat, options);
+};
+
+export const timeIsOnTheHour = (time: Date) =>
+  getMilliseconds(time) === 0 && getSeconds(time) === 0 && getMinutes(time) === 0;
+
+export const humanTimeFormat = (time: Date) => {
+  if (timeIsOnTheHour(time)) {
+    if (getHours(time) === 0) {
+      return "'midnight'";
+    }
+
+    if (getHours(time) === 12) {
+      return "'noon'";
     }
   }
 
-  return 'h:mma';
+  return 'h:mmaaa';
 };
 
-export const humanizeTime = (time: Moment, includeDay?: boolean) => {
+export const humanizeTime = (time: Date, includeDay?: boolean, options?: OptionsWithTZ) => {
   let timeFormat = humanTimeFormat(time);
   if (includeDay) {
-    timeFormat = `ddd ${timeFormat}`;
+    timeFormat = `E ${timeFormat}`;
   }
 
-  return time.format(timeFormat);
+  return formatWithLowercaseMeridiemHack(time, timeFormat, options);
 };
 
-export const timesAreSameOrBothNull = (a?: Moment | null, b?: Moment | null) => {
+export const timesAreSameOrBothNull = (a?: Date | null, b?: Date | null) => {
   if (onlyOneIsNull(a, b)) {
     return false;
   }
 
-  return (a == null && b == null) || a!.isSame(b ?? undefined);
+  return (a == null && b == null) || isEqual(a!, b!);
 };
 
-export const compareTimesAscending = (a: Moment, b: Moment) => {
-  if (a.isBefore(b)) {
+export const compareTimesAscending = (a: Date, b: Date) => {
+  if (isBefore(a, b)) {
     return -1;
   }
 
-  if (b.isBefore(a)) {
+  if (isBefore(b, a)) {
     return 1;
   }
 
   return 0;
 };
 
-export const compareTimesDescending = (a: Moment, b: Moment) => compareTimesAscending(b, a);
+export const compareTimesDescending = (a: Date, b: Date) => compareTimesAscending(b, a);
 
-export function ageAsOf(birthDate?: Moment | null, date?: Moment | null) {
-  if (!birthDate || !date || !birthDate.isValid() || !date.isValid()) {
+export function ageAsOf(birthDate?: Date | null, date?: Date | null) {
+  if (!birthDate || !date || !isValid(birthDate) || !isValid(date)) {
     return null;
   }
 
   const onOrAfterBirthday =
-    date.month() > birthDate.month() ||
-    (date.month() === birthDate.month() && date.date() >= birthDate.date());
+    getMonth(date) > getMonth(birthDate) ||
+    (getMonth(date) === getMonth(birthDate) && getDate(date) >= getDate(birthDate));
 
-  return date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1);
+  return getYear(date) - getYear(birthDate) - (onOrAfterBirthday ? 0 : 1);
 }
 
 let userTimezoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
