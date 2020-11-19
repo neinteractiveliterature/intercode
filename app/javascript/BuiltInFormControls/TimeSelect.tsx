@@ -1,6 +1,9 @@
 import { ReactNode, useMemo } from 'react';
 import * as React from 'react';
+import { add, isBefore, differenceInDays, startOfDay, getHours } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
+import { formatWithLowercaseMeridiemHack } from '../TimeUtils';
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import useUniqueId from '../useUniqueId';
 import { FiniteTimespan } from '../Timespan';
@@ -22,10 +25,16 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
     () => {
       let hourOffset = 0;
       const options = [];
-      while (timespan.start.clone().add(hourOffset, 'hours').isBefore(timespan.finish)) {
-        const now = timespan.start.clone().add(hourOffset, 'hours');
-        const dayDiff = now.diff(timespan.start.clone().startOf('day'), 'days');
-        let description = `${now.format('ha')}`;
+      const localStartOfDayAtTimespanStart = startOfDay(
+        utcToZonedTime(timespan.start, timespan.timezone),
+      );
+      while (isBefore(add(timespan.start, { hours: hourOffset }), timespan.finish)) {
+        const now = add(timespan.start, { hours: hourOffset });
+        const nowLocal = utcToZonedTime(now, timespan.timezone);
+        const dayDiff = differenceInDays(nowLocal, localStartOfDayAtTimespanStart);
+        let description = `${formatWithLowercaseMeridiemHack(nowLocal, 'haaa', {
+          timeZone: timespan.timezone,
+        })}`;
         if (dayDiff > 0) {
           description += ` (+${dayDiff} ${dayDiff > 1 ? 'days' : 'day'})`;
         }
@@ -33,7 +42,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
         options.push({
           hourOffset,
           description,
-          optionValue: hourOffset + timespan.start.hour(),
+          optionValue: getHours(nowLocal),
         });
         hourOffset += 1;
       }

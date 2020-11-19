@@ -47,6 +47,8 @@ export interface FiniteTimespan extends Timespan {
   finish: Date;
   clone(): FiniteTimespan;
   getLength(unit: TimeUnit | 'milliseconds'): number;
+  getLocalStart(): Date;
+  getLocalFinish(): Date;
   union(other: FiniteTimespan): FiniteTimespan;
   intersection(other: FiniteTimespan): FiniteTimespan;
   expandedToFit(other: FiniteTimespan): FiniteTimespan;
@@ -153,6 +155,22 @@ class Timespan {
 
   tz(timezoneName: string) {
     return new Timespan(this.start, this.finish, timezoneName);
+  }
+
+  getLocalStart() {
+    if (this.start == null) {
+      return undefined;
+    }
+
+    return utcToZonedTime(this.start, this.timezone);
+  }
+
+  getLocalFinish() {
+    if (this.finish == null) {
+      return undefined;
+    }
+
+    return utcToZonedTime(this.finish, this.timezone);
   }
 
   isFinite(): this is FiniteTimespan {

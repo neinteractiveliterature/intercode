@@ -1,18 +1,39 @@
-import { memo, ReactNode, RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import {
+  memo,
+  ReactNode,
+  RefObject,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useContext,
+} from 'react';
 import { maxBy, minBy } from 'lodash';
-import moment, { Moment } from 'moment-timezone';
+import {
+  parseISO,
+  isValid,
+  add,
+  getDate,
+  getMonth,
+  getDay,
+  differenceInMonths,
+  startOfMonth,
+  isEqual,
+} from 'date-fns';
+import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 
+import AppRootContext from '../AppRootContext';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import { notEmpty } from '../ValueUtils';
 import { findTimespanAt, findValueAt } from '../ScheduledValueUtils';
 import Tooltip from './Tooltip';
 import { useIntercodePopper } from './PopperUtils';
 
-function momentIfValid(value: string | undefined, timezoneName: string) {
+function dateIfValid(value: string | undefined) {
   if (value) {
-    const momentValue = moment.tz(value, timezoneName);
-    if (momentValue.isValid()) {
-      return momentValue;
+    const date = parseISO(value);
+    if (isValid(date)) {
+      return date;
     }
   }
 
@@ -20,7 +41,7 @@ function momentIfValid(value: string | undefined, timezoneName: string) {
 }
 
 export type ScheduledValuePreviewTooltipContentProps<ValueType> = {
-  date: Moment;
+  date: Date;
   scheduledValue: EditingScheduledValue<ValueType>;
   getDescriptionForValue: (value: ValueType | undefined) => ReactNode;
   timezoneName: string;
@@ -32,21 +53,34 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
   timezoneName,
   getDescriptionForValue,
 }: ScheduledValuePreviewTooltipContentProps<ValueType>) {
+  const { dateFnsLocale } = useContext(AppRootContext);
   const value = useMemo(() => findValueAt(scheduledValue, date), [scheduledValue, date]);
 
+  const nextStart = useMemo(() => findTimespanAt(scheduledValue, date)?.finish, [
+    scheduledValue,
+    date,
+  ]);
   const nextValue = useMemo(() => {
-    const tomorrow = date.clone().add(1, 'day');
+    const tomorrow = zonedTimeToUtc(
+      add(utcToZonedTime(date, timezoneName), { days: 1 }),
+      timezoneName,
+    );
     return findValueAt(scheduledValue, tomorrow);
-  }, [scheduledValue, date]);
+  }, [scheduledValue, date, timezoneName]);
+  const localDate = useMemo(() => utcToZonedTime(date, timezoneName), [date, timezoneName]);
 
   return (
     <>
-      <strong>{date.format('LL')}</strong>
+      <strong>{format(localDate, 'PP', { timeZone: timezoneName, locale: dateFnsLocale })}</strong>
       <br />
       {value !== nextValue && (
         <em>
           Before{' '}
-          {moment.tz(findTimespanAt(scheduledValue, date)?.finish, timezoneName).format('LT z')}
+          {nextStart &&
+            format(utcToZonedTime(nextStart, timezoneName), 'p z', {
+              timeZone: timezoneName,
+              locale: dateFnsLocale,
+            })}
         </em>
       )}
       <br />
@@ -56,7 +90,11 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
           <hr className="my-2 border-white" />
           <em>
             Starting at{' '}
-            {moment.tz(findTimespanAt(scheduledValue, date)?.finish, timezoneName).format('LT z')}
+            {nextStart &&
+              format(utcToZonedTime(nextStart, timezoneName), 'p z', {
+                timeZone: timezoneName,
+                locale: dateFnsLocale,
+              })}
           </em>
           <br />
           {getDescriptionForValue(nextValue)}
@@ -69,8 +107,8 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
 type ScheduledValuePreviewDateCellProps<ValueType> = ScheduledValuePreviewTooltipContentProps<
   ValueType
 > & {
-  focusDate: (date: Moment) => void;
-  blurDate: (date: Moment) => void;
+  focusDate: (date: Date) => void;
+  blurDate: (date: Date) => void;
   dateElementMapRef: RefObject<Map<number, HTMLElement>>;
 };
 
@@ -101,7 +139,7 @@ function ScheduledValuePreviewDateCell<ValueType>({
         onMouseOver={() => focusDate(date)}
         onMouseOut={() => blurDate(date)}
       >
-        {date.date()}
+        {getDate(utcToZonedTime(date, timezoneName))}
         <div className="sr-only">
           <ScheduledValuePreviewTooltipContent
             date={date}
@@ -120,8 +158,8 @@ export type ScheduledValuePreviewCalendarProps<ValueType> = {
   timezoneName: string;
   getClassNameForValue: (value: ValueType | undefined, nextValue: ValueType | undefined) => string;
   getDescriptionForValue: (value: ValueType | undefined) => ReactNode;
-  focusDate: (date: Moment) => void;
-  blurDate: (date: Moment) => void;
+  focusDate: (date: Date) => void;
+  blurDate: (date: Date) => void;
   dateElementMapRef: RefObject<Map<number, HTMLElement>>;
 };
 
@@ -140,48 +178,44 @@ function ScheduledValuePreviewCalendar<ValueType>({
   );
 
   const earliestChange = useMemo(
-    () =>
-      momentIfValid(
-        minBy(timespanFinishes, (finish) => moment(finish).toDate()),
-        timezoneName,
-      ),
-    [timespanFinishes, timezoneName],
+    () => dateIfValid(minBy(timespanFinishes, (finish) => finish.valueOf())),
+    [timespanFinishes],
   );
 
   const latestChange = useMemo(
-    () =>
-      momentIfValid(
-        maxBy(timespanFinishes, (finish) => moment(finish).toDate()),
-        timezoneName,
-      ),
-    [timespanFinishes, timezoneName],
+    () => dateIfValid(maxBy(timespanFinishes, (finish) => finish.valueOf())),
+    [timespanFinishes],
   );
 
   if (!earliestChange || !latestChange) {
     return <></>;
   }
 
-  if (latestChange.diff(earliestChange, 'months') > 6) {
+  if (differenceInMonths(latestChange, earliestChange) > 6) {
     return <>Timespan too long to display a preview</>;
   }
 
   const monthPreviews: JSX.Element[] = [];
-  let now = earliestChange.startOf('month');
+  let now = zonedTimeToUtc(
+    startOfMonth(utcToZonedTime(earliestChange, timezoneName)),
+    timezoneName,
+  );
   while (now < latestChange) {
-    const startOfMonth = now;
-    const currentMonth = now.month();
+    let localNow = utcToZonedTime(now, timezoneName);
+    const monthStart = localNow;
+    const currentMonth = getMonth(localNow);
     const weekPreviews: JSX.Element[] = [];
     let currentWeek: JSX.Element[] = [];
-    while (now.month() === currentMonth) {
-      if (now.date() === 1) {
-        for (let wd = 0; wd < now.weekday(); wd += 1) {
+    while (getMonth(localNow) === currentMonth) {
+      if (getDate(localNow) === 1) {
+        for (let wd = 0; wd < getDay(localNow); wd += 1) {
           currentWeek.push(<td key={`fill-weekday-${wd}`} className="p-1" />);
         }
-      } else if (now.weekday() === 0) {
+      } else if (getDay(localNow) === 0) {
         weekPreviews.push(<tr key={now.toISOString()}>{currentWeek}</tr>);
         currentWeek = [];
       }
-      const tomorrow = now.clone().add(1, 'day');
+      const tomorrow = add(now, { days: 1 });
       const value = findValueAt(scheduledValue, now);
       const nextValue = findValueAt(scheduledValue, tomorrow);
       currentWeek.push(
@@ -201,6 +235,7 @@ function ScheduledValuePreviewCalendar<ValueType>({
         </td>,
       );
       now = tomorrow;
+      localNow = utcToZonedTime(now, timezoneName);
     }
     if (currentWeek.length > 0) {
       while (currentWeek.length < 7) {
@@ -210,11 +245,11 @@ function ScheduledValuePreviewCalendar<ValueType>({
     }
 
     monthPreviews.push(
-      <table key={startOfMonth.toISOString()} className="m-2 border border-1" role="grid">
+      <table key={monthStart.toISOString()} className="m-2 border border-1" role="grid">
         <thead>
           <tr className="border-bottom border-1">
             <th colSpan={7} className="text-center">
-              {startOfMonth.format('MMMM YYYY')}
+              {format(monthStart, 'MMMM yyyy')}
             </th>
           </tr>
         </thead>
@@ -241,7 +276,7 @@ function ScheduledValuePreview<ValueType>({
   getDescriptionForValue,
   timezoneName,
 }: ScheduledValuePreviewProps<ValueType>) {
-  const [focusedDate, setFocusedDate] = useState<Moment>();
+  const [focusedDate, setFocusedDate] = useState<Date>();
   const [tooltip, setTooltip] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLDivElement | null>(null);
   const dateElementMapRef = useRef(new Map<number, HTMLElement>());
@@ -252,13 +287,13 @@ function ScheduledValuePreview<ValueType>({
 
   const { styles, attributes, state } = useIntercodePopper(tooltip, focusedDateElement, arrow);
 
-  const focusDate = useCallback((value: Moment) => setFocusedDate(value), []);
+  const focusDate = useCallback((value: Date) => setFocusedDate(value), []);
 
   const blurDate = useCallback(
-    (value: Moment) =>
+    (value: Date) =>
       setFocusedDate((prevValue) => {
         // Only clear out the focused date if it hasn't already changed to some other date
-        if (prevValue && prevValue.isSame(value)) {
+        if (prevValue && isEqual(prevValue, value)) {
           return undefined;
         }
 

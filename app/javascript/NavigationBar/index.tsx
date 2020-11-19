@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import AppRootContext from '../AppRootContext';
+import AppRootContext, { AppRootContextValue } from '../AppRootContext';
 import NavigationBrand from './NavigationBrand';
 import UserNavigationSection from './UserNavigationSection';
 import TicketPurchaseNavigationItem from './TicketPurchaseNavigationItem';
@@ -16,8 +16,8 @@ import AdminNavigationSection from './AdminNavigationSection';
 import SearchNavigationItem from './SearchNavigationItem';
 import NavigationBarContext from './NavigationBarContext';
 
-type RootItem = AppRootContext['cmsNavigationItems'][0] & {
-  sectionItems: AppRootContext['cmsNavigationItems'];
+type RootItem = AppRootContextValue['cmsNavigationItems'][0] & {
+  sectionItems: AppRootContextValue['cmsNavigationItems'];
 };
 
 type NavigationBarContentProps = {

@@ -1,5 +1,4 @@
-import moment from 'moment-timezone';
-
+import { parseISO, add } from 'date-fns';
 import Timespan, { FiniteTimespan } from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
@@ -11,7 +10,9 @@ export type ConventionForTimespanUtils = Pick<
 >;
 
 export function timespanFromConvention(convention: ConventionForTimespanUtils) {
-  return Timespan.fromStrings(convention.starts_at, convention.ends_at).tz(
+  return Timespan.fromStrings(
+    convention.starts_at,
+    convention.ends_at,
     timezoneNameForConvention(convention),
   );
 }
@@ -21,19 +22,16 @@ export function timespanFromRun(
   event: Pick<Event, 'length_seconds'>,
   run: Pick<Run, 'starts_at'>,
 ) {
-  const start = moment(run.starts_at).tz(timezoneName);
-  const finish = start.clone().add(event.length_seconds, 'seconds');
+  const start = parseISO(run.starts_at);
+  const finish = add(start, { seconds: event.length_seconds });
 
-  return Timespan.fromMoments(start, finish) as FiniteTimespan;
+  return Timespan.fromDates(start, finish, timezoneName) as FiniteTimespan;
 }
 
-export function getConventionDayTimespans(
-  conventionTimespan: FiniteTimespan,
-  timezoneName: string,
-) {
-  return conventionTimespan.getTimespansWithin(timezoneName, {
-    unit: 'day',
-    offset: moment.duration(6, 'hours'), // start convention days at 6:00am
+export function getConventionDayTimespans(conventionTimespan: FiniteTimespan) {
+  return conventionTimespan.getTimespansWithin({
+    unit: 'days',
+    offset: { hours: 6 }, // start convention days at 6:00am
   });
 }
 

@@ -4,7 +4,7 @@ import type { Locale } from 'date-fns';
 import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryQuery } from './appRootQueries.generated';
 
-type AppRootContextValue = {
+export type AppRootContextValue = {
   assumedIdentityFromProfile?: AppRootQueryQuery['assumedIdentityFromProfile'];
   cmsNavigationItems: AppRootQueryQuery['cmsNavigationItems'];
   conventionAcceptingProposals?: boolean | null;

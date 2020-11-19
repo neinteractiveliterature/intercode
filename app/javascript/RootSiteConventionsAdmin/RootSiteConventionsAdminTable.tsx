@@ -1,8 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 import { Column } from 'react-table';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment-timezone';
+import { getYear, getMonth, getDate, isAfter } from 'date-fns';
+import { utcToZonedTime, format } from 'date-fns-tz';
 
+import AppRootContext from '../AppRootContext';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
@@ -22,31 +24,35 @@ type ConventionType = RootSiteConventionsAdminTableQueryQuery['conventions_pagin
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
 function ConventionDatesCell({ value }: { value: ConventionType }) {
+  const { dateFnsLocale } = useContext(AppRootContext);
   const timespan = useMemo(() => timespanFromConvention(value), [value]);
 
   const datesDescription = useMemo(() => {
     if (timespan.isFinite()) {
-      const sameYear = timespan.start.year() === timespan.finish.year();
-      const sameMonth = sameYear && timespan.start.month() === timespan.finish.month();
-      const sameDay = sameMonth && timespan.start.day() === timespan.finish.day();
+      const localStart = utcToZonedTime(timespan.start, timespan.timezone);
+      const localFinish = utcToZonedTime(timespan.finish, timespan.timezone);
+      const sameYear = getYear(localStart) === getYear(localFinish);
+      const sameMonth = sameYear && getMonth(localStart) === getMonth(localFinish);
+      const sameDay = sameMonth && getDate(localStart) === getDate(localFinish);
+      const formatOptions = { locale: dateFnsLocale, timeZone: timespan.timezone };
 
       if (sameDay) {
-        return timespan.start.format('MMMM D, YYYY');
+        return format(timespan.start, 'PP', formatOptions);
       }
 
-      const startFormat = sameYear ? 'MMMM D' : 'MMMM D, YYYY';
-      const finishFormat = sameMonth ? 'D, YYYY' : 'MMMM D, YYYY';
-      return `${timespan.start.format(startFormat)} - ${timespan.finish.format(finishFormat)}`;
+      const startFormat = sameYear ? 'MMMM d' : 'PP';
+      const finishFormat = sameMonth ? 'd, yyyy' : 'PP';
+      return `${format(timespan.start, startFormat, formatOptions)} - ${format(
+        timespan.finish,
+        finishFormat,
+        formatOptions,
+      )}`;
     }
 
-    return timespan.humanizeInTimezone(
-      value.timezone_name ?? 'Etc/UTC',
-      'MMMM D, YYYY',
-      'MMMM D, YYYY',
-    );
-  }, [timespan, value.timezone_name]);
+    return timespan.humanize('PP', 'PP');
+  }, [timespan, dateFnsLocale]);
 
-  const now = moment();
+  const now = new Date();
 
   if (timespan.includesTime(now)) {
     return (
@@ -57,7 +63,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
     );
   }
 
-  if (timespan.isFinite() && timespan.start.isAfter(now)) {
+  if (timespan.isFinite() && isAfter(timespan.start, now)) {
     return (
       <>
         <i className="fa fa-arrow-circle-right" aria-label="Future convention" /> {datesDescription}

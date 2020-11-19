@@ -3,6 +3,8 @@ import moment from 'moment-timezone';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { getHours, getMinutes, getSeconds, add, set } from 'date-fns';
+import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { getUserTimezoneName } from '../TimeUtils';
@@ -111,23 +113,23 @@ export default LoadQueryWrapper<NewConventionModalQueryQuery, NewConventionModal
       if (
         newStartsAt &&
         cloneConventionTimespan?.isFinite() &&
-        timespanFromConvention(convention).getLength('day') ===
-          cloneConventionTimespan.getLength('day')
+        timespanFromConvention(convention).getLength('days') ===
+          cloneConventionTimespan.getLength('days')
       ) {
-        const newStartsAtInZone = convention.timezone_name
-          ? moment.tz(newStartsAt, convention.timezone_name)
-          : moment(newStartsAt);
-        const newEndsAt = newStartsAtInZone
-          .add(cloneConventionTimespan.getLength('day'), 'day')
-          .set({
-            hour: cloneConventionTimespan.finish.hour(),
-            minute: cloneConventionTimespan.finish.minute(),
-            second: cloneConventionTimespan.finish.second(),
-          });
+        const localFinish = cloneConventionTimespan.getLocalFinish();
+        const localNewStartsAt = utcToZonedTime(newStartsAt, convention.timezone_name ?? 'Etc/UTC');
+        const newEndsAt = set(
+          add(localNewStartsAt, { days: cloneConventionTimespan.getLength('days') }),
+          {
+            hours: getHours(localFinish),
+            minutes: getMinutes(localFinish),
+            seconds: getSeconds(localFinish),
+          },
+        );
         setConvention((prevConvention) => ({
           ...prevConvention,
           starts_at: newStartsAt,
-          ends_at: newEndsAt.toISOString(),
+          ends_at: zonedTimeToUtc(newEndsAt, convention.timezone_name ?? 'Etc/UTC').toISOString(),
         }));
       } else {
         setConvention((prevConvention) => ({ ...prevConvention, starts_at: newStartsAt }));

@@ -80,7 +80,7 @@ function SignupModerationRunDetails({
           </small>
         </>
       )}
-      <small>{runTimespan.humanizeInTimezone(timezoneName)}</small>
+      <small>{runTimespan.humanize()}</small>
     </>
   );
 }
