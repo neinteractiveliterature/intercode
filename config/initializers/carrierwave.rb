@@ -15,6 +15,7 @@ CarrierWave.configure do |config|
         aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
         region: ENV['AWS_S3_REGION'] || 'us-east-1'
       }
+      config.fog_attributes = { 'Cache-Control' => "public, max-age=#{1.year.to_i}" }
 
       config.fog_directory = ENV['AWS_S3_BUCKET']
       config.asset_host = ENV['UPLOADS_HOST'] if ENV['UPLOADS_HOST'].present?
