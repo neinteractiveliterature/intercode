@@ -15,10 +15,7 @@ describe('TimeSelect', () => {
       <TimeSelect
         value={{}}
         onChange={() => {}}
-        timespan={Timespan.finiteFromMoments(
-          moment.tz(START_TIME, 'UTC'),
-          moment.tz(FINISH_TIME, 'UTC'),
-        )}
+        timespan={Timespan.finiteFromStrings(START_TIME, FINISH_TIME, 'Etc/UTC')}
         {...props}
       />,
     );
@@ -38,9 +35,10 @@ describe('TimeSelect', () => {
 
   test('it renders +days options', () => {
     const { getByLabelText } = renderTimeSelect({
-      timespan: Timespan.finiteFromMoments(
-        moment.tz('2017-01-01T00:00:00Z', 'UTC'),
-        moment.tz('2017-01-04T00:00:00Z', 'UTC'),
+      timespan: Timespan.finiteFromStrings(
+        '2017-01-01T00:00:00Z',
+        '2017-01-04T00:00:00Z',
+        'Etc/UTC',
       ),
     });
     const hourSelect = getByLabelText(/Hour/);

@@ -10,8 +10,8 @@ describe('timespanFromRun', () => {
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
 
-    expect(timespan.start?.hour()).toEqual(9);
-    expect(timespan.finish?.hour()).toEqual(10);
+    expect(timespan.start.getUTCHours()).toEqual(9);
+    expect(timespan.finish.getUTCHours()).toEqual(10);
   });
 
   test('converting to a different time zone', () => {
@@ -21,8 +21,11 @@ describe('timespanFromRun', () => {
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
 
-    expect(timespan.start?.hour()).toEqual(4);
-    expect(timespan.finish?.hour()).toEqual(5);
+    // start and finish are still in UTC
+    expect(timespan.start?.getUTCHours()).toEqual(9);
+    expect(timespan.finish?.getUTCHours()).toEqual(10);
+
+    expect(timespan.humanize()).toEqual('Sun 4:00am - 5:00am');
   });
 });
 
@@ -44,8 +47,11 @@ describe('user_local timezone mode', () => {
       timezone_mode: TimezoneMode.UserLocal,
     });
 
-    expect(timespan.start?.hour()).toEqual(3);
-    expect(timespan.finish?.hour()).toEqual(12);
+    // start and finish are still in UTC
+    expect(timespan.start?.getUTCHours()).toEqual(9);
+    expect(timespan.finish?.getUTCHours()).toEqual(18);
+
+    expect(timespan.humanize()).toEqual('Sun 3:00am - Mon noon');
   });
 });
 
@@ -58,7 +64,10 @@ describe('convention_local timezone mode', () => {
       timezone_mode: TimezoneMode.ConventionLocal,
     });
 
-    expect(timespan.start?.hour()).toEqual(4);
-    expect(timespan.finish?.hour()).toEqual(13);
+    // start and finish are still in UTC
+    expect(timespan.start?.getUTCHours()).toEqual(9);
+    expect(timespan.finish?.getUTCHours()).toEqual(18);
+
+    expect(timespan.humanize()).toEqual('Sun 4:00am - Mon 1:00pm');
   });
 });
