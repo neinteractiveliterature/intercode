@@ -4,10 +4,11 @@ class Types::JSON < Types::BaseScalar
 
   def self.coerce_input(input_value, _context)
     return nil if input_value.nil?
-    JSON.parse(input_value)
+    Oj.load(input_value)
   end
 
   def self.coerce_result(ruby_value, _context)
-    ruby_value&.to_json
+    return nil unless ruby_value
+    Oj.dump(ruby_value.as_json)
   end
 end
