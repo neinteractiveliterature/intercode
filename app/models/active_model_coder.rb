@@ -20,7 +20,7 @@ class ActiveModelCoder
     model_class.new.tap do |model|
       case json
       when Hash
-        model.from_json(json.to_json) # working around lack of assign_attributes in ScheduledValue
+        model.attributes = json
       when String
         model.from_json(json)
       end
