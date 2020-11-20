@@ -131,7 +131,7 @@
     "porter-stemmer": "^0.9.1",
     "postcss": "^8.1.7",
     "postcss-import": "^13.0.0",
-    "postcss-loader": "^4.0.4",
+    "postcss-loader": "^4.1.0",
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.0",
