@@ -1,8 +1,8 @@
 class Queries::TeamMemberQueryManager < Queries::QueryManager
   def initialize(user:)
     super(user: user)
-    @team_member_event_ids_in_convention_id = Queries::NilSafeCache.new
     @team_member_for_user_con_profile = Queries::NilSafeCache.new
+    @team_member_event_ids_in_convention_id = Queries::NilSafeCache.new
   end
 
   def team_member_in_convention?(convention)
@@ -21,7 +21,7 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
     return false unless user_con_profile && user
 
     @team_member_for_user_con_profile.get(user_con_profile.id) do
-      team_member_event_ids_in_convention_id(user_con_profile.convention_id).any? || (
+      (
         Signup
           .where(
             run: Run.where(
@@ -31,7 +31,12 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
           )
           .where.not(state: 'withdrawn')
           .any?
-      )
+      ) ||
+        (
+          TeamMember
+            .where(event: events_where_team_member, user_con_profile: user_con_profile.id)
+            .any?
+        )
     end
   end
 
