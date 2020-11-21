@@ -163,7 +163,7 @@ function ReactTableWithTheWorks<
                   <div
                     {...mergeProps<HTMLAttributes<HTMLDivElement>>(
                       row.getRowProps(),
-                      { style: { width: 'max-content' } },
+                      { style: { minWidth: 'max-content' } },
                       onClickRow
                         ? {
                             style: { cursor: 'pointer' },
