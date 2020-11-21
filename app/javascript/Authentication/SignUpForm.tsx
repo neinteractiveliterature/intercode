@@ -86,7 +86,9 @@ function SignUpForm() {
     await afterSessionChange(window.location.href);
   };
 
-  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, {
+    suppressError: true,
+  });
 
   return (
     <>

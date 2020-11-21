@@ -141,6 +141,7 @@ function OrderPaymentModalContents({
       await submitOrder(orderId, actualPaymentMode, paymentDetails);
       onComplete();
     }, [onComplete, paymentMode, submitOrder, orderId, paymentDetails, totalPrice]),
+    { suppressError: true },
   );
 
   const disabled =

@@ -72,7 +72,9 @@ function RunCard({
       cardRef.current?.scrollIntoView(false);
     }
   }, [history.location.hash, run.id]);
-  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup);
+  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup, {
+    suppressError: true,
+  });
   const { setAfterSignInPath, open: openAuthenticationModal } = useContext(
     AuthenticationModalContext,
   );

@@ -25,7 +25,7 @@ class Mutations::CreateMySignup < Mutations::BaseMutation
       should_have_requested_bucket_key ? args[:requested_bucket_key] : nil,
       context[:current_user],
       action: 'self_service_signup'
-    ).call
+    ).call_and_raise
 
     raise GraphQL::ExecutionError, result.errors.full_messages.join(', ') if result.failure?
 
