@@ -1,45 +1,10 @@
 import { useRef, useMemo, useEffect, RefObject } from 'react';
-import {
-  ApolloClient,
-  ApolloLink,
-  Operation,
-  NextLink,
-  InMemoryCache,
-  FieldFunctionOptions,
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
 import { DateTime } from 'luxon';
 
 import possibleTypes from './possibleTypes.json';
-
-function mergeArrayByField<T extends Record<string, any>, F extends keyof T>(
-  existing: T[],
-  incoming: T[],
-  field: F,
-  { readField, mergeObjects }: FieldFunctionOptions<T>,
-) {
-  const merged: T[] = existing ? existing.slice(0) : [];
-  const fieldValueToIndex = new Map<T[F], number>();
-  if (existing) {
-    existing.forEach((record, index) => {
-      fieldValueToIndex.set(readField<T[F]>(field as string, record)!, index);
-    });
-  }
-  incoming.forEach((record) => {
-    const fieldValue = readField<T[F]>(field as string, record)!;
-    const index = fieldValueToIndex.get(fieldValue);
-    if (typeof index === 'number') {
-      // Merge the new record data with the existing record data.
-      merged[index] = mergeObjects(merged[index], record)!;
-    } else {
-      // First time we've seen this record in this array.
-      fieldValueToIndex.set(fieldValue, merged.length);
-      merged.push(record);
-    }
-  });
-  return merged;
-}
 
 export function useIntercodeApolloLink(
   authenticityToken: string,
@@ -127,32 +92,17 @@ function useIntercodeApolloClient(
           addTypename: true,
           possibleTypes,
           typePolicies: {
-            Event: {
-              fields: {
-                registration_policy: {
-                  merge: (existing, incoming, { mergeObjects }) => mergeObjects(existing, incoming),
-                },
-              },
-            },
-            RegistrationPolicy: {
-              fields: {
-                buckets: {
-                  merge: (existing, incoming, functions) =>
-                    mergeArrayByField(existing, incoming, 'key', functions),
-                },
-              },
-            },
             UserConProfile: {
               fields: {
                 ability: {
-                  merge: (existing, incoming, { mergeObjects }) => mergeObjects(existing, incoming),
+                  merge: (existing, incoming) => ({ ...existing, ...incoming }),
                 },
               },
             },
             Query: {
               fields: {
                 currentAbility: {
-                  merge: (existing, incoming, { mergeObjects }) => mergeObjects(existing, incoming),
+                  merge: (existing, incoming) => ({ ...existing, ...incoming }),
                 },
               },
             },
