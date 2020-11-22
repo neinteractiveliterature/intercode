@@ -147,8 +147,12 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
   }
 
   const renderUserSection = () => {
-    const { signup } = data!;
-    const { user_con_profile: userConProfile } = signup;
+    const signup = data?.signup;
+    const userConProfile = signup?.user_con_profile;
+
+    if (!signup || !userConProfile) {
+      return <></>;
+    }
 
     return (
       <div className="card mr-2">
