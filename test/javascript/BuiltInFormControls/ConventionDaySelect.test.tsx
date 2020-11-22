@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import { parseISO } from 'date-fns';
 
 import { render, fireEvent } from '../testUtils';
 import ConventionDaySelect, {
@@ -38,7 +38,7 @@ describe('ConventionDaySelect', () => {
 
   test('the value is selected', () => {
     const { getByLabelText } = renderConventionDaySelect({
-      value: moment('2017-01-02T06:00:00.000Z'),
+      value: parseISO('2017-01-02T06:00:00.000Z'),
     });
     expect(getByLabelText('Sunday')).not.toBeChecked();
     expect(getByLabelText('Monday')).toBeChecked();

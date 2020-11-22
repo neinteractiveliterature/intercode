@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
+import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
 import TabbedMailingList from './TabbedMailingList';
 import Timespan, { FiniteTimespan } from '../Timespan';
@@ -31,6 +32,7 @@ function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
 }
 
 function WhosFree() {
+  const { timezoneName } = useContext(AppRootContext);
   const [timespan, setTimespan] = useState<FiniteTimespan>();
 
   usePageTitle('Who‘s free');
@@ -39,7 +41,9 @@ function WhosFree() {
     <>
       <h1 className="mb-4">Who&rsquo;s free?</h1>
       <WhosFreeForm
-        onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromMoments(start, finish))}
+        onSubmit={({ start, finish }) =>
+          setTimespan(Timespan.finiteFromDates(start, finish, timezoneName))
+        }
       />
       {timespan && <WhosFreeResults timespan={timespan} />}
     </>

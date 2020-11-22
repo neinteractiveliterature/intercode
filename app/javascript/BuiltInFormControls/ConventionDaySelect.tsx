@@ -1,38 +1,37 @@
-import { useCallback, useMemo, useContext } from 'react';
+import { useCallback, useMemo } from 'react';
 import * as React from 'react';
-import moment, { Moment } from 'moment-timezone';
+import { parseISO, isEqual } from 'date-fns';
+
+import { useAppDateFormat } from '../TimeUtils';
 import {
   timespanFromConvention,
   getConventionDayTimespans,
   ConventionForTimespanUtils,
 } from '../TimespanUtils';
-import AppRootContext from '../AppRootContext';
 
 export type ConventionDaySelectProps = {
   convention: ConventionForTimespanUtils;
-  value?: Moment;
-  onChange: React.Dispatch<Moment>;
+  value?: Date;
+  onChange: React.Dispatch<Date>;
 };
 
 function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps) {
-  const { timezoneName } = useContext(AppRootContext);
+  const appDateFormat = useAppDateFormat();
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
   const conventionDays = useMemo(
     () =>
       conventionTimespan.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName).map(
-            (timespan) => timespan.start,
-          )
+        ? getConventionDayTimespans(conventionTimespan).map((timespan) => timespan.start)
         : [],
-    [conventionTimespan, timezoneName],
+    [conventionTimespan],
   );
 
   const inputChange = useCallback(
     (event) => {
       const newDayString = event.target.value;
-      onChange(moment(newDayString).tz(timezoneName));
+      onChange(parseISO(newDayString));
     },
-    [onChange, timezoneName],
+    [onChange],
   );
 
   const options = conventionDays.map((day) => (
@@ -43,11 +42,11 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
           type="radio"
           name="day"
           value={day.toISOString()}
-          checked={day.isSame(value)}
+          checked={value && isEqual(day, value)}
           onChange={inputChange}
-          aria-label={day.format('dddd')}
+          aria-label={appDateFormat(day, 'eeee')}
         />{' '}
-        {day.format('dddd')}
+        {appDateFormat(day, 'eeee')}
       </label>
     </div>
   ));

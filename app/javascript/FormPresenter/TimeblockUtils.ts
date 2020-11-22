@@ -1,19 +1,38 @@
-import moment, { Moment } from 'moment-timezone';
+import { useContext, useCallback } from 'react';
+import { startOfDay, set, parseISO, isEqual } from 'date-fns';
+import { OptionsWithTZ } from 'date-fns-tz';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
 
+import AppRootContext from '../AppRootContext';
 import Timespan, { FiniteTimespan } from '../Timespan';
 import { timespanFromConvention, ConventionForTimespanUtils } from '../TimespanUtils';
-import { timezoneNameForConvention } from '../TimeUtils';
-import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockTypes';
+import {
+  timezoneNameForConvention,
+  formatWithLowercaseMeridiemHack,
+  manipulateInZone,
+  formatInTimezone,
+} from '../TimeUtils';
+import { TimeblockDefinition, TimeblockPreferenceOrdinality, FuzzyTime } from './TimeblockTypes';
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 import { notEmpty } from '../ValueUtils';
 
-export function describeTimeblock(timeblock: TimeblockDefinition) {
-  const start = moment().startOf('day').set(timeblock.start);
-  const finish = moment().startOf('day').set(timeblock.finish);
+function fuzzyTimeToSetOptions(fuzzyTime: FuzzyTime): Parameters<typeof set>[1] {
+  return {
+    hours: fuzzyTime.hour,
+    minutes: fuzzyTime.minute,
+    seconds: fuzzyTime.second,
+  };
+}
 
-  return `${start.format('h:mma')} - ${finish.format('h:mma')}`;
+export function describeTimeblock(timeblock: TimeblockDefinition) {
+  const start = set(startOfDay(new Date()), fuzzyTimeToSetOptions(timeblock.start));
+  const finish = set(startOfDay(new Date()), fuzzyTimeToSetOptions(timeblock.finish));
+
+  return `${formatWithLowercaseMeridiemHack(start, 'h:mmaaa')} - ${formatWithLowercaseMeridiemHack(
+    finish,
+    'h:mmaaa',
+  )}`;
 }
 
 export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | null) {
@@ -36,30 +55,36 @@ export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | 
 }
 
 function getDayStarts(convention: ConventionForTimespanUtils) {
-  return timespanFromConvention(convention).getTimeHopsWithin(
-    timezoneNameForConvention(convention),
-    { unit: 'day' },
-  );
+  return timespanFromConvention(convention).getTimeHopsWithin({ unit: 'days' });
 }
 
 export type ConcreteTimeblock = {
-  dayStart: Moment;
+  dayStart: Date;
   timeblock: TimeblockDefinition;
   label: string;
   timespan: FiniteTimespan;
 };
 
+function setFuzzyTimeInZone(date: Date, fuzzyTime: FuzzyTime, timezoneName: string) {
+  return manipulateInZone(date, timezoneName, (localDate) =>
+    set(localDate, fuzzyTimeToSetOptions(fuzzyTime)),
+  );
+}
+
 function getAllPossibleTimeblocks(
   convention: ConventionForTimespanUtils,
   formItem: TimeblockPreferenceFormItem,
 ) {
+  const timezoneName = timezoneNameForConvention(convention);
+
   return flatMap(getDayStarts(convention), (dayStart) =>
     formItem.rendered_properties.timeblocks
       .map((timeblock) => {
         try {
-          const timespan = Timespan.fromMoments(
-            moment(dayStart).set(timeblock.start),
-            moment(dayStart).set(timeblock.finish),
+          const timespan = Timespan.fromDates(
+            setFuzzyTimeInZone(dayStart, timeblock.start, timezoneName),
+            setFuzzyTimeInZone(dayStart, timeblock.finish, timezoneName),
+            timezoneName,
           ) as FiniteTimespan;
 
           const concreteTimeblock: ConcreteTimeblock = {
@@ -84,17 +109,16 @@ function isTimeblockValid(
   timeblock: ConcreteTimeblock,
 ) {
   const conventionTimespan = timespanFromConvention(convention);
+  const timezoneName = conventionTimespan.timezone;
 
   if (!conventionTimespan.overlapsTimespan(timeblock.timespan)) {
     return false;
   }
 
   const timeblockOmitted = formItem.rendered_properties.omit_timeblocks.some((omission) => {
-    const omissionDate = moment
-      .tz(omission.date, timezoneNameForConvention(convention))
-      .startOf('day');
-    const dayStart = moment(timeblock.timespan.start).startOf('day');
-    return omission.label === timeblock.label && omissionDate.isSame(dayStart);
+    const omissionDate = manipulateInZone(parseISO(omission.date), timezoneName, startOfDay);
+    const dayStart = manipulateInZone(timeblock.timespan.start, timezoneName, startOfDay);
+    return omission.label === timeblock.label && isEqual(omissionDate, dayStart);
   });
 
   return !timeblockOmitted;
@@ -110,7 +134,7 @@ export function getValidTimeblocks(
 }
 
 export type TimeblockColumn = {
-  dayStart: Moment;
+  dayStart: Date;
   cells: (ConcreteTimeblock | null)[];
 };
 
@@ -122,7 +146,7 @@ export function getValidTimeblockColumns(
   return getDayStarts(convention)
     .map((dayStart) => {
       const possibleTimeblocksForDayStart = allPossibleTimeblocks.filter((timeblock) =>
-        dayStart.isSame(timeblock.dayStart),
+        isEqual(dayStart, timeblock.dayStart),
       );
 
       return {
@@ -166,6 +190,19 @@ export function rotateTimeblockColumnsToRows(
     .filter(notEmpty);
 }
 
-export function getColumnHeader(column: TimeblockColumn) {
-  return column.dayStart.format('dddd');
+export function getColumnHeader(
+  column: TimeblockColumn,
+  timezoneName: string,
+  options: Omit<OptionsWithTZ, 'timeZone'>,
+) {
+  return formatInTimezone(column.dayStart, 'eeee', timezoneName, options);
+}
+
+export function useGetColumnHeader() {
+  const { timezoneName, dateFnsLocale } = useContext(AppRootContext);
+  return useCallback(
+    (column: TimeblockColumn, options?: Omit<OptionsWithTZ, 'timeZone'>) =>
+      getColumnHeader(column, timezoneName, { locale: dateFnsLocale, ...options }),
+    [timezoneName, dateFnsLocale],
+  );
 }

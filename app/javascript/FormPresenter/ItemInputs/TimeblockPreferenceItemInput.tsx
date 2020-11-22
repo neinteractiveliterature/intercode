@@ -3,7 +3,7 @@ import { useMemo, useCallback } from 'react';
 import CaptionLegend from './CaptionLegend';
 import {
   describeTimeblock,
-  getColumnHeader,
+  useGetColumnHeader,
   getValidTimeblockColumns,
   rotateTimeblockColumnsToRows,
 } from '../TimeblockUtils';
@@ -19,6 +19,7 @@ import TimeblockPreferenceCell, {
 } from './TimeblockPreferenceCell';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
+import { useAppDateFormat } from '../../TimeUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 
 function valueIsTimeblockPreferenceValue(
@@ -49,6 +50,8 @@ function TimeblockPreferenceItemInput({
   value: uncheckedValue,
   onChange,
 }: TimeblockPreferenceItemInputProps) {
+  const getColumnHeader = useGetColumnHeader();
+  const appDateFormat = useAppDateFormat();
   const value = useMemo(
     () => (valueIsTimeblockPreferenceValue(uncheckedValue) ? uncheckedValue : []),
     [uncheckedValue],
@@ -125,7 +128,7 @@ function TimeblockPreferenceItemInput({
               {row.cells.map((cell, x) =>
                 cell ? (
                   <TimeblockPreferenceCell
-                    key={cell.dayStart.format('dddd')}
+                    key={appDateFormat(cell.dayStart, 'eeee')}
                     timeblock={cell.timeblock}
                     existingPreferences={preferences}
                     dayStart={cell.dayStart}
@@ -134,7 +137,7 @@ function TimeblockPreferenceItemInput({
                     onChange={preferenceDidChange}
                   />
                 ) : (
-                  <td key={columns[x].dayStart.format('dddd')} />
+                  <td key={appDateFormat(columns[x].dayStart, 'eeee')} />
                 ),
               )}
             </tr>

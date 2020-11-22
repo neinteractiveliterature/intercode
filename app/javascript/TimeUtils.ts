@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react';
-import { format, utcToZonedTime, OptionsWithTZ } from 'date-fns-tz';
+import { format, utcToZonedTime, zonedTimeToUtc, OptionsWithTZ } from 'date-fns-tz';
 import {
   getMilliseconds,
   getSeconds,
@@ -136,4 +136,12 @@ export function useAppDateFormat() {
     [timezoneName, dateFnsLocale],
   );
   return appDateFormat;
+}
+
+export function manipulateInZone(
+  date: Date,
+  timezoneName: string,
+  manipulate: (localDate: Date) => Date,
+) {
+  return zonedTimeToUtc(manipulate(utcToZonedTime(date, timezoneName)), timezoneName);
 }

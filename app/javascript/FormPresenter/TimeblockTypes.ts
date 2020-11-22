@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment-timezone';
+import { parseISO, isDate, isEqual } from 'date-fns';
 
 export type FuzzyTime = {
   hour?: number;
@@ -25,8 +25,8 @@ type TimeblockPreferenceCommon = {
 };
 
 export type ParsedTimeblockPreference = TimeblockPreferenceCommon & {
-  start: Moment;
-  finish: Moment;
+  start: Date;
+  finish: Date;
 };
 
 export type UnparsedTimeblockPreference = TimeblockPreferenceCommon & {
@@ -43,8 +43,8 @@ export function parseTimeblockPreference(
   unparsedPreference: UnparsedTimeblockPreference,
 ): ParsedTimeblockPreference {
   return {
-    start: moment(unparsedPreference.start),
-    finish: moment(unparsedPreference.finish),
+    start: parseISO(unparsedPreference.start),
+    finish: parseISO(unparsedPreference.finish),
     label: unparsedPreference.label,
     ordinality: unparsedPreference.ordinality,
   };
@@ -61,9 +61,20 @@ export function serializeTimeblockPreference(
   };
 }
 
+function coerceToDate(dateLike: string | Date): Date {
+  if (isDate(dateLike)) {
+    return dateLike as Date;
+  }
+
+  return parseISO(dateLike as string);
+}
+
 export function preferencesMatch(
   a: TimeblockPreferenceForComparison,
   b: TimeblockPreferenceForComparison,
 ) {
-  return moment(a.start).isSame(moment(b.start)) && moment(a.finish).isSame(moment(b.finish));
+  return (
+    isEqual(coerceToDate(a.start), coerceToDate(b.start)) &&
+    isEqual(coerceToDate(a.finish), coerceToDate(b.finish))
+  );
 }

@@ -8,7 +8,7 @@ import {
 import {
   describeOrdinality,
   describeTimeblock,
-  getColumnHeader,
+  useGetColumnHeader,
   getValidTimeblockColumns,
   rotateTimeblockColumnsToRows,
   ConcreteTimeblock,
@@ -43,8 +43,9 @@ function TimeblockPreferenceItemChangeDisplay({
   convention,
   change,
 }: TimeblockPreferenceItemChangeDisplayProps) {
+  const getColumnHeader = useGetColumnHeader();
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
-    const key = column.dayStart.format('dddd');
+    const key = column.dayStart.valueOf();
     if (cell == null) {
       return <td key={key} className="table-secondary" />;
     }

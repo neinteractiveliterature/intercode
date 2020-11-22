@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
-import { getHours, getMinutes, set } from 'date-fns';
+import { useCallback, useState, useContext } from 'react';
+import { getHours, getMinutes, set, add } from 'date-fns';
 
+import AppRootContext from '../AppRootContext';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect, { TimeValues } from '../BuiltInFormControls/TimeSelect';
@@ -31,6 +32,7 @@ export type WhosFreeFormProps = {
 };
 
 function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
+  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useWhosFreeFormConventionQueryQuery();
   const [start, setStart] = useState<Date>();
   const [finish, setFinish] = useState<Date>();
@@ -41,8 +43,12 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
       return null;
     }
 
-    const startTimespan = Timespan.finiteFromMoments(day, day.clone().add(1, 'day'));
-    const finishTimespan = Timespan.finiteFromMoments(start ?? day, startTimespan.finish);
+    const startTimespan = Timespan.finiteFromDates(day, add(day, { days: 1 }), timezoneName);
+    const finishTimespan = Timespan.finiteFromDates(
+      start ?? day,
+      startTimespan.finish,
+      timezoneName,
+    );
 
     return (
       <div className="d-flex mb-4">
@@ -64,7 +70,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
         </div>
       </div>
     );
-  }, [day, start, finish]);
+  }, [day, start, finish, timezoneName]);
 
   const dayChanged = useCallback((newDay) => {
     setDay(newDay);

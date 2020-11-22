@@ -1,10 +1,10 @@
 import { useCallback, useContext } from 'react';
 import { pluralize, humanize, underscore } from 'inflected';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { parseISO } from 'date-fns';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
@@ -175,8 +175,8 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
               eventTitle: signup.run.event.title,
             })}{' '}
             {ageAsOf(
-              userConProfile.birth_date ? moment(userConProfile.birth_date) : undefined,
-              moment(signup.run.starts_at),
+              userConProfile.birth_date ? parseISO(userConProfile.birth_date) : undefined,
+              parseISO(signup.run.starts_at),
             )}
           </li>
           <li className={classNames('list-group-item')}>
@@ -255,7 +255,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
     const { run } = signup;
     const { event } = run;
     const { registration_policy: registrationPolicy } = event;
-    const timespan = Timespan.fromStrings(run.starts_at, run.ends_at);
+    const timespan = Timespan.fromStrings(run.starts_at, run.ends_at, timezoneName);
     const teamMember = run.event.team_members.find(
       (tm) => tm.user_con_profile.id === signup.user_con_profile.id,
     );
@@ -271,7 +271,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
         <div className="card-header">
           {run.event.title}
           <br />
-          {timespan.humanizeInTimezone(timezoneName)}
+          {timespan.humanize()}
           <br />
           {run.rooms
             .map((room) => room.name)

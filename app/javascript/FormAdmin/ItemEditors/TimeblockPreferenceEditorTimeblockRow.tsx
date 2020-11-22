@@ -53,9 +53,10 @@ function TimeblockPreferenceEditorTimeblockRow({
 
   const selectTimespan = useMemo(
     () =>
-      Timespan.finiteFromMoments(
+      Timespan.finiteFromDates(
         moment.tz({ hour: 0 }, timezoneName),
         moment.tz({ hour: 0 }, timezoneName).add(31, 'hours'),
+        timezoneName,
       ),
     [timezoneName],
   );

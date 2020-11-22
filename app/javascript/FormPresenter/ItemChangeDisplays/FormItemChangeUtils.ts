@@ -1,6 +1,6 @@
 // @ts-expect-error
 import MD5 from 'md5.js';
-import moment from 'moment-timezone';
+import { parseISO, compareAsc, differenceInMinutes } from 'date-fns';
 
 import Timespan from '../../Timespan';
 import { FormResponseChange, UserConProfile } from '../../graphqlTypes.generated';
@@ -80,7 +80,7 @@ export function buildChangeGroups(
         lastChangeGroup.length > 0 ? lastChangeGroup[lastChangeGroup.length - 1] : null;
       if (
         lastChange &&
-        (moment(lastChange.created_at).diff(change.created_at, 'minutes') >= 60 ||
+        (differenceInMinutes(parseISO(lastChange.created_at), parseISO(change.created_at)) >= 60 ||
           change.user_con_profile.id !== lastChange.user_con_profile.id)
       ) {
         return [...workingSet, [change]];
@@ -97,13 +97,20 @@ export function buildChangeGroups(
   }));
 }
 
-export function getTimespanForChangeGroup(changeGroup: FormResponseChangeGroup) {
+export function getTimespanForChangeGroup(
+  changeGroup: FormResponseChangeGroup,
+  timezoneName: string,
+) {
   const allTimestamps = [
-    ...changeGroup.changes.map((c) => moment(c.created_at)),
-    ...changeGroup.changes.map((c) => moment(c.updated_at)),
+    ...changeGroup.changes.map((c) => parseISO(c.created_at)),
+    ...changeGroup.changes.map((c) => parseISO(c.updated_at)),
   ];
 
-  allTimestamps.sort((a, b) => a.diff(b));
+  allTimestamps.sort(compareAsc);
 
-  return Timespan.fromMoments(allTimestamps[0], allTimestamps[allTimestamps.length - 1]);
+  return Timespan.finiteFromDates(
+    allTimestamps[0],
+    allTimestamps[allTimestamps.length - 1],
+    timezoneName,
+  );
 }
