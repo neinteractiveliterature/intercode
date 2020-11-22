@@ -1,6 +1,7 @@
 import { useContext, useState, Suspense } from 'react';
 import * as React from 'react';
-import { ReCAPTCHA } from 'react-google-recaptcha';
+// eslint-disable-next-line import/no-named-as-default
+import ReCAPTCHA from 'react-google-recaptcha';
 // @ts-expect-error
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
@@ -85,7 +86,9 @@ function SignUpForm() {
     await afterSessionChange(window.location.href);
   };
 
-  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, {
+    suppressError: true,
+  });
 
   return (
     <>

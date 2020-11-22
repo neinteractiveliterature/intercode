@@ -22,7 +22,7 @@ class GraphqlController < ApplicationController
       if key == :controller
         @controller
       elsif METHODS.key?(key)
-        @values[key] ||= METHODS[key].bind(@controller).call
+        @values[key] ||= METHODS[key].bind_call(@controller)
         @values[key]
       else
         @values[key]

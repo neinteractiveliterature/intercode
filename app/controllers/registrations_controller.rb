@@ -15,9 +15,11 @@ class RegistrationsController < Devise::RegistrationsController
   def check_captcha
     return if verify_recaptcha
 
+    configure_permitted_parameters # we prepended, so this won't have run
     self.resource = resource_class.new sign_up_params
     resource.validate # Look for any other validation errors besides Recaptcha
-    respond_with_navigational(resource) { render :new }
+    resource.errors.add :recaptcha, 'failed verification'
+    respond_with resource
   end
 
   def disable_destroy
