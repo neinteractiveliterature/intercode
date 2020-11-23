@@ -339,7 +339,7 @@ GEM
     nokogiri (1.10.10-java)
     oj (3.10.16)
     orm_adapter (0.5.0)
-    parallel (1.20.0)
+    parallel (1.20.1)
     parser (2.7.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -509,9 +509,6 @@ GEM
     thread_safe (0.3.6-java)
     tilt (2.0.10)
     tins (1.20.2)
-    toys (0.11.3)
-      toys-core (= 0.11.3)
-    toys-core (0.11.3)
     twilio-ruby (5.43.0)
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
@@ -622,8 +619,6 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
-  toys (= 0.11.3)
-  toys-core (= 0.11.3)
   twilio-ruby (~> 5.43.0)
   tzinfo-data
   whenever
