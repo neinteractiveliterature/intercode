@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Column } from 'react-table';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
@@ -26,27 +26,27 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
 
   const datesDescription = useMemo(() => {
     if (timespan.isFinite()) {
-      const sameYear = timespan.start.year() === timespan.finish.year();
-      const sameMonth = sameYear && timespan.start.month() === timespan.finish.month();
-      const sameDay = sameMonth && timespan.start.day() === timespan.finish.day();
+      const sameYear = timespan.start.year === timespan.finish.year;
+      const sameMonth = sameYear && timespan.start.month === timespan.finish.month;
+      const sameDay = sameMonth && timespan.start.day === timespan.finish.day;
 
       if (sameDay) {
-        return timespan.start.format('MMMM D, YYYY');
+        return timespan.start.toFormat('MMMM D, yyyy');
       }
 
-      const startFormat = sameYear ? 'MMMM D' : 'MMMM D, YYYY';
-      const finishFormat = sameMonth ? 'D, YYYY' : 'MMMM D, YYYY';
-      return `${timespan.start.format(startFormat)} - ${timespan.finish.format(finishFormat)}`;
+      const startFormat = sameYear ? 'MMMM D' : 'MMMM D, yyyy';
+      const finishFormat = sameMonth ? 'D, yyyy' : 'MMMM D, yyyy';
+      return `${timespan.start.toFormat(startFormat)} - ${timespan.finish.toFormat(finishFormat)}`;
     }
 
     return timespan.humanizeInTimezone(
       value.timezone_name ?? 'Etc/UTC',
-      'MMMM D, YYYY',
-      'MMMM D, YYYY',
+      'MMMM D, yyyy',
+      'MMMM D, yyyy',
     );
   }, [timespan, value.timezone_name]);
 
-  const now = moment();
+  const now = DateTime.local();
 
   if (timespan.includesTime(now)) {
     return (
@@ -57,7 +57,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
     );
   }
 
-  if (timespan.isFinite() && timespan.start.isAfter(now)) {
+  if (timespan.isFinite() && timespan.start > now) {
     return (
       <>
         <i className="fa fa-arrow-circle-right" aria-label="Future convention" /> {datesDescription}

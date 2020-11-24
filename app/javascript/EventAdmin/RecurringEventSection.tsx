@@ -1,6 +1,7 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import sortBy from 'lodash/sortBy';
+import { DateTime, Duration } from 'luxon';
 
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
@@ -9,6 +10,12 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 import AppRootContext from '../AppRootContext';
 import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
+import { formatLCM } from '../TimeUtils';
+
+function humanizeEventLength(event: Pick<EventFieldsFragment, 'length_seconds'>) {
+  const duration = Duration.fromObject({ seconds: event.length_seconds });
+  return duration.toFormat('h:mm');
+}
 
 type RecurringEventSectionBodyProps = {
   event: EventFieldsFragment;
@@ -30,15 +37,18 @@ function RecurringEventSectionBody({
   }, [convention, timezoneName]);
 
   const runLists = conventionDays.map((conventionDay) => {
-    const dayRuns = event.runs.filter((run) => conventionDay.includesTime(moment(run.starts_at)));
-
-    dayRuns.sort((a, b) => moment(a.starts_at).diff(moment(b.starts_at)));
+    const dayRuns = sortBy(
+      event.runs.filter((run) =>
+        conventionDay.includesTime(DateTime.fromISO(run.starts_at, { zone: timezoneName })),
+      ),
+      (run) => DateTime.fromISO(run.starts_at).toMillis(),
+    );
 
     const runItems = dayRuns.map((run) => {
-      const runStart = moment(run.starts_at).tz(timezoneName);
+      const runStart = DateTime.fromISO(run.starts_at, { zone: timezoneName });
       let format = 'h:mmaaa';
-      if (runStart.day() !== conventionDay.start.day()) {
-        format = 'ddd h:mmaaa';
+      if (runStart.weekday !== conventionDay.start.weekday) {
+        format = 'ccc h:mmaaa';
       }
       const eventCategory = convention.event_categories.find(
         (c) => c.id === event.event_category.id,
@@ -50,16 +60,16 @@ function RecurringEventSectionBody({
             className="btn btn-secondary"
             to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}
           >
-            {runStart.format(format)}
+            {formatLCM(runStart, format)}
           </Link>
         </li>
       );
     });
 
     return (
-      <div className="col" key={conventionDay.start.toISOString()}>
+      <div className="col" key={conventionDay.start.toISO()}>
         <div className="card">
-          <div className="card-header">{conventionDay.start.format('dddd, MMMM DD')}</div>
+          <div className="card-header">{conventionDay.start.toFormat('cccc, MMMM d')}</div>
           <div className="card-body py-3">
             <ul className="list-unstyled m-0">{runItems}</ul>
           </div>
@@ -113,8 +123,7 @@ function RecurringEventSection({ event, convention }: RecurringEventSectionProps
             <h4>
               <DisclosureTriangle expanded={expanded} /> {event.title}{' '}
               <small>
-                ({event.runs.length} runs;{' '}
-                {moment.duration(event.length_seconds, 'seconds').humanize()} per run)
+                ({event.runs.length} runs; {humanizeEventLength(event)} per run)
               </small>
             </h4>
           </button>

@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useContext } from 'react';
-import moment from 'moment-timezone';
 import { Waypoint } from 'react-waypoint';
 import { SortingRule } from 'react-table';
+import { DateTime } from 'luxon';
 
 import EventCard from './EventCard';
 import getSortedRuns from './getSortedRuns';
@@ -43,13 +43,13 @@ function EventListEvents({
           const runs = getSortedRuns(event);
           if (runs.length > 0) {
             const conventionDay = conventionDayTimespans.find((timespan) =>
-              timespan.includesTime(moment.tz(runs[0].starts_at, timezoneName)),
+              timespan.includesTime(DateTime.fromISO(runs[0].starts_at, { zone: timezoneName })),
             );
             if (
               conventionDay &&
               (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
             ) {
-              preamble = <h3 className="mt-4">{conventionDay.start.format('dddd, MMMM D')}</h3>;
+              preamble = <h3 className="mt-4">{conventionDay.start.toFormat('cccc, MMMM d')}</h3>;
               previousConventionDay = conventionDay;
             }
           }

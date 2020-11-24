@@ -178,8 +178,8 @@ function LoadingOverlay({ loading }: LoadingOverlayProps) {
 
 function getEventsQueryVariables(timespan: FiniteTimespan, showExtendedCounts?: boolean) {
   return {
-    start: timespan.start.toISOString(),
-    finish: timespan.finish.toISOString(),
+    start: timespan.start.toISO(),
+    finish: timespan.finish.toISO(),
     extendedCounts: showExtendedCounts || false,
   };
 }

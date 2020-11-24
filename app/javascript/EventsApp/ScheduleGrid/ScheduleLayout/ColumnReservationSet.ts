@@ -1,4 +1,4 @@
-import { Moment } from 'moment-timezone';
+import { DateTime } from 'luxon';
 import { FiniteTimespan } from '../../../Timespan';
 import ColumnReservation from './ColumnReservation';
 
@@ -9,7 +9,7 @@ import ColumnReservation from './ColumnReservation';
 // in case of two reservations starting at the same time, reservations that end
 // later go first.
 // finally, reservations with fewer events go first.
-function compareReservationsForSort(a: ColumnReservation, b: ColumnReservation) {
+function compareReservationsForSort(a: ColumnReservation | null, b: ColumnReservation | null) {
   if (a == null && b == null) {
     return 0;
   }
@@ -22,12 +22,12 @@ function compareReservationsForSort(a: ColumnReservation, b: ColumnReservation) 
     return -1;
   }
 
-  if (!a.timespan.start.isSame(b.timespan.start)) {
-    return a.timespan.start.diff(b.timespan.start);
+  if (a.timespan.start.toMillis() !== b.timespan.start.toMillis()) {
+    return a.timespan.start.diff(b.timespan.start, 'millisecond').milliseconds;
   }
 
-  if (!a.timespan.finish.isSame(b.timespan.finish)) {
-    return b.timespan.finish.diff(a.timespan.finish);
+  if (a.timespan.finish.toMillis() !== b.timespan.finish.toMillis()) {
+    return b.timespan.finish.diff(a.timespan.finish, 'millisecond').milliseconds;
   }
 
   return a.runIds.length - b.runIds.length;
@@ -79,14 +79,14 @@ class ColumnReservationSet {
     return reservedColumnNumbers[reservedColumnNumbers.length - 1];
   }
 
-  expire(cutoff: Moment) {
+  expire(cutoff: DateTime) {
     this.getReservedColumnNumbers().forEach((columnNumber) => {
       const reservation = this.reservations[columnNumber];
       if (reservation == null) {
         return;
       }
 
-      if (reservation.timespan.finish.isSameOrBefore(cutoff)) {
+      if (reservation.timespan.finish <= cutoff) {
         this.reservations[columnNumber] = null;
       }
     });
@@ -106,13 +106,13 @@ class ColumnReservationSet {
   }
 
   getFinishTime() {
-    let lastFinish: Moment | undefined;
+    let lastFinish: DateTime | undefined;
     this.reservations.forEach((reservation) => {
       if (reservation == null) {
         return;
       }
 
-      if (lastFinish == null || lastFinish.isBefore(reservation.timespan.finish)) {
+      if (lastFinish == null || lastFinish < reservation.timespan.finish) {
         lastFinish = reservation.timespan.finish;
       }
     });

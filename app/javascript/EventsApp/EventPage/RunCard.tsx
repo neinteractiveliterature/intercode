@@ -17,6 +17,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
 import { EventPageQueryQuery } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
+import { formatLCM } from '../../TimeUtils';
 
 function describeSignupState(
   mySignup: EventPageQueryQuery['event']['runs'][0]['my_signups'][0],
@@ -194,7 +195,8 @@ function RunCard({
 
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
-              {runTimespan.start.format('ddd h:mmaaa')}-{runTimespan.finish.format('h:mmaaa')}
+              {formatLCM(runTimespan.start, 'ddd h:mmaaa')}-
+              {formatLCM(runTimespan.finish, 'h:mmaaa')}
             </div>
 
             <div>

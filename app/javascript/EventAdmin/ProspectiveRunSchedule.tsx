@@ -1,7 +1,7 @@
 import { useMemo, useContext, useRef, useEffect } from 'react';
 import classnames from 'classnames';
+import { DateTime } from 'luxon';
 
-import { Moment } from 'moment-timezone';
 import {
   ScheduleGridContext,
   useScheduleGridProvider,
@@ -153,7 +153,7 @@ function ProspectiveRunScheduleEventRun({
 }
 
 export type ProspectiveRunScheduleProps = {
-  day?: Moment;
+  day?: DateTime;
   runs: Omit<
     RunFieldsFragment,
     | 'signup_count_by_state_and_bucket_key_and_counted'
@@ -244,7 +244,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
     if (!day) {
       return undefined;
     }
-    const dayTimespan = new Timespan(day, day.clone().endOf('day'));
+    const dayTimespan = Timespan.finiteFromDateTimes(day, day.endOf('day'));
     return conventionDayTimespans?.find((cdt) => cdt.overlapsTimespan(dayTimespan));
   }, [conventionDayTimespans, day]);
 

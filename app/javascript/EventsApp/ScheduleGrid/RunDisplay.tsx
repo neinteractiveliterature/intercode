@@ -9,6 +9,7 @@ import { ScheduleEvent, ScheduleRun } from './Schedule';
 import SignupCountData from '../SignupCountData';
 import { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import { SignupState } from '../../graphqlTypes.generated';
+import { formatLCM } from '../../TimeUtils';
 
 export type RunDisplayProps = {
   event: ScheduleEvent;
@@ -115,18 +116,18 @@ const RunDisplay = memo(
           {renderExtendedCounts()}
           <div className="schedule-grid-event-content">
             {!event.fake && renderAvailabilityBar()}
-            {runDimensions.fullTimespan.start.isBefore(runDimensions.timespan.start) && (
+            {runDimensions.fullTimespan.start < runDimensions.timespan.start && (
               <div className="schedule-grid-event-truncation-label truncation-label-start">
-                starts {runDimensions.fullTimespan.start.format('ddd h:mmaaa')}
+                starts {formatLCM(runDimensions.fullTimespan.start, 'ddd h:mmaaa')}
               </div>
             )}
             <div className="schedule-grid-event-content-main">
               {renderSignupStatusBadge()}
               {event.displayTitle || event.title}
             </div>
-            {runDimensions.fullTimespan.finish.isAfter(runDimensions.timespan.finish) && (
+            {runDimensions.fullTimespan.finish > runDimensions.timespan.finish && (
               <div className="schedule-grid-event-truncation-label truncation-label-finish">
-                ends {runDimensions.fullTimespan.finish.format('ddd h:mmaaa')}
+                ends {formatLCM(runDimensions.fullTimespan.finish, 'ddd h:mmaaa')}
               </div>
             )}
           </div>

@@ -81,8 +81,8 @@ export function getRunClassName({
         signupStatus == null,
       fake: event.fake,
       unlimited,
-      'truncated-start': runDimensions.fullTimespan.start.isBefore(runDimensions.timespan.start),
-      'truncated-finish': runDimensions.fullTimespan.finish.isAfter(runDimensions.timespan.finish),
+      'truncated-start': runDimensions.fullTimespan.start < runDimensions.timespan.start,
+      'truncated-finish': runDimensions.fullTimespan.finish > runDimensions.timespan.finish,
     },
   );
 }

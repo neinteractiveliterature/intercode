@@ -26,12 +26,12 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDa
   return (
     <li className="nav-item">
       <NavLink
-        to={`${basename}/${timespan.start.format('dddd').toLowerCase()}${location.search}`}
+        to={`${basename}/${timespan.start.toFormat('cccc').toLowerCase()}${location.search}`}
         className="nav-link"
         {...prefetchProps}
       >
-        <span className="d-inline d-md-none">{timespan.start.format('ddd')}</span>
-        <span className="d-none d-md-inline">{timespan.start.format('dddd')}</span>
+        <span className="d-inline d-md-none">{timespan.start.toFormat('ccc')}</span>
+        <span className="d-none d-md-inline">{timespan.start.toFormat('cccc')}</span>
       </NavLink>
     </li>
   );
@@ -87,7 +87,7 @@ function ConventionDayTabContainer({
               basename={basename}
               timespan={timespan}
               prefetchTimespan={prefetchTimespan}
-              key={timespan.start.toISOString()}
+              key={timespan.start.toISO()}
             />
           ))}
         </ul>
@@ -99,14 +99,14 @@ function ConventionDayTabContainer({
       <Switch>
         {conventionDayTimespans.map((timespan) => (
           <Route
-            path={`${basename}/${timespan.start.format('dddd').toLowerCase()}`}
-            key={timespan.start.toISOString()}
+            path={`${basename}/${timespan.start.toFormat('cccc').toLowerCase()}`}
+            key={timespan.start.toISO()}
           >
             {children(timespan)}
           </Route>
         ))}
         <Redirect
-          to={`${basename}/${conventionDayTimespans[0].start.format('dddd').toLowerCase()}`}
+          to={`${basename}/${conventionDayTimespans[0].start.toFormat('cccc').toLowerCase()}`}
         />
       </Switch>
     </div>

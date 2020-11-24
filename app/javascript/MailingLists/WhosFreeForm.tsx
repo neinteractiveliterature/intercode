@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react';
-import { Moment, MomentSetObject } from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
-import TimeSelect from '../BuiltInFormControls/TimeSelect';
+import TimeSelect, { TimeValues } from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import LoadingIndicator from '../LoadingIndicator';
 import { useWhosFreeFormConventionQueryQuery } from './queries.generated';
 
-const momentToTimeObject = (momentValue?: Moment | null) => {
+const dateTimeToTimeValues = (momentValue?: DateTime | null) => {
   if (momentValue == null) {
     return {
       hour: undefined,
@@ -17,32 +17,32 @@ const momentToTimeObject = (momentValue?: Moment | null) => {
   }
 
   return {
-    hour: momentValue.hour(),
-    minute: momentValue.minute(),
+    hour: momentValue.hour,
+    minute: momentValue.minute,
   };
 };
 
-function makeTimeOfDay(prevTime: Moment | null | undefined, day: Moment, newTime: MomentSetObject) {
-  return (prevTime || day).clone().set(newTime);
+function makeTimeOfDay(prevTime: DateTime | null | undefined, day: DateTime, newTime: TimeValues) {
+  return (prevTime || day).set(newTime);
 }
 
 export type WhosFreeFormProps = {
-  onSubmit: (options: { start: Moment; finish: Moment }) => void;
+  onSubmit: (options: { start: DateTime; finish: DateTime }) => void;
 };
 
 function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
   const { data, loading, error } = useWhosFreeFormConventionQueryQuery();
-  const [start, setStart] = useState<Moment>();
-  const [finish, setFinish] = useState<Moment>();
-  const [day, setDay] = useState<Moment>();
+  const [start, setStart] = useState<DateTime>();
+  const [finish, setFinish] = useState<DateTime>();
+  const [day, setDay] = useState<DateTime>();
 
   const renderTimeSelects = useCallback(() => {
     if (day == null) {
       return null;
     }
 
-    const startTimespan = Timespan.finiteFromMoments(day, day.clone().add(1, 'day'));
-    const finishTimespan = Timespan.finiteFromMoments(start ?? day, startTimespan.finish);
+    const startTimespan = Timespan.finiteFromDateTimes(day, day.plus({ days: 1 }));
+    const finishTimespan = Timespan.finiteFromDateTimes(start ?? day, startTimespan.finish);
 
     return (
       <div className="d-flex mb-4">
@@ -50,7 +50,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
           from
           <TimeSelect
             timespan={startTimespan}
-            value={momentToTimeObject(start)}
+            value={dateTimeToTimeValues(start)}
             onChange={(newTime) => setStart(makeTimeOfDay(start, day, newTime))}
           />
         </div>
@@ -58,7 +58,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
           until
           <TimeSelect
             timespan={finishTimespan}
-            value={momentToTimeObject(finish)}
+            value={dateTimeToTimeValues(finish)}
             onChange={(newTime) => setFinish(makeTimeOfDay(finish, day, newTime))}
           />
         </div>
