@@ -1,10 +1,10 @@
-import moment from 'moment-timezone';
-import Timespan, { FiniteTimespan } from '../../app/javascript/Timespan';
+import { DateTime, Duration } from 'luxon';
+import Timespan from '../../app/javascript/Timespan';
 
 describe('Timespan', () => {
-  const defaultTimespan = Timespan.finiteFromMoments(
-    moment('2010-01-01T00:00:00Z'),
-    moment('2010-01-02T00:00:00Z'),
+  const defaultTimespan = Timespan.finiteFromDateTimes(
+    DateTime.fromISO('2010-01-01T00:00:00Z'),
+    DateTime.fromISO('2010-01-02T00:00:00Z'),
   );
   const infiniteTimespan = new Timespan(null, null);
   const beginningOfTime: Timespan = defaultTimespan.clone();
@@ -16,14 +16,17 @@ describe('Timespan', () => {
   it('checks that finish is after start', () => {
     expect(() => {
       // eslint-disable-next-line no-new
-      new Timespan(moment('2010-01-02T00:00:00Z'), moment('2010-01-01T00:00:00Z'));
+      new Timespan(
+        DateTime.fromISO('2010-01-02T00:00:00Z'),
+        DateTime.fromISO('2010-01-01T00:00:00Z'),
+      );
     }).toThrow('Start cannot be after finish');
   });
 
   it('constructs from strings', () => {
     const timespan = Timespan.finiteFromStrings('2010-01-01T00:00:00Z', '2010-01-02T00:00:00Z');
-    expect(timespan.start.isSame('2010-01-01T00:00:00Z')).toBeTruthy();
-    expect(timespan.finish.isSame('2010-01-02T00:00:00Z')).toBeTruthy();
+    expect(timespan.start.equals(DateTime.fromISO('2010-01-01T00:00:00Z'))).toBeTruthy();
+    expect(timespan.finish.equals(DateTime.fromISO('2010-01-02T00:00:00Z'))).toBeTruthy();
   });
 
   it('constructs from null strings', () => {
@@ -34,15 +37,19 @@ describe('Timespan', () => {
 
   describe('tz', () => {
     it('converts time zone correctly', () => {
-      const timespan = defaultTimespan.tz('US/Eastern') as FiniteTimespan;
-      expect(timespan.start.hour()).toEqual(19);
-      expect(timespan.finish.hour()).toEqual(19);
-      expect(timespan.start.isSame('2010-01-01T00:00:00Z')).toBeTruthy();
-      expect(timespan.finish.isSame('2010-01-02T00:00:00Z')).toBeTruthy();
+      const timespan = defaultTimespan.tz('America/New_York');
+      expect(timespan.start.hour).toEqual(19);
+      expect(timespan.finish.hour).toEqual(19);
+      expect(timespan.start.toMillis()).toEqual(
+        DateTime.fromISO('2010-01-01T00:00:00Z').toMillis(),
+      );
+      expect(timespan.finish.toMillis()).toEqual(
+        DateTime.fromISO('2010-01-02T00:00:00Z').toMillis(),
+      );
     });
 
     it('handles nulls', () => {
-      const timespan = infiniteTimespan.tz('US/Eastern');
+      const timespan = infiniteTimespan.tz('America/New_York');
       expect(timespan.start).toBeNull();
       expect(timespan.finish).toBeNull();
     });
@@ -62,36 +69,36 @@ describe('Timespan', () => {
 
   describe('includesTime', () => {
     it('includes the start but not the finish', () => {
-      expect(defaultTimespan.includesTime(moment('2010-01-01T00:00:00Z'))).toBeTruthy();
-      expect(defaultTimespan.includesTime(moment('2010-01-02T00:00:00Z'))).toBeFalsy();
+      expect(defaultTimespan.includesTime(DateTime.fromISO('2010-01-01T00:00:00Z'))).toBeTruthy();
+      expect(defaultTimespan.includesTime(DateTime.fromISO('2010-01-02T00:00:00Z'))).toBeFalsy();
     });
 
     it('includes times in the middle of the timespan', () => {
-      expect(defaultTimespan.includesTime(moment('2010-01-01T08:00:00Z'))).toBeTruthy();
+      expect(defaultTimespan.includesTime(DateTime.fromISO('2010-01-01T08:00:00Z'))).toBeTruthy();
     });
 
     it('does not include times outside the timespan', () => {
-      expect(defaultTimespan.includesTime(moment('2009-12-31T23:59:59Z'))).toBeFalsy();
-      expect(defaultTimespan.includesTime(moment('2010-01-02T00:00:01Z'))).toBeFalsy();
+      expect(defaultTimespan.includesTime(DateTime.fromISO('2009-12-31T23:59:59Z'))).toBeFalsy();
+      expect(defaultTimespan.includesTime(DateTime.fromISO('2010-01-02T00:00:01Z'))).toBeFalsy();
     });
 
     it('handles open ends', () => {
-      expect(beginningOfTime.includesTime(moment('1908-01-01T00:00:00Z'))).toBeTruthy();
-      expect(endOfTime.includesTime(moment('2908-01-01T00:00:00Z'))).toBeTruthy();
+      expect(beginningOfTime.includesTime(DateTime.fromISO('1908-01-01T00:00:00Z'))).toBeTruthy();
+      expect(endOfTime.includesTime(DateTime.fromISO('2908-01-01T00:00:00Z'))).toBeTruthy();
 
-      expect(endOfTime.includesTime(moment('1908-01-01T00:00:00Z'))).toBeFalsy();
-      expect(beginningOfTime.includesTime(moment('2908-01-01T00:00:00Z'))).toBeFalsy();
+      expect(endOfTime.includesTime(DateTime.fromISO('1908-01-01T00:00:00Z'))).toBeFalsy();
+      expect(beginningOfTime.includesTime(DateTime.fromISO('2908-01-01T00:00:00Z'))).toBeFalsy();
 
-      expect(infiniteTimespan.includesTime(moment('1908-01-01T00:00:00Z'))).toBeTruthy();
-      expect(infiniteTimespan.includesTime(moment('2908-01-01T00:00:00Z'))).toBeTruthy();
+      expect(infiniteTimespan.includesTime(DateTime.fromISO('1908-01-01T00:00:00Z'))).toBeTruthy();
+      expect(infiniteTimespan.includesTime(DateTime.fromISO('2908-01-01T00:00:00Z'))).toBeTruthy();
     });
   });
 
   describe('includesTimespan', () => {
     it('includes a strict subset of itself', () => {
       const timespan = defaultTimespan.clone();
-      timespan.start = moment(timespan.start).add(1, 'second');
-      timespan.finish = moment(timespan.finish).subtract(1, 'second');
+      timespan.start = timespan.start.plus({ seconds: 1 });
+      timespan.finish = timespan.finish.minus({ seconds: 1 });
 
       expect(defaultTimespan.includesTimespan(timespan)).toBeTruthy();
     });
@@ -102,10 +109,10 @@ describe('Timespan', () => {
 
     it('does not include timespans that have parts outside itself', () => {
       const slightlyBefore = defaultTimespan.clone();
-      slightlyBefore.start = moment(slightlyBefore.start).subtract(1, 'second');
+      slightlyBefore.start = slightlyBefore.start.minus({ seconds: 1 });
 
       const slightlyAfter = defaultTimespan.clone();
-      slightlyAfter.finish = moment(slightlyAfter.finish).add(1, 'second');
+      slightlyAfter.finish = slightlyAfter.finish.plus({ seconds: 1 });
 
       expect(defaultTimespan.includesTimespan(slightlyBefore)).toBeFalsy();
       expect(defaultTimespan.includesTimespan(slightlyAfter)).toBeFalsy();
@@ -113,12 +120,12 @@ describe('Timespan', () => {
 
     it('does not overlap timespans that are entirely outside itself', () => {
       const entirelyBefore = defaultTimespan.clone();
-      entirelyBefore.start = moment(entirelyBefore.start).subtract(1, 'day');
-      entirelyBefore.finish = moment(entirelyBefore.finish).subtract(1, 'day');
+      entirelyBefore.start = entirelyBefore.start.minus({ days: 1 });
+      entirelyBefore.finish = entirelyBefore.finish.minus({ days: 1 });
 
       const entirelyAfter = defaultTimespan.clone();
-      entirelyAfter.start = moment(entirelyAfter.start).add(1, 'day');
-      entirelyAfter.finish = moment(entirelyAfter.finish).add(1, 'day');
+      entirelyAfter.start = entirelyAfter.start.plus({ days: 1 });
+      entirelyAfter.finish = entirelyAfter.finish.plus({ days: 1 });
 
       expect(defaultTimespan.includesTimespan(entirelyBefore)).toBeFalsy();
       expect(defaultTimespan.includesTimespan(entirelyAfter)).toBeFalsy();
@@ -139,8 +146,8 @@ describe('Timespan', () => {
   describe('overlapsTimespan', () => {
     it('overlaps a strict subset of itself', () => {
       const timespan = defaultTimespan.clone();
-      timespan.start = moment(timespan.start).add(1, 'second');
-      timespan.finish = moment(timespan.finish).subtract(1, 'second');
+      timespan.start = timespan.start.plus({ seconds: 1 });
+      timespan.finish = timespan.finish.minus({ seconds: 1 });
 
       expect(defaultTimespan.overlapsTimespan(timespan)).toBeTruthy();
     });
@@ -151,10 +158,10 @@ describe('Timespan', () => {
 
     it('overlaps timespans that have parts outside itself', () => {
       const slightlyBefore = defaultTimespan.clone();
-      slightlyBefore.start = moment(slightlyBefore.start).subtract(1, 'second');
+      slightlyBefore.start = slightlyBefore.start.minus({ seconds: 1 });
 
       const slightlyAfter = defaultTimespan.clone();
-      slightlyAfter.finish = moment(slightlyAfter.finish).add(1, 'second');
+      slightlyAfter.finish = slightlyAfter.finish.plus({ seconds: 1 });
 
       expect(defaultTimespan.overlapsTimespan(slightlyBefore)).toBeTruthy();
       expect(defaultTimespan.overlapsTimespan(slightlyAfter)).toBeTruthy();
@@ -162,12 +169,12 @@ describe('Timespan', () => {
 
     it('does not overlap timespans that are entirely outside itself', () => {
       const entirelyBefore = defaultTimespan.clone();
-      entirelyBefore.start = moment(entirelyBefore.start).subtract(1, 'day');
-      entirelyBefore.finish = moment(entirelyBefore.finish).subtract(1, 'day');
+      entirelyBefore.start = entirelyBefore.start.minus({ days: 1 });
+      entirelyBefore.finish = entirelyBefore.finish.minus({ days: 1 });
 
       const entirelyAfter = defaultTimespan.clone();
-      entirelyAfter.start = moment(entirelyAfter.start).add(1, 'day');
-      entirelyAfter.finish = moment(entirelyAfter.finish).add(1, 'day');
+      entirelyAfter.start = entirelyAfter.start.plus({ days: 1 });
+      entirelyAfter.finish = entirelyAfter.finish.plus({ days: 1 });
 
       expect(defaultTimespan.overlapsTimespan(entirelyBefore)).toBeFalsy();
       expect(defaultTimespan.overlapsTimespan(entirelyAfter)).toBeFalsy();
@@ -199,10 +206,10 @@ describe('Timespan', () => {
 
     it('compares different times', () => {
       const differentStart = defaultTimespan.clone();
-      differentStart.start = moment(differentStart.start).subtract(1, 'day');
+      differentStart.start = differentStart.start.minus({ days: 1 });
 
       const differentFinish = defaultTimespan.clone();
-      differentFinish.finish = moment(differentFinish.finish).add(1, 'day');
+      differentFinish.finish = differentFinish.finish.plus({ days: 1 });
 
       expect(defaultTimespan.isSame(differentStart)).toBeFalsy();
       expect(defaultTimespan.isSame(differentFinish)).toBeFalsy();
@@ -212,20 +219,20 @@ describe('Timespan', () => {
   describe('intersection', () => {
     it('returns just the overlapping subset', () => {
       const somewhatLater = defaultTimespan.clone();
-      somewhatLater.start = moment(somewhatLater.start).add(6, 'hours');
-      somewhatLater.finish = moment(somewhatLater.finish).add(6, 'hours');
+      somewhatLater.start = somewhatLater.start.plus({ hours: 6 });
+      somewhatLater.finish = somewhatLater.finish.plus({ hours: 6 });
 
       const intersection = defaultTimespan.intersection(somewhatLater);
       const inverseIntersection = somewhatLater.intersection(defaultTimespan);
       expect(intersection.isSame(inverseIntersection)).toBeTruthy();
-      expect(intersection.start.isSame(somewhatLater.start)).toBeTruthy();
-      expect(intersection.finish.isSame(defaultTimespan.finish)).toBeTruthy();
+      expect(intersection.start.equals(somewhatLater.start)).toBeTruthy();
+      expect(intersection.finish.equals(defaultTimespan.finish)).toBeTruthy();
     });
 
     it('returns null if there is no overlap', () => {
       const considerablyLater = defaultTimespan.clone();
-      considerablyLater.start = moment(considerablyLater.finish);
-      considerablyLater.finish = moment(considerablyLater.start).add(24, 'hours');
+      considerablyLater.start = considerablyLater.finish;
+      considerablyLater.finish = considerablyLater.start.plus({ hours: 24 });
 
       expect(defaultTimespan.intersection(considerablyLater)).toBeNull();
       expect(considerablyLater.intersection(defaultTimespan)).toBeNull();
@@ -245,14 +252,14 @@ describe('Timespan', () => {
   describe('union', () => {
     it('returns the superset', () => {
       const somewhatLater = defaultTimespan.clone();
-      somewhatLater.start = moment(somewhatLater.start).add(6, 'hours');
-      somewhatLater.finish = moment(somewhatLater.finish).add(6, 'hours');
+      somewhatLater.start = somewhatLater.start.plus({ hours: 6 });
+      somewhatLater.finish = somewhatLater.finish.plus({ hours: 6 });
 
       const union = defaultTimespan.union(somewhatLater);
       const inverseUnion = somewhatLater.union(defaultTimespan);
       expect(union.isSame(inverseUnion)).toBeTruthy();
-      expect(union.start.isSame(defaultTimespan.start)).toBeTruthy();
-      expect(union.finish.isSame(somewhatLater.finish)).toBeTruthy();
+      expect(union.start.equals(defaultTimespan.start)).toBeTruthy();
+      expect(union.finish.equals(somewhatLater.finish)).toBeTruthy();
     });
 
     it('handles open ends', () => {
@@ -274,7 +281,7 @@ describe('Timespan', () => {
 
   describe('getLength', () => {
     it('calculates length for finite timespans', () => {
-      expect(defaultTimespan.getLength('hours')).toEqual(24);
+      expect(defaultTimespan.getLength('hours').hours).toEqual(24);
     });
 
     it('returns null for infinite timespans', () => {
@@ -286,40 +293,40 @@ describe('Timespan', () => {
 
   describe('humanizeStartInTimezone', () => {
     it('formats the start time correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeStartInTimezone('UTC', 'h:mma')).toEqual('12:00am');
-      expect(defaultTimespan.humanizeStartInTimezone('America/New_York', 'h:mma')).toEqual(
+      expect(defaultTimespan.humanizeStartInTimezone('UTC', 'h:mmaaa')).toEqual('12:00am');
+      expect(defaultTimespan.humanizeStartInTimezone('America/New_York', 'h:mmaaa')).toEqual(
         '7:00pm',
       );
     });
 
     it('handles open ends', () => {
-      expect(beginningOfTime.humanizeStartInTimezone('UTC', 'h:mma')).toEqual('anytime');
+      expect(beginningOfTime.humanizeStartInTimezone('UTC', 'h:mmaaa')).toEqual('anytime');
     });
   });
 
   describe('humanizeFinishInTimezone', () => {
     it('formats the finish time correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeFinishInTimezone('UTC', 'h:mma')).toEqual('12:00am');
-      expect(defaultTimespan.humanizeFinishInTimezone('America/New_York', 'h:mma')).toEqual(
+      expect(defaultTimespan.humanizeFinishInTimezone('UTC', 'h:mmaaa')).toEqual('12:00am');
+      expect(defaultTimespan.humanizeFinishInTimezone('America/New_York', 'h:mmaaa')).toEqual(
         '7:00pm',
       );
     });
 
     it('handles open ends', () => {
-      expect(endOfTime.humanizeFinishInTimezone('UTC', 'h:mma')).toEqual('indefinitely');
+      expect(endOfTime.humanizeFinishInTimezone('UTC', 'h:mmaaa')).toEqual('indefinitely');
     });
   });
 
   describe('humanizeInTimezone', () => {
     it('formats the times correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeInTimezone('UTC', 'h:mma')).toEqual('12:00am');
-      expect(defaultTimespan.humanizeInTimezone('America/New_York', 'h:mma')).toEqual('7:00pm');
+      expect(defaultTimespan.humanizeInTimezone('UTC', 'h:mmaaa')).toEqual('12:00am');
+      expect(defaultTimespan.humanizeInTimezone('America/New_York', 'h:mmaaa')).toEqual('7:00pm');
     });
 
     it('handles open ends', () => {
-      expect(beginningOfTime.humanizeInTimezone('UTC', 'h:mma')).toEqual('anytime - 12:00am');
-      expect(endOfTime.humanizeInTimezone('UTC', 'h:mma')).toEqual('12:00am - indefinitely');
-      expect(infiniteTimespan.humanizeInTimezone('UTC', 'h:mma')).toEqual('always');
+      expect(beginningOfTime.humanizeInTimezone('UTC', 'h:mmaaa')).toEqual('anytime - 12:00am');
+      expect(endOfTime.humanizeInTimezone('UTC', 'h:mmaaa')).toEqual('12:00am - indefinitely');
+      expect(infiniteTimespan.humanizeInTimezone('UTC', 'h:mmaaa')).toEqual('always');
     });
   });
 
@@ -342,20 +349,20 @@ describe('Timespan', () => {
       );
     });
 
-    it('returns moment objects with the correct time zone', () => {
-      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })[0].utcOffset()).toEqual(0);
+    it('returns DateTime.fromISO objects with the correct time zone', () => {
+      expect(defaultTimespan.getTimeHopsWithin('UTC', { unit: 'day' })[0].offset).toEqual(0);
       expect(
-        defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].utcOffset(),
+        defaultTimespan.getTimeHopsWithin('America/New_York', { unit: 'day' })[0].offset,
       ).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
       const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', {
         unit: 'hour',
-        offset: moment.duration(2, 'hours'),
+        offset: Duration.fromObject({ hours: 2 }),
       });
       expect(hopsWithOffset).toHaveLength(24);
-      expect(hopsWithOffset[0].hour()).toEqual(2);
+      expect(hopsWithOffset[0].hour).toEqual(2);
     });
   });
 
@@ -379,23 +386,19 @@ describe('Timespan', () => {
     });
 
     it('returns timespans with the correct time zone', () => {
+      expect(defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.offset).toEqual(0);
       expect(
-        defaultTimespan.getTimespansWithin('UTC', { unit: 'day' })[0].start.utcOffset(),
-      ).toEqual(0);
-      expect(
-        defaultTimespan
-          .getTimespansWithin('America/New_York', { unit: 'day' })[0]
-          .start.utcOffset(),
+        defaultTimespan.getTimespansWithin('America/New_York', { unit: 'day' })[0].start.offset,
       ).toEqual(-5 * 60);
     });
 
     it('handles offset', () => {
       const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', {
         unit: 'hour',
-        offset: moment.duration(2, 'hours'),
+        offset: Duration.fromObject({ hours: 2 }),
       });
       expect(hopsWithOffset).toHaveLength(22);
-      expect(hopsWithOffset[0].start.hour()).toEqual(2);
+      expect(hopsWithOffset[0].start.hour).toEqual(2);
     });
   });
 
@@ -404,12 +407,6 @@ describe('Timespan', () => {
       const cloned = defaultTimespan.clone();
       expect(cloned).not.toBe(defaultTimespan);
       expect(cloned.isSame(defaultTimespan)).toBeTruthy();
-    });
-
-    it('clones the members too', () => {
-      const cloned = defaultTimespan.clone();
-      expect(cloned.start).not.toBe(defaultTimespan.start);
-      expect(cloned.finish).not.toBe(defaultTimespan.finish);
     });
   });
 });

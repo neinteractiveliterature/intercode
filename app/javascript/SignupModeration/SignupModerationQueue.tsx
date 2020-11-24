@@ -194,7 +194,7 @@ function SignupModerationQueue() {
                 <small>
                   {moment
                     .tz(signupRequest.created_at, timezoneName)
-                    .format('ddd, MMM D, YYYY [at] h:mma')}
+                    .format('ddd, MMM D, YYYY [at] h:mmaaa')}
                 </small>
               </td>
               <td className="text-right">

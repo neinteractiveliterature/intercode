@@ -36,9 +36,9 @@ function RecurringEventSectionBody({
 
     const runItems = dayRuns.map((run) => {
       const runStart = moment(run.starts_at).tz(timezoneName);
-      let format = 'h:mma';
+      let format = 'h:mmaaa';
       if (runStart.day() !== conventionDay.start.day()) {
-        format = 'ddd h:mma';
+        format = 'ddd h:mmaaa';
       }
       const eventCategory = convention.event_categories.find(
         (c) => c.id === event.event_category.id,

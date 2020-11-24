@@ -194,7 +194,7 @@ function RunCard({
 
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
-              {runTimespan.start.format('ddd h:mma')}-{runTimespan.finish.format('h:mma')}
+              {runTimespan.start.format('ddd h:mmaaa')}-{runTimespan.finish.format('h:mmaaa')}
             </div>
 
             <div>

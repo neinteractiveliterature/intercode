@@ -25,7 +25,7 @@ function renderFirstRunTime(event: EventType, timezoneName: string) {
     const sortedRuns = getSortedRuns(event);
     if (sortedRuns.length > 4) {
       const firstRunStart = moment.tz(sortedRuns[0].starts_at, timezoneName);
-      return `${sortedRuns.length} runs starting ${firstRunStart.format('dddd h:mma')}`;
+      return `${sortedRuns.length} runs starting ${firstRunStart.format('dddd h:mmaaa')}`;
     }
 
     let previousDayName: string;
@@ -35,14 +35,16 @@ function renderFirstRunTime(event: EventType, timezoneName: string) {
         const runStart = moment.tz(run.starts_at, timezoneName);
         const dayName = runStart.format('dddd');
         if (previousDayName === dayName) {
-          return runStart.format('h:mma');
+          return runStart.format('h:mmaaa');
         }
 
         previousDayName = dayName;
         return (
           <Fragment key={runStart.toISOString()}>
-            <span className="d-lg-none text-nowrap">{runStart.format('ddd h:mma')}</span>
-            <span className="d-none d-lg-inline text-nowrap">{runStart.format('dddd h:mma')}</span>
+            <span className="d-lg-none text-nowrap">{runStart.format('ddd h:mmaaa')}</span>
+            <span className="d-none d-lg-inline text-nowrap">
+              {runStart.format('dddd h:mmaaa')}
+            </span>
           </Fragment>
         );
       }),
@@ -187,7 +189,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
           <p className="m-0">
             <strong>
               Added{' '}
-              {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
+              {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mmaaa')}
             </strong>
           </p>
         ) : null}

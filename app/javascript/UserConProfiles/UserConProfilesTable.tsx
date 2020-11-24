@@ -252,7 +252,7 @@ function getPossibleColumns(
               userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null,
             disableSortBy: false,
             Cell: ({ value }: { value: Moment | null }) =>
-              value ? value.format('MMM D, YYYY H:mma') : null,
+              value ? value.format('MMM D, YYYY h:mmaaa') : null,
           },
         ]),
     {

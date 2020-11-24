@@ -182,7 +182,7 @@ function ScheduleMultipleRunsModal({
     const nonConflictingTimespans = nonConflictingTimespansWithinRange;
 
     const runTimespanItems = runTimespans.map((runTimespan) => {
-      let description: ReactNode = runTimespan.start.format('h:mma');
+      let description: ReactNode = runTimespan.start.format('h:mmaaa');
       const runConflicts =
         nonConflictingTimespans.find((nonConflictingTimespan) =>
           nonConflictingTimespan.isSame(runTimespan),

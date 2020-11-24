@@ -183,7 +183,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
                 {order.paid_at
                   ? `on ${moment(order.paid_at)
                       .tz(timezoneName)
-                      .format('ddd, MMM D, YYYY {at} h:mma')}`
+                      .format('ddd, MMM D, YYYY {at} h:mmaaa')}`
                   : null}
               </li>
               <li className="list-inline-item">

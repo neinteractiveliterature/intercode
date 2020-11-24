@@ -117,7 +117,7 @@ const RunDisplay = memo(
             {!event.fake && renderAvailabilityBar()}
             {runDimensions.fullTimespan.start.isBefore(runDimensions.timespan.start) && (
               <div className="schedule-grid-event-truncation-label truncation-label-start">
-                starts {runDimensions.fullTimespan.start.format('ddd h:mma')}
+                starts {runDimensions.fullTimespan.start.format('ddd h:mmaaa')}
               </div>
             )}
             <div className="schedule-grid-event-content-main">
@@ -126,7 +126,7 @@ const RunDisplay = memo(
             </div>
             {runDimensions.fullTimespan.finish.isAfter(runDimensions.timespan.finish) && (
               <div className="schedule-grid-event-truncation-label truncation-label-finish">
-                ends {runDimensions.fullTimespan.finish.format('ddd h:mma')}
+                ends {runDimensions.fullTimespan.finish.format('ddd h:mmaaa')}
               </div>
             )}
           </div>

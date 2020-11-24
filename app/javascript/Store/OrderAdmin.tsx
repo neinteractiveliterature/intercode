@@ -46,7 +46,7 @@ const SubmittedAtCell = ({ value }: SubmittedAtCellProps) => {
     return <></>;
   }
 
-  return <>{moment(value).tz(timezoneName).format('MMM D, YYYY h:mma')}</>;
+  return <>{moment(value).tz(timezoneName).format('MMM D, YYYY h:mmaaa')}</>;
 };
 
 function getPossibleColumns(): Column<OrderType>[] {
