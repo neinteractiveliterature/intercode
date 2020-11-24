@@ -1,4 +1,3 @@
-import moment from 'moment-timezone';
 import { flatMap } from 'lodash';
 
 import ScheduleLayoutBlock from './ScheduleLayout/ScheduleLayoutBlock';
@@ -12,17 +11,15 @@ import {
 } from './ScheduleGridConfig';
 import { ScheduleGridEventFragmentFragment } from './queries.generated';
 import { timespanFromRun } from '../../TimespanUtils';
+import { timeIsOnTheHour } from '../../TimeUtils';
 
 function expandTimespanToNearestHour(timespan: FiniteTimespan) {
-  const start = moment(timespan.start).set({ minute: 0, second: 0, millisecond: 0 });
-  const finish = moment(timespan.finish);
+  const start = timespan.start.set({ minute: 0, second: 0, millisecond: 0 });
+  const finish = timeIsOnTheHour(timespan.finish)
+    ? timespan.finish.plus({ hours: 1 }).set({ minute: 0, second: 0, millisecond: 0 })
+    : timespan.finish;
 
-  if (finish.minute() > 0 || finish.second() > 0 || finish.millisecond() > 0) {
-    finish.add(1, 'hours');
-  }
-  finish.set({ minute: 0, second: 0, millisecond: 0 });
-
-  return Timespan.fromMoments(start, finish) as FiniteTimespan;
+  return Timespan.fromDateTimes(start, finish) as FiniteTimespan;
 }
 
 export type ScheduleEvent = ScheduleGridEventFragmentFragment & {
@@ -294,7 +291,7 @@ export default class Schedule {
       my_signups: [],
       my_signup_requests: [],
       room_names: [],
-      starts_at: timespan.start.toISOString(),
+      starts_at: timespan.start.toISO(),
       confirmed_signup_count: 0,
       not_counted_signup_count: 0,
       signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
@@ -309,7 +306,7 @@ export default class Schedule {
       id: fakeRunId,
       title,
       displayTitle,
-      length_seconds: timespan.getLength('second'),
+      length_seconds: timespan.getLength('second').seconds,
       can_play_concurrently: false,
       fake: true,
       event_category: {

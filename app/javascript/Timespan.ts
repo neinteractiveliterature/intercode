@@ -61,6 +61,14 @@ class Timespan {
       throw new Error('Start cannot be after finish');
     }
 
+    if (start && !start.isValid) {
+      throw new Error('Start time is invalid');
+    }
+
+    if (finish && !finish.isValid) {
+      throw new Error('Finish time is invalid');
+    }
+
     this.start = start;
     this.finish = finish;
   }

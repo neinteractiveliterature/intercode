@@ -26,7 +26,7 @@ function TimeblockPreferenceItemDisplay({
   value,
 }: TimeblockPreferenceItemDisplayProps) {
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
-    const key = column.dayStart.format('dddd');
+    const key = column.dayStart.toFormat('cccc');
     if (cell == null) {
       return <td key={key} className="table-secondary" />;
     }

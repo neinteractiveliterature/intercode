@@ -33,7 +33,7 @@ function renderFirstRunTime(event: EventType, timezoneName: string) {
     return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
         const runStart = moment.tz(run.starts_at, timezoneName);
-        const dayName = runStart.format('dddd');
+        const dayName = runStart.format('cccc');
         if (previousDayName === dayName) {
           return runStart.format('h:mmaaa');
         }

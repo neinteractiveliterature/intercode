@@ -50,7 +50,7 @@ class ScheduleLayoutBlock {
 
     const sortedRunIds = sortBy(
       runIds,
-      (runId) => schedule.getRunTimespan(runId)?.start.toDate().getTime() ?? 0,
+      (runId) => schedule.getRunTimespan(runId)?.start.toMillis() ?? 0,
     );
     sortedRunIds.forEach((runId) => {
       const runTimespan = schedule.getRunTimespan(runId);
@@ -110,7 +110,7 @@ class ScheduleLayoutBlock {
       if (!aTimespan || !bTimespan) {
         return 0;
       }
-      const timeDiff = aTimespan.start.diff(bTimespan.start);
+      const timeDiff = aTimespan.start.diff(bTimespan.start, 'millisecond').milliseconds;
 
       if (timeDiff === 0) {
         // use number of overlapping runs as a tiebreaker (more runs first)
@@ -135,11 +135,11 @@ class ScheduleLayoutBlock {
 
         const eventAOverlappingRunCount = this.getRunCountInTimespan(
           eventA,
-          bTimespan.expand(1, 'hour'),
+          bTimespan.expand({ hours: 1 }),
         );
         const eventBOverlappingRunCount = this.getRunCountInTimespan(
           eventB,
-          aTimespan.expand(1, 'hour'),
+          aTimespan.expand({ hours: 1 }),
         );
         const runCountDiff = eventBOverlappingRunCount - eventAOverlappingRunCount;
 
@@ -153,7 +153,7 @@ class ScheduleLayoutBlock {
 
           if (titleDiff === 0) {
             // as a tiebreaker, sort longer events first
-            const lengthDiff = bTimespan.finish.diff(aTimespan.finish);
+            const lengthDiff = bTimespan.finish.diff(aTimespan.finish, 'millisecond').milliseconds;
 
             return lengthDiff;
           }
@@ -170,15 +170,18 @@ class ScheduleLayoutBlock {
 
   computeLayout(): ScheduleLayoutResult {
     const columnReservations = new ColumnReservationSet();
-    const myLength = this.timespan.getLength('millisecond');
+    const myLength = this.timespan.getLength('millisecond').milliseconds;
     let maxColumns = 0;
 
     const runDimensions = this.getTimeSortedRunIds().map((runId) => {
       const fullTimespan = this.schedule.getRunTimespan(runId)!;
-      const maxDisplayLength = Math.max(MIN_LENGTH, fullTimespan.getLength('millisecond'));
-      const displayTimespan = Timespan.finiteFromMoments(
+      const maxDisplayLength = Math.max(
+        MIN_LENGTH,
+        fullTimespan.getLength('millisecond').milliseconds,
+      );
+      const displayTimespan = Timespan.finiteFromDateTimes(
         fullTimespan.start,
-        fullTimespan.start.clone().add(maxDisplayLength),
+        fullTimespan.start.plus({ milliseconds: maxDisplayLength }),
       ).intersection(this.timespan);
 
       columnReservations.expire(displayTimespan.start);
@@ -194,8 +197,11 @@ class ScheduleLayoutBlock {
         timespan: displayTimespan,
         fullTimespan,
         laneIndex,
-        timeAxisStartPercent: (displayTimespan.start.diff(this.timespan.start) / myLength) * 100.0,
-        timeAxisSizePercent: (displayTimespan.getLength('millisecond') / myLength) * 100.0,
+        timeAxisStartPercent:
+          (displayTimespan.start.diff(this.timespan.start, 'millisecond').milliseconds / myLength) *
+          100.0,
+        timeAxisSizePercent:
+          (displayTimespan.getLength('millisecond').milliseconds / myLength) * 100.0,
       };
     });
 

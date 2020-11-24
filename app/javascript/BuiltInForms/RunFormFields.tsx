@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useContext } from 'react';
 import * as React from 'react';
-import moment, { Moment } from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
+import { DateTime } from 'luxon';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
@@ -43,7 +43,9 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 
   const startsAt = useMemo(
     () =>
-      !error && !loading && run && run.starts_at ? moment(run.starts_at).tz(timezoneName) : null,
+      !error && !loading && run && run.starts_at
+        ? DateTime.fromISO(run.starts_at, { zone: timezoneName })
+        : null,
     [timezoneName, error, loading, run],
   );
   const conventionTimespan = useMemo(
@@ -57,17 +59,17 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         : null,
     [conventionTimespan, timezoneName],
   );
-  const [day, setDay] = useState<Moment | undefined>(() =>
+  const [day, setDay] = useState<DateTime | undefined>(() =>
     startsAt && conventionDayTimespans
       ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt))?.start
       : undefined,
   );
   const [hour, setHour] = useState<number | undefined>(() =>
-    startsAt && day ? startsAt.diff(day.clone().startOf('day'), 'hours') : undefined,
+    startsAt && day ? startsAt.diff(day.startOf('day'), 'hours').hours : undefined,
   );
   const [minute, setMinute] = useState<number | undefined>(() =>
     startsAt && hour != null && day != null
-      ? startsAt.diff(day.clone().startOf('day').add(hour, 'hours'), 'minutes')
+      ? startsAt.diff(day.startOf('day').plus({ hour }), 'minutes').minutes
       : undefined,
   );
   const startTime = useMemo(() => {
@@ -75,14 +77,14 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       return null;
     }
 
-    return day.clone().set({
+    return day.set({
       hour,
       minute,
     });
   }, [day, hour, minute]);
 
   useEffect(() => {
-    onChange((prevRun) => ({ ...prevRun, starts_at: startTime ? startTime.toISOString() : null }));
+    onChange((prevRun) => ({ ...prevRun, starts_at: startTime ? startTime.toISO() : null }));
   }, [onChange, startTime]);
 
   if (loading) {
@@ -115,8 +117,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       <fieldset className="form-group">
         <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
-          {startTime &&
-            `- ${startTime.clone().add(event.length_seconds, 'seconds').format('H:mm')}`}
+          {startTime && `- ${startTime.plus({ seconds: event.length_seconds }).toFormat('h:mm')}`}
         </TimeSelect>
       </fieldset>
     );

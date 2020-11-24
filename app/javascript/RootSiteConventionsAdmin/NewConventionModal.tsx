@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import moment from 'moment-timezone';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
@@ -70,7 +69,7 @@ export default LoadQueryWrapper<NewConventionModalQueryQuery, NewConventionModal
     const [convention, setConvention] = useState<CreatingConvention>(() =>
       cloneConvention
         ? { ...cloneConvention, ...DEFAULT_PROPS }
-        : { ...DEFAULT_PROPS, timezone_name: moment.tz.guess() },
+        : { ...DEFAULT_PROPS, timezone_name: DateTime.local().zoneName },
     );
     const cloneConventionTimespan = useMemo(
       () => (cloneConvention ? timespanFromConvention(cloneConvention) : null),
@@ -115,19 +114,19 @@ export default LoadQueryWrapper<NewConventionModalQueryQuery, NewConventionModal
           cloneConventionTimespan.getLength('day')
       ) {
         const newStartsAtInZone = convention.timezone_name
-          ? moment.tz(newStartsAt, convention.timezone_name)
-          : moment(newStartsAt);
+          ? DateTime.fromISO(newStartsAt, { zone: convention.timezone_name })
+          : DateTime.fromISO(newStartsAt);
         const newEndsAt = newStartsAtInZone
-          .add(cloneConventionTimespan.getLength('day'), 'day')
+          .plus({ days: cloneConventionTimespan.getLength('day').days })
           .set({
-            hour: cloneConventionTimespan.finish.hour(),
-            minute: cloneConventionTimespan.finish.minute(),
-            second: cloneConventionTimespan.finish.second(),
+            hour: cloneConventionTimespan.finish.hour,
+            minute: cloneConventionTimespan.finish.minute,
+            second: cloneConventionTimespan.finish.second,
           });
         setConvention((prevConvention) => ({
           ...prevConvention,
           starts_at: newStartsAt,
-          ends_at: newEndsAt.toISOString(),
+          ends_at: newEndsAt.toISO(),
         }));
       } else {
         setConvention((prevConvention) => ({ ...prevConvention, starts_at: newStartsAt }));

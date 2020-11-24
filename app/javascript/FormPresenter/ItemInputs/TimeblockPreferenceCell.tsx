@@ -1,5 +1,5 @@
+import { DateTime } from 'luxon';
 import { useMemo, ChangeEvent } from 'react';
-import { Moment } from 'moment-timezone';
 
 import {
   preferencesMatch,
@@ -10,14 +10,14 @@ import {
 
 export type TimeblockPreferenceCellChangeCallback = (
   newOrdinality: TimeblockPreferenceOrdinality | '',
-  hypotheticalPreference: { start: Moment; finish: Moment; label: string },
+  hypotheticalPreference: { start: DateTime; finish: DateTime; label: string },
 ) => void;
 
 export type TimeblockPreferenceCellProps = {
-  dayStart: Moment;
+  dayStart: DateTime;
   timeblock: TimeblockDefinition;
-  start: Moment;
-  finish: Moment;
+  start: DateTime;
+  finish: DateTime;
   existingPreferences: ParsedTimeblockPreference[];
   onChange: TimeblockPreferenceCellChangeCallback;
 };
@@ -56,7 +56,7 @@ function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
   const { ordinality } = existingPreference || {};
 
   return (
-    <td key={dayStart.format('dddd')}>
+    <td key={dayStart.toFormat('cccc')}>
       <select value={ordinality || ''} onChange={selectorDidChange} className="form-control">
         <option value="">Don&apos;t care</option>
         <option value="1">1st choice</option>

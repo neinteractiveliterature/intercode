@@ -4,6 +4,7 @@ import * as React from 'react';
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import useUniqueId from '../useUniqueId';
 import { FiniteTimespan } from '../Timespan';
+import { formatLCM } from '../TimeUtils';
 
 export type TimeValues = {
   hour?: number;
@@ -22,10 +23,10 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
     () => {
       let hourOffset = 0;
       const options = [];
-      while (timespan.start.clone().add(hourOffset, 'hours').isBefore(timespan.finish)) {
-        const now = timespan.start.clone().add(hourOffset, 'hours');
-        const dayDiff = now.diff(timespan.start.clone().startOf('day'), 'days');
-        let description = `${now.format('ha')}`;
+      while (timespan.start.plus({ hours: hourOffset }) < timespan.finish) {
+        const now = timespan.start.plus({ hours: hourOffset });
+        const dayDiff = Math.floor(now.diff(timespan.start.startOf('day'), 'days').days);
+        let description = `${formatLCM(now, 'haaa')}`;
         if (dayDiff > 0) {
           description += ` (+${dayDiff} ${dayDiff > 1 ? 'days' : 'day'})`;
         }
@@ -33,7 +34,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
         options.push({
           hourOffset,
           description,
-          optionValue: hourOffset + timespan.start.hour(),
+          optionValue: hourOffset + timespan.start.hour,
         });
         hourOffset += 1;
       }

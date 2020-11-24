@@ -1,9 +1,9 @@
 import { useContext, useMemo } from 'react';
-import moment from 'moment-timezone';
 import { Column, FilterProps, CellProps } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { DateTime } from 'luxon';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -142,9 +142,9 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       accessor: (signup: SignupType) =>
         ageAsOf(
           signup.user_con_profile.birth_date
-            ? moment(signup.user_con_profile.birth_date)
+            ? DateTime.fromISO(signup.user_con_profile.birth_date)
             : undefined,
-          moment(signup.run.starts_at),
+          DateTime.fromISO(signup.run.starts_at),
         ),
       disableSortBy: false,
     },

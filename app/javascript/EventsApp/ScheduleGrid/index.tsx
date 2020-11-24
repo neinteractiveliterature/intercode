@@ -1,6 +1,5 @@
 import { useContext, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
 import CategoryLegend from './CategoryLegend';
@@ -115,7 +114,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
             <ScheduleGrid timespan={timespan} />
             <div className="font-italic">
               {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
-                offsetName: DateTime.fromISO(timespan.start.toISOString())
+                offsetName: timespan.start
                   .reconfigure({
                     locale: language,
                   })

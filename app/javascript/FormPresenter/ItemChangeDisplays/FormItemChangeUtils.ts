@@ -1,6 +1,8 @@
 // @ts-expect-error
 import MD5 from 'md5.js';
 import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
+import sortBy from 'lodash/sortBy';
 
 import Timespan from '../../Timespan';
 import { FormResponseChange, UserConProfile } from '../../graphqlTypes.generated';
@@ -99,11 +101,11 @@ export function buildChangeGroups(
 
 export function getTimespanForChangeGroup(changeGroup: FormResponseChangeGroup) {
   const allTimestamps = [
-    ...changeGroup.changes.map((c) => moment(c.created_at)),
-    ...changeGroup.changes.map((c) => moment(c.updated_at)),
+    ...changeGroup.changes.map((c) => DateTime.fromISO(c.created_at)),
+    ...changeGroup.changes.map((c) => DateTime.fromISO(c.updated_at)),
   ];
 
-  allTimestamps.sort((a, b) => a.diff(b));
+  const sortedTimestamps = sortBy(allTimestamps, (timestamp) => timestamp.toMillis());
 
-  return Timespan.fromMoments(allTimestamps[0], allTimestamps[allTimestamps.length - 1]);
+  return Timespan.fromDateTimes(sortedTimestamps[0], sortedTimestamps[sortedTimestamps.length - 1]);
 }

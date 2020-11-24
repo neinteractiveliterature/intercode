@@ -125,7 +125,7 @@ function TimeblockPreferenceItemInput({
               {row.cells.map((cell, x) =>
                 cell ? (
                   <TimeblockPreferenceCell
-                    key={cell.dayStart.format('dddd')}
+                    key={cell.dayStart.toFormat('cccc')}
                     timeblock={cell.timeblock}
                     existingPreferences={preferences}
                     dayStart={cell.dayStart}
@@ -134,7 +134,7 @@ function TimeblockPreferenceItemInput({
                     onChange={preferenceDidChange}
                   />
                 ) : (
-                  <td key={columns[x].dayStart.format('dddd')} />
+                  <td key={columns[x].dayStart.toFormat('cccc')} />
                 ),
               )}
             </tr>
