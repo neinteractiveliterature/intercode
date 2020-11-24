@@ -55,7 +55,7 @@ export function describeUserPricingStructure(
       const nextValue = nextTimespan.value;
       const nextChange = moment.tz(nextTimespan.start, timezoneName);
       return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${nextChange.format(
-        'MMM DD, YYYY [at] h:mma',
+        'MMM DD, YYYY [at] h:mmaaa',
       )})`;
     }
     return formatMoney(currentValue);

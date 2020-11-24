@@ -8,7 +8,7 @@ import AppRootContext from '../AppRootContext';
 import { useMyTicketDisplayQueryQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-const dateFormat = 'dddd, MMMM D, YYYY [at] h:mma z';
+const dateFormat = 'dddd, MMMM D, YYYY [at] h:mmaaa z';
 
 export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketDisplay({ data }) {
   const { timezoneName } = useContext(AppRootContext);

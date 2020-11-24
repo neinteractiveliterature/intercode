@@ -145,7 +145,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
       <div className="d-flex card-header border-bottom-0">
         <div className="col pl-0">
           <h3>Order #{order.id}</h3>
-          <small>{submittedTime?.format('dddd, MMMM D, YYYY, h:mma')}</small>
+          <small>{submittedTime?.format('dddd, MMMM D, YYYY, h:mmaaa')}</small>
         </div>
         <div className="text-right">
           <OrderHistoryOrderStatus

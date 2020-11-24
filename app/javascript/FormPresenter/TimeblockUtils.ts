@@ -13,7 +13,7 @@ export function describeTimeblock(timeblock: TimeblockDefinition) {
   const start = moment().startOf('day').set(timeblock.start);
   const finish = moment().startOf('day').set(timeblock.finish);
 
-  return `${start.format('h:mma')} - ${finish.format('h:mma')}`;
+  return `${start.format('h:mmaaa')} - ${finish.format('h:mmaaa')}`;
 }
 
 export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | null) {

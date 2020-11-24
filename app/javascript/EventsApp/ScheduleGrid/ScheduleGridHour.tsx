@@ -13,7 +13,7 @@ function formatTime(time: Moment, timezoneName: string) {
   if (timeInZone.hour() === 12) {
     return 'Noon';
   }
-  return timeInZone.format('h:mma');
+  return timeInZone.format('h:mmaaa');
 }
 
 export type ScheduleGridHourProps = {
