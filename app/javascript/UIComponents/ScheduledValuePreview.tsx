@@ -1,5 +1,6 @@
 import { memo, ReactNode, RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { maxBy, minBy } from 'lodash';
+import minBy from 'lodash/minBy';
+import maxBy from 'lodash/maxBy';
 import { DateTime } from 'luxon';
 
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';

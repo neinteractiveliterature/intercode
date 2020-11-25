@@ -1,5 +1,4 @@
-import moment from 'moment-timezone';
-
+import { DateTime } from 'luxon';
 import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueEditor, {
@@ -20,12 +19,12 @@ describe('ScheduledValueEditor', () => {
     );
 
   test('it renders the correct values', () => {
-    const cutoff = moment();
+    const cutoff = DateTime.utc();
     const { getAllByRole, getAllByTestId } = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
-          { value: 1, start: null, finish: cutoff.toISOString() },
-          { value: 2, start: cutoff.toISOString(), finish: null },
+          { value: 1, start: null, finish: cutoff.toISO() },
+          { value: 2, start: cutoff.toISO(), finish: null },
         ],
       },
     });

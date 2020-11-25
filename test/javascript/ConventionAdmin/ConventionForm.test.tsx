@@ -1,5 +1,4 @@
-import moment from 'moment-timezone';
-
+import { DateTime } from 'luxon';
 import { act, waitFor, render, fireEvent } from '../testUtils';
 import ConventionForm, {
   ConventionFormConvention,
@@ -63,7 +62,7 @@ describe('ConventionForm', () => {
     );
 
   test('it renders the given values', () => {
-    const now = moment.tz('2019-04-18T18:34:04.283Z', 'UTC').toISOString();
+    const now = DateTime.fromISO('2019-04-18T18:34:04.283Z', { zone: 'Etc/UTC' }).toISO();
     const { getByLabelText, getByText, getMultipleChoiceInput } = renderConventionForm(
       {},
       {
