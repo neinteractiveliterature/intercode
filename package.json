@@ -194,7 +194,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react-hooks": "^3.4.2",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.1",
@@ -227,7 +227,7 @@
   "resolutions": {
     "**/**/kind-of": ">= 6.0.3",
     "**/webpack-dev-middleware": "^3.7.2",
-    "@typescript-eslint/parser": "4.8.1"
+    "@typescript-eslint/parser": "4.8.2"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
