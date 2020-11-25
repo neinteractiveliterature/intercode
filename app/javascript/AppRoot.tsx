@@ -5,7 +5,6 @@ import { Settings } from 'luxon';
 import { useAppRootQueryQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import ErrorDisplay from './ErrorDisplay';
-import NavigationBar from './NavigationBar';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
@@ -13,6 +12,11 @@ import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import i18n from './setupI18Next';
+import { lazyWithBundleHashCheck } from './checkBundleHash';
+
+const NavigationBar = lazyWithBundleHashCheck(
+  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
+);
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
