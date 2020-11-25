@@ -1,4 +1,3 @@
-import moment from 'moment-timezone';
 import sortBy from 'lodash/sortBy';
 
 import { normalizeTitle } from '../../../ValueUtils';
@@ -38,14 +37,11 @@ class ScheduleLayoutBlock {
 
   hiddenEventsFakeRunId: number | undefined;
 
-  interval: moment.Duration;
-
   constructor(id: string, timespan: FiniteTimespan, runIds: number[], schedule: Schedule) {
     this.id = id;
     this.runIds = [];
     this.timespan = timespan;
     this.hiddenEventRunIds = [];
-    this.interval = moment.duration(1, 'hour');
     this.schedule = schedule;
 
     const sortedRunIds = sortBy(

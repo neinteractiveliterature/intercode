@@ -1,10 +1,10 @@
 import { useContext, useMemo } from 'react';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { humanize } from 'inflected';
-import moment, { Moment } from 'moment-timezone';
 import { Column, CellProps, FilterProps } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { DateTime } from 'luxon';
 
 import AddAttendeeModal from './AddAttendeeModal';
 import BooleanCell from '../Tables/BooleanCell';
@@ -28,14 +28,12 @@ import {
 import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { formatLCM } from '../TimeUtils';
+import AppRootContext from '../AppRootContext';
 
 type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryQuery['convention']
 >['user_con_profiles_paginated']['entries'][0];
-
-type UserConProfilesTableFormItem = NonNullable<
-  UserConProfilesTableUserConProfilesQueryQuery['convention']
->['user_con_profile_form']['form_sections'][0]['form_items'][0];
 
 const UserConProfilesTableQueryDataContext = createQueryDataContext<
   UserConProfilesTableUserConProfilesQueryQuery
@@ -128,6 +126,7 @@ function getPossibleColumns(
   data: UserConProfilesTableUserConProfilesQueryQuery,
   t: TFunction,
   formItems: TypedFormItem[],
+  timezoneName: string,
 ): Column<UserConProfilesTableRow>[] {
   const columns: Column<UserConProfilesTableRow>[] = [
     {
@@ -249,10 +248,12 @@ function getPossibleColumns(
             ),
             id: 'ticket_updated_at',
             accessor: (userConProfile: UserConProfilesTableRow) =>
-              userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null,
+              userConProfile.ticket
+                ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName })
+                : null,
             disableSortBy: false,
-            Cell: ({ value }: { value: Moment | null }) =>
-              value ? value.format('MMM D, YYYY h:mmaaa') : null,
+            Cell: ({ value }: { value: DateTime | null }) =>
+              value ? formatLCM(value, 'MMM d, yyyy h:mmaaa') : null,
           },
         ]),
     {
@@ -308,12 +309,18 @@ export type UserConProfilesTableProps = {
 };
 
 function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTableProps) {
+  const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
   const history = useHistory();
   const getPossibleColumnsWithTranslation = useMemo(
     () => (data: UserConProfilesTableUserConProfilesQueryQuery) =>
-      getPossibleColumns(data, t, getSortedParsedFormItems(data.convention!.user_con_profile_form)),
-    [t],
+      getPossibleColumns(
+        data,
+        t,
+        getSortedParsedFormItems(data.convention!.user_con_profile_form),
+        timezoneName,
+      ),
+    [t, timezoneName],
   );
   const { tableInstance, loading, tableHeaderProps, queryData } = useReactTableWithTheWorks<
     UserConProfilesTableUserConProfilesQueryQuery,

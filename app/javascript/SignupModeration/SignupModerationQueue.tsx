@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
-import moment from 'moment-timezone';
 // @ts-expect-error
 import Pagination from 'react-js-pagination';
 import { assertNever } from 'assert-never';
+import { DateTime } from 'luxon';
 
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
@@ -20,6 +20,7 @@ import {
   useAcceptSignupRequestMutation,
   useRejectSignupRequestMutation,
 } from './mutations.generated';
+import { formatLCM } from '../TimeUtils';
 
 function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
@@ -192,9 +193,10 @@ function SignupModerationQueue() {
               </td>
               <td>
                 <small>
-                  {moment
-                    .tz(signupRequest.created_at, timezoneName)
-                    .format('ddd, MMM D, YYYY [at] h:mmaaa')}
+                  {formatLCM(
+                    DateTime.fromISO(signupRequest.created_at, { zone: timezoneName }),
+                    "ccc, MMM d, yyyy 'at' h:mmaaa",
+                  )}
                 </small>
               </td>
               <td className="text-right">

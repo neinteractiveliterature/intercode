@@ -3,12 +3,11 @@ import { humanize, titleize } from 'inflected';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
 import { useParams } from 'react-router-dom';
-import moment from 'moment-timezone';
 
 import usePageTitle from '../usePageTitle';
-import { timezoneNameForConvention } from '../TimeUtils';
 import { UserAdminQueryQuery, useUserAdminQueryQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { timespanFromConvention } from '../TimespanUtils';
 
 function sortByConventionDate(profiles: UserAdminQueryQuery['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -69,17 +68,17 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
                     {userConProfiles.map((profile) => (
                       <li key={profile.id}>
                         <a href={buildProfileUrl(profile)}>
-                          {profile.convention.name}{' '}
-                          <small>
-                            (
-                            {moment
-                              .tz(
-                                profile.convention.starts_at,
-                                timezoneNameForConvention(profile.convention),
-                              )
-                              .format('YYYY')}
-                            )
-                          </small>
+                          {profile.convention.name}
+                          {profile.convention.starts_at && (
+                            <>
+                              {' '}
+                              <small>
+                                (
+                                {timespanFromConvention(profile.convention).start?.toFormat('yyyy')}
+                                )
+                              </small>
+                            </>
+                          )}
                         </a>
                         {profile.staff_positions.length > 0
                           ? ` (${profile.staff_positions
