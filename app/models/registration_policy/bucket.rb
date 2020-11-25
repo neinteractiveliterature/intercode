@@ -83,7 +83,7 @@ class RegistrationPolicy::Bucket
   end
 
   def ==(other)
-    attributes == other.attributes
+    attributes == other&.attributes
   end
 
   delegate :hash, to: :attributes
