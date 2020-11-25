@@ -1,10 +1,10 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-import moment from 'moment-timezone';
 // @ts-ignore
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
-
 import { SortingRule } from 'react-table';
+import { DateTime } from 'luxon';
+
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
@@ -16,6 +16,7 @@ import Gravatar from '../../Gravatar';
 import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
 import { EventListEventsQueryQuery } from './queries.generated';
 import { notEmpty } from '../../ValueUtils';
+import { formatLCM } from '../../TimeUtils';
 
 type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
@@ -24,26 +25,26 @@ function renderFirstRunTime(event: EventType, timezoneName: string) {
   if (event.runs.length > 0) {
     const sortedRuns = getSortedRuns(event);
     if (sortedRuns.length > 4) {
-      const firstRunStart = moment.tz(sortedRuns[0].starts_at, timezoneName);
-      return `${sortedRuns.length} runs starting ${firstRunStart.format('dddd h:mmaaa')}`;
+      const firstRunStart = DateTime.fromISO(sortedRuns[0].starts_at, { zone: timezoneName });
+      return `${sortedRuns.length} runs starting ${formatLCM(firstRunStart, 'cccc h:mmaaa')}`;
     }
 
     let previousDayName: string;
 
     return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
-        const runStart = moment.tz(run.starts_at, timezoneName);
-        const dayName = runStart.format('cccc');
+        const runStart = DateTime.fromISO(run.starts_at, { zone: timezoneName });
+        const dayName = runStart.toFormat('cccc');
         if (previousDayName === dayName) {
-          return runStart.format('h:mmaaa');
+          return formatLCM(runStart, 'h:mmaaa');
         }
 
         previousDayName = dayName;
         return (
-          <Fragment key={runStart.toISOString()}>
-            <span className="d-lg-none text-nowrap">{runStart.format('ddd h:mmaaa')}</span>
+          <Fragment key={runStart.toISO()}>
+            <span className="d-lg-none text-nowrap">{formatLCM(runStart, 'ccc h:mmaaa')}</span>
             <span className="d-none d-lg-inline text-nowrap">
-              {runStart.format('dddd h:mmaaa')}
+              {formatLCM(runStart, 'cccc h:mmaaa')}
             </span>
           </Fragment>
         );
@@ -185,14 +186,19 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
           </div>
         </div>
 
-        {sortBy?.some((sort) => sort.id === 'created_at') ? (
-          <p className="m-0">
-            <strong>
-              Added{' '}
-              {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mmaaa')}
-            </strong>
-          </p>
-        ) : null}
+        {sortBy?.some((sort) => sort.id === 'created_at')
+          ? event.created_at && (
+              <p className="m-0">
+                <strong>
+                  Added{' '}
+                  {formatLCM(
+                    DateTime.fromISO(event.created_at, { zone: timezoneName }),
+                    "cccc, MMMM d, yyyy 'at' h:mmaaa",
+                  )}
+                </strong>
+              </p>
+            )
+          : null}
       </div>
 
       <div

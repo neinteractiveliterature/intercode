@@ -1,14 +1,15 @@
 import { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { useMyTicketDisplayQueryQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
+import { formatLCM } from '../TimeUtils';
 
-const dateFormat = 'dddd, MMMM D, YYYY [at] h:mmaaa z';
+const dateFormat = "cccc, MMMM d, yyyy 'at' h:mmaaa ZZZ";
 
 export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketDisplay({ data }) {
   const { timezoneName } = useContext(AppRootContext);
@@ -58,11 +59,11 @@ export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketD
             )}
             <dt className="col-md-3">Created</dt>
             <dd className="col-md-9">
-              {moment.tz(ticket.created_at, timezoneName).format(dateFormat)}
+              {formatLCM(DateTime.fromISO(ticket.created_at, { zone: timezoneName }), dateFormat)}
             </dd>
             <dt className="col-md-3">Last updated</dt>
             <dd className="col-md-9">
-              {moment.tz(ticket.updated_at, timezoneName).format(dateFormat)}
+              {formatLCM(DateTime.fromISO(ticket.updated_at, { zone: timezoneName }), dateFormat)}
             </dd>
           </dl>
         </div>

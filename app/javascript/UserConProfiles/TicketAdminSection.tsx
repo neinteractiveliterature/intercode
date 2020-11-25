@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { humanize } from 'inflected';
-import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line no-restricted-imports
 import { useQuery } from '@apollo/client';
+import { DateTime } from 'luxon';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
@@ -25,6 +25,7 @@ import {
   TicketAdminWithTicketAbilityQueryQuery,
   TicketAdminWithoutTicketAbilityQueryQuery,
 } from './queries.generated';
+import { formatLCM } from '../TimeUtils';
 
 type TicketAdminControlsProps = {
   convention: {
@@ -265,12 +266,18 @@ function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionPr
 
         <dt className="col-md-3">Created</dt>
         <dd className="col-md-9">
-          {moment.tz(ticket.created_at, timezoneName).format('MMMM D, YYYY h:mmaaa z')}
+          {formatLCM(
+            DateTime.fromISO(ticket.created_at, { zone: timezoneName }),
+            'MMMM d, yyyy h:mmaaa ZZZZ',
+          )}
         </dd>
 
         <dt className="col-md-3">Last updated</dt>
         <dd className="col-md-9">
-          {moment.tz(ticket.updated_at, timezoneName).format('MMMM D, YYYY h:mmaaa z')}
+          {formatLCM(
+            DateTime.fromISO(ticket.updated_at, { zone: timezoneName }),
+            'MMMM d, yyyy h:mmaaa ZZZZ',
+          )}
         </dd>
       </dl>
     );

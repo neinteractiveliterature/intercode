@@ -1,9 +1,10 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';
 import { findCurrentValue, findCurrentTimespanIndex } from '../ScheduledValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { Money, PricingStructure, ScheduledMoneyValue } from '../graphqlTypes.generated';
+import { formatLCM } from '../TimeUtils';
 
 export function describeAdminPricingStructure(
   pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null,
@@ -51,11 +52,12 @@ export function describeUserPricingStructure(
 
     const currentValue = scheduledValue.timespans[currentTimespanIndex].value;
     const nextTimespan = scheduledValue.timespans[currentTimespanIndex + 1];
-    if (nextTimespan) {
+    if (nextTimespan && nextTimespan.start) {
       const nextValue = nextTimespan.value;
-      const nextChange = moment.tz(nextTimespan.start, timezoneName);
-      return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${nextChange.format(
-        'MMM DD, YYYY [at] h:mmaaa',
+      const nextChange = DateTime.fromISO(nextTimespan.start, { zone: timezoneName });
+      return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${formatLCM(
+        nextChange,
+        "MMM d, yyyy 'at' h:mmaaa",
       )})`;
     }
     return formatMoney(currentValue);

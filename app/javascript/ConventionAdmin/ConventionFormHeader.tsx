@@ -1,5 +1,5 @@
 import { memo, Fragment, useMemo } from 'react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import { findCurrentValue } from '../ScheduledValueUtils';
 import {
@@ -58,23 +58,37 @@ function describeConventionTiming(
     return 'is canceled';
   }
 
-  const now = moment.tz({}, timezoneName).startOf('day');
-  const conventionStart = moment.tz(startsAt, timezoneName).startOf('day');
-  const conventionEnd = moment.tz(endsAt, timezoneName).startOf('day');
+  const now = DateTime.fromObject({ zone: timezoneName }).startOf('day');
+  const conventionStart = startsAt
+    ? DateTime.fromISO(startsAt, { zone: timezoneName }).startOf('day')
+    : undefined;
+  const conventionEnd = endsAt
+    ? DateTime.fromISO(endsAt, { zone: timezoneName }).startOf('day')
+    : undefined;
 
-  if (now.isBefore(conventionStart)) {
-    return `starts in ${pluralizeWithCount('day', conventionStart.diff(now, 'day'))}`;
+  if (!conventionStart || !conventionEnd) {
+    return '';
   }
 
-  if (now.isBefore(conventionEnd)) {
-    return `ends in ${pluralizeWithCount('day', conventionEnd.diff(now, 'day'))}`;
+  if (now < conventionStart) {
+    return `starts in ${pluralizeWithCount(
+      'day',
+      Math.ceil(conventionStart.diff(now, 'day').days),
+    )}`;
   }
 
-  if (conventionEnd.isBefore(now)) {
-    return `ended ${pluralizeWithCount('day', now.diff(conventionEnd, 'day'))} ago`;
+  if (now < conventionEnd) {
+    return `ends in ${pluralizeWithCount('day', Math.ceil(conventionEnd.diff(now, 'day').days))}`;
   }
 
-  const isMultiDay = conventionStart.isBefore(conventionEnd);
+  if (conventionEnd < now) {
+    return `ended ${pluralizeWithCount(
+      'day',
+      Math.floor(now.diff(conventionEnd, 'day').days),
+    )} ago`;
+  }
+
+  const isMultiDay = conventionStart < conventionEnd;
   return `${isMultiDay ? 'ends' : 'is'} today`;
 }
 

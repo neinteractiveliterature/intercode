@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useWaitlistMailingListsQueryQuery } from './queries.generated';
+import { formatLCM } from '../TimeUtils';
 
 export default LoadQueryWrapper(useWaitlistMailingListsQueryQuery, function WaitlistMailingLists({
   data,
@@ -19,7 +20,10 @@ export default LoadQueryWrapper(useWaitlistMailingListsQueryQuery, function Wait
       <h1 className="mb-4">Mail to waitlists</h1>
 
       {data.convention.mailing_lists.waitlists.map((waitlistResult) => {
-        const runTime = moment.tz(waitlistResult.run.starts_at, timezoneName).format('ddd h:mmaaa');
+        const runTime = formatLCM(
+          DateTime.fromISO(waitlistResult.run.starts_at, { zone: timezoneName }),
+          'ccc h:mmaaa',
+        );
 
         return (
           <div className="card my-4" key={waitlistResult.run.id}>

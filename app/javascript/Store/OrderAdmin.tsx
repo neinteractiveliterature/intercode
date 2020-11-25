@@ -1,6 +1,6 @@
 import { useState, useContext, useMemo } from 'react';
-import moment from 'moment-timezone';
 import { Column, FilterProps } from 'react-table';
+import { DateTime } from 'luxon';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -16,6 +16,7 @@ import NewOrderModal from './NewOrderModal';
 import AppRootContext from '../AppRootContext';
 import { AdminOrdersQueryQuery, useAdminOrdersQueryQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { formatLCM } from '../TimeUtils';
 
 type OrderType = AdminOrdersQueryQuery['convention']['orders_paginated']['entries'][0];
 
@@ -46,7 +47,7 @@ const SubmittedAtCell = ({ value }: SubmittedAtCellProps) => {
     return <></>;
   }
 
-  return <>{moment(value).tz(timezoneName).format('MMM D, YYYY h:mmaaa')}</>;
+  return <>{formatLCM(DateTime.fromISO(value, { zone: timezoneName }), 'MMM d, yyyy h:mmaaa')}</>;
 };
 
 function getPossibleColumns(): Column<OrderType>[] {

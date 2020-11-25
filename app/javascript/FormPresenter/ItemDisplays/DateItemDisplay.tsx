@@ -1,9 +1,11 @@
 import { useMemo, useContext } from 'react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
+
 import AppRootContext from '../../AppRootContext';
+import { formatLCM } from '../../TimeUtils';
 
 export function describeDate(value: string, timezoneName: string) {
-  return moment.tz(value, timezoneName).format('dddd, MMMM D, YYYY');
+  return formatLCM(DateTime.fromISO(value, { zone: timezoneName }), 'cccc, MMMM d, yyyy');
 }
 
 export type DateItemDisplayProps = {

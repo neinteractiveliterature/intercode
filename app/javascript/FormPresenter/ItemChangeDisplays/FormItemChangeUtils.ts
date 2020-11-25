@@ -1,6 +1,5 @@
 // @ts-expect-error
 import MD5 from 'md5.js';
-import moment from 'moment-timezone';
 import { DateTime } from 'luxon';
 import sortBy from 'lodash/sortBy';
 
@@ -82,7 +81,10 @@ export function buildChangeGroups(
         lastChangeGroup.length > 0 ? lastChangeGroup[lastChangeGroup.length - 1] : null;
       if (
         lastChange &&
-        (moment(lastChange.created_at).diff(change.created_at, 'minutes') >= 60 ||
+        (DateTime.fromISO(lastChange.created_at).diff(
+          DateTime.fromISO(change.created_at),
+          'minutes',
+        ).minutes >= 60 ||
           change.user_con_profile.id !== lastChange.user_con_profile.id)
       ) {
         return [...workingSet, [change]];

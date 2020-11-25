@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import type { EditingTimespan } from './ScheduledValueEditor';
 
@@ -60,7 +60,9 @@ function ScheduledValueTimespanRow<ValueType>({
       <td className="w-75">
         <div className="d-flex flex-row align-items-center justify-content-stretch">
           {timespan.start
-            ? `from ${moment.tz(timespan.start, timezone).format('L LT z')}`
+            ? `from ${DateTime.fromISO(timespan.start, { zone: timezone }).toLocaleString(
+                DateTime.DATETIME_FULL,
+              )}`
             : 'anytime'}
           &nbsp;
           {isLastTimespan ? (

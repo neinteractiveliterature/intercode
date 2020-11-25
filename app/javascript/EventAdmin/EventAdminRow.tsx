@@ -1,5 +1,4 @@
 import { useState, useMemo, useContext } from 'react';
-import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { Duration } from 'luxon';
 
@@ -14,6 +13,7 @@ import {
 } from './queries.generated';
 import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 import { timespanFromRun } from '../TimespanUtils';
+import getSortedRuns from '../EventsApp/EventList/getSortedRuns';
 
 export type EventAdminRowProps = {
   event: EventFieldsFragment;
@@ -76,9 +76,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
 
   const renderRuns = () => {
     if (expanded || event.runs.length <= 2) {
-      const sortedRuns = [...event.runs].sort((a, b) =>
-        moment(a.starts_at).diff(moment(b.starts_at)),
-      );
+      const sortedRuns = getSortedRuns(event);
 
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
