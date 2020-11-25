@@ -1,6 +1,5 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
-import moment from 'moment-timezone';
 import { Settings } from 'luxon';
 
 import { useAppRootQueryQuery } from './appRootQueries.generated';
@@ -113,13 +112,6 @@ function AppRoot() {
     if (appRootContextValue?.language) {
       i18n.changeLanguage(appRootContextValue.language);
       Settings.defaultLocale = appRootContextValue.language;
-
-      if (appRootContextValue.language === 'es') {
-        // @ts-expect-error
-        import('moment/locale/es').then(() => moment.locale('es'));
-      } else {
-        moment.locale('en');
-      }
     }
   }, [appRootContextValue]);
 
