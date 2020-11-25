@@ -34,17 +34,17 @@ const MIN_SUPPORTED_VERSION = {
   ...Object.keys(IOS_WEBVIEW_APP_HOSTS).reduce(
     (iosVersions, browserName) => ({
       ...iosVersions,
-      [browserName]: 11,
+      [browserName]: 12,
     }),
     {},
   ),
-  chrome: 61,
+  chrome: 63,
   firefox: 60,
-  safari: 11,
-  ios: 11,
-  'ios-webview': 11,
-  opera: 48,
-  edge: 17,
+  safari: 12,
+  ios: 12,
+  'ios-webview': 12,
+  opera: 50,
+  edge: 18,
 };
 
 const SUPPORTED_BROWSERS = Object.getOwnPropertyNames(MIN_SUPPORTED_VERSION);
