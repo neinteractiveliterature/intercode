@@ -2,8 +2,6 @@ import { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
 import * as React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import { DndProvider } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
@@ -79,32 +77,30 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
     return (
       <React.StrictMode>
         <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
-          <DndProvider options={HTML5toTouch}>
-            <LazyStripeContext.Provider
-              value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
-            >
-              <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-                <MapboxContext.Provider value={mapboxContextValue}>
-                  <ApolloProvider client={apolloClient}>
-                    <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                      <>
-                        {!unauthenticatedError && (
-                          <Suspense fallback={<PageLoadingIndicator visible />}>
-                            <AlertProvider>
-                              <ErrorBoundary placement="replace" errorType="plain">
-                                <WrappedComponent {...((otherProps as unknown) as P)} />
-                              </ErrorBoundary>
-                            </AlertProvider>
-                          </Suspense>
-                        )}
-                        <AuthenticationModal />
-                      </>
-                    </AuthenticationModalContext.Provider>
-                  </ApolloProvider>
-                </MapboxContext.Provider>
-              </AuthenticityTokensContext.Provider>
-            </LazyStripeContext.Provider>
-          </DndProvider>
+          <LazyStripeContext.Provider
+            value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
+          >
+            <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+              <MapboxContext.Provider value={mapboxContextValue}>
+                <ApolloProvider client={apolloClient}>
+                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                    <>
+                      {!unauthenticatedError && (
+                        <Suspense fallback={<PageLoadingIndicator visible />}>
+                          <AlertProvider>
+                            <ErrorBoundary placement="replace" errorType="plain">
+                              <WrappedComponent {...((otherProps as unknown) as P)} />
+                            </ErrorBoundary>
+                          </AlertProvider>
+                        </Suspense>
+                      )}
+                      <AuthenticationModal />
+                    </>
+                  </AuthenticationModalContext.Provider>
+                </ApolloProvider>
+              </MapboxContext.Provider>
+            </AuthenticityTokensContext.Provider>
+          </LazyStripeContext.Provider>
         </BrowserRouter>
       </React.StrictMode>
     );
