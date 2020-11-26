@@ -9,7 +9,7 @@ const baseConfig = {
     '@babel/preset-typescript',
   ],
   plugins: [
-    'lodash',
+    // 'lodash',
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-proposal-object-rest-spread',
     '@babel/plugin-syntax-dynamic-import',
@@ -23,7 +23,7 @@ const browserConfig = {
       '@babel/preset-env',
       {
         corejs: 3,
-        useBuiltIns: 'usage',
+        useBuiltIns: 'entry',
         modules: false,
       },
     ],
