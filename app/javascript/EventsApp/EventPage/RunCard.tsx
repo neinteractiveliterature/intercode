@@ -195,7 +195,7 @@ function RunCard({
 
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
-              {formatLCM(runTimespan.start, 'ddd h:mmaaa')}-
+              {formatLCM(runTimespan.start, 'ccc h:mmaaa')}-
               {formatLCM(runTimespan.finish, 'h:mmaaa')}
             </div>
 

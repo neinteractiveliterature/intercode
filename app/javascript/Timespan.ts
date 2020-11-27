@@ -244,22 +244,27 @@ class Timespan {
 
     const stepDuration = Duration.fromObject({ [unit]: duration ?? 1 });
     const timeHops = thisTimespan.getTimeHopsWithin(timezoneName, { unit, offset, duration });
+    const expandStart = timeHops.length > 0 && timeHops[0] > thisTimespan.start;
     return timeHops
       .map((timeHop, i) => {
+        const effectiveStart = i === 0 && expandStart ? thisTimespan.start : timeHop;
         if (i < timeHops.length - 1) {
-          return Timespan.finiteFromDateTimes(timeHop, timeHops[i + 1]).intersection(thisTimespan);
+          return Timespan.finiteFromDateTimes(effectiveStart, timeHops[i + 1]).intersection(
+            thisTimespan,
+          );
         }
 
         if (offset) {
           return Timespan.finiteFromDateTimes(
-            timeHop,
+            effectiveStart,
             timeHop.minus(offset).plus(stepDuration).plus(offset),
           ).intersection(thisTimespan);
         }
 
-        return Timespan.finiteFromDateTimes(timeHop, timeHop.plus(stepDuration)).intersection(
-          thisTimespan,
-        );
+        return Timespan.finiteFromDateTimes(
+          effectiveStart,
+          timeHop.plus(stepDuration),
+        ).intersection(thisTimespan);
       })
       .filter(notEmpty)
       .map((timespan) => timespan.tz(timezoneName));
