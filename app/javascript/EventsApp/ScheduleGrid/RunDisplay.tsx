@@ -118,7 +118,7 @@ const RunDisplay = memo(
             {!event.fake && renderAvailabilityBar()}
             {runDimensions.fullTimespan.start < runDimensions.timespan.start && (
               <div className="schedule-grid-event-truncation-label truncation-label-start">
-                starts {formatLCM(runDimensions.fullTimespan.start, 'ddd h:mmaaa')}
+                starts {formatLCM(runDimensions.fullTimespan.start, 'ccc h:mmaaa')}
               </div>
             )}
             <div className="schedule-grid-event-content-main">
@@ -127,7 +127,7 @@ const RunDisplay = memo(
             </div>
             {runDimensions.fullTimespan.finish > runDimensions.timespan.finish && (
               <div className="schedule-grid-event-truncation-label truncation-label-finish">
-                ends {formatLCM(runDimensions.fullTimespan.finish, 'ddd h:mmaaa')}
+                ends {formatLCM(runDimensions.fullTimespan.finish, 'ccc h:mmaaa')}
               </div>
             )}
           </div>

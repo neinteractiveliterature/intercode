@@ -30,7 +30,7 @@ describe('ConventionDaySelect', () => {
   test('it renders an option for each convention day', () => {
     const { getAllByRole } = renderConventionDaySelect();
     expect(getAllByRole('radio').map((input: HTMLInputElement) => input.value)).toEqual([
-      '2017-01-01T06:00:00.000+00:00',
+      '2017-01-01T00:00:00.000+00:00',
       '2017-01-02T06:00:00.000+00:00',
       '2017-01-03T06:00:00.000+00:00',
     ]);
