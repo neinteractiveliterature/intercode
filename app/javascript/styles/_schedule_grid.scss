@@ -110,6 +110,9 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
   background-color: rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
 }
 
 .schedule-grid-row-header {

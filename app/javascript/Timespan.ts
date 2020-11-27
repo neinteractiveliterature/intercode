@@ -233,21 +233,25 @@ class Timespan {
     }
 
     const timeHops = thisTimespan.getTimeHopsWithin(timezoneName, { unit, offset, duration });
+    const expandStart = timeHops.length > 0 && timeHops[0].isAfter(thisTimespan.start);
     return timeHops
       .map((timeHop, i) => {
+        const effectiveStart = i === 0 && expandStart ? thisTimespan.start : timeHop;
         if (i < timeHops.length - 1) {
-          return Timespan.finiteFromMoments(timeHop, timeHops[i + 1]).intersection(thisTimespan);
+          return Timespan.finiteFromMoments(effectiveStart, timeHops[i + 1]).intersection(
+            thisTimespan,
+          );
         }
 
         if (offset) {
           return Timespan.finiteFromMoments(
-            timeHop,
+            effectiveStart,
             timeHop.clone().subtract(offset).add(duration!, unit).add(offset),
           ).intersection(thisTimespan);
         }
 
         return Timespan.finiteFromMoments(
-          timeHop,
+          effectiveStart,
           timeHop.clone().add(duration!, unit),
         ).intersection(thisTimespan);
       })
