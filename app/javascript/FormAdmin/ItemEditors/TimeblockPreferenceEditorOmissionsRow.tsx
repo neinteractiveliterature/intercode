@@ -10,10 +10,9 @@ import { FormEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TimeblockPreferenceFormItem } from '../FormItemUtils';
 import { notEmpty } from '../../ValueUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
-export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<
-  TimeblockPreferenceFormItem
-> & {
+export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<TimeblockPreferenceFormItem> & {
   timeblock: TimeblockDefinition;
 };
 function TimeblockPreferenceEditorOmissionsRow({
@@ -22,6 +21,7 @@ function TimeblockPreferenceEditorOmissionsRow({
   timeblock,
 }: TimeblockPreferenceEditorOmissionsRowProps) {
   const { convention } = useContext(FormEditorContext);
+  const format = useAppDateTimeFormat();
 
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
 
@@ -75,7 +75,7 @@ function TimeblockPreferenceEditorOmissionsRow({
           const timespan = Timespan.fromDateTimes(start, finish);
 
           return {
-            label: dayStart.toFormat('cccc'),
+            label: format(dayStart, 'longWeekday'),
             value: dayStart.toISODate(),
             disabled: !timespan.overlapsTimespan(conventionTimespan),
           };

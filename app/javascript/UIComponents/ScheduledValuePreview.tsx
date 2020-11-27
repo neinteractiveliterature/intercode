@@ -8,7 +8,7 @@ import { notEmpty } from '../ValueUtils';
 import { findTimespanAt, findValueAt } from '../ScheduledValueUtils';
 import Tooltip from './Tooltip';
 import { useIntercodePopper } from './PopperUtils';
-import { formatLCM } from '../TimeUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 function dateTimeIfValid(value: string | undefined, timezoneName: string) {
   if (value) {
@@ -35,6 +35,7 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
   getDescriptionForValue,
 }: ScheduledValuePreviewTooltipContentProps<ValueType>) {
   const value = useMemo(() => findValueAt(scheduledValue, date), [scheduledValue, date]);
+  const format = useAppDateTimeFormat();
 
   const nextValue = useMemo(() => {
     const tomorrow = date.plus({ days: 1 });
@@ -50,13 +51,15 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
     <>
       <strong>{date.toLocaleString(DateTime.DATE_FULL)}</strong>
       <br />
-      {value !== nextValue && nextChange && <em>Before {formatLCM(nextChange, 'h:mmaaa ZZZZ')}</em>}
+      {value !== nextValue && nextChange && (
+        <em>Before {format(nextChange, 'shortDateTimeWithZone')}</em>
+      )}
       <br />
       {getDescriptionForValue(value)}
       {value !== nextValue && nextChange && (
         <>
           <hr className="my-2 border-white" />
-          <em>Starting at {formatLCM(nextChange, 'h:mmaaa ZZZZ')}</em>
+          <em>Starting at {format(nextChange, 'shortDateTimeWithZone')}</em>
           <br />
           {getDescriptionForValue(nextValue)}
         </>
@@ -65,9 +68,9 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
   );
 }
 
-type ScheduledValuePreviewDateCellProps<ValueType> = ScheduledValuePreviewTooltipContentProps<
+type ScheduledValuePreviewDateCellProps<
   ValueType
-> & {
+> = ScheduledValuePreviewTooltipContentProps<ValueType> & {
   focusDate: (date: DateTime) => void;
   blurDate: (date: DateTime) => void;
   dateElementMapRef: RefObject<Map<number, HTMLElement>>;
@@ -133,6 +136,8 @@ function ScheduledValuePreviewCalendar<ValueType>({
   blurDate,
   dateElementMapRef,
 }: ScheduledValuePreviewCalendarProps<ValueType>) {
+  const format = useAppDateTimeFormat();
+
   const timespanFinishes = useMemo(
     () => scheduledValue.timespans.map((timespan) => timespan.finish).filter(notEmpty),
     [scheduledValue.timespans],
@@ -213,7 +218,7 @@ function ScheduledValuePreviewCalendar<ValueType>({
         <thead>
           <tr className="border-bottom border-1">
             <th colSpan={7} className="text-center">
-              {startOfMonth.toFormat('MMMM yyyy')}
+              {format(startOfMonth, 'longMonthYear')}
             </th>
           </tr>
         </thead>

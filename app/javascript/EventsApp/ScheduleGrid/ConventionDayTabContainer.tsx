@@ -7,6 +7,7 @@ import RefreshButton from './RefreshButton';
 import { ScheduleGridCombinedQuery } from './queries';
 import AppRootContext from '../../AppRootContext';
 import { FiniteTimespan } from '../../Timespan';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 type ConventionDayTabProps = {
   basename: string;
@@ -16,6 +17,7 @@ type ConventionDayTabProps = {
 
 function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDayTabProps) {
   const location = useLocation();
+  const format = useAppDateTimeFormat();
   const prefetchProps = prefetchTimespan
     ? {
         onMouseOver: () => prefetchTimespan(timespan),
@@ -26,12 +28,12 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDa
   return (
     <li className="nav-item">
       <NavLink
-        to={`${basename}/${timespan.start.toFormat('cccc').toLowerCase()}${location.search}`}
+        to={`${basename}/${format(timespan.start, 'longWeekday').toLowerCase()}${location.search}`}
         className="nav-link"
         {...prefetchProps}
       >
-        <span className="d-inline d-md-none">{timespan.start.toFormat('ccc')}</span>
-        <span className="d-none d-md-inline">{timespan.start.toFormat('cccc')}</span>
+        <span className="d-inline d-md-none">{format(timespan.start, 'shortWeekday')}</span>
+        <span className="d-none d-md-inline">{format(timespan.start, 'longWeekday')}</span>
       </NavLink>
     </li>
   );
@@ -53,6 +55,7 @@ function ConventionDayTabContainer({
   showExtendedCounts,
 }: ConventionDayTabContainerProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const client = useApolloClient();
   const refreshData = useCallback(
     () =>
@@ -99,14 +102,14 @@ function ConventionDayTabContainer({
       <Switch>
         {conventionDayTimespans.map((timespan) => (
           <Route
-            path={`${basename}/${timespan.start.toFormat('cccc').toLowerCase()}`}
+            path={`${basename}/${format(timespan.start, 'longWeekday').toLowerCase()}`}
             key={timespan.start.toISO()}
           >
             {children(timespan)}
           </Route>
         ))}
         <Redirect
-          to={`${basename}/${conventionDayTimespans[0].start.toFormat('cccc').toLowerCase()}`}
+          to={`${basename}/${format(conventionDayTimespans[0].start, 'longWeekday').toLowerCase()}`}
         />
       </Switch>
     </div>

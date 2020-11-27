@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   preferencesMatch,
@@ -18,6 +19,7 @@ import TextDiffDisplay from './TextDiffDisplay';
 import { TimeblockPreferenceFormItem } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 function findOrdinalityForCell(
   value: (ParsedTimeblockPreference | UnparsedTimeblockPreference)[],
@@ -43,8 +45,10 @@ function TimeblockPreferenceItemChangeDisplay({
   convention,
   change,
 }: TimeblockPreferenceItemChangeDisplayProps) {
+  const { t } = useTranslation();
+  const format = useAppDateTimeFormat();
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
-    const key = column.dayStart.toFormat('cccc');
+    const key = format(column.dayStart, 'longWeekday');
     if (cell == null) {
       return <td key={key} className="table-secondary" />;
     }
@@ -85,7 +89,7 @@ function TimeblockPreferenceItemChangeDisplay({
               {formItem.rendered_properties.hide_timestamps ? null : (
                 <>
                   <br />
-                  <small>{describeTimeblock(row.timeblock)}</small>
+                  <small>{describeTimeblock(row.timeblock, t)}</small>
                 </>
               )}
             </td>

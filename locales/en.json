@@ -165,18 +165,31 @@
   },
   "dateTimeFormats": {
     "anytime": "'anytime'",
+    "compactDateTime": "yyyy-MM-dd HH:mm",
+    "durationHoursMinutes": "h:mm",
     "indefinitely": "'indefinitely'",
     "longDate": "MMMM D, yyyy",
-    "longDateTime": "MMMM d, yyyy - h:mmaaa",
+    "longDateTime": "MMMM d, yyyy 'at' h:mmaaa",
     "longDayYear": "D, yyyy",
-    "longYearMonth": "MMMM D",
+    "longMonthDay": "MMMM D",
+    "longWeekday": "cccc",
+    "longWeekdayDate": "cccc, MMMM d, yyyy",
+    "longWeekdayDateTime": "cccc, MMMM d, yyyy 'at' h:mmaaa",
+    "longWeekdayDateTimeWithZone": "cccc, MMMM d, yyyy 'at' h:mmaaa ZZZ",
+    "longWeekdayTime": "cccc h:mmaaa",
     "midnight": "'midnight'",
     "noon": "'noon'",
+    "shortDateTime": "MMM d, yyyy h:mmaaa",
+    "shortDateTimeWithZone": "h:mmaaa ZZZZ",
     "shortHour": "haaa",
     "shortTime": "h:mmaaa",
+    "shortTimeWithSeconds": "h:mm:ssaaa",
+    "shortWeekday": "ccc",
+    "shortWeekdayDateTime": "ccc, MMM d, yyyy h:mmaaa",
     "shortWeekdayTime": "ccc h:mmaaa",
     "weekdayMidnight": "ccc 'midnight'",
-    "weekdayNoon": "ccc 'noon'"
+    "weekdayNoon": "ccc 'noon'",
+    "year": "yyyy"
   },
   "errors": {
     "404": "<0>Oops!</0><1>We couldn’t find a page at the location {{pathname}}.</1>",
@@ -505,6 +518,7 @@
     }
   },
   "schedule": {
+    "goToEvent": "Go to event",
     "legends": {
       "attendeeCounts": {
         "confirmed": "confirmed signups",

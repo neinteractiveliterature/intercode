@@ -1,4 +1,5 @@
 import { useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CaptionLegend from './CaptionLegend';
 import {
@@ -20,6 +21,7 @@ import TimeblockPreferenceCell, {
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 function valueIsTimeblockPreferenceValue(
   value: any | undefined | null,
@@ -37,9 +39,7 @@ function valueIsTimeblockPreferenceValue(
   );
 }
 
-export type TimeblockPreferenceItemInputProps = CommonFormItemInputProps<
-  TimeblockPreferenceFormItem
-> & {
+export type TimeblockPreferenceItemInputProps = CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
   convention: ConventionForTimespanUtils;
 };
 
@@ -49,6 +49,8 @@ function TimeblockPreferenceItemInput({
   value: uncheckedValue,
   onChange,
 }: TimeblockPreferenceItemInputProps) {
+  const { t } = useTranslation();
+  const format = useAppDateTimeFormat();
   const value = useMemo(
     () => (valueIsTimeblockPreferenceValue(uncheckedValue) ? uncheckedValue : []),
     [uncheckedValue],
@@ -106,7 +108,7 @@ function TimeblockPreferenceItemInput({
           <tr>
             <th />
             {columns.map((column) => (
-              <th key={column.dayStart.toString()}>{getColumnHeader(column)}</th>
+              <th key={column.dayStart.toString()}>{getColumnHeader(column, format)}</th>
             ))}
           </tr>
         </thead>
@@ -118,14 +120,14 @@ function TimeblockPreferenceItemInput({
                 {formItem.rendered_properties.hide_timestamps ? null : (
                   <>
                     <br />
-                    <small>{describeTimeblock(row.timeblock)}</small>
+                    <small>{describeTimeblock(row.timeblock, t)}</small>
                   </>
                 )}
               </td>
               {row.cells.map((cell, x) =>
                 cell ? (
                   <TimeblockPreferenceCell
-                    key={cell.dayStart.toFormat('cccc')}
+                    key={format(cell.dayStart, 'longWeekday')}
                     timeblock={cell.timeblock}
                     existingPreferences={preferences}
                     dayStart={cell.dayStart}
@@ -134,7 +136,7 @@ function TimeblockPreferenceItemInput({
                     onChange={preferenceDidChange}
                   />
                 ) : (
-                  <td key={columns[x].dayStart.toFormat('cccc')} />
+                  <td key={format(columns[x].dayStart, 'longWeekday')} />
                 ),
               )}
             </tr>

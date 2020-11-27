@@ -21,7 +21,7 @@ import {
   useAcceptSignupRequestMutation,
   useRejectSignupRequestMutation,
 } from './mutations.generated';
-import { formatLCM } from '../TimeUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
@@ -90,6 +90,7 @@ function SignupModerationRunDetails({
 
 function SignupModerationQueue() {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, loading, error } = useSignupModerationQueueQueryQuery({
     variables: { page: currentPage },
@@ -195,9 +196,9 @@ function SignupModerationQueue() {
               </td>
               <td>
                 <small>
-                  {formatLCM(
+                  {format(
                     DateTime.fromISO(signupRequest.created_at, { zone: timezoneName }),
-                    "ccc, MMM d, yyyy 'at' h:mmaaa",
+                    'shortWeekdayDateTime',
                   )}
                 </small>
               </td>

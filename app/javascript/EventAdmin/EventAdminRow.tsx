@@ -15,6 +15,7 @@ import {
 import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 import { timespanFromRun } from '../TimespanUtils';
 import getSortedRuns from '../EventsApp/EventList/getSortedRuns';
+import { getDateTimeFormat } from '../TimeUtils';
 
 export type EventAdminRowProps = {
   event: EventFieldsFragment;
@@ -120,7 +121,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
           />
         </div>
       </td>
-      <td>{length.toFormat('h:mm')}</td>
+      <td>{length.toFormat(getDateTimeFormat('durationHoursMinutes', t))}</td>
       <td style={{ minWidth: '29em' }}>{renderRuns()}</td>
     </tr>
   );

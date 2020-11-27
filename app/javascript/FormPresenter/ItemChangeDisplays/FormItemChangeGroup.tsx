@@ -41,7 +41,7 @@ function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupPro
       <h3>
         {changeGroup.changes[0].user_con_profile.name_without_nickname}
         {': '}
-        {timespan.humanizeInTimezone(timezoneName, t, 'longDateTime', 'shortTime')}
+        {timespan.humanizeInTimezone(timezoneName, t, 'shortDateTime', 'shortTime')}
       </h3>
       <dl>
         {changeGroup.changes.map((change) => (

@@ -8,6 +8,7 @@ import usePageTitle from '../usePageTitle';
 import { UserAdminQueryQuery, useUserAdminQueryQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { timespanFromConvention } from '../TimespanUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 function sortByConventionDate(profiles: UserAdminQueryQuery['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -27,8 +28,17 @@ function useLoadUserAdminData() {
   return useUserAdminQueryQuery({ variables: { id: userId } });
 }
 
+function renderProfileConventionYear(
+  profile: UserAdminQueryQuery['user']['user_con_profiles'][number],
+  format: ReturnType<typeof useAppDateTimeFormat>,
+) {
+  const { start } = timespanFromConvention(profile.convention);
+  return start ? format(start, 'year') : null;
+}
+
 export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay({ data }) {
   usePageTitle(data.user.name);
+  const format = useAppDateTimeFormat();
 
   const userConProfiles = useMemo(() => sortByConventionDate(data.user.user_con_profiles), [data]);
 
@@ -72,11 +82,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
                           {profile.convention.starts_at && (
                             <>
                               {' '}
-                              <small>
-                                (
-                                {timespanFromConvention(profile.convention).start?.toFormat('yyyy')}
-                                )
-                              </small>
+                              <small>({renderProfileConventionYear(profile, format)})</small>
                             </>
                           )}
                         </a>

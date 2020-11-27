@@ -14,7 +14,7 @@ import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import EnumTypes from '../enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from '../graphqlTypes.generated';
 import { useCancelOrderMutation, useMarkOrderPaidMutation } from './mutations.generated';
-import { formatLCM } from '../TimeUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
@@ -149,6 +149,7 @@ export type AdminOrderFormProps<T extends AdminOrderType> = {
 
 function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
 
   return (
     <div>
@@ -182,9 +183,9 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
               <li className="list-inline-item">
                 {humanize(order.status)}
                 {order.paid_at
-                  ? `on ${formatLCM(
+                  ? `on ${format(
                       DateTime.fromISO(order.paid_at, { zone: timezoneName }),
-                      "ccc, MMM d, yyyy 'at' h:mmaaa",
+                      'shortWeekdayDateTime',
                     )}`
                   : null}
               </li>

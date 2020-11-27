@@ -28,16 +28,14 @@ import {
 import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { formatLCM } from '../TimeUtils';
+import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 import AppRootContext from '../AppRootContext';
 
 type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryQuery['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-const UserConProfilesTableQueryDataContext = createQueryDataContext<
-  UserConProfilesTableUserConProfilesQueryQuery
->();
+const UserConProfilesTableQueryDataContext = createQueryDataContext<UserConProfilesTableUserConProfilesQueryQuery>();
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
@@ -253,7 +251,7 @@ function getPossibleColumns(
                 : null,
             disableSortBy: false,
             Cell: ({ value }: { value: DateTime | null }) =>
-              value ? formatLCM(value, 'MMM d, yyyy h:mmaaa') : null,
+              value ? formatLCM(value, getDateTimeFormat('shortDateTime', t)) : null,
           },
         ]),
     {

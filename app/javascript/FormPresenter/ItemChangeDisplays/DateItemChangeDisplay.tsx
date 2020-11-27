@@ -5,6 +5,7 @@ import { describeDate } from '../ItemDisplays/DateItemDisplay';
 import AppRootContext from '../../AppRootContext';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { DateFormItem } from '../../FormAdmin/FormItemUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type DateItemChangeDisplayProps = {
   change: ParsedFormResponseChange<DateFormItem>;
@@ -12,13 +13,16 @@ export type DateItemChangeDisplayProps = {
 
 function DateItemChangeDisplay({ change }: DateItemChangeDisplayProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const before = useMemo(() => describeDate(change.previous_value || '', timezoneName), [
+  const format = useAppDateTimeFormat();
+  const before = useMemo(() => describeDate(change.previous_value || '', timezoneName, format), [
     change.previous_value,
     timezoneName,
+    format,
   ]);
-  const after = useMemo(() => describeDate(change.new_value || '', timezoneName), [
+  const after = useMemo(() => describeDate(change.new_value || '', timezoneName, format), [
     change.new_value,
     timezoneName,
+    format,
   ]);
 
   return <TextDiffDisplay before={before} after={after} />;

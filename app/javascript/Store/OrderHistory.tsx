@@ -10,7 +10,7 @@ import AppRootContext from '../AppRootContext';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { OrderHistoryQueryQuery, useOrderHistoryQueryQuery } from './queries.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
-import { formatLCM } from '../TimeUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 type OrderType = NonNullable<OrderHistoryQueryQuery['myProfile']>['orders'][0];
 type PaymentModalState = {
@@ -137,6 +137,7 @@ type OrderHistoryOrderProps = {
 
 function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrderProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const submittedTime = order.submitted_at
     ? DateTime.fromISO(order.submitted_at, { zone: timezoneName })
     : undefined;
@@ -146,7 +147,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
       <div className="d-flex card-header border-bottom-0">
         <div className="col pl-0">
           <h3>Order #{order.id}</h3>
-          <small>{submittedTime && formatLCM(submittedTime, 'cccc, MMMM d, yyyy, h:mmaaa')}</small>
+          <small>{submittedTime && format(submittedTime, 'longWeekdayDateTime')}</small>
         </div>
         <div className="text-right">
           <OrderHistoryOrderStatus
