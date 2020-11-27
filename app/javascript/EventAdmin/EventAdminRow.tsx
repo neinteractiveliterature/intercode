@@ -1,6 +1,7 @@
 import { useState, useMemo, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Duration } from 'luxon';
+import { useTranslation } from 'react-i18next';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -21,6 +22,7 @@ export type EventAdminRowProps = {
 };
 
 function EventAdminRow({ event, convention }: EventAdminRowProps) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const [updateEventAdminNotes] = useUpdateEventAdminNotesMutation();
   const [expanded, setExpanded] = useState(false);
@@ -53,7 +55,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
 
     const runMetadata = [
       titleSuffix,
-      <li key="timespan">{timespan.humanizeInTimezone(timezoneName)}</li>,
+      <li key="timespan">{timespan.humanizeInTimezone(timezoneName, t)}</li>,
       <li key="rooms">
         {run.rooms
           .map((room) => room.name)

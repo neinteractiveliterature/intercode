@@ -1,25 +1,32 @@
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { DateTime, DateTimeFormatOptions } from 'luxon';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
+import { DateTimeFormatKey } from './DateTimeFormats';
+
+export function getDateTimeFormat(key: DateTimeFormatKey, t: TFunction) {
+  return t(`dateTimeFormats.${key}`);
+}
 
 export const timeIsOnTheHour = (time: DateTime) =>
   time.millisecond === 0 && time.second === 0 && time.minute === 0;
 
-export const humanTimeFormat = (time: DateTime) => {
+export const humanTimeFormat = (time: DateTime, t: TFunction, includeDay?: boolean) => {
   if (timeIsOnTheHour(time)) {
     if (time.hour === 0) {
-      return "'midnight'";
+      return getDateTimeFormat(includeDay ? 'weekdayMidnight' : 'midnight', t);
     }
 
     if (time.hour === 12) {
-      return "'noon'";
+      return getDateTimeFormat(includeDay ? 'weekdayMidnight' : 'noon', t);
     }
   }
 
-  return 'h:mmaaa';
+  return getDateTimeFormat(includeDay ? 'shortWeekdayTime' : 'shortTime', t);
 };
 
 // this is just DateTime.toFormat patched with a hack for lowercasing the meridiem
@@ -35,13 +42,18 @@ export function formatLCM(dateTime: DateTime, format: string, options?: DateTime
   return dateTime.toFormat(hackedFormat, options);
 }
 
-export const humanizeTime = (time: DateTime, includeDay?: boolean) => {
-  let timeFormat = humanTimeFormat(time);
-  if (includeDay) {
-    timeFormat = `ddd ${timeFormat}`;
-  }
+export function useAppDateTimeFormat() {
+  const { t } = useTranslation();
+  const format = useCallback(
+    (dateTime: DateTime, formatKey: DateTimeFormatKey, options?: DateTimeFormatOptions) =>
+      formatLCM(dateTime, getDateTimeFormat(formatKey, t), options),
+    [t],
+  );
+  return format;
+}
 
-  return formatLCM(time, timeFormat);
+export const humanizeTime = (time: DateTime, t: TFunction, includeDay?: boolean) => {
+  return formatLCM(time, humanTimeFormat(time, t, includeDay));
 };
 
 export const timesAreSameOrBothNull = (a?: DateTime | null, b?: DateTime | null) => {

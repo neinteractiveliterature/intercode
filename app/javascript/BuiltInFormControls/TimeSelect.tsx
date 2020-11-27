@@ -4,7 +4,7 @@ import * as React from 'react';
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import useUniqueId from '../useUniqueId';
 import { FiniteTimespan } from '../Timespan';
-import { formatLCM } from '../TimeUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 export type TimeValues = {
   hour?: number;
@@ -19,6 +19,7 @@ export type TimeSelectProps = {
 };
 
 function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
+  const format = useAppDateTimeFormat();
   const hourValues = useMemo(
     () => {
       let hourOffset = 0;
@@ -26,7 +27,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
       while (timespan.start.plus({ hours: hourOffset }) < timespan.finish) {
         const now = timespan.start.plus({ hours: hourOffset });
         const dayDiff = Math.floor(now.diff(timespan.start.startOf('day'), 'days').days);
-        let description = `${formatLCM(now, 'haaa')}`;
+        let description = `${format(now, 'shortHour')}`;
         if (dayDiff > 0) {
           description += ` (+${dayDiff} ${dayDiff > 1 ? 'days' : 'day'})`;
         }
