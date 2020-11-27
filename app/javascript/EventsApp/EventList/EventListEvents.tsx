@@ -9,6 +9,7 @@ import { timespanFromConvention, getConventionDayTimespans } from '../../Timespa
 import AppRootContext from '../../AppRootContext';
 import { EventListEventsQueryQuery } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type EventListEventsProps = {
   convention: NonNullable<EventListEventsQueryQuery['convention']>;
@@ -27,6 +28,7 @@ function EventListEvents({
   canReadSchedule,
   fetchMoreIfNeeded,
 }: EventListEventsProps) {
+  const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
   let previousConventionDay: FiniteTimespan | null = null;
   let conventionDayTimespans: FiniteTimespan[] = [];
@@ -49,7 +51,7 @@ function EventListEvents({
               conventionDay &&
               (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
             ) {
-              preamble = <h3 className="mt-4">{conventionDay.start.toFormat('cccc, MMMM d')}</h3>;
+              preamble = <h3 className="mt-4">{format(conventionDay.start, 'longWeekdayDate')}</h3>;
               previousConventionDay = conventionDay;
             }
           }

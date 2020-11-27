@@ -7,6 +7,7 @@ import {
   ConventionForTimespanUtils,
 } from '../TimespanUtils';
 import AppRootContext from '../AppRootContext';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 export type ConventionDaySelectProps = {
   convention: ConventionForTimespanUtils;
@@ -16,6 +17,7 @@ export type ConventionDaySelectProps = {
 
 function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
   const conventionDays = useMemo(
     () =>
@@ -45,9 +47,9 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
           value={day.toISO()}
           checked={day.toMillis() === value?.toMillis()}
           onChange={inputChange}
-          aria-label={day.toFormat('cccc')}
+          aria-label={format(day, 'longWeekday')}
         />{' '}
-        {day.toFormat('cccc')}
+        {format(day, 'longWeekday')}
       </label>
     </div>
   ));

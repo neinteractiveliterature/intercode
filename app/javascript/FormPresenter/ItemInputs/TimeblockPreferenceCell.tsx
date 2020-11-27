@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { useMemo, ChangeEvent } from 'react';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 import {
   preferencesMatch,
@@ -24,6 +25,7 @@ export type TimeblockPreferenceCellProps = {
 
 function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
   const { start, finish, timeblock, dayStart, existingPreferences, onChange } = props;
+  const format = useAppDateTimeFormat();
 
   const hypotheticalPreference = useMemo(
     () => ({
@@ -56,7 +58,7 @@ function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
   const { ordinality } = existingPreference || {};
 
   return (
-    <td key={dayStart.toFormat('cccc')}>
+    <td key={format(dayStart, 'longWeekday')}>
       <select value={ordinality || ''} onChange={selectorDidChange} className="form-control">
         <option value="">Don&apos;t care</option>
         <option value="1">1st choice</option>

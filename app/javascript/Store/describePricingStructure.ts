@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon';
+import { TFunction } from 'i18next';
 
 import formatMoney from '../formatMoney';
 import { findCurrentValue, findCurrentTimespanIndex } from '../ScheduledValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { Money, PricingStructure, ScheduledMoneyValue } from '../graphqlTypes.generated';
-import { formatLCM } from '../TimeUtils';
+import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 
 export function describeAdminPricingStructure(
   pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null,
@@ -34,6 +35,7 @@ export function describeAdminPricingStructure(
 export function describeUserPricingStructure(
   pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | undefined | null,
   timezoneName: string,
+  t: TFunction,
 ) {
   if (!pricingStructure) {
     return null;
@@ -57,7 +59,7 @@ export function describeUserPricingStructure(
       const nextChange = DateTime.fromISO(nextTimespan.start, { zone: timezoneName });
       return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${formatLCM(
         nextChange,
-        "MMM d, yyyy 'at' h:mmaaa",
+        getDateTimeFormat('shortDateTime', t),
       )})`;
     }
     return formatMoney(currentValue);

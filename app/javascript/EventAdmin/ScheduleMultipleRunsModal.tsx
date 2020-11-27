@@ -18,7 +18,7 @@ import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
-import { formatLCM, timezoneNameForConvention } from '../TimeUtils';
+import { timezoneNameForConvention, useAppDateTimeFormat } from '../TimeUtils';
 import { useCreateMultipleRunsMutation } from './mutations.generated';
 import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
 import {
@@ -53,6 +53,7 @@ function ScheduleMultipleRunsModal({
   onCancel,
   onFinish,
 }: ScheduleMultipleRunsModalProps) {
+  const format = useAppDateTimeFormat();
   const [createMutate] = useCreateMultipleRunsMutation();
   const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(createMutate);
   const [day, setDay] = useState<DateTime>();
@@ -182,7 +183,7 @@ function ScheduleMultipleRunsModal({
     const nonConflictingTimespans = nonConflictingTimespansWithinRange;
 
     const runTimespanItems = runTimespans.map((runTimespan) => {
-      let description: ReactNode = formatLCM(runTimespan.start, 'h:mmaaa');
+      let description: ReactNode = format(runTimespan.start, 'shortTime');
       const runConflicts =
         nonConflictingTimespans.find((nonConflictingTimespan) =>
           nonConflictingTimespan.isSame(runTimespan),

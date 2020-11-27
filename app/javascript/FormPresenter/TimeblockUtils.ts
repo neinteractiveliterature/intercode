@@ -1,19 +1,28 @@
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
 import { DateTime } from 'luxon';
+import { TFunction } from 'i18next';
 
 import Timespan, { FiniteTimespan } from '../Timespan';
 import { timespanFromConvention, ConventionForTimespanUtils } from '../TimespanUtils';
-import { formatLCM, timezoneNameForConvention } from '../TimeUtils';
+import {
+  formatLCM,
+  getDateTimeFormat,
+  timezoneNameForConvention,
+  useAppDateTimeFormat,
+} from '../TimeUtils';
 import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockTypes';
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 import { notEmpty } from '../ValueUtils';
 
-export function describeTimeblock(timeblock: TimeblockDefinition) {
+export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction) {
   const start = DateTime.fromObject(timeblock.start);
   const finish = DateTime.fromObject(timeblock.finish);
 
-  return `${formatLCM(start, 'h:mmaaa')} - ${formatLCM(finish, 'h:mmaaa')}`;
+  return `${formatLCM(start, getDateTimeFormat('shortTime', t))} - ${formatLCM(
+    finish,
+    getDateTimeFormat('shortTime', t),
+  )}`;
 }
 
 export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | null) {
@@ -166,6 +175,9 @@ export function rotateTimeblockColumnsToRows(
     .filter(notEmpty);
 }
 
-export function getColumnHeader(column: TimeblockColumn) {
-  return column.dayStart.toFormat('cccc');
+export function getColumnHeader(
+  column: TimeblockColumn,
+  format: ReturnType<typeof useAppDateTimeFormat>,
+) {
+  return format(column.dayStart, 'longWeekday');
 }

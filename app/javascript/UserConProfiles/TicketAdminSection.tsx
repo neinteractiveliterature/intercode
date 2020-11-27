@@ -25,7 +25,7 @@ import {
   TicketAdminWithTicketAbilityQueryQuery,
   TicketAdminWithoutTicketAbilityQueryQuery,
 } from './queries.generated';
-import { formatLCM } from '../TimeUtils';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 type TicketAdminControlsProps = {
   convention: {
@@ -237,6 +237,7 @@ export type TicketAdminSectionProps = {
 
 function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
 
   const renderTicketData = (ticket: typeof userConProfile['ticket']) => {
     if (!ticket) {
@@ -266,17 +267,17 @@ function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionPr
 
         <dt className="col-md-3">Created</dt>
         <dd className="col-md-9">
-          {formatLCM(
+          {format(
             DateTime.fromISO(ticket.created_at, { zone: timezoneName }),
-            'MMMM d, yyyy h:mmaaa ZZZZ',
+            'longWeekdayDateTimeWithZone',
           )}
         </dd>
 
         <dt className="col-md-3">Last updated</dt>
         <dd className="col-md-9">
-          {formatLCM(
+          {format(
             DateTime.fromISO(ticket.updated_at, { zone: timezoneName }),
-            'MMMM d, yyyy h:mmaaa ZZZZ',
+            'longWeekdayDateTimeWithZone',
           )}
         </dd>
       </dl>

@@ -18,6 +18,7 @@ import {
   EventAdminEventsQueryQuery,
 } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 export type RunForRunFormFields = Pick<
   Run,
@@ -39,6 +40,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 }: RunFormFieldsProps<RunType>) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   const startsAt = useMemo(
@@ -117,7 +119,8 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       <fieldset className="form-group">
         <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
-          {startTime && `- ${startTime.plus({ seconds: event.length_seconds }).toFormat('h:mm')}`}
+          {startTime &&
+            `- ${format(startTime.plus({ seconds: event.length_seconds }), 'shortTime')}`}
         </TimeSelect>
       </fieldset>
     );

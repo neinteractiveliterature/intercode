@@ -9,7 +9,7 @@ import { ScheduleEvent, ScheduleRun } from './Schedule';
 import SignupCountData from '../SignupCountData';
 import { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import { SignupState } from '../../graphqlTypes.generated';
-import { formatLCM } from '../../TimeUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type RunDisplayProps = {
   event: ScheduleEvent;
@@ -25,6 +25,7 @@ const RunDisplay = memo(
     ({ event, run, signupCountData, toggle, runDimensions, layoutResult }, ref) => {
       const { config } = useContext(ScheduleGridContext);
       const signupStatus = userSignupStatus(run);
+      const format = useAppDateTimeFormat();
 
       const runStyle = getRunStyle({
         event,
@@ -118,7 +119,7 @@ const RunDisplay = memo(
             {!event.fake && renderAvailabilityBar()}
             {runDimensions.fullTimespan.start < runDimensions.timespan.start && (
               <div className="schedule-grid-event-truncation-label truncation-label-start">
-                starts {formatLCM(runDimensions.fullTimespan.start, 'ccc h:mmaaa')}
+                starts {format(runDimensions.fullTimespan.start, 'shortWeekdayTime')}
               </div>
             )}
             <div className="schedule-grid-event-content-main">
@@ -127,7 +128,7 @@ const RunDisplay = memo(
             </div>
             {runDimensions.fullTimespan.finish > runDimensions.timespan.finish && (
               <div className="schedule-grid-event-truncation-label truncation-label-finish">
-                ends {formatLCM(runDimensions.fullTimespan.finish, 'ccc h:mmaaa')}
+                ends {format(runDimensions.fullTimespan.finish, 'shortWeekdayTime')}
               </div>
             )}
           </div>

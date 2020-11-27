@@ -37,7 +37,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
         return timespan.start.toFormat(getDateTimeFormat('longDate', t));
       }
 
-      const startFormat = getDateTimeFormat(sameYear ? 'longYearMonth' : 'longDate', t);
+      const startFormat = getDateTimeFormat(sameYear ? 'longMonthDay' : 'longDate', t);
       const finishFormat = getDateTimeFormat(sameMonth ? 'longDayYear' : 'longDate', t);
       return `${timespan.start.toFormat(startFormat)} - ${timespan.finish.toFormat(finishFormat)}`;
     }

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { preferencesMatch } from '../TimeblockTypes';
 import {
@@ -13,6 +14,7 @@ import {
 } from '../TimeblockUtils';
 import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type TimeblockPreferenceItemDisplayProps = {
   formItem: TimeblockPreferenceFormItem;
@@ -25,8 +27,10 @@ function TimeblockPreferenceItemDisplay({
   convention,
   value,
 }: TimeblockPreferenceItemDisplayProps) {
+  const { t } = useTranslation();
+  const format = useAppDateTimeFormat();
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
-    const key = column.dayStart.toFormat('cccc');
+    const key = format(column.dayStart, 'longWeekday');
     if (cell == null) {
       return <td key={key} className="table-secondary" />;
     }
@@ -73,7 +77,7 @@ function TimeblockPreferenceItemDisplay({
           <th />
           {columns.map((column) => (
             <th key={column.dayStart.toString()} className="text-center">
-              {getColumnHeader(column)}
+              {getColumnHeader(column, format)}
             </th>
           ))}
         </tr>
@@ -86,7 +90,7 @@ function TimeblockPreferenceItemDisplay({
               {formItem.rendered_properties.hide_timestamps ? null : (
                 <>
                   <br />
-                  <small>{describeTimeblock(row.timeblock)}</small>
+                  <small>{describeTimeblock(row.timeblock, t)}</small>
                 </>
               )}
             </td>
