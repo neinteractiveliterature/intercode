@@ -390,12 +390,15 @@ describe('Timespan', () => {
     });
 
     it('handles offset', () => {
-      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', {
+      const spansWithOffset = defaultTimespan.getTimespansWithin('UTC', {
         unit: 'hour',
         offset: moment.duration(2, 'hours'),
       });
-      expect(hopsWithOffset).toHaveLength(22);
-      expect(hopsWithOffset[0].start.hour()).toEqual(2);
+      expect(spansWithOffset).toHaveLength(22);
+      // first span gets expanded to cover the beginning of the timespan before the offset starts
+      expect(spansWithOffset[0].start.hour()).toEqual(24 - 5);
+      // second span should start 1 unit*duration after the offset
+      expect(spansWithOffset[1].start.hour()).toEqual(3);
     });
   });
 
