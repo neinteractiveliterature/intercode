@@ -45,8 +45,9 @@ function FormResponseChangeHistory({
                 <small>
                   {getTimespanForChangeGroup(changeGroup).humanizeInTimezone(
                     timezoneName,
-                    'MMMM d, yyyy - h:mmaaa',
-                    'h:mmaaa',
+                    t,
+                    'longDateTime',
+                    'shortTime',
                   )}
                 </small>
               </NavLink>

@@ -87,6 +87,7 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
           <small>
             {timespanFromRun(timezoneName, signup.run.event, signup.run).humanizeInTimezone(
               timezoneName,
+              t,
             )}
           </small>
         </li>

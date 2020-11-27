@@ -39,7 +39,7 @@ function RunHeader({ eventId, runId }: RunHeaderProps) {
       </h1>
 
       <h3 className="mt-0">
-        {timespanFromRun(timezoneName, event, event.run).humanizeInTimezone(timezoneName)}
+        {timespanFromRun(timezoneName, event, event.run).humanizeInTimezone(timezoneName, t)}
       </h3>
 
       <ul className="list-inline">

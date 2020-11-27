@@ -3,9 +3,10 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { Placement } from 'popper.js';
-
 import { usePopper } from 'react-popper';
+import { useTranslation } from 'react-i18next';
 import { ScheduleGridContext } from './ScheduleGridContext';
+
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
 import buildEventUrl from '../buildEventUrl';
@@ -33,6 +34,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
     { styles, placement, attributes, event, run, runDimensions, toggle, signupCountData, arrowRef },
     ref,
   ) => {
+    const { t } = useTranslation();
     const { myProfile } = useContext(AppRootContext);
     const { schedule } = useContext(ScheduleGridContext);
     const { timespan } = runDimensions;
@@ -85,7 +87,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 style={{ cursor: 'pointer' }}
                 onClick={toggle}
               >
-                <i className="fa fa-close" title="Close" />
+                <i className="fa fa-close" title={t('buttons.close', 'Close')} />
               </button>
             </div>
           </div>
@@ -101,7 +103,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                   <td className="text-center pr-1">
                     <i className="fa fa-clock-o" />
                   </td>
-                  <td>{timespan.humanizeInTimezone(schedule.timezoneName)}</td>
+                  <td>{timespan.humanizeInTimezone(schedule.timezoneName, t)}</td>
                 </tr>
                 {roomsDescription ? (
                   <tr>
@@ -154,7 +156,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
               to={`${buildEventUrl(event)}#run-${run.id}`}
               className="btn btn-primary btn-sm mb-2"
             >
-              Go to event &raquo;
+              {t('schedule.goToEvent', 'Go to event')} &raquo;
             </Link>
 
             <div

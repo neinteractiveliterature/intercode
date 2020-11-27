@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next';
 import { DateTime, Duration, DurationObject, DurationUnit } from 'luxon';
 import {
   compareTimesAscending,
@@ -5,8 +6,11 @@ import {
   humanizeTime,
   timesAreSameOrBothNull,
   formatLCM,
+  getDateTimeFormat,
 } from './TimeUtils';
 import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
+import i18n from './setupI18Next';
+import { DateTimeFormatKey } from './DateTimeFormats';
 
 export type TimeHopOptions = {
   unit: DurationUnit;
@@ -151,53 +155,59 @@ class Timespan {
     return this.finish.diff(this.start, unit);
   }
 
-  humanizeStartInTimezone(timezoneName: string, format?: string) {
+  humanizeStartInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
     if (this.start == null) {
-      return 'anytime';
+      return t(getDateTimeFormat('anytime', t));
     }
 
     const start = this.start.setZone(timezoneName);
     if (format != null) {
-      return formatLCM(start, format);
+      return formatLCM(start, getDateTimeFormat(format, t));
     }
 
-    return humanizeTime(start, true);
+    return humanizeTime(start, t, true);
   }
 
-  humanizeFinishInTimezone(timezoneName: string, format?: string) {
+  humanizeFinishInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
     if (this.finish == null) {
-      return 'indefinitely';
+      return t(getDateTimeFormat('indefinitely', t));
     }
 
     const finish = this.finish.setZone(timezoneName);
     if (format != null) {
-      return formatLCM(finish, format);
+      return formatLCM(finish, getDateTimeFormat(format, t));
     }
 
     if (this.start == null) {
-      return humanizeTime(finish, true);
+      return humanizeTime(finish, t, true);
     }
 
     const start = this.start.setZone(timezoneName);
     const includeDayInFinish = finish.day !== start.day;
 
-    return humanizeTime(finish, includeDayInFinish);
+    return humanizeTime(finish, t, includeDayInFinish);
   }
 
-  humanizeInTimezone(timezoneName: string, startFormat?: string, finishFormat?: string) {
+  humanizeInTimezone(
+    timezoneName: string,
+    t: TFunction,
+    startFormat?: DateTimeFormatKey,
+    finishFormat?: DateTimeFormatKey,
+  ) {
     if (this.start == null && this.finish == null) {
       return 'always';
     }
 
-    const start = this.humanizeStartInTimezone(timezoneName, startFormat);
+    const start = this.humanizeStartInTimezone(timezoneName, t, startFormat);
     const finish = this.humanizeFinishInTimezone(
       timezoneName,
+      t,
       this.start == null || this.finish == null || this.finish.day !== this.start.day
         ? startFormat
         : finishFormat || startFormat,
     );
 
-    if (this.humanizeFinishInTimezone(timezoneName, startFormat) === start) {
+    if (this.humanizeFinishInTimezone(timezoneName, t, startFormat) === start) {
       return start;
     }
 
@@ -210,7 +220,10 @@ class Timespan {
   ) {
     if (!this.isFinite()) {
       throw new Error(
-        `getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`,
+        `getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(
+          timezoneName,
+          i18n.t,
+        )}`,
       );
     }
 
@@ -238,6 +251,7 @@ class Timespan {
       throw new Error(
         `getTimespansWithin called on an infinite Timespan ${thisTimespan.humanizeInTimezone(
           timezoneName,
+          i18n.t,
         )}`,
       );
     }

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Column } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import { useTranslation } from 'react-i18next';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
@@ -16,12 +17,14 @@ import {
   RootSiteConventionsAdminTableQueryQuery,
   useRootSiteConventionsAdminTableQueryQuery,
 } from './queries.generated';
+import { getDateTimeFormat } from '../TimeUtils';
 
 type ConventionType = RootSiteConventionsAdminTableQueryQuery['conventions_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
 function ConventionDatesCell({ value }: { value: ConventionType }) {
+  const { t } = useTranslation();
   const timespan = useMemo(() => timespanFromConvention(value), [value]);
 
   const datesDescription = useMemo(() => {
@@ -31,20 +34,16 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
       const sameDay = sameMonth && timespan.start.day === timespan.finish.day;
 
       if (sameDay) {
-        return timespan.start.toFormat('MMMM D, yyyy');
+        return timespan.start.toFormat(getDateTimeFormat('longDate', t));
       }
 
-      const startFormat = sameYear ? 'MMMM D' : 'MMMM D, yyyy';
-      const finishFormat = sameMonth ? 'D, yyyy' : 'MMMM D, yyyy';
+      const startFormat = getDateTimeFormat(sameYear ? 'longYearMonth' : 'longDate', t);
+      const finishFormat = getDateTimeFormat(sameMonth ? 'longDayYear' : 'longDate', t);
       return `${timespan.start.toFormat(startFormat)} - ${timespan.finish.toFormat(finishFormat)}`;
     }
 
-    return timespan.humanizeInTimezone(
-      value.timezone_name ?? 'Etc/UTC',
-      'MMMM D, yyyy',
-      'MMMM D, yyyy',
-    );
-  }, [timespan, value.timezone_name]);
+    return timespan.humanizeInTimezone(value.timezone_name ?? 'Etc/UTC', t, 'longDate', 'longDate');
+  }, [timespan, value.timezone_name, t]);
 
   const now = DateTime.local();
 

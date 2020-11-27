@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { assertNever } from 'assert-never';
 import { DateTime } from 'luxon';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
@@ -62,6 +63,7 @@ function SignupModerationRunDetails({
   requestedBucketKey,
 }: SignupModerationRunDetailsProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const { t } = useTranslation();
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
 
   return (
@@ -81,7 +83,7 @@ function SignupModerationRunDetails({
           </small>
         </>
       )}
-      <small>{runTimespan.humanizeInTimezone(timezoneName)}</small>
+      <small>{runTimespan.humanizeInTimezone(timezoneName, t)}</small>
     </>
   );
 }

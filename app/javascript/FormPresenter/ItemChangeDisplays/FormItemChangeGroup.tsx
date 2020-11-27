@@ -1,4 +1,5 @@
 import { Fragment, useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeDisplay, { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
@@ -32,6 +33,7 @@ export type FormItemChangeGroupProps = {
 
 function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const { t } = useTranslation();
   const timespan = useMemo(() => getTimespanForChangeGroup(changeGroup), [changeGroup]);
 
   return (
@@ -39,7 +41,7 @@ function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupPro
       <h3>
         {changeGroup.changes[0].user_con_profile.name_without_nickname}
         {': '}
-        {timespan.humanizeInTimezone(timezoneName, 'MMMM d, yyyy - h:mmaaa', 'h:mmaaa')}
+        {timespan.humanizeInTimezone(timezoneName, t, 'longDateTime', 'shortTime')}
       </h3>
       <dl>
         {changeGroup.changes.map((change) => (

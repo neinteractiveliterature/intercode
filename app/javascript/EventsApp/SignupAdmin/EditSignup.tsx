@@ -273,7 +273,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
         <div className="card-header">
           {run.event.title}
           <br />
-          {timespan.humanizeInTimezone(timezoneName)}
+          {timespan.humanizeInTimezone(timezoneName, t)}
           <br />
           {run.rooms
             .map((room) => room.name)

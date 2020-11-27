@@ -13,6 +13,7 @@ ReactDOMServer.renderToStaticNodeStream(
   <AppRootContext.Provider
     value={{
       ...appRootContextDefaultValue,
+      language: props.convention.language,
       timezoneName: timezoneNameForConvention(props.convention),
     }}
   >
