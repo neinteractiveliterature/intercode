@@ -151,8 +151,11 @@ function AuthorizationPrompt() {
           </p>
 
           <p>
-            This will allow {preAuth?.client_name} to access your convention profile and information
-            about events you can access.
+            This will allow {preAuth?.client_name} to access{' '}
+            {scopes?.includes('read_profile')
+              ? 'all information in your convention profiles'
+              : 'the public information in your convention profiles'}{' '}
+            as well as information about events you can access.
           </p>
 
           {scopes && scopes.length > 0 && <PermissionsPrompt scopeNames={scopes} />}
