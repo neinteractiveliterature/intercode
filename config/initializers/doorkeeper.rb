@@ -232,7 +232,10 @@ Doorkeeper::JWT.configure do
 
       user: {
         id: user.id,
-        email: user.email
+        email: user.email,
+        name: user.name,
+        first_name: user.first_name,
+        last_name: user.last_name
       }
     }
   end
