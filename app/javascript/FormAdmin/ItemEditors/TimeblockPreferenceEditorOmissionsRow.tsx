@@ -81,7 +81,7 @@ function TimeblockPreferenceEditorOmissionsRow({
           };
         })
         .filter(notEmpty),
-    [columns, conventionTimespan, timeblock.finish, timeblock.start],
+    [columns, conventionTimespan, timeblock.finish, timeblock.start, format],
   );
 
   const inclusionDates = useMemo(
