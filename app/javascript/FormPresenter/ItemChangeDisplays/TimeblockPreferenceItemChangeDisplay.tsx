@@ -76,7 +76,7 @@ function TimeblockPreferenceItemChangeDisplay({
           <th />
           {columns.map((column) => (
             <th key={column.dayStart.toString()} className="text-center">
-              {getColumnHeader(column)}
+              {getColumnHeader(column, format)}
             </th>
           ))}
         </tr>
