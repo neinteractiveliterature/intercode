@@ -21,6 +21,19 @@ function generateSiteContentItem(
   );
 }
 
+function generateOAuthApplicationsNavigationItem(
+  currentAbility: Pick<Ability, 'can_manage_oauth_applications'>,
+  t: TFunction,
+) {
+  return (
+    currentAbility.can_manage_oauth_applications && {
+      label: t('navigation.admin.oauth2Applications', 'OAuth2 Applications'),
+      url: '/oauth/applications-embed',
+      icon: 'fa-code',
+    }
+  );
+}
+
 function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
   const { currentAbility, signupMode, siteMode, ticketMode, ticketName } = useContext(
@@ -77,11 +90,7 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
           url: '/admin_notifications',
           icon: 'fa-circle-o',
         },
-        currentAbility.can_manage_oauth_applications && {
-          label: t('navigation.admin.oauth2Applications', 'OAuth2 Applications'),
-          url: '/oauth/applications-embed',
-          icon: 'fa-code',
-        },
+        generateOAuthApplicationsNavigationItem(currentAbility, t),
         currentAbility.can_read_reports && {
           label: t('navigation.admin.reports', 'Reports'),
           url: '/reports',
@@ -146,6 +155,7 @@ function useRootSiteAdminNavigationItems(): GeneratedNavigationItem[] {
           url: '/email_routes?sort.receiver_address=asc',
           icon: 'fa-envelope-o',
         },
+        generateOAuthApplicationsNavigationItem(currentAbility, t),
         currentAbility.can_read_organizations && {
           label: t('navigation.admin.organizations', 'Organizations'),
           url: '/organizations',
