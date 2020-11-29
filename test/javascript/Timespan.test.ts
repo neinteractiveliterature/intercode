@@ -1,5 +1,5 @@
-import i18next from 'i18next';
 import { DateTime, Duration } from 'luxon';
+import getI18n from '../../app/javascript/setupI18Next';
 import Timespan from '../../app/javascript/Timespan';
 
 describe('Timespan', () => {
@@ -293,55 +293,83 @@ describe('Timespan', () => {
   });
 
   describe('humanizeStartInTimezone', () => {
-    it('formats the start time correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeStartInTimezone('UTC', i18next.t, 'shortTime')).toEqual(
-        '12:00am',
-      );
+    it('formats the start time correctly for the given time zone', async () => {
       expect(
-        defaultTimespan.humanizeStartInTimezone('America/New_York', i18next.t, 'shortTime'),
+        defaultTimespan.humanizeStartInTimezone(
+          'UTC',
+          (await getI18n()).getFixedT('en'),
+          'shortTime',
+        ),
+      ).toEqual('12:00am');
+      expect(
+        defaultTimespan.humanizeStartInTimezone(
+          'America/New_York',
+          (await getI18n()).getFixedT('en'),
+          'shortTime',
+        ),
       ).toEqual('7:00pm');
     });
 
-    it('handles open ends', () => {
-      expect(beginningOfTime.humanizeStartInTimezone('UTC', i18next.t, 'shortTime')).toEqual(
-        'anytime',
-      );
+    it('handles open ends', async () => {
+      expect(
+        beginningOfTime.humanizeStartInTimezone(
+          'UTC',
+          (await getI18n()).getFixedT('en'),
+          'shortTime',
+        ),
+      ).toEqual('anytime');
     });
   });
 
   describe('humanizeFinishInTimezone', () => {
-    it('formats the finish time correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeFinishInTimezone('UTC', i18next.t, 'shortTime')).toEqual(
-        '12:00am',
-      );
+    it('formats the finish time correctly for the given time zone', async () => {
       expect(
-        defaultTimespan.humanizeFinishInTimezone('America/New_York', i18next.t, 'shortTime'),
+        defaultTimespan.humanizeFinishInTimezone(
+          'UTC',
+          (await getI18n()).getFixedT('en'),
+          'shortTime',
+        ),
+      ).toEqual('12:00am');
+      expect(
+        defaultTimespan.humanizeFinishInTimezone(
+          'America/New_York',
+          (await getI18n()).getFixedT('en'),
+          'shortTime',
+        ),
       ).toEqual('7:00pm');
     });
 
-    it('handles open ends', () => {
-      expect(endOfTime.humanizeFinishInTimezone('UTC', i18next.t, 'shortTime')).toEqual(
-        'indefinitely',
-      );
+    it('handles open ends', async () => {
+      expect(
+        endOfTime.humanizeFinishInTimezone('UTC', (await getI18n()).getFixedT('en'), 'shortTime'),
+      ).toEqual('indefinitely');
     });
   });
 
   describe('humanizeInTimezone', () => {
-    it('formats the times correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeInTimezone('UTC', i18next.t, 'shortTime')).toEqual('12:00am');
+    it('formats the times correctly for the given time zone', async () => {
       expect(
-        defaultTimespan.humanizeInTimezone('America/New_York', i18next.t, 'shortTime'),
+        defaultTimespan.humanizeInTimezone('UTC', (await getI18n()).getFixedT('en'), 'shortTime'),
+      ).toEqual('12:00am');
+      expect(
+        defaultTimespan.humanizeInTimezone(
+          'America/New_York',
+          (await getI18n()).getFixedT('en'),
+          'shortTime',
+        ),
       ).toEqual('7:00pm');
     });
 
-    it('handles open ends', () => {
-      expect(beginningOfTime.humanizeInTimezone('UTC', i18next.t, 'shortTime')).toEqual(
-        'anytime - 12:00am',
-      );
-      expect(endOfTime.humanizeInTimezone('UTC', i18next.t, 'shortTime')).toEqual(
-        '12:00am - indefinitely',
-      );
-      expect(infiniteTimespan.humanizeInTimezone('UTC', i18next.t, 'shortTime')).toEqual('always');
+    it('handles open ends', async () => {
+      expect(
+        beginningOfTime.humanizeInTimezone('UTC', (await getI18n()).getFixedT('en'), 'shortTime'),
+      ).toEqual('anytime - 12:00am');
+      expect(
+        endOfTime.humanizeInTimezone('UTC', (await getI18n()).getFixedT('en'), 'shortTime'),
+      ).toEqual('12:00am - indefinitely');
+      expect(
+        infiniteTimespan.humanizeInTimezone('UTC', (await getI18n()).getFixedT('en'), 'shortTime'),
+      ).toEqual('always');
     });
   });
 

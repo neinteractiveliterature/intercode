@@ -62,6 +62,7 @@ const initOptions = {
       },
     },
   },
+  defaultNS: 'translation',
   lng: 'en',
   fallbackLng: 'en',
   keySeparator: '.',
