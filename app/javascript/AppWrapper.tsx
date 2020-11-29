@@ -1,7 +1,9 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
+import { Suspense, useCallback, useRef, useEffect, ReactNode, useState } from 'react';
 import * as React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
+import { i18n } from 'i18next';
+import { I18nextProvider } from 'react-i18next';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
@@ -15,6 +17,29 @@ import { AlertProvider } from './ModalDialogs/Alert';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
 import ErrorBoundary from './ErrorBoundary';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
+import getI18n from './setupI18Next';
+import ErrorDisplay from './ErrorDisplay';
+
+function I18NextWrapper({ children }: { children: ReactNode }) {
+  const [i18nInstance, seti18nInstance] = useState<i18n>();
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    getI18n()
+      .then((instance) => seti18nInstance(instance))
+      .catch((err) => setError(err));
+  }, []);
+
+  if (i18nInstance) {
+    return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
+  }
+
+  if (error) {
+    return <ErrorDisplay stringError={error.message} />;
+  }
+
+  return <PageLoadingIndicator visible />;
+}
 
 export type AppWrapperProps = {
   authenticityTokens: {
@@ -87,11 +112,13 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
                     <>
                       {!unauthenticatedError && (
                         <Suspense fallback={<PageLoadingIndicator visible />}>
-                          <AlertProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <WrappedComponent {...((otherProps as unknown) as P)} />
-                            </ErrorBoundary>
-                          </AlertProvider>
+                          <I18NextWrapper>
+                            <AlertProvider>
+                              <ErrorBoundary placement="replace" errorType="plain">
+                                <WrappedComponent {...((otherProps as unknown) as P)} />
+                              </ErrorBoundary>
+                            </AlertProvider>
+                          </I18NextWrapper>
                         </Suspense>
                       )}
                       <AuthenticationModal />

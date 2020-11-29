@@ -18,9 +18,9 @@ describe('ScheduledValueEditor', () => {
       />,
     );
 
-  test('it renders the correct values', () => {
+  test('it renders the correct values', async () => {
     const cutoff = DateTime.utc();
-    const { getAllByRole, getAllByTestId } = renderScheduledValueEditor({
+    const { getAllByRole, getAllByTestId } = await renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
           { value: 1, start: null, finish: cutoff.toISO() },
@@ -37,16 +37,16 @@ describe('ScheduledValueEditor', () => {
     ]);
   });
 
-  test('adding a row', () => {
+  test('adding a row', async () => {
     const dispatch = jest.fn();
-    const { getByText } = renderScheduledValueEditor({ dispatch });
+    const { getByText } = await renderScheduledValueEditor({ dispatch });
     fireEvent.click(getByText('Add row'));
     expect(dispatch).toHaveBeenCalledWith({ type: 'addTimespan' });
   });
 
-  test('deleting a row', () => {
+  test('deleting a row', async () => {
     const dispatch = jest.fn();
-    const { getByText } = renderScheduledValueEditor({
+    const { getByText } = await renderScheduledValueEditor({
       scheduledValue: {
         timespans: [{ value: 'something', start: null, finish: null }],
       },
@@ -56,9 +56,9 @@ describe('ScheduledValueEditor', () => {
     expect(dispatch).toHaveBeenCalledWith({ type: 'deleteTimespan', index: 0 });
   });
 
-  test('changing something in a row', () => {
+  test('changing something in a row', async () => {
     const dispatch = jest.fn();
-    const { getByTestId } = renderScheduledValueEditor({
+    const { getByTestId } = await renderScheduledValueEditor({
       scheduledValue: {
         timespans: [{ value: 'something', start: null, finish: null }],
       },

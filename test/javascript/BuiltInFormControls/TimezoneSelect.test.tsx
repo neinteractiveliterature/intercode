@@ -7,13 +7,13 @@ describe('TimezoneSelect', () => {
   const renderComponent = (overrideProps?: Partial<TimezoneSelectProps>) =>
     render(<TimezoneSelect label="Timezone" onChange={() => {}} {...overrideProps} />);
 
-  test('it renders', () => {
-    const { getAllByText } = renderComponent();
+  test('it renders', async () => {
+    const { getAllByText } = await renderComponent();
     expect(getAllByText(/Timezone/)).toHaveLength(1);
   });
 
   test('option filtering', async () => {
-    const { getByRole, getByText } = renderComponent();
+    const { getByRole, getByText } = await renderComponent();
     const input = getByRole('textbox');
 
     fireEvent.change(input, { target: { value: 'coordinated' } });

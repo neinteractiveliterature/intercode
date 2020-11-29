@@ -2,6 +2,7 @@ import i18next, { BackendModule, ResourceKey } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import mapValues from 'lodash/mapValues';
 import pickBy from 'lodash/pickBy';
+import enLanguage from '../../locales/en.json'; // english is the fallback language and therefore must always be loaded
 
 function filterEmptyStrings(obj: ResourceKey): ResourceKey {
   return mapValues(
@@ -24,9 +25,14 @@ type PromiseI18NextBackendOptions = {
   };
 };
 
-const PromiseI18nextBackend: BackendModule = {
+type PromiseI18NextBackendModule = BackendModule<PromiseI18NextBackendOptions> & {
+  loaders: PromiseI18NextBackendOptions['loaders'];
+};
+
+const PromiseI18nextBackend: PromiseI18NextBackendModule = {
   type: 'backend',
-  init(services, backendOptions: PromiseI18NextBackendOptions) {
+  loaders: {},
+  init(services, backendOptions) {
     this.loaders = backendOptions.loaders || {};
   },
   read(language, namespace, callback) {
@@ -45,26 +51,42 @@ const PromiseI18nextBackend: BackendModule = {
   },
 };
 
-i18next
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .use(PromiseI18nextBackend)
-  .init({
-    backend: {
-      loaders: {
-        en: {
-          translation: () => import('../../locales/en.json').then((module) => module.default),
-        },
-        es: {
-          translation: () => import('../../locales/es.json').then((module) => module.default),
-        },
+const initOptions = {
+  backend: {
+    loaders: {
+      en: {
+        translation: async () => enLanguage,
+      },
+      es: {
+        translation: () => import('../../locales/es.json').then((module) => module.default),
       },
     },
-    lng: 'en',
-    fallbackLng: 'en',
-    keySeparator: '.',
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-  });
+  },
+  lng: 'en',
+  fallbackLng: 'en',
+  keySeparator: '.',
+  interpolation: {
+    escapeValue: false, // react already safes from xss
+  },
+};
 
-export default i18next;
+let ready = false;
+const i18n = i18next
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(PromiseI18nextBackend);
+
+const i18nInitPromise = i18n.init(initOptions).then(() => {
+  ready = true;
+});
+
+async function getI18n() {
+  if (ready) {
+    return i18n;
+  }
+
+  await i18nInitPromise;
+  return i18n;
+}
+
+export { i18n };
+export default getI18n;

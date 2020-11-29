@@ -9,7 +9,7 @@ import {
   getDateTimeFormat,
 } from './TimeUtils';
 import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
-import i18n from './setupI18Next';
+import { i18n } from './setupI18Next';
 import { DateTimeFormatKey } from './DateTimeFormats';
 
 export type TimeHopOptions = {

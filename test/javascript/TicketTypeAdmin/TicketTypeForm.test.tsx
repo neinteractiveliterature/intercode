@@ -1,8 +1,8 @@
 import { render } from '../testUtils';
 import TicketTypeForm from '../../../app/javascript/TicketTypeAdmin/TicketTypeForm';
 
-test('TicketTypeForm matches snapshot', () => {
-  const { asFragment } = render(
+test('TicketTypeForm matches snapshot', async () => {
+  const { asFragment } = await render(
     <TicketTypeForm
       ticketType={{
         __typename: 'TicketType',
