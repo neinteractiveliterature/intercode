@@ -2,15 +2,14 @@ import * as React from 'react';
 
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import { usePropertySetters } from '../../usePropertySetters';
+import { FunctionalStateUpdater, usePropertySetters } from '../../usePropertySetters';
 import useSortable from '../../useSortable';
 import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';
-import { PricingStrategy } from '../../graphqlTypes.generated';
 
 export type AdminProductVariantEditRowProps = {
   variant: EditingVariant;
-  updateVariant: React.Dispatch<React.SetStateAction<EditingVariant>>;
+  updateVariant: FunctionalStateUpdater<EditingVariant>;
   deleteVariant: () => void;
   moveVariant: (dragIndex: number, hoverIndex: number) => void;
   index: number;
@@ -60,13 +59,7 @@ function AdminProductVariantEditRow({
       </td>
       <td>
         <PricingStructureInput
-          value={
-            variant.override_pricing_structure ?? {
-              __typename: 'PricingStructure',
-              pricing_strategy: PricingStrategy.Fixed,
-              value: { __typename: 'Money', currency_code: 'USD', fractional: 0 },
-            }
-          }
+          value={variant.override_pricing_structure}
           onChange={setOverridePricingStructure}
         />
       </td>
