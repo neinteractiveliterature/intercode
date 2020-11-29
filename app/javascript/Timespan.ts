@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { TFunction } from 'i18next';
 import { DateTime, Duration, DurationObject, DurationUnit } from 'luxon';
 import {
@@ -9,7 +10,6 @@ import {
   getDateTimeFormat,
 } from './TimeUtils';
 import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
-import { i18n } from './setupI18Next';
 import { DateTimeFormatKey } from './DateTimeFormats';
 
 export type TimeHopOptions = {
@@ -35,6 +35,8 @@ export interface FiniteTimespan extends Timespan {
 export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
   return timespan.start != null && timespan.finish != null;
 }
+
+export class InfiniteTimespanError extends Error {}
 
 class Timespan {
   start: DateTime | null | undefined;
@@ -157,7 +159,7 @@ class Timespan {
 
   humanizeStartInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
     if (this.start == null) {
-      return t(getDateTimeFormat('anytime', t));
+      return formatLCM(DateTime.local(), getDateTimeFormat('anytime', t));
     }
 
     const start = this.start.setZone(timezoneName);
@@ -170,7 +172,7 @@ class Timespan {
 
   humanizeFinishInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
     if (this.finish == null) {
-      return t(getDateTimeFormat('indefinitely', t));
+      return formatLCM(DateTime.local(), getDateTimeFormat('indefinitely', t));
     }
 
     const finish = this.finish.setZone(timezoneName);
@@ -219,12 +221,7 @@ class Timespan {
     { unit, offset = undefined, duration = undefined }: TimeHopOptions,
   ) {
     if (!this.isFinite()) {
-      throw new Error(
-        `getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(
-          timezoneName,
-          i18n.t,
-        )}`,
-      );
+      throw new InfiniteTimespanError('getTimeHopsWithin called on an infinite timespan');
     }
 
     const timeBlocks: DateTime[] = [];
@@ -248,12 +245,7 @@ class Timespan {
   ): FiniteTimespan[] {
     const thisTimespan = this;
     if (!thisTimespan.isFinite()) {
-      throw new Error(
-        `getTimespansWithin called on an infinite Timespan ${thisTimespan.humanizeInTimezone(
-          timezoneName,
-          i18n.t,
-        )}`,
-      );
+      throw new InfiniteTimespanError('getTimespansWithin called on an infinite Timespan');
     }
 
     const stepDuration = Duration.fromObject({ [unit]: duration ?? 1 });
