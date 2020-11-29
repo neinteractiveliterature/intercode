@@ -12,11 +12,11 @@ function updateVariant(
   productVariants: EditingVariant[],
   setProductVariants: React.Dispatch<React.SetStateAction<EditingVariant[]>>,
   variant: EditingVariant,
-  newValue: Partial<EditingVariant>,
+  getNewValue: (prevVariant: EditingVariant) => EditingVariant,
 ) {
   const newVariants = productVariants.map((existingVariant) => {
     if (realOrGeneratedIdsMatch(variant, existingVariant)) {
-      return { ...existingVariant, ...newValue };
+      return { ...existingVariant, ...getNewValue(variant) };
     }
 
     return existingVariant;
@@ -166,8 +166,8 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
 
   const rows = sortProductVariants(variants).map((variant, index) => {
     if (props.editing) {
-      const variantUpdater = (newValue: EditingVariant) =>
-        updateVariant(product.product_variants, props.onChange, variant, newValue);
+      const variantUpdater = (getNewValue: (prevValue: EditingVariant) => EditingVariant) =>
+        updateVariant(product.product_variants, props.onChange, variant, getNewValue);
 
       return (
         <AdminProductVariantEditRow

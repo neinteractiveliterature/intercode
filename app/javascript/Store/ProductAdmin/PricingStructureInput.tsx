@@ -6,7 +6,7 @@ import { PricingStructureModalContext } from './EditPricingStructureModal';
 import { EditingPricingStructure } from './EditingProductTypes';
 
 export type PricingStructureInputProps = {
-  value: EditingPricingStructure;
+  value?: EditingPricingStructure | null;
   onChange: React.Dispatch<EditingPricingStructure>;
 };
 
