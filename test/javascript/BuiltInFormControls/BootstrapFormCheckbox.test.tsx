@@ -18,19 +18,19 @@ describe('BootstrapFormCheckbox', () => {
 
   beforeEach(onChange.mockReset);
 
-  test('it passes change events', () => {
-    const { getByLabelText } = renderComponent();
+  test('it passes change events', async () => {
+    const { getByLabelText } = await renderComponent();
     fireEvent.click(getByLabelText('check me'));
     expect(onChange.mock.calls).toHaveLength(1);
   });
 
-  test('it renders as a checkbox', () => {
-    const { getByLabelText } = renderComponent();
+  test('it renders as a checkbox', async () => {
+    const { getByLabelText } = await renderComponent();
     expect(getByLabelText('check me')).toHaveAttribute('type', 'checkbox');
   });
 
-  test('it will also render as a radio button', () => {
-    const { getByLabelText } = renderComponent({ type: 'radio' });
+  test('it will also render as a radio button', async () => {
+    const { getByLabelText } = await renderComponent({ type: 'radio' });
     expect(getByLabelText('check me')).toHaveAttribute('type', 'radio');
   });
 });

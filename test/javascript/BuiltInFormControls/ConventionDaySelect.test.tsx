@@ -27,8 +27,8 @@ describe('ConventionDaySelect', () => {
       </AppRootContext.Provider>,
     );
 
-  test('it renders an option for each convention day', () => {
-    const { getAllByRole } = renderConventionDaySelect();
+  test('it renders an option for each convention day', async () => {
+    const { getAllByRole } = await renderConventionDaySelect();
     expect(getAllByRole('radio').map((input: HTMLInputElement) => input.value)).toEqual([
       '2017-01-01T00:00:00.000+00:00',
       '2017-01-02T06:00:00.000+00:00',
@@ -36,8 +36,8 @@ describe('ConventionDaySelect', () => {
     ]);
   });
 
-  test('the value is selected', () => {
-    const { getByLabelText } = renderConventionDaySelect({
+  test('the value is selected', async () => {
+    const { getByLabelText } = await renderConventionDaySelect({
       value: DateTime.fromISO('2017-01-02T06:00:00.000Z'),
     });
     expect(getByLabelText('Sunday')).not.toBeChecked();
@@ -45,8 +45,8 @@ describe('ConventionDaySelect', () => {
     expect(getByLabelText('Tuesday')).not.toBeChecked();
   });
 
-  test('it calls onChange when a value is selected', () => {
-    const { getByLabelText } = renderConventionDaySelect();
+  test('it calls onChange when a value is selected', async () => {
+    const { getByLabelText } = await renderConventionDaySelect();
     fireEvent.click(getByLabelText('Tuesday'));
     expect(onChange.mock.calls).toHaveLength(1);
     expect(onChange.mock.calls[0][0].day).toEqual(3);

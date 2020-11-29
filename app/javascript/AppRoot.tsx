@@ -11,7 +11,7 @@ import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
-import i18n from './setupI18Next';
+import getI18n from './setupI18Next';
 import { lazyWithBundleHashCheck } from './checkBundleHash';
 
 const NavigationBar = lazyWithBundleHashCheck(
@@ -114,8 +114,10 @@ function AppRoot() {
 
   useEffect(() => {
     if (appRootContextValue?.language) {
-      i18n.changeLanguage(appRootContextValue.language);
-      Settings.defaultLocale = appRootContextValue.language;
+      getI18n().then((i18n) => {
+        i18n.changeLanguage(appRootContextValue.language);
+        Settings.defaultLocale = appRootContextValue.language;
+      });
     }
   }, [appRootContextValue]);
 

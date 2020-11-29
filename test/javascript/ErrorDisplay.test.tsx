@@ -1,8 +1,8 @@
 import { render } from './testUtils';
 import ErrorDisplay from '../../app/javascript/ErrorDisplay';
 
-test('it renders a string error', () => {
-  const { container } = render(<ErrorDisplay stringError="everything is borked" />);
+test('it renders a string error', async () => {
+  const { container } = await render(<ErrorDisplay stringError="everything is borked" />);
 
   expect(container.innerHTML).toMatch(/everything is borked/);
 });
@@ -17,8 +17,8 @@ const APOLLO_ERROR_FIELDS = {
   positions: undefined,
   source: undefined,
 };
-test('it renders a graphql error', () => {
-  const { getAllByText } = render(
+test('it renders a graphql error', async () => {
+  const { getAllByText } = await render(
     <ErrorDisplay
       graphQLError={{
         graphQLErrors: [
@@ -40,8 +40,8 @@ test('it renders a graphql error', () => {
   expect(getAllByText('is borked')).toHaveLength(1);
 });
 
-test('it renders nothing by default', () => {
-  const { getByTestId } = render(<ErrorDisplay />, {
+test('it renders nothing by default', async () => {
+  const { getByTestId } = await render(<ErrorDisplay />, {
     wrapper: () => <div data-testid="wrapper" />,
   });
   const wrapper: HTMLDivElement = getByTestId('wrapper') as HTMLDivElement;

@@ -61,9 +61,9 @@ describe('ConventionForm', () => {
       />,
     );
 
-  test('it renders the given values', () => {
+  test('it renders the given values', async () => {
     const now = DateTime.fromISO('2019-04-18T18:34:04.283Z', { zone: 'Etc/UTC' }).toISO();
-    const { getByLabelText, getByText, getMultipleChoiceInput } = renderConventionForm(
+    const { getByLabelText, getByText, getMultipleChoiceInput } = await renderConventionForm(
       {},
       {
         ...defaultInitialConvention,
@@ -108,8 +108,8 @@ describe('ConventionForm', () => {
     expect((getByLabelText('Maximum tickets') as HTMLInputElement).value).toEqual('100');
   });
 
-  test('mutating form fields', () => {
-    const { getByText, getMultipleChoiceInput } = renderConventionForm();
+  test('mutating form fields', async () => {
+    const { getByText, getMultipleChoiceInput } = await renderConventionForm();
 
     fireEvent.click(getByText('Events'));
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(false);
@@ -121,7 +121,7 @@ describe('ConventionForm', () => {
 
   test('onClickSave', async () => {
     const saveConvention = jest.fn();
-    const { getByText } = renderConventionForm({ saveConvention });
+    const { getByText } = await renderConventionForm({ saveConvention });
 
     await act(async () => {
       fireEvent.click(getByText('Save settings'), { selector: 'button' });
