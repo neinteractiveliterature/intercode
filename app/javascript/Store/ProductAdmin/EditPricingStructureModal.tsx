@@ -26,7 +26,7 @@ const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, des
 type EditingPricingStructure = Omit<Partial<PricingStructure>, '__typename'>;
 
 export type PricingStructureModalState = {
-  value: EditingPricingStructure;
+  value: EditingPricingStructure | null | undefined;
   onChange: React.Dispatch<EditingPricingStructure | undefined>;
 };
 
@@ -66,7 +66,13 @@ function EditPricingStructureModal({ visible, state, close }: EditPricingStructu
 
       setPricingStructure({
         ...pricingStructure,
-        value: scheduledValueReducer(pricingStructure.value as ScheduledMoneyValue, action),
+        value: scheduledValueReducer(
+          (pricingStructure.value as ScheduledMoneyValue | undefined) ?? {
+            timespans: [],
+            __typename: 'ScheduledMoneyValue' as const,
+          },
+          action,
+        ),
       });
     },
     [pricingStructure],
@@ -84,41 +90,39 @@ function EditPricingStructureModal({ visible, state, close }: EditPricingStructu
       <div className="modal-header">Pricing structure</div>
 
       <div className="modal-body">
-        {pricingStructure && (
-          <>
-            <MultipleChoiceInput
-              caption="Pricing strategy"
-              choices={PRICING_STRATEGIES}
-              value={pricingStructure.pricing_strategy}
-              onChange={(strategy: PricingStrategy) =>
-                setPricingStructure((prev) => ({
-                  ...prev,
-                  pricing_strategy: strategy,
-                }))
-              }
-            />
+        <MultipleChoiceInput
+          caption="Pricing strategy"
+          choices={PRICING_STRATEGIES}
+          value={pricingStructure?.pricing_strategy}
+          onChange={(strategy: PricingStrategy) =>
+            setPricingStructure((prev) => ({
+              ...prev,
+              pricing_strategy: strategy,
+            }))
+          }
+        />
 
-            {pricingStructure.pricing_strategy === 'fixed' && (
-              <FormGroupWithLabel label="Price">
-                {(id) => (
-                  <MoneyInput
-                    id={id}
-                    value={pricingStructure.value as Money}
-                    onChange={(price) => setPricingStructure((prev) => ({ ...prev, value: price }))}
-                  />
-                )}
-              </FormGroupWithLabel>
-            )}
-
-            {pricingStructure.pricing_strategy === 'scheduled_value' && (
-              <ScheduledValueEditor
-                timezone={timezoneName}
-                scheduledValue={pricingStructure.value as ScheduledMoneyValue}
-                dispatch={dispatchScheduledValue}
-                buildValueInput={buildScheduledMoneyValueInput}
+        {pricingStructure?.pricing_strategy === 'fixed' && (
+          <FormGroupWithLabel label="Price">
+            {(id) => (
+              <MoneyInput
+                id={id}
+                value={pricingStructure.value as Money | undefined}
+                onChange={(price) => setPricingStructure((prev) => ({ ...prev, value: price }))}
               />
             )}
-          </>
+          </FormGroupWithLabel>
+        )}
+
+        {pricingStructure?.pricing_strategy === 'scheduled_value' && (
+          <ScheduledValueEditor
+            timezone={timezoneName}
+            scheduledValue={
+              (pricingStructure.value as ScheduledMoneyValue | undefined) ?? { timespans: [] }
+            }
+            dispatch={dispatchScheduledValue}
+            buildValueInput={buildScheduledMoneyValueInput}
+          />
         )}
       </div>
 
