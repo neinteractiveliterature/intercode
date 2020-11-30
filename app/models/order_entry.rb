@@ -18,7 +18,7 @@ class OrderEntry < ApplicationRecord
 
       if order_entry.product_variant
         order_entry.price_per_item = (
-          order_entry.product_variant.override_pricing_structure.price(**price_args) ||
+          order_entry.product_variant.override_pricing_structure&.price(**price_args) ||
           order_entry.product.pricing_structure.price(**price_args)
         )
       else
