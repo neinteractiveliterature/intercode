@@ -10,11 +10,7 @@ class Run < ApplicationRecord
   delegate :bucket_with_key, to: :registration_policy
 
   scope :between, ->(start, finish) do
-    joins(:event).where(
-      "tsrange(?, ?, '[)') && \
-tsrange(starts_at, starts_at + make_interval(secs := events.length_seconds), '[)')",
-      start, finish
-    )
+    where("tsrange(?, ?, '[)') && timespan_tsrange", start, finish)
   end
 
   def ends_at
