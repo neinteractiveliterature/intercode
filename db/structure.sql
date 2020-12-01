@@ -128,6 +128,26 @@ CREATE FUNCTION public.current_scheduled_value_timespan(scheduled_value jsonb) R
 
 
 --
+-- Name: event_update_all_runs_timespan_tsrange(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.event_update_all_runs_timespan_tsrange() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+  BEGIN
+    UPDATE runs
+    SET timespan_tsrange = tsrange(
+      runs.starts_at, runs.starts_at + make_interval(secs := events.length_seconds),
+      '[)'
+    )
+    FROM events
+    WHERE events.id = NEW.id AND events.id = runs.event_id;
+    RETURN null;
+  END
+$$;
+
+
+--
 -- Name: minimum_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -316,6 +336,26 @@ CREATE FUNCTION public.registration_policy_buckets(registration_policy jsonb) RE
       SELECT jsonb_array_elements(registration_policy->'buckets') AS bucket
     ) buckets
   $$;
+
+
+--
+-- Name: run_update_timespan_tsrange(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.run_update_timespan_tsrange() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+  BEGIN
+    UPDATE runs
+    SET timespan_tsrange = tsrange(
+      runs.starts_at, runs.starts_at + make_interval(secs := events.length_seconds),
+      '[)'
+    )
+    FROM events
+    WHERE runs.id = NEW.id AND events.id = runs.event_id;
+    RETURN null;
+  END
+$$;
 
 
 --
@@ -1282,7 +1322,7 @@ CREATE TABLE public.events (
     email character varying,
     organization character varying,
     url text,
-    length_seconds integer,
+    length_seconds integer NOT NULL,
     can_play_concurrently boolean DEFAULT false NOT NULL,
     con_mail_destination character varying,
     description text,
@@ -2130,7 +2170,8 @@ CREATE TABLE public.runs (
     schedule_note text,
     updated_by_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    timespan_tsrange tsrange NOT NULL
 );
 
 
@@ -4104,6 +4145,13 @@ CREATE INDEX index_runs_on_event_id ON public.runs USING btree (event_id);
 
 
 --
+-- Name: index_runs_on_timespan_tsrange; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_runs_on_timespan_tsrange ON public.runs USING gist (timespan_tsrange);
+
+
+--
 -- Name: index_runs_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4311,6 +4359,20 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: events event_update_all_runs_timespan_tsrange; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER event_update_all_runs_timespan_tsrange AFTER INSERT OR UPDATE OF length_seconds ON public.events FOR EACH ROW EXECUTE FUNCTION public.event_update_all_runs_timespan_tsrange();
+
+
+--
+-- Name: runs run_update_timespan_tsrange; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER run_update_timespan_tsrange AFTER INSERT OR UPDATE OF starts_at ON public.runs FOR EACH ROW EXECUTE FUNCTION public.run_update_timespan_tsrange();
 
 
 --
@@ -5217,6 +5279,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200830175919'),
 ('20200930160120'),
 ('20201010180459'),
-('20201010181146');
+('20201010181146'),
+('20201201184155');
 
 
