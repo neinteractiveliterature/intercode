@@ -346,14 +346,10 @@ CREATE FUNCTION public.run_update_timespan_tsrange() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
   BEGIN
-    UPDATE runs
-    SET timespan_tsrange = tsrange(
-      runs.starts_at, runs.starts_at + make_interval(secs := events.length_seconds),
-      '[)'
-    )
-    FROM events
-    WHERE runs.id = NEW.id AND events.id = runs.event_id;
-    RETURN null;
+    NEW.timespan_tsrange := tsrange(
+      NEW.starts_at, NEW.starts_at + make_interval(secs := (SELECT length_seconds FROM events WHERE id = NEW.event_id))
+    );
+    RETURN NEW;
   END
 $$;
 
@@ -4372,7 +4368,7 @@ CREATE TRIGGER event_update_all_runs_timespan_tsrange AFTER INSERT OR UPDATE OF 
 -- Name: runs run_update_timespan_tsrange; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER run_update_timespan_tsrange AFTER INSERT OR UPDATE OF starts_at ON public.runs FOR EACH ROW EXECUTE FUNCTION public.run_update_timespan_tsrange();
+CREATE TRIGGER run_update_timespan_tsrange BEFORE INSERT OR UPDATE OF starts_at ON public.runs FOR EACH ROW EXECUTE FUNCTION public.run_update_timespan_tsrange();
 
 
 --
