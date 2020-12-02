@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:title) { |n| "Event proposal #{n}" }
     status { 'proposed' }
     convention
+    length_seconds { 1.hour.to_i }
 
     after(:build) do |event_proposal|
       event_proposal.event_category ||= create(
