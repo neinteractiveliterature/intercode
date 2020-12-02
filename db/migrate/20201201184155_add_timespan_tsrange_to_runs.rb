@@ -1,4 +1,5 @@
 class AddTimespanTsrangeToRuns < ActiveRecord::Migration[6.0]
+  # rubocop:disable Metrics/MethodLength
   def up
     change_column_null :events, :length_seconds, false
 
