@@ -146,7 +146,7 @@ function ProspectiveRunScheduleEventRun({
           runStyle={runStyle}
           unlimited={!event.registration_policy?.slots_limited}
         />
-        {event.title}
+        <div className="schedule-grid-event-content-main">{event.title}</div>
       </div>
     </div>
   );
@@ -179,7 +179,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
     () =>
       runs.map((run) => ({
         __typename: 'Run',
-        id: 0,
+        id: run.id,
         event_id: event.id,
         starts_at: run.starts_at,
         rooms: run.rooms,
