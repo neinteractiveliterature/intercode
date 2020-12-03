@@ -22,9 +22,14 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 
 export type RunForRunFormFields = Pick<
   Run,
-  '__typename' | 'id' | 'starts_at' | 'title_suffix' | 'schedule_note'
+  '__typename' | 'id' | 'title_suffix' | 'schedule_note'
 > & {
   rooms: RoomForSelect[];
+  starts_at?: Run['starts_at'];
+};
+
+type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_at'> & {
+  starts_at: Run['starts_at'];
 };
 
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
@@ -89,6 +94,20 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     onChange((prevRun) => ({ ...prevRun, starts_at: startTime ? startTime.toISO() : null }));
   }, [onChange, startTime]);
 
+  const runsForProspectiveRunSchedule = useMemo(
+    () => (run.starts_at ? [run as WithStartsAt<RunType>] : []),
+    [run],
+  );
+
+  const eventForProspectiveRunSchedule = useMemo(
+    () => ({
+      ...event,
+      id: event.id || -1,
+      runs: event.runs || [],
+    }),
+    [event],
+  );
+
   if (loading) {
     return <LoadingIndicator />;
   }
@@ -147,12 +166,8 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 
       <ProspectiveRunSchedule
         day={day ?? undefined}
-        runs={[run]}
-        event={{
-          ...event,
-          id: event.id || -1,
-          runs: event.runs || [],
-        }}
+        runs={runsForProspectiveRunSchedule}
+        event={eventForProspectiveRunSchedule}
       />
 
       <BootstrapFormInput

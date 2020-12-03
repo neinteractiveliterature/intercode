@@ -110,6 +110,26 @@ function ScheduleMultipleRunsModal({
     [timespansWithinRange, existingRunTimespans],
   );
 
+  const runsForProspectiveRunSchedule = useMemo(
+    () =>
+      nonConflictingTimespansWithinRange.map((t, index) => ({
+        __typename: 'Run' as const,
+        id: index * -1,
+        starts_at: t.start.toISO(),
+        rooms,
+      })),
+    [nonConflictingTimespansWithinRange, rooms],
+  );
+
+  const eventForProspectiveRunSchedule = useMemo(
+    () => ({
+      ...event,
+      id: event.id || -1,
+      runs: event.runs || [],
+    }),
+    [event],
+  );
+
   const scheduleRuns = useCallback(async () => {
     const runs = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
       starts_at: nonConflictingTimespan.start.toISO(),
@@ -240,17 +260,8 @@ function ScheduleMultipleRunsModal({
 
           <ProspectiveRunSchedule
             day={day}
-            runs={nonConflictingTimespansWithinRange.map((t, index) => ({
-              __typename: 'Run',
-              id: index * -1,
-              starts_at: t.start.toISO(),
-              rooms,
-            }))}
-            event={{
-              ...event,
-              id: event.id || -1,
-              runs: event.runs || [],
-            }}
+            runs={runsForProspectiveRunSchedule}
+            event={eventForProspectiveRunSchedule}
           />
 
           <ErrorDisplay graphQLError={createError as ApolloError} />

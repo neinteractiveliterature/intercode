@@ -1,13 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
-import EditRunModal from './EditRunModal';
+import EditRunModal, { EditingRun } from './EditRunModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import {
-  ConventionFieldsFragment,
-  EventFieldsFragment,
-  RunFieldsFragment,
-} from './queries.generated';
+import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
 
 export type EditRunProps = {
   convention: ConventionFieldsFragment;
@@ -25,7 +21,7 @@ function EditRun({ convention, events }: EditRunProps) {
     return events.find((e) => e.id.toString() === match.params.eventId);
   }, [match, events]);
 
-  const initialRun: RunFieldsFragment | undefined = useMemo(() => {
+  const initialRun: EditingRun | undefined = useMemo(() => {
     if (!event) {
       return undefined;
     }
@@ -36,7 +32,7 @@ function EditRun({ convention, events }: EditRunProps) {
         id: 0,
         my_signups: [],
         my_signup_requests: [],
-        starts_at: '',
+        starts_at: undefined,
         title_suffix: undefined,
         schedule_note: undefined,
         rooms: [],
