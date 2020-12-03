@@ -10,20 +10,7 @@ class Run < ApplicationRecord
   delegate :bucket_with_key, to: :registration_policy
 
   scope :between, ->(start, finish) do
-    run_scope = self
-    if start
-      run_scope = run_scope.joins(:event).where(
-        'starts_at >= ? or (starts_at + make_interval(secs := events.length_seconds)) > ?',
-        start, start
-      )
-    end
-    if finish
-      run_scope = run_scope.joins(:event).where(
-        'starts_at < ? or (starts_at + make_interval(secs := events.length_seconds)) >= ?',
-        finish, finish
-      )
-    end
-    run_scope
+    where("tsrange(?, ?, '[)') && timespan_tsrange", start, finish)
   end
 
   def ends_at
