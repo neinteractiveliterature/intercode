@@ -172,6 +172,7 @@
     "longDateTime": "MMMM d, yyyy 'at' h:mmaaa",
     "longDayYear": "D, yyyy",
     "longMonthDay": "MMMM D",
+    "longMonthYear": "MMMM yyyy",
     "longWeekday": "cccc",
     "longWeekdayDate": "cccc, MMMM d, yyyy",
     "longWeekdayDateTime": "cccc, MMMM d, yyyy 'at' h:mmaaa",
