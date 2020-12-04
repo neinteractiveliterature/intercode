@@ -8,15 +8,13 @@ const DateTimeFormatGenerators = {
   compactDateTime: (t: TFunction) => t('dateTimeFormats.compactDateTime', 'yyyy-MM-dd HH:mm'),
   durationHoursMinutes: (t: TFunction) => t('dateTimeFormats.durationHoursMinutes', 'h:mm'),
   indefinitely: (t: TFunction) => t('dateTimeFormats.indefinitely', "'indefinitely'"),
-  longDate: (t: TFunction) => t('dateTimeFormats.longDate', 'MMMM D, yyyy'),
+  longDate: (t: TFunction) => t('dateTimeFormats.longDate', 'MMMM d, yyyy'),
   longDateTime: (t: TFunction) => t('dateTimeFormats.longDateTime', "MMMM d, yyyy 'at' h:mmaaa"),
-  longDayYear: (t: TFunction) => t('dateTimeFormats.longDayYear', 'D, yyyy'),
-  longMonthDay: (t: TFunction) => t('dateTimeFormats.longMonthDay', 'MMMM D'),
+  longDayYear: (t: TFunction) => t('dateTimeFormats.longDayYear', 'd, yyyy'),
+  longMonthDay: (t: TFunction) => t('dateTimeFormats.longMonthDay', 'MMMM d'),
   longMonthYear: (t: TFunction) => t('dateTimeFormats.longMonthYear', 'MMMM yyyy'),
   longWeekday: (t: TFunction) => t('dateTimeFormats.longWeekday', 'cccc'),
   longWeekdayDate: (t: TFunction) => t('dateTimeFormats.longWeekdayDate', 'cccc, MMMM d, yyyy'),
-  longWeekdayDateTime: (t: TFunction) =>
-    t('dateTimeFormats.longWeekdayDateTime', "cccc, MMMM d, yyyy 'at' h:mmaaa"),
   longWeekdayDateTimeWithZone: (t: TFunction) =>
     t('dateTimeFormats.longWeekdayDateTimeWithZone', "cccc, MMMM d, yyyy 'at' h:mmaaa ZZZZ"),
   longWeekdayTime: (t: TFunction) => t('dateTimeFormats.longWeekdayTime', 'cccc h:mmaaa'),
@@ -28,6 +26,7 @@ const DateTimeFormatGenerators = {
   shortHour: (t: TFunction) => t('dateTimeFormats.shortHour', 'haaa'),
   shortTime: (t: TFunction) => t('dateTimeFormats.shortTime', 'h:mmaaa'),
   shortTimeWithSeconds: (t: TFunction) => t('dateTimeFormats.shortTimeWithSeconds', 'h:mm:ssaaa'),
+  shortTimeWithZone: (t: TFunction) => t('dateTimeFormats.shortTimeWithZone', 'h:mmaaa ZZZZ'),
   shortWeekday: (t: TFunction) => t('dateTimeFormats.shortWeekday', 'ccc'),
   shortWeekdayDateTime: (t: TFunction) =>
     t('dateTimeFormats.shortWeekdayDateTime', 'ccc, MMM d, yyyy h:mmaaa'),

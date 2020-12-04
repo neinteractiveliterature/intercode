@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import FakeEventRun from './FakeEventRun';
 
 function FullnessLegend() {
   const { t } = useTranslation();
@@ -15,28 +16,42 @@ function FullnessLegend() {
             {[
               {
                 className: 'below-minimum',
+                availability: 0.9,
+                unlimited: false,
                 label: t('schedule.legends.eventFullness.belowMinimum', 'Below minimum'),
               },
               {
                 className: 'minimum',
+                availability: 0.6,
+                unlimited: false,
                 label: t('schedule.legends.eventFullness.minimum', 'Reached minimum'),
               },
               {
                 className: 'preferred',
+                availability: 0.2,
+                unlimited: false,
                 label: t('schedule.legends.eventFullness.preferred', 'Reached preferred'),
               },
               {
                 className: 'full',
+                availability: 0.0,
+                unlimited: false,
                 label: t('schedule.legends.eventFullness.full', 'Full'),
               },
               {
                 className: 'unlimited',
+                unlimited: true,
                 label: t('schedule.legends.eventFullness.unlimited', 'Unlimited capacity'),
               },
-            ].map(({ className, label }) => (
-              <div className={`px-2 event-fullness-${className}`} key={className}>
+            ].map(({ label, availability, unlimited }) => (
+              <FakeEventRun
+                classifyEventsBy="fullness"
+                eventCategory={{}}
+                availability={availability}
+                unlimited={unlimited}
+              >
                 {label}
-              </div>
+              </FakeEventRun>
             ))}
           </div>
         </div>

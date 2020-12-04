@@ -198,7 +198,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
                   Added{' '}
                   {format(
                     DateTime.fromISO(event.created_at, { zone: timezoneName }),
-                    'longWeekdayDateTime',
+                    'longWeekdayDateTimeWithZone',
                   )}
                 </strong>
               </p>
