@@ -197,7 +197,7 @@ function RunCard({
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
               {format(runTimespan.start, 'shortWeekdayTime')}-
-              {format(runTimespan.finish, 'shortTime')}
+              {format(runTimespan.finish, 'shortTimeWithZone')}
             </div>
 
             <div>

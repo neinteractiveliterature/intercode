@@ -8,6 +8,7 @@ import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
+import { RegistrationPolicyForCapacityThresholds } from './getCapacityThresholds';
 
 export enum SignupStatus {
   Confirmed = 'confirmed',
@@ -44,9 +45,10 @@ export type GetRunClassNameOptions = {
     fake?: boolean;
     registration_policy?:
       | null
-      | (EventForSignupCountData['registration_policy'] & {
-          total_slots_including_not_counted?: null | number;
-        });
+      | (EventForSignupCountData['registration_policy'] &
+          RegistrationPolicyForCapacityThresholds & {
+            total_slots_including_not_counted?: null | number;
+          });
   };
   signupStatus?: SignupStatus;
   config: Pick<ScheduleGridConfig, 'classifyEventsBy' | 'showSignedUp'>;
