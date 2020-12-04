@@ -9,6 +9,7 @@ import useSortable from '../../useSortable';
 import AppRootContext from '../../AppRootContext';
 import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
+import { getTimeblockTimespanForDisplay } from '../../FormPresenter/TimeblockUtils';
 
 function useTimeblockPropertyUpdater(
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void,
@@ -67,16 +68,13 @@ function TimeblockPreferenceEditorTimeblockRow({
 
     try {
       // eslint-disable-next-line no-new
-      new Timespan(
-        DateTime.fromObject({ ...timeblock.start, zone: timezoneName }),
-        DateTime.fromObject({ ...timeblock.finish, zone: timezoneName }),
-      );
+      getTimeblockTimespanForDisplay(timeblock);
     } catch (e) {
       return e.message;
     }
 
     return null;
-  }, [timeblock, timezoneName]);
+  }, [timeblock]);
 
   return (
     <tr ref={rowRef}>

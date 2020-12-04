@@ -15,12 +15,18 @@ import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockT
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 import { notEmpty } from '../ValueUtils';
 
-export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction) {
-  const start = DateTime.fromObject(timeblock.start);
-  const finish = DateTime.fromObject(timeblock.finish);
+export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition) {
+  return Timespan.finiteFromDateTimes(
+    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus(timeblock.start),
+    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus(timeblock.finish),
+  );
+}
 
-  return `${formatLCM(start, getDateTimeFormat('shortTime', t))} - ${formatLCM(
-    finish,
+export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction) {
+  const timespan = getTimeblockTimespanForDisplay(timeblock);
+
+  return `${formatLCM(timespan.start, getDateTimeFormat('shortTime', t))} - ${formatLCM(
+    timespan.finish,
     getDateTimeFormat('shortTime', t),
   )}`;
 }
