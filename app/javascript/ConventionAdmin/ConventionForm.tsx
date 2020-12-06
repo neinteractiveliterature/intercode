@@ -4,15 +4,14 @@ import { ApolloError } from '@apollo/client';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
-import ConventionFormEventsSection, {
-  MaximumEventSignupsValue,
-} from './ConventionFormEventsSection';
+import ConventionFormEventsSection from './ConventionFormEventsSection';
 import { TabList, TabBody, useTabsWithRouter } from '../UIComponents/Tabs';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import ConventionFormEmailSection from './ConventionFormEmailSection';
 import { ConventionAdminConventionQueryQuery } from './queries.generated';
+import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
 export type ConventionFormConvention = Omit<
   ConventionAdminConventionQueryQuery['convention'],

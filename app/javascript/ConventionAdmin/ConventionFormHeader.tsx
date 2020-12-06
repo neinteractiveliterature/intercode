@@ -5,7 +5,7 @@ import { findCurrentValue } from '../ScheduledValueUtils';
 import {
   MaximumEventSignupsValue,
   MAXIMUM_EVENT_SIGNUPS_OPTIONS,
-} from './ConventionFormEventsSection';
+} from './MaximumEventSignupsPreview';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { ShowSchedule } from '../graphqlTypes.generated';
