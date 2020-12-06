@@ -11,9 +11,10 @@ export type MapboxMapProps = {
   markerLocation?: LngLat;
   setCenter?: React.Dispatch<LngLat>;
   setZoom?: React.Dispatch<number>;
+  height?: string;
 };
 
-function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom }: MapboxMapProps) {
+function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom, height }: MapboxMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const markerRef = useRef<Marker | null>(null);
@@ -76,7 +77,7 @@ function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom }: MapboxM
   }, [markerLocation, mapboxgl]);
 
   return (
-    <div ref={containerRef} style={{ height: '30rem' }}>
+    <div ref={containerRef} style={{ height: height ?? '30rem' }}>
       {/* eslint-disable-next-line no-nested-ternary */}
       {mapboxgl ? null : mapboxAccessToken ? (
         <PageLoadingIndicator visible />
