@@ -14,7 +14,7 @@ import { useConventionAdminConventionQueryQuery } from './queries.generated';
 import { useUpdateConventionMutation } from './mutations.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
-import { MaximumEventSignupsValue } from './ConventionFormEventsSection';
+import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
 function ConventionAdmin() {
   const history = useHistory();
