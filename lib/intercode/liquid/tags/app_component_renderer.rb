@@ -6,13 +6,23 @@ module Intercode
         include ActionView::Helpers::TagHelper
 
         def render_react_component(context)
-          controller_props = context.registers['controller']&.app_component_props
+          render_low_level_component_tag(
+            component_name(context),
+            merge_controller_props(context, props(context))
+          )
+        end
 
+        def merge_controller_props(context, component_props)
+          controller_props = context.registers['controller']&.app_component_props
+          (controller_props || {}).merge(component_props)
+        end
+
+        def render_low_level_component_tag(classname, component_props)
           content_tag(
             :div,
             '',
-            'data-react-class' => component_name(context),
-            'data-react-props' => JSON.dump((controller_props || {}).merge(props(context)))
+            'data-react-class' => classname,
+            'data-react-props' => JSON.dump(component_props)
           )
         end
 

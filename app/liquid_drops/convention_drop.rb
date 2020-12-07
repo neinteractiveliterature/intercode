@@ -191,6 +191,13 @@ class ConventionDrop < Liquid::Drop
     "#{protocol}://#{hostname}"
   end
 
+  # @return [Hash] A hash value representing this convention's location, suitable for passing
+  #                to the {% map %} tag
+  def location
+    return nil unless convention.location
+    convention.location
+  end
+
   private
 
   # @api
