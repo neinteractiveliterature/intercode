@@ -34,6 +34,14 @@ type NewEventFormEvent = {
   form_response_attrs: NewEventFormResponseAttrs;
 };
 
+function runIsCreatable(
+  run: RunForRunFormFields,
+): run is Omit<RunForRunFormFields, 'starts_at'> & {
+  starts_at: NonNullable<RunForRunFormFields['starts_at']>;
+} {
+  return run.starts_at != null;
+}
+
 function NewEventForm({ data }: NewEventFormProps) {
   const convention = data.convention!;
   const history = useHistory();
@@ -70,7 +78,7 @@ function NewEventForm({ data }: NewEventFormProps) {
     convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/';
 
   const createEvent = async () => {
-    if (!validateForm()) {
+    if (!validateForm() || !runIsCreatable(run)) {
       return;
     }
 
