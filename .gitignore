@@ -11,6 +11,7 @@
 /bin/manifest.json
 /bin/mergeTranslations
 /bin/renderFormResponseChangeGroup
+/ssr-dist
 /test/html_reports
 
 # Ignore bundler config

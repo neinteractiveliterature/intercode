@@ -114,7 +114,7 @@ module.exports = {
       '.jpg',
     ],
     alias: {
-      'lodash.isequal': 'lodash-es/isEqual',
+      'lodash.isequal': 'lodash/isEqual',
     },
     fallback: {
       stream: require.resolve('stream-browserify'),

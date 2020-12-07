@@ -1,5 +1,12 @@
 import { useRef, useMemo, useEffect, RefObject } from 'react';
-import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  Operation,
+  NextLink,
+  InMemoryCache,
+  createHttpLink,
+} from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
 import { DateTime } from 'luxon';
@@ -110,6 +117,26 @@ function useIntercodeApolloClient(
         }),
       }),
     [link],
+  );
+
+  return client;
+}
+
+export function useSsrApolloClient(request?: { header: (name: string) => string }) {
+  const client = useMemo(
+    () =>
+      new ApolloClient({
+        ssrMode: true,
+        link: createHttpLink({
+          uri: 'https://localhost:5000',
+          credentials: 'same-origin',
+          headers: {
+            cookie: request?.header('Cookie'),
+          },
+        }),
+        cache: new InMemoryCache(),
+      }),
+    [request],
   );
 
   return client;

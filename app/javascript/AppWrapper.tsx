@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
 import * as React from 'react';
 import { ApolloProvider } from '@apollo/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, StaticRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
@@ -14,9 +14,35 @@ import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import { AlertProvider } from './ModalDialogs/Alert';
-import useIntercodeApolloClient from './useIntercodeApolloClient';
+import useIntercodeApolloClient, { useSsrApolloClient } from './useIntercodeApolloClient';
 import ErrorBoundary from './ErrorBoundary';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
+
+type BrowserOrStaticRouterProps = {
+  children: ReactNode;
+  staticLocation?: string;
+  getUserConfirmation: (message: ReactNode, callback: (confirmed: boolean) => void) => void;
+};
+
+function BrowserOrStaticRouter({
+  children,
+  staticLocation,
+  getUserConfirmation,
+}: BrowserOrStaticRouterProps) {
+  if (staticLocation) {
+    return (
+      <StaticRouter basename="/" location={staticLocation}>
+        {children}
+      </StaticRouter>
+    );
+  }
+
+  return (
+    <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
+      {children}
+    </BrowserRouter>
+  );
+}
 
 export type AppWrapperProps = {
   authenticityTokens: {
@@ -24,6 +50,8 @@ export type AppWrapperProps = {
   };
   mapboxAccessToken: string;
   recaptchaSiteKey: string;
+  ssrRequest: Parameters<typeof useSsrApolloClient>[0];
+  staticLocation?: string;
   stripeAccountId?: string;
   stripePublishableKey: string;
 };
@@ -34,6 +62,8 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
       authenticityTokens,
       mapboxAccessToken,
       recaptchaSiteKey,
+      ssrRequest,
+      staticLocation,
       stripeAccountId,
       stripePublishableKey,
       ...otherProps
@@ -57,6 +87,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
       onUnauthenticatedRef.current = openSignIn;
     }, [openSignIn]);
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
+    const ssrClient = useSsrApolloClient(ssrRequest);
 
     const getUserConfirmation = useCallback(
       (message: ReactNode, callback: (confirmed: boolean) => void) => {
@@ -78,14 +109,17 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
 
     return (
       <React.StrictMode>
-        <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
+        <BrowserOrStaticRouter
+          getUserConfirmation={getUserConfirmation}
+          staticLocation={staticLocation}
+        >
           <DndProvider options={HTML5toTouch}>
             <LazyStripeContext.Provider
               value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
             >
               <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
                 <MapboxContext.Provider value={mapboxContextValue}>
-                  <ApolloProvider client={apolloClient}>
+                  <ApolloProvider client={ssrRequest ? ssrClient : apolloClient}>
                     <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
                       <>
                         {!unauthenticatedError && (
@@ -105,7 +139,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
               </AuthenticityTokensContext.Provider>
             </LazyStripeContext.Provider>
           </DndProvider>
-        </BrowserRouter>
+        </BrowserOrStaticRouter>
       </React.StrictMode>
     );
   }

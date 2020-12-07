@@ -3,12 +3,12 @@
     "node": ">= 8.4.0",
     "yarn": ">=0.25.2"
   },
-  "type": "module",
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
     "build": "webpack --config config/webpack/production.js",
     "build:cli": "webpack --config config/webpack/cliUtils.js",
+    "build:ssr": "webpack --config config/webpack/ssr.js --progress",
     "build:timezone_data": "node ./buildTimezoneData.js",
     "graphdoc:generate": "graphdoc -s schema.graphql",
     "graphql:codegen": "graphql-codegen --config codegen.yml",
@@ -127,6 +127,7 @@
     "minimist": "^1.2.5",
     "moment": "2.24.0",
     "moment-timezone": "^0.5.28",
+    "node-fetch": "^2.6.1",
     "path-complete-extname": "^1.0.0",
     "payment": "^2.4.0",
     "popper.js": "^1.16.1",
