@@ -31,15 +31,16 @@ const browserConfig = {
   ],
 };
 
-const testConfig = {
+const nodeConfig = {
   ...baseConfig,
   presets: [
     [
       '@babel/preset-env',
       {
         targets: {
-          node: '12',
+          node: process.versions.node,
         },
+        modules: 'auto',
       },
     ],
     ...baseConfig.presets,
@@ -50,7 +51,10 @@ module.exports = {
   ...browserConfig,
   env: {
     test: {
-      ...testConfig,
+      ...nodeConfig,
+    },
+    cli: {
+      ...nodeConfig,
     },
   },
 };

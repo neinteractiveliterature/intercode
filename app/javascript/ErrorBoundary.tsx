@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+/// <reference path="./@types/globals.d.ts" />
 import { Component, ReactNode, ErrorInfo } from 'react';
 import { ApolloError } from '@apollo/client';
 
