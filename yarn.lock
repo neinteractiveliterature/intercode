@@ -12346,10 +12346,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollbar-sourcemap-webpack-plugin@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/rollbar-sourcemap-webpack-plugin/-/rollbar-sourcemap-webpack-plugin-3.0.1.tgz#4332fdef80cd7f8bf93cf0c977030f093e40459f"
-  integrity sha512-kkSO632gAjmM8jqc4Ya6YoqzjZi2t1rpThDjkdbI+GqJDn7txyg94Be66xzbRzwl69FzrhnyiHuyqql7qP9OpQ==
+rollbar-sourcemap-webpack-plugin@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/rollbar-sourcemap-webpack-plugin/-/rollbar-sourcemap-webpack-plugin-3.1.0.tgz#9e8b346aadb026ea31709f9f829a31326429b8e9"
+  integrity sha512-D/OJ2x8OwxghaOxeFrE+qiT7FcXe/nwg2Sk3zhqU8wJdxhKUJGu37Jkctry7vpqFWq1/gwCHetK9ghA8mTkSWA==
   dependencies:
     form-data "^3.0.0"
     lodash.isfunction "^3.0.9"
