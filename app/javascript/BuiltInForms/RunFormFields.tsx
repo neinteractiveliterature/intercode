@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useContext } from 'react';
 import * as React from 'react';
-import moment, { Moment } from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
+import { DateTime } from 'luxon';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
@@ -18,12 +18,18 @@ import {
   EventAdminEventsQueryQuery,
 } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 export type RunForRunFormFields = Pick<
   Run,
-  '__typename' | 'id' | 'starts_at' | 'title_suffix' | 'schedule_note'
+  '__typename' | 'id' | 'title_suffix' | 'schedule_note'
 > & {
   rooms: RoomForSelect[];
+  starts_at?: Run['starts_at'];
+};
+
+type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_at'> & {
+  starts_at: Run['starts_at'];
 };
 
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
@@ -39,11 +45,14 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 }: RunFormFieldsProps<RunType>) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const { data, loading, error } = useEventAdminEventsQueryQuery();
 
   const startsAt = useMemo(
     () =>
-      !error && !loading && run && run.starts_at ? moment(run.starts_at).tz(timezoneName) : null,
+      !error && !loading && run && run.starts_at
+        ? DateTime.fromISO(run.starts_at, { zone: timezoneName })
+        : null,
     [timezoneName, error, loading, run],
   );
   const conventionTimespan = useMemo(
@@ -57,17 +66,17 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         : null,
     [conventionTimespan, timezoneName],
   );
-  const [day, setDay] = useState<Moment | undefined>(() =>
+  const [day, setDay] = useState<DateTime | undefined>(() =>
     startsAt && conventionDayTimespans
       ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt))?.start
       : undefined,
   );
   const [hour, setHour] = useState<number | undefined>(() =>
-    startsAt && day ? startsAt.diff(day.clone().startOf('day'), 'hours') : undefined,
+    startsAt && day ? startsAt.diff(day.startOf('day'), 'hours').hours : undefined,
   );
   const [minute, setMinute] = useState<number | undefined>(() =>
     startsAt && hour != null && day != null
-      ? startsAt.diff(day.clone().startOf('day').add(hour, 'hours'), 'minutes')
+      ? startsAt.diff(day.startOf('day').plus({ hour }), 'minutes').minutes
       : undefined,
   );
   const startTime = useMemo(() => {
@@ -75,15 +84,29 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       return null;
     }
 
-    return day.clone().set({
+    return day.set({
       hour,
       minute,
     });
   }, [day, hour, minute]);
 
   useEffect(() => {
-    onChange((prevRun) => ({ ...prevRun, starts_at: startTime ? startTime.toISOString() : null }));
+    onChange((prevRun) => ({ ...prevRun, starts_at: startTime ? startTime.toISO() : null }));
   }, [onChange, startTime]);
+
+  const runsForProspectiveRunSchedule = useMemo(
+    () => (run.starts_at ? [run as WithStartsAt<RunType>] : []),
+    [run],
+  );
+
+  const eventForProspectiveRunSchedule = useMemo(
+    () => ({
+      ...event,
+      id: event.id || -1,
+      runs: event.runs || [],
+    }),
+    [event],
+  );
 
   if (loading) {
     return <LoadingIndicator />;
@@ -116,7 +139,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
           {startTime &&
-            `- ${startTime.clone().add(event.length_seconds, 'seconds').format('H:mm')}`}
+            `- ${format(startTime.plus({ seconds: event.length_seconds }), 'shortTime')}`}
         </TimeSelect>
       </fieldset>
     );
@@ -143,12 +166,8 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 
       <ProspectiveRunSchedule
         day={day ?? undefined}
-        runs={[run]}
-        event={{
-          ...event,
-          id: event.id || -1,
-          runs: event.runs || [],
-        }}
+        runs={runsForProspectiveRunSchedule}
+        event={eventForProspectiveRunSchedule}
       />
 
       <BootstrapFormInput

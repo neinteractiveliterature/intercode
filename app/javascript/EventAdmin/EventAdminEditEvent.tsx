@@ -10,7 +10,7 @@ import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../usePageTitle';
 import useUpdateEvent from './useUpdateEvent';
-import RunFormFields from '../BuiltInForms/RunFormFields';
+import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
@@ -91,6 +91,23 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
     initialEvent,
   });
 
+  const eventForRunFormFields: RunFormFieldsProps<typeof run>['event'] = useMemo(
+    () => ({
+      __typename: 'Event',
+      id: event.id,
+      length_seconds: event.form_response_attrs.length_seconds,
+      can_play_concurrently: false,
+      event_category: {
+        __typename: 'EventCategory',
+        id: 0,
+        name: 'fake category for single-run event UI',
+      },
+      maximum_event_provided_tickets_overrides: [],
+      runs: [run],
+    }),
+    [run, event],
+  );
+
   const updateEvent = useUpdateEvent();
 
   const [dropEventMutate] = useDropEventMutation();
@@ -135,25 +152,10 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
           )}
       </EventFormWithCategorySelection>
 
-      {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
-        <RunFormFields
-          run={run}
-          event={{
-            __typename: 'Event',
-            id: event.id,
-            length_seconds: event.form_response_attrs.length_seconds,
-            can_play_concurrently: false,
-            event_category: {
-              __typename: 'EventCategory',
-              id: 0,
-              name: 'fake category for single-run event UI',
-            },
-            maximum_event_provided_tickets_overrides: [],
-            runs: [run],
-          }}
-          onChange={setRun}
-        />
-      )}
+      {eventCategory?.scheduling_ui === 'single_run' &&
+        event.form_response_attrs.length_seconds && (
+          <RunFormFields run={run} event={eventForRunFormFields} onChange={setRun} />
+        )}
     </EditEvent>
   );
 }

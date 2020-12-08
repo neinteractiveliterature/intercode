@@ -1,5 +1,4 @@
-import moment from 'moment-timezone';
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import Timespan, { FiniteTimespan } from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
 import { removeCommonStringMiddle } from './ValueUtils';
@@ -21,10 +20,10 @@ export function timespanFromRun(
   event: Pick<Event, 'length_seconds'>,
   run: Pick<Run, 'starts_at'>,
 ) {
-  const start = moment(run.starts_at).tz(timezoneName);
-  const finish = start.clone().add(event.length_seconds, 'seconds');
+  const start = DateTime.fromISO(run.starts_at).setZone(timezoneName);
+  const finish = start.plus({ seconds: event.length_seconds });
 
-  return Timespan.fromMoments(start, finish) as FiniteTimespan;
+  return Timespan.finiteFromDateTimes(start, finish);
 }
 
 export function getConventionDayTimespans(
@@ -33,7 +32,7 @@ export function getConventionDayTimespans(
 ) {
   return conventionTimespan.getTimespansWithin(timezoneName, {
     unit: 'day',
-    offset: moment.duration(6, 'hours'), // start convention days at 6:00am
+    offset: Duration.fromObject({ hours: 6 }), // start convention days at 6:00am
   });
 }
 
@@ -43,8 +42,8 @@ export function getMemoizationKeyForTimespan(timespan?: Timespan) {
   }
 
   return [
-    timespan.start ? timespan.start.toISOString() : '',
-    timespan.finish ? timespan.finish.toISOString() : '',
+    timespan.start ? timespan.start.toISO() : '',
+    timespan.finish ? timespan.finish.toISO() : '',
   ].join('/');
 }
 
@@ -53,12 +52,10 @@ export function describeInterval(
   formatDateTime: (dateTime: DateTime) => string,
   timeZone: string,
 ) {
-  const start = timespan.start
-    ? formatDateTime(DateTime.fromISO(timespan.start.toISOString()).setZone(timeZone))
-    : 'anytime';
+  const start = timespan.start ? formatDateTime(timespan.start.setZone(timeZone)) : 'anytime';
 
   const finish = timespan.finish
-    ? formatDateTime(DateTime.fromISO(timespan.finish.toISOString()).setZone(timeZone))
+    ? formatDateTime(timespan.finish.setZone(timeZone))
     : 'indefinitely';
 
   const [dedupedStart, dedupedFinish] = removeCommonStringMiddle(start, finish);

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import moment from 'moment-timezone';
 import { Link, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { DateTime } from 'luxon';
 
 import {
   ConventionForTimespanUtils,
@@ -11,6 +11,7 @@ import {
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import AppRootContext from '../../AppRootContext';
 import { Run } from '../../graphqlTypes.generated';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 function findRunFromHash<RunType extends { id: number }>(runs: RunType[], hash?: string | null) {
   if (!hash) {
@@ -30,7 +31,7 @@ function getConventionDayStart(
     return conventionTimespan.start;
   }
 
-  const runStart = moment.tz(run.starts_at, timezoneName);
+  const runStart = DateTime.fromISO(run.starts_at, { zone: timezoneName });
   const conventionDayTimespans = getConventionDayTimespans(conventionTimespan, timezoneName);
   const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(runStart));
   return conventionDay?.start ?? conventionTimespan.start;
@@ -56,6 +57,7 @@ function EventBreadcrumbItems({
 }: EventBreadcrumbItemsProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const history = useHistory();
   const runToLink = findRunFromHash(event.runs, history.location.hash) || event.runs[0];
   const conventionDayStart = getConventionDayStart(runToLink, convention, timezoneName);
@@ -67,7 +69,7 @@ function EventBreadcrumbItems({
           <Link
             to={
               conventionDayStart
-                ? `/events/schedule/${conventionDayStart.format('dddd').toLowerCase()}`
+                ? `/events/schedule/${format(conventionDayStart, 'longWeekday').toLowerCase()}`
                 : '/events/schedule'
             }
           >

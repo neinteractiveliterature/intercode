@@ -104,6 +104,8 @@ class Event < ApplicationRecord
 
   validate :event_category_must_be_from_same_convention
 
+  validates :length_seconds, numericality: { greater_than_or_equal_to: 0 }
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy

@@ -17,6 +17,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
 import { EventPageQueryQuery } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 function describeSignupState(
   mySignup: EventPageQueryQuery['event']['runs'][0]['my_signups'][0],
@@ -65,6 +66,7 @@ function RunCard({
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
+  const format = useAppDateTimeFormat();
   const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -194,7 +196,8 @@ function RunCard({
 
           <div className="d-flex flex-wrap">
             <div className="flex-grow-1">
-              {runTimespan.start.format('ddd h:mma')}-{runTimespan.finish.format('h:mma')}
+              {format(runTimespan.start, 'shortWeekdayTime')}-
+              {format(runTimespan.finish, 'shortTimeWithZone')}
             </div>
 
             <div>

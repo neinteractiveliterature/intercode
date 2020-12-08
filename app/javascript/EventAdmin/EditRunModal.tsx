@@ -17,8 +17,12 @@ import {
   RunFieldsFragment,
 } from './queries.generated';
 
+export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
+  starts_at?: RunFieldsFragment['starts_at'];
+};
+
 export type EditRunModalProps = {
-  run: RunFieldsFragment;
+  run: EditingRun;
   event: EventFieldsFragment;
   editingRunChanged: React.Dispatch<RunFieldsFragment>;
   onCancel: () => void;

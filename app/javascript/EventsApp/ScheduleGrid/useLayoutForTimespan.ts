@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
-import { FiniteTimespan } from '../../Timespan';
+import Timespan, { FiniteTimespan } from '../../Timespan';
 
 import { getMemoizationKeyForTimespan } from '../../TimespanUtils';
 import Schedule from './Schedule';
@@ -13,10 +13,11 @@ export default function useLayoutForTimespan(schedule: Schedule, timespan?: Fini
       return undefined;
     }
 
-    const min = timespan.clone();
-    min.start.add(3, 'hours'); // start grid at 9am unless something is earlier
-    min.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
-    if (min.start.isAfter(min.finish)) {
+    const min = Timespan.finiteFromDateTimes(
+      timespan.start.plus({ hours: 3 }), // start grid at 9am unless something is earlier
+      timespan.finish.minus({ hours: 6 }), // end grid at midnight unless something is earlier
+    );
+    if (min.start > min.finish) {
       return timespan;
     }
     return min;

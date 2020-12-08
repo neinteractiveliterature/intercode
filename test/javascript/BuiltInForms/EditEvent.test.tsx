@@ -34,13 +34,13 @@ describe('EditEvent', () => {
   const renderEditEvent = (overrideProps = {}) => render(<EditEventTester {...overrideProps} />);
 
   describe('header text', () => {
-    test('edit event', () => {
-      const { getByText } = renderEditEvent();
+    test('edit event', async () => {
+      const { getByText } = await renderEditEvent();
       expect(getByText('Edit event').tagName).toEqual('H3');
     });
 
-    test('new event', () => {
-      const { getByText } = renderEditEvent({
+    test('new event', async () => {
+      const { getByText } = await renderEditEvent({
         initialEvent: { ...formMockData.initialEvent, id: null },
       });
       expect(getByText('New event').tagName).toEqual('H3');
@@ -51,7 +51,7 @@ describe('EditEvent', () => {
     test('the save button validates the form', async () => {
       const updateEvent = jest.fn();
       const onSave = jest.fn();
-      const { getByText, getByLabelText } = renderEditEvent({ updateEvent, onSave });
+      const { getByText, getByLabelText } = await renderEditEvent({ updateEvent, onSave });
       await act(async () => {
         fireEvent.click(getByText('Save event'));
         await waitFor(() => expect(getByLabelText('Title*')).toHaveClass('is-invalid'));
@@ -63,7 +63,7 @@ describe('EditEvent', () => {
     test('the save button updates the event and calls onSave', async () => {
       const updateEvent = jest.fn();
       const onSave = jest.fn();
-      const { getByText } = renderEditEvent({
+      const { getByText } = await renderEditEvent({
         updateEvent,
         onSave,
         initialEvent: {
@@ -83,7 +83,7 @@ describe('EditEvent', () => {
         throw new Error('blahhhh');
       });
       const onSave = jest.fn();
-      const { getByText } = renderEditEvent({
+      const { getByText } = await renderEditEvent({
         updateEvent,
         onSave,
         initialEvent: {
@@ -101,26 +101,26 @@ describe('EditEvent', () => {
   });
 
   describe('drop event workflow', () => {
-    test('no drop button by default', () => {
-      const { queryByText } = renderEditEvent();
+    test('no drop button by default', async () => {
+      const { queryByText } = await renderEditEvent();
       expect(queryByText('Drop event')).toBeNull();
     });
 
-    test('showDropButton gets it to render a drop button', () => {
-      const { queryAllByText } = renderEditEvent({ showDropButton: true });
+    test('showDropButton gets it to render a drop button', async () => {
+      const { queryAllByText } = await renderEditEvent({ showDropButton: true });
       expect(queryAllByText('Drop event')).toHaveLength(1);
     });
 
-    test('if the event is already dropped, the drop button does not show up', () => {
-      const { queryByText } = renderEditEvent({
+    test('if the event is already dropped, the drop button does not show up', async () => {
+      const { queryByText } = await renderEditEvent({
         showDropButton: true,
         initialEvent: { ...formMockData.initialEvent, status: 'dropped' },
       });
       expect(queryByText('Drop event')).toBeNull();
     });
 
-    test('if the event is not yet saved, the drop button does not show up', () => {
-      const { queryByText } = renderEditEvent({
+    test('if the event is not yet saved, the drop button does not show up', async () => {
+      const { queryByText } = await renderEditEvent({
         showDropButton: true,
         initialEvent: { ...formMockData.initialEvent, id: null },
       });
@@ -130,7 +130,7 @@ describe('EditEvent', () => {
     test('dropping the event', async () => {
       const dropEvent = jest.fn();
       const onDrop = jest.fn();
-      const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
+      const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
         fireEvent.click(getByText('Drop event'));
         await waitFor(() => expect(getByText('OK')).toBeVisible());
@@ -144,7 +144,7 @@ describe('EditEvent', () => {
     test('canceling the drop', async () => {
       const dropEvent = jest.fn();
       const onDrop = jest.fn();
-      const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
+      const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
         fireEvent.click(getByText('Drop event'));
         await waitFor(() => expect(getByText('Cancel')).toBeVisible());
@@ -160,7 +160,7 @@ describe('EditEvent', () => {
         throw new Error('fooey');
       });
       const onDrop = jest.fn();
-      const { getByText } = renderEditEvent({ showDropButton: true, dropEvent, onDrop });
+      const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       await act(async () => {
         fireEvent.click(getByText('Drop event'));
         await waitFor(() => expect(getByText('OK')).toBeVisible());
@@ -173,15 +173,15 @@ describe('EditEvent', () => {
   });
 
   describe('cancel link', () => {
-    test('no cancel link by default', () => {
-      const { queryByText } = renderEditEvent();
+    test('no cancel link by default', async () => {
+      const { queryByText } = await renderEditEvent();
       expect(
         queryByText((content, element) => element.tagName === 'A' && content === 'Cancel'),
       ).toBeNull();
     });
 
-    test('passing a cancelPath makes a cancel link show up', () => {
-      const { queryAllByText } = renderEditEvent({ cancelPath: '/' });
+    test('passing a cancelPath makes a cancel link show up', async () => {
+      const { queryAllByText } = await renderEditEvent({ cancelPath: '/' });
       expect(
         queryAllByText((content, element) => element.tagName === 'A' && content === 'Cancel'),
       ).toHaveLength(1);

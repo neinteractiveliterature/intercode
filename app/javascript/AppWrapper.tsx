@@ -1,9 +1,9 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode } from 'react';
+import { Suspense, useCallback, useRef, useEffect, ReactNode, useState } from 'react';
 import * as React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import { DndProvider } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
+import { i18n } from 'i18next';
+import { I18nextProvider } from 'react-i18next';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
@@ -17,6 +17,29 @@ import { AlertProvider } from './ModalDialogs/Alert';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
 import ErrorBoundary from './ErrorBoundary';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
+import getI18n from './setupI18Next';
+import ErrorDisplay from './ErrorDisplay';
+
+function I18NextWrapper({ children }: { children: ReactNode }) {
+  const [i18nInstance, seti18nInstance] = useState<i18n>();
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    getI18n()
+      .then((instance) => seti18nInstance(instance))
+      .catch((err) => setError(err));
+  }, []);
+
+  if (i18nInstance) {
+    return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
+  }
+
+  if (error) {
+    return <ErrorDisplay stringError={error.message} />;
+  }
+
+  return <PageLoadingIndicator visible />;
+}
 
 export type AppWrapperProps = {
   authenticityTokens: {
@@ -79,32 +102,32 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
     return (
       <React.StrictMode>
         <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
-          <DndProvider options={HTML5toTouch}>
-            <LazyStripeContext.Provider
-              value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
-            >
-              <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-                <MapboxContext.Provider value={mapboxContextValue}>
-                  <ApolloProvider client={apolloClient}>
-                    <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                      <>
-                        {!unauthenticatedError && (
-                          <Suspense fallback={<PageLoadingIndicator visible />}>
+          <LazyStripeContext.Provider
+            value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
+          >
+            <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+              <MapboxContext.Provider value={mapboxContextValue}>
+                <ApolloProvider client={apolloClient}>
+                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                    <>
+                      {!unauthenticatedError && (
+                        <Suspense fallback={<PageLoadingIndicator visible />}>
+                          <I18NextWrapper>
                             <AlertProvider>
                               <ErrorBoundary placement="replace" errorType="plain">
                                 <WrappedComponent {...((otherProps as unknown) as P)} />
                               </ErrorBoundary>
                             </AlertProvider>
-                          </Suspense>
-                        )}
-                        <AuthenticationModal />
-                      </>
-                    </AuthenticationModalContext.Provider>
-                  </ApolloProvider>
-                </MapboxContext.Provider>
-              </AuthenticityTokensContext.Provider>
-            </LazyStripeContext.Provider>
-          </DndProvider>
+                          </I18NextWrapper>
+                        </Suspense>
+                      )}
+                      <AuthenticationModal />
+                    </>
+                  </AuthenticationModalContext.Provider>
+                </ApolloProvider>
+              </MapboxContext.Provider>
+            </AuthenticityTokensContext.Provider>
+          </LazyStripeContext.Provider>
         </BrowserRouter>
       </React.StrictMode>
     );

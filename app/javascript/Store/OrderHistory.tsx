@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import moment from 'moment-timezone';
 import intersection from 'lodash/intersection';
+import { DateTime } from 'luxon';
 
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
@@ -10,6 +10,7 @@ import AppRootContext from '../AppRootContext';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { OrderHistoryQueryQuery, useOrderHistoryQueryQuery } from './queries.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 type OrderType = NonNullable<OrderHistoryQueryQuery['myProfile']>['orders'][0];
 type PaymentModalState = {
@@ -136,8 +137,9 @@ type OrderHistoryOrderProps = {
 
 function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrderProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const submittedTime = order.submitted_at
-    ? moment(order.submitted_at).tz(timezoneName)
+    ? DateTime.fromISO(order.submitted_at, { zone: timezoneName })
     : undefined;
 
   return (
@@ -145,7 +147,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
       <div className="d-flex card-header border-bottom-0">
         <div className="col pl-0">
           <h3>Order #{order.id}</h3>
-          <small>{submittedTime?.format('dddd, MMMM D, YYYY, h:mma')}</small>
+          <small>{submittedTime && format(submittedTime, 'longWeekdayDateTimeWithZone')}</small>
         </div>
         <div className="text-right">
           <OrderHistoryOrderStatus

@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import * as React from 'react';
 import maxBy from 'lodash/maxBy';
-import moment from 'moment-timezone';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
+import { DateTime } from 'luxon';
 
 import ScheduledValueTimespanRow, {
   scheduledValueTimespanIsValid,
@@ -38,7 +38,7 @@ function addTimespanToScheduledValue<
 >(scheduledValue: ScheduledValueType) {
   const newTimespans = [...(scheduledValue.timespans || [])];
   const lastTimespan = maxBy(newTimespans, (timespan) =>
-    timespan.finish ? moment(timespan.finish).toDate() : 0,
+    timespan.finish ? DateTime.fromISO(timespan.finish).toMillis() : 0,
   );
   const everyTimespanFinishes = newTimespans.every((timespan) => timespan.finish);
 
@@ -57,7 +57,7 @@ function recalculateTimespans<ValueType>(
 ): EditingTimespan<ValueType>[] {
   const sortedNewTimespans = sortBy(timespans, (timespan) => {
     if (timespan.finish) {
-      return moment(timespan.finish).toDate();
+      return DateTime.fromISO(timespan.finish).toMillis();
     }
 
     // undefined finish means forever

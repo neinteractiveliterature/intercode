@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 export type FuzzyTime = {
   hour?: number;
@@ -25,8 +25,8 @@ type TimeblockPreferenceCommon = {
 };
 
 export type ParsedTimeblockPreference = TimeblockPreferenceCommon & {
-  start: Moment;
-  finish: Moment;
+  start: DateTime;
+  finish: DateTime;
 };
 
 export type UnparsedTimeblockPreference = TimeblockPreferenceCommon & {
@@ -43,8 +43,8 @@ export function parseTimeblockPreference(
   unparsedPreference: UnparsedTimeblockPreference,
 ): ParsedTimeblockPreference {
   return {
-    start: moment(unparsedPreference.start),
-    finish: moment(unparsedPreference.finish),
+    start: DateTime.fromISO(unparsedPreference.start),
+    finish: DateTime.fromISO(unparsedPreference.finish),
     label: unparsedPreference.label,
     ordinality: unparsedPreference.ordinality,
   };
@@ -54,16 +54,27 @@ export function serializeTimeblockPreference(
   preference: ParsedTimeblockPreference,
 ): UnparsedTimeblockPreference {
   return {
-    start: preference.start.toISOString(),
-    finish: preference.finish.toISOString(),
+    start: preference.start.toISO(),
+    finish: preference.finish.toISO(),
     label: preference.label,
     ordinality: preference.ordinality,
   };
+}
+
+function coerceDateLike(dateLike: string | DateTime): DateTime {
+  if (typeof dateLike === 'string') {
+    return DateTime.fromISO(dateLike);
+  }
+
+  return dateLike;
 }
 
 export function preferencesMatch(
   a: TimeblockPreferenceForComparison,
   b: TimeblockPreferenceForComparison,
 ) {
-  return moment(a.start).isSame(moment(b.start)) && moment(a.finish).isSame(moment(b.finish));
+  return (
+    coerceDateLike(a.start).toMillis() === coerceDateLike(b.start).toMillis() &&
+    coerceDateLike(a.finish).toMillis() === coerceDateLike(b.finish).toMillis()
+  );
 }

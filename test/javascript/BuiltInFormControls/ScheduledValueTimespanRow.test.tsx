@@ -50,14 +50,14 @@ describe('ScheduledValueTimespanRow', () => {
     );
   };
 
-  test('it renders with a value', () => {
+  test('it renders with a value', async () => {
     const value = 'blooblah';
-    const { getByTestId } = renderScheduledValueTimespanRow({}, { value });
+    const { getByTestId } = await renderScheduledValueTimespanRow({}, { value });
     expect(getByTestId('testInput')).toHaveValue(value);
   });
 
-  test('changing value', () => {
-    const { getByTestId } = renderScheduledValueTimespanRow();
+  test('changing value', async () => {
+    const { getByTestId } = await renderScheduledValueTimespanRow();
     fireEvent.change(getByTestId('testInput'), { target: { value: 'newvalue' } });
     expect(valueDidChange).toHaveBeenCalledWith(42, 'newvalue');
   });

@@ -21,22 +21,24 @@ function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlock
 
   const blockContentStyle = {
     position: 'relative' as const,
-    width: `${layoutBlock.timespan.getLength('hour') * PIXELS_PER_HOUR}px`,
+    width: `${layoutBlock.timespan.getLength('hour').hours * PIXELS_PER_HOUR}px`,
     height: `${layoutResult.laneCount * PIXELS_PER_LANE}px`,
   };
 
-  return <>
-    <ScheduleGridRowHeader layoutResult={layoutResult} rowHeader={rowHeader} />
-    <div className="schedule-grid-block">
-      <div style={blockContentStyle}>
-        {layoutResult.runDimensions.map((runDimensions) => (
-          <Fragment key={runDimensions.runId}>
-            {renderEventRun({ layoutResult, runDimensions })}
-          </Fragment>
-        ))}
+  return (
+    <>
+      <ScheduleGridRowHeader layoutResult={layoutResult} rowHeader={rowHeader} />
+      <div className="schedule-grid-block">
+        <div style={blockContentStyle}>
+          {layoutResult.runDimensions.map((runDimensions) => (
+            <Fragment key={runDimensions.runId}>
+              {renderEventRun({ layoutResult, runDimensions })}
+            </Fragment>
+          ))}
+        </div>
       </div>
-    </div>
-  </>;
+    </>
+  );
 }
 
 export default ScheduleBlock;

@@ -1,9 +1,15 @@
 import { useMemo, useContext } from 'react';
-import moment from 'moment-timezone';
-import AppRootContext from '../../AppRootContext';
+import { DateTime } from 'luxon';
 
-export function describeDate(value: string, timezoneName: string) {
-  return moment.tz(value, timezoneName).format('dddd, MMMM D, YYYY');
+import AppRootContext from '../../AppRootContext';
+import { useAppDateTimeFormat } from '../../TimeUtils';
+
+export function describeDate(
+  value: string,
+  timezoneName: string,
+  format: ReturnType<typeof useAppDateTimeFormat>,
+) {
+  return format(DateTime.fromISO(value, { zone: timezoneName }), 'longWeekdayDate');
 }
 
 export type DateItemDisplayProps = {
@@ -12,7 +18,12 @@ export type DateItemDisplayProps = {
 
 function DateItemDisplay({ value }: DateItemDisplayProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const formattedDate = useMemo(() => describeDate(value, timezoneName), [timezoneName, value]);
+  const format = useAppDateTimeFormat();
+  const formattedDate = useMemo(() => describeDate(value, timezoneName, format), [
+    timezoneName,
+    value,
+    format,
+  ]);
 
   return <>{formattedDate}</>;
 }

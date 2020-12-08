@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { findIndex } from 'lodash';
+import findIndex from 'lodash/findIndex';
 
 import { SectionTraversalContext } from '../SectionTraversalContext';
 import { getSortedFormItems, sortFormItems } from '../../Models/Form';

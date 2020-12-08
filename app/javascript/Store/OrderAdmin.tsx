@@ -1,6 +1,6 @@
 import { useState, useContext, useMemo } from 'react';
-import moment from 'moment-timezone';
 import { Column, FilterProps } from 'react-table';
+import { DateTime } from 'luxon';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -16,6 +16,7 @@ import NewOrderModal from './NewOrderModal';
 import AppRootContext from '../AppRootContext';
 import { AdminOrdersQueryQuery, useAdminOrdersQueryQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 type OrderType = AdminOrdersQueryQuery['convention']['orders_paginated']['entries'][0];
 
@@ -41,12 +42,13 @@ type SubmittedAtCellProps = {
 
 const SubmittedAtCell = ({ value }: SubmittedAtCellProps) => {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
 
   if (!value) {
     return <></>;
   }
 
-  return <>{moment(value).tz(timezoneName).format('MMM D, YYYY h:mma')}</>;
+  return <>{format(DateTime.fromISO(value, { zone: timezoneName }), 'shortDateTime')}</>;
 };
 
 function getPossibleColumns(): Column<OrderType>[] {

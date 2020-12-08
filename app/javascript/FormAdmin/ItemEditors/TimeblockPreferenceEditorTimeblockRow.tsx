@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useContext } from 'react';
 import * as React from 'react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import TimeSelect from '../../BuiltInFormControls/TimeSelect';
 import { useConfirm } from '../../ModalDialogs/Confirm';
@@ -9,6 +9,7 @@ import useSortable from '../../useSortable';
 import AppRootContext from '../../AppRootContext';
 import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
+import { getTimeblockTimespanForDisplay } from '../../FormPresenter/TimeblockUtils';
 
 function useTimeblockPropertyUpdater(
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void,
@@ -53,9 +54,9 @@ function TimeblockPreferenceEditorTimeblockRow({
 
   const selectTimespan = useMemo(
     () =>
-      Timespan.finiteFromMoments(
-        moment.tz({ hour: 0 }, timezoneName),
-        moment.tz({ hour: 0 }, timezoneName).add(31, 'hours'),
+      Timespan.finiteFromDateTimes(
+        DateTime.fromObject({ hour: 0, zone: timezoneName }),
+        DateTime.fromObject({ hour: 0, zone: timezoneName }).plus({ hours: 31 }),
       ),
     [timezoneName],
   );
@@ -67,16 +68,13 @@ function TimeblockPreferenceEditorTimeblockRow({
 
     try {
       // eslint-disable-next-line no-new
-      new Timespan(
-        moment.tz(timeblock.start, timezoneName),
-        moment.tz(timeblock.finish, timezoneName),
-      );
+      getTimeblockTimespanForDisplay(timeblock);
     } catch (e) {
       return e.message;
     }
 
     return null;
-  }, [timeblock, timezoneName]);
+  }, [timeblock]);
 
   return (
     <tr ref={rowRef}>

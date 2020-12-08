@@ -18,11 +18,11 @@ describe('useEventForm', () => {
       }),
     );
 
-  const renderEventForm = (
+  const renderEventForm = async (
     result: ReturnType<typeof renderEventFormHook>['result'],
     overrideProps = {},
   ) => {
-    const renderResult = render(<EventForm {...result.current[0]} {...overrideProps} />);
+    const renderResult = await render(<EventForm {...result.current[0]} {...overrideProps} />);
 
     return {
       ...renderResult,
@@ -31,9 +31,9 @@ describe('useEventForm', () => {
     };
   };
 
-  it('returns props for an EventForm', () => {
+  it('returns props for an EventForm', async () => {
     const { result } = renderEventFormHook();
-    const { getAllByLabelText } = renderEventForm(result);
+    const { getAllByLabelText } = await renderEventForm(result);
     expect(getAllByLabelText('Title*')).toHaveLength(1);
   });
 

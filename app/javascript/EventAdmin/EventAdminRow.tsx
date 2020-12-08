@@ -1,10 +1,10 @@
 import { useState, useMemo, useContext } from 'react';
-import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import { Duration } from 'luxon';
+import { useTranslation } from 'react-i18next';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
-import Timespan from '../Timespan';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import AppRootContext from '../AppRootContext';
 import {
@@ -13,6 +13,9 @@ import {
   RunFieldsFragment,
 } from './queries.generated';
 import { useUpdateEventAdminNotesMutation } from './mutations.generated';
+import { timespanFromRun } from '../TimespanUtils';
+import getSortedRuns from '../EventsApp/EventList/getSortedRuns';
+import { getDateTimeFormat } from '../TimeUtils';
 
 export type EventAdminRowProps = {
   event: EventFieldsFragment;
@@ -20,11 +23,12 @@ export type EventAdminRowProps = {
 };
 
 function EventAdminRow({ event, convention }: EventAdminRowProps) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const [updateEventAdminNotes] = useUpdateEventAdminNotesMutation();
   const [expanded, setExpanded] = useState(false);
 
-  const length = useMemo(() => moment.duration(event.length_seconds, 'seconds'), [
+  const length = useMemo(() => Duration.fromObject({ seconds: event.length_seconds }), [
     event.length_seconds,
   ]);
   const eventCategory = useMemo(
@@ -33,8 +37,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
   );
 
   const renderRun = (run: RunFieldsFragment) => {
-    const start = moment(run.starts_at);
-    const timespan = new Timespan(start, start.clone().add(event.length_seconds, 'seconds'));
+    const timespan = timespanFromRun(timezoneName, event, run);
 
     const [titleSuffix, scheduleNote] = ([
       ['title_suffix', 'font-weight-bold'],
@@ -53,7 +56,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
 
     const runMetadata = [
       titleSuffix,
-      <li key="timespan">{timespan.humanizeInTimezone(timezoneName)}</li>,
+      <li key="timespan">{timespan.humanizeInTimezone(timezoneName, t)}</li>,
       <li key="rooms">
         {run.rooms
           .map((room) => room.name)
@@ -76,9 +79,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
 
   const renderRuns = () => {
     if (expanded || event.runs.length <= 2) {
-      const sortedRuns = [...event.runs].sort((a, b) =>
-        moment(a.starts_at).diff(moment(b.starts_at)),
-      );
+      const sortedRuns = getSortedRuns(event);
 
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
@@ -120,9 +121,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
           />
         </div>
       </td>
-      <td>
-        {length.hours()}:{length.minutes().toString().padStart(2, '0')}
-      </td>
+      <td>{length.toFormat(getDateTimeFormat('durationHoursMinutes', t))}</td>
       <td style={{ minWidth: '29em' }}>{renderRuns()}</td>
     </tr>
   );

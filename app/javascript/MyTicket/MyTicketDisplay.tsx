@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { useMyTicketDisplayQueryQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-
-const dateFormat = 'dddd, MMMM D, YYYY [at] h:mma z';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketDisplay({ data }) {
+  const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 
   usePageTitle(`My ${data.convention.ticket_name} receipt`);
@@ -58,11 +58,17 @@ export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketD
             )}
             <dt className="col-md-3">Created</dt>
             <dd className="col-md-9">
-              {moment.tz(ticket.created_at, timezoneName).format(dateFormat)}
+              {format(
+                DateTime.fromISO(ticket.created_at, { zone: timezoneName }),
+                'longWeekdayDateTimeWithZone',
+              )}
             </dd>
             <dt className="col-md-3">Last updated</dt>
             <dd className="col-md-9">
-              {moment.tz(ticket.updated_at, timezoneName).format(dateFormat)}
+              {format(
+                DateTime.fromISO(ticket.updated_at, { zone: timezoneName }),
+                'longWeekdayDateTimeWithZone',
+              )}
             </dd>
           </dl>
         </div>

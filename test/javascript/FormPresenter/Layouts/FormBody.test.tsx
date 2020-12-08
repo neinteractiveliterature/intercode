@@ -31,15 +31,15 @@ describe('FormBody', () => {
     );
   };
 
-  it('renders values correctly', () => {
-    const { getByLabelText } = renderFormBody();
+  it('renders values correctly', async () => {
+    const { getByLabelText } = await renderFormBody();
 
     expect((getByLabelText('Title*') as HTMLInputElement).value).toEqual('A title');
   });
 
-  it('accepts item changes', () => {
+  it('accepts item changes', async () => {
     const responseValuesChanged = jest.fn();
-    const { getByLabelText } = renderFormBody({ responseValuesChanged });
+    const { getByLabelText } = await renderFormBody({ responseValuesChanged });
 
     fireEvent.change(getByLabelText('Title*'), { target: { value: 'Something' } });
     expect(responseValuesChanged).toHaveBeenCalledTimes(1);
@@ -47,13 +47,13 @@ describe('FormBody', () => {
   });
 
   describe('incomplete item errors', () => {
-    it('does not show incomplete item errors on non-interacted items', () => {
-      const { getByLabelText } = renderFormBody({ response: { form_response_attrs: {} } });
+    it('does not show incomplete item errors on non-interacted items', async () => {
+      const { getByLabelText } = await renderFormBody({ response: { form_response_attrs: {} } });
       expect(getByLabelText('Title*')).not.toHaveClass('is-invalid');
     });
 
-    it('shows errors on interacted items', () => {
-      const { getByLabelText } = renderFormBody({ response: { form_response_attrs: {} } }, [
+    it('shows errors on interacted items', async () => {
+      const { getByLabelText } = await renderFormBody({ response: { form_response_attrs: {} } }, [
         'title',
       ]);
       expect(getByLabelText('Title*')).toHaveClass('is-invalid');
@@ -61,8 +61,8 @@ describe('FormBody', () => {
   });
 
   describe('string item errors', () => {
-    it('shows errors on items', () => {
-      const { getByText } = renderFormBody({ errors: { title: ['blah'] } });
+    it('shows errors on items', async () => {
+      const { getByText } = await renderFormBody({ errors: { title: ['blah'] } });
       expect(getByText('blah')).toBeVisible();
     });
   });

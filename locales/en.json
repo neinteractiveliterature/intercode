@@ -163,6 +163,35 @@
     "defaultSuccess": "Copied!",
     "defaultText": "Copy to clipboard"
   },
+  "dateTimeFormats": {
+    "anytime": "'anytime'",
+    "compactDateTime": "yyyy-MM-dd HH:mm",
+    "durationHoursMinutes": "h:mm",
+    "indefinitely": "'indefinitely'",
+    "longDate": "MMMM d, yyyy",
+    "longDateTime": "MMMM d, yyyy 'at' h:mmaaa",
+    "longDayYear": "d, yyyy",
+    "longMonthDay": "MMMM d",
+    "longMonthYear": "MMMM yyyy",
+    "longWeekday": "cccc",
+    "longWeekdayDate": "cccc, MMMM d, yyyy",
+    "longWeekdayDateTimeWithZone": "cccc, MMMM d, yyyy 'at' h:mmaaa ZZZZ",
+    "longWeekdayTime": "cccc h:mmaaa",
+    "midnight": "'midnight'",
+    "noon": "'noon'",
+    "shortDateTime": "MMM d, yyyy h:mmaaa",
+    "shortDateTimeWithZone": "h:mmaaa ZZZZ",
+    "shortHour": "haaa",
+    "shortTime": "h:mmaaa",
+    "shortTimeWithSeconds": "h:mm:ssaaa",
+    "shortTimeWithZone": "h:mmaaa ZZZZ",
+    "shortWeekday": "ccc",
+    "shortWeekdayDateTime": "ccc, MMM d, yyyy h:mmaaa",
+    "shortWeekdayTime": "ccc h:mmaaa",
+    "weekdayMidnight": "ccc 'midnight'",
+    "weekdayNoon": "ccc 'noon'",
+    "year": "yyyy"
+  },
   "errors": {
     "404": "<0>Oops!</0><1>We couldn’t find a page at the location {{pathname}}.</1>",
     "unauthorized": "Sorry, your account is not authorized to view this page."
@@ -490,6 +519,7 @@
     }
   },
   "schedule": {
+    "goToEvent": "Go to event",
     "legends": {
       "attendeeCounts": {
         "confirmed": "confirmed signups",

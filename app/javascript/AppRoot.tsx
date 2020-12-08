@@ -1,19 +1,22 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
-import moment from 'moment-timezone';
 import { Settings } from 'luxon';
 
 import { useAppRootQueryQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import ErrorDisplay from './ErrorDisplay';
-import NavigationBar from './NavigationBar';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
-import i18n from './setupI18Next';
+import getI18n from './setupI18Next';
+import { lazyWithBundleHashCheck } from './checkBundleHash';
+
+const NavigationBar = lazyWithBundleHashCheck(
+  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
+);
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
@@ -111,15 +114,10 @@ function AppRoot() {
 
   useEffect(() => {
     if (appRootContextValue?.language) {
-      i18n.changeLanguage(appRootContextValue.language);
-      Settings.defaultLocale = appRootContextValue.language;
-
-      if (appRootContextValue.language === 'es') {
-        // @ts-expect-error
-        import('moment/locale/es').then(() => moment.locale('es'));
-      } else {
-        moment.locale('en');
-      }
+      getI18n().then((i18n) => {
+        i18n.changeLanguage(appRootContextValue.language);
+        Settings.defaultLocale = appRootContextValue.language;
+      });
     }
   }, [appRootContextValue]);
 

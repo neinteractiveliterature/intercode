@@ -1,10 +1,10 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-import moment from 'moment-timezone';
 // @ts-ignore
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
-
 import { SortingRule } from 'react-table';
+import { DateTime } from 'luxon';
+
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
@@ -16,33 +16,40 @@ import Gravatar from '../../Gravatar';
 import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
 import { EventListEventsQueryQuery } from './queries.generated';
 import { notEmpty } from '../../ValueUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
 
-function renderFirstRunTime(event: EventType, timezoneName: string) {
+function renderFirstRunTime(
+  event: EventType,
+  timezoneName: string,
+  format: ReturnType<typeof useAppDateTimeFormat>,
+) {
   if (event.runs.length > 0) {
     const sortedRuns = getSortedRuns(event);
     if (sortedRuns.length > 4) {
-      const firstRunStart = moment.tz(sortedRuns[0].starts_at, timezoneName);
-      return `${sortedRuns.length} runs starting ${firstRunStart.format('dddd h:mma')}`;
+      const firstRunStart = DateTime.fromISO(sortedRuns[0].starts_at, { zone: timezoneName });
+      return `${sortedRuns.length} runs starting ${format(firstRunStart, 'longWeekdayTime')}`;
     }
 
-    let previousDayName: string;
+    let previousWeekday: number;
 
     return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
-        const runStart = moment.tz(run.starts_at, timezoneName);
-        const dayName = runStart.format('dddd');
-        if (previousDayName === dayName) {
-          return runStart.format('h:mma');
+        const runStart = DateTime.fromISO(run.starts_at, { zone: timezoneName });
+        const dayName = runStart.weekday;
+        if (previousWeekday === dayName) {
+          return format(runStart, 'shortTime');
         }
 
-        previousDayName = dayName;
+        previousWeekday = dayName;
         return (
-          <Fragment key={runStart.toISOString()}>
-            <span className="d-lg-none text-nowrap">{runStart.format('ddd h:mma')}</span>
-            <span className="d-none d-lg-inline text-nowrap">{runStart.format('dddd h:mma')}</span>
+          <Fragment key={runStart.toISO()}>
+            <span className="d-lg-none text-nowrap">{format(runStart, 'shortWeekdayTime')}</span>
+            <span className="d-none d-lg-inline text-nowrap">
+              {format(runStart, 'longWeekdayTime')}
+            </span>
           </Fragment>
         );
       }),
@@ -82,6 +89,7 @@ export type EventCardProps = {
 
 const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems: { key: string; content: ReactNode }[] = [];
@@ -155,7 +163,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
         <div className="event-card-header">
           <div className="float-right text-right ml-1">
             <div className="lead">
-              {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
+              {canReadSchedule ? renderFirstRunTime(event, timezoneName, format) : null}
             </div>
             <div className="mt-1 d-flex align-items-end justify-content-end">
               {myProfile && (
@@ -183,14 +191,19 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
           </div>
         </div>
 
-        {sortBy?.some((sort) => sort.id === 'created_at') ? (
-          <p className="m-0">
-            <strong>
-              Added{' '}
-              {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
-            </strong>
-          </p>
-        ) : null}
+        {sortBy?.some((sort) => sort.id === 'created_at')
+          ? event.created_at && (
+              <p className="m-0">
+                <strong>
+                  Added{' '}
+                  {format(
+                    DateTime.fromISO(event.created_at, { zone: timezoneName }),
+                    'longWeekdayDateTimeWithZone',
+                  )}
+                </strong>
+              </p>
+            )
+          : null}
       </div>
 
       <div

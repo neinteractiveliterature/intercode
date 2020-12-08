@@ -34,7 +34,7 @@ describe('RegistrationPolicyEditor', () => {
     let result: RenderResult;
 
     await act(async () => {
-      result = render(
+      result = await render(
         <RegistrationPolicyEditor
           registrationPolicy={{
             buckets,

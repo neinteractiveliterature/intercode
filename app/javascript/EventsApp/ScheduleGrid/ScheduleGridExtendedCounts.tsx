@@ -1,5 +1,5 @@
 import { useMemo, useContext } from 'react';
-import moment, { Moment } from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import SignupCountData from '../SignupCountData';
 import { ScheduleGridContext } from './ScheduleGridContext';
@@ -20,7 +20,7 @@ function buildHourRunData(runId: number, schedule: Schedule) {
 }
 
 export type ScheduleGridExtendedCountsProps = {
-  now: Moment;
+  now: DateTime;
   runIds: number[];
 };
 
@@ -28,11 +28,9 @@ function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsP
   const { schedule } = useContext(ScheduleGridContext);
   const { timezoneName } = useContext(AppRootContext);
 
-  const nowISOString = now.toISOString();
   const hourTimespan = useMemo(() => {
-    const nowMoment = moment.tz(nowISOString, timezoneName);
-    return new Timespan(nowMoment, nowMoment.clone().add(1, 'hour'));
-  }, [nowISOString, timezoneName]);
+    return new Timespan(now, now.setZone(timezoneName).plus({ hours: 1 }));
+  }, [now, timezoneName]);
   const hourRunIds = useMemo(() => {
     const runIdsFromSchedule = new Set(schedule.getRunIdsOverlapping(hourTimespan));
     return runIds.filter((runId) => runIdsFromSchedule.has(runId));

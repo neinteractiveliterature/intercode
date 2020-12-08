@@ -1,8 +1,9 @@
 import { useContext, useState } from 'react';
-import moment from 'moment-timezone';
 // @ts-expect-error
 import Pagination from 'react-js-pagination';
 import { assertNever } from 'assert-never';
+import { DateTime } from 'luxon';
+import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
@@ -20,6 +21,7 @@ import {
   useAcceptSignupRequestMutation,
   useRejectSignupRequestMutation,
 } from './mutations.generated';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
@@ -61,6 +63,7 @@ function SignupModerationRunDetails({
   requestedBucketKey,
 }: SignupModerationRunDetailsProps) {
   const { timezoneName } = useContext(AppRootContext);
+  const { t } = useTranslation();
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
 
   return (
@@ -80,13 +83,14 @@ function SignupModerationRunDetails({
           </small>
         </>
       )}
-      <small>{runTimespan.humanizeInTimezone(timezoneName)}</small>
+      <small>{runTimespan.humanizeInTimezone(timezoneName, t)}</small>
     </>
   );
 }
 
 function SignupModerationQueue() {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, loading, error } = useSignupModerationQueueQueryQuery({
     variables: { page: currentPage },
@@ -192,9 +196,10 @@ function SignupModerationQueue() {
               </td>
               <td>
                 <small>
-                  {moment
-                    .tz(signupRequest.created_at, timezoneName)
-                    .format('ddd, MMM D, YYYY [at] h:mma')}
+                  {format(
+                    DateTime.fromISO(signupRequest.created_at, { zone: timezoneName }),
+                    'shortWeekdayDateTime',
+                  )}
                 </small>
               </td>
               <td className="text-right">

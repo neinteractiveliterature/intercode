@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useContext, ReactNode } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Moment } from 'moment-timezone';
 import { ApolloError } from '@apollo/client';
+import { DateTime } from 'luxon';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
@@ -18,7 +18,7 @@ import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
-import { timezoneNameForConvention } from '../TimeUtils';
+import { timezoneNameForConvention, useAppDateTimeFormat } from '../TimeUtils';
 import { useCreateMultipleRunsMutation } from './mutations.generated';
 import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
 import {
@@ -53,9 +53,10 @@ function ScheduleMultipleRunsModal({
   onCancel,
   onFinish,
 }: ScheduleMultipleRunsModalProps) {
+  const format = useAppDateTimeFormat();
   const [createMutate] = useCreateMultipleRunsMutation();
   const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(createMutate);
-  const [day, setDay] = useState<Moment>();
+  const [day, setDay] = useState<DateTime>();
   const [start, setStart] = useState<FuzzyTimeWithoutSecond>({});
   const [finish, setFinish] = useState<FuzzyTimeWithoutSecond>({});
   const [rooms, setRooms] = useState<RoomFieldsFragment[]>([]);
@@ -78,7 +79,7 @@ function ScheduleMultipleRunsModal({
       return null;
     }
 
-    return new Timespan(day.clone().set(start), day.clone().set(finish));
+    return Timespan.finiteFromDateTimes(day.set(start), day.set(finish));
   }, [day, start, finish]);
 
   const timespansWithinRange = useMemo(() => {
@@ -109,9 +110,29 @@ function ScheduleMultipleRunsModal({
     [timespansWithinRange, existingRunTimespans],
   );
 
+  const runsForProspectiveRunSchedule = useMemo(
+    () =>
+      nonConflictingTimespansWithinRange.map((t, index) => ({
+        __typename: 'Run' as const,
+        id: index * -1,
+        starts_at: t.start.toISO(),
+        rooms,
+      })),
+    [nonConflictingTimespansWithinRange, rooms],
+  );
+
+  const eventForProspectiveRunSchedule = useMemo(
+    () => ({
+      ...event,
+      id: event.id || -1,
+      runs: event.runs || [],
+    }),
+    [event],
+  );
+
   const scheduleRuns = useCallback(async () => {
     const runs = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
-      starts_at: nonConflictingTimespan.start.toISOString(),
+      starts_at: nonConflictingTimespan.start.toISO(),
       room_ids: rooms.map((room) => room.id),
     }));
 
@@ -153,9 +174,9 @@ function ScheduleMultipleRunsModal({
       return null;
     }
 
-    const timespanForFinish = Timespan.finiteFromMoments(
+    const timespanForFinish = Timespan.finiteFromDateTimes(
       conventionDayTimespan.start,
-      conventionDayTimespan.finish.clone().add(1, 'hour'),
+      conventionDayTimespan.finish.plus({ hours: 1 }),
     );
 
     return (
@@ -182,7 +203,7 @@ function ScheduleMultipleRunsModal({
     const nonConflictingTimespans = nonConflictingTimespansWithinRange;
 
     const runTimespanItems = runTimespans.map((runTimespan) => {
-      let description: ReactNode = runTimespan.start.format('h:mma');
+      let description: ReactNode = format(runTimespan.start, 'shortTime');
       const runConflicts =
         nonConflictingTimespans.find((nonConflictingTimespan) =>
           nonConflictingTimespan.isSame(runTimespan),
@@ -195,7 +216,7 @@ function ScheduleMultipleRunsModal({
       }
 
       return (
-        <li key={runTimespan.start.toISOString()} className="list-inline-item">
+        <li key={runTimespan.start.toISO()} className="list-inline-item">
           {description}
         </li>
       );
@@ -239,17 +260,8 @@ function ScheduleMultipleRunsModal({
 
           <ProspectiveRunSchedule
             day={day}
-            runs={nonConflictingTimespansWithinRange.map((t, index) => ({
-              __typename: 'Run',
-              id: index * -1,
-              starts_at: t.start.toISOString(),
-              rooms,
-            }))}
-            event={{
-              ...event,
-              id: event.id || -1,
-              runs: event.runs || [],
-            }}
+            runs={runsForProspectiveRunSchedule}
+            event={eventForProspectiveRunSchedule}
           />
 
           <ErrorDisplay graphQLError={createError as ApolloError} />

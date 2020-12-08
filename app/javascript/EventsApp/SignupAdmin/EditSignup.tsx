@@ -1,10 +1,10 @@
 import { useCallback, useContext } from 'react';
 import { pluralize, humanize, underscore } from 'inflected';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { DateTime } from 'luxon';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
@@ -175,8 +175,10 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
               eventTitle: signup.run.event.title,
             })}{' '}
             {ageAsOf(
-              userConProfile.birth_date ? moment(userConProfile.birth_date) : undefined,
-              moment(signup.run.starts_at),
+              userConProfile.birth_date
+                ? DateTime.fromISO(userConProfile.birth_date, { zone: timezoneName })
+                : undefined,
+              DateTime.fromISO(signup.run.starts_at, { zone: timezoneName }),
             )}
           </li>
           <li className={classNames('list-group-item')}>
@@ -271,7 +273,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
         <div className="card-header">
           {run.event.title}
           <br />
-          {timespan.humanizeInTimezone(timezoneName)}
+          {timespan.humanizeInTimezone(timezoneName, t)}
           <br />
           {run.rooms
             .map((room) => room.name)
