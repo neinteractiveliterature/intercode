@@ -131,10 +131,5 @@ module.exports = {
       writeToDisk: true,
       publicPath: true,
     }),
-    // don't load all of moment's locales
-    new webpack.IgnorePlugin({
-      resourceRegExp: /^\.\/locale$/,
-      contextRegExp: /moment$/,
-    }),
   ],
 };
