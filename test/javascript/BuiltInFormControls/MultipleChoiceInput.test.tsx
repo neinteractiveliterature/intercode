@@ -16,13 +16,13 @@ describe('MultipleChoiceInput', () => {
       />,
     );
 
-  test('it renders the caption', () => {
-    const { getByText } = renderMultipleChoiceInput();
+  test('it renders the caption', async () => {
+    const { getByText } = await renderMultipleChoiceInput();
     expect(getByText('Hello there').tagName.toUpperCase()).toEqual('LEGEND');
   });
 
-  test('it renders the choices', () => {
-    const { getAllByRole } = renderMultipleChoiceInput();
+  test('it renders the choices', async () => {
+    const { getAllByRole } = await renderMultipleChoiceInput();
     expect(getAllByRole('radio')).toHaveLength(3);
   });
 

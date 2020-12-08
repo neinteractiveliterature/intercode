@@ -8,6 +8,7 @@ import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import Timespan from '../../Timespan';
 
 export type FakeEventRunProps = {
+  classifyEventsBy?: 'category' | 'fullness';
   eventCategory: {};
   children: ReactNode;
   availability?: number;
@@ -29,12 +30,17 @@ function FakeEventRun({
   onClick,
   withRef,
   zeroCapacity,
+  classifyEventsBy,
 }: FakeEventRunProps) {
-  const config = { classifyEventsBy: 'category' as const, showSignedUp: true };
+  const config = {
+    classifyEventsBy: classifyEventsBy ?? ('category' as const),
+    showSignedUp: true,
+  };
+  const signupCount = Math.round((1.0 - (availability ?? 0)) * 100);
   const signupCountData = {
     runFull: () => runFull ?? false,
-    getConfirmedLimitedSignupCount: () => 0,
-    getNotCountedConfirmedSignupCount: () => 0,
+    getConfirmedLimitedSignupCount: () => signupCount,
+    getNotCountedConfirmedSignupCount: () => signupCount,
   };
   const clickableProps = onClick
     ? {
@@ -69,7 +75,13 @@ function FakeEventRun({
           event: {
             registration_policy: {
               buckets: [],
-              total_slots_including_not_counted: zeroCapacity ? 0 : 1,
+              slots_limited: !unlimited,
+              total_slots: zeroCapacity ? 0 : 100,
+              preferred_slots: zeroCapacity ? 0 : 60,
+              minimum_slots: zeroCapacity ? 0 : 30,
+              total_slots_including_not_counted: zeroCapacity ? 0 : 100,
+              preferred_slots_including_not_counted: zeroCapacity ? 0 : 60,
+              minimum_slots_including_not_counted: zeroCapacity ? 0 : 30,
             },
           },
           unlimited: unlimited ?? false,

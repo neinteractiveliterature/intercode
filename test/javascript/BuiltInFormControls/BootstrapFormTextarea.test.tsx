@@ -7,16 +7,16 @@ describe('BootstrapFormTextarea', () => {
       <BootstrapFormTextarea name="my_textarea" label="type in me" value="" {...overrideProps} />,
     );
 
-  test('it passes change events', () => {
+  test('it passes change events', async () => {
     const onChange = jest.fn();
-    const { getByLabelText } = renderComponent({ onChange });
+    const { getByLabelText } = await renderComponent({ onChange });
     fireEvent.change(getByLabelText('type in me'), { target: { value: 'asdf' } });
     expect(onChange.mock.calls).toHaveLength(1);
   });
 
-  test('it calls onTextChange', () => {
+  test('it calls onTextChange', async () => {
     const onTextChange = jest.fn();
-    const { getByLabelText } = renderComponent({ onTextChange });
+    const { getByLabelText } = await renderComponent({ onTextChange });
     fireEvent.change(getByLabelText('type in me'), { target: { value: 'asdf' } });
     expect(onTextChange.mock.calls[0][0]).toEqual('asdf');
   });

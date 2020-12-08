@@ -37,6 +37,7 @@ class FormResponseChangeGroupPresenter
         'id' => convention.id,
         'starts_at' => convention.starts_at,
         'ends_at' => convention.ends_at,
+        'language' => convention.language,
         # force JS timezone helpers to use the request timezone
         'timezone_name' => Notifier.current_timezone || 'Etc/UTC',
         'timezone_mode' => 'convention_local'

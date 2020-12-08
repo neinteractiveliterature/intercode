@@ -1,19 +1,34 @@
-import moment, { Moment } from 'moment-timezone';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
+import { DateTime } from 'luxon';
+import { TFunction } from 'i18next';
 
 import Timespan, { FiniteTimespan } from '../Timespan';
 import { timespanFromConvention, ConventionForTimespanUtils } from '../TimespanUtils';
-import { timezoneNameForConvention } from '../TimeUtils';
+import {
+  formatLCM,
+  getDateTimeFormat,
+  timezoneNameForConvention,
+  useAppDateTimeFormat,
+} from '../TimeUtils';
 import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockTypes';
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 import { notEmpty } from '../ValueUtils';
 
-export function describeTimeblock(timeblock: TimeblockDefinition) {
-  const start = moment().startOf('day').set(timeblock.start);
-  const finish = moment().startOf('day').set(timeblock.finish);
+export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition) {
+  return Timespan.finiteFromDateTimes(
+    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus(timeblock.start),
+    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus(timeblock.finish),
+  );
+}
 
-  return `${start.format('h:mma')} - ${finish.format('h:mma')}`;
+export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction) {
+  const timespan = getTimeblockTimespanForDisplay(timeblock);
+
+  return `${formatLCM(timespan.start, getDateTimeFormat('shortTime', t))} - ${formatLCM(
+    timespan.finish,
+    getDateTimeFormat('shortTime', t),
+  )}`;
 }
 
 export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | null) {
@@ -43,7 +58,7 @@ function getDayStarts(convention: ConventionForTimespanUtils) {
 }
 
 export type ConcreteTimeblock = {
-  dayStart: Moment;
+  dayStart: DateTime;
   timeblock: TimeblockDefinition;
   label: string;
   timespan: FiniteTimespan;
@@ -57,9 +72,9 @@ function getAllPossibleTimeblocks(
     formItem.rendered_properties.timeblocks
       .map((timeblock) => {
         try {
-          const timespan = Timespan.fromMoments(
-            moment(dayStart).set(timeblock.start),
-            moment(dayStart).set(timeblock.finish),
+          const timespan = Timespan.fromDateTimes(
+            dayStart.set(timeblock.start),
+            dayStart.set(timeblock.finish),
           ) as FiniteTimespan;
 
           const concreteTimeblock: ConcreteTimeblock = {
@@ -90,11 +105,11 @@ function isTimeblockValid(
   }
 
   const timeblockOmitted = formItem.rendered_properties.omit_timeblocks.some((omission) => {
-    const omissionDate = moment
-      .tz(omission.date, timezoneNameForConvention(convention))
-      .startOf('day');
-    const dayStart = moment(timeblock.timespan.start).startOf('day');
-    return omission.label === timeblock.label && omissionDate.isSame(dayStart);
+    const omissionDate = DateTime.fromISO(omission.date, {
+      zone: timezoneNameForConvention(convention),
+    }).startOf('day');
+    const dayStart = timeblock.timespan.start.startOf('day');
+    return omission.label === timeblock.label && omissionDate.toMillis() === dayStart.toMillis();
   });
 
   return !timeblockOmitted;
@@ -110,7 +125,7 @@ export function getValidTimeblocks(
 }
 
 export type TimeblockColumn = {
-  dayStart: Moment;
+  dayStart: DateTime;
   cells: (ConcreteTimeblock | null)[];
 };
 
@@ -121,8 +136,8 @@ export function getValidTimeblockColumns(
   const allPossibleTimeblocks = getAllPossibleTimeblocks(convention, formItem);
   return getDayStarts(convention)
     .map((dayStart) => {
-      const possibleTimeblocksForDayStart = allPossibleTimeblocks.filter((timeblock) =>
-        dayStart.isSame(timeblock.dayStart),
+      const possibleTimeblocksForDayStart = allPossibleTimeblocks.filter(
+        (timeblock) => dayStart.toMillis() === timeblock.dayStart.toMillis(),
       );
 
       return {
@@ -166,6 +181,9 @@ export function rotateTimeblockColumnsToRows(
     .filter(notEmpty);
 }
 
-export function getColumnHeader(column: TimeblockColumn) {
-  return column.dayStart.format('dddd');
+export function getColumnHeader(
+  column: TimeblockColumn,
+  format: ReturnType<typeof useAppDateTimeFormat>,
+) {
+  return format(column.dayStart, 'longWeekday');
 }

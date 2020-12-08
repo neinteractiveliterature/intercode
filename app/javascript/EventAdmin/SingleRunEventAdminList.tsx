@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { useTranslation } from 'react-i18next';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
@@ -21,6 +22,7 @@ export type SingleRunEventAdminListProps = {
 };
 
 function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListProps) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useEventAdminEventsQueryQuery();
   const [eventCategory, sortedEvents] = useEventAdminCategory(
@@ -60,7 +62,7 @@ function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListPro
             {event.title}
           </span>
         </th>
-        <td>{timespan && timespan.humanizeInTimezone(timezoneName)}</td>
+        <td>{timespan && timespan.humanizeInTimezone(timezoneName, t)}</td>
         <td>
           <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
             Edit

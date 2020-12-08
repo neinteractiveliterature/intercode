@@ -1,7 +1,8 @@
 import { useMemo, useContext } from 'react';
-import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import sortBy from 'lodash/sortBy';
+import { DateTime } from 'luxon';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
@@ -23,9 +24,7 @@ function filterAndSortSignups(
 ) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
 
-  return filteredSignups.sort(
-    (a, b) => moment(a.run.starts_at).valueOf() - moment(b.run.starts_at).valueOf(),
-  );
+  return sortBy(filteredSignups, (signup) => DateTime.fromISO(signup.run.starts_at).valueOf());
 }
 
 export type UserConProfileSignupsCardProps = {
@@ -88,6 +87,9 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
           <small>
             {timespanFromRun(timezoneName, signup.run.event, signup.run).humanizeInTimezone(
               timezoneName,
+              t,
+              'shortWeekdayTime',
+              'shortTimeWithZone',
             )}
           </small>
         </li>

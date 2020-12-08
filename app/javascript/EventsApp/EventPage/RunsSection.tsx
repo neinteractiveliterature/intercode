@@ -1,12 +1,12 @@
-import { useMemo, useContext } from 'react';
-import moment from 'moment-timezone';
+import { useMemo } from 'react';
+import sortBy from 'lodash/sortBy';
+import { DateTime } from 'luxon';
 
 import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
 import RunCapacityGraph from './RunCapacityGraph';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventPageRunCard from './EventPageRunCard';
 import LoadingIndicator from '../../LoadingIndicator';
-import AppRootContext from '../../AppRootContext';
 import { EventPageQueryQuery, useEventPageQueryQuery } from './queries.generated';
 
 type FakeRunProps = {
@@ -43,19 +43,14 @@ export type RunsSectionProps = {
 };
 
 function RunsSection({ eventId }: RunsSectionProps) {
-  const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
 
   const sortedRuns = useMemo(
     () =>
       error || loading || !data
         ? []
-        : [...data.event.runs].sort(
-            (a, b) =>
-              moment.tz(a.starts_at, timezoneName).valueOf() -
-              moment.tz(b.starts_at, timezoneName).valueOf(),
-          ),
-    [data, error, loading, timezoneName],
+        : sortBy(data.event.runs, (run) => DateTime.fromISO(run.starts_at).toMillis()),
+    [data, error, loading],
   );
 
   if (loading) {

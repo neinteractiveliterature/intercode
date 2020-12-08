@@ -68,7 +68,7 @@ describe('GraphQLAsyncSelect', () => {
     );
 
   test('loads options', async () => {
-    const { getByRole, queryAllByText } = renderUserConProfileSelect();
+    const { getByRole, queryAllByText } = await renderUserConProfileSelect();
     const selectInput = getByRole('textbox');
     await act(async () => {
       fireEvent.change(selectInput, { target: { value: 'gab' } });

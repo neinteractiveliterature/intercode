@@ -10,7 +10,7 @@ import { useWhosFreeQueryQuery } from './queries.generated';
 
 function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
   const { data, loading, error } = useWhosFreeQueryQuery({
-    variables: { start: timespan.start.toISOString(), finish: timespan.finish.toISOString() },
+    variables: { start: timespan.start.toISO(), finish: timespan.finish.toISO() },
   });
 
   if (loading) {
@@ -39,7 +39,7 @@ function WhosFree() {
     <>
       <h1 className="mb-4">Who&rsquo;s free?</h1>
       <WhosFreeForm
-        onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromMoments(start, finish))}
+        onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromDateTimes(start, finish))}
       />
       {timespan && <WhosFreeResults timespan={timespan} />}
     </>

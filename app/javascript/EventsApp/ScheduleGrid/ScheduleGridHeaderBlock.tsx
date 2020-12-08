@@ -9,11 +9,11 @@ export type ScheduleGridHeaderBlockProps = {
 };
 
 function ScheduleGridHeaderBlock({ timespan, runIds }: ScheduleGridHeaderBlockProps) {
-  const now = timespan.start.clone();
+  let now = timespan.start;
   const hourDivs: JSX.Element[] = [];
   while (timespan.includesTime(now)) {
-    hourDivs.push(<ScheduleGridHour now={now.clone()} runIds={runIds} key={now.toISOString()} />);
-    now.add(1, 'hour');
+    hourDivs.push(<ScheduleGridHour now={now} runIds={runIds} key={now.toISO()} />);
+    now = now.plus({ hours: 1 });
   }
 
   return <>{hourDivs}</>;

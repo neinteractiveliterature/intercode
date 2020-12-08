@@ -26,6 +26,7 @@ class AcceptEventProposalService < CivilService::Service
     event.assign_form_response_attributes(event_attributes)
     event.con_mail_destination ||= 'gms'
     event.title ||= event_proposal.title # in case the form doesn't include it
+    event.length_seconds ||= event_proposal.length_seconds # same deal as title
     event.save!
     event_proposal.update!(event: event)
 

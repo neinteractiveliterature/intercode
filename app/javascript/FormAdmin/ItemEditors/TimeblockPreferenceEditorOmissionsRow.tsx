@@ -1,5 +1,4 @@
 import { useMemo, useCallback, useContext } from 'react';
-import moment from 'moment-timezone';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getValidTimeblockColumns } from '../../FormPresenter/TimeblockUtils';
@@ -8,14 +7,12 @@ import Timespan from '../../Timespan';
 import { timespanFromConvention } from '../../TimespanUtils';
 import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
 import { FormEditorContext } from '../FormEditorContexts';
-import AppRootContext from '../../AppRootContext';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TimeblockPreferenceFormItem } from '../FormItemUtils';
 import { notEmpty } from '../../ValueUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
-export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<
-  TimeblockPreferenceFormItem
-> & {
+export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<TimeblockPreferenceFormItem> & {
   timeblock: TimeblockDefinition;
 };
 function TimeblockPreferenceEditorOmissionsRow({
@@ -23,8 +20,8 @@ function TimeblockPreferenceEditorOmissionsRow({
   setFormItem,
   timeblock,
 }: TimeblockPreferenceEditorOmissionsRowProps) {
-  const { timezoneName } = useContext(AppRootContext);
   const { convention } = useContext(FormEditorContext);
+  const format = useAppDateTimeFormat();
 
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
 
@@ -69,22 +66,22 @@ function TimeblockPreferenceEditorOmissionsRow({
     () =>
       columns
         .map((column) => {
-          const dayStart = moment.tz(column.dayStart, timezoneName);
-          const start = moment(dayStart).add(timeblock.start);
-          const finish = moment(dayStart).add(timeblock.finish);
-          if (start.isAfter(finish)) {
+          const { dayStart } = column;
+          const start = dayStart.plus(timeblock.start);
+          const finish = dayStart.plus(timeblock.finish);
+          if (start > finish) {
             return undefined;
           }
-          const timespan = Timespan.fromMoments(start, finish);
+          const timespan = Timespan.fromDateTimes(start, finish);
 
           return {
-            label: dayStart.format('dddd'),
-            value: dayStart.format('YYYY-MM-DD'),
+            label: format(dayStart, 'longWeekday'),
+            value: dayStart.toISODate(),
             disabled: !timespan.overlapsTimespan(conventionTimespan),
           };
         })
         .filter(notEmpty),
-    [columns, timezoneName, conventionTimespan, timeblock.finish, timeblock.start],
+    [columns, conventionTimespan, timeblock.finish, timeblock.start, format],
   );
 
   const inclusionDates = useMemo(

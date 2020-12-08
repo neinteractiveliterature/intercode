@@ -1,9 +1,11 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
+import { TFunction } from 'i18next';
 
 import formatMoney from '../formatMoney';
 import { findCurrentValue, findCurrentTimespanIndex } from '../ScheduledValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { Money, PricingStructure, ScheduledMoneyValue } from '../graphqlTypes.generated';
+import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 
 export function describeAdminPricingStructure(
   pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null,
@@ -33,6 +35,7 @@ export function describeAdminPricingStructure(
 export function describeUserPricingStructure(
   pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | undefined | null,
   timezoneName: string,
+  t: TFunction,
 ) {
   if (!pricingStructure) {
     return null;
@@ -51,11 +54,12 @@ export function describeUserPricingStructure(
 
     const currentValue = scheduledValue.timespans[currentTimespanIndex].value;
     const nextTimespan = scheduledValue.timespans[currentTimespanIndex + 1];
-    if (nextTimespan) {
+    if (nextTimespan && nextTimespan.start) {
       const nextValue = nextTimespan.value;
-      const nextChange = moment.tz(nextTimespan.start, timezoneName);
-      return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${nextChange.format(
-        'MMM DD, YYYY [at] h:mma',
+      const nextChange = DateTime.fromISO(nextTimespan.start, { zone: timezoneName });
+      return `${formatMoney(currentValue)} (${formatMoney(nextValue)} starting ${formatLCM(
+        nextChange,
+        getDateTimeFormat('shortDateTime', t),
       )})`;
     }
     return formatMoney(currentValue);

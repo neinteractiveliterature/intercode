@@ -1,5 +1,6 @@
 import { createContext, useState, useCallback, ReactNode, useMemo } from 'react';
-import { findIndex, keyBy } from 'lodash';
+import findIndex from 'lodash/findIndex';
+import keyBy from 'lodash/keyBy';
 import { getSortedFormSections } from '../Models/Form';
 import {
   CommonFormSectionFieldsFragment,

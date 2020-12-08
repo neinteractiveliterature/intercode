@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import * as React from 'react';
 import { humanize } from 'inflected';
-import moment from 'moment-timezone';
 import classNames from 'classnames';
+import { DateTime } from 'luxon';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -14,6 +14,7 @@ import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import EnumTypes from '../enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from '../graphqlTypes.generated';
 import { useCancelOrderMutation, useMarkOrderPaidMutation } from './mutations.generated';
+import { useAppDateTimeFormat } from '../TimeUtils';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
@@ -148,6 +149,7 @@ export type AdminOrderFormProps<T extends AdminOrderType> = {
 
 function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>) {
   const { timezoneName } = useContext(AppRootContext);
+  const format = useAppDateTimeFormat();
 
   return (
     <div>
@@ -181,9 +183,10 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
               <li className="list-inline-item">
                 {humanize(order.status)}
                 {order.paid_at
-                  ? `on ${moment(order.paid_at)
-                      .tz(timezoneName)
-                      .format('ddd, MMM D, YYYY {at} h:mma')}`
+                  ? `on ${format(
+                      DateTime.fromISO(order.paid_at, { zone: timezoneName }),
+                      'shortWeekdayDateTime',
+                    )}`
                   : null}
               </li>
               <li className="list-inline-item">

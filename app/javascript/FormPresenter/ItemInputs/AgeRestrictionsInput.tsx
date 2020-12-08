@@ -78,7 +78,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   );
 
   return (
-    <fieldset className="card my-2">
+    <div className="card my-2">
       <div className="card-header py-0">
         <legend
           className="col-form-label"
@@ -119,7 +119,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
           }
         />
       </div>
-    </fieldset>
+    </div>
   );
 }
 

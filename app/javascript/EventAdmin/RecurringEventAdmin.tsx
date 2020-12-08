@@ -44,9 +44,10 @@ function RecurringEventAdmin({ eventCategoryId }: RecurringEventAdminProps) {
       {sortedEvents.map((event) => (
         <RecurringEventSection convention={data!.convention} event={event} key={event.id} />
       ))}
-      <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
-        {(props) => <EditRun {...props} events={data!.events} convention={data!.convention} />}
-      </Route>
+      <Route
+        path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
+        render={() => <EditRun events={data!.events} convention={data!.convention} />}
+      />
     </div>
   );
 }

@@ -15,20 +15,20 @@ describe('BooleanInput', () => {
 
   beforeEach(onChange.mockReset);
 
-  test('it renders', () => {
-    const { getByText } = renderInput();
+  test('it renders', async () => {
+    const { getByText } = await renderInput();
     expect(getByText('Is this a test?')).toBeTruthy();
   });
 
-  test('it calls onChange for true boolean value', () => {
-    const { getByLabelText } = renderInput();
+  test('it calls onChange for true boolean value', async () => {
+    const { getByLabelText } = await renderInput();
     const yesInput = getByLabelText('Yes');
     fireEvent.click(yesInput);
     expect(onChange.mock.calls[0][0]).toBeTruthy();
   });
 
-  test('it calls onChange for false boolean value', () => {
-    const { getByLabelText } = renderInput({ value: true });
+  test('it calls onChange for false boolean value', async () => {
+    const { getByLabelText } = await renderInput({ value: true });
     const noInput = getByLabelText('No');
     fireEvent.click(noInput);
     expect(onChange.mock.calls[0][0]).toBeFalsy();

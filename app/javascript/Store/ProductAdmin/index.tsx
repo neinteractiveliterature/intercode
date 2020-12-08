@@ -14,6 +14,7 @@ import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
 import { useAdminProductsQueryQuery } from '../queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
+import DndWrapper from '../../DndWrapper';
 
 const blankProduct: EditingProduct = {
   __typename: 'Product',
@@ -27,7 +28,9 @@ const blankProduct: EditingProduct = {
   available: true,
 };
 
-export default LoadQueryWrapper(useAdminProductsQueryQuery, function ProductAdmin({ data }) {
+const ProductAdminPage = LoadQueryWrapper(useAdminProductsQueryQuery, function ProductAdmin({
+  data,
+}) {
   const [newProducts, setNewProducts] = useState<EditingProduct[]>([]);
   const [editingProductIds, setEditingProductIds] = useState<number[]>([]);
   const pricingStructureModal = useModal<PricingStructureModalState>();
@@ -100,3 +103,5 @@ export default LoadQueryWrapper(useAdminProductsQueryQuery, function ProductAdmi
     </PricingStructureModalContext.Provider>
   );
 });
+
+export default DndWrapper(ProductAdminPage);

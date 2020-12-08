@@ -27,7 +27,7 @@ describe('RegistrationBucketRow', () => {
     let result: RenderResult;
 
     await act(async () => {
-      result = render(
+      result = await render(
         <table>
           <tbody>
             <RegistrationBucketRow

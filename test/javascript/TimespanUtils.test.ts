@@ -10,8 +10,8 @@ describe('timespanFromRun', () => {
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
 
-    expect(timespan.start?.hour()).toEqual(9);
-    expect(timespan.finish?.hour()).toEqual(10);
+    expect(timespan.start.hour).toEqual(9);
+    expect(timespan.finish.hour).toEqual(10);
   });
 
   test('converting to a different time zone', () => {
@@ -21,8 +21,8 @@ describe('timespanFromRun', () => {
       { starts_at: '2017-01-01T09:00:00.000Z' },
     );
 
-    expect(timespan.start?.hour()).toEqual(4);
-    expect(timespan.finish?.hour()).toEqual(5);
+    expect(timespan.start.hour).toEqual(4);
+    expect(timespan.finish.hour).toEqual(5);
   });
 });
 
@@ -44,8 +44,8 @@ describe('user_local timezone mode', () => {
       timezone_mode: TimezoneMode.UserLocal,
     });
 
-    expect(timespan.start?.hour()).toEqual(3);
-    expect(timespan.finish?.hour()).toEqual(12);
+    expect(timespan.start?.hour).toEqual(3);
+    expect(timespan.finish?.hour).toEqual(12);
   });
 });
 
@@ -58,7 +58,7 @@ describe('convention_local timezone mode', () => {
       timezone_mode: TimezoneMode.ConventionLocal,
     });
 
-    expect(timespan.start?.hour()).toEqual(4);
-    expect(timespan.finish?.hour()).toEqual(13);
+    expect(timespan.start?.hour).toEqual(4);
+    expect(timespan.finish?.hour).toEqual(13);
   });
 });

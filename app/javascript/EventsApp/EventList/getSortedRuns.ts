@@ -1,10 +1,10 @@
-import moment from 'moment-timezone';
-import { EventListEventsQueryQuery } from './queries.generated';
+import sortBy from 'lodash/sortBy';
+import { DateTime } from 'luxon';
 
-export default function getSortedRuns(
-  event: NonNullable<EventListEventsQueryQuery['convention']>['events_paginated']['entries'][0],
+import { Run } from '../../graphqlTypes.generated';
+
+export default function getSortedRuns<EventType extends { runs: Pick<Run, 'starts_at'>[] }>(
+  event: EventType,
 ) {
-  return [...event.runs].sort(
-    (a, b) => moment(a.starts_at).valueOf() - moment(b.starts_at).valueOf(),
-  );
+  return sortBy(event.runs, (run) => DateTime.fromISO(run.starts_at).toMillis());
 }

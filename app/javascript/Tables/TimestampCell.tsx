@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-import { useISODateTimeInAppZone } from '../TimeUtils';
+import { useAppDateTimeFormat, useISODateTimeInAppZone } from '../TimeUtils';
 
 export type SingleLineTimestampCellProps = {
   value: string;
@@ -8,12 +8,13 @@ export type SingleLineTimestampCellProps = {
 
 export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps) {
   const timestamp = useISODateTimeInAppZone(value);
+  const format = useAppDateTimeFormat();
 
   if (!timestamp.isValid) {
     return null;
   }
 
-  return <>{timestamp.toFormat('yyyy-MM-dd HH:mm')}</>;
+  return <>{format(timestamp, 'compactDateTime')}</>;
 }
 
 export type TimestampCellProps = {
@@ -22,6 +23,7 @@ export type TimestampCellProps = {
 
 function TimestampCell({ value }: TimestampCellProps) {
   const timestamp = useISODateTimeInAppZone(value);
+  const format = useAppDateTimeFormat();
 
   if (!timestamp.isValid) {
     return null;
@@ -31,7 +33,7 @@ function TimestampCell({ value }: TimestampCellProps) {
     <>
       {timestamp.toLocaleString(DateTime.DATE_MED)}
       <br />
-      {timestamp.toFormat('h:mm:ssa').toLowerCase()}
+      {format(timestamp, 'shortTimeWithSeconds').toLowerCase()}
     </>
   );
 }
