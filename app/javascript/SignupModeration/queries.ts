@@ -29,6 +29,9 @@ export const SignupModerationSignupRequestFields = gql`
     user_con_profile {
       id
       name
+      name_inverted
+      gravatar_enabled
+      gravatar_url
     }
 
     replace_signup {
@@ -168,14 +171,14 @@ export const CreateSignupRunCardQuery = gql`
 `;
 
 export const SignupModerationQueueQuery = gql`
-  query SignupModerationQueueQuery($page: Int) {
-    convention {
+  query SignupModerationQueueQuery($page: Int, $perPage: Int) {
+    convention: assertConvention {
       id
 
       signup_requests_paginated(
         sort: [{ field: "state", desc: false }, { field: "created_at", desc: false }]
         page: $page
-        per_page: 10
+        per_page: $perPage
       ) {
         total_pages
 

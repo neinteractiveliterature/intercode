@@ -147,7 +147,6 @@
     "react-google-recaptcha": "^2.1.0",
     "react-html-id": "^0.1.5",
     "react-i18next": "^11.7.3",
-    "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-onclickoutside": "^6.9.0",
     "react-popper": "^2.2.3",
     "react-router-dom": "^5.2.0",

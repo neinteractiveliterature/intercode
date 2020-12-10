@@ -19,7 +19,7 @@ export type SignupModerationSignupRequestFieldsFragment = (
   & Pick<Types.SignupRequest, 'id' | 'state' | 'requested_bucket_key' | 'created_at'>
   & { user_con_profile: (
     { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'name'>
+    & Pick<Types.UserConProfile, 'id' | 'name' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
   ), replace_signup?: Types.Maybe<(
     { __typename: 'Signup' }
     & Pick<Types.Signup, 'id'>
@@ -133,12 +133,13 @@ export type CreateSignupRunCardQueryQuery = (
 
 export type SignupModerationQueueQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
+  perPage?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 
 export type SignupModerationQueueQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id'>
     & { signup_requests_paginated: (
@@ -150,7 +151,7 @@ export type SignupModerationQueueQueryQuery = (
         & SignupModerationSignupRequestFieldsFragment
       )> }
     ) }
-  )> }
+  ) }
 );
 
 export const SignupModerationRunFieldsFragmentDoc = gql`
@@ -175,6 +176,9 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
   user_con_profile {
     id
     name
+    name_inverted
+    gravatar_enabled
+    gravatar_url
   }
   replace_signup {
     id
@@ -343,13 +347,13 @@ export type CreateSignupRunCardQueryQueryHookResult = ReturnType<typeof useCreat
 export type CreateSignupRunCardQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupRunCardQueryLazyQuery>;
 export type CreateSignupRunCardQueryQueryResult = Apollo.QueryResult<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>;
 export const SignupModerationQueueQueryDocument = gql`
-    query SignupModerationQueueQuery($page: Int) {
-  convention {
+    query SignupModerationQueueQuery($page: Int, $perPage: Int) {
+  convention: assertConvention {
     id
     signup_requests_paginated(
       sort: [{field: "state", desc: false}, {field: "created_at", desc: false}]
       page: $page
-      per_page: 10
+      per_page: $perPage
     ) {
       total_pages
       entries {
@@ -374,6 +378,7 @@ export const SignupModerationQueueQueryDocument = gql`
  * const { data, loading, error } = useSignupModerationQueueQueryQuery({
  *   variables: {
  *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
  *   },
  * });
  */
