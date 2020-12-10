@@ -5,7 +5,7 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
       base_scope: scope.includes(
         user_con_profile: [:team_members, :staff_positions],
         target_run: { event: :convention },
-        replace_signup: { run: { event: :convention }}
+        replace_signup: { run: { event: :convention } }
       ),
       convention: convention,
       pundit_user: pundit_user,
