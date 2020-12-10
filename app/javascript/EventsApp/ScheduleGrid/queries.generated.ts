@@ -20,7 +20,7 @@ export type ScheduleGridEventFragmentFragment = (
     )> }
   )>, runs: Array<(
     { __typename: 'Run' }
-    & Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix' | 'confirmed_signup_count' | 'not_counted_signup_count' | 'room_names'>
+    & Types.MakeOptional<Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix' | 'confirmed_signup_count' | 'not_counted_signup_count' | 'room_names'>, 'confirmed_signup_count' | 'not_counted_signup_count'>
     & RunBasicSignupDataFragment
   )> }
 );

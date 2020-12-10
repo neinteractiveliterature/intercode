@@ -2,7 +2,11 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
   def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     scope = SignupRequestPolicy::Scope.new(pundit_user, convention.signup_requests).resolve
     new(
-      base_scope: scope,
+      base_scope: scope.includes(
+        user_con_profile: [:team_members, :staff_positions],
+        target_run: { event: :convention },
+        replace_signup: { run: { event: :convention } }
+      ),
       convention: convention,
       pundit_user: pundit_user,
       filters: filters,
@@ -14,7 +18,7 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
   field :state, 'State' do
     column_filter
 
-    def sql_order_for_sort_field(direction)
+    def sql_order(direction)
       Arel.sql(<<~SQL)
       (
         CASE
