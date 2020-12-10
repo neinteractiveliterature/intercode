@@ -1,13 +1,10 @@
-import { useContext, useState } from 'react';
-// @ts-expect-error
-import Pagination from 'react-js-pagination';
+import { createContext, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
-import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
+import { Column } from 'react-table';
 
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import { timespanFromRun } from '../TimespanUtils';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
@@ -21,7 +18,20 @@ import {
   useAcceptSignupRequestMutation,
   useRejectSignupRequestMutation,
 } from './mutations.generated';
-import { useAppDateTimeFormat } from '../TimeUtils';
+import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
+import TimestampCell from '../Tables/TimestampCell';
+
+type SignupModerationContextValue = {
+  acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
+  rejectClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
+};
+
+const SignupModerationContext = createContext<SignupModerationContextValue>({
+  acceptClicked: () => {},
+  rejectClicked: () => {},
+});
 
 function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
@@ -88,168 +98,184 @@ function SignupModerationRunDetails({
   );
 }
 
-function SignupModerationQueue() {
-  const { timezoneName } = useContext(AppRootContext);
-  const format = useAppDateTimeFormat();
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, loading, error } = useSignupModerationQueueQueryQuery({
-    variables: { page: currentPage },
-  });
-  const [acceptSignupRequest] = useAcceptSignupRequestMutation();
-  const [rejectSignupRequest] = useRejectSignupRequestMutation();
-  const confirm = useConfirm();
-
-  const acceptClicked = (signupRequest: SignupModerationSignupRequestFieldsFragment) =>
-    confirm({
-      prompt: (
-        <>
-          <p>
-            Please confirm you want to accept this signup request. This will attempt to sign{' '}
-            {signupRequest.user_con_profile.name}
-            {' up for '}
-            {signupRequest.target_run.event.title}
-            {' as '}
-            {describeRequestedBucket(signupRequest)}. If there is no space in the requested bucket,
-            the attendee will either be signed up in a flex bucket, if possible, or waitlisted.
-          </p>
-
-          <div className="mb-2">
-            <strong>Current space availability in this event run:</strong>
-            <RunCapacityGraph
-              event={signupRequest.target_run.event}
-              run={signupRequest.target_run}
-              signupsAvailable
-            />
-          </div>
-
-          <p className="mb-0">
-            This will automatically email both the attendee and the event team to let them know
-            about the signup.
-          </p>
-        </>
-      ),
-      action: () => acceptSignupRequest({ variables: { id: signupRequest.id } }),
-      renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
-    });
-
-  const rejectClicked = (
-    signupRequest: NonNullable<
-      SignupModerationQueueQueryQuery['convention']
-    >['signup_requests_paginated']['entries'][0],
-  ) =>
-    confirm({
-      prompt: (
-        <p className="mb-0">
-          Please confirm you want to reject this signup request. This will <strong>not</strong>{' '}
-          automatically email anyone. After doing this, you may wish to email the attendee to let
-          them know.
+function SignupRequestCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
+  return (
+    <>
+      {value.replace_signup && (
+        <p>
+          <strong className="text-danger">Withdraw from</strong>{' '}
+          <SignupModerationRunDetails run={value.replace_signup.run} />
         </p>
-      ),
-      action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),
-      renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
-    });
+      )}
+      <strong className="text-success">
+        {value.replace_signup ? 'And sign up for' : 'Sign up for'}
+      </strong>{' '}
+      <SignupModerationRunDetails run={value.target_run} />
+      <br />
+      <small>
+        <strong>Requested bucket:</strong> {describeRequestedBucket(value)}
+      </small>
+    </>
+  );
+}
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+function SignupRequestStateCell({ value }: { value: SignupRequestState }) {
+  return <div className={`badge ${signupRequestStateBadgeClass(value)}`}>{value}</div>;
+}
 
-  if (loading) {
-    return <LoadingIndicator />;
-  }
+function SignupRequestActionsCell({
+  value,
+}: {
+  value: SignupModerationSignupRequestFieldsFragment;
+}) {
+  const { acceptClicked, rejectClicked } = useContext(SignupModerationContext);
 
   return (
     <>
-      <table className="table table-striped mt-4">
-        <thead>
-          <tr>
-            <th>Attendee</th>
-            <th>Request</th>
-            <th>Status</th>
-            <th>Submitted at</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {data!.convention!.signup_requests_paginated.entries.map((signupRequest) => (
-            <tr key={signupRequest.id}>
-              <td>{signupRequest.user_con_profile.name}</td>
-              <td>
-                {signupRequest.replace_signup && (
-                  <p>
-                    <strong className="text-danger">Withdraw from</strong>{' '}
-                    <SignupModerationRunDetails run={signupRequest.replace_signup.run} />
-                  </p>
-                )}
-                <strong className="text-success">
-                  {signupRequest.replace_signup ? 'And sign up for' : 'Sign up for'}
-                </strong>{' '}
-                <SignupModerationRunDetails run={signupRequest.target_run} />
-                <br />
-                <small>
-                  <strong>Requested bucket:</strong> {describeRequestedBucket(signupRequest)}
-                </small>
-              </td>
-              <td>
-                <div className={`badge ${signupRequestStateBadgeClass(signupRequest.state)}`}>
-                  {signupRequest.state}
-                </div>
-              </td>
-              <td>
-                <small>
-                  {format(
-                    DateTime.fromISO(signupRequest.created_at, { zone: timezoneName }),
-                    'shortWeekdayDateTime',
-                  )}
-                </small>
-              </td>
-              <td className="text-right">
-                {signupRequest.state === 'pending' && (
-                  <>
-                    <button
-                      className="btn btn-sm btn-danger mr-2"
-                      type="button"
-                      onClick={() => rejectClicked(signupRequest)}
-                    >
-                      Reject
-                    </button>
+      {value.state === 'pending' && (
+        <>
+          <button
+            className="btn btn-sm btn-danger mr-2"
+            type="button"
+            onClick={() => rejectClicked(value)}
+          >
+            Reject
+          </button>
 
-                    <button
-                      className="btn btn-sm btn-success"
-                      type="button"
-                      onClick={() => acceptClicked(signupRequest)}
-                    >
-                      Accept
-                    </button>
-                  </>
-                )}
-                {signupRequest.state === 'rejected' && (
-                  <button
-                    className="btn btn-sm btn-warning"
-                    type="button"
-                    onClick={() => acceptClicked(signupRequest)}
-                  >
-                    Accept after all
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <Pagination
-        totalItemsCount={data!.convention!.signup_requests_paginated.total_pages}
-        activePage={currentPage}
-        onChange={setCurrentPage}
-        itemsCountPerPage={1}
-        innerClass="pagination"
-        itemClass="page-item"
-        linkClass="page-link"
-        hideNavigation
-        hideFirstLastPages
-        ellipsis
-      />
+          <button
+            className="btn btn-sm btn-success"
+            type="button"
+            onClick={() => acceptClicked(value)}
+          >
+            Accept
+          </button>
+        </>
+      )}
+      {value.state === 'rejected' && (
+        <button
+          className="btn btn-sm btn-warning"
+          type="button"
+          onClick={() => acceptClicked(value)}
+        >
+          Accept after all
+        </button>
+      )}
     </>
+  );
+}
+
+function getPossibleColumns(): Column<
+  SignupModerationQueueQueryQuery['convention']['signup_requests_paginated']['entries'][number]
+>[] {
+  return [
+    {
+      id: 'attendee',
+      Header: 'Attendee',
+      accessor: 'user_con_profile',
+      width: 130,
+      Cell: UserConProfileWithGravatarCell,
+    },
+    {
+      id: 'request',
+      Header: 'Request',
+      Cell: SignupRequestCell,
+      accessor: (signupRequest) => signupRequest,
+    },
+    {
+      id: 'state',
+      Header: 'Status',
+      Cell: SignupRequestStateCell,
+      width: 60,
+      accessor: 'state',
+    },
+    {
+      id: 'created_at',
+      Header: 'Submitted at',
+      Cell: TimestampCell,
+      width: 60,
+      accessor: 'created_at',
+    },
+    {
+      id: 'actions',
+      Header: 'Actions',
+      width: 100,
+      Cell: SignupRequestActionsCell,
+      accessor: (signupRequest) => signupRequest,
+    },
+  ];
+}
+
+function SignupModerationQueue() {
+  const [acceptSignupRequest] = useAcceptSignupRequestMutation();
+  const [rejectSignupRequest] = useRejectSignupRequestMutation();
+  const confirm = useConfirm();
+  const { tableInstance, loading } = useReactTableWithTheWorks({
+    useQuery: useSignupModerationQueueQueryQuery,
+    storageKeyPrefix: 'signupModerationQueue',
+    getData: (result) => result.data.convention.signup_requests_paginated.entries,
+    getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
+    getPossibleColumns,
+  });
+
+  const contextValue = useMemo(
+    () => ({
+      acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) =>
+        confirm({
+          prompt: (
+            <>
+              <p>
+                Please confirm you want to accept this signup request. This will attempt to sign{' '}
+                {signupRequest.user_con_profile.name}
+                {' up for '}
+                {signupRequest.target_run.event.title}
+                {' as '}
+                {describeRequestedBucket(signupRequest)}. If there is no space in the requested
+                bucket, the attendee will either be signed up in a flex bucket, if possible, or
+                waitlisted.
+              </p>
+
+              <div className="mb-2">
+                <strong>Current space availability in this event run:</strong>
+                <RunCapacityGraph
+                  event={signupRequest.target_run.event}
+                  run={signupRequest.target_run}
+                  signupsAvailable
+                />
+              </div>
+
+              <p className="mb-0">
+                This will automatically email both the attendee and the event team to let them know
+                about the signup.
+              </p>
+            </>
+          ),
+          action: () => acceptSignupRequest({ variables: { id: signupRequest.id } }),
+          renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
+        }),
+      rejectClicked: (
+        signupRequest: NonNullable<
+          SignupModerationQueueQueryQuery['convention']
+        >['signup_requests_paginated']['entries'][0],
+      ) =>
+        confirm({
+          prompt: (
+            <p className="mb-0">
+              Please confirm you want to reject this signup request. This will <strong>not</strong>{' '}
+              automatically email anyone. After doing this, you may wish to email the attendee to
+              let them know.
+            </p>
+          ),
+          action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),
+          renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
+        }),
+    }),
+    [confirm, rejectSignupRequest, acceptSignupRequest],
+  );
+
+  return (
+    <SignupModerationContext.Provider value={contextValue}>
+      <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+    </SignupModerationContext.Provider>
   );
 }
 
