@@ -13,14 +13,14 @@ export default function useLayoutForTimespan(schedule: Schedule, timespan?: Fini
       return undefined;
     }
 
-    const min = Timespan.finiteFromDateTimes(
-      timespan.start.plus({ hours: 3 }), // start grid at 9am unless something is earlier
-      timespan.finish.minus({ hours: 6 }), // end grid at midnight unless something is earlier
-    );
-    if (min.start > min.finish) {
+    const minStart = timespan.start.plus({ hours: 3 }); // start grid at 9am unless something is earlie
+    const minFinish = timespan.finish.minus({ hours: 6 }); // end grid at midnight unless something is earlier
+
+    if (minStart > minFinish) {
       return timespan;
     }
-    return min;
+
+    return Timespan.finiteFromDateTimes(minStart, minFinish);
   }, [timespanKey]);
 
   const layout = useMemo(
