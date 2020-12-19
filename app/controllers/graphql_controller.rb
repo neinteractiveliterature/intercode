@@ -37,6 +37,10 @@ class GraphqlController < ApplicationController
     def []=(key, value)
       @values[key] = value
     end
+
+    def delete(key)
+      @values.delete(key)
+    end
   end
 
   skip_before_action :verify_authenticity_token # We're doing this in MutationType.authorized?
