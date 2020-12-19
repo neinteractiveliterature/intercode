@@ -11,7 +11,7 @@ type MapboxAPIFeature = {
 };
 
 export type LocationSelectProps = Omit<
-  Props<MapboxAPIFeature>,
+  Props<MapboxAPIFeature, false>,
   'loadOptions' | 'formatOptionLabel' | 'getOptionValue'
 >;
 
@@ -34,12 +34,14 @@ function LocationSelect({ ...props }: LocationSelectProps) {
           return option.place_name;
         }
 
-        return <>
-          {option.text}{' '}
-          <small className="text-muted">
-            {option.place_name.replace(option.text, '').replace(/^,/, '').trim()}
-          </small>
-        </>;
+        return (
+          <>
+            {option.text}{' '}
+            <small className="text-muted">
+              {option.place_name.replace(option.text, '').replace(/^,/, '').trim()}
+            </small>
+          </>
+        );
       }}
       getOptionValue={(option) => option.id}
       {...props}

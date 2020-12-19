@@ -53,7 +53,7 @@ function SearchDropdownIndicator(props: any) {
   );
 }
 
-function SearchMenu(props: MenuProps<any>) {
+function SearchMenu(props: MenuProps<any, false>) {
   const { t } = useTranslation();
 
   return (

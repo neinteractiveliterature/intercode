@@ -113,7 +113,7 @@ function CmsContentGroupFormFields({
           )}
 
           {!readOnly && (
-            <SelectWithLabel
+            <SelectWithLabel<RoleType>
               label="Add staff position"
               options={convention?.staff_positions ?? []}
               getOptionValue={(staffPosition) => staffPosition.id.toString()}
