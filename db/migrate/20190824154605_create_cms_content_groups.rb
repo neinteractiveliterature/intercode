@@ -9,21 +9,33 @@ class CreateCmsContentGroups < ActiveRecord::Migration[5.2]
 
     add_reference :permissions, :cms_content_group, null: true, foreign_key: true
 
-    remove_check_constraint :permissions, :permissions_model_exclusive_arc, <<~SQL
-      (
-        (convention_id is not null)::integer +
-        (event_category_id is not null)::integer
-      ) IN (0, 1)
-    SQL
+    reversible do |dir|
+      dir.up do
+        execute 'ALTER TABLE permissions DROP CONSTRAINT permissions_model_exclusive_arc'
+        execute <<~SQL
+          ALTER TABLE permissions ADD CONSTRAINT permissions_model_exclusive_arc
+          CHECK (
+            (
+              (cms_content_group_id IS NOT NULL)::integer +
+              (convention_id is not null)::integer +
+              (event_category_id is not null)::integer
+            ) = ANY (ARRAY[0, 1])
+          )
+        SQL
+      end
 
-    add_check_constraint :permissions, :permissions_model_exclusive_arc, <<~SQL
-      (
-        (
-          (cms_content_group_id IS NOT NULL)::integer +
-          (convention_id IS NOT NULL)::integer +
-          (event_category_id IS NOT NULL)::integer
-        ) = ANY (ARRAY[0, 1])
-      )
-    SQL
+      dir.down do
+        execute 'ALTER TABLE permissions DROP CONSTRAINT permissions_model_exclusive_arc'
+        execute <<~SQL
+          ALTER TABLE permissions ADD CONSTRAINT permissions_model_exclusive_arc
+          CHECK (
+            (
+              (convention_id is not null)::integer +
+              (event_category_id is not null)::integer
+            ) IN (0, 1)
+          )
+        SQL
+      end
+    end
   end
 end

@@ -55,9 +55,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_record-postgres-constraints (0.2.2)
-      pg
-      rails (>= 5.0, <= 7.0)
     activejob (6.1.0)
       activesupport (= 6.1.0)
       globalid (>= 0.3.6)
@@ -556,7 +553,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_record-postgres-constraints
   activerecord-session_store
   ahoy_matey
   apollo_upload_server (= 2.0.3)
