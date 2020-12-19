@@ -1,3 +1,6 @@
+# TODO: Figure out a way to use EnvironmentBasedUploader in here without this
+require_relative '../../app/uploaders/environment_based_uploader'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 

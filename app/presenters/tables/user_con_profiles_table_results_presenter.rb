@@ -1,3 +1,5 @@
+require 'money-rails/helpers/action_view_extension'
+
 class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresenter
   extend MoneyRails::ActionViewExtension
 
