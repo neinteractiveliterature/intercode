@@ -10,17 +10,25 @@ type DO<QueryType extends DefaultUserConProfilesQueryQuery> = NonNullable<
   QueryType['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-export type UserConProfileSelectProps<DataType, OptionType extends OptionTypeBase> = Omit<
-  GraphQLAsyncSelectProps<DataType, OptionType>,
+export type UserConProfileSelectProps<
+  DataType,
+  OptionType extends OptionTypeBase,
+  IsMulti extends boolean
+> = Omit<
+  GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 > & {
   userConProfilesQuery?: DocumentNode;
 };
 
-function UserConProfileSelect<DataType extends DQ = DQ, OptionType extends DO<DataType> = DO<DQ>>({
+function UserConProfileSelect<
+  IsMulti extends boolean = false,
+  DataType extends DQ = DQ,
+  OptionType extends DO<DataType> = DO<DQ>
+>({
   userConProfilesQuery,
   ...otherProps
-}: UserConProfileSelectProps<DataType, OptionType>) {
+}: UserConProfileSelectProps<DataType, OptionType, IsMulti>) {
   return (
     <GraphQLAsyncSelect<DataType, OptionType>
       isClearable

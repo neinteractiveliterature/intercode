@@ -6,16 +6,16 @@ import { SearchCmsContentQueryQuery } from './queries.generated';
 
 export type CmsContentOption = SearchCmsContentQueryQuery['searchCmsContent'][0];
 
-export type CmsContentSelectProps = Omit<
-  GraphQLAsyncSelectProps<SearchCmsContentQueryQuery, CmsContentOption>,
+export type CmsContentSelectProps<IsMulti extends boolean> = Omit<
+  GraphQLAsyncSelectProps<SearchCmsContentQueryQuery, CmsContentOption, IsMulti>,
   'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 >;
 
-function CmsContentSelect(props: CmsContentSelectProps) {
+function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSelectProps<IsMulti>) {
   const { ...otherProps } = props;
 
   return (
-    <GraphQLAsyncSelect<SearchCmsContentQueryQuery, CmsContentOption>
+    <GraphQLAsyncSelect<SearchCmsContentQueryQuery, CmsContentOption, IsMulti>
       getOptions={(data) => data.searchCmsContent}
       getVariables={(inputValue) => ({ name: inputValue })}
       getOptionValue={({ id: optionId, __typename }: CmsContentOption) =>

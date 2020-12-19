@@ -188,7 +188,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         disabled={disabled}
       />
 
-      <SelectWithLabel
+      <SelectWithLabel<T['department'] | null>
         label="Department"
         options={departments}
         getOptionValue={(option) => option?.id.toString() ?? ''}
