@@ -9,18 +9,17 @@ class CreatePermissions < ActiveRecord::Migration[5.2]
         :permission,
         :event_category_id
       ], unique: true, name: 'idx_permissions_unique_join'
-
-      t.check_constraint 'permissions_exclusive_arc', <<~SQL
-        (
-          (event_category_id is not null)::integer
-        ) = 1
-      SQL
-
       t.timestamps
     end
 
     reversible do |dir|
       dir.up do
+        execute <<~SQL
+        ALTER TABLE permissions ADD CONSTRAINT permissions_exclusive_arc CHECK ((
+          (event_category_id is not null)::integer
+        ) = 1)
+        SQL
+
         autogenerate_hidden_staff_positions_for_privilege 'proposal_chair'
         grant_larp_permissions_to_privilege_holders(
           'proposal_chair',
