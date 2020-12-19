@@ -11,17 +11,22 @@ type DO<QueryType extends DefaultEventsQueryQuery> = NonNullable<
 >['events_paginated']['entries'][0];
 export type DefaultEventSelectOptionType = DO<DQ>;
 
-export type EventSelectProps<DataType, OptionType extends OptionTypeBase> = Omit<
-  GraphQLAsyncSelectProps<DataType, OptionType>,
+export type EventSelectProps<
+  DataType,
+  OptionType extends OptionTypeBase,
+  IsMulti extends boolean
+> = Omit<
+  GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 > & {
   eventsQuery?: DocumentNode;
 };
 
-function EventSelect<DataType extends DQ = DQ, OptionType extends DO<DataType> = DO<DQ>>({
-  eventsQuery,
-  ...otherProps
-}: EventSelectProps<DataType, OptionType>) {
+function EventSelect<
+  IsMulti extends boolean = false,
+  DataType extends DQ = DQ,
+  OptionType extends DO<DataType> = DO<DQ>
+>({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>) {
   return (
     <GraphQLAsyncSelect<DataType, OptionType>
       isClearable

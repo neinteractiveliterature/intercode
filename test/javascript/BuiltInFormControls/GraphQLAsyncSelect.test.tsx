@@ -52,7 +52,7 @@ describe('GraphQLAsyncSelect', () => {
   ];
 
   const renderUserConProfileSelect = (
-    props?: Partial<GraphQLAsyncSelectProps<any, any>>,
+    props?: Partial<GraphQLAsyncSelectProps<any, any, false>>,
     mocks?: MockedResponse[],
   ) =>
     render(
