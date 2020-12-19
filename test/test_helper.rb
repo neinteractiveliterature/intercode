@@ -49,7 +49,7 @@ class ActiveSupport::TestCase
     end
 
     attr_reader :attrs
-    delegate :[], :[]=, :fetch, to: :attrs
+    delegate :[], :[]=, :fetch, :delete, to: :attrs
 
     def initialize(**attrs)
       @attrs = attrs.with_indifferent_access
