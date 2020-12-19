@@ -6,9 +6,9 @@ Minipack.configuration do |c|
 
   # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = if Rails.env.development?
-    'https://localhost:3135/packs/manifest.json'
+    'https://localhost:3135/packs/assets-manifest.json'
   else
-    Rails.root.join('public', 'packs', 'manifest.json')
+    Rails.root.join('public', 'packs', 'assets-manifest.json')
   end
 
   # If you are not extracting CSS in your webpack config you should set this flag to false
