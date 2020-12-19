@@ -3,19 +3,22 @@ import Select, { Props } from 'react-select';
 
 import FormGroupWithLabel from './FormGroupWithLabel';
 
-export type SelectWithLabelProps<OptionType> = Props<OptionType> & {
+export type SelectWithLabelProps<OptionType, IsMulti extends boolean> = Props<
+  OptionType,
+  IsMulti
+> & {
   label: ReactNode;
   helpText?: ReactNode;
 };
 
-function SelectWithLabel<OptionType>({
+function SelectWithLabel<OptionType, IsMulti extends boolean = false>({
   label,
   helpText,
   ...otherProps
-}: SelectWithLabelProps<OptionType>) {
+}: SelectWithLabelProps<OptionType, IsMulti>) {
   return (
     <FormGroupWithLabel label={label} name={otherProps.name} helpText={helpText}>
-      {(id) => <Select inputId={id} {...otherProps} />}
+      {(id) => <Select<OptionType, IsMulti> inputId={id} {...otherProps} />}
     </FormGroupWithLabel>
   );
 }

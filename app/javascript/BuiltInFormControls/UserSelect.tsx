@@ -27,8 +27,12 @@ type DO<QueryType extends DefaultUsersQueryQuery> = NonNullable<
   QueryType['users_paginated']
 >['entries'][0];
 
-export type UserSelectProps<DataType, OptionType extends OptionTypeBase> = Omit<
-  GraphQLAsyncSelectProps<DataType, OptionType>,
+export type UserSelectProps<
+  DataType,
+  OptionType extends OptionTypeBase,
+  IsMulti extends boolean = false
+> = Omit<
+  GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   | 'isClearable'
   | 'getOptions'
   | 'getVariables'

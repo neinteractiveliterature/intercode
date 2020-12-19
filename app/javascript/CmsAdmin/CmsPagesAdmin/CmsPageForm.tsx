@@ -10,7 +10,6 @@ import useUniqueId from '../../useUniqueId';
 import { CmsLayout, Page } from '../../graphqlTypes.generated';
 import { CmsPagesAdminQueryQuery } from './queries.generated';
 import { usePropertySetters } from '../../usePropertySetters';
-import { onChangeSingleValue } from '../../ReactSelectUtils';
 
 export type PageFormFields = Pick<
   Page,
@@ -134,7 +133,7 @@ function CmsPageForm<T extends PageFormFields>({
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
         options={cmsLayoutOptions}
-        onChange={onChangeSingleValue(setCmsLayout)}
+        onChange={setCmsLayout}
         placeholder={cmsLayoutSelectPlaceholder}
         disabled={readOnly}
       />

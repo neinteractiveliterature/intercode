@@ -5,21 +5,26 @@ import type { OptionTypeBase } from 'react-select';
 
 // This will be a lot more useful once https://github.com/microsoft/TypeScript/issues/36981
 // is fixed
-export type GraphQLAsyncSelectProps<DataType, OptionType extends OptionTypeBase> = Omit<
-  Props<OptionType>,
-  'loadOptions'
-> & {
+export type GraphQLAsyncSelectProps<
+  DataType,
+  OptionType extends OptionTypeBase,
+  IsMulti extends boolean
+> = Omit<Props<OptionType, IsMulti>, 'loadOptions'> & {
   query: DocumentNode;
   getVariables: (inputValue: string) => any;
   getOptions: (results: DataType) => OptionType[];
 };
 
-function GraphQLAsyncSelect<DataType, OptionType extends OptionTypeBase>({
+function GraphQLAsyncSelect<
+  DataType,
+  OptionType extends OptionTypeBase,
+  IsMulti extends boolean = false
+>({
   query,
   getOptions,
   getVariables,
   ...otherProps
-}: GraphQLAsyncSelectProps<DataType, OptionType>) {
+}: GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>) {
   const client = useApolloClient();
   const loadOptions = async (inputValue: string) => {
     const results = await client.query<DataType>({
