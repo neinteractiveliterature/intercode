@@ -142,8 +142,9 @@ function StandaloneEditEventForm({
               {...meptoMutations}
               ticketName={convention.ticket_name}
               ticketTypes={convention.ticket_types}
-              overrides={event.maximum_event_provided_tickets_overrides}
-              eventId={event.id}
+              // we use initialEvent here because we want it to be controlled by the query result
+              overrides={initialEvent.maximum_event_provided_tickets_overrides}
+              eventId={initialEvent.id}
             />
           )}
       </EventForm>
