@@ -45,7 +45,11 @@ function ScheduleGrid({ timespan }: ScheduleGridProps) {
               layoutBlock={layoutBlock}
               rowHeader={options.rowHeader}
               renderEventRun={({ layoutResult, runDimensions }) => (
-                <ScheduleGridEventRun layoutResult={layoutResult} runDimensions={runDimensions} />
+                <ScheduleGridEventRun
+                  layoutResult={layoutResult}
+                  runDimensions={runDimensions}
+                  scheduleLayoutBlock={layoutBlock}
+                />
               )}
             />
           </div>
