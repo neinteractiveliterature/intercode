@@ -4,19 +4,31 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
 import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
-import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
+import ScheduleLayoutBlock, {
+  RunDimensions,
+  ScheduleLayoutResult,
+} from './ScheduleLayout/ScheduleLayoutBlock';
 import { useIntercodePopper } from '../../UIComponents/PopperUtils';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;
   layoutResult: ScheduleLayoutResult;
+  scheduleLayoutBlock: ScheduleLayoutBlock;
 };
 
-function ScheduleGridEventRun({ runDimensions, layoutResult }: ScheduleGridEventRunProps) {
-  const { schedule, toggleRunDetailsVisibility, visibleRunDetailsIds } = useContext(
+function ScheduleGridEventRun({
+  runDimensions,
+  layoutResult,
+  scheduleLayoutBlock,
+}: ScheduleGridEventRunProps) {
+  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible } = useContext(
     ScheduleGridContext,
   );
-  const detailsVisible = visibleRunDetailsIds.has(runDimensions.runId);
+  const detailsVisible = useMemo(
+    () =>
+      isRunDetailsVisible({ runId: runDimensions.runId, scheduleBlockId: scheduleLayoutBlock.id }),
+    [isRunDetailsVisible, runDimensions.runId, scheduleLayoutBlock.id],
+  );
 
   const [runDisplayElement, setRunDisplayElement] = useState<HTMLDivElement | null>(null);
   const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
@@ -45,12 +57,12 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }: ScheduleGridEvent
   const toggleVisibility = useCallback(() => {
     const runId = run?.id;
     if (runId) {
-      toggleRunDetailsVisibility(runId);
+      toggleRunDetailsVisibility({ runId, scheduleBlockId: scheduleLayoutBlock.id });
       if (update) {
         update();
       }
     }
-  }, [run, toggleRunDetailsVisibility, update]);
+  }, [run, toggleRunDetailsVisibility, update, scheduleLayoutBlock.id]);
 
   if (event == null || run == null) {
     return null;
