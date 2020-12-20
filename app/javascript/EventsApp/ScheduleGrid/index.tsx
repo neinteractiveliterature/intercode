@@ -14,7 +14,7 @@ import { parseIntOrNull } from '../../ValueUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
-import { formatLCM, useAppDateTimeFormat } from '../../TimeUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 const filterCodecs = buildFieldFilterCodecs({
   my_rating: FilterCodecs.integerArray,
@@ -113,17 +113,19 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
                 </div>
               </div>
             )}
-            <h3 className="m-0 p-2 border-bottom">{format(timespan.start, 'longDate')}</h3>
-            <ScheduleGrid timespan={timespan} />
-            <div className="font-italic">
-              {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
-                offsetName: timespan.start
-                  .reconfigure({
-                    locale: language,
-                  })
-                  .setZone(timezoneName).offsetNameLong,
-              })}
+            <div className="m-0 p-2 border-bottom">
+              <h3 className="p-0 m-0">{format(timespan.start, 'longWeekdayDate')}</h3>
+              <div className="font-italic">
+                {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
+                  offsetName: timespan.start
+                    .reconfigure({
+                      locale: language,
+                    })
+                    .setZone(timezoneName).offsetNameLong,
+                })}
+              </div>
             </div>
+            <ScheduleGrid timespan={timespan} />
           </div>
         )}
       </ScheduleGridProvider>
