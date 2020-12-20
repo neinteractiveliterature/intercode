@@ -52,9 +52,8 @@ export function useAppDateTimeFormat() {
   return format;
 }
 
-export const humanizeTime = (time: DateTime, t: TFunction, includeDay?: boolean) => {
-  return formatLCM(time, humanTimeFormat(time, t, includeDay));
-};
+export const humanizeTime = (time: DateTime, t: TFunction, includeDay?: boolean) =>
+  formatLCM(time, humanTimeFormat(time, t, includeDay));
 
 export const timesAreSameOrBothNull = (a?: DateTime | null, b?: DateTime | null) => {
   if (onlyOneIsNull(a, b)) {

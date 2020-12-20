@@ -35,13 +35,18 @@ import { FiniteTimespan } from '../../Timespan';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
+export type RunDetailsVisibilitySpec = {
+  runId: number;
+  scheduleBlockId: string;
+};
+
 export type ScheduleGridContextValue = {
   schedule: Schedule;
   config: ScheduleGridConfig;
   convention: ConventionForTimespanUtils;
-  isRunDetailsVisible: (runId: number) => boolean;
-  visibleRunDetailsIds: Set<number>;
-  toggleRunDetailsVisibility: (runId: number) => void;
+  isRunDetailsVisible: (visibilityId: RunDetailsVisibilitySpec) => boolean;
+  visibleRunDetails: Map<number, RunDetailsVisibilitySpec[]>;
+  toggleRunDetailsVisibility: (visibilityId: RunDetailsVisibilitySpec) => void;
 };
 
 const skeletonScheduleGridConfig: ScheduleGridConfig = {
@@ -70,7 +75,7 @@ export const ScheduleGridContext = createContext<ScheduleGridContextValue>({
   config: skeletonScheduleGridConfig,
   convention: skeletonConvention,
   isRunDetailsVisible: () => false,
-  visibleRunDetailsIds: new Set(),
+  visibleRunDetails: new Map<number, RunDetailsVisibilitySpec[]>(),
   toggleRunDetailsVisibility: () => {},
 });
 
@@ -84,19 +89,39 @@ const ScheduleGridFiltersContext = createContext<ScheduleGridFiltersContextValue
   hideConflicts: false,
 });
 
+function runDetailsVisibilitySpecsMatch(a: RunDetailsVisibilitySpec, b: RunDetailsVisibilitySpec) {
+  return a.runId === b.runId && a.scheduleBlockId === b.scheduleBlockId;
+}
+
+function checkRunDetailsVisibity(
+  visibleRunDetails: Map<number, RunDetailsVisibilitySpec[]>,
+  visibilitySpec: RunDetailsVisibilitySpec,
+) {
+  const visibleSpecs = visibleRunDetails.get(visibilitySpec.runId);
+  if (!visibleSpecs) {
+    return false;
+  }
+
+  return visibleSpecs.some((spec) => runDetailsVisibilitySpecsMatch(spec, visibilitySpec));
+}
+
 export function useScheduleGridProvider(
   config: ScheduleGridConfig | undefined,
   convention: ConventionForTimespanUtils | undefined,
   events: ScheduleGridEventFragmentFragment[] | undefined,
   myRatingFilter?: number[],
   hideConflicts?: boolean,
-) {
+): ScheduleGridContextValue {
   const { timezoneName } = useContext(AppRootContext);
-  const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set<number>());
+  const [visibleRunDetails, setVisibleRunDetailsIds] = useState(
+    new Map<number, RunDetailsVisibilitySpec[]>(),
+  );
 
-  const isRunDetailsVisible = useMemo(() => (runId: number) => visibleRunDetailsIds.has(runId), [
-    visibleRunDetailsIds,
-  ]);
+  const isRunDetailsVisible = useMemo(
+    () => (visibilitySpec: RunDetailsVisibilitySpec) =>
+      checkRunDetailsVisibity(visibleRunDetails, visibilitySpec),
+    [visibleRunDetails],
+  );
 
   const schedule = useMemo(() => {
     if (config && convention && events) {
@@ -113,28 +138,38 @@ export function useScheduleGridProvider(
   }, [config, convention, events, hideConflicts, myRatingFilter, timezoneName]);
 
   const toggleRunDetailsVisibility = useCallback(
-    (runId) => {
+    (visibilitySpec: RunDetailsVisibilitySpec) => {
       let newVisibility: boolean = false;
 
-      setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
-        const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
+      setVisibleRunDetailsIds((prevVisibleRunDetails) => {
+        const newVisibleRunDetails = new Map<number, RunDetailsVisibilitySpec[]>();
+        prevVisibleRunDetails.forEach((visibleSpecs, visibleRunId) => {
+          newVisibleRunDetails.set(visibleRunId, [...visibleSpecs]);
+        });
 
-        if (prevVisibleRunDetailsIds.has(runId)) {
-          newVisibleRunDetailsIds.delete(runId);
+        if (checkRunDetailsVisibity(prevVisibleRunDetails, visibilitySpec)) {
+          const visibleSpecsForRun = prevVisibleRunDetails.get(visibilitySpec.runId)!;
+          newVisibleRunDetails.set(
+            visibilitySpec.runId,
+            visibleSpecsForRun.filter(
+              (visibleSpec) => !runDetailsVisibilitySpecsMatch(visibleSpec, visibilitySpec),
+            ),
+          );
           newVisibility = false;
-          return newVisibleRunDetailsIds;
+          return newVisibleRunDetails;
         }
 
-        const runTimespan = schedule.getRunTimespan(runId);
+        const runTimespan = schedule.getRunTimespan(visibilitySpec.runId);
         const concurrentRunIds = runTimespan ? schedule.getRunIdsOverlapping(runTimespan) : [];
 
         concurrentRunIds.forEach((concurrentRunId: number) => {
-          newVisibleRunDetailsIds.delete(concurrentRunId);
+          newVisibleRunDetails.delete(concurrentRunId);
         });
-        newVisibleRunDetailsIds.add(runId);
+        // throw out the old visibility specs for this run because by definition they overlap
+        newVisibleRunDetails.set(visibilitySpec.runId, [visibilitySpec]);
         newVisibility = true;
 
-        return newVisibleRunDetailsIds;
+        return newVisibleRunDetails;
       });
 
       return newVisibility;
@@ -147,7 +182,7 @@ export function useScheduleGridProvider(
     convention: convention ?? skeletonConvention,
     config: config ?? skeletonScheduleGridConfig,
     isRunDetailsVisible,
-    visibleRunDetailsIds,
+    visibleRunDetails,
     toggleRunDetailsVisibility,
   };
 }
