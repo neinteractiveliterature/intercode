@@ -12,6 +12,7 @@ import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
 import { NoLoginAuthorizationWrapper } from '../Authentication/useAuthorizationRequired';
+import RunList from './RunList';
 
 function renderScheduleRoutes() {
   return [
@@ -28,6 +29,11 @@ function renderScheduleRoutes() {
     <Route path="/events/schedule_with_counts" key="scheduleWithCounts">
       <NoLoginAuthorizationWrapper abilities={['can_read_schedule_with_counts']}>
         <ScheduleGridApp configKey="schedule_with_counts" />
+      </NoLoginAuthorizationWrapper>
+    </Route>,
+    <Route path="/events/run_list" key="runList">
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>
+        <RunList />
       </NoLoginAuthorizationWrapper>
     </Route>,
   ];

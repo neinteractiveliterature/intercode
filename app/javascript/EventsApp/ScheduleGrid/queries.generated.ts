@@ -62,11 +62,11 @@ export type ScheduleGridCombinedQueryQueryVariables = Types.Exact<{
 
 export type ScheduleGridCombinedQueryQuery = (
   { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
+  & { convention: (
     { __typename: 'Convention' }
     & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
     & CommonConventionDataFragment
-  )>, events: Array<(
+  ), events: Array<(
     { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
     & ScheduleGridEventFragmentFragment
@@ -188,7 +188,7 @@ export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useSc
 export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>;
 export const ScheduleGridCombinedQueryDocument = gql`
     query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
-  convention {
+  convention: assertConvention {
     id
     pre_schedule_content_html
     ...CommonConventionData
