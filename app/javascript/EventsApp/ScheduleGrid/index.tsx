@@ -1,5 +1,4 @@
-import { useContext, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CategoryLegend from './CategoryLegend';
@@ -7,24 +6,12 @@ import FullnessLegend from './FullnessLegend';
 import ScheduleGrid from './ScheduleGrid';
 import { getConfig } from './ScheduleGridConfig';
 import { ScheduleGridProvider } from './ScheduleGridContext';
-import { RATING_OPTIONS } from '../EventList/EventListMyRatingSelector';
 import AppRootContext from '../../AppRootContext';
-import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import { parseIntOrNull } from '../../ValueUtils';
-import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
-import { FilterCodecs, buildFieldFilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
 import { useAppDateTimeFormat } from '../../TimeUtils';
-
-const filterCodecs = buildFieldFilterCodecs({
-  my_rating: FilterCodecs.integerArray,
-  hide_conflicts: FilterCodecs.boolean,
-});
-
-const DEFAULT_PERSONAL_FILTERS = [
-  { id: 'my_rating', value: [1, 0] },
-  { id: 'hide_conflicts', value: false },
-];
+import PersonalScheduleFiltersBar, {
+  usePersonalScheduleFilters,
+} from './PersonalScheduleFiltersBar';
 
 export type ScheduleGridAppProps = {
   configKey: string;
@@ -32,51 +19,19 @@ export type ScheduleGridAppProps = {
 
 function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const { t } = useTranslation();
-  const location = useLocation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
-  const { filters, updateSearch } = useReactRouterReactTable({ ...filterCodecs });
   const config = getConfig(configKey);
-  const storageKey = `schedule:${configKey}:personalFilters`;
   const format = useAppDateTimeFormat();
-
-  const loadPersonalFilters = useCallback(() => {
-    const storedValue = window.localStorage.getItem(storageKey);
-    if (storedValue) {
-      try {
-        return JSON.parse(storedValue);
-      } catch (e) {
-        return DEFAULT_PERSONAL_FILTERS;
-      }
-    }
-
-    return DEFAULT_PERSONAL_FILTERS;
-  }, [storageKey]);
-
-  useEffect(() => {
-    if (config?.showPersonalFilters && myProfile && !location.search) {
-      updateSearch({ filters: loadPersonalFilters() });
-    }
-  }, [config?.showPersonalFilters, loadPersonalFilters, location, myProfile, updateSearch]);
-
-  const ratingFilter = (filters.find((f) => f.id === 'my_rating') || {}).value;
-  const hideConflicts = (filters.find((f) => f.id === 'hide_conflicts') || {}).value;
-
-  const choiceSetValue = [
-    ...(ratingFilter || []).map((integer: number) => integer.toString()),
-    ...(hideConflicts ? [] : ['conflicts']),
-  ];
-
-  const choiceSetChanged = (newValue: string[]) => {
-    const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(parseIntOrNull);
-
-    const newFilters = [
-      { id: 'my_rating', value: integerArray },
-      { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
-    ];
-
-    updateSearch({ filters: newFilters });
-    window.localStorage.setItem(storageKey, JSON.stringify(newFilters));
-  };
+  const {
+    choiceSetValue,
+    choiceSetChanged,
+    ratingFilter,
+    hideConflicts,
+  } = usePersonalScheduleFilters({
+    storageKey: `schedule:${configKey}:personalFilters`,
+    showPersonalFilters: config?.showPersonalFilters ?? false,
+    signedIn: myProfile != null,
+  });
 
   if (!config) {
     return <ErrorDisplay stringError={`Schedule grid configuration "${configKey}" not found`} />;
@@ -93,25 +48,16 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
       </nav>
       <ScheduleGridProvider
         config={config}
-        myRatingFilter={myProfile ? ratingFilter : null}
+        myRatingFilter={myProfile ? ratingFilter : undefined}
         hideConflicts={myProfile ? hideConflicts : false}
       >
         {(timespan) => (
           <div className="mb-4">
             {config.showPersonalFilters && myProfile && (
-              <div className="d-flex flex-column flex-md-row bg-light">
-                <div className="d-flex btn">
-                  <span className="mr-2">Show:</span>
-                  <ChoiceSet
-                    choices={[...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }]}
-                    choiceClassName="form-check-inline mr-md-4"
-                    containerClassName="d-flex flex-wrap"
-                    value={choiceSetValue}
-                    onChange={choiceSetChanged}
-                    multiple
-                  />
-                </div>
-              </div>
+              <PersonalScheduleFiltersBar
+                choiceSetValue={choiceSetValue}
+                choiceSetChanged={choiceSetChanged}
+              />
             )}
             <div className="m-0 p-2 border-bottom">
               <h3 className="p-0 m-0">{format(timespan.start, 'longWeekdayDate')}</h3>
