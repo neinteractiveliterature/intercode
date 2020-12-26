@@ -1,6 +1,5 @@
-import { memo, forwardRef, useContext } from 'react';
+import { memo, forwardRef } from 'react';
 
-import { ScheduleGridContext } from './ScheduleGridContext';
 import { userSignupStatus, getRunStyle, getRunClassName } from './StylingUtils';
 import { calculateAvailability } from './AvailabilityUtils';
 import AvailabilityBar from './AvailabilityBar';
@@ -10,6 +9,7 @@ import SignupCountData from '../SignupCountData';
 import { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import { SignupState } from '../../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { ScheduleGridConfig } from './ScheduleGridConfig';
 
 export type RunDisplayProps = {
   event: ScheduleEvent;
@@ -18,12 +18,29 @@ export type RunDisplayProps = {
   toggle: () => void;
   runDimensions: RunDimensions;
   layoutResult: ScheduleLayoutResult;
+  showSignupStatusBadge: boolean;
+  showExtendedCounts: boolean;
+  classifyEventsBy: ScheduleGridConfig['classifyEventsBy'];
+  showSignedUp: ScheduleGridConfig['showSignedUp'];
 };
 
 const RunDisplay = memo(
   forwardRef<HTMLDivElement, RunDisplayProps>(
-    ({ event, run, signupCountData, toggle, runDimensions, layoutResult }, ref) => {
-      const { config } = useContext(ScheduleGridContext);
+    (
+      {
+        event,
+        run,
+        signupCountData,
+        toggle,
+        runDimensions,
+        layoutResult,
+        showSignupStatusBadge,
+        classifyEventsBy,
+        showSignedUp,
+        showExtendedCounts,
+      },
+      ref,
+    ) => {
       const signupStatus = userSignupStatus(run);
       const format = useAppDateTimeFormat();
 
@@ -31,7 +48,7 @@ const RunDisplay = memo(
         event,
         eventCategory: event.event_category,
         signupStatus,
-        config,
+        config: { classifyEventsBy },
         signupCountData,
         runDimensions,
         layoutResult,
@@ -58,7 +75,7 @@ const RunDisplay = memo(
       };
 
       const renderExtendedCounts = () => {
-        if (!config.showExtendedCounts) {
+        if (!showExtendedCounts) {
           return null;
         }
 
@@ -77,7 +94,7 @@ const RunDisplay = memo(
       };
 
       const renderSignupStatusBadge = () => {
-        if (!config.showSignupStatusBadge) {
+        if (!showSignupStatusBadge) {
           return null;
         }
 
@@ -94,7 +111,7 @@ const RunDisplay = memo(
           className={getRunClassName({
             event,
             signupStatus: signupStatus ?? undefined,
-            config,
+            config: { classifyEventsBy, showSignedUp },
             signupCountData,
             unlimited: unlimited ?? false,
             runDimensions,
