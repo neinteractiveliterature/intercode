@@ -470,7 +470,7 @@ GEM
     safely_block (0.3.0)
       errbase (>= 0.1.1)
     scheduled_value (1.3.0)
-    sequel (5.39.0)
+    sequel (5.40.0)
     shoryuken (5.0.6)
       aws-sdk-core (>= 2)
       concurrent-ruby
