@@ -2204,10 +2204,10 @@
   resolved "https://registry.yarnpkg.com/@types/clipboard/-/clipboard-2.0.1.tgz#75a74086c293d75b12bc93ff13bc7797fef05a40"
   integrity sha512-gJJX9Jjdt3bIAePQRRjYWG20dIhAgEqonguyHxXuqALxsoDsDLimihqrSg8fXgVTJ4KZCzkfglKtwsh/8dLfbA==
 
-"@types/codemirror@^0.0.102":
-  version "0.0.102"
-  resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-0.0.102.tgz#56049f14a85e170fc5b71bd76517089ca74a4036"
-  integrity sha512-WZZW8VL8BAzzAZWkiYnM5VsYz1qWYieRqHPPtC/BB015QXd3LPXtBlbRYA8lauKgM10qWYeLH8p5LsIn2SLXfA==
+"@types/codemirror@^0.0.104":
+  version "0.0.104"
+  resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-0.0.104.tgz#b5d7612211d2dfb476ecee2c77c0846b78e75796"
+  integrity sha512-b417c7DZifNj1IQzOurj+HDBzHEW+C6Y8DaBai3va7p7hR/mh3YLs4wYyDapqjYiIcvJSu/kPd8XUSPaDRftbg==
   dependencies:
     "@types/tern" "*"
 
