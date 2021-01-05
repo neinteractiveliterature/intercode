@@ -2387,10 +2387,10 @@
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.25.0.tgz#3d6fe591fac874f48dd225cb5660b2b785a21a05"
   integrity sha512-iIJp2CP6C32gVqI08HIYnzqj55tlLnodIBMCcMf28q9ckqMfMzocCmIzd9JWI/ALLPMUiTkCu1JGv3FFtu6t3g==
 
-"@types/mapbox-gl@^1.12.9":
-  version "1.12.9"
-  resolved "https://registry.yarnpkg.com/@types/mapbox-gl/-/mapbox-gl-1.12.9.tgz#b34b4dcd8fc32a6aff830db0f75ed4f6e44274f2"
-  integrity sha512-+RWus/Q27dr212Of9EIMvfhRHpdE28Nu4HN3/vLk9ZruQ1WhIvkFOQEUcgQuH6v+LnJ4VxglVSye6UqMtoCLtQ==
+"@types/mapbox-gl@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/mapbox-gl/-/mapbox-gl-2.0.1.tgz#dc0734ba6bcd459e69f14ac8fc0368349c685a6f"
+  integrity sha512-0bHvAoDt5Cpz1GQeXjamLnSbNDLX/wAa8KelK02KW+prvjtSKVuirQayJZkaKa/JMb/WmVtEhfMjvH3sDEOUOw==
   dependencies:
     "@types/geojson" "*"
 
