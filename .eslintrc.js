@@ -79,6 +79,7 @@ module.exports = {
     'import/namespace': 'off',
     'import/default': 'off',
     'import/no-named-as-default-member': 'off',
+    'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
   },
 
   overrides: [

@@ -21,7 +21,7 @@ function ScheduleGridEventRun({
   layoutResult,
   scheduleLayoutBlock,
 }: ScheduleGridEventRunProps) {
-  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible } = useContext(
+  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible, config } = useContext(
     ScheduleGridContext,
   );
   const detailsVisible = useMemo(
@@ -77,6 +77,10 @@ function ScheduleGridEventRun({
       toggle={toggleVisibility}
       runDimensions={runDimensions}
       layoutResult={layoutResult}
+      classifyEventsBy={config.classifyEventsBy}
+      showExtendedCounts={config.showExtendedCounts ?? false}
+      showSignedUp={config.showSignedUp}
+      showSignupStatusBadge={config.showSignupStatusBadge ?? false}
     />
   );
 

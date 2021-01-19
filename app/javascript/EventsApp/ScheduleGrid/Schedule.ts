@@ -22,6 +22,45 @@ function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   return Timespan.fromDateTimes(start, finish) as FiniteTimespan;
 }
 
+type EventForConflictingRuns = Pick<
+  ScheduleGridEventFragmentFragment,
+  'can_play_concurrently' | 'id'
+> & {
+  runs: {
+    my_signups: Pick<
+      ScheduleGridEventFragmentFragment['runs'][number]['my_signups'][number],
+      'state'
+    >[];
+    my_signup_requests: Pick<
+      ScheduleGridEventFragmentFragment['runs'][number]['my_signup_requests'][number],
+      'state'
+    >[];
+  }[];
+};
+
+export function findConflictingRuns<T extends EventForConflictingRuns>(events: T[]) {
+  const conflictingRuns: (T['runs'][number] & { event_id: T['id'] })[] = [];
+
+  events.forEach((event) => {
+    if (event.can_play_concurrently) {
+      return;
+    }
+
+    event.runs.forEach((run) => {
+      if (
+        (run.my_signups || []).some(
+          (signup) => signup.state === 'confirmed' || signup.state === 'waitlisted',
+        ) ||
+        (run.my_signup_requests || []).some((request) => request.state === 'pending')
+      ) {
+        conflictingRuns.push({ ...run, event_id: event.id });
+      }
+    });
+  });
+
+  return conflictingRuns;
+}
+
 export type ScheduleEvent = ScheduleGridEventFragmentFragment & {
   displayTitle?: string;
   fake?: boolean;
@@ -89,7 +128,8 @@ export default class Schedule {
     this.nextFakeRunId = -1;
 
     this.hideConflicts = hideConflicts;
-    this.myConflictingRuns = [];
+    this.myConflictingRuns = findConflictingRuns(events);
+
     events.forEach((event) => {
       if (event.can_play_concurrently) {
         return;
