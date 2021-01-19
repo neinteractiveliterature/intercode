@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.7.2'
-gem 'rails', '6.1.0'
+gem 'rails', '6.1.1'
 
 gem 'pg'
 gem 'puma'
@@ -69,7 +69,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.45.1'
+gem 'twilio-ruby', '~> 5.46.0'
 gem 'phonelib'
 
 # Background workers and scheduling
@@ -92,7 +92,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.10.17'
+gem 'oj', '~> 3.11.0'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -124,7 +124,7 @@ group :development do
   gem 'debase'
 
   # Linting
-  gem 'rubocop', '1.6.1' # 0.85 seems to break pronto-rubocop :(
+  gem 'rubocop', '1.7.0' # 0.85 seems to break pronto-rubocop :(
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
