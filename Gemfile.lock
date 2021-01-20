@@ -449,15 +449,15 @@ GEM
       rollbar (~> 2.21, <= 3.0)
       shoryuken (>= 4.0, <= 5.1)
     rouge (3.11.0)
-    rubocop (1.7.0)
+    rubocop (1.8.1)
       parallel (~> 1.10)
-      parser (>= 2.7.1.5)
+      parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
       rubocop-ast (>= 1.2.0, < 2.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 2.0)
+      unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.4.0)
       parser (>= 2.7.1.5)
     rubocop-performance (1.9.2)
@@ -538,7 +538,7 @@ GEM
       unf_ext
     unf (0.1.4-java)
     unf_ext (0.0.7.6)
-    unicode-display_width (1.7.0)
+    unicode-display_width (2.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     websocket-driver (0.7.3)
@@ -621,7 +621,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.7.0)
+  rubocop (= 1.8.1)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide
