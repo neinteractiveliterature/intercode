@@ -96,7 +96,7 @@ GEM
     apollo_upload_server (2.0.3)
       graphql (>= 1.8)
       rails (>= 4.2)
-    ast (2.4.1)
+    ast (2.4.2)
     aws-eventstream (1.1.0)
     aws-partitions (1.417.0)
     aws-record (2.5.0)
@@ -449,7 +449,7 @@ GEM
       rollbar (~> 2.21, <= 3.0)
       shoryuken (>= 4.0, <= 5.1)
     rouge (3.11.0)
-    rubocop (1.8.1)
+    rubocop (1.9.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -458,7 +458,7 @@ GEM
       rubocop-ast (>= 1.2.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.4.0)
+    rubocop-ast (1.4.1)
       parser (>= 2.7.1.5)
     rubocop-performance (1.9.2)
       rubocop (>= 0.90.0, < 2.0)
@@ -621,7 +621,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.8.1)
+  rubocop (= 1.9.0)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide
