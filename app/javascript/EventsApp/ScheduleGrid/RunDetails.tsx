@@ -14,8 +14,8 @@ import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import { ScheduleEvent, ScheduleRun } from './Schedule';
-import { RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import SignupCountData from '../SignupCountData';
+import { FiniteTimespan } from '../../Timespan';
 
 export type RunDetailsProps = {
   placement?: Placement;
@@ -24,20 +24,19 @@ export type RunDetailsProps = {
   toggle: () => void;
   event: ScheduleEvent;
   run: ScheduleRun;
-  runDimensions: RunDimensions;
+  timespan: FiniteTimespan;
   signupCountData: SignupCountData;
   arrowRef: React.Ref<HTMLSpanElement>;
 };
 
 const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
   (
-    { styles, placement, attributes, event, run, runDimensions, toggle, signupCountData, arrowRef },
+    { styles, placement, attributes, event, run, timespan, toggle, signupCountData, arrowRef },
     ref,
   ) => {
     const { t } = useTranslation();
     const { myProfile } = useContext(AppRootContext);
     const { schedule } = useContext(ScheduleGridContext);
-    const { timespan } = runDimensions;
     const rateEvent = useRateEvent();
     const apolloClient = useApolloClient();
 
@@ -62,7 +61,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
 
     return (
       <div
-        className={`popover schedule-grid-run-details-popover bs-popover-${placement} show`}
+        className={`popover schedule-grid-run-details-popover bs-popover-${placement}`}
         ref={ref}
         style={styles.popper}
         role="tooltip"
