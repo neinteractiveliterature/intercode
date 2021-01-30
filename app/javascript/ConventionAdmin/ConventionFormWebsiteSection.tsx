@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSObject } from '@emotion/serialize';
 import * as React from 'react';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
@@ -11,7 +11,7 @@ import { usePropertySetters } from '../usePropertySetters';
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
 // dropdown menu so that the text in the CodeMirror doesn't cover it
 const selectStyles = {
-  menu: (provided: CSSProperties) => ({ ...provided, zIndex: 5 }),
+  menu: (provided: CSSObject) => ({ ...provided, zIndex: 5 }),
 };
 
 export type ConventionFormWebsiteSectionProps = {
@@ -46,8 +46,8 @@ function ConventionFormWebsiteSection({
         label="Default layout for pages"
         value={convention.default_layout}
         isClearable
-        getOptionValue={(option) => option.id.toString()}
-        getOptionLabel={(option) => option.name ?? ''}
+        getOptionValue={(option) => option?.id.toString() ?? ''}
+        getOptionLabel={(option) => option?.name ?? ''}
         options={cmsLayouts}
         onChange={(newValue: typeof convention.default_layout) => setDefaultLayout(newValue)}
         styles={selectStyles}
@@ -57,10 +57,10 @@ function ConventionFormWebsiteSection({
       <SelectWithLabel
         name="root_page_id"
         label="Root page"
-        value={convention.root_page}
+        value={convention.root_page ?? null}
         isClearable
-        getOptionValue={(option) => option.id.toString()}
-        getOptionLabel={(option) => option.name ?? ''}
+        getOptionValue={(option) => option?.id.toString() ?? ''}
+        getOptionLabel={(option) => option?.name ?? ''}
         options={pages}
         onChange={(newValue: typeof convention.root_page) => setRootPage(newValue)}
         styles={selectStyles}

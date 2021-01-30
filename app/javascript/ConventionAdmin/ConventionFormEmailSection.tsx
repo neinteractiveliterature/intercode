@@ -59,8 +59,8 @@ function ConventionFormEmailSection({
         helpText={`If present, email received by any address @${convention.domain}
           that doesn’t match any staff position will be forwarded to this staff position.`}
         options={staffPositions}
-        getOptionLabel={(staffPosition) => staffPosition.name}
-        getOptionValue={(staffPosition) => staffPosition.id.toString()}
+        getOptionLabel={(staffPosition) => staffPosition?.name ?? ''}
+        getOptionValue={(staffPosition) => staffPosition?.id.toString() ?? ''}
         value={convention.catch_all_staff_position}
         isClearable
         onChange={(newValue: typeof convention.catch_all_staff_position) =>
