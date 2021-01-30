@@ -155,7 +155,7 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
               paddingTop: '0.5rem',
             }}
           >
-            <h2 className="pb-1">{format(dayStart, 'longWeekdayDate')}</h2>
+            <h3 className="pb-1">{format(dayStart, 'longWeekdayDate')}</h3>
           </div>
 
           {timeGroups.map(({ startTime, runs }) => {
