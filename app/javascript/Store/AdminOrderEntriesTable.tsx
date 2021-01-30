@@ -114,7 +114,9 @@ function AdminOrderEntriesTable<
     );
   };
 
-  const setAddingItemProductVariant = (variant: T['product_variant']) => {
+  const setAddingItemProductVariant: (variant: NonNullable<T['product_variant']> | null) => void = (
+    variant,
+  ) => {
     setAddingItem(
       (prevAddingItem) =>
         ({
