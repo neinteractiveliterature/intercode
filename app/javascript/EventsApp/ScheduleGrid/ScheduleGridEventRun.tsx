@@ -101,7 +101,7 @@ function ScheduleGridEventRun({
           toggle={toggleVisibility}
           event={event}
           run={run}
-          runDimensions={runDimensions}
+          timespan={runDimensions.fullTimespan}
           signupCountData={signupCountData!}
         />
       )}
