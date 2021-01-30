@@ -24,7 +24,8 @@ type BoostableDocument = {
   $boost?: number;
 };
 
-class BoostableTfIdfSearchIndex extends TfIdfSearchIndex
+class BoostableTfIdfSearchIndex
+  extends TfIdfSearchIndex
   implements TfIdfSearchIndexWithOverridableCreate {
   _createCalculateTfIdf() {
     /* eslint-disable-next-line no-underscore-dangle */ /* @ts-ignore */
@@ -77,7 +78,7 @@ function TimezoneSelect(props: TimezoneSelectProps) {
     }
 
     const filtered = searchIndex.search(inputValue).slice(0, 50);
-    return (filtered as ZoneData[]);
+    return filtered as ZoneData[];
   };
 
   const [options, setOptions] = useState(loadOptions(''));
@@ -96,9 +97,9 @@ function TimezoneSelect(props: TimezoneSelectProps) {
         inputId={selectId}
         options={options}
         isClearable
-        value={(value && isValidZone(value)) ? timezoneSelectData.zones[value] : undefined}
+        value={value && isValidZone(value) ? timezoneSelectData.zones[value] : undefined}
         onInputChange={(input) => filterOptions(input)}
-        onChange={(newValue?: ZoneData) => {
+        onChange={(newValue: ZoneData | null) => {
           onChange(newValue?.name);
         }}
         getOptionValue={(zone) => zone.name}
