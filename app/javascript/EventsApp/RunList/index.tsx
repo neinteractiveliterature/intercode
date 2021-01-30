@@ -2,21 +2,20 @@ import { sortBy } from 'lodash';
 import flatMap from 'lodash/flatMap';
 import { DateTime } from 'luxon';
 import React, { useContext, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+
 import AppRootContext from '../../AppRootContext';
 import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
 import { FiniteTimespan } from '../../Timespan';
 import { timespanFromRun } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
-import buildEventUrl from '../buildEventUrl';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import PersonalScheduleFiltersBar, {
   usePersonalScheduleFilters,
 } from '../ScheduleGrid/PersonalScheduleFiltersBar';
 import { useScheduleGridCombinedQueryQuery } from '../ScheduleGrid/queries.generated';
-import RunDisplay from '../ScheduleGrid/RunDisplay';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
+import RunListEventRun from './RunListEventRun';
 
 function useLoadRunListData() {
   return useScheduleGridCombinedQueryQuery({ variables: { extendedCounts: false } });
@@ -25,7 +24,6 @@ function useLoadRunListData() {
 export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
   const { timezoneName, myProfile } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const history = useHistory();
   const {
     choiceSetValue,
     choiceSetChanged,
@@ -198,34 +196,11 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
                           height: `${PIXELS_PER_LANE}px`,
                         }}
                       >
-                        <RunDisplay
-                          event={{
-                            ...event,
-                            displayTitle: `${event.title} - until ${format(
-                              timespan.finish,
-                              timespan.finish.day === timespan.start.day
-                                ? 'shortTime'
-                                : 'shortWeekdayTime',
-                            )}`,
-                          }}
-                          run={{ ...run, event_id: event.id }}
-                          toggle={() => {
-                            history.push(`${buildEventUrl(event)}#run-${run.id}`);
-                          }}
-                          layoutResult={{ laneCount: 1, runDimensions: [] }}
-                          runDimensions={{
-                            fullTimespan: timespan,
-                            timespan,
-                            laneIndex: 0,
-                            runId: run.id,
-                            timeAxisSizePercent: 100,
-                            timeAxisStartPercent: 0,
-                          }}
+                        <RunListEventRun
+                          event={event}
+                          run={run}
+                          timespan={timespan}
                           signupCountData={signupCountDataByRunId.get(run.id)!}
-                          showExtendedCounts={false}
-                          showSignedUp
-                          classifyEventsBy="category"
-                          showSignupStatusBadge
                         />
                       </div>
                     </div>
