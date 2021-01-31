@@ -13,6 +13,7 @@ import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
 import { lazyWithBundleHashCheck } from './checkBundleHash';
+import { timespanFromConvention } from './TimespanUtils';
 
 const NavigationBar = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
@@ -68,6 +69,7 @@ function AppRoot() {
       conventionCanceled: data!.convention?.canceled,
       conventionName: data!.convention?.name,
       conventionDomain: data!.convention?.domain,
+      conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
       currentAbility: data!.currentAbility,
       currentPendingOrder: data!.currentPendingOrder,
       currentUser: data!.currentUser,

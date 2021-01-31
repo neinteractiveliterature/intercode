@@ -1,19 +1,36 @@
 import { sortBy } from 'lodash';
 import flatMap from 'lodash/flatMap';
 import { DateTime } from 'luxon';
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { Waypoint } from 'react-waypoint';
 
 import AppRootContext from '../../AppRootContext';
 import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
 import { FiniteTimespan } from '../../Timespan';
 import { timespanFromRun } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
 import { useScheduleGridCombinedQueryQuery } from '../ScheduleGrid/queries.generated';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
 import RunListEventRun from './RunListEventRun';
+
+// http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+function isElementInViewport(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+  const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
+  return (
+    rect.left >= 0 &&
+    rect.top >= 0 &&
+    rect.left + rect.width <= windowWidth &&
+    rect.top + rect.height <= windowHeight
+  );
+}
 
 function useLoadRunListData() {
   return useScheduleGridCombinedQueryQuery({ variables: { extendedCounts: false } });
@@ -27,6 +44,20 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
     showPersonalFilters: true,
     signedIn: myProfile != null,
   });
+  const history = useHistory();
+  const conventionDayUrlPortion = useConventionDayUrlPortion();
+  const conventionDayHeaders = useRef(new Map<string, HTMLElement>());
+  const routeMatch = useRouteMatch<{ conventionDay: string }>('/events/schedule/:conventionDay');
+
+  useLayoutEffect(() => {
+    if (routeMatch?.params.conventionDay) {
+      const header = conventionDayHeaders.current.get(routeMatch.params.conventionDay);
+      if (header && !isElementInViewport(header)) {
+        header.scrollIntoView(true);
+        window.scrollBy(0, -100);
+      }
+    }
+  }, [routeMatch?.params.conventionDay]);
 
   const eventsByRunId = useMemo(() => {
     const eventMap = new Map<number, typeof data['events'][number]>();
@@ -117,68 +148,91 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
 
   const conflictingRuns = useMemo(() => findConflictingRuns(data.events), [data.events]);
 
+  const enteredRunGroup = useCallback(
+    (runGroup: RunGroup) => {
+      history.replace(
+        `/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${history.location.search}`,
+      );
+    },
+    [history, conventionDayUrlPortion],
+  );
+
   return (
     <>
       {runGroups.map(({ dayStart, timeGroups }) => (
         <React.Fragment key={dayStart.valueOf()}>
-          <div className="schedule-list-day-header">
+          <div
+            className="schedule-list-day-header"
+            ref={(element) => {
+              if (element) {
+                conventionDayHeaders.current.set(conventionDayUrlPortion(dayStart), element);
+              } else {
+                conventionDayHeaders.current.delete(conventionDayUrlPortion(dayStart));
+              }
+            }}
+          >
             <h3 className="pb-1">{format(dayStart, 'longWeekdayDate')}</h3>
           </div>
-
-          {timeGroups.map(({ startTime, runs }) => {
-            const filteredRuns = runs.filter((run) => {
-              const event = eventsByRunId.get(run.id)!;
-              const timespan = timespanByRunId.get(run.id)!;
-
-              if (
-                hideConflicts &&
-                conflictingRuns.some(
-                  (conflictingRun) =>
-                    conflictingRun.id !== run.id &&
-                    timespanByRunId.get(conflictingRun.id)?.overlapsTimespan(timespan),
-                )
-              ) {
-                return false;
-              }
-
-              if (myProfile && !ratingFilter.includes(event.my_rating ?? 0)) {
-                return false;
-              }
-              return true;
-            });
-
-            return (
-              <React.Fragment key={startTime.valueOf()}>
-                <div className="mt-2">{format(startTime, 'shortTimeWithZone')}</div>
-                {filteredRuns.map((run) => {
+          <Waypoint topOffset="50%" onEnter={() => enteredRunGroup({ dayStart, timeGroups })}>
+            <div>
+              {timeGroups.map(({ startTime, runs }) => {
+                const filteredRuns = runs.filter((run) => {
                   const event = eventsByRunId.get(run.id)!;
                   const timespan = timespanByRunId.get(run.id)!;
 
-                  return (
-                    <div className="pl-4" key={run.id}>
-                      <div
-                        style={{
-                          position: 'relative',
-                          width: '100%',
-                          height: `${PIXELS_PER_LANE}px`,
-                        }}
-                      >
-                        <RunListEventRun
-                          event={event}
-                          run={run}
-                          timespan={timespan}
-                          signupCountData={signupCountDataByRunId.get(run.id)!}
-                        />
+                  if (
+                    hideConflicts &&
+                    conflictingRuns.some(
+                      (conflictingRun) =>
+                        conflictingRun.id !== run.id &&
+                        timespanByRunId.get(conflictingRun.id)?.overlapsTimespan(timespan),
+                    )
+                  ) {
+                    return false;
+                  }
+
+                  if (myProfile && !ratingFilter.includes(event.my_rating ?? 0)) {
+                    return false;
+                  }
+                  return true;
+                });
+
+                return (
+                  <React.Fragment key={startTime.valueOf()}>
+                    <div className="mt-2">{format(startTime, 'shortTimeWithZone')}</div>
+                    {filteredRuns.map((run) => {
+                      const event = eventsByRunId.get(run.id)!;
+                      const timespan = timespanByRunId.get(run.id)!;
+
+                      return (
+                        <div className="pl-4" key={run.id}>
+                          <div
+                            style={{
+                              position: 'relative',
+                              width: '100%',
+                              height: `${PIXELS_PER_LANE}px`,
+                            }}
+                          >
+                            <RunListEventRun
+                              event={event}
+                              run={run}
+                              timespan={timespan}
+                              signupCountData={signupCountDataByRunId.get(run.id)!}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {filteredRuns.length < runs.length && (
+                      <div className="pl-4 text-muted">
+                        +{runs.length - filteredRuns.length} hidden
                       </div>
-                    </div>
-                  );
-                })}
-                {filteredRuns.length < runs.length && (
-                  <div className="pl-4 text-muted">+{runs.length - filteredRuns.length} hidden</div>
-                )}
-              </React.Fragment>
-            );
-          })}
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </Waypoint>
         </React.Fragment>
       ))}
     </>

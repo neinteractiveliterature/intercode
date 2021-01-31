@@ -46,7 +46,7 @@ export type CreateOrderMutationVariables = Types.Exact<{
   userConProfileId: Types.Scalars['Int'];
   order: Types.OrderInput;
   status: Types.OrderStatus;
-  orderEntries?: Types.Maybe<Array<Types.OrderEntryInput>>;
+  orderEntries?: Types.Maybe<Array<Types.OrderEntryInput> | Types.OrderEntryInput>;
 }>;
 
 

@@ -125,7 +125,7 @@ export type RunSignupsTableSignupsQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.SignupFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 
@@ -295,7 +295,7 @@ export type UserConProfileSignupsQueryQuery = (
 export type RunSignupChangesQueryQueryVariables = Types.Exact<{
   runId: Types.Scalars['Int'];
   filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
 }>;

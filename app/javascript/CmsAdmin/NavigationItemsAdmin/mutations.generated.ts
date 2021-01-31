@@ -57,7 +57,7 @@ export type DeleteNavigationItemMutation = (
 );
 
 export type SortNavigationItemsMutationVariables = Types.Exact<{
-  sortItems: Array<Types.UpdateCmsNavigationItemInput>;
+  sortItems: Array<Types.UpdateCmsNavigationItemInput> | Types.UpdateCmsNavigationItemInput;
 }>;
 
 

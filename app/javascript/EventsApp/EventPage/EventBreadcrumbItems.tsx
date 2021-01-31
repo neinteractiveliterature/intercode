@@ -11,7 +11,7 @@ import {
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import AppRootContext from '../../AppRootContext';
 import { Run } from '../../graphqlTypes.generated';
-import { useAppDateTimeFormat } from '../../TimeUtils';
+import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 
 function findRunFromHash<RunType extends { id: number }>(runs: RunType[], hash?: string | null) {
   if (!hash) {
@@ -57,10 +57,10 @@ function EventBreadcrumbItems({
 }: EventBreadcrumbItemsProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const format = useAppDateTimeFormat();
   const history = useHistory();
   const runToLink = findRunFromHash(event.runs, history.location.hash) || event.runs[0];
   const conventionDayStart = getConventionDayStart(runToLink, convention, timezoneName);
+  const conventionDayUrlPortion = useConventionDayUrlPortion();
 
   return (
     <>
@@ -69,7 +69,7 @@ function EventBreadcrumbItems({
           <Link
             to={
               conventionDayStart
-                ? `/events/schedule/${format(conventionDayStart, 'longWeekday').toLowerCase()}`
+                ? `/events/schedule/${conventionDayUrlPortion(conventionDayStart)}`
                 : '/events/schedule'
             }
           >

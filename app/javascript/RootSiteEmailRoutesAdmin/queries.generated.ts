@@ -11,7 +11,7 @@ export type EmailRouteFieldsFragment = (
 export type RootSiteEmailRoutesAdminTableQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.EmailRouteFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 
