@@ -13,8 +13,17 @@ import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
 import { NoLoginAuthorizationWrapper } from '../Authentication/useAuthorizationRequired';
 import RunList from './RunList';
+import ScheduleApp from './ScheduleApp';
 
 function renderScheduleRoutes() {
+  return (
+    <Route path="/events/schedule" key="conSchedule">
+      <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>
+        <ScheduleApp />
+      </NoLoginAuthorizationWrapper>
+    </Route>
+  );
+
   return [
     <Route path="/events/schedule" key="conSchedule">
       <NoLoginAuthorizationWrapper abilities={['can_read_schedule']}>

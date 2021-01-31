@@ -337,7 +337,7 @@ export function ScheduleGridProvider({
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
       <ConventionDayTabContainer
-        basename={config.basename}
+        basename="/events/schedule"
         conventionTimespan={conventionTimespan as FiniteTimespan} // TODO: make this work with infinite cons
         prefetchTimespan={prefetchTimespan}
       >
