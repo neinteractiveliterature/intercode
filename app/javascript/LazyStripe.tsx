@@ -1,5 +1,6 @@
-import { createContext, lazy, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import type { Stripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import ErrorDisplay from './ErrorDisplay';
 
 const StripeJs = () => import('@stripe/stripe-js');
@@ -13,7 +14,6 @@ export const LazyStripeContext = createContext<LazyStripeContext>({
   accountId: undefined,
   publishableKey: undefined,
 });
-export const LazyElements = lazy(() => import('./SyncStripeElements'));
 
 async function lazyLoadStripe(publishableKey: string, accountId: string) {
   const { loadStripe } = await StripeJs();
@@ -52,9 +52,17 @@ function useLazyStripe() {
 export function LazyStripeElementsContainer({ children }: { children: ReactNode }) {
   const [stripe, loadError] = useLazyStripe();
 
+  // horrible horrible workaround until Stripe fixes https://github.com/stripe/react-stripe-js/issues/154
+  const counter = useRef(0);
+  counter.current += 1;
+
   if (loadError) {
     return <ErrorDisplay stringError={loadError.message} />;
   }
 
-  return <LazyElements stripe={stripe}>{children}</LazyElements>;
+  return (
+    <Elements stripe={stripe} key={counter.current}>
+      {children}
+    </Elements>
+  );
 }
