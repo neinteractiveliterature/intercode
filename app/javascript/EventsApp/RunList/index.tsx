@@ -9,9 +9,7 @@ import { FiniteTimespan } from '../../Timespan';
 import { timespanFromRun } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
-import PersonalScheduleFiltersBar, {
-  usePersonalScheduleFilters,
-} from '../ScheduleGrid/PersonalScheduleFiltersBar';
+import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
 import { useScheduleGridCombinedQueryQuery } from '../ScheduleGrid/queries.generated';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
@@ -24,12 +22,7 @@ function useLoadRunListData() {
 export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
   const { timezoneName, myProfile } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const {
-    choiceSetValue,
-    choiceSetChanged,
-    ratingFilter,
-    hideConflicts,
-  } = usePersonalScheduleFilters({
+  const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
     storageKey: `runList:personalFilters`,
     showPersonalFilters: true,
     signedIn: myProfile != null,
@@ -126,35 +119,9 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
 
   return (
     <>
-      <h1>Run list</h1>
-
-      <div
-        className="border-bottom pt-3"
-        style={{
-          position: 'sticky',
-          top: '50px',
-          zIndex: 1010,
-          height: '5rem',
-          backgroundColor: 'white',
-        }}
-      >
-        <PersonalScheduleFiltersBar
-          choiceSetValue={choiceSetValue}
-          choiceSetChanged={choiceSetChanged}
-        />
-      </div>
-
       {runGroups.map(({ dayStart, timeGroups }) => (
         <React.Fragment key={dayStart.valueOf()}>
-          <div
-            style={{
-              position: 'sticky',
-              top: 'calc(50px + 5rem)',
-              backgroundColor: 'white',
-              zIndex: 1010,
-              paddingTop: '0.5rem',
-            }}
-          >
+          <div className="schedule-list-day-header">
             <h3 className="pb-1">{format(dayStart, 'longWeekdayDate')}</h3>
           </div>
 

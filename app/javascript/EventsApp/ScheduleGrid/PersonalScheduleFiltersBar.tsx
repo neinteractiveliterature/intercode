@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
+import { Filters } from 'react-table';
+import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import { parseIntOrNull } from '../../ValueUtils';
@@ -20,6 +21,19 @@ type PersonalScheduleFilter = {
   my_rating: number[];
   hide_conflicts: boolean;
 };
+
+function parseFilters(filters: Filters<PersonalScheduleFilter>) {
+  const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {})
+    .value;
+  const hideConflicts: boolean | undefined = (filters.find((f) => f.id === 'hide_conflicts') || {})
+    .value;
+
+  const choiceSetValue: string[] = [
+    ...(ratingFilter || []).map((integer: number) => integer.toString()),
+    ...(hideConflicts ? [] : ['conflicts']),
+  ];
+  return { choiceSetValue, ratingFilter, hideConflicts };
+}
 
 type UsePersonalScheduleFiltersOptions = {
   storageKey: string;
@@ -57,24 +71,18 @@ export function usePersonalScheduleFilters({
   }, [showPersonalFilters, loadPersonalFilters, location, signedIn, updateSearch]);
 
   return useMemo(() => {
-    const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {})
-      .value;
-    const hideConflicts: boolean | undefined = (
-      filters.find((f) => f.id === 'hide_conflicts') || {}
-    ).value;
-
-    const choiceSetValue: string[] = [
-      ...(ratingFilter || []).map((integer: number) => integer.toString()),
-      ...(hideConflicts ? [] : ['conflicts']),
-    ];
+    const { choiceSetValue, ratingFilter, hideConflicts } = parseFilters(filters);
 
     const choiceSetChanged = (newValue: string[]) => {
       const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(parseIntOrNull);
 
-      const newFilters = [
-        { id: 'my_rating', value: integerArray },
-        { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
-      ];
+      const newFilters =
+        newValue.length === 0
+          ? [...DEFAULT_PERSONAL_FILTERS]
+          : [
+              { id: 'my_rating', value: integerArray },
+              { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
+            ];
 
       updateSearch({ filters: newFilters });
       window.localStorage.setItem(storageKey, JSON.stringify(newFilters));
@@ -89,6 +97,25 @@ export function usePersonalScheduleFilters({
   }, [filters, storageKey, updateSearch]);
 }
 
+const filterOptions = [...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }];
+
+function renderFilterHeaderCaption(value: string[]): string {
+  if (value.length === filterOptions.length) {
+    return 'Show all events';
+  }
+  if (value.length === 0) {
+    return renderFilterHeaderCaption(parseFilters([...DEFAULT_PERSONAL_FILTERS]).choiceSetValue);
+  }
+
+  const visibleOptions = filterOptions.filter((option) =>
+    value.find((selectedOption) => option.value === selectedOption),
+  );
+  if (visibleOptions.length === filterOptions.length - 1 && !value.includes('-1')) {
+    return 'Show my selections';
+  }
+  return `Show only ${visibleOptions.map((option) => option.label).join(', ')}`;
+}
+
 type PersonalScheduleFiltersBarProps = {
   choiceSetValue: string[];
   choiceSetChanged: React.Dispatch<string[]>;
@@ -99,19 +126,16 @@ function PersonalScheduleFiltersBar({
   choiceSetChanged,
 }: PersonalScheduleFiltersBarProps) {
   return (
-    <div className="d-flex flex-column flex-md-row bg-light">
-      <div className="d-flex btn">
-        <span className="mr-2">Show:</span>
-        <ChoiceSet
-          choices={[...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }]}
-          choiceClassName="form-check-inline mr-md-4"
-          containerClassName="d-flex flex-wrap"
-          value={choiceSetValue}
-          onChange={choiceSetChanged}
-          multiple
-        />
-      </div>
-    </div>
+    <ChoiceSetFilter
+      choices={filterOptions}
+      column={{
+        filterValue: choiceSetValue,
+        setFilter: choiceSetChanged,
+      }}
+      renderHeaderCaption={renderFilterHeaderCaption}
+      multiple
+      hideSelectNone
+    />
   );
 }
 
