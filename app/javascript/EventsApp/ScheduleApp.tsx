@@ -1,4 +1,5 @@
 import { assertNever } from 'assert-never';
+import classNames from 'classnames';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
@@ -12,6 +13,49 @@ import PersonalScheduleFiltersBar, {
 
 const SCHEDULE_VIEWS = ['list', 'grid', 'gridByRoom', 'gridWithCounts'] as const;
 type ScheduleView = typeof SCHEDULE_VIEWS[number];
+
+type ScheduleViewDropdownProps = {
+  viewSelected: (view: ScheduleView) => void;
+  scheduleView: ScheduleView;
+};
+
+function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdownProps) {
+  const { t } = useTranslation();
+  const scheduleViewLabels = useMemo<Record<ScheduleView, string>>(
+    () => ({
+      list: t('schedule.views.listView', 'List view'),
+      grid: t('schedule.views.gridView', 'Grid view'),
+      gridByRoom: t('schedule.views.gridViewByRoom', 'Grid view by room'),
+      gridWithCounts: t('schedule.views.gridViewWithCounts', 'Grid view with counts'),
+    }),
+    [t],
+  );
+
+  return (
+    <DropdownMenu
+      buttonContent={scheduleViewLabels[scheduleView]}
+      buttonClassName="btn btn-link dropdown-toggle"
+      dropdownClassName="p-0"
+    >
+      {([
+        ['list', 'fa-list'],
+        ['grid', 'fa-calendar'],
+        ['gridByRoom', 'fa-calendar-o'],
+        ['gridWithCounts', 'fa-calendar-check-o'],
+      ] as const).map(([view, iconName]) => (
+        <button
+          className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
+          type="button"
+          onClick={() => viewSelected(view)}
+          key={view}
+        >
+          <MenuIcon icon={iconName} />
+          {scheduleViewLabels[view]}
+        </button>
+      ))}
+    </DropdownMenu>
+  );
+}
 
 export default function ScheduleApp() {
   const { myProfile } = useContext(AppRootContext);
@@ -41,16 +85,6 @@ export default function ScheduleApp() {
     setScheduleView(view);
   }, []);
 
-  const scheduleViewLabels = useMemo<Record<ScheduleView, string>>(
-    () => ({
-      list: t('schedule.views.listView', 'List view'),
-      grid: t('schedule.views.gridView', 'Grid view'),
-      gridByRoom: t('schedule.views.gridViewByRoom', 'Grid view by room'),
-      gridWithCounts: t('schedule.views.gridViewWithCounts', 'Grid view with counts'),
-    }),
-    [t],
-  );
-
   const renderSchedule = () => {
     if (scheduleView === 'list') {
       return <RunList />;
@@ -77,54 +111,15 @@ export default function ScheduleApp() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item active" aria-current="page">
-            {t('navigation.events.eventSchedule', 'Event schedule')}
+            {t('navigation.events.eventSchedule', 'Event Schedule')}
           </li>
         </ol>
       </nav>
 
-      <h1>{t('navigation.events.eventSchedule', 'Event schedule')}</h1>
-
       <div className="schedule-grid-navigation-bar">
         <div className="bg-light p-1 d-flex">
           <div className="flex-grow-1">
-            <DropdownMenu
-              buttonContent={scheduleViewLabels[scheduleView]}
-              buttonClassName="btn btn-link dropdown-toggle"
-              dropdownClassName="p-0"
-            >
-              <button
-                className="dropdown-item btn btn-link"
-                type="button"
-                onClick={() => viewSelected('list')}
-              >
-                <MenuIcon icon="fa-list" />
-                {scheduleViewLabels.list}
-              </button>
-              <button
-                className="dropdown-item btn btn-link"
-                type="button"
-                onClick={() => viewSelected('grid')}
-              >
-                <MenuIcon icon="fa-calendar" />
-                {scheduleViewLabels.grid}
-              </button>
-              <button
-                className="dropdown-item btn btn-link"
-                type="button"
-                onClick={() => viewSelected('gridByRoom')}
-              >
-                <MenuIcon icon="fa-calendar-o" />
-                {scheduleViewLabels.gridByRoom}
-              </button>
-              <button
-                className="dropdown-item btn btn-link"
-                type="button"
-                onClick={() => viewSelected('gridWithCounts')}
-              >
-                <MenuIcon icon="fa-calendar-check-o" />
-                {scheduleViewLabels.gridWithCounts}
-              </button>
-            </DropdownMenu>
+            <ScheduleViewDropdown viewSelected={viewSelected} scheduleView={scheduleView} />
           </div>
           <div>
             <PersonalScheduleFiltersBar
