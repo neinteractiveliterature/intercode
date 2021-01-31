@@ -165,6 +165,7 @@
   },
   "dateTimeFormats": {
     "anytime": "'anytime'",
+    "compactDate": "yyyy-MM-dd",
     "compactDateTime": "yyyy-MM-dd HH:mm",
     "durationHoursMinutes": "h:mm",
     "indefinitely": "'indefinitely'",
@@ -457,6 +458,7 @@
       "signUp": "Sign up"
     },
     "events": {
+      "eventSchedule": "Event schedule",
       "eventsList": "List of Events",
       "newProposal": "Propose an Event",
       "schedule": "Con Schedule",
@@ -554,7 +556,13 @@
         "unlimited": "Unlimited slots"
       }
     },
-    "timezoneMessage": "All times displayed in {{ offsetName }}."
+    "timezoneMessage": "All times displayed in {{ offsetName }}.",
+    "views": {
+      "gridView": "Grid view",
+      "gridViewByRoom": "Grid view by room",
+      "gridViewWithCounts": "Grid view with counts",
+      "listView": "List view"
+    }
   },
   "signups": {
     "noSignupsAvailable": "This event does not take signups.",

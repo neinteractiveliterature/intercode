@@ -8,8 +8,8 @@ import * as Apollo from '@apollo/client';
 export type CreateOrganizationRoleMutationVariables = Types.Exact<{
   organizationId: Types.Scalars['Int'];
   name: Types.Scalars['String'];
-  userIds: Array<Types.Scalars['Int']>;
-  permissions: Array<Types.PermissionInput>;
+  userIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
+  permissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;
 
 
@@ -28,10 +28,10 @@ export type CreateOrganizationRoleMutation = (
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
   name?: Types.Maybe<Types.Scalars['String']>;
-  addUserIds?: Types.Maybe<Array<Types.Scalars['Int']>>;
-  removeUserIds?: Types.Maybe<Array<Types.Scalars['Int']>>;
-  addPermissions?: Types.Maybe<Array<Types.PermissionInput>>;
-  removePermissionIds?: Types.Maybe<Array<Types.Scalars['Int']>>;
+  addUserIds?: Types.Maybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
+  removeUserIds?: Types.Maybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
+  addPermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
+  removePermissionIds?: Types.Maybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
 }>;
 
 

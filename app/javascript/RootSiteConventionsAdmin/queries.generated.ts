@@ -6,7 +6,7 @@ import * as Apollo from '@apollo/client';
 export type RootSiteConventionsAdminTableQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.ConventionFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

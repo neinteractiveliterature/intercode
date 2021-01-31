@@ -5,6 +5,7 @@ import { TFunction } from 'i18next';
 // type below
 const DateTimeFormatGenerators = {
   anytime: (t: TFunction) => t('dateTimeFormats.anytime', "'anytime'"),
+  compactDate: (t: TFunction) => t('dateTimeFormats.compactDate', 'yyyy-MM-dd'),
   compactDateTime: (t: TFunction) => t('dateTimeFormats.compactDateTime', 'yyyy-MM-dd HH:mm'),
   durationHoursMinutes: (t: TFunction) => t('dateTimeFormats.durationHoursMinutes', 'h:mm'),
   indefinitely: (t: TFunction) => t('dateTimeFormats.indefinitely', "'indefinitely'"),

@@ -7,7 +7,7 @@ import { CmsContentGroupFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 export type CreateContentGroupMutationVariables = Types.Exact<{
   cmsContentGroup: Types.CmsContentGroupInput;
-  permissions?: Types.Maybe<Array<Types.PermissionInput>>;
+  permissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
 }>;
 
 
@@ -26,8 +26,8 @@ export type CreateContentGroupMutation = (
 export type UpdateContentGroupMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
   cmsContentGroup: Types.CmsContentGroupInput;
-  grantPermissions?: Types.Maybe<Array<Types.PermissionInput>>;
-  revokePermissions?: Types.Maybe<Array<Types.PermissionInput>>;
+  grantPermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
+  revokePermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
 }>;
 
 

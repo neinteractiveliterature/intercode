@@ -13,7 +13,7 @@ export type AdminCouponFieldsFragment = (
 
 export type AdminCouponsQueryQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.CouponFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
   page?: Types.Maybe<Types.Scalars['Int']>;
   per_page?: Types.Maybe<Types.Scalars['Int']>;
 }>;
