@@ -40,8 +40,6 @@ import { notEmpty } from '../ValueUtils';
 
 const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',
-  basename: '/events/schedule_by_room',
-  title: 'Schedule preview',
   titlei18nKey: 'admin.events.prospectiveRunSchedule.title',
   classifyEventsBy: 'category',
   showSignupStatusBadge: true,

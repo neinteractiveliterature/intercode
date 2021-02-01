@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
@@ -16,8 +17,9 @@ export type ScheduleGridProps = {
 
 function ScheduleGrid({ timespan }: ScheduleGridProps) {
   const { config, schedule } = useContext(ScheduleGridContext);
+  const { t } = useTranslation();
 
-  usePageTitle(config.title);
+  usePageTitle(`${t('navigation.events.eventSchedule')} (${t(config.titlei18nKey)})`);
 
   const layout = useLayoutForTimespan(schedule, timespan);
   if (!layout) {
