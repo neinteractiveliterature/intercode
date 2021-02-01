@@ -13,17 +13,12 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
     () =>
       [
         currentAbility.can_read_schedule && {
-          label: t('navigation.events.schedule'),
+          label: t('navigation.events.eventSchedule'),
           url: '/events/schedule',
           icon: 'fa-calendar',
         },
-        currentAbility.can_read_schedule && {
-          label: t('navigation.events.scheduleByRoom'),
-          url: '/events/schedule_by_room',
-          icon: 'fa-calendar-o',
-        },
         currentAbility.can_list_events && {
-          label: t('navigation.events.eventsList'),
+          label: t('navigation.events.eventCatalog'),
           url: '/events',
           icon: 'fa-list',
         },
@@ -31,11 +26,6 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
           label: t('navigation.events.newProposal'),
           url: '/pages/new-proposal',
           icon: 'fa-gift',
-        },
-        currentAbility.can_read_schedule_with_counts && {
-          label: t('navigation.events.scheduleWithCounts'),
-          url: '/events/schedule_with_counts',
-          icon: 'fa-calendar-check-o',
         },
       ]
         .filter(notFalse)

@@ -1,7 +1,8 @@
-import { assertNever } from 'assert-never';
 import classNames from 'classnames';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+
 import AppRootContext from '../AppRootContext';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
@@ -10,49 +11,55 @@ import ScheduleGridApp from './ScheduleGrid';
 import PersonalScheduleFiltersBar, {
   usePersonalScheduleFilters,
 } from './ScheduleGrid/PersonalScheduleFiltersBar';
+import ScheduleGridConfigs from '../../../config/schedule_grid_configs.json';
 
-const SCHEDULE_VIEWS = ['list', 'grid', 'gridByRoom', 'gridWithCounts'] as const;
-type ScheduleView = typeof SCHEDULE_VIEWS[number];
+const SCHEDULE_VIEWS = ['list', ...ScheduleGridConfigs.map((config) => config.key)];
 
 type ScheduleViewDropdownProps = {
-  viewSelected: (view: ScheduleView) => void;
-  scheduleView: ScheduleView;
+  viewSelected: (view: string) => void;
+  scheduleView: string;
 };
+
+function getScheduleViewLabel(view: string, t: TFunction) {
+  if (view === 'list') {
+    return t('schedule.views.listView', 'List view');
+  }
+
+  const config = ScheduleGridConfigs.find((c) => c.key === view);
+  if (config != null) {
+    return t(config.titlei18nKey, view);
+  }
+
+  return view;
+
+  // Deliberately unreachable code in order to get i18next-parse not to delete these translations
+  t('schedule.views.gridView', 'Grid view');
+  t('schedule.views.gridViewByRoom', 'Grid view by room');
+  t('schedule.views.gridViewWithCounts', 'Grid view with counts');
+}
 
 function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdownProps) {
   const { t } = useTranslation();
-  const scheduleViewLabels = useMemo<Record<ScheduleView, string>>(
-    () => ({
-      list: t('schedule.views.listView', 'List view'),
-      grid: t('schedule.views.gridView', 'Grid view'),
-      gridByRoom: t('schedule.views.gridViewByRoom', 'Grid view by room'),
-      gridWithCounts: t('schedule.views.gridViewWithCounts', 'Grid view with counts'),
-    }),
-    [t],
-  );
 
   return (
     <DropdownMenu
-      buttonContent={scheduleViewLabels[scheduleView]}
+      buttonContent={getScheduleViewLabel(scheduleView, t)}
       buttonClassName="btn btn-link dropdown-toggle"
       dropdownClassName="p-0"
     >
-      {([
-        ['list', 'fa-list'],
-        ['grid', 'fa-calendar'],
-        ['gridByRoom', 'fa-calendar-o'],
-        ['gridWithCounts', 'fa-calendar-check-o'],
-      ] as const).map(([view, iconName]) => (
-        <button
-          className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
-          type="button"
-          onClick={() => viewSelected(view)}
-          key={view}
-        >
-          <MenuIcon icon={iconName} />
-          {scheduleViewLabels[view]}
-        </button>
-      ))}
+      {[['list', 'fa-list'], ...ScheduleGridConfigs.map((config) => [config.key, config.icon])].map(
+        ([view, iconName]) => (
+          <button
+            className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
+            type="button"
+            onClick={() => viewSelected(view)}
+            key={view}
+          >
+            <MenuIcon icon={iconName ?? 'fa-calendar'} />
+            {getScheduleViewLabel(view, t)}
+          </button>
+        ),
+      )}
     </DropdownMenu>
   );
 }
@@ -61,15 +68,14 @@ export default function ScheduleApp() {
   const { myProfile } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
-    storageKey: `schedule:personalFilters`,
     showPersonalFilters: true,
     signedIn: myProfile != null,
   });
 
-  const [scheduleView, setScheduleView] = useState<ScheduleView>(() => {
+  const [scheduleView, setScheduleView] = useState<string>(() => {
     const storedView = window.localStorage.getItem('schedule:view');
     if (storedView && (SCHEDULE_VIEWS as readonly string[]).includes(storedView)) {
-      return storedView as ScheduleView;
+      return storedView as string;
     }
 
     // Bootstrap's "medium" breakpoint
@@ -80,30 +86,26 @@ export default function ScheduleApp() {
     return 'grid';
   });
 
-  const viewSelected = useCallback((view: ScheduleView) => {
+  const viewSelected = useCallback((view: string) => {
     window.localStorage.setItem('schedule:view', view);
     setScheduleView(view);
   }, []);
+
+  const scheduleGridConfig = useMemo(
+    () => ScheduleGridConfigs.find((c) => c.key === scheduleView),
+    [scheduleView],
+  );
 
   const renderSchedule = () => {
     if (scheduleView === 'list') {
       return <RunList />;
     }
 
-    if (scheduleView === 'grid') {
-      return <ScheduleGridApp configKey="con_schedule" />;
+    if (scheduleGridConfig) {
+      return <ScheduleGridApp configKey={scheduleGridConfig.key} />;
     }
 
-    if (scheduleView === 'gridByRoom') {
-      return <ScheduleGridApp configKey="con_schedule_by_room" />;
-    }
-
-    if (scheduleView === 'gridWithCounts') {
-      return <ScheduleGridApp configKey="schedule_with_counts" />;
-    }
-
-    assertNever(scheduleView, true);
-    return <ScheduleGridApp configKey="con_schedule" />;
+    return <div>Unknown view: {scheduleView}</div>;
   };
 
   return (
@@ -121,12 +123,14 @@ export default function ScheduleApp() {
           <div className="flex-grow-1">
             <ScheduleViewDropdown viewSelected={viewSelected} scheduleView={scheduleView} />
           </div>
-          <div>
-            <PersonalScheduleFiltersBar
-              choiceSetValue={choiceSetValue}
-              choiceSetChanged={choiceSetChanged}
-            />
-          </div>
+          {(scheduleGridConfig == null || scheduleGridConfig.showPersonalFilters) && (
+            <div>
+              <PersonalScheduleFiltersBar
+                choiceSetValue={choiceSetValue}
+                choiceSetChanged={choiceSetChanged}
+              />
+            </div>
+          )}
         </div>
       </div>
 

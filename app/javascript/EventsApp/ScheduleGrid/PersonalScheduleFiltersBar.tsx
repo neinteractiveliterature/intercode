@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Filters } from 'react-table';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -22,6 +22,21 @@ type PersonalScheduleFilter = {
   hide_conflicts: boolean;
 };
 
+const STORAGE_KEY = 'schedule:personalFilters';
+
+function loadPersonalFilters() {
+  const storedValue = window.localStorage.getItem(STORAGE_KEY);
+  if (storedValue) {
+    try {
+      return JSON.parse(storedValue);
+    } catch (e) {
+      return DEFAULT_PERSONAL_FILTERS;
+    }
+  }
+
+  return DEFAULT_PERSONAL_FILTERS;
+}
+
 function parseFilters(filters: Filters<PersonalScheduleFilter>) {
   const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {})
     .value;
@@ -36,13 +51,11 @@ function parseFilters(filters: Filters<PersonalScheduleFilter>) {
 }
 
 type UsePersonalScheduleFiltersOptions = {
-  storageKey: string;
   showPersonalFilters: boolean;
   signedIn: boolean;
 };
 
 export function usePersonalScheduleFilters({
-  storageKey,
   showPersonalFilters,
   signedIn,
 }: UsePersonalScheduleFiltersOptions) {
@@ -51,27 +64,16 @@ export function usePersonalScheduleFilters({
   });
   const location = useLocation();
 
-  const loadPersonalFilters = useCallback(() => {
-    const storedValue = window.localStorage.getItem(storageKey);
-    if (storedValue) {
-      try {
-        return JSON.parse(storedValue);
-      } catch (e) {
-        return DEFAULT_PERSONAL_FILTERS;
-      }
-    }
-
-    return DEFAULT_PERSONAL_FILTERS;
-  }, [storageKey]);
-
   useEffect(() => {
     if (showPersonalFilters && signedIn && !location.search) {
       updateSearch({ filters: loadPersonalFilters() });
     }
-  }, [showPersonalFilters, loadPersonalFilters, location, signedIn, updateSearch]);
+  }, [showPersonalFilters, location, signedIn, updateSearch]);
 
   return useMemo(() => {
-    const { choiceSetValue, ratingFilter, hideConflicts } = parseFilters(filters);
+    const { choiceSetValue, ratingFilter, hideConflicts } = parseFilters(
+      showPersonalFilters ? filters : [...DEFAULT_PERSONAL_FILTERS],
+    );
 
     const choiceSetChanged = (newValue: string[]) => {
       const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(parseIntOrNull);
@@ -85,7 +87,7 @@ export function usePersonalScheduleFilters({
             ];
 
       updateSearch({ filters: newFilters });
-      window.localStorage.setItem(storageKey, JSON.stringify(newFilters));
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newFilters));
     };
 
     return {
@@ -94,7 +96,7 @@ export function usePersonalScheduleFilters({
       ratingFilter: ratingFilter ?? [...DEFAULT_PERSONAL_FILTERS[0].value],
       hideConflicts: hideConflicts ?? DEFAULT_PERSONAL_FILTERS[1].value,
     };
-  }, [filters, storageKey, updateSearch]);
+  }, [filters, showPersonalFilters, updateSearch]);
 }
 
 const filterOptions = [...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }];
