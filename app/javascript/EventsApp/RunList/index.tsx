@@ -2,6 +2,7 @@ import { sortBy } from 'lodash';
 import flatMap from 'lodash/flatMap';
 import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 
@@ -10,6 +11,7 @@ import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
 import { FiniteTimespan } from '../../Timespan';
 import { timespanFromRun } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import usePageTitle from '../../usePageTitle';
 import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
@@ -47,6 +49,9 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
   const conventionDayUrlPortion = useConventionDayUrlPortion();
   const conventionDayHeaders = useRef(new Map<string, HTMLElement>());
   const routeMatch = useRouteMatch<{ conventionDay: string }>('/events/schedule/:conventionDay');
+  const { t } = useTranslation();
+
+  usePageTitle(`${t('navigation.events.eventSchedule')} (${t('schedule.views.listView')})`);
 
   useLayoutEffect(() => {
     if (routeMatch?.params.conventionDay) {

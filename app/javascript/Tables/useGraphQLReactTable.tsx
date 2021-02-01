@@ -7,12 +7,13 @@ import {
   reactTableSortToTableResultsSort,
 } from './TableUtils';
 import useCachedLoadableValue from '../useCachedLoadableValue';
+import { SortInput } from '../graphqlTypes.generated';
 
 export type GraphQLReactTableVariables = {
   page?: number | null;
   perPage?: number | null;
   filters?: { [field: string]: any } | null;
-  sort?: { field: string; desc: boolean }[] | null;
+  sort?: SortInput | SortInput[] | null;
 };
 
 type QueryResultWithData<QueryData, Variables> = Omit<QueryResult<QueryData, Variables>, 'data'> & {

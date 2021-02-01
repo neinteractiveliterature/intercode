@@ -24,6 +24,7 @@ import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGrava
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import {
   RunSignupsTableSignupsQueryQuery,
+  RunSignupsTableSignupsQueryQueryVariables,
   useRunSignupsTableSignupsQueryQuery,
   useSignupAdminEventQueryQuery,
 } from './queries.generated';
@@ -178,7 +179,11 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     loading: tableLoading,
     tableHeaderProps,
     queryData,
-  } = useReactTableWithTheWorks({
+  } = useReactTableWithTheWorks<
+    RunSignupsTableSignupsQueryQuery,
+    RunSignupsTableSignupsQueryQuery['event']['run']['signups_paginated']['entries'][number],
+    RunSignupsTableSignupsQueryQueryVariables
+  >({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,

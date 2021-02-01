@@ -50,9 +50,7 @@ export type ScheduleGridContextValue = {
 };
 
 const skeletonScheduleGridConfig: ScheduleGridConfig = {
-  basename: 'skeleton',
   key: 'skeleton',
-  title: 'Loading...',
   titlei18nKey: 'schedule.skeletonTitle',
   classifyEventsBy: 'category',
   groupEventsBy: 'category',
