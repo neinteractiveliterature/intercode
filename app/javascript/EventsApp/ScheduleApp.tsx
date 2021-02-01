@@ -56,6 +56,8 @@ function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdo
       buttonContent={getScheduleViewLabel(scheduleView, t)}
       buttonClassName="btn btn-link dropdown-toggle"
       dropdownClassName="p-0"
+      // hack to get the menu to "close" when switching views
+      key={scheduleView}
     >
       {[['list', 'fa-list'], ...authorizedConfigs.map((config) => [config.key, config.icon])].map(
         ([view, iconName]) => (
