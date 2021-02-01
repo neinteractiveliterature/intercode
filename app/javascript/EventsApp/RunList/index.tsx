@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash';
 import flatMap from 'lodash/flatMap';
 import { DateTime } from 'luxon';
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 
@@ -40,7 +40,6 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
   const { timezoneName, myProfile } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
-    storageKey: `runList:personalFilters`,
     showPersonalFilters: true,
     signedIn: myProfile != null,
   });

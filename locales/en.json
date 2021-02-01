@@ -458,12 +458,10 @@
       "signUp": "Sign up"
     },
     "events": {
+      "eventCatalog": "Event Catalog",
       "eventSchedule": "Event Schedule",
       "eventsList": "List of Events",
-      "newProposal": "Propose an Event",
-      "schedule": "Con Schedule",
-      "scheduleByRoom": "Con Schedule by Room",
-      "scheduleWithCounts": "Schedule With Counts"
+      "newProposal": "Propose an Event"
     },
     "general": {
       "edit": "Edit",

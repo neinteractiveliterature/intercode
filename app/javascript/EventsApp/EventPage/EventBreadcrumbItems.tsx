@@ -73,7 +73,7 @@ function EventBreadcrumbItems({
                 : '/events/schedule'
             }
           >
-            {t('navigation.events.schedule', 'Con schedule')}
+            {t('navigation.events.eventSchedule', 'Event Schedule')}
           </Link>
         ) : (
           <Link to="/events">{t('navigation.events.eventsList', 'List of events')}</Link>

@@ -21,7 +21,6 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const config = getConfig(configKey);
   const format = useAppDateTimeFormat();
   const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
-    storageKey: `schedule:${configKey}:personalFilters`,
     showPersonalFilters: config?.showPersonalFilters ?? false,
     signedIn: myProfile != null,
   });

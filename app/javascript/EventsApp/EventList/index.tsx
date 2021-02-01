@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Filters } from 'react-table';
+import { useTranslation } from 'react-i18next';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -65,6 +66,7 @@ function EventList() {
     ...filterCodecs,
   });
   const { myProfile } = useContext(AppRootContext);
+  const { t } = useTranslation();
   const defaultSort = myProfile
     ? [
         { id: 'my_rating', desc: true },
@@ -141,7 +143,7 @@ function EventList() {
     }
   }, [data, loading, error]);
 
-  usePageTitle('List of Events');
+  usePageTitle(t('navigation.events.eventCatalog', 'Event Catalog'));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
