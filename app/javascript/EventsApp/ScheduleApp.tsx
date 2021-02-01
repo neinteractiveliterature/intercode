@@ -12,6 +12,7 @@ import PersonalScheduleFiltersBar, {
   usePersonalScheduleFilters,
 } from './ScheduleGrid/PersonalScheduleFiltersBar';
 import ScheduleGridConfigs from '../../../config/schedule_grid_configs.json';
+import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 
 const SCHEDULE_VIEWS = ['list', ...ScheduleGridConfigs.map((config) => config.key)];
 
@@ -40,6 +41,15 @@ function getScheduleViewLabel(view: string, t: TFunction) {
 
 function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdownProps) {
   const { t } = useTranslation();
+  const { currentAbility } = useContext(AppRootContext);
+
+  const authorizedConfigs = useMemo(
+    () =>
+      ScheduleGridConfigs.filter(
+        (config) => !config.showExtendedCounts || currentAbility.can_read_schedule_with_counts,
+      ),
+    [currentAbility.can_read_schedule_with_counts],
+  );
 
   return (
     <DropdownMenu
@@ -47,7 +57,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdo
       buttonClassName="btn btn-link dropdown-toggle"
       dropdownClassName="p-0"
     >
-      {[['list', 'fa-list'], ...ScheduleGridConfigs.map((config) => [config.key, config.icon])].map(
+      {[['list', 'fa-list'], ...authorizedConfigs.map((config) => [config.key, config.icon])].map(
         ([view, iconName]) => (
           <button
             className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
@@ -65,7 +75,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdo
 }
 
 export default function ScheduleApp() {
-  const { myProfile } = useContext(AppRootContext);
+  const { myProfile, currentAbility } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
     showPersonalFilters: true,
@@ -86,15 +96,19 @@ export default function ScheduleApp() {
     return 'grid';
   });
 
-  const viewSelected = useCallback((view: string) => {
-    window.localStorage.setItem('schedule:view', view);
-    setScheduleView(view);
-  }, []);
-
   const scheduleGridConfig = useMemo(
     () => ScheduleGridConfigs.find((c) => c.key === scheduleView),
     [scheduleView],
   );
+
+  const authorizationRequired = useAuthorizationRequiredWithoutLogin(
+    scheduleGridConfig?.showExtendedCounts ? 'can_read_schedule_with_counts' : 'can_read_schedule',
+  );
+
+  const viewSelected = useCallback((view: string) => {
+    window.localStorage.setItem('schedule:view', view);
+    setScheduleView(view);
+  }, []);
 
   const renderSchedule = () => {
     if (scheduleView === 'list') {
@@ -107,6 +121,17 @@ export default function ScheduleApp() {
 
     return <div>Unknown view: {scheduleView}</div>;
   };
+
+  if (authorizationRequired) {
+    if (scheduleGridConfig?.showExtendedCounts && currentAbility.can_read_schedule) {
+      const authorizedView =
+        ScheduleGridConfigs.find((config) => !config.showExtendedCounts)?.key ?? 'list';
+      setScheduleView(authorizedView);
+      return <></>;
+    }
+
+    return authorizationRequired;
+  }
 
   return (
     <>
