@@ -57,7 +57,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
     <>
       <div className="row mb-2">
         <div className="col-md-9">
-          <h1>{t('navigation.events.newProposal', 'Propose an event')}</h1>
+          <h1>{t('navigation.events.newProposal', 'Propose an Event')}</h1>
         </div>
         <div className="col-md-3">
           {canDelete && (

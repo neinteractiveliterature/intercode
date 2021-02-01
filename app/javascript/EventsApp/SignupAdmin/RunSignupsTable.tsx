@@ -136,7 +136,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       Cell: AgeRestrictionsCheckCell,
     },
     {
-      Header: <>{t('events.signupAdmin.ageHeader', 'Age')}</>,
+      Header: <>{t('events.signupAdmin.ageTableHeader', 'Age')}</>,
       id: 'age',
       width: 40,
       accessor: (signup: SignupType) =>
@@ -149,7 +149,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       disableSortBy: false,
     },
     {
-      Header: <>{t('events.signupAdmin.emailHeader', 'Email')}</>,
+      Header: <>{t('events.signupAdmin.emailTableHeader', 'Email')}</>,
       id: 'email',
       accessor: (signup: SignupType) => signup.user_con_profile.email,
       Cell: EmailCell,

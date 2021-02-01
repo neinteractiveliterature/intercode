@@ -13,17 +13,17 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
     () =>
       [
         currentAbility.can_read_schedule && {
-          label: t('navigation.events.eventSchedule'),
+          label: t('navigation.events.eventSchedule', 'Event Schedule'),
           url: '/events/schedule',
           icon: 'fa-calendar',
         },
         currentAbility.can_list_events && {
-          label: t('navigation.events.eventCatalog'),
+          label: t('navigation.events.eventCatalog', 'Event Catalog'),
           url: '/events',
           icon: 'fa-list',
         },
         conventionAcceptingProposals && {
-          label: t('navigation.events.newProposal'),
+          label: t('navigation.events.newProposal', 'Propose an Event'),
           url: '/pages/new-proposal',
           icon: 'fa-gift',
         },

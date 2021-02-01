@@ -260,6 +260,7 @@
       "addressHeader": "Address:",
       "ageCheckHeader": "Age check",
       "ageHeader": "Age",
+      "ageTableHeader": "Age",
       "bucketHeader": "Bucket",
       "bucketInput": {
         "currentBucketLabel": "current",
@@ -277,6 +278,7 @@
         "waitlisted": "Include waitlisted"
       },
       "emailHeader": "Email",
+      "emailTableHeader": "Email",
       "forceConfirmSignup": {
         "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",
         "header": "Force signup into run",
@@ -559,7 +561,8 @@
       "gridView": "Grid view",
       "gridViewByRoom": "Grid view by room",
       "gridViewWithCounts": "Grid view with counts",
-      "listView": "List view"
+      "listView": "List view",
+      "scheduleViewSelectorHeader": "View type:"
     }
   },
   "signups": {
