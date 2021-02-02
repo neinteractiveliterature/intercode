@@ -41,8 +41,8 @@ export type UpdateStaffPositionMutation = (
 
 export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
   staffPositionId: Types.Scalars['Int'];
-  grantPermissions: Array<Types.PermissionInput>;
-  revokePermissions: Array<Types.PermissionInput>;
+  grantPermissions: Array<Types.PermissionInput> | Types.PermissionInput;
+  revokePermissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;
 
 

@@ -32,17 +32,18 @@ type ChoiceSetFilterCommonProps<RowType extends object> = LenientFilterProps<Row
   filterCodec?: FilterCodec<ChoiceSetFilterValue>;
 };
 
-export type ChoiceSetFilterSingleProps<RowType extends object> = ChoiceSetFilterCommonProps<
-  RowType
-> & {
+export type ChoiceSetFilterSingleProps<
+  RowType extends object
+> = ChoiceSetFilterCommonProps<RowType> & {
   multiple: false;
   renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
 };
 
-export type ChoiceSetFilterMultipleProps<RowType extends object> = ChoiceSetFilterCommonProps<
-  RowType
-> & {
+export type ChoiceSetFilterMultipleProps<
+  RowType extends object
+> = ChoiceSetFilterCommonProps<RowType> & {
   multiple: true;
+  hideSelectNone?: boolean;
   renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
 };
 
@@ -226,9 +227,15 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
               Select all
             </button>
 
-            <button type="button" className="btn btn-link btn-sm" onClick={() => valueChanged([])}>
-              Select none
-            </button>
+            {!props.hideSelectNone && (
+              <button
+                type="button"
+                className="btn btn-link btn-sm"
+                onClick={() => valueChanged([])}
+              >
+                Select none
+              </button>
+            )}
           </div>
         )}
       </div>

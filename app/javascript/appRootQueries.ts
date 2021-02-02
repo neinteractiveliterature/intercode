@@ -77,6 +77,8 @@ export const AppRootQuery = gql`
       language
       site_mode
       signup_mode
+      starts_at
+      ends_at
       ticket_mode
       timezone_name
       timezone_mode

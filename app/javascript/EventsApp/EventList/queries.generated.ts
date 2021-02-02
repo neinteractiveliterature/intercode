@@ -9,7 +9,7 @@ export type EventListEventsQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   pageSize?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.EventFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

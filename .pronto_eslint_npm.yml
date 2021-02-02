@@ -1,2 +1,0 @@
-eslint_executable: ./node_modules/.bin/eslint
-files_to_lint: 'app/javascript/.*(\.jsx|\.js|\.tsx|\.ts|\.gql|\.graphql)$'

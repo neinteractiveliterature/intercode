@@ -24,6 +24,7 @@ import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGrava
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import {
   RunSignupsTableSignupsQueryQuery,
+  RunSignupsTableSignupsQueryQueryVariables,
   useRunSignupsTableSignupsQueryQuery,
   useSignupAdminEventQueryQuery,
 } from './queries.generated';
@@ -136,7 +137,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       Cell: AgeRestrictionsCheckCell,
     },
     {
-      Header: <>{t('events.signupAdmin.ageHeader', 'Age')}</>,
+      Header: <>{t('events.signupAdmin.ageTableHeader', 'Age')}</>,
       id: 'age',
       width: 40,
       accessor: (signup: SignupType) =>
@@ -149,7 +150,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       disableSortBy: false,
     },
     {
-      Header: <>{t('events.signupAdmin.emailHeader', 'Email')}</>,
+      Header: <>{t('events.signupAdmin.emailTableHeader', 'Email')}</>,
       id: 'email',
       accessor: (signup: SignupType) => signup.user_con_profile.email,
       Cell: EmailCell,
@@ -178,7 +179,11 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     loading: tableLoading,
     tableHeaderProps,
     queryData,
-  } = useReactTableWithTheWorks({
+  } = useReactTableWithTheWorks<
+    RunSignupsTableSignupsQueryQuery,
+    RunSignupsTableSignupsQueryQuery['event']['run']['signups_paginated']['entries'][number],
+    RunSignupsTableSignupsQueryQueryVariables
+  >({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,

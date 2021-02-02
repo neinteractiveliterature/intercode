@@ -7,7 +7,7 @@ import { UserActivityAlertFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 export type CreateUserActivityAlertMutationVariables = Types.Exact<{
   userActivityAlert: Types.UserActivityAlertInput;
-  notificationDestinations: Array<Types.NotificationDestinationInput>;
+  notificationDestinations: Array<Types.NotificationDestinationInput> | Types.NotificationDestinationInput;
 }>;
 
 
@@ -26,8 +26,8 @@ export type CreateUserActivityAlertMutation = (
 export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
   userActivityAlert: Types.UserActivityAlertInput;
-  addNotificationDestinations: Array<Types.NotificationDestinationInput>;
-  removeNotificationDestinationIds: Array<Types.Scalars['Int']>;
+  addNotificationDestinations: Array<Types.NotificationDestinationInput> | Types.NotificationDestinationInput;
+  removeNotificationDestinationIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
 }>;
 
 

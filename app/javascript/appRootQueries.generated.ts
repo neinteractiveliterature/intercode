@@ -38,7 +38,7 @@ export type AppRootQueryQuery = (
     & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
   )>, convention?: Types.Maybe<(
     { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'accepting_proposals' | 'canceled' | 'language' | 'site_mode' | 'signup_mode' | 'ticket_mode' | 'timezone_name' | 'timezone_mode' | 'clickwrap_agreement' | 'tickets_available_for_purchase' | 'ticket_name'>
+    & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'accepting_proposals' | 'canceled' | 'language' | 'site_mode' | 'signup_mode' | 'starts_at' | 'ends_at' | 'ticket_mode' | 'timezone_name' | 'timezone_mode' | 'clickwrap_agreement' | 'tickets_available_for_purchase' | 'ticket_name'>
     & { ticket_types: Array<(
       { __typename: 'TicketType' }
       & Pick<Types.TicketType, 'id'>
@@ -134,6 +134,8 @@ export const AppRootQueryDocument = gql`
     language
     site_mode
     signup_mode
+    starts_at
+    ends_at
     ticket_mode
     timezone_name
     timezone_mode

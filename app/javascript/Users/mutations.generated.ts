@@ -6,9 +6,9 @@ import { gql } from '@apollo/client';
 import { DetailedUserFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 export type MergeUsersMutationVariables = Types.Exact<{
-  userIds: Array<Types.Scalars['Int']>;
+  userIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
   winningUserId: Types.Scalars['Int'];
-  winningUserConProfiles: Array<Types.WinningUserConProfileInput>;
+  winningUserConProfiles: Array<Types.WinningUserConProfileInput> | Types.WinningUserConProfileInput;
 }>;
 
 

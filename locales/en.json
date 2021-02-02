@@ -165,6 +165,7 @@
   },
   "dateTimeFormats": {
     "anytime": "'anytime'",
+    "compactDate": "yyyy-MM-dd",
     "compactDateTime": "yyyy-MM-dd HH:mm",
     "durationHoursMinutes": "h:mm",
     "indefinitely": "'indefinitely'",
@@ -259,6 +260,7 @@
       "addressHeader": "Address:",
       "ageCheckHeader": "Age check",
       "ageHeader": "Age",
+      "ageTableHeader": "Age",
       "bucketHeader": "Bucket",
       "bucketInput": {
         "currentBucketLabel": "current",
@@ -276,6 +278,7 @@
         "waitlisted": "Include waitlisted"
       },
       "emailHeader": "Email",
+      "emailTableHeader": "Email",
       "forceConfirmSignup": {
         "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",
         "header": "Force signup into run",
@@ -457,11 +460,10 @@
       "signUp": "Sign up"
     },
     "events": {
+      "eventCatalog": "Event Catalog",
+      "eventSchedule": "Event Schedule",
       "eventsList": "List of Events",
-      "newProposal": "Propose an Event",
-      "schedule": "Con Schedule",
-      "scheduleByRoom": "Con Schedule by Room",
-      "scheduleWithCounts": "Schedule With Counts"
+      "newProposal": "Propose an Event"
     },
     "general": {
       "edit": "Edit",
@@ -554,7 +556,14 @@
         "unlimited": "Unlimited slots"
       }
     },
-    "timezoneMessage": "All times displayed in {{ offsetName }}."
+    "timezoneMessage": "All times displayed in {{ offsetName }}.",
+    "views": {
+      "gridView": "Grid view",
+      "gridViewByRoom": "Grid view by room",
+      "gridViewWithCounts": "Grid view with counts",
+      "listView": "List view",
+      "scheduleViewSelectorHeader": "View type:"
+    }
   },
   "signups": {
     "noSignupsAvailable": "This event does not take signups.",

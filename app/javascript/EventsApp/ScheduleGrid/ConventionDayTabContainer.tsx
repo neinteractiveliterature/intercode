@@ -1,13 +1,54 @@
 import { useCallback, useMemo, useContext } from 'react';
 import { NavLink, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
+import { DateTime } from 'luxon';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
 import { ScheduleGridCombinedQuery } from './queries';
 import AppRootContext from '../../AppRootContext';
-import { FiniteTimespan } from '../../Timespan';
+import Timespan, { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { SiteMode } from '../../graphqlTypes.generated';
+import { DateTimeFormatKey } from '../../DateTimeFormats';
+
+function conventionDayUrlPortionFormat(
+  siteMode: SiteMode | undefined,
+  conventionTimespan: Timespan | undefined,
+): DateTimeFormatKey {
+  const conventionLengthInDays = conventionTimespan?.getLength('days');
+  if (
+    siteMode === SiteMode.Convention &&
+    conventionLengthInDays &&
+    conventionLengthInDays.days < 7
+  ) {
+    return 'longWeekday';
+  }
+
+  return 'compactDate';
+}
+
+export function buildConventionDayUrlPortion(
+  dayStart: DateTime,
+  format: ReturnType<typeof useAppDateTimeFormat>,
+  siteMode: SiteMode | undefined,
+  conventionTimespan: Timespan | undefined,
+) {
+  return format(
+    dayStart,
+    conventionDayUrlPortionFormat(siteMode, conventionTimespan),
+  ).toLowerCase();
+}
+
+export function useConventionDayUrlPortion() {
+  const format = useAppDateTimeFormat();
+  const { conventionTimespan, siteMode } = useContext(AppRootContext);
+
+  return useCallback(
+    (dayStart) => buildConventionDayUrlPortion(dayStart, format, siteMode, conventionTimespan),
+    [format, siteMode, conventionTimespan],
+  );
+}
 
 type ConventionDayTabProps = {
   basename: string;
@@ -18,6 +59,7 @@ type ConventionDayTabProps = {
 function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDayTabProps) {
   const location = useLocation();
   const format = useAppDateTimeFormat();
+  const conventionDayUrlPortion = useConventionDayUrlPortion();
   const prefetchProps = prefetchTimespan
     ? {
         onMouseOver: () => prefetchTimespan(timespan),
@@ -28,7 +70,7 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDa
   return (
     <li className="nav-item">
       <NavLink
-        to={`${basename}/${format(timespan.start, 'longWeekday').toLowerCase()}${location.search}`}
+        to={`${basename}/${conventionDayUrlPortion(timespan.start)}${location.search}`}
         className="nav-link"
         {...prefetchProps}
       >
@@ -55,8 +97,8 @@ function ConventionDayTabContainer({
   showExtendedCounts,
 }: ConventionDayTabContainerProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const format = useAppDateTimeFormat();
   const client = useApolloClient();
+  const conventionDayUrlPortion = useConventionDayUrlPortion();
   const refreshData = useCallback(
     () =>
       client.query({
@@ -102,15 +144,13 @@ function ConventionDayTabContainer({
       <Switch>
         {conventionDayTimespans.map((timespan) => (
           <Route
-            path={`${basename}/${format(timespan.start, 'longWeekday').toLowerCase()}`}
+            path={`${basename}/${conventionDayUrlPortion(timespan.start)}`}
             key={timespan.start.toISO()}
           >
             {children(timespan)}
           </Route>
         ))}
-        <Redirect
-          to={`${basename}/${format(conventionDayTimespans[0].start, 'longWeekday').toLowerCase()}`}
-        />
+        <Redirect to={`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`} />
       </Switch>
     </div>
   );

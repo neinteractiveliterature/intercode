@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryQuery } from './appRootQueries.generated';
+import type Timespan from './Timespan';
 
 type AppRootContext = {
   assumedIdentityFromProfile?: AppRootQueryQuery['assumedIdentityFromProfile'];
@@ -9,6 +10,7 @@ type AppRootContext = {
   conventionCanceled?: boolean | null;
   conventionDomain?: string | null;
   conventionName?: string | null;
+  conventionTimespan?: Timespan;
   currentAbility: AppRootQueryQuery['currentAbility'];
   currentPendingOrder?: AppRootQueryQuery['currentPendingOrder'];
   currentUser?: AppRootQueryQuery['currentUser'];
