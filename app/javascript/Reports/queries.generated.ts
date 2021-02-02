@@ -126,7 +126,7 @@ export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

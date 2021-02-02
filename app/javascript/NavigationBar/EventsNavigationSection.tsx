@@ -13,29 +13,19 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
     () =>
       [
         currentAbility.can_read_schedule && {
-          label: t('navigation.events.schedule'),
+          label: t('navigation.events.eventSchedule', 'Event Schedule'),
           url: '/events/schedule',
           icon: 'fa-calendar',
         },
-        currentAbility.can_read_schedule && {
-          label: t('navigation.events.scheduleByRoom'),
-          url: '/events/schedule_by_room',
-          icon: 'fa-calendar-o',
-        },
         currentAbility.can_list_events && {
-          label: t('navigation.events.eventsList'),
+          label: t('navigation.events.eventCatalog', 'Event Catalog'),
           url: '/events',
           icon: 'fa-list',
         },
         conventionAcceptingProposals && {
-          label: t('navigation.events.newProposal'),
+          label: t('navigation.events.newProposal', 'Propose an Event'),
           url: '/pages/new-proposal',
           icon: 'fa-gift',
-        },
-        currentAbility.can_read_schedule_with_counts && {
-          label: t('navigation.events.scheduleWithCounts'),
-          url: '/events/schedule_with_counts',
-          icon: 'fa-calendar-check-o',
         },
       ]
         .filter(notFalse)

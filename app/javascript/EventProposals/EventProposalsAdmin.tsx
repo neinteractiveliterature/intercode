@@ -105,7 +105,7 @@ function EventProposalsAdmin() {
             matchProps={{ path: '/admin_event_proposals', exact: true }}
             to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
           >
-            {t('navigation.admin.eventProposals', 'Event proposals')}
+            {t('navigation.admin.eventProposals', 'Event Proposals')}
           </RouteActivatedBreadcrumbItem>
 
           <Route path="/admin_event_proposals/:id">

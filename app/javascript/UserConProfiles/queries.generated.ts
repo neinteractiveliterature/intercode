@@ -118,7 +118,7 @@ export type UserConProfilesTableUserConProfilesQueryQueryVariables = Types.Exact
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.UserConProfileFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

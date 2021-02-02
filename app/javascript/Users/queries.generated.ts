@@ -7,7 +7,7 @@ export type UsersTableUsersQueryQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.UserFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput>>;
+  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 
@@ -63,7 +63,7 @@ export type UserAdminQueryQuery = (
 );
 
 export type MergeUsersModalQueryQueryVariables = Types.Exact<{
-  ids: Array<Types.Scalars['Int']>;
+  ids: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
 }>;
 
 

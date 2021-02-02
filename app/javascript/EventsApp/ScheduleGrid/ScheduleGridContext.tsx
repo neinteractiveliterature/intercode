@@ -50,9 +50,7 @@ export type ScheduleGridContextValue = {
 };
 
 const skeletonScheduleGridConfig: ScheduleGridConfig = {
-  basename: 'skeleton',
   key: 'skeleton',
-  title: 'Loading...',
   titlei18nKey: 'schedule.skeletonTitle',
   classifyEventsBy: 'category',
   groupEventsBy: 'category',
@@ -337,7 +335,7 @@ export function ScheduleGridProvider({
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
       <ConventionDayTabContainer
-        basename={config.basename}
+        basename="/events/schedule"
         conventionTimespan={conventionTimespan as FiniteTimespan} // TODO: make this work with infinite cons
         prefetchTimespan={prefetchTimespan}
       >

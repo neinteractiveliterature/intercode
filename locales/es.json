@@ -113,9 +113,13 @@
     "add": "Añadir",
     "cancel": "Cancelar",
     "close": "Cerrar",
+    "collapse": "",
+    "composeEmail": "",
     "edit": "Editar",
+    "expand": "",
     "help": "Ayuda",
     "ok": "OK",
+    "options": "",
     "preview": "Previsualizar",
     "proposeEventLoggedOut": "Inicia sesión para proponer una actividad",
     "refresh": "Actualizar"
@@ -139,6 +143,9 @@
       "title": "Cargar fichero",
       "uploadFileButton": "Cargar"
     },
+    "layoutForm": {
+      "navbarClassesHelpText": ""
+    },
     "liquidInput": {
       "addFileButton": "Añadir fichero...",
       "help": {
@@ -156,8 +163,42 @@
     "defaultSuccess": "¡Copiado!",
     "defaultText": "Copiado al portapapeles"
   },
+  "dateTimeFormats": {
+    "anytime": "",
+    "compactDate": "",
+    "compactDateTime": "",
+    "durationHoursMinutes": "",
+    "indefinitely": "",
+    "longDate": "",
+    "longDateTime": "",
+    "longDayYear": "",
+    "longMonthDay": "",
+    "longMonthYear": "",
+    "longWeekday": "",
+    "longWeekdayDate": "",
+    "longWeekdayDateTimeWithZone": "",
+    "longWeekdayTime": "",
+    "midnight": "",
+    "noon": "",
+    "shortDateTime": "",
+    "shortDateTimeWithZone": "",
+    "shortHour": "",
+    "shortTime": "",
+    "shortTimeWithSeconds": "",
+    "shortTimeWithZone": "",
+    "shortWeekday": "",
+    "shortWeekdayDateTime": "",
+    "shortWeekdayTime": "",
+    "weekdayMidnight": "",
+    "weekdayNoon": "",
+    "year": ""
+  },
   "errors": {
+    "404": "",
     "unauthorized": "Lo siento, tu cuenta no está autorizada a ver esta página."
+  },
+  "eventCategorySelect": {
+    "defaultLabel": ""
   },
   "eventProposals": {
     "edit": {
@@ -176,20 +217,161 @@
     }
   },
   "events": {
+    "adminMenu": {
+      "editLink": "",
+      "editTeamMembersLink": "",
+      "header": "",
+      "historyLink": ""
+    },
+    "edit": {
+      "dropButton": "",
+      "dropPrompt": "",
+      "editHeader": "",
+      "newHeader": "",
+      "roomsLabel": "",
+      "scheduleNoteLabel": "",
+      "timeLabel": "",
+      "titleSuffixLabel": ""
+    },
+    "history": {
+      "title": ""
+    },
+    "ratings": {
+      "clearButton": "",
+      "favoriteButton": "",
+      "hideButton": ""
+    },
     "runCapacity": {
+      "label": "",
       "slotCount": "plaza {{ count }}",
+      "slotCount_plural": "{{ count }} plazas",
       "slotRemainingCount": "Plaza {{ filledCount }} de {{ count }} ocupada",
+      "slotRemainingCount_plural": "{{ filledCount }} de {{ count }} plazas ocupadas",
       "unlimitedSimple": "ilimitadas",
       "unlimitedWithCount": "({{ signupCount }} inscritas (capacidad ilimitada)",
-      "zeroCapacity": "plazas agotadas",
-      "slotCount_plural": "{{ count }} plazas",
-      "slotRemainingCount_plural": "{{ filledCount }} de {{ count }} plazas ocupadas"
+      "waitlistCount": "",
+      "zeroCapacity": "plazas agotadas"
+    },
+    "runHeader": {
+      "maxSignups": "",
+      "maxSignups_plural": ""
+    },
+    "signupAdmin": {
+      "addressHeader": "",
+      "ageCheckHeader": "",
+      "ageHeader": "",
+      "bucketHeader": "",
+      "bucketInput": {
+        "currentBucketLabel": "",
+        "userRequestedBucketLabel": ""
+      },
+      "changeBucketHeader": "",
+      "changeBucketInputCaption": "",
+      "editPageHeader": "",
+      "editPageTitle": "",
+      "editTitle": "",
+      "emailFilters": {
+        "confirmed": "",
+        "nobody": "",
+        "teamMembers": "",
+        "waitlisted": ""
+      },
+      "emailHeader": "",
+      "forceConfirmSignup": {
+        "bucketInputCaption": "",
+        "header": "",
+        "overfillWarning": ""
+      },
+      "history": {
+        "bucketHeader": "",
+        "changeHeader": "",
+        "nameHeader": "",
+        "timestampHeader": ""
+      },
+      "historyPageTitle": "",
+      "indexPageTitle": "",
+      "makeCountedConfirmPrompt": "",
+      "makeNotCountedConfirmPrompt": "",
+      "nameHeader": "",
+      "nicknameHeader": "",
+      "phoneHeader": "",
+      "sequenceHeader": "",
+      "stateHeader": "",
+      "title": ""
+    },
+    "signupsAdmin": {
+      "emailsCommaTitle": "",
+      "emailsSemicolonTitle": "",
+      "emailsSemicolonWarning": "",
+      "historyTitle": "",
+      "title": ""
+    },
+    "signupSummary": {
+      "nameHeader": "",
+      "stateHeader": "",
+      "title": ""
+    },
+    "teamMemberAdmin": {
+      "addButton": "",
+      "addTeamMemberButton": "",
+      "displayEmailHeader": "",
+      "displayHeader": "",
+      "displayLabel": "",
+      "editHeader": "",
+      "editPageTitle": "",
+      "editSettingsLink": "",
+      "emailLabel": "",
+      "eventProvidedTicketDescription": "",
+      "hasEventTicketHeader": "",
+      "header": "",
+      "mobilePhoneLabel": "",
+      "nameHeader": "",
+      "newHeader": "",
+      "newPageTitle": "",
+      "nonEventProvidedTicketDescription": "",
+      "provideTicketButton": "",
+      "provideTicketChoice": "",
+      "provideTicketChoice_plural": "",
+      "provideTicketLink": "",
+      "receiveConEmailHeader": "",
+      "receiveConEmailLabel": "",
+      "receiveSignupEmail": {
+        "allSignups": "",
+        "noEmail": "",
+        "nonWaitlistSignups": ""
+      },
+      "receiveSignupEmailHeader": "",
+      "receiveSignupEmailLabel": "",
+      "removeTeamMemberLink": "",
+      "removeTeamMemberPrompt": "",
+      "selectUserConProfilePrompt": "",
+      "showEmailLabel": "",
+      "ticketProvidability": "",
+      "ticketProvidability_plural": "",
+      "unticketedWarning": "",
+      "updateButton": "",
+      "userConProfileLabel": "",
+      "userConProfilePlaceholder": ""
+    },
+    "ticketQuotaOverrides": {
+      "defaultQuotaHeader": "",
+      "deleteButton": "",
+      "deletePrompt": "",
+      "header": "",
+      "overridenQuotaHeader": "",
+      "ticketTypeHeader": ""
+    },
+    "withdrawPrompt": {
+      "moderatedSignup": "",
+      "selfServiceSignup": "",
+      "signupRequest": ""
     }
   },
   "forms": {
     "ageRestrictions": {
       "descriptionLabel": "Texto público de restricción por edad",
       "minimumAgeDescription": "Debe tener {{ count }} años o más.",
+      "minimumAgeDescription_plural": "",
       "minimumAgeHelpText": "Si se especifica, la lista de participantes inscritas mostrará si alguien demasiado joven se ha anotado a la actividad. <2>La web no impone restricciones por edad; eso debes hacerlo tú.</2>",
       "minimumAgeLabel": "Edad mínima",
       "noRestrictions": "Sin restricciones de edad."
@@ -208,6 +390,9 @@
       "backButton": "Volver",
       "continueButton": "Continuar",
       "fieldRequiredError": "Campo obligatorio."
+    },
+    "history": {
+      "noChanges": ""
     }
   },
   "general": {
@@ -216,7 +401,8 @@
     },
     "pageTitles": {
       "editing": "Editando “{{ title }}”"
-    }
+    },
+    "placeholderOptionLabel": ""
   },
   "myProfile": {
     "bioLabel": "Bio",
@@ -272,6 +458,7 @@
       "signUp": "Inscripción"
     },
     "events": {
+      "eventSchedule": "",
       "eventsList": "Listado de actividades",
       "newProposal": "Proponer actividad",
       "schedule": "Agenda de las jornadas",
@@ -310,7 +497,31 @@
       "myProfile": "Mi perfil de {{ conventionName }}"
     }
   },
+  "oauth": {
+    "permissionGroups": {
+      "manage": "",
+      "readPrivate": "",
+      "readPublic": ""
+    },
+    "permissions": {
+      "manage_conventions": "",
+      "manage_email_routing": "",
+      "manage_events": "",
+      "manage_organizations": "",
+      "manage_profile": "",
+      "manage_signups": "",
+      "openid": "",
+      "public": "",
+      "read_conventions": "",
+      "read_email_routing": "",
+      "read_events": "",
+      "read_organizations": "",
+      "read_profile": "",
+      "read_signups": ""
+    }
+  },
   "schedule": {
+    "goToEvent": "",
     "legends": {
       "attendeeCounts": {
         "confirmed": "inscripciones confirmadas",
@@ -345,27 +556,74 @@
         "unlimited": "Plazas ilimitadas"
       }
     },
-    "timezoneMessage": "Todos los horarios mostrados en zona horaria {{ offsetName }}."
+    "timezoneMessage": "Todos los horarios mostrados en zona horaria {{ offsetName }}.",
+    "views": {
+      "gridView": "",
+      "gridViewByRoom": "",
+      "gridViewWithCounts": "",
+      "listView": ""
+    }
   },
   "signups": {
+    "noSignupsAvailable": "",
+    "runCardText": {
+      "confirmed": "",
+      "requestPending": "",
+      "waitlisted": "",
+      "waitlistedUnknownPosition": ""
+    },
+    "signedOutSignupButton": "",
+    "signupButton": "",
+    "signupSummaryLink": "",
     "states": {
+      "bucketWithNoPreference": "",
       "confirmed": "Confirmado",
+      "inUnrequestedBucket": "",
+      "noBucketName": "",
+      "notCounted": "",
+      "notCountedWithBucket": "",
       "notSignedUp": "No inscrita",
-      "waitlisted": "En lista de espera"
-    }
+      "stateWithRequestedBucket": "",
+      "teamMemberNotCounted": "",
+      "waitlisted": "En lista de espera",
+      "waitlistedNoPreference": "",
+      "waitlistedWithRequestedBucket": "",
+      "withdrawn": ""
+    },
+    "viewSignupsLink": "",
+    "withdrawButton": "",
+    "withdrawSignupRequestButton": ""
   },
   "spoiler": {
     "hoverText": ""
   },
   "tables": {
+    "ageRestrictionsCheck": {
+      "notApplicable": "",
+      "ok": "",
+      "unknown": ""
+    },
     "choiceSetFilter": {
       "anyText": "Cualquiera"
     },
+    "columnSelectorButton": "",
     "exportCSV": {
       "buttonText": "Exportar CSV"
     },
     "privileges": {
       "siteAdmin": "Admin Global"
+    },
+    "signupChange": {
+      "actions": {
+        "acceptSignupRequest": "",
+        "adminCreateSignup": "",
+        "changeRegistrationPolicy": "",
+        "selfServiceSignup": "",
+        "unknown": "",
+        "vacancyFill": "",
+        "withdraw": ""
+      },
+      "unknownState": ""
     },
     "ticketStatus": {
       "unpaid": "No pagado"

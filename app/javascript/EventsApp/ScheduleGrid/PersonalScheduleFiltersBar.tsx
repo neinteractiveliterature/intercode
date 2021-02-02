@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
+import { Filters } from 'react-table';
+import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import { parseIntOrNull } from '../../ValueUtils';
@@ -21,14 +22,40 @@ type PersonalScheduleFilter = {
   hide_conflicts: boolean;
 };
 
+const STORAGE_KEY = 'schedule:personalFilters';
+
+function loadPersonalFilters() {
+  const storedValue = window.localStorage.getItem(STORAGE_KEY);
+  if (storedValue) {
+    try {
+      return JSON.parse(storedValue);
+    } catch (e) {
+      return DEFAULT_PERSONAL_FILTERS;
+    }
+  }
+
+  return DEFAULT_PERSONAL_FILTERS;
+}
+
+function parseFilters(filters: Filters<PersonalScheduleFilter>) {
+  const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {})
+    .value;
+  const hideConflicts: boolean | undefined = (filters.find((f) => f.id === 'hide_conflicts') || {})
+    .value;
+
+  const choiceSetValue: string[] = [
+    ...(ratingFilter || []).map((integer: number) => integer.toString()),
+    ...(hideConflicts ? [] : ['conflicts']),
+  ];
+  return { choiceSetValue, ratingFilter, hideConflicts };
+}
+
 type UsePersonalScheduleFiltersOptions = {
-  storageKey: string;
   showPersonalFilters: boolean;
   signedIn: boolean;
 };
 
 export function usePersonalScheduleFilters({
-  storageKey,
   showPersonalFilters,
   signedIn,
 }: UsePersonalScheduleFiltersOptions) {
@@ -37,47 +64,30 @@ export function usePersonalScheduleFilters({
   });
   const location = useLocation();
 
-  const loadPersonalFilters = useCallback(() => {
-    const storedValue = window.localStorage.getItem(storageKey);
-    if (storedValue) {
-      try {
-        return JSON.parse(storedValue);
-      } catch (e) {
-        return DEFAULT_PERSONAL_FILTERS;
-      }
-    }
-
-    return DEFAULT_PERSONAL_FILTERS;
-  }, [storageKey]);
-
   useEffect(() => {
     if (showPersonalFilters && signedIn && !location.search) {
       updateSearch({ filters: loadPersonalFilters() });
     }
-  }, [showPersonalFilters, loadPersonalFilters, location, signedIn, updateSearch]);
+  }, [showPersonalFilters, location, signedIn, updateSearch]);
 
   return useMemo(() => {
-    const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {})
-      .value;
-    const hideConflicts: boolean | undefined = (
-      filters.find((f) => f.id === 'hide_conflicts') || {}
-    ).value;
-
-    const choiceSetValue: string[] = [
-      ...(ratingFilter || []).map((integer: number) => integer.toString()),
-      ...(hideConflicts ? [] : ['conflicts']),
-    ];
+    const { choiceSetValue, ratingFilter, hideConflicts } = parseFilters(
+      showPersonalFilters ? filters : [...DEFAULT_PERSONAL_FILTERS],
+    );
 
     const choiceSetChanged = (newValue: string[]) => {
       const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(parseIntOrNull);
 
-      const newFilters = [
-        { id: 'my_rating', value: integerArray },
-        { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
-      ];
+      const newFilters =
+        newValue.length === 0
+          ? [...DEFAULT_PERSONAL_FILTERS]
+          : [
+              { id: 'my_rating', value: integerArray },
+              { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
+            ];
 
       updateSearch({ filters: newFilters });
-      window.localStorage.setItem(storageKey, JSON.stringify(newFilters));
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newFilters));
     };
 
     return {
@@ -86,7 +96,26 @@ export function usePersonalScheduleFilters({
       ratingFilter: ratingFilter ?? [...DEFAULT_PERSONAL_FILTERS[0].value],
       hideConflicts: hideConflicts ?? DEFAULT_PERSONAL_FILTERS[1].value,
     };
-  }, [filters, storageKey, updateSearch]);
+  }, [filters, showPersonalFilters, updateSearch]);
+}
+
+const filterOptions = [...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }];
+
+function renderFilterHeaderCaption(value: string[]): string {
+  if (value.length === filterOptions.length) {
+    return 'Show all events';
+  }
+  if (value.length === 0) {
+    return renderFilterHeaderCaption(parseFilters([...DEFAULT_PERSONAL_FILTERS]).choiceSetValue);
+  }
+
+  const visibleOptions = filterOptions.filter((option) =>
+    value.find((selectedOption) => option.value === selectedOption),
+  );
+  if (visibleOptions.length === filterOptions.length - 1 && !value.includes('-1')) {
+    return 'Show my selections';
+  }
+  return `Show only ${visibleOptions.map((option) => option.label).join(', ')}`;
 }
 
 type PersonalScheduleFiltersBarProps = {
@@ -99,19 +128,16 @@ function PersonalScheduleFiltersBar({
   choiceSetChanged,
 }: PersonalScheduleFiltersBarProps) {
   return (
-    <div className="d-flex flex-column flex-md-row bg-light">
-      <div className="d-flex btn">
-        <span className="mr-2">Show:</span>
-        <ChoiceSet
-          choices={[...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }]}
-          choiceClassName="form-check-inline mr-md-4"
-          containerClassName="d-flex flex-wrap"
-          value={choiceSetValue}
-          onChange={choiceSetChanged}
-          multiple
-        />
-      </div>
-    </div>
+    <ChoiceSetFilter
+      choices={filterOptions}
+      column={{
+        filterValue: choiceSetValue,
+        setFilter: choiceSetChanged,
+      }}
+      renderHeaderCaption={renderFilterHeaderCaption}
+      multiple
+      hideSelectNone
+    />
   );
 }
 

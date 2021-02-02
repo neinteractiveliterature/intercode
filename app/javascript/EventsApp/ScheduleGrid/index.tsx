@@ -9,9 +9,7 @@ import { ScheduleGridProvider } from './ScheduleGridContext';
 import AppRootContext from '../../AppRootContext';
 import ErrorDisplay from '../../ErrorDisplay';
 import { useAppDateTimeFormat } from '../../TimeUtils';
-import PersonalScheduleFiltersBar, {
-  usePersonalScheduleFilters,
-} from './PersonalScheduleFiltersBar';
+import { usePersonalScheduleFilters } from './PersonalScheduleFiltersBar';
 
 export type ScheduleGridAppProps = {
   configKey: string;
@@ -22,13 +20,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
   const config = getConfig(configKey);
   const format = useAppDateTimeFormat();
-  const {
-    choiceSetValue,
-    choiceSetChanged,
-    ratingFilter,
-    hideConflicts,
-  } = usePersonalScheduleFilters({
-    storageKey: `schedule:${configKey}:personalFilters`,
+  const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
     showPersonalFilters: config?.showPersonalFilters ?? false,
     signedIn: myProfile != null,
   });
@@ -38,14 +30,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
   }
 
   return (
-    <>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item active" aria-current="page">
-            {t(config.titlei18nKey, config.title)}
-          </li>
-        </ol>
-      </nav>
+    <div className="mt-2">
       <ScheduleGridProvider
         config={config}
         myRatingFilter={myProfile ? ratingFilter : undefined}
@@ -53,12 +38,6 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
       >
         {(timespan) => (
           <div className="mb-4">
-            {config.showPersonalFilters && myProfile && (
-              <PersonalScheduleFiltersBar
-                choiceSetValue={choiceSetValue}
-                choiceSetChanged={choiceSetChanged}
-              />
-            )}
             <div className="m-0 p-2 border-bottom">
               <h3 className="p-0 m-0">{format(timespan.start, 'longWeekdayDate')}</h3>
               <div className="font-italic">
@@ -97,7 +76,7 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
 
         return `Unknown legend type ${legend.type}`;
       })}
-    </>
+    </div>
   );
 }
 
