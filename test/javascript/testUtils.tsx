@@ -1,5 +1,5 @@
 /* eslint-disable import/export */
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing';
 import {
   render,
@@ -13,6 +13,7 @@ import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
+import type { Stripe } from '@stripe/stripe-js';
 
 import getI18n from '../../app/javascript/setupI18Next';
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';
@@ -32,9 +33,11 @@ function TestWrapper({
   children,
 }: TestWrapperProps) {
   const history = useMemo(() => createMemoryHistory(), []);
-  const lazyStripeProviderValue = useMemo(() => ({ publishableKey: stripePublishableKey }), [
-    stripePublishableKey,
-  ]);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const lazyStripeProviderValue = useMemo(
+    () => ({ publishableKey: stripePublishableKey, stripePromise, setStripePromise }),
+    [stripePublishableKey, stripePromise, setStripePromise],
+  );
   return (
     <Router history={history}>
       <MockedProvider mocks={apolloMocks}>
