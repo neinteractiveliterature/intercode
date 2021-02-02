@@ -1,68 +1,59 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import { createContext, useContext, useState, ReactNode, useLayoutEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js/pure';
 import type { Stripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import ErrorDisplay from './ErrorDisplay';
 
-const StripeJs = () => import('@stripe/stripe-js');
-
-export type LazyStripeContext = {
+export type LazyStripeContextValue = {
   accountId?: string;
   publishableKey?: string;
+  stripePromise: Promise<Stripe | null> | null;
+  setStripePromise: (stripePromise: Promise<Stripe | null>) => void;
 };
 
-export const LazyStripeContext = createContext<LazyStripeContext>({
+export const LazyStripeContext = createContext<LazyStripeContextValue>({
   accountId: undefined,
   publishableKey: undefined,
+  stripePromise: null,
+  setStripePromise: () => {},
 });
 
-async function lazyLoadStripe(publishableKey: string, accountId: string) {
-  const { loadStripe } = await StripeJs();
-  const stripe = await loadStripe(publishableKey, { stripeAccount: accountId });
-  return stripe;
-}
-
 function useLazyStripe() {
-  const { publishableKey, accountId } = useContext(LazyStripeContext);
-  const [stripe, setStripe] = useState<Stripe | null>(null);
+  const { publishableKey, accountId, stripePromise, setStripePromise } = useContext(
+    LazyStripeContext,
+  );
   const [loadError, setLoadError] = useState<Error>();
 
-  useEffect(() => {
-    const initiateLoad = async () => {
-      if (publishableKey != null && accountId != null) {
-        try {
-          const loadedStripe = await lazyLoadStripe(publishableKey, accountId);
-          setStripe(loadedStripe);
-        } catch (error) {
-          setLoadError(error);
-        }
-      } else {
-        setLoadError(
+  useLayoutEffect(() => {
+    const initiateLoad = () => {
+      if (publishableKey == null || accountId == null) {
+        return Promise.reject(
           new Error(
             'Stripe is not configured for this convention.  Please set it up in Convention Settings.',
           ),
         );
       }
-    };
-    initiateLoad();
-  }, [publishableKey, accountId]);
 
-  return [stripe, loadError] as const;
+      return loadStripe(publishableKey, { stripeAccount: accountId });
+    };
+    if (!stripePromise) {
+      const promise = initiateLoad().catch((error) => {
+        setLoadError(error);
+        throw error;
+      });
+      setStripePromise(promise);
+    }
+  }, [publishableKey, accountId, stripePromise, setStripePromise]);
+
+  return [stripePromise, loadError] as const;
 }
 
 export function LazyStripeElementsContainer({ children }: { children: ReactNode }) {
-  const [stripe, loadError] = useLazyStripe();
-
-  // horrible horrible workaround until Stripe fixes https://github.com/stripe/react-stripe-js/issues/154
-  const counter = useRef(0);
-  counter.current += 1;
+  const [stripePromise, loadError] = useLazyStripe();
 
   if (loadError) {
     return <ErrorDisplay stringError={loadError.message} />;
   }
 
-  return (
-    <Elements stripe={stripe} key={counter.current}>
-      {children}
-    </Elements>
-  );
+  return <Elements stripe={stripePromise}>{children}</Elements>;
 }

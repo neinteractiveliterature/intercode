@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
+import type { Stripe } from '@stripe/stripe-js';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
@@ -80,6 +81,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
       onUnauthenticatedRef.current = openSignIn;
     }, [openSignIn]);
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
+    const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
     const getUserConfirmation = useCallback(
       (message: ReactNode, callback: (confirmed: boolean) => void) => {
@@ -103,7 +105,12 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
       <React.StrictMode>
         <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
           <LazyStripeContext.Provider
-            value={{ publishableKey: stripePublishableKey, accountId: stripeAccountId }}
+            value={{
+              publishableKey: stripePublishableKey,
+              accountId: stripeAccountId,
+              stripePromise,
+              setStripePromise,
+            }}
           >
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
               <MapboxContext.Provider value={mapboxContextValue}>
