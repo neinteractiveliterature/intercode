@@ -102,7 +102,7 @@ export default function ScheduleApp() {
       return 'list';
     }
 
-    return 'grid';
+    return 'gridView';
   });
 
   const scheduleGridConfig = useMemo(
