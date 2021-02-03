@@ -452,13 +452,13 @@
     "@babel/helper-skip-transparent-expression-wrappers" "^7.12.1"
     "@babel/plugin-syntax-optional-chaining" "^7.8.0"
 
-"@babel/plugin-proposal-pipeline-operator@^7.12.1":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-pipeline-operator/-/plugin-proposal-pipeline-operator-7.12.1.tgz#4bd377bc7e5be92f22f1c08b3f3963636bd8f4a1"
-  integrity sha512-iloNp4xu8YV8e/mZgGjePg9be1VkJSxQWIplRwgQtQPtF26ar3cHXL4sV8Fujlm2mm/Tu/WiA+FU+Fp7QVP7/g==
+"@babel/plugin-proposal-pipeline-operator@^7.12.13":
+  version "7.12.13"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-pipeline-operator/-/plugin-proposal-pipeline-operator-7.12.13.tgz#739a490d253513f4fbead016afcfbb8ed980eb9d"
+  integrity sha512-p6ypYNG6oKPHO73jPjyBVrZMcc2bWWn8ByusDzStzlPmWNElcErf+pZGB6Lt5f23T9LFFTB7rqOr8BQMc1nSiQ==
   dependencies:
-    "@babel/helper-plugin-utils" "^7.10.4"
-    "@babel/plugin-syntax-pipeline-operator" "^7.12.1"
+    "@babel/helper-plugin-utils" "^7.12.13"
+    "@babel/plugin-syntax-pipeline-operator" "^7.12.13"
 
 "@babel/plugin-proposal-private-methods@^7.12.1":
   version "7.12.1"
@@ -617,12 +617,12 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.0"
 
-"@babel/plugin-syntax-pipeline-operator@^7.12.1":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-pipeline-operator/-/plugin-syntax-pipeline-operator-7.12.1.tgz#6186f1d5feb86d315a920a5056a86c991bf4b7f4"
-  integrity sha512-NazCTl1P9Kp+790g7gDRQEvhU0+OYbZVsuW45ThfgVCdUyhtxzFJeFrzY6BX/u/NfFyXWbKAIl6wR0PhJWwyDA==
+"@babel/plugin-syntax-pipeline-operator@^7.12.13":
+  version "7.12.13"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-pipeline-operator/-/plugin-syntax-pipeline-operator-7.12.13.tgz#a6a01b9bd1b695945783ed8a6b66696ff179981c"
+  integrity sha512-IHs5FTRPJv7M7K0IurpuCTU1ILnhAXDi+YW8dIddJywIDWEYAaV90pSk1RnHRAyExn8szPER1SaraZdZLxKOGw==
   dependencies:
-    "@babel/helper-plugin-utils" "^7.10.4"
+    "@babel/helper-plugin-utils" "^7.12.13"
 
 "@babel/plugin-syntax-throw-expressions@^7.12.1":
   version "7.12.1"
