@@ -5,7 +5,6 @@ import { useApolloClient } from '@apollo/client';
 import { Placement } from 'popper.js';
 import { usePopper } from 'react-popper';
 import { useTranslation } from 'react-i18next';
-import { ScheduleGridContext } from './ScheduleGridContext';
 
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
@@ -16,6 +15,8 @@ import useRateEvent from '../../EventRatings/useRateEvent';
 import { ScheduleEvent, ScheduleRun } from './Schedule';
 import SignupCountData from '../SignupCountData';
 import { FiniteTimespan } from '../../Timespan';
+import { conventionRequiresDates, useFormatRunTimespan } from '../runTimeFormatting';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type RunDetailsProps = {
   placement?: Placement;
@@ -35,10 +36,15 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
     ref,
   ) => {
     const { t } = useTranslation();
-    const { myProfile } = useContext(AppRootContext);
-    const { schedule } = useContext(ScheduleGridContext);
+    const { myProfile, conventionTimespan } = useContext(AppRootContext);
     const rateEvent = useRateEvent();
     const apolloClient = useApolloClient();
+    const formatRunTimespan = useFormatRunTimespan();
+    const format = useAppDateTimeFormat();
+
+    const showDate = useMemo(() => conventionRequiresDates(conventionTimespan), [
+      conventionTimespan,
+    ]);
 
     const availabilityDescription = useMemo(() => describeAvailability(event, signupCountData), [
       event,
@@ -98,11 +104,21 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
             )}
             <table className="mb-2">
               <tbody>
+                {showDate && (
+                  <tr>
+                    <td className="text-center pr-1">
+                      <i className="fa fa-calendar-o" />
+                    </td>
+                    <td>{format(timespan.start, 'longDate')}</td>
+                  </tr>
+                )}
                 <tr>
                   <td className="text-center pr-1">
                     <i className="fa fa-clock-o" />
                   </td>
-                  <td>{timespan.humanizeInTimezone(schedule.timezoneName, t)}</td>
+                  <td>
+                    {formatRunTimespan(timespan, { formatType: 'short', includeDate: false })}
+                  </td>
                 </tr>
                 {roomsDescription ? (
                   <tr>

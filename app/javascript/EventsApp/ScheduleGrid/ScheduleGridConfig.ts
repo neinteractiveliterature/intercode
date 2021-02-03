@@ -33,6 +33,7 @@ export type ScheduleGridLegendConfig = {
 export type ScheduleGridConfig = {
   key: string;
   titlei18nKey: string;
+  icon: string;
   classifyEventsBy: 'category' | 'fullness';
   groupEventsBy: 'category' | 'room';
   showExtendedCounts?: boolean;

@@ -17,6 +17,7 @@ import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
 import { EventListEventsQueryQuery } from './queries.generated';
 import { notEmpty } from '../../ValueUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { useFormatRunTime } from '../runTimeFormatting';
 
 type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
@@ -24,13 +25,16 @@ type EventType = ConventionType['events_paginated']['entries'][0];
 function renderFirstRunTime(
   event: EventType,
   timezoneName: string,
-  format: ReturnType<typeof useAppDateTimeFormat>,
+  formatRunTime: ReturnType<typeof useFormatRunTime>,
 ) {
   if (event.runs.length > 0) {
     const sortedRuns = getSortedRuns(event);
     if (sortedRuns.length > 4) {
       const firstRunStart = DateTime.fromISO(sortedRuns[0].starts_at, { zone: timezoneName });
-      return `${sortedRuns.length} runs starting ${format(firstRunStart, 'longWeekdayTime')}`;
+      return `${sortedRuns.length} runs starting ${formatRunTime(firstRunStart, {
+        formatType: 'long',
+        includeDate: true,
+      })}`;
     }
 
     let previousWeekday: number;
@@ -38,17 +42,19 @@ function renderFirstRunTime(
     return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
         const runStart = DateTime.fromISO(run.starts_at, { zone: timezoneName });
-        const dayName = runStart.weekday;
-        if (previousWeekday === dayName) {
-          return format(runStart, 'shortTime');
+        const { weekday } = runStart;
+        if (previousWeekday === weekday) {
+          return formatRunTime(runStart, { formatType: 'short', includeDate: false });
         }
 
-        previousWeekday = dayName;
+        previousWeekday = weekday;
         return (
           <Fragment key={runStart.toISO()}>
-            <span className="d-lg-none text-nowrap">{format(runStart, 'shortWeekdayTime')}</span>
+            <span className="d-lg-none text-nowrap">
+              {formatRunTime(runStart, { formatType: 'short', includeDate: true })}
+            </span>
             <span className="d-none d-lg-inline text-nowrap">
-              {format(runStart, 'longWeekdayTime')}
+              {formatRunTime(runStart, { formatType: 'long', includeDate: true })}
             </span>
           </Fragment>
         );
@@ -90,6 +96,7 @@ export type EventCardProps = {
 const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
+  const formatRunTime = useFormatRunTime();
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems: { key: string; content: ReactNode }[] = [];
@@ -163,7 +170,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
         <div className="event-card-header">
           <div className="float-right text-right ml-1">
             <div className="lead">
-              {canReadSchedule ? renderFirstRunTime(event, timezoneName, format) : null}
+              {canReadSchedule ? renderFirstRunTime(event, timezoneName, formatRunTime) : null}
             </div>
             <div className="mt-1 d-flex align-items-end justify-content-end">
               {myProfile && (

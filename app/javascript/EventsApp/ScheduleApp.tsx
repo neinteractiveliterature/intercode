@@ -11,22 +11,26 @@ import ScheduleGridApp from './ScheduleGrid';
 import PersonalScheduleFiltersBar, {
   usePersonalScheduleFilters,
 } from './ScheduleGrid/PersonalScheduleFiltersBar';
-import ScheduleGridConfigs from '../../../config/schedule_grid_configs.json';
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
+import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
 
-const SCHEDULE_VIEWS = ['list', ...ScheduleGridConfigs.map((config) => config.key)];
+const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
 
-type ScheduleViewDropdownProps = {
-  viewSelected: (view: string) => void;
-  scheduleView: string;
-};
+function getDefaultScheduleView() {
+  // Bootstrap's "medium" breakpoint
+  if (window.innerWidth < 768) {
+    return 'list';
+  }
+
+  return 'con_schedule';
+}
 
 function getScheduleViewLabel(view: string, t: TFunction) {
   if (view === 'list') {
     return t('schedule.views.listView', 'List view');
   }
 
-  const config = ScheduleGridConfigs.find((c) => c.key === view);
+  const config = allConfigs.find((c) => c.key === view);
   if (config != null) {
     return t(config.titlei18nKey, view);
   }
@@ -39,17 +43,14 @@ function getScheduleViewLabel(view: string, t: TFunction) {
   t('schedule.views.gridViewWithCounts', 'Grid view with counts');
 }
 
-function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdownProps) {
-  const { t } = useTranslation();
-  const { currentAbility } = useContext(AppRootContext);
+type ScheduleViewDropdownProps = {
+  viewSelected: (view: string) => void;
+  scheduleView: string;
+  configs: ScheduleGridConfig[];
+};
 
-  const authorizedConfigs = useMemo(
-    () =>
-      ScheduleGridConfigs.filter(
-        (config) => !config.showExtendedCounts || currentAbility.can_read_schedule_with_counts,
-      ),
-    [currentAbility.can_read_schedule_with_counts],
-  );
+function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleViewDropdownProps) {
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu
@@ -66,7 +67,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdo
       // hack to get the menu to "close" when switching views
       key={scheduleView}
     >
-      {[['list', 'fa-list'], ...authorizedConfigs.map((config) => [config.key, config.icon])].map(
+      {[['list', 'fa-list'], ...configs.map((config) => [config.key, config.icon])].map(
         ([view, iconName]) => (
           <button
             className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
@@ -84,7 +85,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView }: ScheduleViewDropdo
 }
 
 export default function ScheduleApp() {
-  const { myProfile, currentAbility } = useContext(AppRootContext);
+  const { myProfile, currentAbility, conventionTimespan } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
     showPersonalFilters: true,
@@ -97,18 +98,30 @@ export default function ScheduleApp() {
       return storedView as string;
     }
 
-    // Bootstrap's "medium" breakpoint
-    if (window.innerWidth < 768) {
-      return 'list';
-    }
-
-    return 'con_schedule';
+    return getDefaultScheduleView();
   });
 
-  const scheduleGridConfig = useMemo(
-    () => ScheduleGridConfigs.find((c) => c.key === scheduleView),
-    [scheduleView],
+  const configs = useMemo(
+    () =>
+      allConfigs.filter((config) => {
+        // Only show grids for conventions less than a week long
+        if ((conventionTimespan?.getLength('days')?.days ?? 7) >= 7) {
+          return false;
+        }
+
+        if (config.showExtendedCounts && !currentAbility.can_read_schedule_with_counts) {
+          return false;
+        }
+
+        return true;
+      }),
+    [currentAbility.can_read_schedule_with_counts, conventionTimespan],
   );
+
+  const scheduleGridConfig = useMemo(() => configs.find((c) => c.key === scheduleView), [
+    scheduleView,
+    configs,
+  ]);
 
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(
     scheduleGridConfig?.showExtendedCounts ? 'can_read_schedule_with_counts' : 'can_read_schedule',
@@ -133,13 +146,17 @@ export default function ScheduleApp() {
 
   if (authorizationRequired) {
     if (scheduleGridConfig?.showExtendedCounts && currentAbility.can_read_schedule) {
-      const authorizedView =
-        ScheduleGridConfigs.find((config) => !config.showExtendedCounts)?.key ?? 'list';
+      const authorizedView = configs.find((config) => !config.showExtendedCounts)?.key ?? 'list';
       setScheduleView(authorizedView);
       return <></>;
     }
 
     return authorizationRequired;
+  }
+
+  if (scheduleView && scheduleView !== 'list' && !scheduleGridConfig) {
+    setScheduleView(getDefaultScheduleView());
+    return <></>;
   }
 
   return (
@@ -155,7 +172,13 @@ export default function ScheduleApp() {
       <div className="schedule-grid-navigation-bar">
         <div className="bg-light p-1 d-flex">
           <div className="flex-grow-1">
-            <ScheduleViewDropdown viewSelected={viewSelected} scheduleView={scheduleView} />
+            {configs.length > 0 && (
+              <ScheduleViewDropdown
+                viewSelected={viewSelected}
+                scheduleView={scheduleView}
+                configs={configs}
+              />
+            )}
           </div>
           {(scheduleGridConfig == null || scheduleGridConfig.showPersonalFilters) && (
             <div>
