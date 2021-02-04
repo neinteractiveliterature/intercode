@@ -16,6 +16,7 @@ import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 import { timespanFromRun } from '../TimespanUtils';
 import getSortedRuns from '../EventsApp/EventList/getSortedRuns';
 import { getDateTimeFormat } from '../TimeUtils';
+import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 
 export type EventAdminRowProps = {
   event: EventFieldsFragment;
@@ -27,6 +28,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
   const { timezoneName } = useContext(AppRootContext);
   const [updateEventAdminNotes] = useUpdateEventAdminNotesMutation();
   const [expanded, setExpanded] = useState(false);
+  const formatRunTimespan = useFormatRunTimespan();
 
   const length = useMemo(() => Duration.fromObject({ seconds: event.length_seconds }), [
     event.length_seconds,
@@ -56,7 +58,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
 
     const runMetadata = [
       titleSuffix,
-      <li key="timespan">{timespan.humanizeInTimezone(timezoneName, t)}</li>,
+      <li key="timespan">{formatRunTimespan(timespan, { formatType: 'short' })}</li>,
       <li key="rooms">
         {run.rooms
           .map((room) => room.name)

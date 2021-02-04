@@ -19,6 +19,7 @@ import {
 } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import Timespan from '../Timespan';
 
 export type RunForRunFormFields = Pick<
   Run,
@@ -132,7 +133,12 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       return null;
     }
 
-    const timespan = conventionDayTimespans!.find((cdt) => cdt.includesTime(day))!;
+    const timespan =
+      conventionDayTimespans?.find((cdt) => cdt.includesTime(day)) ??
+      Timespan.finiteFromDateTimes(
+        day.startOf('day').set({ hour: 6 }),
+        day.plus({ days: 1 }).startOf('day').set({ hour: 6 }),
+      );
 
     return (
       <fieldset className="form-group">

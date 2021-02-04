@@ -1,8 +1,7 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import AppRootContext from '../../AppRootContext';
 import FormItemChangeGroup from './FormItemChangeGroup';
 import {
   buildChangeGroups,
@@ -11,6 +10,7 @@ import {
 } from './FormItemChangeUtils';
 import { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type FormResponseChangeHistoryProps = {
   basePath: string;
@@ -26,8 +26,17 @@ function FormResponseChangeHistory({
   form,
 }: FormResponseChangeHistoryProps) {
   const { t } = useTranslation();
-  const { timezoneName } = useContext(AppRootContext);
   const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);
+  const format = useAppDateTimeFormat();
+
+  const renderTimespan = (changeGroup: typeof changeGroups[number]) => {
+    const timespan = getTimespanForChangeGroup(changeGroup);
+    return (
+      <>
+        {format(timespan.start, 'shortDateTime')} - {format(timespan.finish, 'shortTime')}
+      </>
+    );
+  };
 
   if (changeGroups.length === 0) {
     return <>{t('forms.history.noChanges', 'No changes.')}</>;
@@ -42,14 +51,7 @@ function FormResponseChangeHistory({
               <NavLink to={`${basePath}/${changeGroup.id}`} className="nav-link">
                 <strong>{changeGroup.changes[0].user_con_profile.name_without_nickname}</strong>
                 <br />
-                <small>
-                  {getTimespanForChangeGroup(changeGroup).humanizeInTimezone(
-                    timezoneName,
-                    t,
-                    'shortDateTime',
-                    'shortTime',
-                  )}
-                </small>
+                <small>{renderTimespan(changeGroup)}</small>
               </NavLink>
             </li>
           ))}

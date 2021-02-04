@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import Select from 'react-select';
-import { useTranslation } from 'react-i18next';
 
 import { timespanFromRun } from '../TimespanUtils';
 import { sortByLocaleString } from '../ValueUtils';
 import AppRootContext from '../AppRootContext';
+import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 
 type RoomForRunSelectProps = {
   name: string;
@@ -25,8 +25,8 @@ type RunSelectProps = {
 };
 
 function RunSelect({ event, ...otherProps }: RunSelectProps) {
-  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
+  const formatRunTimespan = useFormatRunTimespan();
   if (!event) {
     return null;
   }
@@ -37,7 +37,7 @@ function RunSelect({ event, ...otherProps }: RunSelectProps) {
       getOptionValue={(r: RunForRunSelectProps) => r.id.toString()}
       formatOptionLabel={(r: RunForRunSelectProps) => {
         const timespan = timespanFromRun(timezoneName, event, r);
-        const timeDescription = timespan.humanizeInTimezone(timezoneName, t, undefined, undefined);
+        const timeDescription = formatRunTimespan(timespan, { formatType: 'short' });
         const roomsDescription = sortByLocaleString(
           r.rooms || [],
           (room: RoomForRunSelectProps) => room.name,
