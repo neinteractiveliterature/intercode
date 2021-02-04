@@ -16,13 +16,13 @@ import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfi
 
 const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
 
-function getDefaultScheduleView() {
+function getDefaultScheduleView(scheduleGridConfigs: ScheduleGridConfig[]) {
   // Bootstrap's "medium" breakpoint
-  if (window.innerWidth < 768) {
+  if (window.innerWidth < 768 || scheduleGridConfigs.length === 0) {
     return 'list';
   }
 
-  return 'con_schedule';
+  return scheduleGridConfigs[0].key;
 }
 
 function getScheduleViewLabel(view: string, t: TFunction) {
@@ -92,15 +92,6 @@ export default function ScheduleApp() {
     signedIn: myProfile != null,
   });
 
-  const [scheduleView, setScheduleView] = useState<string>(() => {
-    const storedView = window.localStorage.getItem('schedule:view');
-    if (storedView && (SCHEDULE_VIEWS as readonly string[]).includes(storedView)) {
-      return storedView as string;
-    }
-
-    return getDefaultScheduleView();
-  });
-
   const configs = useMemo(
     () =>
       allConfigs.filter((config) => {
@@ -117,6 +108,15 @@ export default function ScheduleApp() {
       }),
     [currentAbility.can_read_schedule_with_counts, conventionTimespan],
   );
+
+  const [scheduleView, setScheduleView] = useState<string>(() => {
+    const storedView = window.localStorage.getItem('schedule:view');
+    if (storedView && (SCHEDULE_VIEWS as readonly string[]).includes(storedView)) {
+      return storedView as string;
+    }
+
+    return getDefaultScheduleView(configs);
+  });
 
   const scheduleGridConfig = useMemo(() => configs.find((c) => c.key === scheduleView), [
     scheduleView,
@@ -155,7 +155,7 @@ export default function ScheduleApp() {
   }
 
   if (scheduleView && scheduleView !== 'list' && !scheduleGridConfig) {
-    setScheduleView(getDefaultScheduleView());
+    setScheduleView(getDefaultScheduleView(configs));
     return <></>;
   }
 
