@@ -160,9 +160,9 @@ const AUTHENTICATION_LINK_REPLACEMENTS = {
   ),
 };
 
-const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<
-  Element
->[] = Object.entries(AUTHENTICATION_LINK_REPLACEMENTS).map(([path, processNode]) => ({
+const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<Element>[] = Object.entries(
+  AUTHENTICATION_LINK_REPLACEMENTS,
+).map(([path, processNode]) => ({
   shouldProcessNode: (node: Node) =>
     nodeIsElement(node) &&
     node.nodeName.toLowerCase() === 'a' &&
@@ -196,6 +196,14 @@ function processReactComponentNode(
   );
 }
 
+function getURLOrigin(href: string) {
+  try {
+    return new URL(href, window.location.href).origin;
+  } catch (error) {
+    return undefined;
+  }
+}
+
 function processCmsLinkNode(node: Element, children: ReactNode[], index: number) {
   const attributesArray = [...node.attributes];
   const hrefAttribute = attributesArray.find(
@@ -206,11 +214,7 @@ function processCmsLinkNode(node: Element, children: ReactNode[], index: number)
   );
   const href = (hrefAttribute || {}).value;
 
-  if (
-    href &&
-    !href.startsWith('#') &&
-    new URL(href, window.location.href).origin === window.location.origin
-  ) {
+  if (href && !href.startsWith('#') && getURLOrigin(href) === window.location.origin) {
     return (
       <Link to={href} key={index} {...jsxAttributesFromHTMLAttributes(otherAttributes)}>
         {children}
