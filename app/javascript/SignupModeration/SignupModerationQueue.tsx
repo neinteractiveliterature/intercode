@@ -1,6 +1,5 @@
 import { createContext, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
-import { useTranslation } from 'react-i18next';
 import { Column } from 'react-table';
 
 import AppRootContext from '../AppRootContext';
@@ -22,6 +21,7 @@ import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
+import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -73,8 +73,8 @@ function SignupModerationRunDetails({
   requestedBucketKey,
 }: SignupModerationRunDetailsProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const { t } = useTranslation();
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
+  const formatRunTimespan = useFormatRunTimespan();
 
   return (
     <>
@@ -93,7 +93,7 @@ function SignupModerationRunDetails({
           </small>
         </>
       )}
-      <small>{runTimespan.humanizeInTimezone(timezoneName, t)}</small>
+      <small>{formatRunTimespan(runTimespan, { formatType: 'short' })}</small>
     </>
   );
 }

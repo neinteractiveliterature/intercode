@@ -16,6 +16,7 @@ import AppRootContext from '../AppRootContext';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { useEventAdminEventsQueryQuery } from './queries.generated';
 import { useDropEventMutation } from './mutations.generated';
+import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 
 export type SingleRunEventAdminListProps = {
   eventCategoryId: number;
@@ -31,6 +32,7 @@ function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListPro
     error,
     eventCategoryId,
   );
+  const formatRunTimespan = useFormatRunTimespan();
 
   const [drop] = useDropEventMutation();
   const confirm = useConfirm();
@@ -62,7 +64,7 @@ function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListPro
             {event.title}
           </span>
         </th>
-        <td>{timespan && timespan.humanizeInTimezone(timezoneName, t)}</td>
+        <td>{timespan && formatRunTimespan(timespan, { formatType: 'short' })}</td>
         <td>
           <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
             Edit

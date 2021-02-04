@@ -157,6 +157,7 @@ class Timespan {
     return this.finish.diff(this.start, unit);
   }
 
+  /** @deprecated */
   humanizeStartInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
     if (this.start == null) {
       return formatLCM(DateTime.local(), getDateTimeFormat('anytime', t));
@@ -170,6 +171,7 @@ class Timespan {
     return humanizeTime(start, t, true);
   }
 
+  /** @deprecated */
   humanizeFinishInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
     if (this.finish == null) {
       return formatLCM(DateTime.local(), getDateTimeFormat('indefinitely', t));
@@ -190,6 +192,7 @@ class Timespan {
     return humanizeTime(finish, t, includeDayInFinish);
   }
 
+  /** @deprecated */
   humanizeInTimezone(
     timezoneName: string,
     t: TFunction,
