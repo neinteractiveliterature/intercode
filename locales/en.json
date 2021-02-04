@@ -171,6 +171,7 @@
     "indefinitely": "'indefinitely'",
     "longDate": "MMMM d, yyyy",
     "longDateTime": "MMMM d, yyyy 'at' h:mmaaa",
+    "longDateTimeWithZone": "MMMM d, yyyy 'at' h:mmaaa ZZZZ",
     "longDayYear": "d, yyyy",
     "longMonthDay": "MMMM d",
     "longMonthYear": "MMMM yyyy",
@@ -178,6 +179,7 @@
     "longWeekdayDate": "cccc, MMMM d, yyyy",
     "longWeekdayDateTimeWithZone": "cccc, MMMM d, yyyy 'at' h:mmaaa ZZZZ",
     "longWeekdayTime": "cccc h:mmaaa",
+    "longWeekdayTimeWithZone": "cccc h:mmaaa ZZZZ",
     "midnight": "'midnight'",
     "noon": "'noon'",
     "shortDateTime": "MMM d, yyyy h:mmaaa",
@@ -189,6 +191,7 @@
     "shortWeekday": "ccc",
     "shortWeekdayDateTime": "ccc, MMM d, yyyy h:mmaaa",
     "shortWeekdayTime": "ccc h:mmaaa",
+    "shortWeekdayTimeWithZone": "ccc h:mmaaa ZZZZ",
     "weekdayMidnight": "ccc 'midnight'",
     "weekdayNoon": "ccc 'noon'",
     "year": "yyyy"

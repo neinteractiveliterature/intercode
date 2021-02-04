@@ -51,7 +51,12 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
   const routeMatch = useRouteMatch<{ conventionDay: string }>('/events/schedule/:conventionDay');
   const { t } = useTranslation();
 
-  usePageTitle(`${t('navigation.events.eventSchedule')} (${t('schedule.views.listView')})`);
+  usePageTitle(
+    `${t('navigation.events.eventSchedule', 'Event Schedule')} (${t(
+      'schedule.views.listView',
+      'List view',
+    )})`,
+  );
 
   useLayoutEffect(() => {
     if (routeMatch?.params.conventionDay) {

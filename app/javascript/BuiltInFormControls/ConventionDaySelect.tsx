@@ -8,6 +8,8 @@ import {
 } from '../TimespanUtils';
 import AppRootContext from '../AppRootContext';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import { conventionRequiresDates } from '../EventsApp/runTimeFormatting';
+import { DateInput } from './DateTimeInput';
 
 export type ConventionDaySelectProps = {
   convention: ConventionForTimespanUtils;
@@ -19,6 +21,9 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
+  const showDateInput = useMemo(() => conventionRequiresDates(conventionTimespan), [
+    conventionTimespan,
+  ]);
   const conventionDays = useMemo(
     () =>
       conventionTimespan.isFinite()
@@ -30,12 +35,20 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
   );
 
   const inputChange = useCallback(
-    (event) => {
-      const newDayString = event.target.value;
+    (newDayString: string) => {
       onChange(DateTime.fromISO(newDayString, { zone: timezoneName }));
     },
     [onChange, timezoneName],
   );
+
+  if (showDateInput) {
+    return (
+      <fieldset className="form-group">
+        <legend className="col-form-label">Date</legend>
+        <DateInput value={value?.toISODate()} onChange={inputChange} />
+      </fieldset>
+    );
+  }
 
   const options = conventionDays.map((day) => (
     <div className="form-check form-check-inline" key={day.toISO()}>
@@ -46,7 +59,7 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
           name="day"
           value={day.toISO()}
           checked={day.toMillis() === value?.toMillis()}
-          onChange={inputChange}
+          onChange={(event) => inputChange(event.target.value)}
           aria-label={format(day, 'longWeekday')}
         />{' '}
         {format(day, 'longWeekday')}

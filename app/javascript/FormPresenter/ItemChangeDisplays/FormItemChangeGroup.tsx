@@ -1,11 +1,10 @@
-import { Fragment, useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Fragment, useMemo } from 'react';
 
-import AppRootContext from '../../AppRootContext';
 import FormItemChangeDisplay, { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
 import TextDiffDisplay from './TextDiffDisplay';
 import { getTimespanForChangeGroup, FormResponseChangeGroup } from './FormItemChangeUtils';
 import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import { useAppDateTimeFormat } from '../../TimeUtils';
 
 function describeFormItem(item: TypedFormItem | undefined | null, itemIdentifier: string) {
   if (!item) {
@@ -32,16 +31,15 @@ export type FormItemChangeGroupProps = {
 };
 
 function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps) {
-  const { timezoneName } = useContext(AppRootContext);
-  const { t } = useTranslation();
   const timespan = useMemo(() => getTimespanForChangeGroup(changeGroup), [changeGroup]);
+  const format = useAppDateTimeFormat();
 
   return (
     <section key={changeGroup.id}>
       <h3>
         {changeGroup.changes[0].user_con_profile.name_without_nickname}
         {': '}
-        {timespan.humanizeInTimezone(timezoneName, t, 'shortDateTime', 'shortTime')}
+        {format(timespan.start, 'shortDateTime')} - {format(timespan.finish, 'shortTime')}
       </h3>
       <dl>
         {changeGroup.changes.map((change) => (

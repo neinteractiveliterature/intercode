@@ -109,5 +109,8 @@ export function getTimespanForChangeGroup(changeGroup: FormResponseChangeGroup) 
 
   const sortedTimestamps = sortBy(allTimestamps, (timestamp) => timestamp.toMillis());
 
-  return Timespan.fromDateTimes(sortedTimestamps[0], sortedTimestamps[sortedTimestamps.length - 1]);
+  return Timespan.finiteFromDateTimes(
+    sortedTimestamps[0],
+    sortedTimestamps[sortedTimestamps.length - 1],
+  );
 }
