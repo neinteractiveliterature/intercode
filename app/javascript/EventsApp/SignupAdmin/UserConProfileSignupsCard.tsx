@@ -18,6 +18,7 @@ import {
 } from './queries.generated';
 import { useWithdrawAllUserConProfileSignupsMutation } from './mutations.generated';
 import { joinReact } from '../../RenderingUtils';
+import { useFormatRunTimespan } from '../runTimeFormatting';
 
 function filterAndSortSignups(
   signups: UserConProfileSignupsQueryQuery['userConProfile']['signups'],
@@ -39,6 +40,7 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
   });
   const [withdrawAllSignups] = useWithdrawAllUserConProfileSignupsMutation();
   const confirm = useConfirm();
+  const formatRunTimespan = useFormatRunTimespan();
 
   const signups = useMemo(
     () => (loading || error ? [] : filterAndSortSignups(data?.userConProfile.signups ?? [])),
@@ -85,12 +87,9 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
         <li>{formatSignupStatus(signup, signup.run.event, t)}</li>
         <li>
           <small>
-            {timespanFromRun(timezoneName, signup.run.event, signup.run).humanizeInTimezone(
-              timezoneName,
-              t,
-              'shortWeekdayTime',
-              'shortTimeWithZone',
-            )}
+            {formatRunTimespan(timespanFromRun(timezoneName, signup.run.event, signup.run), {
+              formatType: 'short',
+            })}
           </small>
         </li>
         <li>

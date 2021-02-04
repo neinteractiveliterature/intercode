@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import * as React from 'react';
 import sortBy from 'lodash/sortBy';
 
@@ -21,17 +20,6 @@ export type EventListMyRatingSelectorProps = {
 };
 
 function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelectorProps) {
-  const dismissedRatingsHelp = useMemo(
-    () => window.localStorage.getItem('dismissedRatingsHelp') != null,
-    [],
-  );
-
-  const ratingsHelpVisibleChanged = (newVisible: boolean) => {
-    if (!newVisible) {
-      window.localStorage.setItem('dismissedRatingsHelp', 'true');
-    }
-  };
-
   return (
     <div className="d-flex btn cursor-auto">
       <span className="mr-2">Show:</span>
@@ -46,10 +34,7 @@ function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelecto
         multiple
       />
       <span className="ml-2">
-        <HelpPopover
-          initialVisible={!dismissedRatingsHelp}
-          visibleChanged={ratingsHelpVisibleChanged}
-        >
+        <HelpPopover>
           <RatingsHelp />
         </HelpPopover>
       </span>

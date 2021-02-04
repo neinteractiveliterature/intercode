@@ -20,6 +20,7 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 import AppRootContext from '../../AppRootContext';
 import { SignupFieldsFragment, useAdminSignupQueryQuery } from './queries.generated';
 import { useUpdateSignupCountedMutation } from './mutations.generated';
+import { useFormatRunTimespan } from '../runTimeFormatting';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state]
@@ -111,6 +112,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
   const [updateCountedMutate] = useUpdateSignupCountedMutation();
   const confirm = useConfirm();
   const { t } = useTranslation();
+  const formatRunTimespan = useFormatRunTimespan();
 
   usePageTitle(
     useValueUnless(
@@ -257,7 +259,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
     const { run } = signup;
     const { event } = run;
     const { registration_policy: registrationPolicy } = event;
-    const timespan = Timespan.fromStrings(run.starts_at, run.ends_at);
+    const timespan = Timespan.finiteFromStrings(run.starts_at, run.ends_at);
     const teamMember = run.event.team_members.find(
       (tm) => tm.user_con_profile.id === signup.user_con_profile.id,
     );
@@ -273,7 +275,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
         <div className="card-header">
           {run.event.title}
           <br />
-          {timespan.humanizeInTimezone(timezoneName, t)}
+          {formatRunTimespan(timespan, { formatType: 'short' })}
           <br />
           {run.rooms
             .map((room) => room.name)

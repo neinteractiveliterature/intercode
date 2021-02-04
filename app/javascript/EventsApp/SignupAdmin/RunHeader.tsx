@@ -6,6 +6,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 import AppRootContext from '../../AppRootContext';
 import { useRunHeaderRunInfoQueryQuery } from './queries.generated';
+import { useFormatRunTimespan } from '../runTimeFormatting';
 
 export type RunHeaderProps = {
   eventId: number;
@@ -18,6 +19,7 @@ function RunHeader({ eventId, runId }: RunHeaderProps) {
   const { data, loading, error } = useRunHeaderRunInfoQueryQuery({
     variables: { runId, eventId },
   });
+  const formatRunTimespan = useFormatRunTimespan();
 
   if (loading) {
     return <LoadingIndicator />;
@@ -39,7 +41,9 @@ function RunHeader({ eventId, runId }: RunHeaderProps) {
       </h1>
 
       <h3 className="mt-0">
-        {timespanFromRun(timezoneName, event, event.run).humanizeInTimezone(timezoneName, t)}
+        {formatRunTimespan(timespanFromRun(timezoneName, event, event.run), {
+          formatType: 'short',
+        })}
       </h3>
 
       <ul className="list-inline">

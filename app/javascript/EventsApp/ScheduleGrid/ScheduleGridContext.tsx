@@ -51,6 +51,7 @@ export type ScheduleGridContextValue = {
 
 const skeletonScheduleGridConfig: ScheduleGridConfig = {
   key: 'skeleton',
+  icon: 'fa-calendar',
   titlei18nKey: 'schedule.skeletonTitle',
   classifyEventsBy: 'category',
   groupEventsBy: 'category',
