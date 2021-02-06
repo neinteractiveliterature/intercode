@@ -2468,137 +2468,792 @@ type MoveFormSectionPayload {
 }
 
 type Mutation {
-  acceptClickwrapAgreement(input: AcceptClickwrapAgreementInput!): AcceptClickwrapAgreementPayload
-  acceptSignupRequest(input: AcceptSignupRequestInput!): AcceptSignupRequestPayload
-  addOrderEntryToCurrentPendingOrder(input: AddOrderEntryToCurrentPendingOrderInput!): AddOrderEntryToCurrentPendingOrderPayload
-  cancelOrder(input: CancelOrderInput!): CancelOrderPayload
-  convertTicketToEventProvided(input: ConvertTicketToEventProvidedInput!): ConvertTicketToEventProvidedPayload
-  createCmsContentGroup(input: CreateCmsContentGroupInput!): CreateCmsContentGroupPayload
-  createCmsFile(input: CreateCmsFileInput!): CreateCmsFilePayload
-  createCmsGraphqlQuery(input: CreateCmsGraphqlQueryInput!): CreateCmsGraphqlQueryPayload
-  createCmsLayout(input: CreateCmsLayoutInput!): CreateCmsLayoutPayload
-  createCmsNavigationItem(input: CreateCmsNavigationItemInput!): CreateCmsNavigationItemPayload
-  createCmsPartial(input: CreateCmsPartialInput!): CreateCmsPartialPayload
-  createConvention(input: CreateConventionInput!): CreateConventionPayload
-  createConventionStripeAccount(input: CreateConventionStripeAccountInput!): CreateConventionStripeAccountPayload
-  createCoupon(input: CreateCouponInput!): CreateCouponPayload
-  createCouponApplication(input: CreateCouponApplicationInput!): CreateCouponApplicationPayload
-  createDepartment(input: CreateDepartmentInput!): CreateDepartmentPayload
-  createEmailRoute(input: CreateEmailRouteInput!): CreateEmailRoutePayload
-  createEvent(input: CreateEventInput!): CreateEventPayload
-  createEventCategory(input: CreateEventCategoryInput!): CreateEventCategoryPayload
-  createEventProposal(input: CreateEventProposalInput!): CreateEventProposalPayload
-  createFillerEvent(input: CreateFillerEventInput!): CreateFillerEventPayload
-  createForm(input: CreateFormInput!): CreateFormPayload
-  createFormItem(input: CreateFormItemInput!): CreateFormItemPayload
-  createFormSection(input: CreateFormSectionInput!): CreateFormSectionPayload
-  createFormWithJSON(input: CreateFormWithJSONInput!): CreateFormWithJSONPayload
-  createMaximumEventProvidedTicketsOverride(input: CreateMaximumEventProvidedTicketsOverrideInput!): CreateMaximumEventProvidedTicketsOverridePayload
-  createMultipleRuns(input: CreateMultipleRunsInput!): CreateMultipleRunsPayload
-  createMySignup(input: CreateMySignupInput!): CreateMySignupPayload
-  createOrder(input: CreateOrderInput!): CreateOrderPayload
-  createOrderEntry(input: CreateOrderEntryInput!): CreateOrderEntryPayload
-  createOrganizationRole(input: CreateOrganizationRoleInput!): CreateOrganizationRolePayload
-  createPage(input: CreatePageInput!): CreatePagePayload
-  createProduct(input: CreateProductInput!): CreateProductPayload
-  createRoom(input: CreateRoomInput!): CreateRoomPayload
-  createRun(input: CreateRunInput!): CreateRunPayload
-  createSignupRequest(input: CreateSignupRequestInput!): CreateSignupRequestPayload
-  createStaffPosition(input: CreateStaffPositionInput!): CreateStaffPositionPayload
-  createTeamMember(input: CreateTeamMemberInput!): CreateTeamMemberPayload
-  createTicket(input: CreateTicketInput!): CreateTicketPayload
-  createTicketType(input: CreateTicketTypeInput!): CreateTicketTypePayload
-  createUserActivityAlert(input: CreateUserActivityAlertInput!): CreateUserActivityAlertPayload
-  createUserConProfile(input: CreateUserConProfileInput!): CreateUserConProfilePayload
-  createUserSignup(input: CreateUserSignupInput!): CreateUserSignupPayload
-  deleteCmsContentGroup(input: DeleteCmsContentGroupInput!): DeleteCmsContentGroupPayload
-  deleteCmsFile(input: DeleteCmsFileInput!): DeleteCmsFilePayload
-  deleteCmsGraphqlQuery(input: DeleteCmsGraphqlQueryInput!): DeleteCmsGraphqlQueryPayload
-  deleteCmsLayout(input: DeleteCmsLayoutInput!): DeleteCmsLayoutPayload
-  deleteCmsNavigationItem(input: DeleteCmsNavigationItemInput!): DeleteCmsNavigationItemPayload
-  deleteCmsPartial(input: DeleteCmsPartialInput!): DeleteCmsPartialPayload
-  deleteCmsVariable(input: DeleteCmsVariableInput!): DeleteCmsVariablePayload
-  deleteCoupon(input: DeleteCouponInput!): DeleteCouponPayload
-  deleteCouponApplication(input: DeleteCouponApplicationInput!): DeleteCouponApplicationPayload
-  deleteDepartment(input: DeleteDepartmentInput!): DeleteDepartmentPayload
-  deleteEmailRoute(input: DeleteEmailRouteInput!): DeleteEmailRoutePayload
-  deleteEventCategory(input: DeleteEventCategoryInput!): DeleteEventCategoryPayload
-  deleteEventProposal(input: DeleteEventProposalInput!): DeleteEventProposalPayload
-  deleteForm(input: DeleteFormInput!): DeleteFormPayload
-  deleteFormItem(input: DeleteFormItemInput!): DeleteFormItemPayload
-  deleteFormSection(input: DeleteFormSectionInput!): DeleteFormSectionPayload
-  deleteMaximumEventProvidedTicketsOverride(input: DeleteMaximumEventProvidedTicketsOverrideInput!): DeleteMaximumEventProvidedTicketsOverridePayload
-  deleteOrderEntry(input: DeleteOrderEntryInput!): DeleteOrderEntryPayload
-  deleteOrganizationRole(input: DeleteOrganizationRoleInput!): DeleteOrganizationRolePayload
-  deletePage(input: DeletePageInput!): DeletePagePayload
-  deleteProduct(input: DeleteProductInput!): DeleteProductPayload
-  deleteRoom(input: DeleteRoomInput!): DeleteRoomPayload
-  deleteRun(input: DeleteRunInput!): DeleteRunPayload
-  deleteStaffPosition(input: DeleteStaffPositionInput!): DeleteStaffPositionPayload
-  deleteTeamMember(input: DeleteTeamMemberInput!): DeleteTeamMemberPayload
-  deleteTicket(input: DeleteTicketInput!): DeleteTicketPayload
-  deleteTicketType(input: DeleteTicketTypeInput!): DeleteTicketTypePayload
-  deleteUserActivityAlert(input: DeleteUserActivityAlertInput!): DeleteUserActivityAlertPayload
-  deleteUserConProfile(input: DeleteUserConProfileInput!): DeleteUserConProfilePayload
-  dropEvent(input: DropEventInput!): DropEventPayload
-  forceConfirmSignup(input: ForceConfirmSignupInput!): ForceConfirmSignupPayload
-  markOrderPaid(input: MarkOrderPaidInput!): MarkOrderPaidPayload
-  mergeUsers(input: MergeUsersInput!): MergeUsersPayload
-  moveFormItem(input: MoveFormItemInput!): MoveFormItemPayload
-  moveFormSection(input: MoveFormSectionInput!): MoveFormSectionPayload
-  provideEventTicket(input: ProvideEventTicketInput!): ProvideEventTicketPayload
-  rateEvent(input: RateEventInput!): RateEventPayload
-  rejectSignupRequest(input: RejectSignupRequestInput!): RejectSignupRequestPayload
-  renameCmsFile(input: RenameCmsFileInput!): RenameCmsFilePayload
-  restoreDroppedEvent(input: RestoreDroppedEventInput!): RestoreDroppedEventPayload
-  revokeAuthorizedApplication(input: RevokeAuthorizedApplicationInput!): RevokeAuthorizedApplicationPayload
-  setCmsVariable(input: SetCmsVariableInput!): SetCmsVariablePayload
-  setConventionCanceled(input: SetConventionCanceledInput!): SetConventionCanceledPayload
-  sortCmsNavigationItems(input: SortCmsNavigationItemsInput!): SortCmsNavigationItemsPayload
-  submitEventProposal(input: SubmitEventProposalInput!): SubmitEventProposalPayload
-  submitOrder(input: SubmitOrderInput!): SubmitOrderPayload
-  transitionEventProposal(input: TransitionEventProposalInput!): TransitionEventProposalPayload
-  updateCmsContentGroup(input: UpdateCmsContentGroupInput!): UpdateCmsContentGroupPayload
-  updateCmsGraphqlQuery(input: UpdateCmsGraphqlQueryInput!): UpdateCmsGraphqlQueryPayload
-  updateCmsLayout(input: UpdateCmsLayoutInput!): UpdateCmsLayoutPayload
-  updateCmsNavigationItem(input: UpdateCmsNavigationItemInput!): UpdateCmsNavigationItemPayload
-  updateCmsPartial(input: UpdateCmsPartialInput!): UpdateCmsPartialPayload
-  updateConvention(input: UpdateConventionInput!): UpdateConventionPayload
-  updateCoupon(input: UpdateCouponInput!): UpdateCouponPayload
-  updateDepartment(input: UpdateDepartmentInput!): UpdateDepartmentPayload
-  updateEmailRoute(input: UpdateEmailRouteInput!): UpdateEmailRoutePayload
-  updateEvent(input: UpdateEventInput!): UpdateEventPayload
-  updateEventAdminNotes(input: UpdateEventAdminNotesInput!): UpdateEventAdminNotesPayload
-  updateEventCategory(input: UpdateEventCategoryInput!): UpdateEventCategoryPayload
-  updateEventProposal(input: UpdateEventProposalInput!): UpdateEventProposalPayload
-  updateEventProposalAdminNotes(input: UpdateEventProposalAdminNotesInput!): UpdateEventProposalAdminNotesPayload
-  updateForm(input: UpdateFormInput!): UpdateFormPayload
-  updateFormItem(input: UpdateFormItemInput!): UpdateFormItemPayload
-  updateFormSection(input: UpdateFormSectionInput!): UpdateFormSectionPayload
-  updateFormWithJSON(input: UpdateFormWithJSONInput!): UpdateFormWithJSONPayload
-  updateMaximumEventProvidedTicketsOverride(input: UpdateMaximumEventProvidedTicketsOverrideInput!): UpdateMaximumEventProvidedTicketsOverridePayload
-  updateNotificationTemplate(input: UpdateNotificationTemplateInput!): UpdateNotificationTemplatePayload
-  updateOrder(input: UpdateOrderInput!): UpdateOrderPayload
-  updateOrderEntry(input: UpdateOrderEntryInput!): UpdateOrderEntryPayload
-  updateOrganizationRole(input: UpdateOrganizationRoleInput!): UpdateOrganizationRolePayload
-  updatePage(input: UpdatePageInput!): UpdatePagePayload
-  updateProduct(input: UpdateProductInput!): UpdateProductPayload
-  updateRoom(input: UpdateRoomInput!): UpdateRoomPayload
-  updateRootSite(input: UpdateRootSiteInput!): UpdateRootSitePayload
-  updateRun(input: UpdateRunInput!): UpdateRunPayload
-  updateSignupBucket(input: UpdateSignupBucketInput!): UpdateSignupBucketPayload
-  updateSignupCounted(input: UpdateSignupCountedInput!): UpdateSignupCountedPayload
-  updateStaffPosition(input: UpdateStaffPositionInput!): UpdateStaffPositionPayload
-  updateStaffPositionPermissions(input: UpdateStaffPositionPermissionsInput!): UpdateStaffPositionPermissionsPayload
-  updateTeamMember(input: UpdateTeamMemberInput!): UpdateTeamMemberPayload
-  updateTicket(input: UpdateTicketInput!): UpdateTicketPayload
-  updateTicketType(input: UpdateTicketTypeInput!): UpdateTicketTypePayload
-  updateUserActivityAlert(input: UpdateUserActivityAlertInput!): UpdateUserActivityAlertPayload
-  updateUserConProfile(input: UpdateUserConProfileInput!): UpdateUserConProfilePayload
-  withdrawAllUserConProfileSignups(input: WithdrawAllUserConProfileSignupsInput!): WithdrawAllUserConProfileSignupsPayload
-  withdrawMySignup(input: WithdrawMySignupInput!): WithdrawMySignupPayload
-  withdrawSignupRequest(input: WithdrawSignupRequestInput!): WithdrawSignupRequestPayload
-  withdrawUserSignup(input: WithdrawUserSignupInput!): WithdrawUserSignupPayload
+  acceptClickwrapAgreement(
+    """
+    Parameters for AcceptClickwrapAgreement
+    """
+    input: AcceptClickwrapAgreementInput!
+  ): AcceptClickwrapAgreementPayload
+  acceptSignupRequest(
+    """
+    Parameters for AcceptSignupRequest
+    """
+    input: AcceptSignupRequestInput!
+  ): AcceptSignupRequestPayload
+  addOrderEntryToCurrentPendingOrder(
+    """
+    Parameters for AddOrderEntryToCurrentPendingOrder
+    """
+    input: AddOrderEntryToCurrentPendingOrderInput!
+  ): AddOrderEntryToCurrentPendingOrderPayload
+  cancelOrder(
+    """
+    Parameters for CancelOrder
+    """
+    input: CancelOrderInput!
+  ): CancelOrderPayload
+  convertTicketToEventProvided(
+    """
+    Parameters for ConvertTicketToEventProvided
+    """
+    input: ConvertTicketToEventProvidedInput!
+  ): ConvertTicketToEventProvidedPayload
+  createCmsContentGroup(
+    """
+    Parameters for CreateCmsContentGroup
+    """
+    input: CreateCmsContentGroupInput!
+  ): CreateCmsContentGroupPayload
+  createCmsFile(
+    """
+    Parameters for CreateCmsFile
+    """
+    input: CreateCmsFileInput!
+  ): CreateCmsFilePayload
+  createCmsGraphqlQuery(
+    """
+    Parameters for CreateCmsGraphqlQuery
+    """
+    input: CreateCmsGraphqlQueryInput!
+  ): CreateCmsGraphqlQueryPayload
+  createCmsLayout(
+    """
+    Parameters for CreateCmsLayout
+    """
+    input: CreateCmsLayoutInput!
+  ): CreateCmsLayoutPayload
+  createCmsNavigationItem(
+    """
+    Parameters for CreateCmsNavigationItem
+    """
+    input: CreateCmsNavigationItemInput!
+  ): CreateCmsNavigationItemPayload
+  createCmsPartial(
+    """
+    Parameters for CreateCmsPartial
+    """
+    input: CreateCmsPartialInput!
+  ): CreateCmsPartialPayload
+  createConvention(
+    """
+    Parameters for CreateConvention
+    """
+    input: CreateConventionInput!
+  ): CreateConventionPayload
+  createConventionStripeAccount(
+    """
+    Parameters for CreateConventionStripeAccount
+    """
+    input: CreateConventionStripeAccountInput!
+  ): CreateConventionStripeAccountPayload
+  createCoupon(
+    """
+    Parameters for CreateCoupon
+    """
+    input: CreateCouponInput!
+  ): CreateCouponPayload
+  createCouponApplication(
+    """
+    Parameters for CreateCouponApplication
+    """
+    input: CreateCouponApplicationInput!
+  ): CreateCouponApplicationPayload
+  createDepartment(
+    """
+    Parameters for CreateDepartment
+    """
+    input: CreateDepartmentInput!
+  ): CreateDepartmentPayload
+  createEmailRoute(
+    """
+    Parameters for CreateEmailRoute
+    """
+    input: CreateEmailRouteInput!
+  ): CreateEmailRoutePayload
+  createEvent(
+    """
+    Parameters for CreateEvent
+    """
+    input: CreateEventInput!
+  ): CreateEventPayload
+  createEventCategory(
+    """
+    Parameters for CreateEventCategory
+    """
+    input: CreateEventCategoryInput!
+  ): CreateEventCategoryPayload
+  createEventProposal(
+    """
+    Parameters for CreateEventProposal
+    """
+    input: CreateEventProposalInput!
+  ): CreateEventProposalPayload
+  createFillerEvent(
+    """
+    Parameters for CreateFillerEvent
+    """
+    input: CreateFillerEventInput!
+  ): CreateFillerEventPayload
+  createForm(
+    """
+    Parameters for CreateForm
+    """
+    input: CreateFormInput!
+  ): CreateFormPayload
+  createFormItem(
+    """
+    Parameters for CreateFormItem
+    """
+    input: CreateFormItemInput!
+  ): CreateFormItemPayload
+  createFormSection(
+    """
+    Parameters for CreateFormSection
+    """
+    input: CreateFormSectionInput!
+  ): CreateFormSectionPayload
+  createFormWithJSON(
+    """
+    Parameters for CreateFormWithJSON
+    """
+    input: CreateFormWithJSONInput!
+  ): CreateFormWithJSONPayload
+  createMaximumEventProvidedTicketsOverride(
+    """
+    Parameters for CreateMaximumEventProvidedTicketsOverride
+    """
+    input: CreateMaximumEventProvidedTicketsOverrideInput!
+  ): CreateMaximumEventProvidedTicketsOverridePayload
+  createMultipleRuns(
+    """
+    Parameters for CreateMultipleRuns
+    """
+    input: CreateMultipleRunsInput!
+  ): CreateMultipleRunsPayload
+  createMySignup(
+    """
+    Parameters for CreateMySignup
+    """
+    input: CreateMySignupInput!
+  ): CreateMySignupPayload
+  createOrder(
+    """
+    Parameters for CreateOrder
+    """
+    input: CreateOrderInput!
+  ): CreateOrderPayload
+  createOrderEntry(
+    """
+    Parameters for CreateOrderEntry
+    """
+    input: CreateOrderEntryInput!
+  ): CreateOrderEntryPayload
+  createOrganizationRole(
+    """
+    Parameters for CreateOrganizationRole
+    """
+    input: CreateOrganizationRoleInput!
+  ): CreateOrganizationRolePayload
+  createPage(
+    """
+    Parameters for CreatePage
+    """
+    input: CreatePageInput!
+  ): CreatePagePayload
+  createProduct(
+    """
+    Parameters for CreateProduct
+    """
+    input: CreateProductInput!
+  ): CreateProductPayload
+  createRoom(
+    """
+    Parameters for CreateRoom
+    """
+    input: CreateRoomInput!
+  ): CreateRoomPayload
+  createRun(
+    """
+    Parameters for CreateRun
+    """
+    input: CreateRunInput!
+  ): CreateRunPayload
+  createSignupRequest(
+    """
+    Parameters for CreateSignupRequest
+    """
+    input: CreateSignupRequestInput!
+  ): CreateSignupRequestPayload
+  createStaffPosition(
+    """
+    Parameters for CreateStaffPosition
+    """
+    input: CreateStaffPositionInput!
+  ): CreateStaffPositionPayload
+  createTeamMember(
+    """
+    Parameters for CreateTeamMember
+    """
+    input: CreateTeamMemberInput!
+  ): CreateTeamMemberPayload
+  createTicket(
+    """
+    Parameters for CreateTicket
+    """
+    input: CreateTicketInput!
+  ): CreateTicketPayload
+  createTicketType(
+    """
+    Parameters for CreateTicketType
+    """
+    input: CreateTicketTypeInput!
+  ): CreateTicketTypePayload
+  createUserActivityAlert(
+    """
+    Parameters for CreateUserActivityAlert
+    """
+    input: CreateUserActivityAlertInput!
+  ): CreateUserActivityAlertPayload
+  createUserConProfile(
+    """
+    Parameters for CreateUserConProfile
+    """
+    input: CreateUserConProfileInput!
+  ): CreateUserConProfilePayload
+  createUserSignup(
+    """
+    Parameters for CreateUserSignup
+    """
+    input: CreateUserSignupInput!
+  ): CreateUserSignupPayload
+  deleteCmsContentGroup(
+    """
+    Parameters for DeleteCmsContentGroup
+    """
+    input: DeleteCmsContentGroupInput!
+  ): DeleteCmsContentGroupPayload
+  deleteCmsFile(
+    """
+    Parameters for DeleteCmsFile
+    """
+    input: DeleteCmsFileInput!
+  ): DeleteCmsFilePayload
+  deleteCmsGraphqlQuery(
+    """
+    Parameters for DeleteCmsGraphqlQuery
+    """
+    input: DeleteCmsGraphqlQueryInput!
+  ): DeleteCmsGraphqlQueryPayload
+  deleteCmsLayout(
+    """
+    Parameters for DeleteCmsLayout
+    """
+    input: DeleteCmsLayoutInput!
+  ): DeleteCmsLayoutPayload
+  deleteCmsNavigationItem(
+    """
+    Parameters for DeleteCmsNavigationItem
+    """
+    input: DeleteCmsNavigationItemInput!
+  ): DeleteCmsNavigationItemPayload
+  deleteCmsPartial(
+    """
+    Parameters for DeleteCmsPartial
+    """
+    input: DeleteCmsPartialInput!
+  ): DeleteCmsPartialPayload
+  deleteCmsVariable(
+    """
+    Parameters for DeleteCmsVariable
+    """
+    input: DeleteCmsVariableInput!
+  ): DeleteCmsVariablePayload
+  deleteCoupon(
+    """
+    Parameters for DeleteCoupon
+    """
+    input: DeleteCouponInput!
+  ): DeleteCouponPayload
+  deleteCouponApplication(
+    """
+    Parameters for DeleteCouponApplication
+    """
+    input: DeleteCouponApplicationInput!
+  ): DeleteCouponApplicationPayload
+  deleteDepartment(
+    """
+    Parameters for DeleteDepartment
+    """
+    input: DeleteDepartmentInput!
+  ): DeleteDepartmentPayload
+  deleteEmailRoute(
+    """
+    Parameters for DeleteEmailRoute
+    """
+    input: DeleteEmailRouteInput!
+  ): DeleteEmailRoutePayload
+  deleteEventCategory(
+    """
+    Parameters for DeleteEventCategory
+    """
+    input: DeleteEventCategoryInput!
+  ): DeleteEventCategoryPayload
+  deleteEventProposal(
+    """
+    Parameters for DeleteEventProposal
+    """
+    input: DeleteEventProposalInput!
+  ): DeleteEventProposalPayload
+  deleteForm(
+    """
+    Parameters for DeleteForm
+    """
+    input: DeleteFormInput!
+  ): DeleteFormPayload
+  deleteFormItem(
+    """
+    Parameters for DeleteFormItem
+    """
+    input: DeleteFormItemInput!
+  ): DeleteFormItemPayload
+  deleteFormSection(
+    """
+    Parameters for DeleteFormSection
+    """
+    input: DeleteFormSectionInput!
+  ): DeleteFormSectionPayload
+  deleteMaximumEventProvidedTicketsOverride(
+    """
+    Parameters for DeleteMaximumEventProvidedTicketsOverride
+    """
+    input: DeleteMaximumEventProvidedTicketsOverrideInput!
+  ): DeleteMaximumEventProvidedTicketsOverridePayload
+  deleteOrderEntry(
+    """
+    Parameters for DeleteOrderEntry
+    """
+    input: DeleteOrderEntryInput!
+  ): DeleteOrderEntryPayload
+  deleteOrganizationRole(
+    """
+    Parameters for DeleteOrganizationRole
+    """
+    input: DeleteOrganizationRoleInput!
+  ): DeleteOrganizationRolePayload
+  deletePage(
+    """
+    Parameters for DeletePage
+    """
+    input: DeletePageInput!
+  ): DeletePagePayload
+  deleteProduct(
+    """
+    Parameters for DeleteProduct
+    """
+    input: DeleteProductInput!
+  ): DeleteProductPayload
+  deleteRoom(
+    """
+    Parameters for DeleteRoom
+    """
+    input: DeleteRoomInput!
+  ): DeleteRoomPayload
+  deleteRun(
+    """
+    Parameters for DeleteRun
+    """
+    input: DeleteRunInput!
+  ): DeleteRunPayload
+  deleteStaffPosition(
+    """
+    Parameters for DeleteStaffPosition
+    """
+    input: DeleteStaffPositionInput!
+  ): DeleteStaffPositionPayload
+  deleteTeamMember(
+    """
+    Parameters for DeleteTeamMember
+    """
+    input: DeleteTeamMemberInput!
+  ): DeleteTeamMemberPayload
+  deleteTicket(
+    """
+    Parameters for DeleteTicket
+    """
+    input: DeleteTicketInput!
+  ): DeleteTicketPayload
+  deleteTicketType(
+    """
+    Parameters for DeleteTicketType
+    """
+    input: DeleteTicketTypeInput!
+  ): DeleteTicketTypePayload
+  deleteUserActivityAlert(
+    """
+    Parameters for DeleteUserActivityAlert
+    """
+    input: DeleteUserActivityAlertInput!
+  ): DeleteUserActivityAlertPayload
+  deleteUserConProfile(
+    """
+    Parameters for DeleteUserConProfile
+    """
+    input: DeleteUserConProfileInput!
+  ): DeleteUserConProfilePayload
+  dropEvent(
+    """
+    Parameters for DropEvent
+    """
+    input: DropEventInput!
+  ): DropEventPayload
+  forceConfirmSignup(
+    """
+    Parameters for ForceConfirmSignup
+    """
+    input: ForceConfirmSignupInput!
+  ): ForceConfirmSignupPayload
+  markOrderPaid(
+    """
+    Parameters for MarkOrderPaid
+    """
+    input: MarkOrderPaidInput!
+  ): MarkOrderPaidPayload
+  mergeUsers(
+    """
+    Parameters for MergeUsers
+    """
+    input: MergeUsersInput!
+  ): MergeUsersPayload
+  moveFormItem(
+    """
+    Parameters for MoveFormItem
+    """
+    input: MoveFormItemInput!
+  ): MoveFormItemPayload
+  moveFormSection(
+    """
+    Parameters for MoveFormSection
+    """
+    input: MoveFormSectionInput!
+  ): MoveFormSectionPayload
+  provideEventTicket(
+    """
+    Parameters for ProvideEventTicket
+    """
+    input: ProvideEventTicketInput!
+  ): ProvideEventTicketPayload
+  rateEvent(
+    """
+    Parameters for RateEvent
+    """
+    input: RateEventInput!
+  ): RateEventPayload
+  rejectSignupRequest(
+    """
+    Parameters for RejectSignupRequest
+    """
+    input: RejectSignupRequestInput!
+  ): RejectSignupRequestPayload
+  renameCmsFile(
+    """
+    Parameters for RenameCmsFile
+    """
+    input: RenameCmsFileInput!
+  ): RenameCmsFilePayload
+  restoreDroppedEvent(
+    """
+    Parameters for RestoreDroppedEvent
+    """
+    input: RestoreDroppedEventInput!
+  ): RestoreDroppedEventPayload
+  revokeAuthorizedApplication(
+    """
+    Parameters for RevokeAuthorizedApplication
+    """
+    input: RevokeAuthorizedApplicationInput!
+  ): RevokeAuthorizedApplicationPayload
+  setCmsVariable(
+    """
+    Parameters for SetCmsVariable
+    """
+    input: SetCmsVariableInput!
+  ): SetCmsVariablePayload
+  setConventionCanceled(
+    """
+    Parameters for SetConventionCanceled
+    """
+    input: SetConventionCanceledInput!
+  ): SetConventionCanceledPayload
+  sortCmsNavigationItems(
+    """
+    Parameters for SortCmsNavigationItems
+    """
+    input: SortCmsNavigationItemsInput!
+  ): SortCmsNavigationItemsPayload
+  submitEventProposal(
+    """
+    Parameters for SubmitEventProposal
+    """
+    input: SubmitEventProposalInput!
+  ): SubmitEventProposalPayload
+  submitOrder(
+    """
+    Parameters for SubmitOrder
+    """
+    input: SubmitOrderInput!
+  ): SubmitOrderPayload
+  transitionEventProposal(
+    """
+    Parameters for TransitionEventProposal
+    """
+    input: TransitionEventProposalInput!
+  ): TransitionEventProposalPayload
+  updateCmsContentGroup(
+    """
+    Parameters for UpdateCmsContentGroup
+    """
+    input: UpdateCmsContentGroupInput!
+  ): UpdateCmsContentGroupPayload
+  updateCmsGraphqlQuery(
+    """
+    Parameters for UpdateCmsGraphqlQuery
+    """
+    input: UpdateCmsGraphqlQueryInput!
+  ): UpdateCmsGraphqlQueryPayload
+  updateCmsLayout(
+    """
+    Parameters for UpdateCmsLayout
+    """
+    input: UpdateCmsLayoutInput!
+  ): UpdateCmsLayoutPayload
+  updateCmsNavigationItem(
+    """
+    Parameters for UpdateCmsNavigationItem
+    """
+    input: UpdateCmsNavigationItemInput!
+  ): UpdateCmsNavigationItemPayload
+  updateCmsPartial(
+    """
+    Parameters for UpdateCmsPartial
+    """
+    input: UpdateCmsPartialInput!
+  ): UpdateCmsPartialPayload
+  updateConvention(
+    """
+    Parameters for UpdateConvention
+    """
+    input: UpdateConventionInput!
+  ): UpdateConventionPayload
+  updateCoupon(
+    """
+    Parameters for UpdateCoupon
+    """
+    input: UpdateCouponInput!
+  ): UpdateCouponPayload
+  updateDepartment(
+    """
+    Parameters for UpdateDepartment
+    """
+    input: UpdateDepartmentInput!
+  ): UpdateDepartmentPayload
+  updateEmailRoute(
+    """
+    Parameters for UpdateEmailRoute
+    """
+    input: UpdateEmailRouteInput!
+  ): UpdateEmailRoutePayload
+  updateEvent(
+    """
+    Parameters for UpdateEvent
+    """
+    input: UpdateEventInput!
+  ): UpdateEventPayload
+  updateEventAdminNotes(
+    """
+    Parameters for UpdateEventAdminNotes
+    """
+    input: UpdateEventAdminNotesInput!
+  ): UpdateEventAdminNotesPayload
+  updateEventCategory(
+    """
+    Parameters for UpdateEventCategory
+    """
+    input: UpdateEventCategoryInput!
+  ): UpdateEventCategoryPayload
+  updateEventProposal(
+    """
+    Parameters for UpdateEventProposal
+    """
+    input: UpdateEventProposalInput!
+  ): UpdateEventProposalPayload
+  updateEventProposalAdminNotes(
+    """
+    Parameters for UpdateEventProposalAdminNotes
+    """
+    input: UpdateEventProposalAdminNotesInput!
+  ): UpdateEventProposalAdminNotesPayload
+  updateForm(
+    """
+    Parameters for UpdateForm
+    """
+    input: UpdateFormInput!
+  ): UpdateFormPayload
+  updateFormItem(
+    """
+    Parameters for UpdateFormItem
+    """
+    input: UpdateFormItemInput!
+  ): UpdateFormItemPayload
+  updateFormSection(
+    """
+    Parameters for UpdateFormSection
+    """
+    input: UpdateFormSectionInput!
+  ): UpdateFormSectionPayload
+  updateFormWithJSON(
+    """
+    Parameters for UpdateFormWithJSON
+    """
+    input: UpdateFormWithJSONInput!
+  ): UpdateFormWithJSONPayload
+  updateMaximumEventProvidedTicketsOverride(
+    """
+    Parameters for UpdateMaximumEventProvidedTicketsOverride
+    """
+    input: UpdateMaximumEventProvidedTicketsOverrideInput!
+  ): UpdateMaximumEventProvidedTicketsOverridePayload
+  updateNotificationTemplate(
+    """
+    Parameters for UpdateNotificationTemplate
+    """
+    input: UpdateNotificationTemplateInput!
+  ): UpdateNotificationTemplatePayload
+  updateOrder(
+    """
+    Parameters for UpdateOrder
+    """
+    input: UpdateOrderInput!
+  ): UpdateOrderPayload
+  updateOrderEntry(
+    """
+    Parameters for UpdateOrderEntry
+    """
+    input: UpdateOrderEntryInput!
+  ): UpdateOrderEntryPayload
+  updateOrganizationRole(
+    """
+    Parameters for UpdateOrganizationRole
+    """
+    input: UpdateOrganizationRoleInput!
+  ): UpdateOrganizationRolePayload
+  updatePage(
+    """
+    Parameters for UpdatePage
+    """
+    input: UpdatePageInput!
+  ): UpdatePagePayload
+  updateProduct(
+    """
+    Parameters for UpdateProduct
+    """
+    input: UpdateProductInput!
+  ): UpdateProductPayload
+  updateRoom(
+    """
+    Parameters for UpdateRoom
+    """
+    input: UpdateRoomInput!
+  ): UpdateRoomPayload
+  updateRootSite(
+    """
+    Parameters for UpdateRootSite
+    """
+    input: UpdateRootSiteInput!
+  ): UpdateRootSitePayload
+  updateRun(
+    """
+    Parameters for UpdateRun
+    """
+    input: UpdateRunInput!
+  ): UpdateRunPayload
+  updateSignupBucket(
+    """
+    Parameters for UpdateSignupBucket
+    """
+    input: UpdateSignupBucketInput!
+  ): UpdateSignupBucketPayload
+  updateSignupCounted(
+    """
+    Parameters for UpdateSignupCounted
+    """
+    input: UpdateSignupCountedInput!
+  ): UpdateSignupCountedPayload
+  updateStaffPosition(
+    """
+    Parameters for UpdateStaffPosition
+    """
+    input: UpdateStaffPositionInput!
+  ): UpdateStaffPositionPayload
+  updateStaffPositionPermissions(
+    """
+    Parameters for UpdateStaffPositionPermissions
+    """
+    input: UpdateStaffPositionPermissionsInput!
+  ): UpdateStaffPositionPermissionsPayload
+  updateTeamMember(
+    """
+    Parameters for UpdateTeamMember
+    """
+    input: UpdateTeamMemberInput!
+  ): UpdateTeamMemberPayload
+  updateTicket(
+    """
+    Parameters for UpdateTicket
+    """
+    input: UpdateTicketInput!
+  ): UpdateTicketPayload
+  updateTicketType(
+    """
+    Parameters for UpdateTicketType
+    """
+    input: UpdateTicketTypeInput!
+  ): UpdateTicketTypePayload
+  updateUserActivityAlert(
+    """
+    Parameters for UpdateUserActivityAlert
+    """
+    input: UpdateUserActivityAlertInput!
+  ): UpdateUserActivityAlertPayload
+  updateUserConProfile(
+    """
+    Parameters for UpdateUserConProfile
+    """
+    input: UpdateUserConProfileInput!
+  ): UpdateUserConProfilePayload
+  withdrawAllUserConProfileSignups(
+    """
+    Parameters for WithdrawAllUserConProfileSignups
+    """
+    input: WithdrawAllUserConProfileSignupsInput!
+  ): WithdrawAllUserConProfileSignupsPayload
+  withdrawMySignup(
+    """
+    Parameters for WithdrawMySignup
+    """
+    input: WithdrawMySignupInput!
+  ): WithdrawMySignupPayload
+  withdrawSignupRequest(
+    """
+    Parameters for WithdrawSignupRequest
+    """
+    input: WithdrawSignupRequestInput!
+  ): WithdrawSignupRequestPayload
+  withdrawUserSignup(
+    """
+    Parameters for WithdrawUserSignup
+    """
+    input: WithdrawUserSignupInput!
+  ): WithdrawUserSignupPayload
 }
 
 type NotificationDestination {
@@ -3489,6 +4144,11 @@ enum SiteMode {
   Site behaves as a convention with multiple events
   """
   convention
+
+  """
+  Site behaves as a series of standalone events
+  """
+  event_series
 
   """
   Site behaves as a single standalone event

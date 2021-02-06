@@ -506,6 +506,12 @@
         "description": "Site behaves as a single standalone event",
         "isDeprecated": false,
         "deprecationReason": null
+      },
+      {
+        "name": "event_series",
+        "description": "Site behaves as a series of standalone events",
+        "isDeprecated": false,
+        "deprecationReason": null
       }
     ],
     "possibleTypes": null
