@@ -1,6 +1,6 @@
 class Convention < ApplicationRecord
   TICKET_MODES = %w[disabled required_for_signup]
-  SITE_MODES = %w[convention single_event]
+  SITE_MODES = %w[convention single_event event_series]
   SIGNUP_MODES = %w[self_service moderated]
   EMAIL_MODES = %w[forward staff_emails_to_catch_all]
   TIMEZONE_MODES = %w[convention_local user_local]
@@ -137,17 +137,22 @@ class Convention < ApplicationRecord
   end
 
   def site_mode_must_be_possible
-    return unless site_mode
+    if site_mode == 'single_event'
+      unless ticket_mode == 'disabled'
+        errors.add(:base, 'Single-event sites cannot sell tickets (yet)')
+      end
 
-    if site_mode == 'single_event' && ticket_mode != 'disabled'
-      errors.add(:base, 'Single-event sites cannot sell tickets (yet)')
+      if events.count > 1
+        errors.add(
+          :site_mode,
+          'single_event is not valid because this convention has multiple events already'
+        )
+      end
+    elsif site_mode == 'event_series'
+      unless ticket_mode == 'disabled'
+        errors.add(:base, 'Event series sites cannot sell tickets (yet)')
+      end
     end
-
-    return unless site_mode == 'single_event' && events.count > 1
-    errors.add(
-      :site_mode,
-      'single_event is not valid because this convention has multiple events already'
-    )
   end
 
   SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes]

@@ -110,6 +110,10 @@ function ConventionFormGeneralSection({
             value: 'single_event',
             label: 'Site behaves as a single standalone event',
           },
+          {
+            value: 'event_series',
+            label: 'Site behaves as a series of standalone events',
+          },
         ]}
         value={convention.site_mode}
         onChange={(newValue: string) => setSiteMode(newValue as SiteMode)}

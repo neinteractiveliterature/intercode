@@ -13,6 +13,7 @@ import PersonalScheduleFiltersBar, {
 } from './ScheduleGrid/PersonalScheduleFiltersBar';
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
+import { conventionRequiresDates } from './runTimeFormatting';
 
 const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
 
@@ -85,7 +86,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
 }
 
 export default function ScheduleApp() {
-  const { myProfile, currentAbility, conventionTimespan } = useContext(AppRootContext);
+  const { myProfile, currentAbility, conventionTimespan, siteMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
     showPersonalFilters: true,
@@ -96,7 +97,7 @@ export default function ScheduleApp() {
     () =>
       allConfigs.filter((config) => {
         // Only show grids for conventions less than a week long
-        if ((conventionTimespan?.getLength('days')?.days ?? 7) >= 7) {
+        if (conventionRequiresDates(conventionTimespan, siteMode)) {
           return false;
         }
 
@@ -106,7 +107,7 @@ export default function ScheduleApp() {
 
         return true;
       }),
-    [currentAbility.can_read_schedule_with_counts, conventionTimespan],
+    [currentAbility.can_read_schedule_with_counts, conventionTimespan, siteMode],
   );
 
   const [scheduleView, setScheduleView] = useState<string>(() => {
