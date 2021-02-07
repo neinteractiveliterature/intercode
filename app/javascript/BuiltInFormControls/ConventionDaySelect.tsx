@@ -18,11 +18,12 @@ export type ConventionDaySelectProps = {
 };
 
 function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps) {
-  const { timezoneName } = useContext(AppRootContext);
+  const { timezoneName, siteMode } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
-  const showDateInput = useMemo(() => conventionRequiresDates(conventionTimespan), [
+  const showDateInput = useMemo(() => conventionRequiresDates(conventionTimespan, siteMode), [
     conventionTimespan,
+    siteMode,
   ]);
   const conventionDays = useMemo(
     () =>
