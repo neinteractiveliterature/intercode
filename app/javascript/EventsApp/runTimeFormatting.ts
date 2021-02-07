@@ -2,12 +2,16 @@ import { DateTime } from 'luxon';
 import { useCallback, useContext } from 'react';
 import AppRootContext from '../AppRootContext';
 import { DateTimeFormatKey } from '../DateTimeFormats';
+import { SiteMode } from '../graphqlTypes.generated';
 import Timespan, { FiniteTimespan } from '../Timespan';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
-export function conventionRequiresDates(conventionTimespan: Timespan | undefined) {
+export function conventionRequiresDates(
+  conventionTimespan: Timespan | undefined,
+  siteMode: SiteMode | undefined,
+) {
   const lengthInDays = conventionTimespan?.getLength('days')?.days;
-  if (lengthInDays == null || lengthInDays >= 7) {
+  if (siteMode === SiteMode.EventSeries || lengthInDays == null || lengthInDays >= 7) {
     return true;
   }
 
@@ -22,6 +26,7 @@ export type RunTimeFormatOptions = {
 
 export function getRunTimeFormat(
   conventionTimespan: Timespan | undefined,
+  siteMode: SiteMode | undefined,
   options: RunTimeFormatOptions,
 ): DateTimeFormatKey {
   const { formatType } = options;
@@ -33,7 +38,7 @@ export function getRunTimeFormat(
   }
 
   // Only show weekday-based times for conventions less than a week long
-  if (conventionRequiresDates(conventionTimespan)) {
+  if (conventionRequiresDates(conventionTimespan, siteMode)) {
     if (formatType === 'short') {
       return includeZone ? 'shortDateTimeWithZone' : 'shortDateTime';
     }
@@ -49,13 +54,13 @@ export function getRunTimeFormat(
 }
 
 export function useFormatRunTime() {
-  const { conventionTimespan } = useContext(AppRootContext);
+  const { conventionTimespan, siteMode } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 
   const formatRunTime = useCallback(
     (time: DateTime, options: RunTimeFormatOptions) =>
-      format(time, getRunTimeFormat(conventionTimespan, options)),
-    [conventionTimespan, format],
+      format(time, getRunTimeFormat(conventionTimespan, siteMode, options)),
+    [conventionTimespan, format, siteMode],
   );
 
   return formatRunTime;

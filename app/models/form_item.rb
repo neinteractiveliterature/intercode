@@ -1,3 +1,30 @@
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+# == Schema Information
+#
+# Table name: form_items
+#
+#  id                 :bigint           not null, primary key
+#  admin_description  :text
+#  default_value      :jsonb
+#  identifier         :text
+#  item_type          :text
+#  position           :integer
+#  properties         :jsonb
+#  public_description :text
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  form_section_id    :bigint
+#
+# Indexes
+#
+#  index_form_items_on_form_section_id  (form_section_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (form_section_id => form_sections.id)
+#
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class FormItem < ApplicationRecord
   DEFAULT_PROPERTIES_CONFIG = JSON.parse(
     File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))

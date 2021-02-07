@@ -12,3 +12,5 @@ reporters:
 require_paths:
 - test
 max_files: 5000
+plugins:
+  - solargraph-rails

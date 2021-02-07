@@ -118,6 +118,10 @@ group :development do
 
   # Ruby language server for LSP-compatible editors
   gem 'solargraph'
+  gem 'solargraph-rails', '0.2.0.pre'
+
+  # Automatic annotation for models
+  gem 'annotate'
 
   # Debugging
   gem 'ruby-debug-ide'
