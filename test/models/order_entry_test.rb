@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: order_entries
@@ -25,7 +25,8 @@
 #  fk_rails_...  (product_id => products.id)
 #  fk_rails_...  (product_variant_id => product_variants.id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class OrderEntryTest < ActiveSupport::TestCase

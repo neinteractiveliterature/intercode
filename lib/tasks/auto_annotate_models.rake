@@ -49,8 +49,8 @@ if Rails.env.development?
       'frozen' => 'false',
       'classified_sort' => 'true',
       'trace' => 'false',
-      'wrapper_open' => 'rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective',
-      'wrapper_close' => 'rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective',
+      'wrapper_open' => 'rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective',
+      'wrapper_close' => 'rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective',
       'with_comment' => 'true'
     )
   end

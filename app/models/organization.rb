@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: organizations
@@ -8,7 +8,8 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Organization < ApplicationRecord
   has_many :conventions, dependent: :nullify
   has_many :organization_roles, dependent: :destroy

@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: maximum_event_provided_tickets_overrides
@@ -20,7 +20,8 @@
 #  fk_rails_...  (event_id => events.id)
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class MaximumEventProvidedTicketsOverride < ApplicationRecord
   belongs_to :event
   belongs_to :ticket_type

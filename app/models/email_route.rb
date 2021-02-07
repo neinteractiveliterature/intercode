@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: email_routes
@@ -13,7 +13,8 @@
 #
 #  index_email_routes_on_receiver_address  (receiver_address) UNIQUE
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class EmailRoute < ApplicationRecord
   def self.parse_address(raw_address)
     return nil if raw_address.blank?
