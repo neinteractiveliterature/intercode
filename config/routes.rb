@@ -1,3 +1,6 @@
+# == Route Map
+#
+
 require 'intercode/virtual_host_constraint'
 
 Intercode::Application.routes.draw do
