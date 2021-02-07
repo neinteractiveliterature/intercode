@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: user_activity_alerts
@@ -22,7 +23,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (user_id => users.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :user_activity_alert do
     convention

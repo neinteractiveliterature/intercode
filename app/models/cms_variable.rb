@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_variables
@@ -15,8 +16,7 @@
 #  index_cms_variables_on_parent_id          (parent_id)
 #  index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE
 #
-# A convention-specific variable.  To set the values of these variables, go to Admin -> Site
-# Content -> Variables.
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class CmsVariable < ApplicationRecord
   include Cadmus::Concerns::ModelWithParent
   model_with_parent

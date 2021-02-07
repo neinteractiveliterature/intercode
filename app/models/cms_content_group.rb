@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_content_groups
@@ -13,6 +14,7 @@
 #
 #  index_cms_content_groups_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class CmsContentGroup < ApplicationRecord
   include Cadmus::Concerns::ModelWithParent
 

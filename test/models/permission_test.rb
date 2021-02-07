@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: permissions
@@ -29,6 +30,7 @@
 #  fk_rails_...  (organization_role_id => organization_roles.id)
 #  fk_rails_...  (staff_position_id => staff_positions.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class PermissionTest < ActiveSupport::TestCase

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: email_routes
@@ -12,6 +13,7 @@
 #
 #  index_email_routes_on_receiver_address  (receiver_address) UNIQUE
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class EmailRouteTest < ActiveSupport::TestCase

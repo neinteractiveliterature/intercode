@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: organization_roles
@@ -16,6 +17,7 @@
 #
 #  fk_rails_...  (organization_id => organizations.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class OrganizationRole < ApplicationRecord
   belongs_to :organization
   has_and_belongs_to_many :users

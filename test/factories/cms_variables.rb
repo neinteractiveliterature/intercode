@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_variables
@@ -15,7 +16,7 @@
 #  index_cms_variables_on_parent_id          (parent_id)
 #  index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :cms_variable do
     sequence(:key) { |n| "variable_#{n}" }

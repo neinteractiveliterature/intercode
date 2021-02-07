@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: form_items
@@ -22,6 +23,7 @@
 #
 #  fk_rails_...  (form_section_id => form_sections.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class FormItem < ApplicationRecord
   DEFAULT_PROPERTIES_CONFIG = JSON.parse(
     File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))

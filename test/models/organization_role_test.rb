@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: organization_roles
@@ -16,6 +17,7 @@
 #
 #  fk_rails_...  (organization_id => organizations.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class OrganizationRoleTest < ActiveSupport::TestCase

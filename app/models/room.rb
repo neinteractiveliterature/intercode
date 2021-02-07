@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: rooms
@@ -16,6 +17,7 @@
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Room < ApplicationRecord
   belongs_to :convention
   has_and_belongs_to_many :runs

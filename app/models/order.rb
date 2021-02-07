@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: orders
@@ -22,6 +23,7 @@
 #
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Order < ApplicationRecord
   belongs_to :user_con_profile
   has_many :order_entries, dependent: :destroy

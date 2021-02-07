@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: event_categories
@@ -32,6 +33,7 @@
 #  fk_rails_...  (event_form_id => forms.id)
 #  fk_rails_...  (event_proposal_form_id => forms.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class EventCategoryTest < ActiveSupport::TestCase

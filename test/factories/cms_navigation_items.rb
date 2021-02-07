@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_navigation_items
@@ -23,7 +24,7 @@
 #  fk_rails_...  (navigation_section_id => cms_navigation_items.id)
 #  fk_rails_...  (page_id => pages.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :cms_navigation_item do
     sequence(:title) { |n| "navigation item #{n}" }

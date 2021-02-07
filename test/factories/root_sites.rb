@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: root_sites
@@ -17,7 +18,7 @@
 #  fk_rails_...  (default_layout_id => cms_layouts.id)
 #  fk_rails_...  (root_page_id => pages.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :root_site do
     site_name { 'The Root Site' }

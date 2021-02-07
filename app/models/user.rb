@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: users
@@ -27,6 +28,7 @@
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class User < ApplicationRecord
   include Names
 

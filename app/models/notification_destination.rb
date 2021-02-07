@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: notification_destinations
@@ -21,6 +22,7 @@
 #  fk_rails_...  (staff_position_id => staff_positions.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class NotificationDestination < ApplicationRecord
   belongs_to :source, polymorphic: true
   belongs_to :staff_position, optional: true

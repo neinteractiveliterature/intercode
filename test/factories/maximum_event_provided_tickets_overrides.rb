@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: maximum_event_provided_tickets_overrides
@@ -19,6 +20,7 @@
 #  fk_rails_...  (event_id => events.id)
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :maximum_event_provided_tickets_override do
     association :event
