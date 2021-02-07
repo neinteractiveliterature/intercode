@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: runs
+#
+#  id               :integer          not null, primary key
+#  schedule_note    :text
+#  starts_at        :datetime
+#  timespan_tsrange :tsrange          not null
+#  title_suffix     :string
+#  created_at       :datetime
+#  updated_at       :datetime
+#  event_id         :integer
+#  updated_by_id    :integer
+#
+# Indexes
+#
+#  index_runs_on_event_id          (event_id)
+#  index_runs_on_timespan_tsrange  (timespan_tsrange) USING gist
+#  index_runs_on_updated_by_id     (updated_by_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (event_id => events.id)
+#  fk_rails_...  (updated_by_id => users.id)
+#
 class Run < ApplicationRecord
   belongs_to :event
   belongs_to :updated_by, class_name: 'User', optional: true

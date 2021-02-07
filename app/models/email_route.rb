@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: email_routes
+#
+#  id                :bigint           not null, primary key
+#  forward_addresses :text             not null, is an Array
+#  receiver_address  :text             not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+# Indexes
+#
+#  index_email_routes_on_receiver_address  (receiver_address) UNIQUE
+#
 class EmailRoute < ApplicationRecord
   def self.parse_address(raw_address)
     return nil if raw_address.blank?
