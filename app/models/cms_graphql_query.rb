@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_graphql_queries
@@ -16,7 +16,8 @@
 #
 #  index_cms_graphql_queries_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class CmsGraphqlQuery < ApplicationRecord
   include Cadmus::Concerns::ModelWithParent
   model_with_parent

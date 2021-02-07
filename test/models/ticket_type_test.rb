@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: ticket_types
@@ -21,7 +21,8 @@
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class TicketTypeTest < ActiveSupport::TestCase

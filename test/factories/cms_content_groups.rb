@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_content_groups
@@ -14,7 +14,8 @@
 #
 #  index_cms_content_groups_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :cms_content_group do
     sequence(:name) { |n| "content_group_#{n}" }

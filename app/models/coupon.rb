@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: coupons
@@ -27,7 +27,8 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (provides_product_id => products.id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Coupon < ApplicationRecord
   belongs_to :convention
   belongs_to :provides_product, class_name: 'Product', optional: true

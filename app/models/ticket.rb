@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: tickets
@@ -25,7 +25,8 @@
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Ticket < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :ticket_type

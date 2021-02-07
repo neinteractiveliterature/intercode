@@ -1,4 +1,4 @@
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: ahoy_events
@@ -17,7 +17,8 @@
 #  index_ahoy_events_on_user_id        (user_id)
 #  index_ahoy_events_on_visit_id       (visit_id)
 #
-# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Ahoy::Event < ApplicationRecord
   include Ahoy::QueryMethods
 
