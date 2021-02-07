@@ -36,14 +36,15 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
     ref,
   ) => {
     const { t } = useTranslation();
-    const { myProfile, conventionTimespan } = useContext(AppRootContext);
+    const { myProfile, conventionTimespan, siteMode } = useContext(AppRootContext);
     const rateEvent = useRateEvent();
     const apolloClient = useApolloClient();
     const formatRunTimespan = useFormatRunTimespan();
     const format = useAppDateTimeFormat();
 
-    const showDate = useMemo(() => conventionRequiresDates(conventionTimespan), [
+    const showDate = useMemo(() => conventionRequiresDates(conventionTimespan, siteMode), [
       conventionTimespan,
+      siteMode,
     ]);
 
     const availabilityDescription = useMemo(() => describeAvailability(event, signupCountData), [

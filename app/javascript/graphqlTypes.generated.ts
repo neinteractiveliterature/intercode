@@ -3888,6 +3888,8 @@ export type SignupsPagination = PaginationInterface & {
 export enum SiteMode {
   /** Site behaves as a convention with multiple events */
   Convention = 'convention',
+  /** Site behaves as a series of standalone events */
+  EventSeries = 'event_series',
   /** Site behaves as a single standalone event */
   SingleEvent = 'single_event'
 }
