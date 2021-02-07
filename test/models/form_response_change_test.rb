@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: form_response_changes
@@ -25,6 +26,7 @@
 #
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class FormResponseChangeTest < ActiveSupport::TestCase

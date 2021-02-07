@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: form_sections
@@ -17,6 +18,7 @@
 #
 #  fk_rails_...  (form_id => forms.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class FormSectionTest < ActiveSupport::TestCase

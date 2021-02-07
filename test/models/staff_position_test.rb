@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: staff_positions
@@ -21,6 +22,7 @@
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class StaffPositionTest < ActiveSupport::TestCase

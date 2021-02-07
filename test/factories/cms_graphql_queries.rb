@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_graphql_queries
@@ -15,7 +16,7 @@
 #
 #  index_cms_graphql_queries_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :cms_graphql_query do
     sequence(:identifier) { |n| "graphql_query_#{n}" }

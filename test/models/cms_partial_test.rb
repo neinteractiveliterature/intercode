@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_partials
@@ -17,6 +18,7 @@
 #  index_cms_partials_on_parent_id_and_parent_type           (parent_id,parent_type)
 #  index_cms_partials_on_parent_id_and_parent_type_and_name  (parent_id,parent_type,name) UNIQUE
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class CmsPartialTest < ActiveSupport::TestCase

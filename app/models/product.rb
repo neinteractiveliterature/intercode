@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: products
@@ -24,6 +25,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (provides_ticket_type_id => ticket_types.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Product < ApplicationRecord
   PAYMENT_OPTIONS = %w[stripe pay_at_convention]
 

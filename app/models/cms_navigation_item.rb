@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: cms_navigation_items
@@ -23,6 +24,7 @@
 #  fk_rails_...  (navigation_section_id => cms_navigation_items.id)
 #  fk_rails_...  (page_id => pages.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class CmsNavigationItem < ApplicationRecord
   include CadmusNavbar::NavigationItem
   cadmus_navigation_item

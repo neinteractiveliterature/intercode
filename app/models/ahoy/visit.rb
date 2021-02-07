@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: ahoy_visits
@@ -34,6 +35,7 @@
 #  index_ahoy_visits_on_user_id      (user_id)
 #  index_ahoy_visits_on_visit_token  (visit_token) UNIQUE
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Ahoy::Visit < ApplicationRecord
   self.table_name = 'ahoy_visits'
 

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: notification_templates
@@ -20,6 +21,7 @@
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class NotificationTemplate < ApplicationRecord
   include Cadmus::Concerns::LiquidTemplateField
 

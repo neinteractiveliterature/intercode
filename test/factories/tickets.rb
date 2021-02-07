@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: tickets
@@ -24,7 +25,7 @@
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :ticket do
     user_con_profile

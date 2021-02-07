@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: event_categories
@@ -32,7 +33,7 @@
 #  fk_rails_...  (event_form_id => forms.id)
 #  fk_rails_...  (event_proposal_form_id => forms.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :event_category do
     sequence(:name) { |n| "Event category #{n}" }

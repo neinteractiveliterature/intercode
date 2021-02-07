@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: order_entries
@@ -24,6 +25,7 @@
 #  fk_rails_...  (product_id => products.id)
 #  fk_rails_...  (product_variant_id => product_variants.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class OrderEntry < ApplicationRecord
   belongs_to :order
   belongs_to :product

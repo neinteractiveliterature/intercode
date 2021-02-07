@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: coupons
@@ -26,6 +27,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (provides_product_id => products.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :coupon do
     convention

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: events
@@ -46,7 +47,7 @@
 #  fk_rails_...  (owner_id => users.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :event do
     convention

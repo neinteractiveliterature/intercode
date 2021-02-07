@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: pages
@@ -25,7 +26,7 @@
 #
 #  fk_rails_...  (cms_layout_id => cms_layouts.id)
 #
-
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :page do
     sequence(:name) { |n| "Page #{n}" }

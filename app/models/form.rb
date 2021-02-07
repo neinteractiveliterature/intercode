@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
 # Table name: forms
@@ -17,6 +18,7 @@
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #
+# rubocop:enable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Form < ApplicationRecord
   FORM_TYPE_CONFIG = JSON.parse(File.read(File.expand_path('config/form_types.json', Rails.root)))
 
