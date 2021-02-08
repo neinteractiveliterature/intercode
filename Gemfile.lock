@@ -274,8 +274,8 @@ GEM
     jaro_winkler (1.5.4)
     jaro_winkler (1.5.4-java)
     jmespath (1.4.0)
-    json (2.3.1)
-    json (2.3.1-java)
+    json (2.5.1)
+    json (2.5.1-java)
     json-jwt (1.11.0)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -430,7 +430,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    recaptcha (5.6.0)
+    recaptcha (5.7.0)
       json
     redcarpet (3.5.1)
     regexp_parser (2.0.3)
