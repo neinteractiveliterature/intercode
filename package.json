@@ -147,7 +147,7 @@
     "react-google-recaptcha": "^2.1.0",
     "react-html-id": "^0.1.5",
     "react-i18next": "^11.8.5",
-    "react-onclickoutside": "^6.9.0",
+    "react-onclickoutside": "^6.10.0",
     "react-popper": "^2.2.3",
     "react-router-dom": "^5.2.0",
     "react-select": "^4.0.2",
