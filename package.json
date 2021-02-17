@@ -170,7 +170,7 @@
     "uuid": "^8.3.2",
     "webpack": "^5.21.2",
     "webpack-assets-manifest": "^5.0.1",
-    "webpack-bundle-analyzer": "^4.3.0",
+    "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.5.0",
     "webpack-manifest-plugin": "^3.0.0",
     "webpack-merge": "^5.7.3",
