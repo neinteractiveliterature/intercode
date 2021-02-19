@@ -178,7 +178,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.12.16",
+    "@babel/preset-typescript": "^7.12.17",
     "@graphql-codegen/cli": "^1.20.1",
     "@graphql-codegen/fragment-matcher": "^2.0.1",
     "@graphql-codegen/introspection": "^1.18.1",
