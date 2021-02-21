@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { usePopper } from 'react-popper';
 
@@ -7,14 +7,19 @@ export function useAutoClosingPopper(
   referenceElement: HTMLElement | undefined | null,
   popperElement: HTMLElement | undefined | null,
 ) {
-  const referenceRef = useRef<HTMLElement | null>(null);
-  const popperRef = useRef<HTMLElement | null>(null);
-  const hide = useCallback(() => setVisible(false), [setVisible]);
+  const hide = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
 
-  referenceRef.current = referenceElement ?? null;
-  popperRef.current = popperElement ?? null;
-
-  useOnclickOutside(hide, { refs: [popperRef, referenceRef] });
+  const onClickOutsideRef = useOnclickOutside(hide);
+  useEffect(() => {
+    if (referenceElement) {
+      onClickOutsideRef(referenceElement);
+    }
+    if (popperElement) {
+      onClickOutsideRef(popperElement);
+    }
+  }, [onClickOutsideRef, referenceElement, popperElement]);
 }
 
 export function useIntercodePopper(
