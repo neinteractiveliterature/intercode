@@ -67,7 +67,8 @@ module CmsReferences
       when String, Liquid::Include
         next
       when Liquid::Variable
-        next if cms_variable_names.include?(node.name.name)
+        # Sometimes node.name is a String, so we need a respond_to? check here
+        next if node.name.respond_to?(:name) && cms_variable_names.include?(node.name.name)
         return false
       else
         return false
