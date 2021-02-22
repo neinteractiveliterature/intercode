@@ -1,8 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
-// @ts-expect-error
-import MD5 from 'md5.js';
+import { Md5 } from 'ts-md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 
@@ -199,9 +198,9 @@ function MyProfileFormInner({
             caption={
               <>
                 <Gravatar
-                  url={`https://gravatar.com/avatar/${new MD5()
-                    .update((userConProfile.email ?? '').trim().toLowerCase())
-                    .digest('hex')}`}
+                  url={`https://gravatar.com/avatar/${Md5.hashStr(
+                    (userConProfile.email ?? '').trim().toLowerCase(),
+                  )}`}
                   enabled={userConProfile.gravatar_enabled}
                   pixelSize={32}
                   imgClassName="align-baseline"

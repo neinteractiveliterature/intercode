@@ -113,11 +113,13 @@ module.exports = {
       '.jpeg',
       '.jpg',
     ],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+      events: require.resolve('events/'),
+      stream: require.resolve('stream-browserify'),
+    },
     alias: {
       'lodash.isequal': 'lodash-es/isEqual',
-    },
-    fallback: {
-      stream: require.resolve('stream-browserify'),
     },
   },
   plugins: [

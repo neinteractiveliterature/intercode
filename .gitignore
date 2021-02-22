@@ -6,6 +6,14 @@
 
 .DS_Store
 
+# Yarn 2 stuff
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 # Ignore build artifacts
 /bin/diffTranslations
 /bin/manifest.json
