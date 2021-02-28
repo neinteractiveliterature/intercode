@@ -1,6 +1,7 @@
 // This module is side-effecty, on purpose.  To work properly, it needs to load before all our
 // React components, in case the browser is so old that it can't even load the components.
 
+import 'core-js/stable';
 import { detect } from 'detect-browser';
 import includes from 'lodash/includes';
 
