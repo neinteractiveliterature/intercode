@@ -19,17 +19,7 @@ const baseConfig = {
 
 const browserConfig = {
   ...baseConfig,
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        corejs: 3,
-        useBuiltIns: 'entry',
-        modules: false,
-      },
-    ],
-    ...baseConfig.presets,
-  ],
+  presets: [['@babel/preset-env', { modules: false }], ...baseConfig.presets],
 };
 
 const testConfig = {
