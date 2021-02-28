@@ -18,6 +18,18 @@ class RunAvailabilityDrop < Liquid::Drop
     :bucket_availabilities_with_counted_slots, :bucket_availabilities_with_not_counted_slots,
     to: :run_availability_presenter
 
+  # @!method event
+  #   @return [EventDrop] The event this is a run of
+  # @!method starts_at
+  #   @return [ActiveSupport::TimeWithZone] The time at which this run starts
+  # @!method ends_at
+  #   @return [ActiveSupport::TimeWithZone] The time at which this run ends
+  delegate :event, :starts_at, :ends_at, to: :run
+
+  # @!method title
+  #   @return [String] The title of the event
+  delegate :title, to: :event
+
   # @api
   def initialize(run_availability_presenter)
     @run_availability_presenter = run_availability_presenter

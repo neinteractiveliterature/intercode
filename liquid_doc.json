@@ -3569,6 +3569,62 @@
           ]
         },
         {
+          "name": "event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event this is a run of",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "starts_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this run starts",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ends_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this run ends",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "title",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The title of the event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
           "name": "initialize",
           "docstring": "",
           "tags": [
@@ -6202,7 +6258,7 @@
         "CmsVariable",
         "ApplicationRecord"
       ],
-      "docstring": "A convention-specific variable.  To set the values of these variables, go to Admin -> Site\nContent -> Variables.",
+      "docstring": "rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective\n== Schema Information\n\nTable name: cms_variables\n\n id          :bigint           not null, primary key\n key         :string(100)      not null\n parent_type :string\n value       :jsonb\n created_at  :datetime         not null\n updated_at  :datetime         not null\n parent_id   :bigint\n\nIndexes\n\n index_cms_variables_on_parent_id          (parent_id)\n index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE\n\nrubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective\nrubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective",
       "tags": [
 
       ],
