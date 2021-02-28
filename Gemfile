@@ -38,7 +38,7 @@ gem 'scheduled_value', '~> 1.3.0'
 gem 'civil_service', '~> 2.3.0'
 
 # File uploading
-gem 'carrierwave', '~> 2.1.1'
+gem 'carrierwave', '~> 2.2.0'
 gem 'fog-aws'
 gem 'aws-sdk-s3'
 
@@ -69,7 +69,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.47.0'
+gem 'twilio-ruby', '~> 5.48.0'
 gem 'phonelib'
 
 # Background workers and scheduling
