@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
-import { Fetcher } from 'graphiql/dist/components/GraphiQL';
+import { Fetcher } from '@graphiql/toolkit';
 
 import { execute, GraphQLRequest } from '@apollo/client/';
 import { useIntercodeApolloLink } from './useIntercodeApolloClient';
