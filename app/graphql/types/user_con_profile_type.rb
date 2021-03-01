@@ -90,6 +90,10 @@ class Types::UserConProfileType < Types::BaseObject
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
   end
 
+  def gravatar_url
+    AssociationLoader.for(UserConProfile, :user).load(object).then { object.gravatar_url }
+  end
+
   def staff_positions
     AssociationLoader.for(UserConProfile, :staff_positions).load(object).then do |staff_positions|
       staff_positions
