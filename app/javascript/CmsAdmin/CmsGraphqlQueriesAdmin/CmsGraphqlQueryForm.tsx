@@ -2,7 +2,7 @@ import { Suspense, useContext, useCallback } from 'react';
 import * as React from 'react';
 import { parse } from 'graphql/language/parser';
 import { execute, GraphQLRequest } from '@apollo/client';
-import { Fetcher } from 'graphiql/dist/components/GraphiQL';
+import { Fetcher } from '@graphiql/toolkit';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';
