@@ -19,6 +19,9 @@ module.exports = {
     hotUpdateChunkFilename: '[id]-[hash].hot-update.js',
     path: path.resolve('public/packs'),
     publicPath: '/packs/',
+    environment: {
+      arrowFunction: false,
+    },
   },
   cache: {
     type: 'filesystem',
@@ -51,7 +54,7 @@ module.exports = {
         },
       },
       {
-        test: /displayBrowserWarning\.jsx$/,
+        test: /displayBrowserWarning\.[tj]sx?$/,
         use: [
           {
             loader: 'babel-loader',

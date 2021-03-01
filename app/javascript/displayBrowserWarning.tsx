@@ -1,7 +1,13 @@
 // This module is side-effecty, on purpose.  To work properly, it needs to load before all our
 // React components, in case the browser is so old that it can't even load the components.
 
-import 'core-js/stable';
+import 'core-js/features/array/reduce';
+import 'core-js/features/object/keys';
+import 'core-js/features/object/get-own-property-names';
+import 'core-js/features/string/split';
+import 'core-js/features/string/match';
+import 'core-js/features/parse-int';
+
 import { detect } from 'detect-browser';
 import includes from 'lodash/includes';
 
