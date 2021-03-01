@@ -5,6 +5,33 @@ class CmsRenderingContext
   include ActionView::Helpers::TagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
 
+  NOSCRIPT_WARNING = <<~HTML
+  <noscript id="no-javascript-warning">
+    <div class="container">
+      <div class="alert alert-danger">
+        <h2 class="mb-4">JavaScript disabled</h2>
+
+        <div class="d-flex align-items-center">
+          <h1 class="m-0 mr-4">
+            <i class="fa fa-exclamation-triangle"></i>
+          </h1>
+          <div class="flex-grow-1">
+            <p>
+              Your web browser has JavaScript disabled.  This site is written mostly in JavaScript,
+              and will not work without it.  Please enable JavaScript in your browser's settings (or
+              disable your JavaScript-blocking browser extension for this site).
+            </p>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <a class="btn btn-primary" href=".">Reload page</a>
+        </div>
+      </div>
+    </div>
+  </noscript>
+  HTML
+
   def initialize(cms_parent:, controller:, timezone:, assigns: {})
     @cms_parent = cms_parent
     @controller = controller
@@ -39,7 +66,7 @@ class CmsRenderingContext
     layout_html = render_layout_content(cms_layout, assigns)
     doc = Nokogiri::HTML.parse(layout_html)
     doc.xpath('//body/*').remove
-    doc.xpath('//body').first.inner_html = content_tag(
+    doc.xpath('//body').first.inner_html = NOSCRIPT_WARNING + content_tag(
       :div,
       '',
       'data-react-class' => 'AppRoot',
