@@ -7501,10 +7501,10 @@ hypernova@^2.5.0:
     object.assign "^4.1.0"
     winston "^2.4.4"
 
-i18next-parser@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-3.6.0.tgz#10d6b9acf5d170fe342ac359c95f7bee9d50ea32"
-  integrity sha512-XMXvMp+qSs7NOwDoEUipkT/PHesGyvw0tjIBR1w1+ROYYxCMqn8zd/UAtBHq3wKLjqWLtL+/JCS5aO+NxKsqjw==
+i18next-parser@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-3.7.0.tgz#4cdf2042dcae1488ebf94d104ae9c2f28e220d37"
+  integrity sha512-Se0UBM8WcJBK+DfKz/+KCOwjl1mxq66od9SkXm7oAt9oISl3snNEZkqWEsLyns++W7roqyVeKZBW6BIxh77vxg==
   dependencies:
     broccoli-plugin "^1.3.0"
     cheerio "^1.0.0-rc.2"
