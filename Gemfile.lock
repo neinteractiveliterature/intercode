@@ -87,7 +87,7 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.0.1)
-    ahoy_matey (3.1.0)
+    ahoy_matey (3.2.0)
       activesupport (>= 5)
       device_detector
       geocoder (>= 1.4.5)
@@ -205,7 +205,7 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     e2mmap (0.1.0)
-    errbase (0.2.0)
+    errbase (0.2.1)
     erubi (1.10.0)
     erubis (2.7.0)
     eu_central_bank (1.6.0)
@@ -244,7 +244,7 @@ GEM
       fog-core
       nokogiri (>= 1.5.11, < 2.0.0)
     formatador (0.2.5)
-    geocoder (1.6.4)
+    geocoder (1.6.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     graphql (1.12.5)
@@ -320,7 +320,7 @@ GEM
     minipack (0.3.6)
       actionview
       railties (>= 4.2)
-    minitest (5.14.3)
+    minitest (5.14.4)
     minitest-focus (1.2.1)
       minitest (>= 4, < 6)
     minitest-reporters (1.4.3)
