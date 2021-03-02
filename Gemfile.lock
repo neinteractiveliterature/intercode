@@ -337,7 +337,7 @@ GEM
       money (~> 6.12)
     money (6.13.8)
       i18n (>= 0.6.4, <= 2)
-    money-rails (1.13.4)
+    money-rails (1.14.0)
       activesupport (>= 3.0)
       monetize (~> 1.9.0)
       money (~> 6.13.2)
