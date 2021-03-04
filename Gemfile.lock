@@ -186,7 +186,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise-doorkeeper (1.1.2)
+    devise-doorkeeper (1.2.0)
       devise
       doorkeeper
       rails
@@ -348,8 +348,8 @@ GEM
     multipart-post (2.1.1)
     mysql2 (0.5.3)
     netrc (0.11.0)
-    nio4r (2.5.5)
-    nio4r (2.5.5-java)
+    nio4r (2.5.7)
+    nio4r (2.5.7-java)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
