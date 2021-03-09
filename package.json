@@ -95,7 +95,7 @@
     "codemirror": "^5.59.4",
     "compression-webpack-plugin": "^7.1.2",
     "core-js": "^3.9.0",
-    "css-loader": "^5.0.2",
+    "css-loader": "^5.1.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "csv-string": "^4.0.1",
     "custom-event-polyfill": "^1.0.7",
