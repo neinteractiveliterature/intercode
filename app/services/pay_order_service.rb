@@ -43,7 +43,7 @@ class PayOrderService < CivilService::Service
         customer: customer.id,
         amount: order.total_price.fractional,
         description: "#{description} for #{convention.name}",
-        statement_descriptor_suffix: convention.name,
+        statement_descriptor_suffix: convention.name.gsub(/[^0-9A-Za-z \-]/, ''),
         currency: order.total_price.currency.iso_code.downcase
       },
       stripe_account: convention.stripe_account_id
