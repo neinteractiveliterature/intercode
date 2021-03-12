@@ -48,7 +48,7 @@
     "@juggle/resize-observer": "^3.2.0",
     "@popperjs/core": "^2.9.0",
     "@stripe/react-stripe-js": "^1.2.0",
-    "@stripe/stripe-js": "^1.12.1",
+    "@stripe/stripe-js": "^1.13.1",
     "@testing-library/react": "^11.2.5",
     "@types/apollo-upload-client": "^14.1.0",
     "@types/bytes": "^3.1.0",
