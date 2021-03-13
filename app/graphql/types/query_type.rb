@@ -412,7 +412,7 @@ present, the request will error out.',
         amount: current_pending_order.total_price.fractional,
         currency: current_pending_order.total_price.currency,
         description: "#{description} for #{convention.name}",
-        statement_descriptor_suffix: convention.name,
+        statement_descriptor_suffix: PayOrderService.statement_descriptor_suffix(convention),
         metadata: { order_id: current_pending_order.id }
       },
       stripe_account: convention.stripe_account_id
