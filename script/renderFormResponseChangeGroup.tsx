@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime';
+
 import ReactDOMServer from 'react-dom/server';
 import SourceMapSupport from 'source-map-support';
 
