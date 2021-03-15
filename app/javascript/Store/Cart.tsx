@@ -19,6 +19,7 @@ import {
   useDeleteOrderEntryMutation,
   useUpdateOrderEntryMutation,
 } from './mutations.generated';
+import useLoginRequired from '../Authentication/useLoginRequired';
 
 type OrderEntryType = NonNullable<CartQueryQuery['currentPendingOrder']>['order_entries'][0];
 
@@ -120,6 +121,12 @@ export default LoadQueryWrapper(useCartQueryQuery, function Cart({ data }) {
   const checkOutComplete = () => {
     history.push('/order_history');
   };
+
+  const loginRequired = useLoginRequired();
+
+  if (loginRequired) {
+    return <></>;
+  }
 
   return (
     <div>
