@@ -27,6 +27,7 @@ const IOS_WEBVIEW_APP_HOSTS = {
 const BROWSER_NAMES = {
   ...IOS_WEBVIEW_APP_HOSTS,
   chrome: 'Google Chrome',
+  'chromium-webview': 'Google Chrome',
   firefox: 'Mozilla Firefox',
   edge: 'Microsoft Edge',
   ie: 'Microsoft Internet Explorer',
@@ -46,6 +47,7 @@ const MIN_SUPPORTED_VERSION = {
     {},
   ),
   chrome: 63,
+  'chromium-webview': 63,
   firefox: 60,
   safari: 12,
   ios: 12,
