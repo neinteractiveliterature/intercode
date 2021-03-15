@@ -12,6 +12,7 @@ import { describeUserPricingStructure } from '../Store/describePricingStructure'
 import ProductOrderForm from '../Store/ProductOrderForm';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { TicketPurchaseFormQueryQuery, useTicketPurchaseFormQueryQuery } from './queries.generated';
+import useLoginRequired from '../Authentication/useLoginRequired';
 
 export default LoadQueryWrapper(
   useTicketPurchaseFormQueryQuery,
@@ -33,6 +34,12 @@ export default LoadQueryWrapper(
     }, [availableProducts]);
 
     usePageTitle(`Buy a ${data.convention.ticket_name}`);
+
+    const loginRequired = useLoginRequired();
+
+    if (loginRequired) {
+      return <></>;
+    }
 
     if (data.myProfile && data.myProfile.ticket) {
       return <Redirect to="/" />;
