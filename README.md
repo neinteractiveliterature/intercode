@@ -26,7 +26,7 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 - Intercode 2 in development mode uses `intercode.test` as its cookie domain. If you use `localhost` to visit the site, that will mysteriously fail. I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.test` domain name.
 - We used to support a Docker Compose-based development workflow, but this has been deprecated. Please run Rails locally using the instructions below.
 
-## Developer Quickstart with local Rails
+## Developer Setup with local Rails
 
 This is the classic Rails development setup, and should work for Mac and Linux users.
 
@@ -36,7 +36,10 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 4. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
 5. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode.test`
 6. `cd` to the Intercode source folder, all the remaining steps should be performed in that folder.
-7. Install all the dependencies of Intercode:
+7. Copy `.env.development.local.sample` to `.env.development.local` and follow the instructions in
+   that file to set up keys for various external services. You'll almost certainly need to set up
+   reCAPTCHA; the others are probably best left until you really need to.
+8. Install all the dependencies of Intercode:
 
    1. Install the Ruby version Intercode requires: `rbenv install`
    2. Install Bundler: `gem install bundler`
@@ -45,16 +48,21 @@ This is the classic Rails development setup, and should work for Mac and Linux u
    5. Make sure you have Yarn installed. With Homebrew: `brew install yarn`
    6. `bundle install`
 
-8. Generate self-signed certificates to support HTTPS
+9. Generate self-signed certificates to support HTTPS
 
    1. `gem install toys`
    2. `toys setup_tls`
 
-9. Set up your local database: `bin/rails db:create db:migrate`
-10. Install JavaScript packages: `yarn install`
-11. Start up the Intercode server: `bin/rails server`
-12. Start up the Webpack server: `yarn run start`
-13. You should now be able to go to <http://intercode.test:5000> and see the app running!
+10. Set up your local database: `bin/rails db:create db:migrate`
+11. Install JavaScript packages: `yarn install`
+12. Start up the Intercode server: `bin/rails server`
+13. Start up the Webpack server: `yarn run start`
+14. You should now be able to go to <https://intercode.test:5000> and see the app running!
+15. Click the user icon in the upper right of the navigation bar and choose "Sign up" to sign up for
+    an account in your local copy of Intercode.
+16. To make yourself a superadmin in your local copy, run `./bin/rails console`.  At the Rails
+    console prompt, type `User.first.update!(site_admin: true)`.  This will set the `site_admin`
+    flag on your account in the database, giving you superadmin powers.
 
 ## Testing production builds
 
