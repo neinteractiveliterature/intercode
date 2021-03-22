@@ -14488,10 +14488,10 @@ webpack-merge@^5.7.3:
     clone-deep "^4.0.1"
     wildcard "^2.0.0"
 
-webpack-shell-plugin-next@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/webpack-shell-plugin-next/-/webpack-shell-plugin-next-2.1.1.tgz#d107a2ca0c0802ef46d4a19b552a17543412b7ad"
-  integrity sha512-QvAjl7ZTkGs6MCl6LTiHLHyiFE+FA/1b8x/3j1L/Y36fFp9N5foQmV2e2PlwVILARGpz8JNpRMKx76oo6j4hfg==
+webpack-shell-plugin-next@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/webpack-shell-plugin-next/-/webpack-shell-plugin-next-2.2.2.tgz#35e1bf7fa070b6472be8199cf08012e866f0eea0"
+  integrity sha512-2HeC1e0cCvTgA3SD4XPAD69DnILM92mCschrtKdlLRORHCR+oG7xnibQMkVySxTAYWTQOcBRHlqa88x4syWwhQ==
 
 webpack-sources@^1.1.0, webpack-sources@^1.4.3:
   version "1.4.3"
