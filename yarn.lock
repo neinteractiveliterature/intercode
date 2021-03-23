@@ -6043,10 +6043,10 @@ eslint-plugin-import@^2.22.1:
     resolve "^1.17.0"
     tsconfig-paths "^3.9.0"
 
-eslint-plugin-jest@^24.2.0:
-  version "24.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.2.0.tgz#2d7784f58bf424b7ba888305c6c070f80bd2af5d"
-  integrity sha512-PZ6+/cOldZxpGF3rVYX6Y+83AUAI4jofdtyVrjimVHgXHfPBC5UKVTn92f6aFFV9HuD8xa1WNqY5s3kgfSzROQ==
+eslint-plugin-jest@^24.3.2:
+  version "24.3.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.3.2.tgz#30a8b2dea6278d0da1d6fb9d6cd530aaf58050a1"
+  integrity sha512-cicWDr+RvTAOKS3Q/k03+Z3odt3VCiWamNUHWd6QWbVQWcYJyYgUTu8x0mx9GfeDEimawU5kQC+nQ3MFxIM6bw==
   dependencies:
     "@typescript-eslint/experimental-utils" "^4.0.1"
 
