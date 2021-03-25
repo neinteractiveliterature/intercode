@@ -8,6 +8,8 @@ FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
 USER root
 WORKDIR /usr/src/intercode
 
+RUN apk add --no-cache shared-mime-info
+
 COPY Gemfile Gemfile.lock /usr/src/intercode/
 RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
   bundle install -j4 --without intercode1_import \
