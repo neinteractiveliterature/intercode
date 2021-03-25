@@ -314,7 +314,7 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0225)
-    mimemagic (0.3.5)
+    mimemagic (0.3.6)
     mini_magick (4.11.0)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
@@ -453,7 +453,7 @@ GEM
       rollbar (~> 2.21, <= 3.0)
       shoryuken (>= 4.0, <= 5.1)
     rouge (3.26.0)
-    rubocop (1.11.0)
+    rubocop (1.12.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -629,7 +629,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.11.0)
+  rubocop (= 1.12.0)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide
