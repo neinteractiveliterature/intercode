@@ -283,7 +283,7 @@ GEM
       aes_key_wrap
       bindata
     jwt (2.2.2)
-    kramdown (2.3.0)
+    kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
