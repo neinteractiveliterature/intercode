@@ -123,7 +123,7 @@
     "mini-css-extract-plugin": "^1.4.0",
     "minimist": "^1.2.5",
     "path-complete-extname": "^1.0.0",
-    "payment": "^2.4.0",
+    "payment": "^2.4.3",
     "popper.js": "^1.16.1",
     "porter-stemmer": "^0.9.1",
     "postcss": "^8.2.6",
