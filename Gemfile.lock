@@ -485,7 +485,7 @@ GEM
       errbase (>= 0.1.1)
     scheduled_value (1.3.0)
     sequel (5.43.0)
-    shoryuken (5.1.0)
+    shoryuken (5.2.0)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
