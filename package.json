@@ -43,7 +43,7 @@
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-flow": "^7.13.13",
     "@babel/preset-react": "^7.13.13",
-    "@babel/register": "^7.13.8",
+    "@babel/register": "^7.13.14",
     "@emotion/serialize": "^1.0.1",
     "@juggle/resize-observer": "^3.3.0",
     "@popperjs/core": "^2.9.2",
