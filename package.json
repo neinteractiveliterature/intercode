@@ -44,7 +44,7 @@
     "@babel/preset-flow": "^7.13.13",
     "@babel/preset-react": "^7.13.13",
     "@babel/register": "^7.13.14",
-    "@emotion/serialize": "^1.0.1",
+    "@emotion/serialize": "^1.0.2",
     "@juggle/resize-observer": "^3.3.0",
     "@popperjs/core": "^2.9.2",
     "@stripe/react-stripe-js": "^1.4.0",
