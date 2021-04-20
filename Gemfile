@@ -128,7 +128,7 @@ group :development do
   gem 'debase'
 
   # Linting
-  gem 'rubocop', '1.12.1'
+  gem 'rubocop', '1.13.0'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
