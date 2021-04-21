@@ -32,7 +32,11 @@ function SignOutButton({ className, caption }: SignOutButtonProps) {
   const onClick = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     await signOut(authenticityToken ?? '');
-    await afterSessionChange('/');
+    await afterSessionChange('/', {
+      title: 'Logout',
+      body: 'Logged out.',
+      autoDismissAfter: 1000 * 60,
+    });
   };
 
   return (
