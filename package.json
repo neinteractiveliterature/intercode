@@ -110,7 +110,7 @@
     "graphiql": "^1.4.1",
     "graphql": "^15.5.0",
     "graphql-anywhere": "^4.2.7",
-    "history": "^4.9.0",
+    "history": "^5.0.0",
     "html-to-react": "^1.4.5",
     "hypernova": "^2.5.0",
     "i18next": "^20.2.1",
