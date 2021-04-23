@@ -13674,14 +13674,16 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-thread-loader@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-3.0.2.tgz#b1c85893767258c7aa1186a36588feeeec5ffa06"
-  integrity sha512-yNNiWjQKM+aS3WufFFMv8jdDaTX65oIBLpnzQpGZ7krhgK8L7WrF5nFa7yTdsVxfXEJlEpPRWd5L353qlWkxig==
+thread-loader@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-3.0.3.tgz#c0fa0eae3b925f273a7cce868cf1f52b4a515d78"
+  integrity sha512-/s8dGDkKLF89qAsn2b0PNdXS68pKhj+/Rqd7YDht/OvTlBoMm0FAsndceowSX1GEKVLo8yKRil9e+W0PpI/q1g==
   dependencies:
+    json-parse-better-errors "^1.0.2"
     loader-runner "^4.1.0"
     loader-utils "^2.0.0"
     neo-async "^2.6.2"
+    schema-utils "^3.0.0"
 
 throat@^5.0.0:
   version "5.0.0"
