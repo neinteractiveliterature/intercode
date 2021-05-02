@@ -83,7 +83,11 @@ function SignUpForm() {
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     await signUp(authenticityToken!, formState, password, passwordConfirmation, captchaValue ?? '');
-    await afterSessionChange(window.location.href);
+    await afterSessionChange(window.location.href, {
+      title: 'Account signup',
+      body: 'Account created.  Welcome!',
+      autoDismissAfter: 1000 * 60,
+    });
   };
 
   const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, {

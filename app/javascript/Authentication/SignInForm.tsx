@@ -68,7 +68,11 @@ function SignInForm() {
     event.preventDefault();
     try {
       const location = await signIn(authenticityToken!, email, password, rememberMe);
-      await afterSessionChange(afterSignInPath || location);
+      await afterSessionChange(afterSignInPath || location, {
+        title: 'Login',
+        body: 'Logged in successfully!',
+        autoDismissAfter: 1000 * 60,
+      });
     } catch (e) {
       if (!e.message.match(/invalid email or password/i)) {
         if (typeof Rollbar !== 'undefined') {

@@ -253,16 +253,8 @@ function UserNavigationSection() {
 
   const renderLoggedOutContent = () => (
     <>
-      <button
-        className="btn btn-link nav-link"
-        onClick={toggle}
-        ref={setReferenceElement}
-        type="button"
-      >
-        <i className="fa fa-user-circle" />
-        <span className="sr-only">
-          {t('navigation.headers.authentication', 'Log in or sign up')}
-        </span>
+      <button className="btn btn-primary" onClick={toggle} ref={setReferenceElement} type="button">
+        {t('navigation.headers.authentication', 'Log in/sign up')}
       </button>
       <div
         className={classNames('dropdown-menu m-0', { show: dropdownOpen })}
