@@ -3,6 +3,7 @@ on: [pull_request]
 
 jobs:
   pronto:
+    if: github.actor != 'dependabot[bot]'
 
     runs-on: ubuntu-latest
 

@@ -474,7 +474,7 @@
     },
     "headers": {
       "admin": "Admin",
-      "authentication": "Log in or sign up",
+      "authentication": "Log in/sign up",
       "events": "Events",
       "user": "User options"
     },

@@ -1,0 +1,10 @@
+.toast-container {
+  position: absolute;
+  top: 65px;
+  right: 10px;
+}
+
+.toast {
+  // just make all toasts as wide as possible
+  width: $toast-max-width;
+}
