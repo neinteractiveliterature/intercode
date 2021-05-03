@@ -20,6 +20,8 @@ import ErrorBoundary from './ErrorBoundary';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import ErrorDisplay from './ErrorDisplay';
+import Toast from './UIComponents/Toast';
+import { ToastProvider } from './UIComponents/ToastContext';
 
 function I18NextWrapper({ children }: { children: ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -121,9 +123,11 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
                         <Suspense fallback={<PageLoadingIndicator visible />}>
                           <I18NextWrapper>
                             <AlertProvider>
-                              <ErrorBoundary placement="replace" errorType="plain">
-                                <WrappedComponent {...((otherProps as unknown) as P)} />
-                              </ErrorBoundary>
+                              <ToastProvider>
+                                <ErrorBoundary placement="replace" errorType="plain">
+                                  <WrappedComponent {...((otherProps as unknown) as P)} />{' '}
+                                </ErrorBoundary>
+                              </ToastProvider>
                             </AlertProvider>
                           </I18NextWrapper>
                         </Suspense>

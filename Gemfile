@@ -16,7 +16,7 @@ gem 'with_advisory_lock'
 gem 'devise'
 gem 'pundit'
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'doorkeeper', '5.5.0'
+gem 'doorkeeper', '5.5.1'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
@@ -54,7 +54,7 @@ gem 'pg_search'
 # GraphQL server
 gem 'graphql', '>= 1.10.2'
 gem 'graphql-batch'
-gem 'apollo_upload_server', '2.0.3'
+gem 'apollo_upload_server', '2.0.5'
 gem 'graphql-rails_logger', groups: [:development, :test]
 
 # Email stuff
@@ -69,7 +69,7 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # SMS and phone support
-gem 'twilio-ruby', '~> 5.50.0'
+gem 'twilio-ruby', '~> 5.52.0'
 gem 'phonelib'
 
 # Background workers and scheduling
@@ -92,7 +92,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.11.3'
+gem 'oj', '~> 3.11.5'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -128,7 +128,7 @@ group :development do
   gem 'debase'
 
   # Linting
-  gem 'rubocop', '1.12.0'
+  gem 'rubocop', '1.13.0'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
