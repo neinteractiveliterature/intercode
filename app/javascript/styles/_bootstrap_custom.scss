@@ -27,7 +27,20 @@ $custom-colors: (
   width: 100vw; // Don't let page content blow out the sides of fixed UI
 }
 
+// Port Bootstrap 4's info color to Bootstrap 5, because otherwise our sidebar boxes
+// will look super weird
+$info: #17a2b8;
+
 // Reset and dependencies
 @import '~bootstrap/scss/bootstrap';
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
+
+// Port Bootstrap 4 link behavior to Bootstrap 5
+a, .btn-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
