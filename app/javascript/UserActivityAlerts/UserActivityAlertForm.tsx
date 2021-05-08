@@ -100,8 +100,10 @@ function UserActivityAlertForm({
             disabled={disabled}
           />
 
-          <div className="form-group mb-0">
-            <label htmlFor={userSelectId}>User account</label>
+          <div className="mb-3 mb-0">
+            <label className="form-label" htmlFor={userSelectId}>
+              User account
+            </label>
             <UserSelect
               inputId={userSelectId}
               value={userActivityAlert.user}

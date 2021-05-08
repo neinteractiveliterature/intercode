@@ -141,7 +141,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       );
 
     return (
-      <fieldset className="form-group">
+      <fieldset className="mb-3">
         <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
           {startTime &&

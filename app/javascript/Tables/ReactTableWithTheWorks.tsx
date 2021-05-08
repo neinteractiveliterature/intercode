@@ -212,7 +212,9 @@ function ReactTableWithTheWorks<
               <i className="fa fa-chevron-left" /> Previous
             </button>
             <div>
-              <label htmlFor={pageInputId}>Page&nbsp;</label>
+              <label className="form-label" htmlFor={pageInputId}>
+                Page&nbsp;
+              </label>
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <input
                 className="form-control form-control-sm d-inline"

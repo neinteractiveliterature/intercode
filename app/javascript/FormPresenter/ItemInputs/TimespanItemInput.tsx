@@ -56,7 +56,7 @@ function TimespanItemInput(props: TimespanItemInputProps) {
   }
 
   return (
-    <div className="form-group">
+    <div className="mb-3">
       <CaptionLabel formItem={formItem} htmlFor={inputId} />
       <div className="d-flex">
         <div className="w-25">

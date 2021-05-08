@@ -183,7 +183,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
       },
     ] as const).map(({ label, field, min, inputId, value, setValue }) => (
       <div key={field} className={lockLimited ? 'd-inline me-2' : undefined}>
-        <label htmlFor={inputId} className="d-inline">
+        <label htmlFor={inputId} className="form-label d-inline">
           {label}
         </label>
         <input

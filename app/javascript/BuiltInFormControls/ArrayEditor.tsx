@@ -46,7 +46,7 @@ function ArrayEditor<T>({
   };
 
   return (
-    <fieldset className="card form-group">
+    <fieldset className="card mb-3">
       <div className="card-header">{header}</div>
 
       <ul className="list-group list-group-flush">

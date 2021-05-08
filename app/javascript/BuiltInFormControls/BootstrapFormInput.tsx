@@ -2,6 +2,7 @@ import { InputHTMLAttributes, ReactNode } from 'react';
 import * as React from 'react';
 import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';
+import classNames from 'classnames';
 
 type BootstrapFormInputPropsCommon = InputHTMLAttributes<HTMLInputElement> & {
   label: ReactNode;
@@ -48,8 +49,8 @@ function BootstrapFormInput(props: BootstrapFormInputProps) {
       };
 
   return (
-    <div className="form-group">
-      <label htmlFor={inputId} className={props.hideLabel ? 'sr-only' : undefined}>
+    <div className="mb-3">
+      <label htmlFor={inputId} className={classNames('form-label', { 'sr-only': props.hideLabel })}>
         {props.label}
       </label>
       <input

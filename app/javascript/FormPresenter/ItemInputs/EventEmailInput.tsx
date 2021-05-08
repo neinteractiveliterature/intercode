@@ -134,7 +134,7 @@ function EventEmailInput({
   };
 
   return (
-    <fieldset className="form-group">
+    <fieldset className="mb-3">
       <div
         className={classNames({
           'border-0': !valueInvalid,

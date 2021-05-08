@@ -44,11 +44,9 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
             <small className="text-muted">Admin notes</small>
           )}
         </div>
-        <div className="input-group-append">
-          <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
-            Edit
-          </button>
-        </div>
+        <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
+          Edit
+        </button>
       </div>
     );
   }

@@ -11,7 +11,7 @@ function CaptionLabel<PropertiesType extends { caption: string; required?: boole
   htmlFor,
 }: CaptionLabelProps<PropertiesType>) {
   return (
-    <label className="form-item-label" htmlFor={htmlFor}>
+    <label className="form-label form-item-label" htmlFor={htmlFor}>
       <span
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }}

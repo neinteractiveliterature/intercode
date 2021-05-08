@@ -226,7 +226,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         disabled={disabled}
       />
 
-      <fieldset className="form-group">
+      <fieldset className="mb-3">
         <legend className="col-form-label">Colors</legend>
 
         <div className="d-flex flex-wrap">

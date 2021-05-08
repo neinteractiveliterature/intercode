@@ -29,7 +29,9 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
 
   return (
     <>
-      <label htmlFor={couponCodeInputId}>Apply coupon:</label>
+      <label className="form-label" htmlFor={couponCodeInputId}>
+        Apply coupon:
+      </label>
       <input
         type="text"
         className="form-control form-control-sm col-4 d-inline-block ms-2"

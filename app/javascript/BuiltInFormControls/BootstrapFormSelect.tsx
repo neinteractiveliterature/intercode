@@ -40,8 +40,10 @@ function BootstrapFormSelect(props: BootstrapFormSelectProps) {
     : (event: React.ChangeEvent<HTMLSelectElement>) => props.onValueChange(event.target.value);
 
   return (
-    <div className="form-group">
-      <label htmlFor={inputId}>{props.label}</label>
+    <div className="mb-3">
+      <label className="form-label" htmlFor={inputId}>
+        {props.label}
+      </label>
       <select
         className="form-control"
         id={inputId}

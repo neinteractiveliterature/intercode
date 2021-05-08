@@ -87,7 +87,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
             </button>
           </div>
         ) : (
-          <div className="form-group">
+          <div className="mb-3">
             <label className="form-label" htmlFor={fileInputId} aria-hidden>
               {t('cms.fileUploadForm.fileInputLabel', 'File to upload')}
             </label>

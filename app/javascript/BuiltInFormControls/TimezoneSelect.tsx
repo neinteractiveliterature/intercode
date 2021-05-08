@@ -91,8 +91,10 @@ function TimezoneSelect(props: TimezoneSelectProps) {
   const selectId = useUniqueId('timezone-select-');
 
   return (
-    <div className="form-group">
-      <label htmlFor={selectId}>{label}</label>
+    <div className="mb-3">
+      <label className="form-label" htmlFor={selectId}>
+        {label}
+      </label>
       <Select<ZoneData>
         inputId={selectId}
         options={options}

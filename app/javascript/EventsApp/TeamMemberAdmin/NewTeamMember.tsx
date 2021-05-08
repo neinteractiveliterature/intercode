@@ -81,8 +81,8 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps) {
         })}
       </h1>
 
-      <div className="form-group">
-        <label htmlFor={userConProfileSelectId}>
+      <div className="mb-3">
+        <label className="form-label" htmlFor={userConProfileSelectId}>
           {t('events.teamMemberAdmin.userConProfileLabel', '{{ teamMemberName }} to add', {
             teamMemberName: humanize(underscore(event.event_category.team_member_name)),
           })}

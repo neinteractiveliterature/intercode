@@ -99,7 +99,7 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
   };
 
   const renderQuantity = () => (
-    <label className="form-group d-flex mb-4 align-items-baseline">
+    <label className="form-label mb-3 d-flex mb-4 align-items-baseline">
       <div className="me-2">Quantity:</div>
       <input
         type="number"
