@@ -65,7 +65,7 @@ function CmsFilesAdmin() {
             <div className="card" key={cmsFile.id}>
               <div className="card-header">
                 {cmsFile.current_ability_can_delete && (
-                  <div className="float-right">
+                  <div className="float-end">
                     <button
                       type="button"
                       className="btn btn-outline-danger px-2 py-1"

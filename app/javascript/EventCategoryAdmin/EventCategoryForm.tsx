@@ -114,7 +114,7 @@ function EventColorPicker({
         <div className="card-body">
           <ColorPicker value={color} onChange={setColor} />
         </div>
-        <span ref={setArrow} style={styles.arrow} className="arrow" />
+        <span ref={setArrow} style={styles.arrow} className="popover-arrow" />
       </div>
     </>
   );

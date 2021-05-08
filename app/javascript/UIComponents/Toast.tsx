@@ -66,19 +66,15 @@ export default function Toast({ title, children, visible, close, autoCloseAfter 
       aria-atomic="true"
     >
       <div className="toast-header">
-        <span className="mr-auto">{title}</span>
+        <span className="mr-auto flex-grow-1">{title}</span>
         <small className="text-muted">{formattedTimeAgo}</small>
         <button
           type="button"
-          className="ms-2 mb-1 close"
+          className="ms-2 mb-1 btn-close"
           data-dismiss="toast"
           aria-label="Close"
           onClick={close}
-        >
-          <small>
-            <i className="fa fa-close" />
-          </small>
-        </button>
+        />
       </div>
       <div className="toast-body">{children}</div>
     </div>

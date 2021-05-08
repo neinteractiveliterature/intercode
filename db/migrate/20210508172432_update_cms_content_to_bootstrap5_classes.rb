@@ -1,3 +1,5 @@
+# rubocop:disable Style/WordArray
+
 class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
   CMS_CONTENT_COLUMNS = {
     pages: 'content',
@@ -13,7 +15,10 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
 
     # Bootstrap 5 doesn't have a media class anymore but leaving it in here will make it easier
     # to back this out if we need to
-    ['class="media', 'class="media d-flex align-items-start']
+    ['class="media', 'class="media d-flex align-items-start'],
+
+    ['float-right', 'float-end'],
+    ['float-left', 'float-start']
   ]
 
   DOWN_REGEXP_REPLACEMENTS = [
@@ -21,7 +26,9 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
     ['(?<=\\W)me-(\\d)(?=\\W)', 'mr-\\1'],
     ['(?<=\\W)ps-(\\d)(?=\\W)', 'pl-\\1'],
     ['(?<=\\W)pe-(\\d)(?=\\W)', 'pr-\\1'],
-    ['class="media d-flex align-items-start', 'class="media']
+    ['class="media d-flex align-items-start', 'class="media'],
+    ['float-end', 'float-right'],
+    ['float-start', 'float-left']
   ]
 
   def up

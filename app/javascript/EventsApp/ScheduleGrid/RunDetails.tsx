@@ -74,7 +74,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
         role="tooltip"
         {...attributes.popper}
       >
-        <span ref={arrowRef} style={styles.arrow} className="arrow" />
+        <span ref={arrowRef} style={styles.arrow} className="popover-arrow" />
         <div className="schedule-grid-run-details-content">
           <div className="popover-header">
             <div className="d-flex align-items-center">
@@ -99,7 +99,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
           </div>
           <div className="popover-body overflow-auto">
             {myProfile && (
-              <div className="float-right">
+              <div className="float-end">
                 <RateEventControl value={event.my_rating} onChange={ratingChanged} />
               </div>
             )}
