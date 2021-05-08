@@ -5,6 +5,7 @@ import { PermissionedModelFields_CmsContentGroup_Fragment, PermissionedModelFiel
 import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CmsContentFields_CmsLayout_Fragment = (
   { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name'>
@@ -56,10 +57,10 @@ export type CmsContentGroupFieldsFragment = (
   )> }
 );
 
-export type CmsContentGroupsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsContentGroupsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsContentGroupsAdminQueryQuery = (
+export type CmsContentGroupsAdminQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -78,12 +79,12 @@ export type CmsContentGroupsAdminQueryQuery = (
   ) }
 );
 
-export type SearchCmsContentQueryQueryVariables = Types.Exact<{
+export type SearchCmsContentQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type SearchCmsContentQueryQuery = (
+export type SearchCmsContentQueryData = (
   { __typename: 'Query' }
   & { searchCmsContent: Array<(
     { __typename: 'CmsLayout' }
@@ -158,29 +159,31 @@ export const CmsContentGroupsAdminQueryDocument = gql`
     ${CmsContentGroupFieldsFragmentDoc}`;
 
 /**
- * __useCmsContentGroupsAdminQueryQuery__
+ * __useCmsContentGroupsAdminQuery__
  *
- * To run a query within a React component, call `useCmsContentGroupsAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsContentGroupsAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsContentGroupsAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsContentGroupsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsContentGroupsAdminQueryQuery({
+ * const { data, loading, error } = useCmsContentGroupsAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsContentGroupsAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsContentGroupsAdminQueryQuery, CmsContentGroupsAdminQueryQueryVariables>) {
-        return Apollo.useQuery<CmsContentGroupsAdminQueryQuery, CmsContentGroupsAdminQueryQueryVariables>(CmsContentGroupsAdminQueryDocument, baseOptions);
+export function useCmsContentGroupsAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
       }
-export function useCmsContentGroupsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsContentGroupsAdminQueryQuery, CmsContentGroupsAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsContentGroupsAdminQueryQuery, CmsContentGroupsAdminQueryQueryVariables>(CmsContentGroupsAdminQueryDocument, baseOptions);
+export function useCmsContentGroupsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
         }
-export type CmsContentGroupsAdminQueryQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQueryQuery>;
+export type CmsContentGroupsAdminQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQuery>;
 export type CmsContentGroupsAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQueryLazyQuery>;
-export type CmsContentGroupsAdminQueryQueryResult = Apollo.QueryResult<CmsContentGroupsAdminQueryQuery, CmsContentGroupsAdminQueryQueryVariables>;
+export type CmsContentGroupsAdminQueryDataResult = Apollo.QueryResult<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>;
 export const SearchCmsContentQueryDocument = gql`
     query SearchCmsContentQuery($name: String) {
   searchCmsContent(name: $name) {
@@ -190,27 +193,29 @@ export const SearchCmsContentQueryDocument = gql`
     ${CmsContentFieldsFragmentDoc}`;
 
 /**
- * __useSearchCmsContentQueryQuery__
+ * __useSearchCmsContentQuery__
  *
- * To run a query within a React component, call `useSearchCmsContentQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchCmsContentQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchCmsContentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCmsContentQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchCmsContentQueryQuery({
+ * const { data, loading, error } = useSearchCmsContentQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useSearchCmsContentQueryQuery(baseOptions?: Apollo.QueryHookOptions<SearchCmsContentQueryQuery, SearchCmsContentQueryQueryVariables>) {
-        return Apollo.useQuery<SearchCmsContentQueryQuery, SearchCmsContentQueryQueryVariables>(SearchCmsContentQueryDocument, baseOptions);
+export function useSearchCmsContentQuery(baseOptions?: Apollo.QueryHookOptions<SearchCmsContentQueryData, SearchCmsContentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
       }
-export function useSearchCmsContentQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCmsContentQueryQuery, SearchCmsContentQueryQueryVariables>) {
-          return Apollo.useLazyQuery<SearchCmsContentQueryQuery, SearchCmsContentQueryQueryVariables>(SearchCmsContentQueryDocument, baseOptions);
+export function useSearchCmsContentQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCmsContentQueryData, SearchCmsContentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
         }
-export type SearchCmsContentQueryQueryHookResult = ReturnType<typeof useSearchCmsContentQueryQuery>;
+export type SearchCmsContentQueryHookResult = ReturnType<typeof useSearchCmsContentQuery>;
 export type SearchCmsContentQueryLazyQueryHookResult = ReturnType<typeof useSearchCmsContentQueryLazyQuery>;
-export type SearchCmsContentQueryQueryResult = Apollo.QueryResult<SearchCmsContentQueryQuery, SearchCmsContentQueryQueryVariables>;
+export type SearchCmsContentQueryDataResult = Apollo.QueryResult<SearchCmsContentQueryData, SearchCmsContentQueryVariables>;

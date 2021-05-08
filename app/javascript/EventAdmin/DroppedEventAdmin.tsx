@@ -2,11 +2,11 @@ import ErrorDisplay from '../ErrorDisplay';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useEventAdminEventsQuery } from './queries.generated';
 import { useRestoreDroppedEventMutation } from './mutations.generated';
 
 function DroppedEventAdmin() {
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
   const [restoreDroppedEvent] = useRestoreDroppedEventMutation();
   const confirm = useConfirm();
 

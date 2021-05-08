@@ -9,14 +9,14 @@ import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useMyProfileQueryQuery } from './queries.generated';
+import { useMyProfileQuery } from './queries.generated';
 import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
 
 function MyProfileDisplay() {
   const { t } = useTranslation();
-  const { data, loading, error } = useMyProfileQueryQuery();
+  const { data, loading, error } = useMyProfileQuery();
 
   const formResponse = useMemo(() => {
     if (loading || error) {

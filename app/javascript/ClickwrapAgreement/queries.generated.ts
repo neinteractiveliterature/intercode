@@ -3,10 +3,11 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type ClickwrapAgreementQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type ClickwrapAgreementQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ClickwrapAgreementQueryQuery = (
+export type ClickwrapAgreementQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -33,26 +34,28 @@ export const ClickwrapAgreementQueryDocument = gql`
     `;
 
 /**
- * __useClickwrapAgreementQueryQuery__
+ * __useClickwrapAgreementQuery__
  *
- * To run a query within a React component, call `useClickwrapAgreementQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useClickwrapAgreementQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useClickwrapAgreementQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClickwrapAgreementQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useClickwrapAgreementQueryQuery({
+ * const { data, loading, error } = useClickwrapAgreementQuery({
  *   variables: {
  *   },
  * });
  */
-export function useClickwrapAgreementQueryQuery(baseOptions?: Apollo.QueryHookOptions<ClickwrapAgreementQueryQuery, ClickwrapAgreementQueryQueryVariables>) {
-        return Apollo.useQuery<ClickwrapAgreementQueryQuery, ClickwrapAgreementQueryQueryVariables>(ClickwrapAgreementQueryDocument, baseOptions);
+export function useClickwrapAgreementQuery(baseOptions?: Apollo.QueryHookOptions<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
       }
-export function useClickwrapAgreementQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ClickwrapAgreementQueryQuery, ClickwrapAgreementQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ClickwrapAgreementQueryQuery, ClickwrapAgreementQueryQueryVariables>(ClickwrapAgreementQueryDocument, baseOptions);
+export function useClickwrapAgreementQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
         }
-export type ClickwrapAgreementQueryQueryHookResult = ReturnType<typeof useClickwrapAgreementQueryQuery>;
+export type ClickwrapAgreementQueryHookResult = ReturnType<typeof useClickwrapAgreementQuery>;
 export type ClickwrapAgreementQueryLazyQueryHookResult = ReturnType<typeof useClickwrapAgreementQueryLazyQuery>;
-export type ClickwrapAgreementQueryQueryResult = Apollo.QueryResult<ClickwrapAgreementQueryQuery, ClickwrapAgreementQueryQueryVariables>;
+export type ClickwrapAgreementQueryDataResult = Apollo.QueryResult<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>;

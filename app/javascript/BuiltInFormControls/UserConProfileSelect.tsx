@@ -3,10 +3,10 @@ import type { OptionTypeBase } from 'react-select';
 
 import { DefaultUserConProfilesQuery } from './selectDefaultQueries';
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
-import { DefaultUserConProfilesQueryQuery } from './selectDefaultQueries.generated';
+import { DefaultUserConProfilesQueryData } from './selectDefaultQueries.generated';
 
-type DQ = DefaultUserConProfilesQueryQuery;
-type DO<QueryType extends DefaultUserConProfilesQueryQuery> = NonNullable<
+type DQ = DefaultUserConProfilesQueryData;
+type DO<QueryType extends DefaultUserConProfilesQueryData> = NonNullable<
   QueryType['convention']
 >['user_con_profiles_paginated']['entries'][0];
 

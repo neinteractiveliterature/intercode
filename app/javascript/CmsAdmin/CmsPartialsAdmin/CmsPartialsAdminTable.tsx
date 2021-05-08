@@ -9,10 +9,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsPartialsAdminQueryQuery } from './queries.generated';
+import { useCmsPartialsAdminQuery } from './queries.generated';
 
 function CmsPartialsAdminTable() {
-  const { data, loading, error } = useCmsPartialsAdminQueryQuery();
+  const { data, loading, error } = useCmsPartialsAdminQuery();
   const confirm = useConfirm();
   const deletePartialMutate = useDeleteMutation(DeletePartial, {
     query: CmsPartialsAdminQuery,

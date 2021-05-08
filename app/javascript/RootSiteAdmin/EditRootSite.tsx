@@ -8,7 +8,7 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useRootSiteAdminQueryQuery } from './queries.generated';
+import { useRootSiteAdminQuery } from './queries.generated';
 import { useUpdateRootSiteMutation } from './mutations.generated';
 
 function useDirtyState<T>(initialState: T, setDirty: () => void) {
@@ -22,7 +22,7 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export default LoadQueryWrapper(useRootSiteAdminQueryQuery, function EditRootSite({ data }) {
+export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ data }) {
   const [updateMutate] = useUpdateRootSiteMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 

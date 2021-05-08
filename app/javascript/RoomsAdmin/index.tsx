@@ -15,27 +15,27 @@ import { useCreateMutation, useDeleteMutation } from '../MutationUtils';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
-  RoomsAdminQueryQuery,
-  RoomsAdminQueryQueryVariables,
-  useRoomsAdminQueryQuery,
+  RoomsAdminQueryData,
+  RoomsAdminQueryVariables,
+  useRoomsAdminQuery,
 } from './queries.generated';
 import {
-  CreateRoomMutation,
+  CreateRoomMutationData,
   CreateRoomMutationVariables,
-  DeleteRoomMutation,
+  DeleteRoomMutationData,
   DeleteRoomMutationVariables,
   useUpdateRoomMutation,
 } from './mutations.generated';
 
-export default LoadQueryWrapper(useRoomsAdminQueryQuery, function RoomsAdmin({ data }) {
+export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }) {
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const [updateMutate] = useUpdateRoomMutation();
   const [createRoom, createError] = useAsyncFunction(
     useCreateMutation<
-      RoomsAdminQueryQuery,
-      RoomsAdminQueryQueryVariables,
+      RoomsAdminQueryData,
+      RoomsAdminQueryVariables,
       CreateRoomMutationVariables,
-      CreateRoomMutation
+      CreateRoomMutationData
     >(CreateRoom, {
       query: RoomsAdminQuery,
       arrayPath: ['convention', 'rooms'],
@@ -44,7 +44,7 @@ export default LoadQueryWrapper(useRoomsAdminQueryQuery, function RoomsAdmin({ d
   );
   const [updateRoom, updateError] = useAsyncFunction(updateMutate);
   const [deleteRoom, deleteError] = useAsyncFunction(
-    useDeleteMutation<DeleteRoomMutation, DeleteRoomMutationVariables>(DeleteRoom, {
+    useDeleteMutation<DeleteRoomMutationData, DeleteRoomMutationVariables>(DeleteRoom, {
       query: RoomsAdminQuery,
       arrayPath: ['convention', 'rooms'],
       idVariablePath: ['input', 'id'],

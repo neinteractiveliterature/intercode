@@ -3,10 +3,11 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type RoomsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type RoomsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RoomsAdminQueryQuery = (
+export type RoomsAdminQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -39,26 +40,28 @@ export const RoomsAdminQueryDocument = gql`
     `;
 
 /**
- * __useRoomsAdminQueryQuery__
+ * __useRoomsAdminQuery__
  *
- * To run a query within a React component, call `useRoomsAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useRoomsAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useRoomsAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoomsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useRoomsAdminQueryQuery({
+ * const { data, loading, error } = useRoomsAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useRoomsAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<RoomsAdminQueryQuery, RoomsAdminQueryQueryVariables>) {
-        return Apollo.useQuery<RoomsAdminQueryQuery, RoomsAdminQueryQueryVariables>(RoomsAdminQueryDocument, baseOptions);
+export function useRoomsAdminQuery(baseOptions?: Apollo.QueryHookOptions<RoomsAdminQueryData, RoomsAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RoomsAdminQueryData, RoomsAdminQueryVariables>(RoomsAdminQueryDocument, options);
       }
-export function useRoomsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoomsAdminQueryQuery, RoomsAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<RoomsAdminQueryQuery, RoomsAdminQueryQueryVariables>(RoomsAdminQueryDocument, baseOptions);
+export function useRoomsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoomsAdminQueryData, RoomsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RoomsAdminQueryData, RoomsAdminQueryVariables>(RoomsAdminQueryDocument, options);
         }
-export type RoomsAdminQueryQueryHookResult = ReturnType<typeof useRoomsAdminQueryQuery>;
+export type RoomsAdminQueryHookResult = ReturnType<typeof useRoomsAdminQuery>;
 export type RoomsAdminQueryLazyQueryHookResult = ReturnType<typeof useRoomsAdminQueryLazyQuery>;
-export type RoomsAdminQueryQueryResult = Apollo.QueryResult<RoomsAdminQueryQuery, RoomsAdminQueryQueryVariables>;
+export type RoomsAdminQueryDataResult = Apollo.QueryResult<RoomsAdminQueryData, RoomsAdminQueryVariables>;

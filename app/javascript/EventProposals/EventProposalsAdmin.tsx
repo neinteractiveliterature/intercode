@@ -12,16 +12,13 @@ import EventProposalHistory from './EventProposalHistory';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import {
-  useEventProposalQueryQuery,
-  useEventProposalQueryWithOwnerQuery,
-} from './queries.generated';
+import { useEventProposalQuery, useEventProposalQueryWithOwner } from './queries.generated';
 
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
   const eventProposalId = Number.parseInt(params.id, 10);
-  const { data, loading, error } = useEventProposalQueryWithOwnerQuery({
+  const { data, loading, error } = useEventProposalQueryWithOwner({
     variables: { eventProposalId },
   });
 
@@ -61,7 +58,7 @@ function AdminEditEventProposal() {
   const { t } = useTranslation();
   const history = useHistory();
   const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
-  const { data, loading, error } = useEventProposalQueryQuery({ variables: { eventProposalId } });
+  const { data, loading, error } = useEventProposalQuery({ variables: { eventProposalId } });
 
   usePageTitle(
     useValueUnless(

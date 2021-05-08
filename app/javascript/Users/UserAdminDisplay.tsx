@@ -5,16 +5,16 @@ import sortBy from 'lodash/sortBy';
 import { useParams } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
-import { UserAdminQueryQuery, useUserAdminQueryQuery } from './queries.generated';
+import { UserAdminQueryData, useUserAdminQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
-function sortByConventionDate(profiles: UserAdminQueryQuery['user']['user_con_profiles']) {
+function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
 }
 
-function buildProfileUrl(profile: UserAdminQueryQuery['user']['user_con_profiles'][0]) {
+function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'][0]) {
   const profileUrl = new URL(
     `//${profile.convention.domain}/user_con_profiles/${profile.id}`,
     window.location.href,
@@ -25,11 +25,11 @@ function buildProfileUrl(profile: UserAdminQueryQuery['user']['user_con_profiles
 
 function useLoadUserAdminData() {
   const userId = Number.parseInt(useParams<{ id: string }>().id, 10);
-  return useUserAdminQueryQuery({ variables: { id: userId } });
+  return useUserAdminQuery({ variables: { id: userId } });
 }
 
 function renderProfileConventionYear(
-  profile: UserAdminQueryQuery['user']['user_con_profiles'][number],
+  profile: UserAdminQueryData['user']['user_con_profiles'][number],
   format: ReturnType<typeof useAppDateTimeFormat>,
 ) {
   const { start } = timespanFromConvention(profile.convention);

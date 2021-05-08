@@ -15,10 +15,10 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { useDeleteMutation } from '../../MutationUtils';
 import { DeleteTeamMember } from './mutations';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { TeamMembersQueryQuery, useTeamMembersQueryQuery } from './queries.generated';
+import { TeamMembersQueryData, useTeamMembersQuery } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
-function sortTeamMembers(teamMembers: TeamMembersQueryQuery['event']['team_members']) {
+function sortTeamMembers(teamMembers: TeamMembersQueryData['event']['team_members']) {
   return sortByLocaleString(
     teamMembers,
     (teamMember) => teamMember.user_con_profile.name_inverted ?? '',
@@ -26,9 +26,9 @@ function sortTeamMembers(teamMembers: TeamMembersQueryQuery['event']['team_membe
 }
 
 type TeamMemberActionMenuProps = {
-  event: TeamMembersQueryQuery['event'];
-  convention: NonNullable<TeamMembersQueryQuery['convention']>;
-  teamMember: TeamMembersQueryQuery['event']['team_members'][0];
+  event: TeamMembersQueryData['event'];
+  convention: NonNullable<TeamMembersQueryData['convention']>;
+  teamMember: TeamMembersQueryData['event']['team_members'][0];
   openProvideTicketModal: () => void;
   eventPath: string;
 };
@@ -112,8 +112,8 @@ export type TeamMembersIndexProps = {
 
 function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useTeamMembersQueryQuery({ variables: { eventId } });
-  const modal = useModal<{ teamMember: TeamMembersQueryQuery['event']['team_members'][0] }>();
+  const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
+  const modal = useModal<{ teamMember: TeamMembersQueryData['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
     () =>

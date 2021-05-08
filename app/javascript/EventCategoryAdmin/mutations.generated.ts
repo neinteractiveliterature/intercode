@@ -5,12 +5,13 @@ import { EventCategoryFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateEventCategoryMutationVariables = Types.Exact<{
   eventCategory: Types.EventCategoryInput;
 }>;
 
 
-export type CreateEventCategoryMutation = (
+export type CreateEventCategoryMutationData = (
   { __typename: 'Mutation' }
   & { createEventCategory?: Types.Maybe<(
     { __typename: 'CreateEventCategoryPayload' }
@@ -28,7 +29,7 @@ export type UpdateEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventCategoryMutation = (
+export type UpdateEventCategoryMutationData = (
   { __typename: 'Mutation' }
   & { updateEventCategory?: Types.Maybe<(
     { __typename: 'UpdateEventCategoryPayload' }
@@ -45,7 +46,7 @@ export type DeleteEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteEventCategoryMutation = (
+export type DeleteEventCategoryMutationData = (
   { __typename: 'Mutation' }
   & { deleteEventCategory?: Types.Maybe<(
     { __typename: 'DeleteEventCategoryPayload' }
@@ -64,7 +65,7 @@ export const CreateEventCategoryDocument = gql`
   }
 }
     ${EventCategoryFieldsFragmentDoc}`;
-export type CreateEventCategoryMutationFn = Apollo.MutationFunction<CreateEventCategoryMutation, CreateEventCategoryMutationVariables>;
+export type CreateEventCategoryMutationFn = Apollo.MutationFunction<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>;
 
 /**
  * __useCreateEventCategoryMutation__
@@ -83,12 +84,13 @@ export type CreateEventCategoryMutationFn = Apollo.MutationFunction<CreateEventC
  *   },
  * });
  */
-export function useCreateEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventCategoryMutation, CreateEventCategoryMutationVariables>) {
-        return Apollo.useMutation<CreateEventCategoryMutation, CreateEventCategoryMutationVariables>(CreateEventCategoryDocument, baseOptions);
+export function useCreateEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>(CreateEventCategoryDocument, options);
       }
 export type CreateEventCategoryMutationHookResult = ReturnType<typeof useCreateEventCategoryMutation>;
-export type CreateEventCategoryMutationResult = Apollo.MutationResult<CreateEventCategoryMutation>;
-export type CreateEventCategoryMutationOptions = Apollo.BaseMutationOptions<CreateEventCategoryMutation, CreateEventCategoryMutationVariables>;
+export type CreateEventCategoryMutationResult = Apollo.MutationResult<CreateEventCategoryMutationData>;
+export type CreateEventCategoryMutationOptions = Apollo.BaseMutationOptions<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>;
 export const UpdateEventCategoryDocument = gql`
     mutation UpdateEventCategory($id: Int!, $eventCategory: EventCategoryInput!) {
   updateEventCategory(input: {id: $id, event_category: $eventCategory}) {
@@ -99,7 +101,7 @@ export const UpdateEventCategoryDocument = gql`
   }
 }
     ${EventCategoryFieldsFragmentDoc}`;
-export type UpdateEventCategoryMutationFn = Apollo.MutationFunction<UpdateEventCategoryMutation, UpdateEventCategoryMutationVariables>;
+export type UpdateEventCategoryMutationFn = Apollo.MutationFunction<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>;
 
 /**
  * __useUpdateEventCategoryMutation__
@@ -119,12 +121,13 @@ export type UpdateEventCategoryMutationFn = Apollo.MutationFunction<UpdateEventC
  *   },
  * });
  */
-export function useUpdateEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventCategoryMutation, UpdateEventCategoryMutationVariables>) {
-        return Apollo.useMutation<UpdateEventCategoryMutation, UpdateEventCategoryMutationVariables>(UpdateEventCategoryDocument, baseOptions);
+export function useUpdateEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>(UpdateEventCategoryDocument, options);
       }
 export type UpdateEventCategoryMutationHookResult = ReturnType<typeof useUpdateEventCategoryMutation>;
-export type UpdateEventCategoryMutationResult = Apollo.MutationResult<UpdateEventCategoryMutation>;
-export type UpdateEventCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateEventCategoryMutation, UpdateEventCategoryMutationVariables>;
+export type UpdateEventCategoryMutationResult = Apollo.MutationResult<UpdateEventCategoryMutationData>;
+export type UpdateEventCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>;
 export const DeleteEventCategoryDocument = gql`
     mutation DeleteEventCategory($id: Int!) {
   deleteEventCategory(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeleteEventCategoryDocument = gql`
   }
 }
     `;
-export type DeleteEventCategoryMutationFn = Apollo.MutationFunction<DeleteEventCategoryMutation, DeleteEventCategoryMutationVariables>;
+export type DeleteEventCategoryMutationFn = Apollo.MutationFunction<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>;
 
 /**
  * __useDeleteEventCategoryMutation__
@@ -151,9 +154,10 @@ export type DeleteEventCategoryMutationFn = Apollo.MutationFunction<DeleteEventC
  *   },
  * });
  */
-export function useDeleteEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventCategoryMutation, DeleteEventCategoryMutationVariables>) {
-        return Apollo.useMutation<DeleteEventCategoryMutation, DeleteEventCategoryMutationVariables>(DeleteEventCategoryDocument, baseOptions);
+export function useDeleteEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>(DeleteEventCategoryDocument, options);
       }
 export type DeleteEventCategoryMutationHookResult = ReturnType<typeof useDeleteEventCategoryMutation>;
-export type DeleteEventCategoryMutationResult = Apollo.MutationResult<DeleteEventCategoryMutation>;
-export type DeleteEventCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteEventCategoryMutation, DeleteEventCategoryMutationVariables>;
+export type DeleteEventCategoryMutationResult = Apollo.MutationResult<DeleteEventCategoryMutationData>;
+export type DeleteEventCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>;

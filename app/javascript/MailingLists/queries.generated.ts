@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type ContactEmailFieldsFragment = (
   { __typename: 'ContactEmail' }
   & Pick<Types.ContactEmail, 'email' | 'formatted_address' | 'name' | 'metadata_json'>
@@ -17,10 +18,10 @@ export type MailingListsResultFieldsFragment = (
   )> }
 );
 
-export type MailingListsMenuQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type MailingListsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MailingListsMenuQueryQuery = (
+export type MailingListsMenuQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -28,10 +29,10 @@ export type MailingListsMenuQueryQuery = (
   ) }
 );
 
-export type TicketedAttendeesQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type TicketedAttendeesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketedAttendeesQueryQuery = (
+export type TicketedAttendeesQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -46,10 +47,10 @@ export type TicketedAttendeesQueryQuery = (
   ) }
 );
 
-export type EventProposersQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EventProposersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProposersQueryQuery = (
+export type EventProposersQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -64,10 +65,10 @@ export type EventProposersQueryQuery = (
   ) }
 );
 
-export type TeamMembersMailingListQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type TeamMembersMailingListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TeamMembersMailingListQueryQuery = (
+export type TeamMembersMailingListQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -82,10 +83,10 @@ export type TeamMembersMailingListQueryQuery = (
   ) }
 );
 
-export type UsersWithPendingBioQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type UsersWithPendingBioQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UsersWithPendingBioQueryQuery = (
+export type UsersWithPendingBioQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -100,10 +101,10 @@ export type UsersWithPendingBioQueryQuery = (
   ) }
 );
 
-export type WaitlistMailingListsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type WaitlistMailingListsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type WaitlistMailingListsQueryQuery = (
+export type WaitlistMailingListsQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -129,10 +130,10 @@ export type WaitlistMailingListsQueryQuery = (
   ) }
 );
 
-export type WhosFreeFormConventionQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type WhosFreeFormConventionQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type WhosFreeFormConventionQueryQuery = (
+export type WhosFreeFormConventionQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -140,13 +141,13 @@ export type WhosFreeFormConventionQueryQuery = (
   ) }
 );
 
-export type WhosFreeQueryQueryVariables = Types.Exact<{
+export type WhosFreeQueryVariables = Types.Exact<{
   start: Types.Scalars['Date'];
   finish: Types.Scalars['Date'];
 }>;
 
 
-export type WhosFreeQueryQuery = (
+export type WhosFreeQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -188,29 +189,31 @@ export const MailingListsMenuQueryDocument = gql`
     `;
 
 /**
- * __useMailingListsMenuQueryQuery__
+ * __useMailingListsMenuQuery__
  *
- * To run a query within a React component, call `useMailingListsMenuQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useMailingListsMenuQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMailingListsMenuQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMailingListsMenuQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMailingListsMenuQueryQuery({
+ * const { data, loading, error } = useMailingListsMenuQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMailingListsMenuQueryQuery(baseOptions?: Apollo.QueryHookOptions<MailingListsMenuQueryQuery, MailingListsMenuQueryQueryVariables>) {
-        return Apollo.useQuery<MailingListsMenuQueryQuery, MailingListsMenuQueryQueryVariables>(MailingListsMenuQueryDocument, baseOptions);
+export function useMailingListsMenuQuery(baseOptions?: Apollo.QueryHookOptions<MailingListsMenuQueryData, MailingListsMenuQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MailingListsMenuQueryData, MailingListsMenuQueryVariables>(MailingListsMenuQueryDocument, options);
       }
-export function useMailingListsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MailingListsMenuQueryQuery, MailingListsMenuQueryQueryVariables>) {
-          return Apollo.useLazyQuery<MailingListsMenuQueryQuery, MailingListsMenuQueryQueryVariables>(MailingListsMenuQueryDocument, baseOptions);
+export function useMailingListsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MailingListsMenuQueryData, MailingListsMenuQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MailingListsMenuQueryData, MailingListsMenuQueryVariables>(MailingListsMenuQueryDocument, options);
         }
-export type MailingListsMenuQueryQueryHookResult = ReturnType<typeof useMailingListsMenuQueryQuery>;
+export type MailingListsMenuQueryHookResult = ReturnType<typeof useMailingListsMenuQuery>;
 export type MailingListsMenuQueryLazyQueryHookResult = ReturnType<typeof useMailingListsMenuQueryLazyQuery>;
-export type MailingListsMenuQueryQueryResult = Apollo.QueryResult<MailingListsMenuQueryQuery, MailingListsMenuQueryQueryVariables>;
+export type MailingListsMenuQueryDataResult = Apollo.QueryResult<MailingListsMenuQueryData, MailingListsMenuQueryVariables>;
 export const TicketedAttendeesQueryDocument = gql`
     query TicketedAttendeesQuery {
   convention: assertConvention {
@@ -227,29 +230,31 @@ export const TicketedAttendeesQueryDocument = gql`
     ${MailingListsResultFieldsFragmentDoc}`;
 
 /**
- * __useTicketedAttendeesQueryQuery__
+ * __useTicketedAttendeesQuery__
  *
- * To run a query within a React component, call `useTicketedAttendeesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTicketedAttendeesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTicketedAttendeesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTicketedAttendeesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTicketedAttendeesQueryQuery({
+ * const { data, loading, error } = useTicketedAttendeesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useTicketedAttendeesQueryQuery(baseOptions?: Apollo.QueryHookOptions<TicketedAttendeesQueryQuery, TicketedAttendeesQueryQueryVariables>) {
-        return Apollo.useQuery<TicketedAttendeesQueryQuery, TicketedAttendeesQueryQueryVariables>(TicketedAttendeesQueryDocument, baseOptions);
+export function useTicketedAttendeesQuery(baseOptions?: Apollo.QueryHookOptions<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>(TicketedAttendeesQueryDocument, options);
       }
-export function useTicketedAttendeesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketedAttendeesQueryQuery, TicketedAttendeesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TicketedAttendeesQueryQuery, TicketedAttendeesQueryQueryVariables>(TicketedAttendeesQueryDocument, baseOptions);
+export function useTicketedAttendeesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>(TicketedAttendeesQueryDocument, options);
         }
-export type TicketedAttendeesQueryQueryHookResult = ReturnType<typeof useTicketedAttendeesQueryQuery>;
+export type TicketedAttendeesQueryHookResult = ReturnType<typeof useTicketedAttendeesQuery>;
 export type TicketedAttendeesQueryLazyQueryHookResult = ReturnType<typeof useTicketedAttendeesQueryLazyQuery>;
-export type TicketedAttendeesQueryQueryResult = Apollo.QueryResult<TicketedAttendeesQueryQuery, TicketedAttendeesQueryQueryVariables>;
+export type TicketedAttendeesQueryDataResult = Apollo.QueryResult<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>;
 export const EventProposersQueryDocument = gql`
     query EventProposersQuery {
   convention: assertConvention {
@@ -265,29 +270,31 @@ export const EventProposersQueryDocument = gql`
     ${MailingListsResultFieldsFragmentDoc}`;
 
 /**
- * __useEventProposersQueryQuery__
+ * __useEventProposersQuery__
  *
- * To run a query within a React component, call `useEventProposersQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProposersQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProposersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventProposersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProposersQueryQuery({
+ * const { data, loading, error } = useEventProposersQuery({
  *   variables: {
  *   },
  * });
  */
-export function useEventProposersQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventProposersQueryQuery, EventProposersQueryQueryVariables>) {
-        return Apollo.useQuery<EventProposersQueryQuery, EventProposersQueryQueryVariables>(EventProposersQueryDocument, baseOptions);
+export function useEventProposersQuery(baseOptions?: Apollo.QueryHookOptions<EventProposersQueryData, EventProposersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProposersQueryData, EventProposersQueryVariables>(EventProposersQueryDocument, options);
       }
-export function useEventProposersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposersQueryQuery, EventProposersQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventProposersQueryQuery, EventProposersQueryQueryVariables>(EventProposersQueryDocument, baseOptions);
+export function useEventProposersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposersQueryData, EventProposersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProposersQueryData, EventProposersQueryVariables>(EventProposersQueryDocument, options);
         }
-export type EventProposersQueryQueryHookResult = ReturnType<typeof useEventProposersQueryQuery>;
+export type EventProposersQueryHookResult = ReturnType<typeof useEventProposersQuery>;
 export type EventProposersQueryLazyQueryHookResult = ReturnType<typeof useEventProposersQueryLazyQuery>;
-export type EventProposersQueryQueryResult = Apollo.QueryResult<EventProposersQueryQuery, EventProposersQueryQueryVariables>;
+export type EventProposersQueryDataResult = Apollo.QueryResult<EventProposersQueryData, EventProposersQueryVariables>;
 export const TeamMembersMailingListQueryDocument = gql`
     query TeamMembersMailingListQuery {
   convention: assertConvention {
@@ -303,29 +310,31 @@ export const TeamMembersMailingListQueryDocument = gql`
     ${MailingListsResultFieldsFragmentDoc}`;
 
 /**
- * __useTeamMembersMailingListQueryQuery__
+ * __useTeamMembersMailingListQuery__
  *
- * To run a query within a React component, call `useTeamMembersMailingListQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTeamMembersMailingListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTeamMembersMailingListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamMembersMailingListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTeamMembersMailingListQueryQuery({
+ * const { data, loading, error } = useTeamMembersMailingListQuery({
  *   variables: {
  *   },
  * });
  */
-export function useTeamMembersMailingListQueryQuery(baseOptions?: Apollo.QueryHookOptions<TeamMembersMailingListQueryQuery, TeamMembersMailingListQueryQueryVariables>) {
-        return Apollo.useQuery<TeamMembersMailingListQueryQuery, TeamMembersMailingListQueryQueryVariables>(TeamMembersMailingListQueryDocument, baseOptions);
+export function useTeamMembersMailingListQuery(baseOptions?: Apollo.QueryHookOptions<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>(TeamMembersMailingListQueryDocument, options);
       }
-export function useTeamMembersMailingListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMembersMailingListQueryQuery, TeamMembersMailingListQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TeamMembersMailingListQueryQuery, TeamMembersMailingListQueryQueryVariables>(TeamMembersMailingListQueryDocument, baseOptions);
+export function useTeamMembersMailingListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>(TeamMembersMailingListQueryDocument, options);
         }
-export type TeamMembersMailingListQueryQueryHookResult = ReturnType<typeof useTeamMembersMailingListQueryQuery>;
+export type TeamMembersMailingListQueryHookResult = ReturnType<typeof useTeamMembersMailingListQuery>;
 export type TeamMembersMailingListQueryLazyQueryHookResult = ReturnType<typeof useTeamMembersMailingListQueryLazyQuery>;
-export type TeamMembersMailingListQueryQueryResult = Apollo.QueryResult<TeamMembersMailingListQueryQuery, TeamMembersMailingListQueryQueryVariables>;
+export type TeamMembersMailingListQueryDataResult = Apollo.QueryResult<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>;
 export const UsersWithPendingBioQueryDocument = gql`
     query UsersWithPendingBioQuery {
   convention: assertConvention {
@@ -341,29 +350,31 @@ export const UsersWithPendingBioQueryDocument = gql`
     ${MailingListsResultFieldsFragmentDoc}`;
 
 /**
- * __useUsersWithPendingBioQueryQuery__
+ * __useUsersWithPendingBioQuery__
  *
- * To run a query within a React component, call `useUsersWithPendingBioQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUsersWithPendingBioQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUsersWithPendingBioQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersWithPendingBioQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUsersWithPendingBioQueryQuery({
+ * const { data, loading, error } = useUsersWithPendingBioQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUsersWithPendingBioQueryQuery(baseOptions?: Apollo.QueryHookOptions<UsersWithPendingBioQueryQuery, UsersWithPendingBioQueryQueryVariables>) {
-        return Apollo.useQuery<UsersWithPendingBioQueryQuery, UsersWithPendingBioQueryQueryVariables>(UsersWithPendingBioQueryDocument, baseOptions);
+export function useUsersWithPendingBioQuery(baseOptions?: Apollo.QueryHookOptions<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>(UsersWithPendingBioQueryDocument, options);
       }
-export function useUsersWithPendingBioQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersWithPendingBioQueryQuery, UsersWithPendingBioQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UsersWithPendingBioQueryQuery, UsersWithPendingBioQueryQueryVariables>(UsersWithPendingBioQueryDocument, baseOptions);
+export function useUsersWithPendingBioQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>(UsersWithPendingBioQueryDocument, options);
         }
-export type UsersWithPendingBioQueryQueryHookResult = ReturnType<typeof useUsersWithPendingBioQueryQuery>;
+export type UsersWithPendingBioQueryHookResult = ReturnType<typeof useUsersWithPendingBioQuery>;
 export type UsersWithPendingBioQueryLazyQueryHookResult = ReturnType<typeof useUsersWithPendingBioQueryLazyQuery>;
-export type UsersWithPendingBioQueryQueryResult = Apollo.QueryResult<UsersWithPendingBioQueryQuery, UsersWithPendingBioQueryQueryVariables>;
+export type UsersWithPendingBioQueryDataResult = Apollo.QueryResult<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>;
 export const WaitlistMailingListsQueryDocument = gql`
     query WaitlistMailingListsQuery {
   convention: assertConvention {
@@ -392,29 +403,31 @@ export const WaitlistMailingListsQueryDocument = gql`
     ${ContactEmailFieldsFragmentDoc}`;
 
 /**
- * __useWaitlistMailingListsQueryQuery__
+ * __useWaitlistMailingListsQuery__
  *
- * To run a query within a React component, call `useWaitlistMailingListsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useWaitlistMailingListsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useWaitlistMailingListsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWaitlistMailingListsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWaitlistMailingListsQueryQuery({
+ * const { data, loading, error } = useWaitlistMailingListsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useWaitlistMailingListsQueryQuery(baseOptions?: Apollo.QueryHookOptions<WaitlistMailingListsQueryQuery, WaitlistMailingListsQueryQueryVariables>) {
-        return Apollo.useQuery<WaitlistMailingListsQueryQuery, WaitlistMailingListsQueryQueryVariables>(WaitlistMailingListsQueryDocument, baseOptions);
+export function useWaitlistMailingListsQuery(baseOptions?: Apollo.QueryHookOptions<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>(WaitlistMailingListsQueryDocument, options);
       }
-export function useWaitlistMailingListsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WaitlistMailingListsQueryQuery, WaitlistMailingListsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<WaitlistMailingListsQueryQuery, WaitlistMailingListsQueryQueryVariables>(WaitlistMailingListsQueryDocument, baseOptions);
+export function useWaitlistMailingListsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>(WaitlistMailingListsQueryDocument, options);
         }
-export type WaitlistMailingListsQueryQueryHookResult = ReturnType<typeof useWaitlistMailingListsQueryQuery>;
+export type WaitlistMailingListsQueryHookResult = ReturnType<typeof useWaitlistMailingListsQuery>;
 export type WaitlistMailingListsQueryLazyQueryHookResult = ReturnType<typeof useWaitlistMailingListsQueryLazyQuery>;
-export type WaitlistMailingListsQueryQueryResult = Apollo.QueryResult<WaitlistMailingListsQueryQuery, WaitlistMailingListsQueryQueryVariables>;
+export type WaitlistMailingListsQueryDataResult = Apollo.QueryResult<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>;
 export const WhosFreeFormConventionQueryDocument = gql`
     query WhosFreeFormConventionQuery {
   convention: assertConvention {
@@ -429,29 +442,31 @@ export const WhosFreeFormConventionQueryDocument = gql`
     `;
 
 /**
- * __useWhosFreeFormConventionQueryQuery__
+ * __useWhosFreeFormConventionQuery__
  *
- * To run a query within a React component, call `useWhosFreeFormConventionQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useWhosFreeFormConventionQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useWhosFreeFormConventionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWhosFreeFormConventionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWhosFreeFormConventionQueryQuery({
+ * const { data, loading, error } = useWhosFreeFormConventionQuery({
  *   variables: {
  *   },
  * });
  */
-export function useWhosFreeFormConventionQueryQuery(baseOptions?: Apollo.QueryHookOptions<WhosFreeFormConventionQueryQuery, WhosFreeFormConventionQueryQueryVariables>) {
-        return Apollo.useQuery<WhosFreeFormConventionQueryQuery, WhosFreeFormConventionQueryQueryVariables>(WhosFreeFormConventionQueryDocument, baseOptions);
+export function useWhosFreeFormConventionQuery(baseOptions?: Apollo.QueryHookOptions<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>(WhosFreeFormConventionQueryDocument, options);
       }
-export function useWhosFreeFormConventionQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WhosFreeFormConventionQueryQuery, WhosFreeFormConventionQueryQueryVariables>) {
-          return Apollo.useLazyQuery<WhosFreeFormConventionQueryQuery, WhosFreeFormConventionQueryQueryVariables>(WhosFreeFormConventionQueryDocument, baseOptions);
+export function useWhosFreeFormConventionQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>(WhosFreeFormConventionQueryDocument, options);
         }
-export type WhosFreeFormConventionQueryQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQueryQuery>;
+export type WhosFreeFormConventionQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQuery>;
 export type WhosFreeFormConventionQueryLazyQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQueryLazyQuery>;
-export type WhosFreeFormConventionQueryQueryResult = Apollo.QueryResult<WhosFreeFormConventionQueryQuery, WhosFreeFormConventionQueryQueryVariables>;
+export type WhosFreeFormConventionQueryDataResult = Apollo.QueryResult<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>;
 export const WhosFreeQueryDocument = gql`
     query WhosFreeQuery($start: Date!, $finish: Date!) {
   convention: assertConvention {
@@ -467,28 +482,30 @@ export const WhosFreeQueryDocument = gql`
     ${MailingListsResultFieldsFragmentDoc}`;
 
 /**
- * __useWhosFreeQueryQuery__
+ * __useWhosFreeQuery__
  *
- * To run a query within a React component, call `useWhosFreeQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useWhosFreeQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useWhosFreeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWhosFreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWhosFreeQueryQuery({
+ * const { data, loading, error } = useWhosFreeQuery({
  *   variables: {
  *      start: // value for 'start'
  *      finish: // value for 'finish'
  *   },
  * });
  */
-export function useWhosFreeQueryQuery(baseOptions: Apollo.QueryHookOptions<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>) {
-        return Apollo.useQuery<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>(WhosFreeQueryDocument, baseOptions);
+export function useWhosFreeQuery(baseOptions: Apollo.QueryHookOptions<WhosFreeQueryData, WhosFreeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WhosFreeQueryData, WhosFreeQueryVariables>(WhosFreeQueryDocument, options);
       }
-export function useWhosFreeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>) {
-          return Apollo.useLazyQuery<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>(WhosFreeQueryDocument, baseOptions);
+export function useWhosFreeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WhosFreeQueryData, WhosFreeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WhosFreeQueryData, WhosFreeQueryVariables>(WhosFreeQueryDocument, options);
         }
-export type WhosFreeQueryQueryHookResult = ReturnType<typeof useWhosFreeQueryQuery>;
+export type WhosFreeQueryHookResult = ReturnType<typeof useWhosFreeQuery>;
 export type WhosFreeQueryLazyQueryHookResult = ReturnType<typeof useWhosFreeQueryLazyQuery>;
-export type WhosFreeQueryQueryResult = Apollo.QueryResult<WhosFreeQueryQuery, WhosFreeQueryQueryVariables>;
+export type WhosFreeQueryDataResult = Apollo.QueryResult<WhosFreeQueryData, WhosFreeQueryVariables>;

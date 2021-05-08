@@ -14,7 +14,7 @@ import RootSiteAdmin from '../RootSiteAdmin';
 import LoadingIndicator from '../LoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import MenuIcon from '../NavigationBar/MenuIcon';
-import { useCmsAdminBaseQueryQuery } from './queries.generated';
+import { useCmsAdminBaseQuery } from './queries.generated';
 
 type CmsAdminNavTabProps = {
   path: string;
@@ -35,7 +35,7 @@ function CmsAdminNavTab({ path, children, icon }: CmsAdminNavTabProps) {
 
 function CmsAdmin() {
   const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
-  const { data, loading, error } = useCmsAdminBaseQueryQuery();
+  const { data, loading, error } = useCmsAdminBaseQuery();
 
   if (loading) {
     return <LoadingIndicator />;

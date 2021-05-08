@@ -9,11 +9,11 @@ import ErrorDisplay from '../../ErrorDisplay';
 import TeamMemberForm from './TeamMemberForm';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import { TeamMembersQueryQuery } from './queries.generated';
+import { TeamMembersQueryData } from './queries.generated';
 import { useUpdateTeamMemberMutation } from './mutations.generated';
 
 export type EditTeamMemberProps = {
-  event: TeamMembersQueryQuery['event'];
+  event: TeamMembersQueryData['event'];
   eventPath: string;
 };
 
@@ -81,7 +81,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps) {
         event={event}
         value={teamMember}
         onChange={(newValue) =>
-          setTeamMember(newValue as TeamMembersQueryQuery['event']['team_members'][0])
+          setTeamMember(newValue as TeamMembersQueryData['event']['team_members'][0])
         }
         disabled={updateInProgress}
       />

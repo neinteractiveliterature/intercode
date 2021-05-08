@@ -9,14 +9,14 @@ import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useEventAdminCategory from './useEventAdminCategory';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useEventAdminEventsQuery } from './queries.generated';
 
 export type EventAdminRunsTableProps = {
   eventCategoryId: number;
 };
 
 function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsTableProps) {
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
 
   const [eventCategory, sortedEvents] = useEventAdminCategory(
     data,

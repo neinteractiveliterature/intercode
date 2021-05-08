@@ -15,21 +15,21 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
 import {
   DeleteCmsFileMutationVariables,
-  DeleteCmsFileMutation,
+  DeleteCmsFileMutationData,
   useRenameCmsFileMutation,
 } from './mutations.generated';
-import { useCmsFilesAdminQueryQuery } from './queries.generated';
+import { useCmsFilesAdminQuery } from './queries.generated';
 
 function CmsFilesAdmin() {
-  const { data, loading, error, refetch } = useCmsFilesAdminQueryQuery();
-  const deleteFileMutate = useDeleteMutation<DeleteCmsFileMutationVariables, DeleteCmsFileMutation>(
-    DeleteCmsFile,
-    {
-      query: CmsFilesAdminQuery,
-      arrayPath: ['cmsFiles'],
-      idVariablePath: ['id'],
-    },
-  );
+  const { data, loading, error, refetch } = useCmsFilesAdminQuery();
+  const deleteFileMutate = useDeleteMutation<
+    DeleteCmsFileMutationVariables,
+    DeleteCmsFileMutationData
+  >(DeleteCmsFile, {
+    query: CmsFilesAdminQuery,
+    arrayPath: ['cmsFiles'],
+    idVariablePath: ['id'],
+  });
   const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
 

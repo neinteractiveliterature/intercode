@@ -3,10 +3,7 @@ import { components, OptionTypeBase } from 'react-select';
 import type { DocumentNode } from 'graphql';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
-import {
-  DefaultUsersQueryQuery,
-  DefaultUsersQueryDocument,
-} from './selectDefaultQueries.generated';
+import { DefaultUsersQueryData, DefaultUsersQueryDocument } from './selectDefaultQueries.generated';
 
 type UserNameLabelProps = {
   data: {
@@ -22,8 +19,8 @@ function UserNameLabel({ children, ...otherProps }: UserNameLabelProps) {
   );
 }
 
-type DQ = DefaultUsersQueryQuery;
-type DO<QueryType extends DefaultUsersQueryQuery> = NonNullable<
+type DQ = DefaultUsersQueryData;
+type DO<QueryType extends DefaultUsersQueryData> = NonNullable<
   QueryType['users_paginated']
 >['entries'][0];
 

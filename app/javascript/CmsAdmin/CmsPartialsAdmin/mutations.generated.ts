@@ -5,12 +5,13 @@ import { CmsPartialFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsPartialFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreatePartialMutationVariables = Types.Exact<{
   cmsPartial: Types.CmsPartialInput;
 }>;
 
 
-export type CreatePartialMutation = (
+export type CreatePartialMutationData = (
   { __typename: 'Mutation' }
   & { createCmsPartial?: Types.Maybe<(
     { __typename: 'CreateCmsPartialPayload' }
@@ -28,7 +29,7 @@ export type UpdatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePartialMutation = (
+export type UpdatePartialMutationData = (
   { __typename: 'Mutation' }
   & { updateCmsPartial?: Types.Maybe<(
     { __typename: 'UpdateCmsPartialPayload' }
@@ -45,7 +46,7 @@ export type DeletePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeletePartialMutation = (
+export type DeletePartialMutationData = (
   { __typename: 'Mutation' }
   & { deleteCmsPartial?: Types.Maybe<(
     { __typename: 'DeleteCmsPartialPayload' }
@@ -64,7 +65,7 @@ export const CreatePartialDocument = gql`
   }
 }
     ${CmsPartialFieldsFragmentDoc}`;
-export type CreatePartialMutationFn = Apollo.MutationFunction<CreatePartialMutation, CreatePartialMutationVariables>;
+export type CreatePartialMutationFn = Apollo.MutationFunction<CreatePartialMutationData, CreatePartialMutationVariables>;
 
 /**
  * __useCreatePartialMutation__
@@ -83,12 +84,13 @@ export type CreatePartialMutationFn = Apollo.MutationFunction<CreatePartialMutat
  *   },
  * });
  */
-export function useCreatePartialMutation(baseOptions?: Apollo.MutationHookOptions<CreatePartialMutation, CreatePartialMutationVariables>) {
-        return Apollo.useMutation<CreatePartialMutation, CreatePartialMutationVariables>(CreatePartialDocument, baseOptions);
+export function useCreatePartialMutation(baseOptions?: Apollo.MutationHookOptions<CreatePartialMutationData, CreatePartialMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePartialMutationData, CreatePartialMutationVariables>(CreatePartialDocument, options);
       }
 export type CreatePartialMutationHookResult = ReturnType<typeof useCreatePartialMutation>;
-export type CreatePartialMutationResult = Apollo.MutationResult<CreatePartialMutation>;
-export type CreatePartialMutationOptions = Apollo.BaseMutationOptions<CreatePartialMutation, CreatePartialMutationVariables>;
+export type CreatePartialMutationResult = Apollo.MutationResult<CreatePartialMutationData>;
+export type CreatePartialMutationOptions = Apollo.BaseMutationOptions<CreatePartialMutationData, CreatePartialMutationVariables>;
 export const UpdatePartialDocument = gql`
     mutation UpdatePartial($id: Int!, $cmsPartial: CmsPartialInput!) {
   updateCmsPartial(input: {id: $id, cms_partial: $cmsPartial}) {
@@ -99,7 +101,7 @@ export const UpdatePartialDocument = gql`
   }
 }
     ${CmsPartialFieldsFragmentDoc}`;
-export type UpdatePartialMutationFn = Apollo.MutationFunction<UpdatePartialMutation, UpdatePartialMutationVariables>;
+export type UpdatePartialMutationFn = Apollo.MutationFunction<UpdatePartialMutationData, UpdatePartialMutationVariables>;
 
 /**
  * __useUpdatePartialMutation__
@@ -119,12 +121,13 @@ export type UpdatePartialMutationFn = Apollo.MutationFunction<UpdatePartialMutat
  *   },
  * });
  */
-export function useUpdatePartialMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePartialMutation, UpdatePartialMutationVariables>) {
-        return Apollo.useMutation<UpdatePartialMutation, UpdatePartialMutationVariables>(UpdatePartialDocument, baseOptions);
+export function useUpdatePartialMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePartialMutationData, UpdatePartialMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePartialMutationData, UpdatePartialMutationVariables>(UpdatePartialDocument, options);
       }
 export type UpdatePartialMutationHookResult = ReturnType<typeof useUpdatePartialMutation>;
-export type UpdatePartialMutationResult = Apollo.MutationResult<UpdatePartialMutation>;
-export type UpdatePartialMutationOptions = Apollo.BaseMutationOptions<UpdatePartialMutation, UpdatePartialMutationVariables>;
+export type UpdatePartialMutationResult = Apollo.MutationResult<UpdatePartialMutationData>;
+export type UpdatePartialMutationOptions = Apollo.BaseMutationOptions<UpdatePartialMutationData, UpdatePartialMutationVariables>;
 export const DeletePartialDocument = gql`
     mutation DeletePartial($id: Int!) {
   deleteCmsPartial(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeletePartialDocument = gql`
   }
 }
     `;
-export type DeletePartialMutationFn = Apollo.MutationFunction<DeletePartialMutation, DeletePartialMutationVariables>;
+export type DeletePartialMutationFn = Apollo.MutationFunction<DeletePartialMutationData, DeletePartialMutationVariables>;
 
 /**
  * __useDeletePartialMutation__
@@ -151,9 +154,10 @@ export type DeletePartialMutationFn = Apollo.MutationFunction<DeletePartialMutat
  *   },
  * });
  */
-export function useDeletePartialMutation(baseOptions?: Apollo.MutationHookOptions<DeletePartialMutation, DeletePartialMutationVariables>) {
-        return Apollo.useMutation<DeletePartialMutation, DeletePartialMutationVariables>(DeletePartialDocument, baseOptions);
+export function useDeletePartialMutation(baseOptions?: Apollo.MutationHookOptions<DeletePartialMutationData, DeletePartialMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePartialMutationData, DeletePartialMutationVariables>(DeletePartialDocument, options);
       }
 export type DeletePartialMutationHookResult = ReturnType<typeof useDeletePartialMutation>;
-export type DeletePartialMutationResult = Apollo.MutationResult<DeletePartialMutation>;
-export type DeletePartialMutationOptions = Apollo.BaseMutationOptions<DeletePartialMutation, DeletePartialMutationVariables>;
+export type DeletePartialMutationResult = Apollo.MutationResult<DeletePartialMutationData>;
+export type DeletePartialMutationOptions = Apollo.BaseMutationOptions<DeletePartialMutationData, DeletePartialMutationVariables>;

@@ -9,8 +9,8 @@ import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import {
-  OrganizationAdminOrganizationsQueryQuery,
-  useOrganizationAdminOrganizationsQueryQuery,
+  OrganizationAdminOrganizationsQueryData,
+  useOrganizationAdminOrganizationsQuery,
 } from './queries.generated';
 import { useDeleteOrganizationRoleMutation } from './mutations.generated';
 
@@ -23,7 +23,7 @@ function getOrganizationRolePermissionName(permissionName: string) {
 }
 
 export default LoadSingleValueFromCollectionWrapper(
-  useOrganizationAdminOrganizationsQueryQuery,
+  useOrganizationAdminOrganizationsQuery,
   (data, id) => data.organizations.find((org) => org.id.toString() === id),
   function OrganizationDisplay({ value: organization }) {
     const confirm = useConfirm();
@@ -39,7 +39,7 @@ export default LoadSingleValueFromCollectionWrapper(
       mutate({
         variables: { id },
         update: (proxy) => {
-          const storeData = proxy.readQuery<OrganizationAdminOrganizationsQueryQuery>({
+          const storeData = proxy.readQuery<OrganizationAdminOrganizationsQueryData>({
             query: OrganizationAdminOrganizationsQuery,
           });
           if (!storeData) {

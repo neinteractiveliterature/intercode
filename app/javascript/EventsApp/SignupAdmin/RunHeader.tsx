@@ -5,7 +5,7 @@ import { timespanFromRun } from '../../TimespanUtils';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 import AppRootContext from '../../AppRootContext';
-import { useRunHeaderRunInfoQueryQuery } from './queries.generated';
+import { useRunHeaderRunInfoQuery } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 
 export type RunHeaderProps = {
@@ -16,7 +16,7 @@ export type RunHeaderProps = {
 function RunHeader({ eventId, runId }: RunHeaderProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useRunHeaderRunInfoQueryQuery({
+  const { data, loading, error } = useRunHeaderRunInfoQuery({
     variables: { runId, eventId },
   });
   const formatRunTimespan = useFormatRunTimespan();

@@ -8,11 +8,11 @@ import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useDeleteEventProposalMutation } from './mutations.generated';
-import { useEventProposalQueryQuery } from './queries.generated';
+import { useEventProposalQuery } from './queries.generated';
 
 function useLoadEventProposal() {
   const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
-  return useEventProposalQueryQuery({ variables: { eventProposalId } });
+  return useEventProposalQuery({ variables: { eventProposalId } });
 }
 
 export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal({ data }) {

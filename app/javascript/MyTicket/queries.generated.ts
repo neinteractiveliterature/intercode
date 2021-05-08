@@ -5,10 +5,11 @@ import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-export type TicketPurchaseFormQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type TicketPurchaseFormQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketPurchaseFormQueryQuery = (
+export type TicketPurchaseFormQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -38,10 +39,10 @@ export type TicketPurchaseFormQueryQuery = (
   )> }
 );
 
-export type MyTicketDisplayQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type MyTicketDisplayQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyTicketDisplayQueryQuery = (
+export type MyTicketDisplayQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -107,29 +108,31 @@ export const TicketPurchaseFormQueryDocument = gql`
     ${PricingStructureFieldsFragmentDoc}`;
 
 /**
- * __useTicketPurchaseFormQueryQuery__
+ * __useTicketPurchaseFormQuery__
  *
- * To run a query within a React component, call `useTicketPurchaseFormQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTicketPurchaseFormQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTicketPurchaseFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTicketPurchaseFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTicketPurchaseFormQueryQuery({
+ * const { data, loading, error } = useTicketPurchaseFormQuery({
  *   variables: {
  *   },
  * });
  */
-export function useTicketPurchaseFormQueryQuery(baseOptions?: Apollo.QueryHookOptions<TicketPurchaseFormQueryQuery, TicketPurchaseFormQueryQueryVariables>) {
-        return Apollo.useQuery<TicketPurchaseFormQueryQuery, TicketPurchaseFormQueryQueryVariables>(TicketPurchaseFormQueryDocument, baseOptions);
+export function useTicketPurchaseFormQuery(baseOptions?: Apollo.QueryHookOptions<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>(TicketPurchaseFormQueryDocument, options);
       }
-export function useTicketPurchaseFormQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketPurchaseFormQueryQuery, TicketPurchaseFormQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TicketPurchaseFormQueryQuery, TicketPurchaseFormQueryQueryVariables>(TicketPurchaseFormQueryDocument, baseOptions);
+export function useTicketPurchaseFormQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>(TicketPurchaseFormQueryDocument, options);
         }
-export type TicketPurchaseFormQueryQueryHookResult = ReturnType<typeof useTicketPurchaseFormQueryQuery>;
+export type TicketPurchaseFormQueryHookResult = ReturnType<typeof useTicketPurchaseFormQuery>;
 export type TicketPurchaseFormQueryLazyQueryHookResult = ReturnType<typeof useTicketPurchaseFormQueryLazyQuery>;
-export type TicketPurchaseFormQueryQueryResult = Apollo.QueryResult<TicketPurchaseFormQueryQuery, TicketPurchaseFormQueryQueryVariables>;
+export type TicketPurchaseFormQueryDataResult = Apollo.QueryResult<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>;
 export const MyTicketDisplayQueryDocument = gql`
     query MyTicketDisplayQuery {
   convention: assertConvention {
@@ -170,26 +173,28 @@ export const MyTicketDisplayQueryDocument = gql`
     `;
 
 /**
- * __useMyTicketDisplayQueryQuery__
+ * __useMyTicketDisplayQuery__
  *
- * To run a query within a React component, call `useMyTicketDisplayQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyTicketDisplayQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyTicketDisplayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTicketDisplayQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyTicketDisplayQueryQuery({
+ * const { data, loading, error } = useMyTicketDisplayQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMyTicketDisplayQueryQuery(baseOptions?: Apollo.QueryHookOptions<MyTicketDisplayQueryQuery, MyTicketDisplayQueryQueryVariables>) {
-        return Apollo.useQuery<MyTicketDisplayQueryQuery, MyTicketDisplayQueryQueryVariables>(MyTicketDisplayQueryDocument, baseOptions);
+export function useMyTicketDisplayQuery(baseOptions?: Apollo.QueryHookOptions<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>(MyTicketDisplayQueryDocument, options);
       }
-export function useMyTicketDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTicketDisplayQueryQuery, MyTicketDisplayQueryQueryVariables>) {
-          return Apollo.useLazyQuery<MyTicketDisplayQueryQuery, MyTicketDisplayQueryQueryVariables>(MyTicketDisplayQueryDocument, baseOptions);
+export function useMyTicketDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>(MyTicketDisplayQueryDocument, options);
         }
-export type MyTicketDisplayQueryQueryHookResult = ReturnType<typeof useMyTicketDisplayQueryQuery>;
+export type MyTicketDisplayQueryHookResult = ReturnType<typeof useMyTicketDisplayQuery>;
 export type MyTicketDisplayQueryLazyQueryHookResult = ReturnType<typeof useMyTicketDisplayQueryLazyQuery>;
-export type MyTicketDisplayQueryQueryResult = Apollo.QueryResult<MyTicketDisplayQueryQuery, MyTicketDisplayQueryQueryVariables>;
+export type MyTicketDisplayQueryDataResult = Apollo.QueryResult<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>;

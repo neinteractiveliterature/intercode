@@ -7,10 +7,10 @@ import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import { useDeleteMutation } from '../../MutationUtils';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsGraphqlQueriesQueryQuery } from './queries.generated';
+import { useCmsGraphqlQueriesQuery } from './queries.generated';
 
 function CmsGraphqlQueriesAdminTable() {
-  const { data, loading, error } = useCmsGraphqlQueriesQueryQuery(); // lolcry
+  const { data, loading, error } = useCmsGraphqlQueriesQuery(); // lolcry
   const deleteCmsGraphqlQuery = useDeleteMutation(DeleteCmsGraphqlQuery, {
     query: CmsGraphqlQueriesQuery,
     idVariablePath: ['id'],

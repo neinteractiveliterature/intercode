@@ -2,13 +2,14 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
-import { AdminOrderFieldsFragmentFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from '../Store/orderFields.generated';
+import { AdminOrderFieldsFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragment } from '../Store/adminProductFields.generated';
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
-import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from '../Store/orderFields.generated';
+import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type UserConProfileFormDataFragment = (
   { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
@@ -33,7 +34,7 @@ export type UserConProfileAdminTicketFieldsFragment = (
     & { order: (
       { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragmentFragment
+      & AdminOrderFieldsFragment
     ), price_per_item: (
       { __typename: 'Money' }
       & Pick<Types.Money, 'fractional' | 'currency_code'>
@@ -47,12 +48,12 @@ export type UserConProfileAdminTicketFieldsFragment = (
   )> }
 );
 
-export type UserConProfileQueryQueryVariables = Types.Exact<{
+export type UserConProfileQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserConProfileQueryQuery = (
+export type UserConProfileQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -65,12 +66,12 @@ export type UserConProfileQueryQuery = (
   ) }
 );
 
-export type UserConProfileAdminQueryQueryVariables = Types.Exact<{
+export type UserConProfileAdminQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserConProfileAdminQueryQuery = (
+export type UserConProfileAdminQueryData = (
   { __typename: 'Query' }
   & { myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
@@ -114,7 +115,7 @@ export type UserConProfileAdminQueryQuery = (
   ) }
 );
 
-export type UserConProfilesTableUserConProfilesQueryQueryVariables = Types.Exact<{
+export type UserConProfilesTableUserConProfilesQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.UserConProfileFiltersInput>;
@@ -122,7 +123,7 @@ export type UserConProfilesTableUserConProfilesQueryQueryVariables = Types.Exact
 }>;
 
 
-export type UserConProfilesTableUserConProfilesQueryQuery = (
+export type UserConProfilesTableUserConProfilesQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -174,12 +175,12 @@ export type UserConProfilesTableUserConProfilesQueryQuery = (
   ) }
 );
 
-export type ConvertToEventProvidedTicketQueryQueryVariables = Types.Exact<{
+export type ConvertToEventProvidedTicketQueryVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
 }>;
 
 
-export type ConvertToEventProvidedTicketQueryQuery = (
+export type ConvertToEventProvidedTicketQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -205,12 +206,12 @@ export type ConvertToEventProvidedTicketQueryQuery = (
   ) }
 );
 
-export type AddAttendeeUsersQueryQueryVariables = Types.Exact<{
+export type AddAttendeeUsersQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type AddAttendeeUsersQueryQuery = (
+export type AddAttendeeUsersQueryData = (
   { __typename: 'Query' }
   & { users_paginated: (
     { __typename: 'UsersPagination' }
@@ -221,10 +222,10 @@ export type AddAttendeeUsersQueryQuery = (
   ) }
 );
 
-export type TicketAdminWithoutTicketAbilityQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type TicketAdminWithoutTicketAbilityQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketAdminWithoutTicketAbilityQueryQuery = (
+export type TicketAdminWithoutTicketAbilityQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -232,12 +233,12 @@ export type TicketAdminWithoutTicketAbilityQueryQuery = (
   ) }
 );
 
-export type TicketAdminWithTicketAbilityQueryQueryVariables = Types.Exact<{
+export type TicketAdminWithTicketAbilityQueryVariables = Types.Exact<{
   ticketId: Types.Scalars['Int'];
 }>;
 
 
-export type TicketAdminWithTicketAbilityQueryQuery = (
+export type TicketAdminWithTicketAbilityQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -293,7 +294,7 @@ export const UserConProfileAdminTicketFieldsFragmentDoc = gql`
     title
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
+    ${AdminOrderFieldsFragmentDoc}`;
 export const UserConProfileQueryDocument = gql`
     query UserConProfileQuery($id: Int!) {
   convention {
@@ -309,30 +310,32 @@ export const UserConProfileQueryDocument = gql`
 ${UserConProfileFieldsFragmentDoc}`;
 
 /**
- * __useUserConProfileQueryQuery__
+ * __useUserConProfileQuery__
  *
- * To run a query within a React component, call `useUserConProfileQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserConProfileQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserConProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserConProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserConProfileQueryQuery({
+ * const { data, loading, error } = useUserConProfileQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useUserConProfileQueryQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>) {
-        return Apollo.useQuery<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>(UserConProfileQueryDocument, baseOptions);
+export function useUserConProfileQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileQueryData, UserConProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserConProfileQueryData, UserConProfileQueryVariables>(UserConProfileQueryDocument, options);
       }
-export function useUserConProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>(UserConProfileQueryDocument, baseOptions);
+export function useUserConProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileQueryData, UserConProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserConProfileQueryData, UserConProfileQueryVariables>(UserConProfileQueryDocument, options);
         }
-export type UserConProfileQueryQueryHookResult = ReturnType<typeof useUserConProfileQueryQuery>;
+export type UserConProfileQueryHookResult = ReturnType<typeof useUserConProfileQuery>;
 export type UserConProfileQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileQueryLazyQuery>;
-export type UserConProfileQueryQueryResult = Apollo.QueryResult<UserConProfileQueryQuery, UserConProfileQueryQueryVariables>;
+export type UserConProfileQueryDataResult = Apollo.QueryResult<UserConProfileQueryData, UserConProfileQueryVariables>;
 export const UserConProfileAdminQueryDocument = gql`
     query UserConProfileAdminQuery($id: Int!) {
   myProfile {
@@ -395,30 +398,32 @@ ${AdminProductFieldsFragmentDoc}
 ${UserConProfileAdminTicketFieldsFragmentDoc}`;
 
 /**
- * __useUserConProfileAdminQueryQuery__
+ * __useUserConProfileAdminQuery__
  *
- * To run a query within a React component, call `useUserConProfileAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserConProfileAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserConProfileAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserConProfileAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserConProfileAdminQueryQuery({
+ * const { data, loading, error } = useUserConProfileAdminQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useUserConProfileAdminQueryQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>) {
-        return Apollo.useQuery<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>(UserConProfileAdminQueryDocument, baseOptions);
+export function useUserConProfileAdminQuery(baseOptions: Apollo.QueryHookOptions<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>(UserConProfileAdminQueryDocument, options);
       }
-export function useUserConProfileAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>(UserConProfileAdminQueryDocument, baseOptions);
+export function useUserConProfileAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>(UserConProfileAdminQueryDocument, options);
         }
-export type UserConProfileAdminQueryQueryHookResult = ReturnType<typeof useUserConProfileAdminQueryQuery>;
+export type UserConProfileAdminQueryHookResult = ReturnType<typeof useUserConProfileAdminQuery>;
 export type UserConProfileAdminQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileAdminQueryLazyQuery>;
-export type UserConProfileAdminQueryQueryResult = Apollo.QueryResult<UserConProfileAdminQueryQuery, UserConProfileAdminQueryQueryVariables>;
+export type UserConProfileAdminQueryDataResult = Apollo.QueryResult<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>;
 export const UserConProfilesTableUserConProfilesQueryDocument = gql`
     query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput!]) {
   convention {
@@ -495,16 +500,16 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
     ${CommonFormFieldsFragmentDoc}`;
 
 /**
- * __useUserConProfilesTableUserConProfilesQueryQuery__
+ * __useUserConProfilesTableUserConProfilesQuery__
  *
- * To run a query within a React component, call `useUserConProfilesTableUserConProfilesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserConProfilesTableUserConProfilesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserConProfilesTableUserConProfilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserConProfilesTableUserConProfilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserConProfilesTableUserConProfilesQueryQuery({
+ * const { data, loading, error } = useUserConProfilesTableUserConProfilesQuery({
  *   variables: {
  *      page: // value for 'page'
  *      perPage: // value for 'perPage'
@@ -513,15 +518,17 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
  *   },
  * });
  */
-export function useUserConProfilesTableUserConProfilesQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserConProfilesTableUserConProfilesQueryQuery, UserConProfilesTableUserConProfilesQueryQueryVariables>) {
-        return Apollo.useQuery<UserConProfilesTableUserConProfilesQueryQuery, UserConProfilesTableUserConProfilesQueryQueryVariables>(UserConProfilesTableUserConProfilesQueryDocument, baseOptions);
+export function useUserConProfilesTableUserConProfilesQuery(baseOptions?: Apollo.QueryHookOptions<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>(UserConProfilesTableUserConProfilesQueryDocument, options);
       }
-export function useUserConProfilesTableUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfilesTableUserConProfilesQueryQuery, UserConProfilesTableUserConProfilesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UserConProfilesTableUserConProfilesQueryQuery, UserConProfilesTableUserConProfilesQueryQueryVariables>(UserConProfilesTableUserConProfilesQueryDocument, baseOptions);
+export function useUserConProfilesTableUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>(UserConProfilesTableUserConProfilesQueryDocument, options);
         }
-export type UserConProfilesTableUserConProfilesQueryQueryHookResult = ReturnType<typeof useUserConProfilesTableUserConProfilesQueryQuery>;
+export type UserConProfilesTableUserConProfilesQueryHookResult = ReturnType<typeof useUserConProfilesTableUserConProfilesQuery>;
 export type UserConProfilesTableUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useUserConProfilesTableUserConProfilesQueryLazyQuery>;
-export type UserConProfilesTableUserConProfilesQueryQueryResult = Apollo.QueryResult<UserConProfilesTableUserConProfilesQueryQuery, UserConProfilesTableUserConProfilesQueryQueryVariables>;
+export type UserConProfilesTableUserConProfilesQueryDataResult = Apollo.QueryResult<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>;
 export const ConvertToEventProvidedTicketQueryDocument = gql`
     query ConvertToEventProvidedTicketQuery($eventId: Int!) {
   convention {
@@ -553,30 +560,32 @@ export const ConvertToEventProvidedTicketQueryDocument = gql`
     `;
 
 /**
- * __useConvertToEventProvidedTicketQueryQuery__
+ * __useConvertToEventProvidedTicketQuery__
  *
- * To run a query within a React component, call `useConvertToEventProvidedTicketQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useConvertToEventProvidedTicketQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useConvertToEventProvidedTicketQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConvertToEventProvidedTicketQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useConvertToEventProvidedTicketQueryQuery({
+ * const { data, loading, error } = useConvertToEventProvidedTicketQuery({
  *   variables: {
  *      eventId: // value for 'eventId'
  *   },
  * });
  */
-export function useConvertToEventProvidedTicketQueryQuery(baseOptions: Apollo.QueryHookOptions<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>) {
-        return Apollo.useQuery<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>(ConvertToEventProvidedTicketQueryDocument, baseOptions);
+export function useConvertToEventProvidedTicketQuery(baseOptions: Apollo.QueryHookOptions<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>(ConvertToEventProvidedTicketQueryDocument, options);
       }
-export function useConvertToEventProvidedTicketQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>(ConvertToEventProvidedTicketQueryDocument, baseOptions);
+export function useConvertToEventProvidedTicketQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>(ConvertToEventProvidedTicketQueryDocument, options);
         }
-export type ConvertToEventProvidedTicketQueryQueryHookResult = ReturnType<typeof useConvertToEventProvidedTicketQueryQuery>;
+export type ConvertToEventProvidedTicketQueryHookResult = ReturnType<typeof useConvertToEventProvidedTicketQuery>;
 export type ConvertToEventProvidedTicketQueryLazyQueryHookResult = ReturnType<typeof useConvertToEventProvidedTicketQueryLazyQuery>;
-export type ConvertToEventProvidedTicketQueryQueryResult = Apollo.QueryResult<ConvertToEventProvidedTicketQueryQuery, ConvertToEventProvidedTicketQueryQueryVariables>;
+export type ConvertToEventProvidedTicketQueryDataResult = Apollo.QueryResult<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>;
 export const AddAttendeeUsersQueryDocument = gql`
     query AddAttendeeUsersQuery($name: String) {
   users_paginated(filters: {name: $name}, per_page: 50) {
@@ -592,30 +601,32 @@ export const AddAttendeeUsersQueryDocument = gql`
     `;
 
 /**
- * __useAddAttendeeUsersQueryQuery__
+ * __useAddAttendeeUsersQuery__
  *
- * To run a query within a React component, call `useAddAttendeeUsersQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAddAttendeeUsersQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAddAttendeeUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAddAttendeeUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAddAttendeeUsersQueryQuery({
+ * const { data, loading, error } = useAddAttendeeUsersQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useAddAttendeeUsersQueryQuery(baseOptions?: Apollo.QueryHookOptions<AddAttendeeUsersQueryQuery, AddAttendeeUsersQueryQueryVariables>) {
-        return Apollo.useQuery<AddAttendeeUsersQueryQuery, AddAttendeeUsersQueryQueryVariables>(AddAttendeeUsersQueryDocument, baseOptions);
+export function useAddAttendeeUsersQuery(baseOptions?: Apollo.QueryHookOptions<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>(AddAttendeeUsersQueryDocument, options);
       }
-export function useAddAttendeeUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddAttendeeUsersQueryQuery, AddAttendeeUsersQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AddAttendeeUsersQueryQuery, AddAttendeeUsersQueryQueryVariables>(AddAttendeeUsersQueryDocument, baseOptions);
+export function useAddAttendeeUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>(AddAttendeeUsersQueryDocument, options);
         }
-export type AddAttendeeUsersQueryQueryHookResult = ReturnType<typeof useAddAttendeeUsersQueryQuery>;
+export type AddAttendeeUsersQueryHookResult = ReturnType<typeof useAddAttendeeUsersQuery>;
 export type AddAttendeeUsersQueryLazyQueryHookResult = ReturnType<typeof useAddAttendeeUsersQueryLazyQuery>;
-export type AddAttendeeUsersQueryQueryResult = Apollo.QueryResult<AddAttendeeUsersQueryQuery, AddAttendeeUsersQueryQueryVariables>;
+export type AddAttendeeUsersQueryDataResult = Apollo.QueryResult<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>;
 export const TicketAdminWithoutTicketAbilityQueryDocument = gql`
     query TicketAdminWithoutTicketAbilityQuery {
   currentAbility {
@@ -625,29 +636,31 @@ export const TicketAdminWithoutTicketAbilityQueryDocument = gql`
     `;
 
 /**
- * __useTicketAdminWithoutTicketAbilityQueryQuery__
+ * __useTicketAdminWithoutTicketAbilityQuery__
  *
- * To run a query within a React component, call `useTicketAdminWithoutTicketAbilityQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTicketAdminWithoutTicketAbilityQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTicketAdminWithoutTicketAbilityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTicketAdminWithoutTicketAbilityQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTicketAdminWithoutTicketAbilityQueryQuery({
+ * const { data, loading, error } = useTicketAdminWithoutTicketAbilityQuery({
  *   variables: {
  *   },
  * });
  */
-export function useTicketAdminWithoutTicketAbilityQueryQuery(baseOptions?: Apollo.QueryHookOptions<TicketAdminWithoutTicketAbilityQueryQuery, TicketAdminWithoutTicketAbilityQueryQueryVariables>) {
-        return Apollo.useQuery<TicketAdminWithoutTicketAbilityQueryQuery, TicketAdminWithoutTicketAbilityQueryQueryVariables>(TicketAdminWithoutTicketAbilityQueryDocument, baseOptions);
+export function useTicketAdminWithoutTicketAbilityQuery(baseOptions?: Apollo.QueryHookOptions<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>(TicketAdminWithoutTicketAbilityQueryDocument, options);
       }
-export function useTicketAdminWithoutTicketAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketAdminWithoutTicketAbilityQueryQuery, TicketAdminWithoutTicketAbilityQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TicketAdminWithoutTicketAbilityQueryQuery, TicketAdminWithoutTicketAbilityQueryQueryVariables>(TicketAdminWithoutTicketAbilityQueryDocument, baseOptions);
+export function useTicketAdminWithoutTicketAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>(TicketAdminWithoutTicketAbilityQueryDocument, options);
         }
-export type TicketAdminWithoutTicketAbilityQueryQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQueryQuery>;
+export type TicketAdminWithoutTicketAbilityQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQuery>;
 export type TicketAdminWithoutTicketAbilityQueryLazyQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQueryLazyQuery>;
-export type TicketAdminWithoutTicketAbilityQueryQueryResult = Apollo.QueryResult<TicketAdminWithoutTicketAbilityQueryQuery, TicketAdminWithoutTicketAbilityQueryQueryVariables>;
+export type TicketAdminWithoutTicketAbilityQueryDataResult = Apollo.QueryResult<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>;
 export const TicketAdminWithTicketAbilityQueryDocument = gql`
     query TicketAdminWithTicketAbilityQuery($ticketId: Int!) {
   currentAbility {
@@ -659,27 +672,29 @@ export const TicketAdminWithTicketAbilityQueryDocument = gql`
     `;
 
 /**
- * __useTicketAdminWithTicketAbilityQueryQuery__
+ * __useTicketAdminWithTicketAbilityQuery__
  *
- * To run a query within a React component, call `useTicketAdminWithTicketAbilityQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTicketAdminWithTicketAbilityQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTicketAdminWithTicketAbilityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTicketAdminWithTicketAbilityQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTicketAdminWithTicketAbilityQueryQuery({
+ * const { data, loading, error } = useTicketAdminWithTicketAbilityQuery({
  *   variables: {
  *      ticketId: // value for 'ticketId'
  *   },
  * });
  */
-export function useTicketAdminWithTicketAbilityQueryQuery(baseOptions: Apollo.QueryHookOptions<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>) {
-        return Apollo.useQuery<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>(TicketAdminWithTicketAbilityQueryDocument, baseOptions);
+export function useTicketAdminWithTicketAbilityQuery(baseOptions: Apollo.QueryHookOptions<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>(TicketAdminWithTicketAbilityQueryDocument, options);
       }
-export function useTicketAdminWithTicketAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>(TicketAdminWithTicketAbilityQueryDocument, baseOptions);
+export function useTicketAdminWithTicketAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>(TicketAdminWithTicketAbilityQueryDocument, options);
         }
-export type TicketAdminWithTicketAbilityQueryQueryHookResult = ReturnType<typeof useTicketAdminWithTicketAbilityQueryQuery>;
+export type TicketAdminWithTicketAbilityQueryHookResult = ReturnType<typeof useTicketAdminWithTicketAbilityQuery>;
 export type TicketAdminWithTicketAbilityQueryLazyQueryHookResult = ReturnType<typeof useTicketAdminWithTicketAbilityQueryLazyQuery>;
-export type TicketAdminWithTicketAbilityQueryQueryResult = Apollo.QueryResult<TicketAdminWithTicketAbilityQueryQuery, TicketAdminWithTicketAbilityQueryQueryVariables>;
+export type TicketAdminWithTicketAbilityQueryDataResult = Apollo.QueryResult<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>;

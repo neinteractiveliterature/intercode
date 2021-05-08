@@ -7,11 +7,11 @@ import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
-  AttendanceByPaymentAmountQueryQuery,
-  useAttendanceByPaymentAmountQueryQuery,
+  AttendanceByPaymentAmountQueryData,
+  useAttendanceByPaymentAmountQuery,
 } from './queries.generated';
 
-type RowType = AttendanceByPaymentAmountQueryQuery['convention']['reports']['ticket_count_by_type_and_payment_amount'][0];
+type RowType = AttendanceByPaymentAmountQueryData['convention']['reports']['ticket_count_by_type_and_payment_amount'][0];
 
 function describeRow(ticketType: RowType['ticket_type'], paymentAmount: RowType['payment_amount']) {
   if (paymentAmount.fractional > 0) {
@@ -49,7 +49,7 @@ function descriptionCell(
 }
 
 export default LoadQueryWrapper(
-  useAttendanceByPaymentAmountQueryQuery,
+  useAttendanceByPaymentAmountQuery,
   function AttendanceByPaymentAmount({ data }) {
     usePageTitle('Attendance by payment amount');
 

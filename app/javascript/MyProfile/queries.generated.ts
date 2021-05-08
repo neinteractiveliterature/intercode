@@ -5,10 +5,11 @@ import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormIt
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-export type MyProfileQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type MyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyProfileQueryQuery = (
+export type MyProfileQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -70,26 +71,28 @@ export const MyProfileQueryDocument = gql`
     ${CommonFormFieldsFragmentDoc}`;
 
 /**
- * __useMyProfileQueryQuery__
+ * __useMyProfileQuery__
  *
- * To run a query within a React component, call `useMyProfileQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyProfileQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyProfileQueryQuery({
+ * const { data, loading, error } = useMyProfileQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMyProfileQueryQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
-        return Apollo.useQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
+export function useMyProfileQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQueryData, MyProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyProfileQueryData, MyProfileQueryVariables>(MyProfileQueryDocument, options);
       }
-export function useMyProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
-          return Apollo.useLazyQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
+export function useMyProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQueryData, MyProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyProfileQueryData, MyProfileQueryVariables>(MyProfileQueryDocument, options);
         }
-export type MyProfileQueryQueryHookResult = ReturnType<typeof useMyProfileQueryQuery>;
+export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileQueryLazyQueryHookResult = ReturnType<typeof useMyProfileQueryLazyQuery>;
-export type MyProfileQueryQueryResult = Apollo.QueryResult<MyProfileQueryQuery, MyProfileQueryQueryVariables>;
+export type MyProfileQueryDataResult = Apollo.QueryResult<MyProfileQueryData, MyProfileQueryVariables>;

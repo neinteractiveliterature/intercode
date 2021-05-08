@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { useIntercodePopperWithAutoClosing } from '../../UIComponents/PopperUtils';
-import { ScheduleGridCombinedQueryQuery } from '../ScheduleGrid/queries.generated';
+import { ScheduleGridCombinedQueryData } from '../ScheduleGrid/queries.generated';
 import RunDetails from '../ScheduleGrid/RunDetails';
 import RunDisplay from '../ScheduleGrid/RunDisplay';
 import SignupCountData from '../SignupCountData';
 
 export type RunListEventRunProps = {
-  event: ScheduleGridCombinedQueryQuery['events'][number];
-  run: ScheduleGridCombinedQueryQuery['events'][number]['runs'][number];
+  event: ScheduleGridCombinedQueryData['events'][number];
+  run: ScheduleGridCombinedQueryData['events'][number]['runs'][number];
   timespan: FiniteTimespan;
   signupCountData: SignupCountData;
 };

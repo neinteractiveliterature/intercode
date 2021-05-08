@@ -1,28 +1,28 @@
 import { createContext } from 'react';
 import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import { AppRootQueryQuery } from './appRootQueries.generated';
+import { AppRootQueryData } from './appRootQueries.generated';
 import type Timespan from './Timespan';
 
 type AppRootContext = {
-  assumedIdentityFromProfile?: AppRootQueryQuery['assumedIdentityFromProfile'];
-  cmsNavigationItems: AppRootQueryQuery['cmsNavigationItems'];
+  assumedIdentityFromProfile?: AppRootQueryData['assumedIdentityFromProfile'];
+  cmsNavigationItems: AppRootQueryData['cmsNavigationItems'];
   conventionAcceptingProposals?: boolean | null;
   conventionCanceled?: boolean | null;
   conventionDomain?: string | null;
   conventionName?: string | null;
   conventionTimespan?: Timespan;
-  currentAbility: AppRootQueryQuery['currentAbility'];
-  currentPendingOrder?: AppRootQueryQuery['currentPendingOrder'];
-  currentUser?: AppRootQueryQuery['currentUser'];
+  currentAbility: AppRootQueryData['currentAbility'];
+  currentPendingOrder?: AppRootQueryData['currentPendingOrder'];
+  currentUser?: AppRootQueryData['currentUser'];
   language: string;
-  myProfile?: AppRootQueryQuery['myProfile'];
+  myProfile?: AppRootQueryData['myProfile'];
   rootSiteName?: string | null;
   signupMode?: SignupMode;
   siteMode?: SiteMode;
   ticketsAvailableForPurchase?: boolean | null;
   ticketMode?: TicketMode | null;
   ticketName?: string;
-  ticketTypes?: NonNullable<AppRootQueryQuery['convention']>['ticket_types'];
+  ticketTypes?: NonNullable<AppRootQueryData['convention']>['ticket_types'];
   timezoneName: string;
 };
 

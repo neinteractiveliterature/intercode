@@ -12,7 +12,7 @@ import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useEventPageQueryQuery } from './queries.generated';
+import { useEventPageQuery } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import parsePageContent from '../../parsePageContent';
 
@@ -23,7 +23,7 @@ export type EventPageProps = {
 
 function EventPage({ eventId, eventPath }: EventPageProps) {
   const { myProfile } = useContext(AppRootContext);
-  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
   const rateEvent = useRateEvent();
   const { secretFormItems, formResponse } = useSectionizedFormItems(data?.event);
 

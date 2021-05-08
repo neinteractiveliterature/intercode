@@ -5,12 +5,13 @@ import { AdminDepartmentFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminDepartmentFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateDepartmentMutationVariables = Types.Exact<{
   department: Types.DepartmentInput;
 }>;
 
 
-export type CreateDepartmentMutation = (
+export type CreateDepartmentMutationData = (
   { __typename: 'Mutation' }
   & { createDepartment?: Types.Maybe<(
     { __typename: 'CreateDepartmentPayload' }
@@ -28,7 +29,7 @@ export type UpdateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDepartmentMutation = (
+export type UpdateDepartmentMutationData = (
   { __typename: 'Mutation' }
   & { updateDepartment?: Types.Maybe<(
     { __typename: 'UpdateDepartmentPayload' }
@@ -45,7 +46,7 @@ export type DeleteDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteDepartmentMutation = (
+export type DeleteDepartmentMutationData = (
   { __typename: 'Mutation' }
   & { deleteDepartment?: Types.Maybe<(
     { __typename: 'DeleteDepartmentPayload' }
@@ -64,7 +65,7 @@ export const CreateDepartmentDocument = gql`
   }
 }
     ${AdminDepartmentFieldsFragmentDoc}`;
-export type CreateDepartmentMutationFn = Apollo.MutationFunction<CreateDepartmentMutation, CreateDepartmentMutationVariables>;
+export type CreateDepartmentMutationFn = Apollo.MutationFunction<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
 
 /**
  * __useCreateDepartmentMutation__
@@ -83,12 +84,13 @@ export type CreateDepartmentMutationFn = Apollo.MutationFunction<CreateDepartmen
  *   },
  * });
  */
-export function useCreateDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<CreateDepartmentMutation, CreateDepartmentMutationVariables>) {
-        return Apollo.useMutation<CreateDepartmentMutation, CreateDepartmentMutationVariables>(CreateDepartmentDocument, baseOptions);
+export function useCreateDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<CreateDepartmentMutationData, CreateDepartmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDepartmentMutationData, CreateDepartmentMutationVariables>(CreateDepartmentDocument, options);
       }
 export type CreateDepartmentMutationHookResult = ReturnType<typeof useCreateDepartmentMutation>;
-export type CreateDepartmentMutationResult = Apollo.MutationResult<CreateDepartmentMutation>;
-export type CreateDepartmentMutationOptions = Apollo.BaseMutationOptions<CreateDepartmentMutation, CreateDepartmentMutationVariables>;
+export type CreateDepartmentMutationResult = Apollo.MutationResult<CreateDepartmentMutationData>;
+export type CreateDepartmentMutationOptions = Apollo.BaseMutationOptions<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
 export const UpdateDepartmentDocument = gql`
     mutation UpdateDepartment($id: Int!, $department: DepartmentInput!) {
   updateDepartment(input: {id: $id, department: $department}) {
@@ -99,7 +101,7 @@ export const UpdateDepartmentDocument = gql`
   }
 }
     ${AdminDepartmentFieldsFragmentDoc}`;
-export type UpdateDepartmentMutationFn = Apollo.MutationFunction<UpdateDepartmentMutation, UpdateDepartmentMutationVariables>;
+export type UpdateDepartmentMutationFn = Apollo.MutationFunction<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
 
 /**
  * __useUpdateDepartmentMutation__
@@ -119,12 +121,13 @@ export type UpdateDepartmentMutationFn = Apollo.MutationFunction<UpdateDepartmen
  *   },
  * });
  */
-export function useUpdateDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDepartmentMutation, UpdateDepartmentMutationVariables>) {
-        return Apollo.useMutation<UpdateDepartmentMutation, UpdateDepartmentMutationVariables>(UpdateDepartmentDocument, baseOptions);
+export function useUpdateDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>(UpdateDepartmentDocument, options);
       }
 export type UpdateDepartmentMutationHookResult = ReturnType<typeof useUpdateDepartmentMutation>;
-export type UpdateDepartmentMutationResult = Apollo.MutationResult<UpdateDepartmentMutation>;
-export type UpdateDepartmentMutationOptions = Apollo.BaseMutationOptions<UpdateDepartmentMutation, UpdateDepartmentMutationVariables>;
+export type UpdateDepartmentMutationResult = Apollo.MutationResult<UpdateDepartmentMutationData>;
+export type UpdateDepartmentMutationOptions = Apollo.BaseMutationOptions<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
 export const DeleteDepartmentDocument = gql`
     mutation DeleteDepartment($id: Int!) {
   deleteDepartment(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeleteDepartmentDocument = gql`
   }
 }
     `;
-export type DeleteDepartmentMutationFn = Apollo.MutationFunction<DeleteDepartmentMutation, DeleteDepartmentMutationVariables>;
+export type DeleteDepartmentMutationFn = Apollo.MutationFunction<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>;
 
 /**
  * __useDeleteDepartmentMutation__
@@ -151,9 +154,10 @@ export type DeleteDepartmentMutationFn = Apollo.MutationFunction<DeleteDepartmen
  *   },
  * });
  */
-export function useDeleteDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDepartmentMutation, DeleteDepartmentMutationVariables>) {
-        return Apollo.useMutation<DeleteDepartmentMutation, DeleteDepartmentMutationVariables>(DeleteDepartmentDocument, baseOptions);
+export function useDeleteDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>(DeleteDepartmentDocument, options);
       }
 export type DeleteDepartmentMutationHookResult = ReturnType<typeof useDeleteDepartmentMutation>;
-export type DeleteDepartmentMutationResult = Apollo.MutationResult<DeleteDepartmentMutation>;
-export type DeleteDepartmentMutationOptions = Apollo.BaseMutationOptions<DeleteDepartmentMutation, DeleteDepartmentMutationVariables>;
+export type DeleteDepartmentMutationResult = Apollo.MutationResult<DeleteDepartmentMutationData>;
+export type DeleteDepartmentMutationOptions = Apollo.BaseMutationOptions<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>;

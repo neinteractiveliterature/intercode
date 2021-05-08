@@ -10,12 +10,12 @@ import NewEmailRouteModal from './NewEmailRouteModal';
 import EditEmailRouteModal from './EditEmailRouteModal';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import {
-  RootSiteEmailRoutesAdminTableQueryQuery,
-  useRootSiteEmailRoutesAdminTableQueryQuery,
+  RootSiteEmailRoutesAdminTableQueryData,
+  useRootSiteEmailRoutesAdminTableQuery,
 } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
-type EmailRouteType = RootSiteEmailRoutesAdminTableQueryQuery['email_routes_paginated']['entries'][0];
+type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
@@ -56,7 +56,7 @@ function RootSiteEmailRoutesAdminTable() {
     getPages: ({ data }) => data.email_routes_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'email-routes',
-    useQuery: useRootSiteEmailRoutesAdminTableQueryQuery,
+    useQuery: useRootSiteEmailRoutesAdminTableQuery,
   });
   usePageTitle('Email routes');
 

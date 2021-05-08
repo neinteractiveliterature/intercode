@@ -6,13 +6,13 @@ import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import HelpPopover from '../../UIComponents/HelpPopover';
 import { usePropertySetters, useFunctionalStateUpdater } from '../../usePropertySetters';
-import { TeamMembersQueryQuery } from './queries.generated';
+import { TeamMembersQueryData } from './queries.generated';
 
 export type TeamMemberFormProps = {
-  event: TeamMembersQueryQuery['event'];
+  event: TeamMembersQueryData['event'];
   disabled?: boolean;
-  value: Partial<TeamMembersQueryQuery['event']['team_members'][0]>;
-  onChange: React.Dispatch<Partial<TeamMembersQueryQuery['event']['team_members'][0]>>;
+  value: Partial<TeamMembersQueryData['event']['team_members'][0]>;
+  onChange: React.Dispatch<Partial<TeamMembersQueryData['event']['team_members'][0]>>;
 };
 
 function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps) {

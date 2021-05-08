@@ -16,8 +16,8 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
 import {
   EventAdminEventsQueryDocument,
-  EventAdminEventsQueryQuery,
-  useEventAdminEventsQueryQuery,
+  EventAdminEventsQueryData,
+  useEventAdminEventsQuery,
 } from './queries.generated';
 import {
   useDropEventMutation,
@@ -27,8 +27,8 @@ import {
 } from './mutations.generated';
 
 type EventAdminEditEventFormProps = {
-  data: EventAdminEventsQueryQuery;
-  initialEvent: WithFormResponse<EventAdminEventsQueryQuery['events'][0]>;
+  data: EventAdminEventsQueryData;
+  initialEvent: WithFormResponse<EventAdminEventsQueryData['events'][0]>;
 };
 
 function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventFormProps) {
@@ -39,7 +39,7 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
     updateMutate: useUpdateMaximumEventProvidedTicketsOverrideMutation()[0],
     deleteMutate: useDeleteMaximumEventProvidedTicketsOverrideMutation()[0],
     createUpdater: (store, updatedEventId, override) => {
-      const storeData = store.readQuery<EventAdminEventsQueryQuery>({
+      const storeData = store.readQuery<EventAdminEventsQueryData>({
         query: EventAdminEventsQueryDocument,
       });
       store.writeQuery({
@@ -63,7 +63,7 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
       });
     },
     deleteUpdater: (store, overrideId) => {
-      const storeData = store.readQuery<EventAdminEventsQueryQuery>({
+      const storeData = store.readQuery<EventAdminEventsQueryData>({
         query: EventAdminEventsQueryDocument,
       });
       store.writeQuery({
@@ -161,7 +161,7 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
 }
 
 function EventAdminEditEvent() {
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
   const { id: eventId } = useParams<{ id: string }>();
   const serializedEvent = useMemo(
     () => (data ? data.events.find((e) => e.id.toString() === eventId) : undefined),

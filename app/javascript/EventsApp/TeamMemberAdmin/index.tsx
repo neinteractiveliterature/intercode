@@ -9,7 +9,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import { useTeamMembersQueryQuery } from './queries.generated';
+import { useTeamMembersQuery } from './queries.generated';
 
 export type TeamMemberAdminProps = {
   eventId: number;
@@ -17,7 +17,7 @@ export type TeamMemberAdminProps = {
 };
 
 function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps) {
-  const { data, loading, error } = useTeamMembersQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
   const teamMemberMatch = useRouteMatch<{ teamMemberId: string }>(
     `${eventPath}/team_members/:teamMemberId(\\d+)`,
   );

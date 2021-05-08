@@ -8,12 +8,12 @@ import usePageTitle from '../usePageTitle';
 import parseCmsContent from '../parseCmsContent';
 import { describeUserPricingStructure } from './describePricingStructure';
 import AppRootContext from '../AppRootContext';
-import { useOrderFormProductQueryQuery } from './queries.generated';
+import { useOrderFormProductQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 function useLoadProduct() {
   const { id } = useParams<{ id: string }>();
-  return useOrderFormProductQueryQuery({
+  return useOrderFormProductQuery({
     variables: { productId: Number.parseInt(id, 10) },
   });
 }

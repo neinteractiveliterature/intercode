@@ -7,15 +7,15 @@ import SignInButton from '../Authentication/SignInButton';
 import useUniqueId from '../useUniqueId';
 import useModal from '../ModalDialogs/useModal';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { ProposeEventButtonQueryQuery, useProposeEventButtonQueryQuery } from './queries.generated';
+import { ProposeEventButtonQueryData, useProposeEventButtonQuery } from './queries.generated';
 
 export type ProposeEventButtonProps = {
   className?: string;
   caption: React.ReactNode;
 };
 
-export default LoadQueryWrapper<ProposeEventButtonQueryQuery, ProposeEventButtonProps>(
-  useProposeEventButtonQueryQuery,
+export default LoadQueryWrapper<ProposeEventButtonQueryData, ProposeEventButtonProps>(
+  useProposeEventButtonQuery,
   function ProposeEventButton({ className, caption, data }) {
     const { t } = useTranslation();
     const history = useHistory();

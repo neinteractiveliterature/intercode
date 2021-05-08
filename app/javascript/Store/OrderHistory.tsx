@@ -8,11 +8,11 @@ import useModal, { ModalData } from '../ModalDialogs/useModal';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { OrderHistoryQueryQuery, useOrderHistoryQueryQuery } from './queries.generated';
+import { OrderHistoryQueryData, useOrderHistoryQuery } from './queries.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
-type OrderType = NonNullable<OrderHistoryQueryQuery['myProfile']>['orders'][0];
+type OrderType = NonNullable<OrderHistoryQueryData['myProfile']>['orders'][0];
 type PaymentModalState = {
   order: OrderType;
 };
@@ -62,7 +62,7 @@ function OrderHistoryCouponApplication({ couponApplication }: OrderHistoryCoupon
 
 type OrderHistoryOrderStatusProps = {
   order: OrderType;
-  convention: OrderHistoryQueryQuery['convention'];
+  convention: OrderHistoryQueryData['convention'];
   paymentModal: ModalData<PaymentModalState>;
 };
 
@@ -131,7 +131,7 @@ function OrderHistoryOrderStatus({
 
 type OrderHistoryOrderProps = {
   order: OrderType;
-  convention: OrderHistoryQueryQuery['convention'];
+  convention: OrderHistoryQueryData['convention'];
   paymentModal: ModalData<PaymentModalState>;
 };
 
@@ -180,7 +180,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   );
 }
 
-export default LoadQueryWrapper(useOrderHistoryQueryQuery, function OrderHistory({ data }) {
+export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ data }) {
   const paymentModal = useModal<PaymentModalState>();
 
   usePageTitle('My order history');

@@ -5,6 +5,7 @@ import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormIt
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type TicketTypeFieldsFragment = (
   { __typename: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>
@@ -101,10 +102,10 @@ export type EventFieldsFragment = (
   )> }
 );
 
-export type EventAdminEventsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EventAdminEventsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventAdminEventsQueryQuery = (
+export type EventAdminEventsQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -285,26 +286,28 @@ export const EventAdminEventsQueryDocument = gql`
 ${EventFieldsFragmentDoc}`;
 
 /**
- * __useEventAdminEventsQueryQuery__
+ * __useEventAdminEventsQuery__
  *
- * To run a query within a React component, call `useEventAdminEventsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventAdminEventsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventAdminEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventAdminEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventAdminEventsQueryQuery({
+ * const { data, loading, error } = useEventAdminEventsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useEventAdminEventsQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventAdminEventsQueryQuery, EventAdminEventsQueryQueryVariables>) {
-        return Apollo.useQuery<EventAdminEventsQueryQuery, EventAdminEventsQueryQueryVariables>(EventAdminEventsQueryDocument, baseOptions);
+export function useEventAdminEventsQuery(baseOptions?: Apollo.QueryHookOptions<EventAdminEventsQueryData, EventAdminEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventAdminEventsQueryData, EventAdminEventsQueryVariables>(EventAdminEventsQueryDocument, options);
       }
-export function useEventAdminEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventAdminEventsQueryQuery, EventAdminEventsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventAdminEventsQueryQuery, EventAdminEventsQueryQueryVariables>(EventAdminEventsQueryDocument, baseOptions);
+export function useEventAdminEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventAdminEventsQueryData, EventAdminEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventAdminEventsQueryData, EventAdminEventsQueryVariables>(EventAdminEventsQueryDocument, options);
         }
-export type EventAdminEventsQueryQueryHookResult = ReturnType<typeof useEventAdminEventsQueryQuery>;
+export type EventAdminEventsQueryHookResult = ReturnType<typeof useEventAdminEventsQuery>;
 export type EventAdminEventsQueryLazyQueryHookResult = ReturnType<typeof useEventAdminEventsQueryLazyQuery>;
-export type EventAdminEventsQueryQueryResult = Apollo.QueryResult<EventAdminEventsQueryQuery, EventAdminEventsQueryQueryVariables>;
+export type EventAdminEventsQueryDataResult = Apollo.QueryResult<EventAdminEventsQueryData, EventAdminEventsQueryVariables>;

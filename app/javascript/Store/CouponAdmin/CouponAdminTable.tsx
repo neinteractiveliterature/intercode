@@ -9,10 +9,10 @@ import useModal from '../../ModalDialogs/useModal';
 import NewCouponModal from './NewCouponModal';
 import EditCouponModal from './EditCouponModal';
 import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';
-import { AdminCouponsQueryQuery, useAdminCouponsQueryQuery } from './queries.generated';
+import { AdminCouponsQueryData, useAdminCouponsQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 
-type CouponType = AdminCouponsQueryQuery['convention']['coupons_paginated']['entries'][0];
+type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
 
 const transformColumnIdForExport = (columnId: string) => {
   if (columnId === 'effect') {
@@ -69,7 +69,7 @@ function CouponAdminTable() {
     getData: ({ data }) => data!.convention.coupons_paginated.entries,
     getPages: ({ data }) => data!.convention.coupons_paginated.total_pages,
     getPossibleColumns,
-    useQuery: useAdminCouponsQueryQuery,
+    useQuery: useAdminCouponsQuery,
     storageKeyPrefix: 'coupons',
   });
 

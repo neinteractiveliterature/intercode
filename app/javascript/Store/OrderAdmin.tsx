@@ -14,11 +14,11 @@ import useModal from '../ModalDialogs/useModal';
 import EditOrderModal from './EditOrderModal';
 import NewOrderModal from './NewOrderModal';
 import AppRootContext from '../AppRootContext';
-import { AdminOrdersQueryQuery, useAdminOrdersQueryQuery } from './queries.generated';
+import { AdminOrdersQueryData, useAdminOrdersQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
-type OrderType = AdminOrdersQueryQuery['convention']['orders_paginated']['entries'][0];
+type OrderType = AdminOrdersQueryData['convention']['orders_paginated']['entries'][0];
 
 const fieldFilterCodecs = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -110,7 +110,7 @@ function OrderAdmin() {
     getPages: ({ data }) => data!.convention.orders_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'orderAdmin',
-    useQuery: useAdminOrdersQueryQuery,
+    useQuery: useAdminOrdersQuery,
     decodeFilterValue: fieldFilterCodecs.decodeFilterValue,
     encodeFilterValue: fieldFilterCodecs.encodeFilterValue,
   });

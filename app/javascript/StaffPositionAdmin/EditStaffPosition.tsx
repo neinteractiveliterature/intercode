@@ -8,11 +8,11 @@ import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useStaffPositionsQueryQuery } from './queries.generated';
+import { useStaffPositionsQuery } from './queries.generated';
 import { useUpdateStaffPositionMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useStaffPositionsQueryQuery,
+  useStaffPositionsQuery,
   (data, id) => data.convention.staff_positions.find((sp) => sp.id.toString(10) === id),
   function EditStaffPosition({ value: initialStaffPosition }) {
     const history = useHistory();

@@ -3,12 +3,13 @@ import * as Types from './graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type AppRootQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type AppRootQueryVariables = Types.Exact<{
   path: Types.Scalars['String'];
 }>;
 
 
-export type AppRootQueryQuery = (
+export type AppRootQueryData = (
   { __typename: 'Query' }
   & { effectiveCmsLayout: (
     { __typename: 'CmsLayout' }
@@ -170,27 +171,29 @@ export const AppRootQueryDocument = gql`
     `;
 
 /**
- * __useAppRootQueryQuery__
+ * __useAppRootQuery__
  *
- * To run a query within a React component, call `useAppRootQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAppRootQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAppRootQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppRootQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAppRootQueryQuery({
+ * const { data, loading, error } = useAppRootQuery({
  *   variables: {
  *      path: // value for 'path'
  *   },
  * });
  */
-export function useAppRootQueryQuery(baseOptions: Apollo.QueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
-        return Apollo.useQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
+export function useAppRootQuery(baseOptions: Apollo.QueryHookOptions<AppRootQueryData, AppRootQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument, options);
       }
-export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppRootQueryQuery, AppRootQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AppRootQueryQuery, AppRootQueryQueryVariables>(AppRootQueryDocument, baseOptions);
+export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppRootQueryData, AppRootQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument, options);
         }
-export type AppRootQueryQueryHookResult = ReturnType<typeof useAppRootQueryQuery>;
+export type AppRootQueryHookResult = ReturnType<typeof useAppRootQuery>;
 export type AppRootQueryLazyQueryHookResult = ReturnType<typeof useAppRootQueryLazyQuery>;
-export type AppRootQueryQueryResult = Apollo.QueryResult<AppRootQueryQuery, AppRootQueryQueryVariables>;
+export type AppRootQueryDataResult = Apollo.QueryResult<AppRootQueryData, AppRootQueryVariables>;

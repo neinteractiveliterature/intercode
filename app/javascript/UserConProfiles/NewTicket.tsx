@@ -4,19 +4,16 @@ import { useHistory, useParams } from 'react-router-dom';
 import TicketForm from './TicketForm';
 import { UserConProfileAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
-import {
-  UserConProfileAdminQueryQuery,
-  useUserConProfileAdminQueryQuery,
-} from './queries.generated';
+import { UserConProfileAdminQueryData, useUserConProfileAdminQuery } from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-export default LoadQueryWrapper(useUserConProfileAdminQueryQuery, function NewTicket({ data }) {
+export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket({ data }) {
   const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
   const history = useHistory();
   const [createTicket] = useCreateTicketMutation({
     update: (cache, result) => {
-      const cacheData = cache.readQuery<UserConProfileAdminQueryQuery>({
+      const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
         query: UserConProfileAdminQuery,
         variables: { id: userConProfileId },
       });

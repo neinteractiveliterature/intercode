@@ -5,12 +5,13 @@ import { AdminNavigationItemFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminNavigationItemFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateNavigationItemMutationVariables = Types.Exact<{
   navigationItem: Types.CmsNavigationItemInput;
 }>;
 
 
-export type CreateNavigationItemMutation = (
+export type CreateNavigationItemMutationData = (
   { __typename: 'Mutation' }
   & { createCmsNavigationItem?: Types.Maybe<(
     { __typename: 'CreateCmsNavigationItemPayload' }
@@ -28,7 +29,7 @@ export type UpdateNavigationItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateNavigationItemMutation = (
+export type UpdateNavigationItemMutationData = (
   { __typename: 'Mutation' }
   & { updateCmsNavigationItem?: Types.Maybe<(
     { __typename: 'UpdateCmsNavigationItemPayload' }
@@ -45,7 +46,7 @@ export type DeleteNavigationItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteNavigationItemMutation = (
+export type DeleteNavigationItemMutationData = (
   { __typename: 'Mutation' }
   & { deleteCmsNavigationItem?: Types.Maybe<(
     { __typename: 'DeleteCmsNavigationItemPayload' }
@@ -61,7 +62,7 @@ export type SortNavigationItemsMutationVariables = Types.Exact<{
 }>;
 
 
-export type SortNavigationItemsMutation = (
+export type SortNavigationItemsMutationData = (
   { __typename: 'Mutation' }
   & { sortCmsNavigationItems?: Types.Maybe<(
     { __typename: 'SortCmsNavigationItemsPayload' }
@@ -80,7 +81,7 @@ export const CreateNavigationItemDocument = gql`
   }
 }
     ${AdminNavigationItemFieldsFragmentDoc}`;
-export type CreateNavigationItemMutationFn = Apollo.MutationFunction<CreateNavigationItemMutation, CreateNavigationItemMutationVariables>;
+export type CreateNavigationItemMutationFn = Apollo.MutationFunction<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>;
 
 /**
  * __useCreateNavigationItemMutation__
@@ -99,12 +100,13 @@ export type CreateNavigationItemMutationFn = Apollo.MutationFunction<CreateNavig
  *   },
  * });
  */
-export function useCreateNavigationItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateNavigationItemMutation, CreateNavigationItemMutationVariables>) {
-        return Apollo.useMutation<CreateNavigationItemMutation, CreateNavigationItemMutationVariables>(CreateNavigationItemDocument, baseOptions);
+export function useCreateNavigationItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>(CreateNavigationItemDocument, options);
       }
 export type CreateNavigationItemMutationHookResult = ReturnType<typeof useCreateNavigationItemMutation>;
-export type CreateNavigationItemMutationResult = Apollo.MutationResult<CreateNavigationItemMutation>;
-export type CreateNavigationItemMutationOptions = Apollo.BaseMutationOptions<CreateNavigationItemMutation, CreateNavigationItemMutationVariables>;
+export type CreateNavigationItemMutationResult = Apollo.MutationResult<CreateNavigationItemMutationData>;
+export type CreateNavigationItemMutationOptions = Apollo.BaseMutationOptions<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>;
 export const UpdateNavigationItemDocument = gql`
     mutation UpdateNavigationItem($id: Int!, $navigationItem: CmsNavigationItemInput!) {
   updateCmsNavigationItem(input: {id: $id, cms_navigation_item: $navigationItem}) {
@@ -115,7 +117,7 @@ export const UpdateNavigationItemDocument = gql`
   }
 }
     ${AdminNavigationItemFieldsFragmentDoc}`;
-export type UpdateNavigationItemMutationFn = Apollo.MutationFunction<UpdateNavigationItemMutation, UpdateNavigationItemMutationVariables>;
+export type UpdateNavigationItemMutationFn = Apollo.MutationFunction<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>;
 
 /**
  * __useUpdateNavigationItemMutation__
@@ -135,12 +137,13 @@ export type UpdateNavigationItemMutationFn = Apollo.MutationFunction<UpdateNavig
  *   },
  * });
  */
-export function useUpdateNavigationItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNavigationItemMutation, UpdateNavigationItemMutationVariables>) {
-        return Apollo.useMutation<UpdateNavigationItemMutation, UpdateNavigationItemMutationVariables>(UpdateNavigationItemDocument, baseOptions);
+export function useUpdateNavigationItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>(UpdateNavigationItemDocument, options);
       }
 export type UpdateNavigationItemMutationHookResult = ReturnType<typeof useUpdateNavigationItemMutation>;
-export type UpdateNavigationItemMutationResult = Apollo.MutationResult<UpdateNavigationItemMutation>;
-export type UpdateNavigationItemMutationOptions = Apollo.BaseMutationOptions<UpdateNavigationItemMutation, UpdateNavigationItemMutationVariables>;
+export type UpdateNavigationItemMutationResult = Apollo.MutationResult<UpdateNavigationItemMutationData>;
+export type UpdateNavigationItemMutationOptions = Apollo.BaseMutationOptions<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>;
 export const DeleteNavigationItemDocument = gql`
     mutation DeleteNavigationItem($id: Int!) {
   deleteCmsNavigationItem(input: {id: $id}) {
@@ -150,7 +153,7 @@ export const DeleteNavigationItemDocument = gql`
   }
 }
     `;
-export type DeleteNavigationItemMutationFn = Apollo.MutationFunction<DeleteNavigationItemMutation, DeleteNavigationItemMutationVariables>;
+export type DeleteNavigationItemMutationFn = Apollo.MutationFunction<DeleteNavigationItemMutationData, DeleteNavigationItemMutationVariables>;
 
 /**
  * __useDeleteNavigationItemMutation__
@@ -169,12 +172,13 @@ export type DeleteNavigationItemMutationFn = Apollo.MutationFunction<DeleteNavig
  *   },
  * });
  */
-export function useDeleteNavigationItemMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNavigationItemMutation, DeleteNavigationItemMutationVariables>) {
-        return Apollo.useMutation<DeleteNavigationItemMutation, DeleteNavigationItemMutationVariables>(DeleteNavigationItemDocument, baseOptions);
+export function useDeleteNavigationItemMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNavigationItemMutationData, DeleteNavigationItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteNavigationItemMutationData, DeleteNavigationItemMutationVariables>(DeleteNavigationItemDocument, options);
       }
 export type DeleteNavigationItemMutationHookResult = ReturnType<typeof useDeleteNavigationItemMutation>;
-export type DeleteNavigationItemMutationResult = Apollo.MutationResult<DeleteNavigationItemMutation>;
-export type DeleteNavigationItemMutationOptions = Apollo.BaseMutationOptions<DeleteNavigationItemMutation, DeleteNavigationItemMutationVariables>;
+export type DeleteNavigationItemMutationResult = Apollo.MutationResult<DeleteNavigationItemMutationData>;
+export type DeleteNavigationItemMutationOptions = Apollo.BaseMutationOptions<DeleteNavigationItemMutationData, DeleteNavigationItemMutationVariables>;
 export const SortNavigationItemsDocument = gql`
     mutation SortNavigationItems($sortItems: [UpdateCmsNavigationItemInput!]!) {
   sortCmsNavigationItems(input: {sort_items: $sortItems}) {
@@ -182,7 +186,7 @@ export const SortNavigationItemsDocument = gql`
   }
 }
     `;
-export type SortNavigationItemsMutationFn = Apollo.MutationFunction<SortNavigationItemsMutation, SortNavigationItemsMutationVariables>;
+export type SortNavigationItemsMutationFn = Apollo.MutationFunction<SortNavigationItemsMutationData, SortNavigationItemsMutationVariables>;
 
 /**
  * __useSortNavigationItemsMutation__
@@ -201,9 +205,10 @@ export type SortNavigationItemsMutationFn = Apollo.MutationFunction<SortNavigati
  *   },
  * });
  */
-export function useSortNavigationItemsMutation(baseOptions?: Apollo.MutationHookOptions<SortNavigationItemsMutation, SortNavigationItemsMutationVariables>) {
-        return Apollo.useMutation<SortNavigationItemsMutation, SortNavigationItemsMutationVariables>(SortNavigationItemsDocument, baseOptions);
+export function useSortNavigationItemsMutation(baseOptions?: Apollo.MutationHookOptions<SortNavigationItemsMutationData, SortNavigationItemsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SortNavigationItemsMutationData, SortNavigationItemsMutationVariables>(SortNavigationItemsDocument, options);
       }
 export type SortNavigationItemsMutationHookResult = ReturnType<typeof useSortNavigationItemsMutation>;
-export type SortNavigationItemsMutationResult = Apollo.MutationResult<SortNavigationItemsMutation>;
-export type SortNavigationItemsMutationOptions = Apollo.BaseMutationOptions<SortNavigationItemsMutation, SortNavigationItemsMutationVariables>;
+export type SortNavigationItemsMutationResult = Apollo.MutationResult<SortNavigationItemsMutationData>;
+export type SortNavigationItemsMutationOptions = Apollo.BaseMutationOptions<SortNavigationItemsMutationData, SortNavigationItemsMutationVariables>;

@@ -3,10 +3,11 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type CmsAdminBaseQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type CmsAdminBaseQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsAdminBaseQueryQuery = (
+export type CmsAdminBaseQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -30,26 +31,28 @@ export const CmsAdminBaseQueryDocument = gql`
     `;
 
 /**
- * __useCmsAdminBaseQueryQuery__
+ * __useCmsAdminBaseQuery__
  *
- * To run a query within a React component, call `useCmsAdminBaseQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsAdminBaseQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsAdminBaseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsAdminBaseQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsAdminBaseQueryQuery({
+ * const { data, loading, error } = useCmsAdminBaseQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsAdminBaseQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsAdminBaseQueryQuery, CmsAdminBaseQueryQueryVariables>) {
-        return Apollo.useQuery<CmsAdminBaseQueryQuery, CmsAdminBaseQueryQueryVariables>(CmsAdminBaseQueryDocument, baseOptions);
+export function useCmsAdminBaseQuery(baseOptions?: Apollo.QueryHookOptions<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>(CmsAdminBaseQueryDocument, options);
       }
-export function useCmsAdminBaseQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsAdminBaseQueryQuery, CmsAdminBaseQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsAdminBaseQueryQuery, CmsAdminBaseQueryQueryVariables>(CmsAdminBaseQueryDocument, baseOptions);
+export function useCmsAdminBaseQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>(CmsAdminBaseQueryDocument, options);
         }
-export type CmsAdminBaseQueryQueryHookResult = ReturnType<typeof useCmsAdminBaseQueryQuery>;
+export type CmsAdminBaseQueryHookResult = ReturnType<typeof useCmsAdminBaseQuery>;
 export type CmsAdminBaseQueryLazyQueryHookResult = ReturnType<typeof useCmsAdminBaseQueryLazyQuery>;
-export type CmsAdminBaseQueryQueryResult = Apollo.QueryResult<CmsAdminBaseQueryQuery, CmsAdminBaseQueryQueryVariables>;
+export type CmsAdminBaseQueryDataResult = Apollo.QueryResult<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>;

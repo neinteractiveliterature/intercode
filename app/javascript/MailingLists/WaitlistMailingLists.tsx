@@ -5,11 +5,11 @@ import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useWaitlistMailingListsQueryQuery } from './queries.generated';
+import { useWaitlistMailingListsQuery } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
 export default LoadQueryWrapper(
-  useWaitlistMailingListsQueryQuery,
+  useWaitlistMailingListsQuery,
   function WaitlistMailingLists({ data }) {
     const format = useAppDateTimeFormat();
     const { timezoneName } = useContext(AppRootContext);

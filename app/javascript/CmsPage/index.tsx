@@ -8,7 +8,7 @@ import usePageTitle from '../usePageTitle';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 import FourOhFourPage from '../FourOhFourPage';
 import parseCmsContent from '../parseCmsContent';
-import { useCmsPageQueryQuery } from './queries.generated';
+import { useCmsPageQuery } from './queries.generated';
 import { useToast } from '../UIComponents/ToastContext';
 
 const PageAdminDropdown = lazyWithBundleHashCheck(
@@ -23,7 +23,7 @@ export type CmsPageProps = {
 function CmsPage({ slug, rootPage }: CmsPageProps) {
   const history = useHistory();
   const location = useLocation();
-  const { data, loading, error } = useCmsPageQueryQuery({ variables: { slug, rootPage } });
+  const { data, loading, error } = useCmsPageQuery({ variables: { slug, rootPage } });
   const content = useMemo(() => {
     if (loading || error || !data) {
       return null;

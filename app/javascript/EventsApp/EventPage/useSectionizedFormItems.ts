@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { FreeTextFormItem, TypedFormItem } from '../../FormAdmin/FormItemUtils';
 
 import { getSortedParsedFormItems } from '../../Models/Form';
-import { EventPageQueryQuery } from './queries.generated';
+import { EventPageQueryData } from './queries.generated';
 
-type EventPageForm = NonNullable<EventPageQueryQuery['event']['form']>;
+type EventPageForm = NonNullable<EventPageQueryData['event']['form']>;
 
 function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: string]: any }) {
   const displayFormItems = getSortedParsedFormItems(formData).filter(
@@ -42,7 +42,7 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: st
   return { shortFormItems, secretFormItems, longFormItems };
 }
 
-export default function useSectionizedFormItems(event?: EventPageQueryQuery['event']) {
+export default function useSectionizedFormItems(event?: EventPageQueryData['event']) {
   const formResponse = useMemo(
     () => (event ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown) : null),
     [event],

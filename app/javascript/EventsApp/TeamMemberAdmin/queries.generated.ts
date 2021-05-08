@@ -5,6 +5,7 @@ import { CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type TeamMemberTicketFieldsFragment = (
   { __typename: 'Ticket' }
   & Pick<Types.Ticket, 'id'>
@@ -60,12 +61,12 @@ export type TeamMemberFieldsWithoutPersonalInfoFragment = (
   ) }
 );
 
-export type TeamMembersQueryQueryVariables = Types.Exact<{
+export type TeamMembersQueryVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
 }>;
 
 
-export type TeamMembersQueryQuery = (
+export type TeamMembersQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -93,12 +94,12 @@ export type TeamMembersQueryQuery = (
   ) }
 );
 
-export type TeamMemberUserConProfilesQueryQueryVariables = Types.Exact<{
+export type TeamMemberUserConProfilesQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type TeamMemberUserConProfilesQueryQuery = (
+export type TeamMemberUserConProfilesQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -217,30 +218,32 @@ ${TeamMemberTicketFieldsFragmentDoc}
 ${TeamMemberFieldsFragmentDoc}`;
 
 /**
- * __useTeamMembersQueryQuery__
+ * __useTeamMembersQuery__
  *
- * To run a query within a React component, call `useTeamMembersQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTeamMembersQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTeamMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTeamMembersQueryQuery({
+ * const { data, loading, error } = useTeamMembersQuery({
  *   variables: {
  *      eventId: // value for 'eventId'
  *   },
  * });
  */
-export function useTeamMembersQueryQuery(baseOptions: Apollo.QueryHookOptions<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>) {
-        return Apollo.useQuery<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>(TeamMembersQueryDocument, baseOptions);
+export function useTeamMembersQuery(baseOptions: Apollo.QueryHookOptions<TeamMembersQueryData, TeamMembersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TeamMembersQueryData, TeamMembersQueryVariables>(TeamMembersQueryDocument, options);
       }
-export function useTeamMembersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>(TeamMembersQueryDocument, baseOptions);
+export function useTeamMembersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMembersQueryData, TeamMembersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TeamMembersQueryData, TeamMembersQueryVariables>(TeamMembersQueryDocument, options);
         }
-export type TeamMembersQueryQueryHookResult = ReturnType<typeof useTeamMembersQueryQuery>;
+export type TeamMembersQueryHookResult = ReturnType<typeof useTeamMembersQuery>;
 export type TeamMembersQueryLazyQueryHookResult = ReturnType<typeof useTeamMembersQueryLazyQuery>;
-export type TeamMembersQueryQueryResult = Apollo.QueryResult<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>;
+export type TeamMembersQueryDataResult = Apollo.QueryResult<TeamMembersQueryData, TeamMembersQueryVariables>;
 export const TeamMemberUserConProfilesQueryDocument = gql`
     query TeamMemberUserConProfilesQuery($name: String) {
   convention {
@@ -256,27 +259,29 @@ export const TeamMemberUserConProfilesQueryDocument = gql`
     ${TeamMemberUserConProfileSearchFieldsFragmentDoc}`;
 
 /**
- * __useTeamMemberUserConProfilesQueryQuery__
+ * __useTeamMemberUserConProfilesQuery__
  *
- * To run a query within a React component, call `useTeamMemberUserConProfilesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTeamMemberUserConProfilesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTeamMemberUserConProfilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamMemberUserConProfilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTeamMemberUserConProfilesQueryQuery({
+ * const { data, loading, error } = useTeamMemberUserConProfilesQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useTeamMemberUserConProfilesQueryQuery(baseOptions?: Apollo.QueryHookOptions<TeamMemberUserConProfilesQueryQuery, TeamMemberUserConProfilesQueryQueryVariables>) {
-        return Apollo.useQuery<TeamMemberUserConProfilesQueryQuery, TeamMemberUserConProfilesQueryQueryVariables>(TeamMemberUserConProfilesQueryDocument, baseOptions);
+export function useTeamMemberUserConProfilesQuery(baseOptions?: Apollo.QueryHookOptions<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>(TeamMemberUserConProfilesQueryDocument, options);
       }
-export function useTeamMemberUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMemberUserConProfilesQueryQuery, TeamMemberUserConProfilesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<TeamMemberUserConProfilesQueryQuery, TeamMemberUserConProfilesQueryQueryVariables>(TeamMemberUserConProfilesQueryDocument, baseOptions);
+export function useTeamMemberUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>(TeamMemberUserConProfilesQueryDocument, options);
         }
-export type TeamMemberUserConProfilesQueryQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQueryQuery>;
+export type TeamMemberUserConProfilesQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQuery>;
 export type TeamMemberUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQueryLazyQuery>;
-export type TeamMemberUserConProfilesQueryQueryResult = Apollo.QueryResult<TeamMemberUserConProfilesQueryQuery, TeamMemberUserConProfilesQueryQueryVariables>;
+export type TeamMemberUserConProfilesQueryDataResult = Apollo.QueryResult<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>;

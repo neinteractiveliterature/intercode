@@ -11,8 +11,8 @@ import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import {
-  useStandaloneEditEventQueryQuery,
-  StandaloneEditEventQueryQuery,
+  useStandaloneEditEventQuery,
+  StandaloneEditEventQueryData,
   StandaloneEditEventQueryDocument,
 } from './queries.generated';
 import deserializeFormResponse, { WithFormResponse } from '../../Models/deserializeFormResponse';
@@ -25,11 +25,11 @@ import {
 } from './mutations.generated';
 
 export type StandaloneEditEventFormProps = {
-  initialEvent: WithFormResponse<StandaloneEditEventQueryQuery['event']>;
+  initialEvent: WithFormResponse<StandaloneEditEventQueryData['event']>;
   eventPath: string;
   eventForm: CommonFormFieldsFragment;
-  convention: NonNullable<StandaloneEditEventQueryQuery['convention']>;
-  currentAbility: StandaloneEditEventQueryQuery['currentAbility'];
+  convention: NonNullable<StandaloneEditEventQueryData['convention']>;
+  currentAbility: StandaloneEditEventQueryData['currentAbility'];
 };
 
 function StandaloneEditEventForm({
@@ -74,7 +74,7 @@ function StandaloneEditEventForm({
     createUpdater: useCallback(
       (store, updatedEventId, override) => {
         const queryOptions = { variables: { eventId: initialEvent.id } };
-        const storeData = store.readQuery<StandaloneEditEventQueryQuery>({
+        const storeData = store.readQuery<StandaloneEditEventQueryData>({
           query: StandaloneEditEventQueryDocument,
           ...queryOptions,
         });
@@ -101,7 +101,7 @@ function StandaloneEditEventForm({
     deleteUpdater: useCallback(
       (store, id) => {
         const queryOptions = { variables: { eventId: initialEvent.id } };
-        const storeData = store.readQuery<StandaloneEditEventQueryQuery>({
+        const storeData = store.readQuery<StandaloneEditEventQueryData>({
           query: StandaloneEditEventQueryDocument,
           ...queryOptions,
         });
@@ -158,7 +158,7 @@ export type StandaloneEditEventProps = {
 };
 
 function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
-  const { data, loading, error } = useStandaloneEditEventQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId } });
 
   const initialEvent = useMemo(
     () => (error || loading || !data ? null : deserializeFormResponse(data.event)),

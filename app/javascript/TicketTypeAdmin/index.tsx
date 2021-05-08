@@ -5,9 +5,9 @@ import NewTicketType from './NewTicketType';
 import TicketTypesList from './TicketTypesList';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useAdminTicketTypesQueryQuery } from './queries.generated';
+import { useAdminTicketTypesQuery } from './queries.generated';
 
-export default LoadQueryWrapper(useAdminTicketTypesQueryQuery, function TicketTypeAdmin({ data }) {
+export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypeAdmin({ data }) {
   const authorizationWarning = useAuthorizationRequired('can_manage_ticket_types');
   if (authorizationWarning) return authorizationWarning;
 

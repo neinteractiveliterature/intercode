@@ -3,14 +3,15 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type RootSiteConventionsAdminTableQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type RootSiteConventionsAdminTableQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.ConventionFiltersInput>;
   sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 
-export type RootSiteConventionsAdminTableQueryQuery = (
+export type RootSiteConventionsAdminTableQueryData = (
   { __typename: 'Query' }
   & { conventions_paginated: (
     { __typename: 'ConventionsPagination' }
@@ -41,12 +42,12 @@ export type ConventionDisplayFieldsFragment = (
   )> }
 );
 
-export type ConventionDisplayQueryQueryVariables = Types.Exact<{
+export type ConventionDisplayQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type ConventionDisplayQueryQuery = (
+export type ConventionDisplayQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -55,10 +56,10 @@ export type ConventionDisplayQueryQuery = (
   ) }
 );
 
-export type NewConventionModalQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type NewConventionModalQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NewConventionModalQueryQuery = (
+export type NewConventionModalQueryData = (
   { __typename: 'Query' }
   & { organizations: Array<(
     { __typename: 'Organization' }
@@ -118,16 +119,16 @@ export const RootSiteConventionsAdminTableQueryDocument = gql`
     `;
 
 /**
- * __useRootSiteConventionsAdminTableQueryQuery__
+ * __useRootSiteConventionsAdminTableQuery__
  *
- * To run a query within a React component, call `useRootSiteConventionsAdminTableQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useRootSiteConventionsAdminTableQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useRootSiteConventionsAdminTableQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRootSiteConventionsAdminTableQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useRootSiteConventionsAdminTableQueryQuery({
+ * const { data, loading, error } = useRootSiteConventionsAdminTableQuery({
  *   variables: {
  *      page: // value for 'page'
  *      filters: // value for 'filters'
@@ -135,15 +136,17 @@ export const RootSiteConventionsAdminTableQueryDocument = gql`
  *   },
  * });
  */
-export function useRootSiteConventionsAdminTableQueryQuery(baseOptions?: Apollo.QueryHookOptions<RootSiteConventionsAdminTableQueryQuery, RootSiteConventionsAdminTableQueryQueryVariables>) {
-        return Apollo.useQuery<RootSiteConventionsAdminTableQueryQuery, RootSiteConventionsAdminTableQueryQueryVariables>(RootSiteConventionsAdminTableQueryDocument, baseOptions);
+export function useRootSiteConventionsAdminTableQuery(baseOptions?: Apollo.QueryHookOptions<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>(RootSiteConventionsAdminTableQueryDocument, options);
       }
-export function useRootSiteConventionsAdminTableQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RootSiteConventionsAdminTableQueryQuery, RootSiteConventionsAdminTableQueryQueryVariables>) {
-          return Apollo.useLazyQuery<RootSiteConventionsAdminTableQueryQuery, RootSiteConventionsAdminTableQueryQueryVariables>(RootSiteConventionsAdminTableQueryDocument, baseOptions);
+export function useRootSiteConventionsAdminTableQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>(RootSiteConventionsAdminTableQueryDocument, options);
         }
-export type RootSiteConventionsAdminTableQueryQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQueryQuery>;
+export type RootSiteConventionsAdminTableQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQuery>;
 export type RootSiteConventionsAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQueryLazyQuery>;
-export type RootSiteConventionsAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryQuery, RootSiteConventionsAdminTableQueryQueryVariables>;
+export type RootSiteConventionsAdminTableQueryDataResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>;
 export const ConventionDisplayQueryDocument = gql`
     query ConventionDisplayQuery($id: Int!) {
   convention: conventionById(id: $id) {
@@ -154,30 +157,32 @@ export const ConventionDisplayQueryDocument = gql`
     ${ConventionDisplayFieldsFragmentDoc}`;
 
 /**
- * __useConventionDisplayQueryQuery__
+ * __useConventionDisplayQuery__
  *
- * To run a query within a React component, call `useConventionDisplayQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useConventionDisplayQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useConventionDisplayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConventionDisplayQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useConventionDisplayQueryQuery({
+ * const { data, loading, error } = useConventionDisplayQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useConventionDisplayQueryQuery(baseOptions: Apollo.QueryHookOptions<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>) {
-        return Apollo.useQuery<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>(ConventionDisplayQueryDocument, baseOptions);
+export function useConventionDisplayQuery(baseOptions: Apollo.QueryHookOptions<ConventionDisplayQueryData, ConventionDisplayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ConventionDisplayQueryData, ConventionDisplayQueryVariables>(ConventionDisplayQueryDocument, options);
       }
-export function useConventionDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>(ConventionDisplayQueryDocument, baseOptions);
+export function useConventionDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionDisplayQueryData, ConventionDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ConventionDisplayQueryData, ConventionDisplayQueryVariables>(ConventionDisplayQueryDocument, options);
         }
-export type ConventionDisplayQueryQueryHookResult = ReturnType<typeof useConventionDisplayQueryQuery>;
+export type ConventionDisplayQueryHookResult = ReturnType<typeof useConventionDisplayQuery>;
 export type ConventionDisplayQueryLazyQueryHookResult = ReturnType<typeof useConventionDisplayQueryLazyQuery>;
-export type ConventionDisplayQueryQueryResult = Apollo.QueryResult<ConventionDisplayQueryQuery, ConventionDisplayQueryQueryVariables>;
+export type ConventionDisplayQueryDataResult = Apollo.QueryResult<ConventionDisplayQueryData, ConventionDisplayQueryVariables>;
 export const NewConventionModalQueryDocument = gql`
     query NewConventionModalQuery {
   organizations {
@@ -188,26 +193,28 @@ export const NewConventionModalQueryDocument = gql`
     `;
 
 /**
- * __useNewConventionModalQueryQuery__
+ * __useNewConventionModalQuery__
  *
- * To run a query within a React component, call `useNewConventionModalQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useNewConventionModalQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNewConventionModalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNewConventionModalQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNewConventionModalQueryQuery({
+ * const { data, loading, error } = useNewConventionModalQuery({
  *   variables: {
  *   },
  * });
  */
-export function useNewConventionModalQueryQuery(baseOptions?: Apollo.QueryHookOptions<NewConventionModalQueryQuery, NewConventionModalQueryQueryVariables>) {
-        return Apollo.useQuery<NewConventionModalQueryQuery, NewConventionModalQueryQueryVariables>(NewConventionModalQueryDocument, baseOptions);
+export function useNewConventionModalQuery(baseOptions?: Apollo.QueryHookOptions<NewConventionModalQueryData, NewConventionModalQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NewConventionModalQueryData, NewConventionModalQueryVariables>(NewConventionModalQueryDocument, options);
       }
-export function useNewConventionModalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewConventionModalQueryQuery, NewConventionModalQueryQueryVariables>) {
-          return Apollo.useLazyQuery<NewConventionModalQueryQuery, NewConventionModalQueryQueryVariables>(NewConventionModalQueryDocument, baseOptions);
+export function useNewConventionModalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewConventionModalQueryData, NewConventionModalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NewConventionModalQueryData, NewConventionModalQueryVariables>(NewConventionModalQueryDocument, options);
         }
-export type NewConventionModalQueryQueryHookResult = ReturnType<typeof useNewConventionModalQueryQuery>;
+export type NewConventionModalQueryHookResult = ReturnType<typeof useNewConventionModalQuery>;
 export type NewConventionModalQueryLazyQueryHookResult = ReturnType<typeof useNewConventionModalQueryLazyQuery>;
-export type NewConventionModalQueryQueryResult = Apollo.QueryResult<NewConventionModalQueryQuery, NewConventionModalQueryQueryVariables>;
+export type NewConventionModalQueryDataResult = Apollo.QueryResult<NewConventionModalQueryData, NewConventionModalQueryVariables>;

@@ -3,10 +3,11 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type AcceptClickwrapAgreementMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AcceptClickwrapAgreementMutation = (
+export type AcceptClickwrapAgreementMutationData = (
   { __typename: 'Mutation' }
   & { acceptClickwrapAgreement?: Types.Maybe<(
     { __typename: 'AcceptClickwrapAgreementPayload' }
@@ -28,7 +29,7 @@ export const AcceptClickwrapAgreementDocument = gql`
   }
 }
     `;
-export type AcceptClickwrapAgreementMutationFn = Apollo.MutationFunction<AcceptClickwrapAgreementMutation, AcceptClickwrapAgreementMutationVariables>;
+export type AcceptClickwrapAgreementMutationFn = Apollo.MutationFunction<AcceptClickwrapAgreementMutationData, AcceptClickwrapAgreementMutationVariables>;
 
 /**
  * __useAcceptClickwrapAgreementMutation__
@@ -46,9 +47,10 @@ export type AcceptClickwrapAgreementMutationFn = Apollo.MutationFunction<AcceptC
  *   },
  * });
  */
-export function useAcceptClickwrapAgreementMutation(baseOptions?: Apollo.MutationHookOptions<AcceptClickwrapAgreementMutation, AcceptClickwrapAgreementMutationVariables>) {
-        return Apollo.useMutation<AcceptClickwrapAgreementMutation, AcceptClickwrapAgreementMutationVariables>(AcceptClickwrapAgreementDocument, baseOptions);
+export function useAcceptClickwrapAgreementMutation(baseOptions?: Apollo.MutationHookOptions<AcceptClickwrapAgreementMutationData, AcceptClickwrapAgreementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptClickwrapAgreementMutationData, AcceptClickwrapAgreementMutationVariables>(AcceptClickwrapAgreementDocument, options);
       }
 export type AcceptClickwrapAgreementMutationHookResult = ReturnType<typeof useAcceptClickwrapAgreementMutation>;
-export type AcceptClickwrapAgreementMutationResult = Apollo.MutationResult<AcceptClickwrapAgreementMutation>;
-export type AcceptClickwrapAgreementMutationOptions = Apollo.BaseMutationOptions<AcceptClickwrapAgreementMutation, AcceptClickwrapAgreementMutationVariables>;
+export type AcceptClickwrapAgreementMutationResult = Apollo.MutationResult<AcceptClickwrapAgreementMutationData>;
+export type AcceptClickwrapAgreementMutationOptions = Apollo.BaseMutationOptions<AcceptClickwrapAgreementMutationData, AcceptClickwrapAgreementMutationVariables>;

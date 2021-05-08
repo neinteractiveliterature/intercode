@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import buildEventUrl from '../buildEventUrl';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
-import { useEventPageQueryQuery } from './queries.generated';
+import { useEventPageQuery } from './queries.generated';
 
 export type EventAdminMenuProps = {
   eventId: number;
@@ -13,7 +13,7 @@ export type EventAdminMenuProps = {
 
 function EventAdminMenu({ eventId }: EventAdminMenuProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
 
   if (loading) {
     return <LoadingIndicator />;

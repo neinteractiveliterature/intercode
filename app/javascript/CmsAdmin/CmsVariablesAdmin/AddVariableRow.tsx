@@ -4,9 +4,9 @@ import { ApolloError, useApolloClient } from '@apollo/client';
 import ErrorDisplay from '../../ErrorDisplay';
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
-import { CmsVariablesQueryQuery, useSetCmsVariableMutationMutation } from './queries.generated';
+import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';
 
-export type AddingVariable = Omit<CmsVariablesQueryQuery['cmsVariables'][0], 'id'> & {
+export type AddingVariable = Omit<CmsVariablesQueryData['cmsVariables'][0], 'id'> & {
   generatedId: number;
 };
 
@@ -18,7 +18,7 @@ export type AddVariableRowProps = {
 };
 
 function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRowProps) {
-  const [setCmsVariableMutate] = useSetCmsVariableMutationMutation();
+  const [setCmsVariableMutate] = useSetCmsVariableMutation();
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();
 

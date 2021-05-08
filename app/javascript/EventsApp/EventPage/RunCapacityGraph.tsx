@@ -4,14 +4,14 @@ import RunCapacityGraphBucket from './RunCapacityGraphBucket';
 import SignupCountData from '../SignupCountData';
 import sortBuckets from './sortBuckets';
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
-import { EventPageQueryQuery } from './queries.generated';
+import { EventPageQueryData } from './queries.generated';
 
 export type RunCapacityGraphProps = {
   run: Pick<
-    EventPageQueryQuery['event']['runs'][0],
+    EventPageQueryData['event']['runs'][0],
     'signup_count_by_state_and_bucket_key_and_counted'
   >;
-  event: Pick<EventPageQueryQuery['event'], 'registration_policy'>;
+  event: Pick<EventPageQueryData['event'], 'registration_policy'>;
   signupsAvailable: boolean;
 };
 

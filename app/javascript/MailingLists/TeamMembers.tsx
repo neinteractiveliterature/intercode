@@ -1,11 +1,9 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useTeamMembersMailingListQueryQuery } from './queries.generated';
+import { useTeamMembersMailingListQuery } from './queries.generated';
 
-export default LoadQueryWrapper(useTeamMembersMailingListQueryQuery, function TeamMembers({
-  data,
-}) {
+export default LoadQueryWrapper(useTeamMembersMailingListQuery, function TeamMembers({ data }) {
   usePageTitle('Event team members');
 
   return (

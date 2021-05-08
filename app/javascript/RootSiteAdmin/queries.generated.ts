@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type PageFieldsFragment = (
   { __typename: 'Page' }
   & Pick<Types.Page, 'id' | 'name'>
@@ -27,10 +28,10 @@ export type RootSiteFieldsFragment = (
   ) }
 );
 
-export type RootSiteAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type RootSiteAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RootSiteAdminQueryQuery = (
+export type RootSiteAdminQueryData = (
   { __typename: 'Query' }
   & { rootSite: (
     { __typename: 'RootSite' }
@@ -94,26 +95,28 @@ ${PageFieldsFragmentDoc}
 ${RootSiteAdminLayoutFieldsFragmentDoc}`;
 
 /**
- * __useRootSiteAdminQueryQuery__
+ * __useRootSiteAdminQuery__
  *
- * To run a query within a React component, call `useRootSiteAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useRootSiteAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useRootSiteAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRootSiteAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useRootSiteAdminQueryQuery({
+ * const { data, loading, error } = useRootSiteAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useRootSiteAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<RootSiteAdminQueryQuery, RootSiteAdminQueryQueryVariables>) {
-        return Apollo.useQuery<RootSiteAdminQueryQuery, RootSiteAdminQueryQueryVariables>(RootSiteAdminQueryDocument, baseOptions);
+export function useRootSiteAdminQuery(baseOptions?: Apollo.QueryHookOptions<RootSiteAdminQueryData, RootSiteAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RootSiteAdminQueryData, RootSiteAdminQueryVariables>(RootSiteAdminQueryDocument, options);
       }
-export function useRootSiteAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RootSiteAdminQueryQuery, RootSiteAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<RootSiteAdminQueryQuery, RootSiteAdminQueryQueryVariables>(RootSiteAdminQueryDocument, baseOptions);
+export function useRootSiteAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RootSiteAdminQueryData, RootSiteAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RootSiteAdminQueryData, RootSiteAdminQueryVariables>(RootSiteAdminQueryDocument, options);
         }
-export type RootSiteAdminQueryQueryHookResult = ReturnType<typeof useRootSiteAdminQueryQuery>;
+export type RootSiteAdminQueryHookResult = ReturnType<typeof useRootSiteAdminQuery>;
 export type RootSiteAdminQueryLazyQueryHookResult = ReturnType<typeof useRootSiteAdminQueryLazyQuery>;
-export type RootSiteAdminQueryQueryResult = Apollo.QueryResult<RootSiteAdminQueryQuery, RootSiteAdminQueryQueryVariables>;
+export type RootSiteAdminQueryDataResult = Apollo.QueryResult<RootSiteAdminQueryData, RootSiteAdminQueryVariables>;

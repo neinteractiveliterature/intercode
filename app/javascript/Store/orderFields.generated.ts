@@ -17,7 +17,7 @@ export type CouponApplicationFieldsFragment = (
   ) }
 );
 
-export type AdminOrderFieldsFragmentFragment = (
+export type AdminOrderFieldsFragment = (
   { __typename: 'Order' }
   & Pick<Types.Order, 'id' | 'status' | 'submitted_at' | 'charge_id' | 'payment_note'>
   & { user_con_profile: (
@@ -104,7 +104,7 @@ export const CouponApplicationFieldsFragmentDoc = gql`
   }
 }
     ${CouponFieldsFragmentDoc}`;
-export const AdminOrderFieldsFragmentFragmentDoc = gql`
+export const AdminOrderFieldsFragmentDoc = gql`
     fragment AdminOrderFieldsFragment on Order {
   id
   status

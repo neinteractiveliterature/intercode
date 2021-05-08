@@ -5,7 +5,7 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import type { ConventionFormConvention } from './ConventionForm';
-import { ConventionAdminConventionQueryQuery } from './queries.generated';
+import { ConventionAdminConventionQueryData } from './queries.generated';
 import { usePropertySetters } from '../usePropertySetters';
 
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
@@ -18,9 +18,9 @@ export type ConventionFormWebsiteSectionProps = {
   convention: ConventionFormConvention;
   setConvention: React.Dispatch<React.SetStateAction<ConventionFormConvention>>;
   disabled: boolean;
-  rootSite: ConventionAdminConventionQueryQuery['rootSite'];
-  cmsLayouts: ConventionAdminConventionQueryQuery['convention']['cms_layouts'];
-  pages: ConventionAdminConventionQueryQuery['convention']['pages'];
+  rootSite: ConventionAdminConventionQueryData['rootSite'];
+  cmsLayouts: ConventionAdminConventionQueryData['convention']['cms_layouts'];
+  pages: ConventionAdminConventionQueryData['convention']['pages'];
 };
 
 function ConventionFormWebsiteSection({

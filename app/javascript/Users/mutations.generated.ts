@@ -5,6 +5,7 @@ import { DetailedUserFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { DetailedUserFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type MergeUsersMutationVariables = Types.Exact<{
   userIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
   winningUserId: Types.Scalars['Int'];
@@ -12,7 +13,7 @@ export type MergeUsersMutationVariables = Types.Exact<{
 }>;
 
 
-export type MergeUsersMutation = (
+export type MergeUsersMutationData = (
   { __typename: 'Mutation' }
   & { mergeUsers?: Types.Maybe<(
     { __typename: 'MergeUsersPayload' }
@@ -37,7 +38,7 @@ export const MergeUsersDocument = gql`
   }
 }
     ${DetailedUserFieldsFragmentDoc}`;
-export type MergeUsersMutationFn = Apollo.MutationFunction<MergeUsersMutation, MergeUsersMutationVariables>;
+export type MergeUsersMutationFn = Apollo.MutationFunction<MergeUsersMutationData, MergeUsersMutationVariables>;
 
 /**
  * __useMergeUsersMutation__
@@ -58,9 +59,10 @@ export type MergeUsersMutationFn = Apollo.MutationFunction<MergeUsersMutation, M
  *   },
  * });
  */
-export function useMergeUsersMutation(baseOptions?: Apollo.MutationHookOptions<MergeUsersMutation, MergeUsersMutationVariables>) {
-        return Apollo.useMutation<MergeUsersMutation, MergeUsersMutationVariables>(MergeUsersDocument, baseOptions);
+export function useMergeUsersMutation(baseOptions?: Apollo.MutationHookOptions<MergeUsersMutationData, MergeUsersMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MergeUsersMutationData, MergeUsersMutationVariables>(MergeUsersDocument, options);
       }
 export type MergeUsersMutationHookResult = ReturnType<typeof useMergeUsersMutation>;
-export type MergeUsersMutationResult = Apollo.MutationResult<MergeUsersMutation>;
-export type MergeUsersMutationOptions = Apollo.BaseMutationOptions<MergeUsersMutation, MergeUsersMutationVariables>;
+export type MergeUsersMutationResult = Apollo.MutationResult<MergeUsersMutationData>;
+export type MergeUsersMutationOptions = Apollo.BaseMutationOptions<MergeUsersMutationData, MergeUsersMutationVariables>;

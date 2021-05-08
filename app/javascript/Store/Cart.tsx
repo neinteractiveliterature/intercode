@@ -12,7 +12,7 @@ import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import CartContents from './CartContents';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { CartQueryQuery, useCartQueryQuery } from './queries.generated';
+import { CartQueryData, useCartQuery } from './queries.generated';
 import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
@@ -21,9 +21,9 @@ import {
 } from './mutations.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
-type OrderEntryType = NonNullable<CartQueryQuery['currentPendingOrder']>['order_entries'][0];
+type OrderEntryType = NonNullable<CartQueryData['currentPendingOrder']>['order_entries'][0];
 
-export default LoadQueryWrapper(useCartQueryQuery, function Cart({ data }) {
+export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   const history = useHistory();
   const [updateMutate] = useUpdateOrderEntryMutation();
   const [deleteMutate] = useDeleteOrderEntryMutation();
@@ -47,7 +47,7 @@ export default LoadQueryWrapper(useCartQueryQuery, function Cart({ data }) {
       deleteMutate({
         variables: { input: { id } },
         update: (proxy) => {
-          const storeData = proxy.readQuery<CartQueryQuery>({ query: CartQuery });
+          const storeData = proxy.readQuery<CartQueryData>({ query: CartQuery });
           if (!storeData || !storeData.currentPendingOrder) {
             return;
           }

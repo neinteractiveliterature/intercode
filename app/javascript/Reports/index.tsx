@@ -8,9 +8,9 @@ import EventsByChoice from './EventsByChoice';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useReportsMenuQueryQuery } from './queries.generated';
+import { useReportsMenuQuery } from './queries.generated';
 
-const ReportsMenu = LoadQueryWrapper(useReportsMenuQueryQuery, function ReportsMenu({ data }) {
+const ReportsMenu = LoadQueryWrapper(useReportsMenuQuery, function ReportsMenu({ data }) {
   usePageTitle('Reports');
 
   return (

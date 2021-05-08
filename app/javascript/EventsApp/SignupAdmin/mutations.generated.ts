@@ -1,21 +1,22 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { SignupFieldsFragment, UserConProfileSignupsFragmentFragment } from './queries.generated';
+import { SignupFieldsFragment, UserConProfileSignupsFragment } from './queries.generated';
 import { EventPageRunFieldsFragment } from '../EventPage/queries.generated';
 import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
-import { SignupFieldsFragmentDoc, UserConProfileSignupsFragmentFragmentDoc } from './queries.generated';
+import { SignupFieldsFragmentDoc, UserConProfileSignupsFragmentDoc } from './queries.generated';
 import { EventPageRunFieldsFragmentDoc } from '../EventPage/queries.generated';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type ChangeSignupBucketMutationVariables = Types.Exact<{
   signupId: Types.Scalars['Int'];
   bucketKey: Types.Scalars['String'];
 }>;
 
 
-export type ChangeSignupBucketMutation = (
+export type ChangeSignupBucketMutationData = (
   { __typename: 'Mutation' }
   & { updateSignupBucket?: Types.Maybe<(
     { __typename: 'UpdateSignupBucketPayload' }
@@ -39,7 +40,7 @@ export type ForceConfirmSignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type ForceConfirmSignupMutation = (
+export type ForceConfirmSignupMutationData = (
   { __typename: 'Mutation' }
   & { forceConfirmSignup?: Types.Maybe<(
     { __typename: 'ForceConfirmSignupPayload' }
@@ -63,7 +64,7 @@ export type UpdateSignupCountedMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateSignupCountedMutation = (
+export type UpdateSignupCountedMutationData = (
   { __typename: 'Mutation' }
   & { updateSignupCounted?: Types.Maybe<(
     { __typename: 'UpdateSignupCountedPayload' }
@@ -86,14 +87,14 @@ export type WithdrawAllUserConProfileSignupsMutationVariables = Types.Exact<{
 }>;
 
 
-export type WithdrawAllUserConProfileSignupsMutation = (
+export type WithdrawAllUserConProfileSignupsMutationData = (
   { __typename: 'Mutation' }
   & { withdrawAllUserConProfileSignups?: Types.Maybe<(
     { __typename: 'WithdrawAllUserConProfileSignupsPayload' }
     & { user_con_profile: (
       { __typename: 'UserConProfile' }
       & Pick<Types.UserConProfile, 'id'>
-      & UserConProfileSignupsFragmentFragment
+      & UserConProfileSignupsFragment
     ) }
   )> }
 );
@@ -116,7 +117,7 @@ export const ChangeSignupBucketDocument = gql`
     ${SignupFieldsFragmentDoc}
 ${EventPageRunFieldsFragmentDoc}
 ${RunBasicSignupDataFragmentDoc}`;
-export type ChangeSignupBucketMutationFn = Apollo.MutationFunction<ChangeSignupBucketMutation, ChangeSignupBucketMutationVariables>;
+export type ChangeSignupBucketMutationFn = Apollo.MutationFunction<ChangeSignupBucketMutationData, ChangeSignupBucketMutationVariables>;
 
 /**
  * __useChangeSignupBucketMutation__
@@ -136,12 +137,13 @@ export type ChangeSignupBucketMutationFn = Apollo.MutationFunction<ChangeSignupB
  *   },
  * });
  */
-export function useChangeSignupBucketMutation(baseOptions?: Apollo.MutationHookOptions<ChangeSignupBucketMutation, ChangeSignupBucketMutationVariables>) {
-        return Apollo.useMutation<ChangeSignupBucketMutation, ChangeSignupBucketMutationVariables>(ChangeSignupBucketDocument, baseOptions);
+export function useChangeSignupBucketMutation(baseOptions?: Apollo.MutationHookOptions<ChangeSignupBucketMutationData, ChangeSignupBucketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeSignupBucketMutationData, ChangeSignupBucketMutationVariables>(ChangeSignupBucketDocument, options);
       }
 export type ChangeSignupBucketMutationHookResult = ReturnType<typeof useChangeSignupBucketMutation>;
-export type ChangeSignupBucketMutationResult = Apollo.MutationResult<ChangeSignupBucketMutation>;
-export type ChangeSignupBucketMutationOptions = Apollo.BaseMutationOptions<ChangeSignupBucketMutation, ChangeSignupBucketMutationVariables>;
+export type ChangeSignupBucketMutationResult = Apollo.MutationResult<ChangeSignupBucketMutationData>;
+export type ChangeSignupBucketMutationOptions = Apollo.BaseMutationOptions<ChangeSignupBucketMutationData, ChangeSignupBucketMutationVariables>;
 export const ForceConfirmSignupDocument = gql`
     mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
   forceConfirmSignup(input: {id: $signupId, bucket_key: $bucketKey}) {
@@ -159,7 +161,7 @@ export const ForceConfirmSignupDocument = gql`
     ${SignupFieldsFragmentDoc}
 ${EventPageRunFieldsFragmentDoc}
 ${RunBasicSignupDataFragmentDoc}`;
-export type ForceConfirmSignupMutationFn = Apollo.MutationFunction<ForceConfirmSignupMutation, ForceConfirmSignupMutationVariables>;
+export type ForceConfirmSignupMutationFn = Apollo.MutationFunction<ForceConfirmSignupMutationData, ForceConfirmSignupMutationVariables>;
 
 /**
  * __useForceConfirmSignupMutation__
@@ -179,12 +181,13 @@ export type ForceConfirmSignupMutationFn = Apollo.MutationFunction<ForceConfirmS
  *   },
  * });
  */
-export function useForceConfirmSignupMutation(baseOptions?: Apollo.MutationHookOptions<ForceConfirmSignupMutation, ForceConfirmSignupMutationVariables>) {
-        return Apollo.useMutation<ForceConfirmSignupMutation, ForceConfirmSignupMutationVariables>(ForceConfirmSignupDocument, baseOptions);
+export function useForceConfirmSignupMutation(baseOptions?: Apollo.MutationHookOptions<ForceConfirmSignupMutationData, ForceConfirmSignupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForceConfirmSignupMutationData, ForceConfirmSignupMutationVariables>(ForceConfirmSignupDocument, options);
       }
 export type ForceConfirmSignupMutationHookResult = ReturnType<typeof useForceConfirmSignupMutation>;
-export type ForceConfirmSignupMutationResult = Apollo.MutationResult<ForceConfirmSignupMutation>;
-export type ForceConfirmSignupMutationOptions = Apollo.BaseMutationOptions<ForceConfirmSignupMutation, ForceConfirmSignupMutationVariables>;
+export type ForceConfirmSignupMutationResult = Apollo.MutationResult<ForceConfirmSignupMutationData>;
+export type ForceConfirmSignupMutationOptions = Apollo.BaseMutationOptions<ForceConfirmSignupMutationData, ForceConfirmSignupMutationVariables>;
 export const UpdateSignupCountedDocument = gql`
     mutation UpdateSignupCounted($signupId: Int!, $counted: Boolean!) {
   updateSignupCounted(input: {id: $signupId, counted: $counted}) {
@@ -202,7 +205,7 @@ export const UpdateSignupCountedDocument = gql`
     ${SignupFieldsFragmentDoc}
 ${EventPageRunFieldsFragmentDoc}
 ${RunBasicSignupDataFragmentDoc}`;
-export type UpdateSignupCountedMutationFn = Apollo.MutationFunction<UpdateSignupCountedMutation, UpdateSignupCountedMutationVariables>;
+export type UpdateSignupCountedMutationFn = Apollo.MutationFunction<UpdateSignupCountedMutationData, UpdateSignupCountedMutationVariables>;
 
 /**
  * __useUpdateSignupCountedMutation__
@@ -222,12 +225,13 @@ export type UpdateSignupCountedMutationFn = Apollo.MutationFunction<UpdateSignup
  *   },
  * });
  */
-export function useUpdateSignupCountedMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSignupCountedMutation, UpdateSignupCountedMutationVariables>) {
-        return Apollo.useMutation<UpdateSignupCountedMutation, UpdateSignupCountedMutationVariables>(UpdateSignupCountedDocument, baseOptions);
+export function useUpdateSignupCountedMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSignupCountedMutationData, UpdateSignupCountedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSignupCountedMutationData, UpdateSignupCountedMutationVariables>(UpdateSignupCountedDocument, options);
       }
 export type UpdateSignupCountedMutationHookResult = ReturnType<typeof useUpdateSignupCountedMutation>;
-export type UpdateSignupCountedMutationResult = Apollo.MutationResult<UpdateSignupCountedMutation>;
-export type UpdateSignupCountedMutationOptions = Apollo.BaseMutationOptions<UpdateSignupCountedMutation, UpdateSignupCountedMutationVariables>;
+export type UpdateSignupCountedMutationResult = Apollo.MutationResult<UpdateSignupCountedMutationData>;
+export type UpdateSignupCountedMutationOptions = Apollo.BaseMutationOptions<UpdateSignupCountedMutationData, UpdateSignupCountedMutationVariables>;
 export const WithdrawAllUserConProfileSignupsDocument = gql`
     mutation WithdrawAllUserConProfileSignups($userConProfileId: Int!) {
   withdrawAllUserConProfileSignups(
@@ -239,8 +243,8 @@ export const WithdrawAllUserConProfileSignupsDocument = gql`
     }
   }
 }
-    ${UserConProfileSignupsFragmentFragmentDoc}`;
-export type WithdrawAllUserConProfileSignupsMutationFn = Apollo.MutationFunction<WithdrawAllUserConProfileSignupsMutation, WithdrawAllUserConProfileSignupsMutationVariables>;
+    ${UserConProfileSignupsFragmentDoc}`;
+export type WithdrawAllUserConProfileSignupsMutationFn = Apollo.MutationFunction<WithdrawAllUserConProfileSignupsMutationData, WithdrawAllUserConProfileSignupsMutationVariables>;
 
 /**
  * __useWithdrawAllUserConProfileSignupsMutation__
@@ -259,9 +263,10 @@ export type WithdrawAllUserConProfileSignupsMutationFn = Apollo.MutationFunction
  *   },
  * });
  */
-export function useWithdrawAllUserConProfileSignupsMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawAllUserConProfileSignupsMutation, WithdrawAllUserConProfileSignupsMutationVariables>) {
-        return Apollo.useMutation<WithdrawAllUserConProfileSignupsMutation, WithdrawAllUserConProfileSignupsMutationVariables>(WithdrawAllUserConProfileSignupsDocument, baseOptions);
+export function useWithdrawAllUserConProfileSignupsMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawAllUserConProfileSignupsMutationData, WithdrawAllUserConProfileSignupsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WithdrawAllUserConProfileSignupsMutationData, WithdrawAllUserConProfileSignupsMutationVariables>(WithdrawAllUserConProfileSignupsDocument, options);
       }
 export type WithdrawAllUserConProfileSignupsMutationHookResult = ReturnType<typeof useWithdrawAllUserConProfileSignupsMutation>;
-export type WithdrawAllUserConProfileSignupsMutationResult = Apollo.MutationResult<WithdrawAllUserConProfileSignupsMutation>;
-export type WithdrawAllUserConProfileSignupsMutationOptions = Apollo.BaseMutationOptions<WithdrawAllUserConProfileSignupsMutation, WithdrawAllUserConProfileSignupsMutationVariables>;
+export type WithdrawAllUserConProfileSignupsMutationResult = Apollo.MutationResult<WithdrawAllUserConProfileSignupsMutationData>;
+export type WithdrawAllUserConProfileSignupsMutationOptions = Apollo.BaseMutationOptions<WithdrawAllUserConProfileSignupsMutationData, WithdrawAllUserConProfileSignupsMutationVariables>;

@@ -3,6 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type AdminNavigationItemFieldsFragment = (
   { __typename: 'CmsNavigationItem' }
   & Pick<Types.CmsNavigationItem, 'id' | 'position' | 'title'>
@@ -15,10 +16,10 @@ export type AdminNavigationItemFieldsFragment = (
   )> }
 );
 
-export type NavigationItemsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NavigationItemsAdminQueryQuery = (
+export type NavigationItemsAdminQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -64,26 +65,28 @@ export const NavigationItemsAdminQueryDocument = gql`
     ${AdminNavigationItemFieldsFragmentDoc}`;
 
 /**
- * __useNavigationItemsAdminQueryQuery__
+ * __useNavigationItemsAdminQuery__
  *
- * To run a query within a React component, call `useNavigationItemsAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useNavigationItemsAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNavigationItemsAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNavigationItemsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNavigationItemsAdminQueryQuery({
+ * const { data, loading, error } = useNavigationItemsAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useNavigationItemsAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<NavigationItemsAdminQueryQuery, NavigationItemsAdminQueryQueryVariables>) {
-        return Apollo.useQuery<NavigationItemsAdminQueryQuery, NavigationItemsAdminQueryQueryVariables>(NavigationItemsAdminQueryDocument, baseOptions);
+export function useNavigationItemsAdminQuery(baseOptions?: Apollo.QueryHookOptions<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
       }
-export function useNavigationItemsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigationItemsAdminQueryQuery, NavigationItemsAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<NavigationItemsAdminQueryQuery, NavigationItemsAdminQueryQueryVariables>(NavigationItemsAdminQueryDocument, baseOptions);
+export function useNavigationItemsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
         }
-export type NavigationItemsAdminQueryQueryHookResult = ReturnType<typeof useNavigationItemsAdminQueryQuery>;
+export type NavigationItemsAdminQueryHookResult = ReturnType<typeof useNavigationItemsAdminQuery>;
 export type NavigationItemsAdminQueryLazyQueryHookResult = ReturnType<typeof useNavigationItemsAdminQueryLazyQuery>;
-export type NavigationItemsAdminQueryQueryResult = Apollo.QueryResult<NavigationItemsAdminQueryQuery, NavigationItemsAdminQueryQueryVariables>;
+export type NavigationItemsAdminQueryDataResult = Apollo.QueryResult<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>;

@@ -3,12 +3,13 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type OAuthAuthorizationPromptQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type OAuthAuthorizationPromptQueryVariables = Types.Exact<{
   queryParams: Types.Scalars['Json'];
 }>;
 
 
-export type OAuthAuthorizationPromptQueryQuery = (
+export type OAuthAuthorizationPromptQueryData = (
   { __typename: 'Query' }
   & Pick<Types.Query, 'oauthPreAuth'>
   & { currentUser?: Types.Maybe<(
@@ -17,10 +18,10 @@ export type OAuthAuthorizationPromptQueryQuery = (
   )> }
 );
 
-export type OAuthAuthorizedApplicationsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type OAuthAuthorizedApplicationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OAuthAuthorizedApplicationsQueryQuery = (
+export type OAuthAuthorizedApplicationsQueryData = (
   { __typename: 'Query' }
   & { myAuthorizedApplications: Array<(
     { __typename: 'AuthorizedApplication' }
@@ -39,30 +40,32 @@ export const OAuthAuthorizationPromptQueryDocument = gql`
     `;
 
 /**
- * __useOAuthAuthorizationPromptQueryQuery__
+ * __useOAuthAuthorizationPromptQuery__
  *
- * To run a query within a React component, call `useOAuthAuthorizationPromptQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useOAuthAuthorizationPromptQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOAuthAuthorizationPromptQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOAuthAuthorizationPromptQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOAuthAuthorizationPromptQueryQuery({
+ * const { data, loading, error } = useOAuthAuthorizationPromptQuery({
  *   variables: {
  *      queryParams: // value for 'queryParams'
  *   },
  * });
  */
-export function useOAuthAuthorizationPromptQueryQuery(baseOptions: Apollo.QueryHookOptions<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>) {
-        return Apollo.useQuery<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>(OAuthAuthorizationPromptQueryDocument, baseOptions);
+export function useOAuthAuthorizationPromptQuery(baseOptions: Apollo.QueryHookOptions<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>(OAuthAuthorizationPromptQueryDocument, options);
       }
-export function useOAuthAuthorizationPromptQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>) {
-          return Apollo.useLazyQuery<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>(OAuthAuthorizationPromptQueryDocument, baseOptions);
+export function useOAuthAuthorizationPromptQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>(OAuthAuthorizationPromptQueryDocument, options);
         }
-export type OAuthAuthorizationPromptQueryQueryHookResult = ReturnType<typeof useOAuthAuthorizationPromptQueryQuery>;
+export type OAuthAuthorizationPromptQueryHookResult = ReturnType<typeof useOAuthAuthorizationPromptQuery>;
 export type OAuthAuthorizationPromptQueryLazyQueryHookResult = ReturnType<typeof useOAuthAuthorizationPromptQueryLazyQuery>;
-export type OAuthAuthorizationPromptQueryQueryResult = Apollo.QueryResult<OAuthAuthorizationPromptQueryQuery, OAuthAuthorizationPromptQueryQueryVariables>;
+export type OAuthAuthorizationPromptQueryDataResult = Apollo.QueryResult<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>;
 export const OAuthAuthorizedApplicationsQueryDocument = gql`
     query OAuthAuthorizedApplicationsQuery {
   myAuthorizedApplications {
@@ -74,26 +77,28 @@ export const OAuthAuthorizedApplicationsQueryDocument = gql`
     `;
 
 /**
- * __useOAuthAuthorizedApplicationsQueryQuery__
+ * __useOAuthAuthorizedApplicationsQuery__
  *
- * To run a query within a React component, call `useOAuthAuthorizedApplicationsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useOAuthAuthorizedApplicationsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOAuthAuthorizedApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOAuthAuthorizedApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOAuthAuthorizedApplicationsQueryQuery({
+ * const { data, loading, error } = useOAuthAuthorizedApplicationsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useOAuthAuthorizedApplicationsQueryQuery(baseOptions?: Apollo.QueryHookOptions<OAuthAuthorizedApplicationsQueryQuery, OAuthAuthorizedApplicationsQueryQueryVariables>) {
-        return Apollo.useQuery<OAuthAuthorizedApplicationsQueryQuery, OAuthAuthorizedApplicationsQueryQueryVariables>(OAuthAuthorizedApplicationsQueryDocument, baseOptions);
+export function useOAuthAuthorizedApplicationsQuery(baseOptions?: Apollo.QueryHookOptions<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>(OAuthAuthorizedApplicationsQueryDocument, options);
       }
-export function useOAuthAuthorizedApplicationsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OAuthAuthorizedApplicationsQueryQuery, OAuthAuthorizedApplicationsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<OAuthAuthorizedApplicationsQueryQuery, OAuthAuthorizedApplicationsQueryQueryVariables>(OAuthAuthorizedApplicationsQueryDocument, baseOptions);
+export function useOAuthAuthorizedApplicationsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>(OAuthAuthorizedApplicationsQueryDocument, options);
         }
-export type OAuthAuthorizedApplicationsQueryQueryHookResult = ReturnType<typeof useOAuthAuthorizedApplicationsQueryQuery>;
+export type OAuthAuthorizedApplicationsQueryHookResult = ReturnType<typeof useOAuthAuthorizedApplicationsQuery>;
 export type OAuthAuthorizedApplicationsQueryLazyQueryHookResult = ReturnType<typeof useOAuthAuthorizedApplicationsQueryLazyQuery>;
-export type OAuthAuthorizedApplicationsQueryQueryResult = Apollo.QueryResult<OAuthAuthorizedApplicationsQueryQuery, OAuthAuthorizedApplicationsQueryQueryVariables>;
+export type OAuthAuthorizedApplicationsQueryDataResult = Apollo.QueryResult<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>;

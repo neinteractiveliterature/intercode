@@ -3,12 +3,13 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type RevokeAuthorizedApplicationMutationVariables = Types.Exact<{
   uid: Types.Scalars['ID'];
 }>;
 
 
-export type RevokeAuthorizedApplicationMutation = (
+export type RevokeAuthorizedApplicationMutationData = (
   { __typename: 'Mutation' }
   & { revokeAuthorizedApplication?: Types.Maybe<(
     { __typename: 'RevokeAuthorizedApplicationPayload' }
@@ -24,7 +25,7 @@ export const RevokeAuthorizedApplicationDocument = gql`
   }
 }
     `;
-export type RevokeAuthorizedApplicationMutationFn = Apollo.MutationFunction<RevokeAuthorizedApplicationMutation, RevokeAuthorizedApplicationMutationVariables>;
+export type RevokeAuthorizedApplicationMutationFn = Apollo.MutationFunction<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>;
 
 /**
  * __useRevokeAuthorizedApplicationMutation__
@@ -43,9 +44,10 @@ export type RevokeAuthorizedApplicationMutationFn = Apollo.MutationFunction<Revo
  *   },
  * });
  */
-export function useRevokeAuthorizedApplicationMutation(baseOptions?: Apollo.MutationHookOptions<RevokeAuthorizedApplicationMutation, RevokeAuthorizedApplicationMutationVariables>) {
-        return Apollo.useMutation<RevokeAuthorizedApplicationMutation, RevokeAuthorizedApplicationMutationVariables>(RevokeAuthorizedApplicationDocument, baseOptions);
+export function useRevokeAuthorizedApplicationMutation(baseOptions?: Apollo.MutationHookOptions<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>(RevokeAuthorizedApplicationDocument, options);
       }
 export type RevokeAuthorizedApplicationMutationHookResult = ReturnType<typeof useRevokeAuthorizedApplicationMutation>;
-export type RevokeAuthorizedApplicationMutationResult = Apollo.MutationResult<RevokeAuthorizedApplicationMutation>;
-export type RevokeAuthorizedApplicationMutationOptions = Apollo.BaseMutationOptions<RevokeAuthorizedApplicationMutation, RevokeAuthorizedApplicationMutationVariables>;
+export type RevokeAuthorizedApplicationMutationResult = Apollo.MutationResult<RevokeAuthorizedApplicationMutationData>;
+export type RevokeAuthorizedApplicationMutationOptions = Apollo.BaseMutationOptions<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>;

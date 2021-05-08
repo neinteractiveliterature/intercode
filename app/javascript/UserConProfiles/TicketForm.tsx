@@ -13,11 +13,11 @@ import useModal from '../ModalDialogs/useModal';
 import formatMoney from '../formatMoney';
 import EditOrderModal from '../Store/EditOrderModal';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
-import { UserConProfileAdminQueryQuery } from './queries.generated';
+import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';
 import { parseIntOrNull } from '../ValueUtils';
 
-type TicketFromQuery = NonNullable<UserConProfileAdminQueryQuery['userConProfile']['ticket']>;
+type TicketFromQuery = NonNullable<UserConProfileAdminQueryData['userConProfile']['ticket']>;
 type EditingTicket = Omit<
   TicketFromQuery,
   'id' | 'ticket_type' | 'created_at' | 'updated_at' | '__typename'
@@ -26,7 +26,7 @@ type EditingTicket = Omit<
 
 export type TicketFormProps = {
   initialTicket: EditingTicket;
-  convention: UserConProfileAdminQueryQuery['convention'];
+  convention: UserConProfileAdminQueryData['convention'];
   onSubmit: (ticketInput: TicketInput) => Promise<void>;
   submitCaption: string;
   userConProfile: Pick<UserConProfile, 'id' | 'name_without_nickname'>;

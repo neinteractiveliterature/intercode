@@ -15,12 +15,12 @@ import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 import LoadingIndicator from '../../LoadingIndicator';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
-import { EventPageQueryQuery } from './queries.generated';
+import { EventPageQueryData } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 
 function describeSignupState(
-  mySignup: EventPageQueryQuery['event']['runs'][0]['my_signups'][0],
+  mySignup: EventPageQueryData['event']['runs'][0]['my_signups'][0],
   t: TFunction,
 ) {
   if (mySignup.state === 'confirmed') {
@@ -37,13 +37,13 @@ function describeSignupState(
 }
 
 export type RunCardProps = {
-  run: EventPageQueryQuery['event']['runs'][0];
-  event: EventPageQueryQuery['event'];
+  run: EventPageQueryData['event']['runs'][0];
+  event: EventPageQueryData['event'];
   signupOptions: PartitionedSignupOptions;
-  currentAbility: EventPageQueryQuery['currentAbility'];
+  currentAbility: EventPageQueryData['currentAbility'];
   myProfile?: object | null;
-  mySignup?: EventPageQueryQuery['event']['runs'][0]['my_signups'][0] | null;
-  myPendingSignupRequest?: EventPageQueryQuery['event']['runs'][0]['my_signup_requests'][0] | null;
+  mySignup?: EventPageQueryData['event']['runs'][0]['my_signups'][0] | null;
+  myPendingSignupRequest?: EventPageQueryData['event']['runs'][0]['my_signup_requests'][0] | null;
   showViewSignups?: boolean;
   createSignup: (signupOption: SignupOption) => Promise<any>;
   withdrawSignup: () => Promise<any>;

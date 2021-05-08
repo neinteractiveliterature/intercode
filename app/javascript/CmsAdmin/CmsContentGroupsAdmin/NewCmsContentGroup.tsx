@@ -13,14 +13,11 @@ import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import {
-  CmsContentGroupsAdminQueryQuery,
-  useCmsContentGroupsAdminQueryQuery,
-} from './queries.generated';
+import { CmsContentGroupsAdminQueryData, useCmsContentGroupsAdminQuery } from './queries.generated';
 
 function NewCmsContentGroup() {
   const history = useHistory();
-  const { data, loading, error } = useCmsContentGroupsAdminQueryQuery();
+  const { data, loading, error } = useCmsContentGroupsAdminQuery();
   const mutate = useCreateMutation(CreateContentGroup, {
     query: CmsContentGroupsAdminQuery,
     arrayPath: ['cmsContentGroups'],
@@ -28,7 +25,7 @@ function NewCmsContentGroup() {
   });
   const [createCmsContentGroup, createError, createInProgress] = useAsyncFunction(mutate);
   const [contentGroup, setContentGroup] = useState<
-    Omit<CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0], 'id'>
+    Omit<CmsContentGroupsAdminQueryData['cmsContentGroups'][0], 'id'>
   >({
     __typename: 'CmsContentGroup',
     name: '',
@@ -38,7 +35,7 @@ function NewCmsContentGroup() {
     current_ability_can_update: true,
   });
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<
-    CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0]['permissions'][0]
+    CmsContentGroupsAdminQueryData['cmsContentGroups'][0]['permissions'][0]
   >();
 
   usePageTitle('New Content Group');

@@ -12,14 +12,14 @@ import useValueUnless from '../useValueUnless';
 import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useDeleteUserConProfileMutation } from './mutations.generated';
-import { useUserConProfileAdminQueryQuery } from './queries.generated';
+import { useUserConProfileAdminQuery } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 
 function UserConProfileAdminDisplay() {
   const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
   const history = useHistory();
-  const { data, loading, error } = useUserConProfileAdminQueryQuery({
+  const { data, loading, error } = useUserConProfileAdminQuery({
     variables: { id: userConProfileId },
   });
   const formItems = useMemo(

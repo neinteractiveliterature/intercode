@@ -7,7 +7,7 @@ import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import useModal from '../ModalDialogs/useModal';
-import { EventProposalQueryWithOwnerQuery } from './queries.generated';
+import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import { useTransitionEventProposalMutation } from './mutations.generated';
 
 const STATUSES = [
@@ -34,7 +34,7 @@ function getStatus(key: string) {
 }
 
 export type EventProposalStatusUpdaterProps = {
-  eventProposal: EventProposalQueryWithOwnerQuery['eventProposal'];
+  eventProposal: EventProposalQueryWithOwnerQueryData['eventProposal'];
 };
 
 function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdaterProps) {

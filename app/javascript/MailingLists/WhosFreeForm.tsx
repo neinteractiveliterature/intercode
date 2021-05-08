@@ -6,7 +6,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect, { TimeValues } from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import LoadingIndicator from '../LoadingIndicator';
-import { useWhosFreeFormConventionQueryQuery } from './queries.generated';
+import { useWhosFreeFormConventionQuery } from './queries.generated';
 
 const dateTimeToTimeValues = (momentValue?: DateTime | null) => {
   if (momentValue == null) {
@@ -31,7 +31,7 @@ export type WhosFreeFormProps = {
 };
 
 function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
-  const { data, loading, error } = useWhosFreeFormConventionQueryQuery();
+  const { data, loading, error } = useWhosFreeFormConventionQuery();
   const [start, setStart] = useState<DateTime>();
   const [finish, setFinish] = useState<DateTime>();
   const [day, setDay] = useState<DateTime>();

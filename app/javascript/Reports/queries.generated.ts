@@ -5,10 +5,11 @@ import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-export type ReportsMenuQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type ReportsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ReportsMenuQueryQuery = (
+export type ReportsMenuQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -16,10 +17,10 @@ export type ReportsMenuQueryQuery = (
   ) }
 );
 
-export type AttendanceByPaymentAmountQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type AttendanceByPaymentAmountQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AttendanceByPaymentAmountQueryQuery = (
+export type AttendanceByPaymentAmountQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -52,10 +53,10 @@ export type AttendanceByPaymentAmountQueryQuery = (
   ) }
 );
 
-export type EventProvidedTicketsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EventProvidedTicketsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProvidedTicketsQueryQuery = (
+export type EventProvidedTicketsQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -83,10 +84,10 @@ export type EventProvidedTicketsQueryQuery = (
   ) }
 );
 
-export type EventsByChoiceQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EventsByChoiceQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventsByChoiceQueryQuery = (
+export type EventsByChoiceQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -107,10 +108,10 @@ export type EventsByChoiceQueryQuery = (
   ) }
 );
 
-export type SignupCountsByStateQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type SignupCountsByStateQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SignupCountsByStateQueryQuery = (
+export type SignupCountsByStateQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -122,7 +123,7 @@ export type SignupCountsByStateQueryQuery = (
   ) }
 );
 
-export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
+export type SignupSpySignupChangesQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
@@ -130,7 +131,7 @@ export type SignupSpySignupChangesQueryQueryVariables = Types.Exact<{
 }>;
 
 
-export type SignupSpySignupChangesQueryQuery = (
+export type SignupSpySignupChangesQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -192,29 +193,31 @@ export const ReportsMenuQueryDocument = gql`
     `;
 
 /**
- * __useReportsMenuQueryQuery__
+ * __useReportsMenuQuery__
  *
- * To run a query within a React component, call `useReportsMenuQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useReportsMenuQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useReportsMenuQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReportsMenuQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useReportsMenuQueryQuery({
+ * const { data, loading, error } = useReportsMenuQuery({
  *   variables: {
  *   },
  * });
  */
-export function useReportsMenuQueryQuery(baseOptions?: Apollo.QueryHookOptions<ReportsMenuQueryQuery, ReportsMenuQueryQueryVariables>) {
-        return Apollo.useQuery<ReportsMenuQueryQuery, ReportsMenuQueryQueryVariables>(ReportsMenuQueryDocument, baseOptions);
+export function useReportsMenuQuery(baseOptions?: Apollo.QueryHookOptions<ReportsMenuQueryData, ReportsMenuQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReportsMenuQueryData, ReportsMenuQueryVariables>(ReportsMenuQueryDocument, options);
       }
-export function useReportsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReportsMenuQueryQuery, ReportsMenuQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ReportsMenuQueryQuery, ReportsMenuQueryQueryVariables>(ReportsMenuQueryDocument, baseOptions);
+export function useReportsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReportsMenuQueryData, ReportsMenuQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReportsMenuQueryData, ReportsMenuQueryVariables>(ReportsMenuQueryDocument, options);
         }
-export type ReportsMenuQueryQueryHookResult = ReturnType<typeof useReportsMenuQueryQuery>;
+export type ReportsMenuQueryHookResult = ReturnType<typeof useReportsMenuQuery>;
 export type ReportsMenuQueryLazyQueryHookResult = ReturnType<typeof useReportsMenuQueryLazyQuery>;
-export type ReportsMenuQueryQueryResult = Apollo.QueryResult<ReportsMenuQueryQuery, ReportsMenuQueryQueryVariables>;
+export type ReportsMenuQueryDataResult = Apollo.QueryResult<ReportsMenuQueryData, ReportsMenuQueryVariables>;
 export const AttendanceByPaymentAmountQueryDocument = gql`
     query AttendanceByPaymentAmountQuery {
   convention: assertConvention {
@@ -249,29 +252,31 @@ export const AttendanceByPaymentAmountQueryDocument = gql`
     ${PricingStructureFieldsFragmentDoc}`;
 
 /**
- * __useAttendanceByPaymentAmountQueryQuery__
+ * __useAttendanceByPaymentAmountQuery__
  *
- * To run a query within a React component, call `useAttendanceByPaymentAmountQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAttendanceByPaymentAmountQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAttendanceByPaymentAmountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAttendanceByPaymentAmountQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAttendanceByPaymentAmountQueryQuery({
+ * const { data, loading, error } = useAttendanceByPaymentAmountQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAttendanceByPaymentAmountQueryQuery(baseOptions?: Apollo.QueryHookOptions<AttendanceByPaymentAmountQueryQuery, AttendanceByPaymentAmountQueryQueryVariables>) {
-        return Apollo.useQuery<AttendanceByPaymentAmountQueryQuery, AttendanceByPaymentAmountQueryQueryVariables>(AttendanceByPaymentAmountQueryDocument, baseOptions);
+export function useAttendanceByPaymentAmountQuery(baseOptions?: Apollo.QueryHookOptions<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>(AttendanceByPaymentAmountQueryDocument, options);
       }
-export function useAttendanceByPaymentAmountQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AttendanceByPaymentAmountQueryQuery, AttendanceByPaymentAmountQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AttendanceByPaymentAmountQueryQuery, AttendanceByPaymentAmountQueryQueryVariables>(AttendanceByPaymentAmountQueryDocument, baseOptions);
+export function useAttendanceByPaymentAmountQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>(AttendanceByPaymentAmountQueryDocument, options);
         }
-export type AttendanceByPaymentAmountQueryQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQueryQuery>;
+export type AttendanceByPaymentAmountQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQuery>;
 export type AttendanceByPaymentAmountQueryLazyQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQueryLazyQuery>;
-export type AttendanceByPaymentAmountQueryQueryResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryQuery, AttendanceByPaymentAmountQueryQueryVariables>;
+export type AttendanceByPaymentAmountQueryDataResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>;
 export const EventProvidedTicketsQueryDocument = gql`
     query EventProvidedTicketsQuery {
   convention: assertConvention {
@@ -301,29 +306,31 @@ export const EventProvidedTicketsQueryDocument = gql`
     `;
 
 /**
- * __useEventProvidedTicketsQueryQuery__
+ * __useEventProvidedTicketsQuery__
  *
- * To run a query within a React component, call `useEventProvidedTicketsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProvidedTicketsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProvidedTicketsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventProvidedTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProvidedTicketsQueryQuery({
+ * const { data, loading, error } = useEventProvidedTicketsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useEventProvidedTicketsQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventProvidedTicketsQueryQuery, EventProvidedTicketsQueryQueryVariables>) {
-        return Apollo.useQuery<EventProvidedTicketsQueryQuery, EventProvidedTicketsQueryQueryVariables>(EventProvidedTicketsQueryDocument, baseOptions);
+export function useEventProvidedTicketsQuery(baseOptions?: Apollo.QueryHookOptions<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>(EventProvidedTicketsQueryDocument, options);
       }
-export function useEventProvidedTicketsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProvidedTicketsQueryQuery, EventProvidedTicketsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventProvidedTicketsQueryQuery, EventProvidedTicketsQueryQueryVariables>(EventProvidedTicketsQueryDocument, baseOptions);
+export function useEventProvidedTicketsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>(EventProvidedTicketsQueryDocument, options);
         }
-export type EventProvidedTicketsQueryQueryHookResult = ReturnType<typeof useEventProvidedTicketsQueryQuery>;
+export type EventProvidedTicketsQueryHookResult = ReturnType<typeof useEventProvidedTicketsQuery>;
 export type EventProvidedTicketsQueryLazyQueryHookResult = ReturnType<typeof useEventProvidedTicketsQueryLazyQuery>;
-export type EventProvidedTicketsQueryQueryResult = Apollo.QueryResult<EventProvidedTicketsQueryQuery, EventProvidedTicketsQueryQueryVariables>;
+export type EventProvidedTicketsQueryDataResult = Apollo.QueryResult<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>;
 export const EventsByChoiceQueryDocument = gql`
     query EventsByChoiceQuery {
   convention: assertConvention {
@@ -346,29 +353,31 @@ export const EventsByChoiceQueryDocument = gql`
     `;
 
 /**
- * __useEventsByChoiceQueryQuery__
+ * __useEventsByChoiceQuery__
  *
- * To run a query within a React component, call `useEventsByChoiceQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventsByChoiceQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventsByChoiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventsByChoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventsByChoiceQueryQuery({
+ * const { data, loading, error } = useEventsByChoiceQuery({
  *   variables: {
  *   },
  * });
  */
-export function useEventsByChoiceQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventsByChoiceQueryQuery, EventsByChoiceQueryQueryVariables>) {
-        return Apollo.useQuery<EventsByChoiceQueryQuery, EventsByChoiceQueryQueryVariables>(EventsByChoiceQueryDocument, baseOptions);
+export function useEventsByChoiceQuery(baseOptions?: Apollo.QueryHookOptions<EventsByChoiceQueryData, EventsByChoiceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventsByChoiceQueryData, EventsByChoiceQueryVariables>(EventsByChoiceQueryDocument, options);
       }
-export function useEventsByChoiceQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventsByChoiceQueryQuery, EventsByChoiceQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventsByChoiceQueryQuery, EventsByChoiceQueryQueryVariables>(EventsByChoiceQueryDocument, baseOptions);
+export function useEventsByChoiceQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventsByChoiceQueryData, EventsByChoiceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventsByChoiceQueryData, EventsByChoiceQueryVariables>(EventsByChoiceQueryDocument, options);
         }
-export type EventsByChoiceQueryQueryHookResult = ReturnType<typeof useEventsByChoiceQueryQuery>;
+export type EventsByChoiceQueryHookResult = ReturnType<typeof useEventsByChoiceQuery>;
 export type EventsByChoiceQueryLazyQueryHookResult = ReturnType<typeof useEventsByChoiceQueryLazyQuery>;
-export type EventsByChoiceQueryQueryResult = Apollo.QueryResult<EventsByChoiceQueryQuery, EventsByChoiceQueryQueryVariables>;
+export type EventsByChoiceQueryDataResult = Apollo.QueryResult<EventsByChoiceQueryData, EventsByChoiceQueryVariables>;
 export const SignupCountsByStateQueryDocument = gql`
     query SignupCountsByStateQuery {
   convention: assertConvention {
@@ -382,29 +391,31 @@ export const SignupCountsByStateQueryDocument = gql`
     `;
 
 /**
- * __useSignupCountsByStateQueryQuery__
+ * __useSignupCountsByStateQuery__
  *
- * To run a query within a React component, call `useSignupCountsByStateQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useSignupCountsByStateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSignupCountsByStateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignupCountsByStateQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSignupCountsByStateQueryQuery({
+ * const { data, loading, error } = useSignupCountsByStateQuery({
  *   variables: {
  *   },
  * });
  */
-export function useSignupCountsByStateQueryQuery(baseOptions?: Apollo.QueryHookOptions<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>) {
-        return Apollo.useQuery<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>(SignupCountsByStateQueryDocument, baseOptions);
+export function useSignupCountsByStateQuery(baseOptions?: Apollo.QueryHookOptions<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>(SignupCountsByStateQueryDocument, options);
       }
-export function useSignupCountsByStateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>) {
-          return Apollo.useLazyQuery<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>(SignupCountsByStateQueryDocument, baseOptions);
+export function useSignupCountsByStateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>(SignupCountsByStateQueryDocument, options);
         }
-export type SignupCountsByStateQueryQueryHookResult = ReturnType<typeof useSignupCountsByStateQueryQuery>;
+export type SignupCountsByStateQueryHookResult = ReturnType<typeof useSignupCountsByStateQuery>;
 export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useSignupCountsByStateQueryLazyQuery>;
-export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryQuery, SignupCountsByStateQueryQueryVariables>;
+export type SignupCountsByStateQueryDataResult = Apollo.QueryResult<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
     query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int, $sort: [SortInput!]) {
   convention: assertConvention {
@@ -474,16 +485,16 @@ export const SignupSpySignupChangesQueryDocument = gql`
     `;
 
 /**
- * __useSignupSpySignupChangesQueryQuery__
+ * __useSignupSpySignupChangesQuery__
  *
- * To run a query within a React component, call `useSignupSpySignupChangesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useSignupSpySignupChangesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSignupSpySignupChangesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignupSpySignupChangesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSignupSpySignupChangesQueryQuery({
+ * const { data, loading, error } = useSignupSpySignupChangesQuery({
  *   variables: {
  *      filters: // value for 'filters'
  *      page: // value for 'page'
@@ -492,12 +503,14 @@ export const SignupSpySignupChangesQueryDocument = gql`
  *   },
  * });
  */
-export function useSignupSpySignupChangesQueryQuery(baseOptions?: Apollo.QueryHookOptions<SignupSpySignupChangesQueryQuery, SignupSpySignupChangesQueryQueryVariables>) {
-        return Apollo.useQuery<SignupSpySignupChangesQueryQuery, SignupSpySignupChangesQueryQueryVariables>(SignupSpySignupChangesQueryDocument, baseOptions);
+export function useSignupSpySignupChangesQuery(baseOptions?: Apollo.QueryHookOptions<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>(SignupSpySignupChangesQueryDocument, options);
       }
-export function useSignupSpySignupChangesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupSpySignupChangesQueryQuery, SignupSpySignupChangesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<SignupSpySignupChangesQueryQuery, SignupSpySignupChangesQueryQueryVariables>(SignupSpySignupChangesQueryDocument, baseOptions);
+export function useSignupSpySignupChangesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>(SignupSpySignupChangesQueryDocument, options);
         }
-export type SignupSpySignupChangesQueryQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQueryQuery>;
+export type SignupSpySignupChangesQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQuery>;
 export type SignupSpySignupChangesQueryLazyQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQueryLazyQuery>;
-export type SignupSpySignupChangesQueryQueryResult = Apollo.QueryResult<SignupSpySignupChangesQueryQuery, SignupSpySignupChangesQueryQueryVariables>;
+export type SignupSpySignupChangesQueryDataResult = Apollo.QueryResult<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>;

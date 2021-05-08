@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type EventCategoryFieldsFragment = (
   { __typename: 'EventCategory' }
   & Pick<Types.EventCategory, 'id' | 'name' | 'team_member_name' | 'proposal_description' | 'scheduling_ui' | 'default_color' | 'signed_up_color' | 'full_color' | 'can_provide_tickets'>
@@ -21,10 +22,10 @@ export type EventCategoryFieldsFragment = (
   )> }
 );
 
-export type EventCategoryAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EventCategoryAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventCategoryAdminQueryQuery = (
+export type EventCategoryAdminQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -98,26 +99,28 @@ export const EventCategoryAdminQueryDocument = gql`
     ${EventCategoryFieldsFragmentDoc}`;
 
 /**
- * __useEventCategoryAdminQueryQuery__
+ * __useEventCategoryAdminQuery__
  *
- * To run a query within a React component, call `useEventCategoryAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventCategoryAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventCategoryAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventCategoryAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventCategoryAdminQueryQuery({
+ * const { data, loading, error } = useEventCategoryAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useEventCategoryAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventCategoryAdminQueryQuery, EventCategoryAdminQueryQueryVariables>) {
-        return Apollo.useQuery<EventCategoryAdminQueryQuery, EventCategoryAdminQueryQueryVariables>(EventCategoryAdminQueryDocument, baseOptions);
+export function useEventCategoryAdminQuery(baseOptions?: Apollo.QueryHookOptions<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
       }
-export function useEventCategoryAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventCategoryAdminQueryQuery, EventCategoryAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventCategoryAdminQueryQuery, EventCategoryAdminQueryQueryVariables>(EventCategoryAdminQueryDocument, baseOptions);
+export function useEventCategoryAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
         }
-export type EventCategoryAdminQueryQueryHookResult = ReturnType<typeof useEventCategoryAdminQueryQuery>;
+export type EventCategoryAdminQueryHookResult = ReturnType<typeof useEventCategoryAdminQuery>;
 export type EventCategoryAdminQueryLazyQueryHookResult = ReturnType<typeof useEventCategoryAdminQueryLazyQuery>;
-export type EventCategoryAdminQueryQueryResult = Apollo.QueryResult<EventCategoryAdminQueryQuery, EventCategoryAdminQueryQueryVariables>;
+export type EventCategoryAdminQueryDataResult = Apollo.QueryResult<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>;

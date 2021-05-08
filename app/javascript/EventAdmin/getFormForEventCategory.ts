@@ -1,8 +1,8 @@
-import { EventPageQueryQuery } from '../EventsApp/EventPage/queries.generated';
+import { EventPageQueryData } from '../EventsApp/EventPage/queries.generated';
 import { FormType, EventCategory } from '../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 
-const BLANK_FORM: NonNullable<EventPageQueryQuery['event']['form']> = {
+const BLANK_FORM: NonNullable<EventPageQueryData['event']['form']> = {
   __typename: 'Form',
   id: 0,
   title: '',

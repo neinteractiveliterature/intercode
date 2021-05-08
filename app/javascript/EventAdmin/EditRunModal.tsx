@@ -12,7 +12,7 @@ import {
   useUpdateRunMutation,
 } from './mutations.generated';
 import {
-  EventAdminEventsQueryQuery,
+  EventAdminEventsQueryData,
   EventFieldsFragment,
   RunFieldsFragment,
 } from './queries.generated';
@@ -76,7 +76,7 @@ function EditRunModal({
         },
       },
       update: (store, { data }) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+        const eventsData = store.readQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQuery,
         });
         const newRun = data?.createRun?.run;
@@ -119,7 +119,7 @@ function EditRunModal({
         },
       },
       update: (store) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+        const eventsData = store.readQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQuery,
         });
         if (!eventsData) {
