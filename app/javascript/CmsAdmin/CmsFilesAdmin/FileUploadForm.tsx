@@ -75,48 +75,44 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
     <div className="card">
       <div className="card-header">{t('cms.fileUploadForm.title', 'Upload a file')}</div>
       <div className="card-body">
-        <form onSubmit={uploadFormSubmitted}>
-          {file ? (
-            <div className="d-flex align-items-start">
-              <FilePreview
-                filename={(file || {}).name}
-                contentType={(file || {}).type}
-                url={imageUrl ?? undefined}
-              />
-              <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
-                {t('cms.fileUploadForm.clearFileButton', 'Clear')}
-              </button>
-            </div>
-          ) : (
-            <div className="form-group">
-              <div className="custom-file">
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                <input
-                  className="custom-file-input"
-                  type="file"
-                  onChange={uploadFileChanged}
-                  id={fileInputId}
-                  disabled={createInProgress}
-                />
-                <label className="custom-file-label" htmlFor={fileInputId} aria-hidden>
-                  {t('cms.fileUploadForm.fileInputLabel', 'Choose a file...')}
-                </label>
-              </div>
-            </div>
-          )}
-
-          <ErrorDisplay graphQLError={createError as ApolloError} />
-
-          <div className="mt-2">
+        {file ? (
+          <div className="d-flex align-items-start">
+            <FilePreview
+              filename={(file || {}).name}
+              contentType={(file || {}).type}
+              url={imageUrl ?? undefined}
+            />
+            <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
+              {t('cms.fileUploadForm.clearFileButton', 'Clear')}
+            </button>
+          </div>
+        ) : (
+          <div className="form-group">
+            <label className="form-label" htmlFor={fileInputId} aria-hidden>
+              {t('cms.fileUploadForm.fileInputLabel', 'File to upload')}
+            </label>
             <input
-              type="submit"
-              className="btn btn-primary me-4"
-              disabled={!file || createInProgress}
-              value={t<string>('cms.fileUploadForm.uploadFileButton', 'Upload')}
-              aria-label={t('cms.fileUploadForm.uploadFileButton', 'Upload')}
+              className="form-control"
+              type="file"
+              onChange={uploadFileChanged}
+              id={fileInputId}
+              disabled={createInProgress}
             />
           </div>
-        </form>
+        )}
+
+        <ErrorDisplay graphQLError={createError as ApolloError} />
+
+        <div className="mt-2">
+          <button
+            type="submit"
+            onClick={uploadFormSubmitted}
+            className="btn btn-primary me-4"
+            disabled={!file || createInProgress}
+          >
+            {t('cms.fileUploadForm.uploadFileButton', 'Upload')}
+          </button>
+        </div>
       </div>
     </div>
   );

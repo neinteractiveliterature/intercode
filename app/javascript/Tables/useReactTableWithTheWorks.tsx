@@ -51,12 +51,7 @@ const IndeterminateCheckbox = React.forwardRef<
 
   return (
     <>
-      <input
-        type="checkbox"
-        className="custom-control custom-checkbox"
-        ref={resolvedRef}
-        {...rest}
-      />
+      <input type="checkbox" className="form-check" ref={resolvedRef} {...rest} />
     </>
   );
 });
