@@ -87,15 +87,15 @@ function ReactTableWithTheWorks<
   }, [pageIndex]);
 
   return (
-    <div
-      {...mergeProps(getTableProps(), {
-        className: classNames(
-          'table react-table table-striped table-highlight table-borderless border',
-          { 'table-hover': onClickRow != null },
-        ),
-      })}
-    >
-      <div style={{ overflowX: 'auto' }}>
+    <div className="mb-3 border">
+      <div
+        {...mergeProps(getTableProps(), {
+          className: classNames(
+            'table react-table table-striped table-highlight table-borderless mb-0',
+            { 'table-hover': onClickRow != null },
+          ),
+        })}
+      >
         <div className="thead">
           {headerGroups.map((headerGroup) => (
             <React.Fragment key={headerGroup.getHeaderGroupProps().key}>

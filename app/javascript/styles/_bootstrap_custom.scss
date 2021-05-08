@@ -2,7 +2,7 @@ $navbar-inverse-color: rgba(white, 0.85);
 $navbar-inverse-hover-color: white;
 $enable-responsive-font-sizes: true;
 
-$theme-colors: (
+$custom-colors: (
   "intercode-blue": #3b5998,
   "medium-light": #E0E1E2,
 );
@@ -29,3 +29,5 @@ $theme-colors: (
 
 // Reset and dependencies
 @import '~bootstrap/scss/bootstrap';
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
