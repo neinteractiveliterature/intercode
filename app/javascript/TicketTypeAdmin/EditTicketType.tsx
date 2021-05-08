@@ -7,12 +7,12 @@ import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { useAdminTicketTypesQueryQuery } from './queries.generated';
+import { useAdminTicketTypesQuery } from './queries.generated';
 import { useUpdateTicketTypeMutation } from './mutations.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useAdminTicketTypesQueryQuery,
+  useAdminTicketTypesQuery,
   (data, id) => data.convention.ticket_types.find((tt) => tt.id.toString() === id),
   function EditTicketTypeForm({
     value: initialTicketType,

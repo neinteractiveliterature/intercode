@@ -12,9 +12,9 @@ import { useDeleteMutation } from '../MutationUtils';
 import useModal from '../ModalDialogs/useModal';
 import NewFormModal from './NewFormModal';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { FormAdminQueryQuery, useFormAdminQueryQuery } from './queries.generated';
+import { FormAdminQueryData, useFormAdminQuery } from './queries.generated';
 
-function describeFormUsers(form: FormAdminQueryQuery['convention']['forms'][0]) {
+function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
     ...form.user_con_profile_conventions
       .map((convention) => `User profile form for ${convention.name}`)
@@ -28,7 +28,7 @@ function describeFormUsers(form: FormAdminQueryQuery['convention']['forms'][0]) 
   ];
 }
 
-export default LoadQueryWrapper(useFormAdminQueryQuery, function FormAdminIndex({ data }) {
+export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ data }) {
   const confirm = useConfirm();
   const deleteForm = useDeleteMutation(DeleteForm, {
     query: FormAdminQuery,

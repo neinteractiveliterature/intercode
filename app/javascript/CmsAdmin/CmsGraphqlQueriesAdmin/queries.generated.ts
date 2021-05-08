@@ -3,15 +3,16 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CmsGraphqlQueryFieldsFragment = (
   { __typename: 'CmsGraphqlQuery' }
   & Pick<Types.CmsGraphqlQuery, 'id' | 'identifier' | 'query' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>
 );
 
-export type CmsGraphqlQueriesQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsGraphqlQueriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsGraphqlQueriesQueryQuery = (
+export type CmsGraphqlQueriesQueryData = (
   { __typename: 'Query' }
   & { cmsGraphqlQueries: Array<(
     { __typename: 'CmsGraphqlQuery' }
@@ -46,26 +47,28 @@ export const CmsGraphqlQueriesQueryDocument = gql`
     ${CmsGraphqlQueryFieldsFragmentDoc}`;
 
 /**
- * __useCmsGraphqlQueriesQueryQuery__
+ * __useCmsGraphqlQueriesQuery__
  *
- * To run a query within a React component, call `useCmsGraphqlQueriesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsGraphqlQueriesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsGraphqlQueriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsGraphqlQueriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsGraphqlQueriesQueryQuery({
+ * const { data, loading, error } = useCmsGraphqlQueriesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsGraphqlQueriesQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsGraphqlQueriesQueryQuery, CmsGraphqlQueriesQueryQueryVariables>) {
-        return Apollo.useQuery<CmsGraphqlQueriesQueryQuery, CmsGraphqlQueriesQueryQueryVariables>(CmsGraphqlQueriesQueryDocument, baseOptions);
+export function useCmsGraphqlQueriesQuery(baseOptions?: Apollo.QueryHookOptions<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
       }
-export function useCmsGraphqlQueriesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsGraphqlQueriesQueryQuery, CmsGraphqlQueriesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsGraphqlQueriesQueryQuery, CmsGraphqlQueriesQueryQueryVariables>(CmsGraphqlQueriesQueryDocument, baseOptions);
+export function useCmsGraphqlQueriesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
         }
-export type CmsGraphqlQueriesQueryQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQueryQuery>;
+export type CmsGraphqlQueriesQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQuery>;
 export type CmsGraphqlQueriesQueryLazyQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQueryLazyQuery>;
-export type CmsGraphqlQueriesQueryQueryResult = Apollo.QueryResult<CmsGraphqlQueriesQueryQuery, CmsGraphqlQueriesQueryQueryVariables>;
+export type CmsGraphqlQueriesQueryDataResult = Apollo.QueryResult<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>;

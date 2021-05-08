@@ -10,7 +10,7 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import useModal from '../../ModalDialogs/useModal';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
-import { EventPageQueryQuery, EventPageQueryQueryVariables } from './queries.generated';
+import { EventPageQueryData, EventPageQueryVariables } from './queries.generated';
 import {
   useCreateMySignupMutation,
   useWithdrawMySignupMutation,
@@ -19,11 +19,11 @@ import {
 
 function updateCacheAfterSignup(
   cache: ApolloCache<any>,
-  event: EventPageQueryQuery['event'],
-  run: EventPageQueryQuery['event']['runs'][0],
-  signup: EventPageQueryQuery['event']['runs'][0]['my_signups'][0],
+  event: EventPageQueryData['event'],
+  run: EventPageQueryData['event']['runs'][0],
+  signup: EventPageQueryData['event']['runs'][0]['my_signups'][0],
 ) {
-  const data = cache.readQuery<EventPageQueryQuery, EventPageQueryQueryVariables>({
+  const data = cache.readQuery<EventPageQueryData, EventPageQueryVariables>({
     query: EventPageQuery,
     variables: { eventId: event.id },
   });
@@ -54,10 +54,10 @@ function updateCacheAfterSignup(
 }
 
 export type EventPageRunCardProps = {
-  event: EventPageQueryQuery['event'];
-  run: EventPageQueryQuery['event']['runs'][0];
-  myProfile: EventPageQueryQuery['myProfile'];
-  currentAbility: EventPageQueryQuery['currentAbility'];
+  event: EventPageQueryData['event'];
+  run: EventPageQueryData['event']['runs'][0];
+  myProfile: EventPageQueryData['myProfile'];
+  currentAbility: EventPageQueryData['currentAbility'];
 };
 
 function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRunCardProps) {

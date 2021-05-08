@@ -1,5 +1,5 @@
 import { notEmpty } from '../../ValueUtils';
-import { EventPageQueryQuery, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
+import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 
 type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
@@ -62,7 +62,7 @@ function buildBucketSignupOption(
 }
 
 function buildNoPreferenceOptions(
-  event: Pick<EventPageQueryQuery['event'], 'registration_policy'>,
+  event: Pick<EventPageQueryData['event'], 'registration_policy'>,
 ): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];

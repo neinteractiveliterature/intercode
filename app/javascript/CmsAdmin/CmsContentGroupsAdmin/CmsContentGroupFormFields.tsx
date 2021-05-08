@@ -11,7 +11,7 @@ import {
   permissionEquals,
   getPermissionNamesForModelType,
 } from '../../Permissions/PermissionUtils';
-import { CmsContentGroupsAdminQueryQuery } from './queries.generated';
+import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import ChangeSet from '../../ChangeSet';
 import { PermissionedModelTypeIndicator } from '../../graphqlTypes.generated';
 import { notEmpty } from '../../ValueUtils';
@@ -21,7 +21,7 @@ const ContentGroupPermissionNames = getPermissionNamesForModelType(
   PermissionedModelTypeIndicator.CmsContentGroup,
 );
 
-type ContentGroupTypeWithRequiredId = CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0];
+type ContentGroupTypeWithRequiredId = CmsContentGroupsAdminQueryData['cmsContentGroups'][0];
 type ContentGroupType = Omit<ContentGroupTypeWithRequiredId, 'id'> &
   Partial<Pick<ContentGroupTypeWithRequiredId, 'id'>>;
 type PermissionType = ContentGroupType['permissions'][0];
@@ -29,7 +29,7 @@ type RoleType = PermissionType['role'];
 
 export type CmsContentGroupFormFieldsProps = {
   contentGroup: ContentGroupType;
-  convention: CmsContentGroupsAdminQueryQuery['convention'];
+  convention: CmsContentGroupsAdminQueryData['convention'];
   setContentGroup?: React.Dispatch<ContentGroupType>;
   disabled?: boolean;
   readOnly?: boolean;

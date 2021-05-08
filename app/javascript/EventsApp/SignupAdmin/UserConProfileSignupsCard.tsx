@@ -12,16 +12,13 @@ import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import AddToCalendarDropdown from './AddToCalendarDropdown';
 import AppRootContext from '../../AppRootContext';
-import {
-  UserConProfileSignupsQueryQuery,
-  useUserConProfileSignupsQueryQuery,
-} from './queries.generated';
+import { UserConProfileSignupsQueryData, useUserConProfileSignupsQuery } from './queries.generated';
 import { useWithdrawAllUserConProfileSignupsMutation } from './mutations.generated';
 import { joinReact } from '../../RenderingUtils';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 
 function filterAndSortSignups(
-  signups: UserConProfileSignupsQueryQuery['userConProfile']['signups'],
+  signups: UserConProfileSignupsQueryData['userConProfile']['signups'],
 ) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
 
@@ -35,7 +32,7 @@ export type UserConProfileSignupsCardProps = {
 function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCardProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const { data, error, loading } = useUserConProfileSignupsQueryQuery({
+  const { data, error, loading } = useUserConProfileSignupsQuery({
     variables: { id: userConProfileId },
   });
   const [withdrawAllSignups] = useWithdrawAllUserConProfileSignupsMutation();
@@ -76,9 +73,7 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
     <Link to={buildEventUrl(event)}>{event.title}</Link>
   );
 
-  const renderSignup = (
-    signup: UserConProfileSignupsQueryQuery['userConProfile']['signups'][0],
-  ) => (
+  const renderSignup = (signup: UserConProfileSignupsQueryData['userConProfile']['signups'][0]) => (
     <li className="list-group-item" key={signup.id}>
       <ul className="list-unstyled">
         <li>
@@ -105,8 +100,8 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
   );
 
   const renderUnSignedUpTeamMemberEvents = (
-    userConProfile: UserConProfileSignupsQueryQuery['userConProfile'],
-    myProfile: UserConProfileSignupsQueryQuery['myProfile'],
+    userConProfile: UserConProfileSignupsQueryData['userConProfile'],
+    myProfile: UserConProfileSignupsQueryData['myProfile'],
   ) => {
     if (unSignedUpEvents.length === 0) {
       return null;

@@ -5,12 +5,13 @@ import { ConventionAdminConventionFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ConventionAdminConventionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type UpdateConventionMutationVariables = Types.Exact<{
   input: Types.UpdateConventionInput;
 }>;
 
 
-export type UpdateConventionMutation = (
+export type UpdateConventionMutationData = (
   { __typename: 'Mutation' }
   & { updateConvention?: Types.Maybe<(
     { __typename: 'UpdateConventionPayload' }
@@ -27,7 +28,7 @@ export type CreateConventionStripeAccountMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConventionStripeAccountMutation = (
+export type CreateConventionStripeAccountMutationData = (
   { __typename: 'Mutation' }
   & { createConventionStripeAccount?: Types.Maybe<(
     { __typename: 'CreateConventionStripeAccountPayload' }
@@ -49,7 +50,7 @@ export const UpdateConventionDocument = gql`
   }
 }
     ${ConventionAdminConventionFieldsFragmentDoc}`;
-export type UpdateConventionMutationFn = Apollo.MutationFunction<UpdateConventionMutation, UpdateConventionMutationVariables>;
+export type UpdateConventionMutationFn = Apollo.MutationFunction<UpdateConventionMutationData, UpdateConventionMutationVariables>;
 
 /**
  * __useUpdateConventionMutation__
@@ -68,12 +69,13 @@ export type UpdateConventionMutationFn = Apollo.MutationFunction<UpdateConventio
  *   },
  * });
  */
-export function useUpdateConventionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateConventionMutation, UpdateConventionMutationVariables>) {
-        return Apollo.useMutation<UpdateConventionMutation, UpdateConventionMutationVariables>(UpdateConventionDocument, baseOptions);
+export function useUpdateConventionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateConventionMutationData, UpdateConventionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateConventionMutationData, UpdateConventionMutationVariables>(UpdateConventionDocument, options);
       }
 export type UpdateConventionMutationHookResult = ReturnType<typeof useUpdateConventionMutation>;
-export type UpdateConventionMutationResult = Apollo.MutationResult<UpdateConventionMutation>;
-export type UpdateConventionMutationOptions = Apollo.BaseMutationOptions<UpdateConventionMutation, UpdateConventionMutationVariables>;
+export type UpdateConventionMutationResult = Apollo.MutationResult<UpdateConventionMutationData>;
+export type UpdateConventionMutationOptions = Apollo.BaseMutationOptions<UpdateConventionMutationData, UpdateConventionMutationVariables>;
 export const CreateConventionStripeAccountDocument = gql`
     mutation CreateConventionStripeAccount($baseUrl: String!) {
   createConventionStripeAccount(input: {}) {
@@ -84,7 +86,7 @@ export const CreateConventionStripeAccountDocument = gql`
   }
 }
     `;
-export type CreateConventionStripeAccountMutationFn = Apollo.MutationFunction<CreateConventionStripeAccountMutation, CreateConventionStripeAccountMutationVariables>;
+export type CreateConventionStripeAccountMutationFn = Apollo.MutationFunction<CreateConventionStripeAccountMutationData, CreateConventionStripeAccountMutationVariables>;
 
 /**
  * __useCreateConventionStripeAccountMutation__
@@ -103,9 +105,10 @@ export type CreateConventionStripeAccountMutationFn = Apollo.MutationFunction<Cr
  *   },
  * });
  */
-export function useCreateConventionStripeAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateConventionStripeAccountMutation, CreateConventionStripeAccountMutationVariables>) {
-        return Apollo.useMutation<CreateConventionStripeAccountMutation, CreateConventionStripeAccountMutationVariables>(CreateConventionStripeAccountDocument, baseOptions);
+export function useCreateConventionStripeAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateConventionStripeAccountMutationData, CreateConventionStripeAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateConventionStripeAccountMutationData, CreateConventionStripeAccountMutationVariables>(CreateConventionStripeAccountDocument, options);
       }
 export type CreateConventionStripeAccountMutationHookResult = ReturnType<typeof useCreateConventionStripeAccountMutation>;
-export type CreateConventionStripeAccountMutationResult = Apollo.MutationResult<CreateConventionStripeAccountMutation>;
-export type CreateConventionStripeAccountMutationOptions = Apollo.BaseMutationOptions<CreateConventionStripeAccountMutation, CreateConventionStripeAccountMutationVariables>;
+export type CreateConventionStripeAccountMutationResult = Apollo.MutationResult<CreateConventionStripeAccountMutationData>;
+export type CreateConventionStripeAccountMutationOptions = Apollo.BaseMutationOptions<CreateConventionStripeAccountMutationData, CreateConventionStripeAccountMutationVariables>;

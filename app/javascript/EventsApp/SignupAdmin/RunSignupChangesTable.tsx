@@ -17,14 +17,14 @@ import TableHeader from '../../Tables/TableHeader';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
-import { RunSignupChangesQueryQuery, useRunSignupChangesQueryQuery } from './queries.generated';
+import { RunSignupChangesQueryData, useRunSignupChangesQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
 
-type SignupChangeType = RunSignupChangesQueryQuery['run']['signup_changes_paginated']['entries'][0];
+type SignupChangeType = RunSignupChangesQueryData['run']['signup_changes_paginated']['entries'][0];
 
 const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => [
   {
@@ -80,7 +80,7 @@ function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
     getData: ({ data }) => data.run.signup_changes_paginated.entries,
     getPages: ({ data }) => data.run.signup_changes_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
-    useQuery: useRunSignupChangesQueryQuery,
+    useQuery: useRunSignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
     variables: { runId },
   });

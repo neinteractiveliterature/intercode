@@ -9,11 +9,11 @@ import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsPagesAdminQueryQuery } from './queries.generated';
+import { useCmsPagesAdminQuery } from './queries.generated';
 import { useUpdatePageMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useCmsPagesAdminQueryQuery,
+  useCmsPagesAdminQuery,
   (data, id) => data.cmsPages.find((p) => id === p.id.toString()),
   function EditCmsPageForm({ value: initialPage, data: { cmsLayouts, cmsParent } }) {
     const history = useHistory();

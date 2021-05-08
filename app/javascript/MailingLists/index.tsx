@@ -8,10 +8,10 @@ import WaitlistMailingLists from './WaitlistMailingLists';
 import WhosFree from './WhosFree';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useMailingListsMenuQueryQuery } from './queries.generated';
+import { useMailingListsMenuQuery } from './queries.generated';
 
 const MailingListsMenuWrapper = LoadQueryWrapper(
-  useMailingListsMenuQueryQuery,
+  useMailingListsMenuQuery,
   function MailingListsMenu({ data }) {
     const authorizationWarning = useAuthorizationRequired('can_read_any_mailing_list');
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormEditorQueryQuery } from './queries.generated';
+import { FormEditorQueryData } from './queries.generated';
 import { FormType, TimezoneMode } from '../graphqlTypes.generated';
 import type {
   AgeRestrictionsFormItem,
@@ -18,8 +18,8 @@ import type {
 } from './FormItemUtils';
 import FormTypes from '../../../config/form_types.json';
 
-export type FormEditorForm = Omit<FormEditorQueryQuery['form'], 'form_sections'> & {
-  form_sections: (Omit<FormEditorQueryQuery['form']['form_sections'][0], 'form_items'> & {
+export type FormEditorForm = Omit<FormEditorQueryData['form'], 'form_sections'> & {
+  form_sections: (Omit<FormEditorQueryData['form']['form_sections'][0], 'form_items'> & {
     form_items: TypedFormItem[];
   })[];
 };
@@ -36,7 +36,7 @@ export type FormEditorFormItem =
   | ParsedFormItemWithGeneratedIds<WithRequiredProperties<TimespanFormItem>>;
 
 export type FormEditorContextValue = {
-  convention: NonNullable<FormEditorQueryQuery['convention']>;
+  convention: NonNullable<FormEditorQueryData['convention']>;
   currentSection?: FormEditorForm['form_sections'][0];
   form: FormEditorForm;
   formType: FormTypeDefinition;

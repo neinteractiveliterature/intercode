@@ -8,17 +8,17 @@ import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { useCmsGraphqlQueriesQueryQuery } from './queries.generated';
-import { useUpdateCmsGraphqlQueryMutation } from './mutations.generated';
+import { useCmsGraphqlQueriesQuery } from './queries.generated';
+import { useUpdateCmsGraphqlQuery } from './mutations.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useCmsGraphqlQueriesQueryQuery,
+  useCmsGraphqlQueriesQuery,
   (data, id) => data?.cmsGraphqlQueries.find((q) => q.id.toString() === id),
   function EditCmsGraphqlQuery({ value: initialQuery }) {
     const history = useHistory();
     const [query, setQuery] = useState(initialQuery);
-    const [updateMutate] = useUpdateCmsGraphqlQueryMutation();
+    const [updateMutate] = useUpdateCmsGraphqlQuery();
     const apolloClient = useApolloClient();
 
     const saveClicked = async () => {

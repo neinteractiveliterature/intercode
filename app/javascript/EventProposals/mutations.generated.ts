@@ -5,13 +5,14 @@ import { EventProposalFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateEventProposalMutationVariables = Types.Exact<{
   cloneEventProposalId?: Types.Maybe<Types.Scalars['Int']>;
   eventCategoryId: Types.Scalars['Int'];
 }>;
 
 
-export type CreateEventProposalMutation = (
+export type CreateEventProposalMutationData = (
   { __typename: 'Mutation' }
   & { createEventProposal?: Types.Maybe<(
     { __typename: 'CreateEventProposalPayload' }
@@ -27,7 +28,7 @@ export type UpdateEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventProposalMutation = (
+export type UpdateEventProposalMutationData = (
   { __typename: 'Mutation' }
   & { updateEventProposal?: Types.Maybe<(
     { __typename: 'UpdateEventProposalPayload' }
@@ -44,7 +45,7 @@ export type DeleteEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteEventProposalMutation = (
+export type DeleteEventProposalMutationData = (
   { __typename: 'Mutation' }
   & { deleteEventProposal?: Types.Maybe<(
     { __typename: 'DeleteEventProposalPayload' }
@@ -57,7 +58,7 @@ export type SubmitEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type SubmitEventProposalMutation = (
+export type SubmitEventProposalMutationData = (
   { __typename: 'Mutation' }
   & { submitEventProposal?: Types.Maybe<(
     { __typename: 'SubmitEventProposalPayload' }
@@ -76,7 +77,7 @@ export type TransitionEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type TransitionEventProposalMutation = (
+export type TransitionEventProposalMutationData = (
   { __typename: 'Mutation' }
   & { transitionEventProposal?: Types.Maybe<(
     { __typename: 'TransitionEventProposalPayload' }
@@ -94,7 +95,7 @@ export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventProposalAdminNotesMutation = (
+export type UpdateEventProposalAdminNotesMutationData = (
   { __typename: 'Mutation' }
   & { updateEventProposalAdminNotes?: Types.Maybe<(
     { __typename: 'UpdateEventProposalAdminNotesPayload' }
@@ -118,7 +119,7 @@ export const CreateEventProposalDocument = gql`
   }
 }
     `;
-export type CreateEventProposalMutationFn = Apollo.MutationFunction<CreateEventProposalMutation, CreateEventProposalMutationVariables>;
+export type CreateEventProposalMutationFn = Apollo.MutationFunction<CreateEventProposalMutationData, CreateEventProposalMutationVariables>;
 
 /**
  * __useCreateEventProposalMutation__
@@ -138,12 +139,13 @@ export type CreateEventProposalMutationFn = Apollo.MutationFunction<CreateEventP
  *   },
  * });
  */
-export function useCreateEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventProposalMutation, CreateEventProposalMutationVariables>) {
-        return Apollo.useMutation<CreateEventProposalMutation, CreateEventProposalMutationVariables>(CreateEventProposalDocument, baseOptions);
+export function useCreateEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventProposalMutationData, CreateEventProposalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEventProposalMutationData, CreateEventProposalMutationVariables>(CreateEventProposalDocument, options);
       }
 export type CreateEventProposalMutationHookResult = ReturnType<typeof useCreateEventProposalMutation>;
-export type CreateEventProposalMutationResult = Apollo.MutationResult<CreateEventProposalMutation>;
-export type CreateEventProposalMutationOptions = Apollo.BaseMutationOptions<CreateEventProposalMutation, CreateEventProposalMutationVariables>;
+export type CreateEventProposalMutationResult = Apollo.MutationResult<CreateEventProposalMutationData>;
+export type CreateEventProposalMutationOptions = Apollo.BaseMutationOptions<CreateEventProposalMutationData, CreateEventProposalMutationVariables>;
 export const UpdateEventProposalDocument = gql`
     mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   updateEventProposal(input: $input) {
@@ -154,7 +156,7 @@ export const UpdateEventProposalDocument = gql`
   }
 }
     ${EventProposalFieldsFragmentDoc}`;
-export type UpdateEventProposalMutationFn = Apollo.MutationFunction<UpdateEventProposalMutation, UpdateEventProposalMutationVariables>;
+export type UpdateEventProposalMutationFn = Apollo.MutationFunction<UpdateEventProposalMutationData, UpdateEventProposalMutationVariables>;
 
 /**
  * __useUpdateEventProposalMutation__
@@ -173,12 +175,13 @@ export type UpdateEventProposalMutationFn = Apollo.MutationFunction<UpdateEventP
  *   },
  * });
  */
-export function useUpdateEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventProposalMutation, UpdateEventProposalMutationVariables>) {
-        return Apollo.useMutation<UpdateEventProposalMutation, UpdateEventProposalMutationVariables>(UpdateEventProposalDocument, baseOptions);
+export function useUpdateEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventProposalMutationData, UpdateEventProposalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventProposalMutationData, UpdateEventProposalMutationVariables>(UpdateEventProposalDocument, options);
       }
 export type UpdateEventProposalMutationHookResult = ReturnType<typeof useUpdateEventProposalMutation>;
-export type UpdateEventProposalMutationResult = Apollo.MutationResult<UpdateEventProposalMutation>;
-export type UpdateEventProposalMutationOptions = Apollo.BaseMutationOptions<UpdateEventProposalMutation, UpdateEventProposalMutationVariables>;
+export type UpdateEventProposalMutationResult = Apollo.MutationResult<UpdateEventProposalMutationData>;
+export type UpdateEventProposalMutationOptions = Apollo.BaseMutationOptions<UpdateEventProposalMutationData, UpdateEventProposalMutationVariables>;
 export const DeleteEventProposalDocument = gql`
     mutation DeleteEventProposal($id: Int!) {
   deleteEventProposal(input: {id: $id}) {
@@ -186,7 +189,7 @@ export const DeleteEventProposalDocument = gql`
   }
 }
     `;
-export type DeleteEventProposalMutationFn = Apollo.MutationFunction<DeleteEventProposalMutation, DeleteEventProposalMutationVariables>;
+export type DeleteEventProposalMutationFn = Apollo.MutationFunction<DeleteEventProposalMutationData, DeleteEventProposalMutationVariables>;
 
 /**
  * __useDeleteEventProposalMutation__
@@ -205,12 +208,13 @@ export type DeleteEventProposalMutationFn = Apollo.MutationFunction<DeleteEventP
  *   },
  * });
  */
-export function useDeleteEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventProposalMutation, DeleteEventProposalMutationVariables>) {
-        return Apollo.useMutation<DeleteEventProposalMutation, DeleteEventProposalMutationVariables>(DeleteEventProposalDocument, baseOptions);
+export function useDeleteEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventProposalMutationData, DeleteEventProposalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEventProposalMutationData, DeleteEventProposalMutationVariables>(DeleteEventProposalDocument, options);
       }
 export type DeleteEventProposalMutationHookResult = ReturnType<typeof useDeleteEventProposalMutation>;
-export type DeleteEventProposalMutationResult = Apollo.MutationResult<DeleteEventProposalMutation>;
-export type DeleteEventProposalMutationOptions = Apollo.BaseMutationOptions<DeleteEventProposalMutation, DeleteEventProposalMutationVariables>;
+export type DeleteEventProposalMutationResult = Apollo.MutationResult<DeleteEventProposalMutationData>;
+export type DeleteEventProposalMutationOptions = Apollo.BaseMutationOptions<DeleteEventProposalMutationData, DeleteEventProposalMutationVariables>;
 export const SubmitEventProposalDocument = gql`
     mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
   submitEventProposal(input: $input) {
@@ -221,7 +225,7 @@ export const SubmitEventProposalDocument = gql`
   }
 }
     ${EventProposalFieldsFragmentDoc}`;
-export type SubmitEventProposalMutationFn = Apollo.MutationFunction<SubmitEventProposalMutation, SubmitEventProposalMutationVariables>;
+export type SubmitEventProposalMutationFn = Apollo.MutationFunction<SubmitEventProposalMutationData, SubmitEventProposalMutationVariables>;
 
 /**
  * __useSubmitEventProposalMutation__
@@ -240,12 +244,13 @@ export type SubmitEventProposalMutationFn = Apollo.MutationFunction<SubmitEventP
  *   },
  * });
  */
-export function useSubmitEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<SubmitEventProposalMutation, SubmitEventProposalMutationVariables>) {
-        return Apollo.useMutation<SubmitEventProposalMutation, SubmitEventProposalMutationVariables>(SubmitEventProposalDocument, baseOptions);
+export function useSubmitEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<SubmitEventProposalMutationData, SubmitEventProposalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitEventProposalMutationData, SubmitEventProposalMutationVariables>(SubmitEventProposalDocument, options);
       }
 export type SubmitEventProposalMutationHookResult = ReturnType<typeof useSubmitEventProposalMutation>;
-export type SubmitEventProposalMutationResult = Apollo.MutationResult<SubmitEventProposalMutation>;
-export type SubmitEventProposalMutationOptions = Apollo.BaseMutationOptions<SubmitEventProposalMutation, SubmitEventProposalMutationVariables>;
+export type SubmitEventProposalMutationResult = Apollo.MutationResult<SubmitEventProposalMutationData>;
+export type SubmitEventProposalMutationOptions = Apollo.BaseMutationOptions<SubmitEventProposalMutationData, SubmitEventProposalMutationVariables>;
 export const TransitionEventProposalDocument = gql`
     mutation TransitionEventProposal($eventProposalId: Int!, $status: String!, $dropEvent: Boolean) {
   transitionEventProposal(
@@ -258,7 +263,7 @@ export const TransitionEventProposalDocument = gql`
   }
 }
     ${EventProposalFieldsFragmentDoc}`;
-export type TransitionEventProposalMutationFn = Apollo.MutationFunction<TransitionEventProposalMutation, TransitionEventProposalMutationVariables>;
+export type TransitionEventProposalMutationFn = Apollo.MutationFunction<TransitionEventProposalMutationData, TransitionEventProposalMutationVariables>;
 
 /**
  * __useTransitionEventProposalMutation__
@@ -279,12 +284,13 @@ export type TransitionEventProposalMutationFn = Apollo.MutationFunction<Transiti
  *   },
  * });
  */
-export function useTransitionEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<TransitionEventProposalMutation, TransitionEventProposalMutationVariables>) {
-        return Apollo.useMutation<TransitionEventProposalMutation, TransitionEventProposalMutationVariables>(TransitionEventProposalDocument, baseOptions);
+export function useTransitionEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<TransitionEventProposalMutationData, TransitionEventProposalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TransitionEventProposalMutationData, TransitionEventProposalMutationVariables>(TransitionEventProposalDocument, options);
       }
 export type TransitionEventProposalMutationHookResult = ReturnType<typeof useTransitionEventProposalMutation>;
-export type TransitionEventProposalMutationResult = Apollo.MutationResult<TransitionEventProposalMutation>;
-export type TransitionEventProposalMutationOptions = Apollo.BaseMutationOptions<TransitionEventProposalMutation, TransitionEventProposalMutationVariables>;
+export type TransitionEventProposalMutationResult = Apollo.MutationResult<TransitionEventProposalMutationData>;
+export type TransitionEventProposalMutationOptions = Apollo.BaseMutationOptions<TransitionEventProposalMutationData, TransitionEventProposalMutationVariables>;
 export const UpdateEventProposalAdminNotesDocument = gql`
     mutation UpdateEventProposalAdminNotes($eventProposalId: Int!, $adminNotes: String!) {
   updateEventProposalAdminNotes(
@@ -297,7 +303,7 @@ export const UpdateEventProposalAdminNotesDocument = gql`
   }
 }
     ${EventProposalFieldsFragmentDoc}`;
-export type UpdateEventProposalAdminNotesMutationFn = Apollo.MutationFunction<UpdateEventProposalAdminNotesMutation, UpdateEventProposalAdminNotesMutationVariables>;
+export type UpdateEventProposalAdminNotesMutationFn = Apollo.MutationFunction<UpdateEventProposalAdminNotesMutationData, UpdateEventProposalAdminNotesMutationVariables>;
 
 /**
  * __useUpdateEventProposalAdminNotesMutation__
@@ -317,9 +323,10 @@ export type UpdateEventProposalAdminNotesMutationFn = Apollo.MutationFunction<Up
  *   },
  * });
  */
-export function useUpdateEventProposalAdminNotesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventProposalAdminNotesMutation, UpdateEventProposalAdminNotesMutationVariables>) {
-        return Apollo.useMutation<UpdateEventProposalAdminNotesMutation, UpdateEventProposalAdminNotesMutationVariables>(UpdateEventProposalAdminNotesDocument, baseOptions);
+export function useUpdateEventProposalAdminNotesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventProposalAdminNotesMutationData, UpdateEventProposalAdminNotesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventProposalAdminNotesMutationData, UpdateEventProposalAdminNotesMutationVariables>(UpdateEventProposalAdminNotesDocument, options);
       }
 export type UpdateEventProposalAdminNotesMutationHookResult = ReturnType<typeof useUpdateEventProposalAdminNotesMutation>;
-export type UpdateEventProposalAdminNotesMutationResult = Apollo.MutationResult<UpdateEventProposalAdminNotesMutation>;
-export type UpdateEventProposalAdminNotesMutationOptions = Apollo.BaseMutationOptions<UpdateEventProposalAdminNotesMutation, UpdateEventProposalAdminNotesMutationVariables>;
+export type UpdateEventProposalAdminNotesMutationResult = Apollo.MutationResult<UpdateEventProposalAdminNotesMutationData>;
+export type UpdateEventProposalAdminNotesMutationOptions = Apollo.BaseMutationOptions<UpdateEventProposalAdminNotesMutationData, UpdateEventProposalAdminNotesMutationVariables>;

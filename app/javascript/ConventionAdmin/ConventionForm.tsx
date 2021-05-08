@@ -10,11 +10,11 @@ import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import ConventionFormEmailSection from './ConventionFormEmailSection';
-import { ConventionAdminConventionQueryQuery } from './queries.generated';
+import { ConventionAdminConventionQueryData } from './queries.generated';
 import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
 export type ConventionFormConvention = Omit<
-  ConventionAdminConventionQueryQuery['convention'],
+  ConventionAdminConventionQueryData['convention'],
   'maximum_event_signups'
 > & {
   maximum_event_signups: EditingScheduledValue<MaximumEventSignupsValue>;
@@ -23,9 +23,9 @@ export type ConventionFormConvention = Omit<
 export type ConventionFormProps = {
   initialConvention: ConventionFormConvention;
   saveConvention: (convention: ConventionFormConvention) => Promise<void>;
-  cmsLayouts: ConventionAdminConventionQueryQuery['convention']['cms_layouts'];
-  pages: ConventionAdminConventionQueryQuery['convention']['pages'];
-  rootSite: ConventionAdminConventionQueryQuery['rootSite'];
+  cmsLayouts: ConventionAdminConventionQueryData['convention']['cms_layouts'];
+  pages: ConventionAdminConventionQueryData['convention']['pages'];
+  rootSite: ConventionAdminConventionQueryData['rootSite'];
 };
 
 function ConventionForm({

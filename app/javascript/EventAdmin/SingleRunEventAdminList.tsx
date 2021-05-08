@@ -14,7 +14,7 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
 import { timezoneNameForConvention } from '../TimeUtils';
-import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useEventAdminEventsQuery } from './queries.generated';
 import { useDropEventMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 
@@ -25,7 +25,7 @@ export type SingleRunEventAdminListProps = {
 function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListProps) {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
   const [eventCategory, sortedEvents] = useEventAdminCategory(
     data,
     loading,

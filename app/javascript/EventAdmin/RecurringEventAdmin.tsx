@@ -9,14 +9,14 @@ import useEventAdminCategory from './useEventAdminCategory';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useValueUnless from '../useValueUnless';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useEventAdminEventsQuery } from './queries.generated';
 
 export type RecurringEventAdminProps = {
   eventCategoryId: number;
 };
 
 function RecurringEventAdmin({ eventCategoryId }: RecurringEventAdminProps) {
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
   const [eventCategory, sortedEvents] = useEventAdminCategory(
     data,
     loading,

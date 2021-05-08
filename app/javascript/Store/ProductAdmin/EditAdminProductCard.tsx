@@ -14,7 +14,7 @@ import buildProductInput from '../buildProductInput';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import AppRootContext from '../../AppRootContext';
-import { AdminProductsQueryQuery } from '../queries.generated';
+import { AdminProductsQueryData } from '../queries.generated';
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations.generated';
 import { usePropertySetters } from '../../usePropertySetters';
 import { EditingProduct } from './EditingProductTypes';
@@ -24,7 +24,7 @@ import { PricingStrategy } from '../../graphqlTypes.generated';
 export type EditAdminProductCardProps = {
   initialProduct: EditingProduct;
   close: () => void;
-  ticketTypes: AdminProductsQueryQuery['convention']['ticket_types'];
+  ticketTypes: AdminProductsQueryData['convention']['ticket_types'];
 };
 
 function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps) {
@@ -88,12 +88,12 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
       await createProduct({
         variables: { product: productInput },
         update: (cache, result) => {
-          const data = cache.readQuery<AdminProductsQueryQuery>({ query: AdminProductsQuery });
+          const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQuery });
           const newProduct = result.data?.createProduct?.product;
           if (!data || !newProduct) {
             return;
           }
-          cache.writeQuery<AdminProductsQueryQuery>({
+          cache.writeQuery<AdminProductsQueryData>({
             query: AdminProductsQuery,
             data: {
               ...data,

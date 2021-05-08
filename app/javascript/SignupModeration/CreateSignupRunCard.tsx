@@ -7,7 +7,7 @@ import RunCard from '../EventsApp/EventPage/RunCard';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useAlert } from '../ModalDialogs/Alert';
 import LoadingIndicator from '../LoadingIndicator';
-import { useCreateSignupRunCardQueryQuery } from './queries.generated';
+import { useCreateSignupRunCardQuery } from './queries.generated';
 import { useCreateUserSignupMutation, useWithdrawUserSignupMutation } from './mutations.generated';
 
 export type CreateSignupRunCardProps = {
@@ -21,7 +21,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }: CreateSignupR
   const confirm = useConfirm();
   const alert = useAlert();
 
-  const { data, loading, error } = useCreateSignupRunCardQueryQuery({
+  const { data, loading, error } = useCreateSignupRunCardQuery({
     variables: { userConProfileId, eventId },
   });
 

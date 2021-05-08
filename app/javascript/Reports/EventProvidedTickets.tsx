@@ -9,12 +9,9 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import {
-  EventProvidedTicketsQueryQuery,
-  useEventProvidedTicketsQueryQuery,
-} from './queries.generated';
+import { EventProvidedTicketsQueryData, useEventProvidedTicketsQuery } from './queries.generated';
 
-function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryQuery }) {
+function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryData }) {
   const sortedRows = titleSort(
     data.convention.reports.event_provided_tickets,
     (row) => row.provided_by_event.title ?? '',
@@ -41,7 +38,7 @@ function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQuery
   );
 }
 
-function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryQuery }) {
+function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryData }) {
   const sortedRows = useMemo(() => {
     const unsortedRows = flatMap(
       data.convention.reports.event_provided_tickets,
@@ -73,40 +70,41 @@ function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryQ
   );
 }
 
-export default LoadQueryWrapper(useEventProvidedTicketsQueryQuery, function EventProvidedTickets({
-  data,
-}) {
-  const tabProps = useTabs([
-    {
-      id: 'by-event',
-      name: 'By event',
-      renderContent: () => <EventProvidedTicketsByEvent data={data} />,
-    },
-    {
-      id: 'by-user',
-      name: 'By user',
-      renderContent: () => <EventProvidedTicketsByUser data={data} />,
-    },
-  ]);
+export default LoadQueryWrapper(
+  useEventProvidedTicketsQuery,
+  function EventProvidedTickets({ data }) {
+    const tabProps = useTabs([
+      {
+        id: 'by-event',
+        name: 'By event',
+        renderContent: () => <EventProvidedTicketsByEvent data={data} />,
+      },
+      {
+        id: 'by-user',
+        name: 'By user',
+        renderContent: () => <EventProvidedTicketsByUser data={data} />,
+      },
+    ]);
 
-  usePageTitle(`Event-provided ${pluralize(data.convention.ticket_name)}`);
+    usePageTitle(`Event-provided ${pluralize(data.convention.ticket_name)}`);
 
-  return (
-    <>
-      <h1>
-        {'Event-provided '}
-        {pluralize(data.convention.ticket_name)}
-        {' report'}
-      </h1>
-      <h3 className="mb-4">
-        {'Total: '}
-        {pluralizeWithCount(
-          `event-provided ${data.convention.ticket_name}`,
-          sum(data.convention.reports.event_provided_tickets.map((row) => row.tickets.length)),
-        )}
-      </h3>
-      <TabList {...tabProps} />
-      <TabBody {...tabProps} />
-    </>
-  );
-});
+    return (
+      <>
+        <h1>
+          {'Event-provided '}
+          {pluralize(data.convention.ticket_name)}
+          {' report'}
+        </h1>
+        <h3 className="mb-4">
+          {'Total: '}
+          {pluralizeWithCount(
+            `event-provided ${data.convention.ticket_name}`,
+            sum(data.convention.reports.event_provided_tickets.map((row) => row.tickets.length)),
+          )}
+        </h3>
+        <TabList {...tabProps} />
+        <TabBody {...tabProps} />
+      </>
+    );
+  },
+);

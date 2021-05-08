@@ -9,9 +9,9 @@ import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { usePropertySetters, useFunctionalStateUpdater } from '../usePropertySetters';
-import { StaffPositionsQueryQuery } from './queries.generated';
+import { StaffPositionsQueryData } from './queries.generated';
 
-export type EditingStaffPosition = StaffPositionsQueryQuery['convention']['staff_positions'][0];
+export type EditingStaffPosition = StaffPositionsQueryData['convention']['staff_positions'][0];
 
 export type StaffPositionFormProps = {
   staffPosition: EditingStaffPosition;

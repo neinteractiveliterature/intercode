@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type ConventionAdminConventionFieldsFragment = (
   { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'accepting_proposals' | 'starts_at' | 'ends_at' | 'canceled' | 'name' | 'domain' | 'email_from' | 'email_mode' | 'event_mailing_list_domain' | 'location' | 'language' | 'timezone_name' | 'timezone_mode' | 'show_schedule' | 'show_event_list' | 'hidden' | 'maximum_tickets' | 'ticket_name' | 'clickwrap_agreement' | 'ticket_mode' | 'site_mode' | 'signup_mode' | 'signup_requests_open' | 'stripe_account_ready_to_charge'>
@@ -36,10 +37,10 @@ export type ConventionAdminConventionFieldsFragment = (
   )> }
 );
 
-export type ConventionAdminConventionQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ConventionAdminConventionQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ConventionAdminConventionQueryQuery = (
+export type ConventionAdminConventionQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -51,12 +52,12 @@ export type ConventionAdminConventionQueryQuery = (
   ) }
 );
 
-export type StripeAccountOnboardingLinkQueryQueryVariables = Types.Exact<{
+export type StripeAccountOnboardingLinkQueryVariables = Types.Exact<{
   baseUrl: Types.Scalars['String'];
 }>;
 
 
-export type StripeAccountOnboardingLinkQueryQuery = (
+export type StripeAccountOnboardingLinkQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -148,29 +149,31 @@ export const ConventionAdminConventionQueryDocument = gql`
     ${ConventionAdminConventionFieldsFragmentDoc}`;
 
 /**
- * __useConventionAdminConventionQueryQuery__
+ * __useConventionAdminConventionQuery__
  *
- * To run a query within a React component, call `useConventionAdminConventionQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useConventionAdminConventionQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useConventionAdminConventionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConventionAdminConventionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useConventionAdminConventionQueryQuery({
+ * const { data, loading, error } = useConventionAdminConventionQuery({
  *   variables: {
  *   },
  * });
  */
-export function useConventionAdminConventionQueryQuery(baseOptions?: Apollo.QueryHookOptions<ConventionAdminConventionQueryQuery, ConventionAdminConventionQueryQueryVariables>) {
-        return Apollo.useQuery<ConventionAdminConventionQueryQuery, ConventionAdminConventionQueryQueryVariables>(ConventionAdminConventionQueryDocument, baseOptions);
+export function useConventionAdminConventionQuery(baseOptions?: Apollo.QueryHookOptions<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>(ConventionAdminConventionQueryDocument, options);
       }
-export function useConventionAdminConventionQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionAdminConventionQueryQuery, ConventionAdminConventionQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ConventionAdminConventionQueryQuery, ConventionAdminConventionQueryQueryVariables>(ConventionAdminConventionQueryDocument, baseOptions);
+export function useConventionAdminConventionQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>(ConventionAdminConventionQueryDocument, options);
         }
-export type ConventionAdminConventionQueryQueryHookResult = ReturnType<typeof useConventionAdminConventionQueryQuery>;
+export type ConventionAdminConventionQueryHookResult = ReturnType<typeof useConventionAdminConventionQuery>;
 export type ConventionAdminConventionQueryLazyQueryHookResult = ReturnType<typeof useConventionAdminConventionQueryLazyQuery>;
-export type ConventionAdminConventionQueryQueryResult = Apollo.QueryResult<ConventionAdminConventionQueryQuery, ConventionAdminConventionQueryQueryVariables>;
+export type ConventionAdminConventionQueryDataResult = Apollo.QueryResult<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>;
 export const StripeAccountOnboardingLinkQueryDocument = gql`
     query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
   convention: assertConvention {
@@ -184,27 +187,29 @@ export const StripeAccountOnboardingLinkQueryDocument = gql`
     `;
 
 /**
- * __useStripeAccountOnboardingLinkQueryQuery__
+ * __useStripeAccountOnboardingLinkQuery__
  *
- * To run a query within a React component, call `useStripeAccountOnboardingLinkQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useStripeAccountOnboardingLinkQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useStripeAccountOnboardingLinkQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStripeAccountOnboardingLinkQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useStripeAccountOnboardingLinkQueryQuery({
+ * const { data, loading, error } = useStripeAccountOnboardingLinkQuery({
  *   variables: {
  *      baseUrl: // value for 'baseUrl'
  *   },
  * });
  */
-export function useStripeAccountOnboardingLinkQueryQuery(baseOptions: Apollo.QueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {
-        return Apollo.useQuery<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>(StripeAccountOnboardingLinkQueryDocument, baseOptions);
+export function useStripeAccountOnboardingLinkQuery(baseOptions: Apollo.QueryHookOptions<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>(StripeAccountOnboardingLinkQueryDocument, options);
       }
-export function useStripeAccountOnboardingLinkQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>) {
-          return Apollo.useLazyQuery<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>(StripeAccountOnboardingLinkQueryDocument, baseOptions);
+export function useStripeAccountOnboardingLinkQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>(StripeAccountOnboardingLinkQueryDocument, options);
         }
-export type StripeAccountOnboardingLinkQueryQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQueryQuery>;
+export type StripeAccountOnboardingLinkQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQuery>;
 export type StripeAccountOnboardingLinkQueryLazyQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQueryLazyQuery>;
-export type StripeAccountOnboardingLinkQueryQueryResult = Apollo.QueryResult<StripeAccountOnboardingLinkQueryQuery, StripeAccountOnboardingLinkQueryQueryVariables>;
+export type StripeAccountOnboardingLinkQueryDataResult = Apollo.QueryResult<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>;

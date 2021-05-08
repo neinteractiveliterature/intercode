@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
-import { useEventProposalHistoryQueryQuery } from './queries.generated';
+import { useEventProposalHistoryQuery } from './queries.generated';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -16,7 +16,7 @@ const EXCLUDE_FIELDS = new Set([
 
 function EventProposalHistory() {
   const match = useRouteMatch<{ id: string }>();
-  const { data, loading, error } = useEventProposalHistoryQueryQuery({
+  const { data, loading, error } = useEventProposalHistoryQuery({
     variables: { id: Number.parseInt(match.params.id, 10) },
   });
 

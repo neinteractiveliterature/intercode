@@ -10,10 +10,10 @@ import { useDeleteMutation } from '../../MutationUtils';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsPagesAdminQueryQuery } from './queries.generated';
+import { useCmsPagesAdminQuery } from './queries.generated';
 
 function CmsPagesAdminTable() {
-  const { data, loading, error } = useCmsPagesAdminQueryQuery();
+  const { data, loading, error } = useCmsPagesAdminQuery();
   const confirm = useGraphQLConfirm();
   const deletePageMutate = useDeleteMutation(DeletePage, {
     query: CmsPagesAdminQuery,

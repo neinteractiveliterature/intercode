@@ -5,12 +5,13 @@ import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormIt
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-export type EventHistoryQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type EventHistoryQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type EventHistoryQueryQuery = (
+export type EventHistoryQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -88,27 +89,29 @@ export const EventHistoryQueryDocument = gql`
     ${CommonFormFieldsFragmentDoc}`;
 
 /**
- * __useEventHistoryQueryQuery__
+ * __useEventHistoryQuery__
  *
- * To run a query within a React component, call `useEventHistoryQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventHistoryQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventHistoryQueryQuery({
+ * const { data, loading, error } = useEventHistoryQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useEventHistoryQueryQuery(baseOptions: Apollo.QueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
-        return Apollo.useQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
+export function useEventHistoryQuery(baseOptions: Apollo.QueryHookOptions<EventHistoryQueryData, EventHistoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventHistoryQueryData, EventHistoryQueryVariables>(EventHistoryQueryDocument, options);
       }
-export function useEventHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>(EventHistoryQueryDocument, baseOptions);
+export function useEventHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventHistoryQueryData, EventHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventHistoryQueryData, EventHistoryQueryVariables>(EventHistoryQueryDocument, options);
         }
-export type EventHistoryQueryQueryHookResult = ReturnType<typeof useEventHistoryQueryQuery>;
+export type EventHistoryQueryHookResult = ReturnType<typeof useEventHistoryQuery>;
 export type EventHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventHistoryQueryLazyQuery>;
-export type EventHistoryQueryQueryResult = Apollo.QueryResult<EventHistoryQueryQuery, EventHistoryQueryQueryVariables>;
+export type EventHistoryQueryDataResult = Apollo.QueryResult<EventHistoryQueryData, EventHistoryQueryVariables>;

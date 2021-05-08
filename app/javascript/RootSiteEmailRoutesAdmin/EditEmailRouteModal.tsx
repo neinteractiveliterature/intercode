@@ -7,13 +7,13 @@ import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import ErrorDisplay from '../ErrorDisplay';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import { RootSiteEmailRoutesAdminTableQueryQuery } from './queries.generated';
+import { RootSiteEmailRoutesAdminTableQueryData } from './queries.generated';
 import { useDeleteEmailRouteMutation, useUpdateEmailRouteMutation } from './mutations.generated';
 
 export type EditEmailRouteModalProps = {
   visible: boolean;
   close: () => void;
-  initialEmailRoute?: RootSiteEmailRoutesAdminTableQueryQuery['email_routes_paginated']['entries'][0];
+  initialEmailRoute?: RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 };
 
 function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRouteModalProps) {

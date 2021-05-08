@@ -5,6 +5,7 @@ import { RunCardRegistrationPolicyFieldsFragment, EventPageRunFieldsFragment } f
 import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFieldsFragmentDoc, EventPageRunFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type SignupModerationRunFieldsFragment = (
   { __typename: 'Run' }
   & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at' | 'signup_count_by_state_and_bucket_key_and_counted'>
@@ -50,12 +51,12 @@ export type SignupModerationSignupRequestFieldsFragment = (
   )> }
 );
 
-export type CreateSignupEventsQueryQueryVariables = Types.Exact<{
+export type CreateSignupEventsQueryVariables = Types.Exact<{
   title?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type CreateSignupEventsQueryQuery = (
+export type CreateSignupEventsQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -78,13 +79,13 @@ export type CreateSignupEventsQueryQuery = (
   )> }
 );
 
-export type CreateSignupRunCardQueryQueryVariables = Types.Exact<{
+export type CreateSignupRunCardQueryVariables = Types.Exact<{
   userConProfileId: Types.Scalars['Int'];
   eventId: Types.Scalars['Int'];
 }>;
 
 
-export type CreateSignupRunCardQueryQuery = (
+export type CreateSignupRunCardQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -131,13 +132,13 @@ export type CreateSignupRunCardQueryQuery = (
   ) }
 );
 
-export type SignupModerationQueueQueryQueryVariables = Types.Exact<{
+export type SignupModerationQueueQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 
-export type SignupModerationQueueQueryQuery = (
+export type SignupModerationQueueQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -238,30 +239,32 @@ export const CreateSignupEventsQueryDocument = gql`
     `;
 
 /**
- * __useCreateSignupEventsQueryQuery__
+ * __useCreateSignupEventsQuery__
  *
- * To run a query within a React component, call `useCreateSignupEventsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreateSignupEventsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCreateSignupEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateSignupEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCreateSignupEventsQueryQuery({
+ * const { data, loading, error } = useCreateSignupEventsQuery({
  *   variables: {
  *      title: // value for 'title'
  *   },
  * });
  */
-export function useCreateSignupEventsQueryQuery(baseOptions?: Apollo.QueryHookOptions<CreateSignupEventsQueryQuery, CreateSignupEventsQueryQueryVariables>) {
-        return Apollo.useQuery<CreateSignupEventsQueryQuery, CreateSignupEventsQueryQueryVariables>(CreateSignupEventsQueryDocument, baseOptions);
+export function useCreateSignupEventsQuery(baseOptions?: Apollo.QueryHookOptions<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>(CreateSignupEventsQueryDocument, options);
       }
-export function useCreateSignupEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateSignupEventsQueryQuery, CreateSignupEventsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CreateSignupEventsQueryQuery, CreateSignupEventsQueryQueryVariables>(CreateSignupEventsQueryDocument, baseOptions);
+export function useCreateSignupEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>(CreateSignupEventsQueryDocument, options);
         }
-export type CreateSignupEventsQueryQueryHookResult = ReturnType<typeof useCreateSignupEventsQueryQuery>;
+export type CreateSignupEventsQueryHookResult = ReturnType<typeof useCreateSignupEventsQuery>;
 export type CreateSignupEventsQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupEventsQueryLazyQuery>;
-export type CreateSignupEventsQueryQueryResult = Apollo.QueryResult<CreateSignupEventsQueryQuery, CreateSignupEventsQueryQueryVariables>;
+export type CreateSignupEventsQueryDataResult = Apollo.QueryResult<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>;
 export const CreateSignupRunCardQueryDocument = gql`
     query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
   currentAbility {
@@ -321,31 +324,33 @@ export const CreateSignupRunCardQueryDocument = gql`
 ${EventPageRunFieldsFragmentDoc}`;
 
 /**
- * __useCreateSignupRunCardQueryQuery__
+ * __useCreateSignupRunCardQuery__
  *
- * To run a query within a React component, call `useCreateSignupRunCardQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreateSignupRunCardQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCreateSignupRunCardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateSignupRunCardQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCreateSignupRunCardQueryQuery({
+ * const { data, loading, error } = useCreateSignupRunCardQuery({
  *   variables: {
  *      userConProfileId: // value for 'userConProfileId'
  *      eventId: // value for 'eventId'
  *   },
  * });
  */
-export function useCreateSignupRunCardQueryQuery(baseOptions: Apollo.QueryHookOptions<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>) {
-        return Apollo.useQuery<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>(CreateSignupRunCardQueryDocument, baseOptions);
+export function useCreateSignupRunCardQuery(baseOptions: Apollo.QueryHookOptions<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>(CreateSignupRunCardQueryDocument, options);
       }
-export function useCreateSignupRunCardQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>(CreateSignupRunCardQueryDocument, baseOptions);
+export function useCreateSignupRunCardQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>(CreateSignupRunCardQueryDocument, options);
         }
-export type CreateSignupRunCardQueryQueryHookResult = ReturnType<typeof useCreateSignupRunCardQueryQuery>;
+export type CreateSignupRunCardQueryHookResult = ReturnType<typeof useCreateSignupRunCardQuery>;
 export type CreateSignupRunCardQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupRunCardQueryLazyQuery>;
-export type CreateSignupRunCardQueryQueryResult = Apollo.QueryResult<CreateSignupRunCardQueryQuery, CreateSignupRunCardQueryQueryVariables>;
+export type CreateSignupRunCardQueryDataResult = Apollo.QueryResult<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>;
 export const SignupModerationQueueQueryDocument = gql`
     query SignupModerationQueueQuery($page: Int, $perPage: Int) {
   convention: assertConvention {
@@ -366,28 +371,30 @@ export const SignupModerationQueueQueryDocument = gql`
     ${SignupModerationSignupRequestFieldsFragmentDoc}`;
 
 /**
- * __useSignupModerationQueueQueryQuery__
+ * __useSignupModerationQueueQuery__
  *
- * To run a query within a React component, call `useSignupModerationQueueQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useSignupModerationQueueQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSignupModerationQueueQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignupModerationQueueQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSignupModerationQueueQueryQuery({
+ * const { data, loading, error } = useSignupModerationQueueQuery({
  *   variables: {
  *      page: // value for 'page'
  *      perPage: // value for 'perPage'
  *   },
  * });
  */
-export function useSignupModerationQueueQueryQuery(baseOptions?: Apollo.QueryHookOptions<SignupModerationQueueQueryQuery, SignupModerationQueueQueryQueryVariables>) {
-        return Apollo.useQuery<SignupModerationQueueQueryQuery, SignupModerationQueueQueryQueryVariables>(SignupModerationQueueQueryDocument, baseOptions);
+export function useSignupModerationQueueQuery(baseOptions?: Apollo.QueryHookOptions<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>(SignupModerationQueueQueryDocument, options);
       }
-export function useSignupModerationQueueQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupModerationQueueQueryQuery, SignupModerationQueueQueryQueryVariables>) {
-          return Apollo.useLazyQuery<SignupModerationQueueQueryQuery, SignupModerationQueueQueryQueryVariables>(SignupModerationQueueQueryDocument, baseOptions);
+export function useSignupModerationQueueQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>(SignupModerationQueueQueryDocument, options);
         }
-export type SignupModerationQueueQueryQueryHookResult = ReturnType<typeof useSignupModerationQueueQueryQuery>;
+export type SignupModerationQueueQueryHookResult = ReturnType<typeof useSignupModerationQueueQuery>;
 export type SignupModerationQueueQueryLazyQueryHookResult = ReturnType<typeof useSignupModerationQueueQueryLazyQuery>;
-export type SignupModerationQueueQueryQueryResult = Apollo.QueryResult<SignupModerationQueueQueryQuery, SignupModerationQueueQueryQueryVariables>;
+export type SignupModerationQueueQueryDataResult = Apollo.QueryResult<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>;

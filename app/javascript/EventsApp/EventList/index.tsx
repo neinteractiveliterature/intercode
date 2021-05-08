@@ -20,7 +20,7 @@ import AppRootContext from '../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../useAsyncFunction';
 import LoadingIndicator from '../../LoadingIndicator';
-import { EventListEventsQueryQuery, useEventListEventsQueryQuery } from './queries.generated';
+import { EventListEventsQueryData, useEventListEventsQuery } from './queries.generated';
 
 const PAGE_SIZE = 20;
 
@@ -30,9 +30,9 @@ const filterCodecs = buildFieldFilterCodecs({
   title_prefix: FilterCodecs.nonEmptyString,
 });
 
-type FetchMoreFunction = ReturnType<typeof useEventListEventsQueryQuery>['fetchMore'];
+type FetchMoreFunction = ReturnType<typeof useEventListEventsQuery>['fetchMore'];
 type EventType = NonNullable<
-  EventListEventsQueryQuery['convention']
+  EventListEventsQueryData['convention']
 >['events_paginated']['entries'][number];
 
 const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
@@ -40,7 +40,7 @@ const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
     await fetchMore({
       variables: { page, pageSize: PAGE_SIZE },
       updateQuery: (prev, { fetchMoreResult }) => {
-        const updatedQuery: EventListEventsQueryQuery = {
+        const updatedQuery: EventListEventsQueryData = {
           ...prev,
           convention: {
             ...prev.convention!,
@@ -75,7 +75,7 @@ function EventList() {
     : [{ id: 'title', desc: false }];
   const [cachedConventionName, setCachedConventionName] = useState<string>();
   const [cachedEventCategories, setCachedEventCategories] = useState<
-    NonNullable<EventListEventsQueryQuery['convention']>['event_categories']
+    NonNullable<EventListEventsQueryData['convention']>['event_categories']
   >();
   const [cachedPageCount, setCachedPageCount] = useState<number>();
   const defaultFiltered = myProfile
@@ -88,7 +88,7 @@ function EventList() {
   const effectiveFilters: Filters<EventType> =
     filters && filters.length > 0 ? filters : defaultFiltered;
 
-  const { data, loading, error, fetchMore } = useEventListEventsQueryQuery({
+  const { data, loading, error, fetchMore } = useEventListEventsQuery({
     variables: {
       page: 1,
       pageSize: PAGE_SIZE,

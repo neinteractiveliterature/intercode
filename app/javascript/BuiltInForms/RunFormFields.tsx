@@ -14,8 +14,8 @@ import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect, { RoomForSelect } from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
 import {
-  useEventAdminEventsQueryQuery,
-  EventAdminEventsQueryQuery,
+  useEventAdminEventsQuery,
+  EventAdminEventsQueryData,
 } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
@@ -35,7 +35,7 @@ type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_a
 
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
   run: RunType;
-  event: EventAdminEventsQueryQuery['events'][0];
+  event: EventAdminEventsQueryData['events'][0];
   onChange: React.Dispatch<React.SetStateAction<RunType>>;
 };
 
@@ -47,7 +47,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
 
   const startsAt = useMemo(
     () =>

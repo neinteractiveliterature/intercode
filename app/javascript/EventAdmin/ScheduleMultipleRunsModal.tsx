@@ -23,7 +23,7 @@ import { useCreateMultipleRunsMutation } from './mutations.generated';
 import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
 import {
   ConventionFieldsFragment,
-  EventAdminEventsQueryQuery,
+  EventAdminEventsQueryData,
   EventFieldsFragment,
   RoomFieldsFragment,
 } from './queries.generated';
@@ -141,7 +141,7 @@ function ScheduleMultipleRunsModal({
         input: { event_id: event.id, runs },
       },
       update: (store, { data }) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+        const eventsData = store.readQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQuery,
         });
         const newRuns = data?.createMultipleRuns?.runs;

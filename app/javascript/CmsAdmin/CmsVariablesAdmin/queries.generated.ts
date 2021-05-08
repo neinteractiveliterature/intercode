@@ -3,15 +3,16 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CmsVariableFieldsFragment = (
   { __typename: 'CmsVariable' }
   & Pick<Types.CmsVariable, 'id' | 'key' | 'value_json' | 'current_ability_can_update' | 'current_ability_can_delete'>
 );
 
-export type CmsVariablesQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsVariablesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsVariablesQueryQuery = (
+export type CmsVariablesQueryData = (
   { __typename: 'Query' }
   & { cmsVariables: Array<(
     { __typename: 'CmsVariable' }
@@ -23,13 +24,13 @@ export type CmsVariablesQueryQuery = (
   ) }
 );
 
-export type SetCmsVariableMutationMutationVariables = Types.Exact<{
+export type SetCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
   value_json: Types.Scalars['String'];
 }>;
 
 
-export type SetCmsVariableMutationMutation = (
+export type SetCmsVariableMutationData = (
   { __typename: 'Mutation' }
   & { setCmsVariable?: Types.Maybe<(
     { __typename: 'SetCmsVariablePayload' }
@@ -41,12 +42,12 @@ export type SetCmsVariableMutationMutation = (
   )> }
 );
 
-export type DeleteCmsVariableMutationMutationVariables = Types.Exact<{
+export type DeleteCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
 }>;
 
 
-export type DeleteCmsVariableMutationMutation = (
+export type DeleteCmsVariableMutationData = (
   { __typename: 'Mutation' }
   & { deleteCmsVariable?: Types.Maybe<(
     { __typename: 'DeleteCmsVariablePayload' }
@@ -80,29 +81,31 @@ export const CmsVariablesQueryDocument = gql`
     ${CmsVariableFieldsFragmentDoc}`;
 
 /**
- * __useCmsVariablesQueryQuery__
+ * __useCmsVariablesQuery__
  *
- * To run a query within a React component, call `useCmsVariablesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsVariablesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsVariablesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsVariablesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsVariablesQueryQuery({
+ * const { data, loading, error } = useCmsVariablesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsVariablesQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsVariablesQueryQuery, CmsVariablesQueryQueryVariables>) {
-        return Apollo.useQuery<CmsVariablesQueryQuery, CmsVariablesQueryQueryVariables>(CmsVariablesQueryDocument, baseOptions);
+export function useCmsVariablesQuery(baseOptions?: Apollo.QueryHookOptions<CmsVariablesQueryData, CmsVariablesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsVariablesQueryData, CmsVariablesQueryVariables>(CmsVariablesQueryDocument, options);
       }
-export function useCmsVariablesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsVariablesQueryQuery, CmsVariablesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsVariablesQueryQuery, CmsVariablesQueryQueryVariables>(CmsVariablesQueryDocument, baseOptions);
+export function useCmsVariablesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsVariablesQueryData, CmsVariablesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsVariablesQueryData, CmsVariablesQueryVariables>(CmsVariablesQueryDocument, options);
         }
-export type CmsVariablesQueryQueryHookResult = ReturnType<typeof useCmsVariablesQueryQuery>;
+export type CmsVariablesQueryHookResult = ReturnType<typeof useCmsVariablesQuery>;
 export type CmsVariablesQueryLazyQueryHookResult = ReturnType<typeof useCmsVariablesQueryLazyQuery>;
-export type CmsVariablesQueryQueryResult = Apollo.QueryResult<CmsVariablesQueryQuery, CmsVariablesQueryQueryVariables>;
+export type CmsVariablesQueryDataResult = Apollo.QueryResult<CmsVariablesQueryData, CmsVariablesQueryVariables>;
 export const SetCmsVariableMutationDocument = gql`
     mutation SetCmsVariableMutation($key: String!, $value_json: String!) {
   setCmsVariable(input: {cms_variable: {key: $key, value_json: $value_json}}) {
@@ -113,32 +116,33 @@ export const SetCmsVariableMutationDocument = gql`
   }
 }
     ${CmsVariableFieldsFragmentDoc}`;
-export type SetCmsVariableMutationMutationFn = Apollo.MutationFunction<SetCmsVariableMutationMutation, SetCmsVariableMutationMutationVariables>;
+export type SetCmsVariableMutationMutationFn = Apollo.MutationFunction<SetCmsVariableMutationData, SetCmsVariableMutationVariables>;
 
 /**
- * __useSetCmsVariableMutationMutation__
+ * __useSetCmsVariableMutation__
  *
- * To run a mutation, you first call `useSetCmsVariableMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetCmsVariableMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSetCmsVariableMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCmsVariableMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [setCmsVariableMutationMutation, { data, loading, error }] = useSetCmsVariableMutationMutation({
+ * const [setCmsVariableMutation, { data, loading, error }] = useSetCmsVariableMutation({
  *   variables: {
  *      key: // value for 'key'
  *      value_json: // value for 'value_json'
  *   },
  * });
  */
-export function useSetCmsVariableMutationMutation(baseOptions?: Apollo.MutationHookOptions<SetCmsVariableMutationMutation, SetCmsVariableMutationMutationVariables>) {
-        return Apollo.useMutation<SetCmsVariableMutationMutation, SetCmsVariableMutationMutationVariables>(SetCmsVariableMutationDocument, baseOptions);
+export function useSetCmsVariableMutation(baseOptions?: Apollo.MutationHookOptions<SetCmsVariableMutationData, SetCmsVariableMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetCmsVariableMutationData, SetCmsVariableMutationVariables>(SetCmsVariableMutationDocument, options);
       }
-export type SetCmsVariableMutationMutationHookResult = ReturnType<typeof useSetCmsVariableMutationMutation>;
-export type SetCmsVariableMutationMutationResult = Apollo.MutationResult<SetCmsVariableMutationMutation>;
-export type SetCmsVariableMutationMutationOptions = Apollo.BaseMutationOptions<SetCmsVariableMutationMutation, SetCmsVariableMutationMutationVariables>;
+export type SetCmsVariableMutationHookResult = ReturnType<typeof useSetCmsVariableMutation>;
+export type SetCmsVariableMutationMutationResult = Apollo.MutationResult<SetCmsVariableMutationData>;
+export type SetCmsVariableMutationMutationOptions = Apollo.BaseMutationOptions<SetCmsVariableMutationData, SetCmsVariableMutationVariables>;
 export const DeleteCmsVariableMutationDocument = gql`
     mutation DeleteCmsVariableMutation($key: String!) {
   deleteCmsVariable(input: {key: $key}) {
@@ -149,28 +153,29 @@ export const DeleteCmsVariableMutationDocument = gql`
   }
 }
     ${CmsVariableFieldsFragmentDoc}`;
-export type DeleteCmsVariableMutationMutationFn = Apollo.MutationFunction<DeleteCmsVariableMutationMutation, DeleteCmsVariableMutationMutationVariables>;
+export type DeleteCmsVariableMutationMutationFn = Apollo.MutationFunction<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>;
 
 /**
- * __useDeleteCmsVariableMutationMutation__
+ * __useDeleteCmsVariableMutation__
  *
- * To run a mutation, you first call `useDeleteCmsVariableMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCmsVariableMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteCmsVariableMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCmsVariableMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteCmsVariableMutationMutation, { data, loading, error }] = useDeleteCmsVariableMutationMutation({
+ * const [deleteCmsVariableMutation, { data, loading, error }] = useDeleteCmsVariableMutation({
  *   variables: {
  *      key: // value for 'key'
  *   },
  * });
  */
-export function useDeleteCmsVariableMutationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCmsVariableMutationMutation, DeleteCmsVariableMutationMutationVariables>) {
-        return Apollo.useMutation<DeleteCmsVariableMutationMutation, DeleteCmsVariableMutationMutationVariables>(DeleteCmsVariableMutationDocument, baseOptions);
+export function useDeleteCmsVariableMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>(DeleteCmsVariableMutationDocument, options);
       }
-export type DeleteCmsVariableMutationMutationHookResult = ReturnType<typeof useDeleteCmsVariableMutationMutation>;
-export type DeleteCmsVariableMutationMutationResult = Apollo.MutationResult<DeleteCmsVariableMutationMutation>;
-export type DeleteCmsVariableMutationMutationOptions = Apollo.BaseMutationOptions<DeleteCmsVariableMutationMutation, DeleteCmsVariableMutationMutationVariables>;
+export type DeleteCmsVariableMutationHookResult = ReturnType<typeof useDeleteCmsVariableMutation>;
+export type DeleteCmsVariableMutationMutationResult = Apollo.MutationResult<DeleteCmsVariableMutationData>;
+export type DeleteCmsVariableMutationMutationOptions = Apollo.BaseMutationOptions<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>;

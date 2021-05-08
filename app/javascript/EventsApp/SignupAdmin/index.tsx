@@ -6,7 +6,7 @@ import EditSignup from './EditSignup';
 import SignupsIndex from './SignupsIndex';
 import ErrorDisplay from '../../ErrorDisplay';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useSignupAdminEventQueryQuery } from './queries.generated';
+import { useSignupAdminEventQuery } from './queries.generated';
 
 export type SignupAdminProps = {
   runId: number;
@@ -17,7 +17,7 @@ export type SignupAdminProps = {
 function SignupAdmin({ runId, eventId, eventPath }: SignupAdminProps) {
   const { t } = useTranslation();
   const location = useLocation();
-  const { data, loading, error } = useSignupAdminEventQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useSignupAdminEventQuery({ variables: { eventId } });
   const runPath = `${eventPath}/runs/${runId}`;
 
   if (loading) {

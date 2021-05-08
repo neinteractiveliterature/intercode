@@ -11,13 +11,13 @@ import useModal from '../ModalDialogs/useModal';
 import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
 import {
-  UsersTableUsersQueryQuery,
-  UsersTableUsersQueryQueryVariables,
-  useUsersTableUsersQueryQuery,
+  UsersTableUsersQueryData,
+  UsersTableUsersQueryVariables,
+  useUsersTableUsersQuery,
 } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
-type UserType = UsersTableUsersQueryQuery['users_paginated']['entries'][0];
+type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
@@ -73,9 +73,9 @@ function UsersTable() {
   usePageTitle('Users');
 
   const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks<
-    UsersTableUsersQueryQuery,
+    UsersTableUsersQueryData,
     UserType,
-    UsersTableUsersQueryQueryVariables
+    UsersTableUsersQueryVariables
   >({
     decodeFilterValue,
     defaultVisibleColumns,
@@ -85,7 +85,7 @@ function UsersTable() {
     getPossibleColumns,
     rowSelect: true,
     storageKeyPrefix: 'users',
-    useQuery: useUsersTableUsersQueryQuery,
+    useQuery: useUsersTableUsersQuery,
   });
 
   return (

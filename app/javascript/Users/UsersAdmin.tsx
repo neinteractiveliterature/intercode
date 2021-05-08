@@ -6,11 +6,11 @@ import LoadingIndicator from '../LoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useUserAdminQueryQuery } from './queries.generated';
+import { useUserAdminQuery } from './queries.generated';
 
 function UserBreadcrumbItem() {
   const id = Number.parseInt(useParams<{ id: string }>().id, 10);
-  const { data, loading, error } = useUserAdminQueryQuery({ variables: { id } });
+  const { data, loading, error } = useUserAdminQuery({ variables: { id } });
 
   if (loading) {
     return (

@@ -15,7 +15,7 @@ import {
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
-import { StaffPositionsQueryQuery, useStaffPositionsQueryQuery } from './queries.generated';
+import { StaffPositionsQueryData, useStaffPositionsQuery } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
 import { useUpdateStaffPositionPermissionsMutation } from './mutations.generated';
 import { notEmpty } from '../ValueUtils';
@@ -32,8 +32,8 @@ const ConventionPermissionNames = getPermissionNamesForModelType(
 );
 
 type EditStaffPositionPermissionsForm = {
-  convention: StaffPositionsQueryQuery['convention'];
-  staffPosition: StaffPositionsQueryQuery['convention']['staff_positions'][0];
+  convention: StaffPositionsQueryData['convention'];
+  staffPosition: StaffPositionsQueryData['convention']['staff_positions'][0];
 };
 
 function EditStaffPositionPermissionsForm({
@@ -159,7 +159,7 @@ function EditStaffPositionPermissionsForm({
 
 function EditStaffPositionPermissions() {
   const { id } = useParams<{ id: string }>();
-  const { data, loading, error } = useStaffPositionsQueryQuery();
+  const { data, loading, error } = useStaffPositionsQuery();
 
   const convention = useMemo(() => (loading || error || !data ? null : data.convention), [
     loading,

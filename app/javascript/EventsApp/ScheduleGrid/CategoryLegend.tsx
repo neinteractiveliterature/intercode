@@ -5,12 +5,12 @@ import FakeEventRun from './FakeEventRun';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import LoadingIndicator from '../../LoadingIndicator';
-import { useCommonConventionDataQueryQuery } from '../queries.generated';
+import { useCommonConventionDataQuery } from '../queries.generated';
 import { SignupStatus } from './StylingUtils';
 
 function CategoryLegend() {
   const { t } = useTranslation();
-  const { data, loading, error } = useCommonConventionDataQueryQuery();
+  const { data, loading, error } = useCommonConventionDataQuery();
   const sortedEventCategories = useMemo(
     () =>
       error || loading || !data

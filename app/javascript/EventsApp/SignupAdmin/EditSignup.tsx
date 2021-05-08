@@ -18,7 +18,7 @@ import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import AppRootContext from '../../AppRootContext';
-import { SignupFieldsFragment, useAdminSignupQueryQuery } from './queries.generated';
+import { SignupFieldsFragment, useAdminSignupQuery } from './queries.generated';
 import { useUpdateSignupCountedMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 
@@ -106,7 +106,7 @@ export type EditSignupProps = {
 function EditSignup({ teamMembersUrl }: EditSignupProps) {
   const { timezoneName } = useContext(AppRootContext);
   const id = Number.parseInt(useParams<{ id: string }>().id, 10);
-  const { data, loading, error } = useAdminSignupQueryQuery({ variables: { id } });
+  const { data, loading, error } = useAdminSignupQuery({ variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
   const [updateCountedMutate] = useUpdateSignupCountedMutation();

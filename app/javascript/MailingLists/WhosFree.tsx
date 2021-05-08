@@ -6,10 +6,10 @@ import Timespan, { FiniteTimespan } from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
 import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
-import { useWhosFreeQueryQuery } from './queries.generated';
+import { useWhosFreeQuery } from './queries.generated';
 
 function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
-  const { data, loading, error } = useWhosFreeQueryQuery({
+  const { data, loading, error } = useWhosFreeQuery({
     variables: { start: timespan.start.toISO(), finish: timespan.finish.toISO() },
   });
 

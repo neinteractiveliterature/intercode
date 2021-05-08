@@ -12,7 +12,7 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
-import { useFormEditorQueryQuery } from './queries.generated';
+import { useFormEditorQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
 import { notEmpty } from '../ValueUtils';
@@ -20,7 +20,7 @@ import DndWrapper from '../DndWrapper';
 
 function FormEditor() {
   const match = useRouteMatch<{ id: string; sectionId?: string; itemId?: string }>();
-  const { data, error, loading } = useFormEditorQueryQuery({
+  const { data, error, loading } = useFormEditorQuery({
     variables: {
       id: Number.parseInt(match.params.id, 10),
     },

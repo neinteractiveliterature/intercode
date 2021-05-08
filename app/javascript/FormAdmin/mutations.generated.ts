@@ -7,13 +7,14 @@ import { gql } from '@apollo/client';
 import { FormFieldsFragmentDoc, FormEditorDataFragmentDoc, FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
 import { CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateFormWithJsonMutationVariables = Types.Exact<{
   formJSON: Types.Scalars['String'];
   formType: Types.FormType;
 }>;
 
 
-export type CreateFormWithJsonMutation = (
+export type CreateFormWithJsonMutationData = (
   { __typename: 'Mutation' }
   & { createFormWithJSON?: Types.Maybe<(
     { __typename: 'CreateFormWithJSONPayload' }
@@ -31,7 +32,7 @@ export type UpdateFormWithJsonMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormWithJsonMutation = (
+export type UpdateFormWithJsonMutationData = (
   { __typename: 'Mutation' }
   & { updateFormWithJSON?: Types.Maybe<(
     { __typename: 'UpdateFormWithJSONPayload' }
@@ -49,7 +50,7 @@ export type CreateFormMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormMutation = (
+export type CreateFormMutationData = (
   { __typename: 'Mutation' }
   & { createForm?: Types.Maybe<(
     { __typename: 'CreateFormPayload' }
@@ -67,7 +68,7 @@ export type UpdateFormMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormMutation = (
+export type UpdateFormMutationData = (
   { __typename: 'Mutation' }
   & { updateForm?: Types.Maybe<(
     { __typename: 'UpdateFormPayload' }
@@ -84,7 +85,7 @@ export type DeleteFormMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteFormMutation = (
+export type DeleteFormMutationData = (
   { __typename: 'Mutation' }
   & { deleteForm?: Types.Maybe<(
     { __typename: 'DeleteFormPayload' }
@@ -98,7 +99,7 @@ export type CreateFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormSectionMutation = (
+export type CreateFormSectionMutationData = (
   { __typename: 'Mutation' }
   & { createFormSection?: Types.Maybe<(
     { __typename: 'CreateFormSectionPayload' }
@@ -121,7 +122,7 @@ export type UpdateFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormSectionMutation = (
+export type UpdateFormSectionMutationData = (
   { __typename: 'Mutation' }
   & { updateFormSection?: Types.Maybe<(
     { __typename: 'UpdateFormSectionPayload' }
@@ -143,7 +144,7 @@ export type DeleteFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteFormSectionMutation = (
+export type DeleteFormSectionMutationData = (
   { __typename: 'Mutation' }
   & { deleteFormSection?: Types.Maybe<(
     { __typename: 'DeleteFormSectionPayload' }
@@ -157,7 +158,7 @@ export type MoveFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type MoveFormSectionMutation = (
+export type MoveFormSectionMutationData = (
   { __typename: 'Mutation' }
   & { moveFormSection?: Types.Maybe<(
     { __typename: 'MoveFormSectionPayload' }
@@ -175,7 +176,7 @@ export type CreateFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormItemMutation = (
+export type CreateFormItemMutationData = (
   { __typename: 'Mutation' }
   & { createFormItem?: Types.Maybe<(
     { __typename: 'CreateFormItemPayload' }
@@ -193,7 +194,7 @@ export type UpdateFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormItemMutation = (
+export type UpdateFormItemMutationData = (
   { __typename: 'Mutation' }
   & { updateFormItem?: Types.Maybe<(
     { __typename: 'UpdateFormItemPayload' }
@@ -210,7 +211,7 @@ export type DeleteFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteFormItemMutation = (
+export type DeleteFormItemMutationData = (
   { __typename: 'Mutation' }
   & { deleteFormItem?: Types.Maybe<(
     { __typename: 'DeleteFormItemPayload' }
@@ -225,7 +226,7 @@ export type MoveFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type MoveFormItemMutation = (
+export type MoveFormItemMutationData = (
   { __typename: 'Mutation' }
   & { moveFormItem?: Types.Maybe<(
     { __typename: 'MoveFormItemPayload' }
@@ -252,7 +253,7 @@ export const CreateFormWithJsonDocument = gql`
   }
 }
     ${FormFieldsFragmentDoc}`;
-export type CreateFormWithJsonMutationFn = Apollo.MutationFunction<CreateFormWithJsonMutation, CreateFormWithJsonMutationVariables>;
+export type CreateFormWithJsonMutationFn = Apollo.MutationFunction<CreateFormWithJsonMutationData, CreateFormWithJsonMutationVariables>;
 
 /**
  * __useCreateFormWithJsonMutation__
@@ -272,12 +273,13 @@ export type CreateFormWithJsonMutationFn = Apollo.MutationFunction<CreateFormWit
  *   },
  * });
  */
-export function useCreateFormWithJsonMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormWithJsonMutation, CreateFormWithJsonMutationVariables>) {
-        return Apollo.useMutation<CreateFormWithJsonMutation, CreateFormWithJsonMutationVariables>(CreateFormWithJsonDocument, baseOptions);
+export function useCreateFormWithJsonMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormWithJsonMutationData, CreateFormWithJsonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFormWithJsonMutationData, CreateFormWithJsonMutationVariables>(CreateFormWithJsonDocument, options);
       }
 export type CreateFormWithJsonMutationHookResult = ReturnType<typeof useCreateFormWithJsonMutation>;
-export type CreateFormWithJsonMutationResult = Apollo.MutationResult<CreateFormWithJsonMutation>;
-export type CreateFormWithJsonMutationOptions = Apollo.BaseMutationOptions<CreateFormWithJsonMutation, CreateFormWithJsonMutationVariables>;
+export type CreateFormWithJsonMutationResult = Apollo.MutationResult<CreateFormWithJsonMutationData>;
+export type CreateFormWithJsonMutationOptions = Apollo.BaseMutationOptions<CreateFormWithJsonMutationData, CreateFormWithJsonMutationVariables>;
 export const UpdateFormWithJsonDocument = gql`
     mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
   updateFormWithJSON(input: {id: $id, form_json: $formJSON}) {
@@ -288,7 +290,7 @@ export const UpdateFormWithJsonDocument = gql`
   }
 }
     ${FormFieldsFragmentDoc}`;
-export type UpdateFormWithJsonMutationFn = Apollo.MutationFunction<UpdateFormWithJsonMutation, UpdateFormWithJsonMutationVariables>;
+export type UpdateFormWithJsonMutationFn = Apollo.MutationFunction<UpdateFormWithJsonMutationData, UpdateFormWithJsonMutationVariables>;
 
 /**
  * __useUpdateFormWithJsonMutation__
@@ -308,12 +310,13 @@ export type UpdateFormWithJsonMutationFn = Apollo.MutationFunction<UpdateFormWit
  *   },
  * });
  */
-export function useUpdateFormWithJsonMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormWithJsonMutation, UpdateFormWithJsonMutationVariables>) {
-        return Apollo.useMutation<UpdateFormWithJsonMutation, UpdateFormWithJsonMutationVariables>(UpdateFormWithJsonDocument, baseOptions);
+export function useUpdateFormWithJsonMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormWithJsonMutationData, UpdateFormWithJsonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFormWithJsonMutationData, UpdateFormWithJsonMutationVariables>(UpdateFormWithJsonDocument, options);
       }
 export type UpdateFormWithJsonMutationHookResult = ReturnType<typeof useUpdateFormWithJsonMutation>;
-export type UpdateFormWithJsonMutationResult = Apollo.MutationResult<UpdateFormWithJsonMutation>;
-export type UpdateFormWithJsonMutationOptions = Apollo.BaseMutationOptions<UpdateFormWithJsonMutation, UpdateFormWithJsonMutationVariables>;
+export type UpdateFormWithJsonMutationResult = Apollo.MutationResult<UpdateFormWithJsonMutationData>;
+export type UpdateFormWithJsonMutationOptions = Apollo.BaseMutationOptions<UpdateFormWithJsonMutationData, UpdateFormWithJsonMutationVariables>;
 export const CreateFormDocument = gql`
     mutation CreateForm($form: FormInput!, $formType: FormType!) {
   createForm(input: {form: $form, form_type: $formType}) {
@@ -324,7 +327,7 @@ export const CreateFormDocument = gql`
   }
 }
     ${FormFieldsFragmentDoc}`;
-export type CreateFormMutationFn = Apollo.MutationFunction<CreateFormMutation, CreateFormMutationVariables>;
+export type CreateFormMutationFn = Apollo.MutationFunction<CreateFormMutationData, CreateFormMutationVariables>;
 
 /**
  * __useCreateFormMutation__
@@ -344,12 +347,13 @@ export type CreateFormMutationFn = Apollo.MutationFunction<CreateFormMutation, C
  *   },
  * });
  */
-export function useCreateFormMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormMutation, CreateFormMutationVariables>) {
-        return Apollo.useMutation<CreateFormMutation, CreateFormMutationVariables>(CreateFormDocument, baseOptions);
+export function useCreateFormMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormMutationData, CreateFormMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFormMutationData, CreateFormMutationVariables>(CreateFormDocument, options);
       }
 export type CreateFormMutationHookResult = ReturnType<typeof useCreateFormMutation>;
-export type CreateFormMutationResult = Apollo.MutationResult<CreateFormMutation>;
-export type CreateFormMutationOptions = Apollo.BaseMutationOptions<CreateFormMutation, CreateFormMutationVariables>;
+export type CreateFormMutationResult = Apollo.MutationResult<CreateFormMutationData>;
+export type CreateFormMutationOptions = Apollo.BaseMutationOptions<CreateFormMutationData, CreateFormMutationVariables>;
 export const UpdateFormDocument = gql`
     mutation UpdateForm($id: Int!, $form: FormInput!) {
   updateForm(input: {id: $id, form: $form}) {
@@ -360,7 +364,7 @@ export const UpdateFormDocument = gql`
   }
 }
     ${FormEditorDataFragmentDoc}`;
-export type UpdateFormMutationFn = Apollo.MutationFunction<UpdateFormMutation, UpdateFormMutationVariables>;
+export type UpdateFormMutationFn = Apollo.MutationFunction<UpdateFormMutationData, UpdateFormMutationVariables>;
 
 /**
  * __useUpdateFormMutation__
@@ -380,12 +384,13 @@ export type UpdateFormMutationFn = Apollo.MutationFunction<UpdateFormMutation, U
  *   },
  * });
  */
-export function useUpdateFormMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormMutation, UpdateFormMutationVariables>) {
-        return Apollo.useMutation<UpdateFormMutation, UpdateFormMutationVariables>(UpdateFormDocument, baseOptions);
+export function useUpdateFormMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormMutationData, UpdateFormMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFormMutationData, UpdateFormMutationVariables>(UpdateFormDocument, options);
       }
 export type UpdateFormMutationHookResult = ReturnType<typeof useUpdateFormMutation>;
-export type UpdateFormMutationResult = Apollo.MutationResult<UpdateFormMutation>;
-export type UpdateFormMutationOptions = Apollo.BaseMutationOptions<UpdateFormMutation, UpdateFormMutationVariables>;
+export type UpdateFormMutationResult = Apollo.MutationResult<UpdateFormMutationData>;
+export type UpdateFormMutationOptions = Apollo.BaseMutationOptions<UpdateFormMutationData, UpdateFormMutationVariables>;
 export const DeleteFormDocument = gql`
     mutation DeleteForm($id: Int!) {
   deleteForm(input: {id: $id}) {
@@ -393,7 +398,7 @@ export const DeleteFormDocument = gql`
   }
 }
     `;
-export type DeleteFormMutationFn = Apollo.MutationFunction<DeleteFormMutation, DeleteFormMutationVariables>;
+export type DeleteFormMutationFn = Apollo.MutationFunction<DeleteFormMutationData, DeleteFormMutationVariables>;
 
 /**
  * __useDeleteFormMutation__
@@ -412,12 +417,13 @@ export type DeleteFormMutationFn = Apollo.MutationFunction<DeleteFormMutation, D
  *   },
  * });
  */
-export function useDeleteFormMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFormMutation, DeleteFormMutationVariables>) {
-        return Apollo.useMutation<DeleteFormMutation, DeleteFormMutationVariables>(DeleteFormDocument, baseOptions);
+export function useDeleteFormMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFormMutationData, DeleteFormMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFormMutationData, DeleteFormMutationVariables>(DeleteFormDocument, options);
       }
 export type DeleteFormMutationHookResult = ReturnType<typeof useDeleteFormMutation>;
-export type DeleteFormMutationResult = Apollo.MutationResult<DeleteFormMutation>;
-export type DeleteFormMutationOptions = Apollo.BaseMutationOptions<DeleteFormMutation, DeleteFormMutationVariables>;
+export type DeleteFormMutationResult = Apollo.MutationResult<DeleteFormMutationData>;
+export type DeleteFormMutationOptions = Apollo.BaseMutationOptions<DeleteFormMutationData, DeleteFormMutationVariables>;
 export const CreateFormSectionDocument = gql`
     mutation CreateFormSection($formId: Int!, $formSection: FormSectionInput!) {
   createFormSection(input: {form_id: $formId, form_section: $formSection}) {
@@ -433,7 +439,7 @@ export const CreateFormSectionDocument = gql`
 }
     ${CommonFormSectionFieldsFragmentDoc}
 ${FormEditorFormItemFieldsFragmentDoc}`;
-export type CreateFormSectionMutationFn = Apollo.MutationFunction<CreateFormSectionMutation, CreateFormSectionMutationVariables>;
+export type CreateFormSectionMutationFn = Apollo.MutationFunction<CreateFormSectionMutationData, CreateFormSectionMutationVariables>;
 
 /**
  * __useCreateFormSectionMutation__
@@ -453,12 +459,13 @@ export type CreateFormSectionMutationFn = Apollo.MutationFunction<CreateFormSect
  *   },
  * });
  */
-export function useCreateFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormSectionMutation, CreateFormSectionMutationVariables>) {
-        return Apollo.useMutation<CreateFormSectionMutation, CreateFormSectionMutationVariables>(CreateFormSectionDocument, baseOptions);
+export function useCreateFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormSectionMutationData, CreateFormSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFormSectionMutationData, CreateFormSectionMutationVariables>(CreateFormSectionDocument, options);
       }
 export type CreateFormSectionMutationHookResult = ReturnType<typeof useCreateFormSectionMutation>;
-export type CreateFormSectionMutationResult = Apollo.MutationResult<CreateFormSectionMutation>;
-export type CreateFormSectionMutationOptions = Apollo.BaseMutationOptions<CreateFormSectionMutation, CreateFormSectionMutationVariables>;
+export type CreateFormSectionMutationResult = Apollo.MutationResult<CreateFormSectionMutationData>;
+export type CreateFormSectionMutationOptions = Apollo.BaseMutationOptions<CreateFormSectionMutationData, CreateFormSectionMutationVariables>;
 export const UpdateFormSectionDocument = gql`
     mutation UpdateFormSection($id: Int!, $formSection: FormSectionInput!) {
   updateFormSection(input: {id: $id, form_section: $formSection}) {
@@ -474,7 +481,7 @@ export const UpdateFormSectionDocument = gql`
 }
     ${CommonFormSectionFieldsFragmentDoc}
 ${FormEditorFormItemFieldsFragmentDoc}`;
-export type UpdateFormSectionMutationFn = Apollo.MutationFunction<UpdateFormSectionMutation, UpdateFormSectionMutationVariables>;
+export type UpdateFormSectionMutationFn = Apollo.MutationFunction<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>;
 
 /**
  * __useUpdateFormSectionMutation__
@@ -494,12 +501,13 @@ export type UpdateFormSectionMutationFn = Apollo.MutationFunction<UpdateFormSect
  *   },
  * });
  */
-export function useUpdateFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormSectionMutation, UpdateFormSectionMutationVariables>) {
-        return Apollo.useMutation<UpdateFormSectionMutation, UpdateFormSectionMutationVariables>(UpdateFormSectionDocument, baseOptions);
+export function useUpdateFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>(UpdateFormSectionDocument, options);
       }
 export type UpdateFormSectionMutationHookResult = ReturnType<typeof useUpdateFormSectionMutation>;
-export type UpdateFormSectionMutationResult = Apollo.MutationResult<UpdateFormSectionMutation>;
-export type UpdateFormSectionMutationOptions = Apollo.BaseMutationOptions<UpdateFormSectionMutation, UpdateFormSectionMutationVariables>;
+export type UpdateFormSectionMutationResult = Apollo.MutationResult<UpdateFormSectionMutationData>;
+export type UpdateFormSectionMutationOptions = Apollo.BaseMutationOptions<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>;
 export const DeleteFormSectionDocument = gql`
     mutation DeleteFormSection($id: Int!) {
   deleteFormSection(input: {id: $id}) {
@@ -507,7 +515,7 @@ export const DeleteFormSectionDocument = gql`
   }
 }
     `;
-export type DeleteFormSectionMutationFn = Apollo.MutationFunction<DeleteFormSectionMutation, DeleteFormSectionMutationVariables>;
+export type DeleteFormSectionMutationFn = Apollo.MutationFunction<DeleteFormSectionMutationData, DeleteFormSectionMutationVariables>;
 
 /**
  * __useDeleteFormSectionMutation__
@@ -526,12 +534,13 @@ export type DeleteFormSectionMutationFn = Apollo.MutationFunction<DeleteFormSect
  *   },
  * });
  */
-export function useDeleteFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFormSectionMutation, DeleteFormSectionMutationVariables>) {
-        return Apollo.useMutation<DeleteFormSectionMutation, DeleteFormSectionMutationVariables>(DeleteFormSectionDocument, baseOptions);
+export function useDeleteFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFormSectionMutationData, DeleteFormSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFormSectionMutationData, DeleteFormSectionMutationVariables>(DeleteFormSectionDocument, options);
       }
 export type DeleteFormSectionMutationHookResult = ReturnType<typeof useDeleteFormSectionMutation>;
-export type DeleteFormSectionMutationResult = Apollo.MutationResult<DeleteFormSectionMutation>;
-export type DeleteFormSectionMutationOptions = Apollo.BaseMutationOptions<DeleteFormSectionMutation, DeleteFormSectionMutationVariables>;
+export type DeleteFormSectionMutationResult = Apollo.MutationResult<DeleteFormSectionMutationData>;
+export type DeleteFormSectionMutationOptions = Apollo.BaseMutationOptions<DeleteFormSectionMutationData, DeleteFormSectionMutationVariables>;
 export const MoveFormSectionDocument = gql`
     mutation MoveFormSection($id: Int!, $destinationIndex: Int!) {
   moveFormSection(input: {id: $id, destination_index: $destinationIndex}) {
@@ -542,7 +551,7 @@ export const MoveFormSectionDocument = gql`
   }
 }
     ${FormEditorDataFragmentDoc}`;
-export type MoveFormSectionMutationFn = Apollo.MutationFunction<MoveFormSectionMutation, MoveFormSectionMutationVariables>;
+export type MoveFormSectionMutationFn = Apollo.MutationFunction<MoveFormSectionMutationData, MoveFormSectionMutationVariables>;
 
 /**
  * __useMoveFormSectionMutation__
@@ -562,12 +571,13 @@ export type MoveFormSectionMutationFn = Apollo.MutationFunction<MoveFormSectionM
  *   },
  * });
  */
-export function useMoveFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<MoveFormSectionMutation, MoveFormSectionMutationVariables>) {
-        return Apollo.useMutation<MoveFormSectionMutation, MoveFormSectionMutationVariables>(MoveFormSectionDocument, baseOptions);
+export function useMoveFormSectionMutation(baseOptions?: Apollo.MutationHookOptions<MoveFormSectionMutationData, MoveFormSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MoveFormSectionMutationData, MoveFormSectionMutationVariables>(MoveFormSectionDocument, options);
       }
 export type MoveFormSectionMutationHookResult = ReturnType<typeof useMoveFormSectionMutation>;
-export type MoveFormSectionMutationResult = Apollo.MutationResult<MoveFormSectionMutation>;
-export type MoveFormSectionMutationOptions = Apollo.BaseMutationOptions<MoveFormSectionMutation, MoveFormSectionMutationVariables>;
+export type MoveFormSectionMutationResult = Apollo.MutationResult<MoveFormSectionMutationData>;
+export type MoveFormSectionMutationOptions = Apollo.BaseMutationOptions<MoveFormSectionMutationData, MoveFormSectionMutationVariables>;
 export const CreateFormItemDocument = gql`
     mutation CreateFormItem($formSectionId: Int!, $formItem: FormItemInput!) {
   createFormItem(input: {form_section_id: $formSectionId, form_item: $formItem}) {
@@ -578,7 +588,7 @@ export const CreateFormItemDocument = gql`
   }
 }
     ${FormEditorFormItemFieldsFragmentDoc}`;
-export type CreateFormItemMutationFn = Apollo.MutationFunction<CreateFormItemMutation, CreateFormItemMutationVariables>;
+export type CreateFormItemMutationFn = Apollo.MutationFunction<CreateFormItemMutationData, CreateFormItemMutationVariables>;
 
 /**
  * __useCreateFormItemMutation__
@@ -598,12 +608,13 @@ export type CreateFormItemMutationFn = Apollo.MutationFunction<CreateFormItemMut
  *   },
  * });
  */
-export function useCreateFormItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormItemMutation, CreateFormItemMutationVariables>) {
-        return Apollo.useMutation<CreateFormItemMutation, CreateFormItemMutationVariables>(CreateFormItemDocument, baseOptions);
+export function useCreateFormItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateFormItemMutationData, CreateFormItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFormItemMutationData, CreateFormItemMutationVariables>(CreateFormItemDocument, options);
       }
 export type CreateFormItemMutationHookResult = ReturnType<typeof useCreateFormItemMutation>;
-export type CreateFormItemMutationResult = Apollo.MutationResult<CreateFormItemMutation>;
-export type CreateFormItemMutationOptions = Apollo.BaseMutationOptions<CreateFormItemMutation, CreateFormItemMutationVariables>;
+export type CreateFormItemMutationResult = Apollo.MutationResult<CreateFormItemMutationData>;
+export type CreateFormItemMutationOptions = Apollo.BaseMutationOptions<CreateFormItemMutationData, CreateFormItemMutationVariables>;
 export const UpdateFormItemDocument = gql`
     mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
   updateFormItem(input: {id: $id, form_item: $formItem}) {
@@ -614,7 +625,7 @@ export const UpdateFormItemDocument = gql`
   }
 }
     ${FormEditorFormItemFieldsFragmentDoc}`;
-export type UpdateFormItemMutationFn = Apollo.MutationFunction<UpdateFormItemMutation, UpdateFormItemMutationVariables>;
+export type UpdateFormItemMutationFn = Apollo.MutationFunction<UpdateFormItemMutationData, UpdateFormItemMutationVariables>;
 
 /**
  * __useUpdateFormItemMutation__
@@ -634,12 +645,13 @@ export type UpdateFormItemMutationFn = Apollo.MutationFunction<UpdateFormItemMut
  *   },
  * });
  */
-export function useUpdateFormItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormItemMutation, UpdateFormItemMutationVariables>) {
-        return Apollo.useMutation<UpdateFormItemMutation, UpdateFormItemMutationVariables>(UpdateFormItemDocument, baseOptions);
+export function useUpdateFormItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFormItemMutationData, UpdateFormItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFormItemMutationData, UpdateFormItemMutationVariables>(UpdateFormItemDocument, options);
       }
 export type UpdateFormItemMutationHookResult = ReturnType<typeof useUpdateFormItemMutation>;
-export type UpdateFormItemMutationResult = Apollo.MutationResult<UpdateFormItemMutation>;
-export type UpdateFormItemMutationOptions = Apollo.BaseMutationOptions<UpdateFormItemMutation, UpdateFormItemMutationVariables>;
+export type UpdateFormItemMutationResult = Apollo.MutationResult<UpdateFormItemMutationData>;
+export type UpdateFormItemMutationOptions = Apollo.BaseMutationOptions<UpdateFormItemMutationData, UpdateFormItemMutationVariables>;
 export const DeleteFormItemDocument = gql`
     mutation DeleteFormItem($id: Int!) {
   deleteFormItem(input: {id: $id}) {
@@ -647,7 +659,7 @@ export const DeleteFormItemDocument = gql`
   }
 }
     `;
-export type DeleteFormItemMutationFn = Apollo.MutationFunction<DeleteFormItemMutation, DeleteFormItemMutationVariables>;
+export type DeleteFormItemMutationFn = Apollo.MutationFunction<DeleteFormItemMutationData, DeleteFormItemMutationVariables>;
 
 /**
  * __useDeleteFormItemMutation__
@@ -666,12 +678,13 @@ export type DeleteFormItemMutationFn = Apollo.MutationFunction<DeleteFormItemMut
  *   },
  * });
  */
-export function useDeleteFormItemMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFormItemMutation, DeleteFormItemMutationVariables>) {
-        return Apollo.useMutation<DeleteFormItemMutation, DeleteFormItemMutationVariables>(DeleteFormItemDocument, baseOptions);
+export function useDeleteFormItemMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFormItemMutationData, DeleteFormItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFormItemMutationData, DeleteFormItemMutationVariables>(DeleteFormItemDocument, options);
       }
 export type DeleteFormItemMutationHookResult = ReturnType<typeof useDeleteFormItemMutation>;
-export type DeleteFormItemMutationResult = Apollo.MutationResult<DeleteFormItemMutation>;
-export type DeleteFormItemMutationOptions = Apollo.BaseMutationOptions<DeleteFormItemMutation, DeleteFormItemMutationVariables>;
+export type DeleteFormItemMutationResult = Apollo.MutationResult<DeleteFormItemMutationData>;
+export type DeleteFormItemMutationOptions = Apollo.BaseMutationOptions<DeleteFormItemMutationData, DeleteFormItemMutationVariables>;
 export const MoveFormItemDocument = gql`
     mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
   moveFormItem(
@@ -687,7 +700,7 @@ export const MoveFormItemDocument = gql`
   }
 }
     ${FormEditorFormItemFieldsFragmentDoc}`;
-export type MoveFormItemMutationFn = Apollo.MutationFunction<MoveFormItemMutation, MoveFormItemMutationVariables>;
+export type MoveFormItemMutationFn = Apollo.MutationFunction<MoveFormItemMutationData, MoveFormItemMutationVariables>;
 
 /**
  * __useMoveFormItemMutation__
@@ -708,9 +721,10 @@ export type MoveFormItemMutationFn = Apollo.MutationFunction<MoveFormItemMutatio
  *   },
  * });
  */
-export function useMoveFormItemMutation(baseOptions?: Apollo.MutationHookOptions<MoveFormItemMutation, MoveFormItemMutationVariables>) {
-        return Apollo.useMutation<MoveFormItemMutation, MoveFormItemMutationVariables>(MoveFormItemDocument, baseOptions);
+export function useMoveFormItemMutation(baseOptions?: Apollo.MutationHookOptions<MoveFormItemMutationData, MoveFormItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MoveFormItemMutationData, MoveFormItemMutationVariables>(MoveFormItemDocument, options);
       }
 export type MoveFormItemMutationHookResult = ReturnType<typeof useMoveFormItemMutation>;
-export type MoveFormItemMutationResult = Apollo.MutationResult<MoveFormItemMutation>;
-export type MoveFormItemMutationOptions = Apollo.BaseMutationOptions<MoveFormItemMutation, MoveFormItemMutationVariables>;
+export type MoveFormItemMutationResult = Apollo.MutationResult<MoveFormItemMutationData>;
+export type MoveFormItemMutationOptions = Apollo.BaseMutationOptions<MoveFormItemMutationData, MoveFormItemMutationVariables>;

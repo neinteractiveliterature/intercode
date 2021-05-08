@@ -6,7 +6,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
-import { useEventHistoryQueryQuery } from './eventHistoryQuery.generated';
+import { useEventHistoryQuery } from './eventHistoryQuery.generated';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -23,7 +23,7 @@ export type EventHistoryProps = {
 
 function EventHistory({ eventId, eventPath }: EventHistoryProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useEventHistoryQueryQuery({
+  const { data, loading, error } = useEventHistoryQuery({
     variables: { id: eventId },
   });
 

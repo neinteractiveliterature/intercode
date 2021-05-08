@@ -11,11 +11,11 @@ import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useEventCategoryAdminQueryQuery } from './queries.generated';
+import { useEventCategoryAdminQuery } from './queries.generated';
 
 function NewEventCategory() {
   const history = useHistory();
-  const { data, loading, error } = useEventCategoryAdminQueryQuery();
+  const { data, loading, error } = useEventCategoryAdminQuery();
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateEventCategory, {
       query: EventCategoryAdminQuery,

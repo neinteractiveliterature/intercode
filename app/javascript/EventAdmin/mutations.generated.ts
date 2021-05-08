@@ -5,12 +5,13 @@ import { EventFieldsFragment, RunFieldsFragment, MaximumEventProvidedTicketsOver
 import { gql } from '@apollo/client';
 import { EventFieldsFragmentDoc, RunFieldsFragmentDoc, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateEventMutationVariables = Types.Exact<{
   input: Types.CreateEventInput;
 }>;
 
 
-export type CreateEventMutation = (
+export type CreateEventMutationData = (
   { __typename: 'Mutation' }
   & { createEvent?: Types.Maybe<(
     { __typename: 'CreateEventPayload' }
@@ -27,7 +28,7 @@ export type CreateFillerEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFillerEventMutation = (
+export type CreateFillerEventMutationData = (
   { __typename: 'Mutation' }
   & { createFillerEvent?: Types.Maybe<(
     { __typename: 'CreateFillerEventPayload' }
@@ -44,7 +45,7 @@ export type DropEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type DropEventMutation = (
+export type DropEventMutationData = (
   { __typename: 'Mutation' }
   & { dropEvent?: Types.Maybe<(
     { __typename: 'DropEventPayload' }
@@ -60,7 +61,7 @@ export type RestoreDroppedEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type RestoreDroppedEventMutation = (
+export type RestoreDroppedEventMutationData = (
   { __typename: 'Mutation' }
   & { restoreDroppedEvent?: Types.Maybe<(
     { __typename: 'RestoreDroppedEventPayload' }
@@ -76,7 +77,7 @@ export type UpdateEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventMutation = (
+export type UpdateEventMutationData = (
   { __typename: 'Mutation' }
   & { updateEvent?: Types.Maybe<(
     { __typename: 'UpdateEventPayload' }
@@ -93,7 +94,7 @@ export type CreateRunMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateRunMutation = (
+export type CreateRunMutationData = (
   { __typename: 'Mutation' }
   & { createRun?: Types.Maybe<(
     { __typename: 'CreateRunPayload' }
@@ -110,7 +111,7 @@ export type CreateMultipleRunsMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateMultipleRunsMutation = (
+export type CreateMultipleRunsMutationData = (
   { __typename: 'Mutation' }
   & { createMultipleRuns?: Types.Maybe<(
     { __typename: 'CreateMultipleRunsPayload' }
@@ -127,7 +128,7 @@ export type UpdateRunMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateRunMutation = (
+export type UpdateRunMutationData = (
   { __typename: 'Mutation' }
   & { updateRun?: Types.Maybe<(
     { __typename: 'UpdateRunPayload' }
@@ -144,7 +145,7 @@ export type DeleteRunMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteRunMutation = (
+export type DeleteRunMutationData = (
   { __typename: 'Mutation' }
   & { deleteRun?: Types.Maybe<(
     { __typename: 'DeleteRunPayload' }
@@ -161,7 +162,7 @@ export type CreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 }>;
 
 
-export type CreateMaximumEventProvidedTicketsOverrideMutation = (
+export type CreateMaximumEventProvidedTicketsOverrideMutationData = (
   { __typename: 'Mutation' }
   & { createMaximumEventProvidedTicketsOverride?: Types.Maybe<(
     { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload' }
@@ -178,7 +179,7 @@ export type DeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 }>;
 
 
-export type DeleteMaximumEventProvidedTicketsOverrideMutation = (
+export type DeleteMaximumEventProvidedTicketsOverrideMutationData = (
   { __typename: 'Mutation' }
   & { deleteMaximumEventProvidedTicketsOverride?: Types.Maybe<(
     { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
@@ -195,7 +196,7 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 }>;
 
 
-export type UpdateMaximumEventProvidedTicketsOverrideMutation = (
+export type UpdateMaximumEventProvidedTicketsOverrideMutationData = (
   { __typename: 'Mutation' }
   & { updateMaximumEventProvidedTicketsOverride?: Types.Maybe<(
     { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
@@ -213,7 +214,7 @@ export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventAdminNotesMutation = (
+export type UpdateEventAdminNotesMutationData = (
   { __typename: 'Mutation' }
   & { updateEventAdminNotes?: Types.Maybe<(
     { __typename: 'UpdateEventAdminNotesPayload' }
@@ -236,7 +237,7 @@ export const CreateEventDocument = gql`
   }
 }
     ${EventFieldsFragmentDoc}`;
-export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation, CreateEventMutationVariables>;
+export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutationData, CreateEventMutationVariables>;
 
 /**
  * __useCreateEventMutation__
@@ -255,12 +256,13 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *   },
  * });
  */
-export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventMutation, CreateEventMutationVariables>) {
-        return Apollo.useMutation<CreateEventMutation, CreateEventMutationVariables>(CreateEventDocument, baseOptions);
+export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventMutationData, CreateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEventMutationData, CreateEventMutationVariables>(CreateEventDocument, options);
       }
 export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
-export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
-export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
+export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutationData>;
+export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutationData, CreateEventMutationVariables>;
 export const CreateFillerEventDocument = gql`
     mutation CreateFillerEvent($input: CreateFillerEventInput!) {
   createFillerEvent(input: $input) {
@@ -271,7 +273,7 @@ export const CreateFillerEventDocument = gql`
   }
 }
     ${EventFieldsFragmentDoc}`;
-export type CreateFillerEventMutationFn = Apollo.MutationFunction<CreateFillerEventMutation, CreateFillerEventMutationVariables>;
+export type CreateFillerEventMutationFn = Apollo.MutationFunction<CreateFillerEventMutationData, CreateFillerEventMutationVariables>;
 
 /**
  * __useCreateFillerEventMutation__
@@ -290,12 +292,13 @@ export type CreateFillerEventMutationFn = Apollo.MutationFunction<CreateFillerEv
  *   },
  * });
  */
-export function useCreateFillerEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateFillerEventMutation, CreateFillerEventMutationVariables>) {
-        return Apollo.useMutation<CreateFillerEventMutation, CreateFillerEventMutationVariables>(CreateFillerEventDocument, baseOptions);
+export function useCreateFillerEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateFillerEventMutationData, CreateFillerEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFillerEventMutationData, CreateFillerEventMutationVariables>(CreateFillerEventDocument, options);
       }
 export type CreateFillerEventMutationHookResult = ReturnType<typeof useCreateFillerEventMutation>;
-export type CreateFillerEventMutationResult = Apollo.MutationResult<CreateFillerEventMutation>;
-export type CreateFillerEventMutationOptions = Apollo.BaseMutationOptions<CreateFillerEventMutation, CreateFillerEventMutationVariables>;
+export type CreateFillerEventMutationResult = Apollo.MutationResult<CreateFillerEventMutationData>;
+export type CreateFillerEventMutationOptions = Apollo.BaseMutationOptions<CreateFillerEventMutationData, CreateFillerEventMutationVariables>;
 export const DropEventDocument = gql`
     mutation DropEvent($input: DropEventInput!) {
   dropEvent(input: $input) {
@@ -306,7 +309,7 @@ export const DropEventDocument = gql`
   }
 }
     `;
-export type DropEventMutationFn = Apollo.MutationFunction<DropEventMutation, DropEventMutationVariables>;
+export type DropEventMutationFn = Apollo.MutationFunction<DropEventMutationData, DropEventMutationVariables>;
 
 /**
  * __useDropEventMutation__
@@ -325,12 +328,13 @@ export type DropEventMutationFn = Apollo.MutationFunction<DropEventMutation, Dro
  *   },
  * });
  */
-export function useDropEventMutation(baseOptions?: Apollo.MutationHookOptions<DropEventMutation, DropEventMutationVariables>) {
-        return Apollo.useMutation<DropEventMutation, DropEventMutationVariables>(DropEventDocument, baseOptions);
+export function useDropEventMutation(baseOptions?: Apollo.MutationHookOptions<DropEventMutationData, DropEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DropEventMutationData, DropEventMutationVariables>(DropEventDocument, options);
       }
 export type DropEventMutationHookResult = ReturnType<typeof useDropEventMutation>;
-export type DropEventMutationResult = Apollo.MutationResult<DropEventMutation>;
-export type DropEventMutationOptions = Apollo.BaseMutationOptions<DropEventMutation, DropEventMutationVariables>;
+export type DropEventMutationResult = Apollo.MutationResult<DropEventMutationData>;
+export type DropEventMutationOptions = Apollo.BaseMutationOptions<DropEventMutationData, DropEventMutationVariables>;
 export const RestoreDroppedEventDocument = gql`
     mutation RestoreDroppedEvent($input: RestoreDroppedEventInput!) {
   restoreDroppedEvent(input: $input) {
@@ -341,7 +345,7 @@ export const RestoreDroppedEventDocument = gql`
   }
 }
     `;
-export type RestoreDroppedEventMutationFn = Apollo.MutationFunction<RestoreDroppedEventMutation, RestoreDroppedEventMutationVariables>;
+export type RestoreDroppedEventMutationFn = Apollo.MutationFunction<RestoreDroppedEventMutationData, RestoreDroppedEventMutationVariables>;
 
 /**
  * __useRestoreDroppedEventMutation__
@@ -360,12 +364,13 @@ export type RestoreDroppedEventMutationFn = Apollo.MutationFunction<RestoreDropp
  *   },
  * });
  */
-export function useRestoreDroppedEventMutation(baseOptions?: Apollo.MutationHookOptions<RestoreDroppedEventMutation, RestoreDroppedEventMutationVariables>) {
-        return Apollo.useMutation<RestoreDroppedEventMutation, RestoreDroppedEventMutationVariables>(RestoreDroppedEventDocument, baseOptions);
+export function useRestoreDroppedEventMutation(baseOptions?: Apollo.MutationHookOptions<RestoreDroppedEventMutationData, RestoreDroppedEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RestoreDroppedEventMutationData, RestoreDroppedEventMutationVariables>(RestoreDroppedEventDocument, options);
       }
 export type RestoreDroppedEventMutationHookResult = ReturnType<typeof useRestoreDroppedEventMutation>;
-export type RestoreDroppedEventMutationResult = Apollo.MutationResult<RestoreDroppedEventMutation>;
-export type RestoreDroppedEventMutationOptions = Apollo.BaseMutationOptions<RestoreDroppedEventMutation, RestoreDroppedEventMutationVariables>;
+export type RestoreDroppedEventMutationResult = Apollo.MutationResult<RestoreDroppedEventMutationData>;
+export type RestoreDroppedEventMutationOptions = Apollo.BaseMutationOptions<RestoreDroppedEventMutationData, RestoreDroppedEventMutationVariables>;
 export const UpdateEventDocument = gql`
     mutation UpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
@@ -376,7 +381,7 @@ export const UpdateEventDocument = gql`
   }
 }
     ${EventFieldsFragmentDoc}`;
-export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation, UpdateEventMutationVariables>;
+export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutationData, UpdateEventMutationVariables>;
 
 /**
  * __useUpdateEventMutation__
@@ -395,12 +400,13 @@ export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation,
  *   },
  * });
  */
-export function useUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventMutation, UpdateEventMutationVariables>) {
-        return Apollo.useMutation<UpdateEventMutation, UpdateEventMutationVariables>(UpdateEventDocument, baseOptions);
+export function useUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventMutationData, UpdateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventMutationData, UpdateEventMutationVariables>(UpdateEventDocument, options);
       }
 export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
-export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
-export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
+export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutationData>;
+export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutationData, UpdateEventMutationVariables>;
 export const CreateRunDocument = gql`
     mutation CreateRun($input: CreateRunInput!) {
   createRun(input: $input) {
@@ -411,7 +417,7 @@ export const CreateRunDocument = gql`
   }
 }
     ${RunFieldsFragmentDoc}`;
-export type CreateRunMutationFn = Apollo.MutationFunction<CreateRunMutation, CreateRunMutationVariables>;
+export type CreateRunMutationFn = Apollo.MutationFunction<CreateRunMutationData, CreateRunMutationVariables>;
 
 /**
  * __useCreateRunMutation__
@@ -430,12 +436,13 @@ export type CreateRunMutationFn = Apollo.MutationFunction<CreateRunMutation, Cre
  *   },
  * });
  */
-export function useCreateRunMutation(baseOptions?: Apollo.MutationHookOptions<CreateRunMutation, CreateRunMutationVariables>) {
-        return Apollo.useMutation<CreateRunMutation, CreateRunMutationVariables>(CreateRunDocument, baseOptions);
+export function useCreateRunMutation(baseOptions?: Apollo.MutationHookOptions<CreateRunMutationData, CreateRunMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRunMutationData, CreateRunMutationVariables>(CreateRunDocument, options);
       }
 export type CreateRunMutationHookResult = ReturnType<typeof useCreateRunMutation>;
-export type CreateRunMutationResult = Apollo.MutationResult<CreateRunMutation>;
-export type CreateRunMutationOptions = Apollo.BaseMutationOptions<CreateRunMutation, CreateRunMutationVariables>;
+export type CreateRunMutationResult = Apollo.MutationResult<CreateRunMutationData>;
+export type CreateRunMutationOptions = Apollo.BaseMutationOptions<CreateRunMutationData, CreateRunMutationVariables>;
 export const CreateMultipleRunsDocument = gql`
     mutation CreateMultipleRuns($input: CreateMultipleRunsInput!) {
   createMultipleRuns(input: $input) {
@@ -446,7 +453,7 @@ export const CreateMultipleRunsDocument = gql`
   }
 }
     ${RunFieldsFragmentDoc}`;
-export type CreateMultipleRunsMutationFn = Apollo.MutationFunction<CreateMultipleRunsMutation, CreateMultipleRunsMutationVariables>;
+export type CreateMultipleRunsMutationFn = Apollo.MutationFunction<CreateMultipleRunsMutationData, CreateMultipleRunsMutationVariables>;
 
 /**
  * __useCreateMultipleRunsMutation__
@@ -465,12 +472,13 @@ export type CreateMultipleRunsMutationFn = Apollo.MutationFunction<CreateMultipl
  *   },
  * });
  */
-export function useCreateMultipleRunsMutation(baseOptions?: Apollo.MutationHookOptions<CreateMultipleRunsMutation, CreateMultipleRunsMutationVariables>) {
-        return Apollo.useMutation<CreateMultipleRunsMutation, CreateMultipleRunsMutationVariables>(CreateMultipleRunsDocument, baseOptions);
+export function useCreateMultipleRunsMutation(baseOptions?: Apollo.MutationHookOptions<CreateMultipleRunsMutationData, CreateMultipleRunsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMultipleRunsMutationData, CreateMultipleRunsMutationVariables>(CreateMultipleRunsDocument, options);
       }
 export type CreateMultipleRunsMutationHookResult = ReturnType<typeof useCreateMultipleRunsMutation>;
-export type CreateMultipleRunsMutationResult = Apollo.MutationResult<CreateMultipleRunsMutation>;
-export type CreateMultipleRunsMutationOptions = Apollo.BaseMutationOptions<CreateMultipleRunsMutation, CreateMultipleRunsMutationVariables>;
+export type CreateMultipleRunsMutationResult = Apollo.MutationResult<CreateMultipleRunsMutationData>;
+export type CreateMultipleRunsMutationOptions = Apollo.BaseMutationOptions<CreateMultipleRunsMutationData, CreateMultipleRunsMutationVariables>;
 export const UpdateRunDocument = gql`
     mutation UpdateRun($input: UpdateRunInput!) {
   updateRun(input: $input) {
@@ -481,7 +489,7 @@ export const UpdateRunDocument = gql`
   }
 }
     ${RunFieldsFragmentDoc}`;
-export type UpdateRunMutationFn = Apollo.MutationFunction<UpdateRunMutation, UpdateRunMutationVariables>;
+export type UpdateRunMutationFn = Apollo.MutationFunction<UpdateRunMutationData, UpdateRunMutationVariables>;
 
 /**
  * __useUpdateRunMutation__
@@ -500,12 +508,13 @@ export type UpdateRunMutationFn = Apollo.MutationFunction<UpdateRunMutation, Upd
  *   },
  * });
  */
-export function useUpdateRunMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRunMutation, UpdateRunMutationVariables>) {
-        return Apollo.useMutation<UpdateRunMutation, UpdateRunMutationVariables>(UpdateRunDocument, baseOptions);
+export function useUpdateRunMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRunMutationData, UpdateRunMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRunMutationData, UpdateRunMutationVariables>(UpdateRunDocument, options);
       }
 export type UpdateRunMutationHookResult = ReturnType<typeof useUpdateRunMutation>;
-export type UpdateRunMutationResult = Apollo.MutationResult<UpdateRunMutation>;
-export type UpdateRunMutationOptions = Apollo.BaseMutationOptions<UpdateRunMutation, UpdateRunMutationVariables>;
+export type UpdateRunMutationResult = Apollo.MutationResult<UpdateRunMutationData>;
+export type UpdateRunMutationOptions = Apollo.BaseMutationOptions<UpdateRunMutationData, UpdateRunMutationVariables>;
 export const DeleteRunDocument = gql`
     mutation DeleteRun($input: DeleteRunInput!) {
   deleteRun(input: $input) {
@@ -516,7 +525,7 @@ export const DeleteRunDocument = gql`
   }
 }
     ${RunFieldsFragmentDoc}`;
-export type DeleteRunMutationFn = Apollo.MutationFunction<DeleteRunMutation, DeleteRunMutationVariables>;
+export type DeleteRunMutationFn = Apollo.MutationFunction<DeleteRunMutationData, DeleteRunMutationVariables>;
 
 /**
  * __useDeleteRunMutation__
@@ -535,12 +544,13 @@ export type DeleteRunMutationFn = Apollo.MutationFunction<DeleteRunMutation, Del
  *   },
  * });
  */
-export function useDeleteRunMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRunMutation, DeleteRunMutationVariables>) {
-        return Apollo.useMutation<DeleteRunMutation, DeleteRunMutationVariables>(DeleteRunDocument, baseOptions);
+export function useDeleteRunMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRunMutationData, DeleteRunMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRunMutationData, DeleteRunMutationVariables>(DeleteRunDocument, options);
       }
 export type DeleteRunMutationHookResult = ReturnType<typeof useDeleteRunMutation>;
-export type DeleteRunMutationResult = Apollo.MutationResult<DeleteRunMutation>;
-export type DeleteRunMutationOptions = Apollo.BaseMutationOptions<DeleteRunMutation, DeleteRunMutationVariables>;
+export type DeleteRunMutationResult = Apollo.MutationResult<DeleteRunMutationData>;
+export type DeleteRunMutationOptions = Apollo.BaseMutationOptions<DeleteRunMutationData, DeleteRunMutationVariables>;
 export const CreateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation CreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
@@ -551,7 +561,7 @@ export const CreateMaximumEventProvidedTicketsOverrideDocument = gql`
   }
 }
     ${MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
-export type CreateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<CreateMaximumEventProvidedTicketsOverrideMutation, CreateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type CreateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<CreateMaximumEventProvidedTicketsOverrideMutationData, CreateMaximumEventProvidedTicketsOverrideMutationVariables>;
 
 /**
  * __useCreateMaximumEventProvidedTicketsOverrideMutation__
@@ -570,12 +580,13 @@ export type CreateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.Mutatio
  *   },
  * });
  */
-export function useCreateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<CreateMaximumEventProvidedTicketsOverrideMutation, CreateMaximumEventProvidedTicketsOverrideMutationVariables>) {
-        return Apollo.useMutation<CreateMaximumEventProvidedTicketsOverrideMutation, CreateMaximumEventProvidedTicketsOverrideMutationVariables>(CreateMaximumEventProvidedTicketsOverrideDocument, baseOptions);
+export function useCreateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<CreateMaximumEventProvidedTicketsOverrideMutationData, CreateMaximumEventProvidedTicketsOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMaximumEventProvidedTicketsOverrideMutationData, CreateMaximumEventProvidedTicketsOverrideMutationVariables>(CreateMaximumEventProvidedTicketsOverrideDocument, options);
       }
 export type CreateMaximumEventProvidedTicketsOverrideMutationHookResult = ReturnType<typeof useCreateMaximumEventProvidedTicketsOverrideMutation>;
-export type CreateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<CreateMaximumEventProvidedTicketsOverrideMutation>;
-export type CreateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<CreateMaximumEventProvidedTicketsOverrideMutation, CreateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type CreateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<CreateMaximumEventProvidedTicketsOverrideMutationData>;
+export type CreateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<CreateMaximumEventProvidedTicketsOverrideMutationData, CreateMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const DeleteMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation DeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
@@ -586,7 +597,7 @@ export const DeleteMaximumEventProvidedTicketsOverrideDocument = gql`
   }
 }
     ${MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
-export type DeleteMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<DeleteMaximumEventProvidedTicketsOverrideMutation, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type DeleteMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<DeleteMaximumEventProvidedTicketsOverrideMutationData, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
 
 /**
  * __useDeleteMaximumEventProvidedTicketsOverrideMutation__
@@ -605,12 +616,13 @@ export type DeleteMaximumEventProvidedTicketsOverrideMutationFn = Apollo.Mutatio
  *   },
  * });
  */
-export function useDeleteMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMaximumEventProvidedTicketsOverrideMutation, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>) {
-        return Apollo.useMutation<DeleteMaximumEventProvidedTicketsOverrideMutation, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>(DeleteMaximumEventProvidedTicketsOverrideDocument, baseOptions);
+export function useDeleteMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMaximumEventProvidedTicketsOverrideMutationData, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMaximumEventProvidedTicketsOverrideMutationData, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>(DeleteMaximumEventProvidedTicketsOverrideDocument, options);
       }
 export type DeleteMaximumEventProvidedTicketsOverrideMutationHookResult = ReturnType<typeof useDeleteMaximumEventProvidedTicketsOverrideMutation>;
-export type DeleteMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<DeleteMaximumEventProvidedTicketsOverrideMutation>;
-export type DeleteMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<DeleteMaximumEventProvidedTicketsOverrideMutation, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type DeleteMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<DeleteMaximumEventProvidedTicketsOverrideMutationData>;
+export type DeleteMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<DeleteMaximumEventProvidedTicketsOverrideMutationData, DeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const UpdateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation UpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
@@ -621,7 +633,7 @@ export const UpdateMaximumEventProvidedTicketsOverrideDocument = gql`
   }
 }
     ${MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
-export type UpdateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<UpdateMaximumEventProvidedTicketsOverrideMutation, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type UpdateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<UpdateMaximumEventProvidedTicketsOverrideMutationData, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
 
 /**
  * __useUpdateMaximumEventProvidedTicketsOverrideMutation__
@@ -640,12 +652,13 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.Mutatio
  *   },
  * });
  */
-export function useUpdateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMaximumEventProvidedTicketsOverrideMutation, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>) {
-        return Apollo.useMutation<UpdateMaximumEventProvidedTicketsOverrideMutation, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>(UpdateMaximumEventProvidedTicketsOverrideDocument, baseOptions);
+export function useUpdateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMaximumEventProvidedTicketsOverrideMutationData, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMaximumEventProvidedTicketsOverrideMutationData, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>(UpdateMaximumEventProvidedTicketsOverrideDocument, options);
       }
 export type UpdateMaximumEventProvidedTicketsOverrideMutationHookResult = ReturnType<typeof useUpdateMaximumEventProvidedTicketsOverrideMutation>;
-export type UpdateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<UpdateMaximumEventProvidedTicketsOverrideMutation>;
-export type UpdateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<UpdateMaximumEventProvidedTicketsOverrideMutation, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type UpdateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<UpdateMaximumEventProvidedTicketsOverrideMutationData>;
+export type UpdateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<UpdateMaximumEventProvidedTicketsOverrideMutationData, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const UpdateEventAdminNotesDocument = gql`
     mutation UpdateEventAdminNotes($eventId: Int!, $adminNotes: String!) {
   updateEventAdminNotes(input: {id: $eventId, admin_notes: $adminNotes}) {
@@ -656,7 +669,7 @@ export const UpdateEventAdminNotesDocument = gql`
   }
 }
     ${EventFieldsFragmentDoc}`;
-export type UpdateEventAdminNotesMutationFn = Apollo.MutationFunction<UpdateEventAdminNotesMutation, UpdateEventAdminNotesMutationVariables>;
+export type UpdateEventAdminNotesMutationFn = Apollo.MutationFunction<UpdateEventAdminNotesMutationData, UpdateEventAdminNotesMutationVariables>;
 
 /**
  * __useUpdateEventAdminNotesMutation__
@@ -676,9 +689,10 @@ export type UpdateEventAdminNotesMutationFn = Apollo.MutationFunction<UpdateEven
  *   },
  * });
  */
-export function useUpdateEventAdminNotesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventAdminNotesMutation, UpdateEventAdminNotesMutationVariables>) {
-        return Apollo.useMutation<UpdateEventAdminNotesMutation, UpdateEventAdminNotesMutationVariables>(UpdateEventAdminNotesDocument, baseOptions);
+export function useUpdateEventAdminNotesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventAdminNotesMutationData, UpdateEventAdminNotesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventAdminNotesMutationData, UpdateEventAdminNotesMutationVariables>(UpdateEventAdminNotesDocument, options);
       }
 export type UpdateEventAdminNotesMutationHookResult = ReturnType<typeof useUpdateEventAdminNotesMutation>;
-export type UpdateEventAdminNotesMutationResult = Apollo.MutationResult<UpdateEventAdminNotesMutation>;
-export type UpdateEventAdminNotesMutationOptions = Apollo.BaseMutationOptions<UpdateEventAdminNotesMutation, UpdateEventAdminNotesMutationVariables>;
+export type UpdateEventAdminNotesMutationResult = Apollo.MutationResult<UpdateEventAdminNotesMutationData>;
+export type UpdateEventAdminNotesMutationOptions = Apollo.BaseMutationOptions<UpdateEventAdminNotesMutationData, UpdateEventAdminNotesMutationVariables>;

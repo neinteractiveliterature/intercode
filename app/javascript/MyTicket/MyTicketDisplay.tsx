@@ -5,11 +5,11 @@ import { DateTime } from 'luxon';
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { useMyTicketDisplayQueryQuery } from './queries.generated';
+import { useMyTicketDisplayQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
-export default LoadQueryWrapper(useMyTicketDisplayQueryQuery, function MyTicketDisplay({ data }) {
+export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDisplay({ data }) {
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 

@@ -3,10 +3,10 @@ import type { DocumentNode } from 'graphql';
 
 import { DefaultEventsQuery } from './selectDefaultQueries';
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
-import { DefaultEventsQueryQuery } from './selectDefaultQueries.generated';
+import { DefaultEventsQueryData } from './selectDefaultQueries.generated';
 
-type DQ = DefaultEventsQueryQuery;
-type DO<QueryType extends DefaultEventsQueryQuery> = NonNullable<
+type DQ = DefaultEventsQueryData;
+type DO<QueryType extends DefaultEventsQueryData> = NonNullable<
   QueryType['convention']
 >['events_paginated']['entries'][0];
 export type DefaultEventSelectOptionType = DO<DQ>;

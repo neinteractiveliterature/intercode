@@ -9,15 +9,15 @@ import usePageTitle from '../../usePageTitle';
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 import {
-  RunSignupsTableSignupsQueryQuery,
-  useRunSignupsTableSignupsQueryQuery,
+  RunSignupsTableSignupsQueryData,
+  useRunSignupsTableSignupsQuery,
 } from './queries.generated';
 
 function getEmails({
   data,
   includes,
 }: {
-  data: RunSignupsTableSignupsQueryQuery;
+  data: RunSignupsTableSignupsQueryData;
   includes: string[];
 }) {
   const teamMemberUserConProfileIds = data.event.team_members.map(
@@ -62,7 +62,7 @@ export type RunEmailListProps = {
 function RunEmailList({ runId, eventId, separator }: RunEmailListProps) {
   const { t } = useTranslation();
   const [includes, setIncludes] = useState(['teamMembers', 'confirmed']);
-  const { data, loading, error } = useRunSignupsTableSignupsQueryQuery({
+  const { data, loading, error } = useRunSignupsTableSignupsQuery({
     variables: {
       runId,
       eventId,

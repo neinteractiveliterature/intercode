@@ -4,10 +4,10 @@ import { useHistory, useParams } from 'react-router-dom';
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useUserConProfileAdminQueryQuery } from './queries.generated';
+import { useUserConProfileAdminQuery } from './queries.generated';
 import { useUpdateTicketMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useUserConProfileAdminQueryQuery, function EditTicket({ data }) {
+export default LoadQueryWrapper(useUserConProfileAdminQuery, function EditTicket({ data }) {
   const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
   const history = useHistory();
   const [updateTicket] = useUpdateTicketMutation();

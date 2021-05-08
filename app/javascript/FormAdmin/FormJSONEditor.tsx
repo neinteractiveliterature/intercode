@@ -11,7 +11,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
-import { useFormAdminQueryQuery } from './queries.generated';
+import { useFormAdminQuery } from './queries.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import { useUpdateFormWithJsonMutation } from './mutations.generated';
 
@@ -30,7 +30,7 @@ function formDataFromJSON(json: string): EditingFormJSONData {
 }
 
 export default LoadSingleValueFromCollectionWrapper(
-  useFormAdminQueryQuery,
+  useFormAdminQuery,
   (data, id) => data.convention.forms.find((form) => form.id.toString(10) === id),
   function FormJSONEditor({ value: initialForm }) {
     const history = useHistory();

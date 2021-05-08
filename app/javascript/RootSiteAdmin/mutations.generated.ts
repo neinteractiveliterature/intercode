@@ -5,6 +5,7 @@ import { RootSiteFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { RootSiteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type UpdateRootSiteMutationVariables = Types.Exact<{
   siteName?: Types.Maybe<Types.Scalars['String']>;
   defaultLayoutId?: Types.Maybe<Types.Scalars['Int']>;
@@ -12,7 +13,7 @@ export type UpdateRootSiteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateRootSiteMutation = (
+export type UpdateRootSiteMutationData = (
   { __typename: 'Mutation' }
   & { updateRootSite?: Types.Maybe<(
     { __typename: 'UpdateRootSitePayload' }
@@ -37,7 +38,7 @@ export const UpdateRootSiteDocument = gql`
   }
 }
     ${RootSiteFieldsFragmentDoc}`;
-export type UpdateRootSiteMutationFn = Apollo.MutationFunction<UpdateRootSiteMutation, UpdateRootSiteMutationVariables>;
+export type UpdateRootSiteMutationFn = Apollo.MutationFunction<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>;
 
 /**
  * __useUpdateRootSiteMutation__
@@ -58,9 +59,10 @@ export type UpdateRootSiteMutationFn = Apollo.MutationFunction<UpdateRootSiteMut
  *   },
  * });
  */
-export function useUpdateRootSiteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRootSiteMutation, UpdateRootSiteMutationVariables>) {
-        return Apollo.useMutation<UpdateRootSiteMutation, UpdateRootSiteMutationVariables>(UpdateRootSiteDocument, baseOptions);
+export function useUpdateRootSiteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>(UpdateRootSiteDocument, options);
       }
 export type UpdateRootSiteMutationHookResult = ReturnType<typeof useUpdateRootSiteMutation>;
-export type UpdateRootSiteMutationResult = Apollo.MutationResult<UpdateRootSiteMutation>;
-export type UpdateRootSiteMutationOptions = Apollo.BaseMutationOptions<UpdateRootSiteMutation, UpdateRootSiteMutationVariables>;
+export type UpdateRootSiteMutationResult = Apollo.MutationResult<UpdateRootSiteMutationData>;
+export type UpdateRootSiteMutationOptions = Apollo.BaseMutationOptions<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>;

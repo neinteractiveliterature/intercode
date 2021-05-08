@@ -15,7 +15,7 @@ import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
-import { useEditUserQueryQuery } from './queries.generated';
+import { useEditUserQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
@@ -68,102 +68,106 @@ async function updateUser(
   }
 }
 
-export default LoadQueryWrapper(useEditUserQueryQuery, function EditUserForm({
-  data: { currentUser: initialFormState },
-}) {
-  const { t } = useTranslation();
-  const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
-  const [formState, setFormState] = useState<UserFormState | undefined>(
-    initialFormState ?? undefined,
-  );
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
-  const passwordFieldId = useUniqueId('password-');
-  usePageTitle('Update Your Account');
-
-  if (!formState) {
-    return <Redirect to="/" />;
-  }
-
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    if (!formState) {
-      return;
-    }
-    await updateUserAsync(
-      authenticityToken!,
-      formState,
-      password,
-      passwordConfirmation,
-      currentPassword,
+export default LoadQueryWrapper(
+  useEditUserQuery,
+  function EditUserForm({ data: { currentUser: initialFormState } }) {
+    const { t } = useTranslation();
+    const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
+    const [formState, setFormState] = useState<UserFormState | undefined>(
+      initialFormState ?? undefined,
     );
-    window.location.href = '/';
-  };
+    const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
+    const passwordFieldId = useUniqueId('password-');
+    usePageTitle('Update Your Account');
 
-  return (
-    <>
-      <h1 className="mb-4">{t('authentication.editUser.header', 'Update your account')}</h1>
+    if (!formState) {
+      return <Redirect to="/" />;
+    }
 
-      <AccountFormContent />
+    const onSubmit = async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+      if (!formState) {
+        return;
+      }
+      await updateUserAsync(
+        authenticityToken!,
+        formState,
+        password,
+        passwordConfirmation,
+        currentPassword,
+      );
+      window.location.href = '/';
+    };
 
-      <form onSubmit={onSubmit} className="card">
-        <div className="card-header">
-          {t('authentication.editUser.accountDataHeader', 'Account data')}
-        </div>
+    return (
+      <>
+        <h1 className="mb-4">{t('authentication.editUser.header', 'Update your account')}</h1>
 
-        <div className="card-body">
-          <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
-          <div className="form-group">
-            <label htmlFor={passwordFieldId}>
-              {t('authentication.editUser.passwordLabel', 'Password')}
-            </label>
-            <Suspense fallback={<LoadingIndicator />}>
-              <PasswordInputWithStrengthCheck
-                id={passwordFieldId}
-                value={password}
-                onChange={setPassword}
-              />
-            </Suspense>
-            <small className="form-text text-muted">
-              {t(
-                'authentication.editUser.passwordHelpText',
-                'Leave blank if you don’t want to change it',
-              )}
-            </small>
+        <AccountFormContent />
+
+        <form onSubmit={onSubmit} className="card">
+          <div className="card-header">
+            {t('authentication.editUser.accountDataHeader', 'Account data')}
           </div>
-          <PasswordConfirmationInput
-            password={password}
-            value={passwordConfirmation}
-            onChange={setPasswordConfirmation}
-          />
-          <BootstrapFormInput
-            label={t('authentication.editUser.currentPasswordLabel', 'Current password')}
-            helpText={t(
-              'authentication.editUser.currentPasswordHelpText',
-              'We need your current password to verify your identity',
-            )}
-            type="password"
-            value={currentPassword}
-            onTextChange={setCurrentPassword}
-          />
 
-          <ErrorDisplay stringError={(updateUserError || {}).message} />
-        </div>
-
-        <div className="card-footer text-right">
-          <div>
-            <input
-              type="submit"
-              className="btn btn-primary"
-              disabled={updateUserInProgress}
-              value={t('authentication.editUser.updateAccountButton', 'Update account').toString()}
-              aria-label={t('authentication.editUser.updateAccountButton', 'Update account')}
+          <div className="card-body">
+            <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
+            <div className="form-group">
+              <label htmlFor={passwordFieldId}>
+                {t('authentication.editUser.passwordLabel', 'Password')}
+              </label>
+              <Suspense fallback={<LoadingIndicator />}>
+                <PasswordInputWithStrengthCheck
+                  id={passwordFieldId}
+                  value={password}
+                  onChange={setPassword}
+                />
+              </Suspense>
+              <small className="form-text text-muted">
+                {t(
+                  'authentication.editUser.passwordHelpText',
+                  'Leave blank if you don’t want to change it',
+                )}
+              </small>
+            </div>
+            <PasswordConfirmationInput
+              password={password}
+              value={passwordConfirmation}
+              onChange={setPasswordConfirmation}
             />
+            <BootstrapFormInput
+              label={t('authentication.editUser.currentPasswordLabel', 'Current password')}
+              helpText={t(
+                'authentication.editUser.currentPasswordHelpText',
+                'We need your current password to verify your identity',
+              )}
+              type="password"
+              value={currentPassword}
+              onTextChange={setCurrentPassword}
+            />
+
+            <ErrorDisplay stringError={(updateUserError || {}).message} />
           </div>
-        </div>
-      </form>
-    </>
-  );
-});
+
+          <div className="card-footer text-right">
+            <div>
+              <input
+                type="submit"
+                className="btn btn-primary"
+                disabled={updateUserInProgress}
+                value={t(
+                  'authentication.editUser.updateAccountButton',
+                  'Update account',
+                ).toString()}
+                aria-label={t('authentication.editUser.updateAccountButton', 'Update account')}
+              />
+            </div>
+          </div>
+        </form>
+      </>
+    );
+  },
+);

@@ -5,11 +5,11 @@ import ErrorDisplay from '../ErrorDisplay';
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useOrganizationAdminOrganizationsQueryQuery } from './queries.generated';
+import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useUpdateOrganizationRoleMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(
-  useOrganizationAdminOrganizationsQueryQuery,
+  useOrganizationAdminOrganizationsQuery,
   function EditOrganizationRoleForm({ data }) {
     const history = useHistory();
     const params = useParams<{ organizationId: string; organizationRoleId: string }>();

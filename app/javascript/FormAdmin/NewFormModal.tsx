@@ -13,8 +13,8 @@ import FormTypes from '../../../config/form_types.json';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
-import { FormAdminQueryQuery, FormAdminQueryQueryVariables } from './queries.generated';
-import { CreateFormMutation, CreateFormMutationVariables } from './mutations.generated';
+import { FormAdminQueryData, FormAdminQueryVariables } from './queries.generated';
+import { CreateFormMutationData, CreateFormMutationVariables } from './mutations.generated';
 
 export type NewFormModalProps = {
   visible: boolean;
@@ -26,10 +26,10 @@ function NewFormModal({ visible, close }: NewFormModalProps) {
   const [title, setTitle] = useState('');
   const [formType, setFormType] = useState('');
   const createFormMutate = useCreateMutation<
-    FormAdminQueryQuery,
-    FormAdminQueryQueryVariables,
+    FormAdminQueryData,
+    FormAdminQueryVariables,
     CreateFormMutationVariables,
-    CreateFormMutation
+    CreateFormMutationData
   >(CreateForm, {
     query: FormAdminQuery,
     arrayPath: ['convention', 'forms'],

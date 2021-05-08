@@ -10,7 +10,7 @@ import { parseIntOrNull } from '../ValueUtils';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useOrderFormProductQueryQuery } from './queries.generated';
+import { useOrderFormProductQuery } from './queries.generated';
 import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
 import { Money } from '../graphqlTypes.generated';
 
@@ -20,7 +20,7 @@ export type ProductOrderFormProps = {
 
 function ProductOrderForm({ productId }: ProductOrderFormProps) {
   const history = useHistory();
-  const { data, loading, error } = useOrderFormProductQueryQuery({ variables: { productId } });
+  const { data, loading, error } = useOrderFormProductQuery({ variables: { productId } });
   const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
     refetchQueries: [{ query: CartQuery }],
   });

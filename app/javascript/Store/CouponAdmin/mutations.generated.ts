@@ -5,12 +5,13 @@ import { AdminCouponFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminCouponFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateCouponMutationVariables = Types.Exact<{
   coupon: Types.CouponInput;
 }>;
 
 
-export type CreateCouponMutation = (
+export type CreateCouponMutationData = (
   { __typename: 'Mutation' }
   & { createCoupon?: Types.Maybe<(
     { __typename: 'CreateCouponPayload' }
@@ -28,7 +29,7 @@ export type UpdateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateCouponMutation = (
+export type UpdateCouponMutationData = (
   { __typename: 'Mutation' }
   & { updateCoupon?: Types.Maybe<(
     { __typename: 'UpdateCouponPayload' }
@@ -45,7 +46,7 @@ export type DeleteCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteCouponMutation = (
+export type DeleteCouponMutationData = (
   { __typename: 'Mutation' }
   & { deleteCoupon?: Types.Maybe<(
     { __typename: 'DeleteCouponPayload' }
@@ -64,7 +65,7 @@ export const CreateCouponDocument = gql`
   }
 }
     ${AdminCouponFieldsFragmentDoc}`;
-export type CreateCouponMutationFn = Apollo.MutationFunction<CreateCouponMutation, CreateCouponMutationVariables>;
+export type CreateCouponMutationFn = Apollo.MutationFunction<CreateCouponMutationData, CreateCouponMutationVariables>;
 
 /**
  * __useCreateCouponMutation__
@@ -83,12 +84,13 @@ export type CreateCouponMutationFn = Apollo.MutationFunction<CreateCouponMutatio
  *   },
  * });
  */
-export function useCreateCouponMutation(baseOptions?: Apollo.MutationHookOptions<CreateCouponMutation, CreateCouponMutationVariables>) {
-        return Apollo.useMutation<CreateCouponMutation, CreateCouponMutationVariables>(CreateCouponDocument, baseOptions);
+export function useCreateCouponMutation(baseOptions?: Apollo.MutationHookOptions<CreateCouponMutationData, CreateCouponMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCouponMutationData, CreateCouponMutationVariables>(CreateCouponDocument, options);
       }
 export type CreateCouponMutationHookResult = ReturnType<typeof useCreateCouponMutation>;
-export type CreateCouponMutationResult = Apollo.MutationResult<CreateCouponMutation>;
-export type CreateCouponMutationOptions = Apollo.BaseMutationOptions<CreateCouponMutation, CreateCouponMutationVariables>;
+export type CreateCouponMutationResult = Apollo.MutationResult<CreateCouponMutationData>;
+export type CreateCouponMutationOptions = Apollo.BaseMutationOptions<CreateCouponMutationData, CreateCouponMutationVariables>;
 export const UpdateCouponDocument = gql`
     mutation UpdateCoupon($id: Int!, $coupon: CouponInput!) {
   updateCoupon(input: {id: $id, coupon: $coupon}) {
@@ -99,7 +101,7 @@ export const UpdateCouponDocument = gql`
   }
 }
     ${AdminCouponFieldsFragmentDoc}`;
-export type UpdateCouponMutationFn = Apollo.MutationFunction<UpdateCouponMutation, UpdateCouponMutationVariables>;
+export type UpdateCouponMutationFn = Apollo.MutationFunction<UpdateCouponMutationData, UpdateCouponMutationVariables>;
 
 /**
  * __useUpdateCouponMutation__
@@ -119,12 +121,13 @@ export type UpdateCouponMutationFn = Apollo.MutationFunction<UpdateCouponMutatio
  *   },
  * });
  */
-export function useUpdateCouponMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCouponMutation, UpdateCouponMutationVariables>) {
-        return Apollo.useMutation<UpdateCouponMutation, UpdateCouponMutationVariables>(UpdateCouponDocument, baseOptions);
+export function useUpdateCouponMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCouponMutationData, UpdateCouponMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCouponMutationData, UpdateCouponMutationVariables>(UpdateCouponDocument, options);
       }
 export type UpdateCouponMutationHookResult = ReturnType<typeof useUpdateCouponMutation>;
-export type UpdateCouponMutationResult = Apollo.MutationResult<UpdateCouponMutation>;
-export type UpdateCouponMutationOptions = Apollo.BaseMutationOptions<UpdateCouponMutation, UpdateCouponMutationVariables>;
+export type UpdateCouponMutationResult = Apollo.MutationResult<UpdateCouponMutationData>;
+export type UpdateCouponMutationOptions = Apollo.BaseMutationOptions<UpdateCouponMutationData, UpdateCouponMutationVariables>;
 export const DeleteCouponDocument = gql`
     mutation DeleteCoupon($id: Int!) {
   deleteCoupon(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeleteCouponDocument = gql`
   }
 }
     `;
-export type DeleteCouponMutationFn = Apollo.MutationFunction<DeleteCouponMutation, DeleteCouponMutationVariables>;
+export type DeleteCouponMutationFn = Apollo.MutationFunction<DeleteCouponMutationData, DeleteCouponMutationVariables>;
 
 /**
  * __useDeleteCouponMutation__
@@ -151,9 +154,10 @@ export type DeleteCouponMutationFn = Apollo.MutationFunction<DeleteCouponMutatio
  *   },
  * });
  */
-export function useDeleteCouponMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCouponMutation, DeleteCouponMutationVariables>) {
-        return Apollo.useMutation<DeleteCouponMutation, DeleteCouponMutationVariables>(DeleteCouponDocument, baseOptions);
+export function useDeleteCouponMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCouponMutationData, DeleteCouponMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCouponMutationData, DeleteCouponMutationVariables>(DeleteCouponDocument, options);
       }
 export type DeleteCouponMutationHookResult = ReturnType<typeof useDeleteCouponMutation>;
-export type DeleteCouponMutationResult = Apollo.MutationResult<DeleteCouponMutation>;
-export type DeleteCouponMutationOptions = Apollo.BaseMutationOptions<DeleteCouponMutation, DeleteCouponMutationVariables>;
+export type DeleteCouponMutationResult = Apollo.MutationResult<DeleteCouponMutationData>;
+export type DeleteCouponMutationOptions = Apollo.BaseMutationOptions<DeleteCouponMutationData, DeleteCouponMutationVariables>;

@@ -6,13 +6,13 @@ import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganiz
 import usePageTitle from '../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import {
-  OrganizationAdminOrganizationsQueryQuery,
-  useOrganizationAdminOrganizationsQueryQuery,
+  OrganizationAdminOrganizationsQueryData,
+  useOrganizationAdminOrganizationsQuery,
 } from './queries.generated';
 import { useCreateOrganizationRoleMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useOrganizationAdminOrganizationsQueryQuery,
+  useOrganizationAdminOrganizationsQuery,
   (data, id) => data.organizations.find((org) => org.id.toString() === id),
   function NewOrganizationRole({ value: organization }) {
     const history = useHistory();
@@ -49,7 +49,7 @@ export default LoadSingleValueFromCollectionWrapper(
           })),
         },
         update: (proxy, result) => {
-          const storeData = proxy.readQuery<OrganizationAdminOrganizationsQueryQuery>({
+          const storeData = proxy.readQuery<OrganizationAdminOrganizationsQueryData>({
             query: OrganizationAdminOrganizationsQuery,
           });
           const newRole = result.data?.createOrganizationRole?.organization_role;

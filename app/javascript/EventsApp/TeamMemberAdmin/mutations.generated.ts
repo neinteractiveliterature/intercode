@@ -5,12 +5,13 @@ import { TeamMemberFieldsFragment, TeamMemberTicketFieldsFragment, TeamMemberFie
 import { gql } from '@apollo/client';
 import { TeamMemberFieldsFragmentDoc, TeamMemberTicketFieldsFragmentDoc, TeamMemberFieldsWithoutPersonalInfoFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateTeamMemberMutationVariables = Types.Exact<{
   input: Types.CreateTeamMemberInput;
 }>;
 
 
-export type CreateTeamMemberMutation = (
+export type CreateTeamMemberMutationData = (
   { __typename: 'Mutation' }
   & { createTeamMember?: Types.Maybe<(
     { __typename: 'CreateTeamMemberPayload' }
@@ -27,7 +28,7 @@ export type DeleteTeamMemberMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteTeamMemberMutation = (
+export type DeleteTeamMemberMutationData = (
   { __typename: 'Mutation' }
   & { deleteTeamMember?: Types.Maybe<(
     { __typename: 'DeleteTeamMemberPayload' }
@@ -44,7 +45,7 @@ export type UpdateTeamMemberMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTeamMemberMutation = (
+export type UpdateTeamMemberMutationData = (
   { __typename: 'Mutation' }
   & { updateTeamMember?: Types.Maybe<(
     { __typename: 'UpdateTeamMemberPayload' }
@@ -63,7 +64,7 @@ export type ProvideEventTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type ProvideEventTicketMutation = (
+export type ProvideEventTicketMutationData = (
   { __typename: 'Mutation' }
   & { provideEventTicket?: Types.Maybe<(
     { __typename: 'ProvideEventTicketPayload' }
@@ -86,7 +87,7 @@ export const CreateTeamMemberDocument = gql`
   }
 }
     ${TeamMemberFieldsFragmentDoc}`;
-export type CreateTeamMemberMutationFn = Apollo.MutationFunction<CreateTeamMemberMutation, CreateTeamMemberMutationVariables>;
+export type CreateTeamMemberMutationFn = Apollo.MutationFunction<CreateTeamMemberMutationData, CreateTeamMemberMutationVariables>;
 
 /**
  * __useCreateTeamMemberMutation__
@@ -105,12 +106,13 @@ export type CreateTeamMemberMutationFn = Apollo.MutationFunction<CreateTeamMembe
  *   },
  * });
  */
-export function useCreateTeamMemberMutation(baseOptions?: Apollo.MutationHookOptions<CreateTeamMemberMutation, CreateTeamMemberMutationVariables>) {
-        return Apollo.useMutation<CreateTeamMemberMutation, CreateTeamMemberMutationVariables>(CreateTeamMemberDocument, baseOptions);
+export function useCreateTeamMemberMutation(baseOptions?: Apollo.MutationHookOptions<CreateTeamMemberMutationData, CreateTeamMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTeamMemberMutationData, CreateTeamMemberMutationVariables>(CreateTeamMemberDocument, options);
       }
 export type CreateTeamMemberMutationHookResult = ReturnType<typeof useCreateTeamMemberMutation>;
-export type CreateTeamMemberMutationResult = Apollo.MutationResult<CreateTeamMemberMutation>;
-export type CreateTeamMemberMutationOptions = Apollo.BaseMutationOptions<CreateTeamMemberMutation, CreateTeamMemberMutationVariables>;
+export type CreateTeamMemberMutationResult = Apollo.MutationResult<CreateTeamMemberMutationData>;
+export type CreateTeamMemberMutationOptions = Apollo.BaseMutationOptions<CreateTeamMemberMutationData, CreateTeamMemberMutationVariables>;
 export const DeleteTeamMemberDocument = gql`
     mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
   deleteTeamMember(input: $input) {
@@ -121,7 +123,7 @@ export const DeleteTeamMemberDocument = gql`
   }
 }
     ${TeamMemberFieldsWithoutPersonalInfoFragmentDoc}`;
-export type DeleteTeamMemberMutationFn = Apollo.MutationFunction<DeleteTeamMemberMutation, DeleteTeamMemberMutationVariables>;
+export type DeleteTeamMemberMutationFn = Apollo.MutationFunction<DeleteTeamMemberMutationData, DeleteTeamMemberMutationVariables>;
 
 /**
  * __useDeleteTeamMemberMutation__
@@ -140,12 +142,13 @@ export type DeleteTeamMemberMutationFn = Apollo.MutationFunction<DeleteTeamMembe
  *   },
  * });
  */
-export function useDeleteTeamMemberMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTeamMemberMutation, DeleteTeamMemberMutationVariables>) {
-        return Apollo.useMutation<DeleteTeamMemberMutation, DeleteTeamMemberMutationVariables>(DeleteTeamMemberDocument, baseOptions);
+export function useDeleteTeamMemberMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTeamMemberMutationData, DeleteTeamMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTeamMemberMutationData, DeleteTeamMemberMutationVariables>(DeleteTeamMemberDocument, options);
       }
 export type DeleteTeamMemberMutationHookResult = ReturnType<typeof useDeleteTeamMemberMutation>;
-export type DeleteTeamMemberMutationResult = Apollo.MutationResult<DeleteTeamMemberMutation>;
-export type DeleteTeamMemberMutationOptions = Apollo.BaseMutationOptions<DeleteTeamMemberMutation, DeleteTeamMemberMutationVariables>;
+export type DeleteTeamMemberMutationResult = Apollo.MutationResult<DeleteTeamMemberMutationData>;
+export type DeleteTeamMemberMutationOptions = Apollo.BaseMutationOptions<DeleteTeamMemberMutationData, DeleteTeamMemberMutationVariables>;
 export const UpdateTeamMemberDocument = gql`
     mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
   updateTeamMember(input: $input) {
@@ -156,7 +159,7 @@ export const UpdateTeamMemberDocument = gql`
   }
 }
     ${TeamMemberFieldsWithoutPersonalInfoFragmentDoc}`;
-export type UpdateTeamMemberMutationFn = Apollo.MutationFunction<UpdateTeamMemberMutation, UpdateTeamMemberMutationVariables>;
+export type UpdateTeamMemberMutationFn = Apollo.MutationFunction<UpdateTeamMemberMutationData, UpdateTeamMemberMutationVariables>;
 
 /**
  * __useUpdateTeamMemberMutation__
@@ -175,12 +178,13 @@ export type UpdateTeamMemberMutationFn = Apollo.MutationFunction<UpdateTeamMembe
  *   },
  * });
  */
-export function useUpdateTeamMemberMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTeamMemberMutation, UpdateTeamMemberMutationVariables>) {
-        return Apollo.useMutation<UpdateTeamMemberMutation, UpdateTeamMemberMutationVariables>(UpdateTeamMemberDocument, baseOptions);
+export function useUpdateTeamMemberMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTeamMemberMutationData, UpdateTeamMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTeamMemberMutationData, UpdateTeamMemberMutationVariables>(UpdateTeamMemberDocument, options);
       }
 export type UpdateTeamMemberMutationHookResult = ReturnType<typeof useUpdateTeamMemberMutation>;
-export type UpdateTeamMemberMutationResult = Apollo.MutationResult<UpdateTeamMemberMutation>;
-export type UpdateTeamMemberMutationOptions = Apollo.BaseMutationOptions<UpdateTeamMemberMutation, UpdateTeamMemberMutationVariables>;
+export type UpdateTeamMemberMutationResult = Apollo.MutationResult<UpdateTeamMemberMutationData>;
+export type UpdateTeamMemberMutationOptions = Apollo.BaseMutationOptions<UpdateTeamMemberMutationData, UpdateTeamMemberMutationVariables>;
 export const ProvideEventTicketDocument = gql`
     mutation ProvideEventTicket($eventId: Int!, $userConProfileId: Int!, $ticketTypeId: Int!) {
   provideEventTicket(
@@ -193,7 +197,7 @@ export const ProvideEventTicketDocument = gql`
   }
 }
     ${TeamMemberTicketFieldsFragmentDoc}`;
-export type ProvideEventTicketMutationFn = Apollo.MutationFunction<ProvideEventTicketMutation, ProvideEventTicketMutationVariables>;
+export type ProvideEventTicketMutationFn = Apollo.MutationFunction<ProvideEventTicketMutationData, ProvideEventTicketMutationVariables>;
 
 /**
  * __useProvideEventTicketMutation__
@@ -214,9 +218,10 @@ export type ProvideEventTicketMutationFn = Apollo.MutationFunction<ProvideEventT
  *   },
  * });
  */
-export function useProvideEventTicketMutation(baseOptions?: Apollo.MutationHookOptions<ProvideEventTicketMutation, ProvideEventTicketMutationVariables>) {
-        return Apollo.useMutation<ProvideEventTicketMutation, ProvideEventTicketMutationVariables>(ProvideEventTicketDocument, baseOptions);
+export function useProvideEventTicketMutation(baseOptions?: Apollo.MutationHookOptions<ProvideEventTicketMutationData, ProvideEventTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProvideEventTicketMutationData, ProvideEventTicketMutationVariables>(ProvideEventTicketDocument, options);
       }
 export type ProvideEventTicketMutationHookResult = ReturnType<typeof useProvideEventTicketMutation>;
-export type ProvideEventTicketMutationResult = Apollo.MutationResult<ProvideEventTicketMutation>;
-export type ProvideEventTicketMutationOptions = Apollo.BaseMutationOptions<ProvideEventTicketMutation, ProvideEventTicketMutationVariables>;
+export type ProvideEventTicketMutationResult = Apollo.MutationResult<ProvideEventTicketMutationData>;
+export type ProvideEventTicketMutationOptions = Apollo.BaseMutationOptions<ProvideEventTicketMutationData, ProvideEventTicketMutationVariables>;

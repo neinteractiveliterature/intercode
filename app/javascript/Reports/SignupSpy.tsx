@@ -1,10 +1,10 @@
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useSignupCountsByStateQueryQuery } from './queries.generated';
+import { useSignupCountsByStateQuery } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
 
-export default LoadQueryWrapper(useSignupCountsByStateQueryQuery, function SignupSpy({ data }) {
+export default LoadQueryWrapper(useSignupCountsByStateQuery, function SignupSpy({ data }) {
   const getSignupCount = (state: SignupState) => {
     return (
       data.convention.signup_counts_by_state.find((record) => record.state === state) || {

@@ -7,10 +7,10 @@ import describeCoupon from './describeCoupon';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ApplyCouponControl from './ApplyCouponControl';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { CartQueryQuery, useCartQueryQuery } from './queries.generated';
+import { CartQueryData, useCartQuery } from './queries.generated';
 import { parseIntOrNull } from '../ValueUtils';
 
-type OrderType = NonNullable<CartQueryQuery['currentPendingOrder']>;
+type OrderType = NonNullable<CartQueryData['currentPendingOrder']>;
 type OrderEntryType = OrderType['order_entries'][0];
 
 export type CartContentsProps = {
@@ -21,8 +21,8 @@ export type CartContentsProps = {
   checkOutButton?: React.ReactNode;
 };
 
-export default LoadQueryWrapper<CartQueryQuery, CartContentsProps>(
-  useCartQueryQuery,
+export default LoadQueryWrapper<CartQueryData, CartContentsProps>(
+  useCartQuery,
   function CartContents({
     data,
     removeFromCart,

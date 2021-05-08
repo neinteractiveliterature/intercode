@@ -7,10 +7,10 @@ import RunCapacityGraph from './RunCapacityGraph';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventPageRunCard from './EventPageRunCard';
 import LoadingIndicator from '../../LoadingIndicator';
-import { EventPageQueryQuery, useEventPageQueryQuery } from './queries.generated';
+import { EventPageQueryData, useEventPageQuery } from './queries.generated';
 
 type FakeRunProps = {
-  event: EventPageQueryQuery['event'];
+  event: EventPageQueryData['event'];
 };
 
 function FakeRun({ event }: FakeRunProps) {
@@ -43,7 +43,7 @@ export type RunsSectionProps = {
 };
 
 function RunsSection({ eventId }: RunsSectionProps) {
-  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
 
   const sortedRuns = useMemo(
     () =>

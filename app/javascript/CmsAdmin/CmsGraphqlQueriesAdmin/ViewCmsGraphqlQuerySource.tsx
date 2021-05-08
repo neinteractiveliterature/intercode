@@ -6,12 +6,12 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
 
 import 'graphiql/graphiql.css';
-import { useCmsGraphqlQueriesQueryQuery } from './queries.generated';
+import { useCmsGraphqlQueriesQuery } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 
 function ViewCmsGraphqlQuerySource() {
   const { id } = useParams<{ id: string }>();
-  const { data, loading, error } = useCmsGraphqlQueriesQueryQuery();
+  const { data, loading, error } = useCmsGraphqlQueriesQuery();
   const query =
     loading || error ? null : data?.cmsGraphqlQueries.find((q) => q.id.toString() === id);
 

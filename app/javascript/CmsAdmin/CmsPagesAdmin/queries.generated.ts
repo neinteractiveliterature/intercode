@@ -3,6 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CmsPageAdminLayoutFieldsFragment = (
   { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name'>
@@ -18,10 +19,10 @@ export type CmsPageFieldsFragment = (
   )> }
 );
 
-export type CmsPagesAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsPagesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsPagesAdminQueryQuery = (
+export type CmsPagesAdminQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -117,26 +118,28 @@ export const CmsPagesAdminQueryDocument = gql`
 ${CmsPageAdminLayoutFieldsFragmentDoc}`;
 
 /**
- * __useCmsPagesAdminQueryQuery__
+ * __useCmsPagesAdminQuery__
  *
- * To run a query within a React component, call `useCmsPagesAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsPagesAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsPagesAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsPagesAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsPagesAdminQueryQuery({
+ * const { data, loading, error } = useCmsPagesAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsPagesAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsPagesAdminQueryQuery, CmsPagesAdminQueryQueryVariables>) {
-        return Apollo.useQuery<CmsPagesAdminQueryQuery, CmsPagesAdminQueryQueryVariables>(CmsPagesAdminQueryDocument, baseOptions);
+export function useCmsPagesAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
       }
-export function useCmsPagesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsPagesAdminQueryQuery, CmsPagesAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsPagesAdminQueryQuery, CmsPagesAdminQueryQueryVariables>(CmsPagesAdminQueryDocument, baseOptions);
+export function useCmsPagesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
         }
-export type CmsPagesAdminQueryQueryHookResult = ReturnType<typeof useCmsPagesAdminQueryQuery>;
+export type CmsPagesAdminQueryHookResult = ReturnType<typeof useCmsPagesAdminQuery>;
 export type CmsPagesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsPagesAdminQueryLazyQuery>;
-export type CmsPagesAdminQueryQueryResult = Apollo.QueryResult<CmsPagesAdminQueryQuery, CmsPagesAdminQueryQueryVariables>;
+export type CmsPagesAdminQueryDataResult = Apollo.QueryResult<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>;

@@ -12,9 +12,9 @@ import useValueUnless from '../../useValueUnless';
 import ErrorDisplay from '../../ErrorDisplay';
 import Gravatar from '../../Gravatar';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { RunSignupSummaryQueryQuery, useRunSignupSummaryQueryQuery } from './queries.generated';
+import { RunSignupSummaryQueryData, useRunSignupSummaryQuery } from './queries.generated';
 
-type EventType = RunSignupSummaryQueryQuery['event'];
+type EventType = RunSignupSummaryQueryData['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
 
 function isTeamMember(signup: SignupType, teamMembers: EventType['team_members']) {
@@ -61,7 +61,7 @@ export type RunSignupSummaryProps = {
 
 function RunSignupSummary({ eventId, runId, eventPath }: RunSignupSummaryProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useRunSignupSummaryQueryQuery({
+  const { data, loading, error } = useRunSignupSummaryQuery({
     variables: { eventId, runId },
   });
 

@@ -3,15 +3,16 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type LiquidAssignFieldsFragment = (
   { __typename: 'LiquidAssign' }
   & Pick<Types.LiquidAssign, 'name' | 'drop_class_name' | 'cms_variable_value_json'>
 );
 
-export type LiquidAssignsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryQuery = (
+export type LiquidAssignsQueryData = (
   { __typename: 'Query' }
   & { liquidAssigns: Array<(
     { __typename: 'LiquidAssign' }
@@ -19,12 +20,12 @@ export type LiquidAssignsQueryQuery = (
   )> }
 );
 
-export type NotifierLiquidAssignsQueryQueryVariables = Types.Exact<{
+export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
 }>;
 
 
-export type NotifierLiquidAssignsQueryQuery = (
+export type NotifierLiquidAssignsQueryData = (
   { __typename: 'Query' }
   & { liquidAssigns: Array<(
     { __typename: 'LiquidAssign' }
@@ -48,29 +49,31 @@ export const LiquidAssignsQueryDocument = gql`
     ${LiquidAssignFieldsFragmentDoc}`;
 
 /**
- * __useLiquidAssignsQueryQuery__
+ * __useLiquidAssignsQuery__
  *
- * To run a query within a React component, call `useLiquidAssignsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useLiquidAssignsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLiquidAssignsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLiquidAssignsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLiquidAssignsQueryQuery({
+ * const { data, loading, error } = useLiquidAssignsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useLiquidAssignsQueryQuery(baseOptions?: Apollo.QueryHookOptions<LiquidAssignsQueryQuery, LiquidAssignsQueryQueryVariables>) {
-        return Apollo.useQuery<LiquidAssignsQueryQuery, LiquidAssignsQueryQueryVariables>(LiquidAssignsQueryDocument, baseOptions);
+export function useLiquidAssignsQuery(baseOptions?: Apollo.QueryHookOptions<LiquidAssignsQueryData, LiquidAssignsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LiquidAssignsQueryData, LiquidAssignsQueryVariables>(LiquidAssignsQueryDocument, options);
       }
-export function useLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LiquidAssignsQueryQuery, LiquidAssignsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<LiquidAssignsQueryQuery, LiquidAssignsQueryQueryVariables>(LiquidAssignsQueryDocument, baseOptions);
+export function useLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LiquidAssignsQueryData, LiquidAssignsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LiquidAssignsQueryData, LiquidAssignsQueryVariables>(LiquidAssignsQueryDocument, options);
         }
-export type LiquidAssignsQueryQueryHookResult = ReturnType<typeof useLiquidAssignsQueryQuery>;
+export type LiquidAssignsQueryHookResult = ReturnType<typeof useLiquidAssignsQuery>;
 export type LiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useLiquidAssignsQueryLazyQuery>;
-export type LiquidAssignsQueryQueryResult = Apollo.QueryResult<LiquidAssignsQueryQuery, LiquidAssignsQueryQueryVariables>;
+export type LiquidAssignsQueryDataResult = Apollo.QueryResult<LiquidAssignsQueryData, LiquidAssignsQueryVariables>;
 export const NotifierLiquidAssignsQueryDocument = gql`
     query NotifierLiquidAssignsQuery($eventKey: String!) {
   liquidAssigns: notifierLiquidAssigns(eventKey: $eventKey) {
@@ -80,27 +83,29 @@ export const NotifierLiquidAssignsQueryDocument = gql`
     ${LiquidAssignFieldsFragmentDoc}`;
 
 /**
- * __useNotifierLiquidAssignsQueryQuery__
+ * __useNotifierLiquidAssignsQuery__
  *
- * To run a query within a React component, call `useNotifierLiquidAssignsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useNotifierLiquidAssignsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNotifierLiquidAssignsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotifierLiquidAssignsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNotifierLiquidAssignsQueryQuery({
+ * const { data, loading, error } = useNotifierLiquidAssignsQuery({
  *   variables: {
  *      eventKey: // value for 'eventKey'
  *   },
  * });
  */
-export function useNotifierLiquidAssignsQueryQuery(baseOptions: Apollo.QueryHookOptions<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>) {
-        return Apollo.useQuery<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>(NotifierLiquidAssignsQueryDocument, baseOptions);
+export function useNotifierLiquidAssignsQuery(baseOptions: Apollo.QueryHookOptions<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>(NotifierLiquidAssignsQueryDocument, options);
       }
-export function useNotifierLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>(NotifierLiquidAssignsQueryDocument, baseOptions);
+export function useNotifierLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>(NotifierLiquidAssignsQueryDocument, options);
         }
-export type NotifierLiquidAssignsQueryQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQueryQuery>;
+export type NotifierLiquidAssignsQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQuery>;
 export type NotifierLiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQueryLazyQuery>;
-export type NotifierLiquidAssignsQueryQueryResult = Apollo.QueryResult<NotifierLiquidAssignsQueryQuery, NotifierLiquidAssignsQueryQueryVariables>;
+export type NotifierLiquidAssignsQueryDataResult = Apollo.QueryResult<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>;

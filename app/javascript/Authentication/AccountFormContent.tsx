@@ -1,8 +1,8 @@
 import parseCmsContent from '../parseCmsContent';
-import { useAccountFormContentQueryQuery } from './queries.generated';
+import { useAccountFormContentQuery } from './queries.generated';
 
 function AccountFormContent() {
-  const { data, loading, error } = useAccountFormContentQueryQuery();
+  const { data, loading, error } = useAccountFormContentQuery();
 
   if (error || loading) {
     return <></>;

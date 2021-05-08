@@ -5,6 +5,7 @@ import { OrganizationRoleFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateOrganizationRoleMutationVariables = Types.Exact<{
   organizationId: Types.Scalars['Int'];
   name: Types.Scalars['String'];
@@ -13,7 +14,7 @@ export type CreateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOrganizationRoleMutation = (
+export type CreateOrganizationRoleMutationData = (
   { __typename: 'Mutation' }
   & { createOrganizationRole?: Types.Maybe<(
     { __typename: 'CreateOrganizationRolePayload' }
@@ -35,7 +36,7 @@ export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOrganizationRoleMutation = (
+export type UpdateOrganizationRoleMutationData = (
   { __typename: 'Mutation' }
   & { updateOrganizationRole?: Types.Maybe<(
     { __typename: 'UpdateOrganizationRolePayload' }
@@ -52,7 +53,7 @@ export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteOrganizationRoleMutation = (
+export type DeleteOrganizationRoleMutationData = (
   { __typename: 'Mutation' }
   & { deleteOrganizationRole?: Types.Maybe<(
     { __typename: 'DeleteOrganizationRolePayload' }
@@ -73,7 +74,7 @@ export const CreateOrganizationRoleDocument = gql`
   }
 }
     ${OrganizationRoleFieldsFragmentDoc}`;
-export type CreateOrganizationRoleMutationFn = Apollo.MutationFunction<CreateOrganizationRoleMutation, CreateOrganizationRoleMutationVariables>;
+export type CreateOrganizationRoleMutationFn = Apollo.MutationFunction<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>;
 
 /**
  * __useCreateOrganizationRoleMutation__
@@ -95,12 +96,13 @@ export type CreateOrganizationRoleMutationFn = Apollo.MutationFunction<CreateOrg
  *   },
  * });
  */
-export function useCreateOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganizationRoleMutation, CreateOrganizationRoleMutationVariables>) {
-        return Apollo.useMutation<CreateOrganizationRoleMutation, CreateOrganizationRoleMutationVariables>(CreateOrganizationRoleDocument, baseOptions);
+export function useCreateOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>(CreateOrganizationRoleDocument, options);
       }
 export type CreateOrganizationRoleMutationHookResult = ReturnType<typeof useCreateOrganizationRoleMutation>;
-export type CreateOrganizationRoleMutationResult = Apollo.MutationResult<CreateOrganizationRoleMutation>;
-export type CreateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationRoleMutation, CreateOrganizationRoleMutationVariables>;
+export type CreateOrganizationRoleMutationResult = Apollo.MutationResult<CreateOrganizationRoleMutationData>;
+export type CreateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>;
 export const UpdateOrganizationRoleDocument = gql`
     mutation UpdateOrganizationRole($id: Int!, $name: String, $addUserIds: [Int!], $removeUserIds: [Int!], $addPermissions: [PermissionInput!], $removePermissionIds: [Int!]) {
   updateOrganizationRole(
@@ -113,7 +115,7 @@ export const UpdateOrganizationRoleDocument = gql`
   }
 }
     ${OrganizationRoleFieldsFragmentDoc}`;
-export type UpdateOrganizationRoleMutationFn = Apollo.MutationFunction<UpdateOrganizationRoleMutation, UpdateOrganizationRoleMutationVariables>;
+export type UpdateOrganizationRoleMutationFn = Apollo.MutationFunction<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
 
 /**
  * __useUpdateOrganizationRoleMutation__
@@ -137,12 +139,13 @@ export type UpdateOrganizationRoleMutationFn = Apollo.MutationFunction<UpdateOrg
  *   },
  * });
  */
-export function useUpdateOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganizationRoleMutation, UpdateOrganizationRoleMutationVariables>) {
-        return Apollo.useMutation<UpdateOrganizationRoleMutation, UpdateOrganizationRoleMutationVariables>(UpdateOrganizationRoleDocument, baseOptions);
+export function useUpdateOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>(UpdateOrganizationRoleDocument, options);
       }
 export type UpdateOrganizationRoleMutationHookResult = ReturnType<typeof useUpdateOrganizationRoleMutation>;
-export type UpdateOrganizationRoleMutationResult = Apollo.MutationResult<UpdateOrganizationRoleMutation>;
-export type UpdateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationRoleMutation, UpdateOrganizationRoleMutationVariables>;
+export type UpdateOrganizationRoleMutationResult = Apollo.MutationResult<UpdateOrganizationRoleMutationData>;
+export type UpdateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
 export const DeleteOrganizationRoleDocument = gql`
     mutation DeleteOrganizationRole($id: Int!) {
   deleteOrganizationRole(input: {id: $id}) {
@@ -150,7 +153,7 @@ export const DeleteOrganizationRoleDocument = gql`
   }
 }
     `;
-export type DeleteOrganizationRoleMutationFn = Apollo.MutationFunction<DeleteOrganizationRoleMutation, DeleteOrganizationRoleMutationVariables>;
+export type DeleteOrganizationRoleMutationFn = Apollo.MutationFunction<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>;
 
 /**
  * __useDeleteOrganizationRoleMutation__
@@ -169,9 +172,10 @@ export type DeleteOrganizationRoleMutationFn = Apollo.MutationFunction<DeleteOrg
  *   },
  * });
  */
-export function useDeleteOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganizationRoleMutation, DeleteOrganizationRoleMutationVariables>) {
-        return Apollo.useMutation<DeleteOrganizationRoleMutation, DeleteOrganizationRoleMutationVariables>(DeleteOrganizationRoleDocument, baseOptions);
+export function useDeleteOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>(DeleteOrganizationRoleDocument, options);
       }
 export type DeleteOrganizationRoleMutationHookResult = ReturnType<typeof useDeleteOrganizationRoleMutation>;
-export type DeleteOrganizationRoleMutationResult = Apollo.MutationResult<DeleteOrganizationRoleMutation>;
-export type DeleteOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<DeleteOrganizationRoleMutation, DeleteOrganizationRoleMutationVariables>;
+export type DeleteOrganizationRoleMutationResult = Apollo.MutationResult<DeleteOrganizationRoleMutationData>;
+export type DeleteOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>;

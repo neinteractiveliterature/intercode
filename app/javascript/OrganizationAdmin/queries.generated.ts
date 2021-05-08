@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type OrganizationRoleFieldsFragment = (
   { __typename: 'OrganizationRole' }
   & Pick<Types.OrganizationRole, 'id' | 'name'>
@@ -15,10 +16,10 @@ export type OrganizationRoleFieldsFragment = (
   )> }
 );
 
-export type OrganizationAdminOrganizationsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type OrganizationAdminOrganizationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrganizationAdminOrganizationsQueryQuery = (
+export type OrganizationAdminOrganizationsQueryData = (
   { __typename: 'Query' }
   & { organizations: Array<(
     { __typename: 'Organization' }
@@ -69,26 +70,28 @@ export const OrganizationAdminOrganizationsQueryDocument = gql`
     ${OrganizationRoleFieldsFragmentDoc}`;
 
 /**
- * __useOrganizationAdminOrganizationsQueryQuery__
+ * __useOrganizationAdminOrganizationsQuery__
  *
- * To run a query within a React component, call `useOrganizationAdminOrganizationsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrganizationAdminOrganizationsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrganizationAdminOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationAdminOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOrganizationAdminOrganizationsQueryQuery({
+ * const { data, loading, error } = useOrganizationAdminOrganizationsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useOrganizationAdminOrganizationsQueryQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationAdminOrganizationsQueryQuery, OrganizationAdminOrganizationsQueryQueryVariables>) {
-        return Apollo.useQuery<OrganizationAdminOrganizationsQueryQuery, OrganizationAdminOrganizationsQueryQueryVariables>(OrganizationAdminOrganizationsQueryDocument, baseOptions);
+export function useOrganizationAdminOrganizationsQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>(OrganizationAdminOrganizationsQueryDocument, options);
       }
-export function useOrganizationAdminOrganizationsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationAdminOrganizationsQueryQuery, OrganizationAdminOrganizationsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<OrganizationAdminOrganizationsQueryQuery, OrganizationAdminOrganizationsQueryQueryVariables>(OrganizationAdminOrganizationsQueryDocument, baseOptions);
+export function useOrganizationAdminOrganizationsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>(OrganizationAdminOrganizationsQueryDocument, options);
         }
-export type OrganizationAdminOrganizationsQueryQueryHookResult = ReturnType<typeof useOrganizationAdminOrganizationsQueryQuery>;
+export type OrganizationAdminOrganizationsQueryHookResult = ReturnType<typeof useOrganizationAdminOrganizationsQuery>;
 export type OrganizationAdminOrganizationsQueryLazyQueryHookResult = ReturnType<typeof useOrganizationAdminOrganizationsQueryLazyQuery>;
-export type OrganizationAdminOrganizationsQueryQueryResult = Apollo.QueryResult<OrganizationAdminOrganizationsQueryQuery, OrganizationAdminOrganizationsQueryQueryVariables>;
+export type OrganizationAdminOrganizationsQueryDataResult = Apollo.QueryResult<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>;

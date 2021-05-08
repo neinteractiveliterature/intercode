@@ -21,9 +21,9 @@ import AppRootContext from '../AppRootContext';
 import { Money } from '../graphqlTypes.generated';
 import { useDeleteTicketMutation } from './mutations.generated';
 import {
-  UserConProfileAdminQueryQuery,
-  TicketAdminWithTicketAbilityQueryQuery,
-  TicketAdminWithoutTicketAbilityQueryQuery,
+  UserConProfileAdminQueryData,
+  TicketAdminWithTicketAbilityQueryData,
+  TicketAdminWithoutTicketAbilityQueryData,
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
@@ -64,7 +64,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     : TicketAdminWithoutTicketAbilityQuery;
 
   const { data, loading, error } = useQuery<
-    TicketAdminWithTicketAbilityQueryQuery | TicketAdminWithoutTicketAbilityQueryQuery
+    TicketAdminWithTicketAbilityQueryData | TicketAdminWithoutTicketAbilityQueryData
   >(query, {
     variables: { ticketId: (userConProfile.ticket || {}).id },
   });
@@ -80,7 +80,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
       },
       update: (cache) => {
         const variables = { id: userConProfile.id };
-        const cacheData = cache.readQuery<UserConProfileAdminQueryQuery>({
+        const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
           query: UserConProfileAdminQuery,
           variables,
         });
@@ -124,7 +124,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
 
   if (
     ticket &&
-    (currentAbility as TicketAdminWithTicketAbilityQueryQuery['currentAbility']).can_update_ticket
+    (currentAbility as TicketAdminWithTicketAbilityQueryData['currentAbility']).can_update_ticket
   ) {
     buttons.push(
       <Link
@@ -136,7 +136,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     );
 
     if (
-      (currentAbility as TicketAdminWithTicketAbilityQueryQuery['currentAbility']).can_delete_ticket
+      (currentAbility as TicketAdminWithTicketAbilityQueryData['currentAbility']).can_delete_ticket
     ) {
       if (!ticket.provided_by_event) {
         buttons.push(

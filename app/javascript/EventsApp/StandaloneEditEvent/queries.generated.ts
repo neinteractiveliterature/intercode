@@ -7,6 +7,7 @@ import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type StandaloneEditEvent_TicketTypeFieldsFragment = (
   { __typename: 'TicketType' }
   & Pick<Types.TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>
@@ -40,12 +41,12 @@ export type StandaloneEditEvent_EventFieldsFragment = (
   )> }
 );
 
-export type StandaloneEditEventQueryQueryVariables = Types.Exact<{
+export type StandaloneEditEventQueryVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
 }>;
 
 
-export type StandaloneEditEventQueryQuery = (
+export type StandaloneEditEventQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -130,27 +131,29 @@ ${StandaloneEditEvent_TicketTypeFieldsFragmentDoc}
 ${StandaloneEditEvent_EventFieldsFragmentDoc}`;
 
 /**
- * __useStandaloneEditEventQueryQuery__
+ * __useStandaloneEditEventQuery__
  *
- * To run a query within a React component, call `useStandaloneEditEventQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useStandaloneEditEventQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useStandaloneEditEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStandaloneEditEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useStandaloneEditEventQueryQuery({
+ * const { data, loading, error } = useStandaloneEditEventQuery({
  *   variables: {
  *      eventId: // value for 'eventId'
  *   },
  * });
  */
-export function useStandaloneEditEventQueryQuery(baseOptions: Apollo.QueryHookOptions<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>) {
-        return Apollo.useQuery<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>(StandaloneEditEventQueryDocument, baseOptions);
+export function useStandaloneEditEventQuery(baseOptions: Apollo.QueryHookOptions<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>(StandaloneEditEventQueryDocument, options);
       }
-export function useStandaloneEditEventQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>) {
-          return Apollo.useLazyQuery<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>(StandaloneEditEventQueryDocument, baseOptions);
+export function useStandaloneEditEventQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>(StandaloneEditEventQueryDocument, options);
         }
-export type StandaloneEditEventQueryQueryHookResult = ReturnType<typeof useStandaloneEditEventQueryQuery>;
+export type StandaloneEditEventQueryHookResult = ReturnType<typeof useStandaloneEditEventQuery>;
 export type StandaloneEditEventQueryLazyQueryHookResult = ReturnType<typeof useStandaloneEditEventQueryLazyQuery>;
-export type StandaloneEditEventQueryQueryResult = Apollo.QueryResult<StandaloneEditEventQueryQuery, StandaloneEditEventQueryQueryVariables>;
+export type StandaloneEditEventQueryDataResult = Apollo.QueryResult<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>;

@@ -6,10 +6,10 @@ import usePageTitle from '../../usePageTitle';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsVariablesQueryQuery } from './queries.generated';
+import { useCmsVariablesQuery } from './queries.generated';
 
 function CmsVariablesAdmin() {
-  const { data, loading, error } = useCmsVariablesQueryQuery();
+  const { data, loading, error } = useCmsVariablesQuery();
   const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
   const addVariable = useCallback(

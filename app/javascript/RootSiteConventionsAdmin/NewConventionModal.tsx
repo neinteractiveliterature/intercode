@@ -18,9 +18,9 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import EnumTypes from '../enumTypes.json';
 import ConventionLanguageInput from '../ConventionAdmin/ConventionLanguageInput';
 import {
-  NewConventionModalQueryQuery,
-  RootSiteConventionsAdminTableQueryQuery,
-  useNewConventionModalQueryQuery,
+  NewConventionModalQueryData,
+  RootSiteConventionsAdminTableQueryData,
+  useNewConventionModalQuery,
 } from './queries.generated';
 import { usePropertySetters } from '../usePropertySetters';
 import { Convention, Organization, TimezoneMode } from '../graphqlTypes.generated';
@@ -58,11 +58,11 @@ const CMS_CONTENT_SET_OPTIONS = [
 export type NewConventionModalProps = {
   visible: boolean;
   close: () => void;
-  cloneConvention?: RootSiteConventionsAdminTableQueryQuery['conventions_paginated']['entries'][0];
+  cloneConvention?: RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
 };
 
-export default LoadQueryWrapper<NewConventionModalQueryQuery, NewConventionModalProps>(
-  useNewConventionModalQueryQuery,
+export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalProps>(
+  useNewConventionModalQuery,
   function NewConventionModal({ visible, close, cloneConvention, data }) {
     const history = useHistory();
     const [createConvention] = useCreateConventionMutation();

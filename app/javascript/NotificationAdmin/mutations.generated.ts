@@ -5,13 +5,14 @@ import { NotificationTemplateFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { NotificationTemplateFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
   notificationTemplate: Types.NotificationTemplateInput;
 }>;
 
 
-export type UpdateNotificationTemplateMutation = (
+export type UpdateNotificationTemplateMutationData = (
   { __typename: 'Mutation' }
   & { updateNotificationTemplate?: Types.Maybe<(
     { __typename: 'UpdateNotificationTemplatePayload' }
@@ -36,7 +37,7 @@ export const UpdateNotificationTemplateDocument = gql`
   }
 }
     ${NotificationTemplateFieldsFragmentDoc}`;
-export type UpdateNotificationTemplateMutationFn = Apollo.MutationFunction<UpdateNotificationTemplateMutation, UpdateNotificationTemplateMutationVariables>;
+export type UpdateNotificationTemplateMutationFn = Apollo.MutationFunction<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>;
 
 /**
  * __useUpdateNotificationTemplateMutation__
@@ -56,9 +57,10 @@ export type UpdateNotificationTemplateMutationFn = Apollo.MutationFunction<Updat
  *   },
  * });
  */
-export function useUpdateNotificationTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNotificationTemplateMutation, UpdateNotificationTemplateMutationVariables>) {
-        return Apollo.useMutation<UpdateNotificationTemplateMutation, UpdateNotificationTemplateMutationVariables>(UpdateNotificationTemplateDocument, baseOptions);
+export function useUpdateNotificationTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>(UpdateNotificationTemplateDocument, options);
       }
 export type UpdateNotificationTemplateMutationHookResult = ReturnType<typeof useUpdateNotificationTemplateMutation>;
-export type UpdateNotificationTemplateMutationResult = Apollo.MutationResult<UpdateNotificationTemplateMutation>;
-export type UpdateNotificationTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationTemplateMutation, UpdateNotificationTemplateMutationVariables>;
+export type UpdateNotificationTemplateMutationResult = Apollo.MutationResult<UpdateNotificationTemplateMutationData>;
+export type UpdateNotificationTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>;

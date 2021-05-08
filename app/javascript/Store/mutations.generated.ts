@@ -1,25 +1,26 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { AdminOrderFieldsFragmentFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from './orderFields.generated';
+import { AdminOrderFieldsFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from './orderFields.generated';
 import { AdminProductFieldsFragment } from './adminProductFields.generated';
 import { gql } from '@apollo/client';
-import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
+import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type MarkOrderPaidMutationVariables = Types.Exact<{
   orderId: Types.Scalars['Int'];
 }>;
 
 
-export type MarkOrderPaidMutation = (
+export type MarkOrderPaidMutationData = (
   { __typename: 'Mutation' }
   & { markOrderPaid?: Types.Maybe<(
     { __typename: 'MarkOrderPaidPayload' }
     & { order: (
       { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragmentFragment
+      & AdminOrderFieldsFragment
     ) }
   )> }
 );
@@ -30,14 +31,14 @@ export type CancelOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type CancelOrderMutation = (
+export type CancelOrderMutationData = (
   { __typename: 'Mutation' }
   & { cancelOrder?: Types.Maybe<(
     { __typename: 'CancelOrderPayload' }
     & { order: (
       { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragmentFragment
+      & AdminOrderFieldsFragment
     ) }
   )> }
 );
@@ -50,14 +51,14 @@ export type CreateOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOrderMutation = (
+export type CreateOrderMutationData = (
   { __typename: 'Mutation' }
   & { createOrder?: Types.Maybe<(
     { __typename: 'CreateOrderPayload' }
     & { order: (
       { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragmentFragment
+      & AdminOrderFieldsFragment
     ) }
   )> }
 );
@@ -68,14 +69,14 @@ export type AdminUpdateOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type AdminUpdateOrderMutation = (
+export type AdminUpdateOrderMutationData = (
   { __typename: 'Mutation' }
   & { updateOrder?: Types.Maybe<(
     { __typename: 'UpdateOrderPayload' }
     & { order: (
       { __typename: 'Order' }
       & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragmentFragment
+      & AdminOrderFieldsFragment
     ) }
   )> }
 );
@@ -85,7 +86,7 @@ export type CreateProductMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateProductMutation = (
+export type CreateProductMutationData = (
   { __typename: 'Mutation' }
   & { createProduct?: Types.Maybe<(
     { __typename: 'CreateProductPayload' }
@@ -103,7 +104,7 @@ export type UpdateProductMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateProductMutation = (
+export type UpdateProductMutationData = (
   { __typename: 'Mutation' }
   & { updateProduct?: Types.Maybe<(
     { __typename: 'UpdateProductPayload' }
@@ -120,7 +121,7 @@ export type DeleteProductMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteProductMutation = (
+export type DeleteProductMutationData = (
   { __typename: 'Mutation' }
   & { deleteProduct?: Types.Maybe<(
     { __typename: 'DeleteProductPayload' }
@@ -137,7 +138,7 @@ export type AdminCreateOrderEntryMutationVariables = Types.Exact<{
 }>;
 
 
-export type AdminCreateOrderEntryMutation = (
+export type AdminCreateOrderEntryMutationData = (
   { __typename: 'Mutation' }
   & { createOrderEntry?: Types.Maybe<(
     { __typename: 'CreateOrderEntryPayload' }
@@ -147,7 +148,7 @@ export type AdminCreateOrderEntryMutation = (
       & { order: (
         { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragmentFragment
+        & AdminOrderFieldsFragment
       ) }
       & OrderEntryFieldsFragment
     ) }
@@ -159,7 +160,7 @@ export type AdminUpdateOrderEntryMutationVariables = Types.Exact<{
 }>;
 
 
-export type AdminUpdateOrderEntryMutation = (
+export type AdminUpdateOrderEntryMutationData = (
   { __typename: 'Mutation' }
   & { updateOrderEntry?: Types.Maybe<(
     { __typename: 'UpdateOrderEntryPayload' }
@@ -169,7 +170,7 @@ export type AdminUpdateOrderEntryMutation = (
       & { order: (
         { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragmentFragment
+        & AdminOrderFieldsFragment
       ) }
       & OrderEntryFieldsFragment
     ) }
@@ -181,7 +182,7 @@ export type UpdateOrderEntryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOrderEntryMutation = (
+export type UpdateOrderEntryMutationData = (
   { __typename: 'Mutation' }
   & { updateOrderEntry?: Types.Maybe<(
     { __typename: 'UpdateOrderEntryPayload' }
@@ -198,7 +199,7 @@ export type DeleteOrderEntryMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteOrderEntryMutation = (
+export type DeleteOrderEntryMutationData = (
   { __typename: 'Mutation' }
   & { deleteOrderEntry?: Types.Maybe<(
     { __typename: 'DeleteOrderEntryPayload' }
@@ -214,7 +215,7 @@ export type AdminDeleteOrderEntryMutationVariables = Types.Exact<{
 }>;
 
 
-export type AdminDeleteOrderEntryMutation = (
+export type AdminDeleteOrderEntryMutationData = (
   { __typename: 'Mutation' }
   & { deleteOrderEntry?: Types.Maybe<(
     { __typename: 'DeleteOrderEntryPayload' }
@@ -224,7 +225,7 @@ export type AdminDeleteOrderEntryMutation = (
       & { order: (
         { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragmentFragment
+        & AdminOrderFieldsFragment
       ) }
     ) }
   )> }
@@ -235,7 +236,7 @@ export type SubmitOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type SubmitOrderMutation = (
+export type SubmitOrderMutationData = (
   { __typename: 'Mutation' }
   & { submitOrder?: Types.Maybe<(
     { __typename: 'SubmitOrderPayload' }
@@ -253,7 +254,7 @@ export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type AddOrderEntryToCurrentPendingOrderMutation = (
+export type AddOrderEntryToCurrentPendingOrderMutationData = (
   { __typename: 'Mutation' }
   & { addOrderEntryToCurrentPendingOrder?: Types.Maybe<(
     { __typename: 'AddOrderEntryToCurrentPendingOrderPayload' }
@@ -270,7 +271,7 @@ export type CreateCouponApplicationMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCouponApplicationMutation = (
+export type CreateCouponApplicationMutationData = (
   { __typename: 'Mutation' }
   & { createCouponApplication?: Types.Maybe<(
     { __typename: 'CreateCouponApplicationPayload' }
@@ -291,7 +292,7 @@ export type DeleteCouponApplicationMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteCouponApplicationMutation = (
+export type DeleteCouponApplicationMutationData = (
   { __typename: 'Mutation' }
   & { deleteCouponApplication?: Types.Maybe<(
     { __typename: 'DeleteCouponApplicationPayload' }
@@ -317,8 +318,8 @@ export const MarkOrderPaidDocument = gql`
     }
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
-export type MarkOrderPaidMutationFn = Apollo.MutationFunction<MarkOrderPaidMutation, MarkOrderPaidMutationVariables>;
+    ${AdminOrderFieldsFragmentDoc}`;
+export type MarkOrderPaidMutationFn = Apollo.MutationFunction<MarkOrderPaidMutationData, MarkOrderPaidMutationVariables>;
 
 /**
  * __useMarkOrderPaidMutation__
@@ -337,12 +338,13 @@ export type MarkOrderPaidMutationFn = Apollo.MutationFunction<MarkOrderPaidMutat
  *   },
  * });
  */
-export function useMarkOrderPaidMutation(baseOptions?: Apollo.MutationHookOptions<MarkOrderPaidMutation, MarkOrderPaidMutationVariables>) {
-        return Apollo.useMutation<MarkOrderPaidMutation, MarkOrderPaidMutationVariables>(MarkOrderPaidDocument, baseOptions);
+export function useMarkOrderPaidMutation(baseOptions?: Apollo.MutationHookOptions<MarkOrderPaidMutationData, MarkOrderPaidMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkOrderPaidMutationData, MarkOrderPaidMutationVariables>(MarkOrderPaidDocument, options);
       }
 export type MarkOrderPaidMutationHookResult = ReturnType<typeof useMarkOrderPaidMutation>;
-export type MarkOrderPaidMutationResult = Apollo.MutationResult<MarkOrderPaidMutation>;
-export type MarkOrderPaidMutationOptions = Apollo.BaseMutationOptions<MarkOrderPaidMutation, MarkOrderPaidMutationVariables>;
+export type MarkOrderPaidMutationResult = Apollo.MutationResult<MarkOrderPaidMutationData>;
+export type MarkOrderPaidMutationOptions = Apollo.BaseMutationOptions<MarkOrderPaidMutationData, MarkOrderPaidMutationVariables>;
 export const CancelOrderDocument = gql`
     mutation CancelOrder($orderId: Int!, $skipRefund: Boolean) {
   cancelOrder(input: {id: $orderId, skip_refund: $skipRefund}) {
@@ -352,8 +354,8 @@ export const CancelOrderDocument = gql`
     }
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
-export type CancelOrderMutationFn = Apollo.MutationFunction<CancelOrderMutation, CancelOrderMutationVariables>;
+    ${AdminOrderFieldsFragmentDoc}`;
+export type CancelOrderMutationFn = Apollo.MutationFunction<CancelOrderMutationData, CancelOrderMutationVariables>;
 
 /**
  * __useCancelOrderMutation__
@@ -373,12 +375,13 @@ export type CancelOrderMutationFn = Apollo.MutationFunction<CancelOrderMutation,
  *   },
  * });
  */
-export function useCancelOrderMutation(baseOptions?: Apollo.MutationHookOptions<CancelOrderMutation, CancelOrderMutationVariables>) {
-        return Apollo.useMutation<CancelOrderMutation, CancelOrderMutationVariables>(CancelOrderDocument, baseOptions);
+export function useCancelOrderMutation(baseOptions?: Apollo.MutationHookOptions<CancelOrderMutationData, CancelOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelOrderMutationData, CancelOrderMutationVariables>(CancelOrderDocument, options);
       }
 export type CancelOrderMutationHookResult = ReturnType<typeof useCancelOrderMutation>;
-export type CancelOrderMutationResult = Apollo.MutationResult<CancelOrderMutation>;
-export type CancelOrderMutationOptions = Apollo.BaseMutationOptions<CancelOrderMutation, CancelOrderMutationVariables>;
+export type CancelOrderMutationResult = Apollo.MutationResult<CancelOrderMutationData>;
+export type CancelOrderMutationOptions = Apollo.BaseMutationOptions<CancelOrderMutationData, CancelOrderMutationVariables>;
 export const CreateOrderDocument = gql`
     mutation CreateOrder($userConProfileId: Int!, $order: OrderInput!, $status: OrderStatus!, $orderEntries: [OrderEntryInput!]) {
   createOrder(
@@ -390,8 +393,8 @@ export const CreateOrderDocument = gql`
     }
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
-export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+    ${AdminOrderFieldsFragmentDoc}`;
+export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutationData, CreateOrderMutationVariables>;
 
 /**
  * __useCreateOrderMutation__
@@ -413,12 +416,13 @@ export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation,
  *   },
  * });
  */
-export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
-        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, baseOptions);
+export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutationData, CreateOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderMutationData, CreateOrderMutationVariables>(CreateOrderDocument, options);
       }
 export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
-export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
-export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
+export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutationData>;
+export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutationData, CreateOrderMutationVariables>;
 export const AdminUpdateOrderDocument = gql`
     mutation AdminUpdateOrder($id: Int!, $order: OrderInput!) {
   updateOrder(input: {id: $id, order: $order}) {
@@ -428,8 +432,8 @@ export const AdminUpdateOrderDocument = gql`
     }
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
-export type AdminUpdateOrderMutationFn = Apollo.MutationFunction<AdminUpdateOrderMutation, AdminUpdateOrderMutationVariables>;
+    ${AdminOrderFieldsFragmentDoc}`;
+export type AdminUpdateOrderMutationFn = Apollo.MutationFunction<AdminUpdateOrderMutationData, AdminUpdateOrderMutationVariables>;
 
 /**
  * __useAdminUpdateOrderMutation__
@@ -449,12 +453,13 @@ export type AdminUpdateOrderMutationFn = Apollo.MutationFunction<AdminUpdateOrde
  *   },
  * });
  */
-export function useAdminUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateOrderMutation, AdminUpdateOrderMutationVariables>) {
-        return Apollo.useMutation<AdminUpdateOrderMutation, AdminUpdateOrderMutationVariables>(AdminUpdateOrderDocument, baseOptions);
+export function useAdminUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateOrderMutationData, AdminUpdateOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminUpdateOrderMutationData, AdminUpdateOrderMutationVariables>(AdminUpdateOrderDocument, options);
       }
 export type AdminUpdateOrderMutationHookResult = ReturnType<typeof useAdminUpdateOrderMutation>;
-export type AdminUpdateOrderMutationResult = Apollo.MutationResult<AdminUpdateOrderMutation>;
-export type AdminUpdateOrderMutationOptions = Apollo.BaseMutationOptions<AdminUpdateOrderMutation, AdminUpdateOrderMutationVariables>;
+export type AdminUpdateOrderMutationResult = Apollo.MutationResult<AdminUpdateOrderMutationData>;
+export type AdminUpdateOrderMutationOptions = Apollo.BaseMutationOptions<AdminUpdateOrderMutationData, AdminUpdateOrderMutationVariables>;
 export const CreateProductDocument = gql`
     mutation CreateProduct($product: ProductInput!) {
   createProduct(input: {product: $product}) {
@@ -465,7 +470,7 @@ export const CreateProductDocument = gql`
   }
 }
     ${AdminProductFieldsFragmentDoc}`;
-export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutation, CreateProductMutationVariables>;
+export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutationData, CreateProductMutationVariables>;
 
 /**
  * __useCreateProductMutation__
@@ -484,12 +489,13 @@ export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutat
  *   },
  * });
  */
-export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductMutation, CreateProductMutationVariables>) {
-        return Apollo.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument, baseOptions);
+export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductMutationData, CreateProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProductMutationData, CreateProductMutationVariables>(CreateProductDocument, options);
       }
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
-export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
-export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
+export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutationData>;
+export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutationData, CreateProductMutationVariables>;
 export const UpdateProductDocument = gql`
     mutation UpdateProduct($id: Int!, $product: ProductInput!) {
   updateProduct(input: {id: $id, product: $product}) {
@@ -500,7 +506,7 @@ export const UpdateProductDocument = gql`
   }
 }
     ${AdminProductFieldsFragmentDoc}`;
-export type UpdateProductMutationFn = Apollo.MutationFunction<UpdateProductMutation, UpdateProductMutationVariables>;
+export type UpdateProductMutationFn = Apollo.MutationFunction<UpdateProductMutationData, UpdateProductMutationVariables>;
 
 /**
  * __useUpdateProductMutation__
@@ -520,12 +526,13 @@ export type UpdateProductMutationFn = Apollo.MutationFunction<UpdateProductMutat
  *   },
  * });
  */
-export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProductMutation, UpdateProductMutationVariables>) {
-        return Apollo.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument, baseOptions);
+export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProductMutationData, UpdateProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProductMutationData, UpdateProductMutationVariables>(UpdateProductDocument, options);
       }
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
-export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
-export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
+export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutationData>;
+export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutationData, UpdateProductMutationVariables>;
 export const DeleteProductDocument = gql`
     mutation DeleteProduct($id: Int!) {
   deleteProduct(input: {id: $id}) {
@@ -536,7 +543,7 @@ export const DeleteProductDocument = gql`
   }
 }
     ${AdminProductFieldsFragmentDoc}`;
-export type DeleteProductMutationFn = Apollo.MutationFunction<DeleteProductMutation, DeleteProductMutationVariables>;
+export type DeleteProductMutationFn = Apollo.MutationFunction<DeleteProductMutationData, DeleteProductMutationVariables>;
 
 /**
  * __useDeleteProductMutation__
@@ -555,12 +562,13 @@ export type DeleteProductMutationFn = Apollo.MutationFunction<DeleteProductMutat
  *   },
  * });
  */
-export function useDeleteProductMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProductMutation, DeleteProductMutationVariables>) {
-        return Apollo.useMutation<DeleteProductMutation, DeleteProductMutationVariables>(DeleteProductDocument, baseOptions);
+export function useDeleteProductMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProductMutationData, DeleteProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteProductMutationData, DeleteProductMutationVariables>(DeleteProductDocument, options);
       }
 export type DeleteProductMutationHookResult = ReturnType<typeof useDeleteProductMutation>;
-export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutation>;
-export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<DeleteProductMutation, DeleteProductMutationVariables>;
+export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutationData>;
+export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<DeleteProductMutationData, DeleteProductMutationVariables>;
 export const AdminCreateOrderEntryDocument = gql`
     mutation AdminCreateOrderEntry($input: CreateOrderEntryInput!) {
   createOrderEntry(input: $input) {
@@ -575,8 +583,8 @@ export const AdminCreateOrderEntryDocument = gql`
   }
 }
     ${OrderEntryFieldsFragmentDoc}
-${AdminOrderFieldsFragmentFragmentDoc}`;
-export type AdminCreateOrderEntryMutationFn = Apollo.MutationFunction<AdminCreateOrderEntryMutation, AdminCreateOrderEntryMutationVariables>;
+${AdminOrderFieldsFragmentDoc}`;
+export type AdminCreateOrderEntryMutationFn = Apollo.MutationFunction<AdminCreateOrderEntryMutationData, AdminCreateOrderEntryMutationVariables>;
 
 /**
  * __useAdminCreateOrderEntryMutation__
@@ -595,12 +603,13 @@ export type AdminCreateOrderEntryMutationFn = Apollo.MutationFunction<AdminCreat
  *   },
  * });
  */
-export function useAdminCreateOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<AdminCreateOrderEntryMutation, AdminCreateOrderEntryMutationVariables>) {
-        return Apollo.useMutation<AdminCreateOrderEntryMutation, AdminCreateOrderEntryMutationVariables>(AdminCreateOrderEntryDocument, baseOptions);
+export function useAdminCreateOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<AdminCreateOrderEntryMutationData, AdminCreateOrderEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminCreateOrderEntryMutationData, AdminCreateOrderEntryMutationVariables>(AdminCreateOrderEntryDocument, options);
       }
 export type AdminCreateOrderEntryMutationHookResult = ReturnType<typeof useAdminCreateOrderEntryMutation>;
-export type AdminCreateOrderEntryMutationResult = Apollo.MutationResult<AdminCreateOrderEntryMutation>;
-export type AdminCreateOrderEntryMutationOptions = Apollo.BaseMutationOptions<AdminCreateOrderEntryMutation, AdminCreateOrderEntryMutationVariables>;
+export type AdminCreateOrderEntryMutationResult = Apollo.MutationResult<AdminCreateOrderEntryMutationData>;
+export type AdminCreateOrderEntryMutationOptions = Apollo.BaseMutationOptions<AdminCreateOrderEntryMutationData, AdminCreateOrderEntryMutationVariables>;
 export const AdminUpdateOrderEntryDocument = gql`
     mutation AdminUpdateOrderEntry($input: UpdateOrderEntryInput!) {
   updateOrderEntry(input: $input) {
@@ -615,8 +624,8 @@ export const AdminUpdateOrderEntryDocument = gql`
   }
 }
     ${OrderEntryFieldsFragmentDoc}
-${AdminOrderFieldsFragmentFragmentDoc}`;
-export type AdminUpdateOrderEntryMutationFn = Apollo.MutationFunction<AdminUpdateOrderEntryMutation, AdminUpdateOrderEntryMutationVariables>;
+${AdminOrderFieldsFragmentDoc}`;
+export type AdminUpdateOrderEntryMutationFn = Apollo.MutationFunction<AdminUpdateOrderEntryMutationData, AdminUpdateOrderEntryMutationVariables>;
 
 /**
  * __useAdminUpdateOrderEntryMutation__
@@ -635,12 +644,13 @@ export type AdminUpdateOrderEntryMutationFn = Apollo.MutationFunction<AdminUpdat
  *   },
  * });
  */
-export function useAdminUpdateOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateOrderEntryMutation, AdminUpdateOrderEntryMutationVariables>) {
-        return Apollo.useMutation<AdminUpdateOrderEntryMutation, AdminUpdateOrderEntryMutationVariables>(AdminUpdateOrderEntryDocument, baseOptions);
+export function useAdminUpdateOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateOrderEntryMutationData, AdminUpdateOrderEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminUpdateOrderEntryMutationData, AdminUpdateOrderEntryMutationVariables>(AdminUpdateOrderEntryDocument, options);
       }
 export type AdminUpdateOrderEntryMutationHookResult = ReturnType<typeof useAdminUpdateOrderEntryMutation>;
-export type AdminUpdateOrderEntryMutationResult = Apollo.MutationResult<AdminUpdateOrderEntryMutation>;
-export type AdminUpdateOrderEntryMutationOptions = Apollo.BaseMutationOptions<AdminUpdateOrderEntryMutation, AdminUpdateOrderEntryMutationVariables>;
+export type AdminUpdateOrderEntryMutationResult = Apollo.MutationResult<AdminUpdateOrderEntryMutationData>;
+export type AdminUpdateOrderEntryMutationOptions = Apollo.BaseMutationOptions<AdminUpdateOrderEntryMutationData, AdminUpdateOrderEntryMutationVariables>;
 export const UpdateOrderEntryDocument = gql`
     mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
   updateOrderEntry(input: $input) {
@@ -651,7 +661,7 @@ export const UpdateOrderEntryDocument = gql`
   }
 }
     ${OrderEntryFieldsFragmentDoc}`;
-export type UpdateOrderEntryMutationFn = Apollo.MutationFunction<UpdateOrderEntryMutation, UpdateOrderEntryMutationVariables>;
+export type UpdateOrderEntryMutationFn = Apollo.MutationFunction<UpdateOrderEntryMutationData, UpdateOrderEntryMutationVariables>;
 
 /**
  * __useUpdateOrderEntryMutation__
@@ -670,12 +680,13 @@ export type UpdateOrderEntryMutationFn = Apollo.MutationFunction<UpdateOrderEntr
  *   },
  * });
  */
-export function useUpdateOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderEntryMutation, UpdateOrderEntryMutationVariables>) {
-        return Apollo.useMutation<UpdateOrderEntryMutation, UpdateOrderEntryMutationVariables>(UpdateOrderEntryDocument, baseOptions);
+export function useUpdateOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderEntryMutationData, UpdateOrderEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrderEntryMutationData, UpdateOrderEntryMutationVariables>(UpdateOrderEntryDocument, options);
       }
 export type UpdateOrderEntryMutationHookResult = ReturnType<typeof useUpdateOrderEntryMutation>;
-export type UpdateOrderEntryMutationResult = Apollo.MutationResult<UpdateOrderEntryMutation>;
-export type UpdateOrderEntryMutationOptions = Apollo.BaseMutationOptions<UpdateOrderEntryMutation, UpdateOrderEntryMutationVariables>;
+export type UpdateOrderEntryMutationResult = Apollo.MutationResult<UpdateOrderEntryMutationData>;
+export type UpdateOrderEntryMutationOptions = Apollo.BaseMutationOptions<UpdateOrderEntryMutationData, UpdateOrderEntryMutationVariables>;
 export const DeleteOrderEntryDocument = gql`
     mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
   deleteOrderEntry(input: $input) {
@@ -685,7 +696,7 @@ export const DeleteOrderEntryDocument = gql`
   }
 }
     `;
-export type DeleteOrderEntryMutationFn = Apollo.MutationFunction<DeleteOrderEntryMutation, DeleteOrderEntryMutationVariables>;
+export type DeleteOrderEntryMutationFn = Apollo.MutationFunction<DeleteOrderEntryMutationData, DeleteOrderEntryMutationVariables>;
 
 /**
  * __useDeleteOrderEntryMutation__
@@ -704,12 +715,13 @@ export type DeleteOrderEntryMutationFn = Apollo.MutationFunction<DeleteOrderEntr
  *   },
  * });
  */
-export function useDeleteOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrderEntryMutation, DeleteOrderEntryMutationVariables>) {
-        return Apollo.useMutation<DeleteOrderEntryMutation, DeleteOrderEntryMutationVariables>(DeleteOrderEntryDocument, baseOptions);
+export function useDeleteOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrderEntryMutationData, DeleteOrderEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOrderEntryMutationData, DeleteOrderEntryMutationVariables>(DeleteOrderEntryDocument, options);
       }
 export type DeleteOrderEntryMutationHookResult = ReturnType<typeof useDeleteOrderEntryMutation>;
-export type DeleteOrderEntryMutationResult = Apollo.MutationResult<DeleteOrderEntryMutation>;
-export type DeleteOrderEntryMutationOptions = Apollo.BaseMutationOptions<DeleteOrderEntryMutation, DeleteOrderEntryMutationVariables>;
+export type DeleteOrderEntryMutationResult = Apollo.MutationResult<DeleteOrderEntryMutationData>;
+export type DeleteOrderEntryMutationOptions = Apollo.BaseMutationOptions<DeleteOrderEntryMutationData, DeleteOrderEntryMutationVariables>;
 export const AdminDeleteOrderEntryDocument = gql`
     mutation AdminDeleteOrderEntry($input: DeleteOrderEntryInput!) {
   deleteOrderEntry(input: $input) {
@@ -722,8 +734,8 @@ export const AdminDeleteOrderEntryDocument = gql`
     }
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
-export type AdminDeleteOrderEntryMutationFn = Apollo.MutationFunction<AdminDeleteOrderEntryMutation, AdminDeleteOrderEntryMutationVariables>;
+    ${AdminOrderFieldsFragmentDoc}`;
+export type AdminDeleteOrderEntryMutationFn = Apollo.MutationFunction<AdminDeleteOrderEntryMutationData, AdminDeleteOrderEntryMutationVariables>;
 
 /**
  * __useAdminDeleteOrderEntryMutation__
@@ -742,12 +754,13 @@ export type AdminDeleteOrderEntryMutationFn = Apollo.MutationFunction<AdminDelet
  *   },
  * });
  */
-export function useAdminDeleteOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<AdminDeleteOrderEntryMutation, AdminDeleteOrderEntryMutationVariables>) {
-        return Apollo.useMutation<AdminDeleteOrderEntryMutation, AdminDeleteOrderEntryMutationVariables>(AdminDeleteOrderEntryDocument, baseOptions);
+export function useAdminDeleteOrderEntryMutation(baseOptions?: Apollo.MutationHookOptions<AdminDeleteOrderEntryMutationData, AdminDeleteOrderEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminDeleteOrderEntryMutationData, AdminDeleteOrderEntryMutationVariables>(AdminDeleteOrderEntryDocument, options);
       }
 export type AdminDeleteOrderEntryMutationHookResult = ReturnType<typeof useAdminDeleteOrderEntryMutation>;
-export type AdminDeleteOrderEntryMutationResult = Apollo.MutationResult<AdminDeleteOrderEntryMutation>;
-export type AdminDeleteOrderEntryMutationOptions = Apollo.BaseMutationOptions<AdminDeleteOrderEntryMutation, AdminDeleteOrderEntryMutationVariables>;
+export type AdminDeleteOrderEntryMutationResult = Apollo.MutationResult<AdminDeleteOrderEntryMutationData>;
+export type AdminDeleteOrderEntryMutationOptions = Apollo.BaseMutationOptions<AdminDeleteOrderEntryMutationData, AdminDeleteOrderEntryMutationVariables>;
 export const SubmitOrderDocument = gql`
     mutation SubmitOrder($input: SubmitOrderInput!) {
   submitOrder(input: $input) {
@@ -758,7 +771,7 @@ export const SubmitOrderDocument = gql`
   }
 }
     `;
-export type SubmitOrderMutationFn = Apollo.MutationFunction<SubmitOrderMutation, SubmitOrderMutationVariables>;
+export type SubmitOrderMutationFn = Apollo.MutationFunction<SubmitOrderMutationData, SubmitOrderMutationVariables>;
 
 /**
  * __useSubmitOrderMutation__
@@ -777,12 +790,13 @@ export type SubmitOrderMutationFn = Apollo.MutationFunction<SubmitOrderMutation,
  *   },
  * });
  */
-export function useSubmitOrderMutation(baseOptions?: Apollo.MutationHookOptions<SubmitOrderMutation, SubmitOrderMutationVariables>) {
-        return Apollo.useMutation<SubmitOrderMutation, SubmitOrderMutationVariables>(SubmitOrderDocument, baseOptions);
+export function useSubmitOrderMutation(baseOptions?: Apollo.MutationHookOptions<SubmitOrderMutationData, SubmitOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitOrderMutationData, SubmitOrderMutationVariables>(SubmitOrderDocument, options);
       }
 export type SubmitOrderMutationHookResult = ReturnType<typeof useSubmitOrderMutation>;
-export type SubmitOrderMutationResult = Apollo.MutationResult<SubmitOrderMutation>;
-export type SubmitOrderMutationOptions = Apollo.BaseMutationOptions<SubmitOrderMutation, SubmitOrderMutationVariables>;
+export type SubmitOrderMutationResult = Apollo.MutationResult<SubmitOrderMutationData>;
+export type SubmitOrderMutationOptions = Apollo.BaseMutationOptions<SubmitOrderMutationData, SubmitOrderMutationVariables>;
 export const AddOrderEntryToCurrentPendingOrderDocument = gql`
     mutation AddOrderEntryToCurrentPendingOrder($productId: Int!, $productVariantId: Int, $quantity: Int!) {
   addOrderEntryToCurrentPendingOrder(
@@ -794,7 +808,7 @@ export const AddOrderEntryToCurrentPendingOrderDocument = gql`
   }
 }
     `;
-export type AddOrderEntryToCurrentPendingOrderMutationFn = Apollo.MutationFunction<AddOrderEntryToCurrentPendingOrderMutation, AddOrderEntryToCurrentPendingOrderMutationVariables>;
+export type AddOrderEntryToCurrentPendingOrderMutationFn = Apollo.MutationFunction<AddOrderEntryToCurrentPendingOrderMutationData, AddOrderEntryToCurrentPendingOrderMutationVariables>;
 
 /**
  * __useAddOrderEntryToCurrentPendingOrderMutation__
@@ -815,12 +829,13 @@ export type AddOrderEntryToCurrentPendingOrderMutationFn = Apollo.MutationFuncti
  *   },
  * });
  */
-export function useAddOrderEntryToCurrentPendingOrderMutation(baseOptions?: Apollo.MutationHookOptions<AddOrderEntryToCurrentPendingOrderMutation, AddOrderEntryToCurrentPendingOrderMutationVariables>) {
-        return Apollo.useMutation<AddOrderEntryToCurrentPendingOrderMutation, AddOrderEntryToCurrentPendingOrderMutationVariables>(AddOrderEntryToCurrentPendingOrderDocument, baseOptions);
+export function useAddOrderEntryToCurrentPendingOrderMutation(baseOptions?: Apollo.MutationHookOptions<AddOrderEntryToCurrentPendingOrderMutationData, AddOrderEntryToCurrentPendingOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddOrderEntryToCurrentPendingOrderMutationData, AddOrderEntryToCurrentPendingOrderMutationVariables>(AddOrderEntryToCurrentPendingOrderDocument, options);
       }
 export type AddOrderEntryToCurrentPendingOrderMutationHookResult = ReturnType<typeof useAddOrderEntryToCurrentPendingOrderMutation>;
-export type AddOrderEntryToCurrentPendingOrderMutationResult = Apollo.MutationResult<AddOrderEntryToCurrentPendingOrderMutation>;
-export type AddOrderEntryToCurrentPendingOrderMutationOptions = Apollo.BaseMutationOptions<AddOrderEntryToCurrentPendingOrderMutation, AddOrderEntryToCurrentPendingOrderMutationVariables>;
+export type AddOrderEntryToCurrentPendingOrderMutationResult = Apollo.MutationResult<AddOrderEntryToCurrentPendingOrderMutationData>;
+export type AddOrderEntryToCurrentPendingOrderMutationOptions = Apollo.BaseMutationOptions<AddOrderEntryToCurrentPendingOrderMutationData, AddOrderEntryToCurrentPendingOrderMutationVariables>;
 export const CreateCouponApplicationDocument = gql`
     mutation CreateCouponApplication($orderId: Int!, $couponCode: String!) {
   createCouponApplication(input: {order_id: $orderId, coupon_code: $couponCode}) {
@@ -834,7 +849,7 @@ export const CreateCouponApplicationDocument = gql`
   }
 }
     ${CartOrderFieldsFragmentDoc}`;
-export type CreateCouponApplicationMutationFn = Apollo.MutationFunction<CreateCouponApplicationMutation, CreateCouponApplicationMutationVariables>;
+export type CreateCouponApplicationMutationFn = Apollo.MutationFunction<CreateCouponApplicationMutationData, CreateCouponApplicationMutationVariables>;
 
 /**
  * __useCreateCouponApplicationMutation__
@@ -854,12 +869,13 @@ export type CreateCouponApplicationMutationFn = Apollo.MutationFunction<CreateCo
  *   },
  * });
  */
-export function useCreateCouponApplicationMutation(baseOptions?: Apollo.MutationHookOptions<CreateCouponApplicationMutation, CreateCouponApplicationMutationVariables>) {
-        return Apollo.useMutation<CreateCouponApplicationMutation, CreateCouponApplicationMutationVariables>(CreateCouponApplicationDocument, baseOptions);
+export function useCreateCouponApplicationMutation(baseOptions?: Apollo.MutationHookOptions<CreateCouponApplicationMutationData, CreateCouponApplicationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCouponApplicationMutationData, CreateCouponApplicationMutationVariables>(CreateCouponApplicationDocument, options);
       }
 export type CreateCouponApplicationMutationHookResult = ReturnType<typeof useCreateCouponApplicationMutation>;
-export type CreateCouponApplicationMutationResult = Apollo.MutationResult<CreateCouponApplicationMutation>;
-export type CreateCouponApplicationMutationOptions = Apollo.BaseMutationOptions<CreateCouponApplicationMutation, CreateCouponApplicationMutationVariables>;
+export type CreateCouponApplicationMutationResult = Apollo.MutationResult<CreateCouponApplicationMutationData>;
+export type CreateCouponApplicationMutationOptions = Apollo.BaseMutationOptions<CreateCouponApplicationMutationData, CreateCouponApplicationMutationVariables>;
 export const DeleteCouponApplicationDocument = gql`
     mutation DeleteCouponApplication($id: Int!) {
   deleteCouponApplication(input: {id: $id}) {
@@ -873,7 +889,7 @@ export const DeleteCouponApplicationDocument = gql`
   }
 }
     ${CartOrderFieldsFragmentDoc}`;
-export type DeleteCouponApplicationMutationFn = Apollo.MutationFunction<DeleteCouponApplicationMutation, DeleteCouponApplicationMutationVariables>;
+export type DeleteCouponApplicationMutationFn = Apollo.MutationFunction<DeleteCouponApplicationMutationData, DeleteCouponApplicationMutationVariables>;
 
 /**
  * __useDeleteCouponApplicationMutation__
@@ -892,9 +908,10 @@ export type DeleteCouponApplicationMutationFn = Apollo.MutationFunction<DeleteCo
  *   },
  * });
  */
-export function useDeleteCouponApplicationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCouponApplicationMutation, DeleteCouponApplicationMutationVariables>) {
-        return Apollo.useMutation<DeleteCouponApplicationMutation, DeleteCouponApplicationMutationVariables>(DeleteCouponApplicationDocument, baseOptions);
+export function useDeleteCouponApplicationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCouponApplicationMutationData, DeleteCouponApplicationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCouponApplicationMutationData, DeleteCouponApplicationMutationVariables>(DeleteCouponApplicationDocument, options);
       }
 export type DeleteCouponApplicationMutationHookResult = ReturnType<typeof useDeleteCouponApplicationMutation>;
-export type DeleteCouponApplicationMutationResult = Apollo.MutationResult<DeleteCouponApplicationMutation>;
-export type DeleteCouponApplicationMutationOptions = Apollo.BaseMutationOptions<DeleteCouponApplicationMutation, DeleteCouponApplicationMutationVariables>;
+export type DeleteCouponApplicationMutationResult = Apollo.MutationResult<DeleteCouponApplicationMutationData>;
+export type DeleteCouponApplicationMutationOptions = Apollo.BaseMutationOptions<DeleteCouponApplicationMutationData, DeleteCouponApplicationMutationVariables>;

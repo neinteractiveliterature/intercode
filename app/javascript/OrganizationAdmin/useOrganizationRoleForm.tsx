@@ -6,7 +6,7 @@ import ChangeSet, { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
-import { OrganizationAdminOrganizationsQueryQuery } from './queries.generated';
+import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
 
 const OrganizationRolePermissionNames = flatMap(
@@ -16,7 +16,7 @@ const OrganizationRolePermissionNames = flatMap(
   (permissionNameGroup) => permissionNameGroup.permissions,
 );
 
-type OrganizationRoleType = OrganizationAdminOrganizationsQueryQuery['organizations'][0]['organization_roles'][0];
+type OrganizationRoleType = OrganizationAdminOrganizationsQueryData['organizations'][0]['organization_roles'][0];
 export type OrganizationRoleFormState = {
   name: string;
   usersChangeSet: ChangeSet<OrganizationRoleType['users'][0]>;

@@ -1,15 +1,16 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { AdminOrderFieldsFragmentFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from './orderFields.generated';
+import { AdminOrderFieldsFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from './orderFields.generated';
 import { AdminProductFieldsFragment } from './adminProductFields.generated';
 import { PricingStructureFieldsFragment } from './pricingStructureFields.generated';
 import { gql } from '@apollo/client';
-import { AdminOrderFieldsFragmentFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
+import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
 import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-export type AdminOrdersQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type AdminOrdersQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.OrderFiltersInput>;
@@ -17,7 +18,7 @@ export type AdminOrdersQueryQueryVariables = Types.Exact<{
 }>;
 
 
-export type AdminOrdersQueryQuery = (
+export type AdminOrdersQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -31,16 +32,16 @@ export type AdminOrdersQueryQuery = (
       & { entries: Array<(
         { __typename: 'Order' }
         & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragmentFragment
+        & AdminOrderFieldsFragment
       )> }
     ) }
   ) }
 );
 
-export type AdminProductsQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type AdminProductsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AdminProductsQueryQuery = (
+export type AdminProductsQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -59,10 +60,10 @@ export type AdminProductsQueryQuery = (
   ) }
 );
 
-export type AdminStoreAbilityQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type AdminStoreAbilityQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AdminStoreAbilityQueryQuery = (
+export type AdminStoreAbilityQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -73,10 +74,10 @@ export type AdminStoreAbilityQueryQuery = (
   ) }
 );
 
-export type CartQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CartQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CartQueryQuery = (
+export type CartQueryData = (
   { __typename: 'Query' }
   & { myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
@@ -91,10 +92,10 @@ export type CartQueryQuery = (
   )> }
 );
 
-export type OrderHistoryQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type OrderHistoryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrderHistoryQueryQuery = (
+export type OrderHistoryQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -140,10 +141,10 @@ export type OrderHistoryQueryQuery = (
   )> }
 );
 
-export type OrderSummaryQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type OrderSummaryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrderSummaryQueryQuery = (
+export type OrderSummaryQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -166,12 +167,12 @@ export type OrderSummaryQueryQuery = (
   ) }
 );
 
-export type OrderFormProductQueryQueryVariables = Types.Exact<{
+export type OrderFormProductQueryVariables = Types.Exact<{
   productId: Types.Scalars['Int'];
 }>;
 
 
-export type OrderFormProductQueryQuery = (
+export type OrderFormProductQueryData = (
   { __typename: 'Query' }
   & { currentUser?: Types.Maybe<(
     { __typename: 'User' }
@@ -196,10 +197,10 @@ export type OrderFormProductQueryQuery = (
   ) }
 );
 
-export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CurrentPendingOrderPaymentIntentClientSecretQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CurrentPendingOrderPaymentIntentClientSecretQueryQuery = (
+export type CurrentPendingOrderPaymentIntentClientSecretQueryData = (
   { __typename: 'Query' }
   & Pick<Types.Query, 'currentPendingOrderPaymentIntentClientSecret'>
 );
@@ -230,19 +231,19 @@ export const AdminOrdersQueryDocument = gql`
     }
   }
 }
-    ${AdminOrderFieldsFragmentFragmentDoc}`;
+    ${AdminOrderFieldsFragmentDoc}`;
 
 /**
- * __useAdminOrdersQueryQuery__
+ * __useAdminOrdersQuery__
  *
- * To run a query within a React component, call `useAdminOrdersQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminOrdersQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAdminOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAdminOrdersQueryQuery({
+ * const { data, loading, error } = useAdminOrdersQuery({
  *   variables: {
  *      page: // value for 'page'
  *      perPage: // value for 'perPage'
@@ -251,15 +252,17 @@ export const AdminOrdersQueryDocument = gql`
  *   },
  * });
  */
-export function useAdminOrdersQueryQuery(baseOptions?: Apollo.QueryHookOptions<AdminOrdersQueryQuery, AdminOrdersQueryQueryVariables>) {
-        return Apollo.useQuery<AdminOrdersQueryQuery, AdminOrdersQueryQueryVariables>(AdminOrdersQueryDocument, baseOptions);
+export function useAdminOrdersQuery(baseOptions?: Apollo.QueryHookOptions<AdminOrdersQueryData, AdminOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminOrdersQueryData, AdminOrdersQueryVariables>(AdminOrdersQueryDocument, options);
       }
-export function useAdminOrdersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminOrdersQueryQuery, AdminOrdersQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AdminOrdersQueryQuery, AdminOrdersQueryQueryVariables>(AdminOrdersQueryDocument, baseOptions);
+export function useAdminOrdersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminOrdersQueryData, AdminOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminOrdersQueryData, AdminOrdersQueryVariables>(AdminOrdersQueryDocument, options);
         }
-export type AdminOrdersQueryQueryHookResult = ReturnType<typeof useAdminOrdersQueryQuery>;
+export type AdminOrdersQueryHookResult = ReturnType<typeof useAdminOrdersQuery>;
 export type AdminOrdersQueryLazyQueryHookResult = ReturnType<typeof useAdminOrdersQueryLazyQuery>;
-export type AdminOrdersQueryQueryResult = Apollo.QueryResult<AdminOrdersQueryQuery, AdminOrdersQueryQueryVariables>;
+export type AdminOrdersQueryDataResult = Apollo.QueryResult<AdminOrdersQueryData, AdminOrdersQueryVariables>;
 export const AdminProductsQueryDocument = gql`
     query AdminProductsQuery {
   convention: assertConvention {
@@ -280,29 +283,31 @@ export const AdminProductsQueryDocument = gql`
     ${AdminProductFieldsFragmentDoc}`;
 
 /**
- * __useAdminProductsQueryQuery__
+ * __useAdminProductsQuery__
  *
- * To run a query within a React component, call `useAdminProductsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminProductsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAdminProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAdminProductsQueryQuery({
+ * const { data, loading, error } = useAdminProductsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAdminProductsQueryQuery(baseOptions?: Apollo.QueryHookOptions<AdminProductsQueryQuery, AdminProductsQueryQueryVariables>) {
-        return Apollo.useQuery<AdminProductsQueryQuery, AdminProductsQueryQueryVariables>(AdminProductsQueryDocument, baseOptions);
+export function useAdminProductsQuery(baseOptions?: Apollo.QueryHookOptions<AdminProductsQueryData, AdminProductsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminProductsQueryData, AdminProductsQueryVariables>(AdminProductsQueryDocument, options);
       }
-export function useAdminProductsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminProductsQueryQuery, AdminProductsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AdminProductsQueryQuery, AdminProductsQueryQueryVariables>(AdminProductsQueryDocument, baseOptions);
+export function useAdminProductsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminProductsQueryData, AdminProductsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminProductsQueryData, AdminProductsQueryVariables>(AdminProductsQueryDocument, options);
         }
-export type AdminProductsQueryQueryHookResult = ReturnType<typeof useAdminProductsQueryQuery>;
+export type AdminProductsQueryHookResult = ReturnType<typeof useAdminProductsQuery>;
 export type AdminProductsQueryLazyQueryHookResult = ReturnType<typeof useAdminProductsQueryLazyQuery>;
-export type AdminProductsQueryQueryResult = Apollo.QueryResult<AdminProductsQueryQuery, AdminProductsQueryQueryVariables>;
+export type AdminProductsQueryDataResult = Apollo.QueryResult<AdminProductsQueryData, AdminProductsQueryVariables>;
 export const AdminStoreAbilityQueryDocument = gql`
     query AdminStoreAbilityQuery {
   currentAbility {
@@ -317,29 +322,31 @@ export const AdminStoreAbilityQueryDocument = gql`
     `;
 
 /**
- * __useAdminStoreAbilityQueryQuery__
+ * __useAdminStoreAbilityQuery__
  *
- * To run a query within a React component, call `useAdminStoreAbilityQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminStoreAbilityQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAdminStoreAbilityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminStoreAbilityQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAdminStoreAbilityQueryQuery({
+ * const { data, loading, error } = useAdminStoreAbilityQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAdminStoreAbilityQueryQuery(baseOptions?: Apollo.QueryHookOptions<AdminStoreAbilityQueryQuery, AdminStoreAbilityQueryQueryVariables>) {
-        return Apollo.useQuery<AdminStoreAbilityQueryQuery, AdminStoreAbilityQueryQueryVariables>(AdminStoreAbilityQueryDocument, baseOptions);
+export function useAdminStoreAbilityQuery(baseOptions?: Apollo.QueryHookOptions<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>(AdminStoreAbilityQueryDocument, options);
       }
-export function useAdminStoreAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminStoreAbilityQueryQuery, AdminStoreAbilityQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AdminStoreAbilityQueryQuery, AdminStoreAbilityQueryQueryVariables>(AdminStoreAbilityQueryDocument, baseOptions);
+export function useAdminStoreAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>(AdminStoreAbilityQueryDocument, options);
         }
-export type AdminStoreAbilityQueryQueryHookResult = ReturnType<typeof useAdminStoreAbilityQueryQuery>;
+export type AdminStoreAbilityQueryHookResult = ReturnType<typeof useAdminStoreAbilityQuery>;
 export type AdminStoreAbilityQueryLazyQueryHookResult = ReturnType<typeof useAdminStoreAbilityQueryLazyQuery>;
-export type AdminStoreAbilityQueryQueryResult = Apollo.QueryResult<AdminStoreAbilityQueryQuery, AdminStoreAbilityQueryQueryVariables>;
+export type AdminStoreAbilityQueryDataResult = Apollo.QueryResult<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>;
 export const CartQueryDocument = gql`
     query CartQuery {
   myProfile {
@@ -358,29 +365,31 @@ export const CartQueryDocument = gql`
     ${CartOrderFieldsFragmentDoc}`;
 
 /**
- * __useCartQueryQuery__
+ * __useCartQuery__
  *
- * To run a query within a React component, call `useCartQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCartQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCartQueryQuery({
+ * const { data, loading, error } = useCartQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCartQueryQuery(baseOptions?: Apollo.QueryHookOptions<CartQueryQuery, CartQueryQueryVariables>) {
-        return Apollo.useQuery<CartQueryQuery, CartQueryQueryVariables>(CartQueryDocument, baseOptions);
+export function useCartQuery(baseOptions?: Apollo.QueryHookOptions<CartQueryData, CartQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CartQueryData, CartQueryVariables>(CartQueryDocument, options);
       }
-export function useCartQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CartQueryQuery, CartQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CartQueryQuery, CartQueryQueryVariables>(CartQueryDocument, baseOptions);
+export function useCartQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CartQueryData, CartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CartQueryData, CartQueryVariables>(CartQueryDocument, options);
         }
-export type CartQueryQueryHookResult = ReturnType<typeof useCartQueryQuery>;
+export type CartQueryHookResult = ReturnType<typeof useCartQuery>;
 export type CartQueryLazyQueryHookResult = ReturnType<typeof useCartQueryLazyQuery>;
-export type CartQueryQueryResult = Apollo.QueryResult<CartQueryQuery, CartQueryQueryVariables>;
+export type CartQueryDataResult = Apollo.QueryResult<CartQueryData, CartQueryVariables>;
 export const OrderHistoryQueryDocument = gql`
     query OrderHistoryQuery {
   convention: assertConvention {
@@ -441,29 +450,31 @@ export const OrderHistoryQueryDocument = gql`
     ${CouponApplicationFieldsFragmentDoc}`;
 
 /**
- * __useOrderHistoryQueryQuery__
+ * __useOrderHistoryQuery__
  *
- * To run a query within a React component, call `useOrderHistoryQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrderHistoryQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrderHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOrderHistoryQueryQuery({
+ * const { data, loading, error } = useOrderHistoryQuery({
  *   variables: {
  *   },
  * });
  */
-export function useOrderHistoryQueryQuery(baseOptions?: Apollo.QueryHookOptions<OrderHistoryQueryQuery, OrderHistoryQueryQueryVariables>) {
-        return Apollo.useQuery<OrderHistoryQueryQuery, OrderHistoryQueryQueryVariables>(OrderHistoryQueryDocument, baseOptions);
+export function useOrderHistoryQuery(baseOptions?: Apollo.QueryHookOptions<OrderHistoryQueryData, OrderHistoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderHistoryQueryData, OrderHistoryQueryVariables>(OrderHistoryQueryDocument, options);
       }
-export function useOrderHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderHistoryQueryQuery, OrderHistoryQueryQueryVariables>) {
-          return Apollo.useLazyQuery<OrderHistoryQueryQuery, OrderHistoryQueryQueryVariables>(OrderHistoryQueryDocument, baseOptions);
+export function useOrderHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderHistoryQueryData, OrderHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderHistoryQueryData, OrderHistoryQueryVariables>(OrderHistoryQueryDocument, options);
         }
-export type OrderHistoryQueryQueryHookResult = ReturnType<typeof useOrderHistoryQueryQuery>;
+export type OrderHistoryQueryHookResult = ReturnType<typeof useOrderHistoryQuery>;
 export type OrderHistoryQueryLazyQueryHookResult = ReturnType<typeof useOrderHistoryQueryLazyQuery>;
-export type OrderHistoryQueryQueryResult = Apollo.QueryResult<OrderHistoryQueryQuery, OrderHistoryQueryQueryVariables>;
+export type OrderHistoryQueryDataResult = Apollo.QueryResult<OrderHistoryQueryData, OrderHistoryQueryVariables>;
 export const OrderSummaryQueryDocument = gql`
     query OrderSummaryQuery {
   convention: assertConvention {
@@ -489,29 +500,31 @@ export const OrderSummaryQueryDocument = gql`
     `;
 
 /**
- * __useOrderSummaryQueryQuery__
+ * __useOrderSummaryQuery__
  *
- * To run a query within a React component, call `useOrderSummaryQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrderSummaryQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrderSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOrderSummaryQueryQuery({
+ * const { data, loading, error } = useOrderSummaryQuery({
  *   variables: {
  *   },
  * });
  */
-export function useOrderSummaryQueryQuery(baseOptions?: Apollo.QueryHookOptions<OrderSummaryQueryQuery, OrderSummaryQueryQueryVariables>) {
-        return Apollo.useQuery<OrderSummaryQueryQuery, OrderSummaryQueryQueryVariables>(OrderSummaryQueryDocument, baseOptions);
+export function useOrderSummaryQuery(baseOptions?: Apollo.QueryHookOptions<OrderSummaryQueryData, OrderSummaryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderSummaryQueryData, OrderSummaryQueryVariables>(OrderSummaryQueryDocument, options);
       }
-export function useOrderSummaryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderSummaryQueryQuery, OrderSummaryQueryQueryVariables>) {
-          return Apollo.useLazyQuery<OrderSummaryQueryQuery, OrderSummaryQueryQueryVariables>(OrderSummaryQueryDocument, baseOptions);
+export function useOrderSummaryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderSummaryQueryData, OrderSummaryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderSummaryQueryData, OrderSummaryQueryVariables>(OrderSummaryQueryDocument, options);
         }
-export type OrderSummaryQueryQueryHookResult = ReturnType<typeof useOrderSummaryQueryQuery>;
+export type OrderSummaryQueryHookResult = ReturnType<typeof useOrderSummaryQuery>;
 export type OrderSummaryQueryLazyQueryHookResult = ReturnType<typeof useOrderSummaryQueryLazyQuery>;
-export type OrderSummaryQueryQueryResult = Apollo.QueryResult<OrderSummaryQueryQuery, OrderSummaryQueryQueryVariables>;
+export type OrderSummaryQueryDataResult = Apollo.QueryResult<OrderSummaryQueryData, OrderSummaryQueryVariables>;
 export const OrderFormProductQueryDocument = gql`
     query OrderFormProductQuery($productId: Int!) {
   currentUser {
@@ -541,30 +554,32 @@ export const OrderFormProductQueryDocument = gql`
     ${PricingStructureFieldsFragmentDoc}`;
 
 /**
- * __useOrderFormProductQueryQuery__
+ * __useOrderFormProductQuery__
  *
- * To run a query within a React component, call `useOrderFormProductQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrderFormProductQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrderFormProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderFormProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOrderFormProductQueryQuery({
+ * const { data, loading, error } = useOrderFormProductQuery({
  *   variables: {
  *      productId: // value for 'productId'
  *   },
  * });
  */
-export function useOrderFormProductQueryQuery(baseOptions: Apollo.QueryHookOptions<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>) {
-        return Apollo.useQuery<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>(OrderFormProductQueryDocument, baseOptions);
+export function useOrderFormProductQuery(baseOptions: Apollo.QueryHookOptions<OrderFormProductQueryData, OrderFormProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderFormProductQueryData, OrderFormProductQueryVariables>(OrderFormProductQueryDocument, options);
       }
-export function useOrderFormProductQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>) {
-          return Apollo.useLazyQuery<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>(OrderFormProductQueryDocument, baseOptions);
+export function useOrderFormProductQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderFormProductQueryData, OrderFormProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderFormProductQueryData, OrderFormProductQueryVariables>(OrderFormProductQueryDocument, options);
         }
-export type OrderFormProductQueryQueryHookResult = ReturnType<typeof useOrderFormProductQueryQuery>;
+export type OrderFormProductQueryHookResult = ReturnType<typeof useOrderFormProductQuery>;
 export type OrderFormProductQueryLazyQueryHookResult = ReturnType<typeof useOrderFormProductQueryLazyQuery>;
-export type OrderFormProductQueryQueryResult = Apollo.QueryResult<OrderFormProductQueryQuery, OrderFormProductQueryQueryVariables>;
+export type OrderFormProductQueryDataResult = Apollo.QueryResult<OrderFormProductQueryData, OrderFormProductQueryVariables>;
 export const CurrentPendingOrderPaymentIntentClientSecretQueryDocument = gql`
     query CurrentPendingOrderPaymentIntentClientSecretQuery {
   currentPendingOrderPaymentIntentClientSecret
@@ -572,26 +587,28 @@ export const CurrentPendingOrderPaymentIntentClientSecretQueryDocument = gql`
     `;
 
 /**
- * __useCurrentPendingOrderPaymentIntentClientSecretQueryQuery__
+ * __useCurrentPendingOrderPaymentIntentClientSecretQuery__
  *
- * To run a query within a React component, call `useCurrentPendingOrderPaymentIntentClientSecretQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentPendingOrderPaymentIntentClientSecretQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCurrentPendingOrderPaymentIntentClientSecretQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentPendingOrderPaymentIntentClientSecretQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCurrentPendingOrderPaymentIntentClientSecretQueryQuery({
+ * const { data, loading, error } = useCurrentPendingOrderPaymentIntentClientSecretQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCurrentPendingOrderPaymentIntentClientSecretQueryQuery(baseOptions?: Apollo.QueryHookOptions<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>) {
-        return Apollo.useQuery<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, baseOptions);
+export function useCurrentPendingOrderPaymentIntentClientSecretQuery(baseOptions?: Apollo.QueryHookOptions<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, options);
       }
-export function useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, baseOptions);
+export function useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, options);
         }
-export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQueryQuery>;
+export type CurrentPendingOrderPaymentIntentClientSecretQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQuery>;
 export type CurrentPendingOrderPaymentIntentClientSecretQueryLazyQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery>;
-export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryResult = Apollo.QueryResult<CurrentPendingOrderPaymentIntentClientSecretQueryQuery, CurrentPendingOrderPaymentIntentClientSecretQueryQueryVariables>;
+export type CurrentPendingOrderPaymentIntentClientSecretQueryDataResult = Apollo.QueryResult<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>;
