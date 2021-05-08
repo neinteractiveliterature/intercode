@@ -47,7 +47,7 @@ export default LoadQueryWrapper(
                 <td>
                   <PermissionsPrompt scopeNames={authorizedApplication.scopes} />
                 </td>
-                <td className="text-right">
+                <td className="text-end">
                   <button
                     type="button"
                     className="btn btn-outline-danger"

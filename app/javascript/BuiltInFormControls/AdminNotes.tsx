@@ -66,7 +66,7 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
         />
         <ErrorDisplay graphQLError={saveError as ApolloError} />
       </div>
-      <div className="card-footer text-right">
+      <div className="card-footer text-end">
         <button
           className="btn btn-secondary btn-sm"
           type="button"

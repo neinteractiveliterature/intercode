@@ -85,7 +85,7 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
 
   if (iosWebviewAppHost) {
     return `
-      <p class="text-left">
+      <p class="text-start">
         ${iosWebviewAppHost}
         uses the Safari engine, which ships with iOS itself.  To update it, update your device to
         the latest version of iOS.
@@ -108,7 +108,7 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
       `;
     case 'safari':
       return `
-        <p class="text-left">
+        <p class="text-start">
           To get the latest Safari, update to the latest version of macOS.  Or, you can use
           this site with an up-to-date version of
           <a href="https://www.google.com/chrome/">Google Chrome</a>
@@ -119,11 +119,11 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
     case 'ios':
     case 'ios-webview':
       return `
-        <p class="text-left">To get the latest Safari, update to the latest version of iOS.</p>
+        <p class="text-start">To get the latest Safari, update to the latest version of iOS.</p>
       `;
     case 'edge':
       return `
-        <p class="text-left">To get the latest Edge, run Windows Update.</p>
+        <p class="text-start">To get the latest Edge, run Windows Update.</p>
       `;
     case 'opera':
       return `
@@ -133,7 +133,7 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
       `;
     default:
       return `
-        <p class="text-left">
+        <p class="text-start">
           To use this site, we recommend an up-to-date version of
           <a href="https://www.google.com/chrome/">Google Chrome</a>
           or
@@ -183,7 +183,7 @@ function renderBrowserWarning(browser: ReturnType<typeof detect>) {
               ${getWarningMessage(browser)}
             </p>
 
-            <div class="text-right mt-4">
+            <div class="text-end mt-4">
               ${renderRecommendation(browser)}
               <button
                 class="btn btn-secondary"

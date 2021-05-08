@@ -43,7 +43,7 @@ function CmsGraphqlQueriesAdminTable() {
                   </>
                 ) : null}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {query.current_ability_can_update ? (
                   <Link
                     to={`/cms_graphql_queries/${query.id}/edit`}

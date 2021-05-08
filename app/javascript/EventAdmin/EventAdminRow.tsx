@@ -42,7 +42,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
     const timespan = timespanFromRun(timezoneName, event, run);
 
     const [titleSuffix, scheduleNote] = ([
-      ['title_suffix', 'font-weight-bold'],
+      ['title_suffix', 'fw-bold'],
       ['schedule_note', 'font-italic'],
     ] as const).map(([field, className]) => {
       if (run[field]) {
@@ -71,7 +71,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
     return (
       <Link
         to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}
-        className="btn btn-secondary m-1 p-2 text-left"
+        className="btn btn-secondary m-1 p-2 text-start"
         key={run.id}
       >
         <ul className="list-unstyled m-0">{runMetadata}</ul>

@@ -268,7 +268,7 @@ function ScheduleMultipleRunsModal({
         </div>
         <div className="modal-footer">
           <div className="d-flex w-100">
-            <div className="col text-right pe-0">
+            <div className="col text-end pe-0">
               <button
                 type="button"
                 className="btn btn-secondary me-2"

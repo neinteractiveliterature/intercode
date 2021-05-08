@@ -243,7 +243,7 @@ function RegistrationPolicyEditor<
               registrationPolicy={registrationPolicy}
             />
             <tr>
-              <td colSpan={headerLabels.length} className="text-right">
+              <td colSpan={headerLabels.length} className="text-end">
                 <strong>Total capacity:</strong> {renderTotals()}
               </td>
             </tr>

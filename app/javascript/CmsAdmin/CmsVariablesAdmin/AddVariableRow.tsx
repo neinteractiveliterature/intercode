@@ -52,7 +52,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
         <td>
           <input
             type="text"
-            className="form-control text-monospace"
+            className="form-control font-monospace"
             value={variable.key}
             onChange={(event) => onChange({ ...variable, key: event.target.value })}
             aria-label="Variable name"
@@ -61,7 +61,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
         <td>
           <input
             type="text"
-            className="form-control text-monospace"
+            className="form-control font-monospace"
             value={variable.value_json}
             onChange={(event) => onChange({ ...variable, value_json: event.target.value })}
             onKeyDown={handleKeyDown}

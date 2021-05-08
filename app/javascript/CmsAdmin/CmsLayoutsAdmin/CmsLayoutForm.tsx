@@ -45,7 +45,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
 
       <BootstrapFormInput
         label="Navigation bar CSS classes"
-        className="form-control text-monospace"
+        className="form-control font-monospace"
         value={layout.navbar_classes ?? ''}
         onTextChange={setNavbarClasses}
         helpText={

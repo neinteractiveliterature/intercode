@@ -33,7 +33,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
         </span>{' '}
         <small>({pluralizeWithCount('event', eventCategory.events_paginated.total_entries)})</small>
       </td>
-      <td className="text-right">
+      <td className="text-end">
         {eventCategory.events_paginated.total_entries > 0 ? (
           <ButtonWithTooltip
             buttonProps={{

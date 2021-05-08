@@ -94,7 +94,7 @@ function CreateEventProposalModal({
       <div className="modal-header">
         {t('eventProposals.newProposalModal.title', 'New event proposal')}
       </div>
-      <div className="modal-body text-left">
+      <div className="modal-body text-start">
         <SelectWithLabel
           label={t(
             'eventProposals.newProposalModal.categoryLabel',

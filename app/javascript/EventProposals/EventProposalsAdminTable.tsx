@@ -55,7 +55,7 @@ function EventCategoryCell({ value }: { value: EventProposalType['event_category
 }
 
 function CapacityCell({ value }: { value: NonNullable<EventProposalType['registration_policy']> }) {
-  return <div className="text-nowrap text-right">{formatCapacity(value)}</div>;
+  return <div className="text-nowrap text-end">{formatCapacity(value)}</div>;
 }
 
 function DurationCell({ value }: { value: NonNullable<EventProposalType['length_seconds']> }) {
@@ -64,9 +64,7 @@ function DurationCell({ value }: { value: NonNullable<EventProposalType['length_
   const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;
 
   return (
-    <div className="text-nowrap text-right">
-      {`${hours}:${minutes.toString().padStart(2, '0')}`}
-    </div>
+    <div className="text-nowrap text-end">{`${hours}:${minutes.toString().padStart(2, '0')}`}</div>
   );
 }
 

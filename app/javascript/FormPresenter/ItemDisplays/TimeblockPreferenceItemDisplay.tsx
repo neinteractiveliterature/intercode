@@ -55,7 +55,7 @@ function TimeblockPreferenceItemDisplay({
       >
         <span
           className={classNames({
-            'font-weight-bold': ['1', '2'].includes(ordinalityString),
+            'fw-bold': ['1', '2'].includes(ordinalityString),
           })}
         >
           {describeOrdinality(ordinality)}

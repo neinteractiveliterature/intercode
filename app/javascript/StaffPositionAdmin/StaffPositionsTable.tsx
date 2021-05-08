@@ -52,7 +52,7 @@ function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
   return (
     <>
       <button
-        className="hidden-button text-left"
+        className="hidden-button text-start"
         type="button"
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >
@@ -139,7 +139,7 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   return (
     <>
       <button
-        className="hidden-button text-left"
+        className="hidden-button text-start"
         type="button"
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >

@@ -9,7 +9,7 @@
       <% end_of_day = (current_day + 1.day).change(hour: 6) %>
       <% day_runs = runs.select { |run| run.starts_at >= current_day && run.starts_at < end_of_day } %>
       <section class="mb-4">
-        <p class="font-weight-bold mb-0">
+        <p class="fw-bold mb-0">
           <%= current_day.strftime('%A, %B %d') %>
         </p>
         <% if day_runs.any? %>

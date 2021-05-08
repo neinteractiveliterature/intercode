@@ -55,7 +55,7 @@ function CmsPartialsAdminTable() {
                   </>
                 )}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {partial.current_ability_can_update ? (
                   <Link
                     to={`/cms_partials/${partial.id}/edit`}

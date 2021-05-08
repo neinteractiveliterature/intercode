@@ -109,7 +109,7 @@ function ReactTableWithTheWorks<
                     {column.canSort ? (
                       <button
                         type="button"
-                        className="btn btn-unstyled p-0 font-weight-bold w-100 text-left"
+                        className="btn btn-unstyled p-0 fw-bold w-100 text-start"
                         onClick={() => column.toggleSortBy()}
                       >
                         {column.render('Header')}
@@ -132,7 +132,7 @@ function ReactTableWithTheWorks<
                   {headerGroup.headers.map((column) => (
                     <div
                       {...mergeProps<HTMLAttributes<HTMLDivElement>>(column.getHeaderProps(), {
-                        className: 'py-1 border-bottom font-weight-normal align-middle',
+                        className: 'py-1 border-bottom fw-normal align-middle',
                         style: { overflow: 'visible' },
                       })}
                     >

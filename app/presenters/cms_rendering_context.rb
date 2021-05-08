@@ -24,7 +24,7 @@ class CmsRenderingContext
           </div>
         </div>
 
-        <div class="text-right">
+        <div class="text-end">
           <a class="btn btn-primary" href=".">Reload page</a>
         </div>
       </div>

@@ -150,7 +150,7 @@ export default LoadQueryWrapper<CartQueryData, CartContentsProps>(
             </tr>
           </tfoot>
         </table>
-        {checkOutButton && <div className="text-right">{checkOutButton}</div>}
+        {checkOutButton && <div className="text-end">{checkOutButton}</div>}
       </div>
     );
   },

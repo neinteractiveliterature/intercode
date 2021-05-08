@@ -108,7 +108,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
               )}
             </div>
           )}
-          <div className="font-weight-bold">Click to edit</div>
+          <div className="fw-bold">Click to edit</div>
         </Link>
 
         <FormItemInput

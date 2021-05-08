@@ -66,7 +66,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
                 <button type="button" {...deleteButtonProps} />
               </div>
               <div className="d-none d-md-block">
-                <div className="text-right">
+                <div className="text-end">
                   <button type="button" {...deleteButtonProps} />
                 </div>
               </div>
