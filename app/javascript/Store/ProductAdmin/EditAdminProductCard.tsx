@@ -213,13 +213,13 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
             {product.image_url && (
               <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />
             )}
-            <div className="custom-file mt-2" style={{ width: '220px' }}>
-              <label className="custom-file-label" htmlFor={imageInputId}>
+            <div className="mt-2" style={{ width: '220px' }}>
+              <label className="form-label" htmlFor={imageInputId}>
                 Choose image...
               </label>
               <input
                 id={imageInputId}
-                className="custom-file-input"
+                className="form-control"
                 type="file"
                 accept="image/*"
                 onChange={imageChanged}

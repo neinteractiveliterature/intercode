@@ -74,7 +74,9 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
               }}
             />
             {data?.currentAbility.can_create_cms_files && (
-              <FileUploadForm onUpload={uploadedFile} />
+              <div className="card mt-2">
+                <FileUploadForm onUpload={uploadedFile} />
+              </div>
             )}
             {file && (
               <div className="card mt-2">

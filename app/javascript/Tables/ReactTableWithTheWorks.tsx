@@ -226,7 +226,7 @@ function ReactTableWithTheWorks<
             </div>
             <div>
               <select
-                className="custom-select"
+                className="form-select"
                 value={pageSize}
                 onChange={(e) => {
                   setPageSize(Number(e.target.value));
