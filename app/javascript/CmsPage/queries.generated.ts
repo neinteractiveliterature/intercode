@@ -3,13 +3,14 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type CmsPageQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type CmsPageQueryVariables = Types.Exact<{
   slug?: Types.Maybe<Types.Scalars['String']>;
   rootPage?: Types.Maybe<Types.Scalars['Boolean']>;
 }>;
 
 
-export type CmsPageQueryQuery = (
+export type CmsPageQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -26,12 +27,12 @@ export type CmsPageQueryQuery = (
   ) }
 );
 
-export type PageAdminDropdownQueryQueryVariables = Types.Exact<{
+export type PageAdminDropdownQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type PageAdminDropdownQueryQuery = (
+export type PageAdminDropdownQueryData = (
   { __typename: 'Query' }
   & { cmsParent: (
     { __typename: 'Convention' }
@@ -87,31 +88,33 @@ export const CmsPageQueryDocument = gql`
     `;
 
 /**
- * __useCmsPageQueryQuery__
+ * __useCmsPageQuery__
  *
- * To run a query within a React component, call `useCmsPageQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsPageQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsPageQueryQuery({
+ * const { data, loading, error } = useCmsPageQuery({
  *   variables: {
  *      slug: // value for 'slug'
  *      rootPage: // value for 'rootPage'
  *   },
  * });
  */
-export function useCmsPageQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsPageQueryQuery, CmsPageQueryQueryVariables>) {
-        return Apollo.useQuery<CmsPageQueryQuery, CmsPageQueryQueryVariables>(CmsPageQueryDocument, baseOptions);
+export function useCmsPageQuery(baseOptions?: Apollo.QueryHookOptions<CmsPageQueryData, CmsPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsPageQueryData, CmsPageQueryVariables>(CmsPageQueryDocument, options);
       }
-export function useCmsPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsPageQueryQuery, CmsPageQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsPageQueryQuery, CmsPageQueryQueryVariables>(CmsPageQueryDocument, baseOptions);
+export function useCmsPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsPageQueryData, CmsPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsPageQueryData, CmsPageQueryVariables>(CmsPageQueryDocument, options);
         }
-export type CmsPageQueryQueryHookResult = ReturnType<typeof useCmsPageQueryQuery>;
+export type CmsPageQueryHookResult = ReturnType<typeof useCmsPageQuery>;
 export type CmsPageQueryLazyQueryHookResult = ReturnType<typeof useCmsPageQueryLazyQuery>;
-export type CmsPageQueryQueryResult = Apollo.QueryResult<CmsPageQueryQuery, CmsPageQueryQueryVariables>;
+export type CmsPageQueryDataResult = Apollo.QueryResult<CmsPageQueryData, CmsPageQueryVariables>;
 export const PageAdminDropdownQueryDocument = gql`
     query PageAdminDropdownQuery($id: Int!) {
   cmsParent {
@@ -145,27 +148,29 @@ export const PageAdminDropdownQueryDocument = gql`
     `;
 
 /**
- * __usePageAdminDropdownQueryQuery__
+ * __usePageAdminDropdownQuery__
  *
- * To run a query within a React component, call `usePageAdminDropdownQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `usePageAdminDropdownQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePageAdminDropdownQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePageAdminDropdownQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = usePageAdminDropdownQueryQuery({
+ * const { data, loading, error } = usePageAdminDropdownQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function usePageAdminDropdownQueryQuery(baseOptions: Apollo.QueryHookOptions<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>) {
-        return Apollo.useQuery<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>(PageAdminDropdownQueryDocument, baseOptions);
+export function usePageAdminDropdownQuery(baseOptions: Apollo.QueryHookOptions<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>(PageAdminDropdownQueryDocument, options);
       }
-export function usePageAdminDropdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>) {
-          return Apollo.useLazyQuery<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>(PageAdminDropdownQueryDocument, baseOptions);
+export function usePageAdminDropdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>(PageAdminDropdownQueryDocument, options);
         }
-export type PageAdminDropdownQueryQueryHookResult = ReturnType<typeof usePageAdminDropdownQueryQuery>;
+export type PageAdminDropdownQueryHookResult = ReturnType<typeof usePageAdminDropdownQuery>;
 export type PageAdminDropdownQueryLazyQueryHookResult = ReturnType<typeof usePageAdminDropdownQueryLazyQuery>;
-export type PageAdminDropdownQueryQueryResult = Apollo.QueryResult<PageAdminDropdownQueryQuery, PageAdminDropdownQueryQueryVariables>;
+export type PageAdminDropdownQueryDataResult = Apollo.QueryResult<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>;

@@ -5,12 +5,13 @@ import { CmsLayoutFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsLayoutFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateLayoutMutationVariables = Types.Exact<{
   cmsLayout: Types.CmsLayoutInput;
 }>;
 
 
-export type CreateLayoutMutation = (
+export type CreateLayoutMutationData = (
   { __typename: 'Mutation' }
   & { createCmsLayout?: Types.Maybe<(
     { __typename: 'CreateCmsLayoutPayload' }
@@ -28,7 +29,7 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateLayoutMutation = (
+export type UpdateLayoutMutationData = (
   { __typename: 'Mutation' }
   & { updateCmsLayout?: Types.Maybe<(
     { __typename: 'UpdateCmsLayoutPayload' }
@@ -45,7 +46,7 @@ export type DeleteLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteLayoutMutation = (
+export type DeleteLayoutMutationData = (
   { __typename: 'Mutation' }
   & { deleteCmsLayout?: Types.Maybe<(
     { __typename: 'DeleteCmsLayoutPayload' }
@@ -64,7 +65,7 @@ export const CreateLayoutDocument = gql`
   }
 }
     ${CmsLayoutFieldsFragmentDoc}`;
-export type CreateLayoutMutationFn = Apollo.MutationFunction<CreateLayoutMutation, CreateLayoutMutationVariables>;
+export type CreateLayoutMutationFn = Apollo.MutationFunction<CreateLayoutMutationData, CreateLayoutMutationVariables>;
 
 /**
  * __useCreateLayoutMutation__
@@ -83,12 +84,13 @@ export type CreateLayoutMutationFn = Apollo.MutationFunction<CreateLayoutMutatio
  *   },
  * });
  */
-export function useCreateLayoutMutation(baseOptions?: Apollo.MutationHookOptions<CreateLayoutMutation, CreateLayoutMutationVariables>) {
-        return Apollo.useMutation<CreateLayoutMutation, CreateLayoutMutationVariables>(CreateLayoutDocument, baseOptions);
+export function useCreateLayoutMutation(baseOptions?: Apollo.MutationHookOptions<CreateLayoutMutationData, CreateLayoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateLayoutMutationData, CreateLayoutMutationVariables>(CreateLayoutDocument, options);
       }
 export type CreateLayoutMutationHookResult = ReturnType<typeof useCreateLayoutMutation>;
-export type CreateLayoutMutationResult = Apollo.MutationResult<CreateLayoutMutation>;
-export type CreateLayoutMutationOptions = Apollo.BaseMutationOptions<CreateLayoutMutation, CreateLayoutMutationVariables>;
+export type CreateLayoutMutationResult = Apollo.MutationResult<CreateLayoutMutationData>;
+export type CreateLayoutMutationOptions = Apollo.BaseMutationOptions<CreateLayoutMutationData, CreateLayoutMutationVariables>;
 export const UpdateLayoutDocument = gql`
     mutation UpdateLayout($id: Int!, $cmsLayout: CmsLayoutInput!) {
   updateCmsLayout(input: {id: $id, cms_layout: $cmsLayout}) {
@@ -99,7 +101,7 @@ export const UpdateLayoutDocument = gql`
   }
 }
     ${CmsLayoutFieldsFragmentDoc}`;
-export type UpdateLayoutMutationFn = Apollo.MutationFunction<UpdateLayoutMutation, UpdateLayoutMutationVariables>;
+export type UpdateLayoutMutationFn = Apollo.MutationFunction<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
 
 /**
  * __useUpdateLayoutMutation__
@@ -119,12 +121,13 @@ export type UpdateLayoutMutationFn = Apollo.MutationFunction<UpdateLayoutMutatio
  *   },
  * });
  */
-export function useUpdateLayoutMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLayoutMutation, UpdateLayoutMutationVariables>) {
-        return Apollo.useMutation<UpdateLayoutMutation, UpdateLayoutMutationVariables>(UpdateLayoutDocument, baseOptions);
+export function useUpdateLayoutMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLayoutMutationData, UpdateLayoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateLayoutMutationData, UpdateLayoutMutationVariables>(UpdateLayoutDocument, options);
       }
 export type UpdateLayoutMutationHookResult = ReturnType<typeof useUpdateLayoutMutation>;
-export type UpdateLayoutMutationResult = Apollo.MutationResult<UpdateLayoutMutation>;
-export type UpdateLayoutMutationOptions = Apollo.BaseMutationOptions<UpdateLayoutMutation, UpdateLayoutMutationVariables>;
+export type UpdateLayoutMutationResult = Apollo.MutationResult<UpdateLayoutMutationData>;
+export type UpdateLayoutMutationOptions = Apollo.BaseMutationOptions<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
 export const DeleteLayoutDocument = gql`
     mutation DeleteLayout($id: Int!) {
   deleteCmsLayout(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeleteLayoutDocument = gql`
   }
 }
     `;
-export type DeleteLayoutMutationFn = Apollo.MutationFunction<DeleteLayoutMutation, DeleteLayoutMutationVariables>;
+export type DeleteLayoutMutationFn = Apollo.MutationFunction<DeleteLayoutMutationData, DeleteLayoutMutationVariables>;
 
 /**
  * __useDeleteLayoutMutation__
@@ -151,9 +154,10 @@ export type DeleteLayoutMutationFn = Apollo.MutationFunction<DeleteLayoutMutatio
  *   },
  * });
  */
-export function useDeleteLayoutMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLayoutMutation, DeleteLayoutMutationVariables>) {
-        return Apollo.useMutation<DeleteLayoutMutation, DeleteLayoutMutationVariables>(DeleteLayoutDocument, baseOptions);
+export function useDeleteLayoutMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLayoutMutationData, DeleteLayoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteLayoutMutationData, DeleteLayoutMutationVariables>(DeleteLayoutDocument, options);
       }
 export type DeleteLayoutMutationHookResult = ReturnType<typeof useDeleteLayoutMutation>;
-export type DeleteLayoutMutationResult = Apollo.MutationResult<DeleteLayoutMutation>;
-export type DeleteLayoutMutationOptions = Apollo.BaseMutationOptions<DeleteLayoutMutation, DeleteLayoutMutationVariables>;
+export type DeleteLayoutMutationResult = Apollo.MutationResult<DeleteLayoutMutationData>;
+export type DeleteLayoutMutationOptions = Apollo.BaseMutationOptions<DeleteLayoutMutationData, DeleteLayoutMutationVariables>;

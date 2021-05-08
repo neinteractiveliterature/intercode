@@ -12,11 +12,11 @@ import useEventFormWithCategorySelection, {
 import useCreateEvent from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useEventAdminEventsQueryQuery, EventAdminEventsQueryQuery } from './queries.generated';
+import { useEventAdminEventsQuery, EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
 
 type NewEventFormProps = {
-  data: EventAdminEventsQueryQuery;
+  data: EventAdminEventsQueryData;
 };
 
 type NewEventFormResponseAttrs = {
@@ -26,7 +26,7 @@ type NewEventFormResponseAttrs = {
 };
 
 type EventCategoryType = NonNullable<
-  EventAdminEventsQueryQuery['convention']
+  EventAdminEventsQueryData['convention']
 >['event_categories'][0];
 
 type NewEventFormEvent = {
@@ -146,7 +146,7 @@ function NewEventForm({ data }: NewEventFormProps) {
 }
 
 function NewEvent() {
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
 
   usePageTitle('New event');
 

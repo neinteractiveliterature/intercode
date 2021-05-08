@@ -5,12 +5,12 @@ import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
-  OrganizationAdminOrganizationsQueryQuery,
-  useOrganizationAdminOrganizationsQueryQuery,
+  OrganizationAdminOrganizationsQueryData,
+  useOrganizationAdminOrganizationsQuery,
 } from './queries.generated';
 
 function renderOrganizationConventions(
-  organization: OrganizationAdminOrganizationsQueryQuery['organizations'][0],
+  organization: OrganizationAdminOrganizationsQueryData['organizations'][0],
 ) {
   const sortedConventions = sortBy(organization.conventions, [
     (convention) => convention.starts_at,
@@ -26,7 +26,7 @@ function renderOrganizationConventions(
 }
 
 export default LoadQueryWrapper(
-  useOrganizationAdminOrganizationsQueryQuery,
+  useOrganizationAdminOrganizationsQuery,
   function OrganizationIndex({ data }) {
     usePageTitle('Organizations');
 

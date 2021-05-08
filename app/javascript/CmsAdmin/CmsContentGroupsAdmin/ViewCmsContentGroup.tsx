@@ -5,12 +5,12 @@ import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsContentGroupsAdminQueryQuery } from './queries.generated';
+import { useCmsContentGroupsAdminQuery } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 
 function ViewCmsContentGroup() {
   const { params } = useRouteMatch<{ id: string }>();
-  const { data, loading, error } = useCmsContentGroupsAdminQueryQuery();
+  const { data, loading, error } = useCmsContentGroupsAdminQuery();
   const contentGroup = useMemo(() => {
     if (loading || error || !data) {
       return null;

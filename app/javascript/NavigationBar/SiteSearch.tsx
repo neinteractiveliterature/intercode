@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next';
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import {
   SiteSearchQueryDocument,
-  SiteSearchQueryQuery,
-  SiteSearchQueryQueryVariables,
+  SiteSearchQueryData,
+  SiteSearchQueryVariables,
 } from './siteSearchQueries.generated';
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
@@ -108,10 +108,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
     () =>
       debounce(
         async (query: string) => {
-          const { data } = await apolloClient.query<
-            SiteSearchQueryQuery,
-            SiteSearchQueryQueryVariables
-          >({
+          const { data } = await apolloClient.query<SiteSearchQueryData, SiteSearchQueryVariables>({
             query: SiteSearchQueryDocument,
             variables: { query },
             fetchPolicy: 'no-cache',

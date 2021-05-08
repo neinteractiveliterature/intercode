@@ -10,7 +10,7 @@ import LoadingIndicator from '../LoadingIndicator';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateUserConProfileMutation } from './mutations.generated';
-import { AddAttendeeUsersQueryQuery } from './queries.generated';
+import { AddAttendeeUsersQueryData } from './queries.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
 
 export type AddAttendeeModalProps = {
@@ -18,7 +18,7 @@ export type AddAttendeeModalProps = {
   visible: boolean;
 };
 
-type UserType = AddAttendeeUsersQueryQuery['users_paginated']['entries'][0];
+type UserType = AddAttendeeUsersQueryData['users_paginated']['entries'][0];
 
 function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps) {
   const { t } = useTranslation();
@@ -78,7 +78,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps) {
           )}
         </p>
 
-        <UserSelect<AddAttendeeUsersQueryQuery>
+        <UserSelect<AddAttendeeUsersQueryData>
           value={user}
           onChange={userSelected}
           usersQuery={AddAttendeeUsersQuery}

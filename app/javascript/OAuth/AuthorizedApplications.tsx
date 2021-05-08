@@ -5,12 +5,12 @@ import { RevokeAuthorizedApplication } from './mutations';
 import { useDeleteMutation } from '../MutationUtils';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
-  OAuthAuthorizedApplicationsQueryQuery,
-  useOAuthAuthorizedApplicationsQueryQuery,
+  OAuthAuthorizedApplicationsQueryData,
+  useOAuthAuthorizedApplicationsQuery,
 } from './queries.generated';
 
 export default LoadQueryWrapper(
-  useOAuthAuthorizedApplicationsQueryQuery,
+  useOAuthAuthorizedApplicationsQuery,
   function AuthorizedApplications({ data }) {
     const revokeAuthorizedApplication = useDeleteMutation(RevokeAuthorizedApplication, {
       query: OAuthAuthorizedApplicationsQuery,
@@ -21,7 +21,7 @@ export default LoadQueryWrapper(
     const confirm = useGraphQLConfirm();
 
     const revokeClicked = (
-      authorizedApplication: OAuthAuthorizedApplicationsQueryQuery['myAuthorizedApplications'][0],
+      authorizedApplication: OAuthAuthorizedApplicationsQueryData['myAuthorizedApplications'][0],
     ) => {
       confirm({
         prompt: `Are you sure you want to revoke the authorization for ${authorizedApplication.name}?`,

@@ -3,12 +3,13 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type DefaultEventsQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type DefaultEventsQueryVariables = Types.Exact<{
   title?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultEventsQueryQuery = (
+export type DefaultEventsQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -23,12 +24,12 @@ export type DefaultEventsQueryQuery = (
   )> }
 );
 
-export type DefaultUserConProfilesQueryQueryVariables = Types.Exact<{
+export type DefaultUserConProfilesQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUserConProfilesQueryQuery = (
+export type DefaultUserConProfilesQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -43,12 +44,12 @@ export type DefaultUserConProfilesQueryQuery = (
   )> }
 );
 
-export type DefaultUsersQueryQueryVariables = Types.Exact<{
+export type DefaultUsersQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUsersQueryQuery = (
+export type DefaultUsersQueryData = (
   { __typename: 'Query' }
   & { users_paginated: (
     { __typename: 'UsersPagination' }
@@ -75,30 +76,32 @@ export const DefaultEventsQueryDocument = gql`
     `;
 
 /**
- * __useDefaultEventsQueryQuery__
+ * __useDefaultEventsQuery__
  *
- * To run a query within a React component, call `useDefaultEventsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultEventsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDefaultEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDefaultEventsQueryQuery({
+ * const { data, loading, error } = useDefaultEventsQuery({
  *   variables: {
  *      title: // value for 'title'
  *   },
  * });
  */
-export function useDefaultEventsQueryQuery(baseOptions?: Apollo.QueryHookOptions<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>) {
-        return Apollo.useQuery<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>(DefaultEventsQueryDocument, baseOptions);
+export function useDefaultEventsQuery(baseOptions?: Apollo.QueryHookOptions<DefaultEventsQueryData, DefaultEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DefaultEventsQueryData, DefaultEventsQueryVariables>(DefaultEventsQueryDocument, options);
       }
-export function useDefaultEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>(DefaultEventsQueryDocument, baseOptions);
+export function useDefaultEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultEventsQueryData, DefaultEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DefaultEventsQueryData, DefaultEventsQueryVariables>(DefaultEventsQueryDocument, options);
         }
-export type DefaultEventsQueryQueryHookResult = ReturnType<typeof useDefaultEventsQueryQuery>;
+export type DefaultEventsQueryHookResult = ReturnType<typeof useDefaultEventsQuery>;
 export type DefaultEventsQueryLazyQueryHookResult = ReturnType<typeof useDefaultEventsQueryLazyQuery>;
-export type DefaultEventsQueryQueryResult = Apollo.QueryResult<DefaultEventsQueryQuery, DefaultEventsQueryQueryVariables>;
+export type DefaultEventsQueryDataResult = Apollo.QueryResult<DefaultEventsQueryData, DefaultEventsQueryVariables>;
 export const DefaultUserConProfilesQueryDocument = gql`
     query DefaultUserConProfilesQuery($name: String) {
   convention {
@@ -115,30 +118,32 @@ export const DefaultUserConProfilesQueryDocument = gql`
     `;
 
 /**
- * __useDefaultUserConProfilesQueryQuery__
+ * __useDefaultUserConProfilesQuery__
  *
- * To run a query within a React component, call `useDefaultUserConProfilesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultUserConProfilesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDefaultUserConProfilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultUserConProfilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDefaultUserConProfilesQueryQuery({
+ * const { data, loading, error } = useDefaultUserConProfilesQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useDefaultUserConProfilesQueryQuery(baseOptions?: Apollo.QueryHookOptions<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>) {
-        return Apollo.useQuery<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>(DefaultUserConProfilesQueryDocument, baseOptions);
+export function useDefaultUserConProfilesQuery(baseOptions?: Apollo.QueryHookOptions<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>(DefaultUserConProfilesQueryDocument, options);
       }
-export function useDefaultUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>(DefaultUserConProfilesQueryDocument, baseOptions);
+export function useDefaultUserConProfilesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>(DefaultUserConProfilesQueryDocument, options);
         }
-export type DefaultUserConProfilesQueryQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQueryQuery>;
+export type DefaultUserConProfilesQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQuery>;
 export type DefaultUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQueryLazyQuery>;
-export type DefaultUserConProfilesQueryQueryResult = Apollo.QueryResult<DefaultUserConProfilesQueryQuery, DefaultUserConProfilesQueryQueryVariables>;
+export type DefaultUserConProfilesQueryDataResult = Apollo.QueryResult<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>;
 export const DefaultUsersQueryDocument = gql`
     query DefaultUsersQuery($name: String) {
   users_paginated(filters: {name: $name}, per_page: 50) {
@@ -152,27 +157,29 @@ export const DefaultUsersQueryDocument = gql`
     `;
 
 /**
- * __useDefaultUsersQueryQuery__
+ * __useDefaultUsersQuery__
  *
- * To run a query within a React component, call `useDefaultUsersQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useDefaultUsersQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDefaultUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDefaultUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDefaultUsersQueryQuery({
+ * const { data, loading, error } = useDefaultUsersQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useDefaultUsersQueryQuery(baseOptions?: Apollo.QueryHookOptions<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>) {
-        return Apollo.useQuery<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>(DefaultUsersQueryDocument, baseOptions);
+export function useDefaultUsersQuery(baseOptions?: Apollo.QueryHookOptions<DefaultUsersQueryData, DefaultUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DefaultUsersQueryData, DefaultUsersQueryVariables>(DefaultUsersQueryDocument, options);
       }
-export function useDefaultUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>) {
-          return Apollo.useLazyQuery<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>(DefaultUsersQueryDocument, baseOptions);
+export function useDefaultUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DefaultUsersQueryData, DefaultUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DefaultUsersQueryData, DefaultUsersQueryVariables>(DefaultUsersQueryDocument, options);
         }
-export type DefaultUsersQueryQueryHookResult = ReturnType<typeof useDefaultUsersQueryQuery>;
+export type DefaultUsersQueryHookResult = ReturnType<typeof useDefaultUsersQuery>;
 export type DefaultUsersQueryLazyQueryHookResult = ReturnType<typeof useDefaultUsersQueryLazyQuery>;
-export type DefaultUsersQueryQueryResult = Apollo.QueryResult<DefaultUsersQueryQuery, DefaultUsersQueryQueryVariables>;
+export type DefaultUsersQueryDataResult = Apollo.QueryResult<DefaultUsersQueryData, DefaultUsersQueryVariables>;

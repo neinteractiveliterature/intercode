@@ -5,12 +5,13 @@ import { CmsPageFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsPageFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreatePageMutationVariables = Types.Exact<{
   page: Types.PageInput;
 }>;
 
 
-export type CreatePageMutation = (
+export type CreatePageMutationData = (
   { __typename: 'Mutation' }
   & { createPage?: Types.Maybe<(
     { __typename: 'CreatePagePayload' }
@@ -28,7 +29,7 @@ export type UpdatePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePageMutation = (
+export type UpdatePageMutationData = (
   { __typename: 'Mutation' }
   & { updatePage?: Types.Maybe<(
     { __typename: 'UpdatePagePayload' }
@@ -45,7 +46,7 @@ export type DeletePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeletePageMutation = (
+export type DeletePageMutationData = (
   { __typename: 'Mutation' }
   & { deletePage?: Types.Maybe<(
     { __typename: 'DeletePagePayload' }
@@ -64,7 +65,7 @@ export const CreatePageDocument = gql`
   }
 }
     ${CmsPageFieldsFragmentDoc}`;
-export type CreatePageMutationFn = Apollo.MutationFunction<CreatePageMutation, CreatePageMutationVariables>;
+export type CreatePageMutationFn = Apollo.MutationFunction<CreatePageMutationData, CreatePageMutationVariables>;
 
 /**
  * __useCreatePageMutation__
@@ -83,12 +84,13 @@ export type CreatePageMutationFn = Apollo.MutationFunction<CreatePageMutation, C
  *   },
  * });
  */
-export function useCreatePageMutation(baseOptions?: Apollo.MutationHookOptions<CreatePageMutation, CreatePageMutationVariables>) {
-        return Apollo.useMutation<CreatePageMutation, CreatePageMutationVariables>(CreatePageDocument, baseOptions);
+export function useCreatePageMutation(baseOptions?: Apollo.MutationHookOptions<CreatePageMutationData, CreatePageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePageMutationData, CreatePageMutationVariables>(CreatePageDocument, options);
       }
 export type CreatePageMutationHookResult = ReturnType<typeof useCreatePageMutation>;
-export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutation>;
-export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutation, CreatePageMutationVariables>;
+export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutationData>;
+export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutationData, CreatePageMutationVariables>;
 export const UpdatePageDocument = gql`
     mutation UpdatePage($id: Int!, $page: PageInput!) {
   updatePage(input: {id: $id, page: $page}) {
@@ -99,7 +101,7 @@ export const UpdatePageDocument = gql`
   }
 }
     ${CmsPageFieldsFragmentDoc}`;
-export type UpdatePageMutationFn = Apollo.MutationFunction<UpdatePageMutation, UpdatePageMutationVariables>;
+export type UpdatePageMutationFn = Apollo.MutationFunction<UpdatePageMutationData, UpdatePageMutationVariables>;
 
 /**
  * __useUpdatePageMutation__
@@ -119,12 +121,13 @@ export type UpdatePageMutationFn = Apollo.MutationFunction<UpdatePageMutation, U
  *   },
  * });
  */
-export function useUpdatePageMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePageMutation, UpdatePageMutationVariables>) {
-        return Apollo.useMutation<UpdatePageMutation, UpdatePageMutationVariables>(UpdatePageDocument, baseOptions);
+export function useUpdatePageMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePageMutationData, UpdatePageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePageMutationData, UpdatePageMutationVariables>(UpdatePageDocument, options);
       }
 export type UpdatePageMutationHookResult = ReturnType<typeof useUpdatePageMutation>;
-export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutation>;
-export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutation, UpdatePageMutationVariables>;
+export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutationData>;
+export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutationData, UpdatePageMutationVariables>;
 export const DeletePageDocument = gql`
     mutation DeletePage($id: Int!) {
   deletePage(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeletePageDocument = gql`
   }
 }
     `;
-export type DeletePageMutationFn = Apollo.MutationFunction<DeletePageMutation, DeletePageMutationVariables>;
+export type DeletePageMutationFn = Apollo.MutationFunction<DeletePageMutationData, DeletePageMutationVariables>;
 
 /**
  * __useDeletePageMutation__
@@ -151,9 +154,10 @@ export type DeletePageMutationFn = Apollo.MutationFunction<DeletePageMutation, D
  *   },
  * });
  */
-export function useDeletePageMutation(baseOptions?: Apollo.MutationHookOptions<DeletePageMutation, DeletePageMutationVariables>) {
-        return Apollo.useMutation<DeletePageMutation, DeletePageMutationVariables>(DeletePageDocument, baseOptions);
+export function useDeletePageMutation(baseOptions?: Apollo.MutationHookOptions<DeletePageMutationData, DeletePageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePageMutationData, DeletePageMutationVariables>(DeletePageDocument, options);
       }
 export type DeletePageMutationHookResult = ReturnType<typeof useDeletePageMutation>;
-export type DeletePageMutationResult = Apollo.MutationResult<DeletePageMutation>;
-export type DeletePageMutationOptions = Apollo.BaseMutationOptions<DeletePageMutation, DeletePageMutationVariables>;
+export type DeletePageMutationResult = Apollo.MutationResult<DeletePageMutationData>;
+export type DeletePageMutationOptions = Apollo.BaseMutationOptions<DeletePageMutationData, DeletePageMutationVariables>;

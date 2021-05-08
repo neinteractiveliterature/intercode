@@ -7,15 +7,15 @@ import EventCard from './EventCard';
 import getSortedRuns from './getSortedRuns';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
-import { EventListEventsQueryQuery } from './queries.generated';
+import { EventListEventsQueryData } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type EventListEventsProps = {
-  convention: NonNullable<EventListEventsQueryQuery['convention']>;
-  eventsPaginated: NonNullable<EventListEventsQueryQuery['convention']>['events_paginated'];
+  convention: NonNullable<EventListEventsQueryData['convention']>;
+  eventsPaginated: NonNullable<EventListEventsQueryData['convention']>['events_paginated'];
   sortBy?: SortingRule<
-    NonNullable<EventListEventsQueryQuery['convention']>['events_paginated']['entries'][number]
+    NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]
   >[];
   canReadSchedule: boolean;
   fetchMoreIfNeeded: () => void;

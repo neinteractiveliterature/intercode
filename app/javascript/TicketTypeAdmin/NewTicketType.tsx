@@ -9,7 +9,7 @@ import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { useCreateTicketTypeMutation } from './mutations.generated';
-import { AdminTicketTypesQueryQuery } from './queries.generated';
+import { AdminTicketTypesQueryData } from './queries.generated';
 
 export type NewTicketTypeProps = {
   ticketName: string;
@@ -32,7 +32,7 @@ function NewTicketType({ ticketName }: NewTicketTypeProps) {
 
   const [mutate] = useCreateTicketTypeMutation({
     update: (proxy, result) => {
-      const data = proxy.readQuery<AdminTicketTypesQueryQuery>({ query: AdminTicketTypesQuery });
+      const data = proxy.readQuery<AdminTicketTypesQueryData>({ query: AdminTicketTypesQuery });
       const newTicketType = result.data?.createTicketType?.ticket_type;
       if (!data || !newTicketType) {
         return;

@@ -2,20 +2,20 @@ import { ApolloClient, FetchResult } from '@apollo/client';
 import { NavigationItemsAdminQuery } from './queries';
 import {
   AdminNavigationItemFieldsFragment,
-  NavigationItemsAdminQueryQuery,
+  NavigationItemsAdminQueryData,
 } from './queries.generated';
 import {
   CreateNavigationItemDocument,
-  CreateNavigationItemMutation,
+  CreateNavigationItemMutationData,
   CreateNavigationItemMutationVariables,
   DeleteNavigationItemDocument,
-  DeleteNavigationItemMutation,
+  DeleteNavigationItemMutationData,
   DeleteNavigationItemMutationVariables,
   SortNavigationItemsDocument,
-  SortNavigationItemsMutation,
+  SortNavigationItemsMutationData,
   SortNavigationItemsMutationVariables,
   UpdateNavigationItemDocument,
-  UpdateNavigationItemMutation,
+  UpdateNavigationItemMutationData,
   UpdateNavigationItemMutationVariables,
 } from './mutations.generated';
 import { CmsNavigationItemInput } from '../../graphqlTypes.generated';
@@ -119,7 +119,7 @@ class Client {
         operation = 'update';
         mutate = () =>
           this.apolloClient.mutate<
-            UpdateNavigationItemMutation,
+            UpdateNavigationItemMutationData,
             UpdateNavigationItemMutationVariables
           >({
             mutation: UpdateNavigationItemDocument,
@@ -129,20 +129,20 @@ class Client {
         operation = 'create';
         mutate = () =>
           this.apolloClient.mutate<
-            CreateNavigationItemMutation,
+            CreateNavigationItemMutationData,
             CreateNavigationItemMutationVariables
           >({
             mutation: CreateNavigationItemDocument,
             variables: { navigationItem: navigationItemInput },
             update: (cache, { data: resultData }) => {
-              const data = cache.readQuery<NavigationItemsAdminQueryQuery>({
+              const data = cache.readQuery<NavigationItemsAdminQueryData>({
                 query: NavigationItemsAdminQuery,
               });
               const newNavigationItem = resultData?.createCmsNavigationItem?.cms_navigation_item;
               if (!data || !newNavigationItem) {
                 return;
               }
-              cache.writeQuery<NavigationItemsAdminQueryQuery>({
+              cache.writeQuery<NavigationItemsAdminQueryData>({
                 query: NavigationItemsAdminQuery,
                 data: {
                   ...data,
@@ -172,13 +172,13 @@ class Client {
 
     try {
       const response = await this.apolloClient.mutate<
-        DeleteNavigationItemMutation,
+        DeleteNavigationItemMutationData,
         DeleteNavigationItemMutationVariables
       >({
         mutation: DeleteNavigationItemDocument,
         variables: { id: navigationItem.id },
         update: (cache) => {
-          const data = cache.readQuery<NavigationItemsAdminQueryQuery>({
+          const data = cache.readQuery<NavigationItemsAdminQueryData>({
             query: NavigationItemsAdminQuery,
           });
           if (!data) {
@@ -217,13 +217,13 @@ class Client {
     this.requestsInProgress.sortingNavigationItems = true;
     try {
       const response = await this.apolloClient.mutate<
-        SortNavigationItemsMutation,
+        SortNavigationItemsMutationData,
         SortNavigationItemsMutationVariables
       >({
         mutation: SortNavigationItemsDocument,
         variables: { sortItems },
         update: (cache) => {
-          const data = cache.readQuery<NavigationItemsAdminQueryQuery>({
+          const data = cache.readQuery<NavigationItemsAdminQueryData>({
             query: NavigationItemsAdminQuery,
           });
           if (!data) {

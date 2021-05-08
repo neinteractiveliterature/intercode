@@ -30,11 +30,11 @@ import {
 } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import {
-  useEventAdminEventsQueryQuery,
+  useEventAdminEventsQuery,
   EventFieldsFragment,
   RunFieldsFragment,
 } from './queries.generated';
-import { ScheduleGridEventFragmentFragment } from '../EventsApp/ScheduleGrid/queries.generated';
+import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { notEmpty } from '../ValueUtils';
 
@@ -167,7 +167,7 @@ export type ProspectiveRunScheduleProps = {
 
 function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps) {
   const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
 
   const conventionTimespan = useMemo(
     () => (error || loading ? null : timespanFromConvention(data!.convention!)),
@@ -195,7 +195,7 @@ function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProp
     [runs, event.id],
   );
 
-  const eventsForSchedule: ScheduleGridEventFragmentFragment[] | undefined = useMemo(() => {
+  const eventsForSchedule: ScheduleGridEventFragment[] | undefined = useMemo(() => {
     if (error || loading || !data) {
       return undefined;
     }

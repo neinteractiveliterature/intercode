@@ -5,13 +5,14 @@ import { CmsContentGroupFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsContentGroupFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateContentGroupMutationVariables = Types.Exact<{
   cmsContentGroup: Types.CmsContentGroupInput;
   permissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
 }>;
 
 
-export type CreateContentGroupMutation = (
+export type CreateContentGroupMutationData = (
   { __typename: 'Mutation' }
   & { createCmsContentGroup?: Types.Maybe<(
     { __typename: 'CreateCmsContentGroupPayload' }
@@ -31,7 +32,7 @@ export type UpdateContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateContentGroupMutation = (
+export type UpdateContentGroupMutationData = (
   { __typename: 'Mutation' }
   & { updateCmsContentGroup?: Types.Maybe<(
     { __typename: 'UpdateCmsContentGroupPayload' }
@@ -48,7 +49,7 @@ export type DeleteContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteContentGroupMutation = (
+export type DeleteContentGroupMutationData = (
   { __typename: 'Mutation' }
   & { deleteCmsContentGroup?: Types.Maybe<(
     { __typename: 'DeleteCmsContentGroupPayload' }
@@ -69,7 +70,7 @@ export const CreateContentGroupDocument = gql`
   }
 }
     ${CmsContentGroupFieldsFragmentDoc}`;
-export type CreateContentGroupMutationFn = Apollo.MutationFunction<CreateContentGroupMutation, CreateContentGroupMutationVariables>;
+export type CreateContentGroupMutationFn = Apollo.MutationFunction<CreateContentGroupMutationData, CreateContentGroupMutationVariables>;
 
 /**
  * __useCreateContentGroupMutation__
@@ -89,12 +90,13 @@ export type CreateContentGroupMutationFn = Apollo.MutationFunction<CreateContent
  *   },
  * });
  */
-export function useCreateContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateContentGroupMutation, CreateContentGroupMutationVariables>) {
-        return Apollo.useMutation<CreateContentGroupMutation, CreateContentGroupMutationVariables>(CreateContentGroupDocument, baseOptions);
+export function useCreateContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateContentGroupMutationData, CreateContentGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateContentGroupMutationData, CreateContentGroupMutationVariables>(CreateContentGroupDocument, options);
       }
 export type CreateContentGroupMutationHookResult = ReturnType<typeof useCreateContentGroupMutation>;
-export type CreateContentGroupMutationResult = Apollo.MutationResult<CreateContentGroupMutation>;
-export type CreateContentGroupMutationOptions = Apollo.BaseMutationOptions<CreateContentGroupMutation, CreateContentGroupMutationVariables>;
+export type CreateContentGroupMutationResult = Apollo.MutationResult<CreateContentGroupMutationData>;
+export type CreateContentGroupMutationOptions = Apollo.BaseMutationOptions<CreateContentGroupMutationData, CreateContentGroupMutationVariables>;
 export const UpdateContentGroupDocument = gql`
     mutation UpdateContentGroup($id: Int!, $cmsContentGroup: CmsContentGroupInput!, $grantPermissions: [PermissionInput!], $revokePermissions: [PermissionInput!]) {
   updateCmsContentGroup(
@@ -107,7 +109,7 @@ export const UpdateContentGroupDocument = gql`
   }
 }
     ${CmsContentGroupFieldsFragmentDoc}`;
-export type UpdateContentGroupMutationFn = Apollo.MutationFunction<UpdateContentGroupMutation, UpdateContentGroupMutationVariables>;
+export type UpdateContentGroupMutationFn = Apollo.MutationFunction<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
 
 /**
  * __useUpdateContentGroupMutation__
@@ -129,12 +131,13 @@ export type UpdateContentGroupMutationFn = Apollo.MutationFunction<UpdateContent
  *   },
  * });
  */
-export function useUpdateContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateContentGroupMutation, UpdateContentGroupMutationVariables>) {
-        return Apollo.useMutation<UpdateContentGroupMutation, UpdateContentGroupMutationVariables>(UpdateContentGroupDocument, baseOptions);
+export function useUpdateContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>(UpdateContentGroupDocument, options);
       }
 export type UpdateContentGroupMutationHookResult = ReturnType<typeof useUpdateContentGroupMutation>;
-export type UpdateContentGroupMutationResult = Apollo.MutationResult<UpdateContentGroupMutation>;
-export type UpdateContentGroupMutationOptions = Apollo.BaseMutationOptions<UpdateContentGroupMutation, UpdateContentGroupMutationVariables>;
+export type UpdateContentGroupMutationResult = Apollo.MutationResult<UpdateContentGroupMutationData>;
+export type UpdateContentGroupMutationOptions = Apollo.BaseMutationOptions<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
 export const DeleteContentGroupDocument = gql`
     mutation DeleteContentGroup($id: Int!) {
   deleteCmsContentGroup(input: {id: $id}) {
@@ -142,7 +145,7 @@ export const DeleteContentGroupDocument = gql`
   }
 }
     `;
-export type DeleteContentGroupMutationFn = Apollo.MutationFunction<DeleteContentGroupMutation, DeleteContentGroupMutationVariables>;
+export type DeleteContentGroupMutationFn = Apollo.MutationFunction<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>;
 
 /**
  * __useDeleteContentGroupMutation__
@@ -161,9 +164,10 @@ export type DeleteContentGroupMutationFn = Apollo.MutationFunction<DeleteContent
  *   },
  * });
  */
-export function useDeleteContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteContentGroupMutation, DeleteContentGroupMutationVariables>) {
-        return Apollo.useMutation<DeleteContentGroupMutation, DeleteContentGroupMutationVariables>(DeleteContentGroupDocument, baseOptions);
+export function useDeleteContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>(DeleteContentGroupDocument, options);
       }
 export type DeleteContentGroupMutationHookResult = ReturnType<typeof useDeleteContentGroupMutation>;
-export type DeleteContentGroupMutationResult = Apollo.MutationResult<DeleteContentGroupMutation>;
-export type DeleteContentGroupMutationOptions = Apollo.BaseMutationOptions<DeleteContentGroupMutation, DeleteContentGroupMutationVariables>;
+export type DeleteContentGroupMutationResult = Apollo.MutationResult<DeleteContentGroupMutationData>;
+export type DeleteContentGroupMutationOptions = Apollo.BaseMutationOptions<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>;

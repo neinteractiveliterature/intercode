@@ -11,13 +11,13 @@ import useUniqueId from '../useUniqueId';
 import {
   useMoveFormSectionMutation,
   CreateFormSectionDocument,
-  CreateFormSectionMutation,
+  CreateFormSectionMutationData,
   CreateFormSectionMutationVariables,
 } from './mutations.generated';
 import {
   FormEditorQueryDocument,
-  FormEditorQueryQuery,
-  FormEditorQueryQueryVariables,
+  FormEditorQueryData,
+  FormEditorQueryVariables,
 } from './queries.generated';
 
 function FormSectionNav() {
@@ -28,10 +28,10 @@ function FormSectionNav() {
   const { form } = useContext(FormEditorContext);
   const [moveFormSection] = useMoveFormSectionMutation();
   const addFormSection = useCreateMutation<
-    FormEditorQueryQuery,
-    FormEditorQueryQueryVariables,
+    FormEditorQueryData,
+    FormEditorQueryVariables,
     CreateFormSectionMutationVariables,
-    CreateFormSectionMutation
+    CreateFormSectionMutationData
   >(CreateFormSectionDocument, {
     query: FormEditorQueryDocument,
     queryVariables: { id: form.id },

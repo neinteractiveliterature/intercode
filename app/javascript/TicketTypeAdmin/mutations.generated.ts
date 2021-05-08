@@ -5,12 +5,13 @@ import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateTicketTypeMutationVariables = Types.Exact<{
   input: Types.CreateTicketTypeInput;
 }>;
 
 
-export type CreateTicketTypeMutation = (
+export type CreateTicketTypeMutationData = (
   { __typename: 'Mutation' }
   & { createTicketType?: Types.Maybe<(
     { __typename: 'CreateTicketTypePayload' }
@@ -27,7 +28,7 @@ export type UpdateTicketTypeMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTicketTypeMutation = (
+export type UpdateTicketTypeMutationData = (
   { __typename: 'Mutation' }
   & { updateTicketType?: Types.Maybe<(
     { __typename: 'UpdateTicketTypePayload' }
@@ -44,7 +45,7 @@ export type DeleteTicketTypeMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteTicketTypeMutation = (
+export type DeleteTicketTypeMutationData = (
   { __typename: 'Mutation' }
   & { deleteTicketType?: Types.Maybe<(
     { __typename: 'DeleteTicketTypePayload' }
@@ -66,7 +67,7 @@ export const CreateTicketTypeDocument = gql`
   }
 }
     ${TicketTypeAdmin_TicketTypeFieldsFragmentDoc}`;
-export type CreateTicketTypeMutationFn = Apollo.MutationFunction<CreateTicketTypeMutation, CreateTicketTypeMutationVariables>;
+export type CreateTicketTypeMutationFn = Apollo.MutationFunction<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>;
 
 /**
  * __useCreateTicketTypeMutation__
@@ -85,12 +86,13 @@ export type CreateTicketTypeMutationFn = Apollo.MutationFunction<CreateTicketTyp
  *   },
  * });
  */
-export function useCreateTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<CreateTicketTypeMutation, CreateTicketTypeMutationVariables>) {
-        return Apollo.useMutation<CreateTicketTypeMutation, CreateTicketTypeMutationVariables>(CreateTicketTypeDocument, baseOptions);
+export function useCreateTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>(CreateTicketTypeDocument, options);
       }
 export type CreateTicketTypeMutationHookResult = ReturnType<typeof useCreateTicketTypeMutation>;
-export type CreateTicketTypeMutationResult = Apollo.MutationResult<CreateTicketTypeMutation>;
-export type CreateTicketTypeMutationOptions = Apollo.BaseMutationOptions<CreateTicketTypeMutation, CreateTicketTypeMutationVariables>;
+export type CreateTicketTypeMutationResult = Apollo.MutationResult<CreateTicketTypeMutationData>;
+export type CreateTicketTypeMutationOptions = Apollo.BaseMutationOptions<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>;
 export const UpdateTicketTypeDocument = gql`
     mutation UpdateTicketType($input: UpdateTicketTypeInput!) {
   updateTicketType(input: $input) {
@@ -101,7 +103,7 @@ export const UpdateTicketTypeDocument = gql`
   }
 }
     ${TicketTypeAdmin_TicketTypeFieldsFragmentDoc}`;
-export type UpdateTicketTypeMutationFn = Apollo.MutationFunction<UpdateTicketTypeMutation, UpdateTicketTypeMutationVariables>;
+export type UpdateTicketTypeMutationFn = Apollo.MutationFunction<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>;
 
 /**
  * __useUpdateTicketTypeMutation__
@@ -120,12 +122,13 @@ export type UpdateTicketTypeMutationFn = Apollo.MutationFunction<UpdateTicketTyp
  *   },
  * });
  */
-export function useUpdateTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTicketTypeMutation, UpdateTicketTypeMutationVariables>) {
-        return Apollo.useMutation<UpdateTicketTypeMutation, UpdateTicketTypeMutationVariables>(UpdateTicketTypeDocument, baseOptions);
+export function useUpdateTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>(UpdateTicketTypeDocument, options);
       }
 export type UpdateTicketTypeMutationHookResult = ReturnType<typeof useUpdateTicketTypeMutation>;
-export type UpdateTicketTypeMutationResult = Apollo.MutationResult<UpdateTicketTypeMutation>;
-export type UpdateTicketTypeMutationOptions = Apollo.BaseMutationOptions<UpdateTicketTypeMutation, UpdateTicketTypeMutationVariables>;
+export type UpdateTicketTypeMutationResult = Apollo.MutationResult<UpdateTicketTypeMutationData>;
+export type UpdateTicketTypeMutationOptions = Apollo.BaseMutationOptions<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>;
 export const DeleteTicketTypeDocument = gql`
     mutation DeleteTicketType($input: DeleteTicketTypeInput!) {
   deleteTicketType(input: $input) {
@@ -135,7 +138,7 @@ export const DeleteTicketTypeDocument = gql`
   }
 }
     `;
-export type DeleteTicketTypeMutationFn = Apollo.MutationFunction<DeleteTicketTypeMutation, DeleteTicketTypeMutationVariables>;
+export type DeleteTicketTypeMutationFn = Apollo.MutationFunction<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>;
 
 /**
  * __useDeleteTicketTypeMutation__
@@ -154,9 +157,10 @@ export type DeleteTicketTypeMutationFn = Apollo.MutationFunction<DeleteTicketTyp
  *   },
  * });
  */
-export function useDeleteTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTicketTypeMutation, DeleteTicketTypeMutationVariables>) {
-        return Apollo.useMutation<DeleteTicketTypeMutation, DeleteTicketTypeMutationVariables>(DeleteTicketTypeDocument, baseOptions);
+export function useDeleteTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>(DeleteTicketTypeDocument, options);
       }
 export type DeleteTicketTypeMutationHookResult = ReturnType<typeof useDeleteTicketTypeMutation>;
-export type DeleteTicketTypeMutationResult = Apollo.MutationResult<DeleteTicketTypeMutation>;
-export type DeleteTicketTypeMutationOptions = Apollo.BaseMutationOptions<DeleteTicketTypeMutation, DeleteTicketTypeMutationVariables>;
+export type DeleteTicketTypeMutationResult = Apollo.MutationResult<DeleteTicketTypeMutationData>;
+export type DeleteTicketTypeMutationOptions = Apollo.BaseMutationOptions<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>;

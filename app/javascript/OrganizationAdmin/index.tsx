@@ -9,12 +9,12 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useOrganizationAdminOrganizationsQueryQuery } from './queries.generated';
+import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
 
 function OrganizationWithIdBreadcrumbs() {
   const match = useRouteMatch();
   const { id } = useParams<{ id: string }>();
-  const { data, loading, error } = useOrganizationAdminOrganizationsQueryQuery();
+  const { data, loading, error } = useOrganizationAdminOrganizationsQuery();
 
   if (loading) {
     return (

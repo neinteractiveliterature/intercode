@@ -3,12 +3,13 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type SiteSearchQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type SiteSearchQueryVariables = Types.Exact<{
   query: Types.Scalars['String'];
 }>;
 
 
-export type SiteSearchQueryQuery = (
+export type SiteSearchQueryData = (
   { __typename: 'Query' }
   & { siteSearch: (
     { __typename: 'SearchResult' }
@@ -65,27 +66,29 @@ export const SiteSearchQueryDocument = gql`
     `;
 
 /**
- * __useSiteSearchQueryQuery__
+ * __useSiteSearchQuery__
  *
- * To run a query within a React component, call `useSiteSearchQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useSiteSearchQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSiteSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSiteSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSiteSearchQueryQuery({
+ * const { data, loading, error } = useSiteSearchQuery({
  *   variables: {
  *      query: // value for 'query'
  *   },
  * });
  */
-export function useSiteSearchQueryQuery(baseOptions: Apollo.QueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
-        return Apollo.useQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
+export function useSiteSearchQuery(baseOptions: Apollo.QueryHookOptions<SiteSearchQueryData, SiteSearchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SiteSearchQueryData, SiteSearchQueryVariables>(SiteSearchQueryDocument, options);
       }
-export function useSiteSearchQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>) {
-          return Apollo.useLazyQuery<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>(SiteSearchQueryDocument, baseOptions);
+export function useSiteSearchQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SiteSearchQueryData, SiteSearchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SiteSearchQueryData, SiteSearchQueryVariables>(SiteSearchQueryDocument, options);
         }
-export type SiteSearchQueryQueryHookResult = ReturnType<typeof useSiteSearchQueryQuery>;
+export type SiteSearchQueryHookResult = ReturnType<typeof useSiteSearchQuery>;
 export type SiteSearchQueryLazyQueryHookResult = ReturnType<typeof useSiteSearchQueryLazyQuery>;
-export type SiteSearchQueryQueryResult = Apollo.QueryResult<SiteSearchQueryQuery, SiteSearchQueryQueryVariables>;
+export type SiteSearchQueryDataResult = Apollo.QueryResult<SiteSearchQueryData, SiteSearchQueryVariables>;

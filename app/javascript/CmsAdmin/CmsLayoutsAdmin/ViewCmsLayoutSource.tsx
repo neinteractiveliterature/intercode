@@ -1,10 +1,10 @@
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsLayoutsAdminQueryQuery } from './queries.generated';
+import { useCmsLayoutsAdminQuery } from './queries.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useCmsLayoutsAdminQueryQuery,
+  useCmsLayoutsAdminQuery,
   (data, id) => data.cmsLayouts.find((layout) => layout.id.toString() === id),
   function ViewCmsLayoutSource({ value }) {
     usePageTitle(`View “${value.name}” Source`);

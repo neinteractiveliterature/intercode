@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import WithdrawSignupButton, { WithdrawSignupButtonProps } from './WithdrawSignupButton';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
-import { EventPageQueryQuery } from './queries.generated';
+import { EventPageQueryData } from './queries.generated';
 import { useWithdrawMySignupMutation } from './mutations.generated';
 
 export type WithdrawMySignupButtonProps = Omit<WithdrawSignupButtonProps, 'withdrawSignup'> & {
-  run: EventPageQueryQuery['event']['runs'][0];
-  event: EventPageQueryQuery['event'];
+  run: EventPageQueryData['event']['runs'][0];
+  event: EventPageQueryData['event'];
   reloadOnSuccess?: boolean;
 };
 

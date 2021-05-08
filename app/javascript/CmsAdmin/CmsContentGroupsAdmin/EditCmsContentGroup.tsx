@@ -8,17 +8,14 @@ import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import {
-  CmsContentGroupsAdminQueryQuery,
-  useCmsContentGroupsAdminQueryQuery,
-} from './queries.generated';
+import { CmsContentGroupsAdminQueryData, useCmsContentGroupsAdminQuery } from './queries.generated';
 import { notEmpty } from '../../ValueUtils';
 import { useUpdateContentGroupMutation } from './mutations.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useCmsContentGroupsAdminQueryQuery,
+  useCmsContentGroupsAdminQuery,
   (data, id) => data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === id),
 
   function EditCmsContentGroupForm({ data: { convention }, value: initialContentGroup }) {
@@ -26,7 +23,7 @@ export default LoadSingleValueFromCollectionWrapper(
     const [updateCmsContentGroup] = useUpdateContentGroupMutation();
     const [contentGroup, setContentGroup] = useState(initialContentGroup);
     const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<
-      CmsContentGroupsAdminQueryQuery['cmsContentGroups'][0]['permissions'][0]
+      CmsContentGroupsAdminQueryData['cmsContentGroups'][0]['permissions'][0]
     >();
     const apolloClient = useApolloClient();
 

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import {
-  UserActivityAlertsAdminQueryQuery,
-  useUserActivityAlertsAdminQueryQuery,
+  UserActivityAlertsAdminQueryData,
+  useUserActivityAlertsAdminQuery,
 } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
@@ -18,7 +18,7 @@ function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.Reac
 }
 
 function renderAlertMatches(
-  userActivityAlert: UserActivityAlertsAdminQueryQuery['convention']['user_activity_alerts'][number],
+  userActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number],
 ) {
   const matches = [];
 
@@ -50,8 +50,8 @@ function renderAlertMatches(
 }
 
 function renderAlertTriggers(
-  convention: UserActivityAlertsAdminQueryQuery['convention'],
-  userActivityAlert: UserActivityAlertsAdminQueryQuery['convention']['user_activity_alerts'][number],
+  convention: UserActivityAlertsAdminQueryData['convention'],
+  userActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number],
 ) {
   const triggers = [];
 
@@ -67,7 +67,7 @@ function renderAlertTriggers(
 }
 
 function renderAlertNotificationDestinations(
-  userActivityAlert: UserActivityAlertsAdminQueryQuery['convention']['user_activity_alerts'][number],
+  userActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number],
 ) {
   const destinations = userActivityAlert.notification_destinations.map((destination) => {
     if (destination.staff_position) {
@@ -89,7 +89,7 @@ function renderAlertNotificationDestinations(
 }
 
 export default LoadQueryWrapper(
-  useUserActivityAlertsAdminQueryQuery,
+  useUserActivityAlertsAdminQuery,
   function UserActivityAlertsList({ data }) {
     usePageTitle('User activity alerts');
 

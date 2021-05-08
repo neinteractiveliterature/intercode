@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import buildEventUrl from '../buildEventUrl';
-import { EventPageQueryQuery } from './queries.generated';
+import { EventPageQueryData } from './queries.generated';
 
 export type ViewSignupsOptionsProps = {
-  event: EventPageQueryQuery['event'];
-  run: EventPageQueryQuery['event']['runs'][0];
-  currentAbility: EventPageQueryQuery['currentAbility'];
+  event: EventPageQueryData['event'];
+  run: EventPageQueryData['event']['runs'][0];
+  currentAbility: EventPageQueryData['currentAbility'];
 };
 
 function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsProps) {

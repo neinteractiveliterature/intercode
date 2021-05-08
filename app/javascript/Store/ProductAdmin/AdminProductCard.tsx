@@ -7,11 +7,11 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { describeAdminPricingStructure } from '../describePricingStructure';
 import { useDeleteProductMutation } from '../mutations.generated';
-import { AdminProductsQueryQuery } from '../queries.generated';
+import { AdminProductsQueryData } from '../queries.generated';
 import { EditingProductWithRealId } from './EditingProductTypes';
 
 export type AdminProductCardProps = {
-  currentAbility: AdminProductsQueryQuery['currentAbility'];
+  currentAbility: AdminProductsQueryData['currentAbility'];
   startEditing: () => void;
   product: EditingProductWithRealId;
 };
@@ -27,7 +27,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
         deleteProduct({
           variables: { id: product.id },
           update: (cache) => {
-            const data = cache.readQuery<AdminProductsQueryQuery>({ query: AdminProductsQuery });
+            const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQuery });
             if (!data) {
               return;
             }

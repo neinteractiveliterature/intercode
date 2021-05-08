@@ -21,9 +21,9 @@ import useReactTableWithTheWorks, {
 import TableHeader from '../Tables/TableHeader';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import {
-  UserConProfilesTableUserConProfilesQueryQuery,
-  useUserConProfilesTableUserConProfilesQueryQuery,
-  UserConProfilesTableUserConProfilesQueryQueryVariables,
+  UserConProfilesTableUserConProfilesQueryData,
+  useUserConProfilesTableUserConProfilesQuery,
+  UserConProfilesTableUserConProfilesQueryVariables,
 } from './queries.generated';
 import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
@@ -32,10 +32,10 @@ import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 import AppRootContext from '../AppRootContext';
 
 type UserConProfilesTableRow = NonNullable<
-  UserConProfilesTableUserConProfilesQueryQuery['convention']
+  UserConProfilesTableUserConProfilesQueryData['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-const UserConProfilesTableQueryDataContext = createQueryDataContext<UserConProfilesTableUserConProfilesQueryQuery>();
+const UserConProfilesTableQueryDataContext = createQueryDataContext<UserConProfilesTableUserConProfilesQueryData>();
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
@@ -121,7 +121,7 @@ const PrivilegesFilter = (props: FilterProps<UserConProfilesTableRow>) => {
 };
 
 function getPossibleColumns(
-  data: UserConProfilesTableUserConProfilesQueryQuery,
+  data: UserConProfilesTableUserConProfilesQueryData,
   t: TFunction,
   formItems: TypedFormItem[],
   timezoneName: string,
@@ -311,7 +311,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
   const { t } = useTranslation();
   const history = useHistory();
   const getPossibleColumnsWithTranslation = useMemo(
-    () => (data: UserConProfilesTableUserConProfilesQueryQuery) =>
+    () => (data: UserConProfilesTableUserConProfilesQueryData) =>
       getPossibleColumns(
         data,
         t,
@@ -321,9 +321,9 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
     [t, timezoneName],
   );
   const { tableInstance, loading, tableHeaderProps, queryData } = useReactTableWithTheWorks<
-    UserConProfilesTableUserConProfilesQueryQuery,
+    UserConProfilesTableUserConProfilesQueryData,
     UserConProfilesTableRow,
-    UserConProfilesTableUserConProfilesQueryQueryVariables
+    UserConProfilesTableUserConProfilesQueryVariables
   >({
     decodeFilterValue,
     defaultVisibleColumns,
@@ -331,7 +331,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
     getData: ({ data }) => data!.convention!.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data!.convention!.user_con_profiles_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
-    useQuery: useUserConProfilesTableUserConProfilesQueryQuery,
+    useQuery: useUserConProfilesTableUserConProfilesQuery,
     storageKeyPrefix: 'userConProfiles',
   });
 

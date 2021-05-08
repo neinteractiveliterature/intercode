@@ -9,15 +9,15 @@ import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import { EventPageQueryQuery, useCreateModeratedSignupModalQueryQuery } from './queries.generated';
+import { EventPageQueryData, useCreateModeratedSignupModalQuery } from './queries.generated';
 import { SignupOption } from './buildSignupOptions';
 import { useCreateSignupRequestMutation } from './mutations.generated';
 
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
   close: () => void;
-  run: EventPageQueryQuery['event']['runs'][0];
-  event: EventPageQueryQuery['event'];
+  run: EventPageQueryData['event']['runs'][0];
+  event: EventPageQueryData['event'];
   signupOption?: SignupOption;
 };
 
@@ -29,7 +29,7 @@ function CreateModeratedSignupModal({
   signupOption,
 }: CreateModeratedSignupModalProps) {
   const { conventionName, timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useCreateModeratedSignupModalQueryQuery();
+  const { data, loading, error } = useCreateModeratedSignupModalQuery();
   const [createMutate] = useCreateSignupRequestMutation({
     refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
   });

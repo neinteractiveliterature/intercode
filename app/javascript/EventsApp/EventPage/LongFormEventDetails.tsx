@@ -2,14 +2,14 @@ import ErrorDisplay from '../../ErrorDisplay';
 import parsePageContent from '../../parsePageContent';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import LoadingIndicator from '../../LoadingIndicator';
-import { useEventPageQueryQuery } from './queries.generated';
+import { useEventPageQuery } from './queries.generated';
 
 export type LongFormEventDetailsProps = {
   eventId: number;
 };
 
 function LongFormEventDetails({ eventId }: LongFormEventDetailsProps) {
-  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
 
   const { longFormItems, formResponse } = useSectionizedFormItems(
     error || loading || !data ? undefined : data.event,

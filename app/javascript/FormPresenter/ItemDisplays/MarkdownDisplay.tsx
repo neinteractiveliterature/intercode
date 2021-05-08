@@ -1,13 +1,13 @@
 import LoadingIndicator from '../../LoadingIndicator';
 import ErrorDisplay from '../../ErrorDisplay';
-import { usePreviewMarkdownQueryQuery } from '../../BuiltInFormControls/previewQueries.generated';
+import { usePreviewMarkdownQuery } from '../../BuiltInFormControls/previewQueries.generated';
 
 export type MarkdownDisplayProps = {
   markdown?: string | null;
 };
 
 function MarkdownDisplay({ markdown }: MarkdownDisplayProps) {
-  const { data, loading, error } = usePreviewMarkdownQueryQuery({
+  const { data, loading, error } = usePreviewMarkdownQuery({
     variables: { markdown: markdown ?? '' },
   });
 

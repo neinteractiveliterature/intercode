@@ -5,15 +5,15 @@ import { DocumentNode, useQuery } from '@apollo/client';
 import { AdminProductsQuery } from '../Store/queries';
 import LoadingIndicator from '../LoadingIndicator';
 import ErrorDisplay from '../ErrorDisplay';
-import { AdminProductsQueryQuery } from '../Store/queries.generated';
+import { AdminProductsQueryData } from '../Store/queries.generated';
 
-export type ProductSelectProps<QueryType extends AdminProductsQueryQuery> = SelectProps<
+export type ProductSelectProps<QueryType extends AdminProductsQueryData> = SelectProps<
   Pick<QueryType['convention']['products'][0], '__typename' | 'id' | 'name'>
 > & {
   productsQuery?: DocumentNode;
 };
 
-function ProductSelect<QueryType extends AdminProductsQueryQuery>({
+function ProductSelect<QueryType extends AdminProductsQueryData>({
   productsQuery,
   ...otherProps
 }: ProductSelectProps<QueryType>) {

@@ -9,13 +9,13 @@ import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { useCreateStaffPositionMutation } from './mutations.generated';
-import { StaffPositionsQueryQuery } from './queries.generated';
+import { StaffPositionsQueryData } from './queries.generated';
 
 function NewStaffPosition() {
   const history = useHistory();
   const [createMutate] = useCreateStaffPositionMutation({
     update: (proxy, result) => {
-      const data = proxy.readQuery<StaffPositionsQueryQuery>({ query: StaffPositionsQuery });
+      const data = proxy.readQuery<StaffPositionsQueryData>({ query: StaffPositionsQuery });
       const newStaffPosition = result.data?.createStaffPosition?.staff_position;
       if (!data || !newStaffPosition) {
         return;

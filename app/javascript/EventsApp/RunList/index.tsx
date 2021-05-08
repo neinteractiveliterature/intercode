@@ -15,7 +15,7 @@ import usePageTitle from '../../usePageTitle';
 import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
-import { useScheduleGridCombinedQueryQuery } from '../ScheduleGrid/queries.generated';
+import { useScheduleGridCombinedQuery } from '../ScheduleGrid/queries.generated';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
 import RunListEventRun from './RunListEventRun';
@@ -35,7 +35,7 @@ function isElementInViewport(el: HTMLElement) {
 }
 
 function useLoadRunListData() {
-  return useScheduleGridCombinedQueryQuery({ variables: { extendedCounts: false } });
+  return useScheduleGridCombinedQuery({ variables: { extendedCounts: false } });
 }
 
 export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {

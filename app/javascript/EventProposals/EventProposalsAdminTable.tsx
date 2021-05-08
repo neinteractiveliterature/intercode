@@ -13,12 +13,9 @@ import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
-import {
-  EventProposalsAdminQueryQuery,
-  useEventProposalsAdminQueryQuery,
-} from './queries.generated';
+import { EventProposalsAdminQueryData, useEventProposalsAdminQuery } from './queries.generated';
 
-type EventProposalType = EventProposalsAdminQueryQuery['convention']['event_proposals_paginated']['entries'][0];
+type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -100,7 +97,7 @@ function ExtraCell({ row: { original } }: CellProps<EventProposalType>) {
 }
 
 const EventCategoryFilter = (props: FilterProps<EventProposalType>) => {
-  const data = useContext(QueryDataContext) as EventProposalsAdminQueryQuery;
+  const data = useContext(QueryDataContext) as EventProposalsAdminQueryData;
   const choices = useMemo(
     () =>
       data
@@ -217,7 +214,7 @@ function EventProposalsAdminTable() {
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages,
     getPossibleColumns,
-    useQuery: useEventProposalsAdminQueryQuery,
+    useQuery: useEventProposalsAdminQuery,
     storageKeyPrefix: 'eventProposalsAdmin',
   });
 

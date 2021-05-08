@@ -11,14 +11,14 @@ import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
-import { TeamMembersQueryQuery, TeamMembersQueryQueryVariables } from './queries.generated';
+import { TeamMembersQueryData, TeamMembersQueryVariables } from './queries.generated';
 import { useProvideEventTicketMutation } from './mutations.generated';
 
 export type ProvideTicketModalProps = {
-  event: TeamMembersQueryQuery['event'];
-  convention: NonNullable<TeamMembersQueryQuery['convention']>;
+  event: TeamMembersQueryData['event'];
+  convention: NonNullable<TeamMembersQueryData['convention']>;
   onClose: () => void;
-  teamMember?: TeamMembersQueryQuery['event']['team_members'][0];
+  teamMember?: TeamMembersQueryData['event']['team_members'][0];
   visible: boolean;
 };
 
@@ -39,7 +39,7 @@ function ProvideTicketModal({
       provideTicketAsync({
         ...args,
         update: (store, result) => {
-          const data = store.readQuery<TeamMembersQueryQuery, TeamMembersQueryQueryVariables>({
+          const data = store.readQuery<TeamMembersQueryData, TeamMembersQueryVariables>({
             query: TeamMembersQuery,
             variables: { eventId: event.id },
           });

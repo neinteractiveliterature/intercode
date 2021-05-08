@@ -5,13 +5,14 @@ import { UserConProfileFieldsFragment, UserConProfileAdminTicketFieldsFragment }
 import { gql } from '@apollo/client';
 import { UserConProfileFieldsFragmentDoc, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateUserConProfileMutationVariables = Types.Exact<{
   user_id: Types.Scalars['Int'];
   user_con_profile: Types.UserConProfileInput;
 }>;
 
 
-export type CreateUserConProfileMutation = (
+export type CreateUserConProfileMutationData = (
   { __typename: 'Mutation' }
   & { createUserConProfile?: Types.Maybe<(
     { __typename: 'CreateUserConProfilePayload' }
@@ -27,7 +28,7 @@ export type UpdateUserConProfileMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserConProfileMutation = (
+export type UpdateUserConProfileMutationData = (
   { __typename: 'Mutation' }
   & { updateUserConProfile?: Types.Maybe<(
     { __typename: 'UpdateUserConProfilePayload' }
@@ -44,7 +45,7 @@ export type DeleteUserConProfileMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteUserConProfileMutation = (
+export type DeleteUserConProfileMutationData = (
   { __typename: 'Mutation' }
   & { deleteUserConProfile?: Types.Maybe<(
     { __typename: 'DeleteUserConProfilePayload' }
@@ -61,7 +62,7 @@ export type CreateTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTicketMutation = (
+export type CreateTicketMutationData = (
   { __typename: 'Mutation' }
   & { createTicket?: Types.Maybe<(
     { __typename: 'CreateTicketPayload' }
@@ -79,7 +80,7 @@ export type UpdateTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTicketMutation = (
+export type UpdateTicketMutationData = (
   { __typename: 'Mutation' }
   & { updateTicket?: Types.Maybe<(
     { __typename: 'UpdateTicketPayload' }
@@ -97,7 +98,7 @@ export type DeleteTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteTicketMutation = (
+export type DeleteTicketMutationData = (
   { __typename: 'Mutation' }
   & { deleteTicket?: Types.Maybe<(
     { __typename: 'DeleteTicketPayload' }
@@ -115,7 +116,7 @@ export type ConvertTicketToEventProvidedMutationVariables = Types.Exact<{
 }>;
 
 
-export type ConvertTicketToEventProvidedMutation = (
+export type ConvertTicketToEventProvidedMutationData = (
   { __typename: 'Mutation' }
   & { convertTicketToEventProvided?: Types.Maybe<(
     { __typename: 'ConvertTicketToEventProvidedPayload' }
@@ -139,7 +140,7 @@ export const CreateUserConProfileDocument = gql`
   }
 }
     `;
-export type CreateUserConProfileMutationFn = Apollo.MutationFunction<CreateUserConProfileMutation, CreateUserConProfileMutationVariables>;
+export type CreateUserConProfileMutationFn = Apollo.MutationFunction<CreateUserConProfileMutationData, CreateUserConProfileMutationVariables>;
 
 /**
  * __useCreateUserConProfileMutation__
@@ -159,12 +160,13 @@ export type CreateUserConProfileMutationFn = Apollo.MutationFunction<CreateUserC
  *   },
  * });
  */
-export function useCreateUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserConProfileMutation, CreateUserConProfileMutationVariables>) {
-        return Apollo.useMutation<CreateUserConProfileMutation, CreateUserConProfileMutationVariables>(CreateUserConProfileDocument, baseOptions);
+export function useCreateUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserConProfileMutationData, CreateUserConProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserConProfileMutationData, CreateUserConProfileMutationVariables>(CreateUserConProfileDocument, options);
       }
 export type CreateUserConProfileMutationHookResult = ReturnType<typeof useCreateUserConProfileMutation>;
-export type CreateUserConProfileMutationResult = Apollo.MutationResult<CreateUserConProfileMutation>;
-export type CreateUserConProfileMutationOptions = Apollo.BaseMutationOptions<CreateUserConProfileMutation, CreateUserConProfileMutationVariables>;
+export type CreateUserConProfileMutationResult = Apollo.MutationResult<CreateUserConProfileMutationData>;
+export type CreateUserConProfileMutationOptions = Apollo.BaseMutationOptions<CreateUserConProfileMutationData, CreateUserConProfileMutationVariables>;
 export const UpdateUserConProfileDocument = gql`
     mutation UpdateUserConProfile($input: UpdateUserConProfileInput!) {
   updateUserConProfile(input: $input) {
@@ -175,7 +177,7 @@ export const UpdateUserConProfileDocument = gql`
   }
 }
     ${UserConProfileFieldsFragmentDoc}`;
-export type UpdateUserConProfileMutationFn = Apollo.MutationFunction<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>;
+export type UpdateUserConProfileMutationFn = Apollo.MutationFunction<UpdateUserConProfileMutationData, UpdateUserConProfileMutationVariables>;
 
 /**
  * __useUpdateUserConProfileMutation__
@@ -194,12 +196,13 @@ export type UpdateUserConProfileMutationFn = Apollo.MutationFunction<UpdateUserC
  *   },
  * });
  */
-export function useUpdateUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>) {
-        return Apollo.useMutation<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>(UpdateUserConProfileDocument, baseOptions);
+export function useUpdateUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserConProfileMutationData, UpdateUserConProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserConProfileMutationData, UpdateUserConProfileMutationVariables>(UpdateUserConProfileDocument, options);
       }
 export type UpdateUserConProfileMutationHookResult = ReturnType<typeof useUpdateUserConProfileMutation>;
-export type UpdateUserConProfileMutationResult = Apollo.MutationResult<UpdateUserConProfileMutation>;
-export type UpdateUserConProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserConProfileMutation, UpdateUserConProfileMutationVariables>;
+export type UpdateUserConProfileMutationResult = Apollo.MutationResult<UpdateUserConProfileMutationData>;
+export type UpdateUserConProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserConProfileMutationData, UpdateUserConProfileMutationVariables>;
 export const DeleteUserConProfileDocument = gql`
     mutation DeleteUserConProfile($userConProfileId: Int!) {
   deleteUserConProfile(input: {id: $userConProfileId}) {
@@ -209,7 +212,7 @@ export const DeleteUserConProfileDocument = gql`
   }
 }
     `;
-export type DeleteUserConProfileMutationFn = Apollo.MutationFunction<DeleteUserConProfileMutation, DeleteUserConProfileMutationVariables>;
+export type DeleteUserConProfileMutationFn = Apollo.MutationFunction<DeleteUserConProfileMutationData, DeleteUserConProfileMutationVariables>;
 
 /**
  * __useDeleteUserConProfileMutation__
@@ -228,12 +231,13 @@ export type DeleteUserConProfileMutationFn = Apollo.MutationFunction<DeleteUserC
  *   },
  * });
  */
-export function useDeleteUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserConProfileMutation, DeleteUserConProfileMutationVariables>) {
-        return Apollo.useMutation<DeleteUserConProfileMutation, DeleteUserConProfileMutationVariables>(DeleteUserConProfileDocument, baseOptions);
+export function useDeleteUserConProfileMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserConProfileMutationData, DeleteUserConProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserConProfileMutationData, DeleteUserConProfileMutationVariables>(DeleteUserConProfileDocument, options);
       }
 export type DeleteUserConProfileMutationHookResult = ReturnType<typeof useDeleteUserConProfileMutation>;
-export type DeleteUserConProfileMutationResult = Apollo.MutationResult<DeleteUserConProfileMutation>;
-export type DeleteUserConProfileMutationOptions = Apollo.BaseMutationOptions<DeleteUserConProfileMutation, DeleteUserConProfileMutationVariables>;
+export type DeleteUserConProfileMutationResult = Apollo.MutationResult<DeleteUserConProfileMutationData>;
+export type DeleteUserConProfileMutationOptions = Apollo.BaseMutationOptions<DeleteUserConProfileMutationData, DeleteUserConProfileMutationVariables>;
 export const CreateTicketDocument = gql`
     mutation CreateTicket($userConProfileId: Int!, $ticket: TicketInput!) {
   createTicket(input: {user_con_profile_id: $userConProfileId, ticket: $ticket}) {
@@ -244,7 +248,7 @@ export const CreateTicketDocument = gql`
   }
 }
     ${UserConProfileAdminTicketFieldsFragmentDoc}`;
-export type CreateTicketMutationFn = Apollo.MutationFunction<CreateTicketMutation, CreateTicketMutationVariables>;
+export type CreateTicketMutationFn = Apollo.MutationFunction<CreateTicketMutationData, CreateTicketMutationVariables>;
 
 /**
  * __useCreateTicketMutation__
@@ -264,12 +268,13 @@ export type CreateTicketMutationFn = Apollo.MutationFunction<CreateTicketMutatio
  *   },
  * });
  */
-export function useCreateTicketMutation(baseOptions?: Apollo.MutationHookOptions<CreateTicketMutation, CreateTicketMutationVariables>) {
-        return Apollo.useMutation<CreateTicketMutation, CreateTicketMutationVariables>(CreateTicketDocument, baseOptions);
+export function useCreateTicketMutation(baseOptions?: Apollo.MutationHookOptions<CreateTicketMutationData, CreateTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTicketMutationData, CreateTicketMutationVariables>(CreateTicketDocument, options);
       }
 export type CreateTicketMutationHookResult = ReturnType<typeof useCreateTicketMutation>;
-export type CreateTicketMutationResult = Apollo.MutationResult<CreateTicketMutation>;
-export type CreateTicketMutationOptions = Apollo.BaseMutationOptions<CreateTicketMutation, CreateTicketMutationVariables>;
+export type CreateTicketMutationResult = Apollo.MutationResult<CreateTicketMutationData>;
+export type CreateTicketMutationOptions = Apollo.BaseMutationOptions<CreateTicketMutationData, CreateTicketMutationVariables>;
 export const UpdateTicketDocument = gql`
     mutation UpdateTicket($id: Int!, $ticket: TicketInput!) {
   updateTicket(input: {id: $id, ticket: $ticket}) {
@@ -280,7 +285,7 @@ export const UpdateTicketDocument = gql`
   }
 }
     ${UserConProfileAdminTicketFieldsFragmentDoc}`;
-export type UpdateTicketMutationFn = Apollo.MutationFunction<UpdateTicketMutation, UpdateTicketMutationVariables>;
+export type UpdateTicketMutationFn = Apollo.MutationFunction<UpdateTicketMutationData, UpdateTicketMutationVariables>;
 
 /**
  * __useUpdateTicketMutation__
@@ -300,12 +305,13 @@ export type UpdateTicketMutationFn = Apollo.MutationFunction<UpdateTicketMutatio
  *   },
  * });
  */
-export function useUpdateTicketMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTicketMutation, UpdateTicketMutationVariables>) {
-        return Apollo.useMutation<UpdateTicketMutation, UpdateTicketMutationVariables>(UpdateTicketDocument, baseOptions);
+export function useUpdateTicketMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTicketMutationData, UpdateTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTicketMutationData, UpdateTicketMutationVariables>(UpdateTicketDocument, options);
       }
 export type UpdateTicketMutationHookResult = ReturnType<typeof useUpdateTicketMutation>;
-export type UpdateTicketMutationResult = Apollo.MutationResult<UpdateTicketMutation>;
-export type UpdateTicketMutationOptions = Apollo.BaseMutationOptions<UpdateTicketMutation, UpdateTicketMutationVariables>;
+export type UpdateTicketMutationResult = Apollo.MutationResult<UpdateTicketMutationData>;
+export type UpdateTicketMutationOptions = Apollo.BaseMutationOptions<UpdateTicketMutationData, UpdateTicketMutationVariables>;
 export const DeleteTicketDocument = gql`
     mutation DeleteTicket($ticketId: Int!, $refund: Boolean!) {
   deleteTicket(input: {id: $ticketId, refund: $refund}) {
@@ -315,7 +321,7 @@ export const DeleteTicketDocument = gql`
   }
 }
     `;
-export type DeleteTicketMutationFn = Apollo.MutationFunction<DeleteTicketMutation, DeleteTicketMutationVariables>;
+export type DeleteTicketMutationFn = Apollo.MutationFunction<DeleteTicketMutationData, DeleteTicketMutationVariables>;
 
 /**
  * __useDeleteTicketMutation__
@@ -335,12 +341,13 @@ export type DeleteTicketMutationFn = Apollo.MutationFunction<DeleteTicketMutatio
  *   },
  * });
  */
-export function useDeleteTicketMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTicketMutation, DeleteTicketMutationVariables>) {
-        return Apollo.useMutation<DeleteTicketMutation, DeleteTicketMutationVariables>(DeleteTicketDocument, baseOptions);
+export function useDeleteTicketMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTicketMutationData, DeleteTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTicketMutationData, DeleteTicketMutationVariables>(DeleteTicketDocument, options);
       }
 export type DeleteTicketMutationHookResult = ReturnType<typeof useDeleteTicketMutation>;
-export type DeleteTicketMutationResult = Apollo.MutationResult<DeleteTicketMutation>;
-export type DeleteTicketMutationOptions = Apollo.BaseMutationOptions<DeleteTicketMutation, DeleteTicketMutationVariables>;
+export type DeleteTicketMutationResult = Apollo.MutationResult<DeleteTicketMutationData>;
+export type DeleteTicketMutationOptions = Apollo.BaseMutationOptions<DeleteTicketMutationData, DeleteTicketMutationVariables>;
 export const ConvertTicketToEventProvidedDocument = gql`
     mutation ConvertTicketToEventProvided($eventId: Int!, $ticketTypeId: Int!, $userConProfileId: Int!) {
   convertTicketToEventProvided(
@@ -353,7 +360,7 @@ export const ConvertTicketToEventProvidedDocument = gql`
   }
 }
     ${UserConProfileAdminTicketFieldsFragmentDoc}`;
-export type ConvertTicketToEventProvidedMutationFn = Apollo.MutationFunction<ConvertTicketToEventProvidedMutation, ConvertTicketToEventProvidedMutationVariables>;
+export type ConvertTicketToEventProvidedMutationFn = Apollo.MutationFunction<ConvertTicketToEventProvidedMutationData, ConvertTicketToEventProvidedMutationVariables>;
 
 /**
  * __useConvertTicketToEventProvidedMutation__
@@ -374,9 +381,10 @@ export type ConvertTicketToEventProvidedMutationFn = Apollo.MutationFunction<Con
  *   },
  * });
  */
-export function useConvertTicketToEventProvidedMutation(baseOptions?: Apollo.MutationHookOptions<ConvertTicketToEventProvidedMutation, ConvertTicketToEventProvidedMutationVariables>) {
-        return Apollo.useMutation<ConvertTicketToEventProvidedMutation, ConvertTicketToEventProvidedMutationVariables>(ConvertTicketToEventProvidedDocument, baseOptions);
+export function useConvertTicketToEventProvidedMutation(baseOptions?: Apollo.MutationHookOptions<ConvertTicketToEventProvidedMutationData, ConvertTicketToEventProvidedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConvertTicketToEventProvidedMutationData, ConvertTicketToEventProvidedMutationVariables>(ConvertTicketToEventProvidedDocument, options);
       }
 export type ConvertTicketToEventProvidedMutationHookResult = ReturnType<typeof useConvertTicketToEventProvidedMutation>;
-export type ConvertTicketToEventProvidedMutationResult = Apollo.MutationResult<ConvertTicketToEventProvidedMutation>;
-export type ConvertTicketToEventProvidedMutationOptions = Apollo.BaseMutationOptions<ConvertTicketToEventProvidedMutation, ConvertTicketToEventProvidedMutationVariables>;
+export type ConvertTicketToEventProvidedMutationResult = Apollo.MutationResult<ConvertTicketToEventProvidedMutationData>;
+export type ConvertTicketToEventProvidedMutationOptions = Apollo.BaseMutationOptions<ConvertTicketToEventProvidedMutationData, ConvertTicketToEventProvidedMutationVariables>;

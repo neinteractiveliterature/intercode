@@ -18,12 +18,12 @@ import AppRootContext from '../AppRootContext';
 
 import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
-import { StaffPositionsQueryQuery, useStaffPositionsQueryQuery } from './queries.generated';
+import { StaffPositionsQueryData, useStaffPositionsQuery } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';
 import { useDeleteStaffPositionMutation } from './mutations.generated';
 
 type UserConProfilesListProps = {
-  userConProfiles: StaffPositionsQueryQuery['convention']['staff_positions'][0]['user_con_profiles'];
+  userConProfiles: StaffPositionsQueryData['convention']['staff_positions'][0]['user_con_profiles'];
 };
 
 function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
@@ -86,7 +86,7 @@ function describePermissionAbilities(
 }
 
 function describePermissionModel(
-  model: StaffPositionsQueryQuery['convention']['staff_positions'][0]['permissions'][0]['model'],
+  model: StaffPositionsQueryData['convention']['staff_positions'][0]['permissions'][0]['model'],
 ) {
   switch (model.__typename) {
     case 'CmsContentGroup':
@@ -115,7 +115,7 @@ function describePermissionModel(
 }
 
 type PermissionsDescriptionProps = {
-  permissions: StaffPositionsQueryQuery['convention']['staff_positions'][0]['permissions'];
+  permissions: StaffPositionsQueryData['convention']['staff_positions'][0]['permissions'];
 };
 
 function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
@@ -136,35 +136,37 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
     return <></>;
   }
 
-  return <>
-    <button
-      className="hidden-button text-left"
-      type="button"
-      onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
-    >
-      <DisclosureTriangle expanded={expanded} />{' '}
-      {joinReact(
-        descriptions.map(({ key, model }) => <Fragment key={key}>{model}</Fragment>),
-        ', ',
+  return (
+    <>
+      <button
+        className="hidden-button text-left"
+        type="button"
+        onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
+      >
+        <DisclosureTriangle expanded={expanded} />{' '}
+        {joinReact(
+          descriptions.map(({ key, model }) => <Fragment key={key}>{model}</Fragment>),
+          ', ',
+        )}
+      </button>
+      {expanded && (
+        <ul className="list-unstyled">
+          {descriptions.map(({ key, model, abilities }) => (
+            <li key={key}>
+              {model}
+              {': '}
+              {abilities}
+            </li>
+          ))}
+        </ul>
       )}
-    </button>
-    {expanded && (
-      <ul className="list-unstyled">
-        {descriptions.map(({ key, model, abilities }) => (
-          <li key={key}>
-            {model}
-            {': '}
-            {abilities}
-          </li>
-        ))}
-      </ul>
-    )}
-  </>;
+    </>
+  );
 }
 
 function StaffPositionsTable() {
   const { conventionDomain } = useContext(AppRootContext);
-  const { data, loading, error } = useStaffPositionsQueryQuery();
+  const { data, loading, error } = useStaffPositionsQuery();
   const confirm = useConfirm();
 
   const [deleteMutate] = useDeleteStaffPositionMutation();
@@ -173,7 +175,7 @@ function StaffPositionsTable() {
       deleteMutate({
         variables: { input: { id } },
         update: (proxy) => {
-          const storeData = proxy.readQuery<StaffPositionsQueryQuery>({
+          const storeData = proxy.readQuery<StaffPositionsQueryData>({
             query: StaffPositionsQuery,
           });
           if (storeData == null) {
@@ -208,7 +210,7 @@ function StaffPositionsTable() {
   }
 
   const renderRow = (
-    staffPosition: StaffPositionsQueryQuery['convention']['staff_positions'][0],
+    staffPosition: StaffPositionsQueryData['convention']['staff_positions'][0],
   ) => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>

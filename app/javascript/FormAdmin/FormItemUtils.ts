@@ -8,7 +8,7 @@ import {
   CommonFormSectionFieldsFragment,
   CommonFormItemFieldsFragment,
 } from '../Models/commonFormFragments.generated';
-import { FormEditorQueryQuery, FormEditorFormItemFieldsFragment } from './queries.generated';
+import { FormEditorQueryData, FormEditorFormItemFieldsFragment } from './queries.generated';
 import {
   TimeblockDefinition,
   TimeblockOmission,
@@ -382,7 +382,7 @@ export function mutationUpdaterForFormSection<ResultDataType>(
   updater: (section: CommonFormSectionFieldsFragment, mutationResultData: ResultDataType) => void,
 ) {
   return (proxy: ApolloCache<any>, mutationResultData: ResultDataType) => {
-    const data = proxy.readQuery<FormEditorQueryQuery>({
+    const data = proxy.readQuery<FormEditorQueryData>({
       query: FormEditorQuery,
       variables: { id: formId },
     });

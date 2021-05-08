@@ -9,10 +9,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsLayoutsAdminQueryQuery } from './queries.generated';
+import { useCmsLayoutsAdminQuery } from './queries.generated';
 
 function CmsLayoutsAdminTable() {
-  const { data, loading, error } = useCmsLayoutsAdminQueryQuery();
+  const { data, loading, error } = useCmsLayoutsAdminQuery();
   const confirm = useConfirm();
   const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
     query: CmsLayoutsAdminQuery,

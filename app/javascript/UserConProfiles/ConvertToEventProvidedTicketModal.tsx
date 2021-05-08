@@ -11,11 +11,11 @@ import TicketingStatusDescription from '../EventsApp/TeamMemberAdmin/TicketingSt
 import useAsyncFunction from '../useAsyncFunction';
 import LoadingIndicator from '../LoadingIndicator';
 import {
-  useConvertToEventProvidedTicketQueryQuery,
-  UserConProfileAdminQueryQuery,
+  useConvertToEventProvidedTicketQuery,
+  UserConProfileAdminQueryData,
 } from './queries.generated';
 import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
-import { DefaultEventsQueryQuery } from '../BuiltInFormControls/selectDefaultQueries.generated';
+import { DefaultEventsQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 
 type EventSpecificSectionProps = {
   event: {
@@ -36,7 +36,7 @@ function EventSpecificSection({
   setTicketTypeId,
   disabled,
 }: EventSpecificSectionProps) {
-  const { data, loading, error } = useConvertToEventProvidedTicketQueryQuery({
+  const { data, loading, error } = useConvertToEventProvidedTicketQuery({
     variables: { eventId: event.id },
   });
 
@@ -77,7 +77,7 @@ export type ConvertToEventProvidedTicketModalProps = {
   onClose: () => void;
 };
 type EventType = NonNullable<
-  DefaultEventsQueryQuery['convention']
+  DefaultEventsQueryData['convention']
 >['events_paginated']['entries'][0];
 
 function ConvertToEventProvidedTicketModal({
@@ -103,7 +103,7 @@ function ConvertToEventProvidedTicketModal({
         userConProfileId: userConProfile.id,
       },
       update: (cache, result) => {
-        const cachedData = cache.readQuery<UserConProfileAdminQueryQuery>({
+        const cachedData = cache.readQuery<UserConProfileAdminQueryData>({
           query: UserConProfileAdminQuery,
           variables: { id: userConProfile.id },
         });

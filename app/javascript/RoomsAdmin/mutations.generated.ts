@@ -3,12 +3,13 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateRoomMutationVariables = Types.Exact<{
   input: Types.CreateRoomInput;
 }>;
 
 
-export type CreateRoomMutation = (
+export type CreateRoomMutationData = (
   { __typename: 'Mutation' }
   & { createRoom?: Types.Maybe<(
     { __typename: 'CreateRoomPayload' }
@@ -28,7 +29,7 @@ export type UpdateRoomMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateRoomMutation = (
+export type UpdateRoomMutationData = (
   { __typename: 'Mutation' }
   & { updateRoom?: Types.Maybe<(
     { __typename: 'UpdateRoomPayload' }
@@ -48,7 +49,7 @@ export type DeleteRoomMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteRoomMutation = (
+export type DeleteRoomMutationData = (
   { __typename: 'Mutation' }
   & { deleteRoom?: Types.Maybe<(
     { __typename: 'DeleteRoomPayload' }
@@ -73,7 +74,7 @@ export const CreateRoomDocument = gql`
   }
 }
     `;
-export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutation, CreateRoomMutationVariables>;
+export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutationData, CreateRoomMutationVariables>;
 
 /**
  * __useCreateRoomMutation__
@@ -92,12 +93,13 @@ export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutation, C
  *   },
  * });
  */
-export function useCreateRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateRoomMutation, CreateRoomMutationVariables>) {
-        return Apollo.useMutation<CreateRoomMutation, CreateRoomMutationVariables>(CreateRoomDocument, baseOptions);
+export function useCreateRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateRoomMutationData, CreateRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRoomMutationData, CreateRoomMutationVariables>(CreateRoomDocument, options);
       }
 export type CreateRoomMutationHookResult = ReturnType<typeof useCreateRoomMutation>;
-export type CreateRoomMutationResult = Apollo.MutationResult<CreateRoomMutation>;
-export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<CreateRoomMutation, CreateRoomMutationVariables>;
+export type CreateRoomMutationResult = Apollo.MutationResult<CreateRoomMutationData>;
+export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<CreateRoomMutationData, CreateRoomMutationVariables>;
 export const UpdateRoomDocument = gql`
     mutation UpdateRoom($input: UpdateRoomInput!) {
   updateRoom(input: $input) {
@@ -111,7 +113,7 @@ export const UpdateRoomDocument = gql`
   }
 }
     `;
-export type UpdateRoomMutationFn = Apollo.MutationFunction<UpdateRoomMutation, UpdateRoomMutationVariables>;
+export type UpdateRoomMutationFn = Apollo.MutationFunction<UpdateRoomMutationData, UpdateRoomMutationVariables>;
 
 /**
  * __useUpdateRoomMutation__
@@ -130,12 +132,13 @@ export type UpdateRoomMutationFn = Apollo.MutationFunction<UpdateRoomMutation, U
  *   },
  * });
  */
-export function useUpdateRoomMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRoomMutation, UpdateRoomMutationVariables>) {
-        return Apollo.useMutation<UpdateRoomMutation, UpdateRoomMutationVariables>(UpdateRoomDocument, baseOptions);
+export function useUpdateRoomMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRoomMutationData, UpdateRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRoomMutationData, UpdateRoomMutationVariables>(UpdateRoomDocument, options);
       }
 export type UpdateRoomMutationHookResult = ReturnType<typeof useUpdateRoomMutation>;
-export type UpdateRoomMutationResult = Apollo.MutationResult<UpdateRoomMutation>;
-export type UpdateRoomMutationOptions = Apollo.BaseMutationOptions<UpdateRoomMutation, UpdateRoomMutationVariables>;
+export type UpdateRoomMutationResult = Apollo.MutationResult<UpdateRoomMutationData>;
+export type UpdateRoomMutationOptions = Apollo.BaseMutationOptions<UpdateRoomMutationData, UpdateRoomMutationVariables>;
 export const DeleteRoomDocument = gql`
     mutation DeleteRoom($input: DeleteRoomInput!) {
   deleteRoom(input: $input) {
@@ -145,7 +148,7 @@ export const DeleteRoomDocument = gql`
   }
 }
     `;
-export type DeleteRoomMutationFn = Apollo.MutationFunction<DeleteRoomMutation, DeleteRoomMutationVariables>;
+export type DeleteRoomMutationFn = Apollo.MutationFunction<DeleteRoomMutationData, DeleteRoomMutationVariables>;
 
 /**
  * __useDeleteRoomMutation__
@@ -164,9 +167,10 @@ export type DeleteRoomMutationFn = Apollo.MutationFunction<DeleteRoomMutation, D
  *   },
  * });
  */
-export function useDeleteRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRoomMutation, DeleteRoomMutationVariables>) {
-        return Apollo.useMutation<DeleteRoomMutation, DeleteRoomMutationVariables>(DeleteRoomDocument, baseOptions);
+export function useDeleteRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRoomMutationData, DeleteRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRoomMutationData, DeleteRoomMutationVariables>(DeleteRoomDocument, options);
       }
 export type DeleteRoomMutationHookResult = ReturnType<typeof useDeleteRoomMutation>;
-export type DeleteRoomMutationResult = Apollo.MutationResult<DeleteRoomMutation>;
-export type DeleteRoomMutationOptions = Apollo.BaseMutationOptions<DeleteRoomMutation, DeleteRoomMutationVariables>;
+export type DeleteRoomMutationResult = Apollo.MutationResult<DeleteRoomMutationData>;
+export type DeleteRoomMutationOptions = Apollo.BaseMutationOptions<DeleteRoomMutationData, DeleteRoomMutationVariables>;

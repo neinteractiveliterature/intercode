@@ -8,11 +8,9 @@ import usePageTitle from '../usePageTitle';
 import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useDepartmentAdminQueryQuery } from './queries.generated';
+import { useDepartmentAdminQuery } from './queries.generated';
 
-export default LoadQueryWrapper(useDepartmentAdminQueryQuery, function DepartmentAdminIndex({
-  data,
-}) {
+export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdminIndex({ data }) {
   const confirm = useGraphQLConfirm();
   const deleteDepartment = useDeleteMutation(DeleteDepartment, {
     query: DepartmentAdminQuery,

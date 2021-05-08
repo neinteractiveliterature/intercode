@@ -1,7 +1,7 @@
 import { RealIdObject, WithRealOrGeneratedId } from '../../GeneratedIdUtils';
-import { AdminProductsQueryQuery } from '../queries.generated';
+import { AdminProductsQueryData } from '../queries.generated';
 
-type QueryProduct = AdminProductsQueryQuery['convention']['products'][0];
+type QueryProduct = AdminProductsQueryData['convention']['products'][0];
 
 export type EditingVariant = WithRealOrGeneratedId<QueryProduct['product_variants'][0], number>;
 
@@ -19,7 +19,7 @@ export type EditingProductWithRealId = EditingProductBase & RealIdObject<QueryPr
 export type EditingPricingStructure = NonNullable<EditingProduct['pricing_structure']>;
 
 export function duplicateProductForEditing(
-  product: AdminProductsQueryQuery['convention']['products'][0],
+  product: AdminProductsQueryData['convention']['products'][0],
 ): EditingProductWithRealId {
   return {
     ...product,

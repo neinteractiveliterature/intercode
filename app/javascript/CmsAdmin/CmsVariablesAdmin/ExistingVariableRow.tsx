@@ -6,14 +6,14 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { CmsVariablesQuery, DeleteCmsVariableMutation } from './queries';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useDeleteMutation } from '../../MutationUtils';
-import { CmsVariablesQueryQuery, useSetCmsVariableMutationMutation } from './queries.generated';
+import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';
 
 export type ExistingVariableRowProps = {
-  variable: CmsVariablesQueryQuery['cmsVariables'][0];
+  variable: CmsVariablesQueryData['cmsVariables'][0];
 };
 
 function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
-  const [setVariableMutate] = useSetCmsVariableMutationMutation();
+  const [setVariableMutate] = useSetCmsVariableMutation();
   const [setVariable, setVariableError, , clearSetVariableError] = useAsyncFunction(
     setVariableMutate,
   );

@@ -8,11 +8,11 @@ import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useEventCategoryAdminQueryQuery } from './queries.generated';
+import { useEventCategoryAdminQuery } from './queries.generated';
 import { useUpdateEventCategoryMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useEventCategoryAdminQueryQuery,
+  useEventCategoryAdminQuery,
   (data, id) => data.convention.event_categories.find((c) => c.id.toString() === id),
   function EditEventCategoryForm({ value: initialEventCategory, data: { convention } }) {
     const history = useHistory();

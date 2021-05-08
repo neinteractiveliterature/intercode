@@ -14,11 +14,11 @@ import useUniqueId from '../../useUniqueId';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
-import { TeamMembersQueryQuery } from './queries.generated';
+import { TeamMembersQueryData } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 
 export type NewTeamMemberProps = {
-  event: TeamMembersQueryQuery['event'];
+  event: TeamMembersQueryData['event'];
   eventPath: string;
 };
 
@@ -26,7 +26,7 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps) {
   const { t } = useTranslation();
   const history = useHistory();
   const [teamMember, setTeamMember] = useState<
-    Partial<TeamMembersQueryQuery['event']['team_members'][0]>
+    Partial<TeamMembersQueryData['event']['team_members'][0]>
   >({
     user_con_profile: undefined,
     display_team_member: true,
@@ -63,7 +63,7 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps) {
         input: {
           event_id: event.id,
           team_member: buildTeamMemberInput(
-            teamMember as TeamMembersQueryQuery['event']['team_members'][0],
+            teamMember as TeamMembersQueryData['event']['team_members'][0],
           ),
           user_con_profile_id: teamMember.user_con_profile!.id,
         },

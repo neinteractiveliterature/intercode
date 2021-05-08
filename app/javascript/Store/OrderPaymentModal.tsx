@@ -13,7 +13,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 import { Money, PaymentMode } from '../graphqlTypes.generated';
-import { CurrentPendingOrderPaymentIntentClientSecretQueryQuery } from './queries.generated';
+import { CurrentPendingOrderPaymentIntentClientSecretQueryData } from './queries.generated';
 import { CurrentPendingOrderPaymentIntentClientSecret } from './queries';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 
@@ -61,9 +61,11 @@ function OrderPaymentModalContents({
       let clientSecret: string = '';
 
       try {
-        const { data } = await apolloClient.query<
-          CurrentPendingOrderPaymentIntentClientSecretQueryQuery
-        >({ query: CurrentPendingOrderPaymentIntentClientSecret });
+        const {
+          data,
+        } = await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
+          query: CurrentPendingOrderPaymentIntentClientSecret,
+        });
 
         clientSecret = data.currentPendingOrderPaymentIntentClientSecret;
       } catch (error) {

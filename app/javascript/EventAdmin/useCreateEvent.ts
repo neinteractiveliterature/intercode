@@ -4,24 +4,21 @@ import { buildEventInput, buildRunInput } from './InputBuilders';
 import { CreateEvent, CreateFillerEvent } from './mutations';
 import { EventAdminEventsQuery } from './queries';
 import { useCreateMutation } from '../MutationUtils';
+import { EventAdminEventsQueryData, EventAdminEventsQueryVariables } from './queries.generated';
 import {
-  EventAdminEventsQueryQuery,
-  EventAdminEventsQueryQueryVariables,
-} from './queries.generated';
-import {
-  CreateEventMutation,
+  CreateEventMutationData,
   CreateEventMutationVariables,
-  CreateFillerEventMutation,
+  CreateFillerEventMutationData,
   CreateFillerEventMutationVariables,
 } from './mutations.generated';
 import { SchedulingUi } from '../graphqlTypes.generated';
 
 export function useCreateRegularEvent() {
   const mutate = useCreateMutation<
-    EventAdminEventsQueryQuery,
-    EventAdminEventsQueryQueryVariables,
+    EventAdminEventsQueryData,
+    EventAdminEventsQueryVariables,
     CreateEventMutationVariables,
-    CreateEventMutation
+    CreateEventMutationData
   >(CreateEvent, {
     query: EventAdminEventsQuery,
     arrayPath: ['events'],
@@ -43,10 +40,10 @@ export function useCreateRegularEvent() {
 
 export function useCreateSingleRunEvent() {
   const mutate = useCreateMutation<
-    EventAdminEventsQueryQuery,
-    EventAdminEventsQueryQueryVariables,
+    EventAdminEventsQueryData,
+    EventAdminEventsQueryVariables,
     CreateFillerEventMutationVariables,
-    CreateFillerEventMutation
+    CreateFillerEventMutationData
   >(CreateFillerEvent, {
     query: EventAdminEventsQuery,
     arrayPath: ['events'],

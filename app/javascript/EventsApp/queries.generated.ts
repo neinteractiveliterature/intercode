@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CommonConventionDataFragment = (
   { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'site_mode' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
@@ -24,10 +25,10 @@ export type RunBasicSignupDataFragment = (
   )> }
 );
 
-export type CommonConventionDataQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CommonConventionDataQueryQuery = (
+export type CommonConventionDataQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -81,26 +82,28 @@ export const CommonConventionDataQueryDocument = gql`
     ${CommonConventionDataFragmentDoc}`;
 
 /**
- * __useCommonConventionDataQueryQuery__
+ * __useCommonConventionDataQuery__
  *
- * To run a query within a React component, call `useCommonConventionDataQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCommonConventionDataQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCommonConventionDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCommonConventionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCommonConventionDataQueryQuery({
+ * const { data, loading, error } = useCommonConventionDataQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCommonConventionDataQueryQuery(baseOptions?: Apollo.QueryHookOptions<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>) {
-        return Apollo.useQuery<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>(CommonConventionDataQueryDocument, baseOptions);
+export function useCommonConventionDataQuery(baseOptions?: Apollo.QueryHookOptions<CommonConventionDataQueryData, CommonConventionDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
       }
-export function useCommonConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>(CommonConventionDataQueryDocument, baseOptions);
+export function useCommonConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommonConventionDataQueryData, CommonConventionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
         }
-export type CommonConventionDataQueryQueryHookResult = ReturnType<typeof useCommonConventionDataQueryQuery>;
+export type CommonConventionDataQueryHookResult = ReturnType<typeof useCommonConventionDataQuery>;
 export type CommonConventionDataQueryLazyQueryHookResult = ReturnType<typeof useCommonConventionDataQueryLazyQuery>;
-export type CommonConventionDataQueryQueryResult = Apollo.QueryResult<CommonConventionDataQueryQuery, CommonConventionDataQueryQueryVariables>;
+export type CommonConventionDataQueryDataResult = Apollo.QueryResult<CommonConventionDataQueryData, CommonConventionDataQueryVariables>;

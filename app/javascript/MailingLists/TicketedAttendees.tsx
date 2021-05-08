@@ -1,11 +1,9 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useTicketedAttendeesQueryQuery } from './queries.generated';
+import { useTicketedAttendeesQuery } from './queries.generated';
 
-export default LoadQueryWrapper(useTicketedAttendeesQueryQuery, function TicketedAttendees({
-  data,
-}) {
+export default LoadQueryWrapper(useTicketedAttendeesQuery, function TicketedAttendees({ data }) {
   usePageTitle(`All attendees with ${data.convention.ticket_name}`);
 
   return (

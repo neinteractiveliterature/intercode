@@ -11,8 +11,8 @@ import { useCreateMutation } from '../../MutationUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import ErrorDisplay from '../../ErrorDisplay';
 import { CmsFile } from '../../graphqlTypes.generated';
-import { CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables } from './queries.generated';
-import { CreateCmsFileMutationVariables, CreateCmsFileMutation } from './mutations.generated';
+import { CmsFilesAdminQueryData, CmsFilesAdminQueryVariables } from './queries.generated';
+import { CreateCmsFileMutationVariables, CreateCmsFileMutationData } from './mutations.generated';
 
 export type FileUploadFormProps = {
   onUpload?: (cmsFile: CmsFile) => void;
@@ -25,10 +25,10 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
   const fileInputId = useUniqueId('file-');
   const [createMutate, createError, createInProgress] = useAsyncFunction(
     useCreateMutation<
-      CmsFilesAdminQueryQuery,
-      CmsFilesAdminQueryQueryVariables,
+      CmsFilesAdminQueryData,
+      CmsFilesAdminQueryVariables,
       CreateCmsFileMutationVariables,
-      CreateCmsFileMutation
+      CreateCmsFileMutationData
     >(CreateCmsFile, {
       query: CmsFilesAdminQuery,
       arrayPath: ['cmsFiles'],

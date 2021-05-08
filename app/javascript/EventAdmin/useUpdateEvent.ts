@@ -7,7 +7,7 @@ import {
   useUpdateEventMutation,
   useUpdateRunMutation,
 } from './mutations.generated';
-import { EventAdminEventsQueryQuery } from './queries.generated';
+import { EventAdminEventsQueryData } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 
 function useUpdateRegularEvent() {
@@ -68,7 +68,7 @@ function useUpdateSingleRunEvent() {
             },
           },
           update: (store, { data }) => {
-            const eventsData = store.readQuery<EventAdminEventsQueryQuery>({
+            const eventsData = store.readQuery<EventAdminEventsQueryData>({
               query: EventAdminEventsQuery,
             });
             const newRun = data?.createRun?.run;

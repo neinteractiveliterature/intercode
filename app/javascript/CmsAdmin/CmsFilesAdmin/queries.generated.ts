@@ -3,15 +3,16 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CmsFileFieldsFragment = (
   { __typename: 'CmsFile' }
   & Pick<Types.CmsFile, 'id' | 'filename' | 'url' | 'content_type' | 'size' | 'current_ability_can_delete'>
 );
 
-export type CmsFilesAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsFilesAdminQueryQuery = (
+export type CmsFilesAdminQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -53,26 +54,28 @@ export const CmsFilesAdminQueryDocument = gql`
     ${CmsFileFieldsFragmentDoc}`;
 
 /**
- * __useCmsFilesAdminQueryQuery__
+ * __useCmsFilesAdminQuery__
  *
- * To run a query within a React component, call `useCmsFilesAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsFilesAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsFilesAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsFilesAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsFilesAdminQueryQuery({
+ * const { data, loading, error } = useCmsFilesAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsFilesAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>) {
-        return Apollo.useQuery<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>(CmsFilesAdminQueryDocument, baseOptions);
+export function useCmsFilesAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
       }
-export function useCmsFilesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>(CmsFilesAdminQueryDocument, baseOptions);
+export function useCmsFilesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
         }
-export type CmsFilesAdminQueryQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryQuery>;
+export type CmsFilesAdminQueryHookResult = ReturnType<typeof useCmsFilesAdminQuery>;
 export type CmsFilesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryLazyQuery>;
-export type CmsFilesAdminQueryQueryResult = Apollo.QueryResult<CmsFilesAdminQueryQuery, CmsFilesAdminQueryQueryVariables>;
+export type CmsFilesAdminQueryDataResult = Apollo.QueryResult<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>;

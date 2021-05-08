@@ -22,7 +22,7 @@ import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import Gravatar from '../Gravatar';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useMyProfileQueryQuery, MyProfileQueryQuery } from './queries.generated';
+import { useMyProfileQuery, MyProfileQueryData } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
@@ -38,8 +38,8 @@ function parseResponseErrors(error: ApolloError) {
 
 type MyProfileFormInnerProps = {
   initialSetup?: boolean;
-  initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryQuery['myProfile']>>;
-  convention: NonNullable<MyProfileQueryQuery['convention']>;
+  initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['myProfile']>>;
+  convention: NonNullable<MyProfileQueryData['convention']>;
   form: CommonFormFieldsFragment;
 };
 
@@ -250,7 +250,7 @@ export type MyProfileFormProps = {
 };
 
 function MyProfileForm({ initialSetup }: MyProfileFormProps) {
-  const { data, loading, error } = useMyProfileQueryQuery();
+  const { data, loading, error } = useMyProfileQuery();
 
   const formState = useMemo(
     () => (loading || error ? null : buildFormStateFromData(data!.myProfile!, data!.convention!)),

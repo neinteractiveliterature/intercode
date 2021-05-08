@@ -5,12 +5,13 @@ import { StandaloneEditEvent_EventFieldsFragment, StandaloneEditEvent_MaximumEve
 import { gql } from '@apollo/client';
 import { StandaloneEditEvent_EventFieldsFragmentDoc, StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type StandaloneDropEventMutationVariables = Types.Exact<{
   input: Types.DropEventInput;
 }>;
 
 
-export type StandaloneDropEventMutation = (
+export type StandaloneDropEventMutationData = (
   { __typename: 'Mutation' }
   & { dropEvent?: Types.Maybe<(
     { __typename: 'DropEventPayload' }
@@ -26,7 +27,7 @@ export type StandaloneUpdateEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type StandaloneUpdateEventMutation = (
+export type StandaloneUpdateEventMutationData = (
   { __typename: 'Mutation' }
   & { updateEvent?: Types.Maybe<(
     { __typename: 'UpdateEventPayload' }
@@ -43,7 +44,7 @@ export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables
 }>;
 
 
-export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutation = (
+export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData = (
   { __typename: 'Mutation' }
   & { createMaximumEventProvidedTicketsOverride?: Types.Maybe<(
     { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload' }
@@ -60,7 +61,7 @@ export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables
 }>;
 
 
-export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation = (
+export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData = (
   { __typename: 'Mutation' }
   & { deleteMaximumEventProvidedTicketsOverride?: Types.Maybe<(
     { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
@@ -77,7 +78,7 @@ export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables
 }>;
 
 
-export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation = (
+export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData = (
   { __typename: 'Mutation' }
   & { updateMaximumEventProvidedTicketsOverride?: Types.Maybe<(
     { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
@@ -100,7 +101,7 @@ export const StandaloneDropEventDocument = gql`
   }
 }
     `;
-export type StandaloneDropEventMutationFn = Apollo.MutationFunction<StandaloneDropEventMutation, StandaloneDropEventMutationVariables>;
+export type StandaloneDropEventMutationFn = Apollo.MutationFunction<StandaloneDropEventMutationData, StandaloneDropEventMutationVariables>;
 
 /**
  * __useStandaloneDropEventMutation__
@@ -119,12 +120,13 @@ export type StandaloneDropEventMutationFn = Apollo.MutationFunction<StandaloneDr
  *   },
  * });
  */
-export function useStandaloneDropEventMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneDropEventMutation, StandaloneDropEventMutationVariables>) {
-        return Apollo.useMutation<StandaloneDropEventMutation, StandaloneDropEventMutationVariables>(StandaloneDropEventDocument, baseOptions);
+export function useStandaloneDropEventMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneDropEventMutationData, StandaloneDropEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StandaloneDropEventMutationData, StandaloneDropEventMutationVariables>(StandaloneDropEventDocument, options);
       }
 export type StandaloneDropEventMutationHookResult = ReturnType<typeof useStandaloneDropEventMutation>;
-export type StandaloneDropEventMutationResult = Apollo.MutationResult<StandaloneDropEventMutation>;
-export type StandaloneDropEventMutationOptions = Apollo.BaseMutationOptions<StandaloneDropEventMutation, StandaloneDropEventMutationVariables>;
+export type StandaloneDropEventMutationResult = Apollo.MutationResult<StandaloneDropEventMutationData>;
+export type StandaloneDropEventMutationOptions = Apollo.BaseMutationOptions<StandaloneDropEventMutationData, StandaloneDropEventMutationVariables>;
 export const StandaloneUpdateEventDocument = gql`
     mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
@@ -135,7 +137,7 @@ export const StandaloneUpdateEventDocument = gql`
   }
 }
     ${StandaloneEditEvent_EventFieldsFragmentDoc}`;
-export type StandaloneUpdateEventMutationFn = Apollo.MutationFunction<StandaloneUpdateEventMutation, StandaloneUpdateEventMutationVariables>;
+export type StandaloneUpdateEventMutationFn = Apollo.MutationFunction<StandaloneUpdateEventMutationData, StandaloneUpdateEventMutationVariables>;
 
 /**
  * __useStandaloneUpdateEventMutation__
@@ -154,12 +156,13 @@ export type StandaloneUpdateEventMutationFn = Apollo.MutationFunction<Standalone
  *   },
  * });
  */
-export function useStandaloneUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneUpdateEventMutation, StandaloneUpdateEventMutationVariables>) {
-        return Apollo.useMutation<StandaloneUpdateEventMutation, StandaloneUpdateEventMutationVariables>(StandaloneUpdateEventDocument, baseOptions);
+export function useStandaloneUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneUpdateEventMutationData, StandaloneUpdateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StandaloneUpdateEventMutationData, StandaloneUpdateEventMutationVariables>(StandaloneUpdateEventDocument, options);
       }
 export type StandaloneUpdateEventMutationHookResult = ReturnType<typeof useStandaloneUpdateEventMutation>;
-export type StandaloneUpdateEventMutationResult = Apollo.MutationResult<StandaloneUpdateEventMutation>;
-export type StandaloneUpdateEventMutationOptions = Apollo.BaseMutationOptions<StandaloneUpdateEventMutation, StandaloneUpdateEventMutationVariables>;
+export type StandaloneUpdateEventMutationResult = Apollo.MutationResult<StandaloneUpdateEventMutationData>;
+export type StandaloneUpdateEventMutationOptions = Apollo.BaseMutationOptions<StandaloneUpdateEventMutationData, StandaloneUpdateEventMutationVariables>;
 export const StandaloneCreateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
@@ -170,7 +173,7 @@ export const StandaloneCreateMaximumEventProvidedTicketsOverrideDocument = gql`
   }
 }
     ${StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
-export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<StandaloneCreateMaximumEventProvidedTicketsOverrideMutation, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>;
 
 /**
  * __useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation__
@@ -189,12 +192,13 @@ export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationFn = Apol
  *   },
  * });
  */
-export function useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneCreateMaximumEventProvidedTicketsOverrideMutation, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>) {
-        return Apollo.useMutation<StandaloneCreateMaximumEventProvidedTicketsOverrideMutation, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>(StandaloneCreateMaximumEventProvidedTicketsOverrideDocument, baseOptions);
+export function useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>(StandaloneCreateMaximumEventProvidedTicketsOverrideDocument, options);
       }
 export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationHookResult = ReturnType<typeof useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation>;
-export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<StandaloneCreateMaximumEventProvidedTicketsOverrideMutation>;
-export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<StandaloneCreateMaximumEventProvidedTicketsOverrideMutation, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData>;
+export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData, StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const StandaloneDeleteMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneDeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
@@ -205,7 +209,7 @@ export const StandaloneDeleteMaximumEventProvidedTicketsOverrideDocument = gql`
   }
 }
     ${StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
-export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
 
 /**
  * __useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation__
@@ -224,12 +228,13 @@ export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationFn = Apol
  *   },
  * });
  */
-export function useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>) {
-        return Apollo.useMutation<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>(StandaloneDeleteMaximumEventProvidedTicketsOverrideDocument, baseOptions);
+export function useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>(StandaloneDeleteMaximumEventProvidedTicketsOverrideDocument, options);
       }
 export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationHookResult = ReturnType<typeof useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation>;
-export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation>;
-export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutation, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData>;
+export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData, StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const StandaloneUpdateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneUpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
@@ -240,7 +245,7 @@ export const StandaloneUpdateMaximumEventProvidedTicketsOverrideDocument = gql`
   }
 }
     ${StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
-export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationFn = Apollo.MutationFunction<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
 
 /**
  * __useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation__
@@ -259,9 +264,10 @@ export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationFn = Apol
  *   },
  * });
  */
-export function useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>) {
-        return Apollo.useMutation<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>(StandaloneUpdateMaximumEventProvidedTicketsOverrideDocument, baseOptions);
+export function useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>(StandaloneUpdateMaximumEventProvidedTicketsOverrideDocument, options);
       }
 export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationHookResult = ReturnType<typeof useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation>;
-export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation>;
-export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutation, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
+export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData>;
+export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData, StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables>;

@@ -16,8 +16,8 @@ import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import {
   StripeAccountOnboardingLinkQueryDocument,
-  StripeAccountOnboardingLinkQueryQuery,
-  StripeAccountOnboardingLinkQueryQueryVariables,
+  StripeAccountOnboardingLinkQueryData,
+  StripeAccountOnboardingLinkQueryVariables,
 } from './queries.generated';
 
 export type ConventionFormBillingSectionProps = {
@@ -60,8 +60,8 @@ function ConventionFormBillingSection({
 
   const obtainOnboardingLinkAndRedirect = useCallback(async () => {
     const result = await apolloClient.query<
-      StripeAccountOnboardingLinkQueryQuery,
-      StripeAccountOnboardingLinkQueryQueryVariables
+      StripeAccountOnboardingLinkQueryData,
+      StripeAccountOnboardingLinkQueryVariables
     >({
       query: StripeAccountOnboardingLinkQueryDocument,
       variables: { baseUrl: window.location.href.toString() },

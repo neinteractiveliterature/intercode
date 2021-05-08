@@ -6,15 +6,15 @@ import EventSelect from '../BuiltInFormControls/EventSelect';
 import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import LoadingIndicator from '../LoadingIndicator';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { CreateSignupEventsQueryQuery } from './queries.generated';
-import { DefaultUserConProfilesQueryQuery } from '../BuiltInFormControls/selectDefaultQueries.generated';
+import { CreateSignupEventsQueryData } from './queries.generated';
+import { DefaultUserConProfilesQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 
 type EventType = NonNullable<
-  CreateSignupEventsQueryQuery['convention']
+  CreateSignupEventsQueryData['convention']
 >['events_paginated']['entries'][0];
 
 type UserConProfileType = NonNullable<
-  DefaultUserConProfilesQueryQuery['convention']
+  DefaultUserConProfilesQueryData['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
 function CreateSignup() {

@@ -1,10 +1,10 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { humanize } from 'inflected';
-import { TeamMembersQueryQuery } from './queries.generated';
+import { TeamMembersQueryData } from './queries.generated';
 
 export type TicketingStatusDescriptionProps = {
-  userConProfile: TeamMembersQueryQuery['event']['team_members'][0]['user_con_profile'];
-  convention: NonNullable<TeamMembersQueryQuery['convention']>;
+  userConProfile: TeamMembersQueryData['event']['team_members'][0]['user_con_profile'];
+  convention: NonNullable<TeamMembersQueryData['convention']>;
 };
 
 function TicketingStatusDescription({

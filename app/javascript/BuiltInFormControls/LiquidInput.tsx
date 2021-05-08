@@ -15,10 +15,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
-import {
-  PreviewNotifierLiquidQueryQuery,
-  PreviewLiquidQueryQuery,
-} from './previewQueries.generated';
+import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
 import type { SyncCodeInputProps } from './SyncCodeInput';
 
@@ -143,7 +140,7 @@ function LiquidInput(props: LiquidInputProps) {
     ? undefined
     : async (liquid: string) => {
         if (notifierEventKey) {
-          const response = await client.query<PreviewNotifierLiquidQueryQuery>({
+          const response = await client.query<PreviewNotifierLiquidQueryData>({
             query: PreviewNotifierLiquidQuery,
             variables: { liquid, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
@@ -151,7 +148,7 @@ function LiquidInput(props: LiquidInputProps) {
           return response.data?.previewLiquid ?? '';
         }
 
-        const response = await client.query<PreviewLiquidQueryQuery>({
+        const response = await client.query<PreviewLiquidQueryData>({
           query: PreviewLiquidQuery,
           variables: { liquid },
           fetchPolicy: 'no-cache',

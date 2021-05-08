@@ -5,11 +5,11 @@ import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useDepartmentAdminQueryQuery } from './queries.generated';
+import { useDepartmentAdminQuery } from './queries.generated';
 import { useUpdateDepartmentMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useDepartmentAdminQueryQuery,
+  useDepartmentAdminQuery,
   (data, id) => data.convention.departments.find((d) => d.id.toString() === id),
   function EditDepartment({ value: initialDepartment }) {
     const [updateDepartment] = useUpdateDepartmentMutation();

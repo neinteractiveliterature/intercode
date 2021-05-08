@@ -12,11 +12,11 @@ import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsPagesAdminQueryQuery } from './queries.generated';
+import { useCmsPagesAdminQuery } from './queries.generated';
 
 function NewCmsPage() {
   const history = useHistory();
-  const { data, loading, error } = useCmsPagesAdminQueryQuery();
+  const { data, loading, error } = useCmsPagesAdminQuery();
   const [page, setPage] = useState<PageFormFields>({
     hidden_from_search: false,
   });
