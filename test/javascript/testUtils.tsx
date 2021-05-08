@@ -71,7 +71,7 @@ const customQueries: CustomQueries = {
   ) => {
     const formGroup = queries
       .getByText(container, formGroupLegendText, { selector: 'legend' })
-      .closest<HTMLElement>('.form-group');
+      .closest<HTMLElement>('.mb-3');
     return formGroup ? (queries.getByLabelText(formGroup, labelText) as HTMLInputElement) : null;
   },
 };

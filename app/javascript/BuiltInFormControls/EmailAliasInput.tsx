@@ -15,9 +15,7 @@ function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInpu
         }}
         {...otherProps}
       />
-      <div className="input-group-append">
-        <span className="input-group-text">@{domain}</span>
-      </div>
+      <span className="input-group-text">@{domain}</span>
     </div>
   );
 }

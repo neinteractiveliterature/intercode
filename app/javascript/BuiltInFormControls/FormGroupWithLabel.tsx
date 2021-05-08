@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { ReactNode } from 'react';
 
 import useUniqueId from '../useUniqueId';
@@ -23,8 +24,8 @@ function FormGroupWithLabel({
   const id = useUniqueId(`${name || 'input'}-`);
 
   return (
-    <div className={className ?? 'form-group'}>
-      <label htmlFor={id} className={labelClassName}>
+    <div className={className ?? 'mb-3'}>
+      <label htmlFor={id} className={classNames('form-label', labelClassName)}>
         {label}
       </label>
       {children(id)}

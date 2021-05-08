@@ -153,7 +153,7 @@ function MyProfileFormInner({
 
       {initialUserConProfile.can_have_bio && (
         <>
-          <div className="form-group">
+          <div className="mb-3">
             <legend className="col-form-label">{t('myProfile.bioLabel', 'Bio')}</legend>
             <MarkdownInput value={userConProfile.bio ?? ''} onChange={setBio} />
             <small className="form-text text-muted">

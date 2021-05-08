@@ -2,6 +2,7 @@ import { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react';
 import * as React from 'react';
 import useUniqueId from '../useUniqueId';
 import HelpText from './HelpText';
+import classNames from 'classnames';
 
 type BootstrapFormTextareaPropsCommon = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label: ReactNode;
@@ -48,8 +49,8 @@ function BootstrapFormTextarea(props: BootstrapFormTextareaProps) {
     : (event: React.ChangeEvent<HTMLTextAreaElement>) => props.onTextChange(event.target.value);
 
   return (
-    <div className="form-group">
-      <label htmlFor={inputId} className={hideLabel ? 'sr-only' : undefined}>
+    <div className="mb-3">
+      <label htmlFor={inputId} className={classNames('form-label', { 'sr-only': hideLabel })}>
         {label}
       </label>
       <textarea

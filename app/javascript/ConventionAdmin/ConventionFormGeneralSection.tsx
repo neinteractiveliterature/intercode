@@ -60,7 +60,9 @@ function ConventionFormGeneralSection({
     ['ends_at', 'Convention ends', convention.ends_at, setEndsAt, endId],
   ] as const).map(([fieldName, label, value, onChange, inputId]) => (
     <div className="col-md-6" key={fieldName}>
-      <label htmlFor={inputId}>{label}</label>
+      <label className="form-label" htmlFor={inputId}>
+        {label}
+      </label>
       <DateTimeInput
         value={value}
         timezoneName={timezoneNameForConvention(convention)}
@@ -177,7 +179,7 @@ function ConventionFormGeneralSection({
         </>
       )}
 
-      <div className="row form-group">{startEndFields}</div>
+      <div className="row mb-3">{startEndFields}</div>
     </>
   );
 }

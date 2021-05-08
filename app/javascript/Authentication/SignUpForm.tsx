@@ -104,8 +104,8 @@ function SignUpForm() {
         <div className="modal-body">
           <AccountFormContent />
           <UserFormFields formState={formState} setFormState={setFormState} />
-          <div className="form-group">
-            <label htmlFor={passwordFieldId}>
+          <div className="mb-3">
+            <label className="form-label" htmlFor={passwordFieldId}>
               {t('authentication.signUpForm.passwordLabel', 'Password')}
             </label>
             <Suspense fallback={<LoadingIndicator />}>

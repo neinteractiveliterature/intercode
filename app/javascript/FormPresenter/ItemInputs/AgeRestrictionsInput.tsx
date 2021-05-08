@@ -88,8 +88,8 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
       </div>
 
       <div className="card-body pb-1">
-        <div className="form-group">
-          <label htmlFor={descriptionId}>
+        <div className="mb-3">
+          <label className="form-label" htmlFor={descriptionId}>
             {t('forms.ageRestrictions.descriptionLabel', 'Publicly visible age restrictions text')}
             <RequiredIndicator formItem={formItem} />
           </label>

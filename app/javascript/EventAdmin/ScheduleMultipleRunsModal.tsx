@@ -181,12 +181,12 @@ function ScheduleMultipleRunsModal({
 
     return (
       <div>
-        <fieldset className="form-group">
+        <fieldset className="mb-3">
           <legend className="col-form-label">From</legend>
           <TimeSelect value={start} onChange={setStart} timespan={conventionDayTimespan} />
         </fieldset>
 
-        <fieldset className="form-group">
+        <fieldset className="mb-3">
           <legend className="col-form-label">Until</legend>
           <TimeSelect value={finish} onChange={setFinish} timespan={timespanForFinish} />
         </fieldset>
