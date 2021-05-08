@@ -8,6 +8,11 @@ class Types::StripeAccountType < Types::BaseObject
     object.settings&.dashboard&.display_name
   end
 
+  def email
+    # in case Stripe didn't return it, which it apparently sometimes doesn't
+    object['email']
+  end
+
   field :account_onboarding_link, String, null: false do
     argument :base_url, String, required: true, camelize: false
   end
