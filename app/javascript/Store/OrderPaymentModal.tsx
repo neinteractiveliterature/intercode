@@ -220,12 +220,12 @@ function OrderPaymentModalContents({
         <div className="d-flex align-items-center">
           <div className="col">
             {paymentMode === 'now' && totalPrice.fractional !== 0 ? (
-              <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
+              <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="me-4" />
             ) : null}
           </div>
           <button
             type="button"
-            className="btn btn-secondary mr-2"
+            className="btn btn-secondary me-2"
             onClick={onCancel}
             disabled={submitting}
           >

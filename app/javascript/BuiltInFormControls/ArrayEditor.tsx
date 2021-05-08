@@ -81,7 +81,7 @@ function ArrayEditor<T>({
                 addValue,
               })}
             </div>
-            <button type="button" className="ml-2 btn btn-outline-primary" onClick={addValue}>
+            <button type="button" className="ms-2 btn btn-outline-primary" onClick={addValue}>
               {addValueLabel}
             </button>
           </div>

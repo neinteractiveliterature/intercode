@@ -200,7 +200,7 @@ function EventList() {
             </div>
           </div>
 
-          <div className="ml-2 flex-grow-1">
+          <div className="ms-2 flex-grow-1">
             <SearchInput
               label="Search"
               value={(effectiveFilters.find(({ id }) => id === 'title_prefix') || {}).value}

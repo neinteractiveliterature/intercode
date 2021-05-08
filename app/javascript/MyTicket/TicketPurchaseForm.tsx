@@ -81,7 +81,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
                   />
                 )}
               </div>
-              <Checkmark value={(product || {}).id === id} className="ml-2" />
+              <Checkmark value={(product || {}).id === id} className="ms-2" />
             </div>
           </label>
         );

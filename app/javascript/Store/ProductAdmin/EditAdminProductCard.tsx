@@ -148,7 +148,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               onChange={(event) => setName(event.target.value)}
             />
           </div>
-          <div className="mr-2">
+          <div className="me-2">
             <ul className="list-inline m-0">
               <li className="list-inline-item">
                 <button type="button" className="btn btn-sm btn-secondary" onClick={close}>
@@ -164,7 +164,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
           </div>
         </div>
         <div className="d-flex flex-wrap">
-          <div className="mr-4">
+          <div className="me-4">
             <BooleanInput
               name="available"
               caption="Available for purchase"
@@ -172,7 +172,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               onChange={setAvailable}
             />
           </div>
-          <div className="mr-4">
+          <div className="me-4">
             <MultipleChoiceInput
               name="payment_options"
               caption="Payment options"
@@ -230,7 +230,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
 
           <div className="ml-lg-4 col-lg">
             <div className="d-flex">
-              <strong className="mr-1">Base price:</strong>
+              <strong className="me-1">Base price:</strong>
               <PricingStructureInput
                 value={
                   product.pricing_structure ?? {

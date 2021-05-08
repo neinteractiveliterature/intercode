@@ -37,7 +37,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
         {eventCategory.events_paginated.total_entries > 0 ? (
           <ButtonWithTooltip
             buttonProps={{
-              className: 'btn btn-outline-danger btn-sm mr-2',
+              className: 'btn btn-outline-danger btn-sm me-2',
               disabled: true,
             }}
             tooltipContent={
@@ -53,7 +53,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
         ) : (
           <button
             type="button"
-            className="btn btn-outline-danger btn-sm mr-2"
+            className="btn btn-outline-danger btn-sm me-2"
             onClick={() =>
               confirm({
                 prompt: 'Are you sure you want to delete this event category?',

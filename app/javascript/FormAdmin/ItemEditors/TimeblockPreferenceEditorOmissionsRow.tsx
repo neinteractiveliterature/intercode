@@ -106,7 +106,7 @@ function TimeblockPreferenceEditorOmissionsRow({
       <td className="border-top-0 pt-0" />
       <td colSpan={4} className="border-top-0 pt-0">
         <div className="d-flex">
-          <span className="mr-2">Offer on:</span>
+          <span className="me-2">Offer on:</span>
           <ChoiceSet
             choiceClassName="form-check-inline"
             multiple

@@ -88,7 +88,7 @@ function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
   return (
     <button
       type="button"
-      className={classNames('btn btn-sm mr-1', skipRefund ? 'btn-danger' : 'btn-warning')}
+      className={classNames('btn btn-sm me-1', skipRefund ? 'btn-danger' : 'btn-warning')}
       onClick={() =>
         confirm({
           prompt,
@@ -116,7 +116,7 @@ function OrderActions({ order }: OrderActionsProps) {
     buttons.push(
       <button
         type="button"
-        className="btn btn-sm btn-outline-danger mr-1"
+        className="btn btn-sm btn-outline-danger me-1"
         onClick={() =>
           confirm({
             prompt: `Are you sure you want to mark order #${order.id} as paid?`,
@@ -210,7 +210,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
             renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
               <>
                 <textarea
-                  className="form-control col mr-1"
+                  className="form-control col me-1"
                   onChange={(event) => {
                     onChange(event.target.value);
                   }}

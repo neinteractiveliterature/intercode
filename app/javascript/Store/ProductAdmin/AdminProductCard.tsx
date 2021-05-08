@@ -55,7 +55,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           <div className="col">
             <div className="lead">{product.name}</div>
           </div>
-          <div className="mr-2">
+          <div className="me-2">
             {currentAbility.can_update_products && (
               <ul className="list-inline m-0">
                 {product.id != null && (
@@ -85,7 +85,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           {product.payment_options.map((paymentOption) => (
             <i
               key={paymentOption}
-              className={classNames('ml-2', 'fa', {
+              className={classNames('ms-2', 'fa', {
                 'fa-cc-stripe': paymentOption === 'stripe',
                 'fa-suitcase': paymentOption === 'pay_at_convention',
               })}

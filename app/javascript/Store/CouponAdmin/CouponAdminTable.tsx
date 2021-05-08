@@ -80,7 +80,7 @@ function CouponAdminTable() {
         renderLeftContent={() => (
           <button
             type="button"
-            className="btn btn-outline-primary ml-2"
+            className="btn btn-outline-primary ms-2"
             onClick={newCouponModal.open}
           >
             <i className="fa fa-plus" /> New coupon

@@ -214,7 +214,7 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
                       const timespan = timespanByRunId.get(run.id)!;
 
                       return (
-                        <div className="pl-4" key={run.id}>
+                        <div className="ps-4" key={run.id}>
                           <div
                             style={{
                               position: 'relative',
@@ -233,7 +233,7 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
                       );
                     })}
                     {filteredRuns.length < runs.length && (
-                      <div className="pl-4 text-muted">
+                      <div className="ps-4 text-muted">
                         +{runs.length - filteredRuns.length} hidden
                       </div>
                     )}

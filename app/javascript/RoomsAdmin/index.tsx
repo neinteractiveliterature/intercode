@@ -87,7 +87,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
   const roomRows = sortedRooms.map((room) => (
     <li className="list-group-item" key={room.id}>
       <div className="row align-items-baseline">
-        <div className="ml-3">
+        <div className="ms-3">
           <InPlaceEditor
             value={room.name}
             onChange={(newName) => {
@@ -103,7 +103,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
           ) : null}
         </div>
         <button
-          className="btn btn-sm btn-outline-danger mr-3"
+          className="btn btn-sm btn-outline-danger me-3"
           title="Delete room"
           onClick={() =>
             confirm({
@@ -139,7 +139,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
                 />
               </div>
               <button
-                className="btn btn-primary mr-2"
+                className="btn btn-primary me-2"
                 disabled={creatingRoomName === ''}
                 onClick={createRoomWasClicked}
                 type="button"

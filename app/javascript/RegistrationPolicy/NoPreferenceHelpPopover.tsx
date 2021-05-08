@@ -15,7 +15,7 @@ export type NoPreferenceHelpPopoverProps = {
 function NoPreferenceHelpPopover({ registrationPolicy }: NoPreferenceHelpPopoverProps) {
   if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
     return (
-      <HelpPopover className="ml-1">
+      <HelpPopover className="ms-1">
         <p>{NO_PREFERENCE_HELP_TEXT}</p>
         <p className="mb-0">
           This event doesn&apos;t have more than one registration bucket with limited slots, so that

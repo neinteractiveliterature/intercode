@@ -263,7 +263,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
 
         <button
           type="button"
-          className="mt-2 ml-1 btn btn-sm btn-outline-secondary"
+          className="mt-2 ms-1 btn btn-sm btn-outline-secondary"
           onClick={() => onChange(autogenerateColors(value))}
           disabled={disabled}
         >

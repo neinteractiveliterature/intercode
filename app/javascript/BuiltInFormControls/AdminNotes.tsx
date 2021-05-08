@@ -78,7 +78,7 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
           Cancel
         </button>
         <button
-          className="btn btn-primary btn-sm ml-2"
+          className="btn btn-primary btn-sm ms-2"
           type="button"
           onClick={saveClicked}
           disabled={saveInProgress}

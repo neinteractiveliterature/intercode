@@ -44,7 +44,7 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
       ref={ref}
     >
       <div className="d-flex align-items-center">
-        <div className="mr-2">
+        <div className="me-2">
           <span className="sr-only">Drag to reorder</span>
           <i
             style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
@@ -59,7 +59,7 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
         >
           {formSection.title}
         </NavLink>
-        <div className="ml-2">
+        <div className="ms-2">
           <button
             className="btn btn-outline-danger btn-sm"
             type="button"

@@ -86,7 +86,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
       ref={ref}
       className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}
     >
-      <div className="mr-2 mt-2">
+      <div className="me-2 mt-2">
         <span className="sr-only">Drag to reorder</span>
         <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
       </div>
@@ -120,7 +120,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
           valueInvalid={false}
         />
       </div>
-      <div className="ml-2 mt-2">
+      <div className="ms-2 mt-2">
         {standardItem && standardItem.required ? (
           <ButtonWithTooltip
             buttonProps={{ className: 'btn btn-outline-danger btn-sm', disabled: true }}

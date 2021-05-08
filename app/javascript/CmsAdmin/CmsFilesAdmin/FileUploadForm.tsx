@@ -83,7 +83,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
                 contentType={(file || {}).type}
                 url={imageUrl ?? undefined}
               />
-              <button className="btn btn-secondary ml-4" type="button" onClick={clearFile}>
+              <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
                 {t('cms.fileUploadForm.clearFileButton', 'Clear')}
               </button>
             </div>
@@ -110,7 +110,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
           <div className="mt-2">
             <input
               type="submit"
-              className="btn btn-primary mr-4"
+              className="btn btn-primary me-4"
               disabled={!file || createInProgress}
               value={t<string>('cms.fileUploadForm.uploadFileButton', 'Upload')}
               aria-label={t('cms.fileUploadForm.uploadFileButton', 'Upload')}

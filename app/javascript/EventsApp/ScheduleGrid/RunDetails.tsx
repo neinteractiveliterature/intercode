@@ -107,14 +107,14 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
               <tbody>
                 {showDate && (
                   <tr>
-                    <td className="text-center pr-1">
+                    <td className="text-center pe-1">
                       <i className="fa fa-calendar-o" />
                     </td>
                     <td>{format(timespan.start, 'longDate')}</td>
                   </tr>
                 )}
                 <tr>
-                  <td className="text-center pr-1">
+                  <td className="text-center pe-1">
                     <i className="fa fa-clock-o" />
                   </td>
                   <td>
@@ -123,7 +123,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 </tr>
                 {roomsDescription ? (
                   <tr>
-                    <td className="text-center pr-1">
+                    <td className="text-center pe-1">
                       <i className="fa fa-map-marker" />
                     </td>
                     <td>{roomsDescription}</td>
@@ -131,7 +131,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 ) : null}
                 {availabilityDescription ? (
                   <tr>
-                    <td className="text-center pr-1 align-top">
+                    <td className="text-center pe-1 align-top">
                       <i className="fa fa-users" />
                     </td>
                     <td>
@@ -149,7 +149,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 ) : null}
                 {waitlistDescription ? (
                   <tr>
-                    <td className="text-center pr-1 align-top">
+                    <td className="text-center pe-1 align-top">
                       <i className="fa fa-hourglass-half" />
                     </td>
                     <td>

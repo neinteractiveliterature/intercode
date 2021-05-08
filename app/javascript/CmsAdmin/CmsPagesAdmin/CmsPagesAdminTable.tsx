@@ -83,7 +83,7 @@ function CmsPagesAdminTable() {
                         action: () => deletePage(page.id),
                       })
                     }
-                    className="btn btn-danger btn-sm ml-1"
+                    className="btn btn-danger btn-sm ms-1"
                   >
                     Delete
                   </button>

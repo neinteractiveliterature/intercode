@@ -28,18 +28,18 @@ function OrderHistoryOrderEntry({ orderEntry }: OrderHistoryOrderEntryProps) {
 
   return (
     <tr>
-      <td className="pl-4">
+      <td className="ps-4">
         <div className="d-flex">
           <div className="flex-grow-1">
             <strong>{name}</strong>
           </div>
           {imageUrl && (
-            <img className="mr-4" src={imageUrl} alt={name} style={{ width: '100px' }} />
+            <img className="me-4" src={imageUrl} alt={name} style={{ width: '100px' }} />
           )}
         </div>
       </td>
       <td className="text-right">{orderEntry.quantity}</td>
-      <td className="text-right pr-4">{formatMoney(orderEntry.price)}</td>
+      <td className="text-right pe-4">{formatMoney(orderEntry.price)}</td>
     </tr>
   );
 }
@@ -51,11 +51,11 @@ type OrderHistoryCouponApplicationProps = {
 function OrderHistoryCouponApplication({ couponApplication }: OrderHistoryCouponApplicationProps) {
   return (
     <tr className="bg-light">
-      <td colSpan={2} className="pl-4">
+      <td colSpan={2} className="ps-4">
         <em>{'Coupon code: '}</em>
         <code>{couponApplication.coupon.code}</code>
       </td>
-      <td className="pr-4 font-italic text-right">-{formatMoney(couponApplication.discount)}</td>
+      <td className="pe-4 font-italic text-right">-{formatMoney(couponApplication.discount)}</td>
     </tr>
   );
 }
@@ -145,7 +145,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   return (
     <li key={order.id} className="card mb-4">
       <div className="d-flex card-header border-bottom-0">
-        <div className="col pl-0">
+        <div className="col ps-0">
           <h3>Order #{order.id}</h3>
           <small>{submittedTime && format(submittedTime, 'longWeekdayDateTimeWithZone')}</small>
         </div>

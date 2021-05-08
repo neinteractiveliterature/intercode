@@ -86,7 +86,7 @@ function EventProposalDisplay({ eventProposalId }: EventProposalDisplayProps) {
           </div>
           <div className="col-md-10">
             <div className="d-flex align-items-center">
-              <div className="mr-2">
+              <div className="me-2">
                 <Gravatar
                   url={data!.eventProposal.owner.gravatar_url}
                   enabled={data!.eventProposal.owner.gravatar_enabled}

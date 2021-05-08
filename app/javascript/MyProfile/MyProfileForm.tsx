@@ -236,7 +236,7 @@ function MyProfileFormInner({
           </Link>
         )}
         {mutationInProgress && (
-          <span className="ml-2">
+          <span className="ms-2">
             <LoadingIndicator />
           </span>
         )}

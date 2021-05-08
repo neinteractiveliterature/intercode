@@ -343,7 +343,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
           exportUrl="/csv_exports/user_con_profiles"
           renderLeftContent={() =>
             queryData && (queryData.currentAbility || {}).can_create_user_con_profiles ? (
-              <Link to="/user_con_profiles/new" className="btn btn-primary ml-2 mb-2">
+              <Link to="/user_con_profiles/new" className="btn btn-primary ms-2 mb-2">
                 <i className="fa fa-plus" />{' '}
                 {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
               </Link>

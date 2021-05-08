@@ -135,7 +135,7 @@ function SignupRequestActionsCell({
       {value.state === 'pending' && (
         <>
           <button
-            className="btn btn-sm btn-danger mr-2"
+            className="btn btn-sm btn-danger me-2"
             type="button"
             onClick={() => rejectClicked(value)}
           >
