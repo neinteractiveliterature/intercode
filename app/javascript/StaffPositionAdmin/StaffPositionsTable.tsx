@@ -92,7 +92,7 @@ function describePermissionModel(
     case 'CmsContentGroup':
       return (
         <span className="text-nowrap">
-          <span className="badge badge-secondary">CMS content</span>
+          <span className="badge bg-secondary">CMS content</span>
           &nbsp;
           {model.name}
         </span>

@@ -46,7 +46,7 @@ function CurrentPendingOrderButton() {
               title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
             />
             <div
-              className="badge badge-pill badge-danger"
+              className="badge rounded-pill bg-danger"
               style={{ position: 'absolute', right: '-7px', top: '0' }}
             >
               {totalQuantity}

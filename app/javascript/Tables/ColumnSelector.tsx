@@ -32,7 +32,7 @@ function ColumnSelector<RowType extends object>({
     return (
       <>
         {' '}
-        <span className="badge badge-primary">{count}</span>
+        <span className="badge bg-primary">{count}</span>
       </>
     );
   };

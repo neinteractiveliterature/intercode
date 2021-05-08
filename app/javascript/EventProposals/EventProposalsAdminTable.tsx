@@ -35,12 +35,12 @@ function formatCapacity(registrationPolicy: NonNullable<EventProposalType['regis
 }
 
 const STATUS_OPTIONS = [
-  { value: 'proposed', label: 'Proposed', badgeClass: 'badge-light' },
-  { value: 'reviewing', label: 'Reviewing', badgeClass: 'badge-info' },
-  { value: 'tentative_accept', label: 'Tentative accept', badgeClass: 'badge-primary' },
-  { value: 'accepted', label: 'Accepted', badgeClass: 'badge-success' },
-  { value: 'rejected', label: 'Rejected', badgeClass: 'badge-danger' },
-  { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'badge-warning' },
+  { value: 'proposed', label: 'Proposed', badgeClass: 'bg-light text-dark' },
+  { value: 'reviewing', label: 'Reviewing', badgeClass: 'bg-info' },
+  { value: 'tentative_accept', label: 'Tentative accept', badgeClass: 'bg-primary' },
+  { value: 'accepted', label: 'Accepted', badgeClass: 'bg-success' },
+  { value: 'rejected', label: 'Rejected', badgeClass: 'bg-danger' },
+  { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'bg-warning' },
 ] as const;
 
 function EventCategoryCell({ value }: { value: EventProposalType['event_category'] }) {
