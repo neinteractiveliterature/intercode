@@ -63,7 +63,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
               }}
               formatOptionLabel={(f) => (
                 <div className="d-flex align-items-center">
-                  <div className="mr-2">
+                  <div className="me-2">
                     <FilePreview url={f.url} contentType={f.content_type} size="2em" />
                   </div>
                   <div>{f.filename}</div>
@@ -176,7 +176,7 @@ function LiquidInput(props: LiquidInputProps) {
         <div className="liquid-docs-browser d-flex flex-column align-items-stretch">
           <header className="bg-light border-top border-color-light d-flex align-items-stretch">
             <div className="flex-grow-1 pt-1">
-              <ul className="nav nav-tabs pl-2 justify-content-center">
+              <ul className="nav nav-tabs ps-2 justify-content-center">
                 <li className="nav-item">
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
@@ -205,7 +205,7 @@ function LiquidInput(props: LiquidInputProps) {
             <div className="border-bottom border-color-light d-flex align-items-center">
               <button
                 type="button"
-                className="btn btn-link btn-sm mr-3 text-body"
+                className="btn btn-link btn-sm me-3 text-body"
                 style={{ cursor: 'pointer' }}
                 onClick={() => setShowingDocs(false)}
               >

@@ -46,7 +46,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
 
     return (
       <div className="d-flex mb-4">
-        <div className="mr-4">
+        <div className="me-4">
           from
           <TimeSelect
             timespan={startTimespan}

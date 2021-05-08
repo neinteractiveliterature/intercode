@@ -78,7 +78,7 @@ function RegistrationPolicyItemEditorPresetRow({
         />
         <button
           type="button"
-          className="btn btn-sm btn-outline-secondary mr-2"
+          className="btn btn-sm btn-outline-secondary me-2"
           onClick={modal.open}
         >
           Edit

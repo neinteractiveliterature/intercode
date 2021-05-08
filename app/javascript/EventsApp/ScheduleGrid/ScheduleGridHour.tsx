@@ -24,7 +24,7 @@ function ScheduleGridHour({ now, runIds }: ScheduleGridHourProps) {
         overflow: 'hidden',
       }}
     >
-      <div className="small text-muted ml-1">
+      <div className="small text-muted ms-1">
         {humanizeTime(now.setZone(schedule.timezoneName), t)}
         {config.showExtendedCounts && <ScheduleGridExtendedCounts now={now} runIds={runIds} />}
       </div>

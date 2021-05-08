@@ -298,7 +298,7 @@ function AdminOrderEntriesTable<
           <td>
             {!addingItem && (
               <button
-                className="btn btn-sm btn-outline-primary mr-2"
+                className="btn btn-sm btn-outline-primary me-2"
                 type="button"
                 onClick={() =>
                   setAddingItem({

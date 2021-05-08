@@ -42,7 +42,7 @@ export function DateInput({ value, onChange, ...otherProps }: DateInputProps) {
   return (
     <input
       type="date"
-      className="form-control mr-1"
+      className="form-control me-1"
       value={value ?? ''}
       onChange={dateChanged}
       pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
@@ -141,7 +141,7 @@ function DateTimeInput({
       <DateInput value={date} onChange={dateChanged} id={id} {...otherProps} />
       <TimeInput value={time} onChange={timeChanged} {...otherProps} />
       {showZone && (
-        <span className="ml-2">
+        <span className="ms-2">
           {dateTime.offsetNameShort ??
             DateTime.fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
         </span>

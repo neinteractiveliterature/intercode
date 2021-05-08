@@ -100,7 +100,7 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
 
   const renderQuantity = () => (
     <label className="form-group d-flex mb-4 align-items-baseline">
-      <div className="mr-2">Quantity:</div>
+      <div className="me-2">Quantity:</div>
       <input
         type="number"
         min="1"

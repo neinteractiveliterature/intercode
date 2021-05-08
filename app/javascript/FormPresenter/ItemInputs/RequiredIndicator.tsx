@@ -9,7 +9,7 @@ const RequiredIndicator = <PropertiesType extends { required?: boolean }>({
 }: RequiredIndicatorProps<PropertiesType>) => {
   if (formItem.rendered_properties.required) {
     return (
-      <span className="text-danger ml-1" aria-label="Required">
+      <span className="text-danger ms-1" aria-label="Required">
         *
       </span>
     );

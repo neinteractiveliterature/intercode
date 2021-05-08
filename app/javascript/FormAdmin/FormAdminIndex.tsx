@@ -77,7 +77,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
               </td>
               <td className="text-right">
                 <button
-                  className="btn btn-sm btn-outline-danger mr-2"
+                  className="btn btn-sm btn-outline-danger me-2"
                   type="button"
                   onClick={() =>
                     confirm({

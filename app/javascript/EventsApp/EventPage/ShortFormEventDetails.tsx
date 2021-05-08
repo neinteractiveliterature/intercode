@@ -72,7 +72,7 @@ function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
               {displayTeamMembers.map((teamMember) => (
                 <li key={teamMember.id}>
                   <div className="d-flex align-items-center mb-1">
-                    <div className="mr-2">
+                    <div className="me-2">
                       <Gravatar
                         url={teamMember.user_con_profile.gravatar_url}
                         enabled={teamMember.user_con_profile.gravatar_enabled}

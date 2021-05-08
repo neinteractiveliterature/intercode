@@ -21,7 +21,7 @@ const DefaultInPlaceEditorInput = React.forwardRef<
   <>
     <input
       type="text"
-      className="form-control form-control-sm mr-1"
+      className="form-control form-control-sm me-1"
       value={value || ''}
       {...inputProps}
       ref={ref}
@@ -79,7 +79,7 @@ function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) 
     <>
       <button
         type="button"
-        className="btn btn-secondary btn-sm mr-1"
+        className="btn btn-secondary btn-sm me-1"
         onClick={cancel}
         aria-label="Cancel editing"
         disabled={committing}

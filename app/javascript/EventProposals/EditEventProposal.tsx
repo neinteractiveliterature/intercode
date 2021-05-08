@@ -78,7 +78,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
         eventProposalId={eventProposalId}
         afterSubmit={() => history.push('/pages/new-proposal')}
         exitButton={
-          <Link className="btn btn-outline-secondary mr-2" to="/pages/new-proposal">
+          <Link className="btn btn-outline-secondary me-2" to="/pages/new-proposal">
             {t('eventProposals.edit.exitButton', 'Return to proposals page')}
           </Link>
         }

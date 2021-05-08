@@ -206,7 +206,7 @@ function ReactTableWithTheWorks<
             <button
               type="button"
               onClick={() => previousPage()}
-              className="btn btn-outline-secondary col-3 mr-2"
+              className="btn btn-outline-secondary col-3 me-2"
               disabled={!canPreviousPage}
             >
               <i className="fa fa-chevron-left" /> Previous
@@ -241,7 +241,7 @@ function ReactTableWithTheWorks<
             </div>
             <button
               type="button"
-              className="btn btn-outline-secondary col-3 ml-2"
+              className="btn btn-outline-secondary col-3 ms-2"
               onClick={() => nextPage()}
               disabled={!canNextPage}
             >

@@ -78,7 +78,7 @@ function AdminEditEventProposal() {
       }}
       exitButton={
         <Link
-          className="btn btn-outline-secondary mr-2"
+          className="btn btn-outline-secondary me-2"
           to={`/admin_event_proposals/${eventProposalId}`}
         >
           {t('admin.eventProposals.edit.exitButton', 'Return to proposal')}

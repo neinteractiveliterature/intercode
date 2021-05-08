@@ -89,7 +89,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
     }
 
     return (
-      <div className="ml-2">
+      <div className="ms-2">
         <div className="form-check">
           <label className="form-check-label text-nowrap" htmlFor={unlimitedId}>
             <input
@@ -105,7 +105,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
         </div>
 
         <div className="form-check">
-          <label className="form-check-label mr-1" htmlFor={countedId}>
+          <label className="form-check-label me-1" htmlFor={countedId}>
             <input
               id={countedId}
               className="form-check-input"
@@ -125,7 +125,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
 
         <div className="form-check">
           <div className="d-flex">
-            <label className="form-check-label mr-1" htmlFor={exposeAttendeesId}>
+            <label className="form-check-label me-1" htmlFor={exposeAttendeesId}>
               <input
                 id={exposeAttendeesId}
                 className="form-check-input"
@@ -182,7 +182,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
         setValue: setTotalSlots,
       },
     ] as const).map(({ label, field, min, inputId, value, setValue }) => (
-      <div key={field} className={lockLimited ? 'd-inline mr-2' : undefined}>
+      <div key={field} className={lockLimited ? 'd-inline me-2' : undefined}>
         <label htmlFor={inputId} className="d-inline">
           {label}
         </label>
@@ -190,7 +190,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           id={inputId}
           type="number"
           size={2}
-          className="form-control form-control-sm d-inline ml-1"
+          className="form-control form-control-sm d-inline ms-1"
           min={min}
           placeholder={label}
           value={value?.toString()}

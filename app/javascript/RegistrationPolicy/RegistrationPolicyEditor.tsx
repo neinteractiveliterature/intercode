@@ -203,15 +203,15 @@ function RegistrationPolicyEditor<
 
     return (
       <>
-        <span className="mr-2">
+        <span className="me-2">
           {'Min: '}
           {sumMinimumSlots(registrationPolicy)}
         </span>
-        <span className="mr-2">
+        <span className="me-2">
           {'Pref: '}
           {sumPreferredSlots(registrationPolicy)}
         </span>
-        <span className="mr-2">
+        <span className="me-2">
           {'Max: '}
           {sumTotalSlots(registrationPolicy)}
         </span>

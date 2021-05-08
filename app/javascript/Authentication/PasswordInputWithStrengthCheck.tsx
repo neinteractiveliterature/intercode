@@ -125,7 +125,7 @@ function PasswordInputWithStrengthCheck({
         />
         <div
           style={{ right: 0, top: 0, position: 'absolute' }}
-          className={classNames('mr-2', 'mt-2')}
+          className={classNames('me-2', 'mt-2')}
         >
           <button
             type="button"

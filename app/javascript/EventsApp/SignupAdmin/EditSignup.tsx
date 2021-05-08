@@ -157,9 +157,9 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
     }
 
     return (
-      <div className="card mr-2">
+      <div className="card me-2">
         <div className="card-header d-flex align-items-center">
-          <div className="mr-2">
+          <div className="me-2">
             <Gravatar
               url={userConProfile.gravatar_url}
               enabled={userConProfile.gravatar_enabled}
@@ -271,7 +271,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       : null;
 
     return (
-      <div className="card ml-2">
+      <div className="card ms-2">
         <div className="card-header">
           {run.event.title}
           <br />

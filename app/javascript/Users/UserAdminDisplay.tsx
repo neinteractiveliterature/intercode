@@ -50,7 +50,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
           <tbody>
             {(['first_name', 'last_name', 'email'] as const).map((field) => (
               <tr key={field}>
-                <th scope="row" className="pr-2">
+                <th scope="row" className="pe-2">
                   {humanize(field)}
                 </th>
                 <td className="col-md-9">{data.user[field]}</td>
@@ -58,7 +58,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
             ))}
 
             <tr>
-              <th scope="row" className="pr-2">
+              <th scope="row" className="pe-2">
                 Privileges
               </th>
               <td>
@@ -69,7 +69,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
             </tr>
 
             <tr>
-              <th scope="row" className="pr-2">
+              <th scope="row" className="pe-2">
                 Convention profiles
               </th>
               <td>

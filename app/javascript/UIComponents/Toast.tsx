@@ -70,7 +70,7 @@ export default function Toast({ title, children, visible, close, autoCloseAfter 
         <small className="text-muted">{formattedTimeAgo}</small>
         <button
           type="button"
-          className="ml-2 mb-1 close"
+          className="ms-2 mb-1 close"
           data-dismiss="toast"
           aria-label="Close"
           onClick={close}

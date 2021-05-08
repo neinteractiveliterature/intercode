@@ -186,8 +186,8 @@ function EditRunModal({
                 Delete
               </button>
             </div>
-            <div className="col text-right pr-0">
-              <button type="button" className="btn btn-secondary mr-2" onClick={onCancel}>
+            <div className="col text-right pe-0">
+              <button type="button" className="btn btn-secondary me-2" onClick={onCancel}>
                 Cancel
               </button>
               <button

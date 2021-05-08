@@ -103,7 +103,7 @@ function RunSignupSummary({ eventId, runId, eventPath }: RunSignupSummaryProps) 
       >
         <td>
           <div className="d-flex align-items-center">
-            <div className="mr-2">
+            <div className="me-2">
               <Gravatar
                 url={signup.user_con_profile.gravatar_url}
                 enabled={signup.user_con_profile.gravatar_enabled}

@@ -84,7 +84,7 @@ function MyProfileDisplay() {
             <dt className="col-md-3 mb-2">{t('myProfile.display.avatarLabel', 'Avatar')}</dt>
             <dd className="col-md-9 mb-2">
               <div className="d-flex align-items-center">
-                <div className="mr-2">
+                <div className="me-2">
                   <Gravatar
                     url={myProfile.gravatar_url}
                     enabled={myProfile.gravatar_enabled}

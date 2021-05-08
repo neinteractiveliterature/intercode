@@ -164,7 +164,7 @@ function AuthorizationPrompt() {
         <div className="card-footer">
           <div className="actions d-flex justify-content-end">
             <button
-              className="btn btn-outline-danger mr-2"
+              className="btn btn-outline-danger me-2"
               type="button"
               onClick={denyAuthorization}
             >

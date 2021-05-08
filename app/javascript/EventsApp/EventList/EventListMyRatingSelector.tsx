@@ -22,7 +22,7 @@ export type EventListMyRatingSelectorProps = {
 function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelectorProps) {
   return (
     <div className="d-flex btn cursor-auto">
-      <span className="mr-2">Show:</span>
+      <span className="me-2">Show:</span>
       <ChoiceSet
         choices={RATING_OPTIONS}
         choiceClassName="form-check-inline"
@@ -33,7 +33,7 @@ function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelecto
         }}
         multiple
       />
-      <span className="ml-2">
+      <span className="ms-2">
         <HelpPopover>
           <RatingsHelp />
         </HelpPopover>
