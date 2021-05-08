@@ -87,7 +87,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
       className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}
     >
       <div className="me-2 mt-2">
-        <span className="sr-only">Drag to reorder</span>
+        <span className="visually-hidden">Drag to reorder</span>
         <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
       </div>
       <div className="form-editor-item flex-grow-1">
@@ -126,7 +126,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
             buttonProps={{ className: 'btn btn-outline-danger btn-sm', disabled: true }}
             tooltipContent={`${standardItem.description} is required for ${formType.description}`}
           >
-            <span className="sr-only">Delete item</span>
+            <span className="visually-hidden">Delete item</span>
             <i className="fa fa-trash-o" />
           </ButtonWithTooltip>
         ) : (
@@ -144,7 +144,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
               })
             }
           >
-            <span className="sr-only">Delete item</span>
+            <span className="visually-hidden">Delete item</span>
             <i className="fa fa-trash-o" />
           </button>
         )}

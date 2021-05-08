@@ -88,7 +88,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                   }
                 >
                   <i className="fa fa-trash-o" />
-                  <span className="sr-only">Delete form</span>
+                  <span className="visually-hidden">Delete form</span>
                 </button>
                 <Link
                   to={`/admin_forms/${form.id}/edit`}

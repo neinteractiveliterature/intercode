@@ -128,7 +128,7 @@ function CommitableInput({
           disabled={disabled || commitInProgress}
         >
           <i className="fa fa-times" />
-          <span className="sr-only">Cancel changes</span>
+          <span className="visually-hidden">Cancel changes</span>
         </button>
         <button
           type="button"
@@ -137,7 +137,7 @@ function CommitableInput({
           disabled={disabled || commitInProgress}
         >
           <i className="fa fa-check" />
-          <span className="sr-only">Commit changes</span>
+          <span className="visually-hidden">Commit changes</span>
         </button>
       </div>
     );
@@ -161,7 +161,7 @@ function CommitableInput({
           disabled={disabled || !value}
         >
           <i className="fa fa-times-rectangle">
-            <span className="sr-only">Clear</span>
+            <span className="visually-hidden">Clear</span>
           </i>
         </button>
       ) : null}

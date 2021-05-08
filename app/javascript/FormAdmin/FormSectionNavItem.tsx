@@ -45,7 +45,7 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
     >
       <div className="d-flex align-items-center">
         <div className="me-2">
-          <span className="sr-only">Drag to reorder</span>
+          <span className="visually-hidden">Drag to reorder</span>
           <i
             style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
             className="fa fa-bars"
@@ -71,7 +71,7 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
               })
             }
           >
-            <span className="sr-only">Delete item</span>
+            <span className="visually-hidden">Delete item</span>
             <i className="fa fa-trash-o" />
           </button>
         </div>

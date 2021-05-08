@@ -15,12 +15,16 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
 
     # Bootstrap 5 doesn't have a media class anymore but leaving it in here will make it easier
     # to back this out if we need to
-    ['class="media', 'class="media d-flex align-items-start'],
+    ['class="media(?!-body)', 'class="media d-flex align-items-start'],
 
     ['float-left', 'float-start'],
     ['float-right', 'float-end'],
     ['text-left', 'text-start'],
-    ['text-right', 'text-end']
+    ['text-right', 'text-end'],
+
+    ['data-toggle=', 'data-bs-toggle='],
+    ['data-target=', 'data-bs-target='],
+    ['data-placement=', 'data-bs-placement=']
   ]
 
   DOWN_REGEXP_REPLACEMENTS = [
@@ -32,7 +36,10 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
     ['float-start', 'float-left'],
     ['float-end', 'float-right'],
     ['text-start', 'text-left'],
-    ['text-end', 'text-right']
+    ['text-end', 'text-right'],
+    ['data-bs-toggle=', 'data-toggle='],
+    ['data-bs-target=', 'data-target='],
+    ['data-bs-placement=', 'data-placement=']
   ]
 
   def up
@@ -58,44 +65,8 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
   def generate_nested_regexp_replace(column_name, replacements)
     replacements.inject(quote_column_name(column_name)) do |sql, (pattern, replacement)|
       <<~SQL
-        regexp_replace(#{sql}, #{quote(pattern)}, #{quote(replacement)})
+        regexp_replace(#{sql}, #{quote(pattern)}, #{quote(replacement)}, 'g')
       SQL
     end
-  end
-
-  def generate_regexp_upgrade(column_name)
-    <<~SQL
-      regexp_replace(
-        regexp_replace(
-          regexp_replace(
-            regexp_replace(
-              #{quote_column_name(column_name)},
-              '(?<=\\W)ml-(\\d)(?=\\W)', 'ms-\\1', 'g'
-            ),
-            '(?<=\\W)mr-(\\d)(?=\\W)', 'me-\\1', 'g'
-          ),
-          '(?<=\\W)pl-(\\d)(?=\\W)', 'ps-\\1', 'g'
-        ),
-        '(?<=\\W)pr-(\\d)(?=\\W)', 'pe-\\1', 'g'
-      )
-    SQL
-  end
-
-  def generate_regexp_downgrade(column_name)
-    <<~SQL
-      regexp_replace(
-        regexp_replace(
-          regexp_replace(
-            regexp_replace(
-              #{quote_column_name(column_name)},
-              '(?<=\\W)ms-(\\d)(?=\\W)', 'ml-\\1', 'g'
-            ),
-            '(?<=\\W)me-(\\d)(?=\\W)', 'mr-\\1', 'g'
-          ),
-          '(?<=\\W)ps-(\\d)(?=\\W)', 'pl-\\1', 'g'
-        ),
-        '(?<=\\W)pe-(\\d)(?=\\W)', 'pr-\\1', 'g'
-      )
-    SQL
   end
 end

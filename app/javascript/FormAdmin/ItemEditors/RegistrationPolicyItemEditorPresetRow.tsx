@@ -57,7 +57,7 @@ function RegistrationPolicyItemEditorPresetRow({
   return (
     <tr ref={rowRef}>
       <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
-        <span className="sr-only">Drag to reorder</span>
+        <span className="visually-hidden">Drag to reorder</span>
         <i className="fa fa-bars" />
       </td>
       <td>
@@ -93,7 +93,7 @@ function RegistrationPolicyItemEditorPresetRow({
             })
           }
         >
-          <span className="sr-only">Delete preset</span>
+          <span className="visually-hidden">Delete preset</span>
           <i className="fa fa-trash-o" />
         </button>
       </td>

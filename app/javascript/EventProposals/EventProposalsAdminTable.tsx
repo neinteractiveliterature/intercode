@@ -88,7 +88,7 @@ function ExtraCell({ row: { original } }: CellProps<EventProposalType>) {
       }}
     >
       <i className="fa fa-external-link">
-        <span className="sr-only">Open in new window</span>
+        <span className="visually-hidden">Open in new window</span>
       </i>
     </Link>
   );

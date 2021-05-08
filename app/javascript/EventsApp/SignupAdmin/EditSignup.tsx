@@ -239,11 +239,11 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       >
         {signup.counted ? (
           <i className="fa fa-toggle-on">
-            <span className="sr-only">Make not counted</span>
+            <span className="visually-hidden">Make not counted</span>
           </i>
         ) : (
           <i className="fa fa-toggle-off">
-            <span className="sr-only">Make counted</span>
+            <span className="visually-hidden">Make counted</span>
           </i>
         )}
       </button>
@@ -305,7 +305,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
             {signup.state === 'confirmed' && data.currentAbility.can_update_bucket_signup ? (
               <button className="btn btn-link" onClick={changeBucketModal.open} type="button">
                 <i className="fa fa-pencil">
-                  <span className="sr-only">Change</span>
+                  <span className="visually-hidden">Change</span>
                 </i>
               </button>
             ) : null}

@@ -69,7 +69,7 @@ export default LoadQueryWrapper<CartQueryData, CartContentsProps>(
               }}
             >
               <i className="fa fa-trash-o" />
-              <span className="sr-only">Remove from cart</span>
+              <span className="visually-hidden">Remove from cart</span>
             </button>
           )}
         </td>
@@ -121,7 +121,7 @@ export default LoadQueryWrapper<CartQueryData, CartContentsProps>(
                           }
                         >
                           <i className="fa fa-trash-o" />
-                          <span className="sr-only">Remove from cart</span>
+                          <span className="visually-hidden">Remove from cart</span>
                         </button>
                       )}
                     </td>

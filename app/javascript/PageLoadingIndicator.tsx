@@ -24,7 +24,7 @@ function PageLoadingIndicator({ visible }: PageLoadingIndicatorProps) {
       }}
     >
       <i className="fa fa-circle-o-notch fa-spin fa-fw" />
-      <span className="sr-only">Loading...</span>
+      <span className="visually-hidden">Loading...</span>
     </div>
   );
 }

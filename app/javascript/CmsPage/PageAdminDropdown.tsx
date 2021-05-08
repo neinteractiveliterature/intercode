@@ -59,7 +59,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
         buttonClassName="btn btn-dark dropdown-toggle"
         buttonContent={
           <i className="fa fa-pencil-square-o">
-            <span className="sr-only">Admin options</span>
+            <span className="visually-hidden">Admin options</span>
           </i>
         }
         popperOptions={{ placement: 'bottom-end' }}

@@ -264,7 +264,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           }
         >
           <i className="fa fa-trash-o" />
-          <span className="sr-only">Delete bucket</span>
+          <span className="visually-hidden">Delete bucket</span>
         </button>
       </td>
     );

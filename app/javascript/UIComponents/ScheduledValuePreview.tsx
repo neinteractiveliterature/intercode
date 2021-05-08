@@ -104,7 +104,7 @@ function ScheduledValuePreviewDateCell<ValueType>({
         onMouseOut={() => blurDate(date)}
       >
         {date.day}
-        <div className="sr-only">
+        <div className="visually-hidden">
           <ScheduledValuePreviewTooltipContent
             date={date}
             scheduledValue={scheduledValue}

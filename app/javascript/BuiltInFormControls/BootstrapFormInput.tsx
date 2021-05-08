@@ -50,7 +50,10 @@ function BootstrapFormInput(props: BootstrapFormInputProps) {
 
   return (
     <div className="mb-3">
-      <label htmlFor={inputId} className={classNames('form-label', { 'sr-only': props.hideLabel })}>
+      <label
+        htmlFor={inputId}
+        className={classNames('form-label', { 'visually-hidden': props.hideLabel })}
+      >
         {props.label}
       </label>
       <input

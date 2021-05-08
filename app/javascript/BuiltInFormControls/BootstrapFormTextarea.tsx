@@ -50,7 +50,10 @@ function BootstrapFormTextarea(props: BootstrapFormTextareaProps) {
 
   return (
     <div className="mb-3">
-      <label htmlFor={inputId} className={classNames('form-label', { 'sr-only': hideLabel })}>
+      <label
+        htmlFor={inputId}
+        className={classNames('form-label', { 'visually-hidden': hideLabel })}
+      >
         {label}
       </label>
       <textarea

@@ -82,7 +82,7 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
               }
             >
               <i className="fa fa-trash-o" />
-              <span className="sr-only">
+              <span className="visually-hidden">
                 Delete variable &ldquo;
                 {variable.key}
                 &rdquo;
