@@ -1,29 +1,45 @@
 .table-hover-cell {
   tbody td {
-    @include hover {
-      color: $table-hover-color;
-      background-color: $table-hover-bg;
+    &:hover {
+      color: var(--#{$variable-prefix}table-hover-color);
+      background-color: var(--#{$variable-prefix}table-hover-bg);
     }
   }
 }
 
 .react-table {
   // fake table styling for react-table stuff, copied from Bootstrap's _tables.scss
-  [role=columnheader],
-  [role=cell] {
-    padding: $table-cell-padding;
-    vertical-align: top;
-    border-top: $table-border-width solid $table-border-color;
+
+  overflow-x: auto;
+
+  .tbody {
+    vertical-align: inherit;
   }
 
-  [role=columnheader] {
+  .thead {
     vertical-align: bottom;
-    border-bottom: (2 * $table-border-width) solid $table-border-color;
   }
 
-  [role=rowgroup] + [role=rowgroup] {
-    border-top: (2 * $table-border-width) solid $table-border-color;
-  }
+  // Highlight border color between thead, tbody and tfoot.
+  // > :not(:last-child) > :last-child > * {
+  //   border-bottom-color: $table-group-separator-color;
+  // }
+
+  // [role=columnheader],
+  // [role=cell] {
+  //   padding: $table-cell-padding-y $table-cell-padding-x;
+  //   vertical-align: top;
+  //   border-top: $table-border-width solid $table-border-color;
+  // }
+
+  // [role=columnheader] {
+  //   vertical-align: bottom;
+  //   border-bottom: (2 * $table-border-width) solid $table-border-color;
+  // }
+
+  // [role=rowgroup] + [role=rowgroup] {
+  //   border-top: (2 * $table-border-width) solid $table-border-color;
+  // }
 
   &.table-bordered {
     border: $table-border-width solid $table-border-color;
@@ -52,15 +68,17 @@
 
   &.table-striped {
     [role=rowgroup] [role=row]:nth-of-type(#{$table-striped-order}) {
-      background-color: $table-accent-bg;
+      --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-striped-bg);
+      color: var(--#{$variable-prefix}table-striped-color);
     }
   }
 
   &.table-hover {
     [role=rowgroup] [role=row] {
-      @include hover() {
-        color: $table-hover-color;
-        background-color: $table-hover-bg;
+      &:hover {
+        --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-hover-bg);
+        color: var(--#{$variable-prefix}table-hover-color);
+        background-color: var(--#{$variable-prefix}table-hover-bg);
       }
     }
   }
