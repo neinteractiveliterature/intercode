@@ -77,9 +77,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           </div>
         </div>
         <div>
-          <span
-            className={classNames('badge', product.available ? 'badge-success' : 'badge-danger')}
-          >
+          <span className={classNames('badge', product.available ? 'bg-success' : 'bg-danger')}>
             {product.available ? 'Available for purchase' : 'Not available for purchase'}
           </span>
           {product.payment_options.map((paymentOption) => (

@@ -24,7 +24,7 @@ function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSele
       formatOptionLabel={(option: CmsContentOption) => (
         <>
           {option.name}{' '}
-          <small className="badge badge-light">{option.__typename.replace('Cms', '')}</small>
+          <small className="badge bg-light text-dark">{option.__typename.replace('Cms', '')}</small>
         </>
       )}
       query={SearchCmsContentQuery}

@@ -110,7 +110,7 @@ function TimezoneSelect(props: TimezoneSelectProps) {
           const formattedOffset = getFormattedOffset(zone.name);
           return (
             <>
-              <span className="badge badge-secondary">{formattedOffset}</span> {zone.name}
+              <span className="badge bg-secondary">{formattedOffset}</span> {zone.name}
               {' ('}
               {zone.longOffsetNames.join('/')})
             </>

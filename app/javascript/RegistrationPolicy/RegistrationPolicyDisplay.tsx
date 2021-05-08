@@ -40,7 +40,7 @@ function renderBucketOptions(
   return (
     <div className="ms-2">
       {bucketOptions.map((option, i) => (
-        <span className="badge badge-secondary" key={option ?? i}>
+        <span className="badge bg-secondary" key={option ?? i}>
           {option}
         </span>
       ))}

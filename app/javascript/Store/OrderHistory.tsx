@@ -82,7 +82,7 @@ function OrderHistoryOrderStatus({
     return (
       <>
         <div>
-          <div className="badge badge-success">
+          <div className="badge bg-success">
             <div className="lead">Paid</div>
           </div>
         </div>
@@ -102,7 +102,7 @@ function OrderHistoryOrderStatus({
   if (order.status === 'cancelled') {
     return (
       <div key="status">
-        <div className="badge badge-danger">
+        <div className="badge bg-danger">
           <div className="lead">Canceled</div>
         </div>
       </div>
@@ -112,7 +112,7 @@ function OrderHistoryOrderStatus({
   return (
     <>
       <div>
-        <div className="badge badge-warning">
+        <div className="badge bg-warning">
           <div className="lead">Pay at convention</div>
         </div>
       </div>
