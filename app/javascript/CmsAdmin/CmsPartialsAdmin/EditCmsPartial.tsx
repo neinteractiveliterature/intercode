@@ -9,11 +9,11 @@ import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsPartialsAdminQueryQuery } from './queries.generated';
+import { useCmsPartialsAdminQuery } from './queries.generated';
 import { useUpdatePartialMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useCmsPartialsAdminQueryQuery,
+  useCmsPartialsAdminQuery,
   (data, id) => data.cmsPartials.find((p) => id === p.id.toString()),
   function EditCmsPartialForm({ value: initialPartial }) {
     const history = useHistory();

@@ -2,7 +2,7 @@ import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import { Settings } from 'luxon';
 
-import { useAppRootQueryQuery } from './appRootQueries.generated';
+import { useAppRootQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import ErrorDisplay from './ErrorDisplay';
 import PageLoadingIndicator from './PageLoadingIndicator';
@@ -37,7 +37,7 @@ function normalizePathForLayout(path: string) {
 function AppRoot() {
   const location = useLocation();
   const history = useHistory();
-  const { data, loading, error } = useAppRootQueryQuery({
+  const { data, loading, error } = useAppRootQuery({
     variables: { path: normalizePathForLayout(location.pathname) },
   });
 

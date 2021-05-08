@@ -31,3 +31,5 @@ generates:
       documentMode: graphQLTag
       gqlImport: '@apollo/client#gql'
       nonOptionalTypename: true
+      dedupeOperationSuffix: true
+      operationResultSuffix: Data

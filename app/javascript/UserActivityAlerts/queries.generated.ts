@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type UserActivityAlertsAdminConventionFieldsFragment = (
   { __typename: 'Convention' }
   & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>
@@ -31,10 +32,10 @@ export type UserActivityAlertFieldsFragment = (
   )> }
 );
 
-export type ConventionTicketNameQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ConventionTicketNameQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ConventionTicketNameQueryQuery = (
+export type ConventionTicketNameQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -43,12 +44,12 @@ export type ConventionTicketNameQueryQuery = (
   ) }
 );
 
-export type UserActivityAlertQueryQueryVariables = Types.Exact<{
+export type UserActivityAlertQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserActivityAlertQueryQuery = (
+export type UserActivityAlertQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -62,10 +63,10 @@ export type UserActivityAlertQueryQuery = (
   ) }
 );
 
-export type UserActivityAlertsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type UserActivityAlertsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserActivityAlertsAdminQueryQuery = (
+export type UserActivityAlertsAdminQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -123,29 +124,31 @@ export const ConventionTicketNameQueryDocument = gql`
     ${UserActivityAlertsAdminConventionFieldsFragmentDoc}`;
 
 /**
- * __useConventionTicketNameQueryQuery__
+ * __useConventionTicketNameQuery__
  *
- * To run a query within a React component, call `useConventionTicketNameQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useConventionTicketNameQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useConventionTicketNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConventionTicketNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useConventionTicketNameQueryQuery({
+ * const { data, loading, error } = useConventionTicketNameQuery({
  *   variables: {
  *   },
  * });
  */
-export function useConventionTicketNameQueryQuery(baseOptions?: Apollo.QueryHookOptions<ConventionTicketNameQueryQuery, ConventionTicketNameQueryQueryVariables>) {
-        return Apollo.useQuery<ConventionTicketNameQueryQuery, ConventionTicketNameQueryQueryVariables>(ConventionTicketNameQueryDocument, baseOptions);
+export function useConventionTicketNameQuery(baseOptions?: Apollo.QueryHookOptions<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>(ConventionTicketNameQueryDocument, options);
       }
-export function useConventionTicketNameQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionTicketNameQueryQuery, ConventionTicketNameQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ConventionTicketNameQueryQuery, ConventionTicketNameQueryQueryVariables>(ConventionTicketNameQueryDocument, baseOptions);
+export function useConventionTicketNameQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>(ConventionTicketNameQueryDocument, options);
         }
-export type ConventionTicketNameQueryQueryHookResult = ReturnType<typeof useConventionTicketNameQueryQuery>;
+export type ConventionTicketNameQueryHookResult = ReturnType<typeof useConventionTicketNameQuery>;
 export type ConventionTicketNameQueryLazyQueryHookResult = ReturnType<typeof useConventionTicketNameQueryLazyQuery>;
-export type ConventionTicketNameQueryQueryResult = Apollo.QueryResult<ConventionTicketNameQueryQuery, ConventionTicketNameQueryQueryVariables>;
+export type ConventionTicketNameQueryDataResult = Apollo.QueryResult<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>;
 export const UserActivityAlertQueryDocument = gql`
     query UserActivityAlertQuery($id: Int!) {
   convention: assertConvention {
@@ -161,30 +164,32 @@ export const UserActivityAlertQueryDocument = gql`
 ${UserActivityAlertFieldsFragmentDoc}`;
 
 /**
- * __useUserActivityAlertQueryQuery__
+ * __useUserActivityAlertQuery__
  *
- * To run a query within a React component, call `useUserActivityAlertQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserActivityAlertQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserActivityAlertQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserActivityAlertQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserActivityAlertQueryQuery({
+ * const { data, loading, error } = useUserActivityAlertQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useUserActivityAlertQueryQuery(baseOptions: Apollo.QueryHookOptions<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>) {
-        return Apollo.useQuery<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>(UserActivityAlertQueryDocument, baseOptions);
+export function useUserActivityAlertQuery(baseOptions: Apollo.QueryHookOptions<UserActivityAlertQueryData, UserActivityAlertQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserActivityAlertQueryData, UserActivityAlertQueryVariables>(UserActivityAlertQueryDocument, options);
       }
-export function useUserActivityAlertQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>(UserActivityAlertQueryDocument, baseOptions);
+export function useUserActivityAlertQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityAlertQueryData, UserActivityAlertQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserActivityAlertQueryData, UserActivityAlertQueryVariables>(UserActivityAlertQueryDocument, options);
         }
-export type UserActivityAlertQueryQueryHookResult = ReturnType<typeof useUserActivityAlertQueryQuery>;
+export type UserActivityAlertQueryHookResult = ReturnType<typeof useUserActivityAlertQuery>;
 export type UserActivityAlertQueryLazyQueryHookResult = ReturnType<typeof useUserActivityAlertQueryLazyQuery>;
-export type UserActivityAlertQueryQueryResult = Apollo.QueryResult<UserActivityAlertQueryQuery, UserActivityAlertQueryQueryVariables>;
+export type UserActivityAlertQueryDataResult = Apollo.QueryResult<UserActivityAlertQueryData, UserActivityAlertQueryVariables>;
 export const UserActivityAlertsAdminQueryDocument = gql`
     query UserActivityAlertsAdminQuery {
   convention: assertConvention {
@@ -200,26 +205,28 @@ export const UserActivityAlertsAdminQueryDocument = gql`
     ${UserActivityAlertFieldsFragmentDoc}`;
 
 /**
- * __useUserActivityAlertsAdminQueryQuery__
+ * __useUserActivityAlertsAdminQuery__
  *
- * To run a query within a React component, call `useUserActivityAlertsAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserActivityAlertsAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserActivityAlertsAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserActivityAlertsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserActivityAlertsAdminQueryQuery({
+ * const { data, loading, error } = useUserActivityAlertsAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUserActivityAlertsAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserActivityAlertsAdminQueryQuery, UserActivityAlertsAdminQueryQueryVariables>) {
-        return Apollo.useQuery<UserActivityAlertsAdminQueryQuery, UserActivityAlertsAdminQueryQueryVariables>(UserActivityAlertsAdminQueryDocument, baseOptions);
+export function useUserActivityAlertsAdminQuery(baseOptions?: Apollo.QueryHookOptions<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>(UserActivityAlertsAdminQueryDocument, options);
       }
-export function useUserActivityAlertsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityAlertsAdminQueryQuery, UserActivityAlertsAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UserActivityAlertsAdminQueryQuery, UserActivityAlertsAdminQueryQueryVariables>(UserActivityAlertsAdminQueryDocument, baseOptions);
+export function useUserActivityAlertsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>(UserActivityAlertsAdminQueryDocument, options);
         }
-export type UserActivityAlertsAdminQueryQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQueryQuery>;
+export type UserActivityAlertsAdminQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQuery>;
 export type UserActivityAlertsAdminQueryLazyQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQueryLazyQuery>;
-export type UserActivityAlertsAdminQueryQueryResult = Apollo.QueryResult<UserActivityAlertsAdminQueryQuery, UserActivityAlertsAdminQueryQueryVariables>;
+export type UserActivityAlertsAdminQueryDataResult = Apollo.QueryResult<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>;

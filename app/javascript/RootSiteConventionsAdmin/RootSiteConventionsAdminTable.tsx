@@ -14,12 +14,12 @@ import usePageTitle from '../usePageTitle';
 import useModal from '../ModalDialogs/useModal';
 import NewConventionModal from './NewConventionModal';
 import {
-  RootSiteConventionsAdminTableQueryQuery,
-  useRootSiteConventionsAdminTableQueryQuery,
+  RootSiteConventionsAdminTableQueryData,
+  useRootSiteConventionsAdminTableQuery,
 } from './queries.generated';
 import { getDateTimeFormat } from '../TimeUtils';
 
-type ConventionType = RootSiteConventionsAdminTableQueryQuery['conventions_paginated']['entries'][0];
+type ConventionType = RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
@@ -112,7 +112,7 @@ function RootSiteConventionsAdminTable() {
     getPages: ({ data }) => data.conventions_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'conventions',
-    useQuery: useRootSiteConventionsAdminTableQueryQuery,
+    useQuery: useRootSiteConventionsAdminTableQuery,
   });
   usePageTitle('Conventions');
 

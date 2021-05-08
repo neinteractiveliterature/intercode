@@ -4,11 +4,11 @@ import { humanize } from 'inflected';
 import usePageTitle from '../usePageTitle';
 import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { OrderSummaryQueryQuery, useOrderSummaryQueryQuery } from './queries.generated';
+import { OrderSummaryQueryData, useOrderSummaryQuery } from './queries.generated';
 
 const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 
-type ProductType = OrderSummaryQueryQuery['convention']['products'][0];
+type ProductType = OrderSummaryQueryData['convention']['products'][0];
 
 function statusClass(status: OrderStatus) {
   switch (status) {
@@ -23,7 +23,7 @@ function statusClass(status: OrderStatus) {
   }
 }
 
-export default LoadQueryWrapper(useOrderSummaryQueryQuery, function OrderSummary({ data }) {
+export default LoadQueryWrapper(useOrderSummaryQuery, function OrderSummary({ data }) {
   usePageTitle('Order summary');
 
   const renderQuantityCell = (quantitiesByStatus: OrderQuantityByStatus[], status: OrderStatus) => {

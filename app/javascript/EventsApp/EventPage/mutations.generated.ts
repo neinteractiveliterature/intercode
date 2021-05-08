@@ -7,6 +7,7 @@ import { gql } from '@apollo/client';
 import { MySignupFieldsFragmentDoc, EventPageRunFieldsFragmentDoc, MySignupRequestFieldsFragmentDoc } from './queries.generated';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateMySignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['Int'];
   requestedBucketKey?: Types.Maybe<Types.Scalars['String']>;
@@ -14,7 +15,7 @@ export type CreateMySignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateMySignupMutation = (
+export type CreateMySignupMutationData = (
   { __typename: 'Mutation' }
   & { createMySignup?: Types.Maybe<(
     { __typename: 'CreateMySignupPayload' }
@@ -37,7 +38,7 @@ export type WithdrawMySignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type WithdrawMySignupMutation = (
+export type WithdrawMySignupMutationData = (
   { __typename: 'Mutation' }
   & { withdrawMySignup?: Types.Maybe<(
     { __typename: 'WithdrawMySignupPayload' }
@@ -62,7 +63,7 @@ export type CreateSignupRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateSignupRequestMutation = (
+export type CreateSignupRequestMutationData = (
   { __typename: 'Mutation' }
   & { createSignupRequest?: Types.Maybe<(
     { __typename: 'CreateSignupRequestPayload' }
@@ -79,7 +80,7 @@ export type WithdrawSignupRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type WithdrawSignupRequestMutation = (
+export type WithdrawSignupRequestMutationData = (
   { __typename: 'Mutation' }
   & { withdrawSignupRequest?: Types.Maybe<(
     { __typename: 'WithdrawSignupRequestPayload' }
@@ -111,7 +112,7 @@ export const CreateMySignupDocument = gql`
     ${MySignupFieldsFragmentDoc}
 ${EventPageRunFieldsFragmentDoc}
 ${RunBasicSignupDataFragmentDoc}`;
-export type CreateMySignupMutationFn = Apollo.MutationFunction<CreateMySignupMutation, CreateMySignupMutationVariables>;
+export type CreateMySignupMutationFn = Apollo.MutationFunction<CreateMySignupMutationData, CreateMySignupMutationVariables>;
 
 /**
  * __useCreateMySignupMutation__
@@ -132,12 +133,13 @@ export type CreateMySignupMutationFn = Apollo.MutationFunction<CreateMySignupMut
  *   },
  * });
  */
-export function useCreateMySignupMutation(baseOptions?: Apollo.MutationHookOptions<CreateMySignupMutation, CreateMySignupMutationVariables>) {
-        return Apollo.useMutation<CreateMySignupMutation, CreateMySignupMutationVariables>(CreateMySignupDocument, baseOptions);
+export function useCreateMySignupMutation(baseOptions?: Apollo.MutationHookOptions<CreateMySignupMutationData, CreateMySignupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMySignupMutationData, CreateMySignupMutationVariables>(CreateMySignupDocument, options);
       }
 export type CreateMySignupMutationHookResult = ReturnType<typeof useCreateMySignupMutation>;
-export type CreateMySignupMutationResult = Apollo.MutationResult<CreateMySignupMutation>;
-export type CreateMySignupMutationOptions = Apollo.BaseMutationOptions<CreateMySignupMutation, CreateMySignupMutationVariables>;
+export type CreateMySignupMutationResult = Apollo.MutationResult<CreateMySignupMutationData>;
+export type CreateMySignupMutationOptions = Apollo.BaseMutationOptions<CreateMySignupMutationData, CreateMySignupMutationVariables>;
 export const WithdrawMySignupDocument = gql`
     mutation WithdrawMySignup($runId: Int!) {
   withdrawMySignup(input: {run_id: $runId}) {
@@ -155,7 +157,7 @@ export const WithdrawMySignupDocument = gql`
     ${MySignupFieldsFragmentDoc}
 ${EventPageRunFieldsFragmentDoc}
 ${RunBasicSignupDataFragmentDoc}`;
-export type WithdrawMySignupMutationFn = Apollo.MutationFunction<WithdrawMySignupMutation, WithdrawMySignupMutationVariables>;
+export type WithdrawMySignupMutationFn = Apollo.MutationFunction<WithdrawMySignupMutationData, WithdrawMySignupMutationVariables>;
 
 /**
  * __useWithdrawMySignupMutation__
@@ -174,12 +176,13 @@ export type WithdrawMySignupMutationFn = Apollo.MutationFunction<WithdrawMySignu
  *   },
  * });
  */
-export function useWithdrawMySignupMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawMySignupMutation, WithdrawMySignupMutationVariables>) {
-        return Apollo.useMutation<WithdrawMySignupMutation, WithdrawMySignupMutationVariables>(WithdrawMySignupDocument, baseOptions);
+export function useWithdrawMySignupMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawMySignupMutationData, WithdrawMySignupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WithdrawMySignupMutationData, WithdrawMySignupMutationVariables>(WithdrawMySignupDocument, options);
       }
 export type WithdrawMySignupMutationHookResult = ReturnType<typeof useWithdrawMySignupMutation>;
-export type WithdrawMySignupMutationResult = Apollo.MutationResult<WithdrawMySignupMutation>;
-export type WithdrawMySignupMutationOptions = Apollo.BaseMutationOptions<WithdrawMySignupMutation, WithdrawMySignupMutationVariables>;
+export type WithdrawMySignupMutationResult = Apollo.MutationResult<WithdrawMySignupMutationData>;
+export type WithdrawMySignupMutationOptions = Apollo.BaseMutationOptions<WithdrawMySignupMutationData, WithdrawMySignupMutationVariables>;
 export const CreateSignupRequestDocument = gql`
     mutation CreateSignupRequest($targetRunId: Int!, $requestedBucketKey: String, $replaceSignupId: Int) {
   createSignupRequest(
@@ -192,7 +195,7 @@ export const CreateSignupRequestDocument = gql`
   }
 }
     ${MySignupRequestFieldsFragmentDoc}`;
-export type CreateSignupRequestMutationFn = Apollo.MutationFunction<CreateSignupRequestMutation, CreateSignupRequestMutationVariables>;
+export type CreateSignupRequestMutationFn = Apollo.MutationFunction<CreateSignupRequestMutationData, CreateSignupRequestMutationVariables>;
 
 /**
  * __useCreateSignupRequestMutation__
@@ -213,12 +216,13 @@ export type CreateSignupRequestMutationFn = Apollo.MutationFunction<CreateSignup
  *   },
  * });
  */
-export function useCreateSignupRequestMutation(baseOptions?: Apollo.MutationHookOptions<CreateSignupRequestMutation, CreateSignupRequestMutationVariables>) {
-        return Apollo.useMutation<CreateSignupRequestMutation, CreateSignupRequestMutationVariables>(CreateSignupRequestDocument, baseOptions);
+export function useCreateSignupRequestMutation(baseOptions?: Apollo.MutationHookOptions<CreateSignupRequestMutationData, CreateSignupRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSignupRequestMutationData, CreateSignupRequestMutationVariables>(CreateSignupRequestDocument, options);
       }
 export type CreateSignupRequestMutationHookResult = ReturnType<typeof useCreateSignupRequestMutation>;
-export type CreateSignupRequestMutationResult = Apollo.MutationResult<CreateSignupRequestMutation>;
-export type CreateSignupRequestMutationOptions = Apollo.BaseMutationOptions<CreateSignupRequestMutation, CreateSignupRequestMutationVariables>;
+export type CreateSignupRequestMutationResult = Apollo.MutationResult<CreateSignupRequestMutationData>;
+export type CreateSignupRequestMutationOptions = Apollo.BaseMutationOptions<CreateSignupRequestMutationData, CreateSignupRequestMutationVariables>;
 export const WithdrawSignupRequestDocument = gql`
     mutation WithdrawSignupRequest($id: Int!) {
   withdrawSignupRequest(input: {id: $id}) {
@@ -229,7 +233,7 @@ export const WithdrawSignupRequestDocument = gql`
   }
 }
     ${MySignupRequestFieldsFragmentDoc}`;
-export type WithdrawSignupRequestMutationFn = Apollo.MutationFunction<WithdrawSignupRequestMutation, WithdrawSignupRequestMutationVariables>;
+export type WithdrawSignupRequestMutationFn = Apollo.MutationFunction<WithdrawSignupRequestMutationData, WithdrawSignupRequestMutationVariables>;
 
 /**
  * __useWithdrawSignupRequestMutation__
@@ -248,9 +252,10 @@ export type WithdrawSignupRequestMutationFn = Apollo.MutationFunction<WithdrawSi
  *   },
  * });
  */
-export function useWithdrawSignupRequestMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawSignupRequestMutation, WithdrawSignupRequestMutationVariables>) {
-        return Apollo.useMutation<WithdrawSignupRequestMutation, WithdrawSignupRequestMutationVariables>(WithdrawSignupRequestDocument, baseOptions);
+export function useWithdrawSignupRequestMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawSignupRequestMutationData, WithdrawSignupRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WithdrawSignupRequestMutationData, WithdrawSignupRequestMutationVariables>(WithdrawSignupRequestDocument, options);
       }
 export type WithdrawSignupRequestMutationHookResult = ReturnType<typeof useWithdrawSignupRequestMutation>;
-export type WithdrawSignupRequestMutationResult = Apollo.MutationResult<WithdrawSignupRequestMutation>;
-export type WithdrawSignupRequestMutationOptions = Apollo.BaseMutationOptions<WithdrawSignupRequestMutation, WithdrawSignupRequestMutationVariables>;
+export type WithdrawSignupRequestMutationResult = Apollo.MutationResult<WithdrawSignupRequestMutationData>;
+export type WithdrawSignupRequestMutationOptions = Apollo.BaseMutationOptions<WithdrawSignupRequestMutationData, WithdrawSignupRequestMutationVariables>;

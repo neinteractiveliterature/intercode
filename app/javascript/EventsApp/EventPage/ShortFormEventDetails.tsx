@@ -10,7 +10,7 @@ import teamMembersForDisplay from '../teamMembersForDisplay';
 import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
 import LoadingIndicator from '../../LoadingIndicator';
-import { useEventPageQueryQuery } from './queries.generated';
+import { useEventPageQuery } from './queries.generated';
 
 export type ShortFormEventDetailsProps = {
   eventId: number;
@@ -18,7 +18,7 @@ export type ShortFormEventDetailsProps = {
 
 function ShortFormEventDetails({ eventId }: ShortFormEventDetailsProps) {
   const { t } = useTranslation();
-  const { data, loading, error } = useEventPageQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
 
   const { shortFormItems, formResponse } = useSectionizedFormItems(
     error || loading || !data ? undefined : data.event,

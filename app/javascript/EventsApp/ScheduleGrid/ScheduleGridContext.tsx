@@ -27,9 +27,9 @@ import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
 import { TimezoneMode } from '../../graphqlTypes.generated';
 import {
-  ScheduleGridEventFragmentFragment,
-  useScheduleGridConventionDataQueryQuery,
-  useScheduleGridEventsQueryQuery,
+  ScheduleGridEventFragment,
+  useScheduleGridConventionDataQuery,
+  useScheduleGridEventsQuery,
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 
@@ -107,7 +107,7 @@ function checkRunDetailsVisibity(
 export function useScheduleGridProvider(
   config: ScheduleGridConfig | undefined,
   convention: ConventionForTimespanUtils | undefined,
-  events: ScheduleGridEventFragmentFragment[] | undefined,
+  events: ScheduleGridEventFragment[] | undefined,
   myRatingFilter?: number[],
   hideConflicts?: boolean,
 ): ScheduleGridContextValue {
@@ -234,7 +234,7 @@ function ScheduleGridProviderTabContent({
   afterLoaded,
 }: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
-  const { data, error, loading } = useScheduleGridEventsQueryQuery({
+  const { data, error, loading } = useScheduleGridEventsQuery({
     variables: {
       ...getEventsQueryVariables(timespan, config.showExtendedCounts),
     },
@@ -284,7 +284,7 @@ export function ScheduleGridProvider({
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
-  const { data, loading, error } = useScheduleGridConventionDataQueryQuery();
+  const { data, loading, error } = useScheduleGridConventionDataQuery();
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(

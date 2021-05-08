@@ -9,10 +9,10 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { useCmsContentGroupsAdminQueryQuery } from './queries.generated';
+import { useCmsContentGroupsAdminQuery } from './queries.generated';
 
 function CmsContentGroupsAdminTable() {
-  const { data, loading, error } = useCmsContentGroupsAdminQueryQuery();
+  const { data, loading, error } = useCmsContentGroupsAdminQuery();
   const confirm = useConfirm();
   const deleteContentGroupMutate = useDeleteMutation(DeleteContentGroup, {
     query: CmsContentGroupsAdminQuery,

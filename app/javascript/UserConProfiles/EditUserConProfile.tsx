@@ -10,13 +10,13 @@ import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import {
-  useUserConProfileQueryQuery,
-  UserConProfileQueryQuery,
-  UserConProfileAdminQueryQuery,
+  useUserConProfileQuery,
+  UserConProfileQueryData,
+  UserConProfileAdminQueryData,
 } from './queries.generated';
 import { useUpdateUserConProfileMutation } from './mutations.generated';
 
-function EditUserConProfileForm({ data }: { data: UserConProfileQueryQuery }) {
+function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
   const history = useHistory();
   const { userConProfile: initialUserConProfile, convention, form } = buildFormStateFromData(
     data.userConProfile,
@@ -28,9 +28,9 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryQuery }) {
   const [mutate] = useUpdateUserConProfileMutation({
     update: (cache, result) => {
       const variables = { id: initialUserConProfile.id };
-      let query: UserConProfileAdminQueryQuery | null = null;
+      let query: UserConProfileAdminQueryData | null = null;
       try {
-        query = cache.readQuery<UserConProfileAdminQueryQuery>({
+        query = cache.readQuery<UserConProfileAdminQueryData>({
           query: UserConProfileAdminQuery,
           variables,
         });
@@ -97,7 +97,7 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryQuery }) {
 
 function EditUserConProfile() {
   const id = Number.parseInt(useParams<{ id: string }>().id, 10);
-  const { data, loading, error } = useUserConProfileQueryQuery({ variables: { id } });
+  const { data, loading, error } = useUserConProfileQuery({ variables: { id } });
 
   if (loading) {
     return <PageLoadingIndicator visible />;

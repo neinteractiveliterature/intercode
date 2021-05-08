@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
 import sortBuckets from './sortBuckets';
-import { EventPageQueryQuery, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
+import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 
 function describeBucketCapacity(
   bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0],
@@ -20,7 +20,7 @@ function describeBucketCapacity(
 }
 
 export type EventCapacityDisplayProps = {
-  event: EventPageQueryQuery['event'];
+  event: EventPageQueryData['event'];
 };
 
 function EventCapacityDisplay({ event }: EventCapacityDisplayProps) {

@@ -3,12 +3,12 @@ import { pluralize } from 'inflected';
 import { useLocation } from 'react-router-dom';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import { EventListEventsQueryQuery } from './queries.generated';
+import { EventListEventsQueryData } from './queries.generated';
 import { notEmpty, parseIntOrNull } from '../../ValueUtils';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import { locationsEqualWithSearchParamsTransform } from '../../URLUtils';
 
-type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
+type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type LocationType = ReturnType<typeof useLocation>;
 
 function shouldAutoCloseOnNavigate(prevLocation: LocationType, location: LocationType) {

@@ -7,7 +7,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
-import { useOAuthAuthorizationPromptQueryQuery } from './queries.generated';
+import { useOAuthAuthorizationPromptQuery } from './queries.generated';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -37,7 +37,7 @@ function AuthorizationPrompt() {
       ),
     [location.search],
   );
-  const { data, loading, error } = useOAuthAuthorizationPromptQueryQuery({
+  const { data, loading, error } = useOAuthAuthorizationPromptQuery({
     variables: { queryParams: preAuthParamsJSON },
   });
   const preAuth = useMemo(() => {

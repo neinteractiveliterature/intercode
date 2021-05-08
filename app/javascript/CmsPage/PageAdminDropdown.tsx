@@ -6,7 +6,7 @@ import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { useDeletePageMutation } from '../CmsAdmin/CmsPagesAdmin/mutations.generated';
-import { PageAdminDropdownQueryQuery, usePageAdminDropdownQueryQuery } from './queries.generated';
+import { PageAdminDropdownQueryData, usePageAdminDropdownQuery } from './queries.generated';
 
 export type PageAdminDropdownProps = {
   showEdit: boolean;
@@ -15,8 +15,8 @@ export type PageAdminDropdownProps = {
 };
 
 function getEffectiveLayout(
-  cmsPage: PageAdminDropdownQueryQuery['cmsPage'],
-  cmsParent: PageAdminDropdownQueryQuery['cmsParent'],
+  cmsPage: PageAdminDropdownQueryData['cmsPage'],
+  cmsParent: PageAdminDropdownQueryData['cmsParent'],
 ) {
   const specificLayout = cmsPage.cms_layout;
   if (specificLayout) {
@@ -34,7 +34,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
   const history = useHistory();
   const confirm = useGraphQLConfirm();
   const [deletePage] = useDeletePageMutation();
-  const { data, loading, error } = usePageAdminDropdownQueryQuery({ variables: { id: pageId } });
+  const { data, loading, error } = usePageAdminDropdownQuery({ variables: { id: pageId } });
 
   const deleteConfirmed = useCallback(async () => {
     await deletePage({ variables: { id: pageId } });

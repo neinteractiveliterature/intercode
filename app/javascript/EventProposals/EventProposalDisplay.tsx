@@ -5,7 +5,7 @@ import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import ErrorDisplay from '../ErrorDisplay';
 import Gravatar from '../Gravatar';
 import LoadingIndicator from '../LoadingIndicator';
-import { useEventProposalQueryWithOwnerQuery } from './queries.generated';
+import { useEventProposalQueryWithOwner } from './queries.generated';
 import { getSortedFormItems } from '../Models/Form';
 import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
@@ -15,7 +15,7 @@ export type EventProposalDisplayProps = {
 };
 
 function EventProposalDisplay({ eventProposalId }: EventProposalDisplayProps) {
-  const { data, loading, error } = useEventProposalQueryWithOwnerQuery({
+  const { data, loading, error } = useEventProposalQueryWithOwner({
     variables: { eventProposalId },
   });
 

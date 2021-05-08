@@ -9,11 +9,9 @@ import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useClickwrapAgreementQueryQuery } from './queries.generated';
+import { useClickwrapAgreementQuery } from './queries.generated';
 
-export default LoadQueryWrapper(useClickwrapAgreementQueryQuery, function ClickwrapAgreement({
-  data,
-}) {
+export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
   const { t } = useTranslation();
   const history = useHistory();
   const [

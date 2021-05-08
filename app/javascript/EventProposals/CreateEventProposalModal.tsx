@@ -6,22 +6,25 @@ import { useTranslation } from 'react-i18next';
 import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { sortByLocaleString } from '../ValueUtils';
-import { ProposeEventButtonQueryQuery } from './queries.generated';
-import { CreateEventProposalMutation, useCreateEventProposalMutation } from './mutations.generated';
+import { ProposeEventButtonQueryData } from './queries.generated';
+import {
+  CreateEventProposalMutationData,
+  useCreateEventProposalMutation,
+} from './mutations.generated';
 
 export type CreateEventProposalModalProps = {
   onCreate: (
     newEventProposal: NonNullable<
-      CreateEventProposalMutation['createEventProposal']
+      CreateEventProposalMutationData['createEventProposal']
     >['event_proposal'],
   ) => void;
   cancel: () => void;
   visible: boolean;
   userEventProposals: NonNullable<
-    NonNullable<ProposeEventButtonQueryQuery['myProfile']>['user']
+    NonNullable<ProposeEventButtonQueryData['myProfile']>['user']
   >['event_proposals'];
-  proposableEventCategories: ProposeEventButtonQueryQuery['convention']['event_categories'];
-  departments: ProposeEventButtonQueryQuery['convention']['departments'];
+  proposableEventCategories: ProposeEventButtonQueryData['convention']['event_categories'];
+  departments: ProposeEventButtonQueryData['convention']['departments'];
 };
 
 function CreateEventProposalModal({

@@ -10,9 +10,9 @@ import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import LoadingIndicator from '../LoadingIndicator';
 import {
-  EventProposalAdminNotesQueryQuery,
-  useEventProposalAdminNotesQueryQuery,
-  useEventProposalQueryWithOwnerQuery,
+  EventProposalAdminNotesQueryData,
+  useEventProposalAdminNotesQuery,
+  useEventProposalQueryWithOwner,
 } from './queries.generated';
 import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
@@ -22,7 +22,7 @@ export type EventProposalAdminNotesProps = {
 };
 
 function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesProps) {
-  const { data, loading, error } = useEventProposalAdminNotesQueryQuery({
+  const { data, loading, error } = useEventProposalAdminNotesQuery({
     variables: { eventProposalId },
   });
 
@@ -32,7 +32,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
       updateAdminNotesMutate({
         variables: { eventProposalId, adminNotes },
         update: (cache) => {
-          const queryData = cache.readQuery<EventProposalAdminNotesQueryQuery>({
+          const queryData = cache.readQuery<EventProposalAdminNotesQueryData>({
             query: EventProposalAdminNotesQuery,
             variables: { eventProposalId },
           });
@@ -67,7 +67,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
 
 function useLoadEventProposal() {
   const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
-  return useEventProposalQueryWithOwnerQuery({ variables: { eventProposalId } });
+  return useEventProposalQueryWithOwner({ variables: { eventProposalId } });
 }
 
 export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdminDisplay({ data }) {

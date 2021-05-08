@@ -8,12 +8,12 @@ import CmsLayoutForm from './CmsLayoutForm';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import { useCmsLayoutsAdminQueryQuery } from './queries.generated';
+import { useCmsLayoutsAdminQuery } from './queries.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
 import { useUpdateLayoutMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
-  useCmsLayoutsAdminQueryQuery,
+  useCmsLayoutsAdminQuery,
   (data, id) => data.cmsLayouts.find((layout) => id === layout.id.toString()),
   function EditCmsLayout({ value: initialLayout }) {
     const history = useHistory();

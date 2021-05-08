@@ -3,13 +3,14 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type RateEventMutationVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
   rating: Types.Scalars['Int'];
 }>;
 
 
-export type RateEventMutation = (
+export type RateEventMutationData = (
   { __typename: 'Mutation' }
   & { rateEvent?: Types.Maybe<(
     { __typename: 'RateEventPayload' }
@@ -31,7 +32,7 @@ export const RateEventDocument = gql`
   }
 }
     `;
-export type RateEventMutationFn = Apollo.MutationFunction<RateEventMutation, RateEventMutationVariables>;
+export type RateEventMutationFn = Apollo.MutationFunction<RateEventMutationData, RateEventMutationVariables>;
 
 /**
  * __useRateEventMutation__
@@ -51,9 +52,10 @@ export type RateEventMutationFn = Apollo.MutationFunction<RateEventMutation, Rat
  *   },
  * });
  */
-export function useRateEventMutation(baseOptions?: Apollo.MutationHookOptions<RateEventMutation, RateEventMutationVariables>) {
-        return Apollo.useMutation<RateEventMutation, RateEventMutationVariables>(RateEventDocument, baseOptions);
+export function useRateEventMutation(baseOptions?: Apollo.MutationHookOptions<RateEventMutationData, RateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RateEventMutationData, RateEventMutationVariables>(RateEventDocument, options);
       }
 export type RateEventMutationHookResult = ReturnType<typeof useRateEventMutation>;
-export type RateEventMutationResult = Apollo.MutationResult<RateEventMutation>;
-export type RateEventMutationOptions = Apollo.BaseMutationOptions<RateEventMutation, RateEventMutationVariables>;
+export type RateEventMutationResult = Apollo.MutationResult<RateEventMutationData>;
+export type RateEventMutationOptions = Apollo.BaseMutationOptions<RateEventMutationData, RateEventMutationVariables>;

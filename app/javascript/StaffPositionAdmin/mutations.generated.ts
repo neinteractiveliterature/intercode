@@ -5,12 +5,13 @@ import { StaffPositionFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { StaffPositionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateStaffPositionMutationVariables = Types.Exact<{
   input: Types.CreateStaffPositionInput;
 }>;
 
 
-export type CreateStaffPositionMutation = (
+export type CreateStaffPositionMutationData = (
   { __typename: 'Mutation' }
   & { createStaffPosition?: Types.Maybe<(
     { __typename: 'CreateStaffPositionPayload' }
@@ -27,7 +28,7 @@ export type UpdateStaffPositionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateStaffPositionMutation = (
+export type UpdateStaffPositionMutationData = (
   { __typename: 'Mutation' }
   & { updateStaffPosition?: Types.Maybe<(
     { __typename: 'UpdateStaffPositionPayload' }
@@ -46,7 +47,7 @@ export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateStaffPositionPermissionsMutation = (
+export type UpdateStaffPositionPermissionsMutationData = (
   { __typename: 'Mutation' }
   & { updateStaffPositionPermissions?: Types.Maybe<(
     { __typename: 'UpdateStaffPositionPermissionsPayload' }
@@ -63,7 +64,7 @@ export type DeleteStaffPositionMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteStaffPositionMutation = (
+export type DeleteStaffPositionMutationData = (
   { __typename: 'Mutation' }
   & { deleteStaffPosition?: Types.Maybe<(
     { __typename: 'DeleteStaffPositionPayload' }
@@ -85,7 +86,7 @@ export const CreateStaffPositionDocument = gql`
   }
 }
     ${StaffPositionFieldsFragmentDoc}`;
-export type CreateStaffPositionMutationFn = Apollo.MutationFunction<CreateStaffPositionMutation, CreateStaffPositionMutationVariables>;
+export type CreateStaffPositionMutationFn = Apollo.MutationFunction<CreateStaffPositionMutationData, CreateStaffPositionMutationVariables>;
 
 /**
  * __useCreateStaffPositionMutation__
@@ -104,12 +105,13 @@ export type CreateStaffPositionMutationFn = Apollo.MutationFunction<CreateStaffP
  *   },
  * });
  */
-export function useCreateStaffPositionMutation(baseOptions?: Apollo.MutationHookOptions<CreateStaffPositionMutation, CreateStaffPositionMutationVariables>) {
-        return Apollo.useMutation<CreateStaffPositionMutation, CreateStaffPositionMutationVariables>(CreateStaffPositionDocument, baseOptions);
+export function useCreateStaffPositionMutation(baseOptions?: Apollo.MutationHookOptions<CreateStaffPositionMutationData, CreateStaffPositionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStaffPositionMutationData, CreateStaffPositionMutationVariables>(CreateStaffPositionDocument, options);
       }
 export type CreateStaffPositionMutationHookResult = ReturnType<typeof useCreateStaffPositionMutation>;
-export type CreateStaffPositionMutationResult = Apollo.MutationResult<CreateStaffPositionMutation>;
-export type CreateStaffPositionMutationOptions = Apollo.BaseMutationOptions<CreateStaffPositionMutation, CreateStaffPositionMutationVariables>;
+export type CreateStaffPositionMutationResult = Apollo.MutationResult<CreateStaffPositionMutationData>;
+export type CreateStaffPositionMutationOptions = Apollo.BaseMutationOptions<CreateStaffPositionMutationData, CreateStaffPositionMutationVariables>;
 export const UpdateStaffPositionDocument = gql`
     mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
   updateStaffPosition(input: $input) {
@@ -120,7 +122,7 @@ export const UpdateStaffPositionDocument = gql`
   }
 }
     ${StaffPositionFieldsFragmentDoc}`;
-export type UpdateStaffPositionMutationFn = Apollo.MutationFunction<UpdateStaffPositionMutation, UpdateStaffPositionMutationVariables>;
+export type UpdateStaffPositionMutationFn = Apollo.MutationFunction<UpdateStaffPositionMutationData, UpdateStaffPositionMutationVariables>;
 
 /**
  * __useUpdateStaffPositionMutation__
@@ -139,12 +141,13 @@ export type UpdateStaffPositionMutationFn = Apollo.MutationFunction<UpdateStaffP
  *   },
  * });
  */
-export function useUpdateStaffPositionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStaffPositionMutation, UpdateStaffPositionMutationVariables>) {
-        return Apollo.useMutation<UpdateStaffPositionMutation, UpdateStaffPositionMutationVariables>(UpdateStaffPositionDocument, baseOptions);
+export function useUpdateStaffPositionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStaffPositionMutationData, UpdateStaffPositionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateStaffPositionMutationData, UpdateStaffPositionMutationVariables>(UpdateStaffPositionDocument, options);
       }
 export type UpdateStaffPositionMutationHookResult = ReturnType<typeof useUpdateStaffPositionMutation>;
-export type UpdateStaffPositionMutationResult = Apollo.MutationResult<UpdateStaffPositionMutation>;
-export type UpdateStaffPositionMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionMutation, UpdateStaffPositionMutationVariables>;
+export type UpdateStaffPositionMutationResult = Apollo.MutationResult<UpdateStaffPositionMutationData>;
+export type UpdateStaffPositionMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionMutationData, UpdateStaffPositionMutationVariables>;
 export const UpdateStaffPositionPermissionsDocument = gql`
     mutation UpdateStaffPositionPermissions($staffPositionId: Int!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
   updateStaffPositionPermissions(
@@ -157,7 +160,7 @@ export const UpdateStaffPositionPermissionsDocument = gql`
   }
 }
     ${StaffPositionFieldsFragmentDoc}`;
-export type UpdateStaffPositionPermissionsMutationFn = Apollo.MutationFunction<UpdateStaffPositionPermissionsMutation, UpdateStaffPositionPermissionsMutationVariables>;
+export type UpdateStaffPositionPermissionsMutationFn = Apollo.MutationFunction<UpdateStaffPositionPermissionsMutationData, UpdateStaffPositionPermissionsMutationVariables>;
 
 /**
  * __useUpdateStaffPositionPermissionsMutation__
@@ -178,12 +181,13 @@ export type UpdateStaffPositionPermissionsMutationFn = Apollo.MutationFunction<U
  *   },
  * });
  */
-export function useUpdateStaffPositionPermissionsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStaffPositionPermissionsMutation, UpdateStaffPositionPermissionsMutationVariables>) {
-        return Apollo.useMutation<UpdateStaffPositionPermissionsMutation, UpdateStaffPositionPermissionsMutationVariables>(UpdateStaffPositionPermissionsDocument, baseOptions);
+export function useUpdateStaffPositionPermissionsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStaffPositionPermissionsMutationData, UpdateStaffPositionPermissionsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateStaffPositionPermissionsMutationData, UpdateStaffPositionPermissionsMutationVariables>(UpdateStaffPositionPermissionsDocument, options);
       }
 export type UpdateStaffPositionPermissionsMutationHookResult = ReturnType<typeof useUpdateStaffPositionPermissionsMutation>;
-export type UpdateStaffPositionPermissionsMutationResult = Apollo.MutationResult<UpdateStaffPositionPermissionsMutation>;
-export type UpdateStaffPositionPermissionsMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionPermissionsMutation, UpdateStaffPositionPermissionsMutationVariables>;
+export type UpdateStaffPositionPermissionsMutationResult = Apollo.MutationResult<UpdateStaffPositionPermissionsMutationData>;
+export type UpdateStaffPositionPermissionsMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionPermissionsMutationData, UpdateStaffPositionPermissionsMutationVariables>;
 export const DeleteStaffPositionDocument = gql`
     mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
   deleteStaffPosition(input: $input) {
@@ -193,7 +197,7 @@ export const DeleteStaffPositionDocument = gql`
   }
 }
     `;
-export type DeleteStaffPositionMutationFn = Apollo.MutationFunction<DeleteStaffPositionMutation, DeleteStaffPositionMutationVariables>;
+export type DeleteStaffPositionMutationFn = Apollo.MutationFunction<DeleteStaffPositionMutationData, DeleteStaffPositionMutationVariables>;
 
 /**
  * __useDeleteStaffPositionMutation__
@@ -212,9 +216,10 @@ export type DeleteStaffPositionMutationFn = Apollo.MutationFunction<DeleteStaffP
  *   },
  * });
  */
-export function useDeleteStaffPositionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStaffPositionMutation, DeleteStaffPositionMutationVariables>) {
-        return Apollo.useMutation<DeleteStaffPositionMutation, DeleteStaffPositionMutationVariables>(DeleteStaffPositionDocument, baseOptions);
+export function useDeleteStaffPositionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStaffPositionMutationData, DeleteStaffPositionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteStaffPositionMutationData, DeleteStaffPositionMutationVariables>(DeleteStaffPositionDocument, options);
       }
 export type DeleteStaffPositionMutationHookResult = ReturnType<typeof useDeleteStaffPositionMutation>;
-export type DeleteStaffPositionMutationResult = Apollo.MutationResult<DeleteStaffPositionMutation>;
-export type DeleteStaffPositionMutationOptions = Apollo.BaseMutationOptions<DeleteStaffPositionMutation, DeleteStaffPositionMutationVariables>;
+export type DeleteStaffPositionMutationResult = Apollo.MutationResult<DeleteStaffPositionMutationData>;
+export type DeleteStaffPositionMutationOptions = Apollo.BaseMutationOptions<DeleteStaffPositionMutationData, DeleteStaffPositionMutationVariables>;

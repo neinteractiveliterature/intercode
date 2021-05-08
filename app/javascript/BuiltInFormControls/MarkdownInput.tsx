@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client';
 import CodeInput from './CodeInput';
 import { PreviewMarkdownQuery } from './previewQueries';
-import { PreviewMarkdownQueryQuery } from './previewQueries.generated';
+import { PreviewMarkdownQueryData } from './previewQueries.generated';
 import type { SyncCodeInputProps } from './SyncCodeInput';
 
 export type MarkdownInputProps = Omit<SyncCodeInputProps, 'mode' | 'getPreviewContent'>;
@@ -14,7 +14,7 @@ const MarkdownInput = (props: MarkdownInputProps) => {
       {...props}
       mode="liquid-markdown"
       getPreviewContent={async (markdown) => {
-        const response = await client.query<PreviewMarkdownQueryQuery>({
+        const response = await client.query<PreviewMarkdownQueryData>({
           query: PreviewMarkdownQuery,
           variables: { markdown },
           fetchPolicy: 'no-cache',

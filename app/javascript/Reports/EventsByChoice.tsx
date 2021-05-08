@@ -11,7 +11,7 @@ import { capitalize } from 'inflected';
 import { titleSort } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { useEventsByChoiceQueryQuery } from './queries.generated';
+import { useEventsByChoiceQuery } from './queries.generated';
 
 type ProcessedChoiceCount = {
   confirmed?: number;
@@ -36,7 +36,7 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   );
 }
 
-export default LoadQueryWrapper(useEventsByChoiceQueryQuery, function EventsByChoice({ data }) {
+export default LoadQueryWrapper(useEventsByChoiceQuery, function EventsByChoice({ data }) {
   const choiceColumns = useMemo(() => {
     const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) =>
       eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice),

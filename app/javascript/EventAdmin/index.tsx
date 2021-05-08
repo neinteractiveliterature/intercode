@@ -14,7 +14,7 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useEventAdminEventsQueryQuery } from './queries.generated';
+import { useEventAdminEventsQuery } from './queries.generated';
 import { useIntercodePopperWithAutoClosing } from '../UIComponents/PopperUtils';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
@@ -27,7 +27,7 @@ const adminComponentsBySchedulingUi = {
 
 function EventAdmin() {
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
-  const { data, loading, error } = useEventAdminEventsQueryQuery();
+  const { data, loading, error } = useEventAdminEventsQuery();
   const location = useLocation();
 
   const eventCategories = useMemo(

@@ -5,12 +5,13 @@ import { EmailRouteFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EmailRouteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateEmailRouteMutationVariables = Types.Exact<{
   emailRoute: Types.EmailRouteInput;
 }>;
 
 
-export type CreateEmailRouteMutation = (
+export type CreateEmailRouteMutationData = (
   { __typename: 'Mutation' }
   & { createEmailRoute?: Types.Maybe<(
     { __typename: 'CreateEmailRoutePayload' }
@@ -28,7 +29,7 @@ export type UpdateEmailRouteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEmailRouteMutation = (
+export type UpdateEmailRouteMutationData = (
   { __typename: 'Mutation' }
   & { updateEmailRoute?: Types.Maybe<(
     { __typename: 'UpdateEmailRoutePayload' }
@@ -45,7 +46,7 @@ export type DeleteEmailRouteMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteEmailRouteMutation = (
+export type DeleteEmailRouteMutationData = (
   { __typename: 'Mutation' }
   & { deleteEmailRoute?: Types.Maybe<(
     { __typename: 'DeleteEmailRoutePayload' }
@@ -64,7 +65,7 @@ export const CreateEmailRouteDocument = gql`
   }
 }
     ${EmailRouteFieldsFragmentDoc}`;
-export type CreateEmailRouteMutationFn = Apollo.MutationFunction<CreateEmailRouteMutation, CreateEmailRouteMutationVariables>;
+export type CreateEmailRouteMutationFn = Apollo.MutationFunction<CreateEmailRouteMutationData, CreateEmailRouteMutationVariables>;
 
 /**
  * __useCreateEmailRouteMutation__
@@ -83,12 +84,13 @@ export type CreateEmailRouteMutationFn = Apollo.MutationFunction<CreateEmailRout
  *   },
  * });
  */
-export function useCreateEmailRouteMutation(baseOptions?: Apollo.MutationHookOptions<CreateEmailRouteMutation, CreateEmailRouteMutationVariables>) {
-        return Apollo.useMutation<CreateEmailRouteMutation, CreateEmailRouteMutationVariables>(CreateEmailRouteDocument, baseOptions);
+export function useCreateEmailRouteMutation(baseOptions?: Apollo.MutationHookOptions<CreateEmailRouteMutationData, CreateEmailRouteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEmailRouteMutationData, CreateEmailRouteMutationVariables>(CreateEmailRouteDocument, options);
       }
 export type CreateEmailRouteMutationHookResult = ReturnType<typeof useCreateEmailRouteMutation>;
-export type CreateEmailRouteMutationResult = Apollo.MutationResult<CreateEmailRouteMutation>;
-export type CreateEmailRouteMutationOptions = Apollo.BaseMutationOptions<CreateEmailRouteMutation, CreateEmailRouteMutationVariables>;
+export type CreateEmailRouteMutationResult = Apollo.MutationResult<CreateEmailRouteMutationData>;
+export type CreateEmailRouteMutationOptions = Apollo.BaseMutationOptions<CreateEmailRouteMutationData, CreateEmailRouteMutationVariables>;
 export const UpdateEmailRouteDocument = gql`
     mutation UpdateEmailRoute($id: Int!, $emailRoute: EmailRouteInput!) {
   updateEmailRoute(input: {id: $id, email_route: $emailRoute}) {
@@ -99,7 +101,7 @@ export const UpdateEmailRouteDocument = gql`
   }
 }
     ${EmailRouteFieldsFragmentDoc}`;
-export type UpdateEmailRouteMutationFn = Apollo.MutationFunction<UpdateEmailRouteMutation, UpdateEmailRouteMutationVariables>;
+export type UpdateEmailRouteMutationFn = Apollo.MutationFunction<UpdateEmailRouteMutationData, UpdateEmailRouteMutationVariables>;
 
 /**
  * __useUpdateEmailRouteMutation__
@@ -119,12 +121,13 @@ export type UpdateEmailRouteMutationFn = Apollo.MutationFunction<UpdateEmailRout
  *   },
  * });
  */
-export function useUpdateEmailRouteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEmailRouteMutation, UpdateEmailRouteMutationVariables>) {
-        return Apollo.useMutation<UpdateEmailRouteMutation, UpdateEmailRouteMutationVariables>(UpdateEmailRouteDocument, baseOptions);
+export function useUpdateEmailRouteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEmailRouteMutationData, UpdateEmailRouteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEmailRouteMutationData, UpdateEmailRouteMutationVariables>(UpdateEmailRouteDocument, options);
       }
 export type UpdateEmailRouteMutationHookResult = ReturnType<typeof useUpdateEmailRouteMutation>;
-export type UpdateEmailRouteMutationResult = Apollo.MutationResult<UpdateEmailRouteMutation>;
-export type UpdateEmailRouteMutationOptions = Apollo.BaseMutationOptions<UpdateEmailRouteMutation, UpdateEmailRouteMutationVariables>;
+export type UpdateEmailRouteMutationResult = Apollo.MutationResult<UpdateEmailRouteMutationData>;
+export type UpdateEmailRouteMutationOptions = Apollo.BaseMutationOptions<UpdateEmailRouteMutationData, UpdateEmailRouteMutationVariables>;
 export const DeleteEmailRouteDocument = gql`
     mutation DeleteEmailRoute($id: Int!) {
   deleteEmailRoute(input: {id: $id}) {
@@ -132,7 +135,7 @@ export const DeleteEmailRouteDocument = gql`
   }
 }
     `;
-export type DeleteEmailRouteMutationFn = Apollo.MutationFunction<DeleteEmailRouteMutation, DeleteEmailRouteMutationVariables>;
+export type DeleteEmailRouteMutationFn = Apollo.MutationFunction<DeleteEmailRouteMutationData, DeleteEmailRouteMutationVariables>;
 
 /**
  * __useDeleteEmailRouteMutation__
@@ -151,9 +154,10 @@ export type DeleteEmailRouteMutationFn = Apollo.MutationFunction<DeleteEmailRout
  *   },
  * });
  */
-export function useDeleteEmailRouteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEmailRouteMutation, DeleteEmailRouteMutationVariables>) {
-        return Apollo.useMutation<DeleteEmailRouteMutation, DeleteEmailRouteMutationVariables>(DeleteEmailRouteDocument, baseOptions);
+export function useDeleteEmailRouteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEmailRouteMutationData, DeleteEmailRouteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEmailRouteMutationData, DeleteEmailRouteMutationVariables>(DeleteEmailRouteDocument, options);
       }
 export type DeleteEmailRouteMutationHookResult = ReturnType<typeof useDeleteEmailRouteMutation>;
-export type DeleteEmailRouteMutationResult = Apollo.MutationResult<DeleteEmailRouteMutation>;
-export type DeleteEmailRouteMutationOptions = Apollo.BaseMutationOptions<DeleteEmailRouteMutation, DeleteEmailRouteMutationVariables>;
+export type DeleteEmailRouteMutationResult = Apollo.MutationResult<DeleteEmailRouteMutationData>;
+export type DeleteEmailRouteMutationOptions = Apollo.BaseMutationOptions<DeleteEmailRouteMutationData, DeleteEmailRouteMutationVariables>;

@@ -10,7 +10,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
-import { useEventProposalQueryQuery, EventProposalQueryQuery } from './queries.generated';
+import { useEventProposalQuery, EventProposalQueryData } from './queries.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import {
@@ -32,7 +32,7 @@ function parseResponseErrors(error: ApolloError) {
 
 type EventProposalFormInnerProps = {
   convention: ConventionForFormItemDisplay;
-  initialEventProposal: WithFormResponse<EventProposalQueryQuery['eventProposal']>;
+  initialEventProposal: WithFormResponse<EventProposalQueryData['eventProposal']>;
   form: CommonFormFieldsFragment;
   afterSubmit?: () => void;
   exitButton?: ReactNode;
@@ -159,7 +159,7 @@ export type EventProposalFormProps = {
 };
 
 function EventProposalForm({ eventProposalId, afterSubmit, exitButton }: EventProposalFormProps) {
-  const { data, loading, error } = useEventProposalQueryQuery({ variables: { eventProposalId } });
+  const { data, loading, error } = useEventProposalQuery({ variables: { eventProposalId } });
 
   const initialEventProposal = useMemo(
     () => (loading || error ? undefined : deserializeFormResponse(data!.eventProposal)),

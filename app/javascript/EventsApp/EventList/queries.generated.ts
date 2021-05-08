@@ -5,7 +5,8 @@ import { CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-export type EventListEventsQueryQueryVariables = Types.Exact<{
+const defaultOptions =  {}
+export type EventListEventsQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   pageSize?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.EventFiltersInput>;
@@ -13,7 +14,7 @@ export type EventListEventsQueryQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventListEventsQueryQuery = (
+export type EventListEventsQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -100,16 +101,16 @@ export const EventListEventsQueryDocument = gql`
     ${CommonConventionDataFragmentDoc}`;
 
 /**
- * __useEventListEventsQueryQuery__
+ * __useEventListEventsQuery__
  *
- * To run a query within a React component, call `useEventListEventsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventListEventsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventListEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventListEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventListEventsQueryQuery({
+ * const { data, loading, error } = useEventListEventsQuery({
  *   variables: {
  *      page: // value for 'page'
  *      pageSize: // value for 'pageSize'
@@ -118,12 +119,14 @@ export const EventListEventsQueryDocument = gql`
  *   },
  * });
  */
-export function useEventListEventsQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventListEventsQueryQuery, EventListEventsQueryQueryVariables>) {
-        return Apollo.useQuery<EventListEventsQueryQuery, EventListEventsQueryQueryVariables>(EventListEventsQueryDocument, baseOptions);
+export function useEventListEventsQuery(baseOptions?: Apollo.QueryHookOptions<EventListEventsQueryData, EventListEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventListEventsQueryData, EventListEventsQueryVariables>(EventListEventsQueryDocument, options);
       }
-export function useEventListEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventListEventsQueryQuery, EventListEventsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventListEventsQueryQuery, EventListEventsQueryQueryVariables>(EventListEventsQueryDocument, baseOptions);
+export function useEventListEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventListEventsQueryData, EventListEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventListEventsQueryData, EventListEventsQueryVariables>(EventListEventsQueryDocument, options);
         }
-export type EventListEventsQueryQueryHookResult = ReturnType<typeof useEventListEventsQueryQuery>;
+export type EventListEventsQueryHookResult = ReturnType<typeof useEventListEventsQuery>;
 export type EventListEventsQueryLazyQueryHookResult = ReturnType<typeof useEventListEventsQueryLazyQuery>;
-export type EventListEventsQueryQueryResult = Apollo.QueryResult<EventListEventsQueryQuery, EventListEventsQueryQueryVariables>;
+export type EventListEventsQueryDataResult = Apollo.QueryResult<EventListEventsQueryData, EventListEventsQueryVariables>;

@@ -3,6 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type AdminDepartmentFieldsFragment = (
   { __typename: 'Department' }
   & Pick<Types.Department, 'id' | 'name' | 'proposal_description'>
@@ -12,10 +13,10 @@ export type AdminDepartmentFieldsFragment = (
   )> }
 );
 
-export type DepartmentAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type DepartmentAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type DepartmentAdminQueryQuery = (
+export type DepartmentAdminQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -58,26 +59,28 @@ export const DepartmentAdminQueryDocument = gql`
     ${AdminDepartmentFieldsFragmentDoc}`;
 
 /**
- * __useDepartmentAdminQueryQuery__
+ * __useDepartmentAdminQuery__
  *
- * To run a query within a React component, call `useDepartmentAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useDepartmentAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDepartmentAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDepartmentAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDepartmentAdminQueryQuery({
+ * const { data, loading, error } = useDepartmentAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useDepartmentAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<DepartmentAdminQueryQuery, DepartmentAdminQueryQueryVariables>) {
-        return Apollo.useQuery<DepartmentAdminQueryQuery, DepartmentAdminQueryQueryVariables>(DepartmentAdminQueryDocument, baseOptions);
+export function useDepartmentAdminQuery(baseOptions?: Apollo.QueryHookOptions<DepartmentAdminQueryData, DepartmentAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
       }
-export function useDepartmentAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DepartmentAdminQueryQuery, DepartmentAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<DepartmentAdminQueryQuery, DepartmentAdminQueryQueryVariables>(DepartmentAdminQueryDocument, baseOptions);
+export function useDepartmentAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DepartmentAdminQueryData, DepartmentAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
         }
-export type DepartmentAdminQueryQueryHookResult = ReturnType<typeof useDepartmentAdminQueryQuery>;
+export type DepartmentAdminQueryHookResult = ReturnType<typeof useDepartmentAdminQuery>;
 export type DepartmentAdminQueryLazyQueryHookResult = ReturnType<typeof useDepartmentAdminQueryLazyQuery>;
-export type DepartmentAdminQueryQueryResult = Apollo.QueryResult<DepartmentAdminQueryQuery, DepartmentAdminQueryQueryVariables>;
+export type DepartmentAdminQueryDataResult = Apollo.QueryResult<DepartmentAdminQueryData, DepartmentAdminQueryVariables>;

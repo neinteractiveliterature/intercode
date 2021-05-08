@@ -8,7 +8,7 @@ import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
 import { sortByLocaleString } from '../../ValueUtils';
 import useUniqueId from '../../useUniqueId';
 import { CmsLayout, Page } from '../../graphqlTypes.generated';
-import { CmsPagesAdminQueryQuery } from './queries.generated';
+import { CmsPagesAdminQueryData } from './queries.generated';
 import { usePropertySetters } from '../../usePropertySetters';
 
 export type PageFormFields = Pick<
@@ -19,8 +19,8 @@ export type PageFormFields = Pick<
 export type CmsPageFormProps<T extends PageFormFields> = {
   page: T;
   onChange?: React.Dispatch<React.SetStateAction<T>>;
-  cmsParent: CmsPagesAdminQueryQuery['cmsParent'];
-  cmsLayouts: CmsPagesAdminQueryQuery['cmsLayouts'];
+  cmsParent: CmsPagesAdminQueryData['cmsParent'];
+  cmsLayouts: CmsPagesAdminQueryData['cmsLayouts'];
   readOnly?: boolean;
 };
 

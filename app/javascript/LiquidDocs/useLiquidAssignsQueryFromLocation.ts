@@ -4,10 +4,10 @@ import { useLocation } from 'react-router-dom';
 
 import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries';
 import {
-  LiquidAssignsQueryQuery,
-  LiquidAssignsQueryQueryVariables,
-  NotifierLiquidAssignsQueryQuery,
-  NotifierLiquidAssignsQueryQueryVariables,
+  LiquidAssignsQueryData,
+  LiquidAssignsQueryVariables,
+  NotifierLiquidAssignsQueryData,
+  NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
 
 export default function useLiquidAssignsQueryFromLocation() {
@@ -18,8 +18,8 @@ export default function useLiquidAssignsQueryFromLocation() {
 
   return [
     useQuery<
-      NotifierLiquidAssignsQueryQuery | LiquidAssignsQueryQuery,
-      NotifierLiquidAssignsQueryQueryVariables | LiquidAssignsQueryQueryVariables
+      NotifierLiquidAssignsQueryData | LiquidAssignsQueryData,
+      NotifierLiquidAssignsQueryVariables | LiquidAssignsQueryVariables
     >(notifierEventKey ? NotifierLiquidAssignsQuery : LiquidAssignsQuery, {
       variables: notifierEventKey ? { eventKey: notifierEventKey } : {},
     }),

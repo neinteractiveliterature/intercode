@@ -14,11 +14,11 @@ import TableHeader from '../Tables/TableHeader';
 import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import {
-  SignupSpySignupChangesQueryQuery,
-  useSignupSpySignupChangesQueryQuery,
+  SignupSpySignupChangesQueryData,
+  useSignupSpySignupChangesQuery,
 } from './queries.generated';
 
-type SignupChangeType = SignupSpySignupChangesQueryQuery['convention']['signup_changes_paginated']['entries'][0];
+type SignupChangeType = SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -100,7 +100,7 @@ function SignupSpyTable() {
     getData: ({ data }) => data.convention.signup_changes_paginated.entries,
     getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
     getPossibleColumns: () => columns,
-    useQuery: useSignupSpySignupChangesQueryQuery,
+    useQuery: useSignupSpySignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
   });
 

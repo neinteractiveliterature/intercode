@@ -9,9 +9,9 @@ import { useConfirm } from '../ModalDialogs/Confirm';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import { SignupRequestState } from '../graphqlTypes.generated';
 import {
-  SignupModerationQueueQueryQuery,
+  SignupModerationQueueQueryData,
   SignupModerationSignupRequestFieldsFragment,
-  useSignupModerationQueueQueryQuery,
+  useSignupModerationQueueQuery,
 } from './queries.generated';
 import {
   useAcceptSignupRequestMutation,
@@ -61,7 +61,7 @@ function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFie
 
 type SignupModerationRunDetailsProps = {
   run: NonNullable<
-    SignupModerationQueueQueryQuery['convention']
+    SignupModerationQueueQueryData['convention']
   >['signup_requests_paginated']['entries'][0]['target_run'];
   showRequestedBucket?: boolean;
   requestedBucketKey?: string;
@@ -165,7 +165,7 @@ function SignupRequestActionsCell({
 }
 
 function getPossibleColumns(): Column<
-  SignupModerationQueueQueryQuery['convention']['signup_requests_paginated']['entries'][number]
+  SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number]
 >[] {
   return [
     {
@@ -210,7 +210,7 @@ function SignupModerationQueue() {
   const [rejectSignupRequest] = useRejectSignupRequestMutation();
   const confirm = useConfirm();
   const { tableInstance, loading } = useReactTableWithTheWorks({
-    useQuery: useSignupModerationQueueQueryQuery,
+    useQuery: useSignupModerationQueueQuery,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
     getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
@@ -254,7 +254,7 @@ function SignupModerationQueue() {
         }),
       rejectClicked: (
         signupRequest: NonNullable<
-          SignupModerationQueueQueryQuery['convention']
+          SignupModerationQueueQueryData['convention']
         >['signup_requests_paginated']['entries'][0],
       ) =>
         confirm({

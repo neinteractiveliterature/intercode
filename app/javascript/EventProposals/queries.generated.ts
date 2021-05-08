@@ -5,6 +5,7 @@ import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormIt
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type EventProposalFieldsFragment = (
   { __typename: 'EventProposal' }
   & Pick<Types.EventProposal, 'id' | 'title' | 'status' | 'form_response_attrs_json'>
@@ -35,12 +36,12 @@ export type EventProposalFormDataFragment = (
   & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
 );
 
-export type EventProposalQueryQueryVariables = Types.Exact<{
+export type EventProposalQueryVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalQueryQuery = (
+export type EventProposalQueryData = (
   { __typename: 'Query' }
   & { currentAbility: (
     { __typename: 'Ability' }
@@ -61,7 +62,7 @@ export type EventProposalQueryWithOwnerQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventProposalQueryWithOwnerQuery = (
+export type EventProposalQueryWithOwnerQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -81,12 +82,12 @@ export type EventProposalQueryWithOwnerQuery = (
   ) }
 );
 
-export type EventProposalAdminNotesQueryQueryVariables = Types.Exact<{
+export type EventProposalAdminNotesQueryVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalAdminNotesQueryQuery = (
+export type EventProposalAdminNotesQueryData = (
   { __typename: 'Query' }
   & { eventProposal: (
     { __typename: 'EventProposal' }
@@ -94,10 +95,10 @@ export type EventProposalAdminNotesQueryQuery = (
   ) }
 );
 
-export type ProposeEventButtonQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ProposeEventButtonQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ProposeEventButtonQueryQuery = (
+export type ProposeEventButtonQueryData = (
   { __typename: 'Query' }
   & { myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
@@ -138,7 +139,7 @@ export type ProposeEventButtonQueryQuery = (
   ) }
 );
 
-export type EventProposalsAdminQueryQueryVariables = Types.Exact<{
+export type EventProposalsAdminQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
   perPage?: Types.Maybe<Types.Scalars['Int']>;
   filters?: Types.Maybe<Types.EventProposalFiltersInput>;
@@ -146,7 +147,7 @@ export type EventProposalsAdminQueryQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventProposalsAdminQueryQuery = (
+export type EventProposalsAdminQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -175,12 +176,12 @@ export type EventProposalsAdminQueryQuery = (
   ) }
 );
 
-export type EventProposalHistoryQueryQueryVariables = Types.Exact<{
+export type EventProposalHistoryQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalHistoryQueryQuery = (
+export type EventProposalHistoryQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -272,30 +273,32 @@ export const EventProposalQueryDocument = gql`
 ${EventProposalFieldsFragmentDoc}`;
 
 /**
- * __useEventProposalQueryQuery__
+ * __useEventProposalQuery__
  *
- * To run a query within a React component, call `useEventProposalQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProposalQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProposalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventProposalQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProposalQueryQuery({
+ * const { data, loading, error } = useEventProposalQuery({
  *   variables: {
  *      eventProposalId: // value for 'eventProposalId'
  *   },
  * });
  */
-export function useEventProposalQueryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryQuery, EventProposalQueryQueryVariables>) {
-        return Apollo.useQuery<EventProposalQueryQuery, EventProposalQueryQueryVariables>(EventProposalQueryDocument, baseOptions);
+export function useEventProposalQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryData, EventProposalQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProposalQueryData, EventProposalQueryVariables>(EventProposalQueryDocument, options);
       }
-export function useEventProposalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalQueryQuery, EventProposalQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventProposalQueryQuery, EventProposalQueryQueryVariables>(EventProposalQueryDocument, baseOptions);
+export function useEventProposalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalQueryData, EventProposalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProposalQueryData, EventProposalQueryVariables>(EventProposalQueryDocument, options);
         }
-export type EventProposalQueryQueryHookResult = ReturnType<typeof useEventProposalQueryQuery>;
+export type EventProposalQueryHookResult = ReturnType<typeof useEventProposalQuery>;
 export type EventProposalQueryLazyQueryHookResult = ReturnType<typeof useEventProposalQueryLazyQuery>;
-export type EventProposalQueryQueryResult = Apollo.QueryResult<EventProposalQueryQuery, EventProposalQueryQueryVariables>;
+export type EventProposalQueryDataResult = Apollo.QueryResult<EventProposalQueryData, EventProposalQueryVariables>;
 export const EventProposalQueryWithOwnerDocument = gql`
     query EventProposalQueryWithOwner($eventProposalId: Int!) {
   convention: assertConvention {
@@ -322,30 +325,32 @@ export const EventProposalQueryWithOwnerDocument = gql`
 ${EventProposalFieldsFragmentDoc}`;
 
 /**
- * __useEventProposalQueryWithOwnerQuery__
+ * __useEventProposalQueryWithOwner__
  *
- * To run a query within a React component, call `useEventProposalQueryWithOwnerQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProposalQueryWithOwnerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProposalQueryWithOwner` and pass it any options that fit your needs.
+ * When your component renders, `useEventProposalQueryWithOwner` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProposalQueryWithOwnerQuery({
+ * const { data, loading, error } = useEventProposalQueryWithOwner({
  *   variables: {
  *      eventProposalId: // value for 'eventProposalId'
  *   },
  * });
  */
-export function useEventProposalQueryWithOwnerQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>) {
-        return Apollo.useQuery<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, baseOptions);
+export function useEventProposalQueryWithOwner(baseOptions: Apollo.QueryHookOptions<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, options);
       }
-export function useEventProposalQueryWithOwnerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>) {
-          return Apollo.useLazyQuery<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, baseOptions);
+export function useEventProposalQueryWithOwnerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, options);
         }
-export type EventProposalQueryWithOwnerQueryHookResult = ReturnType<typeof useEventProposalQueryWithOwnerQuery>;
+export type EventProposalQueryWithOwnerHookResult = ReturnType<typeof useEventProposalQueryWithOwner>;
 export type EventProposalQueryWithOwnerLazyQueryHookResult = ReturnType<typeof useEventProposalQueryWithOwnerLazyQuery>;
-export type EventProposalQueryWithOwnerQueryResult = Apollo.QueryResult<EventProposalQueryWithOwnerQuery, EventProposalQueryWithOwnerQueryVariables>;
+export type EventProposalQueryWithOwnerQueryResult = Apollo.QueryResult<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>;
 export const EventProposalAdminNotesQueryDocument = gql`
     query EventProposalAdminNotesQuery($eventProposalId: Int!) {
   eventProposal(id: $eventProposalId) {
@@ -356,30 +361,32 @@ export const EventProposalAdminNotesQueryDocument = gql`
     `;
 
 /**
- * __useEventProposalAdminNotesQueryQuery__
+ * __useEventProposalAdminNotesQuery__
  *
- * To run a query within a React component, call `useEventProposalAdminNotesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProposalAdminNotesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProposalAdminNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventProposalAdminNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProposalAdminNotesQueryQuery({
+ * const { data, loading, error } = useEventProposalAdminNotesQuery({
  *   variables: {
  *      eventProposalId: // value for 'eventProposalId'
  *   },
  * });
  */
-export function useEventProposalAdminNotesQueryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>) {
-        return Apollo.useQuery<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>(EventProposalAdminNotesQueryDocument, baseOptions);
+export function useEventProposalAdminNotesQuery(baseOptions: Apollo.QueryHookOptions<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>(EventProposalAdminNotesQueryDocument, options);
       }
-export function useEventProposalAdminNotesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>(EventProposalAdminNotesQueryDocument, baseOptions);
+export function useEventProposalAdminNotesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>(EventProposalAdminNotesQueryDocument, options);
         }
-export type EventProposalAdminNotesQueryQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQueryQuery>;
+export type EventProposalAdminNotesQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQuery>;
 export type EventProposalAdminNotesQueryLazyQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQueryLazyQuery>;
-export type EventProposalAdminNotesQueryQueryResult = Apollo.QueryResult<EventProposalAdminNotesQueryQuery, EventProposalAdminNotesQueryQueryVariables>;
+export type EventProposalAdminNotesQueryDataResult = Apollo.QueryResult<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>;
 export const ProposeEventButtonQueryDocument = gql`
     query ProposeEventButtonQuery {
   myProfile {
@@ -426,29 +433,31 @@ export const ProposeEventButtonQueryDocument = gql`
     `;
 
 /**
- * __useProposeEventButtonQueryQuery__
+ * __useProposeEventButtonQuery__
  *
- * To run a query within a React component, call `useProposeEventButtonQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useProposeEventButtonQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProposeEventButtonQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProposeEventButtonQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProposeEventButtonQueryQuery({
+ * const { data, loading, error } = useProposeEventButtonQuery({
  *   variables: {
  *   },
  * });
  */
-export function useProposeEventButtonQueryQuery(baseOptions?: Apollo.QueryHookOptions<ProposeEventButtonQueryQuery, ProposeEventButtonQueryQueryVariables>) {
-        return Apollo.useQuery<ProposeEventButtonQueryQuery, ProposeEventButtonQueryQueryVariables>(ProposeEventButtonQueryDocument, baseOptions);
+export function useProposeEventButtonQuery(baseOptions?: Apollo.QueryHookOptions<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>(ProposeEventButtonQueryDocument, options);
       }
-export function useProposeEventButtonQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProposeEventButtonQueryQuery, ProposeEventButtonQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ProposeEventButtonQueryQuery, ProposeEventButtonQueryQueryVariables>(ProposeEventButtonQueryDocument, baseOptions);
+export function useProposeEventButtonQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>(ProposeEventButtonQueryDocument, options);
         }
-export type ProposeEventButtonQueryQueryHookResult = ReturnType<typeof useProposeEventButtonQueryQuery>;
+export type ProposeEventButtonQueryHookResult = ReturnType<typeof useProposeEventButtonQuery>;
 export type ProposeEventButtonQueryLazyQueryHookResult = ReturnType<typeof useProposeEventButtonQueryLazyQuery>;
-export type ProposeEventButtonQueryQueryResult = Apollo.QueryResult<ProposeEventButtonQueryQuery, ProposeEventButtonQueryQueryVariables>;
+export type ProposeEventButtonQueryDataResult = Apollo.QueryResult<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>;
 export const EventProposalsAdminQueryDocument = gql`
     query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
   convention: assertConvention {
@@ -499,16 +508,16 @@ export const EventProposalsAdminQueryDocument = gql`
     `;
 
 /**
- * __useEventProposalsAdminQueryQuery__
+ * __useEventProposalsAdminQuery__
  *
- * To run a query within a React component, call `useEventProposalsAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProposalsAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProposalsAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventProposalsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProposalsAdminQueryQuery({
+ * const { data, loading, error } = useEventProposalsAdminQuery({
  *   variables: {
  *      page: // value for 'page'
  *      perPage: // value for 'perPage'
@@ -517,15 +526,17 @@ export const EventProposalsAdminQueryDocument = gql`
  *   },
  * });
  */
-export function useEventProposalsAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<EventProposalsAdminQueryQuery, EventProposalsAdminQueryQueryVariables>) {
-        return Apollo.useQuery<EventProposalsAdminQueryQuery, EventProposalsAdminQueryQueryVariables>(EventProposalsAdminQueryDocument, baseOptions);
+export function useEventProposalsAdminQuery(baseOptions?: Apollo.QueryHookOptions<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>(EventProposalsAdminQueryDocument, options);
       }
-export function useEventProposalsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalsAdminQueryQuery, EventProposalsAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventProposalsAdminQueryQuery, EventProposalsAdminQueryQueryVariables>(EventProposalsAdminQueryDocument, baseOptions);
+export function useEventProposalsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>(EventProposalsAdminQueryDocument, options);
         }
-export type EventProposalsAdminQueryQueryHookResult = ReturnType<typeof useEventProposalsAdminQueryQuery>;
+export type EventProposalsAdminQueryHookResult = ReturnType<typeof useEventProposalsAdminQuery>;
 export type EventProposalsAdminQueryLazyQueryHookResult = ReturnType<typeof useEventProposalsAdminQueryLazyQuery>;
-export type EventProposalsAdminQueryQueryResult = Apollo.QueryResult<EventProposalsAdminQueryQuery, EventProposalsAdminQueryQueryVariables>;
+export type EventProposalsAdminQueryDataResult = Apollo.QueryResult<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>;
 export const EventProposalHistoryQueryDocument = gql`
     query EventProposalHistoryQuery($id: Int!) {
   convention: assertConvention {
@@ -571,27 +582,29 @@ export const EventProposalHistoryQueryDocument = gql`
     ${CommonFormFieldsFragmentDoc}`;
 
 /**
- * __useEventProposalHistoryQueryQuery__
+ * __useEventProposalHistoryQuery__
  *
- * To run a query within a React component, call `useEventProposalHistoryQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventProposalHistoryQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEventProposalHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventProposalHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEventProposalHistoryQueryQuery({
+ * const { data, loading, error } = useEventProposalHistoryQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useEventProposalHistoryQueryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>) {
-        return Apollo.useQuery<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>(EventProposalHistoryQueryDocument, baseOptions);
+export function useEventProposalHistoryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>(EventProposalHistoryQueryDocument, options);
       }
-export function useEventProposalHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>(EventProposalHistoryQueryDocument, baseOptions);
+export function useEventProposalHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>(EventProposalHistoryQueryDocument, options);
         }
-export type EventProposalHistoryQueryQueryHookResult = ReturnType<typeof useEventProposalHistoryQueryQuery>;
+export type EventProposalHistoryQueryHookResult = ReturnType<typeof useEventProposalHistoryQuery>;
 export type EventProposalHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventProposalHistoryQueryLazyQuery>;
-export type EventProposalHistoryQueryQueryResult = Apollo.QueryResult<EventProposalHistoryQueryQuery, EventProposalHistoryQueryQueryVariables>;
+export type EventProposalHistoryQueryDataResult = Apollo.QueryResult<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>;

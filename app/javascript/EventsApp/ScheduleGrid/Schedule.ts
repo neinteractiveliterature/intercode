@@ -9,7 +9,7 @@ import {
   isCatchAllMatchRule,
   buildCategoryMatchRules,
 } from './ScheduleGridConfig';
-import { ScheduleGridEventFragmentFragment } from './queries.generated';
+import { ScheduleGridEventFragment } from './queries.generated';
 import { timespanFromRun } from '../../TimespanUtils';
 import { timeIsOnTheHour } from '../../TimeUtils';
 
@@ -22,17 +22,11 @@ function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   return Timespan.fromDateTimes(start, finish) as FiniteTimespan;
 }
 
-type EventForConflictingRuns = Pick<
-  ScheduleGridEventFragmentFragment,
-  'can_play_concurrently' | 'id'
-> & {
+type EventForConflictingRuns = Pick<ScheduleGridEventFragment, 'can_play_concurrently' | 'id'> & {
   runs: {
-    my_signups: Pick<
-      ScheduleGridEventFragmentFragment['runs'][number]['my_signups'][number],
-      'state'
-    >[];
+    my_signups: Pick<ScheduleGridEventFragment['runs'][number]['my_signups'][number], 'state'>[];
     my_signup_requests: Pick<
-      ScheduleGridEventFragmentFragment['runs'][number]['my_signup_requests'][number],
+      ScheduleGridEventFragment['runs'][number]['my_signup_requests'][number],
       'state'
     >[];
   }[];
@@ -61,7 +55,7 @@ export function findConflictingRuns<T extends EventForConflictingRuns>(events: T
   return conflictingRuns;
 }
 
-export type ScheduleEvent = ScheduleGridEventFragmentFragment & {
+export type ScheduleEvent = ScheduleGridEventFragment & {
   displayTitle?: string;
   fake?: boolean;
 };

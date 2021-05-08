@@ -23,10 +23,10 @@ import useValueUnless from '../../useValueUnless';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import {
-  RunSignupsTableSignupsQueryQuery,
-  RunSignupsTableSignupsQueryQueryVariables,
-  useRunSignupsTableSignupsQueryQuery,
-  useSignupAdminEventQueryQuery,
+  RunSignupsTableSignupsQueryData,
+  RunSignupsTableSignupsQueryVariables,
+  useRunSignupsTableSignupsQuery,
+  useSignupAdminEventQuery,
 } from './queries.generated';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
@@ -34,7 +34,7 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   bucket: FilterCodecs.stringArray,
 });
 
-type SignupType = RunSignupsTableSignupsQueryQuery['event']['run']['signups_paginated']['entries'][0];
+type SignupType = RunSignupsTableSignupsQueryData['event']['run']['signups_paginated']['entries'][0];
 
 const SignupStateFilter = (props: FilterProps<SignupType>) => {
   const { t } = useTranslation();
@@ -71,12 +71,12 @@ const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
 
 const BucketCell = ({ row: { original } }: CellProps<SignupType>) => {
   const { t } = useTranslation();
-  const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryQuery;
+  const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryData;
   return <>{formatBucket(original, data.event, t)}</>;
 };
 
 const BucketFilter = (props: FilterProps<SignupType>) => {
-  const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryQuery;
+  const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryData;
   const choices = useMemo(
     () =>
       data?.event
@@ -171,7 +171,7 @@ export type RunSignupsTableProps = {
 function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: RunSignupsTableProps) {
   const { t } = useTranslation();
   const history = useHistory();
-  const { data, loading, error } = useSignupAdminEventQueryQuery({ variables: { eventId } });
+  const { data, loading, error } = useSignupAdminEventQuery({ variables: { eventId } });
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
 
   const {
@@ -180,9 +180,9 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     tableHeaderProps,
     queryData,
   } = useReactTableWithTheWorks<
-    RunSignupsTableSignupsQueryQuery,
-    RunSignupsTableSignupsQueryQuery['event']['run']['signups_paginated']['entries'][number],
-    RunSignupsTableSignupsQueryQueryVariables
+    RunSignupsTableSignupsQueryData,
+    RunSignupsTableSignupsQueryData['event']['run']['signups_paginated']['entries'][number],
+    RunSignupsTableSignupsQueryVariables
   >({
     decodeFilterValue,
     defaultVisibleColumns,
@@ -190,7 +190,7 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     getData: ({ data: tableData }) => tableData.event.run.signups_paginated.entries,
     getPages: ({ data: tableData }) => tableData.event.run.signups_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
-    useQuery: useRunSignupsTableSignupsQueryQuery,
+    useQuery: useRunSignupsTableSignupsQuery,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId, runId },
   });

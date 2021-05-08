@@ -14,12 +14,12 @@ import RateEventControl from '../../EventRatings/RateEventControl';
 import useRateEvent from '../../EventRatings/useRateEvent';
 import Gravatar from '../../Gravatar';
 import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
-import { EventListEventsQueryQuery } from './queries.generated';
+import { EventListEventsQueryData } from './queries.generated';
 import { notEmpty } from '../../ValueUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { useFormatRunTime } from '../runTimeFormatting';
 
-type ConventionType = NonNullable<EventListEventsQueryQuery['convention']>;
+type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
 
 function renderFirstRunTime(
@@ -88,7 +88,7 @@ function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members
 export type EventCardProps = {
   event: EventType;
   sortBy?: SortingRule<
-    NonNullable<EventListEventsQueryQuery['convention']>['events_paginated']['entries'][number]
+    NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]
   >[];
   canReadSchedule?: boolean;
 };

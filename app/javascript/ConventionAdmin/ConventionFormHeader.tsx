@@ -10,7 +10,7 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { ShowSchedule } from '../graphqlTypes.generated';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
-import { ConventionAdminConventionQueryQuery } from './queries.generated';
+import { ConventionAdminConventionQueryData } from './queries.generated';
 
 function describeEventVisibility(visibility: ShowSchedule | null | undefined) {
   switch (visibility) {
@@ -94,7 +94,7 @@ function describeConventionTiming(
 
 export type ConventionFormHeaderProps = {
   convention: Pick<
-    ConventionAdminConventionQueryQuery['convention'],
+    ConventionAdminConventionQueryData['convention'],
     | 'id'
     | 'name'
     | 'starts_at'

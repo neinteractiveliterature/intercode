@@ -5,6 +5,7 @@ import { ConventionDisplayFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ConventionDisplayFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateConventionMutationVariables = Types.Exact<{
   convention: Types.ConventionInput;
   cloneConventionId?: Types.Maybe<Types.Scalars['Int']>;
@@ -13,7 +14,7 @@ export type CreateConventionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConventionMutation = (
+export type CreateConventionMutationData = (
   { __typename: 'Mutation' }
   & { createConvention?: Types.Maybe<(
     { __typename: 'CreateConventionPayload' }
@@ -31,7 +32,7 @@ export type SetConventionCanceledMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetConventionCanceledMutation = (
+export type SetConventionCanceledMutationData = (
   { __typename: 'Mutation' }
   & { setConventionCanceled?: Types.Maybe<(
     { __typename: 'SetConventionCanceledPayload' }
@@ -56,7 +57,7 @@ export const CreateConventionDocument = gql`
   }
 }
     ${ConventionDisplayFieldsFragmentDoc}`;
-export type CreateConventionMutationFn = Apollo.MutationFunction<CreateConventionMutation, CreateConventionMutationVariables>;
+export type CreateConventionMutationFn = Apollo.MutationFunction<CreateConventionMutationData, CreateConventionMutationVariables>;
 
 /**
  * __useCreateConventionMutation__
@@ -78,12 +79,13 @@ export type CreateConventionMutationFn = Apollo.MutationFunction<CreateConventio
  *   },
  * });
  */
-export function useCreateConventionMutation(baseOptions?: Apollo.MutationHookOptions<CreateConventionMutation, CreateConventionMutationVariables>) {
-        return Apollo.useMutation<CreateConventionMutation, CreateConventionMutationVariables>(CreateConventionDocument, baseOptions);
+export function useCreateConventionMutation(baseOptions?: Apollo.MutationHookOptions<CreateConventionMutationData, CreateConventionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateConventionMutationData, CreateConventionMutationVariables>(CreateConventionDocument, options);
       }
 export type CreateConventionMutationHookResult = ReturnType<typeof useCreateConventionMutation>;
-export type CreateConventionMutationResult = Apollo.MutationResult<CreateConventionMutation>;
-export type CreateConventionMutationOptions = Apollo.BaseMutationOptions<CreateConventionMutation, CreateConventionMutationVariables>;
+export type CreateConventionMutationResult = Apollo.MutationResult<CreateConventionMutationData>;
+export type CreateConventionMutationOptions = Apollo.BaseMutationOptions<CreateConventionMutationData, CreateConventionMutationVariables>;
 export const SetConventionCanceledDocument = gql`
     mutation SetConventionCanceled($id: Int!, $canceled: Boolean!) {
   setConventionCanceled(input: {id: $id, canceled: $canceled}) {
@@ -94,7 +96,7 @@ export const SetConventionCanceledDocument = gql`
   }
 }
     ${ConventionDisplayFieldsFragmentDoc}`;
-export type SetConventionCanceledMutationFn = Apollo.MutationFunction<SetConventionCanceledMutation, SetConventionCanceledMutationVariables>;
+export type SetConventionCanceledMutationFn = Apollo.MutationFunction<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>;
 
 /**
  * __useSetConventionCanceledMutation__
@@ -114,9 +116,10 @@ export type SetConventionCanceledMutationFn = Apollo.MutationFunction<SetConvent
  *   },
  * });
  */
-export function useSetConventionCanceledMutation(baseOptions?: Apollo.MutationHookOptions<SetConventionCanceledMutation, SetConventionCanceledMutationVariables>) {
-        return Apollo.useMutation<SetConventionCanceledMutation, SetConventionCanceledMutationVariables>(SetConventionCanceledDocument, baseOptions);
+export function useSetConventionCanceledMutation(baseOptions?: Apollo.MutationHookOptions<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>(SetConventionCanceledDocument, options);
       }
 export type SetConventionCanceledMutationHookResult = ReturnType<typeof useSetConventionCanceledMutation>;
-export type SetConventionCanceledMutationResult = Apollo.MutationResult<SetConventionCanceledMutation>;
-export type SetConventionCanceledMutationOptions = Apollo.BaseMutationOptions<SetConventionCanceledMutation, SetConventionCanceledMutationVariables>;
+export type SetConventionCanceledMutationResult = Apollo.MutationResult<SetConventionCanceledMutationData>;
+export type SetConventionCanceledMutationOptions = Apollo.BaseMutationOptions<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>;

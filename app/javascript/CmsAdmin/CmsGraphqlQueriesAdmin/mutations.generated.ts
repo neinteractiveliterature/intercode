@@ -5,12 +5,13 @@ import { CmsGraphqlQueryFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsGraphqlQueryFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
   query: Types.CmsGraphqlQueryInput;
 }>;
 
 
-export type CreateCmsGraphqlQueryMutation = (
+export type CreateCmsGraphqlQueryMutationData = (
   { __typename: 'Mutation' }
   & { createCmsGraphqlQuery?: Types.Maybe<(
     { __typename: 'CreateCmsGraphqlQueryPayload' }
@@ -28,7 +29,7 @@ export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateCmsGraphqlQueryMutation = (
+export type UpdateCmsGraphqlQueryMutationData = (
   { __typename: 'Mutation' }
   & { updateCmsGraphqlQuery?: Types.Maybe<(
     { __typename: 'UpdateCmsGraphqlQueryPayload' }
@@ -45,7 +46,7 @@ export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteCmsGraphqlQueryMutation = (
+export type DeleteCmsGraphqlQueryMutationData = (
   { __typename: 'Mutation' }
   & { deleteCmsGraphqlQuery?: Types.Maybe<(
     { __typename: 'DeleteCmsGraphqlQueryPayload' }
@@ -67,31 +68,32 @@ export const CreateCmsGraphqlQueryDocument = gql`
   }
 }
     ${CmsGraphqlQueryFieldsFragmentDoc}`;
-export type CreateCmsGraphqlQueryMutationFn = Apollo.MutationFunction<CreateCmsGraphqlQueryMutation, CreateCmsGraphqlQueryMutationVariables>;
+export type CreateCmsGraphqlQueryMutationFn = Apollo.MutationFunction<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
 
 /**
- * __useCreateCmsGraphqlQueryMutation__
+ * __useCreateCmsGraphqlQuery__
  *
- * To run a mutation, you first call `useCreateCmsGraphqlQueryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCmsGraphqlQueryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateCmsGraphqlQuery` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCmsGraphqlQuery` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createCmsGraphqlQueryMutation, { data, loading, error }] = useCreateCmsGraphqlQueryMutation({
+ * const [createCmsGraphqlQuery, { data, loading, error }] = useCreateCmsGraphqlQuery({
  *   variables: {
  *      query: // value for 'query'
  *   },
  * });
  */
-export function useCreateCmsGraphqlQueryMutation(baseOptions?: Apollo.MutationHookOptions<CreateCmsGraphqlQueryMutation, CreateCmsGraphqlQueryMutationVariables>) {
-        return Apollo.useMutation<CreateCmsGraphqlQueryMutation, CreateCmsGraphqlQueryMutationVariables>(CreateCmsGraphqlQueryDocument, baseOptions);
+export function useCreateCmsGraphqlQuery(baseOptions?: Apollo.MutationHookOptions<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>(CreateCmsGraphqlQueryDocument, options);
       }
-export type CreateCmsGraphqlQueryMutationHookResult = ReturnType<typeof useCreateCmsGraphqlQueryMutation>;
-export type CreateCmsGraphqlQueryMutationResult = Apollo.MutationResult<CreateCmsGraphqlQueryMutation>;
-export type CreateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<CreateCmsGraphqlQueryMutation, CreateCmsGraphqlQueryMutationVariables>;
+export type CreateCmsGraphqlQueryHookResult = ReturnType<typeof useCreateCmsGraphqlQuery>;
+export type CreateCmsGraphqlQueryMutationResult = Apollo.MutationResult<CreateCmsGraphqlQueryMutationData>;
+export type CreateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
 export const UpdateCmsGraphqlQueryDocument = gql`
     mutation UpdateCmsGraphqlQuery($id: Int!, $query: CmsGraphqlQueryInput!) {
   updateCmsGraphqlQuery(input: {id: $id, query: $query}) {
@@ -102,32 +104,33 @@ export const UpdateCmsGraphqlQueryDocument = gql`
   }
 }
     ${CmsGraphqlQueryFieldsFragmentDoc}`;
-export type UpdateCmsGraphqlQueryMutationFn = Apollo.MutationFunction<UpdateCmsGraphqlQueryMutation, UpdateCmsGraphqlQueryMutationVariables>;
+export type UpdateCmsGraphqlQueryMutationFn = Apollo.MutationFunction<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
 
 /**
- * __useUpdateCmsGraphqlQueryMutation__
+ * __useUpdateCmsGraphqlQuery__
  *
- * To run a mutation, you first call `useUpdateCmsGraphqlQueryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCmsGraphqlQueryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateCmsGraphqlQuery` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCmsGraphqlQuery` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateCmsGraphqlQueryMutation, { data, loading, error }] = useUpdateCmsGraphqlQueryMutation({
+ * const [updateCmsGraphqlQuery, { data, loading, error }] = useUpdateCmsGraphqlQuery({
  *   variables: {
  *      id: // value for 'id'
  *      query: // value for 'query'
  *   },
  * });
  */
-export function useUpdateCmsGraphqlQueryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCmsGraphqlQueryMutation, UpdateCmsGraphqlQueryMutationVariables>) {
-        return Apollo.useMutation<UpdateCmsGraphqlQueryMutation, UpdateCmsGraphqlQueryMutationVariables>(UpdateCmsGraphqlQueryDocument, baseOptions);
+export function useUpdateCmsGraphqlQuery(baseOptions?: Apollo.MutationHookOptions<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>(UpdateCmsGraphqlQueryDocument, options);
       }
-export type UpdateCmsGraphqlQueryMutationHookResult = ReturnType<typeof useUpdateCmsGraphqlQueryMutation>;
-export type UpdateCmsGraphqlQueryMutationResult = Apollo.MutationResult<UpdateCmsGraphqlQueryMutation>;
-export type UpdateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<UpdateCmsGraphqlQueryMutation, UpdateCmsGraphqlQueryMutationVariables>;
+export type UpdateCmsGraphqlQueryHookResult = ReturnType<typeof useUpdateCmsGraphqlQuery>;
+export type UpdateCmsGraphqlQueryMutationResult = Apollo.MutationResult<UpdateCmsGraphqlQueryMutationData>;
+export type UpdateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
 export const DeleteCmsGraphqlQueryDocument = gql`
     mutation DeleteCmsGraphqlQuery($id: Int!) {
   deleteCmsGraphqlQuery(input: {id: $id}) {
@@ -137,28 +140,29 @@ export const DeleteCmsGraphqlQueryDocument = gql`
   }
 }
     `;
-export type DeleteCmsGraphqlQueryMutationFn = Apollo.MutationFunction<DeleteCmsGraphqlQueryMutation, DeleteCmsGraphqlQueryMutationVariables>;
+export type DeleteCmsGraphqlQueryMutationFn = Apollo.MutationFunction<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>;
 
 /**
- * __useDeleteCmsGraphqlQueryMutation__
+ * __useDeleteCmsGraphqlQuery__
  *
- * To run a mutation, you first call `useDeleteCmsGraphqlQueryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCmsGraphqlQueryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteCmsGraphqlQuery` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCmsGraphqlQuery` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteCmsGraphqlQueryMutation, { data, loading, error }] = useDeleteCmsGraphqlQueryMutation({
+ * const [deleteCmsGraphqlQuery, { data, loading, error }] = useDeleteCmsGraphqlQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeleteCmsGraphqlQueryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCmsGraphqlQueryMutation, DeleteCmsGraphqlQueryMutationVariables>) {
-        return Apollo.useMutation<DeleteCmsGraphqlQueryMutation, DeleteCmsGraphqlQueryMutationVariables>(DeleteCmsGraphqlQueryDocument, baseOptions);
+export function useDeleteCmsGraphqlQuery(baseOptions?: Apollo.MutationHookOptions<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>(DeleteCmsGraphqlQueryDocument, options);
       }
-export type DeleteCmsGraphqlQueryMutationHookResult = ReturnType<typeof useDeleteCmsGraphqlQueryMutation>;
-export type DeleteCmsGraphqlQueryMutationResult = Apollo.MutationResult<DeleteCmsGraphqlQueryMutation>;
-export type DeleteCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<DeleteCmsGraphqlQueryMutation, DeleteCmsGraphqlQueryMutationVariables>;
+export type DeleteCmsGraphqlQueryHookResult = ReturnType<typeof useDeleteCmsGraphqlQuery>;
+export type DeleteCmsGraphqlQueryMutationResult = Apollo.MutationResult<DeleteCmsGraphqlQueryMutationData>;
+export type DeleteCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>;

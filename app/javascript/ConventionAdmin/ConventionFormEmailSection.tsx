@@ -4,7 +4,7 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import type { ConventionFormConvention } from './ConventionForm';
-import { ConventionAdminConventionQueryQuery } from './queries.generated';
+import { ConventionAdminConventionQueryData } from './queries.generated';
 import { usePropertySetters } from '../usePropertySetters';
 import { EmailMode } from '../graphqlTypes.generated';
 
@@ -12,7 +12,7 @@ export type ConventionFormEmailSectionProps = {
   convention: ConventionFormConvention;
   setConvention: React.Dispatch<React.SetStateAction<ConventionFormConvention>>;
   disabled: boolean;
-  staffPositions: ConventionAdminConventionQueryQuery['convention']['staff_positions'];
+  staffPositions: ConventionAdminConventionQueryData['convention']['staff_positions'];
 };
 
 function ConventionFormEmailSection({

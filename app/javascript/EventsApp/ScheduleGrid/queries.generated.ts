@@ -5,7 +5,8 @@ import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../que
 import { gql } from '@apollo/client';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-export type ScheduleGridEventFragmentFragment = (
+const defaultOptions =  {}
+export type ScheduleGridEventFragment = (
   { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'short_blurb_html' | 'my_rating' | 'can_play_concurrently'>
   & { event_category: (
@@ -25,10 +26,10 @@ export type ScheduleGridEventFragmentFragment = (
   )> }
 );
 
-export type ScheduleGridConventionDataQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScheduleGridConventionDataQueryQuery = (
+export type ScheduleGridConventionDataQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -37,30 +38,30 @@ export type ScheduleGridConventionDataQueryQuery = (
   ) }
 );
 
-export type ScheduleGridEventsQueryQueryVariables = Types.Exact<{
+export type ScheduleGridEventsQueryVariables = Types.Exact<{
   extendedCounts: Types.Scalars['Boolean'];
   start?: Types.Maybe<Types.Scalars['Date']>;
   finish?: Types.Maybe<Types.Scalars['Date']>;
 }>;
 
 
-export type ScheduleGridEventsQueryQuery = (
+export type ScheduleGridEventsQueryData = (
   { __typename: 'Query' }
   & { events: Array<(
     { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
-    & ScheduleGridEventFragmentFragment
+    & ScheduleGridEventFragment
   )> }
 );
 
-export type ScheduleGridCombinedQueryQueryVariables = Types.Exact<{
+export type ScheduleGridCombinedQueryVariables = Types.Exact<{
   extendedCounts: Types.Scalars['Boolean'];
   start?: Types.Maybe<Types.Scalars['Date']>;
   finish?: Types.Maybe<Types.Scalars['Date']>;
 }>;
 
 
-export type ScheduleGridCombinedQueryQuery = (
+export type ScheduleGridCombinedQueryData = (
   { __typename: 'Query' }
   & { convention: (
     { __typename: 'Convention' }
@@ -69,11 +70,11 @@ export type ScheduleGridCombinedQueryQuery = (
   ), events: Array<(
     { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
-    & ScheduleGridEventFragmentFragment
+    & ScheduleGridEventFragment
   )> }
 );
 
-export const ScheduleGridEventFragmentFragmentDoc = gql`
+export const ScheduleGridEventFragmentDoc = gql`
     fragment ScheduleGridEventFragment on Event {
   id
   title
@@ -127,29 +128,31 @@ export const ScheduleGridConventionDataQueryDocument = gql`
     ${CommonConventionDataFragmentDoc}`;
 
 /**
- * __useScheduleGridConventionDataQueryQuery__
+ * __useScheduleGridConventionDataQuery__
  *
- * To run a query within a React component, call `useScheduleGridConventionDataQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleGridConventionDataQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useScheduleGridConventionDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleGridConventionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useScheduleGridConventionDataQueryQuery({
+ * const { data, loading, error } = useScheduleGridConventionDataQuery({
  *   variables: {
  *   },
  * });
  */
-export function useScheduleGridConventionDataQueryQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>) {
-        return Apollo.useQuery<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>(ScheduleGridConventionDataQueryDocument, baseOptions);
+export function useScheduleGridConventionDataQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
       }
-export function useScheduleGridConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>(ScheduleGridConventionDataQueryDocument, baseOptions);
+export function useScheduleGridConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
         }
-export type ScheduleGridConventionDataQueryQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryQuery>;
+export type ScheduleGridConventionDataQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQuery>;
 export type ScheduleGridConventionDataQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryLazyQuery>;
-export type ScheduleGridConventionDataQueryQueryResult = Apollo.QueryResult<ScheduleGridConventionDataQueryQuery, ScheduleGridConventionDataQueryQueryVariables>;
+export type ScheduleGridConventionDataQueryDataResult = Apollo.QueryResult<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
 export const ScheduleGridEventsQueryDocument = gql`
     query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
@@ -157,19 +160,19 @@ export const ScheduleGridEventsQueryDocument = gql`
     ...ScheduleGridEventFragment
   }
 }
-    ${ScheduleGridEventFragmentFragmentDoc}`;
+    ${ScheduleGridEventFragmentDoc}`;
 
 /**
- * __useScheduleGridEventsQueryQuery__
+ * __useScheduleGridEventsQuery__
  *
- * To run a query within a React component, call `useScheduleGridEventsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleGridEventsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useScheduleGridEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleGridEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useScheduleGridEventsQueryQuery({
+ * const { data, loading, error } = useScheduleGridEventsQuery({
  *   variables: {
  *      extendedCounts: // value for 'extendedCounts'
  *      start: // value for 'start'
@@ -177,15 +180,17 @@ export const ScheduleGridEventsQueryDocument = gql`
  *   },
  * });
  */
-export function useScheduleGridEventsQueryQuery(baseOptions: Apollo.QueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
-        return Apollo.useQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(ScheduleGridEventsQueryDocument, baseOptions);
+export function useScheduleGridEventsQuery(baseOptions: Apollo.QueryHookOptions<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
       }
-export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>(ScheduleGridEventsQueryDocument, baseOptions);
+export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
         }
-export type ScheduleGridEventsQueryQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryQuery>;
+export type ScheduleGridEventsQueryHookResult = ReturnType<typeof useScheduleGridEventsQuery>;
 export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryLazyQuery>;
-export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryQuery, ScheduleGridEventsQueryQueryVariables>;
+export type ScheduleGridEventsQueryDataResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;
 export const ScheduleGridCombinedQueryDocument = gql`
     query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   convention: assertConvention {
@@ -199,19 +204,19 @@ export const ScheduleGridCombinedQueryDocument = gql`
   }
 }
     ${CommonConventionDataFragmentDoc}
-${ScheduleGridEventFragmentFragmentDoc}`;
+${ScheduleGridEventFragmentDoc}`;
 
 /**
- * __useScheduleGridCombinedQueryQuery__
+ * __useScheduleGridCombinedQuery__
  *
- * To run a query within a React component, call `useScheduleGridCombinedQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleGridCombinedQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useScheduleGridCombinedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScheduleGridCombinedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useScheduleGridCombinedQueryQuery({
+ * const { data, loading, error } = useScheduleGridCombinedQuery({
  *   variables: {
  *      extendedCounts: // value for 'extendedCounts'
  *      start: // value for 'start'
@@ -219,12 +224,14 @@ ${ScheduleGridEventFragmentFragmentDoc}`;
  *   },
  * });
  */
-export function useScheduleGridCombinedQueryQuery(baseOptions: Apollo.QueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {
-        return Apollo.useQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(ScheduleGridCombinedQueryDocument, baseOptions);
+export function useScheduleGridCombinedQuery(baseOptions: Apollo.QueryHookOptions<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>(ScheduleGridCombinedQueryDocument, options);
       }
-export function useScheduleGridCombinedQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>) {
-          return Apollo.useLazyQuery<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>(ScheduleGridCombinedQueryDocument, baseOptions);
+export function useScheduleGridCombinedQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>(ScheduleGridCombinedQueryDocument, options);
         }
-export type ScheduleGridCombinedQueryQueryHookResult = ReturnType<typeof useScheduleGridCombinedQueryQuery>;
+export type ScheduleGridCombinedQueryHookResult = ReturnType<typeof useScheduleGridCombinedQuery>;
 export type ScheduleGridCombinedQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridCombinedQueryLazyQuery>;
-export type ScheduleGridCombinedQueryQueryResult = Apollo.QueryResult<ScheduleGridCombinedQueryQuery, ScheduleGridCombinedQueryQueryVariables>;
+export type ScheduleGridCombinedQueryDataResult = Apollo.QueryResult<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>;

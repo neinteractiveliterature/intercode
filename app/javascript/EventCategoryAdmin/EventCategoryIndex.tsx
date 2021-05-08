@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import EventCategoryRow from './EventCategoryRow';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
-import { useEventCategoryAdminQueryQuery } from './queries.generated';
+import { useEventCategoryAdminQuery } from './queries.generated';
 import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
-export default LoadQueryWrapper(useEventCategoryAdminQueryQuery, function EventCategoryIndex({
-  data,
-}) {
+export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCategoryIndex({ data }) {
   usePageTitle('Event Categories');
 
   const { event_categories: eventCategories } = data!.convention;

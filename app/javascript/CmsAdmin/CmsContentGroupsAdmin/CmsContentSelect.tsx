@@ -2,12 +2,12 @@ import GraphQLAsyncSelect, {
   GraphQLAsyncSelectProps,
 } from '../../BuiltInFormControls/GraphQLAsyncSelect';
 import { SearchCmsContentQuery } from './queries';
-import { SearchCmsContentQueryQuery } from './queries.generated';
+import { SearchCmsContentQueryData } from './queries.generated';
 
-export type CmsContentOption = SearchCmsContentQueryQuery['searchCmsContent'][0];
+export type CmsContentOption = SearchCmsContentQueryData['searchCmsContent'][0];
 
 export type CmsContentSelectProps<IsMulti extends boolean> = Omit<
-  GraphQLAsyncSelectProps<SearchCmsContentQueryQuery, CmsContentOption, IsMulti>,
+  GraphQLAsyncSelectProps<SearchCmsContentQueryData, CmsContentOption, IsMulti>,
   'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 >;
 
@@ -15,7 +15,7 @@ function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSele
   const { ...otherProps } = props;
 
   return (
-    <GraphQLAsyncSelect<SearchCmsContentQueryQuery, CmsContentOption, IsMulti>
+    <GraphQLAsyncSelect<SearchCmsContentQueryData, CmsContentOption, IsMulti>
       getOptions={(data) => data.searchCmsContent}
       getVariables={(inputValue) => ({ name: inputValue })}
       getOptionValue={({ id: optionId, __typename }: CmsContentOption) =>

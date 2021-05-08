@@ -3,18 +3,19 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-export type AccountFormContentQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions =  {}
+export type AccountFormContentQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AccountFormContentQueryQuery = (
+export type AccountFormContentQueryData = (
   { __typename: 'Query' }
   & Pick<Types.Query, 'accountFormContentHtml'>
 );
 
-export type EditUserQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EditUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EditUserQueryQuery = (
+export type EditUserQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -33,29 +34,31 @@ export const AccountFormContentQueryDocument = gql`
     `;
 
 /**
- * __useAccountFormContentQueryQuery__
+ * __useAccountFormContentQuery__
  *
- * To run a query within a React component, call `useAccountFormContentQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccountFormContentQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccountFormContentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountFormContentQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAccountFormContentQueryQuery({
+ * const { data, loading, error } = useAccountFormContentQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAccountFormContentQueryQuery(baseOptions?: Apollo.QueryHookOptions<AccountFormContentQueryQuery, AccountFormContentQueryQueryVariables>) {
-        return Apollo.useQuery<AccountFormContentQueryQuery, AccountFormContentQueryQueryVariables>(AccountFormContentQueryDocument, baseOptions);
+export function useAccountFormContentQuery(baseOptions?: Apollo.QueryHookOptions<AccountFormContentQueryData, AccountFormContentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountFormContentQueryData, AccountFormContentQueryVariables>(AccountFormContentQueryDocument, options);
       }
-export function useAccountFormContentQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountFormContentQueryQuery, AccountFormContentQueryQueryVariables>) {
-          return Apollo.useLazyQuery<AccountFormContentQueryQuery, AccountFormContentQueryQueryVariables>(AccountFormContentQueryDocument, baseOptions);
+export function useAccountFormContentQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountFormContentQueryData, AccountFormContentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountFormContentQueryData, AccountFormContentQueryVariables>(AccountFormContentQueryDocument, options);
         }
-export type AccountFormContentQueryQueryHookResult = ReturnType<typeof useAccountFormContentQueryQuery>;
+export type AccountFormContentQueryHookResult = ReturnType<typeof useAccountFormContentQuery>;
 export type AccountFormContentQueryLazyQueryHookResult = ReturnType<typeof useAccountFormContentQueryLazyQuery>;
-export type AccountFormContentQueryQueryResult = Apollo.QueryResult<AccountFormContentQueryQuery, AccountFormContentQueryQueryVariables>;
+export type AccountFormContentQueryDataResult = Apollo.QueryResult<AccountFormContentQueryData, AccountFormContentQueryVariables>;
 export const EditUserQueryDocument = gql`
     query EditUserQuery {
   convention {
@@ -72,26 +75,28 @@ export const EditUserQueryDocument = gql`
     `;
 
 /**
- * __useEditUserQueryQuery__
+ * __useEditUserQuery__
  *
- * To run a query within a React component, call `useEditUserQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEditUserQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useEditUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEditUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useEditUserQueryQuery({
+ * const { data, loading, error } = useEditUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useEditUserQueryQuery(baseOptions?: Apollo.QueryHookOptions<EditUserQueryQuery, EditUserQueryQueryVariables>) {
-        return Apollo.useQuery<EditUserQueryQuery, EditUserQueryQueryVariables>(EditUserQueryDocument, baseOptions);
+export function useEditUserQuery(baseOptions?: Apollo.QueryHookOptions<EditUserQueryData, EditUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EditUserQueryData, EditUserQueryVariables>(EditUserQueryDocument, options);
       }
-export function useEditUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EditUserQueryQuery, EditUserQueryQueryVariables>) {
-          return Apollo.useLazyQuery<EditUserQueryQuery, EditUserQueryQueryVariables>(EditUserQueryDocument, baseOptions);
+export function useEditUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EditUserQueryData, EditUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EditUserQueryData, EditUserQueryVariables>(EditUserQueryDocument, options);
         }
-export type EditUserQueryQueryHookResult = ReturnType<typeof useEditUserQueryQuery>;
+export type EditUserQueryHookResult = ReturnType<typeof useEditUserQuery>;
 export type EditUserQueryLazyQueryHookResult = ReturnType<typeof useEditUserQueryLazyQuery>;
-export type EditUserQueryQueryResult = Apollo.QueryResult<EditUserQueryQuery, EditUserQueryQueryVariables>;
+export type EditUserQueryDataResult = Apollo.QueryResult<EditUserQueryData, EditUserQueryVariables>;

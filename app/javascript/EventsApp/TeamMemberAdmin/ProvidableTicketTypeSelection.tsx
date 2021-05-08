@@ -6,15 +6,12 @@ import { pluralize, humanize } from 'inflected';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 
 import { getProvidableTicketTypes, getRemainingTicketCountByType } from './ProvideTicketUtils';
-import { TeamMembersQueryQuery } from './queries.generated';
+import { TeamMembersQueryData } from './queries.generated';
 
 export type ProvidableTicketTypeSelectionProps = {
-  convention: Pick<
-    NonNullable<TeamMembersQueryQuery['convention']>,
-    'ticket_types' | 'ticket_name'
-  >;
-  event: Pick<TeamMembersQueryQuery['event'], 'title'> & {
-    provided_tickets: Pick<TeamMembersQueryQuery['event']['provided_tickets'][0], 'ticket_type'>[];
+  convention: Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types' | 'ticket_name'>;
+  event: Pick<TeamMembersQueryData['event'], 'title'> & {
+    provided_tickets: Pick<TeamMembersQueryData['event']['provided_tickets'][0], 'ticket_type'>[];
   };
   value?: number;
   onChange: React.Dispatch<number>;

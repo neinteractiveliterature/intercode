@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Event } from '../graphqlTypes.generated';
 import { sortByLocaleString } from '../ValueUtils';
-import { EventAdminEventsQueryQuery } from './queries.generated';
+import { EventAdminEventsQueryData } from './queries.generated';
 
 function getNormalizedEventTitle<EventType extends Pick<Event, 'title'>>(event: EventType) {
   return (event.title ?? '')
@@ -11,7 +11,7 @@ function getNormalizedEventTitle<EventType extends Pick<Event, 'title'>>(event: 
 }
 
 export default function useEventAdminCategory(
-  data: EventAdminEventsQueryQuery | undefined,
+  data: EventAdminEventsQueryData | undefined,
   loading: boolean,
   error: Error | undefined,
   eventCategoryId: number,

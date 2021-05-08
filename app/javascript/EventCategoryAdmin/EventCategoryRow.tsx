@@ -8,10 +8,10 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
-import { EventCategoryAdminQueryQuery } from './queries.generated';
+import { EventCategoryAdminQueryData } from './queries.generated';
 
 export type EventCategoryRowProps = {
-  eventCategory: EventCategoryAdminQueryQuery['convention']['event_categories'][0];
+  eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][0];
 };
 
 function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {

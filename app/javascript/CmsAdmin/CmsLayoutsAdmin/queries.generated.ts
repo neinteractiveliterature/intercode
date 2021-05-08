@@ -3,15 +3,16 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CmsLayoutFieldsFragment = (
   { __typename: 'CmsLayout' }
   & Pick<Types.CmsLayout, 'id' | 'name' | 'content' | 'navbar_classes' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>
 );
 
-export type CmsLayoutsAdminQueryQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsLayoutsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsLayoutsAdminQueryQuery = (
+export type CmsLayoutsAdminQueryData = (
   { __typename: 'Query' }
   & { convention?: Types.Maybe<(
     { __typename: 'Convention' }
@@ -54,26 +55,28 @@ export const CmsLayoutsAdminQueryDocument = gql`
     ${CmsLayoutFieldsFragmentDoc}`;
 
 /**
- * __useCmsLayoutsAdminQueryQuery__
+ * __useCmsLayoutsAdminQuery__
  *
- * To run a query within a React component, call `useCmsLayoutsAdminQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsLayoutsAdminQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCmsLayoutsAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCmsLayoutsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCmsLayoutsAdminQueryQuery({
+ * const { data, loading, error } = useCmsLayoutsAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCmsLayoutsAdminQueryQuery(baseOptions?: Apollo.QueryHookOptions<CmsLayoutsAdminQueryQuery, CmsLayoutsAdminQueryQueryVariables>) {
-        return Apollo.useQuery<CmsLayoutsAdminQueryQuery, CmsLayoutsAdminQueryQueryVariables>(CmsLayoutsAdminQueryDocument, baseOptions);
+export function useCmsLayoutsAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>(CmsLayoutsAdminQueryDocument, options);
       }
-export function useCmsLayoutsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsLayoutsAdminQueryQuery, CmsLayoutsAdminQueryQueryVariables>) {
-          return Apollo.useLazyQuery<CmsLayoutsAdminQueryQuery, CmsLayoutsAdminQueryQueryVariables>(CmsLayoutsAdminQueryDocument, baseOptions);
+export function useCmsLayoutsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>(CmsLayoutsAdminQueryDocument, options);
         }
-export type CmsLayoutsAdminQueryQueryHookResult = ReturnType<typeof useCmsLayoutsAdminQueryQuery>;
+export type CmsLayoutsAdminQueryHookResult = ReturnType<typeof useCmsLayoutsAdminQuery>;
 export type CmsLayoutsAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsLayoutsAdminQueryLazyQuery>;
-export type CmsLayoutsAdminQueryQueryResult = Apollo.QueryResult<CmsLayoutsAdminQueryQuery, CmsLayoutsAdminQueryQueryVariables>;
+export type CmsLayoutsAdminQueryDataResult = Apollo.QueryResult<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>;

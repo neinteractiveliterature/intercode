@@ -11,7 +11,7 @@ import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { MergeUsersModalQueryQuery, useMergeUsersModalQueryQuery } from './queries.generated';
+import { MergeUsersModalQueryData, useMergeUsersModalQuery } from './queries.generated';
 import { useMergeUsersMutation } from './mutations.generated';
 
 function renderIfQueryReady(
@@ -29,7 +29,7 @@ function renderIfQueryReady(
   return render();
 }
 
-type UserType = MergeUsersModalQueryQuery['users'][0];
+type UserType = MergeUsersModalQueryData['users'][0];
 type UserConProfileType = UserType['user_con_profiles'][0];
 type ConventionType = UserConProfileType['convention'];
 
@@ -40,7 +40,7 @@ export type MergeUsersModalProps = {
 };
 
 function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps) {
-  const { data, loading, error } = useMergeUsersModalQueryQuery({
+  const { data, loading, error } = useMergeUsersModalQuery({
     variables: { ids: userIds || [] },
   });
   const [winningUserId, setWinningUserId] = useState<number>();

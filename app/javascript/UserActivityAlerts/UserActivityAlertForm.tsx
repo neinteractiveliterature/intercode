@@ -10,14 +10,14 @@ import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import useUniqueId from '../useUniqueId';
 import { usePropertySetters } from '../usePropertySetters';
-import { DefaultUserConProfilesQueryQuery } from '../BuiltInFormControls/selectDefaultQueries.generated';
-import { UserActivityAlertQueryQuery } from './queries.generated';
+import { DefaultUserConProfilesQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
+import { UserActivityAlertQueryData } from './queries.generated';
 
-type AlertType = UserActivityAlertQueryQuery['convention']['user_activity_alert'];
+type AlertType = UserActivityAlertQueryData['convention']['user_activity_alert'];
 
 export type UserActivityAlertFormProps = {
   convention: Pick<
-    UserActivityAlertQueryQuery['convention'],
+    UserActivityAlertQueryData['convention'],
     'ticket_name' | 'ticket_mode' | 'staff_positions'
   >;
   disabled?: boolean;
@@ -50,7 +50,7 @@ function UserActivityAlertForm({
 
   const addUserConProfileDestination = (
     userConProfile: NonNullable<
-      DefaultUserConProfilesQueryQuery['convention']
+      DefaultUserConProfilesQueryData['convention']
     >['user_con_profiles_paginated']['entries'][0],
   ) => {
     onAddNotificationDestination({

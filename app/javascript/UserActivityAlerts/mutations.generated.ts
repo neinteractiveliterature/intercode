@@ -5,13 +5,14 @@ import { UserActivityAlertFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { UserActivityAlertFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
+const defaultOptions =  {}
 export type CreateUserActivityAlertMutationVariables = Types.Exact<{
   userActivityAlert: Types.UserActivityAlertInput;
   notificationDestinations: Array<Types.NotificationDestinationInput> | Types.NotificationDestinationInput;
 }>;
 
 
-export type CreateUserActivityAlertMutation = (
+export type CreateUserActivityAlertMutationData = (
   { __typename: 'Mutation' }
   & { createUserActivityAlert?: Types.Maybe<(
     { __typename: 'CreateUserActivityAlertPayload' }
@@ -31,7 +32,7 @@ export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserActivityAlertMutation = (
+export type UpdateUserActivityAlertMutationData = (
   { __typename: 'Mutation' }
   & { updateUserActivityAlert?: Types.Maybe<(
     { __typename: 'UpdateUserActivityAlertPayload' }
@@ -48,7 +49,7 @@ export type DeleteUserActivityAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteUserActivityAlertMutation = (
+export type DeleteUserActivityAlertMutationData = (
   { __typename: 'Mutation' }
   & { deleteUserActivityAlert?: Types.Maybe<(
     { __typename: 'DeleteUserActivityAlertPayload' }
@@ -73,7 +74,7 @@ export const CreateUserActivityAlertDocument = gql`
   }
 }
     ${UserActivityAlertFieldsFragmentDoc}`;
-export type CreateUserActivityAlertMutationFn = Apollo.MutationFunction<CreateUserActivityAlertMutation, CreateUserActivityAlertMutationVariables>;
+export type CreateUserActivityAlertMutationFn = Apollo.MutationFunction<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>;
 
 /**
  * __useCreateUserActivityAlertMutation__
@@ -93,12 +94,13 @@ export type CreateUserActivityAlertMutationFn = Apollo.MutationFunction<CreateUs
  *   },
  * });
  */
-export function useCreateUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserActivityAlertMutation, CreateUserActivityAlertMutationVariables>) {
-        return Apollo.useMutation<CreateUserActivityAlertMutation, CreateUserActivityAlertMutationVariables>(CreateUserActivityAlertDocument, baseOptions);
+export function useCreateUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>(CreateUserActivityAlertDocument, options);
       }
 export type CreateUserActivityAlertMutationHookResult = ReturnType<typeof useCreateUserActivityAlertMutation>;
-export type CreateUserActivityAlertMutationResult = Apollo.MutationResult<CreateUserActivityAlertMutation>;
-export type CreateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<CreateUserActivityAlertMutation, CreateUserActivityAlertMutationVariables>;
+export type CreateUserActivityAlertMutationResult = Apollo.MutationResult<CreateUserActivityAlertMutationData>;
+export type CreateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>;
 export const UpdateUserActivityAlertDocument = gql`
     mutation UpdateUserActivityAlert($id: Int!, $userActivityAlert: UserActivityAlertInput!, $addNotificationDestinations: [NotificationDestinationInput!]!, $removeNotificationDestinationIds: [Int!]!) {
   updateUserActivityAlert(
@@ -111,7 +113,7 @@ export const UpdateUserActivityAlertDocument = gql`
   }
 }
     ${UserActivityAlertFieldsFragmentDoc}`;
-export type UpdateUserActivityAlertMutationFn = Apollo.MutationFunction<UpdateUserActivityAlertMutation, UpdateUserActivityAlertMutationVariables>;
+export type UpdateUserActivityAlertMutationFn = Apollo.MutationFunction<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>;
 
 /**
  * __useUpdateUserActivityAlertMutation__
@@ -133,12 +135,13 @@ export type UpdateUserActivityAlertMutationFn = Apollo.MutationFunction<UpdateUs
  *   },
  * });
  */
-export function useUpdateUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserActivityAlertMutation, UpdateUserActivityAlertMutationVariables>) {
-        return Apollo.useMutation<UpdateUserActivityAlertMutation, UpdateUserActivityAlertMutationVariables>(UpdateUserActivityAlertDocument, baseOptions);
+export function useUpdateUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>(UpdateUserActivityAlertDocument, options);
       }
 export type UpdateUserActivityAlertMutationHookResult = ReturnType<typeof useUpdateUserActivityAlertMutation>;
-export type UpdateUserActivityAlertMutationResult = Apollo.MutationResult<UpdateUserActivityAlertMutation>;
-export type UpdateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<UpdateUserActivityAlertMutation, UpdateUserActivityAlertMutationVariables>;
+export type UpdateUserActivityAlertMutationResult = Apollo.MutationResult<UpdateUserActivityAlertMutationData>;
+export type UpdateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>;
 export const DeleteUserActivityAlertDocument = gql`
     mutation DeleteUserActivityAlert($id: Int!) {
   deleteUserActivityAlert(input: {id: $id}) {
@@ -149,7 +152,7 @@ export const DeleteUserActivityAlertDocument = gql`
   }
 }
     ${UserActivityAlertFieldsFragmentDoc}`;
-export type DeleteUserActivityAlertMutationFn = Apollo.MutationFunction<DeleteUserActivityAlertMutation, DeleteUserActivityAlertMutationVariables>;
+export type DeleteUserActivityAlertMutationFn = Apollo.MutationFunction<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>;
 
 /**
  * __useDeleteUserActivityAlertMutation__
@@ -168,9 +171,10 @@ export type DeleteUserActivityAlertMutationFn = Apollo.MutationFunction<DeleteUs
  *   },
  * });
  */
-export function useDeleteUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserActivityAlertMutation, DeleteUserActivityAlertMutationVariables>) {
-        return Apollo.useMutation<DeleteUserActivityAlertMutation, DeleteUserActivityAlertMutationVariables>(DeleteUserActivityAlertDocument, baseOptions);
+export function useDeleteUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>(DeleteUserActivityAlertDocument, options);
       }
 export type DeleteUserActivityAlertMutationHookResult = ReturnType<typeof useDeleteUserActivityAlertMutation>;
-export type DeleteUserActivityAlertMutationResult = Apollo.MutationResult<DeleteUserActivityAlertMutation>;
-export type DeleteUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<DeleteUserActivityAlertMutation, DeleteUserActivityAlertMutationVariables>;
+export type DeleteUserActivityAlertMutationResult = Apollo.MutationResult<DeleteUserActivityAlertMutationData>;
+export type DeleteUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>;
