@@ -31,7 +31,7 @@ function Tooltip({
       role="tooltip"
       {...attributes.popper}
     >
-      <div className="arrow" ref={arrowRef} style={styles.arrow} />
+      <div className="tooltip-arrow" ref={arrowRef} style={styles.arrow} />
       <div className="tooltip-inner">{children}</div>
     </div>
   );

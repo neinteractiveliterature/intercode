@@ -219,7 +219,7 @@ function AppRouter({ alert }: AppRouterProps) {
         <div className="alert alert-danger" role="alert">
           <button
             type="button"
-            className="close"
+            className="btn-close"
             onClick={() => setShowAlert(false)}
             aria-label="Close"
           >

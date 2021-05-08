@@ -168,7 +168,7 @@ function PasswordInputWithStrengthCheck({
             <div className="card-body">
               <PasswordFeedback result={passwordStrengthResult} />
             </div>
-            <span ref={setArrow} style={styles.arrow} className="arrow" />
+            <span ref={setArrow} style={styles.arrow} className="popover-arrow" />
           </div>
         </div>
         <div
