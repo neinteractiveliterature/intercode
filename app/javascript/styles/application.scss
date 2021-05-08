@@ -112,6 +112,12 @@ table.no-top-border thead th {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
+.cms-file-card-deck {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
 .navbar-convention-canceled-notice {
   background-color: #f41;
   color: white;

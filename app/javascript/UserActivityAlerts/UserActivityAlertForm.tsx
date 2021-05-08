@@ -174,7 +174,7 @@ function UserActivityAlertForm({
                   disabled={disabled}
                 >
                   <i className="fa fa-trash-o" />
-                  <span className="sr-only">Remove destination</span>
+                  <span className="visually-hidden">Remove destination</span>
                 </button>
               </div>
             </li>

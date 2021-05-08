@@ -6,14 +6,14 @@ function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps) {
   if (hasPermission) {
     return (
       <i className="fa fa-check-square-o">
-        <span className="sr-only">Permitted</span>
+        <span className="visually-hidden">Permitted</span>
       </i>
     );
   }
 
   return (
     <i className="fa fa-square-o">
-      <span className="sr-only">Not permitted</span>
+      <span className="visually-hidden">Not permitted</span>
     </i>
   );
 }

@@ -52,7 +52,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
                     })
                   }
                 >
-                  <span className="sr-only">Delete department</span>
+                  <span className="visually-hidden">Delete department</span>
                   <i className="fa fa-trash-o" />
                 </button>
                 <Link

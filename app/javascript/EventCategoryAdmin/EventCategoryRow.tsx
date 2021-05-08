@@ -48,7 +48,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
             }
           >
             <i className="fa fa-trash-o" />
-            <span className="sr-only">Delete event category</span>
+            <span className="visually-hidden">Delete event category</span>
           </ButtonWithTooltip>
         ) : (
           <button
@@ -66,7 +66,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
             }
           >
             <i className="fa fa-trash-o" />
-            <span className="sr-only">Delete event category</span>
+            <span className="visually-hidden">Delete event category</span>
           </button>
         )}
         <Link to={`/event_categories/${eventCategory.id}/edit`} className="btn btn-primary btn-sm">

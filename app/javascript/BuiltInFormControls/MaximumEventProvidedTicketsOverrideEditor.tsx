@@ -170,7 +170,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
           }
         >
           <i className="fa fa-trash-o" />
-          <span className="sr-only">
+          <span className="visually-hidden">
             {t('events.ticketQuotaOverrides.deleteButton', 'Delete override for {{ ticketType }}', {
               ticketType: override.ticket_type.description,
             })}

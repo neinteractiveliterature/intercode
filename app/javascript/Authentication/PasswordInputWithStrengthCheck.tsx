@@ -150,7 +150,7 @@ function PasswordInputWithStrengthCheck({
                   <>
                     {' '}
                     <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
-                      <span className="sr-only">{t('buttons.help', 'Help')}</span>
+                      <span className="visually-hidden">{t('buttons.help', 'Help')}</span>
                     </i>
                   </>
                 )}

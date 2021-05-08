@@ -242,7 +242,7 @@ function StaffPositionsTable() {
           buttonContent={
             <>
               <i className="fa fa-ellipsis-h" />
-              <span className="sr-only">Options</span>
+              <span className="visually-hidden">Options</span>
             </>
           }
           popperOptions={{ placement: 'bottom-end' }}

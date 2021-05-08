@@ -62,7 +62,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
                   <li className="list-inline-item">
                     <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
                       <i className="fa fa-trash-o">
-                        <span className="sr-only">Delete product</span>
+                        <span className="visually-hidden">Delete product</span>
                       </i>
                     </button>
                   </li>
