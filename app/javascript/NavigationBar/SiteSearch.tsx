@@ -63,7 +63,7 @@ function SearchMenu(props: MenuProps<any, false>) {
         <div className="bg-light small p-1 text-muted d-none d-md-block">
           <i className="fa fa-lightbulb-o" />{' '}
           {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
-          <span className="bg-white text-monospace border rounded px-1">
+          <span className="bg-white font-monospace border rounded px-1">
             {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
           </span>
         </div>
@@ -237,7 +237,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
         onBlur={close}
         formatOptionLabel={(entry: OptionType) => (
           <>
-            <div className="font-weight-bold mb-1">
+            <div className="fw-bold mb-1">
               <i className={`fa ${getSearchableModelIcon(entry.model)}`} /> {entry.title}
             </div>
             <div

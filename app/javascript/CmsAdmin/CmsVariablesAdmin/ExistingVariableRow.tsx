@@ -60,13 +60,13 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
         <td>
           {variable.current_ability_can_update ? (
             <CommitableInput
-              className="text-monospace"
+              className="font-monospace"
               value={variable.value_json}
               onChange={commitVariable}
               onCancel={clearError}
             />
           ) : (
-            <span className="text-monospace">{variable.value_json}</span>
+            <span className="font-monospace">{variable.value_json}</span>
           )}
         </td>
         <td>

@@ -156,7 +156,7 @@ function RegistrationPolicyDisplay({
       <tfoot>
         {renderPreventNoPreferenceSignupsRow()}
         <tr>
-          <td colSpan={columnCount - 2} className="text-right">
+          <td colSpan={columnCount - 2} className="text-end">
             <strong className="me-2">Total capacity:</strong>
           </td>
           <td className="d-flex flex-column flex-lg-row">{renderTotals()}</td>

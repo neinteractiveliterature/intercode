@@ -82,7 +82,7 @@ function ScheduledValueTimespanRow<ValueType>({
         </div>
       </td>
 
-      <td className="w-25 text-right" style={{ verticalAlign: 'middle' }}>
+      <td className="w-25 text-end" style={{ verticalAlign: 'middle' }}>
         <button className="btn btn-danger btn-sm" onClick={onDeleteClicked} type="button">
           <i className="fa fa-trash-o" />
           <span className="sr-only">Delete timespan</span>

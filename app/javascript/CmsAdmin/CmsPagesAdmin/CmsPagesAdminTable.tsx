@@ -61,7 +61,7 @@ function CmsPagesAdminTable() {
                   </>
                 )}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {page.current_ability_can_update ? (
                   <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit

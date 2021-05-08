@@ -47,7 +47,7 @@ function CmsContentGroupsAdminTable() {
           {contentGroupsSorted.map((contentGroup) => (
             <tr key={contentGroup.id}>
               <td>{contentGroup.name}</td>
-              <td className="text-right">
+              <td className="text-end">
                 {contentGroup.current_ability_can_update ? (
                   <Link
                     to={`/cms_content_groups/${contentGroup.id}/edit`}

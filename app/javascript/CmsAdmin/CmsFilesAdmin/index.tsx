@@ -81,7 +81,7 @@ function CmsFilesAdmin() {
                     </button>
                   </div>
                 )}
-                <small className="text-break font-weight-bold">
+                <small className="text-break fw-bold">
                   <InPlaceEditor
                     value={cmsFile.filename}
                     onChange={(filename) => renameFile(cmsFile.id, filename)}
@@ -102,7 +102,7 @@ function CmsFilesAdmin() {
                   />
                 </a>
               </div>
-              <div className="card-footer text-right">
+              <div className="card-footer text-end">
                 <small>
                   {'Size: '}
                   {bytes.format(cmsFile.size)}

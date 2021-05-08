@@ -21,7 +21,7 @@ function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQuery
     <>
       {sortedRows.map((row) => (
         <section className="mt-2" key={row.provided_by_event.id}>
-          <p className="font-weight-bold mb-0">{row.provided_by_event.title}</p>
+          <p className="fw-bold mb-0">{row.provided_by_event.title}</p>
           <ul className="list-unstyled">
             {sortByLocaleString(row.tickets, (ticket) => ticket.user_con_profile.name_inverted).map(
               (ticket) => (

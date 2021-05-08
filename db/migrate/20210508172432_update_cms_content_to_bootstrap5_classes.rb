@@ -17,8 +17,10 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
     # to back this out if we need to
     ['class="media', 'class="media d-flex align-items-start'],
 
+    ['float-left', 'float-start'],
     ['float-right', 'float-end'],
-    ['float-left', 'float-start']
+    ['text-left', 'text-start'],
+    ['text-right', 'text-end']
   ]
 
   DOWN_REGEXP_REPLACEMENTS = [
@@ -27,8 +29,10 @@ class UpdateCmsContentToBootstrap5Classes < ActiveRecord::Migration[6.1]
     ['(?<=\\W)ps-(\\d)(?=\\W)', 'pl-\\1'],
     ['(?<=\\W)pe-(\\d)(?=\\W)', 'pr-\\1'],
     ['class="media d-flex align-items-start', 'class="media'],
+    ['float-start', 'float-left'],
     ['float-end', 'float-right'],
-    ['float-start', 'float-left']
+    ['text-start', 'text-left'],
+    ['text-end', 'text-right']
   ]
 
   def up

@@ -38,8 +38,8 @@ function OrderHistoryOrderEntry({ orderEntry }: OrderHistoryOrderEntryProps) {
           )}
         </div>
       </td>
-      <td className="text-right">{orderEntry.quantity}</td>
-      <td className="text-right pe-4">{formatMoney(orderEntry.price)}</td>
+      <td className="text-end">{orderEntry.quantity}</td>
+      <td className="text-end pe-4">{formatMoney(orderEntry.price)}</td>
     </tr>
   );
 }
@@ -55,7 +55,7 @@ function OrderHistoryCouponApplication({ couponApplication }: OrderHistoryCoupon
         <em>{'Coupon code: '}</em>
         <code>{couponApplication.coupon.code}</code>
       </td>
-      <td className="pe-4 font-italic text-right">-{formatMoney(couponApplication.discount)}</td>
+      <td className="pe-4 font-italic text-end">-{formatMoney(couponApplication.discount)}</td>
     </tr>
   );
 }
@@ -149,7 +149,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
           <h3>Order #{order.id}</h3>
           <small>{submittedTime && format(submittedTime, 'longWeekdayDateTimeWithZone')}</small>
         </div>
-        <div className="text-right">
+        <div className="text-end">
           <OrderHistoryOrderStatus
             order={order}
             convention={convention}
@@ -169,7 +169,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
           </tbody>
           <tfoot>
             <tr className="bg-warning-light">
-              <td colSpan={3} className="text-right px-4">
+              <td colSpan={3} className="text-end px-4">
                 <strong>Total: {formatMoney(order.total_price)}</strong>
               </td>
             </tr>

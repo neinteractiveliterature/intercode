@@ -75,7 +75,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                   ))}
                 </ul>
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 <button
                   className="btn btn-sm btn-outline-danger me-2"
                   type="button"

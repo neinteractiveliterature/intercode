@@ -43,7 +43,7 @@ function SearchNavigationItem() {
       />
       <CSSTransition timeout={400} in={!visible} classNames="site-search-navigation-button">
         <button
-          className="btn btn-link nav-link text-right site-search-navigation-button"
+          className="btn btn-link nav-link text-end site-search-navigation-button"
           type="button"
           onClick={() => setVisibleWithHiding(true)}
         >

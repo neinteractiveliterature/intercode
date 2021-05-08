@@ -96,7 +96,7 @@ function ResetPassword() {
             <ErrorDisplay stringError={(changePasswordError || {}).message} />
           </div>
 
-          <div className="card-footer text-right">
+          <div className="card-footer text-end">
             <input
               type="submit"
               value={t('authentication.resetPassword.setPasswordButton', 'Set password').toString()}

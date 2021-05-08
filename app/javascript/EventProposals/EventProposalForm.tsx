@@ -139,7 +139,7 @@ function EventProposalFormInner({
           exitButton={exitButton}
           submitButton={{ caption: t('eventProposals.edit.submitButton', 'Submit proposal') }}
           footerContent={
-            <div className="text-right">
+            <div className="text-end">
               <small className="text-muted">
                 {t('forms.general.autocommitDisclosure', 'Your responses are automatically saved.')}
               </small>

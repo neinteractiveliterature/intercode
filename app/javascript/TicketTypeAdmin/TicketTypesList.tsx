@@ -72,7 +72,7 @@ export default LoadQueryWrapper(
               <strong>{ticketType.description}</strong>
               <code> ({ticketType.name})</code>
             </div>
-            <div className="col-md-4 text-right">
+            <div className="col-md-4 text-end">
               <button
                 type="button"
                 className="btn btn-danger btn-sm mx-1"

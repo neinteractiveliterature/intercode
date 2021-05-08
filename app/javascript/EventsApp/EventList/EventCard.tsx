@@ -168,7 +168,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
     <div className="card mb-4" key={event.id}>
       <div className="card-header">
         <div className="event-card-header">
-          <div className="float-end text-right ms-1">
+          <div className="float-end text-end ms-1">
             <div className="lead">
               {canReadSchedule ? renderFirstRunTime(event, timezoneName, formatRunTime) : null}
             </div>

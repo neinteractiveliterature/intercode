@@ -95,7 +95,7 @@ function FormItemEditorLayout() {
         <FormItemTools saveFormItem={saveFormItem} />
       </nav>
       <div className="form-item-editor-preview bg-info-light">
-        <div className="bg-info text-white px-2 font-weight-bold">Preview</div>
+        <div className="bg-info text-white px-2 fw-bold">Preview</div>
         <div className="glow-inset-info p-2 overflow-auto">
           {previewFormItem && (
             <FormItemInput

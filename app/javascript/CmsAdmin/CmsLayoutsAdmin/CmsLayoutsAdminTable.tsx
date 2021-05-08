@@ -55,7 +55,7 @@ function CmsLayoutsAdminTable() {
                   </>
                 )}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {layout.current_ability_can_update ? (
                   <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit

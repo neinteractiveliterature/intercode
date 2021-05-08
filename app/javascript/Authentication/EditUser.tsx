@@ -152,7 +152,7 @@ export default LoadQueryWrapper(
             <ErrorDisplay stringError={(updateUserError || {}).message} />
           </div>
 
-          <div className="card-footer text-right">
+          <div className="card-footer text-end">
             <div>
               <input
                 type="submit"

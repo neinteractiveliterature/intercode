@@ -50,7 +50,7 @@ export default LoadQueryWrapper(useOrderSummaryQuery, function OrderSummary({ da
     }, 0);
 
     return (
-      <td key="total-to-purchase" className="table-primary font-weight-bold">
+      <td key="total-to-purchase" className="table-primary fw-bold">
         {total}
       </td>
     );
@@ -63,7 +63,7 @@ export default LoadQueryWrapper(useOrderSummaryQuery, function OrderSummary({ da
 
     return (
       <tr key={`variant-${variant.id}`}>
-        <th scope="row" className="font-weight-normal ps-4">
+        <th scope="row" className="fw-normal ps-4">
           {variant.name}
         </th>
         {renderTotalToPurchaseCell(variant.order_quantities_by_status)}
