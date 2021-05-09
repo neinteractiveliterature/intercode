@@ -2,6 +2,12 @@ $navbar-inverse-color: rgba(white, 0.85);
 $navbar-inverse-hover-color: white;
 $enable-responsive-font-sizes: true;
 
+// Bootstrap 4 style breadcrumb
+$breadcrumb-bg: #e9ecef;
+$breadcrumb-padding-x: 1rem;
+$breadcrumb-padding-y: 0.75rem;
+$breadcrumb-border-radius: 0.25rem;
+
 $custom-colors: (
   "intercode-blue": #3b5998,
   "medium-light": #E0E1E2,
