@@ -51,11 +51,11 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
   return (
     <div className="mb-4 card bg-light" id={`product-${product.id}`}>
       <div className="card-header">
-        <div className="row align-items-center">
-          <div className="col">
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
             <div className="lead">{product.name}</div>
           </div>
-          <div className="me-2">
+          <div className="ms-2">
             {currentAbility.can_update_products && (
               <ul className="list-inline m-0">
                 {product.id != null && (

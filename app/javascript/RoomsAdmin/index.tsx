@@ -86,8 +86,8 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
 
   const roomRows = sortedRooms.map((room) => (
     <li className="list-group-item" key={room.id}>
-      <div className="row align-items-baseline">
-        <div className="ms-3">
+      <div className="d-flex align-items-baseline">
+        <div className="me-2">
           <InPlaceEditor
             value={room.name}
             onChange={(newName) => {
@@ -95,7 +95,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
             }}
           />
         </div>
-        <div className="col">
+        <div className="flex-grow-1">
           {room.runs.length > 0 ? (
             <span className="text-muted">
               ({pluralizeWithCount('event run', room.runs.length)})
@@ -103,7 +103,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
           ) : null}
         </div>
         <button
-          className="btn btn-sm btn-outline-danger me-3"
+          className="btn btn-sm btn-outline-danger ms-2"
           title="Delete room"
           onClick={() =>
             confirm({
@@ -126,8 +126,8 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
         <ul className="list-group mb-4">
           {roomRows}
           <li className="list-group-item">
-            <div className="row align-items-baseline">
-              <div className="col">
+            <div className="d-flex align-items-baseline">
+              <div className="flex-grow-1">
                 <input
                   type="text"
                   placeholder="Room name"
@@ -139,7 +139,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
                 />
               </div>
               <button
-                className="btn btn-primary me-2"
+                className="btn btn-primary ms-2"
                 disabled={creatingRoomName === ''}
                 onClick={createRoomWasClicked}
                 type="button"

@@ -136,8 +136,8 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   return (
     <div className="mb-4 card bg-light border-dark glow-dark">
       <div className="card-header">
-        <div className="row align-items-center">
-          <div className="col">
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
             <input
               aria-label="Product name"
               type="text"
@@ -148,7 +148,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               onChange={(event) => setName(event.target.value)}
             />
           </div>
-          <div className="me-2">
+          <div className="ms-2">
             <ul className="list-inline m-0">
               <li className="list-inline-item">
                 <button type="button" className="btn btn-sm btn-secondary" onClick={close}>
