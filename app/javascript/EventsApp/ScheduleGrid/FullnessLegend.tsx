@@ -6,7 +6,7 @@ function FullnessLegend() {
 
   return (
     <div className="d-flex flex-wrap">
-      <div className="col-md-6 col-lg-4 mb-4">
+      <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
           <div className="card-header">
             {t('schedule.legends.eventFullness.title', 'Event fullness colors')}
@@ -57,7 +57,7 @@ function FullnessLegend() {
         </div>
       </div>
 
-      <div className="col-md-6 col-lg-4 mb-4">
+      <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
           <div className="card-header">
             {t('schedule.legends.attendeeCounts.title', 'Attendee counts')}

@@ -31,7 +31,7 @@ function CategoryLegend() {
 
   return (
     <div className="d-flex flex-wrap">
-      <div className="col-md-6 col-lg-4 mb-4">
+      <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
           <div className="card-header">
             {t('schedule.legends.eventCategories.title', 'Event categories')}
@@ -47,7 +47,7 @@ function CategoryLegend() {
         </div>
       </div>
 
-      <div className="col-md-6 col-lg-4 mb-4">
+      <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
           <div className="card-header">
             {t('schedule.legends.slotAvailability.title', 'Slot availability')}
@@ -73,7 +73,7 @@ function CategoryLegend() {
         </div>
       </div>
 
-      <div className="col-md-6 col-lg-4 mb-4">
+      <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
           <div className="card-header">
             {t('schedule.legends.signupStatus.title', 'Signup status')}
