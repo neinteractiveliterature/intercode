@@ -2721,10 +2721,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16.9.0", "@types/react@^17.0.4":
-  version "17.0.4"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.4.tgz#a67c6f7a460d2660e950d9ccc1c2f18525c28220"
-  integrity sha512-onz2BqScSFMoTRdJUZUDD/7xrusM8hBA2Fktk2qgaTYPCgPvWnDEgkrOs8hhPUf2jfcIXkJ5yK6VfYormJS3Jw==
+"@types/react@*", "@types/react@>=16.9.0", "@types/react@^17.0.5":
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.5.tgz#3d887570c4489011f75a3fc8f965bf87d09a1bea"
+  integrity sha512-bj4biDB9ZJmGAYTWSKJly6bMr4BLUiBrx9ujiJEoP9XIDY9CTaPGxE5QWN/1WjpPLzYF7/jRNnV2nNxNe970sw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -7732,10 +7732,10 @@ hypernova@^2.5.0:
     object.assign "^4.1.0"
     winston "^2.4.4"
 
-i18next-parser@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-3.9.0.tgz#7ce8f4824a718be180f0f183145b91d692353613"
-  integrity sha512-uWW4ADg0tG46rhoyUSU4y7OL3f8Klyt641yhtpTPZ/gOi4e498DWGC73MyR8C/+Z59PXy7uEl5eSM0Lk2R9pmg==
+i18next-parser@^3.11.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-3.11.0.tgz#62ead424f63c6e5e40da26bca258a5d6fb08538e"
+  integrity sha512-mJuh+5sgDCbdaSGDXRUKZ90UjjmBwo7Uq4GYsjve1XmtQpzftVz0XRjGC4JP4A6wyyeha1l7SI3KFLbOk8s0qQ==
   dependencies:
     broccoli-plugin "^4.0.5"
     cheerio "^1.0.0-rc.2"
