@@ -4278,15 +4278,10 @@ caniuse-api@^3.0.0:
     lodash.memoize "^4.1.2"
     lodash.uniq "^4.5.0"
 
-caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001196, caniuse-lite@^1.0.30001220:
-  version "1.0.30001220"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001220.tgz#c080e1c8eefb99f6cc9685da6313840bdbaf4c36"
-  integrity sha512-pjC2T4DIDyGAKTL4dMvGUQaMUHRmhvPpAgNNTa14jaBWHu+bLQgvpFqElxh9L4829Fdx0PlKiMp3wnYldRtECA==
-
-caniuse-lite@^1.0.30001219:
-  version "1.0.30001221"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001221.tgz#b916721ddf59066cfbe96c5c9a77cf7ae5c52e65"
-  integrity sha512-b9TOZfND3uGSLjMOrLh8XxSQ41x8mX+9MLJYDM4AAHLfaZHttrLNPrScWjVnBITRZbY5sPpCt7X85n7VSLZ+/g==
+caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001196, caniuse-lite@^1.0.30001219, caniuse-lite@^1.0.30001228:
+  version "1.0.30001228"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001228.tgz#bfdc5942cd3326fa51ee0b42fbef4da9d492a7fa"
+  integrity sha512-QQmLOGJ3DEgokHbMSA8cj2a+geXqmnpyOFT0lhQV6P3/YOJvGDEwoedcwxEQ30gJIwIIunHIicunJ2rzK5gB2A==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -7732,10 +7727,10 @@ hypernova@^2.5.0:
     object.assign "^4.1.0"
     winston "^2.4.4"
 
-i18next-parser@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-3.9.0.tgz#7ce8f4824a718be180f0f183145b91d692353613"
-  integrity sha512-uWW4ADg0tG46rhoyUSU4y7OL3f8Klyt641yhtpTPZ/gOi4e498DWGC73MyR8C/+Z59PXy7uEl5eSM0Lk2R9pmg==
+i18next-parser@^3.11.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/i18next-parser/-/i18next-parser-3.11.0.tgz#62ead424f63c6e5e40da26bca258a5d6fb08538e"
+  integrity sha512-mJuh+5sgDCbdaSGDXRUKZ90UjjmBwo7Uq4GYsjve1XmtQpzftVz0XRjGC4JP4A6wyyeha1l7SI3KFLbOk8s0qQ==
   dependencies:
     broccoli-plugin "^4.0.5"
     cheerio "^1.0.0-rc.2"
