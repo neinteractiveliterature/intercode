@@ -573,7 +573,7 @@
     "runCardText": {
       "confirmed": "You are signed up.",
       "requestPending": "You have requested to sign up for this event.",
-      "waitlisted": "You are #{{ waitlistNumber }} on the waitlist.",
+      "waitlisted": "You are #{{ waitlistPosition }} on the waitlist.",
       "waitlistedUnknownPosition": "You are on the waitlist."
     },
     "signedOutSignupButton": "<0>Log in</0> to sign up for<3></3><4>{{eventTitle}}</4>",
