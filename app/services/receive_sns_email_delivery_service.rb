@@ -4,9 +4,12 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def self.s3_client
-    @s3_client ||= Aws::S3::Encryption::Client.new(
+    @s3_client ||= Aws::S3::EncryptionV2::Client.new(
       kms_key_id: 'alias/aws/ses',
-      kms_client: kms_client
+      kms_client: kms_client,
+      key_wrap_schema: :kms_context,
+      content_encryption_schema: :aes_gcm_no_padding,
+      security_profile: :v2_and_legacy
     )
   end
 
