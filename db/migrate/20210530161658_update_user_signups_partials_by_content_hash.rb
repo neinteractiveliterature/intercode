@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
   USER_SIGNUPS_UPDATED_CONTENT_BY_MD5 = {
     # Standard content set version
@@ -401,11 +402,15 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
 
   def up
     USER_SIGNUPS_UPDATED_CONTENT_BY_MD5.each do |md5, updated_content|
-      CmsPartial.where('name = ? and md5(content) = ?', 'user_signups', md5).update_all(content: updated_content)
+      CmsPartial
+        .where('name = ? and md5(content) = ?', 'user_signups', md5)
+        .update_all(content: updated_content)
     end
 
     USER_SIGNUP_UPDATED_CONTENT_BY_MD5.each do |md5, updated_content|
-      CmsPartial.where('name = ? and md5(content) = ?', 'user_signup', md5).update_all(content: updated_content)
+      CmsPartial
+        .where('name = ? and md5(content) = ?', 'user_signup', md5)
+        .update_all(content: updated_content)
     end
   end
 end
