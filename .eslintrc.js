@@ -13,8 +13,6 @@ module.exports = {
   extends: [
     'airbnb-typescript',
     'prettier',
-    'prettier/react',
-    'prettier/@typescript-eslint',
     // TODO: turn these on once I feel like getting a raft of errors
     // 'plugin:@typescript-eslint/recommended',
     // 'plugin:@typescript-eslint/recommended-requiring-type-checking',

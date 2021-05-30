@@ -90,7 +90,7 @@ describe('ConventionForm', () => {
     expect((getByLabelText('Convention domain name') as HTMLInputElement).value).toEqual(
       'myDomain',
     );
-    expect(getByLabelText('Time zone').closest('div')).toHaveTextContent(
+    expect(getByText('Time zone').closest('div')).toHaveTextContent(
       'Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)',
     );
 
