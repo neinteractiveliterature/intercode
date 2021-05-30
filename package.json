@@ -233,6 +233,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,gql,graphql}": "eslint --cache --fix",
-    "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write",
+    "*.{rb,rake}": "bundle exec rubocop -a"
   }
 }
