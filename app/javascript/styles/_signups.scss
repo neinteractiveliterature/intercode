@@ -1,6 +1,6 @@
-$signup-state-color-confirmed: lighten($green, 45%);
-$signup-state-color-waitlisted: lighten($yellow, 25%);
-$signup-state-color-withdrawn: lighten($red, 35%);
+$signup-state-color-confirmed: $green;
+$signup-state-color-waitlisted: $yellow;
+$signup-state-color-withdrawn: $red;
 
 $signup-state-colors: () !default;
 $signup-state-colors: map-merge(
