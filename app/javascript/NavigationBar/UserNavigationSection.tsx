@@ -36,7 +36,7 @@ function CurrentPendingOrderButton() {
   return (
     <li className="nav-item">
       <DropdownMenu
-        buttonClassName="btn btn-link nav-link mr-2"
+        buttonClassName="btn btn-link nav-link me-2"
         buttonStyle={{ zIndex: 1100, position: 'relative' }}
         popperOptions={{ placement: 'bottom-end' }}
         buttonContent={
@@ -46,7 +46,7 @@ function CurrentPendingOrderButton() {
               title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
             />
             <div
-              className="badge badge-pill badge-danger"
+              className="badge rounded-pill bg-danger"
               style={{ position: 'absolute', right: '-7px', top: '0' }}
             >
               {totalQuantity}

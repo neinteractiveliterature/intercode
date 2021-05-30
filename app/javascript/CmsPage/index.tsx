@@ -33,11 +33,6 @@ function CmsPage({ slug, rootPage }: CmsPageProps) {
   }, [data, loading, error]);
 
   useEffect(() => {
-    // reinitialize Bootstrap Native whenever content changes
-    window.BSN.initCallback();
-  }, [content]);
-
-  useEffect(() => {
     if (
       !loading &&
       !error &&

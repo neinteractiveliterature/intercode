@@ -58,7 +58,7 @@ function UserConProfileAdminDisplay() {
 
       return (
         <tr key={item.identifier}>
-          <th scope="row" className="pr-2">
+          <th scope="row" className="pe-2">
             {humanize(item.identifier)}
           </th>
           <td className="col-md-9">
@@ -156,7 +156,7 @@ function UserConProfileAdminDisplay() {
     <div className="row">
       <div className="col-lg-9">
         <header className="d-flex align-items-center mb-4">
-          <div className="mr-2">
+          <div className="me-2">
             <Gravatar
               url={data!.userConProfile.gravatar_url}
               enabled={data!.userConProfile.gravatar_enabled}
@@ -170,7 +170,7 @@ function UserConProfileAdminDisplay() {
         <table className="table table-sm table-striped my-4">
           <tbody>
             <tr>
-              <th scope="row" className="pr-2">
+              <th scope="row" className="pe-2">
                 Email
               </th>
               <td className="col-md-9">{data!.userConProfile.email}</td>

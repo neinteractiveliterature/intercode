@@ -146,7 +146,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps) {
   };
 
   return (
-    <div className="form-group">
+    <div className="mb-3">
       <CaptionLabel formItem={formItem} htmlFor={domId} />
       {renderInput()}
       <FieldRequiredFeedback valueInvalid={valueInvalid} />

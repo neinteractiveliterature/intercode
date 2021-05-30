@@ -181,12 +181,12 @@ function ScheduleMultipleRunsModal({
 
     return (
       <div>
-        <fieldset className="form-group">
+        <fieldset className="mb-3">
           <legend className="col-form-label">From</legend>
           <TimeSelect value={start} onChange={setStart} timespan={conventionDayTimespan} />
         </fieldset>
 
-        <fieldset className="form-group">
+        <fieldset className="mb-3">
           <legend className="col-form-label">Until</legend>
           <TimeSelect value={finish} onChange={setFinish} timespan={timespanForFinish} />
         </fieldset>
@@ -268,10 +268,10 @@ function ScheduleMultipleRunsModal({
         </div>
         <div className="modal-footer">
           <div className="d-flex w-100">
-            <div className="col text-right pr-0">
+            <div className="col text-end pe-0">
               <button
                 type="button"
-                className="btn btn-secondary mr-2"
+                className="btn btn-secondary me-2"
                 onClick={onCancel}
                 disabled={createInProgress}
               >

@@ -54,7 +54,7 @@ function MultipleChoiceOptionRow({
   return (
     <tr ref={rowRef} style={isDragging ? { opacity: 0.25 } : {}}>
       <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
-        <span className="sr-only">Drag to reorder</span>
+        <span className="visually-hidden">Drag to reorder</span>
         <i className="fa fa-bars" />
       </td>
       <td>
@@ -90,7 +90,7 @@ function MultipleChoiceOptionRow({
             })
           }
         >
-          <span className="sr-only">Delete option</span>
+          <span className="visually-hidden">Delete option</span>
           <i className="fa fa-trash-o" />
         </button>
       </td>

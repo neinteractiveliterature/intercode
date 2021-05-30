@@ -79,7 +79,7 @@ function TimeblockPreferenceEditorTimeblockRow({
   return (
     <tr ref={rowRef}>
       <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
-        <span className="sr-only">Drag to reorder</span>
+        <span className="visually-hidden">Drag to reorder</span>
         <i className="fa fa-bars" />
       </td>
       <td>

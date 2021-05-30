@@ -28,7 +28,7 @@ function MethodDoc({ method, prefix }: MethodDocProps) {
   return (
     <li key={method.name} className="list-group-item">
       <p>
-        <code className="font-weight-bold">
+        <code className="fw-bold">
           <AssignName assign={method} prefix={prefix} />
         </code>
       </p>

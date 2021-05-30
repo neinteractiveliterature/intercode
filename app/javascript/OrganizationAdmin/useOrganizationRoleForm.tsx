@@ -53,8 +53,10 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
     <>
       <BootstrapFormInput name="name" label="Role name" value={name} onTextChange={onNameChange} />
 
-      <div className="form-group">
-        <label htmlFor="users">Users</label>
+      <div className="mb-3">
+        <label className="form-label" htmlFor="users">
+          Users
+        </label>
         <UserSelect isMulti inputId="users" value={users} onChange={onChangeUsers} />
       </div>
 

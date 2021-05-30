@@ -44,11 +44,9 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
             <small className="text-muted">Admin notes</small>
           )}
         </div>
-        <div className="input-group-append">
-          <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
-            Edit
-          </button>
-        </div>
+        <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
+          Edit
+        </button>
       </div>
     );
   }
@@ -68,7 +66,7 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
         />
         <ErrorDisplay graphQLError={saveError as ApolloError} />
       </div>
-      <div className="card-footer text-right">
+      <div className="card-footer text-end">
         <button
           className="btn btn-secondary btn-sm"
           type="button"
@@ -78,7 +76,7 @@ function AdminNotes({ mutate, value }: AdminNotesProps) {
           Cancel
         </button>
         <button
-          className="btn btn-primary btn-sm ml-2"
+          className="btn btn-primary btn-sm ms-2"
           type="button"
           onClick={saveClicked}
           disabled={saveInProgress}

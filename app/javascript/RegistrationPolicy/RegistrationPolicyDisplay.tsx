@@ -38,9 +38,9 @@ function renderBucketOptions(
   ].filter((option) => option != null);
 
   return (
-    <div className="ml-2">
+    <div className="ms-2">
       {bucketOptions.map((option, i) => (
-        <span className="badge badge-secondary" key={option ?? i}>
+        <span className="badge bg-secondary" key={option ?? i}>
           {option}
         </span>
       ))}
@@ -156,8 +156,8 @@ function RegistrationPolicyDisplay({
       <tfoot>
         {renderPreventNoPreferenceSignupsRow()}
         <tr>
-          <td colSpan={columnCount - 2} className="text-right">
-            <strong className="mr-2">Total capacity:</strong>
+          <td colSpan={columnCount - 2} className="text-end">
+            <strong className="me-2">Total capacity:</strong>
           </td>
           <td className="d-flex flex-column flex-lg-row">{renderTotals()}</td>
           <td />

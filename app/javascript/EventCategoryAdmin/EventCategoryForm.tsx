@@ -114,7 +114,7 @@ function EventColorPicker({
         <div className="card-body">
           <ColorPicker value={color} onChange={setColor} />
         </div>
-        <span ref={setArrow} style={styles.arrow} className="arrow" />
+        <span ref={setArrow} style={styles.arrow} className="popover-arrow" />
       </div>
     </>
   );
@@ -226,7 +226,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         disabled={disabled}
       />
 
-      <fieldset className="form-group">
+      <fieldset className="mb-3">
         <legend className="col-form-label">Colors</legend>
 
         <div className="d-flex flex-wrap">
@@ -263,7 +263,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
 
         <button
           type="button"
-          className="mt-2 ml-1 btn btn-sm btn-outline-secondary"
+          className="mt-2 ms-1 btn btn-sm btn-outline-secondary"
           onClick={() => onChange(autogenerateColors(value))}
           disabled={disabled}
         >

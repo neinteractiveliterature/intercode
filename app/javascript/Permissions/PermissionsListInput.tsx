@@ -43,7 +43,7 @@ function PermissionsListRow({
         }
       }}
     >
-      <th scope="row" className="text-left font-weight-normal pr-4">
+      <th scope="row" className="text-start fw-normal pe-4">
         {titleize(name)}
       </th>
       <td>

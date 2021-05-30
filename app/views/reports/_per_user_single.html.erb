@@ -5,7 +5,7 @@
   <% active_signups = user_con_profile.signups.reject(&:withdrawn?) %>
   <% if active_signups.any? %>
     <section>
-      <p class="font-weight-bold mb-0">Events You're Signed Up For:</p>
+      <p class="fw-bold mb-0">Events You're Signed Up For:</p>
       <table class="table table-striped" style="width: auto">
         <% active_signups.sort_by { |signup| signup.run.starts_at }.each do |signup| %>
           <tr>

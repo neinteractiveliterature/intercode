@@ -101,7 +101,7 @@ function TimeblockPreferenceItemInput({
   const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (
-    <fieldset className="form-group">
+    <fieldset className="mb-3">
       <CaptionLegend formItem={formItem} />
       <table className="table">
         <thead>

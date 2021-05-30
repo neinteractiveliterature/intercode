@@ -36,16 +36,16 @@ const SignupModerationContext = createContext<SignupModerationContextValue>({
 function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
     case SignupRequestState.Accepted:
-      return 'badge-success';
+      return 'bg-success';
     case SignupRequestState.Rejected:
-      return 'badge-danger';
+      return 'bg-danger';
     case SignupRequestState.Pending:
-      return 'badge-info';
+      return 'bg-info';
     case SignupRequestState.Withdrawn:
-      return 'badge-dark';
+      return 'bg-dark';
     default:
       assertNever(state, true);
-      return 'badge-light';
+      return 'bg-light';
   }
 }
 
@@ -135,7 +135,7 @@ function SignupRequestActionsCell({
       {value.state === 'pending' && (
         <>
           <button
-            className="btn btn-sm btn-danger mr-2"
+            className="btn btn-sm btn-danger me-2"
             type="button"
             onClick={() => rejectClicked(value)}
           >

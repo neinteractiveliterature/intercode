@@ -160,7 +160,7 @@ function SignInForm() {
           <div>
             <button
               type="button"
-              className="btn btn-secondary mr-2"
+              className="btn btn-secondary me-2"
               disabled={submitInProgress}
               onClick={onCancel}
             >

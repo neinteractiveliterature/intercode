@@ -12,7 +12,7 @@ class CmsRenderingContext
         <h2 class="mb-4">JavaScript disabled</h2>
 
         <div class="d-flex align-items-center">
-          <h1 class="m-0 mr-4">
+          <h1 class="m-0 me-4">
             <i class="fa fa-exclamation-triangle"></i>
           </h1>
           <div class="flex-grow-1">
@@ -24,7 +24,7 @@ class CmsRenderingContext
           </div>
         </div>
 
-        <div class="text-right">
+        <div class="text-end">
           <a class="btn btn-primary" href=".">Reload page</a>
         </div>
       </div>

@@ -44,7 +44,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
               <td>
                 <button
                   type="button"
-                  className="btn btn-sm btn-outline-danger mr-2"
+                  className="btn btn-sm btn-outline-danger me-2"
                   onClick={() =>
                     confirm({
                       action: () => deleteDepartment({ variables: { id: department.id } }),
@@ -52,7 +52,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
                     })
                   }
                 >
-                  <span className="sr-only">Delete department</span>
+                  <span className="visually-hidden">Delete department</span>
                   <i className="fa fa-trash-o" />
                 </button>
                 <Link

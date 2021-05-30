@@ -65,7 +65,7 @@ function EventRatingIcon({
         height: overrideElementSize ? `${size}rem` : undefined,
       }}
     >
-      <span className="sr-only">{isRating(ratingKey) && RATING_NAMES[ratingKey]}</span>
+      <span className="visually-hidden">{isRating(ratingKey) && RATING_NAMES[ratingKey]}</span>
     </i>
   );
 }

@@ -137,7 +137,7 @@ function OrderAdmin() {
             queryData?.currentAbility?.can_create_orders && (
               <button
                 type="button"
-                className="btn btn-outline-primary ml-2"
+                className="btn btn-outline-primary ms-2"
                 onClick={newOrderModal.open}
               >
                 <i className="fa fa-plus" /> New order

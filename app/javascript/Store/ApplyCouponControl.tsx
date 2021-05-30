@@ -29,10 +29,12 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
 
   return (
     <>
-      <label htmlFor={couponCodeInputId}>Apply coupon:</label>
+      <label className="form-label" htmlFor={couponCodeInputId}>
+        Apply coupon:
+      </label>
       <input
         type="text"
-        className="form-control form-control-sm col-4 d-inline-block ml-2"
+        className="form-control form-control-sm col-4 d-inline-block ms-2"
         value={couponCode}
         id={couponCodeInputId}
         onChange={(event) => {
@@ -43,7 +45,7 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
         aria-label="Coupon code"
       />
       <button
-        className="btn btn-sm btn-outline-primary ml-2"
+        className="btn btn-sm btn-outline-primary ms-2"
         type="button"
         onClick={applyClicked}
         disabled={applyInProgress}

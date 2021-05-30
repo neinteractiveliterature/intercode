@@ -85,7 +85,7 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
 
   if (iosWebviewAppHost) {
     return `
-      <p class="text-left">
+      <p class="text-start">
         ${iosWebviewAppHost}
         uses the Safari engine, which ships with iOS itself.  To update it, update your device to
         the latest version of iOS.
@@ -96,19 +96,19 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
   switch (browser?.name ?? 'unknown') {
     case 'chrome':
       return `
-        <a href="https://www.google.com/chrome/" class="btn btn-primary mr-2">
+        <a href="https://www.google.com/chrome/" class="btn btn-primary me-2">
           Download the latest Chrome
         </a>
       `;
     case 'firefox':
       return `
-        <a href="https://www.firefox.com/" class="btn btn-primary mr-2">
+        <a href="https://www.firefox.com/" class="btn btn-primary me-2">
           Download the latest Firefox
         </a>
       `;
     case 'safari':
       return `
-        <p class="text-left">
+        <p class="text-start">
           To get the latest Safari, update to the latest version of macOS.  Or, you can use
           this site with an up-to-date version of
           <a href="https://www.google.com/chrome/">Google Chrome</a>
@@ -119,21 +119,21 @@ function renderRecommendation(browser: ReturnType<typeof detect>) {
     case 'ios':
     case 'ios-webview':
       return `
-        <p class="text-left">To get the latest Safari, update to the latest version of iOS.</p>
+        <p class="text-start">To get the latest Safari, update to the latest version of iOS.</p>
       `;
     case 'edge':
       return `
-        <p class="text-left">To get the latest Edge, run Windows Update.</p>
+        <p class="text-start">To get the latest Edge, run Windows Update.</p>
       `;
     case 'opera':
       return `
-        <a href="https://www.opera.com/" class="btn btn-primary mr-2">
+        <a href="https://www.opera.com/" class="btn btn-primary me-2">
           Download the latest Opera
         </a>
       `;
     default:
       return `
-        <p class="text-left">
+        <p class="text-start">
           To use this site, we recommend an up-to-date version of
           <a href="https://www.google.com/chrome/">Google Chrome</a>
           or
@@ -170,7 +170,7 @@ function renderBrowserWarning(browser: ReturnType<typeof detect>) {
         <h2 class="mb-4">Unsupported web browser</h2>
 
         <div class="d-flex align-items-start">
-          <h1 class="m-0 mr-4">
+          <h1 class="m-0 me-4">
             <i class="fa fa-exclamation-triangle"></i>
           </h1>
           <div class="flex-grow-1">
@@ -183,7 +183,7 @@ function renderBrowserWarning(browser: ReturnType<typeof detect>) {
               ${getWarningMessage(browser)}
             </p>
 
-            <div class="text-right mt-4">
+            <div class="text-end mt-4">
               ${renderRecommendation(browser)}
               <button
                 class="btn btn-secondary"

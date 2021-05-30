@@ -29,7 +29,7 @@ export default LoadQueryWrapper(
     return (
       <>
         {product.image_url && (
-          <div className="float-right d-none d-lg-block ml-4" style={{ maxWidth: '50%' }}>
+          <div className="float-end d-none d-lg-block ms-4" style={{ maxWidth: '50%' }}>
             <img style={{ maxWidth: '100%' }} src={product.image_url} alt={product.name} />
           </div>
         )}

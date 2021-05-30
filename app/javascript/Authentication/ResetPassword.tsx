@@ -75,8 +75,8 @@ function ResetPassword() {
       <form onSubmit={onSubmit}>
         <div className="card">
           <div className="card-body">
-            <div className="form-group">
-              <label htmlFor={passwordId}>
+            <div className="mb-3">
+              <label className="form-label" htmlFor={passwordId}>
                 {t('authentication.resetPassword.passwordLabel', 'Password')}
               </label>
               <Suspense fallback={<LoadingIndicator />}>
@@ -96,7 +96,7 @@ function ResetPassword() {
             <ErrorDisplay stringError={(changePasswordError || {}).message} />
           </div>
 
-          <div className="card-footer text-right">
+          <div className="card-footer text-end">
             <input
               type="submit"
               value={t('authentication.resetPassword.setPasswordButton', 'Set password').toString()}

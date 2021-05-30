@@ -20,7 +20,7 @@ function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderPr
     dropButton = (
       <button
         type="button"
-        className="btn btn-outline-danger float-right"
+        className="btn btn-outline-danger float-end"
         onClick={() =>
           confirm({
             prompt: t(

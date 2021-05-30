@@ -25,7 +25,9 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
       buttonContent={
         <>
           <i className="fa fa-calendar" aria-hidden />
-          <span className="sr-only">{t('addToCalendarDropdown.title', 'Add to calendar')}</span>
+          <span className="visually-hidden">
+            {t('addToCalendarDropdown.title', 'Add to calendar')}
+          </span>
         </>
       }
       popperOptions={{ placement: 'bottom-end' }}

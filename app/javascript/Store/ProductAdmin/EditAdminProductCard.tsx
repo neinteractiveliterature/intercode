@@ -136,8 +136,8 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   return (
     <div className="mb-4 card bg-light border-dark glow-dark">
       <div className="card-header">
-        <div className="row align-items-center">
-          <div className="col">
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
             <input
               aria-label="Product name"
               type="text"
@@ -148,7 +148,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               onChange={(event) => setName(event.target.value)}
             />
           </div>
-          <div className="mr-2">
+          <div className="ms-2">
             <ul className="list-inline m-0">
               <li className="list-inline-item">
                 <button type="button" className="btn btn-sm btn-secondary" onClick={close}>
@@ -164,7 +164,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
           </div>
         </div>
         <div className="d-flex flex-wrap">
-          <div className="mr-4">
+          <div className="me-4">
             <BooleanInput
               name="available"
               caption="Available for purchase"
@@ -172,7 +172,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               onChange={setAvailable}
             />
           </div>
-          <div className="mr-4">
+          <div className="me-4">
             <MultipleChoiceInput
               name="payment_options"
               caption="Payment options"
@@ -213,13 +213,13 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
             {product.image_url && (
               <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />
             )}
-            <div className="custom-file mt-2" style={{ width: '220px' }}>
-              <label className="custom-file-label" htmlFor={imageInputId}>
+            <div className="mt-2" style={{ width: '220px' }}>
+              <label className="form-label" htmlFor={imageInputId}>
                 Choose image...
               </label>
               <input
                 id={imageInputId}
-                className="custom-file-input"
+                className="form-control"
                 type="file"
                 accept="image/*"
                 onChange={imageChanged}
@@ -230,7 +230,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
 
           <div className="ml-lg-4 col-lg">
             <div className="d-flex">
-              <strong className="mr-1">Base price:</strong>
+              <strong className="me-1">Base price:</strong>
               <PricingStructureInput
                 value={
                   product.pricing_structure ?? {

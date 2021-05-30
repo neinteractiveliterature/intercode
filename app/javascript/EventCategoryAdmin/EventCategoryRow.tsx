@@ -33,11 +33,11 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
         </span>{' '}
         <small>({pluralizeWithCount('event', eventCategory.events_paginated.total_entries)})</small>
       </td>
-      <td className="text-right">
+      <td className="text-end">
         {eventCategory.events_paginated.total_entries > 0 ? (
           <ButtonWithTooltip
             buttonProps={{
-              className: 'btn btn-outline-danger btn-sm mr-2',
+              className: 'btn btn-outline-danger btn-sm me-2',
               disabled: true,
             }}
             tooltipContent={
@@ -48,12 +48,12 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
             }
           >
             <i className="fa fa-trash-o" />
-            <span className="sr-only">Delete event category</span>
+            <span className="visually-hidden">Delete event category</span>
           </ButtonWithTooltip>
         ) : (
           <button
             type="button"
-            className="btn btn-outline-danger btn-sm mr-2"
+            className="btn btn-outline-danger btn-sm me-2"
             onClick={() =>
               confirm({
                 prompt: 'Are you sure you want to delete this event category?',
@@ -66,7 +66,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
             }
           >
             <i className="fa fa-trash-o" />
-            <span className="sr-only">Delete event category</span>
+            <span className="visually-hidden">Delete event category</span>
           </button>
         )}
         <Link to={`/event_categories/${eventCategory.id}/edit`} className="btn btn-primary btn-sm">

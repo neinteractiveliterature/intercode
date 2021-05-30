@@ -12,7 +12,7 @@ function Checkmark({ value, className }: CheckmarkProps) {
 
   return (
     <i className={classNames('fa fa-check', className)}>
-      <span className="sr-only">✓</span>
+      <span className="visually-hidden">✓</span>
     </i>
   );
 }

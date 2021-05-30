@@ -52,7 +52,7 @@ function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
   return (
     <>
       <button
-        className="hidden-button text-left"
+        className="hidden-button text-start"
         type="button"
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >
@@ -92,7 +92,7 @@ function describePermissionModel(
     case 'CmsContentGroup':
       return (
         <span className="text-nowrap">
-          <span className="badge badge-secondary">CMS content</span>
+          <span className="badge bg-secondary">CMS content</span>
           &nbsp;
           {model.name}
         </span>
@@ -139,7 +139,7 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   return (
     <>
       <button
-        className="hidden-button text-left"
+        className="hidden-button text-start"
         type="button"
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >
@@ -242,7 +242,7 @@ function StaffPositionsTable() {
           buttonContent={
             <>
               <i className="fa fa-ellipsis-h" />
-              <span className="sr-only">Options</span>
+              <span className="visually-hidden">Options</span>
             </>
           }
           popperOptions={{ placement: 'bottom-end' }}

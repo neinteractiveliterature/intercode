@@ -13,7 +13,7 @@ const MultipleChoiceInput = ({
   helpText,
   ...choiceSetProps
 }: MultipleChoiceInputProps) => (
-  <fieldset className="form-group">
+  <fieldset className="mb-3">
     <legend className="col-form-label">{caption}</legend>
     <ChoiceSet {...choiceSetProps} />
     <HelpText>{helpText}</HelpText>

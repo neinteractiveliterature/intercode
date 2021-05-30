@@ -75,9 +75,9 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                   ))}
                 </ul>
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 <button
-                  className="btn btn-sm btn-outline-danger mr-2"
+                  className="btn btn-sm btn-outline-danger me-2"
                   type="button"
                   onClick={() =>
                     confirm({
@@ -88,7 +88,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                   }
                 >
                   <i className="fa fa-trash-o" />
-                  <span className="sr-only">Delete form</span>
+                  <span className="visually-hidden">Delete form</span>
                 </button>
                 <Link
                   to={`/admin_forms/${form.id}/edit`}

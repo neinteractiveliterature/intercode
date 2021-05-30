@@ -77,15 +77,15 @@ export default LoadQueryWrapper(
                 {capitalize(data.convention.ticket_name)}
                 {' type'}
               </th>
-              <th className="text-right">Count</th>
-              <th className="text-right">Revenue</th>
+              <th className="text-end">Count</th>
+              <th className="text-end">Revenue</th>
             </tr>
           </thead>
           <tbody>
             {sortedRows.map(({ ticket_type: ticketType, payment_amount: paymentAmount, count }) => (
               <tr key={`${ticketType.name}-${paymentAmount.fractional}`}>
                 {descriptionCell(ticketType, paymentAmount)}
-                <td className="text-right">
+                <td className="text-end">
                   <a
                     href={`/user_con_profiles?columns=name,email,ticket,privileges,payment_amount&filters.ticket=${
                       ticketType.id
@@ -94,18 +94,18 @@ export default LoadQueryWrapper(
                     {count}
                   </a>
                 </td>
-                <td className="text-right">
+                <td className="text-end">
                   {formatMoney({ ...paymentAmount, fractional: paymentAmount.fractional * count })}
                 </td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr className="font-weight-bold">
-              <td colSpan={2} className="text-right">
+            <tr className="fw-bold">
+              <td colSpan={2} className="text-end">
                 Total revenue
               </td>
-              <td className="text-right">{formatMoney(data.convention.reports.total_revenue)}</td>
+              <td className="text-end">{formatMoney(data.convention.reports.total_revenue)}</td>
             </tr>
           </tfoot>
         </table>

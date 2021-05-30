@@ -168,7 +168,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
     <div className="card mb-4" key={event.id}>
       <div className="card-header">
         <div className="event-card-header">
-          <div className="float-right text-right ml-1">
+          <div className="float-end text-end ms-1">
             <div className="lead">
               {canReadSchedule ? renderFirstRunTime(event, timezoneName, formatRunTime) : null}
             </div>
@@ -190,7 +190,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
             <span className="lead text-muted">{event.event_category.name}</span>
             <div className="d-flex flex-wrap mt-1">
               {metadataItems.map((metadataItem) => (
-                <div className="flex-shrink-1 mr-4" key={metadataItem.key}>
+                <div className="flex-shrink-1 me-4" key={metadataItem.key}>
                   {metadataItem.content}
                 </div>
               ))}

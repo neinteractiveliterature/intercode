@@ -79,11 +79,11 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
     ['Hour', 'hour', hourOptions, hourInputId],
     ['Minute', 'minute', minuteOptions, minuteInputId],
   ] as const).map(([label, name, options, selectId]) => (
-    <label key={name} htmlFor={selectId}>
-      <span className="sr-only">{label}</span>
+    <label className="form-label" key={name} htmlFor={selectId}>
+      <span className="visually-hidden">{label}</span>
       <select
         id={selectId}
-        className="form-control mr-1"
+        className="form-control me-1"
         name={name}
         value={value[name] == null ? '' : value[name]}
         onChange={inputChanged}

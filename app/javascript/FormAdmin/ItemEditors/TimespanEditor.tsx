@@ -13,8 +13,8 @@ function TimespanEditor({ formItem, setFormItem }: TimespanEditorProps) {
 
   return (
     <>
-      <div className="form-group">
-        <label htmlFor={captionInputId} className="form-item-label">
+      <div className="mb-3">
+        <label htmlFor={captionInputId} className="form-label form-item-label">
           Caption
         </label>
         <LiquidInput

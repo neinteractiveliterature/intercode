@@ -28,7 +28,7 @@ function DateItemInput(props: DateItemInputProps) {
   const value = typeof uncheckedValue === 'string' ? uncheckedValue : '';
 
   return (
-    <div className="form-group">
+    <div className="mb-3">
       <CaptionLabel formItem={formItem} htmlFor={domId} />
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <input

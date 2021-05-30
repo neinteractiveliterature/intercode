@@ -51,18 +51,18 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
   return (
     <div className="mb-4 card bg-light" id={`product-${product.id}`}>
       <div className="card-header">
-        <div className="row align-items-center">
-          <div className="col">
+        <div className="d-flex align-items-center">
+          <div className="flex-grow-1">
             <div className="lead">{product.name}</div>
           </div>
-          <div className="mr-2">
+          <div className="ms-2">
             {currentAbility.can_update_products && (
               <ul className="list-inline m-0">
                 {product.id != null && (
                   <li className="list-inline-item">
                     <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
                       <i className="fa fa-trash-o">
-                        <span className="sr-only">Delete product</span>
+                        <span className="visually-hidden">Delete product</span>
                       </i>
                     </button>
                   </li>
@@ -77,15 +77,13 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           </div>
         </div>
         <div>
-          <span
-            className={classNames('badge', product.available ? 'badge-success' : 'badge-danger')}
-          >
+          <span className={classNames('badge', product.available ? 'bg-success' : 'bg-danger')}>
             {product.available ? 'Available for purchase' : 'Not available for purchase'}
           </span>
           {product.payment_options.map((paymentOption) => (
             <i
               key={paymentOption}
-              className={classNames('ml-2', 'fa', {
+              className={classNames('ms-2', 'fa', {
                 'fa-cc-stripe': paymentOption === 'stripe',
                 'fa-suitcase': paymentOption === 'pay_at_convention',
               })}

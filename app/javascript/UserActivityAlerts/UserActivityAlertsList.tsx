@@ -112,7 +112,7 @@ export default LoadQueryWrapper(
                 <td>{renderAlertMatches(userActivityAlert)}</td>
                 <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>
                 <td>{renderAlertNotificationDestinations(userActivityAlert)}</td>
-                <td className="text-right">
+                <td className="text-end">
                   <Link
                     to={`/user_activity_alerts/${userActivityAlert.id}/edit`}
                     className="btn btn-sm btn-primary"

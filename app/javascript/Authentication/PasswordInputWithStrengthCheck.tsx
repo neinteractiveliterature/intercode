@@ -125,7 +125,7 @@ function PasswordInputWithStrengthCheck({
         />
         <div
           style={{ right: 0, top: 0, position: 'absolute' }}
-          className={classNames('mr-2', 'mt-2')}
+          className={classNames('me-2', 'mt-2')}
         >
           <button
             type="button"
@@ -150,7 +150,7 @@ function PasswordInputWithStrengthCheck({
                   <>
                     {' '}
                     <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
-                      <span className="sr-only">{t('buttons.help', 'Help')}</span>
+                      <span className="visually-hidden">{t('buttons.help', 'Help')}</span>
                     </i>
                   </>
                 )}
@@ -168,7 +168,7 @@ function PasswordInputWithStrengthCheck({
             <div className="card-body">
               <PasswordFeedback result={passwordStrengthResult} />
             </div>
-            <span ref={setArrow} style={styles.arrow} className="arrow" />
+            <span ref={setArrow} style={styles.arrow} className="popover-arrow" />
           </div>
         </div>
         <div
