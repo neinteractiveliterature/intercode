@@ -64,4 +64,5 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
+      if: github.actor != 'dependabot[bot]'
       uses: github/codeql-action/analyze@v1
