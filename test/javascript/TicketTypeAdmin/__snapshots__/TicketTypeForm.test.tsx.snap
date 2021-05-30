@@ -6,6 +6,7 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     class="mb-3"
   >
     <label
+      class="form-label"
       for="name-1"
     >
       Name (no spaces allowed — only letters, numbers, and underscores)
@@ -23,6 +24,7 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     class="mb-3"
   >
     <label
+      class="form-label"
       for="description-2"
     >
       Description
@@ -131,6 +133,7 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     class="mb-3"
   >
     <label
+      class="form-label"
       for="maximum_event_provided_tickets-7"
     >
       Number of event-provided bananas of this type (per event)
