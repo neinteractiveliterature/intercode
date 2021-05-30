@@ -28,7 +28,7 @@ function describeSignupState(
   }
 
   if (mySignup.waitlist_position) {
-    return t('signups.runCardText.waitlisted', 'You are #{{ waitlistNumber }} on the waitlist.', {
+    return t('signups.runCardText.waitlisted', 'You are #{{ waitlistPosition }} on the waitlist.', {
       waitlistPosition: mySignup.waitlist_position,
     });
   }
