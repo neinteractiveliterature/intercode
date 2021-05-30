@@ -104,8 +104,8 @@ function SignUpForm() {
         <div className="modal-body">
           <AccountFormContent />
           <UserFormFields formState={formState} setFormState={setFormState} />
-          <div className="form-group">
-            <label htmlFor={passwordFieldId}>
+          <div className="mb-3">
+            <label className="form-label" htmlFor={passwordFieldId}>
               {t('authentication.signUpForm.passwordLabel', 'Password')}
             </label>
             <Suspense fallback={<LoadingIndicator />}>
@@ -150,7 +150,7 @@ function SignUpForm() {
           <div>
             <button
               type="button"
-              className="btn btn-secondary mr-2"
+              className="btn btn-secondary me-2"
               disabled={submitInProgress}
               onClick={closeModal}
             >

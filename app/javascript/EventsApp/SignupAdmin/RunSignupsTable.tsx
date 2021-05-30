@@ -53,16 +53,16 @@ const SignupStateFilter = (props: FilterProps<SignupType>) => {
 
 const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
   const { t } = useTranslation();
-  let badgeClass = 'badge-danger';
+  let badgeClass = 'bg-danger';
   let text = value;
   if (value === 'OK') {
-    badgeClass = 'badge-success';
+    badgeClass = 'bg-success';
     text = t('tables.ageRestrictionsCheck.ok', 'OK');
   } else if (value === 'Unknown age') {
-    badgeClass = 'badge-warning';
+    badgeClass = 'bg-warning';
     text = t('tables.ageRestrictionsCheck.unknown', 'Unknown age');
   } else if (value === 'N/A') {
-    badgeClass = 'badge-light';
+    badgeClass = 'bg-light';
     text = t('tables.ageRestrictionsCheck.notApplicable', 'N/A');
   }
 

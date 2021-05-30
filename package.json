@@ -17,7 +17,8 @@
     "lint": "eslint app/javascript --cache --ext .js,.jsx,.ts,.tsx,.gql,.graphql",
     "start": "webpack serve --progress --color --config config/webpack/development.js --host localhost --public localhost:3135 --port 3135",
     "test": "jest --testPathPattern=test/javascript --coverage",
-    "test:watch": "jest --watch --testPathPattern=test/javascript"
+    "test:watch": "jest --watch --testPathPattern=test/javascript",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.3.17",
@@ -84,8 +85,7 @@
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-graphql-tag": "^3.2.0",
     "babel-plugin-lodash": "^3.3.4",
-    "bootstrap": "^4.6.0",
-    "bootstrap.native": "^2.0.27",
+    "bootstrap": "^5.0.1",
     "bytes": "^3.1.0",
     "cadmus-navbar-admin": "^4.0.0",
     "caniuse-lite": "^1.0.30001228",
@@ -208,12 +208,14 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": ">=6",
     "i18next-parser": "^3.11.0",
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^2.0.0",
     "jest-html-reporter": "^3.3.0",
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
+    "lint-staged": ">=10",
     "prettier": "^2.2.1",
     "react-test-renderer": "^17.0.2",
     "ts-node": "^9.1.1",
@@ -228,5 +230,9 @@
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,gql,graphql}": "eslint --cache --fix",
+    "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write"
   }
 }

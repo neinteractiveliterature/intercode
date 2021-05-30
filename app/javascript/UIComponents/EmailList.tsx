@@ -32,15 +32,15 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
     <>
       <div className="d-flex align-items-baseline mb-2">
         <div className="flex-grow-1">
-          <a href={mailtoLink} className="btn btn-secondary mr-2">
+          <a href={mailtoLink} className="btn btn-secondary me-2">
             <i className="fa fa-envelope" /> {t('buttons.composeEmail', 'Compose email')}
           </a>
 
           <CopyToClipboardButton
-            className="btn btn-secondary mr-2"
+            className="btn btn-secondary me-2"
             data-clipboard-text={addresses}
             copiedProps={{
-              className: 'btn btn-outline-secondary mr-2',
+              className: 'btn btn-outline-secondary me-2',
             }}
           />
         </div>

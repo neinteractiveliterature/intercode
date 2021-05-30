@@ -115,8 +115,8 @@ export default LoadQueryWrapper(
 
           <div className="card-body">
             <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
-            <div className="form-group">
-              <label htmlFor={passwordFieldId}>
+            <div className="mb-3">
+              <label className="form-label" htmlFor={passwordFieldId}>
                 {t('authentication.editUser.passwordLabel', 'Password')}
               </label>
               <Suspense fallback={<LoadingIndicator />}>
@@ -152,7 +152,7 @@ export default LoadQueryWrapper(
             <ErrorDisplay stringError={(updateUserError || {}).message} />
           </div>
 
-          <div className="card-footer text-right">
+          <div className="card-footer text-end">
             <div>
               <input
                 type="submit"

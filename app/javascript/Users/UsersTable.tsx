@@ -96,7 +96,7 @@ function UsersTable() {
         {...tableHeaderProps}
         exportUrl="/csv_exports/users"
         renderLeftContent={() => (
-          <div className="ml-2 mb-2 d-inline-block align-top">
+          <div className="ms-2 mb-2 d-inline-block align-top">
             <MultiUserActionsDropdown
               selectedUserIds={tableInstance.selectedFlatRows.map((row) => row.original.id)}
               onClickMerge={(userIds) => mergeModal.open({ userIds })}

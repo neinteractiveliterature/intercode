@@ -74,7 +74,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
         role="tooltip"
         {...attributes.popper}
       >
-        <span ref={arrowRef} style={styles.arrow} className="arrow" />
+        <span ref={arrowRef} style={styles.arrow} className="popover-arrow" />
         <div className="schedule-grid-run-details-content">
           <div className="popover-header">
             <div className="d-flex align-items-center">
@@ -99,7 +99,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
           </div>
           <div className="popover-body overflow-auto">
             {myProfile && (
-              <div className="float-right">
+              <div className="float-end">
                 <RateEventControl value={event.my_rating} onChange={ratingChanged} />
               </div>
             )}
@@ -107,14 +107,14 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
               <tbody>
                 {showDate && (
                   <tr>
-                    <td className="text-center pr-1">
+                    <td className="text-center pe-1">
                       <i className="fa fa-calendar-o" />
                     </td>
                     <td>{format(timespan.start, 'longDate')}</td>
                   </tr>
                 )}
                 <tr>
-                  <td className="text-center pr-1">
+                  <td className="text-center pe-1">
                     <i className="fa fa-clock-o" />
                   </td>
                   <td>
@@ -123,7 +123,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 </tr>
                 {roomsDescription ? (
                   <tr>
-                    <td className="text-center pr-1">
+                    <td className="text-center pe-1">
                       <i className="fa fa-map-marker" />
                     </td>
                     <td>{roomsDescription}</td>
@@ -131,7 +131,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 ) : null}
                 {availabilityDescription ? (
                   <tr>
-                    <td className="text-center pr-1 align-top">
+                    <td className="text-center pe-1 align-top">
                       <i className="fa fa-users" />
                     </td>
                     <td>
@@ -149,7 +149,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 ) : null}
                 {waitlistDescription ? (
                   <tr>
-                    <td className="text-center pr-1 align-top">
+                    <td className="text-center pe-1 align-top">
                       <i className="fa fa-hourglass-half" />
                     </td>
                     <td>

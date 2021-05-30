@@ -14,8 +14,8 @@ function StaticTextEditor({ formItem, setFormItem }: StaticTextEditorProps) {
 
   return (
     <>
-      <div className="form-group">
-        <label htmlFor={contentInputId} className="form-item-label">
+      <div className="mb-3">
+        <label htmlFor={contentInputId} className="form-label form-item-label">
           Content
         </label>
         <LiquidInput

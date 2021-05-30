@@ -55,7 +55,7 @@ function CmsPartialsAdminTable() {
                   </>
                 )}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {partial.current_ability_can_update ? (
                   <Link
                     to={`/cms_partials/${partial.id}/edit`}
@@ -81,7 +81,7 @@ function CmsPartialsAdminTable() {
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
-                    className="btn btn-danger btn-sm ml-1"
+                    className="btn btn-danger btn-sm ms-1"
                   >
                     Delete
                   </button>

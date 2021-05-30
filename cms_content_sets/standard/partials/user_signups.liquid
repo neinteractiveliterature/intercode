@@ -6,7 +6,7 @@
 
     <ul class="list-group list-group-flush text-dark">
       {% for signup in signups %}
-        <li class="list-group-item d-flex align-items-baseline">
+        <li class="list-group-item d-flex align-items-center">
           <div style="width: 11em">
             {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}
           </div>

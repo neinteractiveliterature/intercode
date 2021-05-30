@@ -35,7 +35,7 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
         <div className="card-header">
           <div className="d-flex">
             <div className="lead flex-grow-1">{myProfile.name_without_nickname}</div>
-            <div className="lead font-weight-bold">
+            <div className="lead fw-bold">
               {paymentAmount && paymentAmount.fractional > 0 ? 'Paid' : 'Comp'}
             </div>
           </div>

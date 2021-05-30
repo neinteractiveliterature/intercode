@@ -60,13 +60,13 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
         <td>
           {variable.current_ability_can_update ? (
             <CommitableInput
-              className="text-monospace"
+              className="font-monospace"
               value={variable.value_json}
               onChange={commitVariable}
               onCancel={clearError}
             />
           ) : (
-            <span className="text-monospace">{variable.value_json}</span>
+            <span className="font-monospace">{variable.value_json}</span>
           )}
         </td>
         <td>
@@ -82,7 +82,7 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
               }
             >
               <i className="fa fa-trash-o" />
-              <span className="sr-only">
+              <span className="visually-hidden">
                 Delete variable &ldquo;
                 {variable.key}
                 &rdquo;

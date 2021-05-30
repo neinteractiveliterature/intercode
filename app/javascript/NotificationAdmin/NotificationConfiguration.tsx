@@ -82,7 +82,7 @@ export default LoadQueryWrapper(
           <h4>Destination: {event.destination_description}</h4>
         </header>
 
-        <div className="form-group">
+        <div className="mb-3">
           <legend className="col-form-label">Subject line</legend>
           <LiquidInput
             value={notificationTemplate.subject ?? ''}
@@ -94,7 +94,7 @@ export default LoadQueryWrapper(
           />
         </div>
 
-        <div className="form-group">
+        <div className="mb-3">
           <legend className="col-form-label">Notification body (HTML)</legend>
           <LiquidInput
             value={notificationTemplate.body_html ?? ''}
@@ -104,7 +104,7 @@ export default LoadQueryWrapper(
           />
         </div>
 
-        <div className="form-group">
+        <div className="mb-3">
           <legend className="col-form-label">Notification body (plain text)</legend>
           <LiquidInput
             value={notificationTemplate.body_text ?? ''}
@@ -118,7 +118,7 @@ export default LoadQueryWrapper(
         </div>
 
         {event.sends_sms ? (
-          <div className="form-group">
+          <div className="mb-3">
             <legend className="col-form-label">Notification body (SMS text message)</legend>
             <LiquidInput
               value={notificationTemplate.body_sms ?? ''}

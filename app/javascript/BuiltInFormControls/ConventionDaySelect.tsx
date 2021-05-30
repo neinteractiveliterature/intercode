@@ -44,7 +44,7 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
 
   if (showDateInput) {
     return (
-      <fieldset className="form-group">
+      <fieldset className="mb-3">
         <legend className="col-form-label">Date</legend>
         <DateInput value={value?.toISODate()} onChange={inputChange} />
       </fieldset>
@@ -69,7 +69,7 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
   ));
 
   return (
-    <fieldset className="form-group">
+    <fieldset className="mb-3">
       <legend className="col-form-label">Day</legend>
       {options}
     </fieldset>

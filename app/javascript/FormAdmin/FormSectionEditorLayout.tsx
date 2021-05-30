@@ -67,7 +67,7 @@ function FormSectionEditorLayout() {
 
       <div className="form-section-editor-add-item-bar bg-warning-light p-2 border-top border-warning">
         <button
-          className="btn btn-sm btn-secondary mr-2"
+          className="btn btn-sm btn-secondary me-2"
           type="button"
           onClick={newFormItemModal.open}
         >

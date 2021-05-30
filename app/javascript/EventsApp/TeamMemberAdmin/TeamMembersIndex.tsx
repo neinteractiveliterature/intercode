@@ -56,7 +56,7 @@ function TeamMemberActionMenu({
       buttonContent={
         <>
           <i className="fa fa-ellipsis-h" />
-          <span className="sr-only">{t('buttons.options', 'Options')}</span>
+          <span className="visually-hidden">{t('buttons.options', 'Options')}</span>
         </>
       }
       popperOptions={{ placement: 'bottom-end' }}

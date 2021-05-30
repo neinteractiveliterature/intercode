@@ -203,15 +203,15 @@ function RegistrationPolicyEditor<
 
     return (
       <>
-        <span className="mr-2">
+        <span className="me-2">
           {'Min: '}
           {sumMinimumSlots(registrationPolicy)}
         </span>
-        <span className="mr-2">
+        <span className="me-2">
           {'Pref: '}
           {sumPreferredSlots(registrationPolicy)}
         </span>
-        <span className="mr-2">
+        <span className="me-2">
           {'Max: '}
           {sumTotalSlots(registrationPolicy)}
         </span>
@@ -243,7 +243,7 @@ function RegistrationPolicyEditor<
               registrationPolicy={registrationPolicy}
             />
             <tr>
-              <td colSpan={headerLabels.length} className="text-right">
+              <td colSpan={headerLabels.length} className="text-end">
                 <strong>Total capacity:</strong> {renderTotals()}
               </td>
             </tr>

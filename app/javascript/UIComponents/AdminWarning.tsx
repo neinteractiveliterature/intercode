@@ -16,7 +16,7 @@ export default function AdminWarning({ children }: AdminWarningProps) {
   return (
     <div className="alert alert-warning">
       <div className="d-flex align-items-center">
-        <h1 className="mr-4">
+        <h1 className="me-4">
           <i className="fa fa-exclamation-triangle" />
         </h1>
         <div className="flex-grow-1">{children}</div>

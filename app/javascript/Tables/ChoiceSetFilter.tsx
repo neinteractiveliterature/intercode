@@ -149,7 +149,7 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
     }
 
     if (props.renderHeaderCaption) {
-      return <span className="mr-2">{props.renderHeaderCaption(filterValue)}</span>;
+      return <span className="me-2">{props.renderHeaderCaption(filterValue)}</span>;
     }
 
     const anyText = t('tables.choiceSetFilter.anyText', 'Any');
@@ -159,17 +159,17 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
         return filterValue
           .map((item) => choices.find((choice) => choice.value === item) || { label: item })
           .map(({ label }) => (
-            <span key={label} className="mr-2">
+            <span key={label} className="me-2">
               {label}
             </span>
           ));
       }
 
-      return <span className="mr-2">{anyText}</span>;
+      return <span className="me-2">{anyText}</span>;
     }
 
     const choice = choices.find((c) => c.value === filterValue) || { label: filterValue };
-    return <span className="mr-2">{choice.label || anyText}</span>;
+    return <span className="me-2">{choice.label || anyText}</span>;
   };
 
   const renderHeader = () => (

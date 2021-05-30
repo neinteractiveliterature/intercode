@@ -58,7 +58,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
       <BootstrapFormInput
         name="identifier"
         label="Identifier"
-        className="form-control text-monospace"
+        className="form-control font-monospace"
         value={value.identifier}
         onTextChange={setIdentifier}
         readOnly={readOnly}

@@ -70,7 +70,7 @@ function HelpPopover({ children, className, initialVisible, visibleChanged }: He
         style={{ width: '1.5rem' }}
       >
         <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
-          <span className="sr-only">Help</span>
+          <span className="visually-hidden">Help</span>
         </i>
       </span>
 
@@ -83,7 +83,7 @@ function HelpPopover({ children, className, initialVisible, visibleChanged }: He
         {...attributes.popper}
       >
         <div className="card-body">{children}</div>
-        <span ref={setArrow} style={styles.arrow} className="arrow" />
+        <span ref={setArrow} style={styles.arrow} className="popover-arrow" />
       </div>
     </>
   );

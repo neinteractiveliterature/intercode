@@ -36,9 +36,7 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
 
     return (
       <div className={inputGroupClassName || 'input-group'}>
-        <div className="input-group-prepend">
-          <span className="input-group-text">$</span>
-        </div>
+        <span className="input-group-text">$</span>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <input
           type="text"
@@ -48,7 +46,7 @@ const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
           ref={ref}
           {...inputProps}
         />
-        {appendContent && <div className="input-group-append">{appendContent}</div>}
+        {appendContent}
       </div>
     );
   },

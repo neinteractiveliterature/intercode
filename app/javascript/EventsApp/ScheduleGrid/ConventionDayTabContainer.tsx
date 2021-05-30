@@ -137,7 +137,7 @@ function ConventionDayTabContainer({
           ))}
         </ul>
 
-        <div className="border-bottom border-color-light pl-2">
+        <div className="border-bottom border-color-light ps-2">
           <RefreshButton refreshData={refreshData} />
         </div>
       </div>

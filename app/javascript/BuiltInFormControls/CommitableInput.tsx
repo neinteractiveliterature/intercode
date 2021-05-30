@@ -121,26 +121,24 @@ function CommitableInput({
           onKeyDown: keyDownInInput,
           disabled: commitInProgress,
         })}
-        <div className="input-group-append">
-          <button
-            type="button"
-            className="btn btn-outline-secondary"
-            onClick={cancelEditing}
-            disabled={disabled || commitInProgress}
-          >
-            <i className="fa fa-times" />
-            <span className="sr-only">Cancel changes</span>
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={commitEditing}
-            disabled={disabled || commitInProgress}
-          >
-            <i className="fa fa-check" />
-            <span className="sr-only">Commit changes</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          className="btn btn-outline-secondary"
+          onClick={cancelEditing}
+          disabled={disabled || commitInProgress}
+        >
+          <i className="fa fa-times" />
+          <span className="visually-hidden">Cancel changes</span>
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={commitEditing}
+          disabled={disabled || commitInProgress}
+        >
+          <i className="fa fa-check" />
+          <span className="visually-hidden">Commit changes</span>
+        </button>
       </div>
     );
   }
@@ -153,22 +151,20 @@ function CommitableInput({
         onFocus: beginEditing,
         disabled,
       })}
-      <div className="input-group-append">
-        {value ? (
-          <button
-            type="button"
-            className="btn btn-outline-danger"
-            onMouseDown={() => {
-              onChange('');
-            }}
-            disabled={disabled || !value}
-          >
-            <i className="fa fa-times-rectangle">
-              <span className="sr-only">Clear</span>
-            </i>
-          </button>
-        ) : null}
-      </div>
+      {value ? (
+        <button
+          type="button"
+          className="btn btn-outline-danger"
+          onMouseDown={() => {
+            onChange('');
+          }}
+          disabled={disabled || !value}
+        >
+          <i className="fa fa-times-rectangle">
+            <span className="visually-hidden">Clear</span>
+          </i>
+        </button>
+      ) : null}
     </div>
   );
 }

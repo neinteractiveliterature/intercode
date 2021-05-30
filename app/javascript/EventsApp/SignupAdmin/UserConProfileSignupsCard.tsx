@@ -133,7 +133,7 @@ function UserConProfileSignupsCard({ userConProfileId }: UserConProfileSignupsCa
     <div className="card">
       <div className="card-header">
         {userConProfile.ical_secret && (
-          <div className="float-right">
+          <div className="float-end">
             <AddToCalendarDropdown
               icalSecret={userConProfile.ical_secret}
               className="btn btn-outline-secondary btn-sm"

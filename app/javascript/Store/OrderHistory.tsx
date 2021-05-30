@@ -28,18 +28,18 @@ function OrderHistoryOrderEntry({ orderEntry }: OrderHistoryOrderEntryProps) {
 
   return (
     <tr>
-      <td className="pl-4">
+      <td className="ps-4">
         <div className="d-flex">
           <div className="flex-grow-1">
             <strong>{name}</strong>
           </div>
           {imageUrl && (
-            <img className="mr-4" src={imageUrl} alt={name} style={{ width: '100px' }} />
+            <img className="me-4" src={imageUrl} alt={name} style={{ width: '100px' }} />
           )}
         </div>
       </td>
-      <td className="text-right">{orderEntry.quantity}</td>
-      <td className="text-right pr-4">{formatMoney(orderEntry.price)}</td>
+      <td className="text-end">{orderEntry.quantity}</td>
+      <td className="text-end pe-4">{formatMoney(orderEntry.price)}</td>
     </tr>
   );
 }
@@ -51,11 +51,11 @@ type OrderHistoryCouponApplicationProps = {
 function OrderHistoryCouponApplication({ couponApplication }: OrderHistoryCouponApplicationProps) {
   return (
     <tr className="bg-light">
-      <td colSpan={2} className="pl-4">
+      <td colSpan={2} className="ps-4">
         <em>{'Coupon code: '}</em>
         <code>{couponApplication.coupon.code}</code>
       </td>
-      <td className="pr-4 font-italic text-right">-{formatMoney(couponApplication.discount)}</td>
+      <td className="pe-4 font-italic text-end">-{formatMoney(couponApplication.discount)}</td>
     </tr>
   );
 }
@@ -82,7 +82,7 @@ function OrderHistoryOrderStatus({
     return (
       <>
         <div>
-          <div className="badge badge-success">
+          <div className="badge bg-success">
             <div className="lead">Paid</div>
           </div>
         </div>
@@ -102,7 +102,7 @@ function OrderHistoryOrderStatus({
   if (order.status === 'cancelled') {
     return (
       <div key="status">
-        <div className="badge badge-danger">
+        <div className="badge bg-danger">
           <div className="lead">Canceled</div>
         </div>
       </div>
@@ -112,7 +112,7 @@ function OrderHistoryOrderStatus({
   return (
     <>
       <div>
-        <div className="badge badge-warning">
+        <div className="badge bg-warning">
           <div className="lead">Pay at convention</div>
         </div>
       </div>
@@ -145,11 +145,11 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   return (
     <li key={order.id} className="card mb-4">
       <div className="d-flex card-header border-bottom-0">
-        <div className="col pl-0">
+        <div className="col ps-0">
           <h3>Order #{order.id}</h3>
           <small>{submittedTime && format(submittedTime, 'longWeekdayDateTimeWithZone')}</small>
         </div>
-        <div className="text-right">
+        <div className="text-end">
           <OrderHistoryOrderStatus
             order={order}
             convention={convention}
@@ -169,7 +169,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
           </tbody>
           <tfoot>
             <tr className="bg-warning-light">
-              <td colSpan={3} className="text-right px-4">
+              <td colSpan={3} className="text-end px-4">
                 <strong>Total: {formatMoney(order.total_price)}</strong>
               </td>
             </tr>

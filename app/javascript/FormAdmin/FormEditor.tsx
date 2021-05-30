@@ -103,7 +103,7 @@ function FormEditor() {
             <i className="fa fa-chevron-left" /> Back to forms
           </Link>
         )}
-        <div className="flex-grow-1 ml-2">
+        <div className="flex-grow-1 ms-2">
           <InPlaceEditor
             className="d-flex align-items-start w-100"
             value={form.title}

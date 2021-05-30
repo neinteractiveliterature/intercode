@@ -72,7 +72,7 @@ export default LoadQueryWrapper(
               <strong>{ticketType.description}</strong>
               <code> ({ticketType.name})</code>
             </div>
-            <div className="col-md-4 text-right">
+            <div className="col-md-4 text-end">
               <button
                 type="button"
                 className="btn btn-danger btn-sm mx-1"
@@ -84,14 +84,14 @@ export default LoadQueryWrapper(
                   })
                 }
               >
-                <i className="fa fa-trash-o mr-1" />
+                <i className="fa fa-trash-o me-1" />
                 Delete
               </button>
               <Link
                 to={`/ticket_types/${ticketType.id}/edit`}
                 className="btn btn-secondary btn-sm mx-1"
               >
-                <i className="fa fa-pencil-square-o mr-1" />
+                <i className="fa fa-pencil-square-o me-1" />
                 Edit
               </Link>
             </div>

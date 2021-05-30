@@ -6,9 +6,9 @@ import { FormItemEditorContext, FormEditorContext } from '../FormEditorContexts'
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TypedFormItem } from '../FormItemUtils';
 
-export type DefaultAnswerModalProps<FormItemType extends TypedFormItem> = FormItemEditorProps<
-  FormItemType
-> & {
+export type DefaultAnswerModalProps<
+  FormItemType extends TypedFormItem
+> = FormItemEditorProps<FormItemType> & {
   close: () => void;
   visible: boolean;
 };
@@ -59,7 +59,7 @@ function DefaultAnswerModal<FormItemType extends TypedFormItem>({
           </button>
         </div>
         <div>
-          <button type="button" className="btn btn-secondary mr-2" onClick={close}>
+          <button type="button" className="btn btn-secondary me-2" onClick={close}>
             Cancel
           </button>
           <button type="button" className="btn btn-primary" onClick={setDefaultAnswer}>

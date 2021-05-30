@@ -42,7 +42,7 @@ function DroppedEventAdmin() {
   const rows = droppedEvents.map((droppedEvent) => (
     <tr key={droppedEvent.id}>
       <td>{droppedEvent.title}</td>
-      <td className="text-right">
+      <td className="text-end">
         <button
           type="button"
           className="btn btn-sm btn-secondary"

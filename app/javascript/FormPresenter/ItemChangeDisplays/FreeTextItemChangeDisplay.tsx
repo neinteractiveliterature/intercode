@@ -12,7 +12,7 @@ function FreeTextItemChangeDisplay({ formItem, change }: FreeTextItemChangeDispl
 
   if (formItem.rendered_properties.format === 'markdown') {
     return (
-      <div className="text-monospace small border rounded p-1">
+      <div className="font-monospace small border rounded p-1">
         <TextDiffDisplay before={before} after={after} />
       </div>
     );

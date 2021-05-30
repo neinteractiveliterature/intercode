@@ -41,7 +41,7 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
         readOnly={readOnly}
       />
 
-      <div className="form-group">
+      <div className="mb-3">
         <legend className="col-form-label">Content</legend>
         <LiquidInput
           value={partial.content ?? ''}

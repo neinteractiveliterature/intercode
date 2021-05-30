@@ -56,7 +56,7 @@ function TimespanItemInput(props: TimespanItemInputProps) {
   }
 
   return (
-    <div className="form-group">
+    <div className="mb-3">
       <CaptionLabel formItem={formItem} htmlFor={inputId} />
       <div className="d-flex">
         <div className="w-25">
@@ -73,7 +73,7 @@ function TimespanItemInput(props: TimespanItemInputProps) {
           <FieldRequiredFeedback valueInvalid={valueInvalid} />
         </div>
         <select
-          className="form-control ml-2"
+          className="form-control ms-2"
           value={unit}
           onChange={unitSelectorDidChange}
           aria-label="Unit of time"

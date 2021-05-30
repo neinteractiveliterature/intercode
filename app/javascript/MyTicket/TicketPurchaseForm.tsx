@@ -53,7 +53,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
         const { pricing_structure: pricingStructure, id, name: productName } = availableProduct;
         return (
           <label
-            className={classNames('btn text-left btn-outline-primary', {
+            className={classNames('form-label btn text-start btn-outline-primary', {
               active: product?.id === id,
               focus: focusedProduct?.id === id,
             })}
@@ -61,6 +61,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
             <input
               type="radio"
               name="product"
+              className="visually-hidden"
               checked={product?.id === id}
               onChange={() => setProduct(availableProduct)}
               onFocus={() => setFocusedProduct(availableProduct)}
@@ -81,7 +82,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
                   />
                 )}
               </div>
-              <Checkmark value={(product || {}).id === id} className="ml-2" />
+              <Checkmark value={(product || {}).id === id} className="ms-2" />
             </div>
           </label>
         );

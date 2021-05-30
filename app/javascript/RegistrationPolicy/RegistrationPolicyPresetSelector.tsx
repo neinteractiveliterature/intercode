@@ -49,8 +49,8 @@ function RegistrationPolicyPresetSelector({
   }
 
   return (
-    <div className="form-group">
-      <label htmlFor={presetSelectorId}>
+    <div className="mb-3">
+      <label className="form-label" htmlFor={presetSelectorId}>
         Select policy
         <select
           id={presetSelectorId}

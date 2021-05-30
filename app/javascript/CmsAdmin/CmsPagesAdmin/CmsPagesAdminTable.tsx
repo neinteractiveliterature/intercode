@@ -61,7 +61,7 @@ function CmsPagesAdminTable() {
                   </>
                 )}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {page.current_ability_can_update ? (
                   <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit
@@ -83,7 +83,7 @@ function CmsPagesAdminTable() {
                         action: () => deletePage(page.id),
                       })
                     }
-                    className="btn btn-danger btn-sm ml-1"
+                    className="btn btn-danger btn-sm ms-1"
                   >
                     Delete
                   </button>

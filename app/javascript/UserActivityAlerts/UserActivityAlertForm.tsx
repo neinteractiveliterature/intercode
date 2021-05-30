@@ -100,8 +100,10 @@ function UserActivityAlertForm({
             disabled={disabled}
           />
 
-          <div className="form-group mb-0">
-            <label htmlFor={userSelectId}>User account</label>
+          <div className="mb-3 mb-0">
+            <label className="form-label" htmlFor={userSelectId}>
+              User account
+            </label>
             <UserSelect
               inputId={userSelectId}
               value={userActivityAlert.user}
@@ -172,7 +174,7 @@ function UserActivityAlertForm({
                   disabled={disabled}
                 >
                   <i className="fa fa-trash-o" />
-                  <span className="sr-only">Remove destination</span>
+                  <span className="visually-hidden">Remove destination</span>
                 </button>
               </div>
             </li>

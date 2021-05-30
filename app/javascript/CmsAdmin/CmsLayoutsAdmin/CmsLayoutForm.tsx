@@ -45,7 +45,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
 
       <BootstrapFormInput
         label="Navigation bar CSS classes"
-        className="form-control text-monospace"
+        className="form-control font-monospace"
         value={layout.navbar_classes ?? ''}
         onTextChange={setNavbarClasses}
         helpText={
@@ -64,7 +64,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
         readOnly={readOnly}
       />
 
-      <div className="form-group">
+      <div className="mb-3">
         <legend className="col-form-label">Content</legend>
         <LiquidInput
           value={layout.content ?? ''}

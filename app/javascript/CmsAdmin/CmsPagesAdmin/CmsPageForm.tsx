@@ -91,14 +91,14 @@ function CmsPageForm<T extends PageFormFields>({
         readOnly={readOnly}
       />
 
-      <div className="form-group">
-        <label htmlFor={slugInputId}>URL</label>
+      <div className="mb-3">
+        <label className="form-label" htmlFor={slugInputId}>
+          URL
+        </label>
         <div className="input-group">
-          <div className="input-group-prepend">
-            <span className="input-group-text">
-              {`${new URL('/pages', window.location.href).toString()}/`}
-            </span>
-          </div>
+          <span className="input-group-text">
+            {`${new URL('/pages', window.location.href).toString()}/`}
+          </span>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <input
             id={slugInputId}
@@ -138,7 +138,7 @@ function CmsPageForm<T extends PageFormFields>({
         disabled={readOnly}
       />
 
-      <div className="form-group">
+      <div className="mb-3">
         <legend className="col-form-label">Content</legend>
         <LiquidInput
           value={page.content ?? ''}

@@ -158,7 +158,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
       if (chargeId) {
         buttons.push(
           <button
-            className="btn btn-warning mr-2"
+            className="btn btn-warning me-2"
             type="button"
             onClick={() =>
               confirm({

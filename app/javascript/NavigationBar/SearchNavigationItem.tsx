@@ -33,7 +33,7 @@ function SearchNavigationItem() {
 
   return (
     <div
-      className="navbar-nav flex-grow-1 justify-content-end mr-2"
+      className="navbar-nav flex-grow-1 justify-content-end me-2"
       style={{ position: 'relative' }}
     >
       <SiteSearch
@@ -43,12 +43,12 @@ function SearchNavigationItem() {
       />
       <CSSTransition timeout={400} in={!visible} classNames="site-search-navigation-button">
         <button
-          className="btn btn-link nav-link text-right site-search-navigation-button"
+          className="btn btn-link nav-link text-end site-search-navigation-button"
           type="button"
           onClick={() => setVisibleWithHiding(true)}
         >
           <i className="fa fa-search" />
-          <span className="sr-only">{t('navigation.search.buttonText', 'Search')}</span>
+          <span className="visually-hidden">{t('navigation.search.buttonText', 'Search')}</span>
         </button>
       </CSSTransition>
     </div>

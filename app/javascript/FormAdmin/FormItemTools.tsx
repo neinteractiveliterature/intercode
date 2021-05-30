@@ -22,11 +22,11 @@ function StandardItemMetadata() {
 
   return (
     <>
-      <div className="mr-2">
+      <div className="me-2">
         <i className="fa fa-wrench" />{' '}
         <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
       </div>
-      <div className="mr-2">
+      <div className="me-2">
         <small>Standard item for {pluralize(formType.description)}</small>
       </div>
     </>
@@ -48,7 +48,7 @@ function CustomItemMetadata() {
 
   return (
     <>
-      <div className="mr-2">
+      <div className="me-2">
         <i className="fa fa-tag" /> <strong>{formItem.identifier}</strong>
       </div>
       <div>
@@ -134,7 +134,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
       <div className="modal-footer">
         <button
           disabled={inProgress}
-          className="btn btn-secondary mr-2"
+          className="btn btn-secondary me-2"
           type="button"
           onClick={close}
         >
@@ -207,7 +207,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps) {
 
       <div className="d-flex align-items-stretch mt-2 mt-lg-4">
         <button
-          className="btn btn-outline-secondary col mr-2"
+          className="btn btn-outline-secondary col me-2"
           disabled={disabled}
           type="button"
           onClick={() => {

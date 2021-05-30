@@ -65,7 +65,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
 
             <ErrorDisplay graphQLError={acceptError} />
           </div>
-          <div className="card-footer text-right">
+          <div className="card-footer text-end">
             <button
               className="btn btn-primary"
               type="button"

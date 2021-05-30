@@ -46,7 +46,7 @@ const ReturnTagWithClassDoc = ({
       <strong>Return:</strong> <em>{(tag.types ?? []).join(', ')}</em>
     </p>
     <div className="d-flex align-items-start">
-      <div className="h3 mr-1">↳</div>
+      <div className="h3 me-1">↳</div>
       <AssignDocLink
         assign={{ __typename: 'LiquidAssign', name: assignName, drop_class_name: returnClassName }}
         compact

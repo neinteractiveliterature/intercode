@@ -125,11 +125,11 @@ function PermissionsPrompt({ scopeNames }: PermissionsPromptProps) {
               >
                 {expandedGroups.includes(scopeGroup) ? (
                   <i className="fa fa-caret-down">
-                    <span className="sr-only">{t('buttons.collapse', 'Collapse')}</span>
+                    <span className="visually-hidden">{t('buttons.collapse', 'Collapse')}</span>
                   </i>
                 ) : (
                   <i className="fa fa-caret-right">
-                    <span className="sr-only">{t('buttons.expand', 'Expand')}</span>
+                    <span className="visually-hidden">{t('buttons.expand', 'Expand')}</span>
                   </i>
                 )}{' '}
                 <strong>{getScopeGroupDescription(scopeGroup, t)}</strong>

@@ -87,15 +87,15 @@ function ReactTableWithTheWorks<
   }, [pageIndex]);
 
   return (
-    <div
-      {...mergeProps(getTableProps(), {
-        className: classNames(
-          'table react-table table-striped table-highlight table-borderless border',
-          { 'table-hover': onClickRow != null },
-        ),
-      })}
-    >
-      <div style={{ overflowX: 'auto' }}>
+    <div className="mb-3 border">
+      <div
+        {...mergeProps(getTableProps(), {
+          className: classNames(
+            'table react-table table-striped table-highlight table-borderless mb-0',
+            { 'table-hover': onClickRow != null },
+          ),
+        })}
+      >
         <div className="thead">
           {headerGroups.map((headerGroup) => (
             <React.Fragment key={headerGroup.getHeaderGroupProps().key}>
@@ -109,7 +109,7 @@ function ReactTableWithTheWorks<
                     {column.canSort ? (
                       <button
                         type="button"
-                        className="btn btn-unstyled p-0 font-weight-bold w-100 text-left"
+                        className="btn btn-unstyled p-0 fw-bold w-100 text-start"
                         onClick={() => column.toggleSortBy()}
                       >
                         {column.render('Header')}
@@ -132,7 +132,7 @@ function ReactTableWithTheWorks<
                   {headerGroup.headers.map((column) => (
                     <div
                       {...mergeProps<HTMLAttributes<HTMLDivElement>>(column.getHeaderProps(), {
-                        className: 'py-1 border-bottom font-weight-normal align-middle',
+                        className: 'py-1 border-bottom fw-normal align-middle',
                         style: { overflow: 'visible' },
                       })}
                     >
@@ -206,13 +206,15 @@ function ReactTableWithTheWorks<
             <button
               type="button"
               onClick={() => previousPage()}
-              className="btn btn-outline-secondary col-3 mr-2"
+              className="btn btn-outline-secondary col-3 me-2"
               disabled={!canPreviousPage}
             >
               <i className="fa fa-chevron-left" /> Previous
             </button>
             <div>
-              <label htmlFor={pageInputId}>Page&nbsp;</label>
+              <label className="form-label" htmlFor={pageInputId}>
+                Page&nbsp;
+              </label>
               {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <input
                 className="form-control form-control-sm d-inline"
@@ -226,7 +228,7 @@ function ReactTableWithTheWorks<
             </div>
             <div>
               <select
-                className="custom-select"
+                className="form-select"
                 value={pageSize}
                 onChange={(e) => {
                   setPageSize(Number(e.target.value));
@@ -241,7 +243,7 @@ function ReactTableWithTheWorks<
             </div>
             <button
               type="button"
-              className="btn btn-outline-secondary col-3 ml-2"
+              className="btn btn-outline-secondary col-3 ms-2"
               onClick={() => nextPage()}
               disabled={!canNextPage}
             >

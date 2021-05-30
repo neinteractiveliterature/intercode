@@ -157,9 +157,9 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
     }
 
     return (
-      <div className="card mr-2">
+      <div className="card me-2">
         <div className="card-header d-flex align-items-center">
-          <div className="mr-2">
+          <div className="me-2">
             <Gravatar
               url={userConProfile.gravatar_url}
               enabled={userConProfile.gravatar_enabled}
@@ -239,11 +239,11 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       >
         {signup.counted ? (
           <i className="fa fa-toggle-on">
-            <span className="sr-only">Make not counted</span>
+            <span className="visually-hidden">Make not counted</span>
           </i>
         ) : (
           <i className="fa fa-toggle-off">
-            <span className="sr-only">Make counted</span>
+            <span className="visually-hidden">Make counted</span>
           </i>
         )}
       </button>
@@ -271,7 +271,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       : null;
 
     return (
-      <div className="card ml-2">
+      <div className="card ms-2">
         <div className="card-header">
           {run.event.title}
           <br />
@@ -305,7 +305,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
             {signup.state === 'confirmed' && data.currentAbility.can_update_bucket_signup ? (
               <button className="btn btn-link" onClick={changeBucketModal.open} type="button">
                 <i className="fa fa-pencil">
-                  <span className="sr-only">Change</span>
+                  <span className="visually-hidden">Change</span>
                 </i>
               </button>
             ) : null}
