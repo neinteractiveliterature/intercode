@@ -11864,10 +11864,10 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
-react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.5:
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.5.tgz#7f2412efea76c888aeb8a69c7fd76c0ec106238b"
-  integrity sha512-GsX5Qzux9T75CT7t9Jgl/9ow3xQ6z3rWcZC2B8AM+1Ze2/YhvMEt4PpgFJTRck0/2pvHIpjUCTLoYRq4yzES1A==
+react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.6:
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.6.tgz#6eb36db438cb1ce141cbc4cce3c4196e4379b45e"
+  integrity sha512-hhxwDq8zr6uxZWaQftoGxHSSywj1lyd8GQEoDJeZpHWjPdEJqUFErW9thbOrTjrd+H+GTuXZlFaR28G5cGlDYQ==
   dependencies:
     "@types/react" "^16.9.41"
     classnames "^2.2.5"
