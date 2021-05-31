@@ -160,7 +160,7 @@ GEM
       acts_as_list
       cadmus
       rails (>= 5.0.0)
-    carrierwave (2.2.1)
+    carrierwave (2.2.2)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
       addressable (~> 2.6)
@@ -228,8 +228,8 @@ GEM
     faraday-excon (1.1.0)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.1.0)
-    ffi (1.15.0)
-    ffi (1.15.0-java)
+    ffi (1.15.1)
+    ffi (1.15.1-java)
     flamegraph (0.9.5)
     fog-aws (3.10.0)
       fog-core (~> 2.1)
@@ -478,7 +478,7 @@ GEM
     ruby-debug-ide (0.7.2)
       rake (>= 0.8.1)
     ruby-progressbar (1.11.0)
-    ruby-vips (2.1.0)
+    ruby-vips (2.1.2)
       ffi (~> 1.12)
     ruby2_keywords (0.0.4)
     safely_block (0.3.0)
@@ -580,7 +580,7 @@ DEPENDENCIES
   cadmus (~> 0.7.0)
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)
-  carrierwave (~> 2.2.0)
+  carrierwave (~> 2.2.2)
   civil_service (~> 2.3.0)
   dalli
   debase
