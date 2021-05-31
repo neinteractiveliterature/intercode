@@ -38,7 +38,7 @@ gem 'scheduled_value', '~> 1.3.0'
 gem 'civil_service', '~> 2.3.0'
 
 # File uploading
-gem 'carrierwave', '~> 2.2.0'
+gem 'carrierwave', '~> 2.2.2'
 gem 'fog-aws'
 gem 'aws-sdk-s3'
 
