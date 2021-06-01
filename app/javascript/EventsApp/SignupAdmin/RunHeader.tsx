@@ -1,9 +1,8 @@
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { timespanFromRun } from '../../TimespanUtils';
-import LoadingIndicator from '../../LoadingIndicator';
-import ErrorDisplay from '../../ErrorDisplay';
 import AppRootContext from '../../AppRootContext';
 import { useRunHeaderRunInfoQuery } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';

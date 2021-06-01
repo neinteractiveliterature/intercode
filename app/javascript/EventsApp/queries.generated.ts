@@ -106,4 +106,4 @@ export function useCommonConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQ
         }
 export type CommonConventionDataQueryHookResult = ReturnType<typeof useCommonConventionDataQuery>;
 export type CommonConventionDataQueryLazyQueryHookResult = ReturnType<typeof useCommonConventionDataQueryLazyQuery>;
-export type CommonConventionDataQueryDataResult = Apollo.QueryResult<CommonConventionDataQueryData, CommonConventionDataQueryVariables>;
+export type CommonConventionDataQueryQueryResult = Apollo.QueryResult<CommonConventionDataQueryData, CommonConventionDataQueryVariables>;

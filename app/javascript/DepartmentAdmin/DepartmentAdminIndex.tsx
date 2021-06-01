@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
+import {
+  LoadQueryWrapper,
+  useGraphQLConfirm,
+  sortByLocaleString,
+} from '@neinteractiveliterature/litform';
 
 import { DepartmentAdminQuery } from './queries';
 import { DeleteDepartment } from './mutations';
 
-import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
-import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useDepartmentAdminQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdminIndex({ data }) {

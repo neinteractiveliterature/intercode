@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useUserConProfileAdminQuery } from './queries.generated';
 import { useUpdateTicketMutation } from './mutations.generated';
 

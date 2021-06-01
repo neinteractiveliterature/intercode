@@ -68,7 +68,7 @@ export function usePreviewLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type PreviewLiquidQueryHookResult = ReturnType<typeof usePreviewLiquidQuery>;
 export type PreviewLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewLiquidQueryLazyQuery>;
-export type PreviewLiquidQueryDataResult = Apollo.QueryResult<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
+export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
 export const PreviewMarkdownQueryDocument = gql`
     query PreviewMarkdownQuery($markdown: String!) {
   previewMarkdown(markdown: $markdown)
@@ -101,7 +101,7 @@ export function usePreviewMarkdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type PreviewMarkdownQueryHookResult = ReturnType<typeof usePreviewMarkdownQuery>;
 export type PreviewMarkdownQueryLazyQueryHookResult = ReturnType<typeof usePreviewMarkdownQueryLazyQuery>;
-export type PreviewMarkdownQueryDataResult = Apollo.QueryResult<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>;
+export type PreviewMarkdownQueryQueryResult = Apollo.QueryResult<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>;
 export const PreviewNotifierLiquidQueryDocument = gql`
     query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
   previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
@@ -135,4 +135,4 @@ export function usePreviewNotifierLiquidQueryLazyQuery(baseOptions?: Apollo.Lazy
         }
 export type PreviewNotifierLiquidQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQuery>;
 export type PreviewNotifierLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQueryLazyQuery>;
-export type PreviewNotifierLiquidQueryDataResult = Apollo.QueryResult<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>;
+export type PreviewNotifierLiquidQueryQueryResult = Apollo.QueryResult<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>;

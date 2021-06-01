@@ -1,13 +1,12 @@
 import { useContext } from 'react';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import classNames from 'classnames';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { DeleteFormSection } from './mutations';
-import ErrorDisplay from '../ErrorDisplay';
 import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import { FormEditorQuery } from './queries';
 import { useDeleteMutation } from '../MutationUtils';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import useSortable from '../useSortable';
 
 export type FormSectionNavItemProps = {

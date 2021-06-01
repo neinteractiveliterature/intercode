@@ -2,8 +2,7 @@ import { useState } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 export type PasswordConfirmationInputProps = {
   value: string;

@@ -1,9 +1,9 @@
 import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { notFalse, notEmpty } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
 import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
-import { notFalse, notEmpty } from '../ValueUtils';
 
 export function useEventsNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();

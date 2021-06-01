@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { pluralize } from 'inflected';
+import {
+  BooleanInput,
+  BootstrapFormInput,
+  parseIntOrNull,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
-import BooleanInput from '../BuiltInFormControls/BooleanInput';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import { parseIntOrNull } from '../ValueUtils';
-import { usePropertySetters } from '../usePropertySetters';
 import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 
 export type EditingTicketType = Omit<

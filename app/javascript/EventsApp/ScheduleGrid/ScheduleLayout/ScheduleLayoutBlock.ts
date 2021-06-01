@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy';
+import { normalizeTitle } from '@neinteractiveliterature/litform';
 
-import { normalizeTitle } from '../../../ValueUtils';
 import Timespan, { FiniteTimespan } from '../../../Timespan';
 // eslint-disable-next-line import/no-duplicates
 import type Schedule from '../Schedule';

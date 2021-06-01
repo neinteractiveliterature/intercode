@@ -1,6 +1,7 @@
 import { useContext } from 'react';
+import { BootstrapFormInput, BooleanInput , useModal } from '@neinteractiveliterature/litform';
 
-import BooleanInput from '../../BuiltInFormControls/BooleanInput';
+
 import {
   formItemPropertyUpdater,
   TypedFormItem,
@@ -8,11 +9,9 @@ import {
   CommonQuestionProperties,
   ParsedFormItem,
 } from '../FormItemUtils';
-import useModal from '../../ModalDialogs/useModal';
 import DefaultAnswerModal from './DefaultAnswerModal';
 import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
 import FormItemIdentifierInput from './FormItemIdentifierInput';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type CommonQuestionFieldsProps = FormItemEditorProps<TypedFormItem>;

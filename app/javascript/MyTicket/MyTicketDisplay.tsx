@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { useMyTicketDisplayQuery } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
 export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDisplay({ data }) {

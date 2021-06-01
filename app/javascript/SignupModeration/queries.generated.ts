@@ -264,7 +264,7 @@ export function useCreateSignupEventsQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type CreateSignupEventsQueryHookResult = ReturnType<typeof useCreateSignupEventsQuery>;
 export type CreateSignupEventsQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupEventsQueryLazyQuery>;
-export type CreateSignupEventsQueryDataResult = Apollo.QueryResult<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>;
+export type CreateSignupEventsQueryQueryResult = Apollo.QueryResult<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>;
 export const CreateSignupRunCardQueryDocument = gql`
     query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
   currentAbility {
@@ -350,7 +350,7 @@ export function useCreateSignupRunCardQueryLazyQuery(baseOptions?: Apollo.LazyQu
         }
 export type CreateSignupRunCardQueryHookResult = ReturnType<typeof useCreateSignupRunCardQuery>;
 export type CreateSignupRunCardQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupRunCardQueryLazyQuery>;
-export type CreateSignupRunCardQueryDataResult = Apollo.QueryResult<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>;
+export type CreateSignupRunCardQueryQueryResult = Apollo.QueryResult<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>;
 export const SignupModerationQueueQueryDocument = gql`
     query SignupModerationQueueQuery($page: Int, $perPage: Int) {
   convention: assertConvention {
@@ -397,4 +397,4 @@ export function useSignupModerationQueueQueryLazyQuery(baseOptions?: Apollo.Lazy
         }
 export type SignupModerationQueueQueryHookResult = ReturnType<typeof useSignupModerationQueueQuery>;
 export type SignupModerationQueueQueryLazyQueryHookResult = ReturnType<typeof useSignupModerationQueueQueryLazyQuery>;
-export type SignupModerationQueueQueryDataResult = Apollo.QueryResult<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>;
+export type SignupModerationQueueQueryQueryResult = Apollo.QueryResult<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>;

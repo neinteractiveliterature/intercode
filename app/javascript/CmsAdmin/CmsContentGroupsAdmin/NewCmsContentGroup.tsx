@@ -2,17 +2,16 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { CmsContentGroupsAdminQuery } from './queries';
 import { CreateContentGroup } from './mutations';
-import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { CmsContentGroupsAdminQueryData, useCmsContentGroupsAdminQuery } from './queries.generated';
 
 function NewCmsContentGroup() {

@@ -3,8 +3,7 @@ import * as React from 'react';
 import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-
-import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
+import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 type PasswordFeedbackProps = {
   result?: ZXCVBNResult | null;
@@ -39,7 +38,7 @@ function PasswordFeedback({ result }: PasswordFeedbackProps) {
 
 type ScoreText = 'insecure' | 'fair' | 'good' | 'great';
 
-function getTextForScore(score: number) {
+function getTextForScore(score: number): ScoreText {
   if (score < 2) {
     return 'insecure';
   }
@@ -103,7 +102,7 @@ function PasswordInputWithStrengthCheck({
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const { styles, attributes, state, update } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, state, update } = useLitformPopperWithAutoClosing(
     dropdownMenu,
     dropdownButton,
     arrow,

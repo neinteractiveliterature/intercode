@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { EmailRoute } from '../graphqlTypes.generated';
 
 export type EmailRouteFormProps = {

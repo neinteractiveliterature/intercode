@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react';
 import { pluralize } from 'inflected';
 import { useLocation } from 'react-router-dom';
+import { notEmpty, parseIntOrNull, ChoiceSet } from '@neinteractiveliterature/litform';
 
-import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { EventListEventsQueryData } from './queries.generated';
-import { notEmpty, parseIntOrNull } from '../../ValueUtils';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import { locationsEqualWithSearchParamsTransform } from '../../URLUtils';
 

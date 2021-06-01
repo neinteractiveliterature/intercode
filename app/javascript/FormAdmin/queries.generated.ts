@@ -171,7 +171,7 @@ export function useFormAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
         }
 export type FormAdminQueryHookResult = ReturnType<typeof useFormAdminQuery>;
 export type FormAdminQueryLazyQueryHookResult = ReturnType<typeof useFormAdminQueryLazyQuery>;
-export type FormAdminQueryDataResult = Apollo.QueryResult<FormAdminQueryData, FormAdminQueryVariables>;
+export type FormAdminQueryQueryResult = Apollo.QueryResult<FormAdminQueryData, FormAdminQueryVariables>;
 export const FormEditorQueryDocument = gql`
     query FormEditorQuery($id: Int!) {
   convention: assertConvention {
@@ -216,7 +216,7 @@ export function useFormEditorQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
         }
 export type FormEditorQueryHookResult = ReturnType<typeof useFormEditorQuery>;
 export type FormEditorQueryLazyQueryHookResult = ReturnType<typeof useFormEditorQueryLazyQuery>;
-export type FormEditorQueryDataResult = Apollo.QueryResult<FormEditorQueryData, FormEditorQueryVariables>;
+export type FormEditorQueryQueryResult = Apollo.QueryResult<FormEditorQueryData, FormEditorQueryVariables>;
 export const PreviewFormItemQueryDocument = gql`
     query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
   previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
@@ -253,4 +253,4 @@ export function usePreviewFormItemQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type PreviewFormItemQueryHookResult = ReturnType<typeof usePreviewFormItemQuery>;
 export type PreviewFormItemQueryLazyQueryHookResult = ReturnType<typeof usePreviewFormItemQueryLazyQuery>;
-export type PreviewFormItemQueryDataResult = Apollo.QueryResult<PreviewFormItemQueryData, PreviewFormItemQueryVariables>;
+export type PreviewFormItemQueryQueryResult = Apollo.QueryResult<PreviewFormItemQueryData, PreviewFormItemQueryVariables>;

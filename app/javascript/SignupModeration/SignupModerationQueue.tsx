@@ -1,11 +1,10 @@
 import { createContext, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
 import { Column } from 'react-table';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
-import ErrorDisplay from '../ErrorDisplay';
 import { timespanFromRun } from '../TimespanUtils';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import { SignupRequestState } from '../graphqlTypes.generated';
 import {

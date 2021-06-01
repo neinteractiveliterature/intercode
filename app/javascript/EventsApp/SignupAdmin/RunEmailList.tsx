@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { pluralize, underscore, humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
-import LoadingIndicator from '../../LoadingIndicator';
-import ErrorDisplay from '../../ErrorDisplay';
 import {
   RunSignupsTableSignupsQueryData,
   useRunSignupsTableSignupsQuery,

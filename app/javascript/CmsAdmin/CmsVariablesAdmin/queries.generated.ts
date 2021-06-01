@@ -105,7 +105,7 @@ export function useCmsVariablesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
         }
 export type CmsVariablesQueryHookResult = ReturnType<typeof useCmsVariablesQuery>;
 export type CmsVariablesQueryLazyQueryHookResult = ReturnType<typeof useCmsVariablesQueryLazyQuery>;
-export type CmsVariablesQueryDataResult = Apollo.QueryResult<CmsVariablesQueryData, CmsVariablesQueryVariables>;
+export type CmsVariablesQueryQueryResult = Apollo.QueryResult<CmsVariablesQueryData, CmsVariablesQueryVariables>;
 export const SetCmsVariableMutationDocument = gql`
     mutation SetCmsVariableMutation($key: String!, $value_json: String!) {
   setCmsVariable(input: {cms_variable: {key: $key, value_json: $value_json}}) {

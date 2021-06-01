@@ -6,10 +6,8 @@ import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import { humanize } from 'inflected';
 import { ApolloError } from '@apollo/client';
+import { LoadingIndicator, ChoiceSet, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
-import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { MergeUsersModalQueryData, useMergeUsersModalQuery } from './queries.generated';
 import { useMergeUsersMutation } from './mutations.generated';

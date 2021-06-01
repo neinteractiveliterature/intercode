@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { TFunction } from 'i18next';
 import { DateTime, Duration, DurationObject, DurationUnit } from 'luxon';
+import { chooseAmong, preferNull, notEmpty } from '@neinteractiveliterature/litform';
+
 import {
   compareTimesAscending,
   compareTimesDescending,
@@ -9,7 +11,6 @@ import {
   formatLCM,
   getDateTimeFormat,
 } from './TimeUtils';
-import { chooseAmong, preferNull, notEmpty } from './ValueUtils';
 import { DateTimeFormatKey } from './DateTimeFormats';
 
 export type TimeHopOptions = {

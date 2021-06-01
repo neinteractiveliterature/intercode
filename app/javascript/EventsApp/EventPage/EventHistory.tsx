@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import LoadingIndicator from '../../LoadingIndicator';
-import ErrorDisplay from '../../ErrorDisplay';
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';

@@ -1,6 +1,7 @@
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useTicketedAttendeesQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useTicketedAttendeesQuery, function TicketedAttendees({ data }) {

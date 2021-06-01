@@ -2,6 +2,7 @@ import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
 import { DateTime } from 'luxon';
 import { TFunction } from 'i18next';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 import Timespan, { FiniteTimespan } from '../Timespan';
 import { timespanFromConvention, ConventionForTimespanUtils } from '../TimespanUtils';
@@ -13,7 +14,6 @@ import {
 } from '../TimeUtils';
 import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockTypes';
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
-import { notEmpty } from '../ValueUtils';
 
 export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition) {
   return Timespan.finiteFromDateTimes(

@@ -1,10 +1,9 @@
 import { Link, Redirect } from 'react-router-dom';
 import { titleize } from 'inflected';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries';
 import PermissionNames from '../../../config/permission_names.json';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';

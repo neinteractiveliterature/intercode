@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import useIsMounted from './useIsMounted';
+import { useIsMounted } from '@neinteractiveliterature/litform';
 
 export type UseAsyncFunctionOptions = {
   suppressError?: boolean;

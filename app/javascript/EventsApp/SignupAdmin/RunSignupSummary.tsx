@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
@@ -9,9 +10,7 @@ import { findBucket, formatSignupState } from './SignupUtils';
 import RunHeader from './RunHeader';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
-import ErrorDisplay from '../../ErrorDisplay';
 import Gravatar from '../../Gravatar';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { RunSignupSummaryQueryData, useRunSignupSummaryQuery } from './queries.generated';
 
 type EventType = RunSignupSummaryQueryData['event'];

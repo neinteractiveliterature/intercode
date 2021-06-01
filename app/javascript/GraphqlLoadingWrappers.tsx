@@ -2,35 +2,9 @@
 import { QueryHookOptions, QueryResult } from '@apollo/client';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import ErrorDisplay from './ErrorDisplay';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+
 import FourOhFourPage from './FourOhFourPage';
-import PageLoadingIndicator from './PageLoadingIndicator';
-
-export function LoadQueryWrapper<TData, TProps>(
-  useLoadData: (baseOptions?: QueryHookOptions<TData, {}>) => QueryResult<TData>,
-  WrappedComponent: React.ComponentType<TProps & { data: TData }>,
-): (props: TProps) => JSX.Element {
-  const Wrapper = (props: TProps) => {
-    const { data, loading, error } = useLoadData();
-
-    if (loading) {
-      return <PageLoadingIndicator visible />;
-    }
-
-    if (error) {
-      return <ErrorDisplay graphQLError={error} />;
-    }
-
-    return <WrappedComponent data={data!} {...props} />;
-  };
-
-  const wrappedComponentDisplayName =
-    WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
-  Wrapper.displayName = `LoadQueryWrapper(${wrappedComponentDisplayName})`;
-
-  return Wrapper;
-}
 
 export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
   useLoadData: (baseOptions?: QueryHookOptions<TData, {}>) => QueryResult<TData>,

@@ -1467,6 +1467,17 @@
   optionalDependencies:
     subscriptions-transport-ws "^0.9.18"
 
+"@graphiql/toolkit@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@graphiql/toolkit/-/toolkit-0.2.2.tgz#193d570afcf686c9ee61c92054c1782b9f3c1255"
+  integrity sha512-kDgYhqnS4p4LqSo1KvLd3tbX8Hhdj0ZrgQuGsosjjEnahiPYmmylxUL1p9lj6348OsypcTlCncGpEjeb9S3TiQ==
+  dependencies:
+    "@n1ru4l/push-pull-async-iterable-iterator" "^2.1.4"
+    graphql-ws "^4.3.2"
+    meros "^1.1.4"
+  optionalDependencies:
+    subscriptions-transport-ws "^0.9.18"
+
 "@graphql-codegen/add@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-2.0.2.tgz#4acbb95be9ebb859a3cebfe7132fdf49ffe06dd8"
@@ -2164,10 +2175,10 @@
   resolved "https://registry.yarnpkg.com/@n1ru4l/push-pull-async-iterable-iterator/-/push-pull-async-iterable-iterator-2.1.4.tgz#a90225474352f9f159bff979905f707b9c6bcf04"
   integrity sha512-qLIvoOUJ+zritv+BlzcBMePKNjKQzH9Rb2i9W98YXxf/M62Lye8qH0peyiU8yJ1tL0kfulWi31BoK10E6BKJeA==
 
-"@neinteractiveliterature/litform@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.1.tgz#077fd7de978c8538d213a08518837cf37a40cd0a"
-  integrity sha512-qnEaDOMc4MF1BaD+84fOQApB2A/PCDSAtS3qo1Ujuj3/B1TAdGI/9/+9gubi/00mLyMhvhr31lAlAiwBkQQcqw==
+"@neinteractiveliterature/litform@^0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.3.tgz#b49096322aac6f44613b9b0ce981c8a173f2b214"
+  integrity sha512-fsZc2CYwLupxv/RppDPH2JjCOe3wnQBjex9lDZjpL9sXB5G/o4VP9O7MRCZpqp9byVx2FGAIl3I9pu9a9LG9Vg==
   dependencies:
     lodash "^4.17.21"
     uuid "^8.3.2"
@@ -2585,7 +2596,7 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.168.tgz#fe24632e79b7ade3f132891afff86caa5e5ce008"
   integrity sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
 
-"@types/luxon@^1.27.0":
+"@types/luxon@^1.26.5":
   version "1.26.5"
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.26.5.tgz#843fb705e16e4d2a90847a351b799ea9d879859e"
   integrity sha512-XeQxxRMyJi1znfzHw4CGDLyup/raj84SnjjkI2fDootZPGlB0yqtvlvEIAmzHDa5wiEI5JJevZOWxpcofsaV+A==

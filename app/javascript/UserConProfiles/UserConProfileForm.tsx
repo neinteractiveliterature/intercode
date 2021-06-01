@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
+import { useTabs, TabList, TabBody } from '@neinteractiveliterature/litform';
 
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
-import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';

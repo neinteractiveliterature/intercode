@@ -6,9 +6,9 @@ import * as React from 'react';
 import Select from 'react-select';
 import { IANAZone } from 'luxon';
 import { Search, TfIdfSearchIndex } from 'js-search';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import timezoneSelectData from './timezoneSelectData.json';
-import useUniqueId from '../useUniqueId';
 
 function isValidZone(zoneName: string): zoneName is keyof typeof timezoneSelectData['zones'] {
   return zoneName in timezoneSelectData.zones;

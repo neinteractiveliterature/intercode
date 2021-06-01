@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
+
 import { Event } from '../graphqlTypes.generated';
-import { sortByLocaleString } from '../ValueUtils';
 import { EventAdminEventsQueryData } from './queries.generated';
 
 function getNormalizedEventTitle<EventType extends Pick<Event, 'title'>>(event: EventType) {

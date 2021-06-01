@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { usePropertySetters } from '@neinteractiveliterature/litform';
+import { FunctionalStateUpdater } from '@neinteractiveliterature/litform/lib/usePropertySetters';
 
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import { FunctionalStateUpdater, usePropertySetters } from '../../usePropertySetters';
 import useSortable from '../../useSortable';
 import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';

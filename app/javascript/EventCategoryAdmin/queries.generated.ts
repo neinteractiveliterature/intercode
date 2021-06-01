@@ -123,4 +123,4 @@ export function useEventCategoryAdminQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type EventCategoryAdminQueryHookResult = ReturnType<typeof useEventCategoryAdminQuery>;
 export type EventCategoryAdminQueryLazyQueryHookResult = ReturnType<typeof useEventCategoryAdminQueryLazyQuery>;
-export type EventCategoryAdminQueryDataResult = Apollo.QueryResult<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>;
+export type EventCategoryAdminQueryQueryResult = Apollo.QueryResult<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>;

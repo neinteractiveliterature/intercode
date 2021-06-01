@@ -1,7 +1,7 @@
-import ErrorDisplay from '../../ErrorDisplay';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+
 import parsePageContent from '../../parsePageContent';
 import useSectionizedFormItems from './useSectionizedFormItems';
-import LoadingIndicator from '../../LoadingIndicator';
 import { useEventPageQuery } from './queries.generated';
 
 export type LongFormEventDetailsProps = {

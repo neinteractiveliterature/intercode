@@ -5,19 +5,17 @@ import { useApolloClient } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'codemirror';
+import { useModal, CodeInput, ErrorDisplay } from '@neinteractiveliterature/litform';
+import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
-import CodeInput from './CodeInput';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
 import MenuIcon from '../NavigationBar/MenuIcon';
-import useModal from '../ModalDialogs/useModal';
-import ErrorDisplay from '../ErrorDisplay';
 import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
-import type { SyncCodeInputProps } from './SyncCodeInput';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -119,7 +117,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
   );
 }
 
-export type LiquidInputProps = Omit<SyncCodeInputProps, 'mode' | 'editorDidMount'> & {
+export type LiquidInputProps = Omit<CodeInputProps, 'mode' | 'editorDidMount'> & {
   notifierEventKey?: string;
   disablePreview?: boolean;
 };

@@ -1,14 +1,13 @@
 import { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useMyProfileQuery } from './queries.generated';
 import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';

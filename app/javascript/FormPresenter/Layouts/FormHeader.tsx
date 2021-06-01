@@ -1,6 +1,6 @@
 import { forwardRef, useContext, ReactNode } from 'react';
+import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import LoadingIndicator from '../../LoadingIndicator';
 import { SectionTraversalContext } from '../SectionTraversalContext';
 
 export type FormHeaderProps = {

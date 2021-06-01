@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 

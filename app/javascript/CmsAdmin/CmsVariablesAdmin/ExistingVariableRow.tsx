@@ -1,8 +1,7 @@
 import { ApolloError, useApolloClient } from '@apollo/client';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
-import ErrorDisplay from '../../ErrorDisplay';
 import { CmsVariablesQuery, DeleteCmsVariableMutation } from './queries';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useDeleteMutation } from '../../MutationUtils';

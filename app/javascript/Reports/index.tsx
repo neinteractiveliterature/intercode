@@ -1,5 +1,6 @@
 import { Switch, Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
 import SignupSpy from './SignupSpy';
@@ -7,7 +8,6 @@ import EventProvidedTickets from './EventProvidedTickets';
 import EventsByChoice from './EventsByChoice';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useReportsMenuQuery } from './queries.generated';
 
 const ReportsMenu = LoadQueryWrapper(useReportsMenuQuery, function ReportsMenu({ data }) {

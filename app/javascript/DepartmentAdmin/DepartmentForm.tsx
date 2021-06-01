@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
+import {
+  BootstrapFormInput,
+  BootstrapFormTextarea,
+  ErrorDisplay,
+} from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
-import ErrorDisplay from '../ErrorDisplay';
 import { Department, DepartmentInput } from '../graphqlTypes.generated';
 
 export type DepartmentFormProps = {

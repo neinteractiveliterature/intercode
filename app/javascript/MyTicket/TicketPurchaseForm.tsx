@@ -4,13 +4,13 @@ import { Redirect } from 'react-router-dom';
 // @ts-expect-error
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
 import usePageTitle from '../usePageTitle';
 import { describeUserPricingStructure } from '../Store/describePricingStructure';
 import ProductOrderForm from '../Store/ProductOrderForm';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { TicketPurchaseFormQueryData, useTicketPurchaseFormQuery } from './queries.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 

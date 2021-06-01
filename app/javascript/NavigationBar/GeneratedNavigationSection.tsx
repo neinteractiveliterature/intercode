@@ -1,4 +1,5 @@
-import { sortByLocaleString } from '../ValueUtils';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
+
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
 

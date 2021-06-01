@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AdminOrderForm from './AdminOrderForm';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 import {
   CouponApplication,
   Money,

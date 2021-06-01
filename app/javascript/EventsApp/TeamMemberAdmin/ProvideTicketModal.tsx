@@ -4,8 +4,8 @@ import { capitalize, pluralize } from 'inflected';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import { TeamMembersQuery } from './queries';

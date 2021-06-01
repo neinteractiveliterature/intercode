@@ -1,4 +1,5 @@
-import { parseFloatOrNull } from '../ValueUtils';
+import { parseFloatOrNull } from '@neinteractiveliterature/litform';
+
 import formatMoney from '../formatMoney';
 import { Coupon, Product } from '../graphqlTypes.generated';
 

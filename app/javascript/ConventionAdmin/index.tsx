@@ -2,13 +2,12 @@ import { useMemo } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import pick from 'lodash/pick';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionForm, { ConventionFormConvention } from './ConventionForm';
-import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useConventionAdminConventionQuery } from './queries.generated';
 import { useUpdateConventionMutation } from './mutations.generated';

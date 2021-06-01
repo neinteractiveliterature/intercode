@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
-import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { useDeletePageMutation } from '../CmsAdmin/CmsPagesAdmin/mutations.generated';

@@ -1,10 +1,11 @@
 import { useApolloClient } from '@apollo/client';
-import CodeInput from './CodeInput';
+import { CodeInput } from '@neinteractiveliterature/litform';
+import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+
 import { PreviewMarkdownQuery } from './previewQueries';
 import { PreviewMarkdownQueryData } from './previewQueries.generated';
-import type { SyncCodeInputProps } from './SyncCodeInput';
 
-export type MarkdownInputProps = Omit<SyncCodeInputProps, 'mode' | 'getPreviewContent'>;
+export type MarkdownInputProps = Omit<CodeInputProps, 'mode' | 'getPreviewContent'>;
 
 const MarkdownInput = (props: MarkdownInputProps) => {
   const client = useApolloClient();

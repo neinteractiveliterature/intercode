@@ -1,14 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { TFunction } from 'i18next';
+import { BootstrapFormInput, useUniqueId, parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { useTranslation, Trans } from 'react-i18next';
-import useUniqueId from '../../useUniqueId';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import { parseIntOrNull } from '../../ValueUtils';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { AgeRestrictionsFormItem, AgeRestrictionsValue } from '../../FormAdmin/FormItemUtils';
 

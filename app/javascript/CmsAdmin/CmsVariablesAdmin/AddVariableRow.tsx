@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
 import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';

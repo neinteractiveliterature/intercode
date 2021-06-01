@@ -3,28 +3,31 @@ import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import {
+  BootstrapFormInput,
+  FormGroupWithLabel,
+  ErrorDisplay,
+  LoadingIndicator,
+  MultipleChoiceInput,
+  usePropertySetters,
+  LoadQueryWrapper,
+} from '@neinteractiveliterature/litform';
 
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { timespanFromConvention } from '../TimespanUtils';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
-import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import OrganizationSelect from '../BuiltInFormControls/OrganizationSelect';
-import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import useAsyncFunction from '../useAsyncFunction';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import EnumTypes from '../enumTypes.json';
 import ConventionLanguageInput from '../ConventionAdmin/ConventionLanguageInput';
 import {
   NewConventionModalQueryData,
+  NewConventionModalQueryVariables,
   RootSiteConventionsAdminTableQueryData,
   useNewConventionModalQuery,
 } from './queries.generated';
-import { usePropertySetters } from '../usePropertySetters';
 import { Convention, Organization, TimezoneMode } from '../graphqlTypes.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useCreateConventionMutation } from './mutations.generated';
 
 type CreatingConvention = Pick<
@@ -61,7 +64,11 @@ export type NewConventionModalProps = {
   cloneConvention?: RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
 };
 
-export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalProps>(
+export default LoadQueryWrapper<
+  NewConventionModalQueryData,
+  NewConventionModalQueryVariables,
+  NewConventionModalProps
+>(
   useNewConventionModalQuery,
   function NewConventionModal({ visible, close, cloneConvention, data }) {
     const history = useHistory();

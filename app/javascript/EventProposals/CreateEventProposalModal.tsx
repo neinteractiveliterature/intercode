@@ -2,10 +2,9 @@ import { useState, useMemo } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import { sortByLocaleString } from '../ValueUtils';
 import { ProposeEventButtonQueryData } from './queries.generated';
 import {
   CreateEventProposalMutationData,

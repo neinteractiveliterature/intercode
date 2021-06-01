@@ -1,9 +1,9 @@
 import { useState, useMemo, ChangeEvent } from 'react';
 import classNames from 'classnames';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import { getUnitForValue, UNITS } from '../TimespanItemUtils';
-import useUniqueId from '../../useUniqueId';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimespanFormItem } from '../../FormAdmin/FormItemUtils';
 import CaptionLabel from './CaptionLabel';

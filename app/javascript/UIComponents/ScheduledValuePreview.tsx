@@ -2,12 +2,10 @@ import { memo, ReactNode, RefObject, useCallback, useMemo, useRef, useState } fr
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import { DateTime } from 'luxon';
+import { notEmpty, Tooltip, useLitformPopper } from '@neinteractiveliterature/litform';
 
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
-import { notEmpty } from '../ValueUtils';
 import { findTimespanAt, findValueAt } from '../ScheduledValueUtils';
-import Tooltip from './Tooltip';
-import { useIntercodePopper } from './PopperUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
 function dateTimeIfValid(value: string | undefined, timezoneName: string) {
@@ -254,7 +252,7 @@ function ScheduledValuePreview<ValueType>({
     ? dateElementMapRef.current.get(focusedDate.valueOf()) ?? null
     : null;
 
-  const { styles, attributes, state } = useIntercodePopper(tooltip, focusedDateElement, arrow);
+  const { styles, attributes, state } = useLitformPopper(tooltip, focusedDateElement, arrow);
 
   const focusDate = useCallback((value: DateTime) => setFocusedDate(value), []);
 

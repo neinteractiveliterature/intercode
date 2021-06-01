@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
+import { LoadQueryWrapper, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import EventCategoryRow from './EventCategoryRow';
-import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import { useEventCategoryAdminQuery } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCategoryIndex({ data }) {
   usePageTitle('Event Categories');

@@ -1,6 +1,7 @@
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useTeamMembersMailingListQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useTeamMembersMailingListQuery, function TeamMembers({ data }) {

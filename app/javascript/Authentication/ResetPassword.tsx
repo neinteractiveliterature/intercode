@@ -2,13 +2,11 @@ import { useState, useContext, useMemo, Suspense } from 'react';
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useUniqueId from '../useUniqueId';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
 const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(

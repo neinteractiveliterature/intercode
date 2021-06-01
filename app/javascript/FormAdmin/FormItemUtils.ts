@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ApolloCache } from '@apollo/client';
 import { assertNever } from 'assert-never';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { FormEditorQuery } from './queries';
 import { FormSection, FormItemInput, RegistrationPolicy } from '../graphqlTypes.generated';
@@ -14,7 +15,6 @@ import {
   TimeblockOmission,
   UnparsedTimeblockPreference,
 } from '../FormPresenter/TimeblockTypes';
-import { notEmpty } from '../ValueUtils';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
 

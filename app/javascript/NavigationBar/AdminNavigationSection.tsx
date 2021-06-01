@@ -2,10 +2,10 @@ import { useContext, useMemo } from 'react';
 import { titleize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { notFalse } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
 import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
-import { notFalse } from '../ValueUtils';
 import { Ability } from '../graphqlTypes.generated';
 
 function generateSiteContentItem(

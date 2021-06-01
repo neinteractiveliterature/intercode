@@ -2,13 +2,12 @@ import { useContext } from 'react';
 import { useApolloClient } from '@apollo/client';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import parseCmsContent from '../parseCmsContent';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useClickwrapAgreementQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {

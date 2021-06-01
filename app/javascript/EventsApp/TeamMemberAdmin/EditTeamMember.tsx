@@ -3,9 +3,9 @@ import { titleize, underscore } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
-import ErrorDisplay from '../../ErrorDisplay';
 import TeamMemberForm from './TeamMemberForm';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';

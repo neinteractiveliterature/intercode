@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  ErrorDisplay,
+  sortByLocaleString,
+  useConfirm,
+  PageLoadingIndicator,
+} from '@neinteractiveliterature/litform';
 
 import { CmsContentGroupsAdminQuery } from './queries';
 import { DeleteContentGroup } from './mutations';
-import ErrorDisplay from '../../ErrorDisplay';
-import { sortByLocaleString } from '../../ValueUtils';
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useCmsContentGroupsAdminQuery } from './queries.generated';
 
 function CmsContentGroupsAdminTable() {

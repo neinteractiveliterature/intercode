@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import { usePropertySetters } from '../usePropertySetters';
+import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 export type UserFormState = {
   first_name?: string | null;

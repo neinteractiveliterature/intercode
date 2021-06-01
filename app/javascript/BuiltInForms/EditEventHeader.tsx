@@ -1,8 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../ModalDialogs/Confirm';
-import ErrorDisplay from '../ErrorDisplay';
 import { Event } from '../graphqlTypes.generated';
 
 export type EditEventHeaderProps = {

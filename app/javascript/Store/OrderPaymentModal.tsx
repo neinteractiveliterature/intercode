@@ -3,9 +3,12 @@ import Modal from 'react-bootstrap4-modal';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
 import { PaymentRequest, PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js';
+import {
+  ErrorDisplay,
+  MultipleChoiceInput,
+  PageLoadingIndicator,
+} from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import OrderPaymentForm, { PaymentDetails } from './OrderPaymentForm';
 import paymentDetailsComplete from './paymentDetailsComplete';
 import { LazyStripeElementsContainer } from '../LazyStripe';
@@ -15,7 +18,6 @@ import formatMoney from '../formatMoney';
 import { Money, PaymentMode } from '../graphqlTypes.generated';
 import { CurrentPendingOrderPaymentIntentClientSecretQueryData } from './queries.generated';
 import { CurrentPendingOrderPaymentIntentClientSecret } from './queries';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 
 // eslint-disable-next-line global-require
 const PoweredByStripeLogo = require('../images/powered_by_stripe.svg').default as string;

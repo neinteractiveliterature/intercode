@@ -162,7 +162,7 @@ export function useUsersTableUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type UsersTableUsersQueryHookResult = ReturnType<typeof useUsersTableUsersQuery>;
 export type UsersTableUsersQueryLazyQueryHookResult = ReturnType<typeof useUsersTableUsersQueryLazyQuery>;
-export type UsersTableUsersQueryDataResult = Apollo.QueryResult<UsersTableUsersQueryData, UsersTableUsersQueryVariables>;
+export type UsersTableUsersQueryQueryResult = Apollo.QueryResult<UsersTableUsersQueryData, UsersTableUsersQueryVariables>;
 export const UserAdminQueryDocument = gql`
     query UserAdminQuery($id: Int!) {
   user(id: $id) {
@@ -198,7 +198,7 @@ export function useUserAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
         }
 export type UserAdminQueryHookResult = ReturnType<typeof useUserAdminQuery>;
 export type UserAdminQueryLazyQueryHookResult = ReturnType<typeof useUserAdminQueryLazyQuery>;
-export type UserAdminQueryDataResult = Apollo.QueryResult<UserAdminQueryData, UserAdminQueryVariables>;
+export type UserAdminQueryQueryResult = Apollo.QueryResult<UserAdminQueryData, UserAdminQueryVariables>;
 export const MergeUsersModalQueryDocument = gql`
     query MergeUsersModalQuery($ids: [Int!]!) {
   users(ids: $ids) {
@@ -234,4 +234,4 @@ export function useMergeUsersModalQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type MergeUsersModalQueryHookResult = ReturnType<typeof useMergeUsersModalQuery>;
 export type MergeUsersModalQueryLazyQueryHookResult = ReturnType<typeof useMergeUsersModalQueryLazyQuery>;
-export type MergeUsersModalQueryDataResult = Apollo.QueryResult<MergeUsersModalQueryData, MergeUsersModalQueryVariables>;
+export type MergeUsersModalQueryQueryResult = Apollo.QueryResult<MergeUsersModalQueryData, MergeUsersModalQueryVariables>;

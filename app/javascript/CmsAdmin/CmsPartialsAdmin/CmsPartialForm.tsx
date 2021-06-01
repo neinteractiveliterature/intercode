@@ -1,8 +1,7 @@
 import * as React from 'react';
+import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import { usePropertySetters } from '../../usePropertySetters';
 import { CmsPartial } from '../../graphqlTypes.generated';
 
 export type CmsPartialFormFields = Pick<CmsPartial, 'name' | 'admin_notes' | 'content'>;
