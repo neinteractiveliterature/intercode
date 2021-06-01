@@ -96,7 +96,7 @@
     "compression-webpack-plugin": "^7.1.2",
     "core-js": "^3.13.1",
     "css-loader": "^5.2.4",
-    "css-minimizer-webpack-plugin": "^3.0.0",
+    "css-minimizer-webpack-plugin": "^3.0.1",
     "csv-string": "^4.0.1",
     "custom-event-polyfill": "^1.0.7",
     "debounce-promise": "^3.1.2",
@@ -117,7 +117,7 @@
     "inflected": "^2.1.0",
     "js-search": "^2.0.0",
     "lodash": "^4.17.21",
-    "luxon": "^1.26.0",
+    "luxon": "^1.27.0",
     "mapbox-gl": "^1.13.0",
     "md5.js": "^1.3.5",
     "mini-css-extract-plugin": "^1.6.0",
@@ -127,7 +127,7 @@
     "popper.js": "^1.16.1",
     "porter-stemmer": "^0.9.1",
     "postcss": "^8.2.14",
-    "postcss-import": "^14.0.1",
+    "postcss-import": "^14.0.2",
     "postcss-loader": "^5.3.0",
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
@@ -163,7 +163,7 @@
     "source-map-support": "^0.5.19",
     "stream-browserify": "^3.0.0",
     "style-loader": "^2.0.0",
-    "terser-webpack-plugin": "^5.1.2",
+    "terser-webpack-plugin": "^5.1.3",
     "thread-loader": "^3.0.3",
     "tinycolor2": "^1.4.2",
     "tzdata": "^1.0.25",
@@ -190,7 +190,7 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react-hooks": "^5.1.2",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.22.1",
+    "@typescript-eslint/parser": "^4.26.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.1",
@@ -226,7 +226,7 @@
   "resolutions": {
     "**/**/kind-of": ">= 6.0.3",
     "**/webpack-dev-middleware": "^3.7.2",
-    "@typescript-eslint/parser": "4.22.1"
+    "@typescript-eslint/parser": "4.26.0"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
