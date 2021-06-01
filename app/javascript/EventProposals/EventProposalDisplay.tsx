@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
-import ErrorDisplay from '../ErrorDisplay';
 import Gravatar from '../Gravatar';
-import LoadingIndicator from '../LoadingIndicator';
 import { useEventProposalQueryWithOwner } from './queries.generated';
 import { getSortedFormItems } from '../Models/Form';
 import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';

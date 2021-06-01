@@ -4,8 +4,8 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import { TFunction } from 'i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import RunCapacityGraph from './RunCapacityGraph';
 import SignupButtons from './SignupButtons';
 import { timespanFromRun } from '../../TimespanUtils';
@@ -13,7 +13,6 @@ import ViewSignupsOptions from './ViewSignupsOptions';
 import AppRootContext from '../../AppRootContext';
 import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
-import LoadingIndicator from '../../LoadingIndicator';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
 import { EventPageQueryData } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';

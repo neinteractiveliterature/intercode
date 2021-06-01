@@ -91,4 +91,4 @@ export function useSiteSearchQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
         }
 export type SiteSearchQueryHookResult = ReturnType<typeof useSiteSearchQuery>;
 export type SiteSearchQueryLazyQueryHookResult = ReturnType<typeof useSiteSearchQueryLazyQuery>;
-export type SiteSearchQueryDataResult = Apollo.QueryResult<SiteSearchQueryData, SiteSearchQueryVariables>;
+export type SiteSearchQueryQueryResult = Apollo.QueryResult<SiteSearchQueryData, SiteSearchQueryVariables>;

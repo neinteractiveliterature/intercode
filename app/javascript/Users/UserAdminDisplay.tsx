@@ -3,10 +3,10 @@ import { humanize, titleize } from 'inflected';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
 import { useParams } from 'react-router-dom';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import { UserAdminQueryData, useUserAdminQuery } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 

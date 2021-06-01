@@ -2,13 +2,12 @@ import { useCallback, useState, useMemo, ReactNode } from 'react';
 import isEqual from 'lodash/isEqual';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
 import { useEventProposalQuery, EventProposalQueryData } from './queries.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';

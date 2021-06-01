@@ -5,9 +5,9 @@ import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef } from
 import { useTranslation } from 'react-i18next';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../../AppRootContext';
-import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
 import { FiniteTimespan } from '../../Timespan';
 import { timespanFromRun } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';

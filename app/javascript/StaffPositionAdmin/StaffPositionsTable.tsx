@@ -3,20 +3,21 @@ import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
+import {
+  useConfirm,
+  ErrorDisplay,
+  sortByLocaleString,
+  PageLoadingIndicator,
+  DisclosureTriangle,
+} from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../ModalDialogs/Confirm';
-import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
 import { StaffPositionsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
-import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 import { joinReact } from '../RenderingUtils';
 import Gravatar from '../Gravatar';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import AppRootContext from '../AppRootContext';
-
-import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { StaffPositionsQueryData, useStaffPositionsQuery } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';

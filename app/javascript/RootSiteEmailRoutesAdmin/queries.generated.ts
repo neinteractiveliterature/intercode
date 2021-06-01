@@ -77,4 +77,4 @@ export function useRootSiteEmailRoutesAdminTableQueryLazyQuery(baseOptions?: Apo
         }
 export type RootSiteEmailRoutesAdminTableQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQuery>;
 export type RootSiteEmailRoutesAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQueryLazyQuery>;
-export type RootSiteEmailRoutesAdminTableQueryDataResult = Apollo.QueryResult<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>;
+export type RootSiteEmailRoutesAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>;

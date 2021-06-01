@@ -1,10 +1,10 @@
 import { useRef, useContext, useEffect } from 'react';
+import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import FormHeader, { FormHeaderProps } from './FormHeader';
 import FormFooter, { FormFooterProps } from './FormFooter';
 import FormProgress from './FormProgress';
 import FormSection, { FormSectionProps } from './FormSection';
-import LoadingIndicator from '../../LoadingIndicator';
 import { SectionTraversalContext } from '../SectionTraversalContext';
 import { FormBodyImperativeHandle } from './FormBody';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';

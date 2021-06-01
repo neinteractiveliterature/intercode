@@ -2,16 +2,15 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { PageFormFields } from './CmsPageForm';
 import { CmsPagesAdminQuery } from './queries';
-import ErrorDisplay from '../../ErrorDisplay';
 import { CreatePage } from './mutations';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useCmsPagesAdminQuery } from './queries.generated';
 
 function NewCmsPage() {

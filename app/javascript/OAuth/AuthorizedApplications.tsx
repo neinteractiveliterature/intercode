@@ -1,9 +1,9 @@
+import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+
 import { OAuthAuthorizedApplicationsQuery } from './queries';
-import { useGraphQLConfirm } from '../ModalDialogs/Confirm';
 import PermissionsPrompt from './PermissionsPrompt';
 import { RevokeAuthorizedApplication } from './mutations';
 import { useDeleteMutation } from '../MutationUtils';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
   OAuthAuthorizedApplicationsQueryData,
   useOAuthAuthorizedApplicationsQuery,

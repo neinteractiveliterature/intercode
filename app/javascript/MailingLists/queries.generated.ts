@@ -213,7 +213,7 @@ export function useMailingListsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQuery
         }
 export type MailingListsMenuQueryHookResult = ReturnType<typeof useMailingListsMenuQuery>;
 export type MailingListsMenuQueryLazyQueryHookResult = ReturnType<typeof useMailingListsMenuQueryLazyQuery>;
-export type MailingListsMenuQueryDataResult = Apollo.QueryResult<MailingListsMenuQueryData, MailingListsMenuQueryVariables>;
+export type MailingListsMenuQueryQueryResult = Apollo.QueryResult<MailingListsMenuQueryData, MailingListsMenuQueryVariables>;
 export const TicketedAttendeesQueryDocument = gql`
     query TicketedAttendeesQuery {
   convention: assertConvention {
@@ -254,7 +254,7 @@ export function useTicketedAttendeesQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type TicketedAttendeesQueryHookResult = ReturnType<typeof useTicketedAttendeesQuery>;
 export type TicketedAttendeesQueryLazyQueryHookResult = ReturnType<typeof useTicketedAttendeesQueryLazyQuery>;
-export type TicketedAttendeesQueryDataResult = Apollo.QueryResult<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>;
+export type TicketedAttendeesQueryQueryResult = Apollo.QueryResult<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>;
 export const EventProposersQueryDocument = gql`
     query EventProposersQuery {
   convention: assertConvention {
@@ -294,7 +294,7 @@ export function useEventProposersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
         }
 export type EventProposersQueryHookResult = ReturnType<typeof useEventProposersQuery>;
 export type EventProposersQueryLazyQueryHookResult = ReturnType<typeof useEventProposersQueryLazyQuery>;
-export type EventProposersQueryDataResult = Apollo.QueryResult<EventProposersQueryData, EventProposersQueryVariables>;
+export type EventProposersQueryQueryResult = Apollo.QueryResult<EventProposersQueryData, EventProposersQueryVariables>;
 export const TeamMembersMailingListQueryDocument = gql`
     query TeamMembersMailingListQuery {
   convention: assertConvention {
@@ -334,7 +334,7 @@ export function useTeamMembersMailingListQueryLazyQuery(baseOptions?: Apollo.Laz
         }
 export type TeamMembersMailingListQueryHookResult = ReturnType<typeof useTeamMembersMailingListQuery>;
 export type TeamMembersMailingListQueryLazyQueryHookResult = ReturnType<typeof useTeamMembersMailingListQueryLazyQuery>;
-export type TeamMembersMailingListQueryDataResult = Apollo.QueryResult<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>;
+export type TeamMembersMailingListQueryQueryResult = Apollo.QueryResult<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>;
 export const UsersWithPendingBioQueryDocument = gql`
     query UsersWithPendingBioQuery {
   convention: assertConvention {
@@ -374,7 +374,7 @@ export function useUsersWithPendingBioQueryLazyQuery(baseOptions?: Apollo.LazyQu
         }
 export type UsersWithPendingBioQueryHookResult = ReturnType<typeof useUsersWithPendingBioQuery>;
 export type UsersWithPendingBioQueryLazyQueryHookResult = ReturnType<typeof useUsersWithPendingBioQueryLazyQuery>;
-export type UsersWithPendingBioQueryDataResult = Apollo.QueryResult<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>;
+export type UsersWithPendingBioQueryQueryResult = Apollo.QueryResult<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>;
 export const WaitlistMailingListsQueryDocument = gql`
     query WaitlistMailingListsQuery {
   convention: assertConvention {
@@ -427,7 +427,7 @@ export function useWaitlistMailingListsQueryLazyQuery(baseOptions?: Apollo.LazyQ
         }
 export type WaitlistMailingListsQueryHookResult = ReturnType<typeof useWaitlistMailingListsQuery>;
 export type WaitlistMailingListsQueryLazyQueryHookResult = ReturnType<typeof useWaitlistMailingListsQueryLazyQuery>;
-export type WaitlistMailingListsQueryDataResult = Apollo.QueryResult<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>;
+export type WaitlistMailingListsQueryQueryResult = Apollo.QueryResult<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>;
 export const WhosFreeFormConventionQueryDocument = gql`
     query WhosFreeFormConventionQuery {
   convention: assertConvention {
@@ -466,7 +466,7 @@ export function useWhosFreeFormConventionQueryLazyQuery(baseOptions?: Apollo.Laz
         }
 export type WhosFreeFormConventionQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQuery>;
 export type WhosFreeFormConventionQueryLazyQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQueryLazyQuery>;
-export type WhosFreeFormConventionQueryDataResult = Apollo.QueryResult<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>;
+export type WhosFreeFormConventionQueryQueryResult = Apollo.QueryResult<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>;
 export const WhosFreeQueryDocument = gql`
     query WhosFreeQuery($start: Date!, $finish: Date!) {
   convention: assertConvention {
@@ -508,4 +508,4 @@ export function useWhosFreeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
         }
 export type WhosFreeQueryHookResult = ReturnType<typeof useWhosFreeQuery>;
 export type WhosFreeQueryLazyQueryHookResult = ReturnType<typeof useWhosFreeQueryLazyQuery>;
-export type WhosFreeQueryDataResult = Apollo.QueryResult<WhosFreeQueryData, WhosFreeQueryVariables>;
+export type WhosFreeQueryQueryResult = Apollo.QueryResult<WhosFreeQueryData, WhosFreeQueryVariables>;

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater, TimespanFormItem } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';

@@ -3,14 +3,12 @@ import * as React from 'react';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
+import { useConfirm, ErrorDisplay, ChoiceSet } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import AppRootContext from '../AppRootContext';
-import ErrorDisplay from '../ErrorDisplay';
 import InPlaceMoneyEditor from './InPlaceMoneyEditor';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import EnumTypes from '../enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from '../graphqlTypes.generated';
 import { useCancelOrderMutation, useMarkOrderPaidMutation } from './mutations.generated';

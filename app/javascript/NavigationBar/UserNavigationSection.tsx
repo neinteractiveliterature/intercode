@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import classNames from 'classnames';
+import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import htmlFetch from './htmlFetch';
 import SignInButton from '../Authentication/SignInButton';
@@ -13,7 +14,6 @@ import Gravatar from '../Gravatar';
 import CartContents from '../Store/CartContents';
 import MenuIcon from './MenuIcon';
 import SignOutButton from '../Authentication/SignOutButton';
-import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import useAutoCloseOnNavigate from './useAutoCloseOnNavigate';
 
@@ -164,7 +164,7 @@ function UserNavigationSection() {
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { styles, attributes, update } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
     dropdownMenu,
     referenceElement,
     undefined,

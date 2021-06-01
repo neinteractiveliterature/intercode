@@ -64,4 +64,4 @@ export function useRoomsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
         }
 export type RoomsAdminQueryHookResult = ReturnType<typeof useRoomsAdminQuery>;
 export type RoomsAdminQueryLazyQueryHookResult = ReturnType<typeof useRoomsAdminQueryLazyQuery>;
-export type RoomsAdminQueryDataResult = Apollo.QueryResult<RoomsAdminQueryData, RoomsAdminQueryVariables>;
+export type RoomsAdminQueryQueryResult = Apollo.QueryResult<RoomsAdminQueryData, RoomsAdminQueryVariables>;

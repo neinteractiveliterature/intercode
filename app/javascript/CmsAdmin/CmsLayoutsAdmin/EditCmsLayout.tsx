@@ -2,10 +2,10 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildLayoutInput from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
-import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import { useCmsLayoutsAdminQuery } from './queries.generated';

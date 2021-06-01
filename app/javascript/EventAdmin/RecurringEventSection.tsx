@@ -4,12 +4,11 @@ import sortBy from 'lodash/sortBy';
 import { DateTime, Duration } from 'luxon';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { useModal, DisclosureTriangle } from '@neinteractiveliterature/litform';
 
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
-import useModal from '../ModalDialogs/useModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import DisclosureTriangle from '../BuiltInFormControls/DisclosureTriangle';
 import AppRootContext from '../AppRootContext';
 import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
 import { getDateTimeFormat, useAppDateTimeFormat } from '../TimeUtils';

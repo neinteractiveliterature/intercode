@@ -14,7 +14,6 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     <input
       class="form-control"
       id="name-1"
-      name="name"
       style="font-family: monospace;"
       type="text"
       value=""
@@ -32,7 +31,6 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     <input
       class="form-control"
       id="description-2"
-      name="description"
       type="text"
       value=""
     />
@@ -141,7 +139,6 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     <input
       class="form-control"
       id="maximum_event_provided_tickets-7"
-      name="maximum_event_provided_tickets"
       type="number"
       value="0"
     />

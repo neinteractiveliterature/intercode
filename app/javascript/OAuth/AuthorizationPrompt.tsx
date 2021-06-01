@@ -1,12 +1,11 @@
 import { useMemo, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
-import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useOAuthAuthorizationPromptQuery } from './queries.generated';
 
 type AuthorizationParams = {

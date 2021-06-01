@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import WithdrawSignupButton, { WithdrawSignupButtonProps } from './WithdrawSignupButton';
-import { useConfirm } from '../../ModalDialogs/Confirm';
-import ErrorDisplay from '../../ErrorDisplay';
 import { EventPageQueryData } from './queries.generated';
 import { useWithdrawMySignupMutation } from './mutations.generated';
 

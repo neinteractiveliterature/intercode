@@ -1,6 +1,7 @@
 import { useContext, useCallback } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import classnames from 'classnames';
+import { useConfirm, ButtonWithTooltip, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
@@ -11,9 +12,6 @@ import {
   serializeParsedFormItem,
   findStandardItem,
 } from './FormItemUtils';
-import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
-import { useConfirm } from '../ModalDialogs/Confirm';
-import ErrorDisplay from '../ErrorDisplay';
 import { useMoveFormItemMutation, useDeleteFormItemMutation } from './mutations.generated';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {

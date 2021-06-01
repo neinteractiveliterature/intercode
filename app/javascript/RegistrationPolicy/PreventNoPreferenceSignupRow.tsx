@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { ChoiceSet } from '@neinteractiveliterature/litform';
 
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
 

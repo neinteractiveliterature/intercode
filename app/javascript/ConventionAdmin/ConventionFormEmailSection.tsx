@@ -1,11 +1,13 @@
 import * as React from 'react';
+import {
+  BootstrapFormInput,
+  MultipleChoiceInput,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { ConventionAdminConventionQueryData } from './queries.generated';
-import { usePropertySetters } from '../usePropertySetters';
 import { EmailMode } from '../graphqlTypes.generated';
 
 export type ConventionFormEmailSectionProps = {

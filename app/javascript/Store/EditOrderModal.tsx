@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import Modal from 'react-bootstrap4-modal';
+import { useConfirm } from '@neinteractiveliterature/litform';
 
 import AdminOrderForm, { AdminOrderTypeWithId } from './AdminOrderForm';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import AdminOrderEntriesTable, { AdminOrderEntryWithIdType } from './AdminOrderEntriesTable';
 import {
   useAdminCreateOrderEntryMutation,

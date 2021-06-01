@@ -4,18 +4,20 @@ import { Link } from 'react-router-dom';
 // eslint-disable-next-line no-restricted-imports
 import { useQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
+import {
+  useModal,
+  useConfirm,
+  ErrorDisplay,
+  LoadingIndicator,
+} from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../ModalDialogs/Confirm';
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
-import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import {
   TicketAdminWithTicketAbilityQuery,
   TicketAdminWithoutTicketAbilityQuery,
   UserConProfileAdminQuery,
 } from './queries';
-import LoadingIndicator from '../LoadingIndicator';
-import useModal from '../ModalDialogs/useModal';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import AppRootContext from '../AppRootContext';
 import { Money } from '../graphqlTypes.generated';

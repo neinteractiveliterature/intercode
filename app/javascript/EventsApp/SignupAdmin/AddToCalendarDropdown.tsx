@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import { CopyToClipboardButton } from '@neinteractiveliterature/litform';
 
-import CopyToClipboardButton from '../../UIComponents/CopyToClipboardButton';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 
 export type AddToCalendarDropdownProps = {

@@ -1,4 +1,5 @@
-import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 
 function ScheduleGridSkeleton() {

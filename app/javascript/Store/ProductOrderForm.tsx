@@ -1,15 +1,17 @@
 import { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import {
+  LoadingIndicator,
+  ErrorDisplay,
+  parseIntOrNull,
+  PageLoadingIndicator,
+} from '@neinteractiveliterature/litform';
 
 import { CartQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
-import LoadingIndicator from '../LoadingIndicator';
-import { parseIntOrNull } from '../ValueUtils';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useOrderFormProductQuery } from './queries.generated';
 import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
 import { Money } from '../graphqlTypes.generated';
@@ -86,7 +88,7 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
 
     return (
       <select
-        className="form-control mb-3"
+        className="form-select mb-3"
         value={productVariantId ?? ''}
         onChange={(event) => setProductVariantId(parseIntOrNull(event.target.value) ?? undefined)}
       >

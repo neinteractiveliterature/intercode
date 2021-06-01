@@ -2,8 +2,8 @@ import { useCallback, useContext, useMemo } from 'react';
 import { DateTime, DateTimeFormatOptions } from 'luxon';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { onlyOneIsNull } from '@neinteractiveliterature/litform';
 
-import { onlyOneIsNull } from './ValueUtils';
 import AppRootContext from './AppRootContext';
 import { Convention } from './graphqlTypes.generated';
 import { DateTimeFormatKey } from './DateTimeFormats';

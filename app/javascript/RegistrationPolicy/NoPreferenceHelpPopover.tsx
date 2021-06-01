@@ -1,4 +1,5 @@
-import HelpPopover from '../UIComponents/HelpPopover';
+import { HelpPopover } from '@neinteractiveliterature/litform';
+
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
 import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
 

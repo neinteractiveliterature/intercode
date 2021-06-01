@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import * as React from 'react';
-
-import useModal from '../ModalDialogs/useModal';
+import { useModal } from '@neinteractiveliterature/litform';
 
 export type AuthenticationModalView = 'signIn' | 'signUp' | 'forgotPassword';
 

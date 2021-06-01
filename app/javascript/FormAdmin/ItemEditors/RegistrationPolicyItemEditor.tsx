@@ -1,8 +1,8 @@
 import { useCallback, useContext } from 'react';
+import { BootstrapFormCheckbox } from '@neinteractiveliterature/litform';
 
 import RegistrationPolicyItemEditorPresetRow from './RegistrationPolicyItemEditorPresetRow';
 import useArrayProperty from './useArrayProperty';
-import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import usePropertyUpdater from './usePropertyUpdater';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';

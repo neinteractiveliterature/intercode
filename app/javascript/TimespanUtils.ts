@@ -1,7 +1,8 @@
+import { removeCommonStringMiddle } from '@neinteractiveliterature/litform';
+
 import { DateTime, Duration } from 'luxon';
 import Timespan, { FiniteTimespan } from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
-import { removeCommonStringMiddle } from './ValueUtils';
 import { Convention, Event, Run } from './graphqlTypes.generated';
 
 export type ConventionForTimespanUtils = Pick<

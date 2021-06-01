@@ -1,8 +1,11 @@
 import { useCallback } from 'react';
 import * as React from 'react';
+import {
+  BooleanInput,
+  MultipleChoiceInput,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
-import BooleanInput from '../BuiltInFormControls/BooleanInput';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor, {
   scheduledValueReducer,
   ScheduledValueReducerAction,
@@ -13,7 +16,6 @@ import MaximumEventSignupsPreview, {
   MAXIMUM_EVENT_SIGNUPS_OPTIONS,
 } from './MaximumEventSignupsPreview';
 import type { ConventionFormConvention } from './ConventionForm';
-import { usePropertySetters } from '../usePropertySetters';
 import { ShowSchedule, SignupMode } from '../graphqlTypes.generated';
 
 const buildMaximumEventSignupsInput = (
@@ -42,7 +44,7 @@ const buildMaximumEventSignupsInput = (
   ));
 
   return (
-    <select className="form-control form-select" value={value} onChange={processChangeEvent}>
+    <select className="form-select" value={value} onChange={processChangeEvent}>
       <option aria-label="Blank placeholder option" />
       {options}
     </select>

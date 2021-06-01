@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
 import RunCapacityGraph from './RunCapacityGraph';
-import ErrorDisplay from '../../ErrorDisplay';
 import EventPageRunCard from './EventPageRunCard';
-import LoadingIndicator from '../../LoadingIndicator';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
 
 type FakeRunProps = {

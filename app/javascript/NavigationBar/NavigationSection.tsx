@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { ReactNode, useState } from 'react';
+import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
-import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 import useAutoCloseOnNavigate from './useAutoCloseOnNavigate';
 
 export type NavigationSectionProps = {
@@ -14,7 +14,7 @@ function NavigationSection({ children, label }: NavigationSectionProps) {
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { styles, attributes, update } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
     dropdownMenu,
     dropdownLi,
     undefined,

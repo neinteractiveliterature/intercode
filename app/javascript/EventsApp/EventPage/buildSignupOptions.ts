@@ -1,4 +1,5 @@
-import { notEmpty } from '../../ValueUtils';
+import { notEmpty } from '@neinteractiveliterature/litform';
+
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 

@@ -10,9 +10,9 @@ import {
 } from 'react';
 import { detect } from 'detect-browser';
 import { useApolloClient } from '@apollo/client';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
-import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
 import { ScheduleGridEventsQuery } from './queries';
 import {
@@ -20,7 +20,6 @@ import {
   getConventionDayTimespans,
   ConventionForTimespanUtils,
 } from '../../TimespanUtils';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';

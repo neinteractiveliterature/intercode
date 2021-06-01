@@ -58,4 +58,4 @@ export function useClickwrapAgreementQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type ClickwrapAgreementQueryHookResult = ReturnType<typeof useClickwrapAgreementQuery>;
 export type ClickwrapAgreementQueryLazyQueryHookResult = ReturnType<typeof useClickwrapAgreementQueryLazyQuery>;
-export type ClickwrapAgreementQueryDataResult = Apollo.QueryResult<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>;
+export type ClickwrapAgreementQueryQueryResult = Apollo.QueryResult<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>;

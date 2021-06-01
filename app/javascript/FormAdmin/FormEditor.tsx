@@ -2,20 +2,18 @@ import { useMemo } from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
+import { notEmpty, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import FormItemEditorLayout from './FormItemEditorLayout';
 import FormSectionEditorLayout from './FormSectionEditorLayout';
 import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
 import { useFormEditorQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
-import { notEmpty } from '../ValueUtils';
 import DndWrapper from '../DndWrapper';
 
 function FormEditor() {

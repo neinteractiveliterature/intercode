@@ -1,10 +1,9 @@
 import * as React from 'react';
+import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import { Trans } from 'react-i18next';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { CmsLayout } from '../../graphqlTypes.generated';
-import { usePropertySetters } from '../../usePropertySetters';
 
 type CmsLayoutFields = Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>;
 

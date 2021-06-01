@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import { useEventProposalHistoryQuery } from './queries.generated';
 

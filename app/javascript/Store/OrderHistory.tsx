@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import intersection from 'lodash/intersection';
 import { DateTime } from 'luxon';
+import { useModal, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
-import useModal, { ModalData } from '../ModalDialogs/useModal';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { OrderHistoryQueryData, useOrderHistoryQuery } from './queries.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAppDateTimeFormat } from '../TimeUtils';

@@ -1,8 +1,15 @@
 import { useState, useMemo } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
+import {
+  useTabs,
+  TabList,
+  TabBody,
+  PageLoadingIndicator,
+  notEmpty,
+  ErrorDisplay,
+} from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
@@ -12,13 +19,10 @@ import {
   getPermissionNamesForModelType,
   buildPermissionInput,
 } from '../Permissions/PermissionUtils';
-import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
 import { StaffPositionsQueryData, useStaffPositionsQuery } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
 import { useUpdateStaffPositionPermissionsMutation } from './mutations.generated';
-import { notEmpty } from '../ValueUtils';
 import FourOhFourPage from '../FourOhFourPage';
 
 const CmsContentGroupPermissionNames = getPermissionNamesForModelType(
@@ -31,7 +35,7 @@ const ConventionPermissionNames = getPermissionNamesForModelType(
   PermissionedModelTypeIndicator.Convention,
 );
 
-type EditStaffPositionPermissionsForm = {
+type EditStaffPositionPermissionsFormProps = {
   convention: StaffPositionsQueryData['convention'];
   staffPosition: StaffPositionsQueryData['convention']['staff_positions'][0];
 };
@@ -39,7 +43,7 @@ type EditStaffPositionPermissionsForm = {
 function EditStaffPositionPermissionsForm({
   staffPosition,
   convention,
-}: EditStaffPositionPermissionsForm) {
+}: EditStaffPositionPermissionsFormProps) {
   const history = useHistory();
   const [changeSet, add, remove] = useChangeSet<PermissionWithId>();
   const [error, setError] = useState<ApolloError>();

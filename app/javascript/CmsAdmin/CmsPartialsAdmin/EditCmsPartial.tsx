@@ -2,10 +2,10 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildPartialInput from './buildPartialInput';
 import CmsPartialForm from './CmsPartialForm';
-import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';

@@ -4,10 +4,13 @@ import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';
 import { FilterProps } from 'react-table';
 import max from 'lodash/max';
+import {
+  ChoiceSet,
+  useLitformPopperWithAutoClosing,
+  useToggleOpen,
+} from '@neinteractiveliterature/litform';
 
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { FilterCodec } from './FilterUtils';
-import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 
 export type ChoiceSetFilterChoice = {
   label: string;
@@ -89,7 +92,7 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
     [],
   );
 
-  const { styles, attributes, update } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
     dropdownMenu,
     dropdownButton,
     undefined,

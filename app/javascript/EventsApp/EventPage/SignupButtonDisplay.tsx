@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
 
-import ButtonWithTooltip from '../../UIComponents/ButtonWithTooltip';
 import { SignupOption } from './buildSignupOptions';
 
 export type SignupButtonDisplayProps = {

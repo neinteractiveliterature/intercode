@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { ApolloError, FetchResult } from '@apollo/client';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import PlainTextDisplay from '../PlainTextDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 

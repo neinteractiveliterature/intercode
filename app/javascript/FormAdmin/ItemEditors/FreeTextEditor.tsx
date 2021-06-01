@@ -1,15 +1,17 @@
 import { useContext } from 'react';
+import {
+  BootstrapFormInput,
+  BootstrapFormSelect,
+  useUniqueId,
+  parseIntOrNull,
+  BooleanInput,
+  HelpPopover,
+} from '@neinteractiveliterature/litform';
 
-import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import { parseIntOrNull } from '../../ValueUtils';
 import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
-import BooleanInput from '../../BuiltInFormControls/BooleanInput';
-import HelpPopover from '../../UIComponents/HelpPopover';
 
 export type FreeTextEditorProps = FormItemEditorProps<FreeTextFormItem>;
 function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {

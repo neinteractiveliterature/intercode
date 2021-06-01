@@ -1,14 +1,13 @@
 import { Link, Route } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import EditRun from './EditRun';
 import RecurringEventSection from './RecurringEventSection';
-import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useValueUnless from '../useValueUnless';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useEventAdminEventsQuery } from './queries.generated';
 
 export type RecurringEventAdminProps = {

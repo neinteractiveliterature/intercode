@@ -114,7 +114,7 @@ export function useCmsPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
         }
 export type CmsPageQueryHookResult = ReturnType<typeof useCmsPageQuery>;
 export type CmsPageQueryLazyQueryHookResult = ReturnType<typeof useCmsPageQueryLazyQuery>;
-export type CmsPageQueryDataResult = Apollo.QueryResult<CmsPageQueryData, CmsPageQueryVariables>;
+export type CmsPageQueryQueryResult = Apollo.QueryResult<CmsPageQueryData, CmsPageQueryVariables>;
 export const PageAdminDropdownQueryDocument = gql`
     query PageAdminDropdownQuery($id: Int!) {
   cmsParent {
@@ -173,4 +173,4 @@ export function usePageAdminDropdownQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type PageAdminDropdownQueryHookResult = ReturnType<typeof usePageAdminDropdownQuery>;
 export type PageAdminDropdownQueryLazyQueryHookResult = ReturnType<typeof usePageAdminDropdownQueryLazyQuery>;
-export type PageAdminDropdownQueryDataResult = Apollo.QueryResult<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>;
+export type PageAdminDropdownQueryQueryResult = Apollo.QueryResult<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>;

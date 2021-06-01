@@ -335,7 +335,7 @@ export function useUserConProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
         }
 export type UserConProfileQueryHookResult = ReturnType<typeof useUserConProfileQuery>;
 export type UserConProfileQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileQueryLazyQuery>;
-export type UserConProfileQueryDataResult = Apollo.QueryResult<UserConProfileQueryData, UserConProfileQueryVariables>;
+export type UserConProfileQueryQueryResult = Apollo.QueryResult<UserConProfileQueryData, UserConProfileQueryVariables>;
 export const UserConProfileAdminQueryDocument = gql`
     query UserConProfileAdminQuery($id: Int!) {
   myProfile {
@@ -423,7 +423,7 @@ export function useUserConProfileAdminQueryLazyQuery(baseOptions?: Apollo.LazyQu
         }
 export type UserConProfileAdminQueryHookResult = ReturnType<typeof useUserConProfileAdminQuery>;
 export type UserConProfileAdminQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileAdminQueryLazyQuery>;
-export type UserConProfileAdminQueryDataResult = Apollo.QueryResult<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>;
+export type UserConProfileAdminQueryQueryResult = Apollo.QueryResult<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>;
 export const UserConProfilesTableUserConProfilesQueryDocument = gql`
     query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput!]) {
   convention {
@@ -528,7 +528,7 @@ export function useUserConProfilesTableUserConProfilesQueryLazyQuery(baseOptions
         }
 export type UserConProfilesTableUserConProfilesQueryHookResult = ReturnType<typeof useUserConProfilesTableUserConProfilesQuery>;
 export type UserConProfilesTableUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useUserConProfilesTableUserConProfilesQueryLazyQuery>;
-export type UserConProfilesTableUserConProfilesQueryDataResult = Apollo.QueryResult<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>;
+export type UserConProfilesTableUserConProfilesQueryQueryResult = Apollo.QueryResult<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>;
 export const ConvertToEventProvidedTicketQueryDocument = gql`
     query ConvertToEventProvidedTicketQuery($eventId: Int!) {
   convention {
@@ -585,7 +585,7 @@ export function useConvertToEventProvidedTicketQueryLazyQuery(baseOptions?: Apol
         }
 export type ConvertToEventProvidedTicketQueryHookResult = ReturnType<typeof useConvertToEventProvidedTicketQuery>;
 export type ConvertToEventProvidedTicketQueryLazyQueryHookResult = ReturnType<typeof useConvertToEventProvidedTicketQueryLazyQuery>;
-export type ConvertToEventProvidedTicketQueryDataResult = Apollo.QueryResult<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>;
+export type ConvertToEventProvidedTicketQueryQueryResult = Apollo.QueryResult<ConvertToEventProvidedTicketQueryData, ConvertToEventProvidedTicketQueryVariables>;
 export const AddAttendeeUsersQueryDocument = gql`
     query AddAttendeeUsersQuery($name: String) {
   users_paginated(filters: {name: $name}, per_page: 50) {
@@ -626,7 +626,7 @@ export function useAddAttendeeUsersQueryLazyQuery(baseOptions?: Apollo.LazyQuery
         }
 export type AddAttendeeUsersQueryHookResult = ReturnType<typeof useAddAttendeeUsersQuery>;
 export type AddAttendeeUsersQueryLazyQueryHookResult = ReturnType<typeof useAddAttendeeUsersQueryLazyQuery>;
-export type AddAttendeeUsersQueryDataResult = Apollo.QueryResult<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>;
+export type AddAttendeeUsersQueryQueryResult = Apollo.QueryResult<AddAttendeeUsersQueryData, AddAttendeeUsersQueryVariables>;
 export const TicketAdminWithoutTicketAbilityQueryDocument = gql`
     query TicketAdminWithoutTicketAbilityQuery {
   currentAbility {
@@ -660,7 +660,7 @@ export function useTicketAdminWithoutTicketAbilityQueryLazyQuery(baseOptions?: A
         }
 export type TicketAdminWithoutTicketAbilityQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQuery>;
 export type TicketAdminWithoutTicketAbilityQueryLazyQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQueryLazyQuery>;
-export type TicketAdminWithoutTicketAbilityQueryDataResult = Apollo.QueryResult<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>;
+export type TicketAdminWithoutTicketAbilityQueryQueryResult = Apollo.QueryResult<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>;
 export const TicketAdminWithTicketAbilityQueryDocument = gql`
     query TicketAdminWithTicketAbilityQuery($ticketId: Int!) {
   currentAbility {
@@ -697,4 +697,4 @@ export function useTicketAdminWithTicketAbilityQueryLazyQuery(baseOptions?: Apol
         }
 export type TicketAdminWithTicketAbilityQueryHookResult = ReturnType<typeof useTicketAdminWithTicketAbilityQuery>;
 export type TicketAdminWithTicketAbilityQueryLazyQueryHookResult = ReturnType<typeof useTicketAdminWithTicketAbilityQueryLazyQuery>;
-export type TicketAdminWithTicketAbilityQueryDataResult = Apollo.QueryResult<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>;
+export type TicketAdminWithTicketAbilityQueryQueryResult = Apollo.QueryResult<TicketAdminWithTicketAbilityQueryData, TicketAdminWithTicketAbilityQueryVariables>;

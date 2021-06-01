@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -17,11 +18,9 @@ import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks, {
   QueryDataContext,
 } from '../../Tables/useReactTableWithTheWorks';
-import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import {
   RunSignupsTableSignupsQueryData,
   RunSignupsTableSignupsQueryVariables,
@@ -62,7 +61,7 @@ const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
     badgeClass = 'bg-warning';
     text = t('tables.ageRestrictionsCheck.unknown', 'Unknown age');
   } else if (value === 'N/A') {
-    badgeClass = 'bg-light';
+    badgeClass = 'bg-secondary';
     text = t('tables.ageRestrictionsCheck.notApplicable', 'N/A');
   }
 

@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
+import { ErrorDisplay, useConfirm, ButtonWithTooltip } from '@neinteractiveliterature/litform';
 
 import { DeleteEventCategory } from './mutations';
-import ErrorDisplay from '../ErrorDisplay';
 import { EventCategoryAdminQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
-import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 import { EventCategoryAdminQueryData } from './queries.generated';
 
 export type EventCategoryRowProps = {

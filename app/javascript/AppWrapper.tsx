@@ -5,25 +5,27 @@ import { BrowserRouter } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
+import {
+  Confirm,
+  useConfirm,
+  PageLoadingIndicator,
+  AlertProvider,
+  ErrorBoundary,
+  ErrorDisplay,
+  ToastProvider,
+} from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
-import Confirm, { useConfirm } from './ModalDialogs/Confirm';
 import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
-import PageLoadingIndicator from './PageLoadingIndicator';
-import { AlertProvider } from './ModalDialogs/Alert';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
-import ErrorBoundary from './ErrorBoundary';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
-import ErrorDisplay from './ErrorDisplay';
-import Toast from './UIComponents/Toast';
-import { ToastProvider } from './UIComponents/ToastContext';
 
-function I18NextWrapper({ children }: { children: ReactNode }) {
+function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
   const [error, setError] = useState<Error>();
 
@@ -34,7 +36,7 @@ function I18NextWrapper({ children }: { children: ReactNode }) {
   }, []);
 
   if (i18nInstance) {
-    return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
+    return <I18nextProvider i18n={i18nInstance}>{children(i18nInstance)}</I18nextProvider>;
   }
 
   if (error) {
@@ -122,13 +124,15 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
                       {!unauthenticatedError && (
                         <Suspense fallback={<PageLoadingIndicator visible />}>
                           <I18NextWrapper>
-                            <AlertProvider>
-                              <ToastProvider>
-                                <ErrorBoundary placement="replace" errorType="plain">
-                                  <WrappedComponent {...((otherProps as unknown) as P)} />{' '}
-                                </ErrorBoundary>
-                              </ToastProvider>
-                            </AlertProvider>
+                            {(i18nInstance) => (
+                              <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                                <ToastProvider>
+                                  <ErrorBoundary placement="replace" errorType="plain">
+                                    <WrappedComponent {...((otherProps as unknown) as P)} />{' '}
+                                  </ErrorBoundary>
+                                </ToastProvider>
+                              </AlertProvider>
+                            )}
                           </I18NextWrapper>
                         </Suspense>
                       )}

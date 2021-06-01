@@ -6,8 +6,8 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 // @ts-expect-error
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
+import { ErrorBoundary } from '@neinteractiveliterature/litform';
 
-import ErrorBoundary from './ErrorBoundary';
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';

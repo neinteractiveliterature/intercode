@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, ApolloError } from '@apollo/client';
+import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CouponForm from './CouponForm';
 import useAsyncFunction from '../../useAsyncFunction';
-import ErrorDisplay from '../../ErrorDisplay';
 import buildCouponInput from './buildCouponInput';
-import { useGraphQLConfirm } from '../../ModalDialogs/Confirm';
 import { AdminCouponFieldsFragment } from './queries.generated';
 import { useDeleteCouponMutation, useUpdateCouponMutation } from './mutations.generated';
 

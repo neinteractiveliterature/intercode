@@ -13,7 +13,7 @@ jobs:
       - if: github.actor != 'dependabot[bot]'
         uses: actions/setup-node@v1
         with:
-          node-version: '12.14.0'
+          node-version: '14.16.1'
       - name: Set up gem cache
         if: github.actor != 'dependabot[bot]'
         uses: actions/cache@v1
@@ -48,5 +48,5 @@ jobs:
       - if: github.actor != 'dependabot[bot]'
         run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
           PRONTO_GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-          pronto run -f github_combined_status github_pr_review
+          pronto run -f github_combined_status
           -c origin/main

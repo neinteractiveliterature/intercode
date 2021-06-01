@@ -1,8 +1,8 @@
 import { useContext } from 'react';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
 import RunsSection from './RunsSection';
-import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import ShortFormEventDetails from './ShortFormEventDetails';
@@ -11,7 +11,6 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useEventPageQuery } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import parsePageContent from '../../parsePageContent';

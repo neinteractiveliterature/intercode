@@ -1,12 +1,10 @@
 import { Link } from 'react-router-dom';
+import { ErrorDisplay, useConfirm, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { CmsGraphqlQueriesQuery } from './queries';
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import { DeleteCmsGraphqlQuery } from './mutations';
-import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import { useDeleteMutation } from '../../MutationUtils';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useCmsGraphqlQueriesQuery } from './queries.generated';
 
 function CmsGraphqlQueriesAdminTable() {

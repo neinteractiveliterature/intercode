@@ -183,7 +183,7 @@ export function useCmsContentGroupsAdminQueryLazyQuery(baseOptions?: Apollo.Lazy
         }
 export type CmsContentGroupsAdminQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQuery>;
 export type CmsContentGroupsAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQueryLazyQuery>;
-export type CmsContentGroupsAdminQueryDataResult = Apollo.QueryResult<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>;
+export type CmsContentGroupsAdminQueryQueryResult = Apollo.QueryResult<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>;
 export const SearchCmsContentQueryDocument = gql`
     query SearchCmsContentQuery($name: String) {
   searchCmsContent(name: $name) {
@@ -218,4 +218,4 @@ export function useSearchCmsContentQueryLazyQuery(baseOptions?: Apollo.LazyQuery
         }
 export type SearchCmsContentQueryHookResult = ReturnType<typeof useSearchCmsContentQuery>;
 export type SearchCmsContentQueryLazyQueryHookResult = ReturnType<typeof useSearchCmsContentQueryLazyQuery>;
-export type SearchCmsContentQueryDataResult = Apollo.QueryResult<SearchCmsContentQueryData, SearchCmsContentQueryVariables>;
+export type SearchCmsContentQueryQueryResult = Apollo.QueryResult<SearchCmsContentQueryData, SearchCmsContentQueryVariables>;

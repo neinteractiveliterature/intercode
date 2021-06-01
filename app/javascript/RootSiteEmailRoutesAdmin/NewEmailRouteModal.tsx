@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, ApolloError } from '@apollo/client';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';
 import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
-import ErrorDisplay from '../ErrorDisplay';
 import { useCreateEmailRouteMutation } from './mutations.generated';
 import { EmailRoute } from '../graphqlTypes.generated';
 

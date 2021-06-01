@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
-import useUniqueId from '../../useUniqueId';
 import CaptionLabel from './CaptionLabel';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';

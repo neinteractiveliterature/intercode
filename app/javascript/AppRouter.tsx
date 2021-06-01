@@ -1,7 +1,7 @@
 import { useState, useContext, Suspense, useEffect, ReactNode } from 'react';
 import { Switch, Route, Redirect, useLocation, useParams } from 'react-router-dom';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
 import { reloadOnBundleHashMismatch } from './checkBundleHash';
