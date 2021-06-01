@@ -59,7 +59,7 @@ function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
 
   return (
     <td key={format(dayStart, 'longWeekday')}>
-      <select value={ordinality || ''} onChange={selectorDidChange} className="form-control">
+      <select value={ordinality || ''} onChange={selectorDidChange} className="form-select">
         <option value="">Don&apos;t care</option>
         <option value="1">1st choice</option>
         <option value="2">2nd choice</option>

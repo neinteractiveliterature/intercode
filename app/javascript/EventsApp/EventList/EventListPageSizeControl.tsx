@@ -9,7 +9,7 @@ function EventListPageSizeControl({ pageSize, onPageSizeChange }: EventListPageS
   return (
     <div className="form-inline align-items-start">
       <select
-        className="form-control mx-1"
+        className="form-select mx-1"
         value={pageSize.toString()}
         onChange={(event) => {
           onPageSizeChange(Number.parseInt(event.target.value, 10));

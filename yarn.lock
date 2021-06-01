@@ -2175,10 +2175,10 @@
   resolved "https://registry.yarnpkg.com/@n1ru4l/push-pull-async-iterable-iterator/-/push-pull-async-iterable-iterator-2.1.4.tgz#a90225474352f9f159bff979905f707b9c6bcf04"
   integrity sha512-qLIvoOUJ+zritv+BlzcBMePKNjKQzH9Rb2i9W98YXxf/M62Lye8qH0peyiU8yJ1tL0kfulWi31BoK10E6BKJeA==
 
-"@neinteractiveliterature/litform@^0.7.7":
-  version "0.7.7"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.7.tgz#cdcd006fc68ad4e77f5a4bb5f16534e3d3cf5ccd"
-  integrity sha512-+118Wn1MNTVktBEZ6MOzqYuw3pBQ9vmMCbyqkrVmlBPlmP0QLNVRjBRm+y2ahXgKuLbZd+DvXJEAsRv2+qFUnw==
+"@neinteractiveliterature/litform@^0.7.8":
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.8.tgz#95631be9e88ee72fe62f4b3367b2c058e297d283"
+  integrity sha512-gOOmfBh4Rt1VfT7X8jTpvrjQ41Wrc/rcmee6Ol0M8uGG3xYJGT/wm53t/dobezzv2Zef+Q0MOaCzdkXJ7AFecw==
   dependencies:
     lodash "^4.17.21"
     uuid "^8.3.2"

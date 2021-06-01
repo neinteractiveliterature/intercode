@@ -219,7 +219,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
             <tr>
               <td>
                 <select
-                  className="form-control"
+                  className="form-select"
                   value={addingOverride.ticket_type.id}
                   onChange={addingTicketTypeIdDidChange}
                 >

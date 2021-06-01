@@ -44,7 +44,7 @@ const buildMaximumEventSignupsInput = (
   ));
 
   return (
-    <select className="form-control form-select" value={value} onChange={processChangeEvent}>
+    <select className="form-select" value={value} onChange={processChangeEvent}>
       <option aria-label="Blank placeholder option" />
       {options}
     </select>
