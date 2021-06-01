@@ -220,7 +220,7 @@
     "react-test-renderer": "^17.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4",
-    "typescript-plugin-css-modules": "^3.2.0",
+    "typescript-plugin-css-modules": "^3.3.0",
     "webpack-dev-server": "^3.11.2"
   },
   "resolutions": {
