@@ -276,7 +276,6 @@ GEM
     image_processing (1.12.1)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
-    io-wait (0.1.0)
     ipaddress (0.8.3)
     jaro_winkler (1.5.4)
     jaro_winkler (1.5.4-java)
@@ -320,8 +319,7 @@ GEM
     mime-types-data (3.2021.0225)
     mini_magick (4.11.0)
     mini_mime (1.0.3)
-    mini_portile2 (2.5.2)
-      net-ftp (~> 0.1)
+    mini_portile2 (2.5.3)
     minipack (0.3.6)
       actionview
       railties (>= 4.2)
@@ -351,12 +349,6 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.1.1)
     mysql2 (0.5.3)
-    net-ftp (0.1.2)
-      net-protocol
-      time
-    net-protocol (0.1.1)
-      io-wait
-      timeout
     netrc (0.11.0)
     nio4r (2.5.7)
     nio4r (2.5.7-java)
@@ -506,7 +498,7 @@ GEM
     skylight (5.1.1)
       activesupport (>= 5.2.0)
     slop (3.6.0)
-    solargraph (0.40.4)
+    solargraph (0.41.1)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -520,8 +512,8 @@ GEM
       thor (~> 1.0)
       tilt (~> 2.0)
       yard (~> 0.9, >= 0.9.24)
-    solargraph-rails (0.2.0)
-      solargraph (~> 0.40.0)
+    solargraph-rails (0.2.1)
+      solargraph (~> 0.41.1)
     spoon (0.0.6)
       ffi
     sprockets (4.0.2)
@@ -542,8 +534,6 @@ GEM
       tins (~> 1.0)
     thor (1.1.0)
     tilt (2.0.10)
-    time (0.1.0)
-    timeout (0.1.1)
     tins (1.20.2)
     twilio-ruby (5.54.0)
       faraday (>= 0.9, < 2.0)
@@ -651,7 +641,7 @@ DEPENDENCIES
   simplecov
   skylight
   solargraph
-  solargraph-rails (= 0.2.0)
+  solargraph-rails (= 0.2.1)
   stackprof
   stripe
   stripe-ruby-mock (>= 3.0.0)
