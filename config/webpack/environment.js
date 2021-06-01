@@ -118,6 +118,8 @@ module.exports = {
     ],
     alias: {
       'lodash.isequal': 'lodash-es/isEqual',
+      // can possibly remove in React 17.0.3
+      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
     },
     fallback: {
       stream: require.resolve('stream-browserify'),

@@ -48,7 +48,7 @@
     "@emotion/serialize": "^1.0.2",
     "@graphiql/toolkit": "^0.2.2",
     "@juggle/resize-observer": "^3.3.0",
-    "@neinteractiveliterature/litform": "^0.7.4",
+    "@neinteractiveliterature/litform": "^0.7.7",
     "@popperjs/core": "^2.9.2",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.14.0",
