@@ -83,7 +83,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
       <span className="visually-hidden">{label}</span>
       <select
         id={selectId}
-        className="form-control me-1"
+        className="form-select me-1"
         name={name}
         value={value[name] == null ? '' : value[name]}
         onChange={inputChanged}

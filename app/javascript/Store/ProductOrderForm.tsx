@@ -88,7 +88,7 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
 
     return (
       <select
-        className="form-control mb-3"
+        className="form-select mb-3"
         value={productVariantId ?? ''}
         onChange={(event) => setProductVariantId(parseIntOrNull(event.target.value) ?? undefined)}
       >

@@ -54,7 +54,7 @@ function RegistrationPolicyPresetSelector({
         Select policy
         <select
           id={presetSelectorId}
-          className="form-control"
+          className="form-select"
           value={selectorValue || ''}
           onChange={presetSelected}
         >

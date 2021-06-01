@@ -61,7 +61,7 @@ const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
     badgeClass = 'bg-warning';
     text = t('tables.ageRestrictionsCheck.unknown', 'Unknown age');
   } else if (value === 'N/A') {
-    badgeClass = 'bg-light';
+    badgeClass = 'bg-secondary';
     text = t('tables.ageRestrictionsCheck.notApplicable', 'N/A');
   }
 
