@@ -1,8 +1,7 @@
 import { useContext } from 'react';
+import { BootstrapFormSelect, useUniqueId } from '@neinteractiveliterature/litform';
 
-import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater, StaticTextFormItem } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';

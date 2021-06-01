@@ -2,6 +2,7 @@ import { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
+import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormItemTools from './FormItemTools';
 import FormItemEditorContent from './FormItemEditorContent';
@@ -14,10 +15,8 @@ import {
   findStandardItem,
 } from './FormItemUtils';
 import { PreviewFormItemQuery } from './queries';
-import useDebouncedState from '../useDebouncedState';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 import { useUpdateFormItemMutation } from './mutations.generated';
 
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {

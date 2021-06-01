@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import CopyToClipboardButton from './CopyToClipboardButton';
+import { CopyToClipboardButton } from '@neinteractiveliterature/litform';
 
 export type EmailListEntry = { email: string; name?: string | null };
 

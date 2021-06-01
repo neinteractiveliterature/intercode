@@ -1,15 +1,14 @@
 import { Link, Switch, Route, useParams, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import EventProposalAdminDisplay from './EventProposalAdminDisplay';
 import EventProposalForm from './EventProposalForm';
 import EventProposalsAdminTable from './EventProposalsAdminTable';
-import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import EventProposalHistory from './EventProposalHistory';
-import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useEventProposalQuery, useEventProposalQueryWithOwner } from './queries.generated';

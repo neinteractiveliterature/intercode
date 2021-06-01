@@ -2,21 +2,19 @@ import { useState, useContext, Suspense } from 'react';
 import * as React from 'react';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { BootstrapFormInput , LoadingIndicator, useUniqueId, ErrorDisplay , LoadQueryWrapper } from '@neinteractiveliterature/litform';
+
+
 
 import { Redirect } from 'react-router-dom';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useUniqueId from '../useUniqueId';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 import AccountFormContent from './AccountFormContent';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
-import LoadingIndicator from '../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 import { useEditUserQuery } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
   () =>

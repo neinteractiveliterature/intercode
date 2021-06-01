@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect, HTMLAttributes } from 'react';
 import classNames from 'classnames';
 import { ColumnInstance, Row } from 'react-table';
+import { parseIntOrNull, useUniqueId } from '@neinteractiveliterature/litform';
 
 import { UseReactTableWithTheWorksResult } from './useReactTableWithTheWorks';
 import { GraphQLReactTableVariables } from './useGraphQLReactTable';
-import useUniqueId from '../useUniqueId';
-import { parseIntOrNull } from '../ValueUtils';
 
 function mergeProps<T extends HTMLAttributes<any>>(...propSets: T[]) {
   return propSets.reduce((acc, props) =>
@@ -172,29 +171,27 @@ function ReactTableWithTheWorks<
                         : {},
                     )}
                   >
-                    {row.cells.map((cell) => {
-                      return (
-                        <div
-                          {...mergeProps<HTMLAttributes<HTMLDivElement>>(
-                            cell.getCellProps(),
-                            {
-                              style: { position: 'relative', overflow: 'hidden' },
-                            },
-                            cell.column.id === '_selected'
-                              ? {
-                                  onClick: (event) => {
-                                    event.stopPropagation();
-                                    row.toggleRowSelected(!row.isSelected);
-                                  },
-                                }
-                              : {},
-                          )}
-                        >
-                          {cell.render('Cell')}
-                          <Resizer column={cell.column} />
-                        </div>
-                      );
-                    })}
+                    {row.cells.map((cell) => (
+                      <div
+                        {...mergeProps<HTMLAttributes<HTMLDivElement>>(
+                          cell.getCellProps(),
+                          {
+                            style: { position: 'relative', overflow: 'hidden' },
+                          },
+                          cell.column.id === '_selected'
+                            ? {
+                                onClick: (event) => {
+                                  event.stopPropagation();
+                                  row.toggleRowSelected(!row.isSelected);
+                                },
+                              }
+                            : {},
+                        )}
+                      >
+                        {cell.render('Cell')}
+                        <Resizer column={cell.column} />
+                      </div>
+                    ))}
                   </div>
                 );
               })}

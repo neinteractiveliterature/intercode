@@ -2,17 +2,15 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 // @ts-expect-error
 import { capitalize } from 'inflected';
+import { LoadQueryWrapper, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import { AdminTicketTypesQuery } from './queries';
 import { DeleteTicketType } from './mutations';
-import ErrorDisplay from '../ErrorDisplay';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { describeAdminPricingStructure } from '../Store/describePricingStructure';
 import { useDeleteMutation } from '../MutationUtils';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { AdminTicketTypesQueryData, useAdminTicketTypesQuery } from './queries.generated';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];

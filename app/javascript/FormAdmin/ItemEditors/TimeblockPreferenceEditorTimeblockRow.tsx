@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useContext } from 'react';
 import * as React from 'react';
 import { DateTime } from 'luxon';
+import { useConfirm } from '@neinteractiveliterature/litform';
 
 import TimeSelect from '../../BuiltInFormControls/TimeSelect';
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import Timespan from '../../Timespan';
 import useSortable from '../../useSortable';
 import AppRootContext from '../../AppRootContext';

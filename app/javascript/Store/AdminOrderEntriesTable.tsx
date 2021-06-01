@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import Select from 'react-select';
 import { ApolloError } from '@apollo/client';
+import { parseIntOrNull, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { parseIntOrNull } from '../ValueUtils';
 import InPlaceMoneyEditor from './InPlaceMoneyEditor';
-import { useConfirm } from '../ModalDialogs/Confirm';
-import ErrorDisplay from '../ErrorDisplay';
 import pluralizeWithCount from '../pluralizeWithCount';
 import ProductSelect from '../BuiltInFormControls/ProductSelect';
 import useAsyncFunction from '../useAsyncFunction';

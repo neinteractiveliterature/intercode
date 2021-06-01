@@ -3,17 +3,19 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
+import {
+  useModal,
+  useUniqueId,
+  MultipleChoiceInput,
+  parseIntOrNull,
+  ErrorDisplay,
+} from '@neinteractiveliterature/litform';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
 import { FormEditorQuery } from './queries';
 import useCollapse from '../NavigationBar/useCollapse';
-import useUniqueId from '../useUniqueId';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import useModal from '../ModalDialogs/useModal';
-import { parseIntOrNull } from '../ValueUtils';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 import { useMoveFormItemMutation } from './mutations.generated';
 
 function StandardItemMetadata() {

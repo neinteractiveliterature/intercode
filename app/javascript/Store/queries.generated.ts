@@ -262,7 +262,7 @@ export function useAdminOrdersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookO
         }
 export type AdminOrdersQueryHookResult = ReturnType<typeof useAdminOrdersQuery>;
 export type AdminOrdersQueryLazyQueryHookResult = ReturnType<typeof useAdminOrdersQueryLazyQuery>;
-export type AdminOrdersQueryDataResult = Apollo.QueryResult<AdminOrdersQueryData, AdminOrdersQueryVariables>;
+export type AdminOrdersQueryQueryResult = Apollo.QueryResult<AdminOrdersQueryData, AdminOrdersQueryVariables>;
 export const AdminProductsQueryDocument = gql`
     query AdminProductsQuery {
   convention: assertConvention {
@@ -307,7 +307,7 @@ export function useAdminProductsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type AdminProductsQueryHookResult = ReturnType<typeof useAdminProductsQuery>;
 export type AdminProductsQueryLazyQueryHookResult = ReturnType<typeof useAdminProductsQueryLazyQuery>;
-export type AdminProductsQueryDataResult = Apollo.QueryResult<AdminProductsQueryData, AdminProductsQueryVariables>;
+export type AdminProductsQueryQueryResult = Apollo.QueryResult<AdminProductsQueryData, AdminProductsQueryVariables>;
 export const AdminStoreAbilityQueryDocument = gql`
     query AdminStoreAbilityQuery {
   currentAbility {
@@ -346,7 +346,7 @@ export function useAdminStoreAbilityQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type AdminStoreAbilityQueryHookResult = ReturnType<typeof useAdminStoreAbilityQuery>;
 export type AdminStoreAbilityQueryLazyQueryHookResult = ReturnType<typeof useAdminStoreAbilityQueryLazyQuery>;
-export type AdminStoreAbilityQueryDataResult = Apollo.QueryResult<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>;
+export type AdminStoreAbilityQueryQueryResult = Apollo.QueryResult<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>;
 export const CartQueryDocument = gql`
     query CartQuery {
   myProfile {
@@ -389,7 +389,7 @@ export function useCartQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
         }
 export type CartQueryHookResult = ReturnType<typeof useCartQuery>;
 export type CartQueryLazyQueryHookResult = ReturnType<typeof useCartQueryLazyQuery>;
-export type CartQueryDataResult = Apollo.QueryResult<CartQueryData, CartQueryVariables>;
+export type CartQueryQueryResult = Apollo.QueryResult<CartQueryData, CartQueryVariables>;
 export const OrderHistoryQueryDocument = gql`
     query OrderHistoryQuery {
   convention: assertConvention {
@@ -474,7 +474,7 @@ export function useOrderHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
         }
 export type OrderHistoryQueryHookResult = ReturnType<typeof useOrderHistoryQuery>;
 export type OrderHistoryQueryLazyQueryHookResult = ReturnType<typeof useOrderHistoryQueryLazyQuery>;
-export type OrderHistoryQueryDataResult = Apollo.QueryResult<OrderHistoryQueryData, OrderHistoryQueryVariables>;
+export type OrderHistoryQueryQueryResult = Apollo.QueryResult<OrderHistoryQueryData, OrderHistoryQueryVariables>;
 export const OrderSummaryQueryDocument = gql`
     query OrderSummaryQuery {
   convention: assertConvention {
@@ -524,7 +524,7 @@ export function useOrderSummaryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
         }
 export type OrderSummaryQueryHookResult = ReturnType<typeof useOrderSummaryQuery>;
 export type OrderSummaryQueryLazyQueryHookResult = ReturnType<typeof useOrderSummaryQueryLazyQuery>;
-export type OrderSummaryQueryDataResult = Apollo.QueryResult<OrderSummaryQueryData, OrderSummaryQueryVariables>;
+export type OrderSummaryQueryQueryResult = Apollo.QueryResult<OrderSummaryQueryData, OrderSummaryQueryVariables>;
 export const OrderFormProductQueryDocument = gql`
     query OrderFormProductQuery($productId: Int!) {
   currentUser {
@@ -579,7 +579,7 @@ export function useOrderFormProductQueryLazyQuery(baseOptions?: Apollo.LazyQuery
         }
 export type OrderFormProductQueryHookResult = ReturnType<typeof useOrderFormProductQuery>;
 export type OrderFormProductQueryLazyQueryHookResult = ReturnType<typeof useOrderFormProductQueryLazyQuery>;
-export type OrderFormProductQueryDataResult = Apollo.QueryResult<OrderFormProductQueryData, OrderFormProductQueryVariables>;
+export type OrderFormProductQueryQueryResult = Apollo.QueryResult<OrderFormProductQueryData, OrderFormProductQueryVariables>;
 export const CurrentPendingOrderPaymentIntentClientSecretQueryDocument = gql`
     query CurrentPendingOrderPaymentIntentClientSecretQuery {
   currentPendingOrderPaymentIntentClientSecret
@@ -611,4 +611,4 @@ export function useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery(ba
         }
 export type CurrentPendingOrderPaymentIntentClientSecretQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQuery>;
 export type CurrentPendingOrderPaymentIntentClientSecretQueryLazyQueryHookResult = ReturnType<typeof useCurrentPendingOrderPaymentIntentClientSecretQueryLazyQuery>;
-export type CurrentPendingOrderPaymentIntentClientSecretQueryDataResult = Apollo.QueryResult<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>;
+export type CurrentPendingOrderPaymentIntentClientSecretQueryQueryResult = Apollo.QueryResult<CurrentPendingOrderPaymentIntentClientSecretQueryData, CurrentPendingOrderPaymentIntentClientSecretQueryVariables>;

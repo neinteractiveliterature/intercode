@@ -298,7 +298,7 @@ export function useEventProposalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type EventProposalQueryHookResult = ReturnType<typeof useEventProposalQuery>;
 export type EventProposalQueryLazyQueryHookResult = ReturnType<typeof useEventProposalQueryLazyQuery>;
-export type EventProposalQueryDataResult = Apollo.QueryResult<EventProposalQueryData, EventProposalQueryVariables>;
+export type EventProposalQueryQueryResult = Apollo.QueryResult<EventProposalQueryData, EventProposalQueryVariables>;
 export const EventProposalQueryWithOwnerDocument = gql`
     query EventProposalQueryWithOwner($eventProposalId: Int!) {
   convention: assertConvention {
@@ -386,7 +386,7 @@ export function useEventProposalAdminNotesQueryLazyQuery(baseOptions?: Apollo.La
         }
 export type EventProposalAdminNotesQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQuery>;
 export type EventProposalAdminNotesQueryLazyQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQueryLazyQuery>;
-export type EventProposalAdminNotesQueryDataResult = Apollo.QueryResult<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>;
+export type EventProposalAdminNotesQueryQueryResult = Apollo.QueryResult<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>;
 export const ProposeEventButtonQueryDocument = gql`
     query ProposeEventButtonQuery {
   myProfile {
@@ -457,7 +457,7 @@ export function useProposeEventButtonQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type ProposeEventButtonQueryHookResult = ReturnType<typeof useProposeEventButtonQuery>;
 export type ProposeEventButtonQueryLazyQueryHookResult = ReturnType<typeof useProposeEventButtonQueryLazyQuery>;
-export type ProposeEventButtonQueryDataResult = Apollo.QueryResult<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>;
+export type ProposeEventButtonQueryQueryResult = Apollo.QueryResult<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>;
 export const EventProposalsAdminQueryDocument = gql`
     query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
   convention: assertConvention {
@@ -536,7 +536,7 @@ export function useEventProposalsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQu
         }
 export type EventProposalsAdminQueryHookResult = ReturnType<typeof useEventProposalsAdminQuery>;
 export type EventProposalsAdminQueryLazyQueryHookResult = ReturnType<typeof useEventProposalsAdminQueryLazyQuery>;
-export type EventProposalsAdminQueryDataResult = Apollo.QueryResult<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>;
+export type EventProposalsAdminQueryQueryResult = Apollo.QueryResult<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>;
 export const EventProposalHistoryQueryDocument = gql`
     query EventProposalHistoryQuery($id: Int!) {
   convention: assertConvention {
@@ -607,4 +607,4 @@ export function useEventProposalHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQ
         }
 export type EventProposalHistoryQueryHookResult = ReturnType<typeof useEventProposalHistoryQuery>;
 export type EventProposalHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventProposalHistoryQueryLazyQuery>;
-export type EventProposalHistoryQueryDataResult = Apollo.QueryResult<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>;
+export type EventProposalHistoryQueryQueryResult = Apollo.QueryResult<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>;

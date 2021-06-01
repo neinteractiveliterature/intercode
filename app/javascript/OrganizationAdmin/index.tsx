@@ -1,12 +1,11 @@
 import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EditOrganizationRole from './EditOrganizationRole';
 import NewOrganizationRole from './NewOrganizationRole';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
-import ErrorDisplay from '../ErrorDisplay';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
-import LoadingIndicator from '../LoadingIndicator';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useOrganizationAdminOrganizationsQuery } from './queries.generated';

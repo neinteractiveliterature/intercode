@@ -217,7 +217,7 @@ export function useReportsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookO
         }
 export type ReportsMenuQueryHookResult = ReturnType<typeof useReportsMenuQuery>;
 export type ReportsMenuQueryLazyQueryHookResult = ReturnType<typeof useReportsMenuQueryLazyQuery>;
-export type ReportsMenuQueryDataResult = Apollo.QueryResult<ReportsMenuQueryData, ReportsMenuQueryVariables>;
+export type ReportsMenuQueryQueryResult = Apollo.QueryResult<ReportsMenuQueryData, ReportsMenuQueryVariables>;
 export const AttendanceByPaymentAmountQueryDocument = gql`
     query AttendanceByPaymentAmountQuery {
   convention: assertConvention {
@@ -276,7 +276,7 @@ export function useAttendanceByPaymentAmountQueryLazyQuery(baseOptions?: Apollo.
         }
 export type AttendanceByPaymentAmountQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQuery>;
 export type AttendanceByPaymentAmountQueryLazyQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQueryLazyQuery>;
-export type AttendanceByPaymentAmountQueryDataResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>;
+export type AttendanceByPaymentAmountQueryQueryResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>;
 export const EventProvidedTicketsQueryDocument = gql`
     query EventProvidedTicketsQuery {
   convention: assertConvention {
@@ -330,7 +330,7 @@ export function useEventProvidedTicketsQueryLazyQuery(baseOptions?: Apollo.LazyQ
         }
 export type EventProvidedTicketsQueryHookResult = ReturnType<typeof useEventProvidedTicketsQuery>;
 export type EventProvidedTicketsQueryLazyQueryHookResult = ReturnType<typeof useEventProvidedTicketsQueryLazyQuery>;
-export type EventProvidedTicketsQueryDataResult = Apollo.QueryResult<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>;
+export type EventProvidedTicketsQueryQueryResult = Apollo.QueryResult<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>;
 export const EventsByChoiceQueryDocument = gql`
     query EventsByChoiceQuery {
   convention: assertConvention {
@@ -377,7 +377,7 @@ export function useEventsByChoiceQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
         }
 export type EventsByChoiceQueryHookResult = ReturnType<typeof useEventsByChoiceQuery>;
 export type EventsByChoiceQueryLazyQueryHookResult = ReturnType<typeof useEventsByChoiceQueryLazyQuery>;
-export type EventsByChoiceQueryDataResult = Apollo.QueryResult<EventsByChoiceQueryData, EventsByChoiceQueryVariables>;
+export type EventsByChoiceQueryQueryResult = Apollo.QueryResult<EventsByChoiceQueryData, EventsByChoiceQueryVariables>;
 export const SignupCountsByStateQueryDocument = gql`
     query SignupCountsByStateQuery {
   convention: assertConvention {
@@ -415,7 +415,7 @@ export function useSignupCountsByStateQueryLazyQuery(baseOptions?: Apollo.LazyQu
         }
 export type SignupCountsByStateQueryHookResult = ReturnType<typeof useSignupCountsByStateQuery>;
 export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useSignupCountsByStateQueryLazyQuery>;
-export type SignupCountsByStateQueryDataResult = Apollo.QueryResult<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>;
+export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
     query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int, $sort: [SortInput!]) {
   convention: assertConvention {
@@ -513,4 +513,4 @@ export function useSignupSpySignupChangesQueryLazyQuery(baseOptions?: Apollo.Laz
         }
 export type SignupSpySignupChangesQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQuery>;
 export type SignupSpySignupChangesQueryLazyQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQueryLazyQuery>;
-export type SignupSpySignupChangesQueryDataResult = Apollo.QueryResult<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>;
+export type SignupSpySignupChangesQueryQueryResult = Apollo.QueryResult<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>;

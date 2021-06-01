@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Filters } from 'react-table';
+import { parseIntOrNull } from '@neinteractiveliterature/litform';
+
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
-import { parseIntOrNull } from '../../ValueUtils';
 import { RATING_OPTIONS } from '../EventList/EventListMyRatingSelector';
 
 const filterCodecs = buildFieldFilterCodecs({

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useToastOnNextPageLoad } from '../UIComponents/ToastContext';
+import { useToastOnNextPageLoad } from '@neinteractiveliterature/litform';
 
 export default function useAfterSessionChange() {
   const toastOnNextPageLoad = useToastOnNextPageLoad();
@@ -25,7 +25,7 @@ export default function useAfterSessionChange() {
         window.location.href = destUrl.toString();
       }
     },
-    [],
+    [toastOnNextPageLoad],
   );
 
   return afterSessionChange;

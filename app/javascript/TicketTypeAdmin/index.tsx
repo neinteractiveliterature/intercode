@@ -1,10 +1,10 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EditTicketType from './EditTicketType';
 import NewTicketType from './NewTicketType';
 import TicketTypesList from './TicketTypesList';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useAdminTicketTypesQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypeAdmin({ data }) {

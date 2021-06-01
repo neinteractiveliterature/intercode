@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
+import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 
-import useUniqueId from '../useUniqueId';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 
 export type ApplyCouponControlProps = {
   createCouponApplication: (code: string) => Promise<any>;

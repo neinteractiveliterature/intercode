@@ -1,14 +1,16 @@
 import * as React from 'react';
+import {
+  LoadQueryWrapper,
+  ErrorDisplay,
+  useConfirm,
+  parseIntOrNull,
+} from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import formatMoney from '../formatMoney';
 import describeCoupon from './describeCoupon';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import ApplyCouponControl from './ApplyCouponControl';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
-import { CartQueryData, useCartQuery } from './queries.generated';
-import { parseIntOrNull } from '../ValueUtils';
+import { CartQueryData, CartQueryVariables, useCartQuery } from './queries.generated';
 
 type OrderType = NonNullable<CartQueryData['currentPendingOrder']>;
 type OrderEntryType = OrderType['order_entries'][0];
@@ -21,7 +23,7 @@ export type CartContentsProps = {
   checkOutButton?: React.ReactNode;
 };
 
-export default LoadQueryWrapper<CartQueryData, CartContentsProps>(
+export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsProps>(
   useCartQuery,
   function CartContents({
     data,

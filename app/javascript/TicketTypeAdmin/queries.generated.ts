@@ -92,4 +92,4 @@ export function useAdminTicketTypesQueryLazyQuery(baseOptions?: Apollo.LazyQuery
         }
 export type AdminTicketTypesQueryHookResult = ReturnType<typeof useAdminTicketTypesQuery>;
 export type AdminTicketTypesQueryLazyQueryHookResult = ReturnType<typeof useAdminTicketTypesQueryLazyQuery>;
-export type AdminTicketTypesQueryDataResult = Apollo.QueryResult<AdminTicketTypesQueryData, AdminTicketTypesQueryVariables>;
+export type AdminTicketTypesQueryQueryResult = Apollo.QueryResult<AdminTicketTypesQueryData, AdminTicketTypesQueryVariables>;

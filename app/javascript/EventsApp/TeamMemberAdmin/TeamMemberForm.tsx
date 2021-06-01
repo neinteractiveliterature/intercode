@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import {
+  usePropertySetters,
+  useFunctionalStateUpdater,
+  BootstrapFormCheckbox,
+  MultipleChoiceInput,
+  HelpPopover,
+} from '@neinteractiveliterature/litform';
 
-import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
-import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
-import HelpPopover from '../../UIComponents/HelpPopover';
-import { usePropertySetters, useFunctionalStateUpdater } from '../../usePropertySetters';
 import { TeamMembersQueryData } from './queries.generated';
 
 export type TeamMemberFormProps = {

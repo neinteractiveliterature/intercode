@@ -7,10 +7,9 @@ import keyBy from 'lodash/keyBy';
 import sum from 'lodash/sum';
 // @ts-expect-error
 import { capitalize } from 'inflected';
+import { LoadQueryWrapper, titleSort } from '@neinteractiveliterature/litform';
 
-import { titleSort } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useEventsByChoiceQuery } from './queries.generated';
 
 type ProcessedChoiceCount = {

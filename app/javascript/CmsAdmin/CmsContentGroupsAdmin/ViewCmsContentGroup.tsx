@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useCmsContentGroupsAdminQuery } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 

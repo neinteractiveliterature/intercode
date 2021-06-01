@@ -1,4 +1,4 @@
-import { parseIntOrNull, parseFloatOrNull } from '../ValueUtils';
+import { parseIntOrNull, parseFloatOrNull } from '@neinteractiveliterature/litform';
 
 export function encodeStringArray(value?: string[] | null) {
   const encoded = (value || []).join(',');

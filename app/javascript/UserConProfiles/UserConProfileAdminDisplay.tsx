@@ -1,16 +1,14 @@
 import { useCallback, useMemo } from 'react';
 import { humanize } from 'inflected';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import { useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../ModalDialogs/Confirm';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
-import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 import Gravatar from '../Gravatar';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useDeleteUserConProfileMutation } from './mutations.generated';
 import { useUserConProfileAdminQuery } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';

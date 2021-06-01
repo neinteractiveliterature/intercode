@@ -1,11 +1,13 @@
 import { useContext } from 'react';
+import {
+  BootstrapFormInput,
+  MultipleChoiceInput,
+  useUniqueId,
+  BootstrapFormCheckbox,
+} from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater, MultipleChoiceFormItem } from '../FormItemUtils';
-import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
-import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceOptionRow from './MultipleChoiceOptionRow';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import useArrayProperty from './useArrayProperty';

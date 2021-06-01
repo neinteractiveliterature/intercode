@@ -1,5 +1,6 @@
 import { useMemo, useState, useCallback } from 'react';
-import { parseIntOrNull } from '../ValueUtils';
+import { parseIntOrNull } from '@neinteractiveliterature/litform';
+
 import {
   getEventFormForEventCategoryId,
   getProposalFormForEventCategoryId,
@@ -38,9 +39,7 @@ export default function useEventCategorySelection<
   convention,
   initialEventCategoryId,
   selectableCategoryIds,
-}: UseEventCategorySelectionOptions<EventCategoryType>): UseEventCategorySelectionResult<
-  EventCategoryType
-> {
+}: UseEventCategorySelectionOptions<EventCategoryType>): UseEventCategorySelectionResult<EventCategoryType> {
   const selectableCategories = useMemo(
     () =>
       selectableCategoryIds

@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
+import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useUpdateOrganizationRoleMutation } from './mutations.generated';
 

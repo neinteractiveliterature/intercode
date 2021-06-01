@@ -173,7 +173,7 @@ export function useConventionAdminConventionQueryLazyQuery(baseOptions?: Apollo.
         }
 export type ConventionAdminConventionQueryHookResult = ReturnType<typeof useConventionAdminConventionQuery>;
 export type ConventionAdminConventionQueryLazyQueryHookResult = ReturnType<typeof useConventionAdminConventionQueryLazyQuery>;
-export type ConventionAdminConventionQueryDataResult = Apollo.QueryResult<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>;
+export type ConventionAdminConventionQueryQueryResult = Apollo.QueryResult<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>;
 export const StripeAccountOnboardingLinkQueryDocument = gql`
     query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
   convention: assertConvention {
@@ -212,4 +212,4 @@ export function useStripeAccountOnboardingLinkQueryLazyQuery(baseOptions?: Apoll
         }
 export type StripeAccountOnboardingLinkQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQuery>;
 export type StripeAccountOnboardingLinkQueryLazyQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQueryLazyQuery>;
-export type StripeAccountOnboardingLinkQueryDataResult = Apollo.QueryResult<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>;
+export type StripeAccountOnboardingLinkQueryQueryResult = Apollo.QueryResult<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>;

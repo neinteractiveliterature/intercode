@@ -101,7 +101,7 @@ export function useDefaultEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type DefaultEventsQueryHookResult = ReturnType<typeof useDefaultEventsQuery>;
 export type DefaultEventsQueryLazyQueryHookResult = ReturnType<typeof useDefaultEventsQueryLazyQuery>;
-export type DefaultEventsQueryDataResult = Apollo.QueryResult<DefaultEventsQueryData, DefaultEventsQueryVariables>;
+export type DefaultEventsQueryQueryResult = Apollo.QueryResult<DefaultEventsQueryData, DefaultEventsQueryVariables>;
 export const DefaultUserConProfilesQueryDocument = gql`
     query DefaultUserConProfilesQuery($name: String) {
   convention {
@@ -143,7 +143,7 @@ export function useDefaultUserConProfilesQueryLazyQuery(baseOptions?: Apollo.Laz
         }
 export type DefaultUserConProfilesQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQuery>;
 export type DefaultUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQueryLazyQuery>;
-export type DefaultUserConProfilesQueryDataResult = Apollo.QueryResult<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>;
+export type DefaultUserConProfilesQueryQueryResult = Apollo.QueryResult<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>;
 export const DefaultUsersQueryDocument = gql`
     query DefaultUsersQuery($name: String) {
   users_paginated(filters: {name: $name}, per_page: 50) {
@@ -182,4 +182,4 @@ export function useDefaultUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
         }
 export type DefaultUsersQueryHookResult = ReturnType<typeof useDefaultUsersQuery>;
 export type DefaultUsersQueryLazyQueryHookResult = ReturnType<typeof useDefaultUsersQueryLazyQuery>;
-export type DefaultUsersQueryDataResult = Apollo.QueryResult<DefaultUsersQueryData, DefaultUsersQueryVariables>;
+export type DefaultUsersQueryQueryResult = Apollo.QueryResult<DefaultUsersQueryData, DefaultUsersQueryVariables>;

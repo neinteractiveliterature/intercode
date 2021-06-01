@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import {
   UserActivityAlertsAdminQueryData,
   useUserActivityAlertsAdminQuery,
 } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.ReactNode) {
   if (criteria.length > 0) {

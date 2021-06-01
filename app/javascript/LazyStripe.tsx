@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode, useLayoutEffect } from 
 import { loadStripe } from '@stripe/stripe-js/pure';
 import type { Stripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import ErrorDisplay from './ErrorDisplay';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 export type LazyStripeContextValue = {
   accountId?: string;

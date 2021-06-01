@@ -114,4 +114,4 @@ export function useEventHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
         }
 export type EventHistoryQueryHookResult = ReturnType<typeof useEventHistoryQuery>;
 export type EventHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventHistoryQueryLazyQuery>;
-export type EventHistoryQueryDataResult = Apollo.QueryResult<EventHistoryQueryData, EventHistoryQueryVariables>;
+export type EventHistoryQueryQueryResult = Apollo.QueryResult<EventHistoryQueryData, EventHistoryQueryVariables>;

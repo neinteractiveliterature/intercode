@@ -1,9 +1,8 @@
 import sortBy from 'lodash/sortBy';
 import { Link } from 'react-router-dom';
+import { LoadQueryWrapper, sortByLocaleString } from '@neinteractiveliterature/litform';
 
-import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
   OrganizationAdminOrganizationsQueryData,
   useOrganizationAdminOrganizationsQuery,

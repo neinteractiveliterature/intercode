@@ -120,4 +120,4 @@ export function useStaffPositionsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
         }
 export type StaffPositionsQueryHookResult = ReturnType<typeof useStaffPositionsQuery>;
 export type StaffPositionsQueryLazyQueryHookResult = ReturnType<typeof useStaffPositionsQueryLazyQuery>;
-export type StaffPositionsQueryDataResult = Apollo.QueryResult<StaffPositionsQueryData, StaffPositionsQueryVariables>;
+export type StaffPositionsQueryQueryResult = Apollo.QueryResult<StaffPositionsQueryData, StaffPositionsQueryVariables>;

@@ -129,4 +129,4 @@ export function useEventListEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type EventListEventsQueryHookResult = ReturnType<typeof useEventListEventsQuery>;
 export type EventListEventsQueryLazyQueryHookResult = ReturnType<typeof useEventListEventsQueryLazyQuery>;
-export type EventListEventsQueryDataResult = Apollo.QueryResult<EventListEventsQueryData, EventListEventsQueryVariables>;
+export type EventListEventsQueryQueryResult = Apollo.QueryResult<EventListEventsQueryData, EventListEventsQueryVariables>;

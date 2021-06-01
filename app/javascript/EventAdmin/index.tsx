@@ -2,20 +2,22 @@ import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
+import {
+  ErrorDisplay,
+  PageLoadingIndicator,
+  useLitformPopperWithAutoClosing,
+} from '@neinteractiveliterature/litform';
 
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
-import ErrorDisplay from '../ErrorDisplay';
 import sortEventCategories from './sortEventCategories';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useEventAdminEventsQuery } from './queries.generated';
-import { useIntercodePopperWithAutoClosing } from '../UIComponents/PopperUtils';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
@@ -39,7 +41,7 @@ function EventAdmin() {
   const [menu, setMenu] = useState<HTMLDivElement | null>(null);
   const [menuDropdown, setMenuDropdown] = useState<HTMLLIElement | null>(null);
 
-  const { styles, attributes } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes } = useLitformPopperWithAutoClosing(
     menu,
     menuDropdown,
     undefined,

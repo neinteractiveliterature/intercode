@@ -1,10 +1,10 @@
 import { useCallback, ChangeEvent } from 'react';
 import classNames from 'classnames';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { DateFormItem } from '../../FormAdmin/FormItemUtils';
-import useUniqueId from '../../useUniqueId';
 import CaptionLabel from './CaptionLabel';
 
 export type DateItemInputProps = CommonFormItemInputProps<DateFormItem>;

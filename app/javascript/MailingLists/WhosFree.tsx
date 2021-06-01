@@ -1,10 +1,9 @@
 import { useState } from 'react';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import TabbedMailingList from './TabbedMailingList';
 import Timespan, { FiniteTimespan } from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
-import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
 import { useWhosFreeQuery } from './queries.generated';
 

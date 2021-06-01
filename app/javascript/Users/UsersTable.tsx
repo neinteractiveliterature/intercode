@@ -1,5 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { Column } from 'react-table';
+import { useModal } from '@neinteractiveliterature/litform';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';
@@ -7,7 +8,6 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
-import useModal from '../ModalDialogs/useModal';
 import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
 import {

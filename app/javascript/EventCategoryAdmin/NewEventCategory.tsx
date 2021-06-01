@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import { CreateEventCategory } from './mutations';
 import { EventCategoryAdminQuery } from './queries';
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
-import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useEventCategoryAdminQuery } from './queries.generated';
 
 function NewEventCategory() {

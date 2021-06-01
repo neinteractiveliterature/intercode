@@ -1,11 +1,10 @@
 import { Route, Switch, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EditSignup from './EditSignup';
 import SignupsIndex from './SignupsIndex';
-import ErrorDisplay from '../../ErrorDisplay';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useSignupAdminEventQuery } from './queries.generated';
 
 export type SignupAdminProps = {

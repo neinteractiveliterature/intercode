@@ -1,22 +1,24 @@
 import { useState, useContext } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
+import {
+  ErrorDisplay,
+  MultipleChoiceInput,
+  useUniqueId,
+  BooleanInput,
+  BootstrapFormSelect,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
 import { AdminProductsQuery } from '../queries';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
-import ErrorDisplay from '../../ErrorDisplay';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import useAsyncFunction from '../../useAsyncFunction';
-import useUniqueId from '../../useUniqueId';
 import PricingStructureInput from './PricingStructureInput';
 import buildProductInput from '../buildProductInput';
-import BooleanInput from '../../BuiltInFormControls/BooleanInput';
-import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import AppRootContext from '../../AppRootContext';
 import { AdminProductsQueryData } from '../queries.generated';
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations.generated';
-import { usePropertySetters } from '../../usePropertySetters';
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
 import { PricingStrategy } from '../../graphqlTypes.generated';

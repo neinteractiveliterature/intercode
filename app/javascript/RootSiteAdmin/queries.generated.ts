@@ -119,4 +119,4 @@ export function useRootSiteAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type RootSiteAdminQueryHookResult = ReturnType<typeof useRootSiteAdminQuery>;
 export type RootSiteAdminQueryLazyQueryHookResult = ReturnType<typeof useRootSiteAdminQueryLazyQuery>;
-export type RootSiteAdminQueryDataResult = Apollo.QueryResult<RootSiteAdminQueryData, RootSiteAdminQueryVariables>;
+export type RootSiteAdminQueryQueryResult = Apollo.QueryResult<RootSiteAdminQueryData, RootSiteAdminQueryVariables>;

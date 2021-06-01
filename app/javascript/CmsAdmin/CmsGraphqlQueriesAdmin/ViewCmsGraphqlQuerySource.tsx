@@ -1,9 +1,8 @@
 import { useParams } from 'react-router-dom';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
-import ErrorDisplay from '../../ErrorDisplay';
 
 import 'graphiql/graphiql.css';
 import { useCmsGraphqlQueriesQuery } from './queries.generated';

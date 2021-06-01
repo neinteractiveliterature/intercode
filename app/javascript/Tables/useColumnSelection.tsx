@@ -2,8 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { Column } from 'react-table';
 import uniq from 'lodash/uniq';
 import { useHistory, useLocation } from 'react-router-dom';
-
-import { notEmpty } from '../ValueUtils';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 export type UseColumnSelectionOptions<RowType extends object> = {
   alwaysVisibleColumns?: string[];

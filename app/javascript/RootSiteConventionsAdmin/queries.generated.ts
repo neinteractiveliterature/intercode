@@ -146,7 +146,7 @@ export function useRootSiteConventionsAdminTableQueryLazyQuery(baseOptions?: Apo
         }
 export type RootSiteConventionsAdminTableQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQuery>;
 export type RootSiteConventionsAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQueryLazyQuery>;
-export type RootSiteConventionsAdminTableQueryDataResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>;
+export type RootSiteConventionsAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>;
 export const ConventionDisplayQueryDocument = gql`
     query ConventionDisplayQuery($id: Int!) {
   convention: conventionById(id: $id) {
@@ -182,7 +182,7 @@ export function useConventionDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type ConventionDisplayQueryHookResult = ReturnType<typeof useConventionDisplayQuery>;
 export type ConventionDisplayQueryLazyQueryHookResult = ReturnType<typeof useConventionDisplayQueryLazyQuery>;
-export type ConventionDisplayQueryDataResult = Apollo.QueryResult<ConventionDisplayQueryData, ConventionDisplayQueryVariables>;
+export type ConventionDisplayQueryQueryResult = Apollo.QueryResult<ConventionDisplayQueryData, ConventionDisplayQueryVariables>;
 export const NewConventionModalQueryDocument = gql`
     query NewConventionModalQuery {
   organizations {
@@ -217,4 +217,4 @@ export function useNewConventionModalQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type NewConventionModalQueryHookResult = ReturnType<typeof useNewConventionModalQuery>;
 export type NewConventionModalQueryLazyQueryHookResult = ReturnType<typeof useNewConventionModalQueryLazyQuery>;
-export type NewConventionModalQueryDataResult = Apollo.QueryResult<NewConventionModalQueryData, NewConventionModalQueryVariables>;
+export type NewConventionModalQueryQueryResult = Apollo.QueryResult<NewConventionModalQueryData, NewConventionModalQueryVariables>;

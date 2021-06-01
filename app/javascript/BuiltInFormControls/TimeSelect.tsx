@@ -1,8 +1,8 @@
 import { ReactNode, useMemo } from 'react';
 import * as React from 'react';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
-import useUniqueId from '../useUniqueId';
 import { FiniteTimespan } from '../Timespan';
 import { useAppDateTimeFormat } from '../TimeUtils';
 

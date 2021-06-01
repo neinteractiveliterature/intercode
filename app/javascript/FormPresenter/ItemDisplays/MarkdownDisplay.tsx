@@ -1,5 +1,4 @@
-import LoadingIndicator from '../../LoadingIndicator';
-import ErrorDisplay from '../../ErrorDisplay';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { usePreviewMarkdownQuery } from '../../BuiltInFormControls/previewQueries.generated';
 
 export type MarkdownDisplayProps = {

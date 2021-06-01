@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import { LoadQueryWrapper, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserActivityAlert } from './mutations';
-import ErrorDisplay from '../ErrorDisplay';
 import { UserActivityAlertsAdminQuery } from './queries';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import useAsyncFunction from '../useAsyncFunction';
@@ -14,7 +13,6 @@ import { useDeleteMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
 import { useUserActivityAlertQuery } from './queries.generated';
 import { useUpdateUserActivityAlertMutation } from './mutations.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 function useLoadUserActivityAlert() {
   const userActivityAlertId = Number.parseInt(useParams<{ id: string }>().id, 10);

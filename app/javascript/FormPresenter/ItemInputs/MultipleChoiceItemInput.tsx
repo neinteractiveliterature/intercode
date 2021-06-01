@@ -1,7 +1,8 @@
 import { useMemo, useCallback, ChangeEvent } from 'react';
 import classNames from 'classnames';
+import { ChoiceSet } from '@neinteractiveliterature/litform';
+
 import CaptionLegend from './CaptionLegend';
-import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
 

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { CmsGraphqlQueriesQuery } from './queries';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CreateCmsGraphqlQuery } from './mutations';
-import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import { useCreateMutation } from '../../MutationUtils';

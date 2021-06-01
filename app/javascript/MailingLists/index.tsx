@@ -1,4 +1,5 @@
 import { Link, Route, Switch } from 'react-router-dom';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EventProposers from './EventProposers';
 import TicketedAttendees from './TicketedAttendees';
@@ -7,7 +8,6 @@ import UsersWithPendingBio from './UsersWithPendingBio';
 import WaitlistMailingLists from './WaitlistMailingLists';
 import WhosFree from './WhosFree';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useMailingListsMenuQuery } from './queries.generated';
 
 const MailingListsMenuWrapper = LoadQueryWrapper(

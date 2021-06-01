@@ -1,9 +1,9 @@
 import { useContext, useRef, useEffect } from 'react';
 import * as React from 'react';
 import type { LngLat, Map, Marker } from 'mapbox-gl';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import MapboxContext from '../MapboxContext';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 
 export type MapboxMapProps = {
   center?: LngLat;

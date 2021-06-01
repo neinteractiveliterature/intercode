@@ -1,7 +1,6 @@
-import ErrorDisplay from '../ErrorDisplay';
-import { useConfirm } from '../ModalDialogs/Confirm';
+import { useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useEventAdminEventsQuery } from './queries.generated';
 import { useRestoreDroppedEventMutation } from './mutations.generated';
 

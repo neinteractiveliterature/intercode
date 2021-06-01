@@ -78,4 +78,4 @@ export function useCmsFilesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type CmsFilesAdminQueryHookResult = ReturnType<typeof useCmsFilesAdminQuery>;
 export type CmsFilesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryLazyQuery>;
-export type CmsFilesAdminQueryDataResult = Apollo.QueryResult<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>;
+export type CmsFilesAdminQueryQueryResult = Apollo.QueryResult<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>;

@@ -132,7 +132,7 @@ export function useTicketPurchaseFormQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type TicketPurchaseFormQueryHookResult = ReturnType<typeof useTicketPurchaseFormQuery>;
 export type TicketPurchaseFormQueryLazyQueryHookResult = ReturnType<typeof useTicketPurchaseFormQueryLazyQuery>;
-export type TicketPurchaseFormQueryDataResult = Apollo.QueryResult<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>;
+export type TicketPurchaseFormQueryQueryResult = Apollo.QueryResult<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>;
 export const MyTicketDisplayQueryDocument = gql`
     query MyTicketDisplayQuery {
   convention: assertConvention {
@@ -197,4 +197,4 @@ export function useMyTicketDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type MyTicketDisplayQueryHookResult = ReturnType<typeof useMyTicketDisplayQuery>;
 export type MyTicketDisplayQueryLazyQueryHookResult = ReturnType<typeof useMyTicketDisplayQueryLazyQuery>;
-export type MyTicketDisplayQueryDataResult = Apollo.QueryResult<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>;
+export type MyTicketDisplayQueryQueryResult = Apollo.QueryResult<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>;

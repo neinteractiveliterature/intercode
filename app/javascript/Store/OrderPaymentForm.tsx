@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { CardElement } from '@stripe/react-stripe-js';
-
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 export type PaymentDetails = {
   name: string;

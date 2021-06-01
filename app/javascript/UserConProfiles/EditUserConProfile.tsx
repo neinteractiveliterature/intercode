@@ -1,14 +1,13 @@
 import { useState, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from './buildFormStateFromData';
-import ErrorDisplay from '../ErrorDisplay';
 import UserConProfileForm from './UserConProfileForm';
 import { UserConProfileAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import {
   useUserConProfileQuery,
   UserConProfileQueryData,

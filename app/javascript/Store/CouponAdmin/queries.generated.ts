@@ -95,4 +95,4 @@ export function useAdminCouponsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
         }
 export type AdminCouponsQueryHookResult = ReturnType<typeof useAdminCouponsQuery>;
 export type AdminCouponsQueryLazyQueryHookResult = ReturnType<typeof useAdminCouponsQueryLazyQuery>;
-export type AdminCouponsQueryDataResult = Apollo.QueryResult<AdminCouponsQueryData, AdminCouponsQueryVariables>;
+export type AdminCouponsQueryQueryResult = Apollo.QueryResult<AdminCouponsQueryData, AdminCouponsQueryVariables>;

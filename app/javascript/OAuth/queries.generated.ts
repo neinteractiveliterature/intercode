@@ -65,7 +65,7 @@ export function useOAuthAuthorizationPromptQueryLazyQuery(baseOptions?: Apollo.L
         }
 export type OAuthAuthorizationPromptQueryHookResult = ReturnType<typeof useOAuthAuthorizationPromptQuery>;
 export type OAuthAuthorizationPromptQueryLazyQueryHookResult = ReturnType<typeof useOAuthAuthorizationPromptQueryLazyQuery>;
-export type OAuthAuthorizationPromptQueryDataResult = Apollo.QueryResult<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>;
+export type OAuthAuthorizationPromptQueryQueryResult = Apollo.QueryResult<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>;
 export const OAuthAuthorizedApplicationsQueryDocument = gql`
     query OAuthAuthorizedApplicationsQuery {
   myAuthorizedApplications {
@@ -101,4 +101,4 @@ export function useOAuthAuthorizedApplicationsQueryLazyQuery(baseOptions?: Apoll
         }
 export type OAuthAuthorizedApplicationsQueryHookResult = ReturnType<typeof useOAuthAuthorizedApplicationsQuery>;
 export type OAuthAuthorizedApplicationsQueryLazyQueryHookResult = ReturnType<typeof useOAuthAuthorizedApplicationsQueryLazyQuery>;
-export type OAuthAuthorizedApplicationsQueryDataResult = Apollo.QueryResult<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>;
+export type OAuthAuthorizedApplicationsQueryQueryResult = Apollo.QueryResult<OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryVariables>;

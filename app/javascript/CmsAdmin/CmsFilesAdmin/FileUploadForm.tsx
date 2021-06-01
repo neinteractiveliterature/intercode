@@ -2,14 +2,13 @@ import { useState, useCallback } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
+import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 
 import { CmsFilesAdminQuery } from './queries';
 import { CreateCmsFile } from './mutations';
 import FilePreview from './FilePreview';
-import useUniqueId from '../../useUniqueId';
 import { useCreateMutation } from '../../MutationUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import ErrorDisplay from '../../ErrorDisplay';
 import { CmsFile } from '../../graphqlTypes.generated';
 import { CmsFilesAdminQueryData, CmsFilesAdminQueryVariables } from './queries.generated';
 import { CreateCmsFileMutationVariables, CreateCmsFileMutationData } from './mutations.generated';
@@ -91,6 +90,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
             <label className="form-label" htmlFor={fileInputId} aria-hidden>
               {t('cms.fileUploadForm.fileInputLabel', 'File to upload')}
             </label>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <input
               className="form-control"
               type="file"

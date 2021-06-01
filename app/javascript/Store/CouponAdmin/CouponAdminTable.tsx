@@ -1,11 +1,11 @@
 import { Column } from 'react-table';
+import { useModal } from '@neinteractiveliterature/litform';
 
 import describeCoupon from '../describeCoupon';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
 import { SingleLineTimestampCell } from '../../Tables/TimestampCell';
 import TableHeader from '../../Tables/TableHeader';
-import useModal from '../../ModalDialogs/useModal';
 import NewCouponModal from './NewCouponModal';
 import EditCouponModal from './EditCouponModal';
 import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';

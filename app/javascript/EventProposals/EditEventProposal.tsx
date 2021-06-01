@@ -1,12 +1,10 @@
 import { useApolloClient } from '@apollo/client';
 import { Redirect, useHistory, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LoadQueryWrapper, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import EventProposalForm from './EventProposalForm';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useDeleteEventProposalMutation } from './mutations.generated';
 import { useEventProposalQuery } from './queries.generated';
 

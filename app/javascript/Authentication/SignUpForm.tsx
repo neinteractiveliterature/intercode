@@ -6,18 +6,16 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
-import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
-import useUniqueId from '../useUniqueId';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
-import LoadingIndicator from '../LoadingIndicator';
 
 const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
   () =>

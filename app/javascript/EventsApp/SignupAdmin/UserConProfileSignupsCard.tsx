@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
+import { LoadingIndicator, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
 import { timespanFromRun } from '../../TimespanUtils';
 import buildEventUrl from '../buildEventUrl';
-import ErrorDisplay from '../../ErrorDisplay';
-import LoadingIndicator from '../../LoadingIndicator';
 import AddToCalendarDropdown from './AddToCalendarDropdown';
 import AppRootContext from '../../AppRootContext';
 import { UserConProfileSignupsQueryData, useUserConProfileSignupsQuery } from './queries.generated';

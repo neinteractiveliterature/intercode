@@ -1,6 +1,6 @@
 import * as React from 'react';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
-import useUniqueId from '../useUniqueId';
 import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 
 export type RegistrationPolicyPresetSelectorProps = {

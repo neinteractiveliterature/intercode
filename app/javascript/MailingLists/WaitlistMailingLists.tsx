@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { DateTime } from 'luxon';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useWaitlistMailingListsQuery } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 

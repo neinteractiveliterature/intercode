@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
+import { useCallback, useMemo, useState } from 'react';
+
 import { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
-import { useIntercodePopperWithAutoClosing } from '../../UIComponents/PopperUtils';
 import { ScheduleGridCombinedQueryData } from '../ScheduleGrid/queries.generated';
 import RunDetails from '../ScheduleGrid/RunDetails';
 import RunDisplay from '../ScheduleGrid/RunDisplay';
@@ -29,7 +30,7 @@ export default function RunListEventRun({
   const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
 
-  const { styles, attributes, state } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, state } = useLitformPopperWithAutoClosing(
     runDetailsElement,
     runDisplayElement,
     arrow,

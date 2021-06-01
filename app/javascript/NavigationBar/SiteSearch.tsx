@@ -10,6 +10,7 @@ import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } fr
 import { stemmer } from 'porter-stemmer';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
+import type { UnwrapPromise } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import {
@@ -19,7 +20,6 @@ import {
 } from './siteSearchQueries.generated';
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
-import { UnwrapPromise } from '../ValueUtils';
 
 function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
   if (model.__typename === 'NavigationItem') {

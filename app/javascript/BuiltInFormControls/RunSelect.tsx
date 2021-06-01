@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import Select from 'react-select';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import { timespanFromRun } from '../TimespanUtils';
-import { sortByLocaleString } from '../ValueUtils';
 import AppRootContext from '../AppRootContext';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 

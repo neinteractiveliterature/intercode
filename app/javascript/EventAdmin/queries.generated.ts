@@ -310,4 +310,4 @@ export function useEventAdminEventsQueryLazyQuery(baseOptions?: Apollo.LazyQuery
         }
 export type EventAdminEventsQueryHookResult = ReturnType<typeof useEventAdminEventsQuery>;
 export type EventAdminEventsQueryLazyQueryHookResult = ReturnType<typeof useEventAdminEventsQueryLazyQuery>;
-export type EventAdminEventsQueryDataResult = Apollo.QueryResult<EventAdminEventsQueryData, EventAdminEventsQueryVariables>;
+export type EventAdminEventsQueryQueryResult = Apollo.QueryResult<EventAdminEventsQueryData, EventAdminEventsQueryVariables>;

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Column } from 'react-table';
+import { ChoiceSet } from '@neinteractiveliterature/litform';
 
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 export type ColumnSelectorProps<RowType extends object> = {

@@ -196,4 +196,4 @@ export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
         }
 export type AppRootQueryHookResult = ReturnType<typeof useAppRootQuery>;
 export type AppRootQueryLazyQueryHookResult = ReturnType<typeof useAppRootQueryLazyQuery>;
-export type AppRootQueryDataResult = Apollo.QueryResult<AppRootQueryData, AppRootQueryVariables>;
+export type AppRootQueryQueryResult = Apollo.QueryResult<AppRootQueryData, AppRootQueryVariables>;

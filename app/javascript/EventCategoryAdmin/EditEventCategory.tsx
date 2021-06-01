@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import EventCategoryForm from './EventCategoryForm';
-import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';

@@ -1,11 +1,10 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import { Settings } from 'luxon';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { useAppRootQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
-import ErrorDisplay from './ErrorDisplay';
-import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';

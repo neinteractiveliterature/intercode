@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useApolloClient, ApolloError } from '@apollo/client';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';
 import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
-import ErrorDisplay from '../ErrorDisplay';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import { RootSiteEmailRoutesAdminTableQueryData } from './queries.generated';
 import { useDeleteEmailRouteMutation, useUpdateEmailRouteMutation } from './mutations.generated';
 

@@ -1,8 +1,12 @@
-import { TabList, TabBody, useTabsWithRouter } from '../UIComponents/Tabs';
+import { TabList, TabBody, useTabsWithRouter } from '@neinteractiveliterature/litform';
+import { useHistory, useLocation } from 'react-router-dom';
+
 import CreateSignup from './CreateSignup';
 import SignupModerationQueue from './SignupModerationQueue';
 
 function SignupModeration() {
+  const location = useLocation();
+  const history = useHistory();
   const tabProps = useTabsWithRouter(
     [
       {
@@ -13,6 +17,8 @@ function SignupModeration() {
       { id: 'create-signups', name: 'Create signups', renderContent: () => <CreateSignup /> },
     ],
     '/signup_moderation',
+    location,
+    history,
   );
 
   return (

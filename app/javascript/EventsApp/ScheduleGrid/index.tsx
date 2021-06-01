@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CategoryLegend from './CategoryLegend';
 import FullnessLegend from './FullnessLegend';
@@ -7,7 +8,6 @@ import ScheduleGrid from './ScheduleGrid';
 import { getConfig } from './ScheduleGridConfig';
 import { ScheduleGridProvider } from './ScheduleGridContext';
 import AppRootContext from '../../AppRootContext';
-import ErrorDisplay from '../../ErrorDisplay';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { usePersonalScheduleFilters } from './PersonalScheduleFiltersBar';
 

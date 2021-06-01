@@ -71,4 +71,4 @@ export function useCmsGraphqlQueriesQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type CmsGraphqlQueriesQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQuery>;
 export type CmsGraphqlQueriesQueryLazyQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQueryLazyQuery>;
-export type CmsGraphqlQueriesQueryDataResult = Apollo.QueryResult<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>;
+export type CmsGraphqlQueriesQueryQueryResult = Apollo.QueryResult<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>;

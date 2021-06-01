@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import { humanize } from 'inflected';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import { AdminProductsQuery } from '../queries';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
-import ErrorDisplay from '../../ErrorDisplay';
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import { describeAdminPricingStructure } from '../describePricingStructure';
 import { useDeleteProductMutation } from '../mutations.generated';
 import { AdminProductsQueryData } from '../queries.generated';

@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
+import {
+  sortByLocaleString,
+  ErrorDisplay,
+  PageLoadingIndicator,
+} from '@neinteractiveliterature/litform';
 
 import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
-import ErrorDisplay from '../../ErrorDisplay';
-import { sortByLocaleString } from '../../ValueUtils';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { useCmsVariablesQuery } from './queries.generated';
 
 function CmsVariablesAdmin() {

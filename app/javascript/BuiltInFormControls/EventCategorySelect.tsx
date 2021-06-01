@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { BootstrapFormSelect } from '@neinteractiveliterature/litform';
+import { BootstrapFormSelectProps } from '@neinteractiveliterature/litform/lib/BootstrapFormSelect';
 
-import BootstrapFormSelect, { BootstrapFormSelectProps } from './BootstrapFormSelect';
 import { EventCategory } from '../graphqlTypes.generated';
 
 export type EventCategorySelectProps = Omit<BootstrapFormSelectProps, 'label'> & {

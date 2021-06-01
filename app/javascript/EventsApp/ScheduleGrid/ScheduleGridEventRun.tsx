@@ -1,4 +1,5 @@
 import { useContext, useMemo, useCallback, Ref, useState } from 'react';
+import { useLitformPopper } from '@neinteractiveliterature/litform';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
@@ -8,7 +9,6 @@ import ScheduleLayoutBlock, {
   RunDimensions,
   ScheduleLayoutResult,
 } from './ScheduleLayout/ScheduleLayoutBlock';
-import { useIntercodePopper } from '../../UIComponents/PopperUtils';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;
@@ -34,7 +34,7 @@ function ScheduleGridEventRun({
   const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
 
-  const { styles, attributes, state, update } = useIntercodePopper(
+  const { styles, attributes, state, update } = useLitformPopper(
     runDetailsElement,
     runDisplayElement,
     arrow,

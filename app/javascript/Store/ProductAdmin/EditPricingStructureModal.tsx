@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import * as React from 'react';
 import Modal from 'react-bootstrap4-modal';
+import { MultipleChoiceInput, FormGroupWithLabel } from '@neinteractiveliterature/litform';
+import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
-import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import EnumTypes from '../../enumTypes.json';
-import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
 import MoneyInput from '../MoneyInput';
 import ScheduledValueEditor, {
   scheduledValueReducer,
@@ -16,7 +16,6 @@ import {
   PricingStructure,
   ScheduledMoneyValue,
 } from '../../graphqlTypes.generated';
-import { ModalData } from '../../ModalDialogs/useModal';
 
 const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, description }) => ({
   value: name,

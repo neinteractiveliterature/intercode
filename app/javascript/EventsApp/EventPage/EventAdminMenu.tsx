@@ -1,10 +1,9 @@
 import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { useTranslation } from 'react-i18next';
 import buildEventUrl from '../buildEventUrl';
-import ErrorDisplay from '../../ErrorDisplay';
-import LoadingIndicator from '../../LoadingIndicator';
 import { useEventPageQuery } from './queries.generated';
 
 export type EventAdminMenuProps = {

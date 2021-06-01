@@ -1,5 +1,6 @@
 import { createContext, useMemo } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';
@@ -9,8 +10,6 @@ import FilterDoc from './FilterDoc';
 import FilterDocLink from './FilterDocLink';
 import LiquidTagDoc from './LiquidTagDoc';
 import LiquidTagDocLink from './LiquidTagDocLink';
-import LoadingIndicator from '../LoadingIndicator';
-import ErrorDisplay from '../ErrorDisplay';
 import useLiquidAssignsQueryFromLocation from './useLiquidAssignsQueryFromLocation';
 
 function sortByName<T extends { name: string }>(items: T[]) {
