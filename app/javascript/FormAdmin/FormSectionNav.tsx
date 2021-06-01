@@ -1,5 +1,6 @@
 import { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import { FormEditorContext } from './FormEditorContexts';
 import { useCreateMutation } from '../MutationUtils';
@@ -7,7 +8,6 @@ import { serializeParsedFormSection } from './FormItemUtils';
 import FormSectionNavItem from './FormSectionNavItem';
 import { buildOptimisticArrayForMove } from '../useSortable';
 import useCollapse from '../NavigationBar/useCollapse';
-import useUniqueId from '../useUniqueId';
 import {
   useMoveFormSectionMutation,
   CreateFormSectionDocument,

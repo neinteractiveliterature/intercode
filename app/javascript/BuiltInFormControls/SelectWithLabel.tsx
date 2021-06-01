@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import Select, { Props } from 'react-select';
-
-import FormGroupWithLabel from './FormGroupWithLabel';
+import { FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 export type SelectWithLabelProps<OptionType, IsMulti extends boolean> = Props<
   OptionType,

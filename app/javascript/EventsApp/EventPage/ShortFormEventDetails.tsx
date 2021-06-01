@@ -1,15 +1,14 @@
 import { Fragment, useMemo } from 'react';
 import { pluralize, humanize, underscore } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import EventCapacityDisplay from './EventCapacityDisplay';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import teamMembersForDisplay from '../teamMembersForDisplay';
 import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
-import LoadingIndicator from '../../LoadingIndicator';
 import { useEventPageQuery } from './queries.generated';
 
 export type ShortFormEventDetailsProps = {

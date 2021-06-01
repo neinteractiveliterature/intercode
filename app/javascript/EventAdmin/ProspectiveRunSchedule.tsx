@@ -1,6 +1,7 @@
 import { useMemo, useContext, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import { DateTime } from 'luxon';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 import {
   ScheduleGridContext,
@@ -36,7 +37,6 @@ import {
 } from './queries.generated';
 import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
-import { notEmpty } from '../ValueUtils';
 
 const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',

@@ -3,10 +3,9 @@ import Modal from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { AddAttendeeUsersQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateUserConProfileMutation } from './mutations.generated';

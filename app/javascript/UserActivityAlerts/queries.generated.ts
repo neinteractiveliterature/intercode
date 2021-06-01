@@ -148,7 +148,7 @@ export function useConventionTicketNameQueryLazyQuery(baseOptions?: Apollo.LazyQ
         }
 export type ConventionTicketNameQueryHookResult = ReturnType<typeof useConventionTicketNameQuery>;
 export type ConventionTicketNameQueryLazyQueryHookResult = ReturnType<typeof useConventionTicketNameQueryLazyQuery>;
-export type ConventionTicketNameQueryDataResult = Apollo.QueryResult<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>;
+export type ConventionTicketNameQueryQueryResult = Apollo.QueryResult<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>;
 export const UserActivityAlertQueryDocument = gql`
     query UserActivityAlertQuery($id: Int!) {
   convention: assertConvention {
@@ -189,7 +189,7 @@ export function useUserActivityAlertQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type UserActivityAlertQueryHookResult = ReturnType<typeof useUserActivityAlertQuery>;
 export type UserActivityAlertQueryLazyQueryHookResult = ReturnType<typeof useUserActivityAlertQueryLazyQuery>;
-export type UserActivityAlertQueryDataResult = Apollo.QueryResult<UserActivityAlertQueryData, UserActivityAlertQueryVariables>;
+export type UserActivityAlertQueryQueryResult = Apollo.QueryResult<UserActivityAlertQueryData, UserActivityAlertQueryVariables>;
 export const UserActivityAlertsAdminQueryDocument = gql`
     query UserActivityAlertsAdminQuery {
   convention: assertConvention {
@@ -229,4 +229,4 @@ export function useUserActivityAlertsAdminQueryLazyQuery(baseOptions?: Apollo.La
         }
 export type UserActivityAlertsAdminQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQuery>;
 export type UserActivityAlertsAdminQueryLazyQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQueryLazyQuery>;
-export type UserActivityAlertsAdminQueryDataResult = Apollo.QueryResult<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>;
+export type UserActivityAlertsAdminQueryQueryResult = Apollo.QueryResult<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>;

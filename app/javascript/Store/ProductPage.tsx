@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
@@ -9,7 +10,6 @@ import parseCmsContent from '../parseCmsContent';
 import { describeUserPricingStructure } from './describePricingStructure';
 import AppRootContext from '../AppRootContext';
 import { useOrderFormProductQuery } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 function useLoadProduct() {
   const { id } = useParams<{ id: string }>();

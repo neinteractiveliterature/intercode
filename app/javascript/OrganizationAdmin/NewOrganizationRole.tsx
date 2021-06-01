@@ -1,6 +1,6 @@
 import { Redirect, useHistory } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries';
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';

@@ -4,12 +4,15 @@ import * as React from 'react';
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
+import {
+  ErrorDisplay,
+  sortByLocaleString,
+  parseIntOrNull,
+  useConfirm,
+} from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from './InPlaceEditor';
 import useAsyncFunction from '../useAsyncFunction';
-import { sortByLocaleString, parseIntOrNull } from '../ValueUtils';
-import { useConfirm } from '../ModalDialogs/Confirm';
 import { TicketType, MaximumEventProvidedTicketsOverride } from '../graphqlTypes.generated';
 
 type TicketTypeForMEPTO = Pick<TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>;
@@ -216,7 +219,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
             <tr>
               <td>
                 <select
-                  className="form-control"
+                  className="form-select"
                   value={addingOverride.ticket_type.id}
                   onChange={addingTicketTypeIdDidChange}
                 >

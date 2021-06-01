@@ -3,12 +3,11 @@ import * as React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { humanize } from 'inflected';
 import flatMap from 'lodash/flatMap';
+import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
   if (!errors) {

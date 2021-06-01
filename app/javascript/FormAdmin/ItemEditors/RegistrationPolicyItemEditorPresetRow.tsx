@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 import * as React from 'react';
+import { useModal, useConfirm } from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
-import useModal from '../../ModalDialogs/useModal';
 import RegistrationPolicyItemEditorPresetModal from './RegistrationPolicyItemEditorPresetModal';
 import { RegistrationPolicyPreset } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';

@@ -3,12 +3,17 @@ import { useMemo } from 'react';
 import { pluralize, capitalize } from 'inflected';
 import flatMap from 'lodash/flatMap';
 import sum from 'lodash/sum';
+import {
+  LoadQueryWrapper,
+  sortByLocaleString,
+  titleSort,
+  useTabs,
+  TabList,
+  TabBody,
+} from '@neinteractiveliterature/litform';
 
-import { sortByLocaleString, titleSort } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { EventProvidedTicketsQueryData, useEventProvidedTicketsQuery } from './queries.generated';
 
 function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryData }) {

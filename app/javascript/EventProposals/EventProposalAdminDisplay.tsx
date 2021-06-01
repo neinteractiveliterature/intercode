@@ -1,21 +1,19 @@
 import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { humanize } from 'inflected';
+import { LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import { EventProposalAdminNotesQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
-import LoadingIndicator from '../LoadingIndicator';
 import {
   EventProposalAdminNotesQueryData,
   useEventProposalAdminNotesQuery,
   useEventProposalQueryWithOwner,
 } from './queries.generated';
 import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: number;

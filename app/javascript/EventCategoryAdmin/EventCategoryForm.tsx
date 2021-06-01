@@ -3,16 +3,20 @@ import * as React from 'react';
 import { humanize, pluralize } from 'inflected';
 import classNames from 'classnames';
 import tinycolor2 from 'tinycolor2';
+import {
+  BootstrapFormInput,
+  MultipleChoiceInput,
+  BooleanInput,
+  BootstrapFormTextarea,
+  useToggleOpen,
+  useLitformPopperWithAutoClosing,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
-import BooleanInput from '../BuiltInFormControls/BooleanInput';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ColorPicker from '../ColorPicker';
 import FakeEventRun, { FakeEventRunProps } from '../EventsApp/ScheduleGrid/FakeEventRun';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
-import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
-import { useIntercodePopperWithAutoClosing, useToggleOpen } from '../UIComponents/PopperUtils';
 import {
   Department,
   EventCategory,
@@ -20,7 +24,6 @@ import {
   SchedulingUi,
   TicketMode,
 } from '../graphqlTypes.generated';
-import { usePropertySetters } from '../usePropertySetters';
 import { SignupStatus } from '../EventsApp/ScheduleGrid/StylingUtils';
 
 export type EventCategoryForForm = Pick<
@@ -81,7 +84,7 @@ function EventColorPicker({
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
   const [visible, setVisible] = useState(false);
 
-  const { styles, attributes, state, update } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, state, update } = useLitformPopperWithAutoClosing(
     tooltip,
     dropdownButton,
     arrow,

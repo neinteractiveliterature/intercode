@@ -1,11 +1,10 @@
 import { useCallback } from 'react';
-
 import { humanize } from 'inflected';
 import { stringify as csvStringify } from 'csv-string';
 import { saveAs } from 'file-saver';
+import { useTabs, TabBody, TabList } from '@neinteractiveliterature/litform';
 
 import pluralizeWithCount from '../pluralizeWithCount';
-import { useTabs, TabBody, TabList } from '../UIComponents/Tabs';
 import EmailList from '../UIComponents/EmailList';
 import { ContactEmail } from '../graphqlTypes.generated';
 

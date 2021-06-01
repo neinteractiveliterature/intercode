@@ -1,12 +1,11 @@
 import { CSSObject } from '@emotion/serialize';
 import * as React from 'react';
+import { BooleanInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
-import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { ConventionAdminConventionQueryData } from './queries.generated';
-import { usePropertySetters } from '../usePropertySetters';
 
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
 // dropdown menu so that the text in the CodeMirror doesn't cover it

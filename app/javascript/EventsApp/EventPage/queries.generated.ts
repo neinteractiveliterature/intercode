@@ -281,7 +281,7 @@ export function useEventPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
         }
 export type EventPageQueryHookResult = ReturnType<typeof useEventPageQuery>;
 export type EventPageQueryLazyQueryHookResult = ReturnType<typeof useEventPageQueryLazyQuery>;
-export type EventPageQueryDataResult = Apollo.QueryResult<EventPageQueryData, EventPageQueryVariables>;
+export type EventPageQueryQueryResult = Apollo.QueryResult<EventPageQueryData, EventPageQueryVariables>;
 export const CreateModeratedSignupModalQueryDocument = gql`
     query CreateModeratedSignupModalQuery {
   myProfile {
@@ -329,4 +329,4 @@ export function useCreateModeratedSignupModalQueryLazyQuery(baseOptions?: Apollo
         }
 export type CreateModeratedSignupModalQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQuery>;
 export type CreateModeratedSignupModalQueryLazyQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQueryLazyQuery>;
-export type CreateModeratedSignupModalQueryDataResult = Apollo.QueryResult<CreateModeratedSignupModalQueryData, CreateModeratedSignupModalQueryVariables>;
+export type CreateModeratedSignupModalQueryQueryResult = Apollo.QueryResult<CreateModeratedSignupModalQueryData, CreateModeratedSignupModalQueryVariables>;

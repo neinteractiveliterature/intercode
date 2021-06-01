@@ -152,7 +152,7 @@ export function useScheduleGridConventionDataQueryLazyQuery(baseOptions?: Apollo
         }
 export type ScheduleGridConventionDataQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQuery>;
 export type ScheduleGridConventionDataQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryLazyQuery>;
-export type ScheduleGridConventionDataQueryDataResult = Apollo.QueryResult<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
+export type ScheduleGridConventionDataQueryQueryResult = Apollo.QueryResult<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
 export const ScheduleGridEventsQueryDocument = gql`
     query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
@@ -190,7 +190,7 @@ export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type ScheduleGridEventsQueryHookResult = ReturnType<typeof useScheduleGridEventsQuery>;
 export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryLazyQuery>;
-export type ScheduleGridEventsQueryDataResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;
+export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;
 export const ScheduleGridCombinedQueryDocument = gql`
     query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   convention: assertConvention {
@@ -234,4 +234,4 @@ export function useScheduleGridCombinedQueryLazyQuery(baseOptions?: Apollo.LazyQ
         }
 export type ScheduleGridCombinedQueryHookResult = ReturnType<typeof useScheduleGridCombinedQuery>;
 export type ScheduleGridCombinedQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridCombinedQueryLazyQuery>;
-export type ScheduleGridCombinedQueryDataResult = Apollo.QueryResult<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>;
+export type ScheduleGridCombinedQueryQueryResult = Apollo.QueryResult<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>;

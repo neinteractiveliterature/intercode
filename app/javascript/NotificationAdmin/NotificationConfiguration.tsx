@@ -1,13 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import {
+  LoadQueryWrapper,
+  ErrorDisplay,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
 import NotificationsConfig from '../../../config/notifications.json';
-import ErrorDisplay from '../ErrorDisplay';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { useNotificationAdminQuery } from './queries.generated';
 import { useUpdateNotificationTemplateMutation } from './mutations.generated';
-import { usePropertySetters } from '../usePropertySetters';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import FourOhFourPage from '../FourOhFourPage';
 
 export default LoadQueryWrapper(

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
+import {
+  useModal,
+  BooleanInput,
+  ErrorDisplay,
+  MultipleChoiceInput,
+} from '@neinteractiveliterature/litform';
 
 import { useApolloClient } from '@apollo/client';
-import BooleanInput from '../BuiltInFormControls/BooleanInput';
-import ErrorDisplay from '../ErrorDisplay';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import useModal from '../ModalDialogs/useModal';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import { useTransitionEventProposalMutation } from './mutations.generated';
 

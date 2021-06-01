@@ -1,15 +1,14 @@
 import { useContext, useRef, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useModal, notEmpty } from '@neinteractiveliterature/litform';
 
 import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import buildNewFormItem from './buildNewFormItem';
 import { FormEditorContext } from './FormEditorContexts';
 import { buildFormItemInput, mutationUpdaterForFormSection } from './FormItemUtils';
-import useModal from '../ModalDialogs/useModal';
 import NewFormItemModal from './NewFormItemModal';
 import { useCreateFormItemMutation } from './mutations.generated';
-import { notEmpty } from '../ValueUtils';
 
 function FormSectionEditorLayout() {
   const { currentSection, form, formType } = useContext(FormEditorContext);

@@ -2,14 +2,13 @@ import { useState } from 'react';
 import * as React from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { UserConProfileAdminQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import EventSelect, { DefaultEventSelectOptionType } from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
 import TicketingStatusDescription from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
 import useAsyncFunction from '../useAsyncFunction';
-import LoadingIndicator from '../LoadingIndicator';
 import {
   useConvertToEventProvidedTicketQuery,
   UserConProfileAdminQueryData,

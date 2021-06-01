@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import BucketInput from './BucketInput';
-import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import { SignupFieldsFragment } from './queries.generated';
 import { useForceConfirmSignupMutation } from './mutations.generated';

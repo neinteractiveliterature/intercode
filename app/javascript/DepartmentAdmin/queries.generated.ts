@@ -83,4 +83,4 @@ export function useDepartmentAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type DepartmentAdminQueryHookResult = ReturnType<typeof useDepartmentAdminQuery>;
 export type DepartmentAdminQueryLazyQueryHookResult = ReturnType<typeof useDepartmentAdminQueryLazyQuery>;
-export type DepartmentAdminQueryDataResult = Apollo.QueryResult<DepartmentAdminQueryData, DepartmentAdminQueryVariables>;
+export type DepartmentAdminQueryQueryResult = Apollo.QueryResult<DepartmentAdminQueryData, DepartmentAdminQueryVariables>;

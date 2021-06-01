@@ -1,16 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useModal, sortByLocaleString , LoadQueryWrapper } from '@neinteractiveliterature/litform';
+
 
 import AdminProductCard from './AdminProductCard';
-import { sortByLocaleString } from '../../ValueUtils';
 import usePageTitle from '../../usePageTitle';
-import useModal from '../../ModalDialogs/useModal';
 import EditPricingStructureModal, {
   PricingStructureModalContext,
   PricingStructureModalState,
 } from './EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
-import { LoadQueryWrapper } from '../../GraphqlLoadingWrappers';
 import { useAdminProductsQuery } from '../queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';

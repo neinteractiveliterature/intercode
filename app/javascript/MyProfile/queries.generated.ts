@@ -95,4 +95,4 @@ export function useMyProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
         }
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileQueryLazyQueryHookResult = ReturnType<typeof useMyProfileQueryLazyQuery>;
-export type MyProfileQueryDataResult = Apollo.QueryResult<MyProfileQueryData, MyProfileQueryVariables>;
+export type MyProfileQueryQueryResult = Apollo.QueryResult<MyProfileQueryData, MyProfileQueryVariables>;

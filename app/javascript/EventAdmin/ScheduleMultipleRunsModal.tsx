@@ -2,9 +2,9 @@ import { useState, useMemo, useCallback, useContext, ReactNode } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { DateTime } from 'luxon';
+import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
-import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import {
@@ -15,7 +15,6 @@ import {
 import { EventAdminEventsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import ProspectiveRunSchedule from './ProspectiveRunSchedule';
-import FormGroupWithLabel from '../BuiltInFormControls/FormGroupWithLabel';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
 import { timezoneNameForConvention, useAppDateTimeFormat } from '../TimeUtils';

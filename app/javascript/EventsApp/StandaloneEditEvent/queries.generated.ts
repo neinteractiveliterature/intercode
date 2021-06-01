@@ -156,4 +156,4 @@ export function useStandaloneEditEventQueryLazyQuery(baseOptions?: Apollo.LazyQu
         }
 export type StandaloneEditEventQueryHookResult = ReturnType<typeof useStandaloneEditEventQuery>;
 export type StandaloneEditEventQueryLazyQueryHookResult = ReturnType<typeof useStandaloneEditEventQueryLazyQuery>;
-export type StandaloneEditEventQueryDataResult = Apollo.QueryResult<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>;
+export type StandaloneEditEventQueryQueryResult = Apollo.QueryResult<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>;

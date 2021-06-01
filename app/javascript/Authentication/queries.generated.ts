@@ -58,7 +58,7 @@ export function useAccountFormContentQueryLazyQuery(baseOptions?: Apollo.LazyQue
         }
 export type AccountFormContentQueryHookResult = ReturnType<typeof useAccountFormContentQuery>;
 export type AccountFormContentQueryLazyQueryHookResult = ReturnType<typeof useAccountFormContentQueryLazyQuery>;
-export type AccountFormContentQueryDataResult = Apollo.QueryResult<AccountFormContentQueryData, AccountFormContentQueryVariables>;
+export type AccountFormContentQueryQueryResult = Apollo.QueryResult<AccountFormContentQueryData, AccountFormContentQueryVariables>;
 export const EditUserQueryDocument = gql`
     query EditUserQuery {
   convention {
@@ -99,4 +99,4 @@ export function useEditUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
         }
 export type EditUserQueryHookResult = ReturnType<typeof useEditUserQuery>;
 export type EditUserQueryLazyQueryHookResult = ReturnType<typeof useEditUserQueryLazyQuery>;
-export type EditUserQueryDataResult = Apollo.QueryResult<EditUserQueryData, EditUserQueryVariables>;
+export type EditUserQueryQueryResult = Apollo.QueryResult<EditUserQueryData, EditUserQueryVariables>;

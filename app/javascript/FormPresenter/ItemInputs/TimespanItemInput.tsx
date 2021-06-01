@@ -1,9 +1,9 @@
 import { useState, useMemo, ChangeEvent } from 'react';
 import classNames from 'classnames';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import { getUnitForValue, UNITS } from '../TimespanItemUtils';
-import useUniqueId from '../../useUniqueId';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimespanFormItem } from '../../FormAdmin/FormItemUtils';
 import CaptionLabel from './CaptionLabel';
@@ -73,7 +73,7 @@ function TimespanItemInput(props: TimespanItemInputProps) {
           <FieldRequiredFeedback valueInvalid={valueInvalid} />
         </div>
         <select
-          className="form-control ms-2"
+          className="form-select ms-2"
           value={unit}
           onChange={unitSelectorDidChange}
           aria-label="Unit of time"

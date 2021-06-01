@@ -1,8 +1,8 @@
 import { ReactNode, useMemo } from 'react';
 import * as React from 'react';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
-import useUniqueId from '../useUniqueId';
 import { FiniteTimespan } from '../Timespan';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
@@ -83,7 +83,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
       <span className="visually-hidden">{label}</span>
       <select
         id={selectId}
-        className="form-control me-1"
+        className="form-select me-1"
         name={name}
         value={value[name] == null ? '' : value[name]}
         onChange={inputChanged}

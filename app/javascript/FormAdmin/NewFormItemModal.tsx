@@ -4,17 +4,20 @@ import flatMap from 'lodash/flatMap';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
 import { ApolloError } from '@apollo/client';
+import {
+  BootstrapFormCheckbox,
+  BootstrapFormSelect,
+  ErrorDisplay,
+  HelpPopover,
+  notEmpty,
+  sortByLocaleString,
+} from '@neinteractiveliterature/litform';
 
 import { FormEditorContext } from './FormEditorContexts';
-import { notEmpty, sortByLocaleString } from '../ValueUtils';
 import FormItemDefaultProperties from '../../../config/form_item_default_properties.json';
 import buildNewFormItem from './buildNewFormItem';
-import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
-import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import FormItemIdentifierInput from './ItemEditors/FormItemIdentifierInput';
-import HelpPopover from '../UIComponents/HelpPopover';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 import {
   FormTypeDefinition,
   StandardItem,

@@ -243,7 +243,7 @@ export function useTeamMembersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookO
         }
 export type TeamMembersQueryHookResult = ReturnType<typeof useTeamMembersQuery>;
 export type TeamMembersQueryLazyQueryHookResult = ReturnType<typeof useTeamMembersQueryLazyQuery>;
-export type TeamMembersQueryDataResult = Apollo.QueryResult<TeamMembersQueryData, TeamMembersQueryVariables>;
+export type TeamMembersQueryQueryResult = Apollo.QueryResult<TeamMembersQueryData, TeamMembersQueryVariables>;
 export const TeamMemberUserConProfilesQueryDocument = gql`
     query TeamMemberUserConProfilesQuery($name: String) {
   convention {
@@ -284,4 +284,4 @@ export function useTeamMemberUserConProfilesQueryLazyQuery(baseOptions?: Apollo.
         }
 export type TeamMemberUserConProfilesQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQuery>;
 export type TeamMemberUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQueryLazyQuery>;
-export type TeamMemberUserConProfilesQueryDataResult = Apollo.QueryResult<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>;
+export type TeamMemberUserConProfilesQueryQueryResult = Apollo.QueryResult<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>;

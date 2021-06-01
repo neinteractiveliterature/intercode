@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import classnames from 'classnames';
+import { useConfirm } from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
 import { MultipleChoiceFormItem } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';

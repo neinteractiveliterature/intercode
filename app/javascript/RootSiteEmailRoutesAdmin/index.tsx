@@ -1,11 +1,11 @@
 import { Column } from 'react-table';
+import { useModal } from '@neinteractiveliterature/litform';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
-import useModal from '../ModalDialogs/useModal';
 import NewEmailRouteModal from './NewEmailRouteModal';
 import EditEmailRouteModal from './EditEmailRouteModal';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';

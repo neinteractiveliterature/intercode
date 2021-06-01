@@ -1,13 +1,18 @@
 import { useCallback, useState } from 'react';
+import {
+  TabList,
+  TabBody,
+  useTabsWithRouter,
+  ErrorDisplay,
+} from '@neinteractiveliterature/litform';
 
 import { ApolloError } from '@apollo/client';
+import { useHistory, useLocation } from 'react-router-dom';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
 import ConventionFormEventsSection from './ConventionFormEventsSection';
-import { TabList, TabBody, useTabsWithRouter } from '../UIComponents/Tabs';
 import useAsyncFunction from '../useAsyncFunction';
-import ErrorDisplay from '../ErrorDisplay';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import ConventionFormEmailSection from './ConventionFormEmailSection';
 import { ConventionAdminConventionQueryData } from './queries.generated';
@@ -88,7 +93,9 @@ function ConventionForm({
     },
   ];
 
-  const tabProps = useTabsWithRouter(tabs, '/convention/edit');
+  const location = useLocation();
+  const history = useHistory();
+  const tabProps = useTabsWithRouter(tabs, '/convention/edit', location, history);
 
   return (
     <form>

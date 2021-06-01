@@ -1,11 +1,9 @@
 import * as React from 'react';
 import sortBy from 'lodash/sortBy';
+import { notEmpty, parseIntOrNull, ChoiceSet, HelpPopover } from '@neinteractiveliterature/litform';
 
-import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { RATING_NAMES } from '../../EventRatings/EventRatingIcon';
-import HelpPopover from '../../UIComponents/HelpPopover';
 import RatingsHelp from '../../EventRatings/RatingsHelp';
-import { notEmpty, parseIntOrNull } from '../../ValueUtils';
 
 export const RATING_OPTIONS = sortBy(Object.entries(RATING_NAMES), ([rating]) =>
   ['1', '0', '-1'].indexOf(rating),

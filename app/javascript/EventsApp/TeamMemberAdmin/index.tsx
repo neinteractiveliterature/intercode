@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { humanize, underscore, pluralize } from 'inflected';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';
 import TeamMembersIndex from './TeamMembersIndex';
-import ErrorDisplay from '../../ErrorDisplay';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import { useTeamMembersQuery } from './queries.generated';

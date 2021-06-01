@@ -14,9 +14,9 @@ import { Router } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
+import { Confirm } from '@neinteractiveliterature/litform';
 
 import getI18n from '../../app/javascript/setupI18Next';
-import Confirm from '../../app/javascript/ModalDialogs/Confirm';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
 
 export type TestWrapperProps = {

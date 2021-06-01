@@ -72,4 +72,4 @@ export function useNotificationAdminQueryLazyQuery(baseOptions?: Apollo.LazyQuer
         }
 export type NotificationAdminQueryHookResult = ReturnType<typeof useNotificationAdminQuery>;
 export type NotificationAdminQueryLazyQueryHookResult = ReturnType<typeof useNotificationAdminQueryLazyQuery>;
-export type NotificationAdminQueryDataResult = Apollo.QueryResult<NotificationAdminQueryData, NotificationAdminQueryVariables>;
+export type NotificationAdminQueryQueryResult = Apollo.QueryResult<NotificationAdminQueryData, NotificationAdminQueryVariables>;

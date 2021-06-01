@@ -1,18 +1,17 @@
 import { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
+import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import { CreateUserActivityAlert } from './mutations';
 import { UserActivityAlertsAdminQuery } from './queries';
-import ErrorDisplay from '../ErrorDisplay';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import { useCreateMutation } from '../MutationUtils';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { useConventionTicketNameQuery, UserActivityAlertQueryData } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 export default LoadQueryWrapper(
   useConventionTicketNameQuery,

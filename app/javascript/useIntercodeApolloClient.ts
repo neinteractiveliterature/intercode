@@ -1,6 +1,6 @@
-import { useRef, useMemo, useEffect, RefObject } from 'react';
+import { useMemo, RefObject } from 'react';
 import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
+import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
 import { createUploadLink } from 'apollo-upload-client';
 import { DateTime } from 'luxon';
 
@@ -10,27 +10,7 @@ export function useIntercodeApolloLink(
   authenticityToken: string,
   onUnauthenticatedRef?: RefObject<() => void>,
 ) {
-  const authenticityTokenRef = useRef(authenticityToken);
-  useEffect(() => {
-    authenticityTokenRef.current = authenticityToken;
-  }, [authenticityToken]);
-
-  const AuthLink = useMemo(
-    () =>
-      new ApolloLink((operation: Operation, next: NextLink) => {
-        operation.setContext((context: Record<string, any>) => ({
-          ...context,
-          credentials: 'same-origin',
-          headers: {
-            ...context.headers,
-            'X-CSRF-Token': authenticityTokenRef.current,
-          },
-        }));
-
-        return next(operation);
-      }),
-    [],
-  );
+  const AuthLink = useAuthHeadersLink(authenticityToken);
 
   const AddTimezoneLink = useMemo(
     () =>
@@ -49,19 +29,7 @@ export function useIntercodeApolloLink(
     [],
   );
 
-  const ErrorHandlerLink = useMemo(
-    () =>
-      onError(({ graphQLErrors }) => {
-        if (graphQLErrors) {
-          if (graphQLErrors.some((err) => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
-            if (onUnauthenticatedRef?.current) {
-              onUnauthenticatedRef.current();
-            }
-          }
-        }
-      }),
-    [onUnauthenticatedRef],
-  );
+  const ErrorHandlerLink = useErrorHandlerLink(onUnauthenticatedRef);
 
   const link = useMemo(
     () =>

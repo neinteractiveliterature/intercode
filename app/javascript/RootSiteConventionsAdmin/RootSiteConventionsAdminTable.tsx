@@ -3,6 +3,7 @@ import { Column } from 'react-table';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
+import { useModal } from '@neinteractiveliterature/litform';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
@@ -11,7 +12,6 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import { timespanFromConvention } from '../TimespanUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
-import useModal from '../ModalDialogs/useModal';
 import NewConventionModal from './NewConventionModal';
 import {
   RootSiteConventionsAdminTableQueryData,

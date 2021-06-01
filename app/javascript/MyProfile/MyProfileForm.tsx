@@ -5,10 +5,15 @@ import isEqual from 'lodash/isEqual';
 import MD5 from 'md5.js';
 import { useTranslation, Trans } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
+import {
+  BooleanInput,
+  PageLoadingIndicator,
+  LoadingIndicator,
+  ErrorDisplay,
+} from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
-import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
@@ -16,12 +21,9 @@ import {
   useItemInteractionTracking,
   ItemInteractionTrackerContext,
 } from '../FormPresenter/ItemInteractionTracker';
-import LoadingIndicator from '../LoadingIndicator';
 import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
-import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import Gravatar from '../Gravatar';
-import PageLoadingIndicator from '../PageLoadingIndicator';
 import { useMyProfileQuery, MyProfileQueryData } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';

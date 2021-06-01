@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
 
 import EventRatingIcon from './EventRatingIcon';
-import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 
 type RatingButtonProps = {
   rating: number;

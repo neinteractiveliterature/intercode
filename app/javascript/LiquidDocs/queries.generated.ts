@@ -73,7 +73,7 @@ export function useLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
         }
 export type LiquidAssignsQueryHookResult = ReturnType<typeof useLiquidAssignsQuery>;
 export type LiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useLiquidAssignsQueryLazyQuery>;
-export type LiquidAssignsQueryDataResult = Apollo.QueryResult<LiquidAssignsQueryData, LiquidAssignsQueryVariables>;
+export type LiquidAssignsQueryQueryResult = Apollo.QueryResult<LiquidAssignsQueryData, LiquidAssignsQueryVariables>;
 export const NotifierLiquidAssignsQueryDocument = gql`
     query NotifierLiquidAssignsQuery($eventKey: String!) {
   liquidAssigns: notifierLiquidAssigns(eventKey: $eventKey) {
@@ -108,4 +108,4 @@ export function useNotifierLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.Lazy
         }
 export type NotifierLiquidAssignsQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQuery>;
 export type NotifierLiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQueryLazyQuery>;
-export type NotifierLiquidAssignsQueryDataResult = Apollo.QueryResult<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>;
+export type NotifierLiquidAssignsQueryQueryResult = Apollo.QueryResult<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>;

@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode, useState } from 'react';
 import classNames from 'classnames';
+import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
-import { useIntercodePopperWithAutoClosing, useToggleOpen } from './PopperUtils';
 import useAutoCloseOnNavigate from '../NavigationBar/useAutoCloseOnNavigate';
 
 export type DropdownMenuProps = {
@@ -11,7 +11,7 @@ export type DropdownMenuProps = {
   children: ReactNode;
   dropdownClassName?: string;
   dropdownStyle?: CSSProperties;
-  popperOptions?: Parameters<typeof useIntercodePopperWithAutoClosing>[4];
+  popperOptions?: Parameters<typeof useLitformPopperWithAutoClosing>[4];
   shouldAutoCloseOnNavigate?: Parameters<typeof useAutoCloseOnNavigate>[1];
 };
 
@@ -29,7 +29,7 @@ export function DropdownMenu({
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { styles, attributes, update } = useIntercodePopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
     dropdownMenu,
     dropdownButton,
     undefined,

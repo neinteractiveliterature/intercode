@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useCallback, useContext, useImperativeHandle } from 'react';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import FormItemInput from '../ItemInputs/FormItemInput';
 import { formResponseValueIsCompleteIfRequired } from '../../Models/FormItem';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';

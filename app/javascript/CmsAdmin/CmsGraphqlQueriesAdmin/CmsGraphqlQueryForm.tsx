@@ -3,14 +3,16 @@ import * as React from 'react';
 import { parse } from 'graphql/language/parser';
 import { execute, GraphQLRequest } from '@apollo/client';
 import { Fetcher } from '@graphiql/toolkit';
+import {
+  BootstrapFormInput,
+  BootstrapFormTextarea,
+  usePropertySetters,
+  LoadingIndicator,
+} from '@neinteractiveliterature/litform';
 
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';
-import LoadingIndicator from '../../LoadingIndicator';
 import { lazyWithBundleHashCheck } from '../../checkBundleHash';
 import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
 import AuthenticityTokensContext from '../../AuthenticityTokensContext';
-import { usePropertySetters } from '../../usePropertySetters';
 
 const GraphiQL = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: 'graphiql' */ 'graphiql'),

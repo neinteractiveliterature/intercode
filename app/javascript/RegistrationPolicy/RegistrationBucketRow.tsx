@@ -1,14 +1,17 @@
 import { useCallback } from 'react';
 import classNames from 'classnames';
+import {
+  BootstrapFormInput,
+  useConfirm,
+  HelpPopover,
+  parseIntOrNull,
+  BootstrapFormTextarea,
+  useUniqueId,
+  useFunctionalStateUpdater,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 
-import { useConfirm } from '../ModalDialogs/Confirm';
-import HelpPopover from '../UIComponents/HelpPopover';
-import { parseIntOrNull } from '../ValueUtils';
 import { checkBucketFieldMinimums } from './RegistrationPolicyBucket';
-import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import useUniqueId from '../useUniqueId';
-import { useFunctionalStateUpdater, usePropertySetters } from '../usePropertySetters';
 import { RegistrationPolicyBucket } from '../graphqlTypes.generated';
 
 export type EditingRegistrationBucket = Pick<
@@ -222,7 +225,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
             onTextChange={setName}
             placeholder="Bucket name"
             label="Bucket name"
-            hideLabel
+            labelClassName="form-label visually-hidden"
             className={classNames('form-control', {
               'is-invalid': validateComplete && !registrationBucket.name,
             })}
@@ -234,7 +237,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           rows={2}
           value={registrationBucket.description ?? ''}
           label="Bucket description"
-          hideLabel
+          labelClassName="form-label visually-hidden"
           onTextChange={setDescription}
           placeholder="Bucket description"
           className={classNames('form-control', {

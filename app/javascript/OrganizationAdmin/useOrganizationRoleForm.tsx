@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import flatMap from 'lodash/flatMap';
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 import ChangeSet, { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';

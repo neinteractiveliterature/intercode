@@ -1,10 +1,9 @@
 import Select, { Props as SelectProps } from 'react-select';
 // eslint-disable-next-line no-restricted-imports
 import { DocumentNode, useQuery } from '@apollo/client';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { AdminProductsQuery } from '../Store/queries';
-import LoadingIndicator from '../LoadingIndicator';
-import ErrorDisplay from '../ErrorDisplay';
 import { AdminProductsQueryData } from '../Store/queries.generated';
 
 export type ProductSelectProps<QueryType extends AdminProductsQueryData> = SelectProps<

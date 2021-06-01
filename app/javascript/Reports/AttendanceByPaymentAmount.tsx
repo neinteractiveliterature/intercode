@@ -2,10 +2,10 @@
 import { capitalize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 import flatMap from 'lodash/flatMap';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import {
   AttendanceByPaymentAmountQueryData,
   useAttendanceByPaymentAmountQuery,

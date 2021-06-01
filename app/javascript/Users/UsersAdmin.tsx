@@ -1,8 +1,8 @@
 import { Switch, Route, useParams } from 'react-router-dom';
+import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import UsersTable from './UsersTable';
 import UserAdminDisplay from './UserAdminDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';

@@ -2,11 +2,10 @@ import { useContext, useMemo } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import classnames from 'classnames';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../../AppRootContext';
 import { EventPageQuery } from './queries';
-import ErrorDisplay from '../../ErrorDisplay';
-import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { EventPageQueryData, useCreateModeratedSignupModalQuery } from './queries.generated';

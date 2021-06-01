@@ -4,6 +4,7 @@ import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
 import { DateTime } from 'luxon';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
@@ -15,7 +16,6 @@ import useRateEvent from '../../EventRatings/useRateEvent';
 import Gravatar from '../../Gravatar';
 import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
 import { EventListEventsQueryData } from './queries.generated';
-import { notEmpty } from '../../ValueUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { useFormatRunTime } from '../runTimeFormatting';
 

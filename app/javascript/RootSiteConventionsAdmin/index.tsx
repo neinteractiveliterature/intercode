@@ -1,9 +1,9 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import RootSiteConventionsAdminTable from './RootSiteConventionsAdminTable';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import ConventionDisplay from './ConventionDisplay';
-import LoadingIndicator from '../LoadingIndicator';
 import { useConventionQueryFromIdParam } from './conventionQueryHooks';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';

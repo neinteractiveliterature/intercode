@@ -2,9 +2,14 @@ import { useState, useEffect, useCallback, useContext } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Filters } from 'react-table';
 import { useTranslation } from 'react-i18next';
+import {
+  LoadingIndicator,
+  ErrorDisplay,
+  PageLoadingIndicator,
+  SearchInput,
+} from '@neinteractiveliterature/litform';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
-import ErrorDisplay from '../../ErrorDisplay';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
 import EventListEvents from './EventListEvents';
 import EventListSortDropdown from './EventListSortDropdown';
@@ -14,12 +19,9 @@ import {
   reactTableSortToTableResultsSort,
 } from '../../Tables/TableUtils';
 import usePageTitle from '../../usePageTitle';
-import PageLoadingIndicator from '../../PageLoadingIndicator';
-import SearchInput from '../../BuiltInFormControls/SearchInput';
 import AppRootContext from '../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../useAsyncFunction';
-import LoadingIndicator from '../../LoadingIndicator';
 import { EventListEventsQueryData, useEventListEventsQuery } from './queries.generated';
 
 const PAGE_SIZE = 20;

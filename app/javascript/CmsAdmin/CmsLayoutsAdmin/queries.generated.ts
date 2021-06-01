@@ -79,4 +79,4 @@ export function useCmsLayoutsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
         }
 export type CmsLayoutsAdminQueryHookResult = ReturnType<typeof useCmsLayoutsAdminQuery>;
 export type CmsLayoutsAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsLayoutsAdminQueryLazyQuery>;
-export type CmsLayoutsAdminQueryDataResult = Apollo.QueryResult<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>;
+export type CmsLayoutsAdminQueryQueryResult = Apollo.QueryResult<CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryVariables>;

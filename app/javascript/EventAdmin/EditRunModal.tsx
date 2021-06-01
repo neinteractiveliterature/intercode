@@ -1,11 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import * as React from 'react';
 import Modal from 'react-bootstrap4-modal';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { EventAdminEventsQuery } from './queries';
 import RunFormFields from '../BuiltInForms/RunFormFields';
-import { useConfirm } from '../ModalDialogs/Confirm';
-import ErrorDisplay from '../ErrorDisplay';
 import {
   useCreateRunMutation,
   useDeleteRunMutation,

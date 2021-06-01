@@ -1,6 +1,7 @@
 import { useState, useContext, useMemo } from 'react';
 import { Column, FilterProps } from 'react-table';
 import { DateTime } from 'luxon';
+import { useModal } from '@neinteractiveliterature/litform';
 
 import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -10,7 +11,6 @@ import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../usePageTitle';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
-import useModal from '../ModalDialogs/useModal';
 import EditOrderModal from './EditOrderModal';
 import NewOrderModal from './NewOrderModal';
 import AppRootContext from '../AppRootContext';

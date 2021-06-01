@@ -1,17 +1,16 @@
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useSignupCountsByStateQuery } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
 
 export default LoadQueryWrapper(useSignupCountsByStateQuery, function SignupSpy({ data }) {
-  const getSignupCount = (state: SignupState) => {
-    return (
+  const getSignupCount = (state: SignupState) => (
       data.convention.signup_counts_by_state.find((record) => record.state === state) || {
         count: 0,
       }
     ).count;
-  };
 
   usePageTitle('Signup spy');
 

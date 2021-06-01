@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
+import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
 export type ConventionLanguageInputProps = {
   value: string | null | undefined;

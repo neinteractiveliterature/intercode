@@ -1,7 +1,8 @@
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { useEventProposersQuery } from './queries.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 export default LoadQueryWrapper(useEventProposersQuery, function EventProposers({ data }) {
   usePageTitle('Event proposers');

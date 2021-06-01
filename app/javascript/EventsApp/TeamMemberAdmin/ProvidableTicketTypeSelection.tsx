@@ -1,9 +1,8 @@
 import * as React from 'react';
 import sumBy from 'lodash/sumBy';
 import { useTranslation } from 'react-i18next';
-
 import { pluralize, humanize } from 'inflected';
-import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
+import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
 import { getProvidableTicketTypes, getRemainingTicketCountByType } from './ProvideTicketUtils';
 import { TeamMembersQueryData } from './queries.generated';

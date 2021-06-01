@@ -1,14 +1,12 @@
 import { useMemo, useCallback, useContext } from 'react';
 import { ApolloCache, useApolloClient } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
+import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { EventPageQuery } from './queries';
 import RunCard from './RunCard';
 import buildSignupOptions, { SignupOption } from './buildSignupOptions';
 import AppRootContext from '../../AppRootContext';
-import { useConfirm } from '../../ModalDialogs/Confirm';
-import ErrorDisplay from '../../ErrorDisplay';
-import useModal from '../../ModalDialogs/useModal';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 import { EventPageQueryData, EventPageQueryVariables } from './queries.generated';
 import {

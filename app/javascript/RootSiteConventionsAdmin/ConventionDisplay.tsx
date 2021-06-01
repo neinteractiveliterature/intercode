@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { humanize } from 'inflected';
+import { useModal, ErrorDisplay, useConfirm , LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../ErrorDisplay';
+
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
 import { useConventionQueryFromIdParam } from './conventionQueryHooks';
-import useModal from '../ModalDialogs/useModal';
 import NewConventionModal from './NewConventionModal';
 import usePageTitle from '../usePageTitle';
-import { useConfirm } from '../ModalDialogs/Confirm';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 import { useSetConventionCanceledMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(

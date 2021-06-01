@@ -2,14 +2,13 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
-import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { CmsContentGroupsAdminQueryData, useCmsContentGroupsAdminQuery } from './queries.generated';
-import { notEmpty } from '../../ValueUtils';
 import { useUpdateContentGroupMutation } from './mutations.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';

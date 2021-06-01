@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
 import { UserConProfileAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData, useUserConProfileAdminQuery } from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
-import { LoadQueryWrapper } from '../GraphqlLoadingWrappers';
 
 export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket({ data }) {
   const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);

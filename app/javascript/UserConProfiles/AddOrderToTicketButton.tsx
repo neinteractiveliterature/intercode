@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
+import { useModal } from '@neinteractiveliterature/litform';
 
 import NewOrderModal from '../Store/NewOrderModal';
-import useModal from '../ModalDialogs/useModal';
 import AppRootContext from '../AppRootContext';
 import { Money, OrderStatus, Product, UserConProfile } from '../graphqlTypes.generated';
 
