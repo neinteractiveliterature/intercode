@@ -48,7 +48,7 @@
     "@emotion/serialize": "^1.0.2",
     "@juggle/resize-observer": "^3.3.0",
     "@popperjs/core": "^2.9.2",
-    "@stripe/react-stripe-js": "^1.4.0",
+    "@stripe/react-stripe-js": "^1.4.1",
     "@stripe/stripe-js": "^1.14.0",
     "@testing-library/react": "^11.2.6",
     "@types/apollo-upload-client": "^14.1.0",
