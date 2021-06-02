@@ -1,11 +1,12 @@
 import { ReactNode } from 'react';
 import { components, OptionTypeBase } from 'react-select';
 import type { DocumentNode } from 'graphql';
+import { MultiValueGenericProps } from 'react-select/src/components/MultiValue';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
 import { DefaultUsersQueryData, DefaultUsersQueryDocument } from './selectDefaultQueries.generated';
 
-type UserNameLabelProps = {
+type UserNameLabelProps<OptionType> = MultiValueGenericProps<OptionType> & {
   data: {
     name?: string;
   };
@@ -13,7 +14,7 @@ type UserNameLabelProps = {
   [x: string]: any;
 };
 
-function UserNameLabel({ children, ...otherProps }: UserNameLabelProps) {
+function UserNameLabel<OptionType>({ children, ...otherProps }: UserNameLabelProps<OptionType>) {
   return (
     <components.MultiValueLabel {...otherProps}>{otherProps.data.name}</components.MultiValueLabel>
   );

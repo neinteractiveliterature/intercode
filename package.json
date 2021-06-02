@@ -73,7 +73,7 @@
     "@types/react-google-recaptcha": "^2.1.0",
     "@types/react-onclickoutside": "^6.7.3",
     "@types/react-router-dom": "^5.1.7",
-    "@types/react-select": "^4.0.7",
+    "@types/react-select": "^4.0.15",
     "@types/react-table": "^7.7.0",
     "@types/source-map-support": "^0.5.3",
     "@types/tinycolor2": "^1.4.2",
