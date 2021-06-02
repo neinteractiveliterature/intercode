@@ -138,7 +138,7 @@
     "react-clipboard.js": "^2.0.16",
     "react-codemirror2": "^7.2.1",
     "react-color": "^2.19.3",
-    "react-cookie-consent": "^6.2.3",
+    "react-cookie-consent": "^6.2.4",
     "react-cool-onclickoutside": "^1.6.2",
     "react-dnd": "^11.1.1",
     "react-dnd-html5-backend": "^11.1.3",
