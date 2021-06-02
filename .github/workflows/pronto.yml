@@ -18,7 +18,7 @@ jobs:
         if: github.actor != 'dependabot[bot]'
         uses: actions/cache@v1
         with:
-          path: /home/runner/.rubies/ruby-2.7.2/lib/ruby/gems/2.7.0
+          path: /home/runner/.rubies/ruby-2.7.3/lib/ruby/gems/2.7.0
           key: ${{ runner.os }}-pronto-gems-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-pronto-gems-${{ github.ref }}-
