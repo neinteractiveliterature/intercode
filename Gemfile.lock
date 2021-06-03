@@ -219,12 +219,16 @@ GEM
       railties (>= 5.0.0)
     faker (2.18.0)
       i18n (>= 1.6, < 2)
-    faraday (1.4.1)
+    faraday (1.4.2)
+      faraday-em_http (~> 1.0)
+      faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
       faraday-net_http (~> 1.0)
       faraday-net_http_persistent (~> 1.1)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords (>= 0.0.4)
+    faraday-em_http (1.0.0)
+    faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.1.0)
@@ -352,10 +356,10 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.7)
     nio4r (2.5.7-java)
-    nokogiri (1.11.6)
+    nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
-    nokogiri (1.11.6-java)
+    nokogiri (1.11.7-java)
       racc (~> 1.4)
     oj (3.11.5)
     orm_adapter (0.5.0)
@@ -535,7 +539,7 @@ GEM
     thor (1.1.0)
     tilt (2.0.10)
     tins (1.20.2)
-    twilio-ruby (5.54.0)
+    twilio-ruby (5.54.1)
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -646,7 +650,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.0.0)
   term-ansicolor
-  twilio-ruby (~> 5.54.0)
+  twilio-ruby (~> 5.54.1)
   tzinfo-data
   whenever
   will_paginate
