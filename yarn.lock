@@ -2244,12 +2244,18 @@
   resolved "https://registry.yarnpkg.com/@n1ru4l/push-pull-async-iterable-iterator/-/push-pull-async-iterable-iterator-2.1.4.tgz#a90225474352f9f159bff979905f707b9c6bcf04"
   integrity sha512-qLIvoOUJ+zritv+BlzcBMePKNjKQzH9Rb2i9W98YXxf/M62Lye8qH0peyiU8yJ1tL0kfulWi31BoK10E6BKJeA==
 
-"@neinteractiveliterature/litform@^0.7.9":
-  version "0.7.9"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.9.tgz#7eba89d8631391dc17b7980926bb987131493903"
-  integrity sha512-uyNqatdVCYoVRYghOOA7U0mwdU9IPgUN+xEE22grfYajrw4iKlz0sUm22mXZLf1tLL8HSNDloW4oIwQadwbCzg==
+"@neinteractiveliterature/litform@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.8.1.tgz#4b73555ef57172bd5d8296f59549410f3e800ab5"
+  integrity sha512-OwKKS5dQ/tVmfbtpBh809UXGZ3ovYLIqUj7fxxNGahO0+Rg+P7AHXZaoco3MEb6L1fVXRHJ0Yzpdf7BgU4LOIA==
   dependencies:
+    codemirror "^5.61.0"
     lodash "^4.17.21"
+    luxon "^1.27.0"
+    react-bootstrap4-modal "^2.0.0"
+    react-clipboard.js "^2.0.16"
+    react-codemirror2 "^7.2.1"
+    react-cool-onclickoutside "^1.6.2"
     uuid "^8.3.2"
 
 "@nodelib/fs.scandir@2.1.3":
@@ -2840,6 +2846,15 @@
   integrity sha512-gIkl4J44G/qxbuC6r2Xh+D3CGZpJ+NdWTItAPmZbR5mUS+JQ8Zvzpl0ea5qT/ZT3ZNTUcDKUVqV3xBE8wv/DyQ==
   dependencies:
     "@types/prop-types" "*"
+    csstype "^3.0.2"
+
+"@types/react@^17.0":
+  version "17.0.9"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.9.tgz#1147fb520024a62c9b3841f5cb4db89b73ddb87f"
+  integrity sha512-2Cw7FvevpJxQrCb+k5t6GH1KIvmadj5uBbjPaLlJB/nZWUj56e1ZqcD6zsoMFB47MsJUTFl9RJ132A7hb3QFJA==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
     csstype "^3.0.2"
 
 "@types/reactcss@*":
@@ -11451,7 +11466,7 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
-react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.6:
+react-bootstrap4-modal@^1.2.2:
   version "1.7.6"
   resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.7.6.tgz#6eb36db438cb1ce141cbc4cce3c4196e4379b45e"
   integrity sha512-hhxwDq8zr6uxZWaQftoGxHSSywj1lyd8GQEoDJeZpHWjPdEJqUFErW9thbOrTjrd+H+GTuXZlFaR28G5cGlDYQ==
@@ -11459,6 +11474,14 @@ react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.6:
     "@types/react" "^16.9.41"
     classnames "^2.2.5"
     prop-types "^15.5.10"
+
+react-bootstrap4-modal@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-2.0.0.tgz#0d846464c101c3806e638e3eed7047fd3bd7a7cd"
+  integrity sha512-m7N6UncW8QJjvGzVFsqj/LwS/tbsRdwpNIWMBLX5avI5SRzX5zr8r3ksfIgEBjNm3UcS1uEiuiaFChnE4KJMEA==
+  dependencies:
+    "@types/react" "^17.0"
+    classnames "^2.3.1"
 
 react-clipboard.js@^2.0.16:
   version "2.0.16"

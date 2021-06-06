@@ -89,7 +89,7 @@ module.exports = {
       },
       {
         test: /\.(mjs|js|jsx|ts|tsx)?(\.erb)?$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /\.yalc/],
         use: [
           {
             loader: 'babel-loader',
@@ -118,6 +118,8 @@ module.exports = {
     ],
     alias: {
       'lodash.isequal': 'lodash-es/isEqual',
+      'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
+      'react/jsx-runtime': 'react/jsx-runtime.js',
     },
     fallback: {
       stream: require.resolve('stream-browserify'),
