@@ -1,7 +1,7 @@
-const environment = require('./environment');
-const fs = require('fs');
+import environment from './environment.js';
+import { readFileSync } from 'fs';
 
-module.exports = {
+export default {
   ...environment,
   mode: 'development',
   cache: true,
@@ -18,27 +18,25 @@ module.exports = {
     publicPath: 'https://localhost:3135/packs/',
   },
   devServer: {
-    clientLogLevel: 'none',
-    contentBase: environment.output.path,
-    publicPath: environment.output.publicPath,
-    disableHostCheck: true,
+    // clientLogLevel: 'none',
+    static: {
+      directory: environment.output.path,
+      publicPath: environment.output.publicPath,
+    },
+    firewall: false,
     historyApiFallback: {
       disableDotRule: true,
     },
-    stats: {
-      errorDetails: true,
-      colors: true,
-    },
-    overlay: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
     transportMode: 'ws',
-    https: true,
-    key: fs.readFileSync('./dev_certificate.key'),
-    cert: fs.readFileSync('./dev_certificate.crt'),
-    ca: fs.readFileSync('./dev_ca.crt'),
+    https: {
+      key: readFileSync('./dev_certificate.key'),
+      cert: readFileSync('./dev_certificate.crt'),
+      cacert: readFileSync('./dev_ca.crt'),
+    },
   },
 };
