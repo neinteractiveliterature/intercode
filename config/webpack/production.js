@@ -1,28 +1,24 @@
-const environment = require('./environment');
-const process = require('process');
-const TerserPlugin = require('terser-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+import process from 'process';
+import TerserPlugin from 'terser-webpack-plugin';
+import CompressionPlugin from 'compression-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import RollbarSourceMapPlugin from 'rollbar-sourcemap-webpack-plugin';
+import environment from './environment.js';
 
 if (process.env.ANALYZE_BUNDLE_SIZE) {
-  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-
   environment.plugins.push(new BundleAnalyzerPlugin());
-} else {
-  const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
-
-  if (process.env.ROLLBAR_ACCESS_TOKEN) {
-    environment.plugins.push(
-      new RollbarSourceMapPlugin({
-        accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
-        version: process.env.SOURCE_VERSION,
-        publicPath: process.env.ROLLBAR_PUBLIC_PATH,
-      }),
-    );
-  }
+} else if (process.env.ROLLBAR_ACCESS_TOKEN) {
+  environment.plugins.push(
+    new RollbarSourceMapPlugin({
+      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+      version: process.env.SOURCE_VERSION,
+      publicPath: process.env.ROLLBAR_PUBLIC_PATH,
+    }),
+  );
 }
 
-module.exports = {
+export default {
   ...environment,
   mode: 'production',
   devtool: 'nosources-source-map',
