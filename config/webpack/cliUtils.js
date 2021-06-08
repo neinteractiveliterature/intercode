@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { BannerPlugin } from 'webpack';
 import WebpackShellPluginNext from 'webpack-shell-plugin-next';
-import environment, { plugins as _plugins } from './environment.js';
+import environment from './environment.js';
 
 export default {
   ...environment,
@@ -18,7 +18,7 @@ export default {
   target: 'node',
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   plugins: [
-    ..._plugins,
+    ...environment.plugins,
     new BannerPlugin({
       banner: '#!/usr/bin/env node',
       raw: true,
