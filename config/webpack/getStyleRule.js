@@ -1,5 +1,4 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { resolve } = require('path');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const getStyleRule = (test, preprocessors = []) => {
   const use = [
@@ -26,4 +25,4 @@ const getStyleRule = (test, preprocessors = []) => {
   return { test, use, sideEffects: true, exclude: /\.module\.[a-z]+$/ };
 };
 
-module.exports = getStyleRule;
+export default getStyleRule;

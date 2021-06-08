@@ -1,14 +1,15 @@
-const webpack = require('webpack');
-const process = require('process');
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WebpackAssetsManifest = require('webpack-assets-manifest');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const getStyleRule = require('./getStyleRule');
+import { resolve } from 'path';
+import webpack from 'webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import WebpackAssetsManifest from 'webpack-assets-manifest';
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import { createRequire } from 'module';
+import getStyleRule from './getStyleRule.js';
 
+const require = createRequire(import.meta.url);
 const CACHE_PATH = 'tmp/cache/webpack';
 
-module.exports = {
+export default {
   entry: {
     application: './app/javascript/packs/applicationEntry.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',
@@ -17,7 +18,7 @@ module.exports = {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
     hotUpdateChunkFilename: '[id]-[hash].hot-update.js',
-    path: path.resolve('public/packs'),
+    path: resolve('public/packs'),
     publicPath: '/packs/',
     environment: {
       arrowFunction: false,
@@ -25,7 +26,7 @@ module.exports = {
   },
   cache: {
     type: 'filesystem',
-    cacheDirectory: path.resolve(CACHE_PATH, 'cache-loader'),
+    cacheDirectory: resolve(CACHE_PATH, 'cache-loader'),
   },
   module: {
     rules: [
@@ -36,7 +37,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[path][name]-[hash].[ext]',
-              context: path.resolve('app/javascript'),
+              context: resolve('app/javascript'),
             },
           },
         ],
@@ -59,7 +60,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.resolve(CACHE_PATH, 'babel-loader'),
+              cacheDirectory: resolve(CACHE_PATH, 'babel-loader'),
               presets: [
                 [
                   '@babel/env',
@@ -76,13 +77,13 @@ module.exports = {
       },
       {
         test: /\.(jsx)$/,
-        include: /node_modules\/cadmus-navbar-admin/,
+        include: [/node_modules\/cadmus-navbar-admin/],
         type: 'javascript/auto',
         use: [
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.resolve(CACHE_PATH, 'babel-loader'),
+              cacheDirectory: resolve(CACHE_PATH, 'babel-loader'),
             },
           },
         ],
@@ -94,7 +95,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: path.resolve(CACHE_PATH, 'babel-loader'),
+              cacheDirectory: resolve(CACHE_PATH, 'babel-loader'),
             },
           },
         ],

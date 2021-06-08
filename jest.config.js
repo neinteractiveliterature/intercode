@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   collectCoverage: false,
   collectCoverageFrom: ['app/javascript/**/*.{js,jsx}', '!**/node_modules/**'],
   coverageDirectory: 'coverage',
@@ -18,16 +18,16 @@ module.exports = {
       },
     ],
   ],
-  setupFiles: [
-    // 'jest-prop-type-error',
-    'regenerator-runtime/runtime',
-  ],
+  setupFiles: ['regenerator-runtime/runtime'],
   setupFilesAfterEnv: ['./test/javascript/setupTests.ts'],
-  testEnvironment: 'jest-environment-jsdom-sixteen',
+  testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/config'],
   transform: {
-    '\\.(gql|graphql)$': 'jest-transform-graphql',
     '^.+\\.(js|ts)x?$': './test/javascript/transform.js',
   },
-  transformIgnorePatterns: ['/node_modules/(?!(lodash-es|@juggle/resize-observer)/)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(lodash-es|@juggle/resize-observer|@neinteractiveliterature/litform|react-bootstrap4-modal|@apollo/client/link|@apollo/client/utilities)/)',
+  ],
 };
+
+export default config;

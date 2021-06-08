@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
-const WebpackShellPluginNext = require('webpack-shell-plugin-next');
-const environment = require('./environment');
+import { resolve } from 'path';
+import webpack from 'webpack';
+import WebpackShellPluginNext from 'webpack-shell-plugin-next';
+import environment from './environment.js';
 
-module.exports = {
+export default {
   ...environment,
   entry: {
     diffTranslations: './script/diffTranslations.ts',
@@ -13,7 +13,7 @@ module.exports = {
   devtool: 'cheap-source-map',
   output: {
     filename: '[name]',
-    path: path.resolve('bin'),
+    path: resolve('bin'),
   },
   target: 'node',
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
