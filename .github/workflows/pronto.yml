@@ -46,7 +46,7 @@ jobs:
       - if: github.actor != 'dependabot[bot]'
         run: yarn install
       - if: github.actor != 'dependabot[bot]'
-        run: PRONTO_PULL_REQUEST_ID="$(jq --raw-output .number "$GITHUB_EVENT_PATH")"
-          PRONTO_GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
-          pronto run -f github_status github_pr
-          -c origin/main
+        env:
+          PRONTO_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          PRONTO_GITHUB_ACCESS_TOKEN: "${{ github.token }}"
+        run: pronto run -f github_status github_pr -c origin/${{ github.base_ref }}
