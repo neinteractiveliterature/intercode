@@ -81,7 +81,7 @@ function CmsFilesAdmin() {
               <CopyToClipboardButton
                 className="btn btn-sm btn-outline-primary"
                 defaultText="Copy CMS embed code"
-                data-clipboard-text={`{% file_url ${cmsFile.filename} %}`}
+                text={`{% file_url ${cmsFile.filename} %}`}
               />
             </div>
             <div className="card-body text-center py-2">
