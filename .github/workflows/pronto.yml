@@ -49,4 +49,4 @@ jobs:
         env:
           PRONTO_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
           PRONTO_GITHUB_ACCESS_TOKEN: "${{ github.token }}"
-        run: pronto run -f github_status github_pr -c origin/${{ github.base_ref }}
+        run: pronto run -f github_status_combined github_pr_review -c origin/${{ github.base_ref }}
