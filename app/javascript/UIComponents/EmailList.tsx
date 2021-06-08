@@ -37,7 +37,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
 
           <CopyToClipboardButton
             className="btn btn-secondary me-2"
-            data-clipboard-text={addresses}
+            text={addresses}
             copiedProps={{
               className: 'btn btn-outline-secondary me-2',
             }}

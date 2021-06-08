@@ -47,7 +47,7 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
       </a>
       <CopyToClipboardButton
         className="dropdown-item"
-        data-clipboard-text={icalUrl}
+        text={icalUrl.toString()}
         copiedProps={{ className: 'dropdown-item text-success' }}
         defaultText={t('addToCalendarDropdown.copyWebcal', 'Copy webcal:// link')}
       />
