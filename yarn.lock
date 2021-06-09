@@ -1458,18 +1458,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@graphiql/toolkit@^0.2.0":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@graphiql/toolkit/-/toolkit-0.2.1.tgz#2e23829ab7327d79006126dfe72cfed72c61250c"
-  integrity sha512-ogW2TCVmZOV9fwDhO33h4q64KoCoekCEg+hHY6TzN2Gw8qCKOjRmIL7QW6+uiplJEgQHQqr9wFgzs7I/AcOQhQ==
-  dependencies:
-    "@n1ru4l/push-pull-async-iterable-iterator" "^2.1.4"
-    graphql-ws "^4.3.2"
-    meros "^1.1.4"
-  optionalDependencies:
-    subscriptions-transport-ws "^0.9.18"
-
-"@graphiql/toolkit@^0.2.2":
+"@graphiql/toolkit@^0.2.0", "@graphiql/toolkit@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@graphiql/toolkit/-/toolkit-0.2.2.tgz#193d570afcf686c9ee61c92054c1782b9f3c1255"
   integrity sha512-kDgYhqnS4p4LqSo1KvLd3tbX8Hhdj0ZrgQuGsosjjEnahiPYmmylxUL1p9lj6348OsypcTlCncGpEjeb9S3TiQ==
@@ -6483,10 +6472,10 @@ graceful-fs@^4.2.6:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-graphiql@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-1.4.1.tgz#8df7a60a487aef32b71274ad1bb93118ac9f2213"
-  integrity sha512-C7S36lTgCw2/C/Dt90eJSI9VdxQfohrUoDV1dt/WecS7dm5HcaQUIYFqvLQMZG1cSRJttRKwNwP1rYfs73v8SQ==
+graphiql@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-1.4.2.tgz#a1dc1a4d8d35f60c90d6d8a9eb62a99756e9fd9b"
+  integrity sha512-TQDuuU/ZqTWV1yQDpVEiKskg0IYA+Wck37DYrrFzLlpgZWRbWiyab1PyHKiRep7J540CgScBg6C/gGCymKyO3g==
   dependencies:
     "@graphiql/toolkit" "^0.2.0"
     codemirror "^5.54.0"
