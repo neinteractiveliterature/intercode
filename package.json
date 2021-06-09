@@ -22,7 +22,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@apollo/client": "^3.3.18",
+    "@apollo/client": "^3.3.20",
     "@babel/core": "^7.14.3",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-proposal-do-expressions": "^7.14.0",
