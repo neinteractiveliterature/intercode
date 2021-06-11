@@ -95,7 +95,7 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "classnames": "^2.3.1",
     "compression-webpack-plugin": "^8.0.0",
-    "core-js": "^3.13.1",
+    "core-js": "^3.14.0",
     "css-loader": "^5.2.4",
     "css-minimizer-webpack-plugin": "^3.0.1",
     "csv-string": "^4.0.1",
