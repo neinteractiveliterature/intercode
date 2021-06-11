@@ -48,7 +48,7 @@
     "@babel/register": "^7.13.16",
     "@emotion/serialize": "^1.0.2",
     "@graphiql/toolkit": "^0.2.2",
-    "@juggle/resize-observer": "^3.3.0",
+    "@juggle/resize-observer": "^3.3.1",
     "@neinteractiveliterature/litform": "^0.9.1",
     "@popperjs/core": "^2.9.2",
     "@stripe/react-stripe-js": "^1.4.1",
@@ -67,7 +67,7 @@
     "@types/luxon": "^1.26.5",
     "@types/mapbox-gl": "^1.12.9",
     "@types/minimist": "^1.2.0",
-    "@types/react": "^17.0.9",
+    "@types/react": "^17.0.11",
     "@types/react-click-outside-hook": "^1.0.0",
     "@types/react-color": "^3.0.4",
     "@types/react-dnd-multi-backend": "^6.0.0",
@@ -186,7 +186,7 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react-hooks": "^7.0.0",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.1",
     "@webpack-cli/serve": "^1.5.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
@@ -221,7 +221,7 @@
   },
   "resolutions": {
     "**/**/kind-of": ">= 6.0.3",
-    "@typescript-eslint/parser": "4.26.0"
+    "@typescript-eslint/parser": "4.26.1"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
