@@ -634,12 +634,12 @@
     "@babel/helper-wrap-function" "^7.12.13"
     "@babel/plugin-syntax-function-sent" "^7.12.13"
 
-"@babel/plugin-proposal-json-strings@^7.14.2":
-  version "7.14.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-json-strings/-/plugin-proposal-json-strings-7.14.2.tgz#830b4e2426a782e8b2878fbfe2cba85b70cbf98c"
-  integrity sha512-w2DtsfXBBJddJacXMBhElGEYqCZQqN99Se1qeYn8DVLB33owlrlLftIbMzn5nz1OITfDVknXF433tBrLEAOEjA==
+"@babel/plugin-proposal-json-strings@^7.14.2", "@babel/plugin-proposal-json-strings@^7.14.5":
+  version "7.14.5"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-json-strings/-/plugin-proposal-json-strings-7.14.5.tgz#38de60db362e83a3d8c944ac858ddf9f0c2239eb"
+  integrity sha512-NSq2fczJYKVRIsUJyNxrVUMhB27zb7N7pOFGQOhBKJrChbGcgEAqyZrmZswkPk18VMurEeJAaICbfm57vUeTbQ==
   dependencies:
-    "@babel/helper-plugin-utils" "^7.13.0"
+    "@babel/helper-plugin-utils" "^7.14.5"
     "@babel/plugin-syntax-json-strings" "^7.8.3"
 
 "@babel/plugin-proposal-logical-assignment-operators@^7.13.8", "@babel/plugin-proposal-logical-assignment-operators@^7.14.2":
@@ -2277,10 +2277,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@juggle/resize-observer@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.3.0.tgz#2e7a2935adbfae46f9efbd1e1455254ee7ea2219"
-  integrity sha512-P1v2nvK7z2gOLVM/bveIRLG9L99uEahTGgTltyF03zixZAjI9YmKLj5Z9MpS9wBIUt5WDoQORT2lXvLOIF89iA==
+"@juggle/resize-observer@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.3.1.tgz#b50a781709c81e10701004214340f25475a171a0"
+  integrity sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==
 
 "@mapbox/geojson-rewind@^0.5.0":
   version "0.5.0"
@@ -12530,10 +12530,10 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-thread-loader@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-3.0.3.tgz#c0fa0eae3b925f273a7cce868cf1f52b4a515d78"
-  integrity sha512-/s8dGDkKLF89qAsn2b0PNdXS68pKhj+/Rqd7YDht/OvTlBoMm0FAsndceowSX1GEKVLo8yKRil9e+W0PpI/q1g==
+thread-loader@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-3.0.4.tgz#c392e4c0241fbc80430eb680e4886819b504a31b"
+  integrity sha512-ByaL2TPb+m6yArpqQUZvP+5S1mZtXsEP7nWKKlAUTm7fCml8kB5s1uI3+eHRP2bk5mVYfRSBI7FFf+tWEyLZwA==
   dependencies:
     json-parse-better-errors "^1.0.2"
     loader-runner "^4.1.0"
