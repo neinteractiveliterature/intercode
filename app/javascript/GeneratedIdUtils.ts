@@ -44,7 +44,7 @@ export function getRealOrGeneratedId<T extends RealIdObject<IdType>, IdType>(
     return value.id;
   }
 
-  return value.generatedId;
+  return (value as WithGeneratedId<T, IdType>).generatedId;
 }
 
 export function realOrGeneratedIdsMatch<T extends RealIdObject<IdType>, IdType>(
