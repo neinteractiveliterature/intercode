@@ -24,6 +24,7 @@ jobs:
     - name: chmod docker-compose
       run: sudo chmod +x /usr/local/bin/docker-compose
     - name: Set up Docker Buildx
+      id: buildx
       uses: docker/setup-buildx-action@v1
       with:
         install: true
