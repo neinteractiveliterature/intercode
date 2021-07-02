@@ -14,11 +14,17 @@ jobs:
     - name: Set up cache
       uses: actions/cache@v1
       with:
-        path: build-cache
+        path: buildkit-cache
         key: ${{ runner.os }}-docker-${{ github.ref }}-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-docker-${{ github.ref }}-
           ${{ runner.os }}-docker-
+    - name: Load buildkit state from cache
+      uses: dashevo/gh-action-cache-buildkit-state@v1
+      with:
+        builder: buildx_buildkit_${{ steps.buildx.outputs.name }}0
+        cache-path: $(pwd)/buildkit-cache
+        cache-max-size: 2g
     - name: Install docker-compose
       run: sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     - name: chmod docker-compose
@@ -31,13 +37,9 @@ jobs:
     # Do the actual build
     - name: Build the "local-build-production" Docker image
       run: docker buildx build .
-        $(if [ -f build-cache/index.json ]; then echo '--cache-from=type=local,src=build-cache'; fi)
-        --cache-to=type=local,dest=build-cache-new
         --target build-production
         --tag local-build-production
         --load
-    - name: Replace the old build cache with the new one
-      run: rm -rf build-cache && mv build-cache-new build-cache
 
     # Run the tests
     - name: Build the "test" Docker image
