@@ -2338,19 +2338,19 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@testing-library/dom@^7.28.1":
-  version "7.28.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.28.1.tgz#dea78be6e1e6db32ddcb29a449e94d9700c79eb9"
-  integrity sha512-acv3l6kDwZkQif/YqJjstT3ks5aaI33uxGNVIQmdKzbZ2eMKgg3EV2tB84GDdc72k3Kjhl6mO8yUt6StVIdRDg==
+"@testing-library/dom@^8.0.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.1.0.tgz#f8358b1883844ea569ba76b7e94582168df5370d"
+  integrity sha512-kmW9alndr19qd6DABzQ978zKQ+J65gU2Rzkl8hriIetPnwpesRaK4//jEQyYh8fEALmGhomD/LBQqt+o+DL95Q==
   dependencies:
     "@babel/code-frame" "^7.10.4"
     "@babel/runtime" "^7.12.5"
     "@types/aria-query" "^4.2.0"
     aria-query "^4.2.2"
     chalk "^4.1.0"
-    dom-accessibility-api "^0.5.4"
+    dom-accessibility-api "^0.5.6"
     lz-string "^1.4.4"
-    pretty-format "^26.6.2"
+    pretty-format "^27.0.2"
 
 "@testing-library/jest-dom@^5.14.1":
   version "5.14.1"
@@ -2378,13 +2378,13 @@
     "@types/react-test-renderer" ">=16.9.0"
     react-error-boundary "^3.1.0"
 
-"@testing-library/react@^11.2.7":
-  version "11.2.7"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-11.2.7.tgz#b29e2e95c6765c815786c0bc1d5aed9cb2bf7818"
-  integrity sha512-tzRNp7pzd5QmbtXNG/mhdcl7Awfu/Iz1RaVHY75zTdOkmHCuzMhRL83gWHSgOAcjS3CCbyfwUHMZgRJb4kAfpA==
+"@testing-library/react@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-12.0.0.tgz#9aeb2264521522ab9b68f519eaf15136148f164a"
+  integrity sha512-sh3jhFgEshFyJ/0IxGltRhwZv2kFKfJ3fN1vTZ6hhMXzz9ZbbcTgmDYM4e+zJv+oiVKKEWZPyqPAh4MQBI65gA==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@testing-library/dom" "^7.28.1"
+    "@testing-library/dom" "^8.0.0"
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -5135,7 +5135,7 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dom-accessibility-api@^0.5.4, dom-accessibility-api@^0.5.6:
+dom-accessibility-api@^0.5.6:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.5.6.tgz#3f5d43b52c7a3bd68b5fb63fa47b4e4c1fdf65a9"
   integrity sha512-DplGLZd8L1lN64jlT27N9TVSESFR5STaEJvX+thCby7fuCHonfPpAlodYc3vuUYbDuDec5w8AMP7oCM5TWFsqw==
@@ -8430,10 +8430,10 @@ linkify-it@^2.0.0:
   dependencies:
     uc.micro "^1.0.1"
 
-lint-staged@>=10:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-11.0.0.tgz#24d0a95aa316ba28e257f5c4613369a75a10c712"
-  integrity sha512-3rsRIoyaE8IphSUtO1RVTFl1e0SLBtxxUOPBtHxQgBHS5/i6nqvjcUfNioMa4BU9yGnPzbO+xkfLtXtxBpCzjw==
+lint-staged@>=11:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-11.1.1.tgz#9c2018b872654cf80b2b1ff5a10b6b74aef6e300"
+  integrity sha512-eTNGe6i78PSUUH2BZi1gZmGmNfb8IeN4z2OzMYxSZ1qnP1WXKn1E7D+OHwLbRDm/wQINnzIj0bsKJ6lLVSuZiQ==
   dependencies:
     chalk "^4.1.1"
     cli-truncate "^2.1.0"
@@ -8967,15 +8967,7 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
-micromatch@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.2.tgz#4fcb0999bf9fbc2fcbdd212f6d629b9a56c39259"
-  integrity sha512-y7FpHSbMUMoyPbYUSzO6PaZ6FyRnQOpHuKwbo1G+Knck95XVU4QAiKdGEnj5wwoS7PlOgthX/09u5iFJ+aYf5Q==
-  dependencies:
-    braces "^3.0.1"
-    picomatch "^2.0.5"
-
-micromatch@^4.0.4:
+micromatch@^4.0.2, micromatch@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.4.tgz#896d519dfe9db25fce94ceb7a500919bf881ebf9"
   integrity sha512-pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==
@@ -9739,7 +9731,7 @@ pbf@^3.0.5, pbf@^3.2.1:
     ieee754 "^1.1.12"
     resolve-protobuf-schema "^2.1.0"
 
-picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.2.1:
+picomatch@^2.0.4, picomatch@^2.2.1:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
   integrity sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg==
