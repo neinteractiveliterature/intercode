@@ -96,7 +96,7 @@ GEM
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     ansi (1.5.0)
-    apollo_upload_server (2.0.5)
+    apollo_upload_server (2.1.0)
       actionpack (>= 4.2)
       graphql (>= 1.8)
     ast (2.4.2)
@@ -312,7 +312,7 @@ GEM
     listen (3.6.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.10.0)
+    loofah (2.11.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -327,7 +327,7 @@ GEM
     mime-types-data (3.2021.0225)
     mini_magick (4.11.0)
     mini_mime (1.1.0)
-    mini_portile2 (2.5.3)
+    mini_portile2 (2.6.1)
     minipack (0.3.6)
       actionview
       railties (>= 4.2)
@@ -360,10 +360,10 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.7)
     nio4r (2.5.7-java)
-    nokogiri (1.11.7)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.12.2)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.11.7-java)
+    nokogiri (1.12.2-java)
       racc (~> 1.4)
     oj (3.12.3)
     orm_adapter (0.5.0)
@@ -580,7 +580,7 @@ DEPENDENCIES
   activerecord-session_store
   ahoy_matey
   annotate
-  apollo_upload_server (= 2.0.5)
+  apollo_upload_server (= 2.1.0)
   aws-sdk-rails
   aws-sdk-s3
   aws-sdk-sns
