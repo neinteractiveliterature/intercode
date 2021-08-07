@@ -1,5 +1,5 @@
 class FormResponseChangeGroupPresenter
-  SCRIPT_PATH = File.expand_path('bin/renderFormResponseChangeGroup', Rails.root)
+  SCRIPT_PATH = File.expand_path('bin/renderFormResponseChangeGroup.cjs', Rails.root)
   attr_reader :changes, :convention
 
   def initialize(changes, convention)

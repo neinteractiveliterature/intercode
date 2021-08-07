@@ -12,11 +12,11 @@ export default {
   },
   devtool: 'cheap-source-map',
   output: {
-    filename: '[name]',
+    filename: '[name].cjs',
     path: resolve('bin'),
   },
   target: 'node',
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: 'development', // we always want good tracebacks from the CLI utils even in prod
   plugins: [
     ...environment.plugins,
     new webpack.BannerPlugin({
@@ -26,9 +26,9 @@ export default {
     new WebpackShellPluginNext({
       onBuildEnd: {
         scripts: [
-          'chmod +x bin/diffTranslations',
-          'chmod +x bin/mergeTranslations',
-          'chmod +x bin/renderFormResponseChangeGroup',
+          'chmod +x bin/diffTranslations.cjs',
+          'chmod +x bin/mergeTranslations.cjs',
+          'chmod +x bin/renderFormResponseChangeGroup.cjs',
         ],
       },
     }),

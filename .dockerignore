@@ -17,7 +17,8 @@
 
 # Ignore build artifacts
 /bin/manifest.json
-/bin/renderFormResponseChangeGroup
+/bin/*.cjs
+/bin/assets-manifest.json
 
 # Ignore bundler config
 /.bundle
