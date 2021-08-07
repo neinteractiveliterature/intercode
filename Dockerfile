@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1.1.3-experimental
 ARG RUBY_VERSION=2.7.3
 
-### build-production
+### build
 
-FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
+FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build
 
 USER root
 WORKDIR /usr/src/intercode
@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
 
 ### test
 
-FROM build-production AS test
+FROM build AS test
 
 ENV RAILS_ENV test
 ENV NODE_ENV test
@@ -54,17 +54,18 @@ ENV NODE_ENV test
 USER root
 RUN apk add --no-cache postgresql-client
 
-# Unfortunately all the previous stuff is going to have run yarn install with NODE_ENV=production
-# and we need it to be test for this
-# RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-#   yarn install --production=false
+### pre-production
+
+FROM build AS pre-production
+
+RUN rm -rf node_modules
 
 ### production
 
 FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
 
-COPY --from=build-production /usr/local/bundle /usr/local/bundle
-COPY --from=build-production --chown=www /usr/src/intercode /usr/src/intercode
+COPY --from=pre-production /usr/local/bundle /usr/local/bundle
+COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
 CMD bundle exec rails server -p $PORT -b 0.0.0.0
