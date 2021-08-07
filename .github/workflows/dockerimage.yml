@@ -38,16 +38,16 @@ jobs:
         cache-max-size: 2g
 
     # Do the actual build
-    - name: Build the "local-build-production" Docker image
+    - name: Build the "local-build" Docker image
       run: docker buildx build .
-        --target build-production
-        --tag local-build-production
+        --target build
+        --tag local-build
         --load
 
     # Run the tests
     - name: Build the "test" Docker image
       run: docker buildx build .
-        --cache-from local-build-production
+        --cache-from local-build
         --target test
         --tag local-test
         --load
@@ -91,7 +91,7 @@ jobs:
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && (github.event.ref == 'refs/heads/main')
       run: docker buildx build .
-        --cache-from local-build-production
+        --cache-from local-build
         --target production
         --tag local-production
         --load
@@ -140,4 +140,4 @@ jobs:
 #     - name: Download container-diff
 #       run: curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64
 #     - name: Diff the images
-#       run: ./container-diff-linux-amd64 diff docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-main daemon://local-build-production
+#       run: ./container-diff-linux-amd64 diff docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-main daemon://local-build
