@@ -7,10 +7,8 @@
 .DS_Store
 
 # Ignore build artifacts
-/bin/diffTranslations
-/bin/manifest.json
-/bin/mergeTranslations
-/bin/renderFormResponseChangeGroup
+/bin/*.cjs
+/bin/assets-manifest.json
 /test/html_reports
 
 # Ignore bundler config
