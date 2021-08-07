@@ -176,14 +176,14 @@ describe('EditEvent', () => {
     test('no cancel link by default', async () => {
       const { queryByText } = await renderEditEvent();
       expect(
-        queryByText((content, element) => element.tagName === 'A' && content === 'Cancel'),
+        queryByText((content, element) => element?.tagName === 'A' && content === 'Cancel'),
       ).toBeNull();
     });
 
     test('passing a cancelPath makes a cancel link show up', async () => {
       const { queryAllByText } = await renderEditEvent({ cancelPath: '/' });
       expect(
-        queryAllByText((content, element) => element.tagName === 'A' && content === 'Cancel'),
+        queryAllByText((content, element) => element?.tagName === 'A' && content === 'Cancel'),
       ).toHaveLength(1);
     });
   });
