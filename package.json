@@ -88,7 +88,7 @@
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-graphql-tag": "^3.3.0",
     "babel-plugin-lodash": "^3.3.4",
-    "bootstrap": "^5.0.1",
+    "bootstrap": "^5.0.2",
     "bytes": "^3.1.0",
     "cadmus-navbar-admin": "^4.0.0",
     "caniuse-lite": "^1.0.30001247",
