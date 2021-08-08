@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.1.3-experimental
+# syntax=docker/dockerfile:1.3
 ARG RUBY_VERSION=2.7.3
 
 ### build
