@@ -91,7 +91,7 @@
     "bootstrap": "^5.0.2",
     "bytes": "^3.1.0",
     "cadmus-navbar-admin": "^4.0.0",
-    "caniuse-lite": "^1.0.30001247",
+    "caniuse-lite": "^1.0.30001249",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "classnames": "^2.3.1",
     "compression-webpack-plugin": "^8.0.0",
