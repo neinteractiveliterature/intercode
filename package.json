@@ -69,7 +69,7 @@
     "@types/minimist": "^1.2.0",
     "@types/react": "^17.0.16",
     "@types/react-click-outside-hook": "^1.0.0",
-    "@types/react-color": "^3.0.4",
+    "@types/react-color": "^3.0.5",
     "@types/react-dnd-multi-backend": "^6.0.0",
     "@types/react-google-recaptcha": "^2.1.2",
     "@types/react-onclickoutside": "^6.7.3",
