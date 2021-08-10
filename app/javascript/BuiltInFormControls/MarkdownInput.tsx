@@ -1,6 +1,7 @@
 import { useApolloClient } from '@apollo/client';
 import { CodeInput } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import parsePageContent from '../parsePageContent';
 
 import { PreviewMarkdownQuery } from './previewQueries';
 import { PreviewMarkdownQueryData } from './previewQueries.generated';
@@ -21,7 +22,7 @@ const MarkdownInput = (props: MarkdownInputProps) => {
           fetchPolicy: 'no-cache',
         });
 
-        return response.data?.previewMarkdown ?? '';
+        return parsePageContent(response.data?.previewMarkdown ?? '').bodyComponents;
       }}
     />
   );

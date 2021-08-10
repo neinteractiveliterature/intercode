@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
 import { useApolloClient } from '@apollo/client';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'codemirror';
 import { useModal, CodeInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -16,6 +16,7 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
+import parseCmsContent from '../parseCmsContent';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -154,7 +155,7 @@ function LiquidInput(props: LiquidInputProps) {
           fetchPolicy: 'no-cache',
         });
 
-        return response.data?.previewLiquid ?? '';
+        return parseCmsContent(response.data?.previewLiquid ?? '').bodyComponents;
       };
 
   const addFile = (file: CmsFile) => {
