@@ -43,9 +43,9 @@
     "@babel/plugin-transform-regenerator": "^7.14.5",
     "@babel/polyfill": "^7.11.5",
     "@babel/preset-env": "^7.15.0",
-    "@babel/preset-flow": "^7.13.13",
+    "@babel/preset-flow": "^7.14.5",
     "@babel/preset-react": "^7.14.5",
-    "@babel/register": "^7.14.5",
+    "@babel/register": "^7.15.3",
     "@emotion/serialize": "^1.0.2",
     "@graphiql/toolkit": "^0.2.2",
     "@juggle/resize-observer": "^3.3.1",
@@ -176,7 +176,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "@graphql-codegen/cli": "^2.0.1",
     "@graphql-codegen/fragment-matcher": "^2.0.1",
     "@graphql-codegen/introspection": "^1.18.2",
