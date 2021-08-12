@@ -192,7 +192,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.6",
-    "core-js-compat": "^3.14.0",
+    "core-js-compat": "^3.16.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
