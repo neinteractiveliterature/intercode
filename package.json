@@ -74,7 +74,7 @@
     "@types/react-google-recaptcha": "^2.1.2",
     "@types/react-onclickoutside": "^6.7.4",
     "@types/react-router-dom": "^5.1.8",
-    "@types/react-select": "^4.0.15",
+    "@types/react-select": "^4.0.17",
     "@types/react-table": "^7.7.2",
     "@types/source-map-support": "^0.5.3",
     "@types/tinycolor2": "^1.4.2",
