@@ -207,7 +207,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": ">=6",
-    "i18next-parser": "^4.2.0",
+    "i18next-parser": "^4.4.0",
     "jest": "^27.0.6",
     "jest-html-reporter": "^3.4.1",
     "jest-prop-type-error": "^1.1.0",
