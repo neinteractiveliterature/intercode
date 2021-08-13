@@ -2773,10 +2773,10 @@
     "@types/react" "*"
     "@types/reactcss" "*"
 
-"@types/react-dnd-multi-backend@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-dnd-multi-backend/-/react-dnd-multi-backend-6.0.0.tgz#00fbfa9f649cdc1d27d17a40455124343bc07930"
-  integrity sha512-QSU2mnwwNIMKCH6LqarZGgJo918O9I9bCCSnCZfNRcCn2Fz9R6XYhldUes9b3cxwpG08QEz0zHYOytTM8NizQA==
+"@types/react-dnd-multi-backend@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-dnd-multi-backend/-/react-dnd-multi-backend-6.0.1.tgz#4526c8867db472aea16282204efd9cf63db81759"
+  integrity sha512-qaq8eaIKC8mCKz6OFLoXu7mCbnGe2CqzaXYh/UL2Y6we3ZnXmLYsm8WWsR7FYF3UyYn87/gru2iRU8QJtPAKnA==
   dependencies:
     "@types/react" "*"
     react-dnd "^10.0.2"
