@@ -70,7 +70,7 @@
     "@types/react": "^17.0.16",
     "@types/react-click-outside-hook": "^1.0.0",
     "@types/react-color": "^3.0.5",
-    "@types/react-dnd-multi-backend": "^6.0.0",
+    "@types/react-dnd-multi-backend": "^6.0.1",
     "@types/react-google-recaptcha": "^2.1.2",
     "@types/react-onclickoutside": "^6.7.4",
     "@types/react-router-dom": "^5.1.8",
