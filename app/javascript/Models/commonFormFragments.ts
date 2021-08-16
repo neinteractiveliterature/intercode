@@ -8,6 +8,8 @@ export const CommonFormItemFields = gql`
     item_type
     rendered_properties
     default_value
+    visibility
+    writeability
   }
 `;
 

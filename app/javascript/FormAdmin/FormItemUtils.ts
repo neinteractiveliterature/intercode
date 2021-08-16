@@ -4,7 +4,13 @@ import { assertNever } from 'assert-never';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { FormEditorQuery } from './queries';
-import { FormSection, FormItemInput, RegistrationPolicy } from '../graphqlTypes.generated';
+import {
+  FormSection,
+  FormItemInput,
+  RegistrationPolicy,
+  FormItemVisibility,
+  FormItemWriteability,
+} from '../graphqlTypes.generated';
 import {
   CommonFormSectionFieldsFragment,
   CommonFormItemFieldsFragment,
@@ -34,6 +40,8 @@ export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
   default_value?: ValueType;
   properties?: PropertiesType;
   rendered_properties: PropertiesType;
+  visibility: FormItemVisibility;
+  writeability: FormItemWriteability;
 };
 
 export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFormItem<
@@ -83,7 +91,7 @@ export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<any, any>> =
 };
 
 export type ParsedFormSection<
-  FormItemType extends ParsedFormItem<any, any> = ParsedFormItem<any, any>
+  FormItemType extends ParsedFormItem<any, any> = ParsedFormItem<any, any>,
 > = Omit<FormSection, 'form_items' | 'form'> & { form_items: FormItemType[] };
 
 export type CommonQuestionProperties = {
@@ -127,7 +135,6 @@ export type FreeTextProperties = CommonQuestionProperties & {
   lines: number;
   free_text_type: 'text' | 'email' | 'number' | 'tel' | 'url' | null;
   format: 'text' | 'markdown';
-  hide_from_public?: boolean;
   advisory_word_limit?: number;
   advisory_character_limit?: number;
 };
@@ -358,7 +365,7 @@ export function buildFormItemInput(formItem: ParsedFormItem<any, any>): FormItem
 
 export function formItemPropertyUpdater<
   FormItemType extends ParsedFormItem<any, any>,
-  PropertyName extends keyof FormItemType['properties']
+  PropertyName extends keyof FormItemType['properties'],
 >(
   property: PropertyName,
   onChange: (mutator: (prevFormItem: FormItemType) => FormItemType) => void,
@@ -411,9 +418,8 @@ export type FormTypeDefinition =
   | typeof FormTypes['event_proposal']
   | typeof FormTypes['user_con_profile'];
 
-export type StandardItemIdentifier<
-  FormType extends FormTypeDefinition
-> = keyof FormType['standard_items'];
+export type StandardItemIdentifier<FormType extends FormTypeDefinition> =
+  keyof FormType['standard_items'];
 
 export type AnyStandardItemIdentifier =
   | StandardItemIdentifier<typeof FormTypes['event']>
