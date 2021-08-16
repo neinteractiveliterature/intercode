@@ -41,6 +41,8 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
             copiedProps={{
               className: 'btn btn-outline-secondary me-2',
             }}
+            defaultText={t('copyToClipboard.defaultText', 'Copy to clipboard')}
+            copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
           />
         </div>
         {renderToolbarContent ? renderToolbarContent() : null}
