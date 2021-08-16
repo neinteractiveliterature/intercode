@@ -91,8 +91,8 @@ class FormItem < ApplicationRecord
     }
   }.deep_stringify_keys
 
-  VISIBILITY_VALUES = %w[normal admin_only]
-  WRITEABILITY_VALUES = %w[normal admin_only]
+  VISIBILITY_VALUES = %w[normal confirmed_attendee team_member admin]
+  WRITEABILITY_VALUES = %w[normal admin]
 
   belongs_to :form_section
   has_one :form, through: :form_section
