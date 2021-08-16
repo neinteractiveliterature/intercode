@@ -11,6 +11,8 @@
 #  position           :integer
 #  properties         :jsonb
 #  public_description :text
+#  visibility         :string           default("normal"), not null
+#  writeability       :string           default("normal"), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  form_section_id    :bigint
@@ -24,7 +26,6 @@
 #  fk_rails_...  (form_section_id => form_sections.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class FormItem < ApplicationRecord
   DEFAULT_PROPERTIES_CONFIG = JSON.parse(
     File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))
@@ -90,6 +91,9 @@ class FormItem < ApplicationRecord
     }
   }.deep_stringify_keys
 
+  VISIBILITY_VALUES = %w[normal admin_only]
+  WRITEABILITY_VALUES = %w[normal admin_only]
+
   belongs_to :form_section
   has_one :form, through: :form_section
   acts_as_list scope: :form_section
@@ -103,6 +107,8 @@ class FormItem < ApplicationRecord
     scope: 'form_sections.form_id'
   }
   validate :ensure_properties_match_schema
+  validates :visibility, inclusion: { in: VISIBILITY_VALUES }
+  validates :writeability, inclusion: { in: WRITEABILITY_VALUES }
 
   private
 
