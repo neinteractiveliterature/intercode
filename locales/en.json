@@ -137,6 +137,9 @@
       },
       "title": "Add file"
     },
+    "files": {
+      "copyEmbedCode": "Copy CMS embed code"
+    },
     "fileUploadForm": {
       "clearFileButton": "Clear",
       "fileInputLabel": "Choose a file...",

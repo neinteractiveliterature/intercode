@@ -236,6 +236,8 @@ function LiquidInput(props: LiquidInputProps) {
         editorDidMount={(editor) => {
           editorRef.current = editor;
         }}
+        editButtonText={t('buttons.edit', 'Edit')}
+        previewButtonText={t('buttons.preview', 'Preview')}
         extraNavControls={
           <>
             <li className="nav-item">

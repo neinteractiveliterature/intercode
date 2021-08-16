@@ -5,6 +5,7 @@ import {
   PageLoadingIndicator,
   CopyToClipboardButton,
 } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import { CmsFilesAdminQuery } from './queries';
 import { DeleteCmsFile } from './mutations';
@@ -32,6 +33,7 @@ function CmsFilesAdmin() {
   });
   const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
+  const { t } = useTranslation();
 
   usePageTitle('CMS Files');
 
@@ -80,7 +82,8 @@ function CmsFilesAdmin() {
               </small>
               <CopyToClipboardButton
                 className="btn btn-sm btn-outline-primary"
-                defaultText="Copy CMS embed code"
+                defaultText={t('cms.files.copyEmbedCode', 'Copy CMS embed code')}
+                copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
                 text={`{% file_url ${cmsFile.filename} %}`}
               />
             </div>
