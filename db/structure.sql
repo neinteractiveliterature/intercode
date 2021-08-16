@@ -1377,7 +1377,9 @@ CREATE TABLE public.form_items (
     updated_at timestamp without time zone NOT NULL,
     admin_description text,
     default_value jsonb,
-    public_description text
+    public_description text,
+    visibility character varying DEFAULT 'normal'::character varying NOT NULL,
+    writeability character varying DEFAULT 'normal'::character varying NOT NULL
 );
 
 
@@ -5278,6 +5280,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201010181146'),
 ('20201201184155'),
 ('20210508172432'),
-('20210530161658');
+('20210530161658'),
+('20210815202439');
 
 

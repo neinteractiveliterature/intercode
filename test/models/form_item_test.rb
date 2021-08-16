@@ -11,6 +11,8 @@
 #  position           :integer
 #  properties         :jsonb
 #  public_description :text
+#  visibility         :string           default("normal"), not null
+#  writeability       :string           default("normal"), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  form_section_id    :bigint
@@ -24,7 +26,6 @@
 #  fk_rails_...  (form_section_id => form_sections.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class FormItemTest < ActiveSupport::TestCase
