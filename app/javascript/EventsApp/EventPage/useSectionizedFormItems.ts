@@ -16,10 +16,10 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: st
       formResponse[item.identifier],
   );
   const shortFormItems: TypedFormItem[] = [];
-  const secretFormItems: FreeTextFormItem[] = [];
+  const secretFormItems: TypedFormItem[] = [];
   const longFormItems: TypedFormItem[] = [];
   displayFormItems.forEach((item) => {
-    if (item.item_type === 'free_text' && item.rendered_properties.hide_from_public) {
+    if (item.visibility !== 'normal') {
       secretFormItems.push(item);
     } else if (item.item_type === 'free_text' && item.rendered_properties.format === 'markdown') {
       longFormItems.push(item);

@@ -22,6 +22,7 @@
     "./app/javascript/",
     "./script",
     "./test/javascript/",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "graphql.config.js"
   ]
 }
