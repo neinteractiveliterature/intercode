@@ -1978,8 +1978,8 @@ export type FormItem = {
   properties?: Maybe<Scalars['Json']>;
   public_description?: Maybe<Scalars['String']>;
   rendered_properties?: Maybe<Scalars['Json']>;
-  visibility: FormItemVisibility;
-  writeability: FormItemWriteability;
+  visibility: FormItemRole;
+  writeability: FormItemRole;
 };
 
 export type FormItemInput = {
@@ -1989,18 +1989,15 @@ export type FormItemInput = {
   item_type?: Maybe<Scalars['String']>;
   properties?: Maybe<Scalars['Json']>;
   public_description?: Maybe<Scalars['String']>;
+  visibility?: Maybe<FormItemRole>;
+  writeability?: Maybe<FormItemRole>;
 };
 
-export enum FormItemVisibility {
+export enum FormItemRole {
   Admin = 'admin',
   ConfirmedAttendee = 'confirmed_attendee',
   Normal = 'normal',
   TeamMember = 'team_member'
-}
-
-export enum FormItemWriteability {
-  Admin = 'admin',
-  Normal = 'normal'
 }
 
 export type FormResponseChange = {

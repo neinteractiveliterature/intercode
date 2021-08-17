@@ -1,3 +1,4 @@
+import { FormItemRole } from '../../app/javascript/graphqlTypes.generated';
 import {
   CommonFormFieldsFragment,
   CommonFormSectionFieldsFragment,
@@ -32,6 +33,8 @@ export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFra
         identifier,
         default_value: JSON.stringify(defaultValue ?? null),
         rendered_properties: JSON.stringify(properties),
+        visibility: FormItemRole.Normal,
+        writeability: FormItemRole.Normal,
       });
       formItemId += 1;
     });

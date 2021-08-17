@@ -90,8 +90,8 @@ class FormItem < ApplicationRecord
     }
   }.deep_stringify_keys
 
-  VISIBILITY_VALUES = %w[normal confirmed_attendee team_member admin]
-  WRITEABILITY_VALUES = %w[normal admin]
+  # In order from lowest to highest rank.  Later roles always beat earlier roles
+  ROLE_VALUES = %w[normal confirmed_attendee team_member admin]
 
   belongs_to :form_section
   has_one :form, through: :form_section
@@ -106,8 +106,8 @@ class FormItem < ApplicationRecord
     scope: 'form_sections.form_id'
   }
   validate :ensure_properties_match_schema
-  validates :visibility, inclusion: { in: VISIBILITY_VALUES }
-  validates :writeability, inclusion: { in: WRITEABILITY_VALUES }
+  validates :visibility, inclusion: { in: ROLE_VALUES }
+  validates :writeability, inclusion: { in: ROLE_VALUES }
 
   private
 

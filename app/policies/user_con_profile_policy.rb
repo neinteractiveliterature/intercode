@@ -84,6 +84,13 @@ class UserConProfilePolicy < ApplicationPolicy
     manage?
   end
 
+  def form_item_roles
+    {
+      'normal' => read?,
+      'admin' => manage?
+    }.select { |_, v| v }.keys
+  end
+
   private
 
   def profile_is_user_or_identity_assumer?

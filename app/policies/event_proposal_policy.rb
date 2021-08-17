@@ -74,8 +74,16 @@ class EventProposalPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
-  def view_hidden_values?
-    user_is_owner? || update?
+  def form_item_roles
+    {
+      'normal' => true,
+      'confirmed_attendee' => false,
+      'team_member' => user_is_owner?,
+      'admin' => (
+        EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
+        has_applicable_permission?(:update_event_proposals)
+      )
+    }.select { |_, v| v }.keys
   end
 
   private

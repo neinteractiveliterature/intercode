@@ -401,6 +401,14 @@
     },
     "history": {
       "noChanges": ""
+    },
+    "roles": {
+      "admin": "",
+      "confirmed_attendee": "",
+      "proposer": "",
+      "public": "",
+      "team_member": "",
+      "user": ""
     }
   },
   "general": {
