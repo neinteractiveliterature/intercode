@@ -39,7 +39,7 @@ export type FormEditorContextValue = {
   convention: NonNullable<FormEditorQueryData['convention']>;
   currentSection?: FormEditorForm['form_sections'][0];
   form: FormEditorForm;
-  formTypeIdentifier: keyof typeof FormTypes;
+  formTypeIdentifier: FormType;
   formType: FormTypeDefinition;
   formItemsById: Map<number, TypedFormItem>;
 };
@@ -59,7 +59,7 @@ export const FormEditorContext = React.createContext<FormEditorContextValue>({
     form_type: FormType.Event,
     form_sections: [],
   },
-  formTypeIdentifier: 'event',
+  formTypeIdentifier: FormType.Event,
   formType: FormTypes.event,
   formItemsById: new Map(),
 });

@@ -6,6 +6,7 @@ import { DEFAULT_EVENT_FORM_RESPONSE_ATTRS } from '../../../app/javascript/Event
 
 export const minimalForm = formFromExportJSON({
   title: 'Regular event form',
+  form_type: 'event',
   sections: [
     {
       title: 'Event Properties',

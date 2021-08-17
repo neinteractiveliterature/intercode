@@ -34,9 +34,8 @@ export type FormEditorItemPreviewProps = {
 function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) {
   const confirm = useConfirm();
   const match = useRouteMatch<{ id: string; sectionId: string }>();
-  const { convention, currentSection, form, formType, formItemsById } = useContext(
-    FormEditorContext,
-  );
+  const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
+    useContext(FormEditorContext);
   const renderedFormItem = formItemsById.get(formItem.id)!;
   const [moveFormItem] = useMoveFormItemMutation();
   const [deleteFormItem] = useDeleteFormItemMutation({
@@ -112,6 +111,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
         <FormItemInput
           convention={convention}
           formItem={renderedFormItem}
+          formTypeIdentifier={formTypeIdentifier}
           onInteract={() => {}}
           onChange={() => {}}
           value={formItem.default_value}

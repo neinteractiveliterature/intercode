@@ -26,6 +26,7 @@ const SinglePageFormPresenter = forwardRef<
         convention={convention}
         ref={ref}
         formItems={formItems}
+        formTypeIdentifier={form.form_type}
         errors={{}}
         response={response}
         responseValuesChanged={responseValuesChanged}

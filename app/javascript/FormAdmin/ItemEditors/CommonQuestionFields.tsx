@@ -7,7 +7,6 @@ import {
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
-import { assertNever } from 'assert-never';
 
 import {
   formItemPropertyUpdater,
@@ -25,6 +24,7 @@ import {
 import FormItemIdentifierInput from './FormItemIdentifierInput';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { FormItemRole } from '../../graphqlTypes.generated';
+import { describeFormItemRole } from '../../FormPresenter/ItemInputs/PermissionDisclosures';
 
 export type CommonQuestionFieldsProps = FormItemEditorProps<TypedFormItem>;
 
@@ -46,48 +46,13 @@ function applicableRoles(
   ];
 }
 
-function describeRole(
-  purpose: 'visibility' | 'writeability',
-  role: FormItemRole,
-  formTypeIdentifier: FormEditorContextValue['formTypeIdentifier'],
-  t: TFunction,
-): string {
-  switch (role) {
-    case FormItemRole.Admin:
-      return t('forms.roles.admin', 'Admin only');
-    case FormItemRole.ConfirmedAttendee:
-      return t('forms.roles.confirmed_attendee', 'Confirmed attendees, team members, and admins');
-    case FormItemRole.TeamMember:
-      return t('forms.roles.team_member', 'Team members and admins');
-    case FormItemRole.Normal:
-      switch (formTypeIdentifier) {
-        case 'event':
-          if (purpose === 'visibility') {
-            return t('forms.roles.public', 'Public');
-          }
-          return t('forms.roles.team_member', 'Team members and admins');
-        case 'event_proposal':
-          return t('forms.roles.proposer', 'Event proposer, reviewers, and admins');
-        case 'user_con_profile':
-          return t('forms.roles.user', 'User and admins');
-        default:
-          assertNever(formTypeIdentifier);
-      }
-      break;
-    default:
-      assertNever(role);
-  }
-
-  return "If you're seeing this message something has gone very wrong";
-}
-
 function getRoleOptionsForFormTypeIdentifier(
   purpose: 'visibility' | 'writeability',
   formTypeIdentifier: FormEditorContextValue['formTypeIdentifier'],
   t: TFunction,
 ) {
   return applicableRoles(purpose, formTypeIdentifier).map((role) => ({
-    label: describeRole(purpose, role, formTypeIdentifier, t),
+    label: describeFormItemRole(purpose, role, formTypeIdentifier, t),
     value: role,
   }));
 }

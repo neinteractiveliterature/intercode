@@ -7,6 +7,7 @@ import { getSortedParsedFormItems } from '../../../../app/javascript/Models/Form
 describe('FormBody', () => {
   const defaultProps: FormBodyProps = {
     formItems: getSortedParsedFormItems(minimalForm),
+    formTypeIdentifier: minimalForm.form_type,
     convention,
     response: { form_response_attrs: { title: 'A title' } },
     responseValuesChanged: () => {},

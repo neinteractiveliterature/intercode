@@ -408,7 +408,8 @@
       "proposer": "Event proposer, reviewers, and admins",
       "public": "Public",
       "team_member": "Team members and admins",
-      "user": "User and admins"
+      "user": "User and admins",
+      "visibilityDisclosure": "Visible to: {{ roleDescription }}"
     }
   },
   "general": {
