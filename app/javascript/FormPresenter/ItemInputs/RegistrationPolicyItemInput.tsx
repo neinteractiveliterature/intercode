@@ -4,6 +4,7 @@ import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolic
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { RegistrationPolicyFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 import { RegistrationPolicy } from '../../graphqlTypes.generated';
+import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 function valueIsRegistrationPolicy(
   value: unknown | null | undefined,
@@ -19,6 +20,7 @@ export type RegistrationPolicyItemInputProps = CommonFormItemInputProps<Registra
 
 function RegistrationPolicyItemInput({
   formItem,
+  formTypeIdentifier,
   value,
   valueInvalid,
   onChange,
@@ -42,21 +44,23 @@ function RegistrationPolicyItemInput({
 
   return (
     <fieldset className="mb-3">
-      <div
-        className={classNames({
-          'border-0': !valueInvalid,
-          'border rounded border-danger': valueInvalid,
-        })}
-      >
-        <RegistrationPolicyEditor
-          registrationPolicy={effectiveValue ?? undefined}
-          onChange={valueChanged}
-          presets={formItem.rendered_properties.presets}
-          allowCustom={formItem.rendered_properties.allow_custom}
-          validateComplete={valueInvalid}
-        />
-        {valueInvalid ? <span className="text-danger">This field is required.</span> : null}
-      </div>
+      <VisibilityDisclosureCard formItem={formItem} formTypeIdentifier={formTypeIdentifier}>
+        <div
+          className={classNames({
+            'border-0': !valueInvalid,
+            'border rounded border-danger': valueInvalid,
+          })}
+        >
+          <RegistrationPolicyEditor
+            registrationPolicy={effectiveValue ?? undefined}
+            onChange={valueChanged}
+            presets={formItem.rendered_properties.presets}
+            allowCustom={formItem.rendered_properties.allow_custom}
+            validateComplete={valueInvalid}
+          />
+          {valueInvalid ? <span className="text-danger">This field is required.</span> : null}
+        </div>
+      </VisibilityDisclosureCard>
     </fieldset>
   );
 }

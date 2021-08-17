@@ -7,14 +7,23 @@ import { getUnitForValue, UNITS } from '../TimespanItemUtils';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimespanFormItem } from '../../FormAdmin/FormItemUtils';
 import CaptionLabel from './CaptionLabel';
+import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 export type TimespanItemInputProps = CommonFormItemInputProps<TimespanFormItem>;
 
 function TimespanItemInput(props: TimespanItemInputProps) {
-  const { formItem, value: uncheckedValue, valueInvalid, onChange, onInteract } = props;
-  const value = useMemo(() => (typeof uncheckedValue === 'number' ? uncheckedValue : null), [
-    uncheckedValue,
-  ]);
+  const {
+    formItem,
+    formTypeIdentifier,
+    value: uncheckedValue,
+    valueInvalid,
+    onChange,
+    onInteract,
+  } = props;
+  const value = useMemo(
+    () => (typeof uncheckedValue === 'number' ? uncheckedValue : null),
+    [uncheckedValue],
+  );
   const [unit, setUnit] = useState(() => getUnitForValue(value).name);
 
   const currentUnit = useMemo(() => UNITS.find((u) => unit === u.name), [unit]);
@@ -57,30 +66,32 @@ function TimespanItemInput(props: TimespanItemInputProps) {
 
   return (
     <div className="mb-3">
-      <CaptionLabel formItem={formItem} htmlFor={inputId} />
-      <div className="d-flex">
-        <div className="w-25">
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <input
-            id={inputId}
-            type="number"
-            min="1"
-            className={classNames('form-control', { 'is-invalid': valueInvalid })}
-            value={inputValue}
-            onChange={inputDidChange}
-            onBlur={userDidInteract}
-          />
-          <FieldRequiredFeedback valueInvalid={valueInvalid} />
+      <VisibilityDisclosureCard formItem={formItem} formTypeIdentifier={formTypeIdentifier}>
+        <CaptionLabel formItem={formItem} htmlFor={inputId} />
+        <div className="d-flex">
+          <div className="w-25">
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <input
+              id={inputId}
+              type="number"
+              min="1"
+              className={classNames('form-control', { 'is-invalid': valueInvalid })}
+              value={inputValue}
+              onChange={inputDidChange}
+              onBlur={userDidInteract}
+            />
+            <FieldRequiredFeedback valueInvalid={valueInvalid} />
+          </div>
+          <select
+            className="form-select ms-2"
+            value={unit}
+            onChange={unitSelectorDidChange}
+            aria-label="Unit of time"
+          >
+            {options}
+          </select>
         </div>
-        <select
-          className="form-select ms-2"
-          value={unit}
-          onChange={unitSelectorDidChange}
-          aria-label="Unit of time"
-        >
-          {options}
-        </select>
-      </div>
+      </VisibilityDisclosureCard>
     </div>
   );
 }

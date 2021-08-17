@@ -8,9 +8,11 @@ import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { FormResponse } from '../useFormResponse';
+import { FormType } from '../../graphqlTypes.generated';
 
 export type FormBodyProps = {
   convention: ConventionForFormItemDisplay;
+  formTypeIdentifier: FormType;
   formItems: TypedFormItem[];
   response: FormResponse;
   responseValuesChanged: (newValues: any) => void;
@@ -22,7 +24,7 @@ export type FormBodyImperativeHandle = {
 };
 
 const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(
-  ({ convention, formItems, response, responseValuesChanged, errors }, ref) => {
+  ({ convention, formItems, formTypeIdentifier, response, responseValuesChanged, errors }, ref) => {
     const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
     const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
 
@@ -72,6 +74,7 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
             >
               <FormItemInput
                 formItem={item}
+                formTypeIdentifier={formTypeIdentifier}
                 convention={convention}
                 valueInvalid={
                   !!item.identifier &&

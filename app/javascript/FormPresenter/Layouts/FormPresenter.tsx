@@ -68,6 +68,7 @@ function FormPresenter({
       <div className="card-body pb-0">
         <FormSection
           ref={sectionRef}
+          formTypeIdentifier={form.form_type}
           section={currentSection}
           convention={convention}
           response={response}

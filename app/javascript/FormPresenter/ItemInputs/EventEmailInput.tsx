@@ -12,6 +12,7 @@ import EmailAliasInput from '../../BuiltInFormControls/EmailAliasInput';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { EventEmailFormItem, EventEmailValue } from '../../FormAdmin/FormItemUtils';
+import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 function isEventEmailValue(value: unknown | undefined | null): value is EventEmailValue {
   // EventEmailValue has no required properties so literally any object will do
@@ -30,6 +31,7 @@ function EventEmailInput({
   convention,
   value: uncheckedValue,
   formItem,
+  formTypeIdentifier,
   onChange,
   onInteract,
   valueInvalid,
@@ -42,10 +44,10 @@ function EventEmailInput({
       ? 'team_mailing_list'
       : value.con_mail_destination;
   });
-  const userDidInteract = useCallback(() => onInteract(formItem.identifier), [
-    formItem.identifier,
-    onInteract,
-  ]);
+  const userDidInteract = useCallback(
+    () => onInteract(formItem.identifier),
+    [formItem.identifier, onInteract],
+  );
 
   const updateValue = useCallback(
     (newValue: EventEmailValue) => {
@@ -137,57 +139,59 @@ function EventEmailInput({
 
   return (
     <fieldset className="mb-3">
-      <div
-        className={classNames({
-          'border-0': !valueInvalid,
-          'border rounded border-danger': valueInvalid,
-        })}
-      >
-        <legend className="col-form-label">
-          <span>
-            {t(
-              'forms.eventEmail.formGroupLegend',
-              'How would you like to receive email about this event?',
-            )}
-          </span>
-          <RequiredIndicator formItem={formItem} />
-        </legend>
-        <ChoiceSet
-          name={formItem.identifier}
-          choices={[
-            ...(convention.event_mailing_list_domain
-              ? [
-                  {
-                    label: t(
-                      'forms.eventEmail.teamMailingListOption',
-                      'Have the convention create and manage a team mailing list for me',
-                    ),
-                    value: 'team_mailing_list',
-                  },
-                ]
-              : []),
-            {
-              label: t('forms.eventEmail.eventEmailOption', 'Use a contact email I specify'),
-              value: 'event_email',
-            },
-            {
-              label: t(
-                'forms.eventEmail.teamMembersOption',
-                'Specify a contact email for attendees, but have the convention email individual team members with updates',
-              ),
-              value: 'gms',
-            },
-          ]}
-          value={emailBehavior}
-          onChange={emailBehaviorChanged}
-        />
-        <div className="mt-4">{renderEmailInput()}</div>
-        {valueInvalid ? (
-          <span className="text-danger">
-            {t('forms.general.fieldRequiredError', 'This field is required.')}
-          </span>
-        ) : null}
-      </div>
+      <VisibilityDisclosureCard formItem={formItem} formTypeIdentifier={formTypeIdentifier}>
+        <div
+          className={classNames({
+            'border-0': !valueInvalid,
+            'border rounded border-danger': valueInvalid,
+          })}
+        >
+          <legend className="col-form-label">
+            <span>
+              {t(
+                'forms.eventEmail.formGroupLegend',
+                'How would you like to receive email about this event?',
+              )}
+            </span>
+            <RequiredIndicator formItem={formItem} />
+          </legend>
+          <ChoiceSet
+            name={formItem.identifier}
+            choices={[
+              ...(convention.event_mailing_list_domain
+                ? [
+                    {
+                      label: t(
+                        'forms.eventEmail.teamMailingListOption',
+                        'Have the convention create and manage a team mailing list for me',
+                      ),
+                      value: 'team_mailing_list',
+                    },
+                  ]
+                : []),
+              {
+                label: t('forms.eventEmail.eventEmailOption', 'Use a contact email I specify'),
+                value: 'event_email',
+              },
+              {
+                label: t(
+                  'forms.eventEmail.teamMembersOption',
+                  'Specify a contact email for attendees, but have the convention email individual team members with updates',
+                ),
+                value: 'gms',
+              },
+            ]}
+            value={emailBehavior}
+            onChange={emailBehaviorChanged}
+          />
+          <div className="mt-4">{renderEmailInput()}</div>
+          {valueInvalid ? (
+            <span className="text-danger">
+              {t('forms.general.fieldRequiredError', 'This field is required.')}
+            </span>
+          ) : null}
+        </div>
+      </VisibilityDisclosureCard>
     </fieldset>
   );
 }
