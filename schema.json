@@ -14278,7 +14278,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "FormItemVisibility",
+                  "name": "FormItemRole",
                   "ofType": null
                 }
               },
@@ -14294,7 +14294,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "FormItemWriteability",
+                  "name": "FormItemRole",
                   "ofType": null
                 }
               },
@@ -14384,6 +14384,30 @@
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "visibility",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "FormItemRole",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "writeability",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "FormItemRole",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -14392,7 +14416,7 @@
         },
         {
           "kind": "ENUM",
-          "name": "FormItemVisibility",
+          "name": "FormItemRole",
           "description": null,
           "fields": null,
           "inputFields": null,
@@ -14412,29 +14436,6 @@
             },
             {
               "name": "team_member",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "admin",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "possibleTypes": null
-        },
-        {
-          "kind": "ENUM",
-          "name": "FormItemWriteability",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
-            {
-              "name": "normal",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null

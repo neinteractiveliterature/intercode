@@ -1,10 +1,11 @@
 class FormResponsePresenter
-  attr_reader :form, :response, :can_view_hidden_values
+  attr_reader :form, :response, :viewer_roles, :team_member_name
 
-  def initialize(form, response, can_view_hidden_values: false)
+  def initialize(form, response, team_member_name: nil, viewer_roles: [])
     @form = form
     @response = response
-    @can_view_hidden_values = can_view_hidden_values
+    @viewer_roles = viewer_roles.map(&:to_s)
+    @team_member_name = team_member_name
   end
 
   def as_json
@@ -52,18 +53,33 @@ class FormResponsePresenter
   end
 
   def replacement_content_for_form_item(field, form_item, raw_json)
-    return unless form_item.properties['hide_from_public'] && raw_json[field].present?
-    return if can_view_hidden_values
+    return if form_item.visibility == 'normal' || raw_json[field].blank?
+    return if viewer_has_role_or_higher?(form_item.visibility)
+
+    hidden_text = I18n.t(
+      "forms.hidden_text.#{form_item.visibility}",
+      team_member_name_pluralized: team_member_name&.pluralize
+    )
 
     if form_item.item_type == 'free_text' && form_item.properties['format'] == 'markdown'
-      Promise.resolve([field, "<em>#{I18n.t('forms.hidden_from_public_text')}</em>"])
+      Promise.resolve([field, "<em>#{hidden_text}</em>"])
     else
-      Promise.resolve([field, I18n.t('forms.hidden_from_public_text')])
+      Promise.resolve([field, hidden_text])
     end
   end
 
   def render_markdown_for_field(field, value, group_cache_key, object_cache_key, default_content)
     loader = MarkdownLoader.for(group_cache_key, default_content)
     loader.load([[object_cache_key, field], value])
+  end
+
+  def highest_level_viewer_role
+    @highest_level_viewer_role ||= FormItem::ROLE_VALUES.reverse.find do |role|
+      viewer_roles.include?(role)
+    end
+  end
+
+  def viewer_has_role_or_higher?(role)
+    FormItem::ROLE_VALUES.index(highest_level_viewer_role) >= FormItem::ROLE_VALUES.index(role)
   end
 end

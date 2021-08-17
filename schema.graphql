@@ -2273,8 +2273,8 @@ type FormItem {
   properties: Json
   public_description: String
   rendered_properties: Json
-  visibility: FormItemVisibility!
-  writeability: FormItemWriteability!
+  visibility: FormItemRole!
+  writeability: FormItemRole!
 }
 
 input FormItemInput {
@@ -2284,18 +2284,15 @@ input FormItemInput {
   item_type: String
   properties: Json
   public_description: String
+  visibility: FormItemRole
+  writeability: FormItemRole
 }
 
-enum FormItemVisibility {
+enum FormItemRole {
   admin
   confirmed_attendee
   normal
   team_member
-}
-
-enum FormItemWriteability {
-  admin
-  normal
 }
 
 type FormResponseChange {

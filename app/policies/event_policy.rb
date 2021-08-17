@@ -70,11 +70,13 @@ class EventPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
-  def view_hidden_values?
-    confirmed_for_event?(record) ||
-      team_member_for_event?(record) ||
-      has_applicable_permission?('update_events') ||
-      site_admin_manage?
+  def form_item_roles
+    {
+      'normal' => true,
+      'confirmed_attendee' => confirmed_for_event?(record),
+      'team_member' => team_member_for_event?(record),
+      'admin' => has_applicable_permission?('update_events') || site_admin_manage?
+    }.select { |_, v| v }.keys
   end
 
   private

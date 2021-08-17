@@ -8,8 +8,7 @@ import {
   FormSection,
   FormItemInput,
   RegistrationPolicy,
-  FormItemVisibility,
-  FormItemWriteability,
+  FormItemRole,
 } from '../graphqlTypes.generated';
 import {
   CommonFormSectionFieldsFragment,
@@ -40,8 +39,8 @@ export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
   default_value?: ValueType;
   properties?: PropertiesType;
   rendered_properties: PropertiesType;
-  visibility: FormItemVisibility;
-  writeability: FormItemWriteability;
+  visibility: FormItemRole;
+  writeability: FormItemRole;
 };
 
 export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFormItem<
@@ -360,6 +359,8 @@ export function buildFormItemInput(formItem: ParsedFormItem<any, any>): FormItem
     public_description: formItem.public_description,
     default_value: formItem.default_value ? JSON.stringify(formItem.default_value) : null,
     properties: JSON.stringify(removeGeneratedIds(formItem.properties)),
+    visibility: formItem.visibility,
+    writeability: formItem.writeability,
   };
 }
 

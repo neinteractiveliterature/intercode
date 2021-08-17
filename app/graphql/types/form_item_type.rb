@@ -9,8 +9,8 @@ class Types::FormItemType < Types::BaseObject
   field :properties, Types::JSON, null: true
   field :rendered_properties, Types::JSON, null: true
   field :form_section, Types::FormSectionType, null: false, camelize: false
-  field :visibility, Types::FormItemVisibilityType, null: false
-  field :writeability, Types::FormItemWriteabilityType, null: false
+  field :visibility, Types::FormItemRoleType, null: false
+  field :writeability, Types::FormItemRoleType, null: false
 
   association_loaders FormItem, :form_section
 
