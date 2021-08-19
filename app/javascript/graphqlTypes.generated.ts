@@ -1774,6 +1774,7 @@ export type Event = {
   con_mail_destination?: Maybe<Scalars['String']>;
   content_warnings?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['Date']>;
+  current_user_form_item_role: FormItemRole;
   description?: Maybe<Scalars['String']>;
   description_html?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -1875,6 +1876,7 @@ export type EventProposal = {
   admin_notes?: Maybe<Scalars['String']>;
   convention: Convention;
   created_at: Scalars['Date'];
+  current_user_form_item_role: FormItemRole;
   event?: Maybe<Event>;
   event_category: EventCategory;
   form?: Maybe<Form>;
@@ -1978,6 +1980,8 @@ export type FormItem = {
   properties?: Maybe<Scalars['Json']>;
   public_description?: Maybe<Scalars['String']>;
   rendered_properties?: Maybe<Scalars['Json']>;
+  visibility: FormItemRole;
+  writeability: FormItemRole;
 };
 
 export type FormItemInput = {
@@ -1987,7 +1991,16 @@ export type FormItemInput = {
   item_type?: Maybe<Scalars['String']>;
   properties?: Maybe<Scalars['Json']>;
   public_description?: Maybe<Scalars['String']>;
+  visibility?: Maybe<FormItemRole>;
+  writeability?: Maybe<FormItemRole>;
 };
+
+export enum FormItemRole {
+  Admin = 'admin',
+  ConfirmedAttendee = 'confirmed_attendee',
+  Normal = 'normal',
+  TeamMember = 'team_member'
+}
 
 export type FormResponseChange = {
   __typename: 'FormResponseChange';
@@ -4770,13 +4783,15 @@ export type UserConProfile = {
   city?: Maybe<Scalars['String']>;
   convention: Convention;
   country?: Maybe<Scalars['String']>;
+  current_user_form_item_role: FormItemRole;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
   day_phone?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
   evening_phone?: Maybe<Scalars['String']>;
   first_name: Scalars['String'];
-  form_response_attrs_json?: Maybe<Scalars['String']>;
+  form_response_attrs_json?: Maybe<Scalars['Json']>;
+  form_response_attrs_json_with_rendered_markdown?: Maybe<Scalars['Json']>;
   gravatar_enabled: Scalars['Boolean'];
   gravatar_url: Scalars['String'];
   ical_secret?: Maybe<Scalars['String']>;

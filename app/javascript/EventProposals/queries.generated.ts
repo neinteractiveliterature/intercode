@@ -8,7 +8,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type EventProposalFieldsFragment = (
   { __typename: 'EventProposal' }
-  & Pick<Types.EventProposal, 'id' | 'title' | 'status' | 'form_response_attrs_json'>
+  & Pick<Types.EventProposal, 'id' | 'title' | 'status' | 'form_response_attrs_json' | 'current_user_form_item_role'>
   & { event_category: (
     { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
@@ -225,6 +225,7 @@ export const EventProposalFieldsFragmentDoc = gql`
   title
   status
   form_response_attrs_json
+  current_user_form_item_role
   event_category {
     id
     name

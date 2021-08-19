@@ -137,6 +137,9 @@
       },
       "title": "Add file"
     },
+    "files": {
+      "copyEmbedCode": "Copy CMS embed code"
+    },
     "fileUploadForm": {
       "clearFileButton": "Clear",
       "fileInputLabel": "Choose a file...",
@@ -398,6 +401,15 @@
     },
     "history": {
       "noChanges": "No changes."
+    },
+    "roles": {
+      "admin": "Admin only",
+      "confirmed_attendee": "Confirmed attendees, team members, and admins",
+      "proposer": "Event proposer, reviewers, and admins",
+      "public": "Public",
+      "team_member": "Team members and admins",
+      "user": "User and admins",
+      "visibilityDisclosure": "Visible to: {{ roleDescription }}"
     }
   },
   "general": {

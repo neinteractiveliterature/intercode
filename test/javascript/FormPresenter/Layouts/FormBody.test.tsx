@@ -3,10 +3,13 @@ import { convention, minimalForm } from '../../EventAdmin/formMockData';
 import FormBody, { FormBodyProps } from '../../../../app/javascript/FormPresenter/Layouts/FormBody';
 import { ItemInteractionTrackerContext } from '../../../../app/javascript/FormPresenter/ItemInteractionTracker';
 import { getSortedParsedFormItems } from '../../../../app/javascript/Models/Form';
+import { FormItemRole } from '../../../../app/javascript/graphqlTypes.generated';
 
 describe('FormBody', () => {
   const defaultProps: FormBodyProps = {
+    currentUserRole: FormItemRole.Normal,
     formItems: getSortedParsedFormItems(minimalForm),
+    formTypeIdentifier: minimalForm.form_type,
     convention,
     response: { form_response_attrs: { title: 'A title' } },
     responseValuesChanged: () => {},

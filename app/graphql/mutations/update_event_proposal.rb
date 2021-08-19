@@ -9,7 +9,11 @@ class Mutations::UpdateEventProposal < Mutations::BaseMutation
   def resolve(**args)
     event_proposal_attrs = args[:event_proposal].to_h.stringify_keys
     event_proposal.assign_form_response_attributes(
-      JSON.parse(event_proposal_attrs.delete('form_response_attrs_json'))
+      event_proposal.filter_form_response_attributes_for_assignment(
+        JSON.parse(event_proposal_attrs.delete('form_response_attrs_json')),
+        event_proposal.event_category.event_proposal_form.form_items,
+        Pundit.policy(context[:pundit_user], event_proposal).form_item_role
+      )
     )
     event_proposal.assign_attributes(event_proposal_attrs)
     event_proposal.save!

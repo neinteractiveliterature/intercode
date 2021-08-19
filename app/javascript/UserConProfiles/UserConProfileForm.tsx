@@ -5,8 +5,11 @@ import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import { UserConProfile } from '../graphqlTypes.generated';
 
-export type UserConProfileFormProps<UserConProfileType extends FormResponse> = {
+export type UserConProfileFormProps<
+  UserConProfileType extends FormResponse & Pick<UserConProfile, 'current_user_form_item_role'>,
+> = {
   form: CommonFormFieldsFragment;
   footerContent?: ReactNode;
   userConProfile: UserConProfileType;
@@ -14,9 +17,9 @@ export type UserConProfileFormProps<UserConProfileType extends FormResponse> = {
   convention: ConventionForFormItemDisplay;
 };
 
-function UserConProfileForm<UserConProfileType extends FormResponse>(
-  props: UserConProfileFormProps<UserConProfileType>,
-) {
+function UserConProfileForm<
+  UserConProfileType extends FormResponse & Pick<UserConProfile, 'current_user_form_item_role'>,
+>(props: UserConProfileFormProps<UserConProfileType>) {
   const formResponseValuesChanged = (
     newResponseValues: UserConProfileType['form_response_attrs'],
   ) => {
@@ -36,6 +39,7 @@ function UserConProfileForm<UserConProfileType extends FormResponse>(
       renderContent: () => (
         <SinglePageFormPresenter
           form={props.form}
+          currentUserRole={props.userConProfile.current_user_form_item_role}
           convention={props.convention}
           response={props.userConProfile}
           responseValuesChanged={formResponseValuesChanged}

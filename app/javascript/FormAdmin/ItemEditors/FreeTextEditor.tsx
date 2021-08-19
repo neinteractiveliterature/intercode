@@ -4,18 +4,15 @@ import {
   BootstrapFormSelect,
   useUniqueId,
   parseIntOrNull,
-  BooleanInput,
-  HelpPopover,
 } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
-import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
+import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type FreeTextEditorProps = FormItemEditorProps<FreeTextFormItem>;
 function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {
-  const { form } = useContext(FormEditorContext);
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat =
@@ -101,23 +98,6 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {
         </div>
       </fieldset>
 
-      {form.form_type === 'event' && (
-        <BooleanInput
-          disabled={disabled}
-          caption={
-            <>
-              Hide value from public view?
-              <HelpPopover>
-                If selected, this item will only appear on the event page for attendees and staff.
-                Typically, you would use this to reveal information only attendees should know, such
-                as the URL of a Zoom call for the event.
-              </HelpPopover>
-            </>
-          }
-          value={formItem.properties.hide_from_public ?? false}
-          onChange={formItemPropertyUpdater('hide_from_public', setFormItem)}
-        />
-      )}
       <BootstrapFormSelect
         disabled={disabled}
         value={responseFormat}

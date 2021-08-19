@@ -19,19 +19,21 @@ export type FormItemInputProps = Omit<CommonFormItemInputProps<any>, 'onChange'>
 
 function FormItemInput({
   formItem,
+  formTypeIdentifier,
   value,
   onChange,
   onInteract,
   valueInvalid,
   convention,
 }: FormItemInputProps) {
-  const valueDidChange = useCallback((newValue) => onChange(formItem.identifier, newValue), [
-    formItem.identifier,
-    onChange,
-  ]);
+  const valueDidChange = useCallback(
+    (newValue) => onChange(formItem.identifier, newValue),
+    [formItem.identifier, onChange],
+  );
 
   const commonProps = {
     formItem,
+    formTypeIdentifier,
     value,
     onInteract,
     valueInvalid,

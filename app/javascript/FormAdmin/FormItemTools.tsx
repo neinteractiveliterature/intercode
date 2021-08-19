@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
 import { ApolloError } from '@apollo/client';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import {
   useModal,
   useUniqueId,

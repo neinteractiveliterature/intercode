@@ -4,7 +4,13 @@ import { assertNever } from 'assert-never';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { FormEditorQuery } from './queries';
-import { FormSection, FormItemInput, RegistrationPolicy } from '../graphqlTypes.generated';
+import {
+  FormSection,
+  FormItemInput,
+  RegistrationPolicy,
+  FormItemRole,
+  FormItem,
+} from '../graphqlTypes.generated';
 import {
   CommonFormSectionFieldsFragment,
   CommonFormItemFieldsFragment,
@@ -17,6 +23,15 @@ import {
 } from '../FormPresenter/TimeblockTypes';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
+
+// In order from lowest to highest rank.  Higher roles always include lower roles
+// Must be updated in sync with ROLE_VALUES in form_item.rb
+export const FORM_ITEM_ROLES: FormItemRole[] = [
+  FormItemRole.Normal,
+  FormItemRole.ConfirmedAttendee,
+  FormItemRole.TeamMember,
+  FormItemRole.Admin,
+];
 
 const GENERATED_ID_ARRAY_PROPERTIES = [
   'choices',
@@ -34,6 +49,8 @@ export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
   default_value?: ValueType;
   properties?: PropertiesType;
   rendered_properties: PropertiesType;
+  visibility: FormItemRole;
+  writeability: FormItemRole;
 };
 
 export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFormItem<
@@ -83,7 +100,7 @@ export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<any, any>> =
 };
 
 export type ParsedFormSection<
-  FormItemType extends ParsedFormItem<any, any> = ParsedFormItem<any, any>
+  FormItemType extends ParsedFormItem<any, any> = ParsedFormItem<any, any>,
 > = Omit<FormSection, 'form_items' | 'form'> & { form_items: FormItemType[] };
 
 export type CommonQuestionProperties = {
@@ -127,7 +144,6 @@ export type FreeTextProperties = CommonQuestionProperties & {
   lines: number;
   free_text_type: 'text' | 'email' | 'number' | 'tel' | 'url' | null;
   format: 'text' | 'markdown';
-  hide_from_public?: boolean;
   advisory_word_limit?: number;
   advisory_character_limit?: number;
 };
@@ -353,12 +369,14 @@ export function buildFormItemInput(formItem: ParsedFormItem<any, any>): FormItem
     public_description: formItem.public_description,
     default_value: formItem.default_value ? JSON.stringify(formItem.default_value) : null,
     properties: JSON.stringify(removeGeneratedIds(formItem.properties)),
+    visibility: formItem.visibility,
+    writeability: formItem.writeability,
   };
 }
 
 export function formItemPropertyUpdater<
   FormItemType extends ParsedFormItem<any, any>,
-  PropertyName extends keyof FormItemType['properties']
+  PropertyName extends keyof FormItemType['properties'],
 >(
   property: PropertyName,
   onChange: (mutator: (prevFormItem: FormItemType) => FormItemType) => void,
@@ -411,9 +429,8 @@ export type FormTypeDefinition =
   | typeof FormTypes['event_proposal']
   | typeof FormTypes['user_con_profile'];
 
-export type StandardItemIdentifier<
-  FormType extends FormTypeDefinition
-> = keyof FormType['standard_items'];
+export type StandardItemIdentifier<FormType extends FormTypeDefinition> =
+  keyof FormType['standard_items'];
 
 export type AnyStandardItemIdentifier =
   | StandardItemIdentifier<typeof FormTypes['event']>
@@ -452,4 +469,26 @@ export function findStandardItem(
   }
 
   return formType.standard_items[identifier as keyof FormTypeDefinition['standard_items']];
+}
+
+export function highestLevelRole(roles: FormItemRole[]): FormItemRole {
+  return [...FORM_ITEM_ROLES.reverse()].find((role) => roles.includes(role)) ?? FormItemRole.Normal;
+}
+
+export function roleIsAtLeast(a: FormItemRole, b: FormItemRole): boolean {
+  return FORM_ITEM_ROLES.indexOf(a) >= FORM_ITEM_ROLES.indexOf(b);
+}
+
+export function formItemVisibleTo(
+  formItem: Pick<FormItem, 'visibility'>,
+  role: FormItemRole,
+): boolean {
+  return roleIsAtLeast(role, formItem.visibility);
+}
+
+export function formItemWriteableBy(
+  formItem: Pick<FormItem, 'visibility' | 'writeability'>,
+  role: FormItemRole,
+): boolean {
+  return formItemVisibleTo(formItem, role) && roleIsAtLeast(role, formItem.writeability);
 }

@@ -7,6 +7,7 @@ import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import CaptionLabel from './CaptionLabel';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { FreeTextFormItem } from '../../FormAdmin/FormItemUtils';
+import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 function getLimitClass(count: number, limit: number) {
   const warningThreshold = Math.min(limit * 0.9, limit - 10);
@@ -33,9 +34,10 @@ function AdvisoryLimitDisplay({
   advisoryWordLimit,
 }: AdvisoryLimitDisplayProps) {
   const characterCount = content.length;
-  const wordCount = useMemo(() => content.split(/\s+/).filter((word) => word.length > 0).length, [
-    content,
-  ]);
+  const wordCount = useMemo(
+    () => content.split(/\s+/).filter((word) => word.length > 0).length,
+    [content],
+  );
   const showLabels = advisoryCharacterLimit != null && advisoryWordLimit != null;
 
   return (
@@ -64,14 +66,21 @@ function AdvisoryLimitDisplay({
 export type FreeTextItemInputProps = CommonFormItemInputProps<FreeTextFormItem>;
 
 function FreeTextItemInput(props: FreeTextItemInputProps) {
-  const { formItem, onChange, onInteract, value: uncheckedValue, valueInvalid } = props;
+  const {
+    formItem,
+    formTypeIdentifier,
+    onChange,
+    onInteract,
+    value: uncheckedValue,
+    valueInvalid,
+  } = props;
   const domId = useUniqueId(`${formItem.identifier}-`);
   const value = typeof uncheckedValue === 'string' ? uncheckedValue : '';
 
-  const userInteracted = useCallback(() => onInteract(formItem.identifier), [
-    onInteract,
-    formItem.identifier,
-  ]);
+  const userInteracted = useCallback(
+    () => onInteract(formItem.identifier),
+    [onInteract, formItem.identifier],
+  );
 
   const valueChanged = useCallback(
     (newValue) => {
@@ -147,9 +156,11 @@ function FreeTextItemInput(props: FreeTextItemInputProps) {
 
   return (
     <div className="mb-3">
-      <CaptionLabel formItem={formItem} htmlFor={domId} />
-      {renderInput()}
-      <FieldRequiredFeedback valueInvalid={valueInvalid} />
+      <VisibilityDisclosureCard formItem={formItem} formTypeIdentifier={formTypeIdentifier}>
+        <CaptionLabel formItem={formItem} htmlFor={domId} />
+        {renderInput()}
+        <FieldRequiredFeedback valueInvalid={valueInvalid} />
+      </VisibilityDisclosureCard>
     </div>
   );
 }
