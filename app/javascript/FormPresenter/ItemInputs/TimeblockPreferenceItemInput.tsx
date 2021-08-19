@@ -22,6 +22,7 @@ import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 function valueIsTimeblockPreferenceValue(
   value: any | undefined | null,
@@ -39,13 +40,15 @@ function valueIsTimeblockPreferenceValue(
   );
 }
 
-export type TimeblockPreferenceItemInputProps = CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
-  convention: ConventionForTimespanUtils;
-};
+export type TimeblockPreferenceItemInputProps =
+  CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
+    convention: ConventionForTimespanUtils;
+  };
 
 function TimeblockPreferenceItemInput({
   convention,
   formItem,
+  formTypeIdentifier,
   value: uncheckedValue,
   onChange,
 }: TimeblockPreferenceItemInputProps) {
@@ -94,55 +97,57 @@ function TimeblockPreferenceItemInput({
     }
   };
 
-  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
-    convention,
-    formItem,
-  ]);
+  const columns = useMemo(
+    () => getValidTimeblockColumns(convention, formItem),
+    [convention, formItem],
+  );
   const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (
     <fieldset className="mb-3">
-      <CaptionLegend formItem={formItem} />
-      <table className="table">
-        <thead>
-          <tr>
-            <th />
-            {columns.map((column) => (
-              <th key={column.dayStart.toString()}>{getColumnHeader(column, format)}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.timeblock.label}>
-              <td>
-                {row.timeblock.label}
-                {formItem.rendered_properties.hide_timestamps ? null : (
-                  <>
-                    <br />
-                    <small>{describeTimeblock(row.timeblock, t)}</small>
-                  </>
-                )}
-              </td>
-              {row.cells.map((cell, x) =>
-                cell ? (
-                  <TimeblockPreferenceCell
-                    key={format(cell.dayStart, 'longWeekday')}
-                    timeblock={cell.timeblock}
-                    existingPreferences={preferences}
-                    dayStart={cell.dayStart}
-                    start={cell.timespan.start}
-                    finish={cell.timespan.finish}
-                    onChange={preferenceDidChange}
-                  />
-                ) : (
-                  <td key={format(columns[x].dayStart, 'longWeekday')} />
-                ),
-              )}
+      <VisibilityDisclosureCard formItem={formItem} formTypeIdentifier={formTypeIdentifier}>
+        <CaptionLegend formItem={formItem} />
+        <table className="table">
+          <thead>
+            <tr>
+              <th />
+              {columns.map((column) => (
+                <th key={column.dayStart.toString()}>{getColumnHeader(column, format)}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.timeblock.label}>
+                <td>
+                  {row.timeblock.label}
+                  {formItem.rendered_properties.hide_timestamps ? null : (
+                    <>
+                      <br />
+                      <small>{describeTimeblock(row.timeblock, t)}</small>
+                    </>
+                  )}
+                </td>
+                {row.cells.map((cell, x) =>
+                  cell ? (
+                    <TimeblockPreferenceCell
+                      key={format(cell.dayStart, 'longWeekday')}
+                      timeblock={cell.timeblock}
+                      existingPreferences={preferences}
+                      dayStart={cell.dayStart}
+                      start={cell.timespan.start}
+                      finish={cell.timespan.finish}
+                      onChange={preferenceDidChange}
+                    />
+                  ) : (
+                    <td key={format(columns[x].dayStart, 'longWeekday')} />
+                  ),
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </VisibilityDisclosureCard>
     </fieldset>
   );
 }

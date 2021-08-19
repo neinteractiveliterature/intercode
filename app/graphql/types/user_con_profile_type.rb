@@ -1,4 +1,6 @@
 class Types::UserConProfileType < Types::BaseObject
+  include FormResponseAttrsFields
+
   LEGACY_PHONE_DEPRECATION_REASON = (<<~TEXT).tr("\n", ' ').strip
   Daytime phone, evening phone, best time to call, and preferred contact method fields are
   deprecated in favor of just using the mobile phone and/or email address.  For conventions that
@@ -55,21 +57,21 @@ class Types::UserConProfileType < Types::BaseObject
       .load([[object, 'bio_html'], object.bio])
   end
 
-  field :form_response_attrs_json, String, null: true
-
   def form_response_attrs_json
-    attrs = FormResponsePresenter.new(context[:convention].user_con_profile_form, object).as_json
+    attrs_promise = super
 
-    allowed_attrs = attrs.keys
-    allowed_attrs.delete('email') unless policy(object).read_email?
-    allowed_attrs.delete('birth_date') unless policy(object).read_birth_date?
-    unless policy(object).read_personal_info?
-      allowed_attrs.select! do |attr|
-        %w[first_name last_name nickname email birth_date].include?(attr)
+    attrs_promise.then do |attrs|
+      allowed_attrs = attrs.keys
+      allowed_attrs.delete('email') unless policy(object).read_email?
+      allowed_attrs.delete('birth_date') unless policy(object).read_birth_date?
+      unless policy(object).read_personal_info?
+        allowed_attrs.select! do |attr|
+          %w[first_name last_name nickname email birth_date].include?(attr)
+        end
       end
-    end
 
-    attrs.slice(*allowed_attrs).to_json
+      attrs.slice(*allowed_attrs)
+    end
   end
 
   personal_info_field :user, Types::UserType, null: true
@@ -175,5 +177,12 @@ class Types::UserConProfileType < Types::BaseObject
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
     Pundit.policy(user, override).create?
+  end
+
+  private
+
+  # Not exposed as a field, but needed by FormResponseAttrsFields
+  def form
+    convention.then(&:user_con_profile_form)
   end
 end

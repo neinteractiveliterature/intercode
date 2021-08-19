@@ -117,6 +117,7 @@ function FormEditor() {
           convention: convention!,
           currentSection,
           form,
+          formTypeIdentifier: form.form_type,
           formType,
           formItemsById,
         }}

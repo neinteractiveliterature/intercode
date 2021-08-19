@@ -12149,6 +12149,22 @@
               "deprecationReason": null
             },
             {
+              "name": "current_user_form_item_role",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "description",
               "description": null,
               "args": [],
@@ -13200,6 +13216,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "current_user_form_item_role",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
                   "ofType": null
                 }
               },
@@ -14268,6 +14300,38 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "visibility",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "writeability",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -14352,10 +14416,69 @@
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "visibility",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "FormItemRole",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "writeability",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "FormItemRole",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "FormItemRole",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "admin",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "team_member",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "confirmed_attendee",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "normal",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {
@@ -33258,6 +33381,22 @@
               "deprecationReason": null
             },
             {
+              "name": "current_user_form_item_role",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "day_phone",
               "description": null,
               "args": [],
@@ -33315,7 +33454,19 @@
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Json",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "form_response_attrs_json_with_rendered_markdown",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Json",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -34781,7 +34932,20 @@
             {
               "name": "args",
               "description": null,
-              "args": [],
+              "args": [
+                {
+                  "name": "includeDeprecated",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false",
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

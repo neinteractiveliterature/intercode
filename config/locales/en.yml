@@ -52,4 +52,7 @@ en:
       manage_conventions: 'Update conventions you manage'
       manage_organizations: 'Update privileged data about organizations on the site'
   forms:
-    hidden_from_public_text: 'This information is only available to confirmed attendees.'
+    hidden_text:
+      confirmed_attendee: 'This information is only visible to confirmed attendees.'
+      team_member: 'This information is only visible to %{team_member_name_pluralized}.'
+      admin: 'This information is only visible to administrators.'

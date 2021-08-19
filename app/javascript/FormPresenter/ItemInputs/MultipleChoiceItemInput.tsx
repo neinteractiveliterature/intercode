@@ -5,6 +5,7 @@ import { ChoiceSet } from '@neinteractiveliterature/litform';
 import CaptionLegend from './CaptionLegend';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
+import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 const OTHER_VALUE = '_OTHER_VALUE';
 
@@ -38,6 +39,7 @@ export type MultipleChoiceItemInputProps = CommonFormItemInputProps<MultipleChoi
 
 function MultipleChoiceItemInput({
   formItem,
+  formTypeIdentifier,
   onChange,
   value: uncastValue,
   valueInvalid,
@@ -118,10 +120,10 @@ function MultipleChoiceItemInput({
     return castSingleValue(value);
   }, [otherIsSelected, value]);
 
-  const userDidInteract = useCallback(() => onInteract(formItem.identifier), [
-    formItem.identifier,
-    onInteract,
-  ]);
+  const userDidInteract = useCallback(
+    () => onInteract(formItem.identifier),
+    [formItem.identifier, onInteract],
+  );
 
   const valueDidChangeMultiple = (newValue: string[] | null) => {
     userDidInteract();
@@ -189,32 +191,34 @@ function MultipleChoiceItemInput({
 
   return (
     <fieldset className="mb-3">
-      <div
-        className={classNames({
-          'border-0': !valueInvalid,
-          'border rounded border-danger': valueInvalid,
-        })}
-      >
-        <CaptionLegend formItem={formItem} />
-        {Array.isArray(valueForChoiceSet) ? (
-          <ChoiceSet
-            choices={choicesForChoiceSet}
-            value={valueForChoiceSet}
-            onChange={valueDidChangeMultiple}
-            multiple
-            choiceClassName={choiceClassName}
-          />
-        ) : (
-          <ChoiceSet
-            choices={choicesForChoiceSet}
-            value={valueForChoiceSet}
-            onChange={valueDidChangeSingle}
-            choiceClassName={choiceClassName}
-          />
-        )}
-        {renderOtherInput()}
-        {valueInvalid ? <span className="text-danger">This field is required.</span> : null}
-      </div>
+      <VisibilityDisclosureCard formItem={formItem} formTypeIdentifier={formTypeIdentifier}>
+        <div
+          className={classNames({
+            'border-0': !valueInvalid,
+            'border rounded border-danger': valueInvalid,
+          })}
+        >
+          <CaptionLegend formItem={formItem} />
+          {Array.isArray(valueForChoiceSet) ? (
+            <ChoiceSet
+              choices={choicesForChoiceSet}
+              value={valueForChoiceSet}
+              onChange={valueDidChangeMultiple}
+              multiple
+              choiceClassName={choiceClassName}
+            />
+          ) : (
+            <ChoiceSet
+              choices={choicesForChoiceSet}
+              value={valueForChoiceSet}
+              onChange={valueDidChangeSingle}
+              choiceClassName={choiceClassName}
+            />
+          )}
+          {renderOtherInput()}
+          {valueInvalid ? <span className="text-danger">This field is required.</span> : null}
+        </div>
+      </VisibilityDisclosureCard>
     </fieldset>
   );
 }

@@ -11,6 +11,8 @@
 #  position           :integer
 #  properties         :jsonb
 #  public_description :text
+#  visibility         :string           default("normal"), not null
+#  writeability       :string           default("normal"), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  form_section_id    :bigint
@@ -24,7 +26,6 @@
 #  fk_rails_...  (form_section_id => form_sections.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class FormItem < ApplicationRecord
   DEFAULT_PROPERTIES_CONFIG = JSON.parse(
     File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))
@@ -52,7 +53,6 @@ class FormItem < ApplicationRecord
       free_text_type: :optional,
       required: :optional,
       format: :optional,
-      hide_from_public: :optional,
       advisory_word_limit: :optional,
       advisory_character_limit: :optional
     },
@@ -90,6 +90,10 @@ class FormItem < ApplicationRecord
     }
   }.deep_stringify_keys
 
+  # In order from lowest to highest rank.  Higher roles always include lower roles
+  # Must be updated in sync with FORM_ITEM_ROLES in FormItemUtils.ts
+  ROLE_VALUES = %w[normal confirmed_attendee team_member admin]
+
   belongs_to :form_section
   has_one :form, through: :form_section
   acts_as_list scope: :form_section
@@ -103,6 +107,26 @@ class FormItem < ApplicationRecord
     scope: 'form_sections.form_id'
   }
   validate :ensure_properties_match_schema
+  validates :visibility, inclusion: { in: ROLE_VALUES }
+  validates :writeability, inclusion: { in: ROLE_VALUES }
+
+  def self.highest_level_role(roles)
+    ROLE_VALUES.reverse.find do |role|
+      roles.include?(role)
+    end
+  end
+
+  def self.role_is_at_least?(a, b)
+    (ROLE_VALUES.index(a) || -1) >= (ROLE_VALUES.index(b) || -1)
+  end
+
+  def visible_to?(role)
+    FormItem.role_is_at_least?(role, visibility)
+  end
+
+  def writeable_by?(role)
+    visible_to?(role) && FormItem.role_is_at_least?(role, writeability)
+  end
 
   private
 

@@ -16,6 +16,13 @@ module FormResponse
     end
   end
 
+  def filter_form_response_attributes_for_assignment(attributes, form_items, writer_role)
+    form_items_by_identifier = form_items.index_by { |item| item.identifier.to_s }
+    attributes.stringify_keys.select do |key, _|
+      form_items_by_identifier[key]&.writeable_by?(writer_role)
+    end
+  end
+
   def assign_form_response_attributes(attributes)
     form_response_attrs = self.class.form_response_attrs
 

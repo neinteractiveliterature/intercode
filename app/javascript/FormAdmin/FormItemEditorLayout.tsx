@@ -30,7 +30,8 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
 function FormItemEditorLayout() {
   const match = useRouteMatch<{ itemId: string; id: string; sectionId: string }>();
   const history = useHistory();
-  const { convention, currentSection, formType, formItemsById } = useContext(FormEditorContext);
+  const { convention, currentSection, formType, formTypeIdentifier, formItemsById } =
+    useContext(FormEditorContext);
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
     () => currentSection!.form_items.find((item) => item.id.toString() === match.params.itemId)!,
@@ -100,6 +101,7 @@ function FormItemEditorLayout() {
             <FormItemInput
               convention={convention}
               formItem={previewFormItem}
+              formTypeIdentifier={formTypeIdentifier}
               onInteract={() => {}}
               onChange={() => {}}
               value={previewFormItem.default_value}

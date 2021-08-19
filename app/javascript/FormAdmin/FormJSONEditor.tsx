@@ -7,6 +7,7 @@ import {
   BootstrapFormSelect,
   CodeInput,
 } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import { CreateFormWithJSON } from './mutations';
 import { FormAdminQuery } from './queries';
@@ -36,9 +37,10 @@ export default LoadSingleValueFromCollectionWrapper(
   (data, id) => data.convention.forms.find((form) => form.id.toString(10) === id),
   function FormJSONEditor({ value: initialForm }) {
     const history = useHistory();
-    const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [
-      initialForm.export_json,
-    ]);
+    const initialFormData = useMemo(
+      () => formDataFromJSON(initialForm.export_json),
+      [initialForm.export_json],
+    );
     const [form, setForm] = useState(initialFormData);
     const [createForm, createError, createInProgress] = useAsyncFunction(
       useCreateMutation(CreateFormWithJSON, {
@@ -49,6 +51,7 @@ export default LoadSingleValueFromCollectionWrapper(
     );
     const [updateMutate] = useUpdateFormWithJsonMutation();
     const [updateForm, updateError, updateInProgress] = useAsyncFunction(updateMutate);
+    const { t } = useTranslation();
 
     usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 
@@ -105,6 +108,8 @@ export default LoadSingleValueFromCollectionWrapper(
             value={form.sectionsJSON}
             mode="application/json"
             onChange={(sectionsJSON) => setForm((prevForm) => ({ ...prevForm, sectionsJSON }))}
+            editButtonText={t('buttons.edit', 'Edit')}
+            previewButtonText={t('buttons.preview', 'Preview')}
           />
         </fieldset>
 

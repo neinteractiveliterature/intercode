@@ -22,6 +22,9 @@
     "./app/javascript/",
     "./script",
     "./test/javascript/",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "graphql.config.js",
+    "i18next-parser-english.config.cjs",
+    "i18next-parser-non-english.config.cjs"
   ]
 }

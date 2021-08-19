@@ -1,17 +1,16 @@
 import { useState, useContext } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 
 import FormItemInput from '../../FormPresenter/ItemInputs/FormItemInput';
 import { FormItemEditorContext, FormEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TypedFormItem } from '../FormItemUtils';
 
-export type DefaultAnswerModalProps<
-  FormItemType extends TypedFormItem
-> = FormItemEditorProps<FormItemType> & {
-  close: () => void;
-  visible: boolean;
-};
+export type DefaultAnswerModalProps<FormItemType extends TypedFormItem> =
+  FormItemEditorProps<FormItemType> & {
+    close: () => void;
+    visible: boolean;
+  };
 
 function DefaultAnswerModal<FormItemType extends TypedFormItem>({
   close,
@@ -19,7 +18,7 @@ function DefaultAnswerModal<FormItemType extends TypedFormItem>({
   formItem,
   setFormItem,
 }: DefaultAnswerModalProps<FormItemType>) {
-  const { convention } = useContext(FormEditorContext);
+  const { convention, formTypeIdentifier } = useContext(FormEditorContext);
   const { previewFormItem } = useContext(FormItemEditorContext);
   const [defaultValue, setDefaultValue] = useState<FormItemType['default_value']>(
     formItem.default_value,
@@ -45,6 +44,7 @@ function DefaultAnswerModal<FormItemType extends TypedFormItem>({
           <FormItemInput
             convention={convention}
             formItem={previewFormItem}
+            formTypeIdentifier={formTypeIdentifier}
             onInteract={() => {}}
             value={defaultValue}
             onChange={inputChanged}

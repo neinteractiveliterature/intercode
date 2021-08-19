@@ -9,6 +9,7 @@ import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { AgeRestrictionsFormItem, AgeRestrictionsValue } from '../../FormAdmin/FormItemUtils';
+import { FORM_ITEM_ROLE_COLOR_CLASSES, VisibilityDisclosureText } from './PermissionDisclosures';
 
 function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefined, t: TFunction) {
   if (!minimumAge) {
@@ -31,17 +32,18 @@ export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictions
 
 function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   const { t } = useTranslation();
-  const { formItem, onChange, onInteract, valueInvalid } = props;
-  const value = useMemo(() => (valueIsAgeRestrictionsValue(props.value) ? props.value : {}), [
-    props.value,
-  ]);
+  const { formItem, onChange, onInteract, valueInvalid, formTypeIdentifier } = props;
+  const value = useMemo(
+    () => (valueIsAgeRestrictionsValue(props.value) ? props.value : {}),
+    [props.value],
+  );
 
   const descriptionId = useUniqueId(`${formItem.identifier}-description-`);
 
-  const userInteracted = useCallback(() => onInteract(formItem.identifier), [
-    onInteract,
-    formItem.identifier,
-  ]);
+  const userInteracted = useCallback(
+    () => onInteract(formItem.identifier),
+    [onInteract, formItem.identifier],
+  );
 
   const descriptionChanged = useCallback(
     (newDescription) => {
@@ -76,7 +78,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   );
 
   return (
-    <div className="card my-2">
+    <div className={classNames('card my-2', FORM_ITEM_ROLE_COLOR_CLASSES[formItem.visibility])}>
       <div className="card-header py-0">
         <legend
           className="col-form-label"
@@ -116,6 +118,10 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
             </Trans>
           }
         />
+      </div>
+
+      <div className="card-footer">
+        <VisibilityDisclosureText formItem={formItem} formTypeIdentifier={formTypeIdentifier} />
       </div>
     </div>
   );

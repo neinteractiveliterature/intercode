@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 export type CommonFormItemFieldsFragment = (
   { __typename: 'FormItem' }
-  & Pick<Types.FormItem, 'id' | 'position' | 'identifier' | 'item_type' | 'rendered_properties' | 'default_value'>
+  & Pick<Types.FormItem, 'id' | 'position' | 'identifier' | 'item_type' | 'rendered_properties' | 'default_value' | 'visibility' | 'writeability'>
 );
 
 export type CommonFormSectionFieldsFragment = (
@@ -35,6 +35,8 @@ export const CommonFormItemFieldsFragmentDoc = gql`
   item_type
   rendered_properties
   default_value
+  visibility
+  writeability
 }
     `;
 export const CommonFormSectionFieldsFragmentDoc = gql`

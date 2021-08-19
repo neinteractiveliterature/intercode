@@ -80,7 +80,7 @@ export type RunFieldsFragment = (
 
 export type EventFieldsFragment = (
   { __typename: 'Event' }
-  & Pick<Types.Event, 'id' | 'title' | 'author' | 'description' | 'organization' | 'url' | 'con_mail_destination' | 'can_play_concurrently' | 'short_blurb' | 'participant_communications' | 'age_restrictions' | 'content_warnings' | 'email' | 'length_seconds' | 'status' | 'description_html' | 'form_response_attrs_json' | 'admin_notes'>
+  & Pick<Types.Event, 'id' | 'title' | 'author' | 'description' | 'organization' | 'url' | 'con_mail_destination' | 'can_play_concurrently' | 'short_blurb' | 'participant_communications' | 'age_restrictions' | 'content_warnings' | 'email' | 'length_seconds' | 'status' | 'description_html' | 'form_response_attrs_json' | 'current_user_form_item_role' | 'admin_notes'>
   & { event_category: (
     { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
@@ -236,6 +236,7 @@ export const EventFieldsFragmentDoc = gql`
   status
   description_html
   form_response_attrs_json
+  current_user_form_item_role
   admin_notes
   event_category {
     id

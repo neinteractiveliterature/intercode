@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormEditorQueryData } from './queries.generated';
-import { FormType, TimezoneMode } from '../graphqlTypes.generated';
+import { FormItemRole, FormType, TimezoneMode } from '../graphqlTypes.generated';
 import type {
   AgeRestrictionsFormItem,
   DateFormItem,
@@ -39,6 +39,7 @@ export type FormEditorContextValue = {
   convention: NonNullable<FormEditorQueryData['convention']>;
   currentSection?: FormEditorForm['form_sections'][0];
   form: FormEditorForm;
+  formTypeIdentifier: FormType;
   formType: FormTypeDefinition;
   formItemsById: Map<number, TypedFormItem>;
 };
@@ -58,6 +59,7 @@ export const FormEditorContext = React.createContext<FormEditorContextValue>({
     form_type: FormType.Event,
     form_sections: [],
   },
+  formTypeIdentifier: FormType.Event,
   formType: FormTypes.event,
   formItemsById: new Map(),
 });
@@ -83,6 +85,8 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
       content: '',
       style: 'normal',
     },
+    visibility: FormItemRole.Normal,
+    writeability: FormItemRole.Normal,
   },
   previewFormItem: {
     __typename: 'FormItem',
@@ -92,6 +96,8 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
       content: '',
       style: 'normal',
     },
+    visibility: FormItemRole.Normal,
+    writeability: FormItemRole.Normal,
   },
   setFormItem: () => {},
   standardItem: undefined,
