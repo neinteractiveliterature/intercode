@@ -29,7 +29,7 @@ export type MyProfileQueryData = (
     ) }
   )>, myProfile?: Types.Maybe<(
     { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'email' | 'form_response_attrs_json' | 'can_have_bio' | 'gravatar_url' | 'gravatar_enabled' | 'bio' | 'show_nickname_in_bio' | 'bio_name' | 'bio_html'>
+    & Pick<Types.UserConProfile, 'id' | 'email' | 'form_response_attrs_json' | 'can_have_bio' | 'gravatar_url' | 'gravatar_enabled' | 'bio' | 'show_nickname_in_bio' | 'bio_name' | 'bio_html' | 'current_user_form_item_role'>
   )> }
 );
 
@@ -66,6 +66,7 @@ export const MyProfileQueryDocument = gql`
     show_nickname_in_bio
     bio_name
     bio_html
+    current_user_form_item_role
   }
 }
     ${CommonFormFieldsFragmentDoc}`;

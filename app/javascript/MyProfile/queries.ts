@@ -37,6 +37,7 @@ export const MyProfileQuery = gql`
       show_nickname_in_bio
       bio_name
       bio_html
+      current_user_form_item_role
     }
   }
 

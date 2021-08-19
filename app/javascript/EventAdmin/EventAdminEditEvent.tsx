@@ -71,9 +71,10 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
           ...storeData,
           events: data.events.map((event) => ({
             ...event,
-            maximum_event_provided_tickets_overrides: event.maximum_event_provided_tickets_overrides.filter(
-              (mepto) => mepto.id !== overrideId,
-            ),
+            maximum_event_provided_tickets_overrides:
+              event.maximum_event_provided_tickets_overrides.filter(
+                (mepto) => mepto.id !== overrideId,
+              ),
           })),
         },
       });
@@ -82,19 +83,18 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
 
-  const [
-    eventFormWithCategorySelectionProps,
-    { event, eventCategory, validateForm },
-  ] = useEventFormWithCategorySelection({
-    convention: data.convention!,
-    initialEvent,
-  });
+  const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =
+    useEventFormWithCategorySelection({
+      convention: data.convention!,
+      initialEvent,
+    });
 
   const eventForRunFormFields: RunFormFieldsProps<typeof run>['event'] = useMemo(
     () => ({
       __typename: 'Event',
       id: event.id,
       length_seconds: event.form_response_attrs.length_seconds,
+      current_user_form_item_role: event.current_user_form_item_role,
       can_play_concurrently: false,
       event_category: {
         __typename: 'EventCategory',

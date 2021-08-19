@@ -43,7 +43,13 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
   end
 
   def apply_form_response_attrs(event, form_response_attrs)
-    event.assign_form_response_attributes(form_response_attrs)
+    event.assign_form_response_attributes(
+      event.filter_form_response_attributes_for_assignment(
+        form_response_attrs,
+        event.event_category.event_form.form_items,
+        Pundit.policy(context[:pundit_user], event).form_item_role
+      )
+    )
     event.form_response_attribute_changes
   end
 

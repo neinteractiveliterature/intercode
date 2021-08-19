@@ -13,7 +13,9 @@ import {
 } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
-import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
+import SinglePageFormPresenter, {
+  SinglePageFormPresenterProps,
+} from '../FormPresenter/SinglePageFormPresenter';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
@@ -121,15 +123,13 @@ function MyProfileFormInner({
     [updateUserConProfile, userConProfile],
   );
 
-  const formPresenterProps = {
+  const formPresenterProps: SinglePageFormPresenterProps = {
     form,
     convention,
+    currentUserRole: initialUserConProfile.current_user_form_item_role,
     response: userConProfile,
     responseErrors,
-    isSubmittingResponse: false,
-    isUpdatingResponse: mutationInProgress,
     responseValuesChanged,
-    submitForm: () => {},
   };
 
   return (

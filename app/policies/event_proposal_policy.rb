@@ -74,8 +74,8 @@ class EventProposalPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
-  def form_item_roles
-    {
+  def form_item_role
+    FormItem.highest_level_role({
       'normal' => true,
       'confirmed_attendee' => false,
       'team_member' => user_is_owner?,
@@ -83,7 +83,7 @@ class EventProposalPolicy < ApplicationPolicy
         EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
         has_applicable_permission?(:update_event_proposals)
       )
-    }.select { |_, v| v }.keys
+    }.select { |_, v| v }.keys)
   end
 
   private
