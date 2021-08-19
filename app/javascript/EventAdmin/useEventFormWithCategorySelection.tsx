@@ -6,25 +6,24 @@ import EventCategorySelect, {
   EventCategorySelectProps,
 } from '../BuiltInFormControls/EventCategorySelect';
 import { ConventionForEventCategoryForms, EventCategoryFormData } from './getFormForEventCategory';
-import { EventCategory } from '../graphqlTypes.generated';
+import { Event, EventCategory } from '../graphqlTypes.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 
 type EventCategoryForEventFormWithCategorySelection<
-  EventCategoryType extends EventCategoryFormData
+  EventCategoryType extends EventCategoryFormData,
 > = ConventionForEventCategoryForms<EventCategoryType>['event_categories'][0] &
   Pick<EventCategory, 'scheduling_ui' | 'name'>;
 
-type ConventionForEventFormWithCategorySelection<
-  EventCategoryType extends EventCategoryFormData
-> = ConventionForFormItemDisplay &
-  Omit<ConventionForEventCategoryForms<EventCategoryType>, 'event_categories'> & {
-    event_categories: EventCategoryForEventFormWithCategorySelection<EventCategoryType>[];
-  };
+type ConventionForEventFormWithCategorySelection<EventCategoryType extends EventCategoryFormData> =
+  ConventionForFormItemDisplay &
+    Omit<ConventionForEventCategoryForms<EventCategoryType>, 'event_categories'> & {
+      event_categories: EventCategoryForEventFormWithCategorySelection<EventCategoryType>[];
+    };
 
 export type UseEventFormWithCategorySelectionOptions<
   EventCategoryType extends EventCategoryFormData,
-  EventType extends FormResponse & { event_category?: { id: number } | null }
+  EventType extends FormResponse & { event_category?: { id: number } | null },
 > = {
   convention: ConventionForEventFormWithCategorySelection<EventCategoryType>;
   initialEvent: EventType;
@@ -33,7 +32,10 @@ export type UseEventFormWithCategorySelectionOptions<
 
 export default function useEventFormWithCategorySelection<
   EventCategoryType extends EventCategoryFormData,
-  EventType extends FormResponse & { event_category?: { id: number } | null }
+  EventType extends FormResponse & { event_category?: { id: number } | null } & Pick<
+      Event,
+      'current_user_form_item_role'
+    >,
 >({
   convention,
   initialEvent,
@@ -80,7 +82,9 @@ export default function useEventFormWithCategorySelection<
   );
 }
 
-export type EventFormWithCategorySelectionProps<EventType extends FormResponse> = {
+export type EventFormWithCategorySelectionProps<
+  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+> = {
   selectProps: EventCategorySelectProps;
   eventFormProps: EventFormProps<EventType>;
   children?: ReactNode;
@@ -90,7 +94,7 @@ export function EventFormWithCategorySelection<EventType extends FormResponse>({
   selectProps,
   eventFormProps,
   children,
-}: EventFormWithCategorySelectionProps<EventType>) {
+}: EventFormWithCategorySelectionProps<EventType & Pick<Event, 'current_user_form_item_role'>>) {
   return (
     <>
       <EventCategorySelect {...selectProps} />

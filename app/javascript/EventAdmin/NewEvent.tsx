@@ -13,6 +13,7 @@ import useCreateEvent from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import { useEventAdminEventsQuery, EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
+import { FormItemRole } from '../graphqlTypes.generated';
 
 type NewEventFormProps = {
   data: EventAdminEventsQueryData;
@@ -31,11 +32,10 @@ type EventCategoryType = NonNullable<
 type NewEventFormEvent = {
   event_category?: EventCategoryType | null;
   form_response_attrs: NewEventFormResponseAttrs;
+  current_user_form_item_role: FormItemRole;
 };
 
-function runIsCreatable(
-  run: RunForRunFormFields,
-): run is Omit<RunForRunFormFields, 'starts_at'> & {
+function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFields, 'starts_at'> & {
   starts_at: NonNullable<RunForRunFormFields['starts_at']>;
 } {
   return run.starts_at != null;
@@ -51,21 +51,21 @@ function NewEventForm({ data }: NewEventFormProps) {
     [convention, eventCategoryIdParam],
   );
   const [createMutate, createError] = useAsyncFunction(useCreateEvent());
-  const initialEvent = useMemo(
+  const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
       form_response_attrs: {},
       event_category: initialEventCategory,
+      // if you're on the event admin app, you're an admin for events by definition
+      current_user_form_item_role: FormItemRole.Admin,
     }),
     [initialEventCategory],
   );
-  const [
-    formProps,
-    { event, eventCategory, eventCategoryId, validateForm },
-  ] = useEventFormWithCategorySelection<EventCategoryType, NewEventFormEvent>({
-    convention,
-    schedulingUi: initialEventCategory ? initialEventCategory.scheduling_ui : null,
-    initialEvent,
-  });
+  const [formProps, { event, eventCategory, eventCategoryId, validateForm }] =
+    useEventFormWithCategorySelection<EventCategoryType, NewEventFormEvent>({
+      convention,
+      schedulingUi: initialEventCategory ? initialEventCategory.scheduling_ui : null,
+      initialEvent,
+    });
   const [run, setRun] = useState<RunForRunFormFields>({
     __typename: 'Run',
     id: -1,
@@ -111,6 +111,8 @@ function NewEventForm({ data }: NewEventFormProps) {
               event={{
                 __typename: 'Event',
                 id: -1,
+                // if you're on the event admin app, you're an admin for events by definition
+                current_user_form_item_role: FormItemRole.Admin,
                 can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
                 title: event.form_response_attrs.title,
                 length_seconds: event.form_response_attrs.length_seconds,

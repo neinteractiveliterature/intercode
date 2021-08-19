@@ -8,11 +8,13 @@ import FormSection, { FormSectionProps } from './FormSection';
 import { SectionTraversalContext } from '../SectionTraversalContext';
 import { FormBodyImperativeHandle } from './FormBody';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
+import { FormItemRole } from '../../graphqlTypes.generated';
 
 export type FormPresenterProps = {
   convention: FormSectionProps['convention'];
   response: FormSectionProps['response'];
   form: CommonFormFieldsFragment;
+  currentUserRole: FormItemRole;
   responseErrors: FormSectionProps['errors'];
   responseValuesChanged: FormSectionProps['responseValuesChanged'];
   isSubmittingResponse: FormFooterProps['isSubmittingResponse'];
@@ -26,6 +28,7 @@ export type FormPresenterProps = {
 function FormPresenter({
   convention,
   form,
+  currentUserRole,
   response,
   responseErrors,
   responseValuesChanged,
@@ -68,6 +71,7 @@ function FormPresenter({
       <div className="card-body pb-0">
         <FormSection
           ref={sectionRef}
+          currentUserRole={currentUserRole}
           formTypeIdentifier={form.form_type}
           section={currentSection}
           convention={convention}

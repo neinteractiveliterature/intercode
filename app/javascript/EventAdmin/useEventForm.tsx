@@ -8,7 +8,7 @@ import {
   ItemInteractionTrackerContext,
   ItemInteractionTrackerContextValue,
 } from '../FormPresenter/ItemInteractionTracker';
-import { RegistrationPolicy } from '../graphqlTypes.generated';
+import { Event, RegistrationPolicy } from '../graphqlTypes.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormBodyImperativeHandle } from '../FormPresenter/Layouts/FormBody';
@@ -61,13 +61,17 @@ const processFormResponseValue = (key: string, value: any) => {
   }
 };
 
-export type UseEventFormOptions<EventType extends FormResponse> = {
+export type UseEventFormOptions<
+  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+> = {
   convention: ConventionForFormItemDisplay;
   initialEvent: EventType;
   eventForm: CommonFormFieldsFragment;
 };
 
-export type EventFormProps<EventType extends FormResponse> = {
+export type EventFormProps<
+  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+> = {
   eventForm: CommonFormFieldsFragment;
   convention: ConventionForFormItemDisplay;
   itemInteractionTrackingProps: ItemInteractionTrackerContextValue;
@@ -77,11 +81,9 @@ export type EventFormProps<EventType extends FormResponse> = {
   children?: ReactNode;
 };
 
-export default function useEventForm<EventType extends FormResponse>({
-  convention,
-  initialEvent,
-  eventForm,
-}: UseEventFormOptions<EventType>) {
+export default function useEventForm<
+  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+>({ convention, initialEvent, eventForm }: UseEventFormOptions<EventType>) {
   const [event, setEvent] = useState<EventType>(() => ({
     ...initialEvent,
     form_response_attrs: {
@@ -111,11 +113,10 @@ export default function useEventForm<EventType extends FormResponse>({
 
   const formItems = useMemo(() => getSortedParsedFormItems(eventForm), [eventForm]);
 
-  const validateForm: () => boolean = useCallback(() => validate(formItems, event), [
-    event,
-    formItems,
-    validate,
-  ]);
+  const validateForm: () => boolean = useCallback(
+    () => validate(formItems, event),
+    [event, formItems, validate],
+  );
 
   const eventFormProps: EventFormProps<EventType> = useMemo(
     () => ({
@@ -151,26 +152,26 @@ export default function useEventForm<EventType extends FormResponse>({
   );
 }
 
-export function EventForm<EventType extends FormResponse>({
+export function EventForm<
+  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+>({
   eventForm,
   convention,
   itemInteractionTrackingProps,
   event,
   formResponseValuesChanged,
   formRef,
-  children,
 }: EventFormProps<EventType>) {
   return (
     <ItemInteractionTrackerContext.Provider value={itemInteractionTrackingProps}>
       <SinglePageFormPresenter
         form={eventForm}
+        currentUserRole={event.current_user_form_item_role}
         convention={convention}
         response={event}
         responseValuesChanged={formResponseValuesChanged}
         ref={formRef}
-      >
-        {children}
-      </SinglePageFormPresenter>
+      />
     </ItemInteractionTrackerContext.Provider>
   );
 }

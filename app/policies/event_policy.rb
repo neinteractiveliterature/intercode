@@ -70,13 +70,13 @@ class EventPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
-  def form_item_roles
-    {
+  def form_item_role
+    FormItem.highest_level_role({
       'normal' => true,
       'confirmed_attendee' => confirmed_for_event?(record),
       'team_member' => team_member_for_event?(record),
       'admin' => has_applicable_permission?('update_events') || site_admin_manage?
-    }.select { |_, v| v }.keys
+    }.select { |_, v| v }.keys)
   end
 
   private

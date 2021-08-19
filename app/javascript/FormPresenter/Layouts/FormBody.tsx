@@ -1,14 +1,20 @@
-import { forwardRef, useRef, useCallback, useContext, useImperativeHandle } from 'react';
+import React, { forwardRef, useRef, useCallback, useContext, useImperativeHandle } from 'react';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormItemInput from '../ItemInputs/FormItemInput';
 import { formResponseValueIsCompleteIfRequired } from '../../Models/FormItem';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
-import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
+import FormItemDisplay, { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
-import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import {
+  formItemVisibleTo,
+  formItemWriteableBy,
+  TypedFormItem,
+} from '../../FormAdmin/FormItemUtils';
 import { FormResponse } from '../useFormResponse';
-import { FormType } from '../../graphqlTypes.generated';
+import { FormItemRole, FormType } from '../../graphqlTypes.generated';
+
+import { VisibilityDisclosureCard } from '../ItemInputs/PermissionDisclosures';
 
 export type FormBodyProps = {
   convention: ConventionForFormItemDisplay;
@@ -16,6 +22,7 @@ export type FormBodyProps = {
   formItems: TypedFormItem[];
   response: FormResponse;
   responseValuesChanged: (newValues: any) => void;
+  currentUserRole: FormItemRole;
   errors?: { [itemIdentifier: string]: string[] };
 };
 
@@ -24,7 +31,18 @@ export type FormBodyImperativeHandle = {
 };
 
 const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(
-  ({ convention, formItems, formTypeIdentifier, response, responseValuesChanged, errors }, ref) => {
+  (
+    {
+      convention,
+      formItems,
+      formTypeIdentifier,
+      currentUserRole,
+      response,
+      responseValuesChanged,
+      errors,
+    },
+    ref,
+  ) => {
     const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
     const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
 
@@ -57,6 +75,33 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
           const itemErrors = item.identifier ? (errors || {})[item.identifier] || [] : [];
           const errorsForDisplay = itemErrors.length > 0 ? itemErrors.join(', ') : null;
 
+          if (!formItemVisibleTo(item, currentUserRole)) {
+            return <React.Fragment key={item.id} />;
+          }
+
+          const value = item.identifier ? response.form_response_attrs[item.identifier] : null;
+
+          if (!formItemWriteableBy(item, currentUserRole)) {
+            let caption: string | undefined;
+            if ('caption' in item.rendered_properties) {
+              caption = item.rendered_properties.caption;
+            }
+            return (
+              <div className="mb-3">
+                {caption && <div className="form-label">{caption}</div>}
+                <VisibilityDisclosureCard formItem={item} formTypeIdentifier={formTypeIdentifier}>
+                  <FormItemDisplay
+                    key={item.id}
+                    convention={convention}
+                    displayMode="public"
+                    formItem={item}
+                    value={value}
+                  />
+                </VisibilityDisclosureCard>
+              </div>
+            );
+          }
+
           return (
             <div
               key={item.id} // identifier might be null but id won't
@@ -84,7 +129,7 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
                     response.form_response_attrs[item.identifier],
                   )
                 }
-                value={item.identifier ? response.form_response_attrs[item.identifier] : null}
+                value={value}
                 onChange={responseValueChanged}
                 onInteract={interactWithItem}
               />

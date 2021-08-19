@@ -90,7 +90,8 @@ class FormItem < ApplicationRecord
     }
   }.deep_stringify_keys
 
-  # In order from lowest to highest rank.  Later roles always beat earlier roles
+  # In order from lowest to highest rank.  Higher roles always include lower roles
+  # Must be updated in sync with FORM_ITEM_ROLES in FormItemUtils.ts
   ROLE_VALUES = %w[normal confirmed_attendee team_member admin]
 
   belongs_to :form_section
@@ -108,6 +109,24 @@ class FormItem < ApplicationRecord
   validate :ensure_properties_match_schema
   validates :visibility, inclusion: { in: ROLE_VALUES }
   validates :writeability, inclusion: { in: ROLE_VALUES }
+
+  def self.highest_level_role(roles)
+    ROLE_VALUES.reverse.find do |role|
+      roles.include?(role)
+    end
+  end
+
+  def self.role_is_at_least?(a, b)
+    (ROLE_VALUES.index(a) || -1) >= (ROLE_VALUES.index(b) || -1)
+  end
+
+  def visible_to?(role)
+    FormItem.role_is_at_least?(role, visibility)
+  end
+
+  def writeable_by?(role)
+    visible_to?(role) && FormItem.role_is_at_least?(role, writeability)
+  end
 
   private
 

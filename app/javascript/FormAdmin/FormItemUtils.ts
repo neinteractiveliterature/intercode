@@ -9,6 +9,7 @@ import {
   FormItemInput,
   RegistrationPolicy,
   FormItemRole,
+  FormItem,
 } from '../graphqlTypes.generated';
 import {
   CommonFormSectionFieldsFragment,
@@ -22,6 +23,15 @@ import {
 } from '../FormPresenter/TimeblockTypes';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
+
+// In order from lowest to highest rank.  Higher roles always include lower roles
+// Must be updated in sync with ROLE_VALUES in form_item.rb
+export const FORM_ITEM_ROLES: FormItemRole[] = [
+  FormItemRole.Normal,
+  FormItemRole.ConfirmedAttendee,
+  FormItemRole.TeamMember,
+  FormItemRole.Admin,
+];
 
 const GENERATED_ID_ARRAY_PROPERTIES = [
   'choices',
@@ -459,4 +469,26 @@ export function findStandardItem(
   }
 
   return formType.standard_items[identifier as keyof FormTypeDefinition['standard_items']];
+}
+
+export function highestLevelRole(roles: FormItemRole[]): FormItemRole {
+  return [...FORM_ITEM_ROLES.reverse()].find((role) => roles.includes(role)) ?? FormItemRole.Normal;
+}
+
+export function roleIsAtLeast(a: FormItemRole, b: FormItemRole): boolean {
+  return FORM_ITEM_ROLES.indexOf(a) >= FORM_ITEM_ROLES.indexOf(b);
+}
+
+export function formItemVisibleTo(
+  formItem: Pick<FormItem, 'visibility'>,
+  role: FormItemRole,
+): boolean {
+  return roleIsAtLeast(role, formItem.visibility);
+}
+
+export function formItemWriteableBy(
+  formItem: Pick<FormItem, 'visibility' | 'writeability'>,
+  role: FormItemRole,
+): boolean {
+  return formItemVisibleTo(formItem, role) && roleIsAtLeast(role, formItem.writeability);
 }
