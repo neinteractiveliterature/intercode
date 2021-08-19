@@ -88,7 +88,12 @@ class UserConProfilePolicy < ApplicationPolicy
     FormItem.highest_level_role({
       'normal' => read?,
       # admin for user con profiles acts like "has the highest level permissions on this profile"
-      'admin' => manage? && read_birth_date? && read_personal_info? && read_email?
+      'admin' => (
+        has_convention_permission?(convention, 'read_user_con_profiles') &&
+        read_birth_date? &&
+        read_personal_info? &&
+        read_email?
+      )
     }.select { |_, v| v }.keys)
   end
 
