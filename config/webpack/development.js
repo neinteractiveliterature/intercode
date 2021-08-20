@@ -23,7 +23,6 @@ export default {
       directory: environment.output.path,
       publicPath: environment.output.publicPath,
     },
-    firewall: false,
     historyApiFallback: {
       disableDotRule: true,
     },
@@ -32,7 +31,7 @@ export default {
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
-    transportMode: 'ws',
+    webSocketServer: 'ws',
     https: {
       key: readFileSync('./dev_certificate.key'),
       cert: readFileSync('./dev_certificate.crt'),
