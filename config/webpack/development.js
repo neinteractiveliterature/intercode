@@ -1,5 +1,4 @@
 import environment from './environment.js';
-import { readFileSync } from 'fs';
 
 export default {
   ...environment,
@@ -18,11 +17,6 @@ export default {
     publicPath: 'https://localhost:3135/packs/',
   },
   devServer: {
-    // clientLogLevel: 'none',
-    static: {
-      directory: environment.output.path,
-      publicPath: environment.output.publicPath,
-    },
     historyApiFallback: {
       disableDotRule: true,
     },
@@ -31,11 +25,12 @@ export default {
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
-    webSocketServer: 'ws',
     https: {
-      key: readFileSync('./dev_certificate.key'),
-      cert: readFileSync('./dev_certificate.crt'),
-      cacert: readFileSync('./dev_ca.crt'),
+      key: './dev_certificate.key',
+      cert: './dev_certificate.crt',
+      cacert: './dev_ca.crt',
     },
+    webSocketServer: 'ws',
+    allowedHosts: 'all',
   },
 };
