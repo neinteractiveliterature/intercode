@@ -94,7 +94,8 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
       __typename: 'Event',
       id: event.id,
       length_seconds: event.form_response_attrs.length_seconds,
-      current_user_form_item_role: event.current_user_form_item_role,
+      current_user_form_item_viewer_role: event.current_user_form_item_viewer_role,
+      current_user_form_item_writer_role: event.current_user_form_item_writer_role,
       can_play_concurrently: false,
       event_category: {
         __typename: 'EventCategory',

@@ -62,7 +62,8 @@ const processFormResponseValue = (key: string, value: any) => {
 };
 
 export type UseEventFormOptions<
-  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+  EventType extends FormResponse &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 > = {
   convention: ConventionForFormItemDisplay;
   initialEvent: EventType;
@@ -70,7 +71,8 @@ export type UseEventFormOptions<
 };
 
 export type EventFormProps<
-  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+  EventType extends FormResponse &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 > = {
   eventForm: CommonFormFieldsFragment;
   convention: ConventionForFormItemDisplay;
@@ -82,7 +84,8 @@ export type EventFormProps<
 };
 
 export default function useEventForm<
-  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+  EventType extends FormResponse &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 >({ convention, initialEvent, eventForm }: UseEventFormOptions<EventType>) {
   const [event, setEvent] = useState<EventType>(() => ({
     ...initialEvent,
@@ -153,7 +156,8 @@ export default function useEventForm<
 }
 
 export function EventForm<
-  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+  EventType extends FormResponse &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 >({
   eventForm,
   convention,
@@ -166,7 +170,8 @@ export function EventForm<
     <ItemInteractionTrackerContext.Provider value={itemInteractionTrackingProps}>
       <SinglePageFormPresenter
         form={eventForm}
-        currentUserRole={event.current_user_form_item_role}
+        currentUserViewerRole={event.current_user_form_item_viewer_role}
+        currentUserWriterRole={event.current_user_form_item_writer_role}
         convention={convention}
         response={event}
         responseValuesChanged={formResponseValuesChanged}

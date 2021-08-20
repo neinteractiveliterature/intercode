@@ -84,17 +84,28 @@ class UserConProfilePolicy < ApplicationPolicy
     manage?
   end
 
-  def form_item_role
-    FormItem.highest_level_role({
-      'normal' => read?,
+  def form_item_viewer_role
+    FormItem.highest_level_role(
       # admin for user con profiles acts like "has the highest level permissions on this profile"
-      'admin' => (
+      admin: (
         has_convention_permission?(convention, 'read_user_con_profiles') &&
-        read_birth_date? &&
-        read_personal_info? &&
-        read_email?
+        has_convention_permission?(convention, 'read_user_con_profile_birth_date') &&
+        has_convention_permission?(convention, 'read_user_con_profile_personal_info') &&
+        has_convention_permission?(convention, 'read_user_con_profile_email')
       )
-    }.select { |_, v| v }.keys)
+    )
+  end
+
+  def form_item_writer_role
+    FormItem.highest_level_role(
+      # admin for user con profiles acts like "has the highest level permissions on this profile"
+      admin: (
+        has_convention_permission?(convention, 'update_user_con_profiles') &&
+        has_convention_permission?(convention, 'read_user_con_profile_birth_date') &&
+        has_convention_permission?(convention, 'read_user_con_profile_personal_info') &&
+        has_convention_permission?(convention, 'read_user_con_profile_email')
+      )
+    )
   end
 
   private

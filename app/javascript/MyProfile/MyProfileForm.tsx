@@ -126,7 +126,8 @@ function MyProfileFormInner({
   const formPresenterProps: SinglePageFormPresenterProps = {
     form,
     convention,
-    currentUserRole: initialUserConProfile.current_user_form_item_role,
+    currentUserViewerRole: initialUserConProfile.current_user_form_item_viewer_role,
+    currentUserWriterRole: initialUserConProfile.current_user_form_item_writer_role,
     response: userConProfile,
     responseErrors,
     responseValuesChanged,

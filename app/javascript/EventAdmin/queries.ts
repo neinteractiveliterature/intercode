@@ -140,7 +140,8 @@ export const EventFields = gql`
     status
     description_html
     form_response_attrs_json
-    current_user_form_item_role
+    current_user_form_item_viewer_role
+    current_user_form_item_writer_role
     admin_notes
 
     event_category {

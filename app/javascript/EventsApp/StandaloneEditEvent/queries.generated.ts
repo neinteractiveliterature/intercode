@@ -25,7 +25,7 @@ export type StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmen
 
 export type StandaloneEditEvent_EventFieldsFragment = (
   { __typename: 'Event' }
-  & Pick<Types.Event, 'id' | 'title' | 'form_response_attrs_json' | 'current_user_form_item_role'>
+  & Pick<Types.Event, 'id' | 'title' | 'form_response_attrs_json' | 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
   & { event_category: (
     { __typename: 'EventCategory' }
     & Pick<Types.EventCategory, 'id' | 'name'>
@@ -89,7 +89,8 @@ export const StandaloneEditEvent_EventFieldsFragmentDoc = gql`
   id
   title
   form_response_attrs_json
-  current_user_form_item_role
+  current_user_form_item_viewer_role
+  current_user_form_item_writer_role
   event_category {
     id
     name

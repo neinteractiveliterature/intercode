@@ -17,10 +17,11 @@ import { useUpdateUserConProfileMutation } from './mutations.generated';
 
 function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
   const history = useHistory();
-  const { userConProfile: initialUserConProfile, convention, form } = buildFormStateFromData(
-    data.userConProfile,
-    data.convention!,
-  );
+  const {
+    userConProfile: initialUserConProfile,
+    convention,
+    form,
+  } = buildFormStateFromData(data.userConProfile, data.convention!);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
 
@@ -28,26 +29,24 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
     update: (cache, result) => {
       const variables = { id: initialUserConProfile.id };
       let query: UserConProfileAdminQueryData | null = null;
-      try {
-        query = cache.readQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQuery,
-          variables,
-        });
-      } catch (error) {
-        // Work around https://github.com/apollographql/apollo-client/issues/6094
-        return;
-      }
-      cache.writeQuery({
+      query = cache.readQuery<UserConProfileAdminQueryData>({
         query: UserConProfileAdminQuery,
         variables,
-        data: {
-          ...query,
-          userConProfile: {
-            ...query?.userConProfile,
-            ...result.data?.updateUserConProfile?.user_con_profile,
-          },
-        },
       });
+
+      if (query) {
+        cache.writeQuery<UserConProfileAdminQueryData>({
+          query: UserConProfileAdminQuery,
+          variables,
+          data: {
+            ...query,
+            userConProfile: {
+              ...query.userConProfile,
+              ...result.data?.updateUserConProfile?.user_con_profile,
+            },
+          },
+        });
+      }
     },
   });
 

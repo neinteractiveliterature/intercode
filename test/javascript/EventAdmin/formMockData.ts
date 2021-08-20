@@ -31,8 +31,11 @@ export const convention: ConventionForFormItemDisplay = {
   timezone_mode: TimezoneMode.UserLocal,
 };
 
-export const initialEvent: FormResponse & Pick<Event, 'id' | 'current_user_form_item_role'> = {
-  id: 123,
-  form_response_attrs: DEFAULT_EVENT_FORM_RESPONSE_ATTRS,
-  current_user_form_item_role: FormItemRole.Normal,
-};
+export const initialEvent: FormResponse &
+  Pick<Event, 'id' | 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'> =
+  {
+    id: 123,
+    form_response_attrs: DEFAULT_EVENT_FORM_RESPONSE_ATTRS,
+    current_user_form_item_viewer_role: FormItemRole.Normal,
+    current_user_form_item_writer_role: FormItemRole.Normal,
+  };

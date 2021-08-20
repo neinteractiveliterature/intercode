@@ -7,7 +7,8 @@ export const EventProposalFields = gql`
     title
     status
     form_response_attrs_json
-    current_user_form_item_role
+    current_user_form_item_viewer_role
+    current_user_form_item_writer_role
 
     event_category {
       id

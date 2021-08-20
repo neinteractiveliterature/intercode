@@ -12149,7 +12149,23 @@
               "deprecationReason": null
             },
             {
-              "name": "current_user_form_item_role",
+              "name": "current_user_form_item_viewer_role",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "current_user_form_item_writer_role",
               "description": null,
               "args": [],
               "type": {
@@ -13223,7 +13239,23 @@
               "deprecationReason": null
             },
             {
-              "name": "current_user_form_item_role",
+              "name": "current_user_form_item_viewer_role",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "current_user_form_item_writer_role",
               "description": null,
               "args": [],
               "type": {
@@ -14455,13 +14487,7 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "admin",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "team_member",
+              "name": "normal",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -14473,7 +14499,13 @@
               "deprecationReason": null
             },
             {
-              "name": "normal",
+              "name": "team_member",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "admin",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -33381,7 +33413,23 @@
               "deprecationReason": null
             },
             {
-              "name": "current_user_form_item_role",
+              "name": "current_user_form_item_viewer_role",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormItemRole",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "current_user_form_item_writer_role",
               "description": null,
               "args": [],
               "type": {

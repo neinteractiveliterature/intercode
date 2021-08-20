@@ -15,7 +15,7 @@ class Mutations::UpdateUserConProfile < Mutations::BaseMutation
         user_con_profile.filter_form_response_attributes_for_assignment(
           JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json')),
           convention.user_con_profile_form.form_items,
-          Pundit.policy(context[:pundit_user], user_con_profile).form_item_role
+          context[:pundit_user]
         )
       )
     end

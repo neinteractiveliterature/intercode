@@ -61,7 +61,7 @@ export type UserConProfileQueryData = (
     & UserConProfileFormDataFragment
   )>, userConProfile: (
     { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'current_user_form_item_role'>
+    & Pick<Types.UserConProfile, 'id' | 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
     & UserConProfileFieldsFragment
   ) }
 );
@@ -303,7 +303,8 @@ export const UserConProfileQueryDocument = gql`
   }
   userConProfile(id: $id) {
     id
-    current_user_form_item_role
+    current_user_form_item_viewer_role
+    current_user_form_item_writer_role
     ...UserConProfileFields
   }
 }
