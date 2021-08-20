@@ -12,7 +12,7 @@ class Mutations::UpdateEventProposal < Mutations::BaseMutation
       event_proposal.filter_form_response_attributes_for_assignment(
         JSON.parse(event_proposal_attrs.delete('form_response_attrs_json')),
         event_proposal.event_category.event_proposal_form.form_items,
-        context[:pundit_user], event_proposal
+        context[:pundit_user]
       )
     )
     event_proposal.assign_attributes(event_proposal_attrs)

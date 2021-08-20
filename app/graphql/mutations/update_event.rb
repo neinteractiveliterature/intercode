@@ -47,7 +47,7 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
       event.filter_form_response_attributes_for_assignment(
         form_response_attrs,
         event.event_category.event_form.form_items,
-        context[:pundit_user], event
+        context[:pundit_user]
       )
     )
     event.form_response_attribute_changes
