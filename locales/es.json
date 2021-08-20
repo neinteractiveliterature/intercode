@@ -407,7 +407,9 @@
       "confirmed_attendee": "",
       "proposer": "",
       "public": "",
+      "read_all_profiles": "",
       "team_member": "",
+      "update_all_profiles": "",
       "user": "",
       "visibilityDisclosure": ""
     }

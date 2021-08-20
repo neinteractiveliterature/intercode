@@ -30,6 +30,7 @@ export const FORM_ITEM_ROLES: FormItemRole[] = [
   FormItemRole.Normal,
   FormItemRole.ConfirmedAttendee,
   FormItemRole.TeamMember,
+  FormItemRole.AllProfilesBasicAccess,
   FormItemRole.Admin,
 ];
 

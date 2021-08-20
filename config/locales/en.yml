@@ -55,4 +55,5 @@ en:
     hidden_text:
       confirmed_attendee: 'This information is only visible to confirmed attendees.'
       team_member: 'This information is only visible to %{team_member_name_pluralized}.'
+      all_profiles_basic_access: 'This information is only visible to staff members.'
       admin: 'This information is only visible to administrators.'

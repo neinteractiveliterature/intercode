@@ -92,7 +92,7 @@ class FormItem < ApplicationRecord
 
   # In order from lowest to highest rank.  Higher roles always include lower roles
   # Must be updated in sync with FORM_ITEM_ROLES in FormItemUtils.ts
-  ROLE_VALUES = %w[normal confirmed_attendee team_member admin]
+  ROLE_VALUES = %w[normal confirmed_attendee team_member all_profiles_basic_access admin]
 
   belongs_to :form_section
   has_one :form, through: :form_section

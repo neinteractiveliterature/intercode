@@ -1999,6 +1999,7 @@ export type FormItemInput = {
 
 export enum FormItemRole {
   Admin = 'admin',
+  AllProfilesBasicAccess = 'all_profiles_basic_access',
   ConfirmedAttendee = 'confirmed_attendee',
   Normal = 'normal',
   TeamMember = 'team_member'

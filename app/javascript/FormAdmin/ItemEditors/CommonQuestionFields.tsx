@@ -42,6 +42,7 @@ function applicableRoles(
     ...(formTypeIdentifier === 'event' && purpose === 'visibility'
       ? [FormItemRole.ConfirmedAttendee, FormItemRole.TeamMember]
       : []),
+    ...(formTypeIdentifier === 'user_con_profile' ? [FormItemRole.AllProfilesBasicAccess] : []),
     FormItemRole.Admin,
   ];
 }

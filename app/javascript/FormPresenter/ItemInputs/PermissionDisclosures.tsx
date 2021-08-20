@@ -10,6 +10,7 @@ export const FORM_ITEM_ROLE_COLOR_CLASSES: Record<FormItemRole, string> = {
   normal: '',
   confirmed_attendee: 'bg-info bg-opacity-50',
   team_member: 'bg-success bg-opacity-25',
+  all_profiles_basic_access: 'bg-success bg-opacity-25',
   admin: 'bg-warning',
 };
 
@@ -26,6 +27,18 @@ export function describeFormItemRole(
       return t('forms.roles.confirmed_attendee', 'Confirmed attendees, team members, and admins');
     case FormItemRole.TeamMember:
       return t('forms.roles.team_member', 'Team members and admins');
+    case FormItemRole.AllProfilesBasicAccess:
+      if (purpose === 'visibility') {
+        return t(
+          'forms.roles.read_all_profiles',
+          'Staff who can see the non-personal fields on all user profiles, and admins',
+        );
+      }
+
+      return t(
+        'forms.roles.update_all_profiles',
+        'Staff who can update the non-personal fields on all user profiles, and admins',
+      );
     case FormItemRole.Normal:
       switch (formTypeIdentifier) {
         case FormType.Event:
