@@ -128,7 +128,8 @@ function EventProposalFormInner({
       <div>
         <FormPresenter
           form={form}
-          currentUserRole={initialEventProposal.current_user_form_item_role}
+          currentUserViewerRole={initialEventProposal.current_user_form_item_viewer_role}
+          currentUserWriterRole={initialEventProposal.current_user_form_item_writer_role}
           convention={convention}
           response={eventProposal}
           responseErrors={responseErrors}

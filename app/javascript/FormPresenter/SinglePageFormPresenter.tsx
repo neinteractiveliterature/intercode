@@ -11,7 +11,8 @@ export type SinglePageFormPresenterProps = {
   form: CommonFormFieldsFragment;
   convention: ConventionForFormItemDisplay;
   response: FormResponse;
-  currentUserRole: FormItemRole;
+  currentUserViewerRole: FormItemRole;
+  currentUserWriterRole: FormItemRole;
   responseValuesChanged: (newValues: any) => void;
   responseErrors?: FormBodyProps['errors'];
 };
@@ -19,23 +20,37 @@ export type SinglePageFormPresenterProps = {
 const SinglePageFormPresenter = forwardRef<
   FormBodyImperativeHandle | undefined,
   SinglePageFormPresenterProps
->(({ form, currentUserRole, convention, response, responseValuesChanged, responseErrors }, ref) => {
-  const formItems = useMemo(() => getSortedParsedFormItems(form), [form]);
+>(
+  (
+    {
+      form,
+      currentUserViewerRole,
+      currentUserWriterRole,
+      convention,
+      response,
+      responseValuesChanged,
+      responseErrors,
+    },
+    ref,
+  ) => {
+    const formItems = useMemo(() => getSortedParsedFormItems(form), [form]);
 
-  return (
-    <>
-      <FormBody
-        convention={convention}
-        currentUserRole={currentUserRole}
-        ref={ref}
-        formItems={formItems}
-        formTypeIdentifier={form.form_type}
-        errors={responseErrors}
-        response={response}
-        responseValuesChanged={responseValuesChanged}
-      />
-    </>
-  );
-});
+    return (
+      <>
+        <FormBody
+          convention={convention}
+          currentUserViewerRole={currentUserViewerRole}
+          currentUserWriterRole={currentUserWriterRole}
+          ref={ref}
+          formItems={formItems}
+          formTypeIdentifier={form.form_type}
+          errors={responseErrors}
+          response={response}
+          responseValuesChanged={responseValuesChanged}
+        />
+      </>
+    );
+  },
+);
 
 export default SinglePageFormPresenter;

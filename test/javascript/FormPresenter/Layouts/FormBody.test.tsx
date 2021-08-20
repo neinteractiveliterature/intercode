@@ -7,7 +7,8 @@ import { FormItemRole } from '../../../../app/javascript/graphqlTypes.generated'
 
 describe('FormBody', () => {
   const defaultProps: FormBodyProps = {
-    currentUserRole: FormItemRole.Normal,
+    currentUserViewerRole: FormItemRole.Normal,
+    currentUserWriterRole: FormItemRole.Normal,
     formItems: getSortedParsedFormItems(minimalForm),
     formTypeIdentifier: minimalForm.form_type,
     convention,

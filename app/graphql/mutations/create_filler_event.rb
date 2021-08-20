@@ -17,7 +17,7 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
       event.filter_form_response_attributes_for_assignment(
         form_response_attrs,
         event.event_category.event_form.form_items,
-        Pundit.policy(context[:pundit_user], event).form_item_role
+        context[:pundit_user]
       )
     )
 

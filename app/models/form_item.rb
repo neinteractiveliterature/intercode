@@ -110,10 +110,12 @@ class FormItem < ApplicationRecord
   validates :visibility, inclusion: { in: ROLE_VALUES }
   validates :writeability, inclusion: { in: ROLE_VALUES }
 
-  def self.highest_level_role(roles)
-    ROLE_VALUES.reverse.find do |role|
+  def self.highest_level_role(**role_hash)
+    roles = Set.new(role_hash.select { |_, v| v }.keys.map(&:to_s))
+    highest_explicit_role = ROLE_VALUES.reverse.find do |role|
       roles.include?(role)
     end
+    highest_explicit_role || 'normal'
   end
 
   def self.role_is_at_least?(a, b)

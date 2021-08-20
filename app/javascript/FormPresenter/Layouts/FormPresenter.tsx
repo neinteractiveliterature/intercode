@@ -14,7 +14,8 @@ export type FormPresenterProps = {
   convention: FormSectionProps['convention'];
   response: FormSectionProps['response'];
   form: CommonFormFieldsFragment;
-  currentUserRole: FormItemRole;
+  currentUserViewerRole: FormItemRole;
+  currentUserWriterRole: FormItemRole;
   responseErrors: FormSectionProps['errors'];
   responseValuesChanged: FormSectionProps['responseValuesChanged'];
   isSubmittingResponse: FormFooterProps['isSubmittingResponse'];
@@ -28,7 +29,8 @@ export type FormPresenterProps = {
 function FormPresenter({
   convention,
   form,
-  currentUserRole,
+  currentUserViewerRole,
+  currentUserWriterRole,
   response,
   responseErrors,
   responseValuesChanged,
@@ -71,7 +73,8 @@ function FormPresenter({
       <div className="card-body pb-0">
         <FormSection
           ref={sectionRef}
-          currentUserRole={currentUserRole}
+          currentUserViewerRole={currentUserViewerRole}
+          currentUserWriterRole={currentUserWriterRole}
           formTypeIdentifier={form.form_type}
           section={currentSection}
           convention={convention}

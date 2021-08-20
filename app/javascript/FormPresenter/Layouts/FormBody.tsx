@@ -22,7 +22,8 @@ export type FormBodyProps = {
   formItems: TypedFormItem[];
   response: FormResponse;
   responseValuesChanged: (newValues: any) => void;
-  currentUserRole: FormItemRole;
+  currentUserViewerRole: FormItemRole;
+  currentUserWriterRole: FormItemRole;
   errors?: { [itemIdentifier: string]: string[] };
 };
 
@@ -36,7 +37,8 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
       convention,
       formItems,
       formTypeIdentifier,
-      currentUserRole,
+      currentUserViewerRole,
+      currentUserWriterRole,
       response,
       responseValuesChanged,
       errors,
@@ -75,13 +77,13 @@ const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>
           const itemErrors = item.identifier ? (errors || {})[item.identifier] || [] : [];
           const errorsForDisplay = itemErrors.length > 0 ? itemErrors.join(', ') : null;
 
-          if (!formItemVisibleTo(item, currentUserRole)) {
+          if (!formItemVisibleTo(item, currentUserViewerRole)) {
             return <React.Fragment key={item.id} />;
           }
 
           const value = item.identifier ? response.form_response_attrs[item.identifier] : null;
 
-          if (!formItemWriteableBy(item, currentUserRole)) {
+          if (!formItemWriteableBy(item, currentUserWriterRole)) {
             let caption: string | undefined;
             if ('caption' in item.rendered_properties) {
               caption = item.rendered_properties.caption;

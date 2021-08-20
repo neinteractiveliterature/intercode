@@ -75,7 +75,8 @@ export const UserConProfileQuery = gql`
 
     userConProfile(id: $id) {
       id
-      current_user_form_item_role
+      current_user_form_item_viewer_role
+      current_user_form_item_writer_role
       ...UserConProfileFields
     }
   }

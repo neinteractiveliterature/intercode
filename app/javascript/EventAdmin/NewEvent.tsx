@@ -32,7 +32,8 @@ type EventCategoryType = NonNullable<
 type NewEventFormEvent = {
   event_category?: EventCategoryType | null;
   form_response_attrs: NewEventFormResponseAttrs;
-  current_user_form_item_role: FormItemRole;
+  current_user_form_item_viewer_role: FormItemRole;
+  current_user_form_item_writer_role: FormItemRole;
 };
 
 function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFields, 'starts_at'> & {
@@ -56,7 +57,8 @@ function NewEventForm({ data }: NewEventFormProps) {
       form_response_attrs: {},
       event_category: initialEventCategory,
       // if you're on the event admin app, you're an admin for events by definition
-      current_user_form_item_role: FormItemRole.Admin,
+      current_user_form_item_viewer_role: FormItemRole.Admin,
+      current_user_form_item_writer_role: FormItemRole.Admin,
     }),
     [initialEventCategory],
   );
@@ -112,7 +114,8 @@ function NewEventForm({ data }: NewEventFormProps) {
                 __typename: 'Event',
                 id: -1,
                 // if you're on the event admin app, you're an admin for events by definition
-                current_user_form_item_role: FormItemRole.Admin,
+                current_user_form_item_viewer_role: FormItemRole.Admin,
+                current_user_form_item_writer_role: FormItemRole.Admin,
                 can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
                 title: event.form_response_attrs.title,
                 length_seconds: event.form_response_attrs.length_seconds,

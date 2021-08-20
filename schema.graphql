@@ -2091,7 +2091,8 @@ type Event {
   con_mail_destination: String
   content_warnings: String
   created_at: Date
-  current_user_form_item_role: FormItemRole!
+  current_user_form_item_viewer_role: FormItemRole!
+  current_user_form_item_writer_role: FormItemRole!
   description: String
   description_html: String
   email: String
@@ -2170,7 +2171,8 @@ type EventProposal {
   admin_notes: String
   convention: Convention!
   created_at: Date!
-  current_user_form_item_role: FormItemRole!
+  current_user_form_item_viewer_role: FormItemRole!
+  current_user_form_item_writer_role: FormItemRole!
   event: Event
   event_category: EventCategory!
   form: Form
@@ -5320,7 +5322,8 @@ type UserConProfile {
   city: String
   convention: Convention!
   country: String
-  current_user_form_item_role: FormItemRole!
+  current_user_form_item_viewer_role: FormItemRole!
+  current_user_form_item_writer_role: FormItemRole!
   day_phone: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")
   email: String
   evening_phone: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")

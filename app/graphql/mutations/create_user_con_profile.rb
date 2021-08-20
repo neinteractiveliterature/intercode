@@ -45,7 +45,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
       user_con_profile.filter_form_response_attributes_for_assignment(
         attrs,
         convention.user_con_profile_form.form_items,
-        Pundit.policy(context[:pundit_user], object).form_item_role
+        context[:pundit_user]
       )
     )
   end

@@ -34,7 +34,7 @@ export default function useEventFormWithCategorySelection<
   EventCategoryType extends EventCategoryFormData,
   EventType extends FormResponse & { event_category?: { id: number } | null } & Pick<
       Event,
-      'current_user_form_item_role'
+      'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'
     >,
 >({
   convention,
@@ -83,7 +83,8 @@ export default function useEventFormWithCategorySelection<
 }
 
 export type EventFormWithCategorySelectionProps<
-  EventType extends FormResponse & Pick<Event, 'current_user_form_item_role'>,
+  EventType extends FormResponse &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 > = {
   selectProps: EventCategorySelectProps;
   eventFormProps: EventFormProps<EventType>;
@@ -94,7 +95,10 @@ export function EventFormWithCategorySelection<EventType extends FormResponse>({
   selectProps,
   eventFormProps,
   children,
-}: EventFormWithCategorySelectionProps<EventType & Pick<Event, 'current_user_form_item_role'>>) {
+}: EventFormWithCategorySelectionProps<
+  EventType &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
+>) {
   return (
     <>
       <EventCategorySelect {...selectProps} />
