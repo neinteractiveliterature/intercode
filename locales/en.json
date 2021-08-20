@@ -407,7 +407,9 @@
       "confirmed_attendee": "Confirmed attendees, team members, and admins",
       "proposer": "Event proposer, reviewers, and admins",
       "public": "Public",
+      "read_all_profiles": "Staff who can see the non-personal fields on all user profiles, and admins",
       "team_member": "Team members and admins",
+      "update_all_profiles": "Staff who can update the non-personal fields on all user profiles, and admins",
       "user": "User and admins",
       "visibilityDisclosure": "Visible to: {{ roleDescription }}"
     }

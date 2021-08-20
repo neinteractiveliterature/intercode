@@ -2294,6 +2294,7 @@ input FormItemInput {
 
 enum FormItemRole {
   admin
+  all_profiles_basic_access
   confirmed_attendee
   normal
   team_member

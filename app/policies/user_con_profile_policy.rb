@@ -86,6 +86,7 @@ class UserConProfilePolicy < ApplicationPolicy
 
   def form_item_viewer_role
     FormItem.highest_level_role(
+      all_profiles_basic_access: has_convention_permission?(convention, 'read_user_con_profiles'),
       # admin for user con profiles acts like "has the highest level permissions on this profile"
       admin: (
         has_convention_permission?(convention, 'read_user_con_profiles') &&
@@ -98,6 +99,7 @@ class UserConProfilePolicy < ApplicationPolicy
 
   def form_item_writer_role
     FormItem.highest_level_role(
+      all_profiles_basic_access: has_convention_permission?(convention, 'update_user_con_profiles'),
       # admin for user con profiles acts like "has the highest level permissions on this profile"
       admin: (
         has_convention_permission?(convention, 'update_user_con_profiles') &&
