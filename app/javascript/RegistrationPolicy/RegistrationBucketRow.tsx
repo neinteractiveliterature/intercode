@@ -49,10 +49,10 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
   lockDelete,
   onDelete,
 }: RegistrationBucketRowProps<T>) {
-  const updateBucket = useCallback((newValue: T) => onChange(registrationBucket.key, newValue), [
-    registrationBucket.key,
-    onChange,
-  ]);
+  const updateBucket = useCallback(
+    (newValue: T) => onChange(registrationBucket.key, newValue),
+    [registrationBucket.key, onChange],
+  );
   const setBucket = useFunctionalStateUpdater(registrationBucket, updateBucket);
   const [
     setName,
@@ -118,7 +118,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
               aria-label="Counted for signups?"
             />
             Counted for signups?{' '}
-            <HelpPopover>
+            <HelpPopover iconSet="bootstrap-icons">
               “Counted” buckets count towards the attendee’s number of signups, and are included in
               the “No Preference” option. If the bucket is <em>not</em> counted, any attendees who
               click “No Preference” won’t end up in this bucket.
@@ -138,7 +138,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
                 aria-label="Show bucket name in signup list?"
               />
               Show bucket name in signup list?{' '}
-              <HelpPopover>
+              <HelpPopover iconSet="bootstrap-icons">
                 If checked, attendees will be able to see which of their fellow attendees are in
                 this bucket via the signup summary page. (The signup summary always lists fellow
                 attendees’ names, but normally doesn’t show which bucket they’re in.)
@@ -159,32 +159,34 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
       return null;
     }
 
-    const slotControls = ([
-      {
-        label: 'Min',
-        field: 'minimum_slots',
-        min: 0,
-        inputId: minId,
-        value: registrationBucket.minimum_slots,
-        setValue: setMinimumSlots,
-      },
-      {
-        label: 'Pref',
-        field: 'preferred_slots',
-        min: 0,
-        inputId: preferredId,
-        value: registrationBucket.preferred_slots,
-        setValue: setPreferredSlots,
-      },
-      {
-        label: 'Max',
-        field: 'total_slots',
-        min: 0,
-        inputId: maxId,
-        value: registrationBucket.total_slots,
-        setValue: setTotalSlots,
-      },
-    ] as const).map(({ label, field, min, inputId, value, setValue }) => (
+    const slotControls = (
+      [
+        {
+          label: 'Min',
+          field: 'minimum_slots',
+          min: 0,
+          inputId: minId,
+          value: registrationBucket.minimum_slots,
+          setValue: setMinimumSlots,
+        },
+        {
+          label: 'Pref',
+          field: 'preferred_slots',
+          min: 0,
+          inputId: preferredId,
+          value: registrationBucket.preferred_slots,
+          setValue: setPreferredSlots,
+        },
+        {
+          label: 'Max',
+          field: 'total_slots',
+          min: 0,
+          inputId: maxId,
+          value: registrationBucket.total_slots,
+          setValue: setTotalSlots,
+        },
+      ] as const
+    ).map(({ label, field, min, inputId, value, setValue }) => (
       <div key={field} className={lockLimited ? 'd-inline me-2' : undefined}>
         <label htmlFor={inputId} className="form-label d-inline">
           {label}
@@ -266,7 +268,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
             })
           }
         >
-          <i className="fa fa-trash-o" />
+          <i className="bi-trash" />
           <span className="visually-hidden">Delete bucket</span>
         </button>
       </td>

@@ -98,7 +98,7 @@ function EditUserConProfile() {
   const { data, loading, error } = useUserConProfileQuery({ variables: { id } });
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

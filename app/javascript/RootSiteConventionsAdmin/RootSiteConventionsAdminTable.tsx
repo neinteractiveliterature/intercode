@@ -50,7 +50,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
   if (timespan.includesTime(now)) {
     return (
       <>
-        <i className="fa fa-circle" aria-label="Ongoing convention" />{' '}
+        <i className="bi-circle" aria-label="Ongoing convention" />{' '}
         <strong>{datesDescription}</strong>
       </>
     );
@@ -59,14 +59,15 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
   if (timespan.isFinite() && timespan.start > now) {
     return (
       <>
-        <i className="fa fa-arrow-circle-right" aria-label="Future convention" /> {datesDescription}
+        <i className="bi-arrow-right-circle-fill" aria-label="Future convention" />{' '}
+        {datesDescription}
       </>
     );
   }
 
   return (
     <span className="text-secondary">
-      <i className="fa fa-arrow-circle-left" aria-label="Past convention" /> {datesDescription}
+      <i className="bi-arrow-left-circle-fill" aria-label="Past convention" /> {datesDescription}
     </span>
   );
 }

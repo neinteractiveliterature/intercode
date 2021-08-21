@@ -16,7 +16,7 @@ function BackButton({ goToPreviousSection }: BackButtonProps) {
   const { t } = useTranslation();
   return (
     <button className="btn btn-secondary" onClick={goToPreviousSection} type="button">
-      <i className="fa fa-chevron-left" /> {t('forms.general.backButton', 'Back')}
+      <i className="bi-chevron-left" /> {t('forms.general.backButton', 'Back')}
     </button>
   );
 }
@@ -29,7 +29,7 @@ function ContinueButton({ tryNextSection }: ContinueButtonProps) {
   const { t } = useTranslation();
   return (
     <button className="btn btn-primary" onClick={tryNextSection} type="button">
-      {t('forms.general.continueButton', 'Continue')} <i className="fa fa-chevron-right" />
+      {t('forms.general.continueButton', 'Continue')} <i className="bi-chevron-right" />
     </button>
   );
 }
@@ -74,24 +74,19 @@ function FormFooter({
   scrollToItem,
   children,
 }: FormFooterProps) {
-  const {
-    currentSection,
-    currentSectionIndex,
-    sectionCount,
-    previousSection,
-    nextSection,
-  } = useContext(SectionTraversalContext);
+  const { currentSection, currentSectionIndex, sectionCount, previousSection, nextSection } =
+    useContext(SectionTraversalContext);
   const { interactWithItem } = useContext(ItemInteractionTrackerContext);
   const validate = useFormValidation(scrollToItem, interactWithItem);
-  const sectionItems = useMemo(() => sortAndParseFormItems(currentSection?.form_items ?? []), [
-    currentSection?.form_items,
-  ]);
+  const sectionItems = useMemo(
+    () => sortAndParseFormItems(currentSection?.form_items ?? []),
+    [currentSection?.form_items],
+  );
 
-  const validateContinue = useCallback(() => validate(sectionItems, response), [
-    sectionItems,
-    response,
-    validate,
-  ]);
+  const validateContinue = useCallback(
+    () => validate(sectionItems, response),
+    [sectionItems, response, validate],
+  );
 
   const goToPreviousSection = useCallback(() => {
     previousSection();

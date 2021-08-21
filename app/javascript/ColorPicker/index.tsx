@@ -10,7 +10,7 @@ const SyncColorPicker = lazyWithBundleHashCheck(
 
 function ColorPicker(props: SyncColorPickerProps) {
   return (
-    <Suspense fallback={<LoadingIndicator />}>
+    <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
       <SyncColorPicker {...props} />
     </Suspense>
   );

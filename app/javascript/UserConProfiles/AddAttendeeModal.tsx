@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { useHistory } from 'react-router-dom';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -108,7 +108,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps) {
           disabled={user == null || inProgress}
         >
           {inProgress ? (
-            <LoadingIndicator />
+            <LoadingIndicator iconSet="bootstrap-icons" />
           ) : (
             t('admin.userConProfiles.addAttendee.addButtonText', 'Add')
           )}

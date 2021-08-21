@@ -127,7 +127,7 @@ function CommitableInput({
           onClick={cancelEditing}
           disabled={disabled || commitInProgress}
         >
-          <i className="fa fa-times" />
+          <i className="bi-x" />
           <span className="visually-hidden">Cancel changes</span>
         </button>
         <button
@@ -136,7 +136,7 @@ function CommitableInput({
           onClick={commitEditing}
           disabled={disabled || commitInProgress}
         >
-          <i className="fa fa-check" />
+          <i className="bi-check" />
           <span className="visually-hidden">Commit changes</span>
         </button>
       </div>
@@ -160,7 +160,7 @@ function CommitableInput({
           }}
           disabled={disabled || !value}
         >
-          <i className="fa fa-times-rectangle">
+          <i className="bi-x-square-fill">
             <span className="visually-hidden">Clear</span>
           </i>
         </button>

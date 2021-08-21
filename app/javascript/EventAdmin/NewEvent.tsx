@@ -155,7 +155,7 @@ function NewEvent() {
   usePageTitle('New event');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

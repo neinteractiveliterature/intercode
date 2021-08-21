@@ -114,9 +114,10 @@ function StandaloneEditEventForm({
             ...storeData,
             event: {
               ...storeData.event,
-              maximum_event_provided_tickets_overrides: storeData.event.maximum_event_provided_tickets_overrides.filter(
-                (override) => override.id !== id,
-              ),
+              maximum_event_provided_tickets_overrides:
+                storeData.event.maximum_event_provided_tickets_overrides.filter(
+                  (override) => override.id !== id,
+                ),
             },
           },
         });
@@ -167,7 +168,7 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
   usePageTitle(useValueUnless(() => `Editing “${initialEvent?.title}”`, error || loading));
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

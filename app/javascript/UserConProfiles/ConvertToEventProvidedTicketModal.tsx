@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -40,7 +40,7 @@ function EventSpecificSection({
   });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

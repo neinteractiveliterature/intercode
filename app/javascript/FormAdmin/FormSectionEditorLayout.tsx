@@ -74,7 +74,7 @@ function FormSectionEditorLayout() {
         </button>
 
         <button className="btn btn-sm btn-secondary" type="button" onClick={createStaticText}>
-          <i className="fa fa-paragraph" /> Add static text
+          <i className="bi-paragraph" /> Add static text
         </button>
 
         <NewFormItemModal

@@ -33,14 +33,13 @@ function NewCmsContentGroup() {
     current_ability_can_delete: true,
     current_ability_can_update: true,
   });
-  const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<
-    CmsContentGroupsAdminQueryData['cmsContentGroups'][0]['permissions'][0]
-  >();
+  const [permissionsChangeSet, addPermission, removePermission] =
+    useChangeSet<CmsContentGroupsAdminQueryData['cmsContentGroups'][0]['permissions'][0]>();
 
   usePageTitle('New Content Group');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

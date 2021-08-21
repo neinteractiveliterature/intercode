@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
 import { RegistrationPolicyPreset } from '../FormItemUtils';

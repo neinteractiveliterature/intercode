@@ -240,7 +240,7 @@ function MyProfileFormInner({
         )}
         {mutationInProgress && (
           <span className="ms-2">
-            <LoadingIndicator />
+            <LoadingIndicator iconSet="bootstrap-icons" />
           </span>
         )}
       </div>
@@ -263,7 +263,7 @@ function MyProfileForm({ initialSetup }: MyProfileFormProps) {
   usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

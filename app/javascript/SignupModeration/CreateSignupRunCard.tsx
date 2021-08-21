@@ -88,7 +88,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }: CreateSignupR
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

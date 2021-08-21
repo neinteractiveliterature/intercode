@@ -67,9 +67,11 @@ async function signUp(
 
 function SignUpForm() {
   const { t } = useTranslation();
-  const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(
-    AuthenticationModalContext,
-  );
+  const {
+    close: closeModal,
+    setCurrentView,
+    recaptchaSiteKey,
+  } = useContext(AuthenticationModalContext);
   const authenticityToken = useContext(AuthenticityTokensContext).signUp;
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
@@ -106,7 +108,7 @@ function SignUpForm() {
             <label className="form-label" htmlFor={passwordFieldId}>
               {t('authentication.signUpForm.passwordLabel', 'Password')}
             </label>
-            <Suspense fallback={<LoadingIndicator />}>
+            <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
               <PasswordInputWithStrengthCheck
                 id={passwordFieldId}
                 value={password}

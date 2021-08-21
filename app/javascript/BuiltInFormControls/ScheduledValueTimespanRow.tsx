@@ -43,10 +43,10 @@ function ScheduledValueTimespanRow<ValueType>({
     [finishDidChange, rowIdentifier],
   );
 
-  const valueChanged = useCallback((value: ValueType) => valueDidChange(rowIdentifier, value), [
-    valueDidChange,
-    rowIdentifier,
-  ]);
+  const valueChanged = useCallback(
+    (value: ValueType) => valueDidChange(rowIdentifier, value),
+    [valueDidChange, rowIdentifier],
+  );
 
   const onDeleteClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -84,7 +84,7 @@ function ScheduledValueTimespanRow<ValueType>({
 
       <td className="w-25 text-end" style={{ verticalAlign: 'middle' }}>
         <button className="btn btn-danger btn-sm" onClick={onDeleteClicked} type="button">
-          <i className="fa fa-trash-o" />
+          <i className="bi-trash" />
           <span className="visually-hidden">Delete timespan</span>
         </button>
       </td>

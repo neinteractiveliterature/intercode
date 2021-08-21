@@ -43,7 +43,7 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
     return <ErrorDisplay stringError={error.message} />;
   }
 
-  return <PageLoadingIndicator visible />;
+  return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
 }
 
 export type AppWrapperProps = {
@@ -122,13 +122,15 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
                   <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
                     <>
                       {!unauthenticatedError && (
-                        <Suspense fallback={<PageLoadingIndicator visible />}>
+                        <Suspense
+                          fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}
+                        >
                           <I18NextWrapper>
                             {(i18nInstance) => (
                               <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
                                 <ToastProvider>
                                   <ErrorBoundary placement="replace" errorType="plain">
-                                    <WrappedComponent {...((otherProps as unknown) as P)} />{' '}
+                                    <WrappedComponent {...(otherProps as unknown as P)} />{' '}
                                   </ErrorBoundary>
                                 </ToastProvider>
                               </AlertProvider>

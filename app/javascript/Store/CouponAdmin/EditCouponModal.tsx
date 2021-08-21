@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { useApolloClient, ApolloError } from '@apollo/client';
 import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -62,7 +62,7 @@ function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps
               })
             }
           >
-            <i className="fa fa-trash-o" /> Delete coupon
+            <i className="bi-trash" /> Delete coupon
           </button>
         </div>
       </div>

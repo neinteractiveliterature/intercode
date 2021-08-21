@@ -21,7 +21,7 @@ function ViewCmsContentGroup() {
   usePageTitle(`Editing “${(contentGroup || {}).name}”`);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

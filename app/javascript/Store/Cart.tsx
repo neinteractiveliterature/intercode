@@ -143,7 +143,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
         }
         checkOutButton={
           <button type="button" className="btn btn-primary mt-2" onClick={checkOutModal.open}>
-            <i className="fa fa-shopping-cart" /> Check out
+            <i className="bi-shopping-cart" /> Check out
           </button>
         }
         createCouponApplication={createCouponApplication}

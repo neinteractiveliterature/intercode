@@ -17,7 +17,7 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
     const value = error || loading || !data ? undefined : getValue(data, id);
 
     if (loading) {
-      return <PageLoadingIndicator visible />;
+      return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
     }
 
     if (error) {

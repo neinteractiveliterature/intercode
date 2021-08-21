@@ -6,7 +6,7 @@ export type MenuIconProps = {
 function MenuIcon({ icon, colorClass }: MenuIconProps) {
   return (
     <div className={`d-inline-block me-2 ${colorClass ?? 'text-muted'}`} style={{ width: '1em' }}>
-      <i className={`fa ${icon}`} />
+      <i className={icon} />
     </div>
   );
 }

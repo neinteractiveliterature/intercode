@@ -80,7 +80,7 @@ function TimeblockPreferenceEditorTimeblockRow({
     <tr ref={rowRef}>
       <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
         <span className="visually-hidden">Drag to reorder</span>
-        <i className="fa fa-bars" />
+        <i className="bi-list" />
       </td>
       <td>
         <TimeSelect
@@ -90,7 +90,7 @@ function TimeblockPreferenceEditorTimeblockRow({
         />
         {timespanError && (
           <div className="small text-danger mt-1">
-            <i className="fa fa-warning" /> {timespanError}
+            <i className="bi-exclamation-triangle-fill" /> {timespanError}
           </div>
         )}
       </td>
@@ -121,7 +121,7 @@ function TimeblockPreferenceEditorTimeblockRow({
             })
           }
         >
-          <i className="fa fa-trash-o" />
+          <i className="bi-trash" />
         </button>
       </td>
     </tr>

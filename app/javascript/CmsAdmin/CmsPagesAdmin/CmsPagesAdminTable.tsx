@@ -34,7 +34,7 @@ function CmsPagesAdminTable() {
   }, [data, loading, error]);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {
@@ -52,7 +52,7 @@ function CmsPagesAdminTable() {
               <td>
                 {page.hidden_from_search && (
                   <>
-                    <i className="fa fa-eye-slash" />{' '}
+                    <i className="bi-eye-slash" />{' '}
                   </>
                 )}
                 <Link to={`/pages/${page.slug}`}>{page.name}</Link>

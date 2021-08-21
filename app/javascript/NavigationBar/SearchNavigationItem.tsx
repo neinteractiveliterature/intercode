@@ -47,7 +47,7 @@ function SearchNavigationItem() {
           type="button"
           onClick={() => setVisibleWithHiding(true)}
         >
-          <i className="fa fa-search" />
+          <i className="bi-search" />
           <span className="visually-hidden">{t('navigation.search.buttonText', 'Search')}</span>
         </button>
       </CSSTransition>

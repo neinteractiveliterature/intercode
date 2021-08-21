@@ -63,7 +63,7 @@ function FormEditor() {
   usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {
@@ -94,11 +94,11 @@ function FormEditor() {
             to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
             className="btn btn-secondary"
           >
-            <i className="fa fa-chevron-left" /> Back to section
+            <i className="bi-chevron-left" /> Back to section
           </Link>
         ) : (
           <Link to="/admin_forms" className="btn btn-secondary">
-            <i className="fa fa-chevron-left" /> Back to forms
+            <i className="bi-chevron-left" /> Back to forms
           </Link>
         )}
         <div className="flex-grow-1 ms-2">

@@ -46,7 +46,7 @@ function NewEventCategory() {
   usePageTitle('New Event Category');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

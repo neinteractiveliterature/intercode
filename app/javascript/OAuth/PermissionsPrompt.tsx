@@ -124,11 +124,11 @@ function PermissionsPrompt({ scopeNames }: PermissionsPromptProps) {
                 onClick={() => groupClicked(scopeGroup)}
               >
                 {expandedGroups.includes(scopeGroup) ? (
-                  <i className="fa fa-caret-down">
+                  <i className="bi-caret-down-fill">
                     <span className="visually-hidden">{t('buttons.collapse', 'Collapse')}</span>
                   </i>
                 ) : (
-                  <i className="fa fa-caret-right">
+                  <i className="bi-caret-right-fill">
                     <span className="visually-hidden">{t('buttons.expand', 'Expand')}</span>
                   </i>
                 )}{' '}

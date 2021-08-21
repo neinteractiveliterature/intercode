@@ -47,7 +47,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   // Serious shenanigans going on in here, we have to majorly circumvent type checking
   const fetcher: Fetcher = useCallback(
     (operation) => {
-      const request: GraphQLRequest = (operation as unknown) as GraphQLRequest;
+      const request: GraphQLRequest = operation as unknown as GraphQLRequest;
       // eslint-disable-next-line no-param-reassign
       request.query = parse(operation.query);
       return execute(link, request) as any;
@@ -75,7 +75,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
       />
 
       <div className="border" style={{ height: '40em' }}>
-        <Suspense fallback={<LoadingIndicator />}>
+        <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
           <GraphiQL
             query={value.query}
             onEditQuery={setQuery}

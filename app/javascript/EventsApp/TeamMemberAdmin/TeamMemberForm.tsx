@@ -21,18 +21,14 @@ export type TeamMemberFormProps = {
 function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps) {
   const { t } = useTranslation();
   const setValue = useFunctionalStateUpdater(value, onChange);
-  const [
-    setDisplayTeamMember,
-    setShowEmail,
-    setReceiveConEmail,
-    setReceiveSignupEmail,
-  ] = usePropertySetters(
-    setValue,
-    'display_team_member',
-    'show_email',
-    'receive_con_email',
-    'receive_signup_email',
-  );
+  const [setDisplayTeamMember, setShowEmail, setReceiveConEmail, setReceiveSignupEmail] =
+    usePropertySetters(
+      setValue,
+      'display_team_member',
+      'show_email',
+      'receive_con_email',
+      'receive_signup_email',
+    );
 
   const teamMemberName = event.event_category.team_member_name;
   const checkboxProperties = [
@@ -49,7 +45,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       label: (
         <Trans i18nKey="events.teamMemberAdmin.showEmailLabel">
           Show individual email address on event page{' '}
-          <HelpPopover>
+          <HelpPopover iconSet="bootstrap-icons">
             Selecting this option will make the individual email address for this{' '}
             {{ teamMemberName }} appear on the event page, but only for logged-in site users.
           </HelpPopover>

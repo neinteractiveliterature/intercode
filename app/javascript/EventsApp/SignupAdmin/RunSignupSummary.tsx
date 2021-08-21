@@ -130,7 +130,7 @@ function RunSignupSummary({ eventId, runId, eventPath }: RunSignupSummaryProps) 
   };
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

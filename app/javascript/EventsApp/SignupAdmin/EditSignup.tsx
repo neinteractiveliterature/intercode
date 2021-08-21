@@ -82,12 +82,14 @@ const renderAddressItem = (
   userConProfile: SignupFieldsFragment['user_con_profile'],
   t: TFunction,
 ) => {
-  const elements = ([
-    ['header', t('events.signupAdmin.addressHeader', 'Address:')],
-    ['address', userConProfile.address],
-    ['cityStateZip', cityStateZip(userConProfile)],
-    ['country', userConProfile.country],
-  ] as const).filter((pair) => pair[1] && pair[1].trim() !== '');
+  const elements = (
+    [
+      ['header', t('events.signupAdmin.addressHeader', 'Address:')],
+      ['address', userConProfile.address],
+      ['cityStateZip', cityStateZip(userConProfile)],
+      ['country', userConProfile.country],
+    ] as const
+  ).filter((pair) => pair[1] && pair[1].trim() !== '');
 
   const listItems = elements.map(([key, element]) => <li key={key}>{element}</li>);
   return <ul className="list-unstyled">{listItems}</ul>;
@@ -147,7 +149,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
   }
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   const renderUserSection = () => {
@@ -240,11 +242,11 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
         }
       >
         {signup.counted ? (
-          <i className="fa fa-toggle-on">
+          <i className="bi-toggle-on">
             <span className="visually-hidden">Make not counted</span>
           </i>
         ) : (
-          <i className="fa fa-toggle-off">
+          <i className="bi-toggle-off">
             <span className="visually-hidden">Make counted</span>
           </i>
         )}
@@ -306,7 +308,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
             </div>
             {signup.state === 'confirmed' && data.currentAbility.can_update_bucket_signup ? (
               <button className="btn btn-link" onClick={changeBucketModal.open} type="button">
-                <i className="fa fa-pencil">
+                <i className="bi-pencil-fill">
                   <span className="visually-hidden">Change</span>
                 </i>
               </button>

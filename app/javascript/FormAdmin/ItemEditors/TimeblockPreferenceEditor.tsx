@@ -83,7 +83,7 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
                   onClick={addTimeblock}
                   disabled={disabled}
                 >
-                  <i className="fa fa-plus" /> Add timeblock
+                  <i className="bi-plus" /> Add timeblock
                 </button>
               </td>
             </tr>

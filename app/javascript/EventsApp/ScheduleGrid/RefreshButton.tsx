@@ -18,7 +18,7 @@ function RefreshButton({ refreshData }: RefreshButtonProps) {
       disabled={refreshInProgress}
       onClick={refreshAsync}
     >
-      <i className={classNames('fa fa-refresh', { 'fa-spin': refreshInProgress })} />
+      <i className={classNames('bi-arrow-clockwise', { spin: refreshInProgress })} />
       <span className="d-none d-md-inline"> {t('buttons.refresh', 'Refresh')}</span>
     </button>
   );

@@ -44,7 +44,7 @@ function CmsFilesAdmin() {
     });
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {
@@ -70,7 +70,7 @@ function CmsFilesAdmin() {
                       })
                     }
                   >
-                    <i className="fa fa-trash" aria-hidden="true" />
+                    <i className="bi-trash-fill" aria-hidden="true" />
                   </button>
                 </div>
               )}
@@ -85,6 +85,7 @@ function CmsFilesAdmin() {
                 defaultText={t('cms.files.copyEmbedCode', 'Copy CMS embed code')}
                 copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
                 text={`{% file_url ${cmsFile.filename} %}`}
+                iconSet="bootstrap-icons"
               />
             </div>
             <div className="card-body text-center py-2">

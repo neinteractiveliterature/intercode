@@ -65,7 +65,7 @@ type CouponApplicationForOrderEntriesTable = Partial<Pick<CouponApplication, 'id
 
 export type AdminOrderEntriesTableProps<
   T extends AdminOrderEntryType,
-  CouponApplicationType extends CouponApplicationForOrderEntriesTable
+  CouponApplicationType extends CouponApplicationForOrderEntriesTable,
 > = {
   order: {
     order_entries: T[];
@@ -81,7 +81,7 @@ export type AdminOrderEntriesTableProps<
 
 function AdminOrderEntriesTable<
   T extends AdminOrderEntryType,
-  CouponApplicationType extends CouponApplicationForOrderEntriesTable
+  CouponApplicationType extends CouponApplicationForOrderEntriesTable,
 >({
   order,
   createOrderEntry,
@@ -186,7 +186,7 @@ function AdminOrderEntriesTable<
                   })
                 }
               >
-                <i className="fa fa-trash-o" />
+                <i className="bi-trash" />
               </button>
             </td>
           </tr>
@@ -212,7 +212,7 @@ function AdminOrderEntriesTable<
                   })
                 }
               >
-                <i className="fa fa-trash-o" />
+                <i className="bi-trash" />
               </button>
             </td>
           </tr>

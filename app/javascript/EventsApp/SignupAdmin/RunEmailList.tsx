@@ -84,7 +84,7 @@ function RunEmailList({ runId, eventId, separator }: RunEmailListProps) {
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

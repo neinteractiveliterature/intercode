@@ -32,7 +32,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
       <div className="d-flex align-items-baseline mb-2">
         <div className="flex-grow-1">
           <a href={mailtoLink} className="btn btn-secondary me-2">
-            <i className="fa fa-envelope" /> {t('buttons.composeEmail', 'Compose email')}
+            <i className="bi-envelope-fill" /> {t('buttons.composeEmail', 'Compose email')}
           </a>
 
           <CopyToClipboardButton
@@ -43,6 +43,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
             }}
             defaultText={t('copyToClipboard.defaultText', 'Copy to clipboard')}
             copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
+            iconSet="bootstrap-icons"
           />
         </div>
         {renderToolbarContent ? renderToolbarContent() : null}

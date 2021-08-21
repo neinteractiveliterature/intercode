@@ -127,7 +127,7 @@ function AppRoot() {
   }
 
   if (loading && !cachedBodyComponents) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {
@@ -146,7 +146,9 @@ function AppRoot() {
         <Route path="/admin_forms/:id/edit">
           <PageComponents.FormEditor />
         </Route>
-        <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
+        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+          {cachedBodyComponents}
+        </Suspense>
       </Switch>
     </AppRootContext.Provider>
   );

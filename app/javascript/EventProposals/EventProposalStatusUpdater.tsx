@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 import {
   useModal,
@@ -44,10 +44,8 @@ function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdate
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();
   const apolloClient = useApolloClient();
-  const [
-    transitionEventProposal,
-    { loading: transitionInProgress, error: transitionError },
-  ] = useTransitionEventProposalMutation();
+  const [transitionEventProposal, { loading: transitionInProgress, error: transitionError }] =
+    useTransitionEventProposalMutation();
 
   const performTransition = async () => {
     await transitionEventProposal({

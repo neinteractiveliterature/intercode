@@ -1,5 +1,5 @@
 import { useContext, useMemo, useState } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
@@ -193,7 +193,10 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
                     key={item.identifier}
                     label={
                       <>
-                        {item.description} <HelpPopover>{item.deprecation_reason}</HelpPopover>
+                        {item.description}{' '}
+                        <HelpPopover iconSet="bootstrap-icons">
+                          {item.deprecation_reason}
+                        </HelpPopover>
                       </>
                     }
                     checked={standardItemIdentifierOrCustomItemType === item.identifier}

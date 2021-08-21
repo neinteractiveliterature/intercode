@@ -6,7 +6,7 @@ tool 'setup_tls' do
   include :exec, exit_on_nonzero_status: true
   flag :force_rebuild_ca
 
-  def obtain_ca(force_rebuild)
+  def obtain_ca(force_rebuild) # rubocop:disable Metrics/MethodLength
     if File.exist?('dev_ca.crt') && File.exist?('dev_ca.key') && !force_rebuild
       ca_key = OpenSSL::PKey::RSA.new(File.read('dev_ca.key'))
       ca_cert = OpenSSL::X509::Certificate.new(File.read('dev_ca.crt'))
@@ -44,7 +44,8 @@ tool 'setup_tls' do
 
       if File.exist?('/usr/bin/security') && File.exist?('/Library/Keychains/System.keychain')
         puts 'Adding to system keychain, you may be prompted for your password'
-        sh 'sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain dev_ca.crt'
+        sh "sudo security add-trusted-cert -d -r trustRoot \
+-k /Library/Keychains/System.keychain dev_ca.crt"
       else
         puts 'You will have to add dev_ca.crt to your trusted certificates manually'
       end
@@ -53,7 +54,7 @@ tool 'setup_tls' do
     end
   end
 
-  def run
+  def run # rubocop:disable Metrics/MethodLength
     require 'openssl'
 
     ca_key, ca_cert = obtain_ca(force_rebuild_ca)
@@ -79,7 +80,12 @@ tool 'setup_tls' do
       ef.create_extension('subjectKeyIdentifier', 'hash'),
       ef.create_extension(
         'subjectAltName',
-        ['DNS:intercode.test', 'DNS:*.intercode.test', 'DNS:interconu.intercode.test', 'DNS:localhost'].join(',')
+        [
+          'DNS:intercode.test',
+          'DNS:*.intercode.test',
+          'DNS:interconu.intercode.test',
+          'DNS:localhost'
+        ].join(',')
       )
     ]
     cert.add_extension ef.create_extension('authorityKeyIdentifier', 'keyid,issuer')
@@ -136,7 +142,7 @@ tool 'pull_production_db' do
     pull_options = (
       include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"'
     )
-    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:12.2 \
+    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:13 \
 pg_dump --exclude-table-data=\"sessions\" #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
 -f /out/intercode_production.sql"
 
@@ -169,10 +175,12 @@ tool 'build_sanitized_db' do
     sh 'dropdb -U postgres --if-exists intercode_sanitized_tmp'
     sh 'createdb -U postgres -T intercode_development intercode_sanitized_tmp'
 
-    sh './bin/rails sanitize_db DEVELOPMENT_DATABASE_URL=postgres://postgres@localhost/intercode_sanitized_tmp'
+    database_url = 'postgres://postgres@localhost/intercode_sanitized_tmp'
+    sh "./bin/rails sanitize_db DEVELOPMENT_DATABASE_URL=#{database_url}"
 
     puts 'Creating pgdump file'
-    sh "pg_dump -Fc -d intercode_sanitized_tmp -f intercode_sanitized_#{Time.now.strftime('%Y-%m-%d')}.pgdump"
+    filename = "intercode_sanitized_#{Time.now.strftime('%Y-%m-%d')}.pgdump" # rubocop:disable Rails/TimeZone
+    sh "pg_dump -Fc -d intercode_sanitized_tmp -f #{filename}"
 
     puts 'Dropping temporary database'
     sh 'dropdb -U postgres intercode_sanitized_tmp'
@@ -191,7 +199,8 @@ tool 'pull_uploads' do
       dest_path = file.path
       next if File.exist?(dest_path)
 
-      prod_url = URI("https://uploads.neilhosting.net/#{file.store_path}#{URI.encode_www_form_component file.identifier}")
+      path = "/#{file.store_path}#{URI.encode_www_form_component file.identifier}"
+      prod_url = URI("https://uploads.neilhosting.net#{path}")
       puts "Downloading #{prod_url}"
       FileUtils.mkdir_p(File.dirname(dest_path))
       File.open(dest_path, 'wb') do |outfile|

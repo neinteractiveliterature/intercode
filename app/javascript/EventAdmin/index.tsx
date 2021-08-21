@@ -54,7 +54,7 @@ function EventAdmin() {
   }, [location.pathname]);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

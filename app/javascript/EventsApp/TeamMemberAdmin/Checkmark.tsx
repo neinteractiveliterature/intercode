@@ -11,7 +11,7 @@ function Checkmark({ value, className }: CheckmarkProps) {
   }
 
   return (
-    <i className={classNames('fa fa-check', className)}>
+    <i className={classNames('bi-check', className)}>
       <span className="visually-hidden">✓</span>
     </i>
   );

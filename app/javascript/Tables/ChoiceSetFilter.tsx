@@ -35,20 +35,18 @@ type ChoiceSetFilterCommonProps<RowType extends object> = LenientFilterProps<Row
   filterCodec?: FilterCodec<ChoiceSetFilterValue>;
 };
 
-export type ChoiceSetFilterSingleProps<
-  RowType extends object
-> = ChoiceSetFilterCommonProps<RowType> & {
-  multiple: false;
-  renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
-};
+export type ChoiceSetFilterSingleProps<RowType extends object> =
+  ChoiceSetFilterCommonProps<RowType> & {
+    multiple: false;
+    renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
+  };
 
-export type ChoiceSetFilterMultipleProps<
-  RowType extends object
-> = ChoiceSetFilterCommonProps<RowType> & {
-  multiple: true;
-  hideSelectNone?: boolean;
-  renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
-};
+export type ChoiceSetFilterMultipleProps<RowType extends object> =
+  ChoiceSetFilterCommonProps<RowType> & {
+    multiple: true;
+    hideSelectNone?: boolean;
+    renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
+  };
 
 export type ChoiceSetFilterProps<RowType extends object> =
   | ChoiceSetFilterSingleProps<RowType>
@@ -186,9 +184,9 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
         onClick={toggleOpen}
       >
         <i
-          className={classNames('fa', {
-            'fa-caret-down': !dropdownOpen,
-            'fa-caret-up': dropdownOpen,
+          className={classNames({
+            'bi-caret-down': !dropdownOpen,
+            'bi-caret-up': dropdownOpen,
           })}
         />
       </button>

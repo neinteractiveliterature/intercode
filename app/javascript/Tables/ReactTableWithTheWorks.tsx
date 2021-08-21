@@ -34,7 +34,7 @@ function Resizer<RowType extends object>({ column }: { column: ColumnInstance<Ro
 export type ReactTableWithTheWorksProps<
   QueryData,
   RowType extends object,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = Pick<
   UseReactTableWithTheWorksResult<QueryData, RowType, Variables>,
   'tableInstance' | 'loading'
@@ -45,7 +45,7 @@ export type ReactTableWithTheWorksProps<
 function ReactTableWithTheWorks<
   QueryData,
   RowType extends object,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 >({
   tableInstance,
   loading,
@@ -206,7 +206,7 @@ function ReactTableWithTheWorks<
               className="btn btn-outline-secondary col-3 me-2"
               disabled={!canPreviousPage}
             >
-              <i className="fa fa-chevron-left" /> Previous
+              <i className="bi-chevron-left" /> Previous
             </button>
             <div>
               <label className="form-label" htmlFor={pageInputId}>
@@ -244,7 +244,7 @@ function ReactTableWithTheWorks<
               onClick={() => nextPage()}
               disabled={!canNextPage}
             >
-              Next <i className="fa fa-chevron-right" />
+              Next <i className="bi-chevron-right" />
             </button>
           </div>
         </div>
