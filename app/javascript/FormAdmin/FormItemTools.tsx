@@ -25,7 +25,7 @@ function StandardItemMetadata() {
   return (
     <>
       <div className="me-2">
-        <i className="fa fa-wrench" />{' '}
+        <i className="bi-wrench" />{' '}
         <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
       </div>
       <div className="me-2">
@@ -39,7 +39,7 @@ function StaticTextMetadata() {
   return (
     <>
       <div>
-        <i className="fa fa-paragraph" /> <strong>Static text</strong>
+        <i className="bi-paragraph" /> <strong>Static text</strong>
       </div>
     </>
   );
@@ -51,7 +51,7 @@ function CustomItemMetadata() {
   return (
     <>
       <div className="me-2">
-        <i className="fa fa-tag" /> <strong>{formItem.identifier}</strong>
+        <i className="bi-tag-fill" /> <strong>{formItem.identifier}</strong>
       </div>
       <div>
         <small>Custom {humanize(formItem.item_type).toLowerCase()} item</small>
@@ -193,7 +193,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps) {
         aria-expanded={!collapsed}
         aria-controls={collapseId}
       >
-        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} /> Tools
+        <i className={collapsed ? 'bi-caret-right' : 'bi-caret-down'} /> Tools
       </button>
       <div
         id={collapseId}

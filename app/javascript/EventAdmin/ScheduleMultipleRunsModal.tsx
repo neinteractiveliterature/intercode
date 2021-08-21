@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useContext, ReactNode } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { DateTime } from 'luxon';
 import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';

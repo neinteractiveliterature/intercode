@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
@@ -267,7 +267,11 @@ export default LoadQueryWrapper<
             onClick={createClicked}
             disabled={createInProgress}
           >
-            {createInProgress ? <LoadingIndicator /> : `${cloneConvention ? 'Clone' : 'Create'}`}
+            {createInProgress ? (
+              <LoadingIndicator iconSet="bootstrap-icons" />
+            ) : (
+              `${cloneConvention ? 'Clone' : 'Create'}`
+            )}
           </button>
         </div>
       </Modal>

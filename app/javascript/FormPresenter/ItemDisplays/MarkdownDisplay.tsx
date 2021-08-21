@@ -11,7 +11,7 @@ function MarkdownDisplay({ markdown }: MarkdownDisplayProps) {
   });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

@@ -70,7 +70,7 @@ export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsP
                 removeFromCart(entry);
               }}
             >
-              <i className="fa fa-trash-o" />
+              <i className="bi-trash" />
               <span className="visually-hidden">Remove from cart</span>
             </button>
           )}
@@ -122,7 +122,7 @@ export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsP
                             })
                           }
                         >
-                          <i className="fa fa-trash-o" />
+                          <i className="bi-trash" />
                           <span className="visually-hidden">Remove from cart</span>
                         </button>
                       )}

@@ -12,7 +12,7 @@ function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps) {
         className="d-inline-block"
         style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}
       >
-        <i className="fa fa-user-circle" style={{ fontSize: `${pixelSize}px` }} />
+        <i className="bi-person-circle" style={{ fontSize: `${pixelSize}px` }} />
       </span>
     );
   }

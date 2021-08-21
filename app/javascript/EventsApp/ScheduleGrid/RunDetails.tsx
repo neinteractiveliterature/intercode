@@ -42,23 +42,23 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
     const formatRunTimespan = useFormatRunTimespan();
     const format = useAppDateTimeFormat();
 
-    const showDate = useMemo(() => conventionRequiresDates(conventionTimespan, siteMode), [
-      conventionTimespan,
-      siteMode,
-    ]);
+    const showDate = useMemo(
+      () => conventionRequiresDates(conventionTimespan, siteMode),
+      [conventionTimespan, siteMode],
+    );
 
-    const availabilityDescription = useMemo(() => describeAvailability(event, signupCountData), [
-      event,
-      signupCountData,
-    ]);
-    const waitlistDescription = useMemo(() => describeWaitlist(event, signupCountData), [
-      event,
-      signupCountData,
-    ]);
-    const availability = useMemo(() => calculateAvailability(event, signupCountData), [
-      event,
-      signupCountData,
-    ]);
+    const availabilityDescription = useMemo(
+      () => describeAvailability(event, signupCountData),
+      [event, signupCountData],
+    );
+    const waitlistDescription = useMemo(
+      () => describeWaitlist(event, signupCountData),
+      [event, signupCountData],
+    );
+    const availability = useMemo(
+      () => calculateAvailability(event, signupCountData),
+      [event, signupCountData],
+    );
     const roomsDescription = useMemo(() => [...run.room_names].sort().join(', '), [run.room_names]);
 
     const ratingChanged = async (rating: number) => {
@@ -93,7 +93,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 style={{ cursor: 'pointer' }}
                 onClick={toggle}
               >
-                <i className="fa fa-close" title={t('buttons.close', 'Close')} />
+                <i className="bi-x" title={t('buttons.close', 'Close')} />
               </button>
             </div>
           </div>
@@ -108,14 +108,14 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 {showDate && (
                   <tr>
                     <td className="text-center pe-1">
-                      <i className="fa fa-calendar-o" />
+                      <i className="bi-calendar" />
                     </td>
                     <td>{format(timespan.start, 'longDate')}</td>
                   </tr>
                 )}
                 <tr>
                   <td className="text-center pe-1">
-                    <i className="fa fa-clock-o" />
+                    <i className="bi-clock" />
                   </td>
                   <td>
                     {formatRunTimespan(timespan, { formatType: 'short', includeDate: false })}
@@ -124,7 +124,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 {roomsDescription ? (
                   <tr>
                     <td className="text-center pe-1">
-                      <i className="fa fa-map-marker" />
+                      <i className="bi-geo-alt-fill" />
                     </td>
                     <td>{roomsDescription}</td>
                   </tr>
@@ -132,7 +132,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 {availabilityDescription ? (
                   <tr>
                     <td className="text-center pe-1 align-top">
-                      <i className="fa fa-users" />
+                      <i className="bi-people-fill" />
                     </td>
                     <td>
                       {availabilityDescription}
@@ -150,7 +150,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(
                 {waitlistDescription ? (
                   <tr>
                     <td className="text-center pe-1 align-top">
-                      <i className="fa fa-hourglass-half" />
+                      <i className="bi-hourglass-split" />
                     </td>
                     <td>
                       {waitlistDescription}

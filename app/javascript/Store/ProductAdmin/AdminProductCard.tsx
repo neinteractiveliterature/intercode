@@ -60,7 +60,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
                 {product.id != null && (
                   <li className="list-inline-item">
                     <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
-                      <i className="fa fa-trash-o">
+                      <i className="bi-trash">
                         <span className="visually-hidden">Delete product</span>
                       </i>
                     </button>
@@ -82,9 +82,9 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           {product.payment_options.map((paymentOption) => (
             <i
               key={paymentOption}
-              className={classNames('ms-2', 'fa', {
-                'fa-cc-stripe': paymentOption === 'stripe',
-                'fa-suitcase': paymentOption === 'pay_at_convention',
+              className={classNames('ms-2', {
+                'bi-credit-card': paymentOption === 'stripe',
+                'bi-briefcase-fill': paymentOption === 'pay_at_convention',
               })}
               title={humanize(paymentOption)}
             />
@@ -92,7 +92,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
         </div>
         {product.provides_ticket_type && (
           <div>
-            <i className="fa fa-ticket" /> {product.provides_ticket_type.description}
+            <i className="bi-person-badge-fill" /> {product.provides_ticket_type.description}
           </div>
         )}
       </div>

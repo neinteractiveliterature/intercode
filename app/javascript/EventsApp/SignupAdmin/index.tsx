@@ -20,7 +20,7 @@ function SignupAdmin({ runId, eventId, eventPath }: SignupAdminProps) {
   const runPath = `${eventPath}/runs/${runId}`;
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

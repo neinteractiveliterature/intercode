@@ -85,7 +85,7 @@ function FormSectionNav() {
         aria-expanded={!collapsed}
         aria-controls={navId}
       >
-        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} /> Sections
+        <i className={collapsed ? 'bi-caret-right' : 'bi-caret-down'} /> Sections
       </button>
       <nav
         id={navId}

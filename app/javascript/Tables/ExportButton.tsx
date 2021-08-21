@@ -62,7 +62,11 @@ function getExportUrl<RowType extends object>(
     filters,
     sortBy,
     columns,
-  }: { filters?: null | Filters<RowType>; sortBy: null | SortingRule<RowType>[]; columns?: string[] | null },
+  }: {
+    filters?: null | Filters<RowType>;
+    sortBy: null | SortingRule<RowType>[];
+    columns?: string[] | null;
+  },
 ) {
   const queryParams = {
     filters: reactTableFiltersToTableResultsFilters(filters),
@@ -92,16 +96,14 @@ function ReactTableExportButton<RowType extends object>({
   columns,
 }: ReactTableExportButtonProps<RowType>) {
   const { t } = useTranslation();
-  const href = useMemo(() => getExportUrl(exportUrl, { filters, sortBy, columns }), [
-    columns,
-    exportUrl,
-    filters,
-    sortBy,
-  ]);
+  const href = useMemo(
+    () => getExportUrl(exportUrl, { filters, sortBy, columns }),
+    [columns, exportUrl, filters, sortBy],
+  );
 
   return (
     <a className="btn btn-outline-primary" href={href}>
-      <i className="fa fa-file-excel-o" /> {t('tables.exportCSV.buttonText', 'Export CSV')}
+      <i className="bi-file-earmark-spreadsheet" /> {t('tables.exportCSV.buttonText', 'Export CSV')}
     </a>
   );
 }

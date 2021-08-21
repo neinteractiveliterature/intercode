@@ -57,7 +57,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
       <DropdownMenu
         buttonClassName="btn btn-dark dropdown-toggle"
         buttonContent={
-          <i className="fa fa-pencil-square-o">
+          <i className="bi-pencil-square">
             <span className="visually-hidden">Admin options</span>
           </i>
         }
@@ -66,11 +66,11 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
         {showEdit ? (
           <>
             <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">
-              <MenuIcon icon="fa-file-text-o" />
+              <MenuIcon icon="bi-file-earmark-text" />
               Edit page
             </Link>
             <Link to={`/cms_layouts/${layoutId}/edit`} className="dropdown-item">
-              <MenuIcon icon="fa-columns" />
+              <MenuIcon icon="bi-layout-split" />
               Edit layout
             </Link>
             {cmsPage.referenced_partials.map((partial) => (
@@ -79,7 +79,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
                 className="dropdown-item"
                 key={partial.id}
               >
-                <MenuIcon icon="fa-paperclip" />
+                <MenuIcon icon="bi-paperclip" />
                 Edit partial “{partial.name}”
               </Link>
             ))}
@@ -87,11 +87,11 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
         ) : (
           <>
             <Link to={`/cms_pages/${pageId}/view_source`} className="dropdown-item">
-              <MenuIcon icon="fa-file-text-o" />
+              <MenuIcon icon="bi-file-earmark-text" />
               View page source
             </Link>
             <Link to={`/cms_layouts/${layoutId}/view_source`} className="dropdown-item">
-              <MenuIcon icon="fa-columns" />
+              <MenuIcon icon="bi-layout-split" />
               View layout source
             </Link>
             {cmsPage.referenced_partials.map((partial) => (
@@ -100,14 +100,14 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
                 className="dropdown-item"
                 key={partial.id}
               >
-                <MenuIcon icon="fa-paperclip" />
+                <MenuIcon icon="bi-paperclip" />
                 View partial “{partial.name}”
               </Link>
             ))}
           </>
         )}
         <Link to="/cms_pages" className="dropdown-item">
-          <MenuIcon icon="fa-files-o" />
+          <MenuIcon icon="bi-files" />
           View all pages
         </Link>
         {showDelete ? (
@@ -121,7 +121,7 @@ function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownPr
             }
             type="button"
           >
-            <MenuIcon icon="fa-trash-o" colorClass="text-danger" />
+            <MenuIcon icon="bi-trash" colorClass="text-danger" />
             Delete page
           </button>
         ) : null}

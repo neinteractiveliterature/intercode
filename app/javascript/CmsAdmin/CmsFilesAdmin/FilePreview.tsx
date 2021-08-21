@@ -1,32 +1,32 @@
 function iconForContentType(contentType: string) {
   if (contentType.match(/^audio\//)) {
-    return 'file-audio-o';
+    return 'file-earmark-music';
   }
 
   if (contentType.match(/^video\//)) {
-    return 'file-video-o';
+    return 'file-earmark-play';
   }
 
   switch (contentType) {
     case 'application/pdf':
-      return 'file-pdf-o';
+      return 'file-earmark-pdf';
     case 'application/zip':
     case 'application/x-bzip':
     case 'application/x-bzip-2':
     case 'application/x-tar':
     case 'application/x-7z-compressed':
-      return 'file-zip-o';
+      return 'file-earmark-zip';
     case 'application/msword':
-      return 'file-word-o';
+      return 'file-earmark-word';
     case 'application/vnd.ms-excel':
-      return 'file-excel-o';
+      return 'file-earmark-excel';
     case 'application/vnd.ms-powerpoint':
-      return 'file-powerpoint-o';
+      return 'file-earmark-ppt';
     case 'text/plain':
     case 'application/rtf':
-      return 'file-text-o';
+      return 'file-earmark-text';
     default:
-      return 'file-o';
+      return 'file-earmark';
   }
 }
 
@@ -61,7 +61,7 @@ function FilePreview({ url, contentType, filename, size }: FilePreviewProps) {
 
   return (
     <i
-      className={`fa fa-${iconForContentType(contentType)}`}
+      className={`bi-${iconForContentType(contentType)}`}
       style={{ fontSize: effectiveSize }}
       aria-hidden
     />

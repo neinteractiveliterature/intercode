@@ -210,7 +210,7 @@ function LiquidInput(props: LiquidInputProps) {
                 style={{ cursor: 'pointer' }}
                 onClick={() => setShowingDocs(false)}
               >
-                <i className="fa fa-close" title={t('buttons.close', 'Close')} />
+                <i className="bi-x" title={t('buttons.close', 'Close')} />
               </button>
             </div>
           </header>
@@ -246,7 +246,7 @@ function LiquidInput(props: LiquidInputProps) {
                 className="btn btn-link nav-link px-2 py-0"
                 onClick={addFileModal.open}
               >
-                <MenuIcon icon="fa-file-image-o" colorClass="" />
+                <MenuIcon icon="bi-file-earmark-image" colorClass="" />
                 {t('cms.liquidInput.addFileButton', 'Add file…')}
               </button>
             </li>
@@ -260,7 +260,7 @@ function LiquidInput(props: LiquidInputProps) {
                     setShowingDocs(true);
                   }}
                 >
-                  <i className="fa fa-question-circle" /> {t('buttons.help', 'Help')}
+                  <i className="bi-question-circle-fill" /> {t('buttons.help', 'Help')}
                 </button>
               </div>
             </li>

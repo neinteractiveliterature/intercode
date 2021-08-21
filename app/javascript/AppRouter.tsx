@@ -214,7 +214,7 @@ function AppRouter({ alert }: AppRouterProps) {
   };
 
   return (
-    <Suspense fallback={<PageLoadingIndicator visible />}>
+    <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
       {showAlert && (
         <div className="alert alert-danger" role="alert">
           <button

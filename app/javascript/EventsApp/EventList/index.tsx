@@ -76,9 +76,8 @@ function EventList() {
       ]
     : [{ id: 'title', desc: false }];
   const [cachedConventionName, setCachedConventionName] = useState<string>();
-  const [cachedEventCategories, setCachedEventCategories] = useState<
-    NonNullable<EventListEventsQueryData['convention']>['event_categories']
-  >();
+  const [cachedEventCategories, setCachedEventCategories] =
+    useState<NonNullable<EventListEventsQueryData['convention']>['event_categories']>();
   const [cachedPageCount, setCachedPageCount] = useState<number>();
   const defaultFiltered = myProfile
     ? [
@@ -98,9 +97,8 @@ function EventList() {
       filters: reactTableFiltersToTableResultsFilters(effectiveFilters),
     },
   });
-  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(
-    fetchMoreEvents,
-  );
+  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] =
+    useAsyncFunction(fetchMoreEvents);
 
   const loadedEntries: number =
     loading || error || !data ? 0 : data.convention?.events_paginated.entries.length ?? 0;
@@ -126,17 +124,20 @@ function EventList() {
     [updateSearch, filters],
   );
 
-  const categoryChanged = useCallback((value) => changeFilterValue('category', value), [
-    changeFilterValue,
-  ]);
+  const categoryChanged = useCallback(
+    (value) => changeFilterValue('category', value),
+    [changeFilterValue],
+  );
 
-  const myRatingFilterChanged = useCallback((value) => changeFilterValue('my_rating', value), [
-    changeFilterValue,
-  ]);
+  const myRatingFilterChanged = useCallback(
+    (value) => changeFilterValue('my_rating', value),
+    [changeFilterValue],
+  );
 
-  const titlePrefixChanged = useCallback((value) => changeFilterValue('title_prefix', value), [
-    changeFilterValue,
-  ]);
+  const titlePrefixChanged = useCallback(
+    (value) => changeFilterValue('title_prefix', value),
+    [changeFilterValue],
+  );
 
   useEffect(() => {
     if (!loading && !error && data) {
@@ -155,7 +156,7 @@ function EventList() {
     // we haven't had the first load yet, don't render the dropdowns because they will get positioned
     // wrong
 
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   const eventsPaginated = (loading || !data ? undefined : data.convention?.events_paginated) ?? {
@@ -207,6 +208,7 @@ function EventList() {
               label="Search"
               value={(effectiveFilters.find(({ id }) => id === 'title_prefix') || {}).value}
               onChange={titlePrefixChanged}
+              iconSet="bootstrap-icons"
             />
           </div>
         </div>
@@ -221,7 +223,7 @@ function EventList() {
         )}
       </div>
 
-      <PageLoadingIndicator visible={loading} />
+      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
       {loading || !data ? null : (
         <>
           <EventListEvents
@@ -233,7 +235,8 @@ function EventList() {
           />
           {fetchMoreInProgress && (
             <div>
-              <LoadingIndicator /> <em className="text-muted">Loading more events...</em>
+              <LoadingIndicator iconSet="bootstrap-icons" />{' '}
+              <em className="text-muted">Loading more events...</em>
             </div>
           )}
           <ErrorDisplay graphQLError={fetchMoreError as ApolloError} />

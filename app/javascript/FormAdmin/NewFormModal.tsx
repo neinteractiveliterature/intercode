@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 // @ts-expect-error
 import { capitalize } from 'inflected';
 import { useHistory } from 'react-router-dom';

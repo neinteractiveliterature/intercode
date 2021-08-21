@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
@@ -21,7 +21,7 @@ function renderIfQueryReady(
   }
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   return render();

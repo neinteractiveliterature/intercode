@@ -140,7 +140,7 @@ function OrderAdmin() {
                 className="btn btn-outline-primary ms-2"
                 onClick={newOrderModal.open}
               >
-                <i className="fa fa-plus" /> New order
+                <i className="bi-plus" /> New order
               </button>
             )
           }

@@ -26,7 +26,7 @@
           "lines": 15,
           "required": true,
           "format": "markdown",
-          "caption": "**Description** for this event.  The description and blurb are the main advertising text for this event.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
+          "caption": "**Description** for this event.  The description and blurb are the main advertising text for this event.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
         },
         {
           "item_type": "free_text",
@@ -35,7 +35,7 @@
           "lines": 4,
           "required": true,
           "format": "markdown",
-          "caption": "**Blurb** for this event. In general, blurbs should be shorter than the description, as they will be used in things like brochures, flyers, and short advertising messages.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
+          "caption": "**Blurb** for this event. In general, blurbs should be shorter than the description, as they will be used in things like brochures, flyers, and short advertising messages.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
         },
         {
           "item_type": "free_text",

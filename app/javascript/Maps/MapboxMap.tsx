@@ -80,7 +80,7 @@ function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom, height }:
     <div ref={containerRef} style={{ height: height ?? '30rem' }}>
       {/* eslint-disable-next-line no-nested-ternary */}
       {mapboxgl ? null : mapboxAccessToken ? (
-        <PageLoadingIndicator visible />
+        <PageLoadingIndicator visible iconSet="bootstrap-icons" />
       ) : (
         <div className="alert alert-warning">
           Cannot load Mapbox without an access token. To set up Intercode with a Mapbox access

@@ -19,7 +19,7 @@ function CmsGraphqlQueriesAdminTable() {
   usePageTitle('CMS GraphQL Queries');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

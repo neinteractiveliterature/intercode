@@ -15,7 +15,7 @@ function UserBreadcrumbItem() {
   if (loading) {
     return (
       <BreadcrumbItem active to={`/users/${id}`}>
-        <LoadingIndicator />
+        <LoadingIndicator iconSet="bootstrap-icons" />
       </BreadcrumbItem>
     );
   }

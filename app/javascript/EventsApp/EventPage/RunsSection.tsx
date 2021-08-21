@@ -53,7 +53,7 @@ function RunsSection({ eventId }: RunsSectionProps) {
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

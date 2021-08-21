@@ -16,7 +16,7 @@ function LongFormEventDetails({ eventId }: LongFormEventDetailsProps) {
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

@@ -55,7 +55,7 @@
           "lines": 15,
           "required": true,
           "format": "markdown",
-          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the event. The description should be at least a couple of paragraphs, but can be as long as you like.<br>This description is used to promote your larp and attract players who will enjoy it. Be reasonably clear on where and when the larp is set, and what the larp is about. Let your players know what can they expect to be doing during the larp, and make them excited to play your larp! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the event. The description should be at least a couple of paragraphs, but can be as long as you like.<br>This description is used to promote your larp and attract players who will enjoy it. Be reasonably clear on where and when the larp is set, and what the larp is about. Let your players know what can they expect to be doing during the larp, and make them excited to play your larp! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
         },
         {
           "item_type": "free_text",
@@ -64,7 +64,7 @@
           "lines": 4,
           "required": true,
           "format": "markdown",
-          "caption": "A **Short Blurb** (50 words or less) for the event to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>"
+          "caption": "A **Short Blurb** (50 words or less) for the event to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>"
         },
         {
           "item_type": "free_text",
@@ -73,7 +73,7 @@
           "lines": 4,
           "required": true,
           "format": "markdown",
-          "caption": "**Content Warnings**<br>Per NEIL policy, larp descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='fa fa-external-link' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page.<br>Please provide a content warning for your larp."
+          "caption": "**Content Warnings**<br>Per NEIL policy, larp descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page.<br>Please provide a content warning for your larp."
         },
         {
           "item_type": "age_restrictions",
@@ -295,7 +295,7 @@
           "identifier": "setup_teardown",
           "admin_description": "Setup/Teardown requirements",
           "lines": 4,
-          "caption": "Are there any special setup or teardown requirements for this event? For example, do you need extra time to set up or tear down a complex set? (Requests for standard furniture will be handled separately closer to the convention. Intercon can not provide unusual setup materials for your event. Please reference [the GM Policies <i class='fa fa-external-link' aria-hidden='true'></i>]({% page_url gmpolicies %}#FurnitureService) for available items )"
+          "caption": "Are there any special setup or teardown requirements for this event? For example, do you need extra time to set up or tear down a complex set? (Requests for standard furniture will be handled separately closer to the convention. Intercon can not provide unusual setup materials for your event. Please reference [the GM Policies <i class='bi-box-arrow-up-right' aria-hidden='true'></i>]({% page_url gmpolicies %}#FurnitureService) for available items )"
         }
       ]
     },

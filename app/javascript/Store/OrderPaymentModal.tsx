@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
 import { PaymentRequest, PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js';
@@ -63,11 +63,10 @@ function OrderPaymentModalContents({
       let clientSecret: string = '';
 
       try {
-        const {
-          data,
-        } = await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
-          query: CurrentPendingOrderPaymentIntentClientSecret,
-        });
+        const { data } =
+          await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
+            query: CurrentPendingOrderPaymentIntentClientSecret,
+          });
 
         clientSecret = data.currentPendingOrderPaymentIntentClientSecret;
       } catch (error) {
@@ -183,7 +182,7 @@ function OrderPaymentModalContents({
         {paymentMode === 'now' ? (
           <>
             {awaitingPaymentRequestResult ? (
-              <PageLoadingIndicator visible />
+              <PageLoadingIndicator visible iconSet="bootstrap-icons" />
             ) : (
               <>
                 {(!paymentRequest || choseManualCardEntry) && (

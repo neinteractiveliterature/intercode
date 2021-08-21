@@ -57,7 +57,7 @@ function CmsPage({ slug, rootPage }: CmsPageProps) {
 
   return (
     <>
-      <PageLoadingIndicator visible={loading} />
+      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
       {!loading && data && (
         <>
           {data.currentAbility.can_manage_any_cms_content && (

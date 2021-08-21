@@ -33,7 +33,7 @@ function CmsLayoutsAdminTable() {
   usePageTitle('CMS Layouts');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

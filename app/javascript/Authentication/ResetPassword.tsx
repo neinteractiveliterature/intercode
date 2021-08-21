@@ -77,7 +77,7 @@ function ResetPassword() {
               <label className="form-label" htmlFor={passwordId}>
                 {t('authentication.resetPassword.passwordLabel', 'Password')}
               </label>
-              <Suspense fallback={<LoadingIndicator />}>
+              <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
                 <PasswordInputWithStrengthCheck
                   value={password}
                   onChange={setPassword}

@@ -15,17 +15,17 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
         currentAbility.can_read_schedule && {
           label: t('navigation.events.eventSchedule', 'Event Schedule'),
           url: '/events/schedule',
-          icon: 'fa-calendar',
+          icon: 'bi-calendar3',
         },
         currentAbility.can_list_events && {
           label: t('navigation.events.eventCatalog', 'Event Catalog'),
           url: '/events',
-          icon: 'fa-list',
+          icon: 'bi-list-ul',
         },
         conventionAcceptingProposals && {
           label: t('navigation.events.newProposal', 'Propose an Event'),
           url: '/pages/new-proposal',
-          icon: 'fa-gift',
+          icon: 'bi-gift-fill',
         },
       ]
         .filter(notFalse)

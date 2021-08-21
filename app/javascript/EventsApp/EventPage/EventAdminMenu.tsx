@@ -15,7 +15,7 @@ function EventAdminMenu({ eventId }: EventAdminMenuProps) {
   const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

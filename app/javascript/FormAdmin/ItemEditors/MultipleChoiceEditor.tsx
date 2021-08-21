@@ -110,7 +110,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
                   className="btn btn-outline-primary btn-sm"
                   onClick={addChoice}
                 >
-                  <i className="fa fa-plus" /> Add option
+                  <i className="bi-plus" /> Add option
                 </button>
               </td>
             </tr>

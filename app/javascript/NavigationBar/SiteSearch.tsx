@@ -23,32 +23,32 @@ import { useEventsNavigationItems } from './EventsNavigationSection';
 
 function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
   if (model.__typename === 'NavigationItem') {
-    return model.icon ?? 'fa-file-text-o';
+    return model.icon ?? 'bi-file-earmark-text';
   }
 
   if (model.__typename === 'Page') {
-    return 'fa-file-text-o';
+    return 'bi-file-earmark-text';
   }
 
   if (model.__typename === 'Event') {
-    return 'fa-ticket';
+    return 'bi-calendar';
   }
 
   if (model.__typename === 'UserConProfile') {
-    return 'fa-user-circle';
+    return 'bi-person-circle';
   }
 
   if (model.__typename === 'EventProposal') {
-    return 'fa-gift';
+    return 'bi-gift-fill';
   }
 
-  return 'fa-square';
+  return 'bi-square-fill';
 }
 
 function SearchDropdownIndicator(props: any) {
   return (
     <components.DropdownIndicator {...props}>
-      <i className="fa fa-search" />
+      <i className="bi-search" />
     </components.DropdownIndicator>
   );
 }
@@ -61,7 +61,7 @@ function SearchMenu(props: MenuProps<any, false>) {
       <>
         {props.children}
         <div className="bg-light small p-1 text-muted d-none d-md-block">
-          <i className="fa fa-lightbulb-o" />{' '}
+          <i className="bi-lightbulb" />{' '}
           {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
           <span className="bg-white font-monospace border rounded px-1">
             {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
@@ -113,9 +113,9 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
             variables: { query },
             fetchPolicy: 'no-cache',
           });
-          const navigationItemsResult = (navigationItemsSearchIndex.search(
-            query,
-          ) as typeof navigationItemsWithId).map((navigationItem) => ({
+          const navigationItemsResult = (
+            navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId
+          ).map((navigationItem) => ({
             title: navigationItem.label,
             highlight: '',
             model: {
@@ -238,7 +238,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
         formatOptionLabel={(entry: OptionType) => (
           <>
             <div className="fw-bold mb-1">
-              <i className={`fa ${getSearchableModelIcon(entry.model)}`} /> {entry.title}
+              <i className={getSearchableModelIcon(entry.model)} /> {entry.title}
             </div>
             <div
               className="small"

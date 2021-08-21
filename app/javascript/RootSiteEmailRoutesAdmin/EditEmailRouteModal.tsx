@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { useApolloClient, ApolloError } from '@apollo/client';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -66,7 +66,7 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRou
             })
           }
         >
-          <i className="fa fa-trash-o" /> Delete route
+          <i className="bi-trash" /> Delete route
         </button>
       </div>
 

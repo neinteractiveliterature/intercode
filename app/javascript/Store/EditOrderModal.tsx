@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { useConfirm } from '@neinteractiveliterature/litform';
 
 import AdminOrderForm, { AdminOrderTypeWithId } from './AdminOrderForm';

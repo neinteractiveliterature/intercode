@@ -112,7 +112,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
             aria-expanded={!collapsed}
             aria-label={t('navigation.toggle', 'Toggle navigation')}
           >
-            <i className={collapsed ? 'fa fa-bars' : 'fa fa-times'} />
+            <i className={collapsed ? 'bi-list' : 'bi-x'} />
           </button>
         </div>
         {conventionCanceled && (

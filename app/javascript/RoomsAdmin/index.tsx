@@ -115,7 +115,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
           }
           type="button"
         >
-          <i className="fa fa-trash" />
+          <i className="bi-trash-fill" />
         </button>
       </div>
     </li>

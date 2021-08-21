@@ -143,7 +143,7 @@ function UserConProfileAdminDisplay() {
   };
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

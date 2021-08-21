@@ -40,7 +40,7 @@ import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 
 const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',
-  icon: 'fa-calendar-o',
+  icon: 'bi-calendar',
   titlei18nKey: 'admin.events.prospectiveRunSchedule.title',
   classifyEventsBy: 'category',
   showSignupStatusBadge: true,

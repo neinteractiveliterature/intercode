@@ -55,7 +55,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
                   }
                 >
                   <span className="visually-hidden">Delete department</span>
-                  <i className="fa fa-trash-o" />
+                  <i className="bi-trash" />
                 </button>
                 <Link
                   to={`/admin_departments/${department.id}/edit`}

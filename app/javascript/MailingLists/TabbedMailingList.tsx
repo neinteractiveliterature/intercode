@@ -41,7 +41,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
         renderContent: () => (
           <>
             <button type="button" className="btn btn-outline-primary mt-2" onClick={exportCSV}>
-              <i className="fa fa-file-excel-o" /> Export CSV
+              <i className="bi-file-earmark-spreadsheet" /> Export CSV
             </button>
 
             <table className="table table-striped table-sm mt-2">

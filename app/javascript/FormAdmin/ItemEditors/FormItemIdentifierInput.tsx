@@ -30,8 +30,8 @@ function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifi
       invalidFeedback={
         identifierIsReserved && (
           <>
-            <i className="fa fa-warning" /> “{normalizedIdentifier}” is a reserved identifier in{' '}
-            {pluralize(formType.description)}
+            <i className="bi-exclamation-triangle-fill" /> “{normalizedIdentifier}” is a reserved
+            identifier in {pluralize(formType.description)}
           </>
         )
       }

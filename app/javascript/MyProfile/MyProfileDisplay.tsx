@@ -40,7 +40,7 @@ function MyProfileDisplay() {
   usePageTitle(t('myProfile.display.pageTitle', 'My profile'));
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

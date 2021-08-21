@@ -76,7 +76,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
               onClick={() => onCancel(variable.generatedId)}
               disabled={setInProgress}
             >
-              <i className="fa fa-times" />
+              <i className="bi-x" />
             </button>
             <button
               type="button"
@@ -86,7 +86,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
               }
               onClick={save}
             >
-              <i className="fa fa-check" />
+              <i className="bi-check" />
             </button>
           </div>
         </td>

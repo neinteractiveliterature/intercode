@@ -12,11 +12,11 @@ function isRating(ratingKey: string): ratingKey is keyof typeof RATING_NAMES {
 
 function getRatingIconClass(rating: number, selected?: boolean) {
   if (rating === -1) {
-    return 'fa-eye-slash';
+    return 'bi-eye-slash';
   }
 
   if (rating === 1) {
-    return selected ? 'fa-star' : 'fa-star-o';
+    return selected ? 'bi-star-fill' : 'bi-star';
   }
 
   return '';
@@ -55,7 +55,6 @@ function EventRatingIcon({
   return (
     <i
       className={classnames(
-        'fa',
         getRatingIconClass(rating, selected),
         useColors ? getRatingColorClass(rating, selected) : null,
       )}
