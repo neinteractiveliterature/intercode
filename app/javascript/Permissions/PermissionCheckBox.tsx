@@ -5,14 +5,14 @@ export type PermissionCheckBoxProps = {
 function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps) {
   if (hasPermission) {
     return (
-      <i className="fa fa-check-square-o">
+      <i className="bi-check-square-o">
         <span className="visually-hidden">Permitted</span>
       </i>
     );
   }
 
   return (
-    <i className="fa fa-square-o">
+    <i className="bi-square">
       <span className="visually-hidden">Not permitted</span>
     </i>
   );

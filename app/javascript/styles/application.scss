@@ -12,6 +12,7 @@
 @import './schedule_grid';
 @import './scheduled_value_previews';
 @import './search';
+@import './spin';
 @import './signups';
 @import './spoiler';
 @import './tables';
@@ -19,6 +20,7 @@
 
 $fa-font-path: '~font-awesome/fonts';
 @import '~font-awesome/scss/font-awesome';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 .form-item-label p:last-child,
 legend p:last-child {

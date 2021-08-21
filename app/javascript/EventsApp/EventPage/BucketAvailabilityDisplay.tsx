@@ -56,10 +56,10 @@ function BucketAvailabilityDisplay({
     return cellWidthRem * remWidth + 2; // 2px margins
   }, [compact]);
 
-  const maxCellsPerLine = useMemo(() => Math.floor(containerWidth / cellWidth), [
-    cellWidth,
-    containerWidth,
-  ]);
+  const maxCellsPerLine = useMemo(
+    () => Math.floor(containerWidth / cellWidth),
+    [cellWidth, containerWidth],
+  );
   let lineWidth = totalCells;
   let numLines = 1;
   if (lineWidth > maxCellsPerLine) {
@@ -78,12 +78,12 @@ function BucketAvailabilityDisplay({
   const cells = [
     ...generateNElements(signupCount, (index) => (
       <div className="bucket-availability-cell" key={`signedup-${index}`}>
-        <i className="fa fa-user-circle-o" />
+        <i className="bi-person-circle" />
       </div>
     )),
     ...generateNElements(remainingCapacity, (index) => (
       <div className="bucket-availability-cell" key={`available-${index}`}>
-        <i className="fa fa-circle-thin" />
+        <i className="bi-circle" />
       </div>
     )),
   ];

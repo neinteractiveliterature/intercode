@@ -30,9 +30,10 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
   const [expanded, setExpanded] = useState(false);
   const formatRunTimespan = useFormatRunTimespan();
 
-  const length = useMemo(() => Duration.fromObject({ seconds: event.length_seconds }), [
-    event.length_seconds,
-  ]);
+  const length = useMemo(
+    () => Duration.fromObject({ seconds: event.length_seconds }),
+    [event.length_seconds],
+  );
   const eventCategory = useMemo(
     () => convention.event_categories.find((c) => c.id === event.event_category.id)!,
     [convention.event_categories, event.event_category],
@@ -41,10 +42,12 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
   const renderRun = (run: RunFieldsFragment) => {
     const timespan = timespanFromRun(timezoneName, event, run);
 
-    const [titleSuffix, scheduleNote] = ([
-      ['title_suffix', 'fw-bold'],
-      ['schedule_note', 'font-italic'],
-    ] as const).map(([field, className]) => {
+    const [titleSuffix, scheduleNote] = (
+      [
+        ['title_suffix', 'fw-bold'],
+        ['schedule_note', 'font-italic'],
+      ] as const
+    ).map(([field, className]) => {
       if (run[field]) {
         return (
           <li key={field} className={className}>
@@ -90,7 +93,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
             className="btn btn-primary btn-sm m-1"
             to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/new`}
           >
-            <i className="fa fa-plus" />
+            <i className="bi-plus" />
           </Link>
         </div>
       );

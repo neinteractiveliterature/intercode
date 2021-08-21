@@ -60,7 +60,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
                 {product.id != null && (
                   <li className="list-inline-item">
                     <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
-                      <i className="fa fa-trash-o">
+                      <i className="bi-trash">
                         <span className="visually-hidden">Delete product</span>
                       </i>
                     </button>
@@ -92,7 +92,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
         </div>
         {product.provides_ticket_type && (
           <div>
-            <i className="fa fa-ticket" /> {product.provides_ticket_type.description}
+            <i className="bi-person-badge-fill" /> {product.provides_ticket_type.description}
           </div>
         )}
       </div>

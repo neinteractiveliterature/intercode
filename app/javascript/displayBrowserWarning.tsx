@@ -171,7 +171,7 @@ function renderBrowserWarning(browser: ReturnType<typeof detect>) {
 
         <div class="d-flex align-items-start">
           <h1 class="m-0 me-4">
-            <i class="fa fa-exclamation-triangle"></i>
+            <i class="bi-exclamation-triangle-fill"></i>
           </h1>
           <div class="flex-grow-1">
             <p>

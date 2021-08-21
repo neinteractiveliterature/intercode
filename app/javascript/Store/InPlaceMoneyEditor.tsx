@@ -26,7 +26,7 @@ function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorPro
                 aria-label="Cancel editing"
                 disabled={inputProps.committing}
               >
-                <i className="fa fa-times" />
+                <i className="bi-x" />
               </button>
               <button
                 type="button"
@@ -35,7 +35,7 @@ function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorPro
                 aria-label="Commit changes"
                 disabled={inputProps.committing}
               >
-                <i className="fa fa-check" />
+                <i className="bi-check" />
               </button>
             </>
           }

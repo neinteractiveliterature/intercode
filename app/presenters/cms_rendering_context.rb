@@ -13,7 +13,7 @@ class CmsRenderingContext
 
         <div class="d-flex align-items-center">
           <h1 class="m-0 me-4">
-            <i class="fa fa-exclamation-triangle"></i>
+            <i class="bi-exclamation-triangle-fill"></i>
           </h1>
           <div class="flex-grow-1">
             <p>
@@ -147,10 +147,9 @@ class CmsRenderingContext
   end
 
   def cms_variables
-    @cms_variables ||= begin
-      cms_parent.cms_variables.pluck(:key, :value).each_with_object({}) do |(key, value), hash|
-        hash[key] = value
-      end
+    @cms_variables ||= cms_parent.cms_variables.pluck(:key,
+:value).each_with_object({}) do |(key, value), hash|
+      hash[key] = value
     end
   end
 end

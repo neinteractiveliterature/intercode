@@ -68,7 +68,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
       // hack to get the menu to "close" when switching views
       key={scheduleView}
     >
-      {[['list', 'fa-list'], ...configs.map((config) => [config.key, config.icon])].map(
+      {[['list', 'bi-list-ul'], ...configs.map((config) => [config.key, config.icon])].map(
         ([view, iconName]) => (
           <button
             className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
@@ -76,7 +76,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
             onClick={() => viewSelected(view)}
             key={view}
           >
-            <MenuIcon icon={iconName ?? 'fa-calendar'} />
+            <MenuIcon icon={iconName ?? 'bi-calendar3'} />
             {getScheduleViewLabel(view, t)}
           </button>
         ),
@@ -119,10 +119,10 @@ export default function ScheduleApp() {
     return getDefaultScheduleView(configs);
   });
 
-  const scheduleGridConfig = useMemo(() => configs.find((c) => c.key === scheduleView), [
-    scheduleView,
-    configs,
-  ]);
+  const scheduleGridConfig = useMemo(
+    () => configs.find((c) => c.key === scheduleView),
+    [scheduleView, configs],
+  );
 
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(
     scheduleGridConfig?.showExtendedCounts ? 'can_read_schedule_with_counts' : 'can_read_schedule',

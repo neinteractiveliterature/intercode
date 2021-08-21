@@ -37,7 +37,7 @@ function AdminProductVariantEditRow({
   return (
     <tr className={isDragging ? 'opacity-50' : undefined} ref={rowRef}>
       <td ref={drag}>
-        <i className="fa fa-bars cursor-grab">
+        <i className="bi-list cursor-grab">
           <span className="visually-hidden">Drag to reorder</span>
         </i>
       </td>
@@ -65,7 +65,7 @@ function AdminProductVariantEditRow({
       </td>
       <td>
         <button type="button" className="btn btn-sm btn-danger" onClick={deleteVariant}>
-          <i className="fa fa-trash-o">
+          <i className="bi-trash">
             <span className="visually-hidden">
               Delete
               {variant.name}

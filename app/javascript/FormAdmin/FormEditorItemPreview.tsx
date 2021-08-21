@@ -85,7 +85,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
     >
       <div className="me-2 mt-2">
         <span className="visually-hidden">Drag to reorder</span>
-        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
+        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
       </div>
       <div className="form-editor-item flex-grow-1">
         <Link
@@ -96,11 +96,11 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
             <div className="form-editor-item-identifier">
               {standardItem ? (
                 <>
-                  <i className="fa fa-wrench" /> {standardItem.description}
+                  <i className="bi-wrench" /> {standardItem.description}
                 </>
               ) : (
                 <>
-                  <i className="fa fa-tag" /> {formItem.identifier}
+                  <i className="bi-tag-fill" /> {formItem.identifier}
                 </>
               )}
             </div>
@@ -125,7 +125,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
             tooltipContent={`${standardItem.description} is required for ${formType.description}`}
           >
             <span className="visually-hidden">Delete item</span>
-            <i className="fa fa-trash-o" />
+            <i className="bi-trash" />
           </ButtonWithTooltip>
         ) : (
           <button
@@ -143,7 +143,7 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
             }
           >
             <span className="visually-hidden">Delete item</span>
-            <i className="fa fa-trash-o" />
+            <i className="bi-trash" />
           </button>
         )}
       </div>

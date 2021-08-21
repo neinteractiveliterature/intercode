@@ -60,18 +60,14 @@ function CouponAdminTable() {
   const newCouponModal = useModal();
   const editCouponModal = useModal<{ initialCoupon: CouponType }>();
 
-  const {
-    tableHeaderProps,
-    columnSelectionProps,
-    tableInstance,
-    loading,
-  } = useReactTableWithTheWorks({
-    getData: ({ data }) => data!.convention.coupons_paginated.entries,
-    getPages: ({ data }) => data!.convention.coupons_paginated.total_pages,
-    getPossibleColumns,
-    useQuery: useAdminCouponsQuery,
-    storageKeyPrefix: 'coupons',
-  });
+  const { tableHeaderProps, columnSelectionProps, tableInstance, loading } =
+    useReactTableWithTheWorks({
+      getData: ({ data }) => data!.convention.coupons_paginated.entries,
+      getPages: ({ data }) => data!.convention.coupons_paginated.total_pages,
+      getPossibleColumns,
+      useQuery: useAdminCouponsQuery,
+      storageKeyPrefix: 'coupons',
+    });
 
   return (
     <>
@@ -83,7 +79,7 @@ function CouponAdminTable() {
             className="btn btn-outline-primary ms-2"
             onClick={newCouponModal.open}
           >
-            <i className="fa fa-plus" /> New coupon
+            <i className="bi-plus" /> New coupon
           </button>
         )}
         exportButton={

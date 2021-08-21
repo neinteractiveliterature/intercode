@@ -65,7 +65,7 @@ function ArrayEditor<T>({
                   })
                 }
               >
-                <i className="fa fa-trash-o" />
+                <i className="bi-trash" />
               </button>
             </div>
           </li>

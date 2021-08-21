@@ -6,8 +6,8 @@ import {
   useConfirm,
   ErrorDisplay,
   sortByLocaleString,
- LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
+  LoadQueryWrapper,
+} from '@neinteractiveliterature/litform';
 
 import { DeleteForm } from './mutations';
 import { FormAdminQuery } from './queries';
@@ -89,7 +89,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                     })
                   }
                 >
-                  <i className="fa fa-trash-o" />
+                  <i className="bi-trash" />
                   <span className="visually-hidden">Delete form</span>
                 </button>
                 <Link

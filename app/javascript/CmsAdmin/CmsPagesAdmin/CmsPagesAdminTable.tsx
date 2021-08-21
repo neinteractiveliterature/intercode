@@ -52,7 +52,7 @@ function CmsPagesAdminTable() {
               <td>
                 {page.hidden_from_search && (
                   <>
-                    <i className="fa fa-eye-slash" />{' '}
+                    <i className="bi-eye-slash" />{' '}
                   </>
                 )}
                 <Link to={`/pages/${page.slug}`}>{page.name}</Link>

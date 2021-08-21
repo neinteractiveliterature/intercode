@@ -42,7 +42,7 @@ function CurrentPendingOrderButton() {
         buttonContent={
           <>
             <i
-              className="fa fa-shopping-cart"
+              className="bi-shopping-cart"
               title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
             />
             <div
@@ -96,7 +96,7 @@ const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTar
           ref={ref}
           type="button"
         >
-          <i className="fa fa-user-secret" />
+          <i className="bi-person-bounding-box" />
 
           <span className="d-inline d-md-none d-lg-inline">
             {nonNullProfile.name_without_nickname}
@@ -203,7 +203,7 @@ function UserNavigationSection() {
                   inSection
                   label={t('navigation.user.myAccount', 'My Account')}
                   url="/users/edit"
-                  icon="fa-address-card"
+                  icon="bi-card-heading"
                 />
               )}
               {myProfile && (
@@ -213,7 +213,7 @@ function UserNavigationSection() {
                     conventionName,
                   })}
                   url="/my_profile"
-                  icon="fa-user-circle"
+                  icon="bi-person-circle"
                 />
               )}
               {myProfile && (
@@ -221,7 +221,7 @@ function UserNavigationSection() {
                   inSection
                   label={t('navigation.user.myOrderHistory', 'My Order History')}
                   url="/order_history"
-                  icon="fa-shopping-bag"
+                  icon="bi-bag-fill"
                 />
               )}
               {currentUser && (
@@ -229,7 +229,7 @@ function UserNavigationSection() {
                   inSection
                   label={t('navigation.user.authorizedApplications', 'Authorized Applications')}
                   url="/oauth/authorized_applications"
-                  icon="fa-lock"
+                  icon="bi-lock-fill"
                 />
               )}
               {currentUser && (
@@ -237,7 +237,7 @@ function UserNavigationSection() {
                   className="dropdown-item"
                   caption={
                     <>
-                      <MenuIcon icon="fa-sign-out" />
+                      <MenuIcon icon="bi-box-arrow-right" />
                       {t('navigation.user.logOut', 'Log out')}
                     </>
                   }
@@ -270,7 +270,7 @@ function UserNavigationSection() {
             className="btn btn-link dropdown-item"
             caption={
               <>
-                <MenuIcon icon="fa-sign-in" />
+                <MenuIcon icon="bi-box-arrow-in-right" />
                 {t('navigation.authentication.logIn', 'Log in')}
               </>
             }
@@ -281,7 +281,7 @@ function UserNavigationSection() {
             className="btn btn-link dropdown-item"
             caption={
               <>
-                <MenuIcon icon="fa-pencil-square-o" />
+                <MenuIcon icon="bi-pencil-square" />
                 {t('navigation.authentication.signUp', 'Sign up')}
               </>
             }

@@ -82,7 +82,7 @@ function RegistrationPolicyItemEditor({
                 onClick={addPreset}
                 disabled={disabled}
               >
-                <i className="fa fa-plus" /> Add policy preset
+                <i className="bi-plus" /> Add policy preset
               </button>
             </td>
           </tr>

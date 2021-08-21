@@ -11,7 +11,8 @@ import {
   useAttendanceByPaymentAmountQuery,
 } from './queries.generated';
 
-type RowType = AttendanceByPaymentAmountQueryData['convention']['reports']['ticket_count_by_type_and_payment_amount'][0];
+type RowType =
+  AttendanceByPaymentAmountQueryData['convention']['reports']['ticket_count_by_type_and_payment_amount'][0];
 
 function describeRow(ticketType: RowType['ticket_type'], paymentAmount: RowType['payment_amount']) {
   if (paymentAmount.fractional > 0) {
@@ -43,7 +44,7 @@ function descriptionCell(
         ticketType.description
       }`}
     >
-      <i className="fa fa-exclamation-circle" /> {describeRow(ticketType, paymentAmount)}
+      <i className="bi-exclamation-circle-fill" /> {describeRow(ticketType, paymentAmount)}
     </td>
   );
 }

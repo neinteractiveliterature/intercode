@@ -84,7 +84,7 @@ function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) 
         aria-label="Cancel editing"
         disabled={committing}
       >
-        <i className="fa fa-times" />
+        <i className="bi-x" />
       </button>
       <button
         type="button"
@@ -93,7 +93,7 @@ function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) 
         aria-label="Commit changes"
         disabled={committing}
       >
-        <i className="fa fa-check" />
+        <i className="bi-check" />
       </button>
     </>
   );
@@ -189,9 +189,9 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
           />
         ) : (
           <DefaultInPlaceEditorInputWrapper
-            commit={(commitEditing as unknown) as (value: string) => void | Promise<any>}
+            commit={commitEditing as unknown as (value: string) => void | Promise<any>}
             cancel={cancelEditing}
-            initialValue={(value as unknown) as string}
+            initialValue={value as unknown as string}
             inputRef={inputRef}
           />
         )}
@@ -208,7 +208,7 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
         onClick={beginEditing}
         aria-label="Edit"
       >
-        <i className="fa fa-pencil" />
+        <i className="bi-pencil-fill" />
       </button>
     </div>
   );

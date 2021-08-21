@@ -88,7 +88,7 @@ export default LoadQueryWrapper(
               });
             }}
           >
-            <i className="fa fa-trash-o" /> Delete
+            <i className="bi-trash" /> Delete
           </button>
         </div>
         <UserActivityAlertForm

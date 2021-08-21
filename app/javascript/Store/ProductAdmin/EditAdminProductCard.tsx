@@ -118,7 +118,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
     {
       label: (
         <span>
-          <i className="fa fa-cc-stripe" /> Stripe
+          <i className="bi-credit-card" /> Stripe
         </span>
       ),
       value: 'stripe',
@@ -126,7 +126,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
     {
       label: (
         <span>
-          <i className="fa fa-suitcase" /> Pay at convention
+          <i className="bi-briefcase-fill" /> Pay at convention
         </span>
       ),
       value: 'pay_at_convention',

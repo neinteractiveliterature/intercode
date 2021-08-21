@@ -83,11 +83,11 @@ function CategoryLegend() {
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Confirmed}>
-              <i className="fa fa-user-circle" /> {t('signups.states.confirmed', 'Confirmed')}
+              <i className="bi-person-circle" /> {t('signups.states.confirmed', 'Confirmed')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Waitlisted}>
-              <i className="fa fa-hourglass-half" /> {t('signups.states.waitlisted', 'Waitlisted')}
+              <i className="bi-hourglass-split" /> {t('signups.states.waitlisted', 'Waitlisted')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory}>

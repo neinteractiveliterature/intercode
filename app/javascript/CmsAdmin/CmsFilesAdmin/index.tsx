@@ -70,7 +70,7 @@ function CmsFilesAdmin() {
                       })
                     }
                   >
-                    <i className="fa fa-trash" aria-hidden="true" />
+                    <i className="bi-trash-fill" aria-hidden="true" />
                   </button>
                 </div>
               )}

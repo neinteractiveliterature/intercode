@@ -22,7 +22,7 @@ function PasswordFeedback({ result }: PasswordFeedbackProps) {
     <div className="text-danger ">
       {result.feedback.warning && (
         <>
-          <i className="fa fa-exclamation-triangle" /> <strong>{result.feedback.warning}</strong>
+          <i className="bi-exclamation-triangle-fill" /> <strong>{result.feedback.warning}</strong>
         </>
       )}
       {result.feedback.suggestions && (
@@ -148,7 +148,7 @@ function PasswordInputWithStrengthCheck({
                 {hasFeedback && (
                   <>
                     {' '}
-                    <i className="fa fa-question-circle" style={{ cursor: 'pointer' }}>
+                    <i className="bi-question-circle-fill" style={{ cursor: 'pointer' }}>
                       <span className="visually-hidden">{t('buttons.help', 'Help')}</span>
                     </i>
                   </>

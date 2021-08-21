@@ -47,17 +47,17 @@ function RegistrationPolicyItemEditorPresetRow({
     'choice',
   );
 
-  const presetChanged = useCallback((newPreset) => onChange(preset.generatedId, () => newPreset), [
-    onChange,
-    preset.generatedId,
-  ]);
+  const presetChanged = useCallback(
+    (newPreset) => onChange(preset.generatedId, () => newPreset),
+    [onChange, preset.generatedId],
+  );
   const presetNameChanged = usePresetPropertyUpdater(onChange, preset.generatedId, 'name');
 
   return (
     <tr ref={rowRef}>
       <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
         <span className="visually-hidden">Drag to reorder</span>
-        <i className="fa fa-bars" />
+        <i className="bi-list" />
       </td>
       <td>
         <input
@@ -93,7 +93,7 @@ function RegistrationPolicyItemEditorPresetRow({
           }
         >
           <span className="visually-hidden">Delete preset</span>
-          <i className="fa fa-trash-o" />
+          <i className="bi-trash" />
         </button>
       </td>
     </tr>
