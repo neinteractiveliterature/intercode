@@ -51,34 +51,34 @@ function CmsAdmin() {
       <h1>CMS</h1>
 
       <ul className="nav nav-tabs" role="tablist">
-        <CmsAdminNavTab path="/cms_pages" icon="fa-file-text-o">
+        <CmsAdminNavTab path="/cms_pages" icon="bi-file-earmark-text">
           Pages
         </CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_partials" icon="fa-paperclip">
+        <CmsAdminNavTab path="/cms_partials" icon="bi-paperclip">
           Partials
         </CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_files" icon="fa-file-image-o">
+        <CmsAdminNavTab path="/cms_files" icon="bi-file-earmark-image">
           Files
         </CmsAdminNavTab>
         {data?.currentAbility.can_create_cms_navigation_items && (
-          <CmsAdminNavTab path="/cms_navigation_items" icon="fa-map-o">
+          <CmsAdminNavTab path="/cms_navigation_items" icon="bi-map">
             Navigation
           </CmsAdminNavTab>
         )}
-        <CmsAdminNavTab path="/cms_layouts" icon="fa-columns">
+        <CmsAdminNavTab path="/cms_layouts" icon="bi-layout-split">
           Layouts
         </CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_variables" icon="fa-list">
+        <CmsAdminNavTab path="/cms_variables" icon="bi-list-ul">
           Variables
         </CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_graphql_queries" icon="fa-code">
+        <CmsAdminNavTab path="/cms_graphql_queries" icon="bi-code-slash">
           GraphQL queries
         </CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_content_groups" icon="fa-group">
+        <CmsAdminNavTab path="/cms_content_groups" icon="bi-people-fill">
           Content groups
         </CmsAdminNavTab>
         {data && !data.convention && (
-          <CmsAdminNavTab path="/root_site" icon="fa-cogs">
+          <CmsAdminNavTab path="/root_site" icon="bi-gear-wide-connected">
             Root site settings
           </CmsAdminNavTab>
         )}

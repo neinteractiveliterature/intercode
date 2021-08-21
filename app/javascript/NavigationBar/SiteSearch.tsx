@@ -48,7 +48,7 @@ function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
 function SearchDropdownIndicator(props: any) {
   return (
     <components.DropdownIndicator {...props}>
-      <i className="fa fa-search" />
+      <i className="bi-search" />
     </components.DropdownIndicator>
   );
 }
@@ -61,7 +61,7 @@ function SearchMenu(props: MenuProps<any, false>) {
       <>
         {props.children}
         <div className="bg-light small p-1 text-muted d-none d-md-block">
-          <i className="fa fa-lightbulb-o" />{' '}
+          <i className="bi-lightbulb" />{' '}
           {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
           <span className="bg-white font-monospace border rounded px-1">
             {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
@@ -113,9 +113,9 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
             variables: { query },
             fetchPolicy: 'no-cache',
           });
-          const navigationItemsResult = (navigationItemsSearchIndex.search(
-            query,
-          ) as typeof navigationItemsWithId).map((navigationItem) => ({
+          const navigationItemsResult = (
+            navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId
+          ).map((navigationItem) => ({
             title: navigationItem.label,
             highlight: '',
             model: {

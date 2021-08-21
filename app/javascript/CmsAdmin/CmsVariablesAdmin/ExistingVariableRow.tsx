@@ -13,18 +13,16 @@ export type ExistingVariableRowProps = {
 
 function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
   const [setVariableMutate] = useSetCmsVariableMutation();
-  const [setVariable, setVariableError, , clearSetVariableError] = useAsyncFunction(
-    setVariableMutate,
-  );
+  const [setVariable, setVariableError, , clearSetVariableError] =
+    useAsyncFunction(setVariableMutate);
   const deleteVariableMutate = useDeleteMutation(DeleteCmsVariableMutation, {
     query: CmsVariablesQuery,
     arrayPath: ['cmsVariables'],
     idVariablePath: ['key'],
     idAttribute: 'key',
   });
-  const [deleteVariable, deleteVariableError, , clearDeleteVariableError] = useAsyncFunction(
-    deleteVariableMutate,
-  );
+  const [deleteVariable, deleteVariableError, , clearDeleteVariableError] =
+    useAsyncFunction(deleteVariableMutate);
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
 
@@ -80,7 +78,7 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
                 })
               }
             >
-              <i className="fa fa-trash-o" />
+              <i className="bi-trash" />
               <span className="visually-hidden">
                 Delete variable &ldquo;
                 {variable.key}

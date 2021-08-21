@@ -24,7 +24,7 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
       buttonClassName={`${className ?? 'btn btn-outline-secondary'} dropdown-toggle`}
       buttonContent={
         <>
-          <i className="fa fa-calendar" aria-hidden />
+          <i className="bi-calendar3" aria-hidden />
           <span className="visually-hidden">
             {t('addToCalendarDropdown.title', 'Add to calendar')}
           </span>
@@ -38,11 +38,11 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
         target="_blank"
         rel="noopener noreferrer"
       >
-        <i className="fa fa-google" aria-hidden />{' '}
+        <i className="bi-google" aria-hidden />{' '}
         {t('addToCalendarDropdown.subscribeGoogle', 'Subscribe on Google Calendar')}
       </a>
       <a className="dropdown-item" href={icalUrl.toString()}>
-        <i className="fa fa-calendar" aria-hidden />{' '}
+        <i className="bi-calendar3" aria-hidden />{' '}
         {t('addToCalendarDropdown.subscribeICal', 'Subscribe via iCal')}
       </a>
       <CopyToClipboardButton

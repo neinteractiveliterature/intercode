@@ -82,14 +82,14 @@ export default LoadQueryWrapper(
                   })
                 }
               >
-                <i className="fa fa-trash-o me-1" />
+                <i className="bi-trash me-1" />
                 Delete
               </button>
               <Link
                 to={`/ticket_types/${ticketType.id}/edit`}
                 className="btn btn-secondary btn-sm mx-1"
               >
-                <i className="fa fa-pencil-square-o me-1" />
+                <i className="bi-pencil-square me-1" />
                 Edit
               </Link>
             </div>

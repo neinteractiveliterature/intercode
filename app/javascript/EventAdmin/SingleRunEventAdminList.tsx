@@ -73,7 +73,7 @@ function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListPro
               })
             }
           >
-            <i className="fa fa-trash-o" />
+            <i className="bi-trash" />
           </button>
         </td>
       </tr>

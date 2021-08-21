@@ -15,7 +15,8 @@ import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatar
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import { EventProposalsAdminQueryData, useEventProposalsAdminQuery } from './queries.generated';
 
-type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
+type EventProposalType =
+  EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -87,7 +88,7 @@ function ExtraCell({ row: { original } }: CellProps<EventProposalType>) {
         event.stopPropagation();
       }}
     >
-      <i className="fa fa-external-link">
+      <i className="bi-box-arrow-up-right">
         <span className="visually-hidden">Open in new window</span>
       </i>
     </Link>

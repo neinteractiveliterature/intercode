@@ -14,7 +14,7 @@ export type NavigationItemProps = {
 function NavigationItem({ label, url, inSection, icon, iconColorClass }: NavigationItemProps) {
   const labelContent = (
     <>
-      <MenuIcon icon={icon || 'fa-file-text-o'} colorClass={iconColorClass} />
+      <MenuIcon icon={icon || 'bi-file-earmark-text'} colorClass={iconColorClass} />
       {label}
     </>
   );

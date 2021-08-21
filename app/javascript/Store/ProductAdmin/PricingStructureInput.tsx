@@ -21,7 +21,7 @@ function PricingStructureInput({ value, onChange }: PricingStructureInputProps) 
         className="btn btn-link py-0"
         onClick={() => pricingStructureModal.open({ value, onChange })}
       >
-        <i className="fa fa-pencil" />
+        <i className="bi-pencil-fill" />
         <span className="visually-hidden">Edit</span>
       </button>
     </>

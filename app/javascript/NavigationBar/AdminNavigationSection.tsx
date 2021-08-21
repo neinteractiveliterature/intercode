@@ -16,7 +16,7 @@ function generateSiteContentItem(
     currentAbility.can_manage_any_cms_content && {
       label: t('navigation.admin.siteContent', 'Site Content'),
       url: '/cms_pages',
-      icon: 'fa-files-o',
+      icon: 'bi-files',
     }
   );
 }
@@ -29,16 +29,15 @@ function generateOAuthApplicationsNavigationItem(
     currentAbility.can_manage_oauth_applications && {
       label: t('navigation.admin.oauth2Applications', 'OAuth2 Applications'),
       url: '/oauth/applications-embed',
-      icon: 'fa-code',
+      icon: 'bi-code-slash',
     }
   );
 }
 
 function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
-  const { currentAbility, signupMode, siteMode, ticketMode, ticketName } = useContext(
-    AppRootContext,
-  );
+  const { currentAbility, signupMode, siteMode, ticketMode, ticketName } =
+    useContext(AppRootContext);
 
   const items = useMemo(
     () =>
@@ -46,77 +45,77 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
         currentAbility.can_read_user_con_profiles && {
           label: t('navigation.admin.attendees', 'Attendees'),
           url: '/user_con_profiles',
-          icon: 'fa-users',
+          icon: 'bi-people-fill',
         },
         currentAbility.can_update_convention && {
           label: t('navigation.admin.conventionSettings', 'Convention Settings'),
           url: '/convention/edit',
-          icon: 'fa-gear',
+          icon: 'bi-gear-fill',
         },
         currentAbility.can_update_departments && {
           label: t('navigation.admin.departments', 'Departments'),
           url: '/admin_departments',
-          icon: 'fa-gavel',
+          icon: 'bi-megaphone-fill',
         },
         currentAbility.can_update_event_categories &&
           siteMode !== 'single_event' && {
             label: t('navigation.admin.eventCategories', 'Event Categories'),
             url: '/event_categories',
-            icon: 'fa-tags',
+            icon: 'bi-tags-fill',
           },
         currentAbility.can_read_event_proposals &&
           siteMode !== 'single_event' && {
             label: t('navigation.admin.eventProposals', 'Event Proposals'),
             url: '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc',
-            icon: 'fa-gift',
+            icon: 'bi-gift-fill',
           },
         currentAbility.can_manage_runs && {
           label: t('navigation.admin.events', 'Event Scheduling'),
           url: '/admin_events',
-          icon: 'fa-calendar-plus-o',
+          icon: 'bi-calendar-plus',
         },
         currentAbility.can_manage_forms && {
           label: t('navigation.admin.forms', 'Forms'),
           url: '/admin_forms',
-          icon: 'fa-list',
+          icon: 'bi-list-ul',
         },
         currentAbility.can_read_any_mailing_list && {
           label: t('navigation.admin.mailingLists', 'Mailing Lists'),
           url: '/mailing_lists',
-          icon: 'fa-envelope-o',
+          icon: 'bi-envelope',
         },
         currentAbility.can_update_notification_templates && {
           label: t('navigation.admin.notifications', 'Notifications'),
           url: '/admin_notifications',
-          icon: 'fa-circle-o',
+          icon: 'bi-circle',
         },
         generateOAuthApplicationsNavigationItem(currentAbility, t),
         currentAbility.can_read_reports && {
           label: t('navigation.admin.reports', 'Reports'),
           url: '/reports',
-          icon: 'fa-table',
+          icon: 'bi-table',
         },
         currentAbility.can_manage_rooms && {
           label: t('navigation.admin.rooms', 'Rooms'),
           url: '/rooms',
-          icon: 'fa-map',
+          icon: 'bi-map-fill',
         },
         currentAbility.can_manage_signups &&
           signupMode === 'moderated' && {
             label: t('navigation.admin.signupModeration', 'Signup Moderation'),
             url: '/signup_moderation',
-            icon: 'fa-gavel',
+            icon: 'bi-megaphone-fill',
           },
         generateSiteContentItem(currentAbility, t),
         currentAbility.can_manage_staff_positions && {
           label: t('navigation.admin.staffPositions', 'Staff Positions'),
           url: '/staff_positions',
-          icon: 'fa-university',
+          icon: 'bi-bank2',
         },
         currentAbility.can_read_orders && {
           label: t('navigation.admin.store', 'Store'),
           url: '/admin_store',
-          icon: 'fa-shopping-cart',
+          icon: 'bi-cart-fill',
         },
         currentAbility.can_manage_ticket_types &&
           ticketMode !== 'disabled' && {
@@ -124,12 +123,12 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
               ticketName: titleize(ticketName ?? 'ticket'),
             }),
             url: '/ticket_types',
-            icon: 'fa-ticket',
+            icon: 'bi-person-badge-fill',
           },
         currentAbility.can_read_user_activity_alerts && {
           label: t('navigation.admin.userActivityAlerts', 'User Activity Alerts'),
           url: '/user_activity_alerts',
-          icon: 'fa-exclamation-triangle',
+          icon: 'bi-exclamation-triangle-fill',
         },
       ].filter(notFalse),
     [currentAbility, signupMode, siteMode, ticketMode, ticketName, t],
@@ -148,24 +147,24 @@ function useRootSiteAdminNavigationItems(): GeneratedNavigationItem[] {
         currentAbility.can_manage_conventions && {
           label: t('navigation.admin.conventions', 'Conventions'),
           url: '/conventions?sort.starts_at=desc',
-          icon: 'fa-rocket',
+          icon: 'bi-flag-fill',
         },
         currentAbility.can_manage_email_routes && {
           label: t('navigation.admin.emailRoutes', 'Email routes'),
           url: '/email_routes?sort.receiver_address=asc',
-          icon: 'fa-envelope-o',
+          icon: 'bi-envelope',
         },
         generateOAuthApplicationsNavigationItem(currentAbility, t),
         currentAbility.can_read_organizations && {
           label: t('navigation.admin.organizations', 'Organizations'),
           url: '/organizations',
-          icon: 'fa-building',
+          icon: 'bi-building',
         },
         generateSiteContentItem(currentAbility, t),
         currentAbility.can_read_users && {
           label: t('navigation.admin.users', 'Users'),
           url: '/users',
-          icon: 'fa-users',
+          icon: 'bi-people-fill',
         },
       ].filter(notFalse),
     [currentAbility, t],

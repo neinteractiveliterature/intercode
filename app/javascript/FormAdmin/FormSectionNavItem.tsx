@@ -45,11 +45,7 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
       <div className="d-flex align-items-center">
         <div className="me-2">
           <span className="visually-hidden">Drag to reorder</span>
-          <i
-            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-            className="fa fa-bars"
-            ref={drag}
-          />
+          <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
         </div>
         <NavLink
           to={`/admin_forms/${match.params.id}/edit/section/${formSection.id}`}
@@ -71,7 +67,7 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
             }
           >
             <span className="visually-hidden">Delete item</span>
-            <i className="fa fa-trash-o" />
+            <i className="bi-trash" />
           </button>
         </div>
       </div>

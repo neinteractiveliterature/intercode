@@ -57,7 +57,7 @@ function TeamMemberActionMenu({
       buttonClassName="btn btn-sm btn-primary"
       buttonContent={
         <>
-          <i className="fa fa-ellipsis-h" />
+          <i className="bi-three-dots" />
           <span className="visually-hidden">{t('buttons.options', 'Options')}</span>
         </>
       }

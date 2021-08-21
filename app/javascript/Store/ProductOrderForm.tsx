@@ -158,8 +158,8 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
               disabled={!dataComplete || addToCartInProgress}
               onClick={addToCartClicked}
             >
-              {addToCartInProgress ? <LoadingIndicator /> : <i className="fa fa-shopping-cart" />}{' '}
-              Add to cart
+              {addToCartInProgress ? <LoadingIndicator /> : <i className="bi-shopping-cart" />} Add
+              to cart
             </button>
           </div>
         </div>

@@ -2,7 +2,7 @@
   {
     "key": "con_schedule",
     "titlei18nKey": "schedule.views.gridView",
-    "icon": "fa-calendar",
+    "icon": "bi-calendar3",
     "classifyEventsBy": "category",
     "showSignedUp": true,
     "showSignupStatusBadge": true,
@@ -44,7 +44,7 @@
   {
     "key": "con_schedule_by_room",
     "titlei18nKey": "schedule.views.gridViewByRoom",
-    "icon": "fa-calendar-o",
+    "icon": "bi-calendar",
     "classifyEventsBy": "category",
     "showSignupStatusBadge": true,
     "showSignedUp": true,
@@ -61,7 +61,7 @@
   {
     "key": "schedule_with_counts",
     "titlei18nKey": "schedule.views.gridViewWithCounts",
-    "icon": "fa-calendar-check-o",
+    "icon": "bi-calendar2-check",
     "classifyEventsBy": "fullness",
     "showExtendedCounts": true,
     "groupEventsBy": "category",

@@ -35,7 +35,8 @@ type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryData['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-const UserConProfilesTableQueryDataContext = createQueryDataContext<UserConProfilesTableUserConProfilesQueryData>();
+const UserConProfilesTableQueryDataContext =
+  createQueryDataContext<UserConProfilesTableUserConProfilesQueryData>();
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
@@ -344,7 +345,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
           renderLeftContent={() =>
             queryData && (queryData.currentAbility || {}).can_create_user_con_profiles ? (
               <Link to="/user_con_profiles/new" className="btn btn-primary ms-2 mb-2">
-                <i className="fa fa-plus" />{' '}
+                <i className="bi-plus" />{' '}
                 {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
               </Link>
             ) : null
