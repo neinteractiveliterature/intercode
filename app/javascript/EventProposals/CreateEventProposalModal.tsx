@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
@@ -54,10 +54,8 @@ function CreateEventProposalModal({
         )
       : undefined,
   );
-  const [
-    createProposal,
-    { loading: createInProgress, error: createError },
-  ] = useCreateEventProposalMutation();
+  const [createProposal, { loading: createInProgress, error: createError }] =
+    useCreateEventProposalMutation();
   const apolloClient = useApolloClient();
 
   const departmentEventCategories = useMemo(

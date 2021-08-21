@@ -32,7 +32,7 @@ function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelecto
         multiple
       />
       <span className="ms-2">
-        <HelpPopover>
+        <HelpPopover iconSet="bootstrap-icons">
           <RatingsHelp />
         </HelpPopover>
       </span>

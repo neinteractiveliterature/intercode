@@ -9,7 +9,7 @@ invariant: false
   <section class="card bg-info text-white my-4">
     <div class="card-header">My Schedule
       <div class="float-end">
-          <a class="btn btn-outline-light" target="_blank" href="https://calendar.google.com/calendar/r?cid={{user_con_profile.schedule_calendar_url | url_encode}}" title='Add to Google Calendar' data-bs-toggle="tooltip" data-bs-placement="top"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+          <a class="btn btn-outline-light" target="_blank" href="https://calendar.google.com/calendar/r?cid={{user_con_profile.schedule_calendar_url | url_encode}}" title='Add to Google Calendar' data-bs-toggle="tooltip" data-bs-placement="top"><i class="bi-calendar3" aria-hidden="true"></i></a>
       </div>
     </div>
     <div style='max-height:499px; overflow-y:auto'>
@@ -26,36 +26,36 @@ invariant: false
             <div class="d-flex">
               <span>
                 {% if signup.state == 'waitlisted' %}
-                  <i class="fa fa-hourglass-half" aria-hidden="true"></i>
+                  <i class="bi-hourglass-split" aria-hidden="true"></i>
                 {% elsif signup.team_member? %}
                   {% case signup.event.event_category.name %}
                     {% when "Con services" %}
-                      <i class="fa fa-cog" aria-hidden="true"></i>
+                      <i class="bi-gear-fill" aria-hidden="true"></i>
                     {% when "Volunteer event" %}
-                      <i class="fa fa-cog" aria-hidden="true"></i>
+                      <i class="bi-gear-fill" aria-hidden="true"></i>
                     {% when "Larp" %}
-                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <i class="bi-megaphone-fill" aria-hidden="true"></i>
                     {% when "Moderated discussion" %}
-                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <i class="bi-megaphone-fill" aria-hidden="true"></i>
                     {% when "Panel" %}
-                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <i class="bi-megaphone-fill" aria-hidden="true"></i>
                     {% when "Presentation" %}
-                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <i class="bi-megaphone-fill" aria-hidden="true"></i>
                     {% when "Town hall" %}
-                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <i class="bi-megaphone-fill" aria-hidden="true"></i>
                     {% when "Workshop" %}
-                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <i class="bi-megaphone-fill" aria-hidden="true"></i>
                     {% when "Party" %}
-                      <i class="fa fa-comments" aria-hidden="true"></i>
+                      <i class="bi-chat-fill" aria-hidden="true"></i>
                     {% when "Social event" %}
-                      <i class="fa fa-comments" aria-hidden="true"></i>
+                      <i class="bi-chat-fill" aria-hidden="true"></i>
                     {% when "Meetup" %}
-                      <i class="fa fa-comments" aria-hidden="true"></i>
+                      <i class="bi-chat-fill" aria-hidden="true"></i>
                     {% else %}
-                      <i class="fa fa-users" aria-hidden="true"></i>
+                      <i class="bi-people-fill" aria-hidden="true"></i>
                   {% endcase%}
                 {% elsif signup.bucket.name %}
-                  <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                  <i class="bi-person-circle" aria-hidden="true"></i>
                 {% endif %}
               </span>
                &nbsp;{{ signup.event.event_category.name | replace: "_", " " | humanize}}:&nbsp;

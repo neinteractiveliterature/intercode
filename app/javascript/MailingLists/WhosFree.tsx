@@ -13,7 +13,7 @@ function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
   });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error || !data) {

@@ -46,7 +46,7 @@ function CreateSignup() {
       </FormGroupWithLabel>
 
       {event && userConProfile && (
-        <Suspense fallback={<LoadingIndicator />}>
+        <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
           <div className="run-card-deck">
             {event.runs.map((run) => (
               <CreateSignupRunCard

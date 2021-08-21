@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import classnames from 'classnames';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -33,11 +33,10 @@ function CreateModeratedSignupModal({
     refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
   });
   const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
-  const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [
-    timezoneName,
-    event,
-    run,
-  ]);
+  const runTimespan = useMemo(
+    () => timespanFromRun(timezoneName, event, run),
+    [timezoneName, event, run],
+  );
 
   const conflictingSignup = useMemo(() => {
     if (loading || error || !data) {
@@ -76,7 +75,7 @@ function CreateModeratedSignupModal({
 
       <div className="modal-body">
         {loading ? (
-          <LoadingIndicator />
+          <LoadingIndicator iconSet="bootstrap-icons" />
         ) : (
           <>
             <p className={classnames({ 'm-0': !conflictingSignup })}>

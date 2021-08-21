@@ -82,7 +82,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error || !data) {

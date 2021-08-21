@@ -18,8 +18,6 @@
 @import './tables';
 @import './toast';
 
-$fa-font-path: '~font-awesome/fonts';
-@import '~font-awesome/scss/font-awesome';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
 .form-item-label p:last-child,
@@ -94,10 +92,16 @@ table.no-top-border thead th {
 .custom-loading-indicator {
   position: absolute;
   left: 50%;
-  font-size: 30vh;
   color: #aaa;
-  margin-left: -19vh;
+  margin-left: -15vh;
   transition: all 250ms ease-in-out;
+  z-index: 5000;
+
+  .spinner-border {
+    width: 30vh;
+    height: 30vh;
+    border-width: 3vh;
+  }
 }
 
 .run-card {

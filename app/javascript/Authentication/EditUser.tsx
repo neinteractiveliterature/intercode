@@ -2,9 +2,13 @@ import { useState, useContext, Suspense } from 'react';
 import * as React from 'react';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
-import { BootstrapFormInput , LoadingIndicator, useUniqueId, ErrorDisplay , LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
-
+import {
+  BootstrapFormInput,
+  LoadingIndicator,
+  useUniqueId,
+  ErrorDisplay,
+  LoadQueryWrapper,
+} from '@neinteractiveliterature/litform';
 
 import { Redirect } from 'react-router-dom';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -117,7 +121,7 @@ export default LoadQueryWrapper(
               <label className="form-label" htmlFor={passwordFieldId}>
                 {t('authentication.editUser.passwordLabel', 'Password')}
               </label>
-              <Suspense fallback={<LoadingIndicator />}>
+              <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
                 <PasswordInputWithStrengthCheck
                   id={passwordFieldId}
                   value={password}

@@ -193,7 +193,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps) {
         aria-expanded={!collapsed}
         aria-controls={collapseId}
       >
-        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} /> Tools
+        <i className={collapsed ? 'bi-caret-right' : 'bi-caret-down'} /> Tools
       </button>
       <div
         id={collapseId}

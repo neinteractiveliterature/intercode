@@ -32,7 +32,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps) {
   }, [data, error, loading, teamMemberMatch]);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

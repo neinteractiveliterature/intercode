@@ -149,7 +149,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
   }
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   const renderUserSection = () => {

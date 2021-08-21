@@ -82,9 +82,9 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           {product.payment_options.map((paymentOption) => (
             <i
               key={paymentOption}
-              className={classNames('ms-2', 'fa', {
-                'fa-cc-stripe': paymentOption === 'stripe',
-                'fa-suitcase': paymentOption === 'pay_at_convention',
+              className={classNames('ms-2', {
+                'bi-credit-card': paymentOption === 'stripe',
+                'bi-briefcase-fill': paymentOption === 'pay_at_convention',
               })}
               title={humanize(paymentOption)}
             />

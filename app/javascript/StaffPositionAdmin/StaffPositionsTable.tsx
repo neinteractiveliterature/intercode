@@ -203,7 +203,7 @@ function StaffPositionsTable() {
   usePageTitle('Staff positions');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

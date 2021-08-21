@@ -22,7 +22,7 @@ function CategoryLegend() {
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

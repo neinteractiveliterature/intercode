@@ -204,7 +204,7 @@ function LoadingOverlay({ loading }: LoadingOverlayProps) {
         right: 0,
       }}
     >
-      <PageLoadingIndicator visible={loading} />
+      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
     </div>
   );
 }

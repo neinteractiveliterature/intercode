@@ -54,11 +54,8 @@ function ConventionFormBillingSection({
       window.location.href = onboardingLink;
     }
   }, [createConventionStripeAccount]);
-  const [
-    startCreateStripeAccount,
-    createStripeAccountError,
-    createStripeAccountInProgress,
-  ] = useAsyncFunction(createStripeAccountAndRedirect);
+  const [startCreateStripeAccount, createStripeAccountError, createStripeAccountInProgress] =
+    useAsyncFunction(createStripeAccountAndRedirect);
 
   const obtainOnboardingLinkAndRedirect = useCallback(async () => {
     const result = await apolloClient.query<
@@ -74,11 +71,8 @@ function ConventionFormBillingSection({
       window.location.href = onboardingLink;
     }
   }, [apolloClient]);
-  const [
-    startObtainOnboardingLink,
-    obtainOnboardingLinkError,
-    obtainOnboardinLinkInProgress,
-  ] = useAsyncFunction(obtainOnboardingLinkAndRedirect);
+  const [startObtainOnboardingLink, obtainOnboardingLinkError, obtainOnboardinLinkInProgress] =
+    useAsyncFunction(obtainOnboardingLinkAndRedirect);
 
   return (
     <>
@@ -147,7 +141,7 @@ function ConventionFormBillingSection({
                     disabled={obtainOnboardinLinkInProgress}
                   >
                     {obtainOnboardinLinkInProgress ? (
-                      <LoadingIndicator />
+                      <LoadingIndicator iconSet="bootstrap-icons" />
                     ) : (
                       `Continue Stripe account setup for ${convention.name}`
                     )}
@@ -165,7 +159,7 @@ function ConventionFormBillingSection({
                 disabled={createStripeAccountInProgress}
               >
                 {createStripeAccountInProgress ? (
-                  <LoadingIndicator />
+                  <LoadingIndicator iconSet="bootstrap-icons" />
                 ) : (
                   `Set up a Stripe account for ${convention.name}`
                 )}

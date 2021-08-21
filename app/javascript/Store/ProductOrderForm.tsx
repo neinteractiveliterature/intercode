@@ -48,11 +48,11 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
   });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   const { product } = data!;
@@ -158,8 +158,12 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
               disabled={!dataComplete || addToCartInProgress}
               onClick={addToCartClicked}
             >
-              {addToCartInProgress ? <LoadingIndicator /> : <i className="bi-shopping-cart" />} Add
-              to cart
+              {addToCartInProgress ? (
+                <LoadingIndicator iconSet="bootstrap-icons" />
+              ) : (
+                <i className="bi-shopping-cart" />
+              )}{' '}
+              Add to cart
             </button>
           </div>
         </div>

@@ -9,7 +9,7 @@ function ScheduleGridSkeleton() {
         className="schedule-grid-content"
         style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}
       >
-        <PageLoadingIndicator visible />
+        <PageLoadingIndicator visible iconSet="bootstrap-icons" />
       </div>
     </div>
   );
