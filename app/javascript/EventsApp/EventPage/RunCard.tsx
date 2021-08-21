@@ -146,7 +146,7 @@ function RunCard({
           disabled={mutationInProgress}
           onClick={signupButtonClicked}
         />
-        {mutationInProgress && <LoadingIndicator />}
+        {mutationInProgress && <LoadingIndicator iconSet="bootstrap-icons" />}
         <ErrorDisplay graphQLError={signupError as ApolloError} />
       </>
     );

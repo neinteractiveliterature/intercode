@@ -165,11 +165,10 @@ function EditStaffPositionPermissions() {
   const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useStaffPositionsQuery();
 
-  const convention = useMemo(() => (loading || error || !data ? null : data.convention), [
-    loading,
-    error,
-    data,
-  ]);
+  const convention = useMemo(
+    () => (loading || error || !data ? null : data.convention),
+    [loading, error, data],
+  );
 
   const staffPosition = useMemo(
     () => (convention ? convention.staff_positions.find((sp) => sp.id.toString(10) === id) : null),
@@ -177,7 +176,7 @@ function EditStaffPositionPermissions() {
   );
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

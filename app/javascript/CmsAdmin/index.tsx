@@ -37,7 +37,7 @@ function CmsAdmin() {
   const { data, loading, error } = useCmsAdminBaseQuery();
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

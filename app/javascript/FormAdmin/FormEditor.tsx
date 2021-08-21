@@ -63,7 +63,7 @@ function FormEditor() {
   usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

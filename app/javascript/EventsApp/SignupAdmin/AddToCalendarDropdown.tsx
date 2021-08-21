@@ -51,6 +51,7 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
         copiedProps={{ className: 'dropdown-item text-success' }}
         defaultText={t('addToCalendarDropdown.copyWebcal', 'Copy webcal:// link')}
         copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
+        iconSet="bootstrap-icons"
       />
     </DropdownMenu>
   );

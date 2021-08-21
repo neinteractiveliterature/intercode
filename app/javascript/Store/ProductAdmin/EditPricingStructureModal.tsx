@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import * as React from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { MultipleChoiceInput, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 

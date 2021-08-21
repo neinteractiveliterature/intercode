@@ -55,7 +55,7 @@ function FormPresenter({
   if (!form || !convention || !response || !currentSection) {
     return (
       <div>
-        <LoadingIndicator size={4} />
+        <LoadingIndicator size={4} iconSet="bootstrap-icons" />
       </div>
     );
   }

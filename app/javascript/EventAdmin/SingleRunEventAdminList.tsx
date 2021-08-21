@@ -33,7 +33,7 @@ function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListPro
   usePageTitle(useValueUnless(() => pluralize(eventCategory!.name), error || loading));
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

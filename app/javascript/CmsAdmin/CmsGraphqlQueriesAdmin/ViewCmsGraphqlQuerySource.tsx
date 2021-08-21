@@ -17,7 +17,7 @@ function ViewCmsGraphqlQuerySource() {
   usePageTitle(`View “${(query || {}).identifier}” Source`);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

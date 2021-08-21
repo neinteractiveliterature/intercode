@@ -60,16 +60,18 @@ function AuthorizationPrompt() {
       return null;
     }
 
-    return ([
-      'client_id',
-      'redirect_uri',
-      'state',
-      'response_type',
-      'scope',
-      'nonce',
-      'code_challenge',
-      'code_challenge_method',
-    ] as const).reduce(
+    return (
+      [
+        'client_id',
+        'redirect_uri',
+        'state',
+        'response_type',
+        'scope',
+        'nonce',
+        'code_challenge',
+        'code_challenge_method',
+      ] as const
+    ).reduce(
       (params, field) => ({
         ...params,
         [field]: preAuth[field],
@@ -82,7 +84,7 @@ function AuthorizationPrompt() {
   usePageTitle('Authorization required');
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

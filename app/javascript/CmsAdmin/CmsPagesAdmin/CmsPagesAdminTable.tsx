@@ -34,7 +34,7 @@ function CmsPagesAdminTable() {
   }, [data, loading, error]);
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

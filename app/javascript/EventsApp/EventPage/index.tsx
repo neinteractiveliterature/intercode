@@ -29,7 +29,7 @@ function EventPage({ eventId, eventPath }: EventPageProps) {
   usePageTitle(useValueUnless(() => data!.event.title, error || loading));
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

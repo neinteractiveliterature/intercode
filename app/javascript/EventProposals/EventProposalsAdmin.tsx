@@ -24,7 +24,7 @@ function SingleProposalBreadcrumbs() {
   if (loading) {
     return (
       <BreadcrumbItem active>
-        <LoadingIndicator />
+        <LoadingIndicator iconSet="bootstrap-icons" />
       </BreadcrumbItem>
     );
   }

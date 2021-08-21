@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from 'react-bootstrap4-modal';
+import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 

@@ -16,7 +16,7 @@ export type NoPreferenceHelpPopoverProps = {
 function NoPreferenceHelpPopover({ registrationPolicy }: NoPreferenceHelpPopoverProps) {
   if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
     return (
-      <HelpPopover className="ms-1">
+      <HelpPopover className="ms-1" iconSet="bootstrap-icons">
         <p>{NO_PREFERENCE_HELP_TEXT}</p>
         <p className="mb-0">
           This event doesn&apos;t have more than one registration bucket with limited slots, so that
@@ -26,7 +26,7 @@ function NoPreferenceHelpPopover({ registrationPolicy }: NoPreferenceHelpPopover
     );
   }
 
-  return <HelpPopover>{NO_PREFERENCE_HELP_TEXT}</HelpPopover>;
+  return <HelpPopover iconSet="bootstrap-icons">{NO_PREFERENCE_HELP_TEXT}</HelpPopover>;
 }
 
 export default NoPreferenceHelpPopover;

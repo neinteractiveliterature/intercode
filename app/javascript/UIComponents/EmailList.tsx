@@ -43,6 +43,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps) 
             }}
             defaultText={t('copyToClipboard.defaultText', 'Copy to clipboard')}
             copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
+            iconSet="bootstrap-icons"
           />
         </div>
         {renderToolbarContent ? renderToolbarContent() : null}

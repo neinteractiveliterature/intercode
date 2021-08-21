@@ -118,7 +118,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
               aria-label="Counted for signups?"
             />
             Counted for signups?{' '}
-            <HelpPopover>
+            <HelpPopover iconSet="bootstrap-icons">
               “Counted” buckets count towards the attendee’s number of signups, and are included in
               the “No Preference” option. If the bucket is <em>not</em> counted, any attendees who
               click “No Preference” won’t end up in this bucket.
@@ -138,7 +138,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
                 aria-label="Show bucket name in signup list?"
               />
               Show bucket name in signup list?{' '}
-              <HelpPopover>
+              <HelpPopover iconSet="bootstrap-icons">
                 If checked, attendees will be able to see which of their fellow attendees are in
                 this bucket via the signup summary page. (The signup summary always lists fellow
                 attendees’ names, but normally doesn’t show which bucket they’re in.)

@@ -33,7 +33,8 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   bucket: FilterCodecs.stringArray,
 });
 
-type SignupType = RunSignupsTableSignupsQueryData['event']['run']['signups_paginated']['entries'][0];
+type SignupType =
+  RunSignupsTableSignupsQueryData['event']['run']['signups_paginated']['entries'][0];
 
 const SignupStateFilter = (props: FilterProps<SignupType>) => {
   const { t } = useTranslation();
@@ -205,7 +206,7 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
   );
 
   if (loading) {
-    return <PageLoadingIndicator visible />;
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   if (error) {

@@ -19,7 +19,7 @@ function ProductSelect<QueryType extends AdminProductsQueryData>({
   const { data, loading, error } = useQuery<QueryType>(productsQuery ?? AdminProductsQuery);
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

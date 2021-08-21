@@ -112,7 +112,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   );
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {
