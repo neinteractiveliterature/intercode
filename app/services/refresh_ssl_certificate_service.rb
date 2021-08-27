@@ -83,12 +83,10 @@ class RefreshSslCertificateService < CivilService::Service
   end
 
   def usable_endpoint
-    @usable_endpoint ||= begin
-      sni_endpoints.find do |endpoint|
-        pem = endpoint['certificate_chain']
-        cert = OpenSSL::X509::Certificate.new(pem)
-        parse_domains(cert).include?(root_domain)
-      end
+    @usable_endpoint ||= sni_endpoints.find do |endpoint|
+      pem = endpoint['certificate_chain']
+      cert = OpenSSL::X509::Certificate.new(pem)
+      parse_domains(cert).include?(root_domain)
     end
   end
 
@@ -140,7 +138,7 @@ class RefreshSslCertificateService < CivilService::Service
 
     Rails.logger.info 'Requesting certificates'
     sh "~/.acme.sh/acme.sh #{staging ? '--staging ' : ''}\
---issue --challenge-alias #{root_domain} --dns dns_aws \
+--issue --server letsencrypt --challenge-alias #{root_domain} --dns dns_aws \
 #{domain_args.join(' ')}"
   end
 
