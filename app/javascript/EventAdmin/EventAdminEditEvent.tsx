@@ -138,19 +138,18 @@ function EventAdminEditEventForm({ data, initialEvent }: EventAdminEditEventForm
         history.push(donePath);
       }}
     >
-      <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps}>
-        {data.currentAbility.can_override_maximum_event_provided_tickets &&
-          data.convention?.ticket_mode !== 'disabled' &&
-          data.convention?.site_mode === 'convention' && (
-            <MaximumEventProvidedTicketsOverrideEditor
-              {...meptoMutations}
-              ticketTypes={data.convention.ticket_types}
-              ticketName={data.convention.ticket_name}
-              overrides={initialEvent.maximum_event_provided_tickets_overrides}
-              eventId={initialEvent.id}
-            />
-          )}
-      </EventFormWithCategorySelection>
+      <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />
+      {data.currentAbility.can_override_maximum_event_provided_tickets &&
+        data.convention?.ticket_mode !== 'disabled' &&
+        data.convention?.site_mode === 'convention' && (
+          <MaximumEventProvidedTicketsOverrideEditor
+            {...meptoMutations}
+            ticketTypes={data.convention.ticket_types}
+            ticketName={data.convention.ticket_name}
+            overrides={initialEvent.maximum_event_provided_tickets_overrides}
+            eventId={initialEvent.id}
+          />
+        )}
 
       {eventCategory?.scheduling_ui === 'single_run' &&
         event.form_response_attrs.length_seconds && (
