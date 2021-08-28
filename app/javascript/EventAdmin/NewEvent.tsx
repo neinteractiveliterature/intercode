@@ -104,47 +104,47 @@ function NewEventForm({ data }: NewEventFormProps) {
   return (
     <>
       <h2 className="mb-4 mt-2">New event</h2>
-      <EventFormWithCategorySelection {...formProps}>
-        {eventCategory &&
-          eventCategory.scheduling_ui === 'single_run' &&
-          event.form_response_attrs.length_seconds && (
-            <RunFormFields
-              run={run}
-              event={{
-                __typename: 'Event',
-                id: -1,
-                // if you're on the event admin app, you're an admin for events by definition
-                current_user_form_item_viewer_role: FormItemRole.Admin,
-                current_user_form_item_writer_role: FormItemRole.Admin,
-                can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
-                title: event.form_response_attrs.title,
-                length_seconds: event.form_response_attrs.length_seconds,
-                event_category: eventCategory,
-                maximum_event_provided_tickets_overrides: [],
-                runs: [],
-              }}
-              onChange={setRun}
-            />
-          )}
+      <EventFormWithCategorySelection {...formProps} />
 
-        {warningMessage && <div className="alert alert-warning">{warningMessage}</div>}
+      {eventCategory &&
+        eventCategory.scheduling_ui === 'single_run' &&
+        event.form_response_attrs.length_seconds && (
+          <RunFormFields
+            run={run}
+            event={{
+              __typename: 'Event',
+              id: -1,
+              // if you're on the event admin app, you're an admin for events by definition
+              current_user_form_item_viewer_role: FormItemRole.Admin,
+              current_user_form_item_writer_role: FormItemRole.Admin,
+              can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
+              title: event.form_response_attrs.title,
+              length_seconds: event.form_response_attrs.length_seconds,
+              event_category: eventCategory,
+              maximum_event_provided_tickets_overrides: [],
+              runs: [],
+            }}
+            onChange={setRun}
+          />
+        )}
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+      {warningMessage && <div className="alert alert-warning">{warningMessage}</div>}
 
-        <div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={createEvent}
-            disabled={!eventCategoryId || !!warningMessage}
-          >
-            Create event
-          </button>
-          <Link className="btn btn-link" to={donePath}>
-            Cancel
-          </Link>
-        </div>
-      </EventFormWithCategorySelection>
+      <ErrorDisplay graphQLError={createError as ApolloError} />
+
+      <div>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={createEvent}
+          disabled={!eventCategoryId || !!warningMessage}
+        >
+          Create event
+        </button>
+        <Link className="btn btn-link" to={donePath}>
+          Cancel
+        </Link>
+      </div>
     </>
   );
 }

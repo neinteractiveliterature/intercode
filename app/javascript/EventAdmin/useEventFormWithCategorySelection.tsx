@@ -1,4 +1,4 @@
-import { useMemo, useEffect, ReactNode } from 'react';
+import { useMemo, useEffect } from 'react';
 
 import useEventCategorySelection from './useEventCategorySelection';
 import useEventForm, { EventForm, EventFormProps } from './useEventForm';
@@ -88,13 +88,11 @@ export type EventFormWithCategorySelectionProps<
 > = {
   selectProps: EventCategorySelectProps;
   eventFormProps: EventFormProps<EventType>;
-  children?: ReactNode;
 };
 
 export function EventFormWithCategorySelection<EventType extends FormResponse>({
   selectProps,
   eventFormProps,
-  children,
 }: EventFormWithCategorySelectionProps<
   EventType &
     Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
@@ -102,7 +100,7 @@ export function EventFormWithCategorySelection<EventType extends FormResponse>({
   return (
     <>
       <EventCategorySelect {...selectProps} />
-      <EventForm {...eventFormProps}>{children}</EventForm>
+      <EventForm {...eventFormProps} />
     </>
   );
 }
