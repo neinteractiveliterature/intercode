@@ -1,20 +1,22 @@
+import { useUniqueId } from '@neinteractiveliterature/litform';
+
 export type PermissionCheckBoxProps = {
   hasPermission: boolean;
 };
 
 function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps): JSX.Element {
-  if (hasPermission) {
-    return (
-      <i className="bi-check-square">
-        <span className="visually-hidden">Permitted</span>
-      </i>
-    );
-  }
+  const checkboxId = useUniqueId('permitted-');
 
   return (
-    <i className="bi-square">
-      <span className="visually-hidden">Not permitted</span>
-    </i>
+    <div className="form-check form-switch">
+      <input
+        className="form-check-input"
+        type="checkbox"
+        id={checkboxId}
+        checked={hasPermission}
+        aria-label="Permitted"
+      />
+    </div>
   );
 }
 
