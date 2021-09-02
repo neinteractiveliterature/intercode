@@ -1,0 +1,86 @@
+name: JavaScript checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+jobs:
+  "graphql-codegen":
+    name: graphql-codegen
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Set up yarn cache
+      uses: actions/cache@v1
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
+          ${{ runner.os }}-tsc-yarn-
+    - name: install node v14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: yarn install
+      run: yarn install
+    - name: graphql-codegen
+      run: yarn run graphql:codegen
+    - name: tsc on resulting generated files
+      uses: icrawl/action-tsc@v1
+  tsc:
+    name: tsc
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Set up yarn cache
+      uses: actions/cache@v1
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
+          ${{ runner.os }}-tsc-yarn-
+    - name: install node v14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: yarn install
+      run: yarn install
+    - name: tsc
+      uses: icrawl/action-tsc@v1
+  webpack:
+    name: webpack
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Set up yarn cache
+      uses: actions/cache@v1
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
+          ${{ runner.os }}-tsc-yarn-
+    - name: install node v14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: yarn install
+      run: yarn install
+    - name: build
+      run: yarn run build
