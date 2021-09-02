@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { EventFieldsFragment, RunFieldsFragment, MaximumEventProvidedTicketsOverrideFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
-import { EventFieldsFragmentDoc, RunFieldsFragmentDoc, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
+import { EventFieldsFragmentDoc } from './queries.generated';
+import { RunFieldsFragmentDoc, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateEventMutationVariables = Types.Exact<{
@@ -11,202 +11,84 @@ export type CreateEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEventMutationData = (
-  { __typename: 'Mutation' }
-  & { createEvent?: Types.Maybe<(
-    { __typename: 'CreateEventPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id'>
-      & EventFieldsFragment
-    ) }
-  )> }
-);
+export type CreateEventMutationData = { __typename: 'Mutation', createEvent?: Types.Maybe<{ __typename: 'CreateEventPayload', event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, author?: Types.Maybe<string>, description?: Types.Maybe<string>, organization?: Types.Maybe<string>, url?: Types.Maybe<string>, con_mail_destination?: Types.Maybe<string>, can_play_concurrently: boolean, short_blurb?: Types.Maybe<string>, participant_communications?: Types.Maybe<string>, age_restrictions?: Types.Maybe<string>, content_warnings?: Types.Maybe<string>, email?: Types.Maybe<string>, length_seconds: number, status?: Types.Maybe<string>, description_html?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, description?: Types.Maybe<string>, minimum_slots?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } }> } }> };
 
 export type CreateFillerEventMutationVariables = Types.Exact<{
   input: Types.CreateFillerEventInput;
 }>;
 
 
-export type CreateFillerEventMutationData = (
-  { __typename: 'Mutation' }
-  & { createFillerEvent?: Types.Maybe<(
-    { __typename: 'CreateFillerEventPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id'>
-      & EventFieldsFragment
-    ) }
-  )> }
-);
+export type CreateFillerEventMutationData = { __typename: 'Mutation', createFillerEvent?: Types.Maybe<{ __typename: 'CreateFillerEventPayload', event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, author?: Types.Maybe<string>, description?: Types.Maybe<string>, organization?: Types.Maybe<string>, url?: Types.Maybe<string>, con_mail_destination?: Types.Maybe<string>, can_play_concurrently: boolean, short_blurb?: Types.Maybe<string>, participant_communications?: Types.Maybe<string>, age_restrictions?: Types.Maybe<string>, content_warnings?: Types.Maybe<string>, email?: Types.Maybe<string>, length_seconds: number, status?: Types.Maybe<string>, description_html?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, description?: Types.Maybe<string>, minimum_slots?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } }> } }> };
 
 export type DropEventMutationVariables = Types.Exact<{
   input: Types.DropEventInput;
 }>;
 
 
-export type DropEventMutationData = (
-  { __typename: 'Mutation' }
-  & { dropEvent?: Types.Maybe<(
-    { __typename: 'DropEventPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id' | 'status'>
-    ) }
-  )> }
-);
+export type DropEventMutationData = { __typename: 'Mutation', dropEvent?: Types.Maybe<{ __typename: 'DropEventPayload', event: { __typename: 'Event', id: number, status?: Types.Maybe<string> } }> };
 
 export type RestoreDroppedEventMutationVariables = Types.Exact<{
   input: Types.RestoreDroppedEventInput;
 }>;
 
 
-export type RestoreDroppedEventMutationData = (
-  { __typename: 'Mutation' }
-  & { restoreDroppedEvent?: Types.Maybe<(
-    { __typename: 'RestoreDroppedEventPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id' | 'status'>
-    ) }
-  )> }
-);
+export type RestoreDroppedEventMutationData = { __typename: 'Mutation', restoreDroppedEvent?: Types.Maybe<{ __typename: 'RestoreDroppedEventPayload', event: { __typename: 'Event', id: number, status?: Types.Maybe<string> } }> };
 
 export type UpdateEventMutationVariables = Types.Exact<{
   input: Types.UpdateEventInput;
 }>;
 
 
-export type UpdateEventMutationData = (
-  { __typename: 'Mutation' }
-  & { updateEvent?: Types.Maybe<(
-    { __typename: 'UpdateEventPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id'>
-      & EventFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateEventMutationData = { __typename: 'Mutation', updateEvent?: Types.Maybe<{ __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, author?: Types.Maybe<string>, description?: Types.Maybe<string>, organization?: Types.Maybe<string>, url?: Types.Maybe<string>, con_mail_destination?: Types.Maybe<string>, can_play_concurrently: boolean, short_blurb?: Types.Maybe<string>, participant_communications?: Types.Maybe<string>, age_restrictions?: Types.Maybe<string>, content_warnings?: Types.Maybe<string>, email?: Types.Maybe<string>, length_seconds: number, status?: Types.Maybe<string>, description_html?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, description?: Types.Maybe<string>, minimum_slots?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } }> } }> };
 
 export type CreateRunMutationVariables = Types.Exact<{
   input: Types.CreateRunInput;
 }>;
 
 
-export type CreateRunMutationData = (
-  { __typename: 'Mutation' }
-  & { createRun?: Types.Maybe<(
-    { __typename: 'CreateRunPayload' }
-    & { run: (
-      { __typename: 'Run' }
-      & Pick<Types.Run, 'id'>
-      & RunFieldsFragment
-    ) }
-  )> }
-);
+export type CreateRunMutationData = { __typename: 'Mutation', createRun?: Types.Maybe<{ __typename: 'CreateRunPayload', run: { __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> } }> };
 
 export type CreateMultipleRunsMutationVariables = Types.Exact<{
   input: Types.CreateMultipleRunsInput;
 }>;
 
 
-export type CreateMultipleRunsMutationData = (
-  { __typename: 'Mutation' }
-  & { createMultipleRuns?: Types.Maybe<(
-    { __typename: 'CreateMultipleRunsPayload' }
-    & { runs: Array<(
-      { __typename: 'Run' }
-      & Pick<Types.Run, 'id'>
-      & RunFieldsFragment
-    )> }
-  )> }
-);
+export type CreateMultipleRunsMutationData = { __typename: 'Mutation', createMultipleRuns?: Types.Maybe<{ __typename: 'CreateMultipleRunsPayload', runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }> }> };
 
 export type UpdateRunMutationVariables = Types.Exact<{
   input: Types.UpdateRunInput;
 }>;
 
 
-export type UpdateRunMutationData = (
-  { __typename: 'Mutation' }
-  & { updateRun?: Types.Maybe<(
-    { __typename: 'UpdateRunPayload' }
-    & { run: (
-      { __typename: 'Run' }
-      & Pick<Types.Run, 'id'>
-      & RunFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateRunMutationData = { __typename: 'Mutation', updateRun?: Types.Maybe<{ __typename: 'UpdateRunPayload', run: { __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> } }> };
 
 export type DeleteRunMutationVariables = Types.Exact<{
   input: Types.DeleteRunInput;
 }>;
 
 
-export type DeleteRunMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteRun?: Types.Maybe<(
-    { __typename: 'DeleteRunPayload' }
-    & { run: (
-      { __typename: 'Run' }
-      & Pick<Types.Run, 'id'>
-      & RunFieldsFragment
-    ) }
-  )> }
-);
+export type DeleteRunMutationData = { __typename: 'Mutation', deleteRun?: Types.Maybe<{ __typename: 'DeleteRunPayload', run: { __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> } }> };
 
 export type CreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.CreateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type CreateMaximumEventProvidedTicketsOverrideMutationData = (
-  { __typename: 'Mutation' }
-  & { createMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload' }
-    & { maximum_event_provided_tickets_override: (
-      { __typename: 'MaximumEventProvidedTicketsOverride' }
-      & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
-      & MaximumEventProvidedTicketsOverrideFieldsFragment
-    ) }
-  )> }
-);
+export type CreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride?: Types.Maybe<{ __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } } }> };
 
 export type DeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.DeleteMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type DeleteMaximumEventProvidedTicketsOverrideMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload' }
-    & { maximum_event_provided_tickets_override: (
-      { __typename: 'MaximumEventProvidedTicketsOverride' }
-      & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
-      & MaximumEventProvidedTicketsOverrideFieldsFragment
-    ) }
-  )> }
-);
+export type DeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride?: Types.Maybe<{ __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } } }> };
 
 export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.UpdateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type UpdateMaximumEventProvidedTicketsOverrideMutationData = (
-  { __typename: 'Mutation' }
-  & { updateMaximumEventProvidedTicketsOverride?: Types.Maybe<(
-    { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload' }
-    & { maximum_event_provided_tickets_override: (
-      { __typename: 'MaximumEventProvidedTicketsOverride' }
-      & Pick<Types.MaximumEventProvidedTicketsOverride, 'id'>
-      & MaximumEventProvidedTicketsOverrideFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride?: Types.Maybe<{ __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } } }> };
 
 export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
@@ -214,17 +96,7 @@ export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventAdminNotesMutationData = (
-  { __typename: 'Mutation' }
-  & { updateEventAdminNotes?: Types.Maybe<(
-    { __typename: 'UpdateEventAdminNotesPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id'>
-      & EventFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateEventAdminNotesMutationData = { __typename: 'Mutation', updateEventAdminNotes?: Types.Maybe<{ __typename: 'UpdateEventAdminNotesPayload', event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, author?: Types.Maybe<string>, description?: Types.Maybe<string>, organization?: Types.Maybe<string>, url?: Types.Maybe<string>, con_mail_destination?: Types.Maybe<string>, can_play_concurrently: boolean, short_blurb?: Types.Maybe<string>, participant_communications?: Types.Maybe<string>, age_restrictions?: Types.Maybe<string>, content_warnings?: Types.Maybe<string>, email?: Types.Maybe<string>, length_seconds: number, status?: Types.Maybe<string>, description_html?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, description?: Types.Maybe<string>, minimum_slots?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } }> } }> };
 
 
 export const CreateEventDocument = gql`

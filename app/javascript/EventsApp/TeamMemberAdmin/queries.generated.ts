@@ -1,119 +1,33 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type TeamMemberTicketFieldsFragment = (
-  { __typename: 'Ticket' }
-  & Pick<Types.Ticket, 'id'>
-  & { user_con_profile: (
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id'>
-  ), ticket_type: (
-    { __typename: 'TicketType' }
-    & Pick<Types.TicketType, 'id' | 'name'>
-  ), provided_by_event?: Types.Maybe<(
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id' | 'title'>
-  )> }
-);
+export type TeamMemberTicketFieldsFragment = { __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> };
 
-export type TeamMemberUserConProfileFieldsFragment = (
-  { __typename: 'UserConProfile' }
-  & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'name_inverted' | 'email' | 'mobile_phone'>
-  & { ticket?: Types.Maybe<(
-    { __typename: 'Ticket' }
-    & Pick<Types.Ticket, 'id'>
-    & TeamMemberTicketFieldsFragment
-  )> }
-);
+export type TeamMemberUserConProfileFieldsFragment = { __typename: 'UserConProfile', id: number, name_without_nickname: string, name_inverted: string, email?: Types.Maybe<string>, mobile_phone?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> };
 
-export type TeamMemberUserConProfileSearchFieldsFragment = (
-  { __typename: 'UserConProfile' }
-  & Pick<Types.UserConProfile, 'id' | 'name_without_nickname' | 'name_inverted' | 'email'>
-  & { ticket?: Types.Maybe<(
-    { __typename: 'Ticket' }
-    & Pick<Types.Ticket, 'id'>
-    & TeamMemberTicketFieldsFragment
-  )> }
-);
+export type TeamMemberUserConProfileSearchFieldsFragment = { __typename: 'UserConProfile', id: number, name_without_nickname: string, name_inverted: string, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> };
 
-export type TeamMemberFieldsFragment = (
-  { __typename: 'TeamMember' }
-  & Pick<Types.TeamMember, 'id' | 'display_team_member' | 'show_email' | 'receive_con_email' | 'receive_signup_email'>
-  & { user_con_profile: (
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id'>
-    & TeamMemberUserConProfileFieldsFragment
-  ) }
-);
+export type TeamMemberFieldsFragment = { __typename: 'TeamMember', id: number, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string, name_inverted: string, email?: Types.Maybe<string>, mobile_phone?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> } };
 
-export type TeamMemberFieldsWithoutPersonalInfoFragment = (
-  { __typename: 'TeamMember' }
-  & Pick<Types.TeamMember, 'id' | 'display_team_member' | 'show_email' | 'receive_con_email' | 'receive_signup_email'>
-  & { user_con_profile: (
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id'>
-    & TeamMemberUserConProfileSearchFieldsFragment
-  ) }
-);
+export type TeamMemberFieldsWithoutPersonalInfoFragment = { __typename: 'TeamMember', id: number, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string, name_inverted: string, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> } };
 
 export type TeamMembersQueryVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
 }>;
 
 
-export type TeamMembersQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_name'>
-    & { ticket_types: Array<(
-      { __typename: 'TicketType' }
-      & Pick<Types.TicketType, 'id' | 'name' | 'description' | 'maximum_event_provided_tickets'>
-    )> }
-    & CommonConventionDataFragment
-  )>, event: (
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id' | 'title'>
-    & { event_category: (
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id' | 'can_provide_tickets' | 'team_member_name'>
-    ), provided_tickets: Array<(
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-      & TeamMemberTicketFieldsFragment
-    )>, team_members: Array<(
-      { __typename: 'TeamMember' }
-      & Pick<Types.TeamMember, 'id'>
-      & TeamMemberFieldsFragment
-    )> }
-  ) }
-);
+export type TeamMembersQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, ticket_name: string, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_mode: Types.TicketMode, ticket_types: Array<{ __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, maximum_event_provided_tickets: number }>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> }>, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, can_provide_tickets: boolean, team_member_name: string }, provided_tickets: Array<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }>, team_members: Array<{ __typename: 'TeamMember', id: number, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string, name_inverted: string, email?: Types.Maybe<string>, mobile_phone?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> } }> } };
 
 export type TeamMemberUserConProfilesQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type TeamMemberUserConProfilesQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { user_con_profiles_paginated: (
-      { __typename: 'UserConProfilesPagination' }
-      & { entries: Array<(
-        { __typename: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id'>
-        & TeamMemberUserConProfileSearchFieldsFragment
-      )> }
-    ) }
-  )> }
-);
+export type TeamMemberUserConProfilesQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, name_inverted: string, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number }, ticket_type: { __typename: 'TicketType', id: number, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> }> } }> };
 
 export const TeamMemberTicketFieldsFragmentDoc = gql`
     fragment TeamMemberTicketFields on Ticket {

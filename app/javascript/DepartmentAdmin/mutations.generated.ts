@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { AdminDepartmentFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminDepartmentFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -11,17 +10,7 @@ export type CreateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDepartmentMutationData = (
-  { __typename: 'Mutation' }
-  & { createDepartment?: Types.Maybe<(
-    { __typename: 'CreateDepartmentPayload' }
-    & { department: (
-      { __typename: 'Department' }
-      & Pick<Types.Department, 'id'>
-      & AdminDepartmentFieldsFragment
-    ) }
-  )> }
-);
+export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment?: Types.Maybe<{ __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } }> };
 
 export type UpdateDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -29,30 +18,14 @@ export type UpdateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDepartmentMutationData = (
-  { __typename: 'Mutation' }
-  & { updateDepartment?: Types.Maybe<(
-    { __typename: 'UpdateDepartmentPayload' }
-    & { department: (
-      { __typename: 'Department' }
-      & Pick<Types.Department, 'id'>
-      & AdminDepartmentFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment?: Types.Maybe<{ __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } }> };
 
 export type DeleteDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteDepartmentMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteDepartment?: Types.Maybe<(
-    { __typename: 'DeleteDepartmentPayload' }
-    & Pick<Types.DeleteDepartmentPayload, 'clientMutationId'>
-  )> }
-);
+export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment?: Types.Maybe<{ __typename: 'DeleteDepartmentPayload', clientMutationId?: Types.Maybe<string> }> };
 
 
 export const CreateDepartmentDocument = gql`

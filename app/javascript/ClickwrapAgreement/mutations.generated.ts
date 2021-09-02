@@ -7,16 +7,7 @@ const defaultOptions =  {}
 export type AcceptClickwrapAgreementMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AcceptClickwrapAgreementMutationData = (
-  { __typename: 'Mutation' }
-  & { acceptClickwrapAgreement?: Types.Maybe<(
-    { __typename: 'AcceptClickwrapAgreementPayload' }
-    & { my_profile: (
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id' | 'accepted_clickwrap_agreement'>
-    ) }
-  )> }
-);
+export type AcceptClickwrapAgreementMutationData = { __typename: 'Mutation', acceptClickwrapAgreement?: Types.Maybe<{ __typename: 'AcceptClickwrapAgreementPayload', my_profile: { __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: Types.Maybe<boolean> } }> };
 
 
 export const AcceptClickwrapAgreementDocument = gql`

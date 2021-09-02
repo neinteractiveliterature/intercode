@@ -4,25 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsVariableFieldsFragment = (
-  { __typename: 'CmsVariable' }
-  & Pick<Types.CmsVariable, 'id' | 'key' | 'value_json' | 'current_ability_can_update' | 'current_ability_can_delete'>
-);
+export type CmsVariableFieldsFragment = { __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsVariablesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsVariablesQueryData = (
-  { __typename: 'Query' }
-  & { cmsVariables: Array<(
-    { __typename: 'CmsVariable' }
-    & Pick<Types.CmsVariable, 'id'>
-    & CmsVariableFieldsFragment
-  )>, currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_create_cms_variables'>
-  ) }
-);
+export type CmsVariablesQueryData = { __typename: 'Query', cmsVariables: Array<{ __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean }>, currentAbility: { __typename: 'Ability', can_create_cms_variables: boolean } };
 
 export type SetCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
@@ -30,34 +17,14 @@ export type SetCmsVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetCmsVariableMutationData = (
-  { __typename: 'Mutation' }
-  & { setCmsVariable?: Types.Maybe<(
-    { __typename: 'SetCmsVariablePayload' }
-    & { cms_variable: (
-      { __typename: 'CmsVariable' }
-      & Pick<Types.CmsVariable, 'id'>
-      & CmsVariableFieldsFragment
-    ) }
-  )> }
-);
+export type SetCmsVariableMutationData = { __typename: 'Mutation', setCmsVariable?: Types.Maybe<{ __typename: 'SetCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
 
 export type DeleteCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
 }>;
 
 
-export type DeleteCmsVariableMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteCmsVariable?: Types.Maybe<(
-    { __typename: 'DeleteCmsVariablePayload' }
-    & { cms_variable: (
-      { __typename: 'CmsVariable' }
-      & Pick<Types.CmsVariable, 'id'>
-      & CmsVariableFieldsFragment
-    ) }
-  )> }
-);
+export type DeleteCmsVariableMutationData = { __typename: 'Mutation', deleteCmsVariable?: Types.Maybe<{ __typename: 'DeleteCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
 
 export const CmsVariableFieldsFragmentDoc = gql`
     fragment CmsVariableFields on CmsVariable {

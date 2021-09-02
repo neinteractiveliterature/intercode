@@ -4,80 +4,26 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type UserActivityAlertsAdminConventionFieldsFragment = (
-  { __typename: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>
-  & { staff_positions: Array<(
-    { __typename: 'StaffPosition' }
-    & Pick<Types.StaffPosition, 'id' | 'name'>
-  )> }
-);
+export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> };
 
-export type UserActivityAlertFieldsFragment = (
-  { __typename: 'UserActivityAlert' }
-  & Pick<Types.UserActivityAlert, 'id' | 'email' | 'partial_name' | 'trigger_on_user_con_profile_create' | 'trigger_on_ticket_create'>
-  & { user?: Types.Maybe<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id' | 'name'>
-  )>, notification_destinations: Array<(
-    { __typename: 'NotificationDestination' }
-    & Pick<Types.NotificationDestination, 'id'>
-    & { staff_position?: Types.Maybe<(
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id' | 'name'>
-    )>, user_con_profile?: Types.Maybe<(
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-    )> }
-  )> }
-);
+export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> };
 
 export type ConventionTicketNameQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ConventionTicketNameQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & UserActivityAlertsAdminConventionFieldsFragment
-  ) }
-);
+export type ConventionTicketNameQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> } };
 
 export type UserActivityAlertQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserActivityAlertQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { user_activity_alert: (
-      { __typename: 'UserActivityAlert' }
-      & Pick<Types.UserActivityAlert, 'id'>
-      & UserActivityAlertFieldsFragment
-    ) }
-    & UserActivityAlertsAdminConventionFieldsFragment
-  ) }
-);
+export type UserActivityAlertQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> } };
 
 export type UserActivityAlertsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserActivityAlertsAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_name' | 'ticket_mode'>
-    & { user_activity_alerts: Array<(
-      { __typename: 'UserActivityAlert' }
-      & Pick<Types.UserActivityAlert, 'id'>
-      & UserActivityAlertFieldsFragment
-    )> }
-  ) }
-);
+export type UserActivityAlertsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, user_activity_alerts: Array<{ __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> }> } };
 
 export const UserActivityAlertsAdminConventionFieldsFragmentDoc = gql`
     fragment UserActivityAlertsAdminConventionFields on Convention {

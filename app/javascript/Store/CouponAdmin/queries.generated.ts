@@ -1,16 +1,11 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { CouponFieldsFragment } from '../couponFields.generated';
 import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from '../couponFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminCouponFieldsFragment = (
-  { __typename: 'Coupon' }
-  & Pick<Types.Coupon, 'id' | 'usage_limit' | 'expires_at'>
-  & CouponFieldsFragment
-);
+export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: number, usage_limit?: Types.Maybe<number>, expires_at?: Types.Maybe<any>, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> };
 
 export type AdminCouponsQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.CouponFiltersInput>;
@@ -20,22 +15,7 @@ export type AdminCouponsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AdminCouponsQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { coupons_paginated: (
-      { __typename: 'CouponsPagination' }
-      & Pick<Types.CouponsPagination, 'current_page' | 'total_pages'>
-      & { entries: Array<(
-        { __typename: 'Coupon' }
-        & Pick<Types.Coupon, 'id'>
-        & AdminCouponFieldsFragment
-      )> }
-    ) }
-  ) }
-);
+export type AdminCouponsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, coupons_paginated: { __typename: 'CouponsPagination', current_page: number, total_pages: number, entries: Array<{ __typename: 'Coupon', id: number, usage_limit?: Types.Maybe<number>, expires_at?: Types.Maybe<any>, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> }> } } };
 
 export const AdminCouponFieldsFragmentDoc = gql`
     fragment AdminCouponFields on Coupon {

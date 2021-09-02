@@ -1,95 +1,15 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { CouponFieldsFragment } from './couponFields.generated';
 import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from './couponFields.generated';
-export type CouponApplicationFieldsFragment = (
-  { __typename: 'CouponApplication' }
-  & Pick<Types.CouponApplication, 'id'>
-  & { discount: (
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  ), coupon: (
-    { __typename: 'Coupon' }
-    & Pick<Types.Coupon, 'id'>
-    & CouponFieldsFragment
-  ) }
-);
+export type CouponApplicationFieldsFragment = { __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } };
 
-export type AdminOrderFieldsFragment = (
-  { __typename: 'Order' }
-  & Pick<Types.Order, 'id' | 'status' | 'submitted_at' | 'charge_id' | 'payment_note'>
-  & { user_con_profile: (
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-  ), total_price: (
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  ), payment_amount?: Types.Maybe<(
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  )>, coupon_applications: Array<(
-    { __typename: 'CouponApplication' }
-    & Pick<Types.CouponApplication, 'id'>
-    & CouponApplicationFieldsFragment
-  )>, order_entries: Array<(
-    { __typename: 'OrderEntry' }
-    & Pick<Types.OrderEntry, 'id' | 'quantity' | 'describe_products'>
-    & { product: (
-      { __typename: 'Product' }
-      & Pick<Types.Product, 'id' | 'name'>
-    ), product_variant?: Types.Maybe<(
-      { __typename: 'ProductVariant' }
-      & Pick<Types.ProductVariant, 'id' | 'name'>
-    )>, price_per_item: (
-      { __typename: 'Money' }
-      & Pick<Types.Money, 'fractional' | 'currency_code'>
-    ) }
-  )> }
-);
+export type AdminOrderFieldsFragment = { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> };
 
-export type OrderEntryFieldsFragment = (
-  { __typename: 'OrderEntry' }
-  & Pick<Types.OrderEntry, 'id' | 'quantity'>
-  & { product: (
-    { __typename: 'Product' }
-    & Pick<Types.Product, 'id' | 'name' | 'payment_options'>
-    & { provides_ticket_type?: Types.Maybe<(
-      { __typename: 'TicketType' }
-      & Pick<Types.TicketType, 'id'>
-    )> }
-  ), product_variant?: Types.Maybe<(
-    { __typename: 'ProductVariant' }
-    & Pick<Types.ProductVariant, 'id' | 'name'>
-  )>, price: (
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  ), price_per_item: (
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  ) }
-);
+export type OrderEntryFieldsFragment = { __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } };
 
-export type CartOrderFieldsFragment = (
-  { __typename: 'Order' }
-  & Pick<Types.Order, 'id'>
-  & { coupon_applications: Array<(
-    { __typename: 'CouponApplication' }
-    & Pick<Types.CouponApplication, 'id'>
-    & CouponApplicationFieldsFragment
-  )>, total_price_before_discounts: (
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  ), total_price: (
-    { __typename: 'Money' }
-    & Pick<Types.Money, 'fractional' | 'currency_code'>
-  ), order_entries: Array<(
-    { __typename: 'OrderEntry' }
-    & Pick<Types.OrderEntry, 'id'>
-    & OrderEntryFieldsFragment
-  )> }
-);
+export type CartOrderFieldsFragment = { __typename: 'Order', id: number, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, total_price_before_discounts: { __typename: 'Money', fractional: number, currency_code: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> };
 
 export const CouponApplicationFieldsFragmentDoc = gql`
     fragment CouponApplicationFields on CouponApplication {

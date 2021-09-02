@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { CmsContentGroupFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsContentGroupFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -12,17 +11,7 @@ export type CreateContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateContentGroupMutationData = (
-  { __typename: 'Mutation' }
-  & { createCmsContentGroup?: Types.Maybe<(
-    { __typename: 'CreateCmsContentGroupPayload' }
-    & { cms_content_group: (
-      { __typename: 'CmsContentGroup' }
-      & Pick<Types.CmsContentGroup, 'id'>
-      & CmsContentGroupFieldsFragment
-    ) }
-  )> }
-);
+export type CreateContentGroupMutationData = { __typename: 'Mutation', createCmsContentGroup?: Types.Maybe<{ __typename: 'CreateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> } }> };
 
 export type UpdateContentGroupMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,30 +21,14 @@ export type UpdateContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateContentGroupMutationData = (
-  { __typename: 'Mutation' }
-  & { updateCmsContentGroup?: Types.Maybe<(
-    { __typename: 'UpdateCmsContentGroupPayload' }
-    & { cms_content_group: (
-      { __typename: 'CmsContentGroup' }
-      & Pick<Types.CmsContentGroup, 'id'>
-      & CmsContentGroupFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateContentGroupMutationData = { __typename: 'Mutation', updateCmsContentGroup?: Types.Maybe<{ __typename: 'UpdateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> } }> };
 
 export type DeleteContentGroupMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteContentGroupMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteCmsContentGroup?: Types.Maybe<(
-    { __typename: 'DeleteCmsContentGroupPayload' }
-    & Pick<Types.DeleteCmsContentGroupPayload, 'clientMutationId'>
-  )> }
-);
+export type DeleteContentGroupMutationData = { __typename: 'Mutation', deleteCmsContentGroup?: Types.Maybe<{ __typename: 'DeleteCmsContentGroupPayload', clientMutationId?: Types.Maybe<string> }> };
 
 
 export const CreateContentGroupDocument = gql`

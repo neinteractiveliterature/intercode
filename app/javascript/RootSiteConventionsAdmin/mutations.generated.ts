@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { ConventionDisplayFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ConventionDisplayFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -14,17 +13,7 @@ export type CreateConventionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConventionMutationData = (
-  { __typename: 'Mutation' }
-  & { createConvention?: Types.Maybe<(
-    { __typename: 'CreateConventionPayload' }
-    & { convention: (
-      { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id'>
-      & ConventionDisplayFieldsFragment
-    ) }
-  )> }
-);
+export type CreateConventionMutationData = { __typename: 'Mutation', createConvention?: Types.Maybe<{ __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, domain?: Types.Maybe<string>, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.Maybe<Types.ShowSchedule>, show_schedule?: Types.Maybe<Types.ShowSchedule>, email_from: string, hidden: boolean, language: string, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> } }> };
 
 export type SetConventionCanceledMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,17 +21,7 @@ export type SetConventionCanceledMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetConventionCanceledMutationData = (
-  { __typename: 'Mutation' }
-  & { setConventionCanceled?: Types.Maybe<(
-    { __typename: 'SetConventionCanceledPayload' }
-    & { convention: (
-      { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id'>
-      & ConventionDisplayFieldsFragment
-    ) }
-  )> }
-);
+export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled?: Types.Maybe<{ __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, domain?: Types.Maybe<string>, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.Maybe<Types.ShowSchedule>, show_schedule?: Types.Maybe<Types.ShowSchedule>, email_from: string, hidden: boolean, language: string, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> } }> };
 
 
 export const CreateConventionDocument = gql`

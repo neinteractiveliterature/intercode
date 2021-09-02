@@ -10,56 +10,14 @@ export type CmsPageQueryVariables = Types.Exact<{
 }>;
 
 
-export type CmsPageQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'clickwrap_agreement'>
-  )>, currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_manage_any_cms_content'>
-  ), myProfile?: Types.Maybe<(
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'accepted_clickwrap_agreement'>
-  )>, cmsPage: (
-    { __typename: 'Page' }
-    & Pick<Types.Page, 'id' | 'name' | 'content_html' | 'current_ability_can_update' | 'current_ability_can_delete' | 'skip_clickwrap_agreement'>
-  ) }
-);
+export type CmsPageQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, clickwrap_agreement?: Types.Maybe<string> }>, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean }, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: Types.Maybe<boolean> }>, cmsPage: { __typename: 'Page', id: number, name?: Types.Maybe<string>, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: Types.Maybe<boolean> } };
 
 export type PageAdminDropdownQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type PageAdminDropdownQueryData = (
-  { __typename: 'Query' }
-  & { cmsParent: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { default_layout?: Types.Maybe<(
-      { __typename: 'CmsLayout' }
-      & Pick<Types.CmsLayout, 'id' | 'name'>
-    )> }
-  ) | (
-    { __typename: 'RootSite' }
-    & Pick<Types.RootSite, 'id'>
-    & { root_site_default_layout: (
-      { __typename: 'CmsLayout' }
-      & Pick<Types.CmsLayout, 'id' | 'name'>
-    ) }
-  ), cmsPage: (
-    { __typename: 'Page' }
-    & Pick<Types.Page, 'id'>
-    & { cms_layout?: Types.Maybe<(
-      { __typename: 'CmsLayout' }
-      & Pick<Types.CmsLayout, 'id' | 'name'>
-    )>, referenced_partials: Array<(
-      { __typename: 'CmsPartial' }
-      & Pick<Types.CmsPartial, 'id' | 'name'>
-    )> }
-  ) }
-);
+export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, default_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } }, cmsPage: { __typename: 'Page', id: number, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }>, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> }> } };
 
 
 export const CmsPageQueryDocument = gql`

@@ -9,60 +9,7 @@ export type AppRootQueryVariables = Types.Exact<{
 }>;
 
 
-export type AppRootQueryData = (
-  { __typename: 'Query' }
-  & { effectiveCmsLayout: (
-    { __typename: 'CmsLayout' }
-    & Pick<Types.CmsLayout, 'id' | 'content_html'>
-  ), currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_read_schedule' | 'can_read_schedule_with_counts' | 'can_list_events' | 'can_read_user_con_profiles' | 'can_manage_conventions' | 'can_update_convention' | 'can_update_departments' | 'can_manage_email_routes' | 'can_update_event_categories' | 'can_read_event_proposals' | 'can_manage_runs' | 'can_manage_forms' | 'can_read_any_mailing_list' | 'can_update_notification_templates' | 'can_manage_oauth_applications' | 'can_read_reports' | 'can_manage_rooms' | 'can_manage_signups' | 'can_manage_any_cms_content' | 'can_manage_staff_positions' | 'can_read_orders' | 'can_manage_ticket_types' | 'can_read_user_activity_alerts' | 'can_read_organizations' | 'can_read_users'>
-  ), currentUser?: Types.Maybe<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id' | 'name'>
-  )>, currentPendingOrder?: Types.Maybe<(
-    { __typename: 'Order' }
-    & Pick<Types.Order, 'id'>
-    & { order_entries: Array<(
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id' | 'quantity'>
-    )> }
-  )>, myProfile?: Types.Maybe<(
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'name' | 'accepted_clickwrap_agreement' | 'name_without_nickname' | 'first_name' | 'last_name' | 'gravatar_enabled' | 'gravatar_url'>
-    & { ticket?: Types.Maybe<(
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-    )> }
-  )>, assumedIdentityFromProfile?: Types.Maybe<(
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-  )>, convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'accepting_proposals' | 'canceled' | 'language' | 'site_mode' | 'signup_mode' | 'starts_at' | 'ends_at' | 'ticket_mode' | 'timezone_name' | 'timezone_mode' | 'clickwrap_agreement' | 'tickets_available_for_purchase' | 'ticket_name'>
-    & { ticket_types: Array<(
-      { __typename: 'TicketType' }
-      & Pick<Types.TicketType, 'id'>
-      & { providing_products: Array<(
-        { __typename: 'Product' }
-        & Pick<Types.Product, 'id' | 'available'>
-      )> }
-    )> }
-  )>, rootSite: (
-    { __typename: 'RootSite' }
-    & Pick<Types.RootSite, 'id' | 'site_name'>
-  ), cmsNavigationItems: Array<(
-    { __typename: 'CmsNavigationItem' }
-    & Pick<Types.CmsNavigationItem, 'id' | 'position' | 'title'>
-    & { navigation_section?: Types.Maybe<(
-      { __typename: 'CmsNavigationItem' }
-      & Pick<Types.CmsNavigationItem, 'id'>
-    )>, page?: Types.Maybe<(
-      { __typename: 'Page' }
-      & Pick<Types.Page, 'id' | 'slug'>
-    )> }
-  )> }
-);
+export type AppRootQueryData = { __typename: 'Query', effectiveCmsLayout: { __typename: 'CmsLayout', id: number, content_html?: Types.Maybe<string> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, currentPendingOrder?: Types.Maybe<{ __typename: 'Order', id: number, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number }> }>, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name: string, accepted_clickwrap_agreement?: Types.Maybe<boolean>, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }> }>, assumedIdentityFromProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }>, convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, accepting_proposals?: Types.Maybe<boolean>, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, ticket_mode: Types.TicketMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, clickwrap_agreement?: Types.Maybe<string>, tickets_available_for_purchase: boolean, ticket_name: string, ticket_types: Array<{ __typename: 'TicketType', id: number, providing_products: Array<{ __typename: 'Product', id: number, available: boolean }> }> }>, rootSite: { __typename: 'RootSite', id: number, site_name: string }, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }>, page?: Types.Maybe<{ __typename: 'Page', id: number, slug?: Types.Maybe<string> }> }> };
 
 
 export const AppRootQueryDocument = gql`

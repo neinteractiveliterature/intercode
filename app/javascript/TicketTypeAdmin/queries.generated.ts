@@ -1,39 +1,16 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.generated';
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type TicketTypeAdmin_TicketTypeFieldsFragment = (
-  { __typename: 'TicketType' }
-  & Pick<Types.TicketType, 'id' | 'name' | 'description' | 'counts_towards_convention_maximum' | 'allows_event_signups' | 'maximum_event_provided_tickets'>
-  & { providing_products: Array<(
-    { __typename: 'Product' }
-    & Pick<Types.Product, 'id' | 'name' | 'available'>
-    & { pricing_structure: (
-      { __typename: 'PricingStructure' }
-      & PricingStructureFieldsFragment
-    ) }
-  )> }
-);
+export type TicketTypeAdmin_TicketTypeFieldsFragment = { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
 
 export type AdminTicketTypesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AdminTicketTypesQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_name' | 'timezone_name'>
-    & { ticket_types: Array<(
-      { __typename: 'TicketType' }
-      & Pick<Types.TicketType, 'id'>
-      & TicketTypeAdmin_TicketTypeFieldsFragment
-    )> }
-  ) }
-);
+export type AdminTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, timezone_name?: Types.Maybe<string>, ticket_types: Array<{ __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } };
 
 export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     fragment TicketTypeAdmin_TicketTypeFields on TicketType {

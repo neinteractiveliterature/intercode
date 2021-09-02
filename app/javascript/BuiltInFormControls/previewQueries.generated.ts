@@ -9,20 +9,14 @@ export type PreviewLiquidQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewLiquidQueryData = (
-  { __typename: 'Query' }
-  & Pick<Types.Query, 'previewLiquid'>
-);
+export type PreviewLiquidQueryData = { __typename: 'Query', previewLiquid: string };
 
 export type PreviewMarkdownQueryVariables = Types.Exact<{
   markdown: Types.Scalars['String'];
 }>;
 
 
-export type PreviewMarkdownQueryData = (
-  { __typename: 'Query' }
-  & Pick<Types.Query, 'previewMarkdown'>
-);
+export type PreviewMarkdownQueryData = { __typename: 'Query', previewMarkdown: string };
 
 export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
@@ -30,10 +24,7 @@ export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewNotifierLiquidQueryData = (
-  { __typename: 'Query' }
-  & { previewLiquid: Types.Query['previewNotifierLiquid'] }
-);
+export type PreviewNotifierLiquidQueryData = { __typename: 'Query', previewLiquid: string };
 
 
 export const PreviewLiquidQueryDocument = gql`

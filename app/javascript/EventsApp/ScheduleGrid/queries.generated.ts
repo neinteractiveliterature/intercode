@@ -1,42 +1,17 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
-import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
+import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
+import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type ScheduleGridEventFragment = (
-  { __typename: 'Event' }
-  & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'short_blurb_html' | 'my_rating' | 'can_play_concurrently'>
-  & { event_category: (
-    { __typename: 'EventCategory' }
-    & Pick<Types.EventCategory, 'id' | 'name' | 'default_color' | 'signed_up_color' | 'full_color'>
-  ), registration_policy?: Types.Maybe<(
-    { __typename: 'RegistrationPolicy' }
-    & Pick<Types.RegistrationPolicy, 'slots_limited' | 'only_uncounted' | 'total_slots' | 'total_slots_including_not_counted' | 'preferred_slots' | 'preferred_slots_including_not_counted' | 'minimum_slots' | 'minimum_slots_including_not_counted'>
-    & { buckets: Array<(
-      { __typename: 'RegistrationPolicyBucket' }
-      & Pick<Types.RegistrationPolicyBucket, 'key' | 'not_counted' | 'total_slots' | 'slots_limited'>
-    )> }
-  )>, runs: Array<(
-    { __typename: 'Run' }
-    & Types.MakeOptional<Pick<Types.Run, 'id' | 'starts_at' | 'schedule_note' | 'title_suffix' | 'confirmed_signup_count' | 'not_counted_signup_count' | 'room_names'>, 'confirmed_signup_count' | 'not_counted_signup_count'>
-    & RunBasicSignupDataFragment
-  )> }
-);
+export type ScheduleGridEventFragment = { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, short_blurb_html?: Types.Maybe<string>, my_rating?: Types.Maybe<number>, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string> }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, only_uncounted?: Types.Maybe<boolean>, total_slots?: Types.Maybe<number>, total_slots_including_not_counted?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, preferred_slots_including_not_counted?: Types.Maybe<number>, minimum_slots?: Types.Maybe<number>, minimum_slots_including_not_counted?: Types.Maybe<number>, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: Types.Maybe<number>, slots_limited: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, confirmed_signup_count?: Types.Maybe<number>, not_counted_signup_count?: Types.Maybe<number>, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: any, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }> };
 
 export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScheduleGridConventionDataQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
-    & CommonConventionDataFragment
-  ) }
-);
+export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, pre_schedule_content_html?: Types.Maybe<string>, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> } };
 
 export type ScheduleGridEventsQueryVariables = Types.Exact<{
   extendedCounts: Types.Scalars['Boolean'];
@@ -45,14 +20,7 @@ export type ScheduleGridEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ScheduleGridEventsQueryData = (
-  { __typename: 'Query' }
-  & { events: Array<(
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id'>
-    & ScheduleGridEventFragment
-  )> }
-);
+export type ScheduleGridEventsQueryData = { __typename: 'Query', events: Array<{ __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, short_blurb_html?: Types.Maybe<string>, my_rating?: Types.Maybe<number>, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string> }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, only_uncounted?: Types.Maybe<boolean>, total_slots?: Types.Maybe<number>, total_slots_including_not_counted?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, preferred_slots_including_not_counted?: Types.Maybe<number>, minimum_slots?: Types.Maybe<number>, minimum_slots_including_not_counted?: Types.Maybe<number>, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: Types.Maybe<number>, slots_limited: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, confirmed_signup_count?: Types.Maybe<number>, not_counted_signup_count?: Types.Maybe<number>, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: any, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }> }> };
 
 export type ScheduleGridCombinedQueryVariables = Types.Exact<{
   extendedCounts: Types.Scalars['Boolean'];
@@ -61,18 +29,7 @@ export type ScheduleGridCombinedQueryVariables = Types.Exact<{
 }>;
 
 
-export type ScheduleGridCombinedQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'pre_schedule_content_html'>
-    & CommonConventionDataFragment
-  ), events: Array<(
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id'>
-    & ScheduleGridEventFragment
-  )> }
-);
+export type ScheduleGridCombinedQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, pre_schedule_content_html?: Types.Maybe<string>, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> }, events: Array<{ __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, short_blurb_html?: Types.Maybe<string>, my_rating?: Types.Maybe<number>, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string> }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, only_uncounted?: Types.Maybe<boolean>, total_slots?: Types.Maybe<number>, total_slots_including_not_counted?: Types.Maybe<number>, preferred_slots?: Types.Maybe<number>, preferred_slots_including_not_counted?: Types.Maybe<number>, minimum_slots?: Types.Maybe<number>, minimum_slots_including_not_counted?: Types.Maybe<number>, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: Types.Maybe<number>, slots_limited: boolean }> }>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: Types.Maybe<string>, title_suffix?: Types.Maybe<string>, confirmed_signup_count?: Types.Maybe<number>, not_counted_signup_count?: Types.Maybe<number>, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: any, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }> }> };
 
 export const ScheduleGridEventFragmentDoc = gql`
     fragment ScheduleGridEventFragment on Event {

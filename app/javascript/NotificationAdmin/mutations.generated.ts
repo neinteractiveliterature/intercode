@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { NotificationTemplateFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { NotificationTemplateFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -12,17 +11,7 @@ export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateNotificationTemplateMutationData = (
-  { __typename: 'Mutation' }
-  & { updateNotificationTemplate?: Types.Maybe<(
-    { __typename: 'UpdateNotificationTemplatePayload' }
-    & { notification_template: (
-      { __typename: 'NotificationTemplate' }
-      & Pick<Types.NotificationTemplate, 'id'>
-      & NotificationTemplateFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateNotificationTemplateMutationData = { __typename: 'Mutation', updateNotificationTemplate?: Types.Maybe<{ __typename: 'UpdateNotificationTemplatePayload', notification_template: { __typename: 'NotificationTemplate', id: number, event_key: string, subject?: Types.Maybe<string>, body_html?: Types.Maybe<string>, body_text?: Types.Maybe<string>, body_sms?: Types.Maybe<string> } }> };
 
 
 export const UpdateNotificationTemplateDocument = gql`

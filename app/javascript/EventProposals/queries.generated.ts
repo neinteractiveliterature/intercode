@@ -1,143 +1,39 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type EventProposalFieldsFragment = (
-  { __typename: 'EventProposal' }
-  & Pick<Types.EventProposal, 'id' | 'title' | 'status' | 'form_response_attrs_json' | 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
-  & { event_category: (
-    { __typename: 'EventCategory' }
-    & Pick<Types.EventCategory, 'id' | 'name'>
-    & { event_proposal_form?: Types.Maybe<(
-      { __typename: 'Form' }
-      & Pick<Types.Form, 'id'>
-      & { form_sections: Array<(
-        { __typename: 'FormSection' }
-        & Pick<Types.FormSection, 'id'>
-        & { form_items: Array<(
-          { __typename: 'FormItem' }
-          & Pick<Types.FormItem, 'id' | 'admin_description'>
-        )> }
-      )> }
-      & CommonFormFieldsFragment
-    )> }
-  ), event?: Types.Maybe<(
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id'>
-  )> }
-);
+export type EventProposalFieldsFragment = { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> };
 
-export type EventProposalFormDataFragment = (
-  { __typename: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
-);
+export type EventProposalFormDataFragment = { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> };
 
 export type EventProposalQueryVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalQueryData = (
-  { __typename: 'Query' }
-  & { currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_delete_event_proposal'>
-  ), convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & EventProposalFormDataFragment
-  ), eventProposal: (
-    { __typename: 'EventProposal' }
-    & Pick<Types.EventProposal, 'id'>
-    & EventProposalFieldsFragment
-  ) }
-);
+export type EventProposalQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_delete_event_proposal: boolean }, convention: { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> }, eventProposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> } };
 
 export type EventProposalQueryWithOwnerQueryVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalQueryWithOwnerQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & EventProposalFormDataFragment
-  ), eventProposal: (
-    { __typename: 'EventProposal' }
-    & Pick<Types.EventProposal, 'id'>
-    & { owner: (
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id' | 'name' | 'email' | 'gravatar_enabled' | 'gravatar_url'>
-    ) }
-    & EventProposalFieldsFragment
-  ), currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_update_event_proposal' | 'can_read_admin_notes_on_event_proposal'>
-  ) }
-);
+export type EventProposalQueryWithOwnerQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> }, eventProposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, owner: { __typename: 'UserConProfile', id: number, name: string, email?: Types.Maybe<string>, gravatar_enabled: boolean, gravatar_url: string }, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> }, currentAbility: { __typename: 'Ability', can_update_event_proposal: boolean, can_read_admin_notes_on_event_proposal: boolean } };
 
 export type EventProposalAdminNotesQueryVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalAdminNotesQueryData = (
-  { __typename: 'Query' }
-  & { eventProposal: (
-    { __typename: 'EventProposal' }
-    & Pick<Types.EventProposal, 'id' | 'admin_notes'>
-  ) }
-);
+export type EventProposalAdminNotesQueryData = { __typename: 'Query', eventProposal: { __typename: 'EventProposal', id: number, admin_notes?: Types.Maybe<string> } };
 
 export type ProposeEventButtonQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ProposeEventButtonQueryData = (
-  { __typename: 'Query' }
-  & { myProfile?: Types.Maybe<(
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id'>
-    & { user?: Types.Maybe<(
-      { __typename: 'User' }
-      & Pick<Types.User, 'id'>
-      & { event_proposals: Array<(
-        { __typename: 'EventProposal' }
-        & Pick<Types.EventProposal, 'id' | 'title' | 'status' | 'created_at'>
-        & { event_category: (
-          { __typename: 'EventCategory' }
-          & Pick<Types.EventCategory, 'id' | 'name'>
-        ), convention: (
-          { __typename: 'Convention' }
-          & Pick<Types.Convention, 'id' | 'name'>
-        ) }
-      )> }
-    )> }
-  )>, convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { departments: Array<(
-      { __typename: 'Department' }
-      & Pick<Types.Department, 'id' | 'name' | 'proposal_description'>
-      & { event_categories: Array<(
-        { __typename: 'EventCategory' }
-        & Pick<Types.EventCategory, 'id'>
-      )> }
-    )>, event_categories: Array<(
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id' | 'name' | 'proposable' | 'proposal_description'>
-      & { department?: Types.Maybe<(
-        { __typename: 'Department' }
-        & Pick<Types.Department, 'id'>
-      )> }
-    )> }
-  ) }
-);
+export type ProposeEventButtonQueryData = { __typename: 'Query', myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, user?: Types.Maybe<{ __typename: 'User', id: number, event_proposals: Array<{ __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, created_at: any, event_category: { __typename: 'EventCategory', id: number, name: string }, convention: { __typename: 'Convention', id: number, name: string } }> }> }>, convention: { __typename: 'Convention', id: number, departments: Array<{ __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number }> }>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, proposable: boolean, proposal_description?: Types.Maybe<string>, department?: Types.Maybe<{ __typename: 'Department', id: number }> }> } };
 
 export type EventProposalsAdminQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
@@ -147,77 +43,14 @@ export type EventProposalsAdminQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventProposalsAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'timezone_name'>
-    & { event_categories: Array<(
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id' | 'name' | 'default_color'>
-    )>, event_proposals_paginated: (
-      { __typename: 'EventProposalsPagination' }
-      & Pick<Types.EventProposalsPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
-      & { entries: Array<(
-        { __typename: 'EventProposal' }
-        & Pick<Types.EventProposal, 'id' | 'title' | 'length_seconds' | 'status' | 'submitted_at' | 'updated_at'>
-        & { event_category: (
-          { __typename: 'EventCategory' }
-          & Pick<Types.EventCategory, 'id' | 'name' | 'default_color'>
-        ), registration_policy?: Types.Maybe<(
-          { __typename: 'RegistrationPolicy' }
-          & Pick<Types.RegistrationPolicy, 'minimum_slots' | 'total_slots' | 'slots_limited'>
-        )>, owner: (
-          { __typename: 'UserConProfile' }
-          & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
-        ) }
-      )> }
-    ) }
-  ) }
-);
+export type EventProposalsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, timezone_name?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }>, event_proposals_paginated: { __typename: 'EventProposalsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, length_seconds?: Types.Maybe<number>, status: string, submitted_at: any, updated_at: any, event_category: { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', minimum_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number>, slots_limited?: Types.Maybe<boolean> }>, owner: { __typename: 'UserConProfile', id: number, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
 
 export type EventProposalHistoryQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type EventProposalHistoryQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
-  ), eventProposal: (
-    { __typename: 'EventProposal' }
-    & Pick<Types.EventProposal, 'id' | 'title'>
-    & { owner: (
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id'>
-    ), event_category: (
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id'>
-      & { event_proposal_form?: Types.Maybe<(
-        { __typename: 'Form' }
-        & Pick<Types.Form, 'id'>
-        & { form_sections: Array<(
-          { __typename: 'FormSection' }
-          & Pick<Types.FormSection, 'id'>
-          & { form_items: Array<(
-            { __typename: 'FormItem' }
-            & Pick<Types.FormItem, 'id' | 'admin_description'>
-          )> }
-        )> }
-        & CommonFormFieldsFragment
-      )> }
-    ), form_response_changes: Array<(
-      { __typename: 'FormResponseChange' }
-      & Pick<Types.FormResponseChange, 'field_identifier' | 'previous_value' | 'new_value' | 'created_at' | 'updated_at'>
-      & { user_con_profile: (
-        { __typename: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-      ) }
-    )> }
-  ) }
-);
+export type EventProposalHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, eventProposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, owner: { __typename: 'UserConProfile', id: number }, event_category: { __typename: 'EventCategory', id: number, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: Types.Maybe<any>, new_value?: Types.Maybe<any>, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string } }> } };
 
 export const EventProposalFieldsFragmentDoc = gql`
     fragment EventProposalFields on EventProposal {

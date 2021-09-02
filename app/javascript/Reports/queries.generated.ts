@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { PricingStructureFieldsFragment } from '../Store/pricingStructureFields.generated';
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
@@ -9,119 +8,27 @@ const defaultOptions =  {}
 export type ReportsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ReportsMenuQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_mode' | 'ticket_name'>
-  ) }
-);
+export type ReportsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_mode: Types.TicketMode, ticket_name: string } };
 
 export type AttendanceByPaymentAmountQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AttendanceByPaymentAmountQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_name'>
-    & { reports: (
-      { __typename: 'ConventionReports' }
-      & { ticket_count_by_type_and_payment_amount: Array<(
-        { __typename: 'TicketCountByTypeAndPaymentAmount' }
-        & Pick<Types.TicketCountByTypeAndPaymentAmount, 'count'>
-        & { ticket_type: (
-          { __typename: 'TicketType' }
-          & Pick<Types.TicketType, 'id' | 'name' | 'description'>
-          & { providing_products: Array<(
-            { __typename: 'Product' }
-            & Pick<Types.Product, 'id'>
-            & { pricing_structure: (
-              { __typename: 'PricingStructure' }
-              & PricingStructureFieldsFragment
-            ) }
-          )> }
-        ), payment_amount: (
-          { __typename: 'Money' }
-          & Pick<Types.Money, 'fractional' | 'currency_code'>
-        ) }
-      )>, total_revenue: (
-        { __typename: 'Money' }
-        & Pick<Types.Money, 'fractional' | 'currency_code'>
-      ) }
-    ) }
-  ) }
-);
+export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, reports: { __typename: 'ConventionReports', ticket_count_by_type_and_payment_amount: Array<{ __typename: 'TicketCountByTypeAndPaymentAmount', count: number, ticket_type: { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, providing_products: Array<{ __typename: 'Product', id: number, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, total_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
 
 export type EventProvidedTicketsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProvidedTicketsQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_name'>
-    & { reports: (
-      { __typename: 'ConventionReports' }
-      & { event_provided_tickets: Array<(
-        { __typename: 'EventProvidedTicketList' }
-        & { provided_by_event: (
-          { __typename: 'Event' }
-          & Pick<Types.Event, 'id' | 'title'>
-        ), tickets: Array<(
-          { __typename: 'Ticket' }
-          & Pick<Types.Ticket, 'id'>
-          & { user_con_profile: (
-            { __typename: 'UserConProfile' }
-            & Pick<Types.UserConProfile, 'id' | 'name_inverted'>
-          ), ticket_type: (
-            { __typename: 'TicketType' }
-            & Pick<Types.TicketType, 'id' | 'description'>
-          ) }
-        )> }
-      )> }
-    ) }
-  ) }
-);
+export type EventProvidedTicketsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, reports: { __typename: 'ConventionReports', event_provided_tickets: Array<{ __typename: 'EventProvidedTicketList', provided_by_event: { __typename: 'Event', id: number, title?: Types.Maybe<string> }, tickets: Array<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number, name_inverted: string }, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string> } }> }> } } };
 
 export type EventsByChoiceQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventsByChoiceQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { reports: (
-      { __typename: 'ConventionReports' }
-      & { events_by_choice: Array<(
-        { __typename: 'EventWithChoiceCounts' }
-        & { event: (
-          { __typename: 'Event' }
-          & Pick<Types.Event, 'id' | 'title'>
-        ), choice_counts: Array<(
-          { __typename: 'ChoiceCount' }
-          & Pick<Types.ChoiceCount, 'state' | 'choice' | 'count'>
-        )> }
-      )> }
-    ) }
-  ) }
-);
+export type EventsByChoiceQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, reports: { __typename: 'ConventionReports', events_by_choice: Array<{ __typename: 'EventWithChoiceCounts', event: { __typename: 'Event', id: number, title?: Types.Maybe<string> }, choice_counts: Array<{ __typename: 'ChoiceCount', state: Types.SignupState, choice: number, count: number }> }> } } };
 
 export type SignupCountsByStateQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SignupCountsByStateQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { signup_counts_by_state: Array<(
-      { __typename: 'SignupCountByState' }
-      & Pick<Types.SignupCountByState, 'state' | 'count'>
-    )> }
-  ) }
-);
+export type SignupCountsByStateQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, signup_counts_by_state: Array<{ __typename: 'SignupCountByState', state: Types.SignupState, count: number }> } };
 
 export type SignupSpySignupChangesQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
@@ -131,55 +38,7 @@ export type SignupSpySignupChangesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SignupSpySignupChangesQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'timezone_name'>
-    & { signup_changes_paginated: (
-      { __typename: 'SignupChangesPagination' }
-      & Pick<Types.SignupChangesPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
-      & { entries: Array<(
-        { __typename: 'SignupChange' }
-        & Pick<Types.SignupChange, 'id' | 'state' | 'counted' | 'bucket_key' | 'action' | 'created_at'>
-        & { previous_signup_change?: Types.Maybe<(
-          { __typename: 'SignupChange' }
-          & Pick<Types.SignupChange, 'id' | 'state' | 'counted' | 'bucket_key'>
-        )>, signup: (
-          { __typename: 'Signup' }
-          & Pick<Types.Signup, 'id' | 'choice'>
-        ), run: (
-          { __typename: 'Run' }
-          & Pick<Types.Run, 'id'>
-          & { event: (
-            { __typename: 'Event' }
-            & Pick<Types.Event, 'id' | 'title'>
-            & { event_category: (
-              { __typename: 'EventCategory' }
-              & Pick<Types.EventCategory, 'id' | 'team_member_name'>
-            ), registration_policy?: Types.Maybe<(
-              { __typename: 'RegistrationPolicy' }
-              & { buckets: Array<(
-                { __typename: 'RegistrationPolicyBucket' }
-                & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'anything'>
-              )> }
-            )>, team_members: Array<(
-              { __typename: 'TeamMember' }
-              & Pick<Types.TeamMember, 'id'>
-              & { user_con_profile: (
-                { __typename: 'UserConProfile' }
-                & Pick<Types.UserConProfile, 'id'>
-              ) }
-            )> }
-          ) }
-        ), user_con_profile: (
-          { __typename: 'UserConProfile' }
-          & Pick<Types.UserConProfile, 'id' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
-        ) }
-      )> }
-    ) }
-  ) }
-);
+export type SignupSpySignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, timezone_name?: Types.Maybe<string>, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', id: number, state: Types.SignupState, counted: boolean, bucket_key?: Types.Maybe<string>, action: Types.SignupChangeAction, created_at: any, previous_signup_change?: Types.Maybe<{ __typename: 'SignupChange', id: number, state: Types.SignupState, counted: boolean, bucket_key?: Types.Maybe<string> }>, signup: { __typename: 'Signup', id: number, choice?: Types.Maybe<number> }, run: { __typename: 'Run', id: number, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, team_member_name: string }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, anything: boolean }> }>, team_members: Array<{ __typename: 'TeamMember', id: number, user_con_profile: { __typename: 'UserConProfile', id: number } }> } }, user_con_profile: { __typename: 'UserConProfile', id: number, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
 
 
 export const ReportsMenuQueryDocument = gql`

@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
@@ -11,40 +10,7 @@ export type EventHistoryQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventHistoryQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
-  )>, event: (
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id' | 'title'>
-    & { event_category: (
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id'>
-      & { event_form: (
-        { __typename: 'Form' }
-        & Pick<Types.Form, 'id'>
-        & { form_sections: Array<(
-          { __typename: 'FormSection' }
-          & Pick<Types.FormSection, 'id'>
-          & { form_items: Array<(
-            { __typename: 'FormItem' }
-            & Pick<Types.FormItem, 'id' | 'admin_description'>
-          )> }
-        )> }
-        & CommonFormFieldsFragment
-      ) }
-    ), form_response_changes: Array<(
-      { __typename: 'FormResponseChange' }
-      & Pick<Types.FormResponseChange, 'field_identifier' | 'previous_value' | 'new_value' | 'created_at' | 'updated_at'>
-      & { user_con_profile: (
-        { __typename: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-      ) }
-    )> }
-  ) }
-);
+export type EventHistoryQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }>, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: Types.Maybe<any>, new_value?: Types.Maybe<any>, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string } }> } };
 
 
 export const EventHistoryQueryDocument = gql`

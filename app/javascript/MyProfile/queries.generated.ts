@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { CommonFormFieldsFragment, CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
@@ -9,29 +8,7 @@ const defaultOptions =  {}
 export type MyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyProfileQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
-    & { user_con_profile_form: (
-      { __typename: 'Form' }
-      & Pick<Types.Form, 'id'>
-      & { form_sections: Array<(
-        { __typename: 'FormSection' }
-        & Pick<Types.FormSection, 'id'>
-        & { form_items: Array<(
-          { __typename: 'FormItem' }
-          & Pick<Types.FormItem, 'id' | 'admin_description'>
-        )> }
-      )> }
-      & CommonFormFieldsFragment
-    ) }
-  )>, myProfile?: Types.Maybe<(
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'email' | 'form_response_attrs_json' | 'can_have_bio' | 'gravatar_url' | 'gravatar_enabled' | 'bio' | 'show_nickname_in_bio' | 'bio_name' | 'bio_html' | 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
-  )> }
-);
+export type MyProfileQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }>, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio?: Types.Maybe<string>, show_nickname_in_bio?: Types.Maybe<boolean>, bio_name?: Types.Maybe<string>, bio_html?: Types.Maybe<string>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole }> };
 
 
 export const MyProfileQueryDocument = gql`

@@ -7,16 +7,7 @@ const defaultOptions =  {}
 export type CmsAdminBaseQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsAdminBaseQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-  )>, currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_create_cms_navigation_items'>
-  ) }
-);
+export type CmsAdminBaseQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number }>, currentAbility: { __typename: 'Ability', can_create_cms_navigation_items: boolean } };
 
 
 export const CmsAdminBaseQueryDocument = gql`

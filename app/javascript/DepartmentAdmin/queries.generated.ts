@@ -4,33 +4,12 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminDepartmentFieldsFragment = (
-  { __typename: 'Department' }
-  & Pick<Types.Department, 'id' | 'name' | 'proposal_description'>
-  & { event_categories: Array<(
-    { __typename: 'EventCategory' }
-    & Pick<Types.EventCategory, 'id' | 'name'>
-  )> }
-);
+export type AdminDepartmentFieldsFragment = { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> };
 
 export type DepartmentAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type DepartmentAdminQueryData = (
-  { __typename: 'Query' }
-  & { currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_update_departments'>
-  ), convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { departments: Array<(
-      { __typename: 'Department' }
-      & Pick<Types.Department, 'id'>
-      & AdminDepartmentFieldsFragment
-    )> }
-  ) }
-);
+export type DepartmentAdminQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_update_departments: boolean }, convention: { __typename: 'Convention', id: number, departments: Array<{ __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> }> } };
 
 export const AdminDepartmentFieldsFragmentDoc = gql`
     fragment AdminDepartmentFields on Department {
