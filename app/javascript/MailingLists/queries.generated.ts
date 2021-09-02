@@ -4,142 +4,44 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type ContactEmailFieldsFragment = (
-  { __typename: 'ContactEmail' }
-  & Pick<Types.ContactEmail, 'email' | 'formatted_address' | 'name' | 'metadata_json'>
-);
+export type ContactEmailFieldsFragment = { __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any };
 
-export type MailingListsResultFieldsFragment = (
-  { __typename: 'MailingListsResult' }
-  & Pick<Types.MailingListsResult, 'metadata_fields'>
-  & { emails: Array<(
-    { __typename: 'ContactEmail' }
-    & ContactEmailFieldsFragment
-  )> }
-);
+export type MailingListsResultFieldsFragment = { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> };
 
 export type MailingListsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MailingListsMenuQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'ticket_mode' | 'ticket_name'>
-  ) }
-);
+export type MailingListsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_mode: Types.TicketMode, ticket_name: string } };
 
 export type TicketedAttendeesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketedAttendeesQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'ticket_name'>
-    & { mailing_lists: (
-      { __typename: 'MailingLists' }
-      & { ticketed_attendees: (
-        { __typename: 'MailingListsResult' }
-        & MailingListsResultFieldsFragment
-      ) }
-    ) }
-  ) }
-);
+export type TicketedAttendeesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, mailing_lists: { __typename: 'MailingLists', ticketed_attendees: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
 
 export type EventProposersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProposersQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-    & { mailing_lists: (
-      { __typename: 'MailingLists' }
-      & { event_proposers: (
-        { __typename: 'MailingListsResult' }
-        & MailingListsResultFieldsFragment
-      ) }
-    ) }
-  ) }
-);
+export type EventProposersQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', event_proposers: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
 
 export type TeamMembersMailingListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TeamMembersMailingListQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-    & { mailing_lists: (
-      { __typename: 'MailingLists' }
-      & { team_members: (
-        { __typename: 'MailingListsResult' }
-        & MailingListsResultFieldsFragment
-      ) }
-    ) }
-  ) }
-);
+export type TeamMembersMailingListQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', team_members: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
 
 export type UsersWithPendingBioQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UsersWithPendingBioQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-    & { mailing_lists: (
-      { __typename: 'MailingLists' }
-      & { users_with_pending_bio: (
-        { __typename: 'MailingListsResult' }
-        & MailingListsResultFieldsFragment
-      ) }
-    ) }
-  ) }
-);
+export type UsersWithPendingBioQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', users_with_pending_bio: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
 
 export type WaitlistMailingListsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type WaitlistMailingListsQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'timezone_name'>
-    & { mailing_lists: (
-      { __typename: 'MailingLists' }
-      & { waitlists: Array<(
-        { __typename: 'MailingListsWaitlistsResult' }
-        & Pick<Types.MailingListsWaitlistsResult, 'metadata_fields'>
-        & { emails: Array<(
-          { __typename: 'ContactEmail' }
-          & ContactEmailFieldsFragment
-        )>, run: (
-          { __typename: 'Run' }
-          & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
-          & { event: (
-            { __typename: 'Event' }
-            & Pick<Types.Event, 'id' | 'title'>
-          ) }
-        ) }
-      )> }
-    ) }
-  ) }
-);
+export type WaitlistMailingListsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, timezone_name?: Types.Maybe<string>, mailing_lists: { __typename: 'MailingLists', waitlists: Array<{ __typename: 'MailingListsWaitlistsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }>, run: { __typename: 'Run', id: number, starts_at: any, title_suffix?: Types.Maybe<string>, event: { __typename: 'Event', id: number, title?: Types.Maybe<string> } } }> } } };
 
 export type WhosFreeFormConventionQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type WhosFreeFormConventionQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
-  ) }
-);
+export type WhosFreeFormConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode } };
 
 export type WhosFreeQueryVariables = Types.Exact<{
   start: Types.Scalars['Date'];
@@ -147,20 +49,7 @@ export type WhosFreeQueryVariables = Types.Exact<{
 }>;
 
 
-export type WhosFreeQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-    & { mailing_lists: (
-      { __typename: 'MailingLists' }
-      & { whos_free: (
-        { __typename: 'MailingListsResult' }
-        & MailingListsResultFieldsFragment
-      ) }
-    ) }
-  ) }
-);
+export type WhosFreeQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', whos_free: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
 
 export const ContactEmailFieldsFragmentDoc = gql`
     fragment ContactEmailFields on ContactEmail {

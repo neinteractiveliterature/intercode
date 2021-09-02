@@ -1,11 +1,11 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { AdminOrderFieldsFragment, OrderEntryFieldsFragment, CartOrderFieldsFragment, CouponApplicationFieldsFragment } from './orderFields.generated';
-import { AdminProductFieldsFragment } from './adminProductFields.generated';
 import { gql } from '@apollo/client';
-import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
+import { AdminOrderFieldsFragmentDoc } from './orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
+import { OrderEntryFieldsFragmentDoc } from './orderFields.generated';
+import { CartOrderFieldsFragmentDoc } from './orderFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type MarkOrderPaidMutationVariables = Types.Exact<{
@@ -13,17 +13,7 @@ export type MarkOrderPaidMutationVariables = Types.Exact<{
 }>;
 
 
-export type MarkOrderPaidMutationData = (
-  { __typename: 'Mutation' }
-  & { markOrderPaid?: Types.Maybe<(
-    { __typename: 'MarkOrderPaidPayload' }
-    & { order: (
-      { __typename: 'Order' }
-      & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragment
-    ) }
-  )> }
-);
+export type MarkOrderPaidMutationData = { __typename: 'Mutation', markOrderPaid?: Types.Maybe<{ __typename: 'MarkOrderPaidPayload', order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } }> };
 
 export type CancelOrderMutationVariables = Types.Exact<{
   orderId: Types.Scalars['Int'];
@@ -31,17 +21,7 @@ export type CancelOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type CancelOrderMutationData = (
-  { __typename: 'Mutation' }
-  & { cancelOrder?: Types.Maybe<(
-    { __typename: 'CancelOrderPayload' }
-    & { order: (
-      { __typename: 'Order' }
-      & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragment
-    ) }
-  )> }
-);
+export type CancelOrderMutationData = { __typename: 'Mutation', cancelOrder?: Types.Maybe<{ __typename: 'CancelOrderPayload', order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } }> };
 
 export type CreateOrderMutationVariables = Types.Exact<{
   userConProfileId: Types.Scalars['Int'];
@@ -51,17 +31,7 @@ export type CreateOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOrderMutationData = (
-  { __typename: 'Mutation' }
-  & { createOrder?: Types.Maybe<(
-    { __typename: 'CreateOrderPayload' }
-    & { order: (
-      { __typename: 'Order' }
-      & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragment
-    ) }
-  )> }
-);
+export type CreateOrderMutationData = { __typename: 'Mutation', createOrder?: Types.Maybe<{ __typename: 'CreateOrderPayload', order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } }> };
 
 export type AdminUpdateOrderMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -69,34 +39,14 @@ export type AdminUpdateOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type AdminUpdateOrderMutationData = (
-  { __typename: 'Mutation' }
-  & { updateOrder?: Types.Maybe<(
-    { __typename: 'UpdateOrderPayload' }
-    & { order: (
-      { __typename: 'Order' }
-      & Pick<Types.Order, 'id'>
-      & AdminOrderFieldsFragment
-    ) }
-  )> }
-);
+export type AdminUpdateOrderMutationData = { __typename: 'Mutation', updateOrder?: Types.Maybe<{ __typename: 'UpdateOrderPayload', order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } }> };
 
 export type CreateProductMutationVariables = Types.Exact<{
   product: Types.ProductInput;
 }>;
 
 
-export type CreateProductMutationData = (
-  { __typename: 'Mutation' }
-  & { createProduct?: Types.Maybe<(
-    { __typename: 'CreateProductPayload' }
-    & { product: (
-      { __typename: 'Product' }
-      & Pick<Types.Product, 'id'>
-      & AdminProductFieldsFragment
-    ) }
-  )> }
-);
+export type CreateProductMutationData = { __typename: 'Mutation', createProduct?: Types.Maybe<{ __typename: 'CreateProductPayload', product: { __typename: 'Product', id: number, name: string, description?: Types.Maybe<string>, description_html?: Types.Maybe<string>, image_url?: Types.Maybe<string>, available: boolean, payment_options: Array<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: number, name: string, description?: Types.Maybe<string>, image_url?: Types.Maybe<string>, position?: Types.Maybe<number>, override_pricing_structure?: Types.Maybe<{ __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }> }>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string> }> } }> };
 
 export type UpdateProductMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -104,148 +54,56 @@ export type UpdateProductMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateProductMutationData = (
-  { __typename: 'Mutation' }
-  & { updateProduct?: Types.Maybe<(
-    { __typename: 'UpdateProductPayload' }
-    & { product: (
-      { __typename: 'Product' }
-      & Pick<Types.Product, 'id'>
-      & AdminProductFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateProductMutationData = { __typename: 'Mutation', updateProduct?: Types.Maybe<{ __typename: 'UpdateProductPayload', product: { __typename: 'Product', id: number, name: string, description?: Types.Maybe<string>, description_html?: Types.Maybe<string>, image_url?: Types.Maybe<string>, available: boolean, payment_options: Array<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: number, name: string, description?: Types.Maybe<string>, image_url?: Types.Maybe<string>, position?: Types.Maybe<number>, override_pricing_structure?: Types.Maybe<{ __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }> }>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string> }> } }> };
 
 export type DeleteProductMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteProductMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteProduct?: Types.Maybe<(
-    { __typename: 'DeleteProductPayload' }
-    & { product: (
-      { __typename: 'Product' }
-      & Pick<Types.Product, 'id'>
-      & AdminProductFieldsFragment
-    ) }
-  )> }
-);
+export type DeleteProductMutationData = { __typename: 'Mutation', deleteProduct?: Types.Maybe<{ __typename: 'DeleteProductPayload', product: { __typename: 'Product', id: number, name: string, description?: Types.Maybe<string>, description_html?: Types.Maybe<string>, image_url?: Types.Maybe<string>, available: boolean, payment_options: Array<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: number, name: string, description?: Types.Maybe<string>, image_url?: Types.Maybe<string>, position?: Types.Maybe<number>, override_pricing_structure?: Types.Maybe<{ __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }> }>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string> }> } }> };
 
 export type AdminCreateOrderEntryMutationVariables = Types.Exact<{
   input: Types.CreateOrderEntryInput;
 }>;
 
 
-export type AdminCreateOrderEntryMutationData = (
-  { __typename: 'Mutation' }
-  & { createOrderEntry?: Types.Maybe<(
-    { __typename: 'CreateOrderEntryPayload' }
-    & { order_entry: (
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id'>
-      & { order: (
-        { __typename: 'Order' }
-        & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragment
-      ) }
-      & OrderEntryFieldsFragment
-    ) }
-  )> }
-);
+export type AdminCreateOrderEntryMutationData = { __typename: 'Mutation', createOrderEntry?: Types.Maybe<{ __typename: 'CreateOrderEntryPayload', order_entry: { __typename: 'OrderEntry', id: number, quantity: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } }> };
 
 export type AdminUpdateOrderEntryMutationVariables = Types.Exact<{
   input: Types.UpdateOrderEntryInput;
 }>;
 
 
-export type AdminUpdateOrderEntryMutationData = (
-  { __typename: 'Mutation' }
-  & { updateOrderEntry?: Types.Maybe<(
-    { __typename: 'UpdateOrderEntryPayload' }
-    & { order_entry: (
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id'>
-      & { order: (
-        { __typename: 'Order' }
-        & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragment
-      ) }
-      & OrderEntryFieldsFragment
-    ) }
-  )> }
-);
+export type AdminUpdateOrderEntryMutationData = { __typename: 'Mutation', updateOrderEntry?: Types.Maybe<{ __typename: 'UpdateOrderEntryPayload', order_entry: { __typename: 'OrderEntry', id: number, quantity: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } }> };
 
 export type UpdateOrderEntryMutationVariables = Types.Exact<{
   input: Types.UpdateOrderEntryInput;
 }>;
 
 
-export type UpdateOrderEntryMutationData = (
-  { __typename: 'Mutation' }
-  & { updateOrderEntry?: Types.Maybe<(
-    { __typename: 'UpdateOrderEntryPayload' }
-    & { order_entry: (
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id'>
-      & OrderEntryFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateOrderEntryMutationData = { __typename: 'Mutation', updateOrderEntry?: Types.Maybe<{ __typename: 'UpdateOrderEntryPayload', order_entry: { __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } }> };
 
 export type DeleteOrderEntryMutationVariables = Types.Exact<{
   input: Types.DeleteOrderEntryInput;
 }>;
 
 
-export type DeleteOrderEntryMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteOrderEntry?: Types.Maybe<(
-    { __typename: 'DeleteOrderEntryPayload' }
-    & { order_entry: (
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id'>
-    ) }
-  )> }
-);
+export type DeleteOrderEntryMutationData = { __typename: 'Mutation', deleteOrderEntry?: Types.Maybe<{ __typename: 'DeleteOrderEntryPayload', order_entry: { __typename: 'OrderEntry', id: number } }> };
 
 export type AdminDeleteOrderEntryMutationVariables = Types.Exact<{
   input: Types.DeleteOrderEntryInput;
 }>;
 
 
-export type AdminDeleteOrderEntryMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteOrderEntry?: Types.Maybe<(
-    { __typename: 'DeleteOrderEntryPayload' }
-    & { order_entry: (
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id'>
-      & { order: (
-        { __typename: 'Order' }
-        & Pick<Types.Order, 'id'>
-        & AdminOrderFieldsFragment
-      ) }
-    ) }
-  )> }
-);
+export type AdminDeleteOrderEntryMutationData = { __typename: 'Mutation', deleteOrderEntry?: Types.Maybe<{ __typename: 'DeleteOrderEntryPayload', order_entry: { __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
 
 export type SubmitOrderMutationVariables = Types.Exact<{
   input: Types.SubmitOrderInput;
 }>;
 
 
-export type SubmitOrderMutationData = (
-  { __typename: 'Mutation' }
-  & { submitOrder?: Types.Maybe<(
-    { __typename: 'SubmitOrderPayload' }
-    & { order: (
-      { __typename: 'Order' }
-      & Pick<Types.Order, 'id' | 'status'>
-    ) }
-  )> }
-);
+export type SubmitOrderMutationData = { __typename: 'Mutation', submitOrder?: Types.Maybe<{ __typename: 'SubmitOrderPayload', order: { __typename: 'Order', id: number, status: Types.OrderStatus } }> };
 
 export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
   productId: Types.Scalars['Int'];
@@ -254,16 +112,7 @@ export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type AddOrderEntryToCurrentPendingOrderMutationData = (
-  { __typename: 'Mutation' }
-  & { addOrderEntryToCurrentPendingOrder?: Types.Maybe<(
-    { __typename: 'AddOrderEntryToCurrentPendingOrderPayload' }
-    & { order_entry: (
-      { __typename: 'OrderEntry' }
-      & Pick<Types.OrderEntry, 'id'>
-    ) }
-  )> }
-);
+export type AddOrderEntryToCurrentPendingOrderMutationData = { __typename: 'Mutation', addOrderEntryToCurrentPendingOrder?: Types.Maybe<{ __typename: 'AddOrderEntryToCurrentPendingOrderPayload', order_entry: { __typename: 'OrderEntry', id: number } }> };
 
 export type CreateCouponApplicationMutationVariables = Types.Exact<{
   orderId: Types.Scalars['Int'];
@@ -271,42 +120,14 @@ export type CreateCouponApplicationMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCouponApplicationMutationData = (
-  { __typename: 'Mutation' }
-  & { createCouponApplication?: Types.Maybe<(
-    { __typename: 'CreateCouponApplicationPayload' }
-    & { coupon_application: (
-      { __typename: 'CouponApplication' }
-      & Pick<Types.CouponApplication, 'id'>
-      & { order: (
-        { __typename: 'Order' }
-        & Pick<Types.Order, 'id'>
-        & CartOrderFieldsFragment
-      ) }
-    ) }
-  )> }
-);
+export type CreateCouponApplicationMutationData = { __typename: 'Mutation', createCouponApplication?: Types.Maybe<{ __typename: 'CreateCouponApplicationPayload', coupon_application: { __typename: 'CouponApplication', id: number, order: { __typename: 'Order', id: number, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, total_price_before_discounts: { __typename: 'Money', fractional: number, currency_code: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
 
 export type DeleteCouponApplicationMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteCouponApplicationMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteCouponApplication?: Types.Maybe<(
-    { __typename: 'DeleteCouponApplicationPayload' }
-    & { coupon_application: (
-      { __typename: 'CouponApplication' }
-      & Pick<Types.CouponApplication, 'id'>
-      & { order: (
-        { __typename: 'Order' }
-        & Pick<Types.Order, 'id'>
-        & CartOrderFieldsFragment
-      ) }
-    ) }
-  )> }
-);
+export type DeleteCouponApplicationMutationData = { __typename: 'Mutation', deleteCouponApplication?: Types.Maybe<{ __typename: 'DeleteCouponApplicationPayload', coupon_application: { __typename: 'CouponApplication', id: number, order: { __typename: 'Order', id: number, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, total_price_before_discounts: { __typename: 'Money', fractional: number, currency_code: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
 
 
 export const MarkOrderPaidDocument = gql`

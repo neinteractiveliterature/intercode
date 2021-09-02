@@ -9,25 +9,12 @@ export type OAuthAuthorizationPromptQueryVariables = Types.Exact<{
 }>;
 
 
-export type OAuthAuthorizationPromptQueryData = (
-  { __typename: 'Query' }
-  & Pick<Types.Query, 'oauthPreAuth'>
-  & { currentUser?: Types.Maybe<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id'>
-  )> }
-);
+export type OAuthAuthorizationPromptQueryData = { __typename: 'Query', oauthPreAuth: any, currentUser?: Types.Maybe<{ __typename: 'User', id: number }> };
 
 export type OAuthAuthorizedApplicationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OAuthAuthorizedApplicationsQueryData = (
-  { __typename: 'Query' }
-  & { myAuthorizedApplications: Array<(
-    { __typename: 'AuthorizedApplication' }
-    & Pick<Types.AuthorizedApplication, 'uid' | 'name' | 'scopes'>
-  )> }
-);
+export type OAuthAuthorizedApplicationsQueryData = { __typename: 'Query', myAuthorizedApplications: Array<{ __typename: 'AuthorizedApplication', uid: string, name: string, scopes: Array<string> }> };
 
 
 export const OAuthAuthorizationPromptQueryDocument = gql`

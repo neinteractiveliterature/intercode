@@ -4,38 +4,14 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CommonConventionDataFragment = (
-  { __typename: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'site_mode' | 'timezone_name' | 'timezone_mode' | 'ticket_name' | 'ticket_mode'>
-  & { event_categories: Array<(
-    { __typename: 'EventCategory' }
-    & Pick<Types.EventCategory, 'id' | 'name' | 'scheduling_ui' | 'default_color' | 'full_color' | 'signed_up_color'>
-  )> }
-);
+export type CommonConventionDataFragment = { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> };
 
-export type RunBasicSignupDataFragment = (
-  { __typename: 'Run' }
-  & Pick<Types.Run, 'id' | 'signup_count_by_state_and_bucket_key_and_counted'>
-  & { my_signups: Array<(
-    { __typename: 'Signup' }
-    & Pick<Types.Signup, 'id' | 'state'>
-  )>, my_signup_requests: Array<(
-    { __typename: 'SignupRequest' }
-    & Pick<Types.SignupRequest, 'id' | 'state'>
-  )> }
-);
+export type RunBasicSignupDataFragment = { __typename: 'Run', id: number, signup_count_by_state_and_bucket_key_and_counted: any, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> };
 
 export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CommonConventionDataQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & CommonConventionDataFragment
-  )> }
-);
+export type CommonConventionDataQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> }> };
 
 export const CommonConventionDataFragmentDoc = gql`
     fragment CommonConventionData on Convention {

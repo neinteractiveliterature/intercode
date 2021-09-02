@@ -11,61 +11,21 @@ export type RootSiteConventionsAdminTableQueryVariables = Types.Exact<{
 }>;
 
 
-export type RootSiteConventionsAdminTableQueryData = (
-  { __typename: 'Query' }
-  & { conventions_paginated: (
-    { __typename: 'ConventionsPagination' }
-    & Pick<Types.ConventionsPagination, 'total_entries' | 'total_pages'>
-    & { entries: Array<(
-      { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>
-      & { organization?: Types.Maybe<(
-        { __typename: 'Organization' }
-        & Pick<Types.Organization, 'id' | 'name'>
-      )> }
-    )> }
-  ) }
-);
+export type RootSiteConventionsAdminTableQueryData = { __typename: 'Query', conventions_paginated: { __typename: 'ConventionsPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> }> } };
 
-export type ConventionDisplayFieldsFragment = (
-  { __typename: 'Convention' }
-  & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'canceled' | 'timezone_name' | 'timezone_mode' | 'domain' | 'site_mode' | 'ticket_mode' | 'show_event_list' | 'show_schedule' | 'email_from' | 'hidden' | 'language'>
-  & { maximum_event_signups?: Types.Maybe<(
-    { __typename: 'ScheduledValue' }
-    & { timespans: Array<(
-      { __typename: 'TimespanWithValue' }
-      & Pick<Types.TimespanWithValue, 'start' | 'finish' | 'value'>
-    )> }
-  )>, organization?: Types.Maybe<(
-    { __typename: 'Organization' }
-    & Pick<Types.Organization, 'id' | 'name'>
-  )> }
-);
+export type ConventionDisplayFieldsFragment = { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, domain?: Types.Maybe<string>, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.Maybe<Types.ShowSchedule>, show_schedule?: Types.Maybe<Types.ShowSchedule>, email_from: string, hidden: boolean, language: string, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> };
 
 export type ConventionDisplayQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type ConventionDisplayQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & ConventionDisplayFieldsFragment
-  ) }
-);
+export type ConventionDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, domain?: Types.Maybe<string>, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.Maybe<Types.ShowSchedule>, show_schedule?: Types.Maybe<Types.ShowSchedule>, email_from: string, hidden: boolean, language: string, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> } };
 
 export type NewConventionModalQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NewConventionModalQueryData = (
-  { __typename: 'Query' }
-  & { organizations: Array<(
-    { __typename: 'Organization' }
-    & Pick<Types.Organization, 'id' | 'name'>
-  )> }
-);
+export type NewConventionModalQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: number, name: string }> };
 
 export const ConventionDisplayFieldsFragmentDoc = gql`
     fragment ConventionDisplayFields on Convention {

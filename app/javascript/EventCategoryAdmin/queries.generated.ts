@@ -4,45 +4,12 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type EventCategoryFieldsFragment = (
-  { __typename: 'EventCategory' }
-  & Pick<Types.EventCategory, 'id' | 'name' | 'team_member_name' | 'proposal_description' | 'scheduling_ui' | 'default_color' | 'signed_up_color' | 'full_color' | 'can_provide_tickets'>
-  & { events_paginated: (
-    { __typename: 'EventsPagination' }
-    & Pick<Types.EventsPagination, 'total_entries'>
-  ), department?: Types.Maybe<(
-    { __typename: 'Department' }
-    & Pick<Types.Department, 'id' | 'name'>
-  )>, event_form: (
-    { __typename: 'Form' }
-    & Pick<Types.Form, 'id' | 'title' | 'form_type'>
-  ), event_proposal_form?: Types.Maybe<(
-    { __typename: 'Form' }
-    & Pick<Types.Form, 'id' | 'title' | 'form_type'>
-  )> }
-);
+export type EventCategoryFieldsFragment = { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: Types.Maybe<string>, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: Types.Maybe<{ __typename: 'Department', id: number, name: string }>, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> };
 
 export type EventCategoryAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventCategoryAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'ticket_name' | 'ticket_mode'>
-    & { departments: Array<(
-      { __typename: 'Department' }
-      & Pick<Types.Department, 'id' | 'name'>
-    )>, event_categories: Array<(
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id'>
-      & EventCategoryFieldsFragment
-    )>, forms: Array<(
-      { __typename: 'Form' }
-      & Pick<Types.Form, 'id' | 'title' | 'form_type'>
-    )> }
-  ) }
-);
+export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, ticket_mode: Types.TicketMode, departments: Array<{ __typename: 'Department', id: number, name: string }>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: Types.Maybe<string>, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: Types.Maybe<{ __typename: 'Department', id: number, name: string }>, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> }>, forms: Array<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> } };
 
 export const EventCategoryFieldsFragmentDoc = gql`
     fragment EventCategoryFields on EventCategory {

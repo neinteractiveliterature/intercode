@@ -1,79 +1,28 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { CommonFormItemFieldsFragment, CommonFormFieldsFragment, CommonFormSectionFieldsFragment } from '../Models/commonFormFragments.generated';
 import { gql } from '@apollo/client';
-import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type FormFieldsFragment = (
-  { __typename: 'Form' }
-  & Pick<Types.Form, 'id' | 'title' | 'form_type' | 'export_json'>
-  & { event_categories: Array<(
-    { __typename: 'EventCategory' }
-    & Pick<Types.EventCategory, 'id' | 'name'>
-  )>, proposal_event_categories: Array<(
-    { __typename: 'EventCategory' }
-    & Pick<Types.EventCategory, 'id' | 'name'>
-  )>, user_con_profile_conventions: Array<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-  )> }
-);
+export type FormFieldsFragment = { __typename: 'Form', id: number, title: string, form_type: Types.FormType, export_json: any, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: number, name: string }> };
 
-export type FormEditorFormItemFieldsFragment = (
-  { __typename: 'FormItem' }
-  & Pick<Types.FormItem, 'id' | 'admin_description' | 'public_description' | 'properties'>
-  & CommonFormItemFieldsFragment
-);
+export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole };
 
-export type FormEditorDataFragment = (
-  { __typename: 'Form' }
-  & Pick<Types.Form, 'id'>
-  & { form_sections: Array<(
-    { __typename: 'FormSection' }
-    & Pick<Types.FormSection, 'id'>
-    & { form_items: Array<(
-      { __typename: 'FormItem' }
-      & Pick<Types.FormItem, 'id'>
-      & FormEditorFormItemFieldsFragment
-    )> }
-  )> }
-  & CommonFormFieldsFragment
-);
+export type FormEditorDataFragment = { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> };
 
 export type FormAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type FormAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-    & { forms: Array<(
-      { __typename: 'Form' }
-      & Pick<Types.Form, 'id'>
-      & FormFieldsFragment
-    )> }
-  ) }
-);
+export type FormAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, forms: Array<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, export_json: any, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: number, name: string }> }> } };
 
 export type FormEditorQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type FormEditorQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name' | 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode' | 'event_mailing_list_domain'>
-  ), form: (
-    { __typename: 'Form' }
-    & Pick<Types.Form, 'id'>
-    & FormEditorDataFragment
-  ) }
-);
+export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> }, form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } };
 
 export type PreviewFormItemQueryVariables = Types.Exact<{
   formSectionId: Types.Scalars['Int'];
@@ -81,14 +30,7 @@ export type PreviewFormItemQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewFormItemQueryData = (
-  { __typename: 'Query' }
-  & { previewFormItem: (
-    { __typename: 'FormItem' }
-    & Pick<Types.FormItem, 'id'>
-    & FormEditorFormItemFieldsFragment
-  ) }
-);
+export type PreviewFormItemQueryData = { __typename: 'Query', previewFormItem: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } };
 
 export const FormFieldsFragmentDoc = gql`
     fragment FormFields on Form {

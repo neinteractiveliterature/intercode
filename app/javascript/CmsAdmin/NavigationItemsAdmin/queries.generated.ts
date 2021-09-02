@@ -4,35 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminNavigationItemFieldsFragment = (
-  { __typename: 'CmsNavigationItem' }
-  & Pick<Types.CmsNavigationItem, 'id' | 'position' | 'title'>
-  & { page?: Types.Maybe<(
-    { __typename: 'Page' }
-    & Pick<Types.Page, 'id'>
-  )>, navigation_section?: Types.Maybe<(
-    { __typename: 'CmsNavigationItem' }
-    & Pick<Types.CmsNavigationItem, 'id'>
-  )> }
-);
+export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, page?: Types.Maybe<{ __typename: 'Page', id: number }>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }> };
 
 export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NavigationItemsAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-  )>, cmsPages: Array<(
-    { __typename: 'Page' }
-    & Pick<Types.Page, 'id' | 'name'>
-  )>, cmsNavigationItems: Array<(
-    { __typename: 'CmsNavigationItem' }
-    & Pick<Types.CmsNavigationItem, 'id'>
-    & AdminNavigationItemFieldsFragment
-  )> }
-);
+export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, page?: Types.Maybe<{ __typename: 'Page', id: number }>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }> }> };
 
 export const AdminNavigationItemFieldsFragmentDoc = gql`
     fragment AdminNavigationItemFields on CmsNavigationItem {

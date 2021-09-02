@@ -7,24 +7,12 @@ const defaultOptions =  {}
 export type AccountFormContentQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AccountFormContentQueryData = (
-  { __typename: 'Query' }
-  & Pick<Types.Query, 'accountFormContentHtml'>
-);
+export type AccountFormContentQueryData = { __typename: 'Query', accountFormContentHtml?: Types.Maybe<string> };
 
 export type EditUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EditUserQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-  )>, currentUser?: Types.Maybe<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id' | 'first_name' | 'last_name' | 'email'>
-  )> }
-);
+export type EditUserQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, currentUser?: Types.Maybe<{ __typename: 'User', id: number, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string> }> };
 
 
 export const AccountFormContentQueryDocument = gql`

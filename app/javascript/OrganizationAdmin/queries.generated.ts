@@ -4,36 +4,12 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type OrganizationRoleFieldsFragment = (
-  { __typename: 'OrganizationRole' }
-  & Pick<Types.OrganizationRole, 'id' | 'name'>
-  & { users: Array<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id' | 'name' | 'email'>
-  )>, permissions: Array<(
-    { __typename: 'Permission' }
-    & Pick<Types.Permission, 'id' | 'permission'>
-  )> }
-);
+export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> };
 
 export type OrganizationAdminOrganizationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrganizationAdminOrganizationsQueryData = (
-  { __typename: 'Query' }
-  & { organizations: Array<(
-    { __typename: 'Organization' }
-    & Pick<Types.Organization, 'id' | 'name' | 'current_ability_can_manage_access'>
-    & { conventions: Array<(
-      { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id' | 'name' | 'starts_at'>
-    )>, organization_roles: Array<(
-      { __typename: 'OrganizationRole' }
-      & Pick<Types.OrganizationRole, 'id'>
-      & OrganizationRoleFieldsFragment
-    )> }
-  )> }
-);
+export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: number, name: string, current_ability_can_manage_access: boolean, conventions: Array<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any> }>, organization_roles: Array<{ __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> }> }> };
 
 export const OrganizationRoleFieldsFragmentDoc = gql`
     fragment OrganizationRoleFields on OrganizationRole {

@@ -12,70 +12,23 @@ export type UsersTableUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type UsersTableUsersQueryData = (
-  { __typename: 'Query' }
-  & { users_paginated: (
-    { __typename: 'UsersPagination' }
-    & Pick<Types.UsersPagination, 'total_entries' | 'total_pages' | 'current_page' | 'per_page'>
-    & { entries: Array<(
-      { __typename: 'User' }
-      & Pick<Types.User, 'id' | 'name_inverted' | 'first_name' | 'last_name' | 'email' | 'privileges'>
-    )> }
-  ), currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_create_user_con_profiles'>
-  ) }
-);
+export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'User', id: number, name_inverted?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>> }> }, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
 
-export type DetailedUserFieldsFragment = (
-  { __typename: 'User' }
-  & Pick<Types.User, 'id' | 'name' | 'first_name' | 'last_name' | 'email' | 'privileges'>
-  & { user_con_profiles: Array<(
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'email'>
-    & { ticket?: Types.Maybe<(
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-    )>, signups: Array<(
-      { __typename: 'Signup' }
-      & Pick<Types.Signup, 'id' | 'state'>
-    )>, convention: (
-      { __typename: 'Convention' }
-      & Pick<Types.Convention, 'id' | 'name' | 'domain' | 'starts_at' | 'ticket_name' | 'timezone_name' | 'timezone_mode'>
-    ), staff_positions: Array<(
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id' | 'name'>
-    )> }
-  )> }
-);
+export type DetailedUserFieldsFragment = { __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> };
 
 export type UserAdminQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserAdminQueryData = (
-  { __typename: 'Query' }
-  & { user: (
-    { __typename: 'User' }
-    & Pick<Types.User, 'id'>
-    & DetailedUserFieldsFragment
-  ) }
-);
+export type UserAdminQueryData = { __typename: 'Query', user: { __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> } };
 
 export type MergeUsersModalQueryVariables = Types.Exact<{
   ids: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
 }>;
 
 
-export type MergeUsersModalQueryData = (
-  { __typename: 'Query' }
-  & { users: Array<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id'>
-    & DetailedUserFieldsFragment
-  )> }
-);
+export type MergeUsersModalQueryData = { __typename: 'Query', users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> }> };
 
 export const DetailedUserFieldsFragmentDoc = gql`
     fragment DetailedUserFields on User {

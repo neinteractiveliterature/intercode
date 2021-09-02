@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { AdminCouponFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { AdminCouponFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -11,17 +10,7 @@ export type CreateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCouponMutationData = (
-  { __typename: 'Mutation' }
-  & { createCoupon?: Types.Maybe<(
-    { __typename: 'CreateCouponPayload' }
-    & { coupon: (
-      { __typename: 'Coupon' }
-      & Pick<Types.Coupon, 'id'>
-      & AdminCouponFieldsFragment
-    ) }
-  )> }
-);
+export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon?: Types.Maybe<{ __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', id: number, usage_limit?: Types.Maybe<number>, expires_at?: Types.Maybe<any>, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }> };
 
 export type UpdateCouponMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -29,30 +18,14 @@ export type UpdateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateCouponMutationData = (
-  { __typename: 'Mutation' }
-  & { updateCoupon?: Types.Maybe<(
-    { __typename: 'UpdateCouponPayload' }
-    & { coupon: (
-      { __typename: 'Coupon' }
-      & Pick<Types.Coupon, 'id'>
-      & AdminCouponFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon?: Types.Maybe<{ __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', id: number, usage_limit?: Types.Maybe<number>, expires_at?: Types.Maybe<any>, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }> };
 
 export type DeleteCouponMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteCouponMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteCoupon?: Types.Maybe<(
-    { __typename: 'DeleteCouponPayload' }
-    & Pick<Types.DeleteCouponPayload, 'clientMutationId'>
-  )> }
-);
+export type DeleteCouponMutationData = { __typename: 'Mutation', deleteCoupon?: Types.Maybe<{ __typename: 'DeleteCouponPayload', clientMutationId?: Types.Maybe<string> }> };
 
 
 export const CreateCouponDocument = gql`

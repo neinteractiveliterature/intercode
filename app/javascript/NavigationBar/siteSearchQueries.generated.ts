@@ -9,30 +9,7 @@ export type SiteSearchQueryVariables = Types.Exact<{
 }>;
 
 
-export type SiteSearchQueryData = (
-  { __typename: 'Query' }
-  & { siteSearch: (
-    { __typename: 'SearchResult' }
-    & Pick<Types.SearchResult, 'total_entries'>
-    & { entries: Array<(
-      { __typename: 'SearchResultEntry' }
-      & Pick<Types.SearchResultEntry, 'title' | 'highlight'>
-      & { model: (
-        { __typename: 'Event' }
-        & Pick<Types.Event, 'id' | 'title'>
-      ) | (
-        { __typename: 'EventProposal' }
-        & Pick<Types.EventProposal, 'id' | 'title'>
-      ) | (
-        { __typename: 'Page' }
-        & Pick<Types.Page, 'id' | 'slug'>
-      ) | (
-        { __typename: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id'>
-      ) }
-    )> }
-  ) }
-);
+export type SiteSearchQueryData = { __typename: 'Query', siteSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: Types.Maybe<string>, highlight?: Types.Maybe<string>, model: { __typename: 'Event', id: number, title?: Types.Maybe<string> } | { __typename: 'EventProposal', id: number, title?: Types.Maybe<string> } | { __typename: 'Page', id: number, slug?: Types.Maybe<string> } | { __typename: 'UserConProfile', id: number } }> } };
 
 
 export const SiteSearchQueryDocument = gql`

@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { StaffPositionFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { StaffPositionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -11,34 +10,14 @@ export type CreateStaffPositionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateStaffPositionMutationData = (
-  { __typename: 'Mutation' }
-  & { createStaffPosition?: Types.Maybe<(
-    { __typename: 'CreateStaffPositionPayload' }
-    & { staff_position: (
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id'>
-      & StaffPositionFieldsFragment
-    ) }
-  )> }
-);
+export type CreateStaffPositionMutationData = { __typename: 'Mutation', createStaffPosition?: Types.Maybe<{ __typename: 'CreateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string>, visible?: Types.Maybe<boolean>, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> } }> } }> };
 
 export type UpdateStaffPositionMutationVariables = Types.Exact<{
   input: Types.UpdateStaffPositionInput;
 }>;
 
 
-export type UpdateStaffPositionMutationData = (
-  { __typename: 'Mutation' }
-  & { updateStaffPosition?: Types.Maybe<(
-    { __typename: 'UpdateStaffPositionPayload' }
-    & { staff_position: (
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id'>
-      & StaffPositionFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition?: Types.Maybe<{ __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string>, visible?: Types.Maybe<boolean>, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> } }> } }> };
 
 export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
   staffPositionId: Types.Scalars['Int'];
@@ -47,33 +26,14 @@ export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateStaffPositionPermissionsMutationData = (
-  { __typename: 'Mutation' }
-  & { updateStaffPositionPermissions?: Types.Maybe<(
-    { __typename: 'UpdateStaffPositionPermissionsPayload' }
-    & { staff_position: (
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id'>
-      & StaffPositionFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateStaffPositionPermissionsMutationData = { __typename: 'Mutation', updateStaffPositionPermissions?: Types.Maybe<{ __typename: 'UpdateStaffPositionPermissionsPayload', staff_position: { __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string>, visible?: Types.Maybe<boolean>, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> } }> } }> };
 
 export type DeleteStaffPositionMutationVariables = Types.Exact<{
   input: Types.DeleteStaffPositionInput;
 }>;
 
 
-export type DeleteStaffPositionMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteStaffPosition?: Types.Maybe<(
-    { __typename: 'DeleteStaffPositionPayload' }
-    & { staff_position: (
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id'>
-    ) }
-  )> }
-);
+export type DeleteStaffPositionMutationData = { __typename: 'Mutation', deleteStaffPosition?: Types.Maybe<{ __typename: 'DeleteStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: number } }> };
 
 
 export const CreateStaffPositionDocument = gql`

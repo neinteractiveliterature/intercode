@@ -4,49 +4,16 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type PageFieldsFragment = (
-  { __typename: 'Page' }
-  & Pick<Types.Page, 'id' | 'name'>
-);
+export type PageFieldsFragment = { __typename: 'Page', id: number, name?: Types.Maybe<string> };
 
-export type RootSiteAdminLayoutFieldsFragment = (
-  { __typename: 'CmsLayout' }
-  & Pick<Types.CmsLayout, 'id' | 'name'>
-);
+export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> };
 
-export type RootSiteFieldsFragment = (
-  { __typename: 'RootSite' }
-  & Pick<Types.RootSite, 'id' | 'site_name'>
-  & { root_page: (
-    { __typename: 'Page' }
-    & Pick<Types.Page, 'id'>
-    & PageFieldsFragment
-  ), default_layout: (
-    { __typename: 'CmsLayout' }
-    & Pick<Types.CmsLayout, 'id'>
-    & RootSiteAdminLayoutFieldsFragment
-  ) }
-);
+export type RootSiteFieldsFragment = { __typename: 'RootSite', id: number, site_name: string, root_page: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } };
 
 export type RootSiteAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RootSiteAdminQueryData = (
-  { __typename: 'Query' }
-  & { rootSite: (
-    { __typename: 'RootSite' }
-    & Pick<Types.RootSite, 'id'>
-    & RootSiteFieldsFragment
-  ), cmsPages: Array<(
-    { __typename: 'Page' }
-    & Pick<Types.Page, 'id'>
-    & PageFieldsFragment
-  )>, cmsLayouts: Array<(
-    { __typename: 'CmsLayout' }
-    & Pick<Types.CmsLayout, 'id'>
-    & RootSiteAdminLayoutFieldsFragment
-  )> }
-);
+export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: number, site_name: string, root_page: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } }, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> };
 
 export const PageFieldsFragmentDoc = gql`
     fragment PageFields on Page {

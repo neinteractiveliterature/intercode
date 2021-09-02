@@ -1,83 +1,20 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { RunCardRegistrationPolicyFieldsFragment, EventPageRunFieldsFragment } from '../EventsApp/EventPage/queries.generated';
 import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFieldsFragmentDoc, EventPageRunFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type SignupModerationRunFieldsFragment = (
-  { __typename: 'Run' }
-  & Pick<Types.Run, 'id' | 'title_suffix' | 'starts_at' | 'signup_count_by_state_and_bucket_key_and_counted'>
-  & { event: (
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id' | 'title' | 'length_seconds'>
-  ) }
-);
+export type SignupModerationRunFieldsFragment = { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number } };
 
-export type SignupModerationSignupRequestFieldsFragment = (
-  { __typename: 'SignupRequest' }
-  & Pick<Types.SignupRequest, 'id' | 'state' | 'requested_bucket_key' | 'created_at'>
-  & { user_con_profile: (
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'name' | 'name_inverted' | 'gravatar_enabled' | 'gravatar_url'>
-  ), replace_signup?: Types.Maybe<(
-    { __typename: 'Signup' }
-    & Pick<Types.Signup, 'id'>
-    & { run: (
-      { __typename: 'Run' }
-      & Pick<Types.Run, 'id'>
-      & SignupModerationRunFieldsFragment
-    ) }
-  )>, target_run: (
-    { __typename: 'Run' }
-    & Pick<Types.Run, 'id'>
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id'>
-      & { registration_policy?: Types.Maybe<(
-        { __typename: 'RegistrationPolicy' }
-        & Pick<Types.RegistrationPolicy, 'prevent_no_preference_signups'>
-        & { buckets: Array<(
-          { __typename: 'RegistrationPolicyBucket' }
-          & Pick<Types.RegistrationPolicyBucket, 'key' | 'name' | 'total_slots' | 'slots_limited' | 'anything' | 'not_counted'>
-        )> }
-      )> }
-    ) }
-    & SignupModerationRunFieldsFragment
-  ), result_signup?: Types.Maybe<(
-    { __typename: 'Signup' }
-    & Pick<Types.Signup, 'id' | 'state' | 'waitlist_position'>
-  )> }
-);
+export type SignupModerationSignupRequestFieldsFragment = { __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, created_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number, run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number } } }>, target_run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }> } }, result_signup?: Types.Maybe<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }> };
 
 export type CreateSignupEventsQueryVariables = Types.Exact<{
   title?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type CreateSignupEventsQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { events_paginated: (
-      { __typename: 'EventsPagination' }
-      & { entries: Array<(
-        { __typename: 'Event' }
-        & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list'>
-        & { runs: Array<(
-          { __typename: 'Run' }
-          & Pick<Types.Run, 'id' | 'starts_at' | 'title_suffix'>
-          & { rooms: Array<(
-            { __typename: 'Room' }
-            & Pick<Types.Room, 'id' | 'name'>
-          )> }
-        )> }
-      )> }
-    ) }
-  )> }
-);
+export type CreateSignupEventsQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, private_signup_list?: Types.Maybe<boolean>, runs: Array<{ __typename: 'Run', id: number, starts_at: any, title_suffix?: Types.Maybe<string>, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }> }> }> } }> };
 
 export type CreateSignupRunCardQueryVariables = Types.Exact<{
   userConProfileId: Types.Scalars['Int'];
@@ -85,52 +22,7 @@ export type CreateSignupRunCardQueryVariables = Types.Exact<{
 }>;
 
 
-export type CreateSignupRunCardQueryData = (
-  { __typename: 'Query' }
-  & { currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_read_schedule' | 'can_read_event_signups' | 'can_update_event'>
-  ), event: (
-    { __typename: 'Event' }
-    & Pick<Types.Event, 'id' | 'title' | 'length_seconds' | 'private_signup_list' | 'can_play_concurrently'>
-    & { registration_policy?: Types.Maybe<(
-      { __typename: 'RegistrationPolicy' }
-      & RunCardRegistrationPolicyFieldsFragment
-    )>, team_members: Array<(
-      { __typename: 'TeamMember' }
-      & Pick<Types.TeamMember, 'id' | 'display_team_member'>
-      & { user_con_profile: (
-        { __typename: 'UserConProfile' }
-        & Pick<Types.UserConProfile, 'id' | 'gravatar_url' | 'gravatar_enabled' | 'name_without_nickname'>
-      ) }
-    )>, event_category: (
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id' | 'team_member_name'>
-    ), runs: Array<(
-      { __typename: 'Run' }
-      & Pick<Types.Run, 'id'>
-      & EventPageRunFieldsFragment
-    )> }
-  ), userConProfile: (
-    { __typename: 'UserConProfile' }
-    & Pick<Types.UserConProfile, 'id' | 'name_without_nickname'>
-    & { signups: Array<(
-      { __typename: 'Signup' }
-      & Pick<Types.Signup, 'id' | 'state' | 'waitlist_position'>
-      & { run: (
-        { __typename: 'Run' }
-        & Pick<Types.Run, 'id'>
-      ) }
-    )>, signup_requests: Array<(
-      { __typename: 'SignupRequest' }
-      & Pick<Types.SignupRequest, 'id' | 'state'>
-      & { target_run: (
-        { __typename: 'Run' }
-        & Pick<Types.Run, 'id'>
-      ) }
-    )> }
-  ) }
-);
+export type CreateSignupRunCardQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_event_signups: boolean, can_update_event: boolean }, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, private_signup_list?: Types.Maybe<boolean>, can_play_concurrently: boolean, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', slots_limited?: Types.Maybe<boolean>, prevent_no_preference_signups: boolean, total_slots_including_not_counted?: Types.Maybe<number>, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, description?: Types.Maybe<string>, not_counted: boolean, slots_limited: boolean, anything: boolean, minimum_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number> }> }>, team_members: Array<{ __typename: 'TeamMember', id: number, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: number, gravatar_url: string, gravatar_enabled: boolean, name_without_nickname: string } }>, event_category: { __typename: 'EventCategory', id: number, team_member_name: string }, runs: Array<{ __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, target_run: { __typename: 'Run', id: number }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number }> }> }> }, userConProfile: { __typename: 'UserConProfile', id: number, name_without_nickname: string, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number>, run: { __typename: 'Run', id: number } }>, signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, target_run: { __typename: 'Run', id: number } }> } };
 
 export type SignupModerationQueueQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
@@ -138,22 +30,7 @@ export type SignupModerationQueueQueryVariables = Types.Exact<{
 }>;
 
 
-export type SignupModerationQueueQueryData = (
-  { __typename: 'Query' }
-  & { convention: (
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id'>
-    & { signup_requests_paginated: (
-      { __typename: 'SignupRequestsPagination' }
-      & Pick<Types.SignupRequestsPagination, 'total_pages'>
-      & { entries: Array<(
-        { __typename: 'SignupRequest' }
-        & Pick<Types.SignupRequest, 'id'>
-        & SignupModerationSignupRequestFieldsFragment
-      )> }
-    ) }
-  ) }
-);
+export type SignupModerationQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, signup_requests_paginated: { __typename: 'SignupRequestsPagination', total_pages: number, entries: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, created_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number, run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number } } }>, target_run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }> } }, result_signup?: Types.Maybe<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }> }> } } };
 
 export const SignupModerationRunFieldsFragmentDoc = gql`
     fragment SignupModerationRunFields on Run {

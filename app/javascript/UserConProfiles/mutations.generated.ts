@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { UserConProfileFieldsFragment, UserConProfileAdminTicketFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
-import { UserConProfileFieldsFragmentDoc, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
+import { UserConProfileFieldsFragmentDoc } from './queries.generated';
+import { UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateUserConProfileMutationVariables = Types.Exact<{
@@ -12,49 +12,21 @@ export type CreateUserConProfileMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserConProfileMutationData = (
-  { __typename: 'Mutation' }
-  & { createUserConProfile?: Types.Maybe<(
-    { __typename: 'CreateUserConProfilePayload' }
-    & { user_con_profile: (
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id'>
-    ) }
-  )> }
-);
+export type CreateUserConProfileMutationData = { __typename: 'Mutation', createUserConProfile?: Types.Maybe<{ __typename: 'CreateUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', id: number } }> };
 
 export type UpdateUserConProfileMutationVariables = Types.Exact<{
   input: Types.UpdateUserConProfileInput;
 }>;
 
 
-export type UpdateUserConProfileMutationData = (
-  { __typename: 'Mutation' }
-  & { updateUserConProfile?: Types.Maybe<(
-    { __typename: 'UpdateUserConProfilePayload' }
-    & { user_con_profile: (
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id'>
-      & UserConProfileFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateUserConProfileMutationData = { __typename: 'Mutation', updateUserConProfile?: Types.Maybe<{ __typename: 'UpdateUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', id: number, name: string, form_response_attrs_json?: Types.Maybe<any>, gravatar_enabled: boolean, gravatar_url: string } }> };
 
 export type DeleteUserConProfileMutationVariables = Types.Exact<{
   userConProfileId: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteUserConProfileMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteUserConProfile?: Types.Maybe<(
-    { __typename: 'DeleteUserConProfilePayload' }
-    & { user_con_profile: (
-      { __typename: 'UserConProfile' }
-      & Pick<Types.UserConProfile, 'id'>
-    ) }
-  )> }
-);
+export type DeleteUserConProfileMutationData = { __typename: 'Mutation', deleteUserConProfile?: Types.Maybe<{ __typename: 'DeleteUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', id: number } }> };
 
 export type CreateTicketMutationVariables = Types.Exact<{
   userConProfileId: Types.Scalars['Int'];
@@ -62,17 +34,7 @@ export type CreateTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTicketMutationData = (
-  { __typename: 'Mutation' }
-  & { createTicket?: Types.Maybe<(
-    { __typename: 'CreateTicketPayload' }
-    & { ticket: (
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-      & UserConProfileAdminTicketFieldsFragment
-    ) }
-  )> }
-);
+export type CreateTicketMutationData = { __typename: 'Mutation', createTicket?: Types.Maybe<{ __typename: 'CreateTicketPayload', ticket: { __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> } }> };
 
 export type UpdateTicketMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -80,17 +42,7 @@ export type UpdateTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTicketMutationData = (
-  { __typename: 'Mutation' }
-  & { updateTicket?: Types.Maybe<(
-    { __typename: 'UpdateTicketPayload' }
-    & { ticket: (
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-      & UserConProfileAdminTicketFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateTicketMutationData = { __typename: 'Mutation', updateTicket?: Types.Maybe<{ __typename: 'UpdateTicketPayload', ticket: { __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> } }> };
 
 export type DeleteTicketMutationVariables = Types.Exact<{
   ticketId: Types.Scalars['Int'];
@@ -98,16 +50,7 @@ export type DeleteTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteTicketMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteTicket?: Types.Maybe<(
-    { __typename: 'DeleteTicketPayload' }
-    & { ticket: (
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-    ) }
-  )> }
-);
+export type DeleteTicketMutationData = { __typename: 'Mutation', deleteTicket?: Types.Maybe<{ __typename: 'DeleteTicketPayload', ticket: { __typename: 'Ticket', id: number } }> };
 
 export type ConvertTicketToEventProvidedMutationVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
@@ -116,17 +59,7 @@ export type ConvertTicketToEventProvidedMutationVariables = Types.Exact<{
 }>;
 
 
-export type ConvertTicketToEventProvidedMutationData = (
-  { __typename: 'Mutation' }
-  & { convertTicketToEventProvided?: Types.Maybe<(
-    { __typename: 'ConvertTicketToEventProvidedPayload' }
-    & { ticket: (
-      { __typename: 'Ticket' }
-      & Pick<Types.Ticket, 'id'>
-      & UserConProfileAdminTicketFieldsFragment
-    ) }
-  )> }
-);
+export type ConvertTicketToEventProvidedMutationData = { __typename: 'Mutation', convertTicketToEventProvided?: Types.Maybe<{ __typename: 'ConvertTicketToEventProvidedPayload', ticket: { __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> } }> };
 
 
 export const CreateUserConProfileDocument = gql`

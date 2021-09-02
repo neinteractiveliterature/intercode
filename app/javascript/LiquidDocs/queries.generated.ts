@@ -4,34 +4,19 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type LiquidAssignFieldsFragment = (
-  { __typename: 'LiquidAssign' }
-  & Pick<Types.LiquidAssign, 'name' | 'drop_class_name' | 'cms_variable_value_json'>
-);
+export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> };
 
 export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryData = (
-  { __typename: 'Query' }
-  & { liquidAssigns: Array<(
-    { __typename: 'LiquidAssign' }
-    & LiquidAssignFieldsFragment
-  )> }
-);
+export type LiquidAssignsQueryData = { __typename: 'Query', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> };
 
 export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
 }>;
 
 
-export type NotifierLiquidAssignsQueryData = (
-  { __typename: 'Query' }
-  & { liquidAssigns: Array<(
-    { __typename: 'LiquidAssign' }
-    & LiquidAssignFieldsFragment
-  )> }
-);
+export type NotifierLiquidAssignsQueryData = { __typename: 'Query', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> };
 
 export const LiquidAssignFieldsFragmentDoc = gql`
     fragment LiquidAssignFields on LiquidAssign {

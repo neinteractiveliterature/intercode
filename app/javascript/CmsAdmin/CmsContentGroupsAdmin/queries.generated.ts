@@ -1,102 +1,31 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { PermissionedModelFields_CmsContentGroup_Fragment, PermissionedModelFields_Convention_Fragment, PermissionedModelFields_EventCategory_Fragment, PermissionedRoleFields_OrganizationRole_Fragment, PermissionedRoleFields_StaffPosition_Fragment } from '../../Permissions/fragments.generated';
 import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsContentFields_CmsLayout_Fragment = (
-  { __typename: 'CmsLayout' }
-  & Pick<Types.CmsLayout, 'id' | 'name'>
-);
+export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> };
 
-export type CmsContentFields_CmsPartial_Fragment = (
-  { __typename: 'CmsPartial' }
-  & Pick<Types.CmsPartial, 'id' | 'name'>
-);
+export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> };
 
-export type CmsContentFields_Page_Fragment = (
-  { __typename: 'Page' }
-  & Pick<Types.Page, 'id' | 'name'>
-);
+export type CmsContentFields_Page_Fragment = { __typename: 'Page', id: number, name?: Types.Maybe<string> };
 
 export type CmsContentFieldsFragment = CmsContentFields_CmsLayout_Fragment | CmsContentFields_CmsPartial_Fragment | CmsContentFields_Page_Fragment;
 
-export type CmsContentGroupFieldsFragment = (
-  { __typename: 'CmsContentGroup' }
-  & Pick<Types.CmsContentGroup, 'id' | 'name' | 'current_ability_can_update' | 'current_ability_can_delete'>
-  & { contents: Array<(
-    { __typename: 'CmsLayout' }
-    & CmsContentFields_CmsLayout_Fragment
-  ) | (
-    { __typename: 'CmsPartial' }
-    & CmsContentFields_CmsPartial_Fragment
-  ) | (
-    { __typename: 'Page' }
-    & CmsContentFields_Page_Fragment
-  )>, permissions: Array<(
-    { __typename: 'Permission' }
-    & Pick<Types.Permission, 'id' | 'permission'>
-    & { model: (
-      { __typename: 'CmsContentGroup' }
-      & PermissionedModelFields_CmsContentGroup_Fragment
-    ) | (
-      { __typename: 'Convention' }
-      & PermissionedModelFields_Convention_Fragment
-    ) | (
-      { __typename: 'EventCategory' }
-      & PermissionedModelFields_EventCategory_Fragment
-    ), role: (
-      { __typename: 'OrganizationRole' }
-      & PermissionedRoleFields_OrganizationRole_Fragment
-    ) | (
-      { __typename: 'StaffPosition' }
-      & PermissionedRoleFields_StaffPosition_Fragment
-    ) }
-  )> }
-);
+export type CmsContentGroupFieldsFragment = { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> };
 
 export type CmsContentGroupsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsContentGroupsAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-    & { staff_positions: Array<(
-      { __typename: 'StaffPosition' }
-      & Pick<Types.StaffPosition, 'id' | 'name'>
-    )> }
-  )>, cmsContentGroups: Array<(
-    { __typename: 'CmsContentGroup' }
-    & Pick<Types.CmsContentGroup, 'id'>
-    & CmsContentGroupFieldsFragment
-  )>, currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_create_cms_content_groups'>
-  ) }
-);
+export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> }>, currentAbility: { __typename: 'Ability', can_create_cms_content_groups: boolean } };
 
 export type SearchCmsContentQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type SearchCmsContentQueryData = (
-  { __typename: 'Query' }
-  & { searchCmsContent: Array<(
-    { __typename: 'CmsLayout' }
-    & CmsContentFields_CmsLayout_Fragment
-  ) | (
-    { __typename: 'CmsPartial' }
-    & CmsContentFields_CmsPartial_Fragment
-  ) | (
-    { __typename: 'Page' }
-    & CmsContentFields_Page_Fragment
-  )> }
-);
+export type SearchCmsContentQueryData = { __typename: 'Query', searchCmsContent: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }> };
 
 export const CmsContentFieldsFragmentDoc = gql`
     fragment CmsContentFields on CmsContent {

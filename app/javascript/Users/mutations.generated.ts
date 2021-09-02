@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { DetailedUserFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { DetailedUserFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -13,17 +12,7 @@ export type MergeUsersMutationVariables = Types.Exact<{
 }>;
 
 
-export type MergeUsersMutationData = (
-  { __typename: 'Mutation' }
-  & { mergeUsers?: Types.Maybe<(
-    { __typename: 'MergeUsersPayload' }
-    & { user: (
-      { __typename: 'User' }
-      & Pick<Types.User, 'id'>
-      & DetailedUserFieldsFragment
-    ) }
-  )> }
-);
+export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers?: Types.Maybe<{ __typename: 'MergeUsersPayload', user: { __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> } }> };
 
 
 export const MergeUsersDocument = gql`

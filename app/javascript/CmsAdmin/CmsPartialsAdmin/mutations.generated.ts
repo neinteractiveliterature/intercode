@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { CmsPartialFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsPartialFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -11,17 +10,7 @@ export type CreatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePartialMutationData = (
-  { __typename: 'Mutation' }
-  & { createCmsPartial?: Types.Maybe<(
-    { __typename: 'CreateCmsPartialPayload' }
-    & { cms_partial: (
-      { __typename: 'CmsPartial' }
-      & Pick<Types.CmsPartial, 'id'>
-      & CmsPartialFieldsFragment
-    ) }
-  )> }
-);
+export type CreatePartialMutationData = { __typename: 'Mutation', createCmsPartial?: Types.Maybe<{ __typename: 'CreateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
 
 export type UpdatePartialMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -29,30 +18,14 @@ export type UpdatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePartialMutationData = (
-  { __typename: 'Mutation' }
-  & { updateCmsPartial?: Types.Maybe<(
-    { __typename: 'UpdateCmsPartialPayload' }
-    & { cms_partial: (
-      { __typename: 'CmsPartial' }
-      & Pick<Types.CmsPartial, 'id'>
-      & CmsPartialFieldsFragment
-    ) }
-  )> }
-);
+export type UpdatePartialMutationData = { __typename: 'Mutation', updateCmsPartial?: Types.Maybe<{ __typename: 'UpdateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
 
 export type DeletePartialMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeletePartialMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteCmsPartial?: Types.Maybe<(
-    { __typename: 'DeleteCmsPartialPayload' }
-    & Pick<Types.DeleteCmsPartialPayload, 'clientMutationId'>
-  )> }
-);
+export type DeletePartialMutationData = { __typename: 'Mutation', deleteCmsPartial?: Types.Maybe<{ __typename: 'DeleteCmsPartialPayload', clientMutationId?: Types.Maybe<string> }> };
 
 
 export const CreatePartialDocument = gql`

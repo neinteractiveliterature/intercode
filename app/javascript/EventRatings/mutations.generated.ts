@@ -10,16 +10,7 @@ export type RateEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type RateEventMutationData = (
-  { __typename: 'Mutation' }
-  & { rateEvent?: Types.Maybe<(
-    { __typename: 'RateEventPayload' }
-    & { event: (
-      { __typename: 'Event' }
-      & Pick<Types.Event, 'id' | 'my_rating'>
-    ) }
-  )> }
-);
+export type RateEventMutationData = { __typename: 'Mutation', rateEvent?: Types.Maybe<{ __typename: 'RateEventPayload', event: { __typename: 'Event', id: number, my_rating?: Types.Maybe<number> } }> };
 
 
 export const RateEventDocument = gql`

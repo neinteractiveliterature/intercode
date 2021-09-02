@@ -4,28 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsFileFieldsFragment = (
-  { __typename: 'CmsFile' }
-  & Pick<Types.CmsFile, 'id' | 'filename' | 'url' | 'content_type' | 'size' | 'current_ability_can_delete'>
-);
+export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean };
 
 export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsFilesAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-  )>, currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_create_cms_files'>
-  ), cmsFiles: Array<(
-    { __typename: 'CmsFile' }
-    & Pick<Types.CmsFile, 'id'>
-    & CmsFileFieldsFragment
-  )> }
-);
+export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsFiles: Array<{ __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> };
 
 export const CmsFileFieldsFragmentDoc = gql`
     fragment CmsFileFields on CmsFile {

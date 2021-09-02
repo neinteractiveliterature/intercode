@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { EventProposalFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -12,63 +11,28 @@ export type CreateEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEventProposalMutationData = (
-  { __typename: 'Mutation' }
-  & { createEventProposal?: Types.Maybe<(
-    { __typename: 'CreateEventProposalPayload' }
-    & { event_proposal: (
-      { __typename: 'EventProposal' }
-      & Pick<Types.EventProposal, 'id'>
-    ) }
-  )> }
-);
+export type CreateEventProposalMutationData = { __typename: 'Mutation', createEventProposal?: Types.Maybe<{ __typename: 'CreateEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: number } }> };
 
 export type UpdateEventProposalMutationVariables = Types.Exact<{
   input: Types.UpdateEventProposalInput;
 }>;
 
 
-export type UpdateEventProposalMutationData = (
-  { __typename: 'Mutation' }
-  & { updateEventProposal?: Types.Maybe<(
-    { __typename: 'UpdateEventProposalPayload' }
-    & { event_proposal: (
-      { __typename: 'EventProposal' }
-      & Pick<Types.EventProposal, 'id'>
-      & EventProposalFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateEventProposalMutationData = { __typename: 'Mutation', updateEventProposal?: Types.Maybe<{ __typename: 'UpdateEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> } }> };
 
 export type DeleteEventProposalMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteEventProposalMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteEventProposal?: Types.Maybe<(
-    { __typename: 'DeleteEventProposalPayload' }
-    & Pick<Types.DeleteEventProposalPayload, 'clientMutationId'>
-  )> }
-);
+export type DeleteEventProposalMutationData = { __typename: 'Mutation', deleteEventProposal?: Types.Maybe<{ __typename: 'DeleteEventProposalPayload', clientMutationId?: Types.Maybe<string> }> };
 
 export type SubmitEventProposalMutationVariables = Types.Exact<{
   input: Types.SubmitEventProposalInput;
 }>;
 
 
-export type SubmitEventProposalMutationData = (
-  { __typename: 'Mutation' }
-  & { submitEventProposal?: Types.Maybe<(
-    { __typename: 'SubmitEventProposalPayload' }
-    & { event_proposal: (
-      { __typename: 'EventProposal' }
-      & Pick<Types.EventProposal, 'id'>
-      & EventProposalFieldsFragment
-    ) }
-  )> }
-);
+export type SubmitEventProposalMutationData = { __typename: 'Mutation', submitEventProposal?: Types.Maybe<{ __typename: 'SubmitEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> } }> };
 
 export type TransitionEventProposalMutationVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
@@ -77,17 +41,7 @@ export type TransitionEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type TransitionEventProposalMutationData = (
-  { __typename: 'Mutation' }
-  & { transitionEventProposal?: Types.Maybe<(
-    { __typename: 'TransitionEventProposalPayload' }
-    & { event_proposal: (
-      { __typename: 'EventProposal' }
-      & Pick<Types.EventProposal, 'id'>
-      & EventProposalFieldsFragment
-    ) }
-  )> }
-);
+export type TransitionEventProposalMutationData = { __typename: 'Mutation', transitionEventProposal?: Types.Maybe<{ __typename: 'TransitionEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> } }> };
 
 export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
   eventProposalId: Types.Scalars['Int'];
@@ -95,17 +49,7 @@ export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventProposalAdminNotesMutationData = (
-  { __typename: 'Mutation' }
-  & { updateEventProposalAdminNotes?: Types.Maybe<(
-    { __typename: 'UpdateEventProposalAdminNotesPayload' }
-    & { event_proposal: (
-      { __typename: 'EventProposal' }
-      & Pick<Types.EventProposal, 'id'>
-      & EventProposalFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateEventProposalAdminNotesMutationData = { __typename: 'Mutation', updateEventProposalAdminNotes?: Types.Maybe<{ __typename: 'UpdateEventProposalAdminNotesPayload', event_proposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> } }> };
 
 
 export const CreateEventProposalDocument = gql`

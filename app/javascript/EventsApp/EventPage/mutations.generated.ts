@@ -1,11 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { MySignupFieldsFragment, EventPageRunFieldsFragment, MySignupRequestFieldsFragment } from './queries.generated';
-import { RunBasicSignupDataFragment, CommonConventionDataFragment } from '../queries.generated';
 import { gql } from '@apollo/client';
 import { MySignupFieldsFragmentDoc, EventPageRunFieldsFragmentDoc, MySignupRequestFieldsFragmentDoc } from './queries.generated';
-import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
+import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateMySignupMutationVariables = Types.Exact<{
@@ -15,46 +13,14 @@ export type CreateMySignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateMySignupMutationData = (
-  { __typename: 'Mutation' }
-  & { createMySignup?: Types.Maybe<(
-    { __typename: 'CreateMySignupPayload' }
-    & { signup: (
-      { __typename: 'Signup' }
-      & Pick<Types.Signup, 'id'>
-      & { run: (
-        { __typename: 'Run' }
-        & Pick<Types.Run, 'id'>
-        & EventPageRunFieldsFragment
-        & RunBasicSignupDataFragment
-      ) }
-      & MySignupFieldsFragment
-    ) }
-  )> }
-);
+export type CreateMySignupMutationData = { __typename: 'Mutation', createMySignup?: Types.Maybe<{ __typename: 'CreateMySignupPayload', signup: { __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number>, run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, target_run: { __typename: 'Run', id: number }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number }> }> } } }> };
 
 export type WithdrawMySignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['Int'];
 }>;
 
 
-export type WithdrawMySignupMutationData = (
-  { __typename: 'Mutation' }
-  & { withdrawMySignup?: Types.Maybe<(
-    { __typename: 'WithdrawMySignupPayload' }
-    & { signup: (
-      { __typename: 'Signup' }
-      & Pick<Types.Signup, 'id'>
-      & { run: (
-        { __typename: 'Run' }
-        & Pick<Types.Run, 'id'>
-        & EventPageRunFieldsFragment
-        & RunBasicSignupDataFragment
-      ) }
-      & MySignupFieldsFragment
-    ) }
-  )> }
-);
+export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMySignup?: Types.Maybe<{ __typename: 'WithdrawMySignupPayload', signup: { __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number>, run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: Types.Maybe<string> }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, target_run: { __typename: 'Run', id: number }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number }> }> } } }> };
 
 export type CreateSignupRequestMutationVariables = Types.Exact<{
   targetRunId: Types.Scalars['Int'];
@@ -63,34 +29,14 @@ export type CreateSignupRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateSignupRequestMutationData = (
-  { __typename: 'Mutation' }
-  & { createSignupRequest?: Types.Maybe<(
-    { __typename: 'CreateSignupRequestPayload' }
-    & { signup_request: (
-      { __typename: 'SignupRequest' }
-      & Pick<Types.SignupRequest, 'id'>
-      & MySignupRequestFieldsFragment
-    ) }
-  )> }
-);
+export type CreateSignupRequestMutationData = { __typename: 'Mutation', createSignupRequest?: Types.Maybe<{ __typename: 'CreateSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, target_run: { __typename: 'Run', id: number }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number }> } }> };
 
 export type WithdrawSignupRequestMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type WithdrawSignupRequestMutationData = (
-  { __typename: 'Mutation' }
-  & { withdrawSignupRequest?: Types.Maybe<(
-    { __typename: 'WithdrawSignupRequestPayload' }
-    & { signup_request: (
-      { __typename: 'SignupRequest' }
-      & Pick<Types.SignupRequest, 'id'>
-      & MySignupRequestFieldsFragment
-    ) }
-  )> }
-);
+export type WithdrawSignupRequestMutationData = { __typename: 'Mutation', withdrawSignupRequest?: Types.Maybe<{ __typename: 'WithdrawSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, target_run: { __typename: 'Run', id: number }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number }> } }> };
 
 
 export const CreateMySignupDocument = gql`

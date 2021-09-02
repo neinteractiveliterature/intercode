@@ -4,28 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsLayoutFieldsFragment = (
-  { __typename: 'CmsLayout' }
-  & Pick<Types.CmsLayout, 'id' | 'name' | 'content' | 'navbar_classes' | 'admin_notes' | 'current_ability_can_update' | 'current_ability_can_delete'>
-);
+export type CmsLayoutFieldsFragment = { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsLayoutsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsLayoutsAdminQueryData = (
-  { __typename: 'Query' }
-  & { convention?: Types.Maybe<(
-    { __typename: 'Convention' }
-    & Pick<Types.Convention, 'id' | 'name'>
-  )>, currentAbility: (
-    { __typename: 'Ability' }
-    & Pick<Types.Ability, 'can_create_cms_layouts'>
-  ), cmsLayouts: Array<(
-    { __typename: 'CmsLayout' }
-    & Pick<Types.CmsLayout, 'id'>
-    & CmsLayoutFieldsFragment
-  )> }
-);
+export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean }> };
 
 export const CmsLayoutFieldsFragmentDoc = gql`
     fragment CmsLayoutFields on CmsLayout {

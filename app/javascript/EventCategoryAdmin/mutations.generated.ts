@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { EventCategoryFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -11,17 +10,7 @@ export type CreateEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEventCategoryMutationData = (
-  { __typename: 'Mutation' }
-  & { createEventCategory?: Types.Maybe<(
-    { __typename: 'CreateEventCategoryPayload' }
-    & { event_category: (
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id'>
-      & EventCategoryFieldsFragment
-    ) }
-  )> }
-);
+export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory?: Types.Maybe<{ __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: Types.Maybe<string>, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: Types.Maybe<{ __typename: 'Department', id: number, name: string }>, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> } }> };
 
 export type UpdateEventCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -29,30 +18,14 @@ export type UpdateEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventCategoryMutationData = (
-  { __typename: 'Mutation' }
-  & { updateEventCategory?: Types.Maybe<(
-    { __typename: 'UpdateEventCategoryPayload' }
-    & { event_category: (
-      { __typename: 'EventCategory' }
-      & Pick<Types.EventCategory, 'id'>
-      & EventCategoryFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory?: Types.Maybe<{ __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: Types.Maybe<string>, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: Types.Maybe<{ __typename: 'Department', id: number, name: string }>, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> } }> };
 
 export type DeleteEventCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteEventCategoryMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteEventCategory?: Types.Maybe<(
-    { __typename: 'DeleteEventCategoryPayload' }
-    & Pick<Types.DeleteEventCategoryPayload, 'clientMutationId'>
-  )> }
-);
+export type DeleteEventCategoryMutationData = { __typename: 'Mutation', deleteEventCategory?: Types.Maybe<{ __typename: 'DeleteEventCategoryPayload', clientMutationId?: Types.Maybe<string> }> };
 
 
 export const CreateEventCategoryDocument = gql`

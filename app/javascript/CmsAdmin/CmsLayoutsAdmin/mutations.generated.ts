@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { CmsLayoutFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { CmsLayoutFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -11,17 +10,7 @@ export type CreateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateLayoutMutationData = (
-  { __typename: 'Mutation' }
-  & { createCmsLayout?: Types.Maybe<(
-    { __typename: 'CreateCmsLayoutPayload' }
-    & { cms_layout: (
-      { __typename: 'CmsLayout' }
-      & Pick<Types.CmsLayout, 'id'>
-      & CmsLayoutFieldsFragment
-    ) }
-  )> }
-);
+export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout?: Types.Maybe<{ __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
 
 export type UpdateLayoutMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -29,30 +18,14 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateLayoutMutationData = (
-  { __typename: 'Mutation' }
-  & { updateCmsLayout?: Types.Maybe<(
-    { __typename: 'UpdateCmsLayoutPayload' }
-    & { cms_layout: (
-      { __typename: 'CmsLayout' }
-      & Pick<Types.CmsLayout, 'id'>
-      & CmsLayoutFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout?: Types.Maybe<{ __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
 
 export type DeleteLayoutMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteLayoutMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteCmsLayout?: Types.Maybe<(
-    { __typename: 'DeleteCmsLayoutPayload' }
-    & Pick<Types.DeleteCmsLayoutPayload, 'clientMutationId'>
-  )> }
-);
+export type DeleteLayoutMutationData = { __typename: 'Mutation', deleteCmsLayout?: Types.Maybe<{ __typename: 'DeleteCmsLayoutPayload', clientMutationId?: Types.Maybe<string> }> };
 
 
 export const CreateLayoutDocument = gql`
