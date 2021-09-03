@@ -67,7 +67,7 @@
     "@types/luxon": "^1.27.0",
     "@types/mapbox-gl": "^1.12.9",
     "@types/minimist": "^1.2.2",
-    "@types/react": "^17.0.16",
+    "@types/react": "^17.0.19",
     "@types/react-click-outside-hook": "^1.0.0",
     "@types/react-color": "^3.0.5",
     "@types/react-dnd-multi-backend": "^6.0.1",
