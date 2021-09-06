@@ -144,7 +144,7 @@
     "react-dom": "^17.0.2",
     "react-google-recaptcha": "^2.1.0",
     "react-html-id": "^0.1.5",
-    "react-i18next": "^11.11.0",
+    "react-i18next": "^11.11.4",
     "react-onclickoutside": "^6.11.2",
     "react-popper": "^2.2.5",
     "react-router-dom": "^5.2.1",
@@ -188,7 +188,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react-hooks": "^7.0.1",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.29.1",
+    "@typescript-eslint/parser": "^4.30.0",
     "@webpack-cli/serve": "^1.5.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
@@ -219,11 +219,11 @@
     "typescript": "^4.3.5",
     "typescript-plugin-css-modules": "^3.4.0",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.1.0"
   },
   "resolutions": {
     "**/**/kind-of": ">= 6.0.3",
-    "@typescript-eslint/parser": "4.29.1"
+    "@typescript-eslint/parser": "4.30.0"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
