@@ -160,7 +160,7 @@
     "sass-loader": "^12.1.0",
     "source-map-support": "^0.5.19",
     "stream-browserify": "^3.0.0",
-    "style-loader": "^2.0.0",
+    "style-loader": "^3.2.1",
     "terser-webpack-plugin": "^5.2.3",
     "thread-loader": "^3.0.4",
     "tinycolor2": "^1.4.2",
