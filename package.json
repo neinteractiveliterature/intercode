@@ -192,7 +192,7 @@
     "@webpack-cli/serve": "^1.5.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^27.0.6",
+    "babel-jest": "^27.1.0",
     "core-js-compat": "^3.17.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.0",
