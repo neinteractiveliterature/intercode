@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-# making an innocuous gemfile change to invalidate the docker build cache
-
 ruby '2.7.3'
 gem 'rails', '6.1.4.1'
 
