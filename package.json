@@ -95,7 +95,7 @@
     "caniuse-lite": "^1.0.30001249",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "classnames": "^2.3.1",
-    "compression-webpack-plugin": "^8.0.0",
+    "compression-webpack-plugin": "^8.0.1",
     "core-js": "^3.17.2",
     "css-loader": "^5.2.4",
     "css-minimizer-webpack-plugin": "^3.0.2",
