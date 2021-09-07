@@ -22,7 +22,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@apollo/client": "^3.4.10",
+    "@apollo/client": "3.4.10",
     "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-do-expressions": "^7.14.5",
@@ -111,7 +111,7 @@
     "glob": "^7.1.7",
     "graphiql": "^1.4.2",
     "graphql": "^15.5.0",
-    "graphql-anywhere": "^4.2.7",
+    "graphql-anywhere": "4.2.7",
     "history": "^4.9.0",
     "html-to-react": "^1.4.5",
     "hypernova": "^2.5.0",
