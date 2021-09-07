@@ -16,7 +16,7 @@ jobs:
           node-version: '14.16.1'
       - name: Set up gem cache
         if: github.actor != 'dependabot[bot]'
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: /home/runner/.rubies/ruby-2.7.3/lib/ruby/gems/2.7.0
           key: ${{ runner.os }}-pronto-gems-${{ github.ref }}-${{ github.sha }}
@@ -28,7 +28,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Set up yarn cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         if: github.actor != 'dependabot[bot]'
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
