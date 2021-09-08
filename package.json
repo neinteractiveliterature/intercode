@@ -89,7 +89,7 @@
     "babel-plugin-dynamic-import-node": "2.3.3",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-lodash": "3.3.4",
-    "bootstrap": "5.1.0",
+    "bootstrap": "5.1.1",
     "bootstrap-icons": "1.5.0",
     "bytes": "3.1.0",
     "cadmus-navbar-admin": "4.1.0",
