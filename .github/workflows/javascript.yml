@@ -59,6 +59,31 @@ jobs:
       run: yarn install
     - name: tsc
       uses: icrawl/action-tsc@v1
+  jest:
+    name: jest
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Set up yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
+          ${{ runner.os }}-tsc-yarn-
+    - name: install node v14
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+    - name: yarn install
+      run: yarn install
+    - name: build
+      run: yarn run test
   webpack:
     name: webpack
     runs-on: ubuntu-latest
