@@ -1,7 +1,7 @@
 {
   "engines": {
-    "node": ">= 14.0.0",
-    "yarn": ">=0.25.2"
+    "node": "14.x",
+    "yarn": "1.x"
   },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
