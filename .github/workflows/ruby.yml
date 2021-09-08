@@ -11,7 +11,7 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
       RAILS_ENV: test
     services:
       postgres:
