@@ -6,7 +6,8 @@
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
-    "build": "webpack --config config/webpack/production.js",
+    "build": "yarn run build:web && yarn run build:cli",
+    "build:web": "webpack --config config/webpack/production.js",
     "build:cli": "webpack --config config/webpack/cliUtils.js",
     "build:timezone_data": "node ./buildTimezoneData.js",
     "graphdoc:generate": "graphdoc -s schema.graphql",
