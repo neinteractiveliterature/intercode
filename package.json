@@ -222,7 +222,6 @@
     "webpack-dev-server": "4.2.0"
   },
   "resolutions": {
-    "**/**/kind-of": ">= 6.0.3",
     "@typescript-eslint/parser": "4.31.0"
   },
   "graphdoc": {
