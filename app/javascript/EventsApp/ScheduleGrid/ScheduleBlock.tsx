@@ -21,7 +21,7 @@ function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlock
 
   const blockContentStyle = {
     position: 'relative' as const,
-    width: `${layoutBlock.timespan.getLength('hour').hours * PIXELS_PER_HOUR}px`,
+    width: `${layoutBlock.timespan.getLength('hours').hours * PIXELS_PER_HOUR}px`,
     height: `${layoutResult.laneCount * PIXELS_PER_LANE}px`,
   };
 

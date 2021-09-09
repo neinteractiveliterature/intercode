@@ -340,7 +340,7 @@ export default class Schedule {
       id: fakeRunId,
       title,
       displayTitle,
-      length_seconds: timespan.getLength('second').seconds,
+      length_seconds: timespan.getLength('seconds').seconds,
       can_play_concurrently: false,
       fake: true,
       event_category: {

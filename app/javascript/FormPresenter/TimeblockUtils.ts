@@ -17,8 +17,16 @@ import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 
 export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition) {
   return Timespan.finiteFromDateTimes(
-    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus(timeblock.start),
-    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus(timeblock.finish),
+    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus({
+      hours: timeblock.start.hour,
+      minutes: timeblock.start.minute,
+      seconds: timeblock.start.second,
+    }),
+    DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus({
+      hours: timeblock.finish.hour,
+      minutes: timeblock.finish.minute,
+      seconds: timeblock.finish.second,
+    }),
   );
 }
 
