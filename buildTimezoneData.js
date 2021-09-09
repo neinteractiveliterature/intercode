@@ -18,7 +18,7 @@ function getAllOffsetNames(zoneName) {
   const shortOffsetNames = new Set();
   const longOffsetNames = new Set();
 
-  let currentTime = DateTime.fromObject({ zone: zoneName });
+  let currentTime = DateTime.fromObject({}, { zone: zoneName });
   if (currentTime.isOffsetFixed) {
     return {
       shortOffsetNames: [currentTime.offsetNameShort],
@@ -62,11 +62,7 @@ const timezoneOptions = Object.keys(tzdata.zones)
 
 fs.writeFile(
   './app/javascript/BuiltInFormControls/timezoneSelectData.json',
-  JSON.stringify(
-    { zones: keyBy(timezoneOptions, (zone) => zone.name) },
-    null,
-    2,
-  ),
+  JSON.stringify({ zones: keyBy(timezoneOptions, (zone) => zone.name) }, null, 2),
   (err) => {
     if (err) {
       console.error('Error writing timezone data', err);
