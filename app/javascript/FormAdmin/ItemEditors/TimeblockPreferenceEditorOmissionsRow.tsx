@@ -11,9 +11,10 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TimeblockPreferenceFormItem } from '../FormItemUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 
-export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<TimeblockPreferenceFormItem> & {
-  timeblock: TimeblockDefinition;
-};
+export type TimeblockPreferenceEditorOmissionsRowProps =
+  FormItemEditorProps<TimeblockPreferenceFormItem> & {
+    timeblock: TimeblockDefinition;
+  };
 function TimeblockPreferenceEditorOmissionsRow({
   formItem,
   setFormItem,
@@ -56,18 +57,26 @@ function TimeblockPreferenceEditorOmissionsRow({
     [setFormItem, timeblock.label],
   );
 
-  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
-    convention,
-    formItem,
-  ]);
+  const columns = useMemo(
+    () => getValidTimeblockColumns(convention, formItem),
+    [convention, formItem],
+  );
 
   const choices = useMemo(
     () =>
       columns
         .map((column) => {
           const { dayStart } = column;
-          const start = dayStart.plus(timeblock.start);
-          const finish = dayStart.plus(timeblock.finish);
+          const start = dayStart.plus({
+            hours: timeblock.start.hour,
+            minutes: timeblock.start.minute,
+            seconds: timeblock.start.second,
+          });
+          const finish = dayStart.plus({
+            hours: timeblock.finish.hour,
+            minutes: timeblock.finish.minute,
+            seconds: timeblock.finish.second,
+          });
           if (start > finish) {
             return undefined;
           }

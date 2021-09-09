@@ -2,9 +2,7 @@ import sortBy from 'lodash/sortBy';
 import { normalizeTitle } from '@neinteractiveliterature/litform';
 
 import Timespan, { FiniteTimespan } from '../../../Timespan';
-// eslint-disable-next-line import/no-duplicates
 import type Schedule from '../Schedule';
-// eslint-disable-next-line import/no-duplicates
 import type { ScheduleEvent } from '../Schedule';
 import ColumnReservationSet from './ColumnReservationSet';
 
@@ -106,7 +104,7 @@ class ScheduleLayoutBlock {
       if (!aTimespan || !bTimespan) {
         return 0;
       }
-      const timeDiff = aTimespan.start.diff(bTimespan.start, 'millisecond').milliseconds;
+      const timeDiff = aTimespan.start.diff(bTimespan.start, 'milliseconds').milliseconds;
 
       if (timeDiff === 0) {
         // use number of overlapping runs as a tiebreaker (more runs first)
@@ -149,7 +147,7 @@ class ScheduleLayoutBlock {
 
           if (titleDiff === 0) {
             // as a tiebreaker, sort longer events first
-            const lengthDiff = bTimespan.finish.diff(aTimespan.finish, 'millisecond').milliseconds;
+            const lengthDiff = bTimespan.finish.diff(aTimespan.finish, 'milliseconds').milliseconds;
 
             return lengthDiff;
           }
@@ -166,14 +164,14 @@ class ScheduleLayoutBlock {
 
   computeLayout(): ScheduleLayoutResult {
     const columnReservations = new ColumnReservationSet();
-    const myLength = this.timespan.getLength('millisecond').milliseconds;
+    const myLength = this.timespan.getLength('milliseconds').milliseconds;
     let maxColumns = 0;
 
     const runDimensions = this.getTimeSortedRunIds().map((runId) => {
       const fullTimespan = this.schedule.getRunTimespan(runId)!;
       const maxDisplayLength = Math.max(
         MIN_LENGTH,
-        fullTimespan.getLength('millisecond').milliseconds,
+        fullTimespan.getLength('milliseconds').milliseconds,
       );
       const displayTimespan = Timespan.finiteFromDateTimes(
         fullTimespan.start,
@@ -194,10 +192,11 @@ class ScheduleLayoutBlock {
         fullTimespan,
         laneIndex,
         timeAxisStartPercent:
-          (displayTimespan.start.diff(this.timespan.start, 'millisecond').milliseconds / myLength) *
+          (displayTimespan.start.diff(this.timespan.start, 'milliseconds').milliseconds /
+            myLength) *
           100.0,
         timeAxisSizePercent:
-          (displayTimespan.getLength('millisecond').milliseconds / myLength) * 100.0,
+          (displayTimespan.getLength('milliseconds').milliseconds / myLength) * 100.0,
       };
     });
 

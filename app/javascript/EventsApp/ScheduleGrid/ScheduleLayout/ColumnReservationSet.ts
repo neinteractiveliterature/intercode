@@ -23,11 +23,11 @@ function compareReservationsForSort(a: ColumnReservation | null, b: ColumnReserv
   }
 
   if (a.timespan.start.toMillis() !== b.timespan.start.toMillis()) {
-    return a.timespan.start.diff(b.timespan.start, 'millisecond').milliseconds;
+    return a.timespan.start.diff(b.timespan.start, 'milliseconds').milliseconds;
   }
 
   if (a.timespan.finish.toMillis() !== b.timespan.finish.toMillis()) {
-    return b.timespan.finish.diff(a.timespan.finish, 'millisecond').milliseconds;
+    return b.timespan.finish.diff(a.timespan.finish, 'milliseconds').milliseconds;
   }
 
   return a.runIds.length - b.runIds.length;
