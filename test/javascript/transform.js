@@ -1,6 +1,4 @@
-/* eslint-disable import/extensions */
+const BabelJest = require('babel-jest');
+const config = require('../../babel.config.cjs');
 
-import BabelJest from 'babel-jest';
-import config from '../../babel.config.cjs';
-
-export default BabelJest.default.createTransformer(config);
+module.exports = BabelJest.default.createTransformer(config);
