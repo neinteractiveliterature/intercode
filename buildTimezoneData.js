@@ -13,11 +13,6 @@ const BOOST_ZONES = new Set([
 ]);
 
 function getAllOffsetNames(zoneName) {
-  // hackkkkkkk alert: iterate through all days in the past year and find all offset names
-  // during that time
-  const shortOffsetNames = new Set();
-  const longOffsetNames = new Set();
-
   let currentTime = DateTime.fromObject({}, { zone: zoneName });
   if (currentTime.isOffsetFixed) {
     return {
@@ -25,6 +20,11 @@ function getAllOffsetNames(zoneName) {
       longOffsetNames: [currentTime.offsetNameLong],
     };
   }
+
+  // hackkkkkkk alert: iterate through all days in the past year and find all offset names
+  // during that time
+  const shortOffsetNames = new Set();
+  const longOffsetNames = new Set();
 
   for (let i = 0; i < 366; i += DAY_STEP) {
     shortOffsetNames.add(currentTime.offsetNameShort);
@@ -36,6 +36,11 @@ function getAllOffsetNames(zoneName) {
     longOffsetNames: [...longOffsetNames],
   };
 }
+
+const filterOffsetNames = ({ shortOffsetNames, longOffsetNames }) => ({
+  shortOffsetNames: shortOffsetNames.filter((offsetName) => offsetName != null),
+  longOffsetNames: longOffsetNames.filter((offsetName) => offsetName != null),
+});
 
 const getBoostForTimezone = (zoneName) => {
   if (BOOST_ZONES.has(zoneName)) {
@@ -57,7 +62,7 @@ const timezoneOptions = Object.keys(tzdata.zones)
     name: zoneName,
     nameKeywords: zoneName.replace(/[/_]/g, ' '),
     $boost: getBoostForTimezone(zoneName),
-    ...getAllOffsetNames(zoneName),
+    ...filterOffsetNames(getAllOffsetNames(zoneName)),
   }));
 
 fs.writeFile(
