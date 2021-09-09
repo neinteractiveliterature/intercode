@@ -1,10 +1,9 @@
 import { resolve } from 'path';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import WebpackAssetsManifest from 'webpack-assets-manifest';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import { createRequire } from 'module';
-import getStyleRule from './getStyleRule.js';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
 const require = createRequire(import.meta.url);
 
@@ -30,23 +29,25 @@ export default {
     rules: [
       {
         test: /\.(jpg|jpeg|png|gif|tiff|ico|svg|eot|otf|ttf|woff|woff2)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.s[ac]ss$/i,
         use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[path][name]-[hash].[ext]',
-              context: resolve('app/javascript'),
-            },
-          },
+          MiniCssExtractPlugin.loader,
+          require.resolve('css-loader'),
+          require.resolve('postcss-loader'),
+          require.resolve('sass-loader'),
         ],
       },
-      getStyleRule(/\.(css)$/i),
-      getStyleRule(/\.(scss|sass)$/i, [
-        {
-          loader: 'sass-loader',
-          options: { sourceMap: true },
-        },
-      ]),
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          require.resolve('css-loader'),
+          require.resolve('postcss-loader'),
+        ],
+      },
       {
         use: {
           loader: 'thread-loader',
@@ -94,20 +95,7 @@ export default {
     ],
   },
   resolve: {
-    extensions: [
-      '.js',
-      '.jsx',
-      '.ts',
-      '.tsx',
-      '.sass',
-      '.scss',
-      '.css',
-      '.png',
-      '.svg',
-      '.gif',
-      '.jpeg',
-      '.jpg',
-    ],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.png', '.svg', '.gif', '.jpeg', '.jpg'],
     alias: {
       'lodash.isequal': 'lodash-es/isEqual',
       'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
@@ -126,9 +114,8 @@ export default {
       filename: '[name]-[contenthash:8].css',
       chunkFilename: '[name]-[contenthash:8].chunk.css',
     }),
-    new WebpackAssetsManifest({
-      writeToDisk: true,
-      publicPath: true,
+    new WebpackManifestPlugin({
+      fileName: 'assets-manifest.json',
     }),
   ],
 };
