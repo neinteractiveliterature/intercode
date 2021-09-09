@@ -58,7 +58,7 @@ function describeConventionTiming(
     return 'is canceled';
   }
 
-  const now = DateTime.fromObject({ zone: timezoneName }).startOf('day');
+  const now = DateTime.fromObject({}, { zone: timezoneName }).startOf('day');
   const conventionStart = startsAt
     ? DateTime.fromISO(startsAt, { zone: timezoneName }).startOf('day')
     : undefined;
@@ -73,18 +73,18 @@ function describeConventionTiming(
   if (now < conventionStart) {
     return `starts in ${pluralizeWithCount(
       'day',
-      Math.ceil(conventionStart.diff(now, 'day').days),
+      Math.ceil(conventionStart.diff(now, 'days').days),
     )}`;
   }
 
   if (now < conventionEnd) {
-    return `ends in ${pluralizeWithCount('day', Math.ceil(conventionEnd.diff(now, 'day').days))}`;
+    return `ends in ${pluralizeWithCount('day', Math.ceil(conventionEnd.diff(now, 'days').days))}`;
   }
 
   if (conventionEnd < now) {
     return `ended ${pluralizeWithCount(
       'day',
-      Math.floor(now.diff(conventionEnd, 'day').days),
+      Math.floor(now.diff(conventionEnd, 'days').days),
     )} ago`;
   }
 

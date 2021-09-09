@@ -79,7 +79,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   );
   const [minute, setMinute] = useState<number | undefined>(() =>
     startsAt && hour != null && day != null
-      ? startsAt.diff(day.startOf('day').plus({ hour }), 'minutes').minutes
+      ? startsAt.diff(day.startOf('day').plus({ hours: hour }), 'minutes').minutes
       : undefined,
   );
   const startTime = useMemo(() => {

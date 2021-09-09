@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { TFunction } from 'i18next';
-import { DateTime, Duration, DurationObject, DurationUnit } from 'luxon';
+import { DateTime, DateTimeUnit, Duration, DurationLike, DurationUnit } from 'luxon';
 import { chooseAmong, preferNull, notEmpty } from '@neinteractiveliterature/litform';
 
 import {
@@ -14,8 +14,8 @@ import {
 import { DateTimeFormatKey } from './DateTimeFormats';
 
 export type TimeHopOptions = {
-  unit: DurationUnit;
-  offset?: Duration | DurationObject | null;
+  unit: DateTimeUnit;
+  offset?: Duration | null;
   duration?: number | null;
 };
 
@@ -28,9 +28,9 @@ export interface FiniteTimespan extends Timespan {
   union(other: FiniteTimespan): FiniteTimespan;
   intersection(other: FiniteTimespan): FiniteTimespan;
   expandedToFit(other: FiniteTimespan): FiniteTimespan;
-  expand(amount: Duration | DurationObject): FiniteTimespan;
-  expandStart(amount: Duration | DurationObject): FiniteTimespan;
-  expandFinish(amount: Duration | DurationObject): FiniteTimespan;
+  expand(amount: DurationLike): FiniteTimespan;
+  expandStart(amount: DurationLike): FiniteTimespan;
+  expandFinish(amount: DurationLike): FiniteTimespan;
 }
 
 export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
@@ -136,21 +136,21 @@ class Timespan {
     );
   }
 
-  expandStart(amount: Duration | DurationObject) {
+  expandStart(amount: DurationLike) {
     return new Timespan(this.start?.minus(amount), this.finish);
   }
 
-  expandFinish(amount: Duration | DurationObject) {
+  expandFinish(amount: DurationLike) {
     return new Timespan(this.start, this.finish?.plus(amount));
   }
 
-  expand(amount: Duration | DurationObject) {
+  expand(amount: DurationLike) {
     return new Timespan(this.start?.minus(amount), this.finish?.plus(amount));
   }
 
   expandedToFit = this.union;
 
-  getLength(unit: DurationUnit = 'millisecond') {
+  getLength(unit: DurationUnit = 'milliseconds') {
     if (!this.isFinite()) {
       return null;
     }
