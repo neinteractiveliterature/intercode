@@ -1,10 +1,10 @@
-import { resolve } from 'path';
-import webpack from 'webpack';
-import WebpackShellPluginNext from 'webpack-shell-plugin-next';
-import environment from './environment.js';
+const { resolve } = require('path');
+const webpack = require('webpack');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
+const config = require('./webpack.config');
 
-export default {
-  ...environment,
+module.exports = {
+  ...config,
   entry: {
     diffTranslations: './script/diffTranslations.ts',
     mergeTranslations: './script/mergeTranslations.ts',
@@ -18,7 +18,7 @@ export default {
   target: 'node',
   mode: 'development', // we always want good tracebacks from the CLI utils even in prod
   plugins: [
-    ...environment.plugins,
+    ...config.plugins,
     new webpack.BannerPlugin({
       banner: '#!/usr/bin/env node',
       raw: true,
