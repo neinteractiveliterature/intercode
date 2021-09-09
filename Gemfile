@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.7.3'
+ruby File.read(File.expand_path('.ruby-version', __dir__)).strip
 gem 'rails', '6.1.4.1'
 
 gem 'pg'
