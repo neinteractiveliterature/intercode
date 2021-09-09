@@ -1,5 +1,5 @@
 import { useCallback, useContext, useMemo } from 'react';
-import { DateTime, DateTimeFormatOptions } from 'luxon';
+import { DateTime, LocaleOptions } from 'luxon';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { onlyOneIsNull } from '@neinteractiveliterature/litform';
@@ -30,7 +30,7 @@ export const humanTimeFormat = (time: DateTime, t: TFunction, includeDay?: boole
 };
 
 // this is just DateTime.toFormat patched with a hack for lowercasing the meridiem
-export function formatLCM(dateTime: DateTime, format: string, options?: DateTimeFormatOptions) {
+export function formatLCM(dateTime: DateTime, format: string, options?: LocaleOptions) {
   const hackedFormat = format.replace(/a+/g, (substring) => {
     if (substring === 'aaa') {
       return `'${dateTime.toFormat('a', options).toLowerCase()}'`;
@@ -45,7 +45,7 @@ export function formatLCM(dateTime: DateTime, format: string, options?: DateTime
 export function useAppDateTimeFormat() {
   const { t } = useTranslation();
   const format = useCallback(
-    (dateTime: DateTime, formatKey: DateTimeFormatKey, options?: DateTimeFormatOptions) =>
+    (dateTime: DateTime, formatKey: DateTimeFormatKey, options?: LocaleOptions) =>
       formatLCM(dateTime, getDateTimeFormat(formatKey, t), options),
     [t],
   );
@@ -100,10 +100,10 @@ export function timezoneNameForConvention(
 
 export function useISODateTimeInAppZone(isoValue: string) {
   const { timezoneName } = useContext(AppRootContext);
-  const timestamp = useMemo(() => DateTime.fromISO(isoValue).setZone(timezoneName), [
-    isoValue,
-    timezoneName,
-  ]);
+  const timestamp = useMemo(
+    () => DateTime.fromISO(isoValue).setZone(timezoneName),
+    [isoValue, timezoneName],
+  );
 
   return timestamp;
 }

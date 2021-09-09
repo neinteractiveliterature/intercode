@@ -96,10 +96,10 @@ function DateTimeInput({
 }: DateTimeInputProps) {
   const { timezoneName: appTimezoneName } = useContext(AppRootContext);
   const effectiveTimezoneName = timezoneName || appTimezoneName;
-  const dateTime = useMemo(() => DateTime.fromISO(value ?? '').setZone(effectiveTimezoneName), [
-    value,
-    effectiveTimezoneName,
-  ]);
+  const dateTime = useMemo(
+    () => DateTime.fromISO(value ?? '').setZone(effectiveTimezoneName),
+    [value, effectiveTimezoneName],
+  );
   const [date, setDate] = useState(() => dateTime.toISODate());
   const [time, setTime] = useState(() =>
     dateTime.toISOTime({
@@ -143,7 +143,7 @@ function DateTimeInput({
       {showZone && (
         <span className="ms-2">
           {dateTime.offsetNameShort ??
-            DateTime.fromObject({ zone: effectiveTimezoneName }).offsetNameShort}
+            DateTime.fromObject({}, { zone: effectiveTimezoneName }).offsetNameShort}
         </span>
       )}
     </div>

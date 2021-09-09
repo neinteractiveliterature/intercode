@@ -117,14 +117,14 @@ export default LoadQueryWrapper<
       if (
         newStartsAt &&
         cloneConventionTimespan?.isFinite() &&
-        timespanFromConvention(convention).getLength('day') ===
-          cloneConventionTimespan.getLength('day')
+        timespanFromConvention(convention).getLength('days') ===
+          cloneConventionTimespan.getLength('days')
       ) {
         const newStartsAtInZone = convention.timezone_name
           ? DateTime.fromISO(newStartsAt, { zone: convention.timezone_name })
           : DateTime.fromISO(newStartsAt);
         const newEndsAt = newStartsAtInZone
-          .plus({ days: cloneConventionTimespan.getLength('day').days })
+          .plus({ days: cloneConventionTimespan.getLength('days').days })
           .set({
             hour: cloneConventionTimespan.finish.hour,
             minute: cloneConventionTimespan.finish.minute,

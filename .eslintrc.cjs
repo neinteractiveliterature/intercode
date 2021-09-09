@@ -11,6 +11,7 @@ module.exports = {
   },
 
   extends: [
+    'airbnb',
     'airbnb-typescript',
     'prettier',
     // TODO: turn these on once I feel like getting a raft of errors
