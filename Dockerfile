@@ -8,7 +8,7 @@ FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build
 USER root
 WORKDIR /usr/src/intercode
 
-RUN apk add --no-cache shared-mime-info
+RUN apk add --no-cache shared-mime-info npm
 RUN npm install -g yarn
 
 COPY Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
