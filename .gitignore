@@ -11,6 +11,15 @@
 /bin/assets-manifest.json
 /test/html_reports
 
+# Ignore Yarn stuff
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 # Ignore bundler config
 /.bundle
 
