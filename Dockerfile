@@ -24,7 +24,7 @@ RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
   && find /usr/local/bundle-tmp/gems -name '*.o' -delete
 RUN rm -rf /usr/local/bundle && mv /usr/local/bundle-tmp /usr/local/bundle
 
-COPY package.json yarn.lock /usr/src/intercode/
+COPY package.json yarn.lock .yarn /usr/src/intercode/
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
   yarn install
 
