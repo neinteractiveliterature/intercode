@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1.3
-ARG RUBY_VERSION=2.7.3
+ARG RUBY_VERSION=2.7.4
+
 
 ### build
 
