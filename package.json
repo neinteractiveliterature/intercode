@@ -97,7 +97,7 @@
     "classnames": "2.3.1",
     "compression-webpack-plugin": "8.0.1",
     "core-js": "3.17.3",
-    "crypto-browserify": "^3.12.0",
+    "crypto-browserify": "3.12.0",
     "css-loader": "6.2.0",
     "css-minimizer-webpack-plugin": "3.0.2",
     "csv-string": "4.0.1",
