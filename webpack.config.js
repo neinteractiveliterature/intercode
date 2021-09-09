@@ -1,13 +1,17 @@
-import { resolve } from 'path';
-import webpack from 'webpack';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import { createRequire } from 'module';
-import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
+const { resolve } = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
+const webpack = require('webpack');
 
-const require = createRequire(import.meta.url);
+const ASSET_PATH =
+  process.env.ASSET_PATH ||
+  (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
 
-export default {
+const config = {
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: {
     application: './app/javascript/packs/applicationEntry.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',
@@ -15,12 +19,30 @@ export default {
   output: {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
-    hotUpdateChunkFilename: '[id]-[hash].hot-update.js',
+    hotUpdateChunkFilename: '[id]-[fullhash].hot-update.js',
     path: resolve('public/packs'),
-    publicPath: '/packs/',
+    publicPath: ASSET_PATH,
     environment: {
       arrowFunction: false,
     },
+  },
+  devServer: {
+    port: 3135,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    },
+    https: {
+      key: './dev_certificate.key',
+      cert: './dev_certificate.crt',
+      cacert: './dev_ca.crt',
+    },
+    webSocketServer: 'ws',
+    allowedHosts: 'all',
   },
   cache: {
     type: 'filesystem',
@@ -47,11 +69,6 @@ export default {
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
         ],
-      },
-      {
-        use: {
-          loader: 'thread-loader',
-        },
       },
       {
         test: /displayBrowserWarning\.[tj]sx?$/,
@@ -103,11 +120,14 @@ export default {
     },
     fallback: {
       stream: require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify'),
     },
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development',
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
+      'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
     }),
     new CaseSensitivePathsPlugin(),
     new MiniCssExtractPlugin({
@@ -119,3 +139,19 @@ export default {
     }),
   ],
 };
+
+if (process.env.ANALYZE_BUNDLE_SIZE) {
+  config.plugins.push(new BundleAnalyzerPlugin());
+}
+
+if (process.env.ROLLBAR_ACCESS_TOKEN) {
+  config.plugins.push(
+    new RollbarSourceMapPlugin({
+      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+      version: process.env.SOURCE_VERSION,
+      publicPath: process.env.ROLLBAR_PUBLIC_PATH,
+    }),
+  );
+}
+
+module.exports = config;

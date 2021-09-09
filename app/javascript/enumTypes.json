@@ -51,6 +51,47 @@
     ],
     "possibleTypes": null
   },
+  "FormItemRole": {
+    "kind": "ENUM",
+    "name": "FormItemRole",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "normal",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "confirmed_attendee",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "team_member",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "all_profiles_basic_access",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "admin",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
   "FormType": {
     "kind": "ENUM",
     "name": "FormType",
