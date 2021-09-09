@@ -12,7 +12,7 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["mapbox-gl"],
+      "matchPackageNames": ["mapbox-gl", "@types/mapbox-gl"],
       "allowedVersions": "< 2"
     }
   ]
