@@ -106,7 +106,6 @@
     "detect-browser": "5.2.0",
     "diff": "5.0.0",
     "fast-diff": "1.2.0",
-    "file-loader": "6.2.0",
     "file-saver": "2.0.5",
     "font-awesome": "4.7.0",
     "glob": "7.1.7",
