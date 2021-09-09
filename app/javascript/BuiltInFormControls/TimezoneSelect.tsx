@@ -26,7 +26,8 @@ type BoostableDocument = {
 
 class BoostableTfIdfSearchIndex
   extends TfIdfSearchIndex
-  implements TfIdfSearchIndexWithOverridableCreate {
+  implements TfIdfSearchIndexWithOverridableCreate
+{
   _createCalculateTfIdf() {
     /* eslint-disable-next-line no-underscore-dangle */ /* @ts-ignore */
     const baseTfIdf = super._createCalculateTfIdf();
@@ -50,9 +51,9 @@ function getFormattedOffset(zoneName: string) {
   const offsetSign = offset < 0 ? '-' : '+';
   const offsetHours = Math.floor(Math.abs(offset / 60));
   const offsetMinutes = Math.round(Math.abs(offset % 60));
-  return `UTC${offsetSign}${offsetHours
+  return `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes
     .toString()
-    .padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`;
+    .padStart(2, '0')}`;
 }
 
 export type TimezoneSelectProps = {

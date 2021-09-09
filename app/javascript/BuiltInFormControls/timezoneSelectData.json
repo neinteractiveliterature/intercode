@@ -2895,45 +2895,29 @@
       "name": "EST5EDT",
       "nameKeywords": "EST5EDT",
       "$boost": 0.5,
-      "shortOffsetNames": [
-        null
-      ],
-      "longOffsetNames": [
-        null
-      ]
+      "shortOffsetNames": [],
+      "longOffsetNames": []
     },
     "CST6CDT": {
       "name": "CST6CDT",
       "nameKeywords": "CST6CDT",
       "$boost": 0.5,
-      "shortOffsetNames": [
-        null
-      ],
-      "longOffsetNames": [
-        null
-      ]
+      "shortOffsetNames": [],
+      "longOffsetNames": []
     },
     "MST7MDT": {
       "name": "MST7MDT",
       "nameKeywords": "MST7MDT",
       "$boost": 0.5,
-      "shortOffsetNames": [
-        null
-      ],
-      "longOffsetNames": [
-        null
-      ]
+      "shortOffsetNames": [],
+      "longOffsetNames": []
     },
     "PST8PDT": {
       "name": "PST8PDT",
       "nameKeywords": "PST8PDT",
       "$boost": 0.5,
-      "shortOffsetNames": [
-        null
-      ],
-      "longOffsetNames": [
-        null
-      ]
+      "shortOffsetNames": [],
+      "longOffsetNames": []
     },
     "America/New_York": {
       "name": "America/New_York",
