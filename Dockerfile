@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1.3
 ARG RUBY_VERSION=2.7.4
 
-
 ### build
 
 FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build

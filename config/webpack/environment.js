@@ -7,7 +7,6 @@ import { createRequire } from 'module';
 import getStyleRule from './getStyleRule.js';
 
 const require = createRequire(import.meta.url);
-const CACHE_PATH = 'tmp/cache/webpack';
 
 export default {
   entry: {
@@ -26,7 +25,6 @@ export default {
   },
   cache: {
     type: 'filesystem',
-    cacheDirectory: resolve(CACHE_PATH, 'cache-loader'),
   },
   module: {
     rules: [
@@ -60,7 +58,6 @@ export default {
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: resolve(CACHE_PATH, 'babel-loader'),
               presets: [
                 [
                   '@babel/env',
@@ -82,9 +79,6 @@ export default {
         use: [
           {
             loader: 'babel-loader',
-            options: {
-              cacheDirectory: resolve(CACHE_PATH, 'babel-loader'),
-            },
           },
         ],
       },
@@ -94,9 +88,6 @@ export default {
         use: [
           {
             loader: 'babel-loader',
-            options: {
-              cacheDirectory: resolve(CACHE_PATH, 'babel-loader'),
-            },
           },
         ],
       },
@@ -127,7 +118,9 @@ export default {
     },
   },
   plugins: [
-    new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development',
+    }),
     new CaseSensitivePathsPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash:8].css',
