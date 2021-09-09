@@ -9,6 +9,7 @@ USER root
 WORKDIR /usr/src/intercode
 
 RUN apk add --no-cache shared-mime-info
+RUN npm install -g yarn
 
 COPY Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
 RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
