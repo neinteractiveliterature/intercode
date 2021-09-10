@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.3
 ARG RUBY_VERSION=2.7.4
 
 ### build
@@ -12,8 +11,7 @@ RUN apk add --no-cache shared-mime-info npm
 RUN npm install -g yarn
 
 COPY Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
-  bundle install -j4 --without intercode1_import \
+RUN bundle install -j4 --without intercode1_import \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
   && echo 'Copying /usr/local/bundle to /usr/local/bundle-tmp' \
@@ -24,9 +22,9 @@ RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
   && find /usr/local/bundle-tmp/gems -name '*.o' -delete
 RUN rm -rf /usr/local/bundle && mv /usr/local/bundle-tmp /usr/local/bundle
 
-COPY package.json yarn.lock .yarn .yarnrc.yml /usr/src/intercode/
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-  yarn install
+COPY package.json yarn.lock .yarnrc.yml /usr/src/intercode/
+COPY ./.yarn /usr/src/intercode/.yarn
+RUN yarn install
 
 COPY --chown=www:www . /usr/src/intercode
 
@@ -35,15 +33,8 @@ ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-  --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
-  DATABASE_URL=postgresql://fakehost/not_a_real_database yarn run build
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-  --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
-  DATABASE_URL=postgresql://fakehost/not_a_real_database yarn run build:cli
-RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-  --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
-  DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database yarn run build
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
 ### test
 
