@@ -65,9 +65,6 @@ gem 'aws-sdk-sns'
 # Markdown
 gem 'redcarpet'
 
-# Content diffing
-gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
-
 # SMS and phone support
 gem 'twilio-ruby', '~> 5.58.1'
 gem 'phonelib'

@@ -11,7 +11,8 @@ RUN apk add --no-cache shared-mime-info npm
 RUN npm install -g yarn
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN bundle install -j4 --without intercode1_import \
+RUN bundle config set without 'intercode1_import' \
+  && bundle install -j4 \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
   && echo 'Copying /usr/local/bundle to /usr/local/bundle-tmp' \
@@ -19,8 +20,10 @@ RUN bundle install -j4 --without intercode1_import \
   && echo 'Cleaning cached gems and intermediate build files from /usr/local/bundle-tmp' \
   && rm -rf /usr/local/bundle-tmp/cache/*.gem \
   && find /usr/local/bundle-tmp/gems -name '*.c' -delete \
-  && find /usr/local/bundle-tmp/gems -name '*.o' -delete
-RUN rm -rf /usr/local/bundle && mv /usr/local/bundle-tmp /usr/local/bundle
+  && find /usr/local/bundle-tmp/gems -name '*.o' -delete \
+  && echo 'Switching the bundle directory for the cleaned one, Raiders of the Lost Ark-style' \
+  && rm -rf /usr/local/bundle \
+  && mv /usr/local/bundle-tmp /usr/local/bundle
 
 COPY --chown=www:www package.json yarn.lock .yarnrc.yml /usr/src/intercode/
 COPY --chown=www:www ./.yarn /usr/src/intercode/.yarn
@@ -51,6 +54,7 @@ RUN apk add --no-cache postgresql-client
 FROM build AS pre-production
 
 RUN rm -rf node_modules
+RUN yarn cache clean
 
 ### production
 
