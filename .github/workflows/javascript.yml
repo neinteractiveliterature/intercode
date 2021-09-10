@@ -33,7 +33,7 @@ jobs:
     - name: graphql-codegen
       run: yarn run graphql:codegen
     - name: tsc on resulting generated files
-      uses: icrawl/action-tsc@v1
+      run: yarn run tsc --noEmit
   tsc:
     name: tsc
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
     - name: yarn install
       run: yarn install
     - name: tsc
-      uses: icrawl/action-tsc@v1
+      run: yarn run tsc --noEmit
   jest:
     name: jest
     runs-on: ubuntu-latest
