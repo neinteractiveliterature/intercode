@@ -11,81 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install docker-compose
-      run: sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    - name: chmod docker-compose
-      run: sudo chmod +x /usr/local/bin/docker-compose
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DockerHubUsername }}
+        password: ${{ secrets.DockerHubPassword }}
     - name: Set up Docker Buildx
       id: buildx
-      uses: docker/setup-buildx-action@v1
-
-    # Do the actual build
-    - name: Build the "local-build" Docker image
-      run: docker buildx build .
-        --target build
-        --tag local-build
-        --load
-
-    # Run the tests
-    - name: Build the "test" Docker image
-      run: docker buildx build .
-        --cache-from local-build
-        --target test
-        --tag local-test
-        --load
-    - name: Run Ruby tests
-      env:
-        DOCKER_CLI_EXPERIMENTAL: enabled
-      run: docker-compose -f docker-compose.test.yml run
-        -e GIT_COMMIT_SHA=${GITHUB_SHA} -e GIT_BRANCH=${GITHUB_REF}
-        -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
-        -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
-        -e CI=true
-        -v $(pwd)/test/html_reports:/usr/src/intercode/test/html_reports
-        web
-        test/docker-ruby-test.sh
-    - name: Run JavaScript tests
-      env:
-        DOCKER_CLI_EXPERIMENTAL: enabled
-      if: always()
-      run: docker-compose -f docker-compose.test.yml run
-        -e GIT_COMMIT_SHA=${GITHUB_SHA} -e GIT_BRANCH=${GITHUB_REF}
-        -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
-        -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
-        -e CI=true
-        -v $(pwd)/test/html_reports:/usr/src/intercode/test/html_reports
-        web
-        yarn run test
-    - name: Archive HTML test reports
-      uses: actions/upload-artifact@v2
-      if: always()
+      uses: docker/setup-buildx-action@master
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
       with:
-        name: test-reports
-        path: test/html_reports
-
-    # Build and publish the production image
-    - name: Log into Docker Hub
-      env:
-        DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
-      run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-    - name: Build the "local-production" Docker image
-      run: docker buildx build .
-        --cache-from local-build
-        --target production
-        --tag local-production
-        --load
-    - name: Tag the production image with the SHA
-      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
-    - name: Tag the production image "latest"
-      run: docker tag local-production ${GITHUB_REPOSITORY}:latest
-    - name: Push the SHA tag to Docker Hub
-      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
-    - name: Push "latest" to Docker Hub
-      run: docker push ${GITHUB_REPOSITORY}:latest
-
-# I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
-#     - name: Download container-diff
-#       run: curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64
-#     - name: Diff the images
-#       run: ./container-diff-linux-amd64 diff docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-main daemon://local-build
+        target: production
+        tags: |
+          neinteractiveliterature/intercode:latest
+          neinteractiveliterature/intercode:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
