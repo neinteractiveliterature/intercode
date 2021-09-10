@@ -7,13 +7,6 @@ GIT
       doorkeeper (>= 5.0)
       json-jwt (~> 1.6)
 
-GIT
-  remote: https://github.com/nbudin/htmldiff-lcs
-  revision: efeec72cdedadfb310dbb6474395289287d0fcdc
-  specs:
-    htmldiff-lcs (0.0.1)
-      diff-lcs
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -611,7 +604,6 @@ DEPENDENCIES
   graphql (>= 1.10.2)
   graphql-batch
   graphql-rails_logger
-  htmldiff-lcs!
   icalendar
   letter_opener
   liquid-md5
