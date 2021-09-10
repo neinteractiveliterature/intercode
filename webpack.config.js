@@ -74,7 +74,7 @@ const config = {
         test: /displayBrowserWarning\.[tj]sx?$/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: require.resolve('babel-loader'),
             options: {
               presets: [
                 [
@@ -96,7 +96,7 @@ const config = {
         type: 'javascript/auto',
         use: [
           {
-            loader: 'babel-loader',
+            loader: require.resolve('babel-loader'),
           },
         ],
       },
@@ -105,7 +105,7 @@ const config = {
         exclude: [/node_modules/, /\.yalc/],
         use: [
           {
-            loader: 'babel-loader',
+            loader: require.resolve('babel-loader'),
           },
         ],
       },
@@ -121,6 +121,9 @@ const config = {
     fallback: {
       stream: require.resolve('stream-browserify'),
       crypto: require.resolve('crypto-browserify'),
+      events: require.resolve('events'),
+      buffer: require.resolve('buffer'),
+      punycode: require.resolve('punycode'),
     },
   },
   plugins: [
