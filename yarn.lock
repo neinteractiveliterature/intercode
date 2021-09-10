@@ -6170,7 +6170,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001255, caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001251, caniuse-lite@npm:^1.0.30001252, caniuse-lite@npm:^1.0.30001254":
+"caniuse-lite@npm:1.0.30001256":
+  version: 1.0.30001256
+  resolution: "caniuse-lite@npm:1.0.30001256"
+  checksum: 4f9b44e07cdf35e410c9b503dd410051281a9281b198456b5987d22d94ffdeb3e60b784067d4eb06f76ec55855deb8715ffaa16234aa5b55d2dbda290ab304dc
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001251, caniuse-lite@npm:^1.0.30001252, caniuse-lite@npm:^1.0.30001254":
   version: 1.0.30001255
   resolution: "caniuse-lite@npm:1.0.30001255"
   checksum: 6889855b5e4d4496d183c52eb214327d8a8120b2c7b935948ae44cf64748c7b2f3c13d3917a10bb47697b9ba5e9a4bfd4b1ed8319f7f8e6609b3ebd3ba1184b3
@@ -16695,7 +16702,7 @@ resolve@^2.0.0-next.3:
     bootstrap-icons: 1.5.0
     bytes: 3.1.0
     cadmus-navbar-admin: 4.1.0
-    caniuse-lite: 1.0.30001255
+    caniuse-lite: 1.0.30001256
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
     compression-webpack-plugin: 8.0.1
