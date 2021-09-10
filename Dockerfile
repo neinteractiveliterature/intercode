@@ -10,7 +10,7 @@ WORKDIR /usr/src/intercode
 RUN apk add --no-cache shared-mime-info npm
 RUN npm install -g yarn
 
-COPY Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
+COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
 RUN bundle install -j4 --without intercode1_import \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
@@ -22,8 +22,8 @@ RUN bundle install -j4 --without intercode1_import \
   && find /usr/local/bundle-tmp/gems -name '*.o' -delete
 RUN rm -rf /usr/local/bundle && mv /usr/local/bundle-tmp /usr/local/bundle
 
-COPY package.json yarn.lock .yarnrc.yml /usr/src/intercode/
-COPY ./.yarn /usr/src/intercode/.yarn
+COPY --chown=www:www package.json yarn.lock .yarnrc.yml /usr/src/intercode/
+COPY --chown=www:www ./.yarn /usr/src/intercode/.yarn
 RUN yarn install
 
 COPY --chown=www:www . /usr/src/intercode
@@ -33,7 +33,7 @@ ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-RUN DATABASE_URL=postgresql://fakehost/not_a_real_database yarn run build
+RUN yarn run build
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
 ### test
