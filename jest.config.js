@@ -11,7 +11,7 @@ const config = {
   reporters: [
     'default',
     [
-      './node_modules/jest-html-reporter',
+      require.resolve('jest-html-reporter'),
       {
         outputPath: './test/html_reports/jest-report.html',
         pageTitle: 'Test Report',

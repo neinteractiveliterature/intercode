@@ -1911,6 +1911,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.15.4":
+  version: 7.15.4
+  resolution: "@babel/runtime@npm:7.15.4"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: c40825430400e47c19b97e4142d5315d2910305b9714d44a711472587ee2fd4521fdba5f02ddd9df3902f5e988d9854fa83f4da1e0c091f70f6983fa52480606
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.14.5, @babel/template@npm:^7.15.4, @babel/template@npm:^7.3.3":
   version: 7.15.4
   resolution: "@babel/template@npm:7.15.4"
@@ -3843,6 +3852,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/events@npm:^3":
+  version: 3.0.0
+  resolution: "@types/events@npm:3.0.0"
+  checksum: 9a424c2da210957d5636e0763e8c9fc3aaeee35bf411284ddec62a56a6abe31de9c7c2e713dabdd8a76ff98b47db2bd52f61310be6609641d6234cc842ecbbe3
+  languageName: node
+  linkType: hard
+
 "@types/extract-files@npm:*":
   version: 8.1.0
   resolution: "@types/extract-files@npm:8.1.0"
@@ -3877,6 +3893,13 @@ __metadata:
   version: 4.7.8
   resolution: "@types/history@npm:4.7.8"
   checksum: 9c867532afd80f72a7101a5bb3c10c1ad7cc8c2c14e92fdbc54d5fed0ef8cdb6060c0f261a39884e243424636c6ff85d8aaffb984e2edaac348d2f216f9eedeb
+  languageName: node
+  linkType: hard
+
+"@types/history@npm:^4.7.9":
+  version: 4.7.9
+  resolution: "@types/history@npm:4.7.9"
+  checksum: 556b062adb92795839301965776b0418e9ca32798bd8a6031345a6a84d7512771107143a497b7e3ff826d0b0d4456e962c6450485dda6f55c7dd33371e840529
   languageName: node
   linkType: hard
 
@@ -3958,6 +3981,16 @@ __metadata:
     jest-diff: ^25.2.1
     pretty-format: ^25.2.1
   checksum: 97ad03069320f2f34e3c6e7ebe9104eb37f83622e6a89f51b34e365d42ca00c4059bee767e42e5c2b340d5776d94973fb1beb43c06ae933d4b3ec584c74238e0
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:^27.0.1":
+  version: 27.0.1
+  resolution: "@types/jest@npm:27.0.1"
+  dependencies:
+    jest-diff: ^27.0.0
+    pretty-format: ^27.0.0
+  checksum: 972aaae341b83eb608970c93295282f1f9edc056dc8123635456cbaced822702673118d60279c7b889300e7c9a0726c3674d701115915e2e1967db09542389c2
   languageName: node
   linkType: hard
 
@@ -4088,6 +4121,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^16.9.1":
+  version: 16.9.1
+  resolution: "@types/node@npm:16.9.1"
+  checksum: 41afcf183a22d59323a0199dd7e0f46591247f45fc08a4434edb26d56dc279ae4fdb80f37989ddd7a0f45e3857c4933e6e82057ede09c5a829f77e373e680375
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.0
   resolution: "@types/parse-json@npm:4.0.0"
@@ -4106,6 +4146,13 @@ __metadata:
   version: 15.7.3
   resolution: "@types/prop-types@npm:15.7.3"
   checksum: 41831d53c44c9eeafdaf9762bcb4553c13a3bbf990745ed9065a1cc3581b80633113b53fd49b202bf51731b258da5d0a9aa09c9035d5af7f78b0f6bc273f1325
+  languageName: node
+  linkType: hard
+
+"@types/punycode@npm:^2":
+  version: 2.1.0
+  resolution: "@types/punycode@npm:2.1.0"
+  checksum: 6835698becab395eb9ac186970fd7879aeb522ea72d516ef9d681d787989653fcc2439ecc07d48280e1ca11862773b806efeec3fdbd1207528829a83b65d4275
   languageName: node
   linkType: hard
 
@@ -4143,6 +4190,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: d0f989e12fabb2572a38d79630c209499afa2edc865cc3ebc50333845715bd73d88ac88e24274977cd62433e46e91ddf94c30c2c12f89e427bbb739682caf677
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^17.0.9":
+  version: 17.0.9
+  resolution: "@types/react-dom@npm:17.0.9"
+  dependencies:
+    "@types/react": "*"
+  checksum: b7e898e1a22643a371f58e801a3d1d8cf13a82d77063c24be73e840ef8d877ca1d04adc5db168d0dac3167dc050a26b1d70efc5fe8566a7f46a3c488a8322989
   languageName: node
   linkType: hard
 
@@ -4221,6 +4277,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: ba44361d7b055922b60a557389a68d5320a190785cd80173839ef8c096aeb0808bd9c35fc9a70badbfe959dc668fdb1b82211e4914140a5edc9ed87d760c9812
+  languageName: node
+  linkType: hard
+
+"@types/react-transition-group@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "@types/react-transition-group@npm:4.4.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: 35523ef25ae5bbf68793a52e9b996f8c7c337e0d10650bc964c26929547b062509c955f55e76651bcf604560594783f60c4bfcee290a263845f9e43eb0ab0d1e
   languageName: node
   linkType: hard
 
@@ -4331,6 +4396,15 @@ __metadata:
   dependencies:
     "@types/estree": "*"
   checksum: c219c5cae8932e399f2e2fef6e741c85ad67b421af55480a4255630edcd63bafc3ac7a31064024fbfcba25d57577eed49e5dc1b6775ab12aa5011cb469daed4e
+  languageName: node
+  linkType: hard
+
+"@types/testing-library__jest-dom@npm:^5.14.1":
+  version: 5.14.1
+  resolution: "@types/testing-library__jest-dom@npm:5.14.1"
+  dependencies:
+    "@types/jest": "*"
+  checksum: 77fe7ad3a9d49250972a0e3289b6d536942f95f0d539f32a917cf78c9422113d55c00de53b53dd4de1de49b68c8b500faea62e3017c4a64736cfbfbade749e04
   languageName: node
   linkType: hard
 
@@ -6044,6 +6118,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buffer@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "buffer@npm:6.0.3"
+  dependencies:
+    base64-js: ^1.3.1
+    ieee754: ^1.2.1
+  checksum: 5ad23293d9a731e4318e420025800b42bf0d264004c0286c8cc010af7a270c7a0f6522e84f54b9ad65cbd6db20b8badbfd8d2ebf4f80fa03dab093b89e68c3f9
+  languageName: node
+  linkType: hard
+
 "bytes@npm:3.0.0":
   version: 3.0.0
   resolution: "bytes@npm:3.0.0"
@@ -6553,6 +6637,13 @@ __metadata:
   version: 5.61.0
   resolution: "codemirror@npm:5.61.0"
   checksum: d9081d4937fc237c972e12538721b47817a08557a30d692b32e09849977e5d91ca6c8984cdea417cf11a163fdbc3c7139fd66cefc6fcf32047c8cbecd21d2715
+  languageName: node
+  linkType: hard
+
+"codemirror@npm:^5.62.3":
+  version: 5.62.3
+  resolution: "codemirror@npm:5.62.3"
+  checksum: ae1f6cd6302ff65b5abacdb475a88f4f188775930bb3417a1c5c1d9903aa66da1118a238458b8b5bbac5cf263c7b1e2110477c72afc57d51ca0a9b3215869e2d
   languageName: node
   linkType: hard
 
@@ -8813,6 +8904,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"events@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "events@npm:3.3.0"
+  checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
+  languageName: node
+  linkType: hard
+
 "evp_bytestokey@npm:^1.0.0, evp_bytestokey@npm:^1.0.3":
   version: 1.0.3
   resolution: "evp_bytestokey@npm:1.0.3"
@@ -9780,6 +9878,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql-language-service-utils@npm:^2.5.3":
+  version: 2.5.3
+  resolution: "graphql-language-service-utils@npm:2.5.3"
+  dependencies:
+    graphql-language-service-types: ^1.8.0
+    nullthrows: ^1.0.0
+  peerDependencies:
+    graphql: ">= v14.5.0 <= 15.5.0"
+  checksum: fb860b7a750289d6957f706384c4ea94bbff2e590f64bf33fda29053a9fc0c515d67c1b96e84e8d19fb8b9404b8c2d4af6c747004c1a1fd430788ce5676276e8
+  languageName: node
+  linkType: hard
+
 "graphql-language-service@npm:^3.1.2":
   version: 3.1.2
   resolution: "graphql-language-service@npm:3.1.2"
@@ -9807,7 +9917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3":
+"graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3, graphql-tag@npm:^2.12.5":
   version: 2.12.5
   resolution: "graphql-tag@npm:2.12.5"
   dependencies:
@@ -10368,7 +10478,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.12, ieee754@npm:^1.1.13":
+"ieee754@npm:^1.1.12, ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
@@ -11338,7 +11448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:^27.1.1":
+"jest-diff@npm:^27.0.0, jest-diff@npm:^27.1.1":
   version: 27.1.1
   resolution: "jest-diff@npm:27.1.1"
   dependencies:
@@ -15284,6 +15394,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pretty-format@npm:^27.0.0, pretty-format@npm:^27.1.1":
+  version: 27.1.1
+  resolution: "pretty-format@npm:27.1.1"
+  dependencies:
+    "@jest/types": ^27.1.1
+    ansi-regex: ^5.0.0
+    ansi-styles: ^5.0.0
+    react-is: ^17.0.1
+  checksum: 5e88ed87b165b552285187107e9f1bfb8e593a9f8653ceb7b3abf76611eece789c41292786856339191d40c6e306042b13c6553c38edc851c47244119a5bcbf1
+  languageName: node
+  linkType: hard
+
 "pretty-format@npm:^27.0.2":
   version: 27.0.2
   resolution: "pretty-format@npm:27.0.2"
@@ -15293,18 +15415,6 @@ __metadata:
     ansi-styles: ^5.0.0
     react-is: ^17.0.1
   checksum: 26a454f1daebcb9b605a56aadc68364728114b2cada38c0647e745accf02e89ba8e098ceef102abb01e9df00cb0d78dd8c1cf4756e21aa560f054069e97646e3
-  languageName: node
-  linkType: hard
-
-"pretty-format@npm:^27.1.1":
-  version: 27.1.1
-  resolution: "pretty-format@npm:27.1.1"
-  dependencies:
-    "@jest/types": ^27.1.1
-    ansi-regex: ^5.0.0
-    ansi-styles: ^5.0.0
-    react-is: ^17.0.1
-  checksum: 5e88ed87b165b552285187107e9f1bfb8e593a9f8653ceb7b3abf76611eece789c41292786856339191d40c6e306042b13c6553c38edc851c47244119a5bcbf1
   languageName: node
   linkType: hard
 
@@ -16652,8 +16762,10 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": 7.14.5
     "@babel/preset-typescript": 7.15.0
     "@babel/register": 7.15.3
+    "@babel/runtime": ^7.15.4
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.2.2
+    "@graphql-codegen/add": ^3.1.0
     "@graphql-codegen/cli": 2.2.0
     "@graphql-codegen/fragment-matcher": 3.1.0
     "@graphql-codegen/introspection": 2.1.0
@@ -16664,6 +16776,7 @@ resolve@^2.0.0-next.3:
     "@juggle/resize-observer": 3.3.1
     "@neinteractiveliterature/litform": 0.11.1
     "@popperjs/core": 2.10.1
+    "@react-dnd/invariant": ^2.0.0
     "@stripe/react-stripe-js": 1.4.1
     "@stripe/stripe-js": 1.17.1
     "@testing-library/jest-dom": 5.14.1
@@ -16675,23 +16788,31 @@ resolve@^2.0.0-next.3:
     "@types/codemirror": 5.60.2
     "@types/debounce-promise": 3.1.4
     "@types/diff": 5.0.1
+    "@types/events": ^3
     "@types/file-saver": 2.0.3
+    "@types/history": ^4.7.9
     "@types/inflected": 1.1.29
+    "@types/jest": ^27.0.1
     "@types/js-search": 1.4.0
     "@types/lodash": 4.14.172
     "@types/luxon": 2.0.3
     "@types/mapbox-gl": 1.13.2
     "@types/minimist": 1.2.2
+    "@types/node": ^16.9.1
+    "@types/punycode": ^2
     "@types/react": 17.0.20
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.5
     "@types/react-dnd-multi-backend": 6.0.1
+    "@types/react-dom": ^17.0.9
     "@types/react-google-recaptcha": 2.1.2
     "@types/react-onclickoutside": 6.7.4
     "@types/react-router-dom": 5.1.8
     "@types/react-select": 4.0.17
     "@types/react-table": 7.7.2
+    "@types/react-transition-group": ^4.4.2
     "@types/source-map-support": 0.5.4
+    "@types/testing-library__jest-dom": ^5.14.1
     "@types/tinycolor2": 1.4.3
     "@types/uuid": 8.3.1
     "@types/zxcvbn": 4.4.1
@@ -16711,11 +16832,13 @@ resolve@^2.0.0-next.3:
     babel-plugin-lodash: 3.3.4
     bootstrap: 5.1.1
     bootstrap-icons: 1.5.0
+    buffer: ^6.0.3
     bytes: 3.1.0
     cadmus-navbar-admin: 4.1.0
     caniuse-lite: 1.0.30001256
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
+    codemirror: ^5.62.3
     compression-webpack-plugin: 8.0.1
     core-js: 3.17.3
     core-js-compat: 3.17.3
@@ -16729,8 +16852,10 @@ resolve@^2.0.0-next.3:
     diff: 5.0.0
     eslint: 7.32.0
     eslint-config-airbnb: 18.2.1
+    eslint-config-airbnb-base: ^14.2.1
     eslint-config-airbnb-typescript: 14.0.0
     eslint-config-prettier: 8.3.0
+    eslint-import-resolver-node: ^0.3.6
     eslint-import-resolver-typescript: 2.4.0
     eslint-import-resolver-webpack: 0.13.1
     eslint-plugin-babel: 5.3.1
@@ -16740,6 +16865,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-jsx-a11y: 6.4.1
     eslint-plugin-react: 7.25.1
     eslint-plugin-react-hooks: 4.2.0
+    events: ^3.3.0
     fast-diff: 1.2.0
     file-saver: 2.0.5
     font-awesome: 4.7.0
@@ -16747,6 +16873,8 @@ resolve@^2.0.0-next.3:
     graphiql: 1.4.2
     graphql: 15.5.3
     graphql-anywhere: 4.2.7
+    graphql-language-service-utils: ^2.5.3
+    graphql-tag: ^2.12.5
     history: 4.10.1
     html-to-react: 1.4.5
     husky: 7.0.2
@@ -16775,6 +16903,7 @@ resolve@^2.0.0-next.3:
     precss: 4.0.0
     prettier: 2.4.0
     prop-types: 15.7.2
+    punycode: ^2.1.1
     react: 17.0.2
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
