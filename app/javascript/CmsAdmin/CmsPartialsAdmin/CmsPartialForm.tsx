@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
+import { EditorView } from '@codemirror/view';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { CmsPartial } from '../../graphqlTypes.generated';
@@ -24,6 +25,8 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
     'content',
   );
 
+  const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
+
   return (
     <>
       <BootstrapFormInput
@@ -42,11 +45,7 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
 
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
-        <LiquidInput
-          value={partial.content ?? ''}
-          onChange={setContent}
-          codeMirrorOptions={{ readOnly }}
-        />
+        <LiquidInput value={partial.content ?? ''} onChange={setContent} extensions={extensions} />
       </div>
     </>
   );

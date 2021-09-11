@@ -5,8 +5,9 @@ import {
   BootstrapFormInput,
   usePropertySetters,
   useUniqueId,
- sortByLocaleString } from '@neinteractiveliterature/litform';
-
+  sortByLocaleString,
+} from '@neinteractiveliterature/litform';
+import { EditorView } from '@codemirror/view';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
@@ -51,6 +52,8 @@ function CmsPageForm<T extends PageFormFields>({
     'cms_layout',
     'content',
   );
+
+  const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
 
   const slugInputId = useUniqueId('slug-');
   const defaultLayout =
@@ -142,11 +145,7 @@ function CmsPageForm<T extends PageFormFields>({
 
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
-        <LiquidInput
-          value={page.content ?? ''}
-          onChange={setContent}
-          codeMirrorOptions={{ readOnly }}
-        />
+        <LiquidInput value={page.content ?? ''} onChange={setContent} extensions={extensions} />
       </div>
     </>
   );

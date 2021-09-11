@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
 import { useApolloClient } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
-import { Editor } from 'codemirror';
+import { html } from '@codemirror/lang-html';
 import { useModal, CodeInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import type { EditorView } from '@codemirror/view';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
@@ -17,6 +18,7 @@ import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
+import intercodeTheme from './IntercodeCodemirrorTheme';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -118,7 +120,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
   );
 }
 
-export type LiquidInputProps = Omit<CodeInputProps, 'mode' | 'editorDidMount'> & {
+export type LiquidInputProps = Omit<CodeInputProps, 'editorDidMount'> & {
   notifierEventKey?: string;
   disablePreview?: boolean;
 };
@@ -129,8 +131,13 @@ function LiquidInput(props: LiquidInputProps) {
   const [currentDocTab, setCurrentDocTab] = useState('convention');
   const client = useApolloClient();
   const { notifierEventKey } = props;
-  const editorRef = useRef<Editor | null>(null);
   const addFileModal = useModal();
+  const editorViewRef = useRef<EditorView>(null);
+
+  const extensions = useMemo(
+    () => [html(), intercodeTheme, ...(props.extensions ?? [])],
+    [props.extensions],
+  );
 
   const docTabClicked = (event: React.MouseEvent, tab: string) => {
     event.preventDefault();
@@ -159,8 +166,13 @@ function LiquidInput(props: LiquidInputProps) {
       };
 
   const addFile = (file: CmsFile) => {
-    editorRef.current?.replaceSelection(`{% file_url ${file.filename} %}`, 'start');
-    editorRef.current?.focus();
+    const view = editorViewRef.current;
+    if (!view) {
+      return;
+    }
+
+    view.dispatch(view.state.replaceSelection(`{% file_url ${file.filename} %}`));
+    view.focus();
   };
 
   const renderDocs = () => {
@@ -231,11 +243,9 @@ function LiquidInput(props: LiquidInputProps) {
     <>
       <CodeInput
         {...props}
-        mode="liquid-html"
+        ref={editorViewRef}
+        extensions={extensions}
         getPreviewContent={getPreviewContent}
-        editorDidMount={(editor) => {
-          editorRef.current = editor;
-        }}
         editButtonText={t('buttons.edit', 'Edit')}
         previewButtonText={t('buttons.preview', 'Preview')}
         extraNavControls={

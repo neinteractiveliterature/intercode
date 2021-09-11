@@ -8,6 +8,7 @@ import {
   CodeInput,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
+import { json as jsonExtension } from '@codemirror/lang-json';
 
 import { CreateFormWithJSON } from './mutations';
 import { FormAdminQuery } from './queries';
@@ -17,6 +18,7 @@ import usePageTitle from '../usePageTitle';
 import { useFormAdminQuery } from './queries.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import { useUpdateFormWithJsonMutation } from './mutations.generated';
+import intercodeTheme from '../BuiltInFormControls/IntercodeCodemirrorTheme';
 
 type EditingFormJSONData = {
   title: string;
@@ -52,6 +54,8 @@ export default LoadSingleValueFromCollectionWrapper(
     const [updateMutate] = useUpdateFormWithJsonMutation();
     const [updateForm, updateError, updateInProgress] = useAsyncFunction(updateMutate);
     const { t } = useTranslation();
+
+    const extensions = useMemo(() => [jsonExtension(), intercodeTheme], []);
 
     usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 
@@ -106,7 +110,7 @@ export default LoadSingleValueFromCollectionWrapper(
           <legend className="col-form-label">Content</legend>
           <CodeInput
             value={form.sectionsJSON}
-            mode="application/json"
+            extensions={extensions}
             onChange={(sectionsJSON) => setForm((prevForm) => ({ ...prevForm, sectionsJSON }))}
             editButtonText={t('buttons.edit', 'Edit')}
             previewButtonText={t('buttons.preview', 'Preview')}
