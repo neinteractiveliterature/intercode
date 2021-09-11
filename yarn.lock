@@ -3803,9 +3803,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:^0.13.3":
-  version: 0.13.3
-  resolution: "@neinteractiveliterature/litform@npm:0.13.3"
+"@neinteractiveliterature/litform@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "@neinteractiveliterature/litform@npm:0.13.4"
   dependencies:
     "@codemirror/basic-setup": ^0.19.0
     "@codemirror/commands": ^0.19.3
@@ -3828,7 +3828,7 @@ __metadata:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: da25943b2071b54bb3e3819023a5b48f53e659b9748ea352ab4d439fb5f1c69bb07348ae380d64bab25bd252e0d251710fd0b59651d8df78e813b17ba0cc0969
+  checksum: 11de0ff55d0adaddf5febe70e795762f6a00060f17cbba9291f9219896ace6976501b3970330654fcd9d7bda1579fd824434cc94b8f8790755edd80599ea38e6
   languageName: node
   linkType: hard
 
@@ -17154,7 +17154,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": ^0.15.5
-    "@neinteractiveliterature/litform": ^0.13.3
+    "@neinteractiveliterature/litform": ^0.13.4
     "@popperjs/core": 2.10.1
     "@react-dnd/invariant": 2.0.0
     "@stripe/react-stripe-js": 1.4.1
@@ -19134,7 +19134,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-typescript@4.4.3:
+"typescript@4.4.3, typescript@^4.2.4":
   version: 4.4.3
   resolution: "typescript@npm:4.4.3"
   bin:
@@ -19144,33 +19144,13 @@ typescript@4.4.3:
   languageName: node
   linkType: hard
 
-typescript@^4.2.4:
-  version: 4.4.2
-  resolution: "typescript@npm:4.4.2"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 194e08e9d1971d667d6fd1a0554616b7022312a2319d70e81a64e502a265992061ee7817ed9a69b52bbabe7a9b85e7938cb8c11c433e40a516b277f8c4dacd51
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@4.4.3#~builtin<compat/typescript>":
+"typescript@patch:typescript@4.4.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.2.4#~builtin<compat/typescript>":
   version: 4.4.3
   resolution: "typescript@patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 28ab98313afab46788ff41014fdb5932430ada6e03cf9e92ac47f406526a2cac1ae2894834e7da61e46b7429318e9c47f45ba8de323332f0cb9af99b72ebae74
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@^4.2.4#~builtin<compat/typescript>":
-  version: 4.4.2
-  resolution: "typescript@patch:typescript@npm%3A4.4.2#~builtin<compat/typescript>::version=4.4.2&hash=32657b"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 3109ae25705746996007161cdd3271857db4f40356b894e34d4cabc216bf9e251f53e0bb6e48df2450b5e3fd948dcbee716a616a4ad4cf7251292025e6163cb1
   languageName: node
   linkType: hard
 

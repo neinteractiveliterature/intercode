@@ -3,14 +3,6 @@ global.requestAnimationFrame = (cb) => {
   setTimeout(cb, 0);
 };
 
-// just to make @juggle/resize-observer's observe() method not error out
-class MutationObserver {
-  observe() {}
-
-  disconnect() {}
-}
-global.MutationObserver = MutationObserver;
-
 /**
  * begin codemirror polyfills
  * https://stackoverflow.com/questions/42213522/mocking-document-createrange-for-jest
