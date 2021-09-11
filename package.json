@@ -250,5 +250,7 @@
     "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write",
     "*.{rb,rake}": "bundle exec rubocop -a"
   },
-  "cacheDirectories": [".yarn/cache"]
+  "cacheDirectories": [
+    ".yarn/cache"
+  ]
 }
