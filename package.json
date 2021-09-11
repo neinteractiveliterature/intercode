@@ -226,7 +226,7 @@
     "eslint-plugin-react": "7.25.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "husky": "7.0.2",
-    "i18next-parser": "4.4.0",
+    "i18next-parser": "4.5.0",
     "jest": "27.1.1",
     "jest-html-reporter": "3.4.1",
     "jest-prop-type-error": "1.1.0",
