@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { useUniqueId } from '@neinteractiveliterature/litform';
+import { EditorView } from '@codemirror/view';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
@@ -82,6 +83,15 @@ function FreeTextItemInput(props: FreeTextItemInputProps) {
     [onInteract, formItem.identifier],
   );
 
+  const extensions = useMemo(
+    () => [
+      EditorView.domEventHandlers({
+        blur: userInteracted,
+      }),
+    ],
+    [userInteracted],
+  );
+
   const valueChanged = useCallback(
     (newValue) => {
       onChange(newValue);
@@ -97,7 +107,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps) {
           <MarkdownInput
             value={value || ''}
             onChange={valueChanged}
-            onBlur={userInteracted}
+            extensions={extensions}
             lines={formItem.rendered_properties.lines}
             formControlClassName={classNames({ 'is-invalid': valueInvalid })}
           >

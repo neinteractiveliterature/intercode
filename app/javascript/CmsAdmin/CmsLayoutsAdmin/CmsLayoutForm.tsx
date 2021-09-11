@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
-
+import { EditorView } from '@codemirror/view';
 import { Trans } from 'react-i18next';
+
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { CmsLayout } from '../../graphqlTypes.generated';
 
@@ -25,6 +26,8 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
     'navbar_classes',
     'content',
   );
+
+  const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
 
   return (
     <>
@@ -65,11 +68,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
 
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
-        <LiquidInput
-          value={layout.content ?? ''}
-          onChange={setContent}
-          codeMirrorOptions={{ readOnly }}
-        />
+        <LiquidInput value={layout.content ?? ''} onChange={setContent} extensions={extensions} />
       </div>
     </>
   );
