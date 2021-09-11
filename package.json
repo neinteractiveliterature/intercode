@@ -45,6 +45,7 @@
     "@babel/preset-flow": "7.14.5",
     "@babel/preset-react": "7.14.5",
     "@babel/register": "7.15.3",
+    "@codemirror/highlight": "^0.19.4",
     "@codemirror/lang-html": "^0.19.1",
     "@codemirror/lang-json": "^0.19.1",
     "@codemirror/lang-markdown": "^0.19.1",

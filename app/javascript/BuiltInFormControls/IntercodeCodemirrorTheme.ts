@@ -1,4 +1,5 @@
 import { EditorView } from '@codemirror/view';
+import { tags, HighlightStyle } from '@codemirror/highlight';
 
 const intercodeTheme = EditorView.theme({
   '&': {
@@ -7,73 +8,31 @@ const intercodeTheme = EditorView.theme({
     lineHeight: 'auto',
     background: 'transparent',
   },
-  '.cm-header': {
-    color: 'var(--bs-blue)',
-  },
-  '.cm-quote': {
-    color: 'var(--bs-green)',
-  },
-
-  '.cm-keyword': {
-    color: 'var(--bs-purple)',
-  },
-  '.cm-atom': {
-    color: 'var(--bs-indigo)',
-  },
-  '.cm-number': {
-    color: 'var(--bs-teal)',
-  },
-  '.cm-def': {
-    color: 'var(--bs-blue)',
-  },
-  '.cm-variable-2': {
-    color: 'var(--bs-indigo)',
-  },
-  '.cm-variable-3, .cm-type': {
-    color: 'var(--bs-cyan)',
-  },
-  '.cm-comment': {
-    color: 'var(--bs-pink)',
-  },
-  '.cm-string': {
-    color: 'var(--bs-orange)',
-  },
-  '.cm-string-2': {
-    color: 'var(--bs-orange)',
-  },
-  '.cm-meta': {
-    color: '#adb5bd',
-  },
-  '.cm-qualifier': {
-    color: '#6c757d',
-    'font-style': 'italic',
-  },
-  '.cm-builtin': {
-    color: 'var(--bs-indigo)',
-  },
-  '.cm-bracket': {
-    color: 'var(--bs-yellow)',
-  },
-  '.cm-tag': {
-    color: 'var(--bs-green)',
-  },
-  '.cm-attribute': {
-    color: 'var(--bs-cyan)',
-  },
-  '.cm-hr': {
-    color: '#495057',
-  },
-  '.cm-link': {
-    color: 'var(--bs-blue)',
-  },
-
-  '.cm-error': {
-    color: 'var(--bs-red)',
-  },
-
-  '.cm-liquid': {
-    'background-color': '#e9ecef',
+  '.cm-scroller': {
+    fontFamily: 'var(--bs-font-monospace)',
   },
 });
+
+export const intercodeHighlightStyle = HighlightStyle.define([
+  { tag: tags.strong, fontWeight: 'bold' },
+  { tag: tags.emphasis, fontStyle: 'italic' },
+  { tag: tags.heading, color: 'var(--bs-blue)' },
+  { tag: tags.quote, color: 'var(--bs-green)' },
+  { tag: tags.keyword, color: 'var(--bs-purple)' },
+  { tag: tags.atom, color: 'var(--bs-indigo)' },
+  { tag: tags.number, color: 'var(--bs-teal)' },
+  { tag: tags.definitionKeyword, color: 'var(--bs-blue)' },
+  { tag: tags.variableName, color: 'var(--bs-indigo)' },
+  { tag: tags.typeName, color: 'var(--bs-cyan)' },
+  { tag: tags.comment, color: 'var(--bs-pink)' },
+  { tag: tags.string, color: 'var(--bs-orange)' },
+  { tag: tags.meta, color: 'var(--bs-teal)' },
+  { tag: tags.modifier, color: '#6c757d', 'font-style': 'italic' },
+  { tag: tags.bracket, color: 'var(--bs-green)' },
+  { tag: tags.tagName, color: 'var(--bs-green)' },
+  { tag: tags.propertyName, color: 'var(--bs-indigo)' },
+  { tag: tags.link, color: 'var(--bs-blue)' },
+  { tag: tags.invalid, backgroundColor: 'var(--bs-danger)' },
+]);
 
 export default intercodeTheme;

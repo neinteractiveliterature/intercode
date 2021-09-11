@@ -3,12 +3,13 @@ import { CodeInput } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { useTranslation } from 'react-i18next';
 import { markdown } from '@codemirror/lang-markdown';
+import { EditorView } from '@codemirror/view';
 import { useMemo } from 'react';
 import parsePageContent from '../parsePageContent';
 
 import { PreviewMarkdownQuery } from './previewQueries';
 import { PreviewMarkdownQueryData } from './previewQueries.generated';
-import intercodeTheme from './IntercodeCodemirrorTheme';
+import intercodeTheme, { intercodeHighlightStyle } from './IntercodeCodemirrorTheme';
 
 export type MarkdownInputProps = Omit<CodeInputProps, 'getPreviewContent'>;
 
@@ -16,7 +17,13 @@ const MarkdownInput = (props: MarkdownInputProps) => {
   const client = useApolloClient();
   const { t } = useTranslation();
   const extensions = useMemo(
-    () => [markdown(), intercodeTheme, ...(props.extensions ?? [])],
+    () => [
+      markdown(),
+      intercodeTheme,
+      intercodeHighlightStyle,
+      EditorView.lineWrapping,
+      ...(props.extensions ?? []),
+    ],
     [props.extensions],
   );
 
