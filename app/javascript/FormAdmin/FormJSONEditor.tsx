@@ -9,6 +9,7 @@ import {
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import { json as jsonExtension } from '@codemirror/lang-json';
+import { EditorView } from '@codemirror/view';
 
 import { CreateFormWithJSON } from './mutations';
 import { FormAdminQuery } from './queries';
@@ -18,7 +19,9 @@ import usePageTitle from '../usePageTitle';
 import { useFormAdminQuery } from './queries.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import { useUpdateFormWithJsonMutation } from './mutations.generated';
-import intercodeTheme from '../BuiltInFormControls/IntercodeCodemirrorTheme';
+import intercodeTheme, {
+  intercodeHighlightStyle,
+} from '../BuiltInFormControls/IntercodeCodemirrorTheme';
 
 type EditingFormJSONData = {
   title: string;
@@ -55,7 +58,10 @@ export default LoadSingleValueFromCollectionWrapper(
     const [updateForm, updateError, updateInProgress] = useAsyncFunction(updateMutate);
     const { t } = useTranslation();
 
-    const extensions = useMemo(() => [jsonExtension(), intercodeTheme], []);
+    const extensions = useMemo(
+      () => [jsonExtension(), intercodeTheme, intercodeHighlightStyle, EditorView.lineWrapping],
+      [],
+    );
 
     usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 

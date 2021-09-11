@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
 import { useModal, CodeInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
-import type { EditorView } from '@codemirror/view';
+import { EditorView } from '@codemirror/view';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
@@ -18,7 +18,7 @@ import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
-import intercodeTheme from './IntercodeCodemirrorTheme';
+import intercodeTheme, { intercodeHighlightStyle } from './IntercodeCodemirrorTheme';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -135,7 +135,13 @@ function LiquidInput(props: LiquidInputProps) {
   const editorViewRef = useRef<EditorView>(null);
 
   const extensions = useMemo(
-    () => [html(), intercodeTheme, ...(props.extensions ?? [])],
+    () => [
+      html(),
+      intercodeTheme,
+      intercodeHighlightStyle,
+      EditorView.lineWrapping,
+      ...(props.extensions ?? []),
+    ],
     [props.extensions],
   );
 
