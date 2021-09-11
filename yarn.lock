@@ -3694,16 +3694,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:12.0.0":
-  version: 12.0.0
-  resolution: "@testing-library/react@npm:12.0.0"
+"@testing-library/react@npm:12.1.0":
+  version: 12.1.0
+  resolution: "@testing-library/react@npm:12.1.0"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^8.0.0
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: 07f0ba4092f7cd3232c2c61329353b2f2fa65388fc58666780be80f99f75daaf897a09a9897ac53f213d7b2d57e3cecb8127fd940da8cfd4275fa4a281e5b32c
+  checksum: 84ab074f12dbea82e5b08b976a6471c3a7d71629c72c895b661a2652d2b136cbc3de91f7152ca9e1485255c54f39acfa2ff2982ac20f94cf63f5eb84319c56d5
   languageName: node
   linkType: hard
 
@@ -16809,7 +16809,7 @@ resolve@^2.0.0-next.3:
     "@stripe/react-stripe-js": 1.4.1
     "@stripe/stripe-js": 1.17.1
     "@testing-library/jest-dom": 5.14.1
-    "@testing-library/react": 12.0.0
+    "@testing-library/react": 12.1.0
     "@testing-library/react-hooks": 7.0.2
     "@types/apollo-upload-client": 14.1.0
     "@types/bytes": 3.1.1
