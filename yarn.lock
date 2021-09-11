@@ -4204,15 +4204,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/codemirror@npm:5.60.2":
-  version: 5.60.2
-  resolution: "@types/codemirror@npm:5.60.2"
-  dependencies:
-    "@types/tern": "*"
-  checksum: 5e011afdc8385b35c3ffa18d8f06df3006d79071fc995afb56d53490905c290986fef99aad90ed58aede024c81843b33575a3930a15a160dd0c2e881fb387b46
-  languageName: node
-  linkType: hard
-
 "@types/dateformat@npm:^3.0.1":
   version: 3.0.1
   resolution: "@types/dateformat@npm:3.0.1"
@@ -4796,15 +4787,6 @@ __metadata:
   version: 1.2.0
   resolution: "@types/symlink-or-copy@npm:1.2.0"
   checksum: 18fb73094b2cf6c84544939bd6344d7a8cd1ccf8496a1cfb1320f38491c8dfbea3248bb6e91495322a51a493e04a767582a214d5261f5c5b007aa6ef65fc8b50
-  languageName: node
-  linkType: hard
-
-"@types/tern@npm:*":
-  version: 0.23.3
-  resolution: "@types/tern@npm:0.23.3"
-  dependencies:
-    "@types/estree": "*"
-  checksum: c219c5cae8932e399f2e2fef6e741c85ad67b421af55480a4255630edcd63bafc3ac7a31064024fbfcba25d57577eed49e5dc1b6775ab12aa5011cb469daed4e
   languageName: node
   linkType: hard
 
@@ -7039,13 +7021,6 @@ __metadata:
     codemirror: ^5.54.0
     graphql: ^14.0.0 || ^15.0.0
   checksum: b771f24410792bf1a4cfcb64eeee60215fbdae1cac77324b4ee4fffe0f13baae8c5c7e19c08c2e8f0a22242ac32022f80009e58af890eaa91d1b143fc77a3280
-  languageName: node
-  linkType: hard
-
-"codemirror@npm:5.62.3":
-  version: 5.62.3
-  resolution: "codemirror@npm:5.62.3"
-  checksum: ae1f6cd6302ff65b5abacdb475a88f4f188775930bb3417a1c5c1d9903aa66da1118a238458b8b5bbac5cf263c7b1e2110477c72afc57d51ca0a9b3215869e2d
   languageName: node
   linkType: hard
 
@@ -17190,7 +17165,6 @@ resolve@^2.0.0-next.3:
     "@types/apollo-upload-client": 14.1.0
     "@types/bytes": 3.1.1
     "@types/classnames": 2.3.1
-    "@types/codemirror": 5.60.2
     "@types/debounce-promise": 3.1.4
     "@types/diff": 5.0.1
     "@types/events": 3.0.0
@@ -17243,7 +17217,6 @@ resolve@^2.0.0-next.3:
     caniuse-lite: 1.0.30001256
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
-    codemirror: 5.62.3
     compression-webpack-plugin: 8.0.1
     core-js: 3.17.3
     core-js-compat: 3.17.3
