@@ -3428,14 +3428,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.11.1":
-  version: 0.11.1
-  resolution: "@neinteractiveliterature/litform@npm:0.11.1"
+"@neinteractiveliterature/litform@npm:0.12.1":
+  version: 0.12.1
+  resolution: "@neinteractiveliterature/litform@npm:0.12.1"
   dependencies:
+    "@popperjs/core": ^2.10.1
+    classnames: ^2.3.1
     codemirror: ^5.61.0
     copy-to-clipboard: ^3.3.1
     lodash: ^4.17.21
-    luxon: ^1.27.0
+    luxon: ^2.0.0
     react-bootstrap4-modal: ^2.0.0
     react-codemirror2: ^7.2.1
     react-cool-onclickoutside: ^1.6.2
@@ -3443,12 +3445,13 @@ __metadata:
     react-dnd-html5-backend: ^14.0.0
     react-dnd-multi-backend: ^6.0.2
     react-dnd-touch-backend: ^14.0.0
+    react-popper: ^2.2.5
     uuid: ^8.3.2
   peerDependencies:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: 351a9a0d6e3e23c9fcd6388b73b4d9a011ae42b071c819f63cc4e74bb1cb539938a8539431e1bb09eb15f39a314c17704c22c335f7135863efe7b853c8e601b9
+  checksum: 6abcbde2309a595653576ab40d78115af3d8cb7983f9fb0a79fa8ce4b09fedf8eed061f4633801efbc4af95fdf3642a76afb05d3723e4bd931162ec201d29a2a
   languageName: node
   linkType: hard
 
@@ -3506,7 +3509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.10.1":
+"@popperjs/core@npm:2.10.1, @popperjs/core@npm:^2.10.1":
   version: 2.10.1
   resolution: "@popperjs/core@npm:2.10.1"
   checksum: 55262eb98984a03364a844177a9d4b9ab1c6e3503eaa1ecb086c028b5b6d93985a92b5b5783008962633015fc9f0232fda3ce88f5b17930a909a633387a06505
@@ -12884,17 +12887,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.0.2":
+"luxon@npm:2.0.2, luxon@npm:^2.0.0":
   version: 2.0.2
   resolution: "luxon@npm:2.0.2"
   checksum: eb2e366cf41a129704ae3213e0aea3e1504390af2a84322a5bbb6a22c92d96c7cb70e58b941a109c5e1bfbed51784d08130278feeee6cdf169940af90a68ded5
-  languageName: node
-  linkType: hard
-
-"luxon@npm:^1.27.0":
-  version: 1.27.0
-  resolution: "luxon@npm:1.27.0"
-  checksum: 5e6b17cb01c010c59fc50335c08c58fdf79219b3dc92f968ccedd81cfdfe5db19465108ee9198c4f1882b1fbc6cf33c98b74483b6a18a15656e0e305bade332c
   languageName: node
   linkType: hard
 
@@ -16048,7 +16044,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-popper@npm:2.2.5":
+"react-popper@npm:2.2.5, react-popper@npm:^2.2.5":
   version: 2.2.5
   resolution: "react-popper@npm:2.2.5"
   dependencies:
@@ -16803,7 +16799,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-operations": 2.1.4
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@juggle/resize-observer": 3.3.1
-    "@neinteractiveliterature/litform": 0.11.1
+    "@neinteractiveliterature/litform": 0.12.1
     "@popperjs/core": 2.10.1
     "@react-dnd/invariant": 2.0.0
     "@stripe/react-stripe-js": 1.4.1
