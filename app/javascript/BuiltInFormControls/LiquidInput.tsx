@@ -1,13 +1,19 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
 import { useApolloClient } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
-import { useModal, CodeInput, ErrorDisplay } from '@neinteractiveliterature/litform';
-import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
-import { EditorView } from '@codemirror/view';
+import {
+  useModal,
+  CodeInput,
+  ErrorDisplay,
+  useStandardCodeMirror,
+  UseStandardCodeMirrorExtensionsOptions,
+} from '@neinteractiveliterature/litform';
+import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import { Extension } from '@codemirror/state';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
@@ -18,7 +24,6 @@ import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
-import intercodeTheme, { intercodeHighlightStyle } from './IntercodeCodemirrorTheme';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -120,10 +125,20 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
   );
 }
 
-export type LiquidInputProps = Omit<CodeInputProps, 'editorDidMount'> & {
-  notifierEventKey?: string;
-  disablePreview?: boolean;
-};
+export type LiquidInputProps = Omit<
+  CodeInputProps,
+  | 'editorDidMount'
+  | 'editorRef'
+  | 'getPreviewContent'
+  | 'previewButtonText'
+  | 'editButtonText'
+  | 'extraNavControls'
+> &
+  Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {
+    notifierEventKey?: string;
+    disablePreview?: boolean;
+    extensions?: Extension[];
+  };
 
 function LiquidInput(props: LiquidInputProps) {
   const { t } = useTranslation();
@@ -132,18 +147,14 @@ function LiquidInput(props: LiquidInputProps) {
   const client = useApolloClient();
   const { notifierEventKey } = props;
   const addFileModal = useModal();
-  const editorViewRef = useRef<EditorView>(null);
 
-  const extensions = useMemo(
-    () => [
-      html(),
-      intercodeTheme,
-      intercodeHighlightStyle,
-      EditorView.lineWrapping,
-      ...(props.extensions ?? []),
-    ],
-    [props.extensions],
-  );
+  const extensions = useMemo(() => [html(), ...(props.extensions ?? [])], [props.extensions]);
+
+  const [editorRef, editorView] = useStandardCodeMirror({
+    extensions,
+    value: props.value,
+    onChange: props.onChange,
+  });
 
   const docTabClicked = (event: React.MouseEvent, tab: string) => {
     event.preventDefault();
@@ -172,13 +183,8 @@ function LiquidInput(props: LiquidInputProps) {
       };
 
   const addFile = (file: CmsFile) => {
-    const view = editorViewRef.current;
-    if (!view) {
-      return;
-    }
-
-    view.dispatch(view.state.replaceSelection(`{% file_url ${file.filename} %}`));
-    view.focus();
+    editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.filename} %}`));
+    editorView.focus();
   };
 
   const renderDocs = () => {
@@ -249,8 +255,7 @@ function LiquidInput(props: LiquidInputProps) {
     <>
       <CodeInput
         {...props}
-        ref={editorViewRef}
-        extensions={extensions}
+        editorRef={editorRef}
         getPreviewContent={getPreviewContent}
         editButtonText={t('buttons.edit', 'Edit')}
         previewButtonText={t('buttons.preview', 'Preview')}
