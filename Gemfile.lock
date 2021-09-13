@@ -363,7 +363,7 @@ GEM
     oj (3.13.4)
     orm_adapter (0.5.0)
     ox (2.14.4)
-    parallel (1.20.1)
+    parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -460,7 +460,7 @@ GEM
       rollbar (>= 2.21, <= 4.0, < 4.0)
       shoryuken (>= 4.0, <= 5.3)
     rouge (3.26.0)
-    rubocop (1.20.0)
+    rubocop (1.21.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -634,7 +634,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.20.0)
+  rubocop (= 1.21.0)
   rubocop-performance
   rubocop-rails
   ruby-debug-ide
