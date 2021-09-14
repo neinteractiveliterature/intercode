@@ -1,6 +1,6 @@
 class PayOrderService < CivilService::Service
   def self.statement_descriptor_suffix(convention)
-    convention.name.gsub(/[^0-9A-Za-z \-]/, '')
+    convention.name.gsub(/[^0-9A-Za-z \-]/, '').slice(0, 22)
   end
 
   class Result < CivilService::Result
