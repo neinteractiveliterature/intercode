@@ -16977,7 +16977,7 @@ resolve@^2.0.0-next.3:
     require-from-string: 2.0.2
     resolve-url-loader: 4.0.0
     rollbar-sourcemap-webpack-plugin: 3.3.0
-    sass: 1.39.2
+    sass: 1.40.1
     sass-loader: 12.1.0
     source-map-support: 0.5.20
     stream-browserify: 3.0.0
@@ -17100,14 +17100,14 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sass@npm:1.39.2":
-  version: 1.39.2
-  resolution: "sass@npm:1.39.2"
+"sass@npm:1.40.1":
+  version: 1.40.1
+  resolution: "sass@npm:1.40.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: 7b3d96e5db3c579f4d48064bf3ec6582999255aab7fa3226d5db4711434b7aa54cc8f656ca4763c4e65c92520d6820651aecd38148b560997b445ba86b3e3c77
+  checksum: 09966a8f857f023ce059cfa4b925076626ded6f9ef47e70715ee06f5221a574cf120712a0bfa23b74e11707af3d6632f83f431375c71e4f43cadff300cf2a7f5
   languageName: node
   linkType: hard
 
