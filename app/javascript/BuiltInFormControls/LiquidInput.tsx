@@ -11,11 +11,11 @@ import {
   ErrorDisplay,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   liquid,
 } from '@neinteractiveliterature/litform';
 import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { Extension } from '@codemirror/state';
-import { syntaxTree } from '@codemirror/language';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
@@ -26,7 +26,6 @@ import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
-import { logTree } from '../printLezerTree';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -151,14 +150,16 @@ function LiquidInput(props: LiquidInputProps) {
   const { notifierEventKey } = props;
   const addFileModal = useModal();
 
-  const liquidExtension = useMemo(
-    () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
+  const languageExtension = useMemo(
+    // Once we stop getting weird errors from parseMixed we can use the Liquid grammar
+    // () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
+    () => html(),
     [],
   );
 
   const extensions = useMemo(
-    () => [liquidExtension, ...(props.extensions ?? [])],
-    [liquidExtension, props.extensions],
+    () => [languageExtension, ...(props.extensions ?? [])],
+    [languageExtension, props.extensions],
   );
 
   const [editorRef, editorView] = useStandardCodeMirror({
@@ -166,8 +167,6 @@ function LiquidInput(props: LiquidInputProps) {
     value: props.value,
     onChange: props.onChange,
   });
-
-  logTree(syntaxTree(editorView.state), props.value);
 
   const docTabClicked = (event: React.MouseEvent, tab: string) => {
     event.preventDefault();

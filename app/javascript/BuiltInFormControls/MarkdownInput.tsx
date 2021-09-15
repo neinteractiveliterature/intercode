@@ -3,6 +3,7 @@ import {
   CodeInput,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   liquid,
 } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
@@ -26,9 +27,15 @@ export type MarkdownInputProps = Omit<
 const MarkdownInput = (props: MarkdownInputProps) => {
   const client = useApolloClient();
   const { t } = useTranslation();
+  const languageExtension = useMemo(
+    // TODO: once parseMixed is more stable, use the Liquid mode
+    // () => liquid({ baseLanguage: markdown().language }),
+    () => markdown(),
+    [],
+  );
   const extensions = useMemo(
-    () => [liquid({ baseLanguage: markdown().language }), ...(props.extensions ?? [])],
-    [props.extensions],
+    () => [languageExtension, ...(props.extensions ?? [])],
+    [props.extensions, languageExtension],
   );
   const [editorRef] = useStandardCodeMirror({
     extensions,

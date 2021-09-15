@@ -2328,6 +2328,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/state@npm:^0.19.2":
+  version: 0.19.2
+  resolution: "@codemirror/state@npm:0.19.2"
+  dependencies:
+    "@codemirror/text": ^0.19.0
+  checksum: 6460ff45d8ce20812a9abcb035a3e5f2a4adcb837c0efd00151b07c8e0bf617f6fdcf7668982b76c8e7bb447b0a83e7b8308817dac754c190c9495b49289bcaf
+  languageName: node
+  linkType: hard
+
 "@codemirror/text@npm:^0.19.0, @codemirror/text@npm:^0.19.2":
   version: 0.19.3
   resolution: "@codemirror/text@npm:0.19.3"
@@ -2355,6 +2364,19 @@ __metadata:
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
   checksum: df860080bea66f40b7f714ed67ab1b1bccff1997796fb8c48e54e7586674afcaf3661811e6631ba5ec64060c9b6651d3fdab32cc9eafdd2143b754d87736e86f
+  languageName: node
+  linkType: hard
+
+"@codemirror/view@npm:^0.19.7":
+  version: 0.19.7
+  resolution: "@codemirror/view@npm:0.19.7"
+  dependencies:
+    "@codemirror/rangeset": ^0.19.0
+    "@codemirror/state": ^0.19.2
+    "@codemirror/text": ^0.19.0
+    style-mod: ^4.0.0
+    w3c-keyname: ^2.2.4
+  checksum: e888db4585fe10e34b828028e3a5de5c35e6cdfc4af1bcbd16b968eeb760e6825e83e49665d5c81b4bcffe7053cc93773e95d90fe79bd3829c30fa157c82d4be
   languageName: node
   linkType: hard
 
@@ -17159,8 +17181,8 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-json": ^0.19.1
     "@codemirror/lang-markdown": ^0.19.1
     "@codemirror/language": ^0.19.3
-    "@codemirror/state": ^0.19.1
-    "@codemirror/view": ^0.19.6
+    "@codemirror/state": ^0.19.2
+    "@codemirror/view": ^0.19.7
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.2.2
     "@graphql-codegen/add": 3.1.0

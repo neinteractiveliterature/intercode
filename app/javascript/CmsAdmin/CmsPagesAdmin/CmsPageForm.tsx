@@ -145,9 +145,7 @@ function CmsPageForm<T extends PageFormFields>({
 
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
-        {page.content && (
-          <LiquidInput value={page.content ?? ''} onChange={setContent} extensions={extensions} />
-        )}
+        <LiquidInput value={page.content ?? ''} onChange={setContent} extensions={extensions} />
       </div>
     </>
   );
