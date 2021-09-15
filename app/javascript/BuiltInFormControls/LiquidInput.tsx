@@ -11,9 +11,11 @@ import {
   ErrorDisplay,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
+  liquid,
 } from '@neinteractiveliterature/litform';
 import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { Extension } from '@codemirror/state';
+import { syntaxTree } from '@codemirror/language';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
@@ -24,6 +26,7 @@ import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
+import { logTree } from '../printLezerTree';
 
 type AddFileModalProps = {
   visible: boolean;
@@ -148,13 +151,23 @@ function LiquidInput(props: LiquidInputProps) {
   const { notifierEventKey } = props;
   const addFileModal = useModal();
 
-  const extensions = useMemo(() => [html(), ...(props.extensions ?? [])], [props.extensions]);
+  const liquidExtension = useMemo(
+    () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
+    [],
+  );
+
+  const extensions = useMemo(
+    () => [liquidExtension, ...(props.extensions ?? [])],
+    [liquidExtension, props.extensions],
+  );
 
   const [editorRef, editorView] = useStandardCodeMirror({
     extensions,
     value: props.value,
     onChange: props.onChange,
   });
+
+  logTree(syntaxTree(editorView.state), props.value);
 
   const docTabClicked = (event: React.MouseEvent, tab: string) => {
     event.preventDefault();
@@ -163,11 +176,11 @@ function LiquidInput(props: LiquidInputProps) {
 
   const getPreviewContent = props.disablePreview
     ? undefined
-    : async (liquid: string) => {
+    : async (liquidContent: string) => {
         if (notifierEventKey) {
           const response = await client.query<PreviewNotifierLiquidQueryData>({
             query: PreviewNotifierLiquidQuery,
-            variables: { liquid, eventKey: notifierEventKey },
+            variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
           });
           return response.data?.previewLiquid ?? '';
@@ -175,7 +188,7 @@ function LiquidInput(props: LiquidInputProps) {
 
         const response = await client.query<PreviewLiquidQueryData>({
           query: PreviewLiquidQuery,
-          variables: { liquid },
+          variables: { liquid: liquidContent },
           fetchPolicy: 'no-cache',
         });
 
