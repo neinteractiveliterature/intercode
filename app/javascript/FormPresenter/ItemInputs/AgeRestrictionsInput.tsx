@@ -4,6 +4,7 @@ import { TFunction } from 'i18next';
 import { BootstrapFormInput, useUniqueId, parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { useTranslation, Trans } from 'react-i18next';
+import { EditorView } from '@codemirror/view';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
@@ -43,6 +44,15 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
   const userInteracted = useCallback(
     () => onInteract(formItem.identifier),
     [onInteract, formItem.identifier],
+  );
+
+  const extensions = useMemo(
+    () => [
+      EditorView.domEventHandlers({
+        blur: userInteracted,
+      }),
+    ],
+    [userInteracted],
   );
 
   const descriptionChanged = useCallback(
@@ -96,7 +106,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
           <MarkdownInput
             value={value.age_restrictions_description || ''}
             onChange={descriptionChanged}
-            onBlur={userInteracted}
+            extensions={extensions}
             lines={1}
             formControlClassName={classNames({ 'is-invalid': valueInvalid })}
           >

@@ -1,12 +1,21 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
 import { useApolloClient } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
-import { Editor } from 'codemirror';
-import { useModal, CodeInput, ErrorDisplay } from '@neinteractiveliterature/litform';
-import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import { html } from '@codemirror/lang-html';
+import {
+  useModal,
+  CodeInput,
+  ErrorDisplay,
+  useStandardCodeMirror,
+  UseStandardCodeMirrorExtensionsOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  liquid,
+} from '@neinteractiveliterature/litform';
+import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import { Extension } from '@codemirror/state';
 
 import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
@@ -118,10 +127,20 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
   );
 }
 
-export type LiquidInputProps = Omit<CodeInputProps, 'mode' | 'editorDidMount'> & {
-  notifierEventKey?: string;
-  disablePreview?: boolean;
-};
+export type LiquidInputProps = Omit<
+  CodeInputProps,
+  | 'editorDidMount'
+  | 'editorRef'
+  | 'getPreviewContent'
+  | 'previewButtonText'
+  | 'editButtonText'
+  | 'extraNavControls'
+> &
+  Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {
+    notifierEventKey?: string;
+    disablePreview?: boolean;
+    extensions?: Extension[];
+  };
 
 function LiquidInput(props: LiquidInputProps) {
   const { t } = useTranslation();
@@ -129,8 +148,25 @@ function LiquidInput(props: LiquidInputProps) {
   const [currentDocTab, setCurrentDocTab] = useState('convention');
   const client = useApolloClient();
   const { notifierEventKey } = props;
-  const editorRef = useRef<Editor | null>(null);
   const addFileModal = useModal();
+
+  const languageExtension = useMemo(
+    // Once we stop getting weird errors from parseMixed we can use the Liquid grammar
+    // () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
+    () => html(),
+    [],
+  );
+
+  const extensions = useMemo(
+    () => [languageExtension, ...(props.extensions ?? [])],
+    [languageExtension, props.extensions],
+  );
+
+  const [editorRef, editorView] = useStandardCodeMirror({
+    extensions,
+    value: props.value,
+    onChange: props.onChange,
+  });
 
   const docTabClicked = (event: React.MouseEvent, tab: string) => {
     event.preventDefault();
@@ -139,11 +175,11 @@ function LiquidInput(props: LiquidInputProps) {
 
   const getPreviewContent = props.disablePreview
     ? undefined
-    : async (liquid: string) => {
+    : async (liquidContent: string) => {
         if (notifierEventKey) {
           const response = await client.query<PreviewNotifierLiquidQueryData>({
             query: PreviewNotifierLiquidQuery,
-            variables: { liquid, eventKey: notifierEventKey },
+            variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
           });
           return response.data?.previewLiquid ?? '';
@@ -151,7 +187,7 @@ function LiquidInput(props: LiquidInputProps) {
 
         const response = await client.query<PreviewLiquidQueryData>({
           query: PreviewLiquidQuery,
-          variables: { liquid },
+          variables: { liquid: liquidContent },
           fetchPolicy: 'no-cache',
         });
 
@@ -159,8 +195,8 @@ function LiquidInput(props: LiquidInputProps) {
       };
 
   const addFile = (file: CmsFile) => {
-    editorRef.current?.replaceSelection(`{% file_url ${file.filename} %}`, 'start');
-    editorRef.current?.focus();
+    editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.filename} %}`));
+    editorView.focus();
   };
 
   const renderDocs = () => {
@@ -231,11 +267,8 @@ function LiquidInput(props: LiquidInputProps) {
     <>
       <CodeInput
         {...props}
-        mode="liquid-html"
+        editorRef={editorRef}
         getPreviewContent={getPreviewContent}
-        editorDidMount={(editor) => {
-          editorRef.current = editor;
-        }}
         editButtonText={t('buttons.edit', 'Edit')}
         previewButtonText={t('buttons.preview', 'Preview')}
         extraNavControls={

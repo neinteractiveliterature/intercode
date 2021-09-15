@@ -1,28 +1,59 @@
 import { useApolloClient } from '@apollo/client';
-import { CodeInput } from '@neinteractiveliterature/litform';
+import {
+  CodeInput,
+  useStandardCodeMirror,
+  UseStandardCodeMirrorExtensionsOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  liquid,
+} from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { useTranslation } from 'react-i18next';
-import parsePageContent from '../parsePageContent';
+import { markdown } from '@codemirror/lang-markdown';
+import { useMemo } from 'react';
+import { Extension } from '@codemirror/state';
 
+import parsePageContent from '../parsePageContent';
 import { PreviewMarkdownQuery } from './previewQueries';
 import { PreviewMarkdownQueryData } from './previewQueries.generated';
 
-export type MarkdownInputProps = Omit<CodeInputProps, 'mode' | 'getPreviewContent'>;
+export type MarkdownInputProps = Omit<
+  CodeInputProps,
+  'getPreviewContent' | 'editorRef' | 'editButtonText' | 'previewButtonText'
+> &
+  Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {
+    extensions?: Extension[];
+  };
 
 const MarkdownInput = (props: MarkdownInputProps) => {
   const client = useApolloClient();
   const { t } = useTranslation();
+  const languageExtension = useMemo(
+    // TODO: once parseMixed is more stable, use the Liquid mode
+    // () => liquid({ baseLanguage: markdown().language }),
+    () => markdown(),
+    [],
+  );
+  const extensions = useMemo(
+    () => [languageExtension, ...(props.extensions ?? [])],
+    [props.extensions, languageExtension],
+  );
+  const [editorRef] = useStandardCodeMirror({
+    extensions,
+    value: props.value,
+    onChange: props.onChange,
+  });
 
   return (
     <CodeInput
       {...props}
-      mode="liquid-markdown"
+      editorRef={editorRef}
+      value={props.value}
       editButtonText={t('buttons.edit', 'Edit')}
       previewButtonText={t('buttons.preview', 'Preview')}
-      getPreviewContent={async (markdown) => {
+      getPreviewContent={async (markdownContent) => {
         const response = await client.query<PreviewMarkdownQueryData>({
           query: PreviewMarkdownQuery,
-          variables: { markdown },
+          variables: { markdown: markdownContent },
           fetchPolicy: 'no-cache',
         });
 
