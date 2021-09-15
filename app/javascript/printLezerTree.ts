@@ -1,4 +1,4 @@
-import { Input, NodeType, SyntaxNode, Tree, TreeCursor } from '@lezer/common';
+import { Input, NodeProp, NodeType, SyntaxNode, Tree, TreeCursor } from '@lezer/common';
 
 class StringInput implements Input {
   constructor(readonly string: string) {}
@@ -24,7 +24,7 @@ class StringInput implements Input {
 enum Color {
   Red = 31,
   Green = 32,
-  Yellow = 33,
+  Blue = 34,
 }
 
 function colorize(value: any, color: number): string {
@@ -55,6 +55,10 @@ export function printTree(
   const prefixes: string[] = [];
   for (;;) {
     const node = focusedNode(cursor);
+    const mounted = node.type.prop(NodeProp.mounted);
+    if (mounted) {
+      output += printTree(mounted.tree, input.read(node.from, node.to));
+    }
     let leave = false;
     if (node.from <= to && node.to >= from) {
       const enter =
@@ -80,11 +84,11 @@ export function printTree(
         const hasRange = node.from !== node.to;
         output += ` ${
           hasRange
-            ? `[${colorize(start + node.from, Color.Yellow)}..${colorize(
+            ? `[${colorize(start + node.from, Color.Blue)}..${colorize(
                 start + node.to,
-                Color.Yellow,
+                Color.Blue,
               )}]`
-            : colorize(start + node.from, Color.Yellow)
+            : colorize(start + node.from, Color.Blue)
         }`;
         if (hasRange && isLeaf) {
           output += `: ${colorize(JSON.stringify(input.read(node.from, node.to)), Color.Green)}`;
@@ -108,5 +112,6 @@ export function logTree(
   input: Input | string,
   options: { from?: number; to?: number; start?: number; includeParents?: boolean } = {},
 ): void {
+  // eslint-disable-next-line no-console
   console.log(printTree(tree, input, options));
 }
