@@ -56,7 +56,7 @@
     "@graphiql/toolkit": "0.2.2",
     "@juggle/resize-observer": "3.3.1",
     "@lezer/common": "0.15.5",
-    "@neinteractiveliterature/litform": "0.15.2",
+    "@neinteractiveliterature/litform": "0.16.0",
     "@popperjs/core": "2.10.1",
     "@react-dnd/invariant": "2.0.0",
     "@stripe/react-stripe-js": "1.4.1",
