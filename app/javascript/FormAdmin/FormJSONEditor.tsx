@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
@@ -6,8 +6,10 @@ import {
   ErrorDisplay,
   BootstrapFormSelect,
   CodeInput,
+  useStandardCodeMirror,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
+import { json as jsonExtension } from '@codemirror/lang-json';
 
 import { CreateFormWithJSON } from './mutations';
 import { FormAdminQuery } from './queries';
@@ -52,6 +54,13 @@ export default LoadSingleValueFromCollectionWrapper(
     const [updateMutate] = useUpdateFormWithJsonMutation();
     const [updateForm, updateError, updateInProgress] = useAsyncFunction(updateMutate);
     const { t } = useTranslation();
+
+    const extensions = useMemo(() => [jsonExtension()], []);
+    const onChange = useCallback(
+      (sectionsJSON: string) => setForm((prevForm) => ({ ...prevForm, sectionsJSON })),
+      [],
+    );
+    const [editorRef] = useStandardCodeMirror({ extensions, value: form.sectionsJSON, onChange });
 
     usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 
@@ -105,9 +114,8 @@ export default LoadSingleValueFromCollectionWrapper(
         <fieldset className="mb-4">
           <legend className="col-form-label">Content</legend>
           <CodeInput
+            editorRef={editorRef}
             value={form.sectionsJSON}
-            mode="application/json"
-            onChange={(sectionsJSON) => setForm((prevForm) => ({ ...prevForm, sectionsJSON }))}
             editButtonText={t('buttons.edit', 'Edit')}
             previewButtonText={t('buttons.preview', 'Preview')}
           />

@@ -1,147 +1,198 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TicketTypeForm matches snapshot 1`] = `
-<div>
-  <div
-    class="mb-3"
-  >
-    <label
-      class="form-label"
-      for="name-1"
+<DocumentFragment>
+  <div>
+    <div
+      class="mb-3"
     >
-      Name (no spaces allowed — only letters, numbers, and underscores)
-    </label>
-    <input
-      class="form-control"
-      id="name-1"
-      style="font-family: monospace;"
-      type="text"
-      value=""
-    />
-  </div>
-  <div
-    class="mb-3"
-  >
-    <label
-      class="form-label"
-      for="description-2"
-    >
-      Description
-    </label>
-    <input
-      class="form-control"
-      id="description-2"
-      type="text"
-      value=""
-    />
-  </div>
-  <fieldset
-    class="mb-3"
-  >
-    <legend
-      class="col-form-label"
-    >
-      Allows event signups?
-    </legend>
-    <div>
-      <div
-        class="form-check form-check-inline"
+      <label
+        class="form-label"
+        for="name-1"
       >
-        <label
-          class="form-check-label"
-          for="allows_event_signups-3"
+        Name (no spaces allowed — only letters, numbers, and underscores)
+      </label>
+      <input
+        class="form-control"
+        id="name-1"
+        style="font-family: monospace;"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      class="mb-3"
+    >
+      <label
+        class="form-label"
+        for="description-2"
+      >
+        Description
+      </label>
+      <input
+        class="form-control"
+        id="description-2"
+        type="text"
+        value=""
+      />
+    </div>
+    <fieldset
+      class="mb-3"
+    >
+      <legend
+        class="col-form-label"
+      >
+        Allows event signups?
+      </legend>
+      <div>
+        <div
+          class="form-check form-check-inline"
         >
-          <input
-            checked=""
-            class="form-check-input"
-            id="allows_event_signups-3"
-            name="allows_event_signups"
-            type="radio"
-            value="true"
-          />
-           Yes
-        </label>
+          <label
+            class="form-check-label"
+            for="allows_event_signups-3"
+          >
+            <input
+              checked=""
+              class="form-check-input"
+              id="allows_event_signups-3"
+              name="allows_event_signups"
+              type="radio"
+              value="true"
+            />
+             Yes
+          </label>
+        </div>
+        <div
+          class="form-check form-check-inline"
+        >
+          <label
+            class="form-check-label"
+            for="allows_event_signups-4"
+          >
+            <input
+              class="form-check-input"
+              id="allows_event_signups-4"
+              name="allows_event_signups"
+              type="radio"
+              value="false"
+            />
+             No
+          </label>
+        </div>
       </div>
-      <div
-        class="form-check form-check-inline"
+    </fieldset>
+    <fieldset
+      class="mb-3"
+    >
+      <legend
+        class="col-form-label"
       >
-        <label
-          class="form-check-label"
-          for="allows_event_signups-4"
+        Counts towards convention maximum?
+      </legend>
+      <div>
+        <div
+          class="form-check form-check-inline"
         >
-          <input
-            class="form-check-input"
-            id="allows_event_signups-4"
-            name="allows_event_signups"
-            type="radio"
-            value="false"
-          />
-           No
-        </label>
+          <label
+            class="form-check-label"
+            for="counts_towards_convention_maximum-5"
+          >
+            <input
+              checked=""
+              class="form-check-input"
+              id="counts_towards_convention_maximum-5"
+              name="counts_towards_convention_maximum"
+              type="radio"
+              value="true"
+            />
+             Yes
+          </label>
+        </div>
+        <div
+          class="form-check form-check-inline"
+        >
+          <label
+            class="form-check-label"
+            for="counts_towards_convention_maximum-6"
+          >
+            <input
+              class="form-check-input"
+              id="counts_towards_convention_maximum-6"
+              name="counts_towards_convention_maximum"
+              type="radio"
+              value="false"
+            />
+             No
+          </label>
+        </div>
+      </div>
+    </fieldset>
+    <div
+      class="mb-3"
+    >
+      <label
+        class="form-label"
+        for="maximum_event_provided_tickets-7"
+      >
+        Number of event-provided bananas of this type (per event)
+      </label>
+      <input
+        class="form-control"
+        id="maximum_event_provided_tickets-7"
+        type="number"
+        value="0"
+      />
+    </div>
+  </div>
+  <div>
+    <div
+      aria-hidden="true"
+      class="modal fade"
+      role="dialog"
+      style="display: none; z-index: 1041;"
+      tabindex="-1"
+    >
+      <div
+        class="modal-dialog"
+        role="document"
+      >
+        <div
+          class="modal-content"
+        >
+          <div
+            class="modal-header"
+          >
+            <h5
+              class="modal-title"
+            >
+              Confirmation
+            </h5>
+          </div>
+          <div
+            class="modal-body"
+          >
+            <div />
+          </div>
+          <div
+            class="modal-footer"
+          >
+            <button
+              class="btn btn-secondary"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary"
+              type="button"
+            >
+              OK
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </fieldset>
-  <fieldset
-    class="mb-3"
-  >
-    <legend
-      class="col-form-label"
-    >
-      Counts towards convention maximum?
-    </legend>
-    <div>
-      <div
-        class="form-check form-check-inline"
-      >
-        <label
-          class="form-check-label"
-          for="counts_towards_convention_maximum-5"
-        >
-          <input
-            checked=""
-            class="form-check-input"
-            id="counts_towards_convention_maximum-5"
-            name="counts_towards_convention_maximum"
-            type="radio"
-            value="true"
-          />
-           Yes
-        </label>
-      </div>
-      <div
-        class="form-check form-check-inline"
-      >
-        <label
-          class="form-check-label"
-          for="counts_towards_convention_maximum-6"
-        >
-          <input
-            class="form-check-input"
-            id="counts_towards_convention_maximum-6"
-            name="counts_towards_convention_maximum"
-            type="radio"
-            value="false"
-          />
-           No
-        </label>
-      </div>
-    </div>
-  </fieldset>
-  <div
-    class="mb-3"
-  >
-    <label
-      class="form-label"
-      for="maximum_event_provided_tickets-7"
-    >
-      Number of event-provided bananas of this type (per event)
-    </label>
-    <input
-      class="form-control"
-      id="maximum_event_provided_tickets-7"
-      type="number"
-      value="0"
-    />
   </div>
-</div>
+</DocumentFragment>
 `;
