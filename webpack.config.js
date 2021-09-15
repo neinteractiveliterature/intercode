@@ -12,6 +12,7 @@ const ASSET_PATH =
 
 const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
   entry: {
     application: './app/javascript/packs/applicationEntry.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',

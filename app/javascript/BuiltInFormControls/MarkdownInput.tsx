@@ -3,6 +3,7 @@ import {
   CodeInput,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
+  liquid,
 } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +26,10 @@ export type MarkdownInputProps = Omit<
 const MarkdownInput = (props: MarkdownInputProps) => {
   const client = useApolloClient();
   const { t } = useTranslation();
-  const extensions = useMemo(() => [markdown(), ...(props.extensions ?? [])], [props.extensions]);
+  const extensions = useMemo(
+    () => [liquid({ baseLanguage: markdown().language }), ...(props.extensions ?? [])],
+    [props.extensions],
+  );
   const [editorRef] = useStandardCodeMirror({
     extensions,
     value: props.value,
