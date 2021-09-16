@@ -10655,9 +10655,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-to-react@npm:1.4.6":
-  version: 1.4.6
-  resolution: "html-to-react@npm:1.4.6"
+"html-to-react@npm:1.4.7":
+  version: 1.4.7
+  resolution: "html-to-react@npm:1.4.7"
   dependencies:
     domhandler: ^4.0
     htmlparser2: ^7.0
@@ -10665,7 +10665,7 @@ __metadata:
     ramda: ^0.27.1
   peerDependencies:
     react: ^16.0 || ^17.0
-  checksum: d676d8bbe914c0aa36138777ff18b1f44123462e9d9a7efcb33694520204e0f01ee8cc09be1a85143a68620e3b61ecc1965d07bd7d561e44b1c0dce5793ce092
+  checksum: 1ff0aa8062844eeb5212dbad59573e7273aae676fc19a21a94b963e645d24d43858a6245de36ec28aabe50911e7ad42a2d653d3bbc3aef91645af3c906b238b7
   languageName: node
   linkType: hard
 
@@ -17313,7 +17313,7 @@ resolve@^2.0.0-next.3:
     graphql-language-service-utils: 2.5.3
     graphql-tag: 2.12.5
     history: 4.10.1
-    html-to-react: 1.4.6
+    html-to-react: 1.4.7
     husky: 7.0.2
     hypernova: 2.5.0
     i18next: 20.6.1
