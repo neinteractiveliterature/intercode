@@ -8134,10 +8134,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detect-browser@npm:5.2.0":
-  version: 5.2.0
-  resolution: "detect-browser@npm:5.2.0"
-  checksum: 63b5c38fecc657ff12de01a41e6c8c97b3d610dffa37aef1983ec5bfb4314687d588c0c44c5ee03bd45ef15b7fe465bce9349c373369e6a7405f318e0aae56f9
+"detect-browser@npm:5.2.1":
+  version: 5.2.1
+  resolution: "detect-browser@npm:5.2.1"
+  checksum: 6ba4cc9f45c8ae970e8b2c2cdfa13b1d9298e30eec85c801aeaed2f001b2ebd38352e1122d54ae4c85434ec61bf6491900156ff4d1d0acf32eced53cde9a8f38
   languageName: node
   linkType: hard
 
@@ -17299,7 +17299,7 @@ resolve@^2.0.0-next.3:
     csv-string: 4.0.1
     custom-event-polyfill: 1.0.7
     debounce-promise: 3.1.2
-    detect-browser: 5.2.0
+    detect-browser: 5.2.1
     diff: 5.0.0
     eslint: 7.32.0
     eslint-config-airbnb: 18.2.1
