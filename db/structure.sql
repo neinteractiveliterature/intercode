@@ -1369,7 +1369,7 @@ ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
 CREATE TABLE public.form_items (
     id bigint NOT NULL,
     form_section_id bigint,
-    "position" integer,
+    "position" integer NOT NULL,
     identifier text,
     item_type text,
     properties jsonb,
@@ -1448,7 +1448,7 @@ CREATE TABLE public.form_sections (
     id bigint NOT NULL,
     form_id bigint,
     title text,
-    "position" integer,
+    "position" integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -5282,6 +5282,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210508172432'),
 ('20210530161658'),
 ('20210815202439'),
-('20210821174502');
+('20210821174502'),
+('20210915155339');
 
 
