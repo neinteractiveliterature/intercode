@@ -16233,15 +16233,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-cookie-consent@npm:6.3.0":
-  version: 6.3.0
-  resolution: "react-cookie-consent@npm:6.3.0"
+"react-cookie-consent@npm:6.4.0":
+  version: 6.4.0
+  resolution: "react-cookie-consent@npm:6.4.0"
   dependencies:
     js-cookie: ^2.2.1
     prop-types: ^15.7.2
   peerDependencies:
     react: ^16.13.1 || ^17.0.0
-  checksum: 4964ff214973ab7dfdb29c16ac2378d94bf3ecf88283e74ffca6095b1dc18b2ab7714915060f1c111fcd2ff8c774f0a6e133d253a171ead1e6266dbd776494b6
+  checksum: 051f54e175a600af74668d833329d4eae4571cb146406eb42ee8a435e9cd3d1fb40a84d0b77ac8d2f7db012f55f1b357eb9dcbac966eb8762e60028522bbf14a
   languageName: node
   linkType: hard
 
@@ -17358,7 +17358,7 @@ resolve@^2.0.0-next.3:
     react: 17.0.2
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
-    react-cookie-consent: 6.3.0
+    react-cookie-consent: 6.4.0
     react-dnd: 11.1.3
     react-dnd-html5-backend: 11.1.3
     react-dnd-multi-backend: 6.0.2
