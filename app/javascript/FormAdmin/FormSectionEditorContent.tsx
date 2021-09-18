@@ -1,13 +1,23 @@
-import { useContext } from 'react';
+import { useCallback, useContext, useRef } from 'react';
+import { buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
+import { closestCorners, DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { FormEditorContext } from './FormEditorContexts';
 import FormEditorItemPreview from './FormEditorItemPreview';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { useUpdateFormSectionMutation } from './mutations.generated';
+import { useMoveFormItemMutation, useUpdateFormSectionMutation } from './mutations.generated';
+import { serializeParsedFormItem } from './FormItemUtils';
+import { useArrayBasicSortableHandlers, useSortableDndSensors } from '../SortableUtils';
+import FormEditorItemPreviewDragOverlay from './FormEditorItemPreviewDragOverlay';
 
 function FormSectionEditorContent() {
   const { currentSection } = useContext(FormEditorContext);
   const [updateFormSection] = useUpdateFormSectionMutation();
+  const [moveFormItem] = useMoveFormItemMutation();
+  const cardBodyRef = useRef<HTMLDivElement>(null);
+
+  const sensors = useSortableDndSensors();
 
   const updateSectionTitle = async (title: string) => {
     await updateFormSection({
@@ -15,30 +25,79 @@ function FormSectionEditorContent() {
     });
   };
 
+  const moveItem = useCallback(
+    (dragIndex, hoverIndex) => {
+      const optimisticItems = buildOptimisticArrayForMove(
+        currentSection!.form_items.map(serializeParsedFormItem),
+        dragIndex,
+        hoverIndex,
+      );
+
+      moveFormItem({
+        variables: {
+          id: currentSection!.form_items[dragIndex].id,
+          formSectionId: currentSection!.id,
+          destinationIndex: hoverIndex,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          moveFormItem: {
+            __typename: 'MoveFormItemPayload',
+            form_section: {
+              ...currentSection!,
+              form_items: optimisticItems,
+            },
+          },
+        },
+      });
+    },
+    [currentSection, moveFormItem],
+  );
+
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
+    currentSection?.form_items ?? [],
+    moveItem,
+  );
+
   if (!currentSection) {
     return null;
   }
 
   return (
-    <div className="container">
-      <div className="card my-2">
-        <div className="card-header">
-          <InPlaceEditor
-            className="d-flex align-items-start w-100"
-            value={currentSection.title}
-            onChange={updateSectionTitle}
-          >
-            <h4 className="m-0">{currentSection.title}</h4>
-          </InPlaceEditor>
-        </div>
+    <DndContext sensors={sensors} {...sortableHandlers} collisionDetection={closestCorners}>
+      <div className="container">
+        <div className="card my-2">
+          <div className="card-header">
+            <InPlaceEditor
+              className="d-flex align-items-start w-100"
+              value={currentSection.title}
+              onChange={updateSectionTitle}
+            >
+              <h4 className="m-0">{currentSection.title}</h4>
+            </InPlaceEditor>
+          </div>
 
-        <div className="card-body">
-          {currentSection.form_items.map((formItem, index) => (
-            <FormEditorItemPreview key={formItem.id} formItem={formItem} index={index} />
-          ))}
+          <div className="card-body" ref={cardBodyRef}>
+            <SortableContext
+              items={currentSection.form_items.map((formItem) => formItem.id.toString())}
+              strategy={verticalListSortingStrategy}
+            >
+              {currentSection.form_items.map((formItem) => (
+                <FormEditorItemPreview key={formItem.id} formItem={formItem} />
+              ))}
+            </SortableContext>
+          </div>
         </div>
       </div>
-    </div>
+
+      <DragOverlay>
+        {draggingItem && (
+          <div style={{ width: cardBodyRef.current?.offsetWidth }}>
+            <FormEditorItemPreviewDragOverlay formItem={draggingItem} />
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 }
 

@@ -1,5 +1,7 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useRef } from 'react';
 import { BootstrapFormCheckbox } from '@neinteractiveliterature/litform';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import RegistrationPolicyItemEditorPresetRow from './RegistrationPolicyItemEditorPresetRow';
 import useArrayProperty from './useArrayProperty';
@@ -8,6 +10,8 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { RegistrationPolicyFormItem, RegistrationPolicyPreset } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
+import { useSortableDndSensors } from '../../SortableUtils';
+import RegistrationPolicyItemEditorPresetRowDragOverlay from './RegistrationPolicyItemEditorPresetRowDragOverlay';
 
 export type RegistrationPolicyItemEditorProps = FormItemEditorProps<RegistrationPolicyFormItem>;
 function RegistrationPolicyItemEditor({
@@ -30,15 +34,19 @@ function RegistrationPolicyItemEditor({
 
   const allowCustomChanged = usePropertyUpdater(setFormItem, 'allow_custom');
 
-  const [addPreset, presetChanged, deletePreset, movePreset] = useArrayProperty<
-    WithGeneratedId<RegistrationPolicyPreset, string>,
-    typeof formItem,
-    'presets'
-  >('presets', setFormItem, generateNewPreset);
+  const tableRef = useRef<HTMLTableElement>(null);
+  const sensors = useSortableDndSensors();
+  const [addPreset, presetChanged, deletePreset, draggingPreset, sortableHandlers] =
+    useArrayProperty<WithGeneratedId<RegistrationPolicyPreset, string>, typeof formItem, 'presets'>(
+      formItem.properties.presets,
+      'presets',
+      setFormItem,
+      generateNewPreset,
+    );
 
   return (
-    <>
-      <table className="table">
+    <DndContext sensors={sensors} {...sortableHandlers}>
+      <table className="table" ref={tableRef}>
         <thead>
           <tr>
             <th />
@@ -48,16 +56,19 @@ function RegistrationPolicyItemEditor({
           </tr>
         </thead>
         <tbody>
-          {(formItem.properties.presets || []).map((preset, index) => (
-            <RegistrationPolicyItemEditorPresetRow
-              key={preset.generatedId}
-              preset={preset}
-              index={index}
-              movePreset={movePreset}
-              deletePreset={deletePreset}
-              onChange={presetChanged}
-            />
-          ))}
+          <SortableContext
+            items={formItem.properties.presets.map((preset) => preset.generatedId)}
+            strategy={verticalListSortingStrategy}
+          >
+            {formItem.properties.presets.map((preset) => (
+              <RegistrationPolicyItemEditorPresetRow
+                key={preset.generatedId}
+                preset={preset}
+                deletePreset={deletePreset}
+                onChange={presetChanged}
+              />
+            ))}
+          </SortableContext>
           <tr>
             <td />
             <td colSpan={2}>
@@ -88,7 +99,22 @@ function RegistrationPolicyItemEditor({
           </tr>
         </tfoot>
       </table>
-    </>
+
+      <DragOverlay>
+        {draggingPreset && (
+          <table
+            className="table"
+            style={{
+              width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
+            }}
+          >
+            <tbody>
+              <RegistrationPolicyItemEditorPresetRowDragOverlay preset={draggingPreset} />
+            </tbody>
+          </table>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 }
 

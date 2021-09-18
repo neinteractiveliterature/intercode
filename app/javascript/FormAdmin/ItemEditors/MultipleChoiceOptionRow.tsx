@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import classnames from 'classnames';
 import { useConfirm } from '@neinteractiveliterature/litform';
+import { useSortable } from '@dnd-kit/sortable';
 
-import useSortable from '../../useSortable';
 import { MultipleChoiceFormItem } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
+import { getSortableStyle } from '../../SortableUtils';
 
 type Choice = WithGeneratedId<
   NonNullable<MultipleChoiceFormItem['properties']>['choices'][0],
@@ -25,37 +26,33 @@ function useChoicePropertyUpdater(
 export type MultipleChoiceOptionRowProps = {
   choice: Choice;
   choiceChanged: (generatedId: string, choice: (prevChoice: Choice) => Choice) => void;
-  index: number;
   nonUnique: boolean;
   deleteChoice: (generatedId: string) => void;
-  moveChoice: (dragIndex: number, hoverIndex: number) => void;
 };
 
 function MultipleChoiceOptionRow({
   choice,
   choiceChanged,
-  index,
   nonUnique,
   deleteChoice,
-  moveChoice,
 }: MultipleChoiceOptionRowProps) {
   const confirm = useConfirm();
-  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
-    index,
-    moveChoice,
-    'choice',
-  );
+  const { isDragging, setNodeRef, attributes, listeners, transform, transition } = useSortable({
+    id: choice.generatedId.toString(),
+  });
   const captionChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'caption');
   const valueChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'value');
+
+  const style = getSortableStyle(transform, transition, isDragging);
 
   const missingValue = !choice.value || choice.value.trim() === '';
   const hasValidationError = nonUnique || missingValue;
 
   return (
-    <tr ref={rowRef} style={isDragging ? { opacity: 0.25 } : {}}>
-      <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
+    <tr style={style}>
+      <td style={{ cursor: 'grab' }} {...attributes} {...listeners} ref={setNodeRef}>
         <span className="visually-hidden">Drag to reorder</span>
-        <i className="bi-list" />
+        <i className="bi-grip-vertical" />
       </td>
       <td>
         <input

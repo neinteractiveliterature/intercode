@@ -2,14 +2,15 @@ import { useCallback, useMemo, useContext } from 'react';
 import * as React from 'react';
 import { DateTime } from 'luxon';
 import { useConfirm } from '@neinteractiveliterature/litform';
+import { useSortable } from '@dnd-kit/sortable';
 
 import TimeSelect from '../../BuiltInFormControls/TimeSelect';
 import Timespan from '../../Timespan';
-import useSortable from '../../useSortable';
 import AppRootContext from '../../AppRootContext';
 import { TimeblockDefinition } from '../../FormPresenter/TimeblockTypes';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
 import { getTimeblockTimespanForDisplay } from '../../FormPresenter/TimeblockUtils';
+import { getSortableStyle } from '../../SortableUtils';
 
 function useTimeblockPropertyUpdater(
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void,
@@ -28,29 +29,23 @@ function useTimeblockPropertyUpdater(
 
 export type TimeblockPreferenceEditorTimeblockRowProps = {
   timeblock: WithGeneratedId<TimeblockDefinition, string>;
-  index: number;
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void;
   deleteTimeblock: (generatedId: string) => void;
-  moveTimeblock: (dragIndex: number, hoverIndex: number) => void;
 };
 
 function TimeblockPreferenceEditorTimeblockRow({
   timeblock,
-  index,
   onChange,
   deleteTimeblock,
-  moveTimeblock,
 }: TimeblockPreferenceEditorTimeblockRowProps) {
   const { timezoneName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const startChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'start');
   const finishChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'finish');
   const labelChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'label');
-  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
-    index,
-    moveTimeblock,
-    'timeblock',
-  );
+  const { isDragging, setNodeRef, listeners, attributes, transform, transition } = useSortable({
+    id: timeblock.generatedId,
+  });
 
   const selectTimespan = useMemo(
     () =>
@@ -76,11 +71,13 @@ function TimeblockPreferenceEditorTimeblockRow({
     return null;
   }, [timeblock]);
 
+  const style = getSortableStyle(transform, transition, isDragging);
+
   return (
-    <tr ref={rowRef}>
-      <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
+    <tr style={style}>
+      <td style={{ cursor: 'grab' }} {...attributes} {...listeners} ref={setNodeRef}>
         <span className="visually-hidden">Drag to reorder</span>
-        <i className="bi-list" />
+        <i className="bi-grip-vertical" />
       </td>
       <td>
         <TimeSelect

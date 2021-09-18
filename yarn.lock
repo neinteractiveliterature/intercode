@@ -3464,14 +3464,42 @@ __metadata:
     luxon: ^2.0.0
     react-bootstrap4-modal: ^2.0.0
     react-cool-onclickoutside: ^1.6.2
-    react-dnd: ^14.0.3
     react-popper: ^2.2.5
     uuid: ^8.3.2
   peerDependencies:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: 8f97e0a0ebeecd5156396400dc5e504f9fc0caa794611f0513fa2b514d5cd05e6296d97004ac6c1ec490558b0092507846a6135959dd7eb9f839bff55512ded2
+  checksum: 6b15d87eda139d70f1335b62f641a80f13f8d3fdbc0e242e70b38294adac26b9b142ea1d8da47b8ad717f3b795925ef8323b6156f66ef267c7c7468eb44e8034
+  languageName: node
+  linkType: hard
+
+"@neinteractiveliterature/litform@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "@neinteractiveliterature/litform@npm:0.18.0"
+  dependencies:
+    "@codemirror/basic-setup": ^0.19.0
+    "@codemirror/commands": ^0.19.3
+    "@codemirror/highlight": ^0.19.4
+    "@codemirror/lang-html": ^0.19.1
+    "@codemirror/language": ^0.19.2
+    "@codemirror/state": ^0.19.1
+    "@codemirror/view": ^0.19.6
+    "@lezer/lr": ^0.15.2
+    "@popperjs/core": ^2.10.1
+    classnames: ^2.3.1
+    copy-to-clipboard: ^3.3.1
+    lodash: ^4.17.21
+    luxon: ^2.0.0
+    react-bootstrap4-modal: ^2.0.0
+    react-cool-onclickoutside: ^1.6.2
+    react-popper: ^2.2.5
+    uuid: ^8.3.2
+  peerDependencies:
+    "@apollo/client": ^3.3.18
+    graphql: ^15.5.0
+    react: ^17.0.2
+  checksum: 6b15d87eda139d70f1335b62f641a80f13f8d3fdbc0e242e70b38294adac26b9b142ea1d8da47b8ad717f3b795925ef8323b6156f66ef267c7c7468eb44e8034
   languageName: node
   linkType: hard
 
@@ -3533,27 +3561,6 @@ __metadata:
   version: 2.10.1
   resolution: "@popperjs/core@npm:2.10.1"
   checksum: 55262eb98984a03364a844177a9d4b9ab1c6e3503eaa1ecb086c028b5b6d93985a92b5b5783008962633015fc9f0232fda3ce88f5b17930a909a633387a06505
-  languageName: node
-  linkType: hard
-
-"@react-dnd/asap@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@react-dnd/asap@npm:4.0.0"
-  checksum: 4c37ef5c4efd5bb37ba938276074e6896f102b459ed462e2e7560bdb5e75500f2beeafd7e089e1ffea4a9fb337f15be7992952a78a9b56d80f372aadadc31eca
-  languageName: node
-  linkType: hard
-
-"@react-dnd/invariant@npm:2.0.0, @react-dnd/invariant@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@react-dnd/invariant@npm:2.0.0"
-  checksum: ef1e989920d70b15c80dccb01af9b598081d76993311aa22d2e9a3ec41d10a88540eeec4b4de7a8b2a2ea52dfc3495ab45e39192c2d27795a9258bd6b79d000e
-  languageName: node
-  linkType: hard
-
-"@react-dnd/shallowequal@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@react-dnd/shallowequal@npm:2.0.0"
-  checksum: b5bbdc795d65945bb7ba2322bed5cf8d4c6fe91dced98c3b10e3d16822c438f558751135ff296f8d1aa1eaa9d0037dacab2b522ca5eb812175123b9996966dcb
   languageName: node
   linkType: hard
 
@@ -7579,24 +7586,6 @@ __metadata:
   dependencies:
     path-type: ^4.0.0
   checksum: fa05e18324510d7283f55862f3161c6759a3f2f8dbce491a2fc14c8324c498286c54282c1f0e933cb930da8419b30679389499b919122952a4f8592362ef4615
-  languageName: node
-  linkType: hard
-
-"dnd-core@npm:^14.0.0":
-  version: 14.0.0
-  resolution: "dnd-core@npm:14.0.0"
-  dependencies:
-    "@react-dnd/asap": ^4.0.0
-    "@react-dnd/invariant": ^2.0.0
-    redux: ^4.0.5
-  checksum: 1036d1656b94a045964067c92ef74a3ab9289a001f2c8ec1aada747c3bf63d536058421c9d933c525b8e83a68d4ab4b8cf2f4a13e98c81e153023ed0ab78321a
-  languageName: node
-  linkType: hard
-
-"dnd-multi-backend@npm:^7.0.0-alpha.4":
-  version: 7.0.0-alpha.4
-  resolution: "dnd-multi-backend@npm:7.0.0-alpha.4"
-  checksum: be1c35f3dc22c3826efa38436f5faadc1ec5e04bc7567d265a03b6f12253eacc0c735edd8f9d5ccef4a657589a57d38a23b09f94488352ad6bcbbf6fb3610499
   languageName: node
   linkType: hard
 
@@ -15787,15 +15776,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.5":
-  version: 4.1.1
-  resolution: "redux@npm:4.1.1"
-  dependencies:
-    "@babel/runtime": ^7.9.2
-  checksum: 99519438a5d20b69404ad3816307ccc189f16df04b64c50d82c415ec488ea68b656d7a2fc81b6345e8d90f095344dfea68246500f72613d76464986660bc0485
-  languageName: node
-  linkType: hard
-
 "regenerate-unicode-properties@npm:^8.2.0":
   version: 8.2.0
   resolution: "regenerate-unicode-properties@npm:8.2.0"
@@ -16298,9 +16278,8 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": ^0.15.5
-    "@neinteractiveliterature/litform": ^0.17.0
+    "@neinteractiveliterature/litform": ^0.18.0
     "@popperjs/core": 2.10.1
-    "@react-dnd/invariant": 2.0.0
     "@stripe/react-stripe-js": 1.4.1
     "@stripe/stripe-js": 1.17.1
     "@testing-library/jest-dom": 5.14.1
@@ -16428,11 +16407,7 @@ resolve@^2.0.0-next.3:
     react: 17.0.2
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
-    react-cookie-consent: 6.4.0
-    react-dnd: 11.1.3
-    react-dnd-html5-backend: 11.1.3
-    react-dnd-multi-backend: 6.0.2
-    react-dnd-touch-backend: 11.1.3
+    react-cookie-consent: 6.3.0
     react-dom: 17.0.2
     react-google-recaptcha: 2.1.0
     react-html-id: 0.1.5

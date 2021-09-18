@@ -1,21 +1,19 @@
 import { useContext } from 'react';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
-import classNames from 'classnames';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
+import { useSortable } from '@dnd-kit/sortable';
 import { DeleteFormSection } from './mutations';
 import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import { FormEditorQuery } from './queries';
 import { useDeleteMutation } from '../MutationUtils';
-import useSortable from '../useSortable';
+import { getSortableStyle } from '../SortableUtils';
 
 export type FormSectionNavItemProps = {
   formSection: FormEditorForm['form_sections'][0];
-  index: number;
-  moveSection: (dragIndex: number, hoverIndex: number) => void;
 };
 
-function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavItemProps) {
+function FormSectionNavItem({ formSection }: FormSectionNavItemProps) {
   const { form, currentSection } = useContext(FormEditorContext);
   const confirm = useConfirm();
   const history = useHistory();
@@ -34,18 +32,17 @@ function FormSectionNavItem({ formSection, index, moveSection }: FormSectionNavI
     }
   };
 
-  const [ref, drag, { isDragging }] = useSortable<HTMLLIElement>(index, moveSection, 'formSection');
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+    id: formSection.id.toString(),
+  });
+  const style = getSortableStyle(transform, transition, isDragging);
 
   return (
-    <li
-      key={formSection.id}
-      className={classNames('nav-item', { 'opacity-50': isDragging })}
-      ref={ref}
-    >
+    <li key={formSection.id} className="nav-item" style={style}>
       <div className="d-flex align-items-center">
-        <div className="me-2">
+        <div className="me-2" {...attributes} {...listeners} ref={setNodeRef}>
           <span className="visually-hidden">Drag to reorder</span>
-          <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
+          <i style={{ cursor: 'grab' }} className="bi-grip-vertical" />
         </div>
         <NavLink
           to={`/admin_forms/${match.params.id}/edit/section/${formSection.id}`}

@@ -14,7 +14,6 @@ import usePageTitle from '../usePageTitle';
 import { useFormEditorQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
-import DndWrapper from '../DndWrapper';
 
 function FormEditor() {
   const match = useRouteMatch<{ id: string; sectionId?: string; itemId?: string }>();
@@ -135,4 +134,4 @@ function FormEditor() {
   );
 }
 
-export default DndWrapper(FormEditor);
+export default FormEditor;

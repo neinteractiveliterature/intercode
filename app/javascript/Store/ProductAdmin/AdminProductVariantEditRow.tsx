@@ -1,13 +1,13 @@
 import { usePropertySetters } from '@neinteractiveliterature/litform';
 import { FunctionalStateUpdater } from '@neinteractiveliterature/litform/lib/usePropertySetters';
 import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId } from '../../GeneratedIdUtils';
+import { getSortableStyle } from '../../SortableUtils';
 
 export type AdminProductVariantEditRowProps = {
   variant: EditingVariant;
@@ -30,15 +30,11 @@ function AdminProductVariantEditRow({
     'override_pricing_structure',
   );
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: transition ?? undefined,
-    opacity: isDragging ? 0.5 : undefined,
-  };
+  const style = getSortableStyle(transform, transition, isDragging);
 
   return (
-    <tr style={style} {...attributes} {...listeners}>
-      <td ref={setNodeRef}>
+    <tr style={style}>
+      <td {...attributes} {...listeners} ref={setNodeRef}>
         <i className="bi-grip-vertical cursor-grab">
           <span className="visually-hidden">Drag to reorder</span>
         </i>
