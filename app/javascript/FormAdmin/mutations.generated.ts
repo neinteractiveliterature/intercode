@@ -38,7 +38,7 @@ export type UpdateFormMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormMutationData = { __typename: 'Mutation', updateForm?: Types.Maybe<{ __typename: 'UpdateFormPayload', form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }> };
+export type UpdateFormMutationData = { __typename: 'Mutation', updateForm?: Types.Maybe<{ __typename: 'UpdateFormPayload', form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }> };
 
 export type DeleteFormMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -53,7 +53,7 @@ export type CreateFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormSectionMutationData = { __typename: 'Mutation', createFormSection?: Types.Maybe<{ __typename: 'CreateFormSectionPayload', form_section: { __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } }> };
+export type CreateFormSectionMutationData = { __typename: 'Mutation', createFormSection?: Types.Maybe<{ __typename: 'CreateFormSectionPayload', form_section: { __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } }> };
 
 export type UpdateFormSectionMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -61,7 +61,7 @@ export type UpdateFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormSectionMutationData = { __typename: 'Mutation', updateFormSection?: Types.Maybe<{ __typename: 'UpdateFormSectionPayload', form_section: { __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } }> };
+export type UpdateFormSectionMutationData = { __typename: 'Mutation', updateFormSection?: Types.Maybe<{ __typename: 'UpdateFormSectionPayload', form_section: { __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } }> };
 
 export type DeleteFormSectionMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -76,7 +76,7 @@ export type MoveFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type MoveFormSectionMutationData = { __typename: 'Mutation', moveFormSection?: Types.Maybe<{ __typename: 'MoveFormSectionPayload', form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position?: Types.Maybe<number>, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }> };
+export type MoveFormSectionMutationData = { __typename: 'Mutation', moveFormSection?: Types.Maybe<{ __typename: 'MoveFormSectionPayload', form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }> };
 
 export type CreateFormItemMutationVariables = Types.Exact<{
   formSectionId: Types.Scalars['Int'];
@@ -84,7 +84,7 @@ export type CreateFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormItemMutationData = { __typename: 'Mutation', createFormItem?: Types.Maybe<{ __typename: 'CreateFormItemPayload', form_item: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } }> };
+export type CreateFormItemMutationData = { __typename: 'Mutation', createFormItem?: Types.Maybe<{ __typename: 'CreateFormItemPayload', form_item: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } }> };
 
 export type UpdateFormItemMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -92,7 +92,7 @@ export type UpdateFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormItemMutationData = { __typename: 'Mutation', updateFormItem?: Types.Maybe<{ __typename: 'UpdateFormItemPayload', form_item: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } }> };
+export type UpdateFormItemMutationData = { __typename: 'Mutation', updateFormItem?: Types.Maybe<{ __typename: 'UpdateFormItemPayload', form_item: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } }> };
 
 export type DeleteFormItemMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -108,7 +108,7 @@ export type MoveFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type MoveFormItemMutationData = { __typename: 'Mutation', moveFormItem?: Types.Maybe<{ __typename: 'MoveFormItemPayload', form_section: { __typename: 'FormSection', id: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position?: Types.Maybe<number>, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } }> };
+export type MoveFormItemMutationData = { __typename: 'Mutation', moveFormItem?: Types.Maybe<{ __typename: 'MoveFormItemPayload', form_section: { __typename: 'FormSection', id: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } }> };
 
 
 export const CreateFormWithJsonDocument = gql`

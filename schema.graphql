@@ -2273,7 +2273,7 @@ type FormItem {
   id: Int!
   identifier: String
   item_type: String!
-  position: Int
+  position: Int!
   properties: Json
   public_description: String
   rendered_properties: Json
@@ -2315,7 +2315,7 @@ type FormSection {
   form: Form!
   form_items: [FormItem!]!
   id: Int!
-  position: Int
+  position: Int!
   title: String
 }
 

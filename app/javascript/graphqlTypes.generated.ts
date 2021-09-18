@@ -1976,7 +1976,7 @@ export type FormItem = {
   id: Scalars['Int'];
   identifier?: Maybe<Scalars['String']>;
   item_type: Scalars['String'];
-  position?: Maybe<Scalars['Int']>;
+  position: Scalars['Int'];
   properties?: Maybe<Scalars['Json']>;
   public_description?: Maybe<Scalars['String']>;
   rendered_properties?: Maybe<Scalars['Json']>;
@@ -2020,7 +2020,7 @@ export type FormSection = {
   form: Form;
   form_items: Array<FormItem>;
   id: Scalars['Int'];
-  position?: Maybe<Scalars['Int']>;
+  position: Scalars['Int'];
   title?: Maybe<Scalars['String']>;
 };
 

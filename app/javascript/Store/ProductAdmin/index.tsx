@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useModal, sortByLocaleString , LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
+import { useModal, sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AdminProductCard from './AdminProductCard';
 import usePageTitle from '../../usePageTitle';
@@ -13,7 +12,6 @@ import scrollToLocationHash from '../../scrollToLocationHash';
 import { useAdminProductsQuery } from '../queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
-import DndWrapper from '../../DndWrapper';
 
 const blankProduct: EditingProduct = {
   __typename: 'Product',
@@ -101,4 +99,4 @@ const ProductAdminPage = LoadQueryWrapper(useAdminProductsQuery, function Produc
   );
 });
 
-export default DndWrapper(ProductAdminPage);
+export default ProductAdminPage;
