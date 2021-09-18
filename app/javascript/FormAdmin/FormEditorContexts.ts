@@ -76,6 +76,7 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
   formItem: {
     __typename: 'FormItem',
     id: 0,
+    position: 1,
     item_type: 'static_text',
     properties: {
       content: '',
@@ -91,6 +92,7 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
   previewFormItem: {
     __typename: 'FormItem',
     id: 0,
+    position: 1,
     item_type: 'static_text',
     rendered_properties: {
       content: '',
