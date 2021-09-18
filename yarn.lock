@@ -16276,13 +16276,16 @@ resolve@^2.0.0-next.3:
     "@babel/preset-typescript": 7.15.0
     "@babel/register": 7.15.3
     "@babel/runtime": 7.15.4
-    "@codemirror/highlight": 0.19.5
-    "@codemirror/lang-html": 0.19.1
-    "@codemirror/lang-json": 0.19.1
-    "@codemirror/lang-markdown": 0.19.1
-    "@codemirror/language": 0.19.3
-    "@codemirror/state": 0.19.2
-    "@codemirror/view": 0.19.7
+    "@codemirror/highlight": ^0.19.4
+    "@codemirror/lang-html": ^0.19.1
+    "@codemirror/lang-json": ^0.19.1
+    "@codemirror/lang-markdown": ^0.19.1
+    "@codemirror/language": ^0.19.3
+    "@codemirror/state": ^0.19.2
+    "@codemirror/view": ^0.19.7
+    "@dnd-kit/core": ^3.1.1
+    "@dnd-kit/sortable": ^4.0.0
+    "@dnd-kit/utilities": ^2.0.0
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.2.2
     "@graphql-codegen/add": 3.1.0
