@@ -1,12 +1,15 @@
-import { useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import * as React from 'react';
-import { Preview, PreviewGenerator } from 'react-dnd-multi-backend';
+import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import sortProductVariants from '../sortProductVariants';
 import { describeAdminPricingStructure } from '../describePricingStructure';
 import { EditingProduct, EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
+import AdminProductVariantDragOverlayDisplay from './AdminProductVariantDragOverlayDisplay';
+import { useBasicSortableHandlers, useSortableDndSensors } from '../../SortableUtils';
 
 function updateVariant(
   productVariants: EditingVariant[],
@@ -43,19 +46,32 @@ export type AdminProductVariantsTableProps =
   | AdminProductVariantsTableEditingProps
   | AdminProductVariantsTableViewingProps;
 
+const noop = () => {};
+
 function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
-  const { product } = props;
+  const { product, editing } = props;
   const tableRef = useRef<HTMLTableElement>(null);
 
-  const addVariantClicked = () => {
-    if (!props.editing) {
-      return;
-    }
+  const onChange = editing ? props.onChange : noop;
 
+  let variants: EditingVariant[];
+  if (props.editing) {
+    variants = product.product_variants.filter(
+      (variant) => !(hasRealId(variant) && product.delete_variant_ids.includes(variant.id)),
+    );
+  } else {
+    variants = product.product_variants;
+  }
+
+  const sortedVariants = useMemo(() => sortProductVariants(variants), [variants]);
+
+  const sensors = useSortableDndSensors();
+
+  const addVariantClicked = () => {
     const position =
       Math.max(0, ...product.product_variants.map((variant) => variant.position ?? 0)) + 1;
 
-    props.onChange([
+    onChange([
       ...product.product_variants,
       {
         __typename: 'ProductVariant',
@@ -68,14 +84,14 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
   };
 
   const deleteVariantClicked = (variant: EditingVariant) => {
-    if (!props.editing) {
+    if (!editing) {
       return;
     }
 
     if (hasRealId(variant)) {
       props.deleteVariant(variant.id);
     } else {
-      props.onChange(
+      onChange(
         product.product_variants.filter(
           (existingVariant) => !realOrGeneratedIdsMatch(variant, existingVariant),
         ),
@@ -83,56 +99,40 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
     }
   };
 
-  const moveVariant = (dragIndex: number, hoverIndex: number) => {
-    if (!props.editing) {
-      return;
-    }
+  const moveVariant = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragVariant = sortedVariants[dragIndex];
+      const hoverVariant = sortedVariants[hoverIndex];
 
-    const variants = sortProductVariants(product.product_variants);
-    const dragVariant = variants[dragIndex];
-    const hoverVariant = variants[hoverIndex];
+      const newVariants = sortedVariants.map((variant, index) => {
+        if (index === dragIndex) {
+          return { ...variant, position: hoverVariant.position };
+        }
 
-    const newVariants = variants.map((variant, index) => {
-      if (index === dragIndex) {
-        return { ...variant, position: hoverVariant.position };
-      }
+        if (index === hoverIndex) {
+          return { ...variant, position: dragVariant.position };
+        }
 
-      if (index === hoverIndex) {
-        return { ...variant, position: dragVariant.position };
-      }
+        return variant;
+      });
 
-      return variant;
-    });
+      onChange(newVariants);
+    },
+    [sortedVariants, onChange],
+  );
 
-    props.onChange(newVariants);
-  };
-
-  const generatePreview: PreviewGenerator<{ index: number }> = ({
-    itemType,
-    item: { index },
-    style,
-  }) => {
-    if (itemType === 'PRODUCT_VARIANT') {
-      return (
-        <table
-          style={{
-            ...style,
-            width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
-          }}
-        >
-          <AdminProductVariantEditRow
-            index={index}
-            variant={product.product_variants[index]}
-            deleteVariant={() => {}}
-            updateVariant={() => {}}
-            moveVariant={() => {}}
-          />
-        </table>
-      );
-    }
-
-    return null;
-  };
+  const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
+    useCallback(
+      (id) => sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
+      [sortedVariants],
+    ),
+    useCallback(
+      (id) =>
+        sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id),
+      [sortedVariants],
+    ),
+    moveVariant,
+  );
 
   const renderAddVariantButton = () => {
     if (!props.editing) {
@@ -155,28 +155,17 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
     );
   }
 
-  let variants;
-  if (props.editing) {
-    variants = product.product_variants.filter(
-      (variant) => !(hasRealId(variant) && product.delete_variant_ids.includes(variant.id)),
-    );
-  } else {
-    variants = product.product_variants;
-  }
-
-  const rows = sortProductVariants(variants).map((variant, index) => {
+  const rows = sortedVariants.map((variant) => {
     if (props.editing) {
       const variantUpdater = (getNewValue: (prevValue: EditingVariant) => EditingVariant) =>
         updateVariant(product.product_variants, props.onChange, variant, getNewValue);
 
       return (
         <AdminProductVariantEditRow
-          index={index}
           key={getRealOrGeneratedId(variant)}
           variant={variant}
           updateVariant={variantUpdater}
           deleteVariant={() => deleteVariantClicked(variant)}
-          moveVariant={moveVariant}
         />
       );
     }
@@ -193,22 +182,43 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
   });
 
   return (
-    <div className="mt-2">
-      <table className="table table-sm" ref={tableRef}>
-        <thead>
-          <tr>
-            <th />
-            <th>Variant name</th>
-            <th>Description</th>
-            <th>Override price</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-      <Preview generator={generatePreview} />
-      {renderAddVariantButton()}
-    </div>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} {...sortableHandlers}>
+      <div className="mt-2">
+        <table className="table table-sm" ref={tableRef}>
+          <thead>
+            <tr>
+              <th />
+              <th>Variant name</th>
+              <th>Description</th>
+              <th>Override price</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            <SortableContext
+              items={sortedVariants.map((variant) => getRealOrGeneratedId(variant).toString())}
+              strategy={verticalListSortingStrategy}
+            >
+              {rows}
+            </SortableContext>
+          </tbody>
+        </table>
+        <DragOverlay>
+          {draggingItem && (
+            <table
+              style={{
+                width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
+              }}
+            >
+              <tbody>
+                <AdminProductVariantDragOverlayDisplay variant={draggingItem} />
+              </tbody>
+            </table>
+          )}
+        </DragOverlay>
+        {renderAddVariantButton()}
+      </div>
+    </DndContext>
   );
 }
 

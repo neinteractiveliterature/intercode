@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import usePropertyUpdater from './usePropertyUpdater';
 import { ParsedFormItem } from '../FormItemUtils';
 import { WithoutGeneratedId } from '../../GeneratedIdUtils';
+import { useBasicSortableHandlers } from '../../SortableUtils';
 
 // https://stackoverflow.com/questions/46583883/typescript-pick-properties-with-a-defined-type
 type KeysOfType<T, U> = {
@@ -13,8 +14,9 @@ type KeysOfType<T, U> = {
 export default function useArrayProperty<
   ElementType extends { generatedId: string },
   FormItemType extends ParsedFormItem<any, any>,
-  PropertyName extends KeysOfType<FormItemType['properties'], Array<ElementType>>
+  PropertyName extends KeysOfType<FormItemType['properties'], Array<ElementType>>,
 >(
+  array: ElementType[],
   property: PropertyName,
   onChange: React.Dispatch<React.SetStateAction<FormItemType>>,
   generateNewItem: () => WithoutGeneratedId<FormItemType['properties'][PropertyName][0]>,
@@ -73,5 +75,11 @@ export default function useArrayProperty<
     [updateItems],
   );
 
-  return [addItem, itemChanged, deleteItem, moveItem] as const;
+  const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
+    useCallback((id) => array.find((element) => element.generatedId === id), [array]),
+    useCallback((id) => array.findIndex((element) => element.generatedId === id), [array]),
+    moveItem,
+  );
+
+  return [addItem, itemChanged, deleteItem, draggingItem, sortableHandlers] as const;
 }

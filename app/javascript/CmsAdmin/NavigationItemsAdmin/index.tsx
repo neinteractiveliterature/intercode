@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-// @ts-expect-error
-import CadmusNavbarAdminApp from 'cadmus-navbar-admin/src';
+import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import { useApolloClient } from '@apollo/client';
+import 'cadmus-navbar-admin/styles/cadmus-navbar-admin.css';
 
 import Client from './Client';
 import usePageTitle from '../../usePageTitle';
-import DndWrapper from '../../DndWrapper';
 
 const NavigationItemsAdmin = () => {
   const apolloClient = useApolloClient();
@@ -16,4 +15,4 @@ const NavigationItemsAdmin = () => {
   return <CadmusNavbarAdminApp client={navbarAdminClient} />;
 };
 
-export default DndWrapper(NavigationItemsAdmin);
+export default NavigationItemsAdmin;

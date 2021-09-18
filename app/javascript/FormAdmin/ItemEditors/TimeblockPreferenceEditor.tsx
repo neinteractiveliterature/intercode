@@ -1,5 +1,7 @@
-import { Fragment, useCallback, useContext } from 'react';
+import { Fragment, useCallback, useContext, useRef } from 'react';
 import { BooleanInput, useUniqueId } from '@neinteractiveliterature/litform';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, TimeblockPreferenceFormItem } from '../FormItemUtils';
@@ -8,22 +10,27 @@ import TimeblockPreferenceEditorOmissionsRow from './TimeblockPreferenceEditorOm
 import useArrayProperty from './useArrayProperty';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
+import { useSortableDndSensors } from '../../SortableUtils';
+import TimeblockPreferenceEditorTimeblockRowDragOverlay from './TimeblockPreferenceEditorTimeblockRowDragOverlay';
 
 export type TimeblockPreferenceEditorProps = FormItemEditorProps<TimeblockPreferenceFormItem>;
 function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenceEditorProps) {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timeblock-preference-');
-
   const generateNewTimeblock = useCallback(() => ({ label: '', start: {}, finish: {} }), []);
+  const tableRef = useRef<HTMLTableElement>(null);
 
-  const [addTimeblock, timeblockChanged, deleteTimeblock, moveTimeblock] = useArrayProperty<
-    typeof formItem['properties']['timeblocks'][0],
-    typeof formItem,
-    'timeblocks'
-  >('timeblocks', setFormItem, generateNewTimeblock);
+  const sensors = useSortableDndSensors();
+  const [addTimeblock, timeblockChanged, deleteTimeblock, draggingTimeblock, sortableHandlers] =
+    useArrayProperty<typeof formItem['properties']['timeblocks'][0], typeof formItem, 'timeblocks'>(
+      formItem.properties.timeblocks,
+      'timeblocks',
+      setFormItem,
+      generateNewTimeblock,
+    );
 
   return (
-    <>
+    <DndContext sensors={sensors} {...sortableHandlers}>
       <div className="mb-3">
         <label htmlFor={captionInputId} className="form-label form-item-label">
           Caption
@@ -44,7 +51,7 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
           falseLabel="Visible"
           falseBeforeTrue
         />
-        <table className="table">
+        <table className="table" ref={tableRef}>
           <thead>
             <tr>
               <th />
@@ -55,23 +62,26 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
             </tr>
           </thead>
           <tbody>
-            {formItem.properties.timeblocks.map((timeblock, index) => (
-              <Fragment key={timeblock.generatedId}>
-                <TimeblockPreferenceEditorTimeblockRow
-                  index={index}
-                  timeblock={timeblock}
-                  onChange={timeblockChanged}
-                  deleteTimeblock={deleteTimeblock}
-                  moveTimeblock={moveTimeblock}
-                />
+            <SortableContext
+              items={formItem.properties.timeblocks.map((timeblock) => timeblock.generatedId)}
+              strategy={verticalListSortingStrategy}
+            >
+              {formItem.properties.timeblocks.map((timeblock) => (
+                <Fragment key={timeblock.generatedId}>
+                  <TimeblockPreferenceEditorTimeblockRow
+                    timeblock={timeblock}
+                    onChange={timeblockChanged}
+                    deleteTimeblock={deleteTimeblock}
+                  />
 
-                <TimeblockPreferenceEditorOmissionsRow
-                  timeblock={timeblock}
-                  formItem={formItem}
-                  setFormItem={setFormItem}
-                />
-              </Fragment>
-            ))}
+                  <TimeblockPreferenceEditorOmissionsRow
+                    timeblock={timeblock}
+                    formItem={formItem}
+                    setFormItem={setFormItem}
+                  />
+                </Fragment>
+              ))}
+            </SortableContext>
           </tbody>
           <tfoot>
             <tr>
@@ -90,7 +100,22 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
           </tfoot>
         </table>
       </div>
-    </>
+
+      <DragOverlay>
+        {draggingTimeblock && (
+          <table
+            className="table"
+            style={{
+              width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
+            }}
+          >
+            <tbody>
+              <TimeblockPreferenceEditorTimeblockRowDragOverlay timeblock={draggingTimeblock} />
+            </tbody>
+          </table>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 }
 

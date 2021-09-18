@@ -289,7 +289,7 @@ export function serializeParsedFormItem<FormItemType extends ParsedFormItem<any,
   if (formItem.properties != null) {
     const serialized: FormEditorFormItemFieldsFragment = {
       ...formItem,
-      default_value: JSON.stringify(formItem.default_value),
+      default_value: JSON.stringify(formItem.default_value ?? null),
       properties: JSON.stringify(formItem.properties),
       rendered_properties: JSON.stringify(formItem.rendered_properties),
     };
@@ -299,7 +299,7 @@ export function serializeParsedFormItem<FormItemType extends ParsedFormItem<any,
 
   const serialized: CommonFormItemFieldsFragment = {
     ...formItem,
-    default_value: JSON.stringify(formItem.default_value),
+    default_value: JSON.stringify(formItem.default_value ?? null),
     rendered_properties: JSON.stringify(formItem.rendered_properties),
   };
 

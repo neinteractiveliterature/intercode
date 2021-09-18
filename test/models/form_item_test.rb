@@ -8,7 +8,7 @@
 #  default_value      :jsonb
 #  identifier         :text
 #  item_type          :text
-#  position           :integer
+#  position           :integer          not null
 #  properties         :jsonb
 #  public_description :text
 #  visibility         :string           default("normal"), not null

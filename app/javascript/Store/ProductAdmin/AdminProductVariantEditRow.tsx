@@ -1,32 +1,28 @@
 import { usePropertySetters } from '@neinteractiveliterature/litform';
 import { FunctionalStateUpdater } from '@neinteractiveliterature/litform/lib/usePropertySetters';
+import { useSortable } from '@dnd-kit/sortable';
 
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import useSortable from '../../useSortable';
 import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';
+import { getRealOrGeneratedId } from '../../GeneratedIdUtils';
+import { getSortableStyle } from '../../SortableUtils';
 
 export type AdminProductVariantEditRowProps = {
   variant: EditingVariant;
   updateVariant: FunctionalStateUpdater<EditingVariant>;
   deleteVariant: () => void;
-  moveVariant: (dragIndex: number, hoverIndex: number) => void;
-  index: number;
 };
 
 function AdminProductVariantEditRow({
   variant,
   updateVariant,
   deleteVariant,
-  moveVariant,
-  index,
 }: AdminProductVariantEditRowProps) {
-  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
-    index,
-    moveVariant,
-    'PRODUCT_VARIANT',
-  );
+  const { setNodeRef, transform, attributes, listeners, transition, isDragging } = useSortable({
+    id: getRealOrGeneratedId(variant).toString(),
+  });
   const [setName, setDescription, setOverridePricingStructure] = usePropertySetters(
     updateVariant,
     'name',
@@ -34,10 +30,12 @@ function AdminProductVariantEditRow({
     'override_pricing_structure',
   );
 
+  const style = getSortableStyle(transform, transition, isDragging);
+
   return (
-    <tr className={isDragging ? 'opacity-50' : undefined} ref={rowRef}>
-      <td ref={drag}>
-        <i className="bi-list cursor-grab">
+    <tr style={style}>
+      <td {...attributes} {...listeners} ref={setNodeRef}>
+        <i className="bi-grip-vertical cursor-grab">
           <span className="visually-hidden">Drag to reorder</span>
         </i>
       </td>

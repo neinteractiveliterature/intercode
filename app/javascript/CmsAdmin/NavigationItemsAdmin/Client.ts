@@ -1,4 +1,9 @@
 import { ApolloClient, FetchResult } from '@apollo/client';
+import { CadmusNavbarAdminClient } from 'cadmus-navbar-admin/lib/CadmusNavbarAdminClient';
+import { NavigationItem } from 'cadmus-navbar-admin/lib/NavigationItem';
+import { EditingNavigationItem } from 'cadmus-navbar-admin/lib/EditingNavigationItemContext';
+import { parseIntOrNull } from '@neinteractiveliterature/litform';
+import NavigationItemStore from 'cadmus-navbar-admin/lib/NavigationItemStore';
 import { NavigationItemsAdminQuery } from './queries';
 import {
   AdminNavigationItemFieldsFragment,
@@ -20,27 +25,19 @@ import {
 } from './mutations.generated';
 import { CmsNavigationItemInput } from '../../graphqlTypes.generated';
 
-type CadmusNavbarAdminItem = {
-  id: number;
-  position?: number;
-  title?: string;
-  navigation_section_id?: number;
-  page_id?: number;
-};
-
 function graphqlNavigationItemToCadmusNavbarAdminObject(
   navigationItem: AdminNavigationItemFieldsFragment,
-): CadmusNavbarAdminItem {
+): NavigationItem {
   return {
-    id: navigationItem.id,
-    position: navigationItem.position ?? undefined,
-    title: navigationItem.title ?? undefined,
-    navigation_section_id: (navigationItem.navigation_section || {}).id,
-    page_id: (navigationItem.page || {}).id,
+    id: navigationItem.id.toString(),
+    position: navigationItem.position ?? 0,
+    title: navigationItem.title ?? '',
+    navigation_section_id: navigationItem.navigation_section?.id?.toString(),
+    page_id: navigationItem.page?.id?.toString(),
   };
 }
 
-class Client {
+class Client implements CadmusNavbarAdminClient {
   apolloClient: ApolloClient<any>;
 
   requestsInProgress: {
@@ -103,19 +100,20 @@ class Client {
     }
   }
 
-  async saveNavigationItem(navigationItem: CadmusNavbarAdminItem) {
+  async saveNavigationItem(navigationItem: EditingNavigationItem) {
     this.requestsInProgress.savingNavigationItem = true;
     let mutate: () => Promise<FetchResult>;
     let operation: 'create' | 'update';
     const navigationItemInput: CmsNavigationItemInput = {
       title: navigationItem.title,
-      navigation_section_id: navigationItem.navigation_section_id,
-      page_id: navigationItem.page_id,
+      navigation_section_id: parseIntOrNull(navigationItem.navigation_section_id ?? ''),
+      page_id: parseIntOrNull(navigationItem.page_id ?? ''),
       position: navigationItem.position,
     };
+    const navigationItemId = parseIntOrNull(navigationItem.id ?? '');
 
     try {
-      if (navigationItem.id) {
+      if (navigationItemId != null) {
         operation = 'update';
         mutate = () =>
           this.apolloClient.mutate<
@@ -123,7 +121,7 @@ class Client {
             UpdateNavigationItemMutationVariables
           >({
             mutation: UpdateNavigationItemDocument,
-            variables: { id: navigationItem.id, navigationItem: navigationItemInput },
+            variables: { id: navigationItemId, navigationItem: navigationItemInput },
           });
       } else {
         operation = 'create';
@@ -167,16 +165,20 @@ class Client {
     }
   }
 
-  async deleteNavigationItem(navigationItem: CadmusNavbarAdminItem) {
+  async deleteNavigationItem(navigationItem: NavigationItem) {
     this.requestsInProgress.deletingNavigationItem = true;
+    const navigationItemId = parseIntOrNull(navigationItem.id);
+    if (navigationItemId == null) {
+      throw new Error(`Invalid navigation item ID: ${JSON.stringify(navigationItem.id)}`);
+    }
 
     try {
-      const response = await this.apolloClient.mutate<
+      await this.apolloClient.mutate<
         DeleteNavigationItemMutationData,
         DeleteNavigationItemMutationVariables
       >({
         mutation: DeleteNavigationItemDocument,
-        variables: { id: navigationItem.id },
+        variables: { id: navigationItemId },
         update: (cache) => {
           const data = cache.readQuery<NavigationItemsAdminQueryData>({
             query: NavigationItemsAdminQuery,
@@ -189,14 +191,13 @@ class Client {
             data: {
               ...data,
               cmsNavigationItems: data.cmsNavigationItems.filter(
-                (item) => item.id !== navigationItem.id,
+                (item) => item.id !== navigationItemId,
               ),
             },
           });
         },
       });
       await this.apolloClient.resetStore();
-      return response;
     } catch (error) {
       this.onError(error);
       throw error;
@@ -205,18 +206,18 @@ class Client {
     }
   }
 
-  async sortNavigationItems(navigationItems: CadmusNavbarAdminItem[]) {
+  async sortNavigationItems(navigationItems: NavigationItemStore) {
     const sortItems = navigationItems.map((navigationItem) => ({
-      id: navigationItem.id,
+      id: Number.parseInt(navigationItem.id, 10),
       cms_navigation_item: {
         position: navigationItem.position,
-        navigation_section_id: navigationItem.navigation_section_id,
+        navigation_section_id: parseIntOrNull(navigationItem.navigation_section_id ?? ''),
       },
     }));
 
     this.requestsInProgress.sortingNavigationItems = true;
     try {
-      const response = await this.apolloClient.mutate<
+      await this.apolloClient.mutate<
         SortNavigationItemsMutationData,
         SortNavigationItemsMutationVariables
       >({
@@ -249,7 +250,6 @@ class Client {
       });
 
       await this.apolloClient.resetStore();
-      return response;
     } catch (error) {
       this.onError(error);
       throw error;

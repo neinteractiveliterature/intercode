@@ -1,18 +1,14 @@
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import classnames from 'classnames';
 import { useConfirm, ButtonWithTooltip, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useSortable } from '@dnd-kit/sortable';
 
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
-import useSortable, { buildOptimisticArrayForMove } from '../useSortable';
-import {
-  mutationUpdaterForFormSection,
-  TypedFormItem,
-  serializeParsedFormItem,
-  findStandardItem,
-} from './FormItemUtils';
-import { useMoveFormItemMutation, useDeleteFormItemMutation } from './mutations.generated';
+import { mutationUpdaterForFormSection, TypedFormItem, findStandardItem } from './FormItemUtils';
+import { useDeleteFormItemMutation } from './mutations.generated';
+import { getSortableStyle } from '../SortableUtils';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
   if (standardItem) {
@@ -28,16 +24,14 @@ function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
 
 export type FormEditorItemPreviewProps = {
   formItem: TypedFormItem;
-  index: number;
 };
 
-function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) {
+function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
   const confirm = useConfirm();
   const match = useRouteMatch<{ id: string; sectionId: string }>();
   const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
     useContext(FormEditorContext);
   const renderedFormItem = formItemsById.get(formItem.id)!;
-  const [moveFormItem] = useMoveFormItemMutation();
   const [deleteFormItem] = useDeleteFormItemMutation({
     update: mutationUpdaterForFormSection(form.id, currentSection!.id, (section) => ({
       ...section,
@@ -45,47 +39,22 @@ function FormEditorItemPreview({ formItem, index }: FormEditorItemPreviewProps) 
     })),
   });
 
-  const moveItem = useCallback(
-    (dragIndex, hoverIndex) => {
-      const optimisticItems = buildOptimisticArrayForMove(
-        currentSection!.form_items.map(serializeParsedFormItem),
-        dragIndex,
-        hoverIndex,
-      );
-
-      moveFormItem({
-        variables: {
-          id: currentSection!.form_items[dragIndex].id,
-          formSectionId: currentSection!.id,
-          destinationIndex: hoverIndex,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          moveFormItem: {
-            __typename: 'MoveFormItemPayload',
-            form_section: {
-              ...currentSection!,
-              form_items: optimisticItems,
-            },
-          },
-        },
-      });
-    },
-    [currentSection, moveFormItem],
-  );
-
-  const [ref, drag, { isDragging }] = useSortable<HTMLDivElement>(index, moveItem, 'formItem');
+  const { setNodeRef, isDragging, attributes, listeners, transform, transition } = useSortable({
+    id: formItem.id.toString(),
+  });
 
   const standardItem = findStandardItem(formType, formItem.identifier);
 
+  const style = getSortableStyle(transform, transition, isDragging);
+
   return (
     <div
-      ref={ref}
       className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}
+      style={style}
     >
-      <div className="me-2 mt-2">
+      <div className="me-2 mt-2" {...attributes} {...listeners} ref={setNodeRef}>
         <span className="visually-hidden">Drag to reorder</span>
-        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
+        <i className="cursor-grab bi-grip-vertical" />
       </div>
       <div className="form-editor-item flex-grow-1">
         <Link
