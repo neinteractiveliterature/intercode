@@ -6042,9 +6042,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cadmus-navbar-admin@npm:^5.0.0-alpha.6":
-  version: 5.0.0-alpha.6
-  resolution: "cadmus-navbar-admin@npm:5.0.0-alpha.6"
+"cadmus-navbar-admin@npm:^5.0.0-alpha.8":
+  version: 5.0.0-alpha.8
+  resolution: "cadmus-navbar-admin@npm:5.0.0-alpha.8"
   dependencies:
     "@dnd-kit/core": ^3.1.1
     "@dnd-kit/sortable": ^4.0.0
@@ -6054,7 +6054,7 @@ __metadata:
     react-bootstrap4-modal: ^2.0.0
   peerDependencies:
     react: ^17.0.0
-  checksum: add7e813490d5815cf699ec3005fe38363422c74e9eebc10e5eaa585c6b1956a6da82805f475a5ad889b07c82608ef99eaac0b44627ac2855355e1cbc91dac73
+  checksum: e73d42cde7d39b70f8ed80ca2135cdf6debe504bebd5119e14084af47d3ed2a5026528e3f6b7a39983596e705e9a607a0cd76970a8f6e1711314c688607f73be
   languageName: node
   linkType: hard
 
@@ -16335,7 +16335,7 @@ resolve@^2.0.0-next.3:
     bootstrap-icons: 1.5.0
     buffer: 6.0.3
     bytes: 3.1.0
-    cadmus-navbar-admin: ^5.0.0-alpha.6
+    cadmus-navbar-admin: ^5.0.0-alpha.8
     caniuse-lite: 1.0.30001257
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
