@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-// @ts-expect-error
-import CadmusNavbarAdminApp from 'cadmus-navbar-admin/src';
+import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import { useApolloClient } from '@apollo/client';
+import 'cadmus-navbar-admin/styles/cadmus-navbar-admin.css';
 
 import Client from './Client';
 import usePageTitle from '../../usePageTitle';
