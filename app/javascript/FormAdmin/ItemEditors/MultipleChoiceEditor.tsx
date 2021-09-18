@@ -1,10 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useMemo, useRef } from 'react';
 import {
   BootstrapFormInput,
   MultipleChoiceInput,
   useUniqueId,
   BootstrapFormCheckbox,
 } from '@neinteractiveliterature/litform';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, MultipleChoiceFormItem } from '../FormItemUtils';
@@ -12,6 +14,8 @@ import MultipleChoiceOptionRow from './MultipleChoiceOptionRow';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import useArrayProperty from './useArrayProperty';
 import { FormItemEditorProps } from '../FormItemEditorProps';
+import { useSortableDndSensors } from '../../SortableUtils';
+import MultipleChoiceOptionRowDragOverlay from './MultipleChoiceOptionRowDragOverlay';
 
 export type MultipleChoiceEditorProps = FormItemEditorProps<MultipleChoiceFormItem>;
 type FormItemType = MultipleChoiceEditorProps['formItem'];
@@ -20,15 +24,26 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('multiple-choice-caption-');
   const generateNewChoice = () => ({ caption: '', value: '' });
+  const tableRef = useRef<HTMLTableElement>(null);
 
-  const [addChoice, choiceChanged, deleteChoice, moveChoice] = useArrayProperty<
-    ChoiceType,
-    FormItemType,
-    'choices'
-  >('choices', setFormItem, generateNewChoice);
+  const sensors = useSortableDndSensors();
+  const [addChoice, choiceChanged, deleteChoice, draggingChoice, sortableHandlers] =
+    useArrayProperty<ChoiceType, FormItemType, 'choices'>(
+      formItem.properties.choices,
+      'choices',
+      setFormItem,
+      generateNewChoice,
+    );
+
+  const nonUniqueDraggingChoice = useMemo(
+    () =>
+      draggingChoice &&
+      formItem.properties.choices.filter((c) => c.value === draggingChoice.value).length > 1,
+    [draggingChoice, formItem.properties.choices],
+  );
 
   return (
-    <>
+    <DndContext sensors={sensors} {...sortableHandlers}>
       <div className="mb-3">
         <label htmlFor={captionInputId} className="form-label form-item-label">
           Caption
@@ -54,7 +69,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
           disabled={disabled}
         />
 
-        <table className="table">
+        <table className="table" ref={tableRef}>
           <thead>
             <tr>
               <th />
@@ -64,19 +79,22 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
             </tr>
           </thead>
           <tbody>
-            {formItem.properties.choices.map((choice, index) => (
-              <MultipleChoiceOptionRow
-                key={choice.generatedId}
-                choice={choice}
-                index={index}
-                deleteChoice={deleteChoice}
-                choiceChanged={choiceChanged}
-                moveChoice={moveChoice}
-                nonUnique={
-                  formItem.properties.choices.filter((c) => c.value === choice.value).length > 1
-                }
-              />
-            ))}
+            <SortableContext
+              items={formItem.properties.choices.map((choice) => choice.generatedId)}
+              strategy={verticalListSortingStrategy}
+            >
+              {formItem.properties.choices.map((choice) => (
+                <MultipleChoiceOptionRow
+                  key={choice.generatedId}
+                  choice={choice}
+                  deleteChoice={deleteChoice}
+                  choiceChanged={choiceChanged}
+                  nonUnique={
+                    formItem.properties.choices.filter((c) => c.value === choice.value).length > 1
+                  }
+                />
+              ))}
+            </SortableContext>
             <tr>
               <td />
               <td>
@@ -117,7 +135,24 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
           </tfoot>
         </table>
       </div>
-    </>
+      <DragOverlay>
+        {draggingChoice && (
+          <table
+            className="table"
+            style={{
+              width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
+            }}
+          >
+            <tbody>
+              <MultipleChoiceOptionRowDragOverlay
+                choice={draggingChoice}
+                nonUnique={nonUniqueDraggingChoice ?? false}
+              />
+            </tbody>
+          </table>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 }
 

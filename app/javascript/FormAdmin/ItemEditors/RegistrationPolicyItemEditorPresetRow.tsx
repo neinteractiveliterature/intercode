@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
 import * as React from 'react';
 import { useModal, useConfirm } from '@neinteractiveliterature/litform';
+import { useSortable } from '@dnd-kit/sortable';
 
-import useSortable from '../../useSortable';
 import RegistrationPolicyItemEditorPresetModal from './RegistrationPolicyItemEditorPresetModal';
 import { RegistrationPolicyPreset } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
+import { getSortableStyle } from '../../SortableUtils';
 
 type PresetWithId = WithGeneratedId<RegistrationPolicyPreset, string>;
 
@@ -26,26 +27,20 @@ function usePresetPropertyUpdater(
 
 export type RegistrationPolicyItemEditorPresetRowProps = {
   preset: PresetWithId;
-  index: number;
-  movePreset: (dragIndex: number, hoverIndex: number) => void;
   deletePreset: (generatedId: string) => void;
   onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void;
 };
 
 function RegistrationPolicyItemEditorPresetRow({
   preset,
-  index,
-  movePreset,
   deletePreset,
   onChange,
 }: RegistrationPolicyItemEditorPresetRowProps) {
   const confirm = useConfirm();
   const modal = useModal();
-  const [rowRef, drag, { isDragging }] = useSortable<HTMLTableRowElement>(
-    index,
-    movePreset,
-    'choice',
-  );
+  const { isDragging, setNodeRef, transform, transition, listeners, attributes } = useSortable({
+    id: preset.generatedId,
+  });
 
   const presetChanged = useCallback(
     (newPreset) => onChange(preset.generatedId, () => newPreset),
@@ -53,11 +48,13 @@ function RegistrationPolicyItemEditorPresetRow({
   );
   const presetNameChanged = usePresetPropertyUpdater(onChange, preset.generatedId, 'name');
 
+  const style = getSortableStyle(transform, transition, isDragging);
+
   return (
-    <tr ref={rowRef}>
-      <td style={{ cursor: isDragging ? 'grabbing' : 'grab' }} ref={drag}>
+    <tr style={style}>
+      <td style={{ cursor: 'grab' }} {...listeners} {...attributes} ref={setNodeRef}>
         <span className="visually-hidden">Drag to reorder</span>
-        <i className="bi-list" />
+        <i className="bi-grip-vertical" />
       </td>
       <td>
         <input

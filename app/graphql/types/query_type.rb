@@ -330,7 +330,7 @@ present, the request will error out.',
 
   def preview_form_item(form_section_id:, form_item:)
     form_section = FormSection.find(form_section_id)
-    FormItem.new(form_item.to_h.merge(id: 0, form_section: form_section))
+    FormItem.new(form_item.to_h.merge(id: 0, form_section: form_section, position: 1))
   end
 
   field :preview_markdown, String, null: false do

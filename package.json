@@ -59,9 +59,8 @@
     "@graphiql/toolkit": "0.2.2",
     "@juggle/resize-observer": "3.3.1",
     "@lezer/common": "0.15.5",
-    "@neinteractiveliterature/litform": "0.17.0",
+    "@neinteractiveliterature/litform": "^0.18.0",
     "@popperjs/core": "2.10.1",
-    "@react-dnd/invariant": "2.0.0",
     "@stripe/react-stripe-js": "1.4.1",
     "@stripe/stripe-js": "1.17.1",
     "@testing-library/react": "12.1.0",
@@ -151,10 +150,6 @@
     "react-bootstrap4-modal": "2.0.0",
     "react-color": "2.19.3",
     "react-cookie-consent": "6.4.0",
-    "react-dnd": "14.0.3",
-    "react-dnd-html5-backend": "14.0.1",
-    "react-dnd-multi-backend": "7.0.0-alpha.4",
-    "react-dnd-touch-backend": "14.1.0",
     "react-dom": "17.0.2",
     "react-google-recaptcha": "2.1.0",
     "react-html-id": "0.1.5",
@@ -248,11 +243,7 @@
     "webpack-dev-server": "4.2.1"
   },
   "resolutions": {
-    "@typescript-eslint/parser": "4.31.1",
-    "dnd-core": "^14.0.0",
-    "react-dnd": "^14.0.0",
-    "react-dnd-html5-backend": "^14.0.0",
-    "react-dnd-touch-backend": "^14.0.0"
+    "@typescript-eslint/parser": "4.31.1"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"

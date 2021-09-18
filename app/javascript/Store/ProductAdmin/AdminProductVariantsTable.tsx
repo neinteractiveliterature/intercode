@@ -1,21 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import * as React from 'react';
-import {
-  closestCenter,
-  DndContext,
-  DragOverEvent,
-  DragOverlay,
-  DragStartEvent,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import sortProductVariants from '../sortProductVariants';
@@ -23,6 +9,7 @@ import { describeAdminPricingStructure } from '../describePricingStructure';
 import { EditingProduct, EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import AdminProductVariantDragOverlayDisplay from './AdminProductVariantDragOverlayDisplay';
+import { useBasicSortableHandlers, useSortableDndSensors } from '../../SortableUtils';
 
 function updateVariant(
   productVariants: EditingVariant[],
@@ -64,7 +51,6 @@ const noop = () => {};
 function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
   const { product, editing } = props;
   const tableRef = useRef<HTMLTableElement>(null);
-  const [draggingVariant, setDraggingVariant] = useState<EditingVariant>();
 
   const onChange = editing ? props.onChange : noop;
 
@@ -79,12 +65,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
 
   const sortedVariants = useMemo(() => sortProductVariants(variants), [variants]);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
+  const sensors = useSortableDndSensors();
 
   const addVariantClicked = () => {
     const position =
@@ -140,37 +121,18 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
     [sortedVariants, onChange],
   );
 
-  const handleDragStart = useCallback(
-    (event: DragStartEvent) => {
-      setDraggingVariant(
-        variants.find((variant) => getRealOrGeneratedId(variant).toString() === event.active.id),
-      );
-    },
-    [variants],
+  const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
+    useCallback(
+      (id) => sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
+      [sortedVariants],
+    ),
+    useCallback(
+      (id) =>
+        sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id),
+      [sortedVariants],
+    ),
+    moveVariant,
   );
-
-  const handleDragOver = useCallback(
-    (event: DragOverEvent) => {
-      const { active, over } = event;
-      const activeIndex = sortedVariants.findIndex(
-        (variant) => getRealOrGeneratedId(variant).toString() === active.id,
-      );
-      const overIndex = over
-        ? sortedVariants.findIndex(
-            (variant) => getRealOrGeneratedId(variant).toString() === over.id,
-          )
-        : undefined;
-
-      if (over && active.id !== over.id && overIndex != null) {
-        moveVariant(activeIndex, overIndex);
-      }
-    },
-    [sortedVariants, moveVariant],
-  );
-
-  const handleDragEnd = useCallback(() => {
-    setDraggingVariant(undefined);
-  }, []);
 
   const renderAddVariantButton = () => {
     if (!props.editing) {
@@ -220,14 +182,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
   });
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragCancel={handleDragEnd}
-      onDragEnd={handleDragEnd}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} {...sortableHandlers}>
       <div className="mt-2">
         <table className="table table-sm" ref={tableRef}>
           <thead>
@@ -249,13 +204,15 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
           </tbody>
         </table>
         <DragOverlay>
-          {draggingVariant && (
+          {draggingItem && (
             <table
               style={{
                 width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
               }}
             >
-              <AdminProductVariantDragOverlayDisplay variant={draggingVariant} />
+              <tbody>
+                <AdminProductVariantDragOverlayDisplay variant={draggingItem} />
+              </tbody>
             </table>
           )}
         </DragOverlay>

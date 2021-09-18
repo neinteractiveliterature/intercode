@@ -1,12 +1,13 @@
 import { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useUniqueId } from '@neinteractiveliterature/litform';
+import { useUniqueId, buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
 
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { FormEditorContext } from './FormEditorContexts';
 import { useCreateMutation } from '../MutationUtils';
 import { serializeParsedFormSection } from './FormItemUtils';
 import FormSectionNavItem from './FormSectionNavItem';
-import { buildOptimisticArrayForMove } from '../useSortable';
 import useCollapse from '../NavigationBar/useCollapse';
 import {
   useMoveFormSectionMutation,
@@ -19,6 +20,8 @@ import {
   FormEditorQueryData,
   FormEditorQueryVariables,
 } from './queries.generated';
+import { useArrayBasicSortableHandlers, useSortableDndSensors } from '../SortableUtils';
+import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
 
 function FormSectionNav() {
   const collapseRef = useRef<HTMLElement>(null);
@@ -39,6 +42,7 @@ function FormSectionNav() {
     newObjectPath: ['createFormSection', 'form_section'],
   });
   const navId = useUniqueId('section-nav-');
+  const sensors = useSortableDndSensors();
 
   const moveSection = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -68,6 +72,11 @@ function FormSectionNav() {
     [form, moveFormSection],
   );
 
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
+    form.form_sections,
+    moveSection,
+  );
+
   const addSection = async () => {
     const result = await addFormSection({
       variables: { formId: form.id, formSection: { title: 'New section' } },
@@ -77,7 +86,7 @@ function FormSectionNav() {
   };
 
   return (
-    <>
+    <DndContext sensors={sensors} {...sortableHandlers}>
       <button
         className="btn p-0 d-lg-none"
         type="button"
@@ -94,14 +103,14 @@ function FormSectionNav() {
         {...otherCollapseProps}
       >
         <ul className="nav nav-pills flex-column">
-          {form.form_sections.map((formSection, index) => (
-            <FormSectionNavItem
-              key={formSection.id}
-              formSection={formSection}
-              index={index}
-              moveSection={moveSection}
-            />
-          ))}
+          <SortableContext
+            items={form.form_sections.map((formSection) => formSection.id.toString())}
+            strategy={verticalListSortingStrategy}
+          >
+            {form.form_sections.map((formSection) => (
+              <FormSectionNavItem key={formSection.id} formSection={formSection} />
+            ))}
+          </SortableContext>
         </ul>
 
         <div className="mt-4">
@@ -110,7 +119,11 @@ function FormSectionNav() {
           </button>
         </div>
       </nav>
-    </>
+
+      <DragOverlay>
+        {draggingItem && <FormSectionNavItemDragOverlay formSection={draggingItem} />}
+      </DragOverlay>
+    </DndContext>
   );
 }
 
