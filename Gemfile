@@ -4,6 +4,7 @@ ruby File.read(File.expand_path('.ruby-version', __dir__)).strip
 gem 'rails', '6.1.4.1'
 
 gem 'pg'
+gem 'webrick' # we don't actually use it, but Skylight needs it on boot
 gem 'puma'
 
 gem 'minipack'

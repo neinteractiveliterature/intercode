@@ -558,6 +558,7 @@ GEM
     unicode-display_width (2.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
+    webrick (1.7.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-driver (0.7.5-java)
@@ -654,6 +655,7 @@ DEPENDENCIES
   term-ansicolor
   twilio-ruby (~> 5.58.1)
   tzinfo-data
+  webrick
   whenever
   will_paginate
   with_advisory_lock
