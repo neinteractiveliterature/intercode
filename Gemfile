@@ -121,8 +121,7 @@ group :development do
   gem 'annotate'
 
   # Debugging
-  gem 'ruby-debug-ide'
-  gem 'debase'
+  gem 'debug'
 
   # Linting
   gem 'rubocop', '1.21.0'
