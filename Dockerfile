@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=2.7.4
+ARG RUBY_VERSION=3.0.2
 
 ### dev
 
