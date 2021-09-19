@@ -42,7 +42,7 @@ function CurrentPendingOrderButton() {
         buttonContent={
           <>
             <i
-              className="bi-shopping-cart"
+              className="bi-cart-fill"
               title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
             />
             <div

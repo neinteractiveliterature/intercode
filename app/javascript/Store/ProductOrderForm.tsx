@@ -161,7 +161,7 @@ function ProductOrderForm({ productId }: ProductOrderFormProps) {
               {addToCartInProgress ? (
                 <LoadingIndicator iconSet="bootstrap-icons" />
               ) : (
-                <i className="bi-shopping-cart" />
+                <i className="bi-cart-plus-fill" />
               )}{' '}
               Add to cart
             </button>
