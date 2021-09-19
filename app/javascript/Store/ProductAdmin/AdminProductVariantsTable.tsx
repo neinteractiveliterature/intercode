@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import * as React from 'react';
 import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useBasicSortableHandlers, useMatchWidthStyle } from '@neinteractiveliterature/litform';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import sortProductVariants from '../sortProductVariants';
@@ -9,7 +10,7 @@ import { describeAdminPricingStructure } from '../describePricingStructure';
 import { EditingProduct, EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import AdminProductVariantDragOverlayDisplay from './AdminProductVariantDragOverlayDisplay';
-import { useBasicSortableHandlers, useSortableDndSensors } from '../../SortableUtils';
+import { useSortableDndSensors } from '../../SortableUtils';
 
 function updateVariant(
   productVariants: EditingVariant[],
@@ -50,7 +51,7 @@ const noop = () => {};
 
 function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
   const { product, editing } = props;
-  const tableRef = useRef<HTMLTableElement>(null);
+  const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
 
   const onChange = editing ? props.onChange : noop;
 
@@ -123,11 +124,12 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
 
   const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
     useCallback(
-      (id) => sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
+      (id: string) =>
+        sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
       [sortedVariants],
     ),
     useCallback(
-      (id) =>
+      (id: string) =>
         sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id),
       [sortedVariants],
     ),
@@ -184,7 +186,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} {...sortableHandlers}>
       <div className="mt-2">
-        <table className="table table-sm" ref={tableRef}>
+        <table className="table table-sm" ref={matchWidthRef}>
           <thead>
             <tr>
               <th />
@@ -205,11 +207,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps) {
         </table>
         <DragOverlay>
           {draggingItem && (
-            <table
-              style={{
-                width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
-              }}
-            >
+            <table style={matchWidthStyle}>
               <tbody>
                 <AdminProductVariantDragOverlayDisplay variant={draggingItem} />
               </tbody>

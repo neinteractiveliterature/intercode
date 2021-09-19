@@ -1,5 +1,5 @@
-import { useCallback, useContext, useRef } from 'react';
-import { BootstrapFormCheckbox } from '@neinteractiveliterature/litform';
+import { useCallback, useContext } from 'react';
+import { BootstrapFormCheckbox, useMatchWidthStyle } from '@neinteractiveliterature/litform';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -34,7 +34,7 @@ function RegistrationPolicyItemEditor({
 
   const allowCustomChanged = usePropertyUpdater(setFormItem, 'allow_custom');
 
-  const tableRef = useRef<HTMLTableElement>(null);
+  const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
   const sensors = useSortableDndSensors();
   const [addPreset, presetChanged, deletePreset, draggingPreset, sortableHandlers] =
     useArrayProperty<WithGeneratedId<RegistrationPolicyPreset, string>, typeof formItem, 'presets'>(
@@ -46,7 +46,7 @@ function RegistrationPolicyItemEditor({
 
   return (
     <DndContext sensors={sensors} {...sortableHandlers}>
-      <table className="table" ref={tableRef}>
+      <table className="table" ref={matchWidthRef}>
         <thead>
           <tr>
             <th />
@@ -102,12 +102,7 @@ function RegistrationPolicyItemEditor({
 
       <DragOverlay>
         {draggingPreset && (
-          <table
-            className="table"
-            style={{
-              width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
-            }}
-          >
+          <table className="table" style={matchWidthStyle}>
             <tbody>
               <RegistrationPolicyItemEditorPresetRowDragOverlay preset={draggingPreset} />
             </tbody>

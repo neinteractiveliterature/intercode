@@ -1,5 +1,5 @@
-import { Fragment, useCallback, useContext, useRef } from 'react';
-import { BooleanInput, useUniqueId } from '@neinteractiveliterature/litform';
+import { Fragment, useCallback, useContext } from 'react';
+import { BooleanInput, useMatchWidthStyle, useUniqueId } from '@neinteractiveliterature/litform';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -18,7 +18,7 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timeblock-preference-');
   const generateNewTimeblock = useCallback(() => ({ label: '', start: {}, finish: {} }), []);
-  const tableRef = useRef<HTMLTableElement>(null);
+  const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
 
   const sensors = useSortableDndSensors();
   const [addTimeblock, timeblockChanged, deleteTimeblock, draggingTimeblock, sortableHandlers] =
@@ -51,7 +51,7 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
           falseLabel="Visible"
           falseBeforeTrue
         />
-        <table className="table" ref={tableRef}>
+        <table className="table" ref={matchWidthRef}>
           <thead>
             <tr>
               <th />
@@ -103,12 +103,7 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
 
       <DragOverlay>
         {draggingTimeblock && (
-          <table
-            className="table"
-            style={{
-              width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
-            }}
-          >
+          <table className="table" style={matchWidthStyle}>
             <tbody>
               <TimeblockPreferenceEditorTimeblockRowDragOverlay timeblock={draggingTimeblock} />
             </tbody>

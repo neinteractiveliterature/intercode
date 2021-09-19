@@ -1,15 +1,10 @@
 import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { KeysOfType, useArrayBasicSortableHandlers } from '@neinteractiveliterature/litform';
 
 import usePropertyUpdater from './usePropertyUpdater';
 import { ParsedFormItem } from '../FormItemUtils';
 import { WithoutGeneratedId } from '../../GeneratedIdUtils';
-import { useBasicSortableHandlers } from '../../SortableUtils';
-
-// https://stackoverflow.com/questions/46583883/typescript-pick-properties-with-a-defined-type
-type KeysOfType<T, U> = {
-  [P in keyof T]: T[P] extends U ? P : never;
-}[keyof T];
 
 export default function useArrayProperty<
   ElementType extends { generatedId: string },
@@ -75,10 +70,10 @@ export default function useArrayProperty<
     [updateItems],
   );
 
-  const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
-    useCallback((id) => array.find((element) => element.generatedId === id), [array]),
-    useCallback((id) => array.findIndex((element) => element.generatedId === id), [array]),
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
+    array,
     moveItem,
+    'generatedId',
   );
 
   return [addItem, itemChanged, deleteItem, draggingItem, sortableHandlers] as const;

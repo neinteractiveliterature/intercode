@@ -1,5 +1,9 @@
-import { useCallback, useContext, useRef } from 'react';
-import { buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
+import { useCallback, useContext } from 'react';
+import {
+  buildOptimisticArrayForMove,
+  useArrayBasicSortableHandlers,
+  useMatchWidthStyle,
+} from '@neinteractiveliterature/litform';
 import { closestCorners, DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -8,14 +12,13 @@ import FormEditorItemPreview from './FormEditorItemPreview';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { useMoveFormItemMutation, useUpdateFormSectionMutation } from './mutations.generated';
 import { serializeParsedFormItem } from './FormItemUtils';
-import { useArrayBasicSortableHandlers, useSortableDndSensors } from '../SortableUtils';
+import { useSortableDndSensors } from '../SortableUtils';
 import FormEditorItemPreviewDragOverlay from './FormEditorItemPreviewDragOverlay';
 
 function FormSectionEditorContent() {
   const { currentSection } = useContext(FormEditorContext);
   const [updateFormSection] = useUpdateFormSectionMutation();
   const [moveFormItem] = useMoveFormItemMutation();
-  const cardBodyRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSortableDndSensors();
 
@@ -54,9 +57,11 @@ function FormSectionEditorContent() {
     [currentSection, moveFormItem],
   );
 
+  const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLDivElement>();
   const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
     currentSection?.form_items ?? [],
     moveItem,
+    'id',
   );
 
   if (!currentSection) {
@@ -77,7 +82,7 @@ function FormSectionEditorContent() {
             </InPlaceEditor>
           </div>
 
-          <div className="card-body" ref={cardBodyRef}>
+          <div className="card-body" ref={matchWidthRef}>
             <SortableContext
               items={currentSection.form_items.map((formItem) => formItem.id.toString())}
               strategy={verticalListSortingStrategy}
@@ -92,7 +97,7 @@ function FormSectionEditorContent() {
 
       <DragOverlay>
         {draggingItem && (
-          <div style={{ width: cardBodyRef.current?.offsetWidth }}>
+          <div style={matchWidthStyle}>
             <FormEditorItemPreviewDragOverlay formItem={draggingItem} />
           </div>
         )}

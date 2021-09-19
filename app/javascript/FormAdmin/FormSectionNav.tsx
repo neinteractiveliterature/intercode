@@ -1,6 +1,10 @@
 import { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useUniqueId, buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
+import {
+  useUniqueId,
+  buildOptimisticArrayForMove,
+  useArrayBasicSortableHandlers,
+} from '@neinteractiveliterature/litform';
 
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -20,7 +24,7 @@ import {
   FormEditorQueryData,
   FormEditorQueryVariables,
 } from './queries.generated';
-import { useArrayBasicSortableHandlers, useSortableDndSensors } from '../SortableUtils';
+import { useSortableDndSensors } from '../SortableUtils';
 import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
 
 function FormSectionNav() {
@@ -75,6 +79,7 @@ function FormSectionNav() {
   const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
     form.form_sections,
     moveSection,
+    'id',
   );
 
   const addSection = async () => {
