@@ -3348,9 +3348,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.18.0":
-  version: 0.18.0
-  resolution: "@neinteractiveliterature/litform@npm:0.18.0"
+"@neinteractiveliterature/litform@npm:^0.19.1":
+  version: 0.19.1
+  resolution: "@neinteractiveliterature/litform@npm:0.19.1"
   dependencies:
     "@codemirror/basic-setup": ^0.19.0
     "@codemirror/commands": ^0.19.3
@@ -3373,7 +3373,7 @@ __metadata:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: 6b15d87eda139d70f1335b62f641a80f13f8d3fdbc0e242e70b38294adac26b9b142ea1d8da47b8ad717f3b795925ef8323b6156f66ef267c7c7468eb44e8034
+  checksum: 968803d923fa5faa81af9105923f9fde2d2a7a574ae1c7be9373912ea3964593d56ccc0eafe38cffe6fbf0acc48066f8ced8bb906eedb69e4c4e95e9ad9f82c8
   languageName: node
   linkType: hard
 
@@ -15988,7 +15988,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.5
-    "@neinteractiveliterature/litform": 0.18.0
+    "@neinteractiveliterature/litform": ^0.19.1
     "@popperjs/core": 2.10.1
     "@stripe/react-stripe-js": 1.4.1
     "@stripe/stripe-js": 1.17.1

@@ -113,7 +113,7 @@ function FormItemEditorLayout() {
       <div className="form-item-editor-error">
         <ErrorDisplay graphQLError={updateError as ApolloError} />
       </div>
-      <div className="form-item-editor-content p-2 overflow-auto">
+      <div className="form-item-editor-content bg-white p-2 overflow-auto">
         <FormItemEditorContent />
       </div>
     </FormItemEditorContext.Provider>

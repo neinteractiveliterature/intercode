@@ -1,9 +1,10 @@
-import { useContext, useMemo, useRef } from 'react';
+import { useContext, useMemo } from 'react';
 import {
   BootstrapFormInput,
   MultipleChoiceInput,
   useUniqueId,
   BootstrapFormCheckbox,
+  useMatchWidthStyle,
 } from '@neinteractiveliterature/litform';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
@@ -24,7 +25,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('multiple-choice-caption-');
   const generateNewChoice = () => ({ caption: '', value: '' });
-  const tableRef = useRef<HTMLTableElement>(null);
+  const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
 
   const sensors = useSortableDndSensors();
   const [addChoice, choiceChanged, deleteChoice, draggingChoice, sortableHandlers] =
@@ -69,7 +70,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
           disabled={disabled}
         />
 
-        <table className="table" ref={tableRef}>
+        <table className="table" ref={matchWidthRef}>
           <thead>
             <tr>
               <th />
@@ -137,12 +138,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
       </div>
       <DragOverlay>
         {draggingChoice && (
-          <table
-            className="table"
-            style={{
-              width: tableRef.current ? `${tableRef.current.offsetWidth}px` : undefined,
-            }}
-          >
+          <table className="table" style={matchWidthStyle}>
             <tbody>
               <MultipleChoiceOptionRowDragOverlay
                 choice={draggingChoice}

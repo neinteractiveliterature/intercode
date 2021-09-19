@@ -87,7 +87,7 @@ function FormEditor() {
 
   return (
     <div className="form-editor">
-      <div className="form-editor-top-navbar navbar navbar-light bg-warning-light">
+      <div className="form-editor-top-navbar px-2 navbar navbar-light bg-warning-light">
         {match.params.itemId && currentSection ? (
           <Link
             to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
