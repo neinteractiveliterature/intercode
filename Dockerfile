@@ -1,8 +1,8 @@
 ARG RUBY_VERSION=2.7.4
 
-### build
+### dev
 
-FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build
+FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as dev
 
 USER root
 WORKDIR /usr/src/intercode
@@ -30,6 +30,10 @@ COPY --chown=www:www ./.yarn /usr/src/intercode/.yarn
 RUN yarn install
 
 COPY --chown=www:www . /usr/src/intercode
+
+### build
+
+FROM dev AS build
 
 ENV RAILS_ENV production
 ENV NODE_ENV production
