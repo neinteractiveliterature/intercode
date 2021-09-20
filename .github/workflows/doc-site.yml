@@ -16,10 +16,10 @@ jobs:
       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
       with:
         path: .yarn/cache
-        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-doc-site-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
-          ${{ runner.os }}-tsc-yarn-
+          ${{ runner.os }}-doc-site-yarn-${{ github.ref }}-
+          ${{ runner.os }}-doc-site-yarn-
     - name: install node v14
       uses: actions/setup-node@v2
       with:
