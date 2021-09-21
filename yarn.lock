@@ -1833,7 +1833,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:0.19.1, @codemirror/lang-html@npm:^0.19.0, @codemirror/lang-html@npm:^0.19.1":
+"@codemirror/lang-html@npm:0.19.2":
+  version: 0.19.2
+  resolution: "@codemirror/lang-html@npm:0.19.2"
+  dependencies:
+    "@codemirror/autocomplete": ^0.19.0
+    "@codemirror/highlight": ^0.19.0
+    "@codemirror/lang-css": ^0.19.0
+    "@codemirror/lang-javascript": ^0.19.0
+    "@codemirror/language": ^0.19.0
+    "@codemirror/state": ^0.19.0
+    "@lezer/common": ^0.15.0
+    "@lezer/html": ^0.15.0
+  checksum: ab5a2f8d9b4b864409c29bbbe066001fd1f0f821e31f5483334b11136e6bf987cc14ef69b612fdf152838860a6647af934cbcec02712b5758a9d2ca9fbc3fb20
+  languageName: node
+  linkType: hard
+
+"@codemirror/lang-html@npm:^0.19.0, @codemirror/lang-html@npm:^0.19.1":
   version: 0.19.1
   resolution: "@codemirror/lang-html@npm:0.19.1"
   dependencies:
@@ -16476,7 +16492,7 @@ resolve@^2.0.0-next.3:
     "@babel/register": 7.15.3
     "@babel/runtime": 7.15.4
     "@codemirror/highlight": 0.19.5
-    "@codemirror/lang-html": 0.19.1
+    "@codemirror/lang-html": 0.19.2
     "@codemirror/lang-json": 0.19.1
     "@codemirror/lang-markdown": 0.19.1
     "@codemirror/language": 0.19.3
