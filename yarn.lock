@@ -4138,14 +4138,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-dom@npm:5.1.9":
-  version: 5.1.9
-  resolution: "@types/react-router-dom@npm:5.1.9"
+"@types/react-router-dom@npm:5.3.0":
+  version: 5.3.0
+  resolution: "@types/react-router-dom@npm:5.3.0"
   dependencies:
     "@types/history": "*"
     "@types/react": "*"
     "@types/react-router": "*"
-  checksum: 6ff2f10f21124f529e191adce60ad8f1d9a47ee19a0e00f10259e9d39c06ef0ccb8d6d57686b10286fe241bf20c89115c77494b683b0c70de9bddb13b28ee6e1
+  checksum: 7a99579698903059a06d8bcf2607792761b9e226b3dc1508742ece3161c1cb17d38f9fcc929ca658f00d79d6173ecbfadc509c40c32241cb397d5167ea5febf8
   languageName: node
   linkType: hard
 
@@ -16543,7 +16543,7 @@ resolve@^2.0.0-next.3:
     "@types/react-dom": 17.0.9
     "@types/react-google-recaptcha": 2.1.2
     "@types/react-onclickoutside": 6.7.4
-    "@types/react-router-dom": 5.1.9
+    "@types/react-router-dom": 5.3.0
     "@types/react-select": 4.0.17
     "@types/react-table": 7.7.4
     "@types/react-transition-group": 4.4.3
