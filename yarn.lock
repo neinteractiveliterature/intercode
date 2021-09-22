@@ -5362,15 +5362,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-select@npm:4.0.17":
-  version: 4.0.17
-  resolution: "@types/react-select@npm:4.0.17"
+"@types/react-select@npm:4.0.18":
+  version: 4.0.18
+  resolution: "@types/react-select@npm:4.0.18"
   dependencies:
     "@emotion/serialize": ^1.0.0
     "@types/react": "*"
     "@types/react-dom": "*"
     "@types/react-transition-group": "*"
-  checksum: aa94bd1ff3536ab2bb8443bcf3c11109bcd78ae965dc534b205273eb98a84487d272e008adff50744870255e4ec5767465283649abd3d449fbc712718c062fca
+  checksum: c247c7fe45cc1d1db1fb0e5a569e288037081ed05d17f377376de82a58a5d334bb7282922ee5eaf3c30957437b028097235be81cb0bed905b3b73f9a5b8c7b58
   languageName: node
   linkType: hard
 
@@ -20687,7 +20687,7 @@ resolve@^2.0.0-next.3:
     "@types/react-google-recaptcha": 2.1.2
     "@types/react-onclickoutside": 6.7.4
     "@types/react-router-dom": 5.3.0
-    "@types/react-select": 4.0.17
+    "@types/react-select": 4.0.18
     "@types/react-table": 7.7.4
     "@types/react-transition-group": 4.4.3
     "@types/source-map-support": 0.5.4
