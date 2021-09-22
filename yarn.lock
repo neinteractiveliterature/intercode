@@ -8318,6 +8318,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"colorette@npm:*":
+  version: 2.0.7
+  resolution: "colorette@npm:2.0.7"
+  checksum: 25512e8434baa8f61fc0e661f6c20fbf246106a29ea94bc857f2ab77c99c036307aed35a66f337cd3d4e72ce76aadae420cfada9613567996f8969d3b951c559
+  languageName: node
+  linkType: hard
+
 "colorette@npm:^1.2.1, colorette@npm:^1.2.2, colorette@npm:^1.3.0":
   version: 1.3.0
   resolution: "colorette@npm:1.3.0"
