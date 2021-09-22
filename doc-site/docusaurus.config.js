@@ -136,6 +136,10 @@ module.exports = {
                 to: '/blog',
               },
               {
+                label: 'NEIL Hosting',
+                href: 'https://www.neilhosting.net',
+              },
+              {
                 label: 'GitHub',
                 href: 'https://github.com/facebook/docusaurus',
               },
