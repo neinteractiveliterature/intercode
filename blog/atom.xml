@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://your-docusaurus-test-site.com/blog</id>
+    <title>Intercode Blog</title>
+    <updated>2020-03-15T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://your-docusaurus-test-site.com/blog"/>
+    <subtitle>Intercode Blog</subtitle>
+    <icon>https://your-docusaurus-test-site.com/img/neilSquare.png</icon>
+    <entry>
+        <title type="html"><![CDATA[Email forwarding]]></title>
+        <id>Email forwarding</id>
+        <link href="https://your-docusaurus-test-site.com/blog/2020/03/15/email-forwarding"/>
+        <updated>2020-03-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Intercode can now forward emails recieved by a convention domain to appropriate staff members. For example, if your convention is hosted at 2020.example.com, and you have a staff position called Webmaster whose contact email is set as webmaster@2020.example.com, Intercode can now automatically forward emails received at that address to all the people in that staff position.]]></summary>
+        <author>
+            <name>Nat Budin</name>
+            <uri>https://github.com/nbudin</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[SMS Notifications]]></title>
+        <id>SMS Notifications</id>
+        <link href="https://your-docusaurus-test-site.com/blog/2020/01/27/sms-notifications"/>
+        <updated>2020-01-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Intercode is now able to send SMS (text message) notifications! For conventions that keep online event signups open during the con itself, Intercode will deliver notifications of signups, withdrawals, and waitlist pulls starting 24 hours before the start of the convention. The text of notifications is customizable via the "Notification templates" feature in the Admin section.]]></summary>
+        <author>
+            <name>Nat Budin</name>
+            <uri>https://github.com/nbudin</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[New Intercode Schedule Design]]></title>
+        <id>New Intercode Schedule Design</id>
+        <link href="https://your-docusaurus-test-site.com/blog/2019/10/03/new-intercode-schedule-design"/>
+        <updated>2019-10-03T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[We're rolling out some changes to how the schedule and run buckets display in Intercode 2. Here’s the highlights:]]></summary>
+        <author>
+            <name>Marleigh Norton</name>
+            <uri>https://github.com/marleighnorton</uri>
+        </author>
+        <author>
+            <name>Nat Budin</name>
+            <uri>https://github.com/nbudin</uri>
+        </author>
+        <author>
+            <name>Dave Kapell</name>
+            <uri>https://github.com/dkapell</uri>
+        </author>
+    </entry>
+</feed>
