@@ -2,6 +2,10 @@
   "engines": {
     "node": "14.x"
   },
+  "workspaces": [
+    ".",
+    "doc-site"
+  ],
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config ./webpack.config.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config ./webpack.config.js >stats.json",
