@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: {}
 
 jobs:
   publish-doc-site:
@@ -26,11 +27,11 @@ jobs:
         node-version: 14
     - name: yarn install
       run: yarn install
-    - name: Build GraphQL schema docs
-      run: yarn run graphqldoc:generate
+    - name: Build doc site
+      run: cd doc-site && yarn run docusaurus graphql-to-doc -f && yarn run build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./doc-site
+        publish_dir: ./doc-site/build
         cname: intercode.interactiveliterature.org
