@@ -90,7 +90,7 @@
     "apollo-upload-client": "16.0.0",
     "array-to-sentence": "2.0.0",
     "assert-never": "1.2.1",
-    "autoprefixer": "10.3.4",
+    "autoprefixer": "10.3.5",
     "babel-loader": "8.2.2",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "babel-plugin-graphql-tag": "3.3.0",
