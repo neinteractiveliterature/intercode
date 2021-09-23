@@ -3141,7 +3141,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3153,7 +3153,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3165,7 +3165,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "CouponFiltersInput",
@@ -3177,7 +3177,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -3367,7 +3367,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3379,7 +3379,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3391,7 +3391,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "EventProposalFiltersInput",
@@ -3403,7 +3403,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -3440,7 +3440,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3452,7 +3452,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3464,7 +3464,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "EventFiltersInput",
@@ -3476,7 +3476,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -3762,7 +3762,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3774,7 +3774,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -3786,7 +3786,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "OrderFiltersInput",
@@ -3798,7 +3798,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -4032,7 +4032,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4044,7 +4044,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4056,7 +4056,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "SignupChangeFiltersInput",
@@ -4068,7 +4068,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -4161,7 +4161,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4173,7 +4173,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4185,7 +4185,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "SignupRequestFiltersInput",
@@ -4197,7 +4197,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -4234,7 +4234,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4246,7 +4246,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4258,7 +4258,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "SignupFiltersInput",
@@ -4270,7 +4270,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -4572,7 +4572,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4584,7 +4584,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -4596,7 +4596,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "UserConProfileFiltersInput",
@@ -4608,7 +4608,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -5109,7 +5109,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5149,7 +5149,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5165,7 +5165,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5181,7 +5181,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5656,7 +5656,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5696,7 +5696,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5712,7 +5712,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -5728,7 +5728,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -11925,7 +11925,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -11965,7 +11965,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -11981,7 +11981,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -11997,7 +11997,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -12751,7 +12751,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -12763,7 +12763,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -12775,7 +12775,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "EventFiltersInput",
@@ -12787,7 +12787,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -13577,7 +13577,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13617,7 +13617,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13633,7 +13633,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13649,7 +13649,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13784,7 +13784,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13824,7 +13824,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13840,7 +13840,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13856,7 +13856,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -20533,7 +20533,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -20573,7 +20573,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -20589,7 +20589,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -20605,7 +20605,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -21220,11 +21220,11 @@
         {
           "kind": "INTERFACE",
           "name": "PaginationInterface",
-          "description": null,
+          "description": "PaginationInterface provides a way to use offset-based pagination on a list of objects.  This\nis useful for UIs such as Intercode's table views, which provide a way to jump between numbered\npages.\n\nPage numbers in PaginationInterface are 1-based (so, the first page is page 1, then page 2,\netc.)  The number of items per page can be controlled via the per_page argument on paginated\nfields.  It defaults to 20, and can go up to 200.\n\nOffset-based pagination is different from\n[Relay's cursor-based pagination](https://relay.dev/graphql/connections.htm) that is more\ncommonly used in GraphQL APIs.  We chose to go with an offset-based approach due to our UI\nneeds, but if a cursor-based approach is desirable in the future, we may also implement Relay\nconnections alongside our existing pagination fields.\n",
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -21240,7 +21240,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -21256,7 +21256,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -21272,7 +21272,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22504,7 +22504,7 @@
             },
             {
               "name": "assertConvention",
-              "description": "Returns the convention associated with the domain name of this request.  If one is not \\\npresent, the request will error out.",
+              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, the request will error out.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22826,7 +22826,7 @@
             },
             {
               "name": "convention",
-              "description": "Returns the convention associated with the domain name of this request, or null if there \\\nis none.",
+              "description": "Returns the convention associated with the domain name of this HTTP request, or null if there\nis none.\n",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -22838,7 +22838,7 @@
             },
             {
               "name": "conventionById",
-              "description": null,
+              "description": "Finds a convention by ID.  If a matching one can't be found, the request will error out.\n",
               "args": [
                 {
                   "name": "id",
@@ -22871,7 +22871,7 @@
             },
             {
               "name": "conventions",
-              "description": null,
+              "description": "Returns all conventions in the database.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22890,16 +22890,16 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "This field is being removed due to its potential performance implications.  Please use conventions_paginated instead."
             },
             {
               "name": "conventions_paginated",
-              "description": null,
+              "description": "Returns a paginated list of conventions.  See PaginationInterface for details on how to use\npaginated lists, and ConventionFiltersInput for filters you can use here.\n",
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -22911,7 +22911,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -22923,7 +22923,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "ConventionFiltersInput",
@@ -22935,7 +22935,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -23061,7 +23061,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -23073,7 +23073,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -23085,7 +23085,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "EmailRouteFiltersInput",
@@ -23097,7 +23097,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -24009,7 +24009,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -24021,7 +24021,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -24033,7 +24033,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "UserFiltersInput",
@@ -24045,7 +24045,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -25331,7 +25331,7 @@
               "args": [
                 {
                   "name": "page",
-                  "description": null,
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -25343,7 +25343,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -25355,7 +25355,7 @@
                 },
                 {
                   "name": "filters",
-                  "description": null,
+                  "description": "Filters to restrict what items will appear in the result set.",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "SignupChangeFiltersInput",
@@ -25367,7 +25367,7 @@
                 },
                 {
                   "name": "sort",
-                  "description": null,
+                  "description": "A set of fields to use for ordering the result set.  The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on.  If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -26606,7 +26606,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26646,7 +26646,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26662,7 +26662,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26678,7 +26678,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27176,7 +27176,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27216,7 +27216,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27232,7 +27232,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27248,7 +27248,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27310,7 +27310,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27350,7 +27350,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27366,7 +27366,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27382,7 +27382,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27510,12 +27510,12 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SortInput",
-          "description": null,
+          "description": "A description of a field to sort a result set by.  This is typically used in pagination\nfields to specify how the results should be ordered.\n",
           "fields": null,
           "inputFields": [
             {
               "name": "field",
-              "description": null,
+              "description": "The name of the field to sort by.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27531,7 +27531,7 @@
             },
             {
               "name": "desc",
-              "description": null,
+              "description": "If true, the field will be sorted in descending order.  If false, it will be sorted in\nascending order.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -34321,7 +34321,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34361,7 +34361,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34377,7 +34377,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34393,7 +34393,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34505,7 +34505,7 @@
           "fields": [
             {
               "name": "current_page",
-              "description": null,
+              "description": "The number of the page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34545,7 +34545,7 @@
             },
             {
               "name": "per_page",
-              "description": null,
+              "description": "The number of items per page currently being returned in this query",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34561,7 +34561,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of items in the paginated list (across all pages)",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34577,7 +34577,7 @@
             },
             {
               "name": "total_pages",
-              "description": null,
+              "description": "The total number of pages in the paginated list",
               "args": [],
               "type": {
                 "kind": "NON_NULL",

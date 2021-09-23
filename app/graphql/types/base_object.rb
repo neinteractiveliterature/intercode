@@ -16,10 +16,23 @@ class Types::BaseObject < GraphQL::Schema::Object
 
   def self.pagination_field(name, pagination_type, filters_input_type, **options, &block)
     field name, pagination_type, null: false, **options do
-      argument :page, Int, required: false
-      argument :per_page, Int, required: false, camelize: false
-      argument :filters, filters_input_type, required: false
-      argument :sort, [Types::SortInputType], required: false
+      argument :page, Int, required: false do
+        description 'The page number to return from the result set.  Page numbers start with 1.'
+      end
+      argument :per_page, Int, required: false, camelize: false do
+        description 'The number of items to return per page.  Defaults to 20, can go up to 200.'
+      end
+      argument :filters, filters_input_type, required: false do
+        description 'Filters to restrict what items will appear in the result set.'
+      end
+      argument :sort, [Types::SortInputType], required: false do
+        description <<~MARKDOWN
+          A set of fields to use for ordering the result set.  The second field is used as a
+          tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+          and so on.  If the sort argument is missing or empty, the order of items will be left
+          up to the database (and may be unpredictable).
+        MARKDOWN
+      end
 
       instance_eval(&block) if block
     end
