@@ -7713,10 +7713,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001259, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001259":
-  version: 1.0.30001259
-  resolution: "caniuse-lite@npm:1.0.30001259"
-  checksum: 4b0423693616a62d3a9beaa35ab5a414a9e4398df7361915ca2b6f24142f1f55909e014d5f0c14c034c0fd5084524116ab46bcdfae5c3b8620f11f2822a1c4ba
+"caniuse-lite@npm:1.0.30001260":
+  version: 1.0.30001260
+  resolution: "caniuse-lite@npm:1.0.30001260"
+  dependencies:
+    nanocolors: ^0.1.0
+  checksum: a3a61073204636e02bc3972bfdcd8b3c3a2fb56f29b5ffa95fad7e5a01e2eece2ed92f1246728185992618a04f9221cbd83ddd96d2ef68083353d55ffe660e29
   languageName: node
   linkType: hard
 
@@ -7724,6 +7726,13 @@ __metadata:
   version: 1.0.30001257
   resolution: "caniuse-lite@npm:1.0.30001257"
   checksum: d336d5bfaacc5be9d6ab1de3687e6cd88b124f9c3a2013ff40ab9f324cca249de5f93cc4589076c4414d65066ccaa35fc9894346735c3088ce5452c42baaf7db
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001259":
+  version: 1.0.30001259
+  resolution: "caniuse-lite@npm:1.0.30001259"
+  checksum: 4b0423693616a62d3a9beaa35ab5a414a9e4398df7361915ca2b6f24142f1f55909e014d5f0c14c034c0fd5084524116ab46bcdfae5c3b8620f11f2822a1c4ba
   languageName: node
   linkType: hard
 
@@ -16697,6 +16706,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"nanocolors@npm:^0.1.0":
+  version: 0.1.12
+  resolution: "nanocolors@npm:0.1.12"
+  checksum: 2ce58f57006ddd1d2680d05fe21f54d858db8ba81bd13381598ddc546f7637e33c4407da2ea7da40ea1c96794250e7c14a4d00358b48eeae4d917d6a92bafe4c
+  languageName: node
+  linkType: hard
+
 "nanocolors@npm:^0.1.5":
   version: 0.1.6
   resolution: "nanocolors@npm:0.1.6"
@@ -20728,7 +20744,7 @@ resolve@^2.0.0-next.3:
     buffer: 6.0.3
     bytes: 3.1.0
     cadmus-navbar-admin: 5.0.0-alpha.8
-    caniuse-lite: 1.0.30001259
+    caniuse-lite: 1.0.30001260
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
     compression-webpack-plugin: 8.0.1
