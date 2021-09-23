@@ -34,7 +34,7 @@ export function scheduledValueIsValid(scheduledValue: Partial<EditingScheduledVa
 
 function addTimespanToScheduledValue<
   ValueType,
-  ScheduledValueType extends EditingScheduledValue<ValueType>
+  ScheduledValueType extends EditingScheduledValue<ValueType>,
 >(scheduledValue: ScheduledValueType) {
   const newTimespans = [...(scheduledValue.timespans || [])];
   const lastTimespan = maxBy(newTimespans, (timespan) =>
@@ -119,7 +119,7 @@ export type ScheduledValueReducerAction<ValueType> =
 
 export function scheduledValueReducer<
   ValueType,
-  ScheduledValueType extends EditingScheduledValue<ValueType>
+  ScheduledValueType extends EditingScheduledValue<ValueType>,
 >(state: ScheduledValueType, action: ScheduledValueReducerAction<ValueType>): ScheduledValueType {
   switch (action.type) {
     case 'addTimespan':
@@ -191,21 +191,19 @@ function ScheduledValueEditor<ValueType>({
 
   const timespans = scheduledValue.timespans || [];
 
-  const timespanRows = timespans.map((timespan, i) => {
-    return (
-      <ScheduledValueTimespanRow
-        timespan={timespan}
-        timezone={timezone}
-        key={i} // eslint-disable-line react/no-array-index-key
-        rowIdentifier={i}
-        deleteClicked={deleteRowClicked}
-        finishDidChange={timespanFinishDidChange}
-        valueDidChange={valueDidChange}
-        buildInput={buildValueInput}
-        isLastTimespan={i === timespans.length - 1}
-      />
-    );
-  });
+  const timespanRows = timespans.map((timespan, i) => (
+    <ScheduledValueTimespanRow
+      timespan={timespan}
+      timezone={timezone}
+      key={i} // eslint-disable-line react/no-array-index-key
+      rowIdentifier={i}
+      deleteClicked={deleteRowClicked}
+      finishDidChange={timespanFinishDidChange}
+      valueDidChange={valueDidChange}
+      buildInput={buildValueInput}
+      isLastTimespan={i === timespans.length - 1}
+    />
+  ));
 
   return (
     <table className="table table-striped">

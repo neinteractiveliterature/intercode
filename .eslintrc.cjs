@@ -14,6 +14,7 @@ module.exports = {
     'airbnb',
     'airbnb-typescript',
     'prettier',
+    'plugin:@graphql-eslint/recommended',
     // TODO: turn these on once I feel like getting a raft of errors
     // 'plugin:@typescript-eslint/recommended',
     // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -84,6 +85,7 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
+      processor: '@graphql-eslint/graphql',
       rules: {
         'react/prop-types': 'off',
         'react/require-default-props': 'off',

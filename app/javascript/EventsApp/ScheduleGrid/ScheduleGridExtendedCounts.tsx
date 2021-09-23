@@ -28,17 +28,18 @@ function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsP
   const { schedule } = useContext(ScheduleGridContext);
   const { timezoneName } = useContext(AppRootContext);
 
-  const hourTimespan = useMemo(() => {
-    return new Timespan(now, now.setZone(timezoneName).plus({ hours: 1 }));
-  }, [now, timezoneName]);
+  const hourTimespan = useMemo(
+    () => new Timespan(now, now.setZone(timezoneName).plus({ hours: 1 })),
+    [now, timezoneName],
+  );
   const hourRunIds = useMemo(() => {
     const runIdsFromSchedule = new Set(schedule.getRunIdsOverlapping(hourTimespan));
     return runIds.filter((runId) => runIdsFromSchedule.has(runId));
   }, [hourTimespan, schedule, runIds]);
-  const hourRunData = useMemo(() => hourRunIds.map((runId) => buildHourRunData(runId, schedule)), [
-    hourRunIds,
-    schedule,
-  ]);
+  const hourRunData = useMemo(
+    () => hourRunIds.map((runId) => buildHourRunData(runId, schedule)),
+    [hourRunIds, schedule],
+  );
 
   const minimumSlots = hourRunData.reduce(
     (sum, runData) => sum + (runData.event.registration_policy?.minimum_slots ?? 0),

@@ -93,7 +93,7 @@ declare module 'react-table' {
       UseSortByState<D> {}
 
   export interface ColumnInterface<
-    D extends Record<string, unknown> = Record<string, unknown>
+    D extends Record<string, unknown> = Record<string, unknown>,
   > extends UseFiltersColumnOptions<D>,
       // UseGlobalFiltersColumnOptions<D>,
       // UseGroupByColumnOptions<D>,
@@ -101,12 +101,13 @@ declare module 'react-table' {
       UseSortByColumnOptions<D> {}
 
   export interface ColumnInstance<
-    D extends Record<string, unknown> = Record<string, unknown>
+    D extends Record<string, unknown> = Record<string, unknown>,
   > extends UseFiltersColumnProps<D>,
       // UseGroupByColumnProps<D>,
       UseResizeColumnsColumnProps<D>,
       UseSortByColumnProps<D> {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface Cell<D extends Record<string, unknown> = Record<string, unknown>, V = any>
     extends UseGroupByCellProps<D> {}
   // UseRowStateCellProps<D> {}
