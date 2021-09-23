@@ -2075,9 +2075,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/highlight@npm:0.19.5":
-  version: 0.19.5
-  resolution: "@codemirror/highlight@npm:0.19.5"
+"@codemirror/highlight@npm:0.19.6, @codemirror/highlight@npm:^0.19.6":
+  version: 0.19.6
+  resolution: "@codemirror/highlight@npm:0.19.6"
   dependencies:
     "@codemirror/language": ^0.19.0
     "@codemirror/rangeset": ^0.19.0
@@ -2085,7 +2085,7 @@ __metadata:
     "@codemirror/view": ^0.19.0
     "@lezer/common": ^0.15.0
     style-mod: ^4.0.0
-  checksum: d54914219455d11af5038fc243600fc968defb6bd8793ace0c1082e5c721a644536f95751b5e27b6aeb4c3f8701e4f848fc5373128d8aaa286c4e9dba439b808
+  checksum: 833ffe5aea7269ab782649059a6e41c68f7be3f5a49c3824dcf9a22b1efdc33ac081239fbc79fbdbdc9063800f155f16b435e31441598a9748f31c20a6a301b4
   languageName: node
   linkType: hard
 
@@ -2126,19 +2126,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:0.19.2":
-  version: 0.19.2
-  resolution: "@codemirror/lang-html@npm:0.19.2"
+"@codemirror/lang-html@npm:0.19.3":
+  version: 0.19.3
+  resolution: "@codemirror/lang-html@npm:0.19.3"
   dependencies:
     "@codemirror/autocomplete": ^0.19.0
-    "@codemirror/highlight": ^0.19.0
+    "@codemirror/highlight": ^0.19.6
     "@codemirror/lang-css": ^0.19.0
     "@codemirror/lang-javascript": ^0.19.0
     "@codemirror/language": ^0.19.0
     "@codemirror/state": ^0.19.0
     "@lezer/common": ^0.15.0
     "@lezer/html": ^0.15.0
-  checksum: ab5a2f8d9b4b864409c29bbbe066001fd1f0f821e31f5483334b11136e6bf987cc14ef69b612fdf152838860a6647af934cbcec02712b5758a9d2ca9fbc3fb20
+  checksum: 44a621fb4846159714a9faa5f23c14eea604a2f1bd30d021b8adae35068da38a628954a0aa3af02365623c9d86ce7668eb945daddea97a5ee30a0c004e4cd8d3
   languageName: node
   linkType: hard
 
@@ -20664,8 +20664,8 @@ resolve@^2.0.0-next.3:
     "@babel/preset-typescript": 7.15.0
     "@babel/register": 7.15.3
     "@babel/runtime": 7.15.4
-    "@codemirror/highlight": 0.19.5
-    "@codemirror/lang-html": 0.19.2
+    "@codemirror/highlight": 0.19.6
+    "@codemirror/lang-html": 0.19.3
     "@codemirror/lang-json": 0.19.1
     "@codemirror/lang-markdown": 0.19.1
     "@codemirror/language": 0.19.3
