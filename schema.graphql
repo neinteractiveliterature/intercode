@@ -295,7 +295,30 @@ type Convention {
   cms_content_groups: [CmsContentGroup!]!
   cms_layouts: [CmsLayout!]!
   cms_navigation_items: [CmsNavigationItem!]!
-  coupons_paginated(filters: CouponFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): CouponsPagination!
+  coupons_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: CouponFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): CouponsPagination!
   created_at: Date
   default_layout: CmsLayout
   departments: [Department!]!
@@ -305,8 +328,54 @@ type Convention {
   ends_at: Date
   event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory!]!
   event_mailing_list_domain: String
-  event_proposals_paginated(filters: EventProposalFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EventProposalsPagination!
-  events_paginated(filters: EventFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EventsPagination!
+  event_proposals_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: EventProposalFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): EventProposalsPagination!
+  events_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: EventFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): EventsPagination!
   forms: [Form!]!
   hidden: Boolean!
   id: Int!
@@ -339,7 +408,30 @@ type Convention {
     """
     last: Int
   ): OrdersConnection
-  orders_paginated(filters: OrderFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): OrdersPagination!
+  orders_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: OrderFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): OrdersPagination!
   organization: Organization
   pages: [Page!]!
   pre_schedule_content_html: String
@@ -350,12 +442,81 @@ type Convention {
   root_page: Page
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
-  signup_changes_paginated(filters: SignupChangeFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupChangesPagination!
+  signup_changes_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: SignupChangeFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): SignupChangesPagination!
   signup_counts_by_state: [SignupCountByState!]!
   signup_mode: SignupMode!
   signup_requests_open: Boolean!
-  signup_requests_paginated(filters: SignupRequestFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupRequestsPagination!
-  signup_spy_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupsPagination! @deprecated(reason: "Use signup_changes_paginated instead")
+  signup_requests_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: SignupRequestFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): SignupRequestsPagination!
+  signup_spy_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: SignupFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): SignupsPagination! @deprecated(reason: "Use signup_changes_paginated instead")
   site_mode: SiteMode!
   staff_positions: [StaffPosition!]!
   starts_at: Date
@@ -371,7 +532,30 @@ type Convention {
   user_activity_alert(id: Int!): UserActivityAlert!
   user_activity_alerts: [UserActivityAlert!]!
   user_con_profile_form: Form!
-  user_con_profiles_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UserConProfilesPagination!
+  user_con_profiles_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: UserConProfileFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): UserConProfilesPagination!
 }
 
 input ConventionFiltersInput {
@@ -416,10 +600,25 @@ type ConventionReports {
 }
 
 type ConventionsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [Convention!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -489,10 +688,25 @@ input CouponInput {
 }
 
 type CouponsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [Coupon!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -2074,10 +2288,25 @@ input EmailRouteInput {
 }
 
 type EmailRoutesPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [EmailRoute!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -2130,7 +2359,30 @@ type EventCategory {
   department: Department
   event_form: Form!
   event_proposal_form: Form
-  events_paginated(filters: EventFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EventsPagination!
+  events_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: EventFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): EventsPagination!
   full_color: String
   id: Int!
   name: String!
@@ -2201,10 +2453,25 @@ input EventProposalInput {
 }
 
 type EventProposalsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [EventProposal!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -2219,10 +2486,25 @@ type EventWithChoiceCounts {
 }
 
 type EventsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [Event!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -3411,10 +3693,25 @@ type OrdersConnection {
 }
 
 type OrdersPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [Order!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -3488,10 +3785,40 @@ input PageInput {
   slug: String
 }
 
+"""
+PaginationInterface provides a way to use offset-based pagination on a list of objects.  This
+is useful for UIs such as Intercode's table views, which provide a way to jump between numbered
+pages.
+
+Page numbers in PaginationInterface are 1-based (so, the first page is page 1, then page 2,
+etc.)  The number of items per page can be controlled via the per_page argument on paginated
+fields.  It defaults to 20, and can go up to 200.
+
+Offset-based pagination is different from
+[Relay's cursor-based pagination](https://relay.dev/graphql/connections.htm) that is more
+commonly used in GraphQL APIs.  We chose to go with an offset-based approach due to our UI
+needs, but if a cursor-based approach is desirable in the future, we may also implement Relay
+connections alongside our existing pagination fields.
+"""
 interface PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -3634,7 +3961,7 @@ type Query {
   accountFormContentHtml: String
 
   """
-  Returns the convention associated with the domain name of this request.  If one is not \
+  Returns the convention associated with the domain name of this HTTP request.  If one is not
   present, the request will error out.
   """
   assertConvention: Convention!
@@ -3652,19 +3979,78 @@ type Query {
   cmsVariables: [CmsVariable!]!
 
   """
-  Returns the convention associated with the domain name of this request, or null if there \
+  Returns the convention associated with the domain name of this HTTP request, or null if there
   is none.
   """
   convention: Convention
+
+  """
+  Finds a convention by ID.  If a matching one can't be found, the request will error out.
+  """
   conventionById(id: Int!): Convention!
-  conventions: [Convention!]!
-  conventions_paginated(filters: ConventionFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): ConventionsPagination!
+
+  """
+  Returns all conventions in the database.
+  """
+  conventions: [Convention!]! @deprecated(reason: "This field is being removed due to its potential performance implications.  Please use conventions_paginated instead.")
+
+  """
+  Returns a paginated list of conventions.  See PaginationInterface for details on how to use
+  paginated lists, and ConventionFiltersInput for filters you can use here.
+  """
+  conventions_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: ConventionFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): ConventionsPagination!
   currentAbility: Ability!
   currentPendingOrder: Order
   currentPendingOrderPaymentIntentClientSecret: String!
   currentUser: User
   effectiveCmsLayout(path: String!): CmsLayout!
-  email_routes_paginated(filters: EmailRouteFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EmailRoutesPagination!
+  email_routes_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: EmailRouteFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): EmailRoutesPagination!
   event(id: Int!): Event!
   eventProposal(id: Int!): EventProposal!
   events(extendedCounts: Boolean, finish: Date, includeDropped: Boolean, start: Date): [Event!]!
@@ -3691,7 +4077,30 @@ type Query {
   user(id: Int!): User!
   userConProfile(id: Int!): UserConProfile!
   users(ids: [Int!]!): [User!]!
-  users_paginated(filters: UserFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UsersPagination!
+  users_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: UserFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): UsersPagination!
 }
 
 """
@@ -3904,7 +4313,30 @@ type Run {
   room_names: [String!]!
   rooms: [Room!]!
   schedule_note: String
-  signup_changes_paginated(filters: SignupChangeFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupChangesPagination!
+  signup_changes_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: SignupChangeFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set.  The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on.  If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): SignupChangesPagination!
   signup_count_by_state_and_bucket_key_and_counted: Json!
   signups_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!
   starts_at: Date!
@@ -4054,10 +4486,25 @@ input SignupChangeFiltersInput {
 }
 
 type SignupChangesPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [SignupChange!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -4134,10 +4581,25 @@ enum SignupRequestState {
 }
 
 type SignupRequestsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [SignupRequest!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -4148,10 +4610,25 @@ enum SignupState {
 }
 
 type SignupsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [Signup!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -4193,8 +4670,20 @@ type SortCmsNavigationItemsPayload {
   clientMutationId: String
 }
 
+"""
+A description of a field to sort a result set by.  This is typically used in pagination
+fields to specify how the results should be ordered.
+"""
 input SortInput {
+  """
+  If true, the field will be sorted in descending order.  If false, it will be sorted in
+  ascending order.
+  """
   desc: Boolean!
+
+  """
+  The name of the field to sort by.
+  """
   field: String!
 }
 
@@ -5396,10 +5885,25 @@ input UserConProfileInput {
 }
 
 type UserConProfilesPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [UserConProfile!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 
@@ -5412,10 +5916,25 @@ input UserFiltersInput {
 }
 
 type UsersPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
   current_page: Int!
   entries: [User!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
   per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
   total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
   total_pages: Int!
 }
 

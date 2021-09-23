@@ -1,21 +1,23 @@
 class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field_class Types::BaseField # Camelize fields in this type
 
-  field :convention,
-    Types::ConventionType,
-    'Returns the convention associated with the domain name of this request, or null if there \
-is none.',
-    null: true
+  field :convention, Types::ConventionType, null: true do
+    description <<~MARKDOWN
+      Returns the convention associated with the domain name of this HTTP request, or null if there
+      is none.
+    MARKDOWN
+  end
 
   def convention
     context[:convention]
   end
 
-  field :assert_convention,
-    Types::ConventionType,
-    'Returns the convention associated with the domain name of this request.  If one is not \
-present, the request will error out.',
-    null: false
+  field :assert_convention, Types::ConventionType, null: false do
+    description <<~MARKDOWN
+      Returns the convention associated with the domain name of this HTTP request.  If one is not
+      present, the request will error out.
+    MARKDOWN
+  end
 
   def assert_convention
     unless context[:convention]
@@ -26,13 +28,23 @@ present, the request will error out.',
 
   field :convention_by_id, Types::ConventionType, null: false do
     argument :id, Integer, required: true
+    description <<~MARKDOWN
+      Finds a convention by ID.  If a matching one can't be found, the request will error out.
+    MARKDOWN
   end
 
   def convention_by_id(id:)
     Convention.find(id)
   end
 
-  field :conventions, [Types::ConventionType], null: false
+  field :conventions, [Types::ConventionType],
+    null: false,
+    deprecation_reason: "This field is being removed due to its potential performance \
+implications.  Please use conventions_paginated instead." do
+    description <<~MARKDOWN
+      Returns all conventions in the database.
+    MARKDOWN
+  end
 
   def conventions
     Convention.all.to_a
@@ -40,7 +52,12 @@ present, the request will error out.',
 
   pagination_field :conventions_paginated,
     Types::ConventionsPaginationType, Types::ConventionFiltersInputType,
-    camelize: false
+    camelize: false do
+    description <<~MARKDOWN
+      Returns a paginated list of conventions.  See PaginationInterface for details on how to use
+      paginated lists, and ConventionFiltersInput for filters you can use here.
+    MARKDOWN
+  end
 
   def conventions_paginated(**args)
     Tables::ConventionsTableResultsPresenter.new(
