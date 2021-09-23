@@ -3,7 +3,7 @@ import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryData } from './appRootQueries.generated';
 import type Timespan from './Timespan';
 
-type AppRootContext = {
+type AppRootContextValue = {
   assumedIdentityFromProfile?: AppRootQueryData['assumedIdentityFromProfile'];
   cmsNavigationItems: AppRootQueryData['cmsNavigationItems'];
   conventionAcceptingProposals?: boolean | null;
@@ -26,7 +26,7 @@ type AppRootContext = {
   timezoneName: string;
 };
 
-export const appRootContextDefaultValue: AppRootContext = {
+export const appRootContextDefaultValue: AppRootContextValue = {
   assumedIdentityFromProfile: null,
   cmsNavigationItems: [],
   conventionAcceptingProposals: null,
@@ -75,6 +75,6 @@ export const appRootContextDefaultValue: AppRootContext = {
   timezoneName: 'Etc/UTC',
 };
 
-const AppRootContext = createContext<AppRootContext>(appRootContextDefaultValue);
+const AppRootContext = createContext<AppRootContextValue>(appRootContextDefaultValue);
 
 export default AppRootContext;

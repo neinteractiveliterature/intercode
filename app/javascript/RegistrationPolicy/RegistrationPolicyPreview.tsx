@@ -23,18 +23,20 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
       ...otherProps,
     };
   }, [registrationPolicy]);
-  const signupOptions = useMemo(() => {
-    return buildSignupOptions(
-      {
-        registration_policy: registrationPolicyForDisplay,
-        team_members: [],
-        event_category: {
-          team_member_name: 'team member',
+  const signupOptions = useMemo(
+    () =>
+      buildSignupOptions(
+        {
+          registration_policy: registrationPolicyForDisplay,
+          team_members: [],
+          event_category: {
+            team_member_name: 'team member',
+          },
         },
-      },
-      undefined,
-    );
-  }, [registrationPolicyForDisplay]);
+        undefined,
+      ),
+    [registrationPolicyForDisplay],
+  );
 
   return (
     <div className="col-lg-4 col-12 bg-secondary d-flex justify-content-center">
