@@ -3962,25 +3962,77 @@ type Query {
 
   """
   Returns the convention associated with the domain name of this HTTP request.  If one is not
-  present, the request will error out.
+  present, the request will error out.  (For a version that will return null instead of
+  erroring out, use `convention`.)
   """
   assertConvention: Convention!
   assumedIdentityFromProfile: UserConProfile
-  cmsContentGroup(id: Int!): CmsContentGroup!
+
+  """
+  Finds an CMS content group by ID within the domain name of this HTTP request.  If there is no
+  CMS content group with that ID, or the CMS content group is associated with a different
+  domain name, errors out.
+  """
+  cmsContentGroup(
+    """
+    The ID of the CMS content group to find.
+    """
+    id: Int!
+  ): CmsContentGroup!
+
+  """
+  Returns all CMS content groups within the current domain.
+  """
   cmsContentGroups: [CmsContentGroup!]!
+
+  """
+  Returns all CMS files within the current domain.
+  """
   cmsFiles: [CmsFile!]!
   cmsGraphqlQueries: [CmsGraphqlQuery!]!
   cmsLayouts: [CmsLayout!]!
   cmsNavigationItems: [CmsNavigationItem!]!
-  cmsPage(id: Int, rootPage: Boolean, slug: String): Page!
+
+  """
+  Finds an CMS page within the domain name of this HTTP request.  Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+  different way of finding a page.  If the desired page can't be found within the current
+  domain name, errors out.
+  """
+  cmsPage(
+    """
+    The ID of the page to find.
+    """
+    id: Int
+
+    """
+    If true, returns the root page for this domain.
+    """
+    rootPage: Boolean
+
+    """
+    The unique slug of the page to find.
+    """
+    slug: String
+  ): Page!
+
+  """
+  Returns all CMS pages within the current domain.
+  """
   cmsPages: [Page!]!
+
+  """
+  Returns the CMS parent object associated with the domain name of this HTTP request.  In a
+  convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+  """
   cmsParent: CmsParent!
   cmsPartials: [CmsPartial!]!
   cmsVariables: [CmsVariable!]!
 
   """
   Returns the convention associated with the domain name of this HTTP request, or null if there
-  is none.
+  is none.  (For a version that will either return a convention or error out, use
+  `assertConvention`.)
   """
   convention: Convention
 
@@ -4025,8 +4077,17 @@ type Query {
   currentAbility: Ability!
   currentPendingOrder: Order
   currentPendingOrderPaymentIntentClientSecret: String!
+
+  """
+  Returns the currently signed-in user.  If no user is signed in, returns null.
+  """
   currentUser: User
   effectiveCmsLayout(path: String!): CmsLayout!
+
+  """
+  Returns a paginated list of the _global_ email routes configured in Intercode.
+  (Convention-specific email routing is controlled via that convention's StaffPositions.)
+  """
   email_routes_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -4051,13 +4112,77 @@ type Query {
     """
     sort: [SortInput!]
   ): EmailRoutesPagination!
-  event(id: Int!): Event!
-  eventProposal(id: Int!): EventProposal!
-  events(extendedCounts: Boolean, finish: Date, includeDropped: Boolean, start: Date): [Event!]!
+
+  """
+  Finds an active event by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no event with that ID, or the event is associated with a different
+  convention, or the event is no longer active, errors out.
+  """
+  event(
+    """
+    The ID of the event to find
+    """
+    id: Int!
+  ): Event!
+
+  """
+  Finds an event proposal by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no event proposal with that ID, or the event proposal is associated
+  with a different convention, errors out.
+  """
+  eventProposal(
+    """
+    The ID of the event proposal to find.
+    """
+    id: Int!
+  ): EventProposal!
+
+  """
+  Returns all active events in convention associated with the domain name of this HTTP request.
+  Filterable by a range of start/finish times.
+
+  **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+  when using it.
+  """
+  events(
+    extendedCounts: Boolean @deprecated(reason: "This no longer does anything.")
+
+    """
+    If present, only returns events that occur earlier than this time
+    (non-inclusive.) These events may end after this time, but start before it.
+    """
+    finish: Date
+
+    """
+    If true, includes dropped events in addition to active events.
+    """
+    includeDropped: Boolean
+
+    """
+    If present, only returns events that occur at this time or later. (These
+    events may have started before that time, but will still be ongoing during it.)
+    """
+    start: Date
+  ): [Event!]!
   form(id: Int!): Form!
   liquidAssigns: [LiquidAssign!]!
+
+  """
+  Returns the authorized OAuth applications for the current user within the convention
+  associated with the domain name of this HTTP request.  If no user is signed in, returns null.
+  """
   myAuthorizedApplications: [AuthorizedApplication!]!
+
+  """
+  Returns the convention-specific profile for the current user within the convention associated
+  with the domain name of this HTTP request.  If no user is signed in, returns null.
+  """
   myProfile: UserConProfile
+
+  """
+  Returns all signups for the current user within the convention associated with the domain name
+  of this HTTP request.  If no user is signed in, returns an empty array.
+  """
   my_signups: [Signup!]!
   notifierLiquidAssigns(eventKey: String!): [LiquidAssign!]!
   oauthPreAuth(queryParams: Json!): Json!
@@ -4068,9 +4193,39 @@ type Query {
   previewNotifierLiquid(content: String!, eventKey: String!): String!
   product(id: Int!): Product!
   rootSite: RootSite!
-  run(id: Int!): Run!
-  runs: [Run!]!
-  searchCmsContent(name: String): [CmsContent!]!
+
+  """
+  Finds an active run by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no run with that ID, or the run's event is associated with a different
+  convention, or the run's event is no longer active, errors out.
+  """
+  run(
+    """
+    The ID of the run to find
+    """
+    id: Int!
+  ): Run!
+
+  """
+  Returns all runs attached to active events in convention associated with the domain name of
+  this HTTP request.
+  """
+  runs: [Run!]! @deprecated(reason: "This field is being removed due to its potential performance implications.  Please avoid requesting unpaginated lists of all runs.  Instead, use `events_paginated` from a Convention object and request the runs from those events.")
+
+  """
+  Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+  For example, in a convention that has a partial called `attendee_profile` and a page called
+  `info_for_attendees`, a search for `attendee` would return both of these.
+
+  This query is always limited to a maximum of 10 results.
+  """
+  searchCmsContent(
+    """
+    The partial name to search by.  If not specified, returns all CMS content
+    within the current domain (limited to 10 results).
+    """
+    name: String
+  ): [CmsContent!]!
   signup(id: Int!): Signup!
   siteSearch(query: String!): SearchResult!
   staffPosition(id: Int!): StaffPosition!

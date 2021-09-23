@@ -4,7 +4,8 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field :convention, Types::ConventionType, null: true do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request, or null if there
-      is none.
+      is none.  (For a version that will either return a convention or error out, use
+      `assertConvention`.)
     MARKDOWN
   end
 
@@ -15,7 +16,8 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field :assert_convention, Types::ConventionType, null: false do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request.  If one is not
-      present, the request will error out.
+      present, the request will error out.  (For a version that will return null instead of
+      erroring out, use `convention`.)
     MARKDOWN
   end
 
@@ -69,7 +71,12 @@ implications.  Please use conventions_paginated instead." do
 
   pagination_field :email_routes_paginated,
     Types::EmailRoutesPaginationType, Types::EmailRouteFiltersInputType,
-    camelize: false
+    camelize: false do
+    description <<~MARKDOWN
+      Returns a paginated list of the _global_ email routes configured in Intercode.
+      (Convention-specific email routing is controlled via that convention's StaffPositions.)
+    MARKDOWN
+  end
 
   def email_routes_paginated(**args)
     Tables::EmailRoutesTableResultsPresenter.new(
@@ -80,7 +87,13 @@ implications.  Please use conventions_paginated instead." do
   end
 
   field :event, Types::EventType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the event to find'
+
+    description <<~MARKDOWN
+      Finds an active event by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no event with that ID, or the event is associated with a different
+      convention, or the event is no longer active, errors out.
+    MARKDOWN
   end
 
   def event(**args)
@@ -88,24 +101,55 @@ implications.  Please use conventions_paginated instead." do
   end
 
   field :run, Types::RunType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the run to find'
+
+    description <<~MARKDOWN
+      Finds an active run by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no run with that ID, or the run's event is associated with a different
+      convention, or the run's event is no longer active, errors out.
+    MARKDOWN
   end
 
   def run(**args)
     Run.where(event_id: context[:convention].events.active.select(:id)).find(args[:id])
   end
 
-  field :runs, [Types::RunType], null: false
+  field :runs, [Types::RunType],
+    null: false,
+    deprecation_reason: "This field is being removed due to its potential performance \
+implications.  Please avoid requesting unpaginated lists of all runs.  Instead, use \
+`events_paginated` from a Convention object and request the runs from those events." do
+    description <<~MARKDOWN
+      Returns all runs attached to active events in convention associated with the domain name of
+      this HTTP request.
+    MARKDOWN
+  end
 
   def runs
     Run.where(event_id: context[:convention].events.active.select(:id))
   end
 
   field :events, [Types::EventType], null: false do
-    argument :extended_counts, Boolean, required: false
-    argument :include_dropped, Boolean, required: false
-    argument :start, Types::DateType, required: false
-    argument :finish, Types::DateType, required: false
+    description <<~MARKDOWN
+      Returns all active events in convention associated with the domain name of this HTTP request.
+      Filterable by a range of start/finish times.
+
+      **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+      when using it.
+    MARKDOWN
+
+    argument :extended_counts, Boolean,
+      required: false, deprecation_reason: 'This no longer does anything.'
+    argument :include_dropped, Boolean,
+      required: false, description: 'If true, includes dropped events in addition to active events.'
+    argument :start, Types::DateType,
+      required: false,
+      description: "If present, only returns events that occur at this time or later. \
+(These events may have started before that time, but will still be ongoing during it.)"
+    argument :finish, Types::DateType,
+      required: false,
+      description: "If present, only returns events that occur earlier than this time \
+(non-inclusive.) These events may end after this time, but start before it."
   end
 
   def events(include_dropped: false, start: nil, finish: nil, **_args)
@@ -121,46 +165,87 @@ implications.  Please use conventions_paginated instead." do
   end
 
   field :event_proposal, Types::EventProposalType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the event proposal to find.'
+
+    description <<~MARKDOWN
+      Finds an event proposal by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no event proposal with that ID, or the event proposal is associated
+      with a different convention, errors out.
+    MARKDOWN
   end
 
   def event_proposal(**args)
     convention.event_proposals.find(args[:id])
   end
 
-  field :my_signups, [Types::SignupType], null: false, camelize: false
+  field :my_signups, [Types::SignupType], null: false, camelize: false do
+    description <<~MARKDOWN
+      Returns all signups for the current user within the convention associated with the domain name
+      of this HTTP request.  If no user is signed in, returns an empty array.
+    MARKDOWN
+  end
 
   def my_signups
     context[:user_con_profile]&.signups || []
   end
 
-  field :my_profile, Types::UserConProfileType, null: true
+  field :my_profile, Types::UserConProfileType, null: true do
+    description <<~MARKDOWN
+      Returns the convention-specific profile for the current user within the convention associated
+      with the domain name of this HTTP request.  If no user is signed in, returns null.
+    MARKDOWN
+  end
 
   def my_profile
     context[:user_con_profile]
   end
 
-  field :my_authorized_applications, [Types::AuthorizedApplicationType], null: false
+  field :my_authorized_applications, [Types::AuthorizedApplicationType], null: false do
+    description <<~MARKDOWN
+      Returns the authorized OAuth applications for the current user within the convention
+      associated with the domain name of this HTTP request.  If no user is signed in, returns null.
+    MARKDOWN
+  end
 
   def my_authorized_applications
     return [] unless current_user
     Doorkeeper::Application.authorized_for(current_user)
   end
 
-  field :current_user, Types::UserType, null: true
+  field :current_user, Types::UserType, null: true do
+    description <<~MARKDOWN
+      Returns the currently signed-in user.  If no user is signed in, returns null.
+    MARKDOWN
+  end
 
   def current_user
     context[:current_user]
   end
 
-  field :cms_parent, Types::CmsParentType, null: false
+  field :cms_parent, Types::CmsParentType, null: false do
+    description <<~MARKDOWN
+      Returns the CMS parent object associated with the domain name of this HTTP request.  In a
+      convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+    MARKDOWN
+  end
 
   def cms_parent
     convention || root_site
   end
 
   field :search_cms_content, [Types::CmsContentType], null: false do
-    argument :name, String, required: false
+    argument :name, String,
+      required: false,
+      description: "The partial name to search by.  If not specified, returns all CMS content \
+within the current domain (limited to 10 results)."
+
+    description <<~MARKDOWN
+      Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+      For example, in a convention that has a partial called `attendee_profile` and a page called
+      `info_for_attendees`, a search for `attendee` would return both of these.
+
+      This query is always limited to a maximum of 10 results.
+    MARKDOWN
   end
 
   def search_cms_content(name: nil)
@@ -180,19 +265,33 @@ implications.  Please use conventions_paginated instead." do
     contents.sort_by { |content| [content.name.length, content.name] }
   end
 
-  field :cms_content_groups, [Types::CmsContentGroupType], null: false
+  field :cms_content_groups, [Types::CmsContentGroupType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS content groups within the current domain.
+    MARKDOWN
+  end
 
   delegate :cms_content_groups, to: :cms_parent
 
   field :cms_content_group, Types::CmsContentGroupType, null: false do
-    argument :id, Int, required: true
+    argument :id, Int, required: true, description: 'The ID of the CMS content group to find.'
+
+    description <<~MARKDOWN
+      Finds an CMS content group by ID within the domain name of this HTTP request.  If there is no
+      CMS content group with that ID, or the CMS content group is associated with a different
+      domain name, errors out.
+    MARKDOWN
   end
 
   def cms_content_group(id:)
     cms_parent.cms_content_groups.find(id)
   end
 
-  field :cms_files, [Types::CmsFileType], null: false
+  field :cms_files, [Types::CmsFileType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS files within the current domain.
+    MARKDOWN
+  end
 
   def cms_files
     if context[:convention]
@@ -202,7 +301,11 @@ implications.  Please use conventions_paginated instead." do
     end
   end
 
-  field :cms_pages, [Types::PageType], null: false
+  field :cms_pages, [Types::PageType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS pages within the current domain.
+    MARKDOWN
+  end
 
   def cms_pages
     if context[:convention]
@@ -213,9 +316,18 @@ implications.  Please use conventions_paginated instead." do
   end
 
   field :cms_page, Types::PageType, null: false do
-    argument :id, Int, required: false
-    argument :slug, String, required: false
-    argument :root_page, Boolean, required: false
+    argument :id, Int, required: false, description: 'The ID of the page to find.'
+    argument :slug, String, required: false, description: 'The unique slug of the page to find.'
+    argument :root_page, Boolean,
+      required: false,
+      description: 'If true, returns the root page for this domain.'
+
+    description <<~MARKDOWN
+      Finds an CMS page within the domain name of this HTTP request.  Exactly one of the three
+      optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+      different way of finding a page.  If the desired page can't be found within the current
+      domain name, errors out.
+    MARKDOWN
   end
 
   def cms_page(id: nil, slug: nil, root_page: false)

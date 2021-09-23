@@ -22504,7 +22504,7 @@
             },
             {
               "name": "assertConvention",
-              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, the request will error out.\n",
+              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, the request will error out.  (For a version that will return null instead of\nerroring out, use `convention`.)\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22532,11 +22532,11 @@
             },
             {
               "name": "cmsContentGroup",
-              "description": null,
+              "description": "Finds an CMS content group by ID within the domain name of this HTTP request.  If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the CMS content group to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -22565,7 +22565,7 @@
             },
             {
               "name": "cmsContentGroups",
-              "description": null,
+              "description": "Returns all CMS content groups within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22589,7 +22589,7 @@
             },
             {
               "name": "cmsFiles",
-              "description": null,
+              "description": "Returns all CMS files within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22685,11 +22685,11 @@
             },
             {
               "name": "cmsPage",
-              "description": null,
+              "description": "Finds an CMS page within the domain name of this HTTP request.  Exactly one of the three\noptional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a\ndifferent way of finding a page.  If the desired page can't be found within the current\ndomain name, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the page to find.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -22701,7 +22701,7 @@
                 },
                 {
                   "name": "slug",
-                  "description": null,
+                  "description": "The unique slug of the page to find.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -22713,7 +22713,7 @@
                 },
                 {
                   "name": "rootPage",
-                  "description": null,
+                  "description": "If true, returns the root page for this domain.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Boolean",
@@ -22738,7 +22738,7 @@
             },
             {
               "name": "cmsPages",
-              "description": null,
+              "description": "Returns all CMS pages within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22762,7 +22762,7 @@
             },
             {
               "name": "cmsParent",
-              "description": null,
+              "description": "Returns the CMS parent object associated with the domain name of this HTTP request.  In a\nconvention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22826,7 +22826,7 @@
             },
             {
               "name": "convention",
-              "description": "Returns the convention associated with the domain name of this HTTP request, or null if there\nis none.\n",
+              "description": "Returns the convention associated with the domain name of this HTTP request, or null if there\nis none.  (For a version that will either return a convention or error out, use\n`assertConvention`.)\n",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -23012,7 +23012,7 @@
             },
             {
               "name": "currentUser",
-              "description": null,
+              "description": "Returns the currently signed-in user.  If no user is signed in, returns null.\n",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -23057,7 +23057,7 @@
             },
             {
               "name": "email_routes_paginated",
-              "description": null,
+              "description": "Returns a paginated list of the _global_ email routes configured in Intercode.\n(Convention-specific email routing is controlled via that convention's StaffPositions.)\n",
               "args": [
                 {
                   "name": "page",
@@ -23130,11 +23130,11 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "Finds an active event by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no event with that ID, or the event is associated with a different\nconvention, or the event is no longer active, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the event to find",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23163,11 +23163,11 @@
             },
             {
               "name": "eventProposal",
-              "description": null,
+              "description": "Finds an event proposal by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no event proposal with that ID, or the event proposal is associated\nwith a different convention, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the event proposal to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23196,7 +23196,7 @@
             },
             {
               "name": "events",
-              "description": null,
+              "description": "Returns all active events in convention associated with the domain name of this HTTP request.\nFilterable by a range of start/finish times.\n\n**CAUTION:** this query can return a lot of data and take a long time.  Please be careful\nwhen using it.\n",
               "args": [
                 {
                   "name": "extendedCounts",
@@ -23207,12 +23207,12 @@
                     "ofType": null
                   },
                   "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
+                  "isDeprecated": true,
+                  "deprecationReason": "This no longer does anything."
                 },
                 {
                   "name": "includeDropped",
-                  "description": null,
+                  "description": "If true, includes dropped events in addition to active events.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Boolean",
@@ -23224,7 +23224,7 @@
                 },
                 {
                   "name": "start",
-                  "description": null,
+                  "description": "If present, only returns events that occur at this time or later. (These events may have started before that time, but will still be ongoing during it.)",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Date",
@@ -23236,7 +23236,7 @@
                 },
                 {
                   "name": "finish",
-                  "description": null,
+                  "description": "If present, only returns events that occur earlier than this time (non-inclusive.) These events may end after this time, but start before it.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Date",
@@ -23326,7 +23326,7 @@
             },
             {
               "name": "myAuthorizedApplications",
-              "description": null,
+              "description": "Returns the authorized OAuth applications for the current user within the convention\nassociated with the domain name of this HTTP request.  If no user is signed in, returns null.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23350,7 +23350,7 @@
             },
             {
               "name": "myProfile",
-              "description": null,
+              "description": "Returns the convention-specific profile for the current user within the convention associated\nwith the domain name of this HTTP request.  If no user is signed in, returns null.\n",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -23362,7 +23362,7 @@
             },
             {
               "name": "my_signups",
-              "description": null,
+              "description": "Returns all signups for the current user within the convention associated with the domain name\nof this HTTP request.  If no user is signed in, returns an empty array.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23697,11 +23697,11 @@
             },
             {
               "name": "run",
-              "description": null,
+              "description": "Finds an active run by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no run with that ID, or the run's event is associated with a different\nconvention, or the run's event is no longer active, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the run to find",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23730,7 +23730,7 @@
             },
             {
               "name": "runs",
-              "description": null,
+              "description": "Returns all runs attached to active events in convention associated with the domain name of\nthis HTTP request.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23749,16 +23749,16 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "This field is being removed due to its potential performance implications.  Please avoid requesting unpaginated lists of all runs.  Instead, use `events_paginated` from a Convention object and request the runs from those events."
             },
             {
               "name": "searchCmsContent",
-              "description": null,
+              "description": "Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.\nFor example, in a convention that has a partial called `attendee_profile` and a page called\n`info_for_attendees`, a search for `attendee` would return both of these.\n\nThis query is always limited to a maximum of 10 results.\n",
               "args": [
                 {
                   "name": "name",
-                  "description": null,
+                  "description": "The partial name to search by.  If not specified, returns all CMS content within the current domain (limited to 10 results).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
