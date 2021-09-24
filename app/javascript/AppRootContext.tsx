@@ -3,7 +3,7 @@ import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryData } from './appRootQueries.generated';
 import type Timespan from './Timespan';
 
-type AppRootContextValue = {
+export type AppRootContextValue = {
   assumedIdentityFromProfile?: AppRootQueryData['assumedIdentityFromProfile'];
   cmsNavigationItems: AppRootQueryData['cmsNavigationItems'];
   conventionAcceptingProposals?: boolean | null;

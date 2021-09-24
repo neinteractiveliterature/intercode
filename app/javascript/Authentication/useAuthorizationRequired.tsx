@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AppRootContext from '../AppRootContext';
+import AppRootContext, { AppRootContextValue } from '../AppRootContext';
 import useLoginRequired from './useLoginRequired';
 
-type AbilityType = AppRootContext['currentAbility'];
+type AbilityType = AppRootContextValue['currentAbility'];
 type AbilityName = keyof AbilityType;
 
 export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]) {
