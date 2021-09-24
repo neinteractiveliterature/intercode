@@ -3313,6 +3313,39 @@
               "deprecationReason": null
             },
             {
+              "name": "event",
+              "description": "Finds an active event by ID in this convention.  If there is no event with that ID in this\nconvention, or the event is no longer active, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the event to find",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Event",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "event_categories",
               "description": null,
               "args": [
@@ -3357,6 +3390,39 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "event_proposal",
+              "description": "Finds an event proposal by ID in this convention.  If there is no event proposal with that ID\nin this convention, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the event proposal to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "EventProposal",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3429,6 +3495,79 @@
                   "kind": "OBJECT",
                   "name": "EventProposalsPagination",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "events",
+              "description": "Returns all active events in convention associated with the domain name of this HTTP request.\nFilterable by a range of start/finish times.\n\n**CAUTION:** this query can return a lot of data and take a long time.  Please be careful\nwhen using it.\n",
+              "args": [
+                {
+                  "name": "extendedCounts",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": true,
+                  "deprecationReason": "This no longer does anything."
+                },
+                {
+                  "name": "includeDropped",
+                  "description": "If true, includes dropped events in addition to active events.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "start",
+                  "description": "If present, only returns events that occur at this time or later. (These events may have started before that time, but will still be ongoing during it.)",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "finish",
+                  "description": "If present, only returns events that occur earlier than this time (non-inclusive.) These events may end after this time, but start before it.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Event",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
@@ -3592,30 +3731,6 @@
               "deprecationReason": null
             },
             {
-              "name": "mail_privilege_names",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "Mail privileges have gone away in favor of permissions"
-            },
-            {
               "name": "mailing_lists",
               "description": null,
               "args": [],
@@ -3651,6 +3766,42 @@
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "my_profile",
+              "description": "Returns the convention-specific profile for the current user within this convention.  If no\nuser is signed in, returns null.\n",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "UserConProfile",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "my_signups",
+              "description": "Returns all signups for the current user within this convention.  If no user is signed in,\nreturns an empty array.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Signup",
+                      "ofType": null
+                    }
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3753,8 +3904,8 @@
                 "name": "OrdersConnection",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Deprecated for potential performance implications.  Please use `orders_paginated` instead."
             },
             {
               "name": "orders_paginated",
@@ -3878,30 +4029,6 @@
               "deprecationReason": null
             },
             {
-              "name": "privilege_names",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "Privileges have gone away in favor of permissions"
-            },
-            {
               "name": "products",
               "description": null,
               "args": [
@@ -3998,6 +4125,39 @@
                 "kind": "OBJECT",
                 "name": "Page",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "run",
+              "description": "Finds an active run by ID in this convention.  If there is no run with that ID in this\nconvention, or the run's event is no longer active, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the run to find",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Run",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -22515,8 +22675,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "This field is being renamed to `conventionByRequestHost`."
             },
             {
               "name": "assumedIdentityFromProfile",
@@ -22773,6 +22933,22 @@
                   "ofType": null
                 }
               },
+              "isDeprecated": true,
+              "deprecationReason": "This query is being renamed to `cmsParentByRequestHost`."
+            },
+            {
+              "name": "cmsParentByRequestHost",
+              "description": "Returns the CMS parent object associated with the domain name of this HTTP request.  In a\nconvention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "CmsParent",
+                  "ofType": null
+                }
+              },
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -22833,6 +23009,39 @@
                 "name": "Convention",
                 "ofType": null
               },
+              "isDeprecated": true,
+              "deprecationReason": "This field is being removed in favor of `conventionByRequestHost`.  Its semantics are slightly different than this field.  Please update accordingly."
+            },
+            {
+              "name": "conventionByDomain",
+              "description": "Returns the convention associated with a specified domain name.\n",
+              "args": [
+                {
+                  "name": "domain",
+                  "description": "The domain name to find a convention by.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Convention",
+                  "ofType": null
+                }
+              },
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -22857,6 +23066,22 @@
                   "deprecationReason": null
                 }
               ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Convention",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "conventionByRequestHost",
+              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, the request will error out.  (For a version that will return null instead of\nerroring out, use `convention`.)\n",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23158,8 +23383,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated.  Please use the `event` field on the Convention type instead."
             },
             {
               "name": "eventProposal",
@@ -23191,8 +23416,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated.  Please use the `event_proposal` field on the Convention type instead."
             },
             {
               "name": "events",
@@ -23264,8 +23489,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated.  Please use the `events` field on the Convention type instead."
             },
             {
               "name": "form",
@@ -23326,7 +23551,7 @@
             },
             {
               "name": "myAuthorizedApplications",
-              "description": "Returns the authorized OAuth applications for the current user within the convention\nassociated with the domain name of this HTTP request.  If no user is signed in, returns null.\n",
+              "description": "Returns the authorized OAuth applications for the current user.  If no user is signed in,\nreturns null.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23357,8 +23582,8 @@
                 "name": "UserConProfile",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated.  Please use the `my_profile` field on the Convention type instead."
             },
             {
               "name": "my_signups",
@@ -23381,8 +23606,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated.  Please use the `my_signups` field on the Convention type instead."
             },
             {
               "name": "notifierLiquidAssigns",
@@ -23725,8 +23950,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being\ndeprecated.  Please use the `run` field on the Convention type instead."
             },
             {
               "name": "runs",

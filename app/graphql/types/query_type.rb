@@ -1,21 +1,33 @@
 class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field_class Types::BaseField # Camelize fields in this type
 
-  field :convention, Types::ConventionType, null: true do
+  field :convention, Types::ConventionType, null: true, deprecation_reason: "This field is being \
+removed in favor of `conventionByRequestHost`.  Its semantics are slightly different than this \
+field.  Please update accordingly." do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request, or null if there
       is none.  (For a version that will either return a convention or error out, use
       `assertConvention`.)
     MARKDOWN
-
-    deprecation_reason <<~MARKDOWN
-      This field is being removed in favor of `conventionByRequestHost`.  Its semantics are
-      slightly different than this field.  Please update accordingly.
-    MARKDOWN
   end
 
   def convention
     context[:convention]
+  end
+
+  field :convention_by_domain, Types::ConventionType, null: false do
+    argument :domain, String,
+      required: true, description: 'The domain name to find a convention by.'
+
+    description <<~MARKDOWN
+      Returns the convention associated with a specified domain name.
+    MARKDOWN
+  end
+
+  def convention_by_domain(domain:)
+    return context[:convention] if context[:convention].domain == domain
+
+    Convention.find_by!(domain: domain)
   end
 
   field :convention_by_request_host, Types::ConventionType, null: false do
@@ -34,19 +46,17 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     context[:convention]
   end
 
-  field :assert_convention, Types::ConventionType, null: false do
+  field :assert_convention, Types::ConventionType,
+    null: false,
+    deprecation_reason: 'This field is being renamed to `conventionByRequestHost`.' do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request.  If one is not
       present, the request will error out.  (For a version that will return null instead of
       erroring out, use `convention`.)
     MARKDOWN
-
-    deprecation_reason <<~MARKDOWN
-      This field is being renamed to `conventionByRequestHost`.
-    MARKDOWN
   end
 
-  alias :assert_convention, :convention_by_request_host
+  alias assert_convention convention_by_request_host
 
   field :convention_by_id, Types::ConventionType, null: false do
     argument :id, Integer, required: true
@@ -106,7 +116,8 @@ implications.  Please use conventions_paginated instead." do
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  field :event, Types::EventType, null: false do
+  field :event, Types::EventType, null: false, deprecation_reason: "Domain-specific queries are \
+being deprecated.  Please use the `event` field on the Convention type instead." do
     argument :id, Integer, required: true, description: 'The ID of the event to find'
 
     description <<~MARKDOWN
@@ -120,7 +131,8 @@ implications.  Please use conventions_paginated instead." do
     context[:convention].events.active.find(args[:id])
   end
 
-  field :run, Types::RunType, null: false do
+  field :run, Types::RunType, null: false, deprecation_reason: "Domain-specific queries are being
+deprecated.  Please use the `run` field on the Convention type instead." do
     argument :id, Integer, required: true, description: 'The ID of the run to find'
 
     description <<~MARKDOWN
@@ -149,7 +161,8 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
     Run.where(event_id: context[:convention].events.active.select(:id))
   end
 
-  field :events, [Types::EventType], null: false do
+  field :events, [Types::EventType], null: false, deprecation_reason: "Domain-specific queries are \
+being deprecated.  Please use the `events` field on the Convention type instead." do
     description <<~MARKDOWN
       Returns all active events in convention associated with the domain name of this HTTP request.
       Filterable by a range of start/finish times.
@@ -184,7 +197,10 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
     end
   end
 
-  field :event_proposal, Types::EventProposalType, null: false do
+  field :event_proposal, Types::EventProposalType,
+    null: false,
+    deprecation_reason: "Domain-specific queries are being deprecated.  Please use the \
+`event_proposal` field on the Convention type instead." do
     argument :id, Integer, required: true, description: 'The ID of the event proposal to find.'
 
     description <<~MARKDOWN
@@ -198,7 +214,11 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
     convention.event_proposals.find(args[:id])
   end
 
-  field :my_signups, [Types::SignupType], null: false, camelize: false do
+  field :my_signups, [Types::SignupType],
+    null: false,
+    camelize: false,
+    deprecation_reason: "Domain-specific queries are being deprecated.  Please use the \
+`my_signups` field on the Convention type instead." do
     description <<~MARKDOWN
       Returns all signups for the current user within the convention associated with the domain name
       of this HTTP request.  If no user is signed in, returns an empty array.
@@ -209,7 +229,8 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
     context[:user_con_profile]&.signups || []
   end
 
-  field :my_profile, Types::UserConProfileType, null: true do
+  field :my_profile, Types::UserConProfileType, null: true, deprecation_reason: "Domain-specific \
+queries are being deprecated.  Please use the `my_profile` field on the Convention type instead." do
     description <<~MARKDOWN
       Returns the convention-specific profile for the current user within the convention associated
       with the domain name of this HTTP request.  If no user is signed in, returns null.
@@ -222,8 +243,8 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
 
   field :my_authorized_applications, [Types::AuthorizedApplicationType], null: false do
     description <<~MARKDOWN
-      Returns the authorized OAuth applications for the current user within the convention
-      associated with the domain name of this HTTP request.  If no user is signed in, returns null.
+      Returns the authorized OAuth applications for the current user.  If no user is signed in,
+      returns null.
     MARKDOWN
   end
 
@@ -242,16 +263,26 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
     context[:current_user]
   end
 
-  field :cms_parent, Types::CmsParentType, null: false do
+  field :cms_parent_by_request_host, Types::CmsParentType, null: false do
     description <<~MARKDOWN
       Returns the CMS parent object associated with the domain name of this HTTP request.  In a
       convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
     MARKDOWN
   end
 
-  def cms_parent
+  def cms_parent_by_request_host
     convention || root_site
   end
+
+  field :cms_parent, Types::CmsParentType, null: false, deprecation_reason: "This query is being \
+renamed to `cmsParentByRequestHost`." do
+    description <<~MARKDOWN
+      Returns the CMS parent object associated with the domain name of this HTTP request.  In a
+      convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+    MARKDOWN
+  end
+
+  alias cms_parent cms_parent_by_request_host
 
   field :search_cms_content, [Types::CmsContentType], null: false do
     argument :name, String,

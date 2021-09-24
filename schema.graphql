@@ -326,8 +326,30 @@ type Convention {
   email_from: String!
   email_mode: EmailMode!
   ends_at: Date
+
+  """
+  Finds an active event by ID in this convention.  If there is no event with that ID in this
+  convention, or the event is no longer active, errors out.
+  """
+  event(
+    """
+    The ID of the event to find
+    """
+    id: Int!
+  ): Event!
   event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory!]!
   event_mailing_list_domain: String
+
+  """
+  Finds an event proposal by ID in this convention.  If there is no event proposal with that ID
+  in this convention, errors out.
+  """
+  event_proposal(
+    """
+    The ID of the event proposal to find.
+    """
+    id: Int!
+  ): EventProposal!
   event_proposals_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -352,6 +374,34 @@ type Convention {
     """
     sort: [SortInput!]
   ): EventProposalsPagination!
+
+  """
+  Returns all active events in convention associated with the domain name of this HTTP request.
+  Filterable by a range of start/finish times.
+
+  **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+  when using it.
+  """
+  events(
+    extendedCounts: Boolean @deprecated(reason: "This no longer does anything.")
+
+    """
+    If present, only returns events that occur earlier than this time
+    (non-inclusive.) These events may end after this time, but start before it.
+    """
+    finish: Date
+
+    """
+    If true, includes dropped events in addition to active events.
+    """
+    includeDropped: Boolean
+
+    """
+    If present, only returns events that occur at this time or later. (These
+    events may have started before that time, but will still be ongoing during it.)
+    """
+    start: Date
+  ): [Event!]!
   events_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -381,10 +431,21 @@ type Convention {
   id: Int!
   language: String!
   location: Json
-  mail_privilege_names: [String!]! @deprecated(reason: "Mail privileges have gone away in favor of permissions")
   mailing_lists: MailingLists!
   maximum_event_signups: ScheduledValue
   maximum_tickets: Int
+
+  """
+  Returns the convention-specific profile for the current user within this convention.  If no
+  user is signed in, returns null.
+  """
+  my_profile: UserConProfile
+
+  """
+  Returns all signups for the current user within this convention.  If no user is signed in,
+  returns an empty array.
+  """
+  my_signups: [Signup!]!
   name: String!
   notification_templates: [NotificationTemplate!]!
   orders(
@@ -407,7 +468,7 @@ type Convention {
     Returns the last _n_ elements from the list.
     """
     last: Int
-  ): OrdersConnection
+  ): OrdersConnection @deprecated(reason: "Deprecated for potential performance implications.  Please use `orders_paginated` instead.")
   orders_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -435,11 +496,21 @@ type Convention {
   organization: Organization
   pages: [Page!]!
   pre_schedule_content_html: String
-  privilege_names: [String!]! @deprecated(reason: "Privileges have gone away in favor of permissions")
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
   rooms: [Room!]!
   root_page: Page
+
+  """
+  Finds an active run by ID in this convention.  If there is no run with that ID in this
+  convention, or the run's event is no longer active, errors out.
+  """
+  run(
+    """
+    The ID of the run to find
+    """
+    id: Int!
+  ): Run!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
   signup_changes_paginated(
@@ -3972,7 +4043,7 @@ type Query {
   present, the request will error out.  (For a version that will return null instead of
   erroring out, use `convention`.)
   """
-  assertConvention: Convention!
+  assertConvention: Convention! @deprecated(reason: "This field is being renamed to `conventionByRequestHost`.")
 
   """
   If the current user is an assumed identity (using the "become user" feature), this returns
@@ -4049,7 +4120,13 @@ type Query {
   Returns the CMS parent object associated with the domain name of this HTTP request.  In a
   convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
   """
-  cmsParent: CmsParent!
+  cmsParent: CmsParent! @deprecated(reason: "This query is being renamed to `cmsParentByRequestHost`.")
+
+  """
+  Returns the CMS parent object associated with the domain name of this HTTP request.  In a
+  convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+  """
+  cmsParentByRequestHost: CmsParent!
 
   """
   Returns all CMS partials within the current domain.
@@ -4066,12 +4143,29 @@ type Query {
   is none.  (For a version that will either return a convention or error out, use
   `assertConvention`.)
   """
-  convention: Convention
+  convention: Convention @deprecated(reason: "This field is being removed in favor of `conventionByRequestHost`.  Its semantics are slightly different than this field.  Please update accordingly.")
+
+  """
+  Returns the convention associated with a specified domain name.
+  """
+  conventionByDomain(
+    """
+    The domain name to find a convention by.
+    """
+    domain: String!
+  ): Convention!
 
   """
   Finds a convention by ID.  If a matching one can't be found, the request will error out.
   """
   conventionById(id: Int!): Convention!
+
+  """
+  Returns the convention associated with the domain name of this HTTP request.  If one is not
+  present, the request will error out.  (For a version that will return null instead of
+  erroring out, use `convention`.)
+  """
+  conventionByRequestHost: Convention!
 
   """
   Returns all conventions in the database.
@@ -4186,7 +4280,7 @@ type Query {
     The ID of the event to find
     """
     id: Int!
-  ): Event!
+  ): Event! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `event` field on the Convention type instead.")
 
   """
   Finds an event proposal by ID in the convention associated with the domain name of this HTTP
@@ -4198,7 +4292,7 @@ type Query {
     The ID of the event proposal to find.
     """
     id: Int!
-  ): EventProposal!
+  ): EventProposal! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `event_proposal` field on the Convention type instead.")
 
   """
   Returns all active events in convention associated with the domain name of this HTTP request.
@@ -4226,7 +4320,7 @@ type Query {
     events may have started before that time, but will still be ongoing during it.)
     """
     start: Date
-  ): [Event!]!
+  ): [Event!]! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `events` field on the Convention type instead.")
 
   """
   Finds a form by ID in the convention associated with the domain name of this HTTP
@@ -4248,8 +4342,8 @@ type Query {
   liquidAssigns: [LiquidAssign!]!
 
   """
-  Returns the authorized OAuth applications for the current user within the convention
-  associated with the domain name of this HTTP request.  If no user is signed in, returns null.
+  Returns the authorized OAuth applications for the current user.  If no user is signed in,
+  returns null.
   """
   myAuthorizedApplications: [AuthorizedApplication!]!
 
@@ -4257,13 +4351,13 @@ type Query {
   Returns the convention-specific profile for the current user within the convention associated
   with the domain name of this HTTP request.  If no user is signed in, returns null.
   """
-  myProfile: UserConProfile
+  myProfile: UserConProfile @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `my_profile` field on the Convention type instead.")
 
   """
   Returns all signups for the current user within the convention associated with the domain name
   of this HTTP request.  If no user is signed in, returns an empty array.
   """
-  my_signups: [Signup!]!
+  my_signups: [Signup!]! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `my_signups` field on the Convention type instead.")
 
   """
   Returns all the Liquid assigns for rendering a particular notification event in the current
@@ -4388,7 +4482,7 @@ type Query {
     The ID of the run to find
     """
     id: Int!
-  ): Run!
+  ): Run! @deprecated(reason: "Domain-specific queries are being\ndeprecated.  Please use the `run` field on the Convention type instead.")
 
   """
   Returns all runs attached to active events in convention associated with the domain name of
