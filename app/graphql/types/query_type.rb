@@ -7,9 +7,30 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
       is none.  (For a version that will either return a convention or error out, use
       `assertConvention`.)
     MARKDOWN
+
+    deprecation_reason <<~MARKDOWN
+      This field is being removed in favor of `conventionByRequestHost`.  Its semantics are
+      slightly different than this field.  Please update accordingly.
+    MARKDOWN
   end
 
   def convention
+    context[:convention]
+  end
+
+  field :convention_by_request_host, Types::ConventionType, null: false do
+    description <<~MARKDOWN
+      Returns the convention associated with the domain name of this HTTP request.  If one is not
+      present, the request will error out.  (For a version that will return null instead of
+      erroring out, use `convention`.)
+    MARKDOWN
+  end
+
+  def convention_by_request_host
+    unless context[:convention]
+      raise ActiveRecord::RecordNotFound,
+        "The host name #{context[:controller].request.host} does not belong to a convention"
+    end
     context[:convention]
   end
 
@@ -19,14 +40,13 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
       present, the request will error out.  (For a version that will return null instead of
       erroring out, use `convention`.)
     MARKDOWN
+
+    deprecation_reason <<~MARKDOWN
+      This field is being renamed to `conventionByRequestHost`.
+    MARKDOWN
   end
 
-  def assert_convention
-    unless context[:convention]
-      raise ActiveRecord::RecordNotFound, 'This domain does not belong to a convention'
-    end
-    context[:convention]
-  end
+  alias :assert_convention, :convention_by_request_host
 
   field :convention_by_id, Types::ConventionType, null: false do
     argument :id, Integer, required: true
