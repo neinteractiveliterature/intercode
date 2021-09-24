@@ -1,4 +1,4 @@
-class Types::ConventionType < Types::BaseObject
+class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field :accepting_proposals, Boolean, null: true
 
   field :bio_eligible_user_con_profiles, [Types::UserConProfileType], null: false
@@ -42,6 +42,20 @@ class Types::ConventionType < Types::BaseObject
   field :email_from, String, null: false
   field :email_mode, Types::EmailModeType, null: false
   field :ends_at, Types::DateType, null: true
+
+  field :event, Types::EventType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the event to find'
+
+    description <<~MARKDOWN
+      Finds an active event by ID in this convention.  If there is no event with that ID in this
+      convention, or the event is no longer active, errors out.
+    MARKDOWN
+  end
+
+  def event(**args)
+    object.events.active.find(args[:id])
+  end
+
   field :event_categories, [Types::EventCategoryType], null: false do
     argument :current_ability_can_read_event_proposals, Boolean, required: false, camelize: false
   end
@@ -66,6 +80,19 @@ class Types::ConventionType < Types::BaseObject
     end
   end
 
+  field :event_proposal, Types::EventProposalType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the event proposal to find.'
+
+    description <<~MARKDOWN
+      Finds an event proposal by ID in this convention.  If there is no event proposal with that ID
+      in this convention, errors out.
+    MARKDOWN
+  end
+
+  def event_proposal(**args)
+    object.event_proposals.find(args[:id])
+  end
+
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType,
     Types::EventProposalFiltersInputType
 
@@ -79,6 +106,41 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :event_mailing_list_domain, String, null: true
+
+  field :events, [Types::EventType], null: false do
+    description <<~MARKDOWN
+      Returns all active events in convention associated with the domain name of this HTTP request.
+      Filterable by a range of start/finish times.
+
+      **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+      when using it.
+    MARKDOWN
+
+    argument :extended_counts, Boolean,
+      required: false, deprecation_reason: 'This no longer does anything.'
+    argument :include_dropped, Boolean,
+      required: false, description: 'If true, includes dropped events in addition to active events.'
+    argument :start, Types::DateType,
+      required: false,
+      description: "If present, only returns events that occur at this time or later. \
+(These events may have started before that time, but will still be ongoing during it.)"
+    argument :finish, Types::DateType,
+      required: false,
+      description: "If present, only returns events that occur earlier than this time \
+(non-inclusive.) These events may end after this time, but start before it."
+  end
+
+  def events(include_dropped: false, start: nil, finish: nil, **_args)
+    events = object.events
+    events = events.active unless include_dropped
+
+    if start || finish
+      return Event.none unless policy(Run.new(event: Event.new(convention: object))).read?
+      events.with_runs_between(convention, start, finish)
+    else
+      events
+    end
+  end
 
   pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType
 
@@ -105,20 +167,51 @@ class Types::ConventionType < Types::BaseObject
 
   field :maximum_event_signups, Types::ScheduledValueType, null: true
   field :maximum_tickets, Integer, null: true
+
+  field :my_profile, Types::UserConProfileType, null: true do
+    description <<~MARKDOWN
+      Returns the convention-specific profile for the current user within this convention.  If no
+      user is signed in, returns null.
+    MARKDOWN
+  end
+
+  def my_profile
+    @my_profile ||= (
+      if object == context[:convention]
+        # Avoids redundant database queries
+        context[:user_con_profile]
+      elsif context[:user]
+        object.user_con_profiles.find_by(user_id: context[:user].id)
+      end
+    )
+  end
+
+  field :my_signups, [Types::SignupType], null: false, camelize: false do
+    description <<~MARKDOWN
+      Returns all signups for the current user within this convention.  If no user is signed in,
+      returns an empty array.
+    MARKDOWN
+  end
+
+  def my_signups
+    my_profile&.signups || []
+  end
+
   field :notification_templates, [Types::NotificationTemplateType], null: false
   field :name, String, null: false
 
-  field :orders, Types::OrdersConnectionType, max_page_size: 1000, null: true, connection: true do
+  field :orders, Types::OrdersConnectionType,
+    max_page_size: 1000,
+    null: true,
+    connection: true,
+    deprecation_reason: "Deprecated for potential performance implications.  Please use \
+`orders_paginated` instead." do
     authorize do |value, _args, context|
       Pundit.policy(
         context[:pundit_user],
         Order.new(user_con_profile: UserConProfile.new(convention: value))
       ).read?
     end
-
-    deprecation_reason <<~MARKDOWN
-      Deprecated for potential performance implications.  Please use `orders_paginated` instead.
-    MARKDOWN
   end
 
   def orders
@@ -175,6 +268,20 @@ class Types::ConventionType < Types::BaseObject
 
   field :rooms, [Types::RoomType], null: false
   field :root_page, Types::PageType, null: true
+
+  field :run, Types::RunType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the run to find'
+
+    description <<~MARKDOWN
+      Finds an active run by ID in this convention.  If there is no run with that ID in this
+      convention, or the run's event is no longer active, errors out.
+    MARKDOWN
+  end
+
+  def run(**args)
+    Run.where(event_id: object.events.active.select(:id)).find(args[:id])
+  end
+
   field :staff_positions, [Types::StaffPositionType], null: false
   field :show_event_list, Types::ShowScheduleType, null: true
   field :show_schedule, Types::ShowScheduleType, null: true
