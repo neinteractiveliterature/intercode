@@ -3238,7 +3238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:^2.2.0":
+"@graphql-eslint/eslint-plugin@npm:2.2.0":
   version: 2.2.0
   resolution: "@graphql-eslint/eslint-plugin@npm:2.2.0"
   dependencies:
@@ -20773,7 +20773,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript": 2.2.2
     "@graphql-codegen/typescript-operations": 2.1.4
     "@graphql-codegen/typescript-react-apollo": 3.1.4
-    "@graphql-eslint/eslint-plugin": ^2.2.0
+    "@graphql-eslint/eslint-plugin": 2.2.0
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.5
     "@neinteractiveliterature/litform": 0.20.0
