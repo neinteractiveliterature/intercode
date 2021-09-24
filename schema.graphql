@@ -3958,6 +3958,13 @@ type ProvideEventTicketPayload {
 }
 
 type Query {
+  """
+  If there is a CMS partial on the root site called `account_form_text`, renders it to HTML
+  and returns the result.  Otherwise, returns null.
+
+  This is used by the "update your account" pages as a way to clarify that your account is
+  shared between multiple conventions.
+  """
   accountFormContentHtml: String
 
   """
@@ -3966,6 +3973,11 @@ type Query {
   erroring out, use `convention`.)
   """
   assertConvention: Convention!
+
+  """
+  If the current user is an assumed identity (using the "become user" feature), this returns
+  the actual profile of the signed-in account.  If not, returns null.
+  """
   assumedIdentityFromProfile: UserConProfile
 
   """
@@ -3989,8 +4001,20 @@ type Query {
   Returns all CMS files within the current domain.
   """
   cmsFiles: [CmsFile!]!
+
+  """
+  Returns all CMS GraphQL queries within the current domain.
+  """
   cmsGraphqlQueries: [CmsGraphqlQuery!]!
+
+  """
+  Returns all CMS layouts within the current domain.
+  """
   cmsLayouts: [CmsLayout!]!
+
+  """
+  Returns all CMS navigation items within the current domain.
+  """
   cmsNavigationItems: [CmsNavigationItem!]!
 
   """
@@ -4026,7 +4050,15 @@ type Query {
   convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
   """
   cmsParent: CmsParent!
+
+  """
+  Returns all CMS partials within the current domain.
+  """
   cmsPartials: [CmsPartial!]!
+
+  """
+  Returns all CMS variables within the current domain.
+  """
   cmsVariables: [CmsVariable!]!
 
   """
@@ -4074,15 +4106,46 @@ type Query {
     """
     sort: [SortInput!]
   ): ConventionsPagination!
+
+  """
+  Returns the ability object for the current user's permissions, or an ability object for an
+  anonymous user if no user is currently signed in.
+  """
   currentAbility: Ability!
+
+  """
+  If there is a signed-in user and they have a pending store order open in the convention
+  associated with the domain name of this HTTP request, returns that order.  Otherwise, returns
+  null.
+  """
   currentPendingOrder: Order
+
+  """
+  If there is a signed-in user and they have a pending store order open in the convention
+  associated with the domain name of this HTTP request, this generates a Stripe PaymentIntent
+  for that order and returns the client secret from that PaymentIntent.  This can be used to
+  start a payment on the client side, for example using Apple Pay or Google Pay.
+
+  If there is no signed-in user, this query will error out.
+  """
   currentPendingOrderPaymentIntentClientSecret: String!
 
   """
   Returns the currently signed-in user.  If no user is signed in, returns null.
   """
   currentUser: User
-  effectiveCmsLayout(path: String!): CmsLayout!
+
+  """
+  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  will be the page-specific layout if the URL corresponds to a page with a layout override, or
+  the default layout for the domain otherwise.)
+  """
+  effectiveCmsLayout(
+    """
+    The path to find the effective layout for.
+    """
+    path: String!
+  ): CmsLayout!
 
   """
   Returns a paginated list of the _global_ email routes configured in Intercode.
@@ -4164,7 +4227,24 @@ type Query {
     """
     start: Date
   ): [Event!]!
-  form(id: Int!): Form!
+
+  """
+  Finds a form by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no form with that ID, or the form is associated
+  with a different convention, errors out.
+  """
+  form(
+    """
+    The ID of the form to find.
+    """
+    id: Int!
+  ): Form!
+
+  """
+  Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+  This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+  CMS variables.
+  """
   liquidAssigns: [LiquidAssign!]!
 
   """
@@ -4184,14 +4264,118 @@ type Query {
   of this HTTP request.  If no user is signed in, returns an empty array.
   """
   my_signups: [Signup!]!
-  notifierLiquidAssigns(eventKey: String!): [LiquidAssign!]!
-  oauthPreAuth(queryParams: Json!): Json!
+
+  """
+  Returns all the Liquid assigns for rendering a particular notification event in the current
+  domain name.   This is a combination of globally-accessible Liquid assigns, values specific
+  to that notification event, and domain-specific user-defined CMS variables.
+  """
+  notifierLiquidAssigns(
+    """
+    The key of the notification event to use for generating assigns.
+    """
+    eventKey: String!
+  ): [LiquidAssign!]!
+
+  """
+  Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
+  JSON object containing the necessary data for rendering the pre-authorization screen that
+  checks if you want to allow an application to access Intercode on your behalf.
+
+  This essentially emulates the JSON behavior of
+  [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper)'s API-only mode if you go to
+  `/oauth/authorize` with query parameters.  The only reason this query exists, rather than
+  simply having clients actually call `/oauth/authorize`, is that we're running Doorkeeper
+  in regular mode so that we can get the server-rendered HTML admin views.
+
+  When we've implemented our own admin screens for OAuth
+  (see [this Github issue](https://github.com/neinteractiveliterature/intercode/issues/2740)),
+  this query will be deprecated.
+  """
+  oauthPreAuth(
+    """
+    A set of HTTP query parameters for `/oauth/authorize`, parsed out and
+    represented as a JSON object.
+    """
+    queryParams: Json!
+  ): Json!
+
+  """
+  Returns all organizations in the database.
+  """
   organizations: [Organization!]!
-  previewFormItem(formItem: FormItemInput!, formSectionId: Int!): FormItem!
-  previewLiquid(content: String!): String!
-  previewMarkdown(markdown: String!): String!
-  previewNotifierLiquid(content: String!, eventKey: String!): String!
-  product(id: Int!): Product!
+
+  """
+  Given a form section ID and a FormItemInput, returns a preview version of that form item
+  within that section.  This does not actually save the form item.  This is mostly useful
+  because of the `rendered_properties` field inside FormItem, which lets clients retrieve
+  a rendered HTML version of the Liquid-enabled properties of the form item.
+  """
+  previewFormItem(
+    """
+    The fields to use for constructing the form item to preview.
+    """
+    formItem: FormItemInput!
+
+    """
+    The ID of the form section to preview the item in.
+    """
+    formSectionId: Int!
+  ): FormItem!
+
+  """
+  Given a Liquid text string, renders it to HTML using the current domain's CMS context
+  and returns the result.
+  """
+  previewLiquid(
+    """
+    The Liquid content to render.
+    """
+    content: String!
+  ): String!
+
+  """
+  Given a Markdown text string, renders it to HTML using the current domain's CMS context
+  and returns the result.
+  """
+  previewMarkdown(
+    """
+    The Markdown content to render.
+    """
+    markdown: String!
+  ): String!
+
+  """
+  Given a Liquid text string and a notification event, renders the Liquid to HTML using the
+  current domain's CMS context as if it were the content for that notification type.
+  """
+  previewNotifierLiquid(
+    """
+    The Liquid content to render.
+    """
+    content: String!
+
+    """
+    The key of the notification event to use for generating the preview.
+    """
+    eventKey: String!
+  ): String!
+
+  """
+  Finds a product by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no product with that ID, or the product is associated
+  with a different convention, errors out.
+  """
+  product(
+    """
+    The ID of the product to find.
+    """
+    id: Int!
+  ): Product!
+
+  """
+  Returns the singleton RootSite object, which is a CMS parent.
+  """
   rootSite: RootSite!
 
   """
@@ -4226,12 +4410,78 @@ type Query {
     """
     name: String
   ): [CmsContent!]!
-  signup(id: Int!): Signup!
-  siteSearch(query: String!): SearchResult!
-  staffPosition(id: Int!): StaffPosition!
-  user(id: Int!): User!
-  userConProfile(id: Int!): UserConProfile!
-  users(ids: [Int!]!): [User!]!
+
+  """
+  Finds a signup by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no signup with that ID, or the signup is associated
+  with a different convention, errors out.
+  """
+  signup(
+    """
+    The ID of the signup to find.
+    """
+    id: Int!
+  ): Signup!
+
+  """
+  Does a full-text search on the convention associated with the domain name of this HTTP
+  request.
+  """
+  siteSearch(
+    """
+    The text to search for.
+    """
+    query: String!
+  ): SearchResult!
+
+  """
+  Finds a staff position by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no staff position with that ID, or the staff position is associated
+  with a different convention, errors out.
+  """
+  staffPosition(
+    """
+    The ID of the staff position to find.
+    """
+    id: Int!
+  ): StaffPosition!
+
+  """
+  Finds a user by ID.  If there is no user with that ID, errors out.
+  """
+  user(
+    """
+    The ID of the user to find.
+    """
+    id: Int!
+  ): User!
+
+  """
+  Finds a UserConProfile by ID in the convention associated with the domain name of this HTTP
+  request.  If there is no UserConProfile with that ID, or the UserConProfile is associated
+  with a different convention, errors out.
+  """
+  userConProfile(
+    """
+    The ID of the UserConProfile to find.
+    """
+    id: Int!
+  ): UserConProfile!
+
+  """
+  Finds up to 25 users by ID.  If any of the IDs don't match an existing user, errors out.
+  """
+  users(
+    """
+    The IDs of the users to find.
+    """
+    ids: [Int!]!
+  ): [User!]!
+
+  """
+  Returns a paginated list of users.  See PaginationInterface for details on how to use
+  paginated lists, and UserFiltersInput for filters you can use here.
+  """
   users_paginated(
     """
     Filters to restrict what items will appear in the result set.

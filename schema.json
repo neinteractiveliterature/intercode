@@ -22492,7 +22492,7 @@
           "fields": [
             {
               "name": "accountFormContentHtml",
-              "description": null,
+              "description": "If there is a CMS partial on the root site called `account_form_text`, renders it to HTML\nand returns the result.  Otherwise, returns null.\n\nThis is used by the \"update your account\" pages as a way to clarify that your account is\nshared between multiple conventions.\n",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -22520,7 +22520,7 @@
             },
             {
               "name": "assumedIdentityFromProfile",
-              "description": null,
+              "description": "If the current user is an assumed identity (using the \"become user\" feature), this returns\nthe actual profile of the signed-in account.  If not, returns null.\n",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -22613,7 +22613,7 @@
             },
             {
               "name": "cmsGraphqlQueries",
-              "description": null,
+              "description": "Returns all CMS GraphQL queries within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22637,7 +22637,7 @@
             },
             {
               "name": "cmsLayouts",
-              "description": null,
+              "description": "Returns all CMS layouts within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22661,7 +22661,7 @@
             },
             {
               "name": "cmsNavigationItems",
-              "description": null,
+              "description": "Returns all CMS navigation items within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22778,7 +22778,7 @@
             },
             {
               "name": "cmsPartials",
-              "description": null,
+              "description": "Returns all CMS partials within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22802,7 +22802,7 @@
             },
             {
               "name": "cmsVariables",
-              "description": null,
+              "description": "Returns all CMS variables within the current domain.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22968,7 +22968,7 @@
             },
             {
               "name": "currentAbility",
-              "description": null,
+              "description": "Returns the ability object for the current user's permissions, or an ability object for an\nanonymous user if no user is currently signed in.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -22984,7 +22984,7 @@
             },
             {
               "name": "currentPendingOrder",
-              "description": null,
+              "description": "If there is a signed-in user and they have a pending store order open in the convention\nassociated with the domain name of this HTTP request, returns that order.  Otherwise, returns\nnull.\n",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -22996,7 +22996,7 @@
             },
             {
               "name": "currentPendingOrderPaymentIntentClientSecret",
-              "description": null,
+              "description": "If there is a signed-in user and they have a pending store order open in the convention\nassociated with the domain name of this HTTP request, this generates a Stripe PaymentIntent\nfor that order and returns the client secret from that PaymentIntent.  This can be used to\nstart a payment on the client side, for example using Apple Pay or Google Pay.\n\nIf there is no signed-in user, this query will error out.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23024,11 +23024,11 @@
             },
             {
               "name": "effectiveCmsLayout",
-              "description": null,
+              "description": "Returns the CMS layout to be used for a particular URL path within the current domain.  (This\nwill be the page-specific layout if the URL corresponds to a page with a layout override, or\nthe default layout for the domain otherwise.)\n",
               "args": [
                 {
                   "name": "path",
-                  "description": null,
+                  "description": "The path to find the effective layout for.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23269,11 +23269,11 @@
             },
             {
               "name": "form",
-              "description": null,
+              "description": "Finds a form by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no form with that ID, or the form is associated\nwith a different convention, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the form to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23302,7 +23302,7 @@
             },
             {
               "name": "liquidAssigns",
-              "description": null,
+              "description": "Returns all the Liquid assigns for regular CMS page rendering in the current domain name.\nThis is a combination of globally-accessible Liquid assigns and domain-specific user-defined\nCMS variables.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23386,11 +23386,11 @@
             },
             {
               "name": "notifierLiquidAssigns",
-              "description": null,
+              "description": "Returns all the Liquid assigns for rendering a particular notification event in the current\ndomain name.   This is a combination of globally-accessible Liquid assigns, values specific\nto that notification event, and domain-specific user-defined CMS variables.\n",
               "args": [
                 {
                   "name": "eventKey",
-                  "description": null,
+                  "description": "The key of the notification event to use for generating assigns.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23427,11 +23427,11 @@
             },
             {
               "name": "oauthPreAuth",
-              "description": null,
+              "description": "Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a\nJSON object containing the necessary data for rendering the pre-authorization screen that\nchecks if you want to allow an application to access Intercode on your behalf.\n\nThis essentially emulates the JSON behavior of\n[Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper)'s API-only mode if you go to\n`/oauth/authorize` with query parameters.  The only reason this query exists, rather than\nsimply having clients actually call `/oauth/authorize`, is that we're running Doorkeeper\nin regular mode so that we can get the server-rendered HTML admin views.\n\nWhen we've implemented our own admin screens for OAuth\n(see [this Github issue](https://github.com/neinteractiveliterature/intercode/issues/2740)),\nthis query will be deprecated.\n",
               "args": [
                 {
                   "name": "queryParams",
-                  "description": null,
+                  "description": "A set of HTTP query parameters for `/oauth/authorize`, parsed out and\nrepresented as a JSON object.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23460,7 +23460,7 @@
             },
             {
               "name": "organizations",
-              "description": null,
+              "description": "Returns all organizations in the database.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23484,11 +23484,11 @@
             },
             {
               "name": "previewFormItem",
-              "description": null,
+              "description": "Given a form section ID and a FormItemInput, returns a preview version of that form item\nwithin that section.  This does not actually save the form item.  This is mostly useful\nbecause of the `rendered_properties` field inside FormItem, which lets clients retrieve\na rendered HTML version of the Liquid-enabled properties of the form item.\n",
               "args": [
                 {
                   "name": "formSectionId",
-                  "description": null,
+                  "description": "The ID of the form section to preview the item in.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23504,7 +23504,7 @@
                 },
                 {
                   "name": "formItem",
-                  "description": null,
+                  "description": "The fields to use for constructing the form item to preview.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23533,11 +23533,11 @@
             },
             {
               "name": "previewLiquid",
-              "description": null,
+              "description": "Given a Liquid text string, renders it to HTML using the current domain's CMS context\nand returns the result.\n",
               "args": [
                 {
                   "name": "content",
-                  "description": null,
+                  "description": "The Liquid content to render.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23566,11 +23566,11 @@
             },
             {
               "name": "previewMarkdown",
-              "description": null,
+              "description": "Given a Markdown text string, renders it to HTML using the current domain's CMS context\nand returns the result.\n",
               "args": [
                 {
                   "name": "markdown",
-                  "description": null,
+                  "description": "The Markdown content to render.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23599,11 +23599,11 @@
             },
             {
               "name": "previewNotifierLiquid",
-              "description": null,
+              "description": "Given a Liquid text string and a notification event, renders the Liquid to HTML using the\ncurrent domain's CMS context as if it were the content for that notification type.\n",
               "args": [
                 {
                   "name": "eventKey",
-                  "description": null,
+                  "description": "The key of the notification event to use for generating the preview.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23619,7 +23619,7 @@
                 },
                 {
                   "name": "content",
-                  "description": null,
+                  "description": "The Liquid content to render.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23648,11 +23648,11 @@
             },
             {
               "name": "product",
-              "description": null,
+              "description": "Finds a product by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no product with that ID, or the product is associated\nwith a different convention, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the product to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23681,7 +23681,7 @@
             },
             {
               "name": "rootSite",
-              "description": null,
+              "description": "Returns the singleton RootSite object, which is a CMS parent.\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -23791,11 +23791,11 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "Finds a signup by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no signup with that ID, or the signup is associated\nwith a different convention, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the signup to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23824,11 +23824,11 @@
             },
             {
               "name": "siteSearch",
-              "description": null,
+              "description": "Does a full-text search on the convention associated with the domain name of this HTTP\nrequest.\n",
               "args": [
                 {
                   "name": "query",
-                  "description": null,
+                  "description": "The text to search for.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23857,11 +23857,11 @@
             },
             {
               "name": "staffPosition",
-              "description": null,
+              "description": "Finds a staff position by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no staff position with that ID, or the staff position is associated\nwith a different convention, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the staff position to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23890,11 +23890,11 @@
             },
             {
               "name": "user",
-              "description": null,
+              "description": "Finds a user by ID.  If there is no user with that ID, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the user to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23923,11 +23923,11 @@
             },
             {
               "name": "userConProfile",
-              "description": null,
+              "description": "Finds a UserConProfile by ID in the convention associated with the domain name of this HTTP\nrequest.  If there is no UserConProfile with that ID, or the UserConProfile is associated\nwith a different convention, errors out.\n",
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the UserConProfile to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -23956,11 +23956,11 @@
             },
             {
               "name": "users",
-              "description": null,
+              "description": "Finds up to 25 users by ID.  If any of the IDs don't match an existing user, errors out.\n",
               "args": [
                 {
                   "name": "ids",
-                  "description": null,
+                  "description": "The IDs of the users to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -24005,7 +24005,7 @@
             },
             {
               "name": "users_paginated",
-              "description": null,
+              "description": "Returns a paginated list of users.  See PaginationInterface for details on how to use\npaginated lists, and UserFiltersInput for filters you can use here.\n",
               "args": [
                 {
                   "name": "page",

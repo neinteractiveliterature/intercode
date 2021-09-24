@@ -128,6 +128,9 @@ group :development do
   gem 'rubocop', '1.21.0'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
+
+  # Find missing `end` statements
+  gem 'dead_end'
 end
 
 group :development, :test do
