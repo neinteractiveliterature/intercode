@@ -169,6 +169,7 @@ GEM
     crass (1.0.6)
     dalli (2.7.11)
     dante (0.2.0)
+    dead_end (1.1.7)
     debug (1.1.0)
       irb
       reline (>= 0.2.7)
@@ -599,6 +600,7 @@ DEPENDENCIES
   carrierwave (~> 2.2.2)
   civil_service (~> 2.3.0)
   dalli
+  dead_end
   debug
   devise
   devise-doorkeeper

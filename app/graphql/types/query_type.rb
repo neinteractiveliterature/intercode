@@ -336,7 +336,11 @@ within the current domain (limited to 10 results)."
     cms_parent.pages.find_by!(slug: slug)
   end
 
-  field :cms_layouts, [Types::CmsLayoutType], null: false
+  field :cms_layouts, [Types::CmsLayoutType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS layouts within the current domain.
+    MARKDOWN
+  end
 
   def cms_layouts
     if context[:convention]
@@ -346,7 +350,11 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_partials, [Types::CmsPartialType], null: false
+  field :cms_partials, [Types::CmsPartialType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS partials within the current domain.
+    MARKDOWN
+  end
 
   def cms_partials
     if context[:convention]
@@ -356,7 +364,11 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_variables, [Types::CmsVariable], null: false
+  field :cms_variables, [Types::CmsVariable], null: false do
+    description <<~MARKDOWN
+      Returns all CMS variables within the current domain.
+    MARKDOWN
+  end
 
   def cms_variables
     if context[:convention]
@@ -366,7 +378,11 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_graphql_queries, [Types::CmsGraphqlQueryType], null: false
+  field :cms_graphql_queries, [Types::CmsGraphqlQueryType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS GraphQL queries within the current domain.
+    MARKDOWN
+  end
 
   def cms_graphql_queries
     if context[:convention]
@@ -376,7 +392,11 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_navigation_items, [Types::CmsNavigationItemType], null: false
+  field :cms_navigation_items, [Types::CmsNavigationItemType], null: false do
+    description <<~MARKDOWN
+      Returns all CMS navigation items within the current domain.
+    MARKDOWN
+  end
 
   def cms_navigation_items
     if context[:convention]
@@ -386,27 +406,54 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :current_ability, Types::AbilityType, null: false
-
-  field :effective_cms_layout, Types::CmsLayoutType, null: false do
-    argument :path, String, required: true
-  end
-
-  def effective_cms_layout(path:)
-    CmsContentFinder.new(context[:convention]).effective_cms_layout(path)
+  field :current_ability, Types::AbilityType, null: false do
+    description <<~MARKDOWN
+      Returns the ability object for the current user's permissions, or an ability object for an
+      anonymous user if no user is currently signed in.
+    MARKDOWN
   end
 
   def current_ability
     pundit_user
   end
 
-  field :assumed_identity_from_profile, Types::UserConProfileType, null: true
+  field :effective_cms_layout, Types::CmsLayoutType, null: false do
+    argument :path, String,
+      required: true,
+      description: 'The path to find the effective layout for.'
+
+    description <<~MARKDOWN
+      Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+      will be the page-specific layout if the URL corresponds to a page with a layout override, or
+      the default layout for the domain otherwise.)
+    MARKDOWN
+  end
+
+  def effective_cms_layout(path:)
+    CmsContentFinder.new(context[:convention]).effective_cms_layout(path)
+  end
+
+  field :assumed_identity_from_profile, Types::UserConProfileType, null: true do
+    description <<~MARKDOWN
+      If the current user is an assumed identity (using the "become user" feature), this returns
+      the actual profile of the signed-in account.  If not, returns null.
+    MARKDOWN
+  end
 
   def assumed_identity_from_profile
     context[:assumed_identity_from_profile]
   end
 
-  field :account_form_content_html, String, null: true
+  field :account_form_content_html, String, null: true do
+    description <<~MARKDOWN
+      If there is a CMS partial on the root site called `account_form_text`, renders it to HTML
+      and returns the result.  Otherwise, returns null.
+
+      This is used by the "update your account" pages as a way to clarify that your account is
+      shared between multiple conventions.
+    MARKDOWN
+  end
+
   def account_form_content_html
     partial = CmsPartial.global.find_by(name: 'account_form_text')
     return nil unless partial
@@ -414,7 +461,13 @@ within the current domain (limited to 10 results)."
   end
 
   field :user_con_profile, Types::UserConProfileType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the UserConProfile to find.'
+
+    description <<~MARKDOWN
+      Finds a UserConProfile by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no UserConProfile with that ID, or the UserConProfile is associated
+      with a different convention, errors out.
+    MARKDOWN
   end
 
   def user_con_profile(**args)
@@ -422,7 +475,13 @@ within the current domain (limited to 10 results)."
   end
 
   field :form, Types::FormType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the form to find.'
+
+    description <<~MARKDOWN
+      Finds a form by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no form with that ID, or the form is associated
+      with a different convention, errors out.
+    MARKDOWN
   end
 
   def form(**args)
@@ -430,21 +489,41 @@ within the current domain (limited to 10 results)."
   end
 
   field :staff_position, Types::StaffPositionType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the staff position to find.'
+
+    description <<~MARKDOWN
+      Finds a staff position by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no staff position with that ID, or the staff position is associated
+      with a different convention, errors out.
+    MARKDOWN
   end
 
   def staff_position(id:)
     convention.staff_positions.find(id)
   end
 
-  field :liquid_assigns, [Types::LiquidAssign], null: false
+  field :liquid_assigns, [Types::LiquidAssign], null: false do
+    description <<~MARKDOWN
+      Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+      This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+      CMS variables.
+    MARKDOWN
+  end
 
   def liquid_assigns
     LiquidAssignGraphqlPresenter.from_hash(context[:cadmus_renderer].default_assigns)
   end
 
   field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
-    argument :event_key, String, required: true
+    argument :event_key, String,
+      required: true,
+      description: 'The key of the notification event to use for generating assigns.'
+
+    description <<~MARKDOWN
+      Returns all the Liquid assigns for rendering a particular notification event in the current
+      domain name.   This is a combination of globally-accessible Liquid assigns, values specific
+      to that notification event, and domain-specific user-defined CMS variables.
+    MARKDOWN
   end
 
   def notifier_liquid_assigns(event_key:)
@@ -453,8 +532,19 @@ within the current domain (limited to 10 results)."
   end
 
   field :preview_form_item, Types::FormItemType, null: false do
-    argument :form_section_id, Int, required: true
-    argument :form_item, Types::FormItemInputType, required: true
+    argument :form_section_id, Int,
+      required: true,
+      description: 'The ID of the form section to preview the item in.'
+    argument :form_item, Types::FormItemInputType,
+      required: true,
+      description: 'The fields to use for constructing the form item to preview.'
+
+    description <<~MARKDOWN
+      Given a form section ID and a FormItemInput, returns a preview version of that form item
+      within that section.  This does not actually save the form item.  This is mostly useful
+      because of the `rendered_properties` field inside FormItem, which lets clients retrieve
+      a rendered HTML version of the Liquid-enabled properties of the form item.
+    MARKDOWN
   end
 
   def preview_form_item(form_section_id:, form_item:)
@@ -463,7 +553,12 @@ within the current domain (limited to 10 results)."
   end
 
   field :preview_markdown, String, null: false do
-    argument :markdown, String, required: true
+    argument :markdown, String, required: true, description: 'The Markdown content to render.'
+
+    description <<~MARKDOWN
+      Given a Markdown text string, renders it to HTML using the current domain's CMS context
+      and returns the result.
+    MARKDOWN
   end
 
   def preview_markdown(markdown:)
@@ -471,7 +566,12 @@ within the current domain (limited to 10 results)."
   end
 
   field :preview_liquid, String, null: false do
-    argument :content, String, required: true
+    argument :content, String, required: true, description: 'The Liquid content to render.'
+
+    description <<~MARKDOWN
+      Given a Liquid text string, renders it to HTML using the current domain's CMS context
+      and returns the result.
+    MARKDOWN
 
     authorize do |_value, _args, context|
       # TODO maybe better permission for this?  Not sure, but for now I'm using view_reports as a
@@ -490,8 +590,15 @@ within the current domain (limited to 10 results)."
   end
 
   field :preview_notifier_liquid, String, null: false do
-    argument :event_key, String, required: true
-    argument :content, String, required: true
+    argument :event_key, String,
+      required: true,
+      description: 'The key of the notification event to use for generating the preview.'
+    argument :content, String, required: true, description: 'The Liquid content to render.'
+
+    description <<~MARKDOWN
+      Given a Liquid text string and a notification event, renders the Liquid to HTML using the
+      current domain's CMS context as if it were the content for that notification type.
+    MARKDOWN
 
     authorize do |_value, _args, context|
       Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
@@ -506,7 +613,13 @@ within the current domain (limited to 10 results)."
   end
 
   field :product, Types::ProductType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the product to find.'
+
+    description <<~MARKDOWN
+      Finds a product by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no product with that ID, or the product is associated
+      with a different convention, errors out.
+    MARKDOWN
   end
 
   def product(id:)
@@ -514,7 +627,26 @@ within the current domain (limited to 10 results)."
   end
 
   field :oauth_pre_auth, Types::JSON, null: false do
-    argument :query_params, Types::JSON, required: true
+    argument :query_params, Types::JSON,
+      required: true,
+      description: "A set of HTTP query parameters for `/oauth/authorize`, parsed out and
+represented as a JSON object."
+
+    description <<~MARKDOWN
+      Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
+      JSON object containing the necessary data for rendering the pre-authorization screen that
+      checks if you want to allow an application to access Intercode on your behalf.
+
+      This essentially emulates the JSON behavior of
+      [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper)'s API-only mode if you go to
+      `/oauth/authorize` with query parameters.  The only reason this query exists, rather than
+      simply having clients actually call `/oauth/authorize`, is that we're running Doorkeeper
+      in regular mode so that we can get the server-rendered HTML admin views.
+
+      When we've implemented our own admin screens for OAuth
+      (see [this Github issue](https://github.com/neinteractiveliterature/intercode/issues/2740)),
+      this query will be deprecated.
+    MARKDOWN
   end
 
   def oauth_pre_auth(query_params:)
@@ -526,13 +658,28 @@ within the current domain (limited to 10 results)."
     pre_auth.as_json({})
   end
 
-  field :current_pending_order, Types::OrderType, null: true
+  field :current_pending_order, Types::OrderType, null: true do
+    description <<~MARKDOWN
+      If there is a signed-in user and they have a pending store order open in the convention
+      associated with the domain name of this HTTP request, returns that order.  Otherwise, returns
+      null.
+    MARKDOWN
+  end
 
   def current_pending_order
     context[:current_pending_order]
   end
 
-  field :current_pending_order_payment_intent_client_secret, String, null: false
+  field :current_pending_order_payment_intent_client_secret, String, null: false do
+    description <<~MARKDOWN
+      If there is a signed-in user and they have a pending store order open in the convention
+      associated with the domain name of this HTTP request, this generates a Stripe PaymentIntent
+      for that order and returns the client secret from that PaymentIntent.  This can be used to
+      start a payment on the client side, for example using Apple Pay or Google Pay.
+
+      If there is no signed-in user, this query will error out.
+    MARKDOWN
+  end
 
   def current_pending_order_payment_intent_client_secret
     description = current_pending_order.order_entries.map(&:describe_products).to_sentence
@@ -550,20 +697,33 @@ within the current domain (limited to 10 results)."
     intent.client_secret
   end
 
-  field :organizations, [Types::OrganizationType], null: false
+  field :organizations, [Types::OrganizationType], null: false do
+    description <<~MARKDOWN
+      Returns all organizations in the database.
+    MARKDOWN
+  end
 
   def organizations
     policy_scope(Organization.all)
   end
 
-  field :root_site, Types::RootSiteType, null: false
+  field :root_site, Types::RootSiteType, null: false do
+    description <<~MARKDOWN
+      Returns the singleton RootSite object, which is a CMS parent.
+    MARKDOWN
+  end
 
   def root_site
     RootSite.instance
   end
 
   field :site_search, Types::SearchResultType, null: false do
-    argument :query, String, required: true
+    argument :query, String, required: true, description: 'The text to search for.'
+
+    description <<~MARKDOWN
+      Does a full-text search on the convention associated with the domain name of this HTTP
+      request.
+    MARKDOWN
   end
 
   def site_search(query:)
@@ -571,7 +731,13 @@ within the current domain (limited to 10 results)."
   end
 
   field :signup, Types::SignupType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the signup to find.'
+
+    description <<~MARKDOWN
+      Finds a signup by ID in the convention associated with the domain name of this HTTP
+      request.  If there is no signup with that ID, or the signup is associated
+      with a different convention, errors out.
+    MARKDOWN
   end
 
   def signup(**args)
@@ -579,7 +745,12 @@ within the current domain (limited to 10 results)."
   end
 
   pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType,
-    camelize: false
+    camelize: false do
+    description <<~MARKDOWN
+      Returns a paginated list of users.  See PaginationInterface for details on how to use
+      paginated lists, and UserFiltersInput for filters you can use here.
+    MARKDOWN
+  end
 
   def users_paginated(**args)
     Tables::UsersTableResultsPresenter.new(
@@ -590,7 +761,11 @@ within the current domain (limited to 10 results)."
   end
 
   field :user, Types::UserType, null: false do
-    argument :id, Integer, required: true
+    argument :id, Integer, required: true, description: 'The ID of the user to find.'
+
+    description <<~MARKDOWN
+      Finds a user by ID.  If there is no user with that ID, errors out.
+    MARKDOWN
   end
 
   def user(id:)
@@ -598,10 +773,18 @@ within the current domain (limited to 10 results)."
   end
 
   field :users, [Types::UserType], null: false do
-    argument :ids, [Integer], required: true
+    argument :ids, [Integer], required: true, description: 'The IDs of the users to find.'
+
+    description <<~MARKDOWN
+      Finds up to 25 users by ID.  If any of the IDs don't match an existing user, errors out.
+    MARKDOWN
   end
 
   def users(ids:)
+    if ids.size > 25
+      raise GraphQL::ExecutionError, "Can't retrieve more than 25 users in a single query"
+    end
+
     User.find(ids)
   end
 end
