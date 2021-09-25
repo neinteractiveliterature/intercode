@@ -5,7 +5,7 @@ import ColumnSelector from './ColumnSelector';
 import ExportButton from './ExportButton';
 import { UseColumnSelectionResult } from './useColumnSelection';
 
-export type TableHeaderProps<RowType extends object> = {
+export type TableHeaderProps<RowType extends Record<string, undefined>> = {
   columnSelectionProps: UseColumnSelectionResult<RowType>;
   exportButton?: ReactNode;
   exportUrl?: string;
@@ -15,7 +15,7 @@ export type TableHeaderProps<RowType extends object> = {
   sortBy: SortingRule<RowType>[];
 };
 
-function TableHeader<RowType extends object>({
+function TableHeader<RowType extends Record<string, undefined>>({
   columnSelectionProps,
   exportButton,
   exportUrl,
@@ -23,7 +23,7 @@ function TableHeader<RowType extends object>({
   renderLeftContent,
   renderRightContent,
   sortBy,
-}: TableHeaderProps<RowType>) {
+}: TableHeaderProps<RowType>): JSX.Element {
   return (
     <div className="d-flex mb-2">
       <div className="flex-grow-1">

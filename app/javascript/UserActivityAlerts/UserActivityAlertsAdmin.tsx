@@ -7,7 +7,7 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-const UserActivityAlertsAdmin = () => {
+function UserActivityAlertsAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_user_activity_alerts');
   if (authorizationWarning) return authorizationWarning;
 
@@ -46,6 +46,6 @@ const UserActivityAlertsAdmin = () => {
       </Switch>
     </>
   );
-};
+}
 
 export default UserActivityAlertsAdmin;

@@ -31,7 +31,7 @@ function AddOrderToTicketButton({
   userConProfile,
   convention,
   className,
-}: AddOrderToTicketButtonProps) {
+}: AddOrderToTicketButtonProps): JSX.Element {
   const newOrderModal = useModal();
   const { myProfile } = useContext(AppRootContext);
 
@@ -45,7 +45,7 @@ function AddOrderToTicketButton({
   }, [ticket, convention]);
 
   if (!providingProduct) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -68,7 +68,7 @@ function AddOrderToTicketButton({
             fractional: 0,
           },
           status: OrderStatus.Paid,
-          payment_note: `Entered manually by ${myProfile!.name_without_nickname}`,
+          payment_note: `Entered manually by ${myProfile?.name_without_nickname}`,
           coupon_applications: [],
           order_entries: [
             {

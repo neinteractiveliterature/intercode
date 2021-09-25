@@ -59,7 +59,12 @@ export default LoadQueryWrapper(
               if (addValue.staff_position) {
                 return { staff_position_id: addValue.staff_position.id };
               }
-              return { user_con_profile_id: addValue.user_con_profile!.id };
+              if (addValue.user_con_profile) {
+                return { user_con_profile_id: addValue.user_con_profile.id };
+              }
+              throw new Error(
+                'Notification destination must have either a staff position or user con profile',
+              );
             }),
           removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
         },

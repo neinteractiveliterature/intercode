@@ -66,13 +66,12 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
   );
 }
 
-type ScheduledValuePreviewDateCellProps<
-  ValueType
-> = ScheduledValuePreviewTooltipContentProps<ValueType> & {
-  focusDate: (date: DateTime) => void;
-  blurDate: (date: DateTime) => void;
-  dateElementMapRef: RefObject<Map<number, HTMLElement>>;
-};
+type ScheduledValuePreviewDateCellProps<ValueType> =
+  ScheduledValuePreviewTooltipContentProps<ValueType> & {
+    focusDate: (date: DateTime) => void;
+    blurDate: (date: DateTime) => void;
+    dateElementMapRef: RefObject<Map<number, HTMLElement>>;
+  };
 
 function ScheduledValuePreviewDateCell<ValueType>({
   date,
@@ -242,7 +241,7 @@ function ScheduledValuePreview<ValueType>({
   getClassNameForValue,
   getDescriptionForValue,
   timezoneName,
-}: ScheduledValuePreviewProps<ValueType>) {
+}: ScheduledValuePreviewProps<ValueType>): JSX.Element {
   const [focusedDate, setFocusedDate] = useState<DateTime>();
   const [tooltip, setTooltip] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLDivElement | null>(null);

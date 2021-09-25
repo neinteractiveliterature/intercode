@@ -24,7 +24,7 @@ export function DropdownMenu({
   dropdownStyle,
   popperOptions,
   shouldAutoCloseOnNavigate,
-}: DropdownMenuProps) {
+}: DropdownMenuProps): JSX.Element {
   const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);

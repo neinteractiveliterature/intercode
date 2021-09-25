@@ -38,7 +38,7 @@ function UserActivityAlertForm({
   onRemoveNotificationDestination,
   convention,
   disabled,
-}: UserActivityAlertFormProps) {
+}: UserActivityAlertFormProps): JSX.Element {
   const userSelectId = useUniqueId('user-');
   const confirm = useConfirm();
   const [addDestinationType, setAddDestinationType] = useState<string | null>(null);
