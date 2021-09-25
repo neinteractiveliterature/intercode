@@ -10,7 +10,7 @@ export type ConventionForTimespanUtils = Pick<
   'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'
 >;
 
-export function timespanFromConvention(convention: ConventionForTimespanUtils) {
+export function timespanFromConvention(convention: ConventionForTimespanUtils): Timespan {
   return Timespan.fromStrings(convention.starts_at, convention.ends_at).tz(
     timezoneNameForConvention(convention),
   );
@@ -20,7 +20,7 @@ export function timespanFromRun(
   timezoneName: string,
   event: Pick<Event, 'length_seconds'>,
   run: Pick<Run, 'starts_at'>,
-) {
+): FiniteTimespan {
   const start = DateTime.fromISO(run.starts_at).setZone(timezoneName);
   const finish = start.plus({ seconds: event.length_seconds });
 
@@ -30,14 +30,14 @@ export function timespanFromRun(
 export function getConventionDayTimespans(
   conventionTimespan: FiniteTimespan,
   timezoneName: string,
-) {
+): FiniteTimespan[] {
   return conventionTimespan.getTimespansWithin(timezoneName, {
     unit: 'day',
     offset: Duration.fromObject({ hours: 6 }), // start convention days at 6:00am
   });
 }
 
-export function getMemoizationKeyForTimespan(timespan?: Timespan) {
+export function getMemoizationKeyForTimespan(timespan?: Timespan): string {
   if (!timespan) {
     return '';
   }
@@ -52,7 +52,7 @@ export function describeInterval(
   timespan: Timespan,
   formatDateTime: (dateTime: DateTime) => string,
   timeZone: string,
-) {
+): string {
   const start = timespan.start ? formatDateTime(timespan.start.setZone(timeZone)) : 'anytime';
 
   const finish = timespan.finish

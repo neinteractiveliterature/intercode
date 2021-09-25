@@ -1,15 +1,17 @@
 import { useCallback, useMemo } from 'react';
 import get from 'lodash/fp/get';
 import set from 'lodash/fp/set';
-// eslint-disable-next-line no-restricted-imports
-import { useMutation, MutationHookOptions, ApolloCache, OperationVariables } from '@apollo/client';
+import {
+  // eslint-disable-next-line no-restricted-imports
+  useMutation,
+  MutationHookOptions,
+  ApolloCache,
+  OperationVariables,
+  MutationTuple,
+} from '@apollo/client';
 import { DocumentNode, ExecutionResult } from 'graphql';
 
-export function createUpdater<
-  QueryType extends object,
-  TVariables extends OperationVariables,
-  TData
->({
+export function createUpdater<QueryType, TVariables extends OperationVariables, TData>({
   query,
   variables,
   arrayPath,
@@ -20,7 +22,7 @@ export function createUpdater<
   arrayPath: string[];
   newObjectPath: string[];
 }) {
-  return (store: ApolloCache<any>, result: ExecutionResult<TData>) => {
+  return (store: ApolloCache<unknown>, result: ExecutionResult<TData>): void => {
     const newObject = get(['data', ...newObjectPath], result);
     if (newObject == null) {
       throw new Error(
@@ -38,12 +40,13 @@ export function createUpdater<
     store.writeQuery({
       query,
       variables,
-      data: set(arrayPath, [...existingObjects, newObject], data),
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      data: set(arrayPath, [...existingObjects, newObject], data as unknown as object),
     });
   };
 }
 
-export function deleteUpdater<QueryType extends object, TVariables extends OperationVariables>({
+export function deleteUpdater<QueryType, TVariables extends OperationVariables>({
   query,
   queryVariables,
   arrayPath,
@@ -54,9 +57,9 @@ export function deleteUpdater<QueryType extends object, TVariables extends Opera
   queryVariables?: TVariables;
   arrayPath: string[];
   idAttribute?: string;
-  id: any;
+  id: unknown;
 }) {
-  return (store: ApolloCache<any>) => {
+  return (store: ApolloCache<unknown>): void => {
     const data = store.readQuery<QueryType, TVariables>({ query, variables: queryVariables });
     if (data == null) {
       return;
@@ -67,18 +70,20 @@ export function deleteUpdater<QueryType extends object, TVariables extends Opera
       variables: queryVariables,
       data: set(
         arrayPath,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         get(arrayPath, data).filter((object: any) => object[idAttribute ?? 'id'] !== id),
-        data,
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        data as unknown as object,
       ),
     });
   };
 }
 
 export function useCreateMutation<
-  QueryType extends object,
+  QueryType,
   QueryVariables extends OperationVariables,
   TVariables extends OperationVariables,
-  TData
+  TData,
 >(
   mutation: DocumentNode,
   {
@@ -93,7 +98,7 @@ export function useCreateMutation<
     arrayPath: string[];
     newObjectPath: string[];
   },
-) {
+): MutationTuple<TData, TVariables>[0] {
   const update = useMemo(
     () =>
       createUpdater<QueryType, QueryVariables, TData>({
@@ -125,7 +130,7 @@ export function useDeleteMutation<TVariables extends OperationVariables, TData>(
     idAttribute?: string;
     queryVariables?: OperationVariables;
   },
-) {
+): MutationTuple<TData, TVariables>[0] {
   const [mutate] = useMutation(mutation, { variables, ...options });
   return useCallback(
     (mutateOptions) => {

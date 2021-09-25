@@ -6,12 +6,12 @@ export type SingleLineTimestampCellProps = {
   value: string;
 };
 
-export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps) {
+export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps): JSX.Element {
   const timestamp = useISODateTimeInAppZone(value);
   const format = useAppDateTimeFormat();
 
   if (!timestamp.isValid) {
-    return null;
+    return <></>;
   }
 
   return <>{format(timestamp, 'compactDateTime')}</>;
@@ -21,12 +21,12 @@ export type TimestampCellProps = {
   value: string;
 };
 
-function TimestampCell({ value }: TimestampCellProps) {
+function TimestampCell({ value }: TimestampCellProps): JSX.Element {
   const timestamp = useISODateTimeInAppZone(value);
   const format = useAppDateTimeFormat();
 
   if (!timestamp.isValid) {
-    return null;
+    return <></>;
   }
 
   return (

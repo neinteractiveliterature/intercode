@@ -15,7 +15,7 @@ export type NewTicketTypeProps = {
   ticketName: string;
 };
 
-function NewTicketType({ ticketName }: NewTicketTypeProps) {
+function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
   const history = useHistory();
   usePageTitle(`New ${ticketName} type`);
 

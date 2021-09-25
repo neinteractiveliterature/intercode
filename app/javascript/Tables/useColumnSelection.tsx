@@ -4,13 +4,13 @@ import uniq from 'lodash/uniq';
 import { useHistory, useLocation } from 'react-router-dom';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
-export type UseColumnSelectionOptions<RowType extends object> = {
+export type UseColumnSelectionOptions<RowType extends Record<string, undefined>> = {
   alwaysVisibleColumns?: string[];
   defaultVisibleColumns?: string[];
   possibleColumns: Column<RowType>[];
 };
 
-export type UseColumnSelectionResult<RowType extends object> = {
+export type UseColumnSelectionResult<RowType extends Record<string, undefined>> = {
   alwaysVisibleColumns: string[];
   possibleColumns: Column<RowType>[];
   visibleColumnIds: string[];
@@ -18,7 +18,7 @@ export type UseColumnSelectionResult<RowType extends object> = {
   setVisibleColumnIds: React.Dispatch<string[]>;
 };
 
-export default function useColumnSelection<RowType extends object>({
+export default function useColumnSelection<RowType extends Record<string, undefined>>({
   alwaysVisibleColumns,
   defaultVisibleColumns,
   possibleColumns,

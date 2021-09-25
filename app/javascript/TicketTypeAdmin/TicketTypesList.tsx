@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-// @ts-expect-error
+// @ts-expect-error Inflected types don't include the capitalize function
 import { capitalize } from 'inflected';
 import { LoadQueryWrapper, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 

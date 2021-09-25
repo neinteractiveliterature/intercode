@@ -78,11 +78,13 @@ function renderAlertNotificationDestinations(
       );
     }
 
-    return (
-      <li key={`user_con_profile_${destination.user_con_profile!.id}`}>
-        {destination.user_con_profile!.name_without_nickname}
-      </li>
-    );
+    if (destination.user_con_profile) {
+      return (
+        <li key={`user_con_profile_${destination.user_con_profile.id}`}>
+          {destination.user_con_profile.name_without_nickname}
+        </li>
+      );
+    }
   });
 
   return renderCriteriaList(destinations, 'No destinations');

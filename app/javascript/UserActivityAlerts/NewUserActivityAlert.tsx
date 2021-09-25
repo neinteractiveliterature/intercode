@@ -11,7 +11,16 @@ import UserActivityAlertForm from './UserActivityAlertForm';
 import { useCreateMutation } from '../MutationUtils';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { useConventionTicketNameQuery, UserActivityAlertQueryData } from './queries.generated';
+import {
+  useConventionTicketNameQuery,
+  UserActivityAlertQueryData,
+  UserActivityAlertsAdminQueryData,
+  UserActivityAlertsAdminQueryVariables,
+} from './queries.generated';
+import {
+  CreateUserActivityAlertMutationData,
+  CreateUserActivityAlertMutationVariables,
+} from './mutations.generated';
 
 export default LoadQueryWrapper(
   useConventionTicketNameQuery,
@@ -35,11 +44,17 @@ export default LoadQueryWrapper(
       notificationDestinationChangeSet,
       addNotificationDestination,
       removeNotificationDestination,
-    ] = useChangeSet<
-      UserActivityAlertQueryData['convention']['user_activity_alert']['notification_destinations'][number]
-    >();
+    ] =
+      useChangeSet<
+        UserActivityAlertQueryData['convention']['user_activity_alert']['notification_destinations'][number]
+      >();
     const [create, createError, createInProgress] = useAsyncFunction(
-      useCreateMutation(CreateUserActivityAlert, {
+      useCreateMutation<
+        UserActivityAlertsAdminQueryData,
+        UserActivityAlertsAdminQueryVariables,
+        CreateUserActivityAlertMutationVariables,
+        CreateUserActivityAlertMutationData
+      >(CreateUserActivityAlert, {
         query: UserActivityAlertsAdminQuery,
         arrayPath: ['convention', 'user_activity_alerts'],
         newObjectPath: ['createUserActivityAlert', 'user_activity_alert'],
@@ -65,7 +80,12 @@ export default LoadQueryWrapper(
               if (addValue.staff_position) {
                 return { staff_position_id: addValue.staff_position.id };
               }
-              return { user_con_profile_id: addValue.user_con_profile!.id };
+              if (addValue.user_con_profile) {
+                return { user_con_profile_id: addValue.user_con_profile.id };
+              }
+              throw new Error(
+                'Notification destination must have either a staff position or user con profile',
+              );
             }),
         },
       });
