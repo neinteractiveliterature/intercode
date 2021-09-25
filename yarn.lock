@@ -8412,6 +8412,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"colorette@npm:^2.0.10":
+  version: 2.0.10
+  resolution: "colorette@npm:2.0.10"
+  checksum: a8d6b709b0e1e5fd42eb91622729521d72cfbb10577b396f7499ea134d7c7be15ec006e3a64d5d9aca19ad2715a31e1e2b743ac8a9c02b687e8ba59d91de9666
+  languageName: node
+  linkType: hard
+
 "colors@npm:1.0.x":
   version: 1.0.3
   resolution: "colors@npm:1.0.3"
@@ -16826,13 +16833,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"nanocolors@npm:^0.2.1":
-  version: 0.2.2
-  resolution: "nanocolors@npm:0.2.2"
-  checksum: 87392fa827d033847d08d5b6ef47aceb165856a100dd079de6cc7b749ca5ed5d237e8609b2e64b64f7933aee497f73ccc2930dcefe1cbcb70a253418423d936e
-  languageName: node
-  linkType: hard
-
 "nanocolors@npm:^0.2.2":
   version: 0.2.3
   resolution: "nanocolors@npm:0.2.3"
@@ -20972,7 +20972,7 @@ resolve@^2.0.0-next.3:
     webpack-assets-manifest: 5.0.6
     webpack-bundle-analyzer: 4.4.2
     webpack-cli: 4.8.0
-    webpack-dev-middleware: 5.2.0
+    webpack-dev-middleware: 5.2.1
     webpack-dev-server: 4.2.1
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
@@ -24133,18 +24133,18 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:5.2.0":
-  version: 5.2.0
-  resolution: "webpack-dev-middleware@npm:5.2.0"
+"webpack-dev-middleware@npm:5.2.1":
+  version: 5.2.1
+  resolution: "webpack-dev-middleware@npm:5.2.1"
   dependencies:
+    colorette: ^2.0.10
     memfs: ^3.2.2
     mime-types: ^2.1.31
-    nanocolors: ^0.2.1
     range-parser: ^1.2.1
     schema-utils: ^3.1.0
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
-  checksum: 418a57041e40570a99bee59dfd9bc889aa19a65017c5052f3d41245f52447d69db2ce8fadf4af1927f25df06aa847dde47b7a71dcedcece6f488489ea1ab4e56
+  checksum: 06f3ef14ec983d115d7109f37312fc691c867c95fe7579784c7b80db0a2be77392fa27de444d0a937546da68c7e99640c13df73dc1351bbed7ebab4cc5569f14
   languageName: node
   linkType: hard
 
