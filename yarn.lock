@@ -16826,6 +16826,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"nanocolors@npm:^0.2.1":
+  version: 0.2.2
+  resolution: "nanocolors@npm:0.2.2"
+  checksum: 87392fa827d033847d08d5b6ef47aceb165856a100dd079de6cc7b749ca5ed5d237e8609b2e64b64f7933aee497f73ccc2930dcefe1cbcb70a253418423d936e
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.1.23":
   version: 3.1.23
   resolution: "nanoid@npm:3.1.23"
@@ -20958,7 +20965,7 @@ resolve@^2.0.0-next.3:
     webpack-assets-manifest: 5.0.6
     webpack-bundle-analyzer: 4.4.2
     webpack-cli: 4.8.0
-    webpack-dev-middleware: 5.1.0
+    webpack-dev-middleware: 5.2.0
     webpack-dev-server: 4.2.1
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
@@ -24119,18 +24126,18 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:5.1.0, webpack-dev-middleware@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "webpack-dev-middleware@npm:5.1.0"
+"webpack-dev-middleware@npm:5.2.0":
+  version: 5.2.0
+  resolution: "webpack-dev-middleware@npm:5.2.0"
   dependencies:
-    colorette: ^1.2.2
     memfs: ^3.2.2
     mime-types: ^2.1.31
+    nanocolors: ^0.2.1
     range-parser: ^1.2.1
     schema-utils: ^3.1.0
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
-  checksum: 5893f20eae99fd32da8e038b305d3001f095aedc1bbafd48e4939bdcdf2099495e575874c8c9c39a8f4a79744e9f84dfbe106af836fd2920ea315ebf77cb75d5
+  checksum: 418a57041e40570a99bee59dfd9bc889aa19a65017c5052f3d41245f52447d69db2ce8fadf4af1927f25df06aa847dde47b7a71dcedcece6f488489ea1ab4e56
   languageName: node
   linkType: hard
 
@@ -24146,6 +24153,21 @@ resolve@^2.0.0-next.3:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: faa3cdd7b82d23c35b8f45903556eadd92b0795c76f3e08e234d53f7bab3de13331096a71968e7e9905770ae5de7a4f75ddf09f66d1e0bbabfecbb30db0f71e3
+  languageName: node
+  linkType: hard
+
+"webpack-dev-middleware@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "webpack-dev-middleware@npm:5.1.0"
+  dependencies:
+    colorette: ^1.2.2
+    memfs: ^3.2.2
+    mime-types: ^2.1.31
+    range-parser: ^1.2.1
+    schema-utils: ^3.1.0
+  peerDependencies:
+    webpack: ^4.0.0 || ^5.0.0
+  checksum: 5893f20eae99fd32da8e038b305d3001f095aedc1bbafd48e4939bdcdf2099495e575874c8c9c39a8f4a79744e9f84dfbe106af836fd2920ea315ebf77cb75d5
   languageName: node
   linkType: hard
 
