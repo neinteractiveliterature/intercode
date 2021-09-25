@@ -250,6 +250,160 @@ input CmsNavigationItemInput {
 
 union CmsParent = Convention | RootSite
 
+"""
+A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+
+Most CMS parents are conventions, so their content will be convention-specific and scoped to
+that convention's domain name.  The exception to this is the root site, which is what Intercode
+renders when there is no convention associated with the current domain name.  (See the RootSite
+object for more details about this.)
+"""
+interface CmsParentInterface {
+  """
+  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  CMS content group with that ID, or the CMS content group is associated with a different
+  domain name, errors out.
+  """
+  cmsContentGroup(
+    """
+    The ID of the CMS content group to find.
+    """
+    id: Int!
+  ): CmsContentGroup!
+
+  """
+  Returns all CMS content groups within the current domain.
+  """
+  cmsContentGroups: [CmsContentGroup!]!
+
+  """
+  Returns all CMS files within the current domain.
+  """
+  cmsFiles: [CmsFile!]!
+
+  """
+  Returns all CMS GraphQL queries within the current domain.
+  """
+  cmsGraphqlQueries: [CmsGraphqlQuery!]!
+
+  """
+  Returns all CMS layouts within the current domain.
+  """
+  cmsLayouts: [CmsLayout!]!
+
+  """
+  Returns all CMS navigation items within the current domain.
+  """
+  cmsNavigationItems: [CmsNavigationItem!]!
+
+  """
+  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+  different way of finding a page.  If the desired page can't be found within the current
+  domain name, errors out.
+  """
+  cmsPage(
+    """
+    The ID of the page to find.
+    """
+    id: Int
+
+    """
+    If true, returns the root page for this domain.
+    """
+    rootPage: Boolean
+
+    """
+    The unique slug of the page to find.
+    """
+    slug: String
+  ): Page!
+
+  """
+  Returns all CMS pages within the current domain.
+  """
+  cmsPages: [Page!]!
+
+  """
+  Returns all CMS partials within the current domain.
+  """
+  cmsPartials: [CmsPartial!]!
+
+  """
+  Returns all CMS variables within the current domain.
+  """
+  cmsVariables: [CmsVariable!]!
+  defaultLayout: CmsLayout!
+  default_layout: CmsLayout! @deprecated(reason: "Use `defaultLayout` instead")
+
+  """
+  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  will be the page-specific layout if the URL corresponds to a page with a layout override, or
+  the default layout for the domain otherwise.)
+  """
+  effectiveCmsLayout(
+    """
+    The path to find the effective layout for.
+    """
+    path: String!
+  ): CmsLayout!
+
+  """
+  Does a full-text search within this domain.
+  """
+  fullTextSearch(
+    """
+    The text to search for.
+    """
+    query: String!
+  ): SearchResult!
+
+  """
+  Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+  This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+  CMS variables.
+  """
+  liquidAssigns: [LiquidAssign!]!
+
+  """
+  Given a Liquid text string, renders it to HTML and returns the result.
+  """
+  previewLiquid(
+    """
+    The Liquid content to render.
+    """
+    content: String!
+  ): String!
+
+  """
+  Given a Markdown text string, renders it to HTML and returns the result.
+  """
+  previewMarkdown(
+    """
+    The Markdown content to render.
+    """
+    markdown: String!
+  ): String!
+  rootPage: Page!
+  root_page: Page! @deprecated(reason: "Use `rootPage` instead")
+
+  """
+  Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+  For example, in a convention that has a partial called `attendee_profile` and a page called
+  `info_for_attendees`, a search for `attendee` would return both of these.
+
+  This query is always limited to a maximum of 10 results.
+  """
+  typeaheadSearchCmsContent(
+    """
+    The partial name to search by.  If not specified, returns all CMS content
+    within the current domain (limited to 10 results).
+    """
+    name: String
+  ): [CmsContent!]!
+}
+
 type CmsPartial {
   admin_notes: String
   content: String
@@ -285,13 +439,88 @@ type ContactEmail {
   name: String
 }
 
-type Convention {
+type Convention implements CmsParentInterface {
   accepting_proposals: Boolean
   bio_eligible_user_con_profiles: [UserConProfile!]!
   canceled: Boolean!
   catch_all_staff_position: StaffPosition
   clickwrap_agreement: String
   clickwrap_agreement_html: String
+
+  """
+  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  CMS content group with that ID, or the CMS content group is associated with a different
+  domain name, errors out.
+  """
+  cmsContentGroup(
+    """
+    The ID of the CMS content group to find.
+    """
+    id: Int!
+  ): CmsContentGroup!
+
+  """
+  Returns all CMS content groups within the current domain.
+  """
+  cmsContentGroups: [CmsContentGroup!]!
+
+  """
+  Returns all CMS files within the current domain.
+  """
+  cmsFiles: [CmsFile!]!
+
+  """
+  Returns all CMS GraphQL queries within the current domain.
+  """
+  cmsGraphqlQueries: [CmsGraphqlQuery!]!
+
+  """
+  Returns all CMS layouts within the current domain.
+  """
+  cmsLayouts: [CmsLayout!]!
+
+  """
+  Returns all CMS navigation items within the current domain.
+  """
+  cmsNavigationItems: [CmsNavigationItem!]!
+
+  """
+  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+  different way of finding a page.  If the desired page can't be found within the current
+  domain name, errors out.
+  """
+  cmsPage(
+    """
+    The ID of the page to find.
+    """
+    id: Int
+
+    """
+    If true, returns the root page for this domain.
+    """
+    rootPage: Boolean
+
+    """
+    The unique slug of the page to find.
+    """
+    slug: String
+  ): Page!
+
+  """
+  Returns all CMS pages within the current domain.
+  """
+  cmsPages: [Page!]!
+
+  """
+  Returns all CMS partials within the current domain.
+  """
+  cmsPartials: [CmsPartial!]!
+
+  """
+  Returns all CMS variables within the current domain.
+  """
+  cmsVariables: [CmsVariable!]!
   cms_content_groups: [CmsContentGroup!]!
   cms_layouts: [CmsLayout!]!
   cms_navigation_items: [CmsNavigationItem!]!
@@ -320,9 +549,22 @@ type Convention {
     sort: [SortInput!]
   ): CouponsPagination!
   created_at: Date
-  default_layout: CmsLayout
+  defaultLayout: CmsLayout!
+  default_layout: CmsLayout! @deprecated(reason: "Use `defaultLayout` instead")
   departments: [Department!]!
   domain: String
+
+  """
+  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  will be the page-specific layout if the URL corresponds to a page with a layout override, or
+  the default layout for the domain otherwise.)
+  """
+  effectiveCmsLayout(
+    """
+    The path to find the effective layout for.
+    """
+    path: String!
+  ): CmsLayout!
   email_from: String!
   email_mode: EmailMode!
   ends_at: Date
@@ -426,10 +668,38 @@ type Convention {
     """
     sort: [SortInput!]
   ): EventsPagination!
+
+  """
+  Finds a form by ID in this convention.  If there is no form with that ID in this convention,
+  errors out.
+  """
+  form(
+    """
+    The ID of the form to find.
+    """
+    id: Int!
+  ): Form!
   forms: [Form!]!
+
+  """
+  Does a full-text search within this domain.
+  """
+  fullTextSearch(
+    """
+    The text to search for.
+    """
+    query: String!
+  ): SearchResult!
   hidden: Boolean!
   id: Int!
   language: String!
+
+  """
+  Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+  This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+  CMS variables.
+  """
+  liquidAssigns: [LiquidAssign!]!
   location: Json
   mailing_lists: MailingLists!
   maximum_event_signups: ScheduledValue
@@ -448,6 +718,18 @@ type Convention {
   my_signups: [Signup!]!
   name: String!
   notification_templates: [NotificationTemplate!]!
+
+  """
+  Returns all the Liquid assigns for rendering a particular notification event in this
+  convention.   This is a combination of globally-accessible Liquid assigns, values specific
+  to that notification event, and convention-specific user-defined CMS variables.
+  """
+  notifier_liquid_assigns(
+    """
+    The key of the notification event to use for generating assigns.
+    """
+    eventKey: String!
+  ): [LiquidAssign!]!
   orders(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -496,10 +778,58 @@ type Convention {
   organization: Organization
   pages: [Page!]!
   pre_schedule_content_html: String
+
+  """
+  Given a Liquid text string, renders it to HTML and returns the result.
+  """
+  previewLiquid(
+    """
+    The Liquid content to render.
+    """
+    content: String!
+  ): String!
+
+  """
+  Given a Markdown text string, renders it to HTML and returns the result.
+  """
+  previewMarkdown(
+    """
+    The Markdown content to render.
+    """
+    markdown: String!
+  ): String!
+
+  """
+  Given a Liquid text string and a notification event, renders the Liquid to HTML using the
+  current domain's CMS context as if it were the content for that notification type.
+  """
+  preview_notifier_liquid(
+    """
+    The Liquid content to render.
+    """
+    content: String!
+
+    """
+    The key of the notification event to use for generating the preview.
+    """
+    eventKey: String!
+  ): String!
+
+  """
+  Finds a product by ID in this convention.  If there is no product with that ID in this
+  convention, errors out.
+  """
+  product(
+    """
+    The ID of the product to find.
+    """
+    id: Int!
+  ): Product!
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
   rooms: [Room!]!
-  root_page: Page
+  rootPage: Page!
+  root_page: Page! @deprecated(reason: "Use `rootPage` instead")
 
   """
   Finds an active run by ID in this convention.  If there is no run with that ID in this
@@ -513,6 +843,17 @@ type Convention {
   ): Run!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
+
+  """
+  Finds a signup by ID in this convention.  If there is no signup with that ID in this
+  convention, errors out.
+  """
+  signup(
+    """
+    The ID of the signup to find.
+    """
+    id: Int!
+  ): Signup!
   signup_changes_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -589,6 +930,17 @@ type Convention {
     sort: [SortInput!]
   ): SignupsPagination! @deprecated(reason: "Use signup_changes_paginated instead")
   site_mode: SiteMode!
+
+  """
+  Finds a staff position by ID in this convention.  If there is no staff position with that ID
+  in this convention, errors out.
+  """
+  staff_position(
+    """
+    The ID of the staff position to find.
+    """
+    id: Int!
+  ): StaffPosition!
   staff_positions: [StaffPosition!]!
   starts_at: Date
   stripe_account: StripeAccount
@@ -599,9 +951,35 @@ type Convention {
   tickets_available_for_purchase: Boolean!
   timezone_mode: TimezoneMode!
   timezone_name: String
+
+  """
+  Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+  For example, in a convention that has a partial called `attendee_profile` and a page called
+  `info_for_attendees`, a search for `attendee` would return both of these.
+
+  This query is always limited to a maximum of 10 results.
+  """
+  typeaheadSearchCmsContent(
+    """
+    The partial name to search by.  If not specified, returns all CMS content
+    within the current domain (limited to 10 results).
+    """
+    name: String
+  ): [CmsContent!]!
   updated_at: Date
   user_activity_alert(id: Int!): UserActivityAlert!
   user_activity_alerts: [UserActivityAlert!]!
+
+  """
+  Finds a UserConProfile by ID in the convention associated with this convention.  If there is
+  no UserConProfile with that ID in this convention, errors out.
+  """
+  user_con_profile(
+    """
+    The ID of the UserConProfile to find.
+    """
+    id: Int!
+  ): UserConProfile!
   user_con_profile_form: Form!
   user_con_profiles_paginated(
     """
@@ -2669,6 +3047,19 @@ type FormSection {
   form_items: [FormItem!]!
   id: Int!
   position: Int!
+
+  """
+  Given a FormItemInput, returns a preview version of that form item within this section.  This
+  does not actually save the form item.  This is mostly useful because of the
+  `rendered_properties` field inside FormItem, which lets clients retrieve
+  a rendered HTML version of the Liquid-enabled properties of the form item.
+  """
+  preview_form_item(
+    """
+    The fields to use for constructing the form item to preview.
+    """
+    formItem: FormItemInput!
+  ): FormItem!
   title: String
 }
 
@@ -3662,6 +4053,13 @@ type Order {
   order_entries: [OrderEntry!]!
   paid_at: Date
   payment_amount: Money
+
+  """
+  Generates a Stripe PaymentIntent for this order and returns the client secret from that
+  PaymentIntent.  This can be used to start a payment on the client side, for example using
+  Apple Pay or Google Pay.
+  """
+  payment_intent_client_secret: String!
   payment_note: String
   status: OrderStatus!
   submitted_at: Date
@@ -4052,7 +4450,7 @@ type Query {
   assumedIdentityFromProfile: UserConProfile
 
   """
-  Finds an CMS content group by ID within the domain name of this HTTP request.  If there is no
+  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
   domain name, errors out.
   """
@@ -4061,35 +4459,35 @@ type Query {
     The ID of the CMS content group to find.
     """
     id: Int!
-  ): CmsContentGroup!
+  ): CmsContentGroup! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS content groups within the current domain.
   """
-  cmsContentGroups: [CmsContentGroup!]!
+  cmsContentGroups: [CmsContentGroup!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS files within the current domain.
   """
-  cmsFiles: [CmsFile!]!
+  cmsFiles: [CmsFile!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS GraphQL queries within the current domain.
   """
-  cmsGraphqlQueries: [CmsGraphqlQuery!]!
+  cmsGraphqlQueries: [CmsGraphqlQuery!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS layouts within the current domain.
   """
-  cmsLayouts: [CmsLayout!]!
+  cmsLayouts: [CmsLayout!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS navigation items within the current domain.
   """
-  cmsNavigationItems: [CmsNavigationItem!]!
+  cmsNavigationItems: [CmsNavigationItem!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParentInterface interface instead.")
 
   """
-  Finds an CMS page within the domain name of this HTTP request.  Exactly one of the three
+  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
   optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
   different way of finding a page.  If the desired page can't be found within the current
   domain name, errors out.
@@ -4109,12 +4507,12 @@ type Query {
     The unique slug of the page to find.
     """
     slug: String
-  ): Page!
+  ): Page! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS pages within the current domain.
   """
-  cmsPages: [Page!]!
+  cmsPages: [Page!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParentInterface interface instead.")
 
   """
   Returns the CMS parent object associated with the domain name of this HTTP request.  In a
@@ -4131,12 +4529,12 @@ type Query {
   """
   Returns all CMS partials within the current domain.
   """
-  cmsPartials: [CmsPartial!]!
+  cmsPartials: [CmsPartial!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParentInterface interface instead.")
 
   """
   Returns all CMS variables within the current domain.
   """
-  cmsVariables: [CmsVariable!]!
+  cmsVariables: [CmsVariable!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParentInterface interface instead.")
 
   """
   Returns the convention associated with the domain name of this HTTP request, or null if there
@@ -4212,7 +4610,7 @@ type Query {
   associated with the domain name of this HTTP request, returns that order.  Otherwise, returns
   null.
   """
-  currentPendingOrder: Order
+  currentPendingOrder: Order @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `current_pending_order` field on the UserConProfile type instead.")
 
   """
   If there is a signed-in user and they have a pending store order open in the convention
@@ -4222,7 +4620,7 @@ type Query {
 
   If there is no signed-in user, this query will error out.
   """
-  currentPendingOrderPaymentIntentClientSecret: String!
+  currentPendingOrderPaymentIntentClientSecret: String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `payment_intent_client_secret` field on the Order type instead.")
 
   """
   Returns the currently signed-in user.  If no user is signed in, returns null.
@@ -4239,7 +4637,7 @@ type Query {
     The path to find the effective layout for.
     """
     path: String!
-  ): CmsLayout!
+  ): CmsLayout! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParentInterface interface instead.")
 
   """
   Returns a paginated list of the _global_ email routes configured in Intercode.
@@ -4332,14 +4730,14 @@ type Query {
     The ID of the form to find.
     """
     id: Int!
-  ): Form!
+  ): Form! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `form` field on the Convention object instead.")
 
   """
   Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
   This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
   CMS variables.
   """
-  liquidAssigns: [LiquidAssign!]!
+  liquidAssigns: [LiquidAssign!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParentInterface instead.")
 
   """
   Returns the authorized OAuth applications for the current user.  If no user is signed in,
@@ -4369,7 +4767,7 @@ type Query {
     The key of the notification event to use for generating assigns.
     """
     eventKey: String!
-  ): [LiquidAssign!]!
+  ): [LiquidAssign!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the Convention type instead.")
 
   """
   Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
@@ -4415,7 +4813,7 @@ type Query {
     The ID of the form section to preview the item in.
     """
     formSectionId: Int!
-  ): FormItem!
+  ): FormItem! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the FormSection type instead.")
 
   """
   Given a Liquid text string, renders it to HTML using the current domain's CMS context
@@ -4426,7 +4824,7 @@ type Query {
     The Liquid content to render.
     """
     content: String!
-  ): String!
+  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParentInterface instead.")
 
   """
   Given a Markdown text string, renders it to HTML using the current domain's CMS context
@@ -4437,7 +4835,7 @@ type Query {
     The Markdown content to render.
     """
     markdown: String!
-  ): String!
+  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParentInterface instead.")
 
   """
   Given a Liquid text string and a notification event, renders the Liquid to HTML using the
@@ -4453,7 +4851,7 @@ type Query {
     The key of the notification event to use for generating the preview.
     """
     eventKey: String!
-  ): String!
+  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `preview_notifier_liquid` field on the Convention type instead.")
 
   """
   Finds a product by ID in the convention associated with the domain name of this HTTP
@@ -4465,7 +4863,7 @@ type Query {
     The ID of the product to find.
     """
     id: Int!
-  ): Product!
+  ): Product! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `product` field on the Convention type instead.")
 
   """
   Returns the singleton RootSite object, which is a CMS parent.
@@ -4503,7 +4901,7 @@ type Query {
     within the current domain (limited to 10 results).
     """
     name: String
-  ): [CmsContent!]!
+  ): [CmsContent!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParentInterface interface instead.")
 
   """
   Finds a signup by ID in the convention associated with the domain name of this HTTP
@@ -4515,7 +4913,7 @@ type Query {
     The ID of the signup to find.
     """
     id: Int!
-  ): Signup!
+  ): Signup! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `signup` field on the Convention type instead.")
 
   """
   Does a full-text search on the convention associated with the domain name of this HTTP
@@ -4526,7 +4924,7 @@ type Query {
     The text to search for.
     """
     query: String!
-  ): SearchResult!
+  ): SearchResult! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParentInterface instead.")
 
   """
   Finds a staff position by ID in the convention associated with the domain name of this HTTP
@@ -4538,7 +4936,7 @@ type Query {
     The ID of the staff position to find.
     """
     id: Int!
-  ): StaffPosition!
+  ): StaffPosition! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `staff_position` field on the Convention object instead.")
 
   """
   Finds a user by ID.  If there is no user with that ID, errors out.
@@ -4560,7 +4958,7 @@ type Query {
     The ID of the UserConProfile to find.
     """
     id: Int!
-  ): UserConProfile!
+  ): UserConProfile! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `user_con_profile` field on the Convention object instead.")
 
   """
   Finds up to 25 users by ID.  If any of the IDs don't match an existing user, errors out.
@@ -4783,12 +5181,152 @@ input RoomInput {
   name: String
 }
 
-type RootSite {
-  default_layout: CmsLayout!
+type RootSite implements CmsParentInterface {
+  """
+  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  CMS content group with that ID, or the CMS content group is associated with a different
+  domain name, errors out.
+  """
+  cmsContentGroup(
+    """
+    The ID of the CMS content group to find.
+    """
+    id: Int!
+  ): CmsContentGroup!
+
+  """
+  Returns all CMS content groups within the current domain.
+  """
+  cmsContentGroups: [CmsContentGroup!]!
+
+  """
+  Returns all CMS files within the current domain.
+  """
+  cmsFiles: [CmsFile!]!
+
+  """
+  Returns all CMS GraphQL queries within the current domain.
+  """
+  cmsGraphqlQueries: [CmsGraphqlQuery!]!
+
+  """
+  Returns all CMS layouts within the current domain.
+  """
+  cmsLayouts: [CmsLayout!]!
+
+  """
+  Returns all CMS navigation items within the current domain.
+  """
+  cmsNavigationItems: [CmsNavigationItem!]!
+
+  """
+  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+  different way of finding a page.  If the desired page can't be found within the current
+  domain name, errors out.
+  """
+  cmsPage(
+    """
+    The ID of the page to find.
+    """
+    id: Int
+
+    """
+    If true, returns the root page for this domain.
+    """
+    rootPage: Boolean
+
+    """
+    The unique slug of the page to find.
+    """
+    slug: String
+  ): Page!
+
+  """
+  Returns all CMS pages within the current domain.
+  """
+  cmsPages: [Page!]!
+
+  """
+  Returns all CMS partials within the current domain.
+  """
+  cmsPartials: [CmsPartial!]!
+
+  """
+  Returns all CMS variables within the current domain.
+  """
+  cmsVariables: [CmsVariable!]!
+  defaultLayout: CmsLayout!
+  default_layout: CmsLayout! @deprecated(reason: "Use `defaultLayout` instead")
+
+  """
+  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  will be the page-specific layout if the URL corresponds to a page with a layout override, or
+  the default layout for the domain otherwise.)
+  """
+  effectiveCmsLayout(
+    """
+    The path to find the effective layout for.
+    """
+    path: String!
+  ): CmsLayout!
+
+  """
+  Does a full-text search within this domain.
+  """
+  fullTextSearch(
+    """
+    The text to search for.
+    """
+    query: String!
+  ): SearchResult!
   host: String!
   id: Int!
-  root_page: Page!
+
+  """
+  Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+  This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+  CMS variables.
+  """
+  liquidAssigns: [LiquidAssign!]!
+
+  """
+  Given a Liquid text string, renders it to HTML and returns the result.
+  """
+  previewLiquid(
+    """
+    The Liquid content to render.
+    """
+    content: String!
+  ): String!
+
+  """
+  Given a Markdown text string, renders it to HTML and returns the result.
+  """
+  previewMarkdown(
+    """
+    The Markdown content to render.
+    """
+    markdown: String!
+  ): String!
+  rootPage: Page!
+  root_page: Page! @deprecated(reason: "Use `rootPage` instead")
   site_name: String!
+
+  """
+  Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+  For example, in a convention that has a partial called `attendee_profile` and a page called
+  `info_for_attendees`, a search for `attendee` would return both of these.
+
+  This query is always limited to a maximum of 10 results.
+  """
+  typeaheadSearchCmsContent(
+    """
+    The partial name to search by.  If not specified, returns all CMS content
+    within the current domain (limited to 10 results).
+    """
+    name: String
+  ): [CmsContent!]!
   url: String!
 }
 
@@ -6311,6 +6849,11 @@ type UserConProfile {
   city: String
   convention: Convention!
   country: String
+
+  """
+  If this profile has a pending order, returns that order.  Otherwise, returns null.
+  """
+  current_pending_order: Order
   current_user_form_item_viewer_role: FormItemRole!
   current_user_form_item_writer_role: FormItemRole!
   day_phone: String @deprecated(reason: "Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json.")

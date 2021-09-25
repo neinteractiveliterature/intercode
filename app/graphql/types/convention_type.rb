@@ -1,4 +1,6 @@
 class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassLength
+  implements Types::CmsParentInterface
+
   field :accepting_proposals, Boolean, null: true
 
   field :bio_eligible_user_con_profiles, [Types::UserConProfileType], null: false
@@ -36,7 +38,6 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :created_at, Types::DateType, null: true
-  field :default_layout, Types::CmsLayoutType, null: true
   field :departments, [Types::DepartmentType], null: false
   field :domain, String, null: true
   field :email_from, String, null: false
@@ -153,6 +154,19 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
+  field :form, Types::FormType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the form to find.'
+
+    description <<~MARKDOWN
+      Finds a form by ID in this convention.  If there is no form with that ID in this convention,
+      errors out.
+    MARKDOWN
+  end
+
+  def form(**args)
+    object.forms.find(args[:id])
+  end
+
   field :forms, [Types::FormType], null: false
   field :hidden, Boolean, null: false
   field :id, Integer, null: false
@@ -198,6 +212,24 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :notification_templates, [Types::NotificationTemplateType], null: false
+
+  field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
+    argument :event_key, String,
+      required: true,
+      description: 'The key of the notification event to use for generating assigns.'
+
+    description <<~MARKDOWN
+      Returns all the Liquid assigns for rendering a particular notification event in this
+      convention.   This is a combination of globally-accessible Liquid assigns, values specific
+      to that notification event, and convention-specific user-defined CMS variables.
+    MARKDOWN
+  end
+
+  def notifier_liquid_assigns(event_key:)
+    notifier = NotifierPreviewFactory.new(convention: object, event_key: event_key).notifier
+    LiquidAssignGraphqlPresenter.from_hash(notifier.liquid_assigns)
+  end
+
   field :name, String, null: false
 
   field :orders, Types::OrdersConnectionType,
@@ -232,7 +264,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :organization, Types::OrganizationType, null: true
-  field :pages, [Types::PageType], null: false
+  field :pages, [Types::PageType],
+    null: false, deprecation_reason: 'This field is being renamed to `cmsPages`.'
 
   field :pre_schedule_content_html, String, null: true
 
@@ -240,6 +273,42 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     partial = object.cms_partials.find_by(name: 'pre_schedule_text')
     return nil unless partial
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
+  end
+
+  field :preview_notifier_liquid, String, null: false do
+    argument :event_key, String,
+      required: true,
+      description: 'The key of the notification event to use for generating the preview.'
+    argument :content, String, required: true, description: 'The Liquid content to render.'
+
+    description <<~MARKDOWN
+      Given a Liquid text string and a notification event, renders the Liquid to HTML using the
+      current domain's CMS context as if it were the content for that notification type.
+    MARKDOWN
+
+    authorize do |_value, _args, context|
+      Pundit.policy(context[:pundit_user], object).view_reports?
+    end
+  end
+
+  def preview_notifier_liquid(event_key:, content:)
+    notifier = NotifierPreviewFactory.new(convention: object, event_key: event_key).notifier
+    notifier.cadmus_renderer.render(
+      Liquid::Template.parse(content), :html, assigns: notifier.liquid_assigns
+    )
+  end
+
+  field :product, Types::ProductType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the product to find.'
+
+    description <<~MARKDOWN
+      Finds a product by ID in this convention.  If there is no product with that ID in this
+      convention, errors out.
+    MARKDOWN
+  end
+
+  def product(id:)
+    policy_scope(object.products).find(id)
   end
 
   field :products, [Types::ProductType], null: false do
@@ -267,7 +336,6 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :rooms, [Types::RoomType], null: false
-  field :root_page, Types::PageType, null: true
 
   field :run, Types::RunType, null: false do
     argument :id, Integer, required: true, description: 'The ID of the run to find'
@@ -285,6 +353,19 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :staff_positions, [Types::StaffPositionType], null: false
   field :show_event_list, Types::ShowScheduleType, null: true
   field :show_schedule, Types::ShowScheduleType, null: true
+
+  field :signup, Types::SignupType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the signup to find.'
+
+    description <<~MARKDOWN
+      Finds a signup by ID in this convention.  If there is no signup with that ID in this
+      convention, errors out.
+    MARKDOWN
+  end
+
+  def signup(**args)
+    object.signups.find(args[:id])
+  end
 
   pagination_field(
     :signup_changes_paginated, Types::SignupChangesPaginationType,
@@ -343,6 +424,20 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :site_mode, Types::SiteModeType, null: false
+
+  field :staff_position, Types::StaffPositionType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the staff position to find.'
+
+    description <<~MARKDOWN
+      Finds a staff position by ID in this convention.  If there is no staff position with that ID
+      in this convention, errors out.
+    MARKDOWN
+  end
+
+  def staff_position(id:)
+    convention.staff_positions.find(id)
+  end
+
   field :starts_at, Types::DateType, null: true
   field :stripe_account_ready_to_charge, Boolean, null: false
   field :stripe_account, Types::StripeAccountType, null: true do
@@ -364,6 +459,20 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(id)
   end
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
+
+  field :user_con_profile, Types::UserConProfileType, null: false do
+    argument :id, Integer, required: true, description: 'The ID of the UserConProfile to find.'
+
+    description <<~MARKDOWN
+      Finds a UserConProfile by ID in the convention associated with this convention.  If there is
+      no UserConProfile with that ID in this convention, errors out.
+    MARKDOWN
+  end
+
+  def user_con_profile(**args)
+    object.user_con_profiles.find(args[:id])
+  end
+
   field :user_con_profile_form, Types::FormType, null: false
 
   pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType,
