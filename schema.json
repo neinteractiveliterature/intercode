@@ -2624,6 +2624,563 @@
           ]
         },
         {
+          "kind": "INTERFACE",
+          "name": "CmsParentInterface",
+          "description": "A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such\nas pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.\n\nMost CMS parents are conventions, so their content will be convention-specific and scoped to\nthat convention's domain name.  The exception to this is the root site, which is what Intercode\nrenders when there is no convention associated with the current domain name.  (See the RootSite\nobject for more details about this.)\n",
+          "fields": [
+            {
+              "name": "cmsContentGroup",
+              "description": "Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the CMS content group to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsContentGroup",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsContentGroups",
+              "description": "Returns all CMS content groups within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsContentGroup",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsFiles",
+              "description": "Returns all CMS files within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsFile",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsGraphqlQueries",
+              "description": "Returns all CMS GraphQL queries within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsGraphqlQuery",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsLayouts",
+              "description": "Returns all CMS layouts within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsLayout",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsNavigationItems",
+              "description": "Returns all CMS navigation items within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsNavigationItem",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPage",
+              "description": "Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three\noptional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a\ndifferent way of finding a page.  If the desired page can't be found within the current\ndomain name, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the page to find.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "slug",
+                  "description": "The unique slug of the page to find.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "rootPage",
+                  "description": "If true, returns the root page for this domain.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPages",
+              "description": "Returns all CMS pages within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Page",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPartials",
+              "description": "Returns all CMS partials within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsPartial",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsVariables",
+              "description": "Returns all CMS variables within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsVariable",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "defaultLayout",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "default_layout",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `defaultLayout` instead"
+            },
+            {
+              "name": "effectiveCmsLayout",
+              "description": "Returns the CMS layout to be used for a particular URL path within the current domain.  (This\nwill be the page-specific layout if the URL corresponds to a page with a layout override, or\nthe default layout for the domain otherwise.)\n",
+              "args": [
+                {
+                  "name": "path",
+                  "description": "The path to find the effective layout for.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "fullTextSearch",
+              "description": "Does a full-text search within this domain.\n",
+              "args": [
+                {
+                  "name": "query",
+                  "description": "The text to search for.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SearchResult",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "liquidAssigns",
+              "description": "Returns all the Liquid assigns for regular CMS page rendering in the current domain name.\nThis is a combination of globally-accessible Liquid assigns and domain-specific user-defined\nCMS variables.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LiquidAssign",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "previewLiquid",
+              "description": "Given a Liquid text string, renders it to HTML and returns the result.\n",
+              "args": [
+                {
+                  "name": "content",
+                  "description": "The Liquid content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "previewMarkdown",
+              "description": "Given a Markdown text string, renders it to HTML and returns the result.\n",
+              "args": [
+                {
+                  "name": "markdown",
+                  "description": "The Markdown content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "rootPage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "root_page",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `rootPage` instead"
+            },
+            {
+              "name": "typeaheadSearchCmsContent",
+              "description": "Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.\nFor example, in a convention that has a partial called `attendee_profile` and a page called\n`info_for_attendees`, a search for `attendee` would return both of these.\n\nThis query is always limited to a maximum of 10 results.\n",
+              "args": [
+                {
+                  "name": "name",
+                  "description": "The partial name to search by.  If not specified, returns all CMS content within the current domain (limited to 10 results).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "CmsContent",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Convention",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "RootSite",
+              "ofType": null
+            }
+          ]
+        },
+        {
           "kind": "OBJECT",
           "name": "CmsPartial",
           "description": null,
@@ -3064,6 +3621,284 @@
               "deprecationReason": null
             },
             {
+              "name": "cmsContentGroup",
+              "description": "Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the CMS content group to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsContentGroup",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsContentGroups",
+              "description": "Returns all CMS content groups within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsContentGroup",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsFiles",
+              "description": "Returns all CMS files within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsFile",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsGraphqlQueries",
+              "description": "Returns all CMS GraphQL queries within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsGraphqlQuery",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsLayouts",
+              "description": "Returns all CMS layouts within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsLayout",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsNavigationItems",
+              "description": "Returns all CMS navigation items within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsNavigationItem",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPage",
+              "description": "Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three\noptional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a\ndifferent way of finding a page.  If the desired page can't be found within the current\ndomain name, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the page to find.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "slug",
+                  "description": "The unique slug of the page to find.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "rootPage",
+                  "description": "If true, returns the root page for this domain.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPages",
+              "description": "Returns all CMS pages within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Page",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPartials",
+              "description": "Returns all CMS partials within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsPartial",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsVariables",
+              "description": "Returns all CMS variables within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsVariable",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "cms_content_groups",
               "description": null,
               "args": [],
@@ -3221,16 +4056,36 @@
               "deprecationReason": null
             },
             {
+              "name": "defaultLayout",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "default_layout",
               "description": null,
               "args": [],
               "type": {
-                "kind": "OBJECT",
-                "name": "CmsLayout",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Use `defaultLayout` instead"
             },
             {
               "name": "departments",
@@ -3264,6 +4119,39 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "effectiveCmsLayout",
+              "description": "Returns the CMS layout to be used for a particular URL path within the current domain.  (This\nwill be the page-specific layout if the URL corresponds to a page with a layout override, or\nthe default layout for the domain otherwise.)\n",
+              "args": [
+                {
+                  "name": "path",
+                  "description": "The path to find the effective layout for.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3647,6 +4535,39 @@
               "deprecationReason": null
             },
             {
+              "name": "form",
+              "description": "Finds a form by ID in this convention.  If there is no form with that ID in this convention,\nerrors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the form to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Form",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "forms",
               "description": null,
               "args": [],
@@ -3665,6 +4586,39 @@
                       "ofType": null
                     }
                   }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "fullTextSearch",
+              "description": "Does a full-text search within this domain.\n",
+              "args": [
+                {
+                  "name": "query",
+                  "description": "The text to search for.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SearchResult",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -3713,6 +4667,30 @@
                   "kind": "SCALAR",
                   "name": "String",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "liquidAssigns",
+              "description": "Returns all the Liquid assigns for regular CMS page rendering in the current domain name.\nThis is a combination of globally-accessible Liquid assigns and domain-specific user-defined\nCMS variables.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LiquidAssign",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
@@ -3838,6 +4816,47 @@
                     "ofType": {
                       "kind": "OBJECT",
                       "name": "NotificationTemplate",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "notifier_liquid_assigns",
+              "description": "Returns all the Liquid assigns for rendering a particular notification event in this\nconvention.   This is a combination of globally-accessible Liquid assigns, values specific\nto that notification event, and convention-specific user-defined CMS variables.\n",
+              "args": [
+                {
+                  "name": "eventKey",
+                  "description": "The key of the notification event to use for generating assigns.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LiquidAssign",
                       "ofType": null
                     }
                   }
@@ -4029,6 +5048,154 @@
               "deprecationReason": null
             },
             {
+              "name": "previewLiquid",
+              "description": "Given a Liquid text string, renders it to HTML and returns the result.\n",
+              "args": [
+                {
+                  "name": "content",
+                  "description": "The Liquid content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "previewMarkdown",
+              "description": "Given a Markdown text string, renders it to HTML and returns the result.\n",
+              "args": [
+                {
+                  "name": "markdown",
+                  "description": "The Markdown content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "preview_notifier_liquid",
+              "description": "Given a Liquid text string and a notification event, renders the Liquid to HTML using the\ncurrent domain's CMS context as if it were the content for that notification type.\n",
+              "args": [
+                {
+                  "name": "eventKey",
+                  "description": "The key of the notification event to use for generating the preview.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "content",
+                  "description": "The Liquid content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "product",
+              "description": "Finds a product by ID in this convention.  If there is no product with that ID in this\nconvention, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the product to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Product",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "products",
               "description": null,
               "args": [
@@ -4118,16 +5285,36 @@
               "deprecationReason": null
             },
             {
+              "name": "rootPage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "root_page",
               "description": null,
               "args": [],
               "type": {
-                "kind": "OBJECT",
-                "name": "Page",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Use `rootPage` instead"
             },
             {
               "name": "run",
@@ -4182,6 +5369,39 @@
                 "kind": "ENUM",
                 "name": "ShowSchedule",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "signup",
+              "description": "Finds a signup by ID in this convention.  If there is no signup with that ID in this\nconvention, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the signup to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Signup",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -4478,6 +5698,39 @@
               "deprecationReason": null
             },
             {
+              "name": "staff_position",
+              "description": "Finds a staff position by ID in this convention.  If there is no staff position with that ID\nin this convention, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the staff position to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "StaffPosition",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "staff_positions",
               "description": null,
               "args": [],
@@ -4642,6 +5895,43 @@
               "deprecationReason": null
             },
             {
+              "name": "typeaheadSearchCmsContent",
+              "description": "Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.\nFor example, in a convention that has a partial called `attendee_profile` and a page called\n`info_for_attendees`, a search for `attendee` would return both of these.\n\nThis query is always limited to a maximum of 10 results.\n",
+              "args": [
+                {
+                  "name": "name",
+                  "description": "The partial name to search by.  If not specified, returns all CMS content within the current domain (limited to 10 results).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "CmsContent",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "args": [],
@@ -4705,6 +5995,39 @@
                       "ofType": null
                     }
                   }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_con_profile",
+              "description": "Finds a UserConProfile by ID in the convention associated with this convention.  If there is\nno UserConProfile with that ID in this convention, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the UserConProfile to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UserConProfile",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -4801,7 +6124,13 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [],
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "CmsParentInterface",
+              "ofType": null
+            }
+          ],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -14888,6 +16217,39 @@
               "deprecationReason": null
             },
             {
+              "name": "preview_form_item",
+              "description": "Given a FormItemInput, returns a preview version of that form item within this section.  This\ndoes not actually save the form item.  This is mostly useful because of the\n`rendered_properties` field inside FormItem, which lets clients retrieve\na rendered HTML version of the Liquid-enabled properties of the form item.\n",
+              "args": [
+                {
+                  "name": "formItem",
+                  "description": "The fields to use for constructing the form item to preview.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "FormItemInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "FormItem",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "title",
               "description": null,
               "args": [],
@@ -20105,6 +21467,22 @@
               "deprecationReason": null
             },
             {
+              "name": "payment_intent_client_secret",
+              "description": "Generates a Stripe PaymentIntent for this order and returns the client secret from that\nPaymentIntent.  This can be used to start a payment on the client side, for example using\nApple Pay or Google Pay.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "payment_note",
               "description": null,
               "args": [],
@@ -22692,7 +24070,7 @@
             },
             {
               "name": "cmsContentGroup",
-              "description": "Finds an CMS content group by ID within the domain name of this HTTP request.  If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
+              "description": "Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
               "args": [
                 {
                   "name": "id",
@@ -22720,8 +24098,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsContentGroups",
@@ -22744,8 +24122,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsFiles",
@@ -22768,8 +24146,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsGraphqlQueries",
@@ -22792,8 +24170,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsLayouts",
@@ -22816,8 +24194,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsNavigationItems",
@@ -22840,12 +24218,12 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsPage",
-              "description": "Finds an CMS page within the domain name of this HTTP request.  Exactly one of the three\noptional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a\ndifferent way of finding a page.  If the desired page can't be found within the current\ndomain name, errors out.\n",
+              "description": "Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three\noptional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a\ndifferent way of finding a page.  If the desired page can't be found within the current\ndomain name, errors out.\n",
               "args": [
                 {
                   "name": "id",
@@ -22893,8 +24271,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsPages",
@@ -22917,8 +24295,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsParent",
@@ -22973,8 +24351,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParentInterface interface instead."
             },
             {
               "name": "cmsVariables",
@@ -22997,8 +24375,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParentInterface interface instead."
             },
             {
               "name": "convention",
@@ -23216,8 +24594,8 @@
                 "name": "Order",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `current_pending_order` field on the UserConProfile type instead."
             },
             {
               "name": "currentPendingOrderPaymentIntentClientSecret",
@@ -23232,8 +24610,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `payment_intent_client_secret` field on the Order type instead."
             },
             {
               "name": "currentUser",
@@ -23277,8 +24655,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParentInterface interface instead."
             },
             {
               "name": "email_routes_paginated",
@@ -23522,8 +24900,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `form` field on the Convention object instead."
             },
             {
               "name": "liquidAssigns",
@@ -23546,8 +24924,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParentInterface instead."
             },
             {
               "name": "myAuthorizedApplications",
@@ -23647,8 +25025,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the Convention type instead."
             },
             {
               "name": "oauthPreAuth",
@@ -23753,8 +25131,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the FormSection type instead."
             },
             {
               "name": "previewLiquid",
@@ -23786,8 +25164,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParentInterface instead."
             },
             {
               "name": "previewMarkdown",
@@ -23819,8 +25197,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParentInterface instead."
             },
             {
               "name": "previewNotifierLiquid",
@@ -23868,8 +25246,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `preview_notifier_liquid` field on the Convention type instead."
             },
             {
               "name": "product",
@@ -23901,8 +25279,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `product` field on the Convention type instead."
             },
             {
               "name": "rootSite",
@@ -24011,8 +25389,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParentInterface interface instead."
             },
             {
               "name": "signup",
@@ -24044,8 +25422,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `signup` field on the Convention type instead."
             },
             {
               "name": "siteSearch",
@@ -24077,8 +25455,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParentInterface instead."
             },
             {
               "name": "staffPosition",
@@ -24110,8 +25488,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `staff_position` field on the Convention object instead."
             },
             {
               "name": "user",
@@ -24176,8 +25554,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `user_con_profile` field on the Convention object instead."
             },
             {
               "name": "users",
@@ -25161,6 +26539,300 @@
           "description": null,
           "fields": [
             {
+              "name": "cmsContentGroup",
+              "description": "Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the CMS content group to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsContentGroup",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsContentGroups",
+              "description": "Returns all CMS content groups within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsContentGroup",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsFiles",
+              "description": "Returns all CMS files within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsFile",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsGraphqlQueries",
+              "description": "Returns all CMS GraphQL queries within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsGraphqlQuery",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsLayouts",
+              "description": "Returns all CMS layouts within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsLayout",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsNavigationItems",
+              "description": "Returns all CMS navigation items within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsNavigationItem",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPage",
+              "description": "Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three\noptional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a\ndifferent way of finding a page.  If the desired page can't be found within the current\ndomain name, errors out.\n",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the page to find.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "slug",
+                  "description": "The unique slug of the page to find.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "rootPage",
+                  "description": "If true, returns the root page for this domain.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPages",
+              "description": "Returns all CMS pages within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Page",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsPartials",
+              "description": "Returns all CMS partials within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsPartial",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cmsVariables",
+              "description": "Returns all CMS variables within the current domain.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CmsVariable",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "defaultLayout",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "default_layout",
               "description": null,
               "args": [],
@@ -25170,6 +26842,72 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `defaultLayout` instead"
+            },
+            {
+              "name": "effectiveCmsLayout",
+              "description": "Returns the CMS layout to be used for a particular URL path within the current domain.  (This\nwill be the page-specific layout if the URL corresponds to a page with a layout override, or\nthe default layout for the domain otherwise.)\n",
+              "args": [
+                {
+                  "name": "path",
+                  "description": "The path to find the effective layout for.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsLayout",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "fullTextSearch",
+              "description": "Does a full-text search within this domain.\n",
+              "args": [
+                {
+                  "name": "query",
+                  "description": "The text to search for.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SearchResult",
                   "ofType": null
                 }
               },
@@ -25209,7 +26947,97 @@
               "deprecationReason": null
             },
             {
-              "name": "root_page",
+              "name": "liquidAssigns",
+              "description": "Returns all the Liquid assigns for regular CMS page rendering in the current domain name.\nThis is a combination of globally-accessible Liquid assigns and domain-specific user-defined\nCMS variables.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LiquidAssign",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "previewLiquid",
+              "description": "Given a Liquid text string, renders it to HTML and returns the result.\n",
+              "args": [
+                {
+                  "name": "content",
+                  "description": "The Liquid content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "previewMarkdown",
+              "description": "Given a Markdown text string, renders it to HTML and returns the result.\n",
+              "args": [
+                {
+                  "name": "markdown",
+                  "description": "The Markdown content to render.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "rootPage",
               "description": null,
               "args": [],
               "type": {
@@ -25225,6 +27053,22 @@
               "deprecationReason": null
             },
             {
+              "name": "root_page",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Page",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `rootPage` instead"
+            },
+            {
               "name": "site_name",
               "description": null,
               "args": [],
@@ -25235,6 +27079,43 @@
                   "kind": "SCALAR",
                   "name": "String",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "typeaheadSearchCmsContent",
+              "description": "Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.\nFor example, in a convention that has a partial called `attendee_profile` and a page called\n`info_for_attendees`, a search for `attendee` would return both of these.\n\nThis query is always limited to a maximum of 10 results.\n",
+              "args": [
+                {
+                  "name": "name",
+                  "description": "The partial name to search by.  If not specified, returns all CMS content within the current domain (limited to 10 results).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "CmsContent",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
@@ -25258,7 +27139,13 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [],
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "CmsParentInterface",
+              "ofType": null
+            }
+          ],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -33646,6 +35533,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "current_pending_order",
+              "description": "If this profile has a pending order, returns that order.  Otherwise, returns null.\n",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Order",
                 "ofType": null
               },
               "isDeprecated": false,

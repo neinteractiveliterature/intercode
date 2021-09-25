@@ -48,6 +48,12 @@ class Types::UserConProfileType < Types::BaseObject
   field :show_nickname_in_bio, Boolean, null: true
   field :bio_html, String, null: true
 
+  field :current_pending_order, Types::OrderType, null: true do
+    description <<~MARKDOWN
+      If this profile has a pending order, returns that order.  Otherwise, returns null.
+    MARKDOWN
+  end
+
   # This is a little bit of a weird thing to expose here; normally we'd just have people query for
   # User, but access to that object is restricted
   field :user_id, Integer, null: false

@@ -284,7 +284,9 @@ renamed to `cmsParentByRequestHost`." do
 
   alias cms_parent cms_parent_by_request_host
 
-  field :search_cms_content, [Types::CmsContentType], null: false do
+  field :search_cms_content, [Types::CmsContentType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `typeaheadSearchCmsContent` field on the CmsParentInterface interface instead." do
     argument :name, String,
       required: false,
       description: "The partial name to search by.  If not specified, returns all CMS content \
@@ -316,7 +318,9 @@ within the current domain (limited to 10 results)."
     contents.sort_by { |content| [content.name.length, content.name] }
   end
 
-  field :cms_content_groups, [Types::CmsContentGroupType], null: false do
+  field :cms_content_groups, [Types::CmsContentGroupType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsContentGroups` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS content groups within the current domain.
     MARKDOWN
@@ -324,11 +328,13 @@ within the current domain (limited to 10 results)."
 
   delegate :cms_content_groups, to: :cms_parent
 
-  field :cms_content_group, Types::CmsContentGroupType, null: false do
+  field :cms_content_group, Types::CmsContentGroupType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsContentGroup` field on the CmsParentInterface interface instead." do
     argument :id, Int, required: true, description: 'The ID of the CMS content group to find.'
 
     description <<~MARKDOWN
-      Finds an CMS content group by ID within the domain name of this HTTP request.  If there is no
+      Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
       CMS content group with that ID, or the CMS content group is associated with a different
       domain name, errors out.
     MARKDOWN
@@ -338,7 +344,9 @@ within the current domain (limited to 10 results)."
     cms_parent.cms_content_groups.find(id)
   end
 
-  field :cms_files, [Types::CmsFileType], null: false do
+  field :cms_files, [Types::CmsFileType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsFiles` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS files within the current domain.
     MARKDOWN
@@ -352,7 +360,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_pages, [Types::PageType], null: false do
+  field :cms_pages, [Types::PageType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `searchCmsContent` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS pages within the current domain.
     MARKDOWN
@@ -366,7 +376,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_page, Types::PageType, null: false do
+  field :cms_page, Types::PageType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsPage` field on the CmsParentInterface interface instead." do
     argument :id, Int, required: false, description: 'The ID of the page to find.'
     argument :slug, String, required: false, description: 'The unique slug of the page to find.'
     argument :root_page, Boolean,
@@ -374,7 +386,7 @@ within the current domain (limited to 10 results)."
       description: 'If true, returns the root page for this domain.'
 
     description <<~MARKDOWN
-      Finds an CMS page within the domain name of this HTTP request.  Exactly one of the three
+      Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
       optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
       different way of finding a page.  If the desired page can't be found within the current
       domain name, errors out.
@@ -387,7 +399,9 @@ within the current domain (limited to 10 results)."
     cms_parent.pages.find_by!(slug: slug)
   end
 
-  field :cms_layouts, [Types::CmsLayoutType], null: false do
+  field :cms_layouts, [Types::CmsLayoutType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsLayouts` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS layouts within the current domain.
     MARKDOWN
@@ -401,7 +415,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_partials, [Types::CmsPartialType], null: false do
+  field :cms_partials, [Types::CmsPartialType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsPartials` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS partials within the current domain.
     MARKDOWN
@@ -415,7 +431,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_variables, [Types::CmsVariable], null: false do
+  field :cms_variables, [Types::CmsVariable],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsVariables` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS variables within the current domain.
     MARKDOWN
@@ -429,7 +447,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_graphql_queries, [Types::CmsGraphqlQueryType], null: false do
+  field :cms_graphql_queries, [Types::CmsGraphqlQueryType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS GraphQL queries within the current domain.
     MARKDOWN
@@ -443,7 +463,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :cms_navigation_items, [Types::CmsNavigationItemType], null: false do
+  field :cms_navigation_items, [Types::CmsNavigationItemType],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `cmsNavigationItems` field on the CmsParentInterface interface instead." do
     description <<~MARKDOWN
       Returns all CMS navigation items within the current domain.
     MARKDOWN
@@ -457,18 +479,9 @@ within the current domain (limited to 10 results)."
     end
   end
 
-  field :current_ability, Types::AbilityType, null: false do
-    description <<~MARKDOWN
-      Returns the ability object for the current user's permissions, or an ability object for an
-      anonymous user if no user is currently signed in.
-    MARKDOWN
-  end
-
-  def current_ability
-    pundit_user
-  end
-
-  field :effective_cms_layout, Types::CmsLayoutType, null: false do
+  field :effective_cms_layout, Types::CmsLayoutType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `effectiveCmsLayout` field on the CmsParentInterface interface instead." do
     argument :path, String,
       required: true,
       description: 'The path to find the effective layout for.'
@@ -482,6 +495,17 @@ within the current domain (limited to 10 results)."
 
   def effective_cms_layout(path:)
     CmsContentFinder.new(context[:convention]).effective_cms_layout(path)
+  end
+
+  field :current_ability, Types::AbilityType, null: false do
+    description <<~MARKDOWN
+      Returns the ability object for the current user's permissions, or an ability object for an
+      anonymous user if no user is currently signed in.
+    MARKDOWN
+  end
+
+  def current_ability
+    pundit_user
   end
 
   field :assumed_identity_from_profile, Types::UserConProfileType, null: true do
@@ -511,7 +535,9 @@ within the current domain (limited to 10 results)."
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
   end
 
-  field :user_con_profile, Types::UserConProfileType, null: false do
+  field :user_con_profile, Types::UserConProfileType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `user_con_profile` field on the Convention object instead." do
     argument :id, Integer, required: true, description: 'The ID of the UserConProfile to find.'
 
     description <<~MARKDOWN
@@ -525,7 +551,9 @@ within the current domain (limited to 10 results)."
     convention.user_con_profiles.find(args[:id])
   end
 
-  field :form, Types::FormType, null: false do
+  field :form, Types::FormType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `form` field on the Convention object instead." do
     argument :id, Integer, required: true, description: 'The ID of the form to find.'
 
     description <<~MARKDOWN
@@ -539,7 +567,9 @@ within the current domain (limited to 10 results)."
     convention.forms.find(args[:id])
   end
 
-  field :staff_position, Types::StaffPositionType, null: false do
+  field :staff_position, Types::StaffPositionType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `staff_position` field on the Convention object instead." do
     argument :id, Integer, required: true, description: 'The ID of the staff position to find.'
 
     description <<~MARKDOWN
@@ -553,7 +583,9 @@ within the current domain (limited to 10 results)."
     convention.staff_positions.find(id)
   end
 
-  field :liquid_assigns, [Types::LiquidAssign], null: false do
+  field :liquid_assigns, [Types::LiquidAssign],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `liquidAssigns` field on the CmsParentInterface instead." do
     description <<~MARKDOWN
       Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
       This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
@@ -565,7 +597,9 @@ within the current domain (limited to 10 results)."
     LiquidAssignGraphqlPresenter.from_hash(context[:cadmus_renderer].default_assigns)
   end
 
-  field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
+  field :notifier_liquid_assigns, [Types::LiquidAssign],
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `notifier_liquid_assigns` field on the Convention type instead." do
     argument :event_key, String,
       required: true,
       description: 'The key of the notification event to use for generating assigns.'
@@ -582,7 +616,9 @@ within the current domain (limited to 10 results)."
     LiquidAssignGraphqlPresenter.from_hash(notifier.liquid_assigns)
   end
 
-  field :preview_form_item, Types::FormItemType, null: false do
+  field :preview_form_item, Types::FormItemType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `notifier_liquid_assigns` field on the FormSection type instead." do
     argument :form_section_id, Int,
       required: true,
       description: 'The ID of the form section to preview the item in.'
@@ -603,7 +639,9 @@ within the current domain (limited to 10 results)."
     FormItem.new(form_item.to_h.merge(id: 0, form_section: form_section, position: 1))
   end
 
-  field :preview_markdown, String, null: false do
+  field :preview_markdown, String,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `previewMarkdown` field on the CmsParentInterface instead." do
     argument :markdown, String, required: true, description: 'The Markdown content to render.'
 
     description <<~MARKDOWN
@@ -616,7 +654,9 @@ within the current domain (limited to 10 results)."
     MarkdownPresenter.new('').render(markdown)
   end
 
-  field :preview_liquid, String, null: false do
+  field :preview_liquid, String,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `previewLiquid` field on the CmsParentInterface instead." do
     argument :content, String, required: true, description: 'The Liquid content to render.'
 
     description <<~MARKDOWN
@@ -640,7 +680,9 @@ within the current domain (limited to 10 results)."
     cadmus_renderer.render(Liquid::Template.parse(content), :html)
   end
 
-  field :preview_notifier_liquid, String, null: false do
+  field :preview_notifier_liquid, String,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `preview_notifier_liquid` field on the Convention type instead." do
     argument :event_key, String,
       required: true,
       description: 'The key of the notification event to use for generating the preview.'
@@ -663,7 +705,9 @@ within the current domain (limited to 10 results)."
     )
   end
 
-  field :product, Types::ProductType, null: false do
+  field :product, Types::ProductType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `product` field on the Convention type instead." do
     argument :id, Integer, required: true, description: 'The ID of the product to find.'
 
     description <<~MARKDOWN
@@ -709,7 +753,9 @@ represented as a JSON object."
     pre_auth.as_json({})
   end
 
-  field :current_pending_order, Types::OrderType, null: true do
+  field :current_pending_order, Types::OrderType,
+    null: true, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `current_pending_order` field on the UserConProfile type instead." do
     description <<~MARKDOWN
       If there is a signed-in user and they have a pending store order open in the convention
       associated with the domain name of this HTTP request, returns that order.  Otherwise, returns
@@ -721,7 +767,9 @@ represented as a JSON object."
     context[:current_pending_order]
   end
 
-  field :current_pending_order_payment_intent_client_secret, String, null: false do
+  field :current_pending_order_payment_intent_client_secret, String,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `payment_intent_client_secret` field on the Order type instead." do
     description <<~MARKDOWN
       If there is a signed-in user and they have a pending store order open in the convention
       associated with the domain name of this HTTP request, this generates a Stripe PaymentIntent
@@ -768,7 +816,9 @@ represented as a JSON object."
     RootSite.instance
   end
 
-  field :site_search, Types::SearchResultType, null: false do
+  field :site_search, Types::SearchResultType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `fullTextSearch` field on the CmsParentInterface instead." do
     argument :query, String, required: true, description: 'The text to search for.'
 
     description <<~MARKDOWN
@@ -778,10 +828,12 @@ represented as a JSON object."
   end
 
   def site_search(query:)
-    SearchResult.convention_search(query, context[:convention]&.id, pundit_user)
+    SearchResult.full_text_site_search(query, context[:convention]&.id, pundit_user)
   end
 
-  field :signup, Types::SignupType, null: false do
+  field :signup, Types::SignupType,
+    null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
+Please use the `signup` field on the Convention type instead." do
     argument :id, Integer, required: true, description: 'The ID of the signup to find.'
 
     description <<~MARKDOWN

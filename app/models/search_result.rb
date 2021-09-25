@@ -24,7 +24,7 @@ class SearchResult
     end
   end
 
-  def self.convention_search(query, convention_id, pundit_user, limit: 10)
+  def self.full_text_site_search(query, convention_id, pundit_user, limit: 10)
     scope = PgSearch.multisearch(query)
       .where(convention_id: convention_id)
       .includes(:searchable)

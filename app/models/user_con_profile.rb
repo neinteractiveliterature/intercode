@@ -215,6 +215,25 @@ class UserConProfile < ApplicationRecord
     OrderSummaryPresenter.new(user_con_profile: self).order_summary
   end
 
+  def current_pending_order
+    return @current_pending_order if defined?(@current_pending_order)
+    @current_pending_order ||= begin
+      pending_orders = orders.pending.to_a
+
+      if pending_orders.empty?
+        nil
+      elsif pending_orders.size > 1
+        # combine orders into one cart
+        first_order = pending_orders.pop
+        OrderEntry.where(order_id: pending_orders.map(&:id)).update_all(order_id: first_order.id)
+        pending_orders.destroy_all
+        first_order.reload
+      else
+        pending_orders.first
+      end
+    end
+  end
+
   private
 
   def send_user_activity_alerts
