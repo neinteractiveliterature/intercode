@@ -2603,29 +2603,8 @@
           "possibleTypes": null
         },
         {
-          "kind": "UNION",
-          "name": "CmsParent",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "Convention",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "RootSite",
-              "ofType": null
-            }
-          ]
-        },
-        {
           "kind": "INTERFACE",
-          "name": "CmsParentInterface",
+          "name": "CmsParent",
           "description": "A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such\nas pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.\n\nMost CMS parents are conventions, so their content will be convention-specific and scoped to\nthat convention's domain name.  The exception to this is the root site, which is what Intercode\nrenders when there is no convention associated with the current domain name.  (See the RootSite\nobject for more details about this.)\n",
           "fields": [
             {
@@ -5032,8 +5011,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "This field is being renamed to `cmsPages`."
             },
             {
               "name": "pre_schedule_content_html",
@@ -6127,7 +6106,7 @@
           "interfaces": [
             {
               "kind": "INTERFACE",
-              "name": "CmsParentInterface",
+              "name": "CmsParent",
               "ofType": null
             }
           ],
@@ -24099,7 +24078,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParent interface instead."
             },
             {
               "name": "cmsContentGroups",
@@ -24123,7 +24102,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParent interface instead."
             },
             {
               "name": "cmsFiles",
@@ -24147,7 +24126,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParent interface instead."
             },
             {
               "name": "cmsGraphqlQueries",
@@ -24171,7 +24150,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParent interface instead."
             },
             {
               "name": "cmsLayouts",
@@ -24195,7 +24174,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParent interface instead."
             },
             {
               "name": "cmsNavigationItems",
@@ -24219,7 +24198,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParent interface instead."
             },
             {
               "name": "cmsPage",
@@ -24272,7 +24251,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParent interface instead."
             },
             {
               "name": "cmsPages",
@@ -24296,7 +24275,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParent interface instead."
             },
             {
               "name": "cmsParent",
@@ -24306,7 +24285,7 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "UNION",
+                  "kind": "INTERFACE",
                   "name": "CmsParent",
                   "ofType": null
                 }
@@ -24322,7 +24301,7 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "UNION",
+                  "kind": "INTERFACE",
                   "name": "CmsParent",
                   "ofType": null
                 }
@@ -24352,7 +24331,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParent interface instead."
             },
             {
               "name": "cmsVariables",
@@ -24376,7 +24355,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParent interface instead."
             },
             {
               "name": "convention",
@@ -24388,7 +24367,7 @@
                 "ofType": null
               },
               "isDeprecated": true,
-              "deprecationReason": "This field is being removed in favor of `conventionByRequestHost`.  Its semantics are slightly different than this field.  Please update accordingly."
+              "deprecationReason": "This field is being removed in favor of `conventionByRequestHostIfPresent`."
             },
             {
               "name": "conventionByDomain",
@@ -24458,7 +24437,7 @@
             },
             {
               "name": "conventionByRequestHost",
-              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, the request will error out.  (For a version that will return null instead of\nerroring out, use `convention`.)\n",
+              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, the request will error out.  (For a version that will return null instead of\nerroring out, use `conventionByRequestHostIfPresent`.)\n",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -24468,6 +24447,18 @@
                   "name": "Convention",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "conventionByRequestHostIfPresent",
+              "description": "Returns the convention associated with the domain name of this HTTP request.  If one is not\npresent, returns null.\n",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Convention",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -24656,7 +24647,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParent interface instead."
             },
             {
               "name": "email_routes_paginated",
@@ -24925,7 +24916,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParentInterface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParent interface instead."
             },
             {
               "name": "myAuthorizedApplications",
@@ -25165,7 +25156,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParentInterface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParent interface instead."
             },
             {
               "name": "previewMarkdown",
@@ -25198,7 +25189,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParentInterface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParent interface instead."
             },
             {
               "name": "previewNotifierLiquid",
@@ -25390,7 +25381,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParentInterface interface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParent interface instead."
             },
             {
               "name": "signup",
@@ -25456,7 +25447,7 @@
                 }
               },
               "isDeprecated": true,
-              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParentInterface instead."
+              "deprecationReason": "Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParent interface instead."
             },
             {
               "name": "staffPosition",
@@ -27142,7 +27133,7 @@
           "interfaces": [
             {
               "kind": "INTERFACE",
-              "name": "CmsParentInterface",
+              "name": "CmsParent",
               "ofType": null
             }
           ],

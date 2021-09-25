@@ -1,5 +1,5 @@
 class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassLength
-  implements Types::CmsParentInterface
+  implements Types::CmsParent
 
   field :accepting_proposals, Boolean, null: true
 

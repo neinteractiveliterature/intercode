@@ -1,4 +1,4 @@
-module Types::CmsParentInterface
+module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
