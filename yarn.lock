@@ -20965,7 +20965,7 @@ resolve@^2.0.0-next.3:
     ts-node: 10.2.1
     typescript: 4.4.3
     typescript-plugin-css-modules: 3.4.0
-    tzdata: 1.0.25
+    tzdata: 1.0.26
     union-value: 2.0.1
     uuid: 8.3.2
     webpack: 5.54.0
@@ -23215,10 +23215,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tzdata@npm:1.0.25":
-  version: 1.0.25
-  resolution: "tzdata@npm:1.0.25"
-  checksum: fdc9c6401bcf8b9b6b887840810ddc85efdbaefab2b63a0b691c26ec0d883529b404b51eef45c814ef4643379d5213854b77d25ff6301d85f4e1ea2ade796ab7
+"tzdata@npm:1.0.26":
+  version: 1.0.26
+  resolution: "tzdata@npm:1.0.26"
+  checksum: 04a9cce6d634208e0e96db05ca06ec25b2ee59f161ab624a0117a59fc748508ba43cbe853336cd24b166a83b83f2f4d1417894fdcb4a079478c6facd394f806c
   languageName: node
   linkType: hard
 

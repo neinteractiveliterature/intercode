@@ -176,7 +176,7 @@
     "terser-webpack-plugin": "5.2.4",
     "thread-loader": "3.0.4",
     "tinycolor2": "1.4.2",
-    "tzdata": "1.0.25",
+    "tzdata": "1.0.26",
     "union-value": "2.0.1",
     "uuid": "8.3.2",
     "webpack": "5.54.0",
