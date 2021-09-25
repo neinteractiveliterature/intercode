@@ -16833,6 +16833,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"nanocolors@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "nanocolors@npm:0.2.3"
+  checksum: e2167b904cec141dcb0ec869a59ca3027403559c3ba0b546eb1c85e89056fd6d77795e891160ca527119a4d88c52f33d51dc3ddf7825594b7ca8392ffc1ad9d5
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.1.23":
   version: 3.1.23
   resolution: "nanoid@npm:3.1.23"
@@ -19009,14 +19016,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.3.7":
-  version: 8.3.7
-  resolution: "postcss@npm:8.3.7"
+"postcss@npm:8.3.8":
+  version: 8.3.8
+  resolution: "postcss@npm:8.3.8"
   dependencies:
-    nanocolors: ^0.1.5
+    nanocolors: ^0.2.2
     nanoid: ^3.1.25
     source-map-js: ^0.6.2
-  checksum: 6b8c80611045787efa9900b1a278ec71393a12530a1c1f14baadcd6076e753791edd9bb9ef36c258cac450bc95dc3542ce2a4b6f21d5087875b91daa87422fc5
+  checksum: 20073f3f70487e9fa8d40e930d02595c4d96b7db8b2142ee4efe8e0c9a54c844c720370e178aef57c12d2d5bf65592cfdd1d020a74bf2840bc58650590713a35
   languageName: node
   linkType: hard
 
@@ -20920,7 +20927,7 @@ resolve@^2.0.0-next.3:
     payment: 2.4.6
     popper.js: 1.16.1
     porter-stemmer: 0.9.1
-    postcss: 8.3.7
+    postcss: 8.3.8
     postcss-import: 14.0.2
     postcss-loader: 6.1.1
     precss: 4.0.0
