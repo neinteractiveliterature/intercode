@@ -11,14 +11,15 @@ module.exports = {
   },
 
   extends: [
-    'airbnb',
-    'airbnb-typescript',
-    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:@graphql-eslint/recommended',
-    'plugin:jest/recommended'
-    // TODO: turn these on once I feel like getting a raft of errors
-    // 'plugin:@typescript-eslint/recommended',
-    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:jest/recommended',
+    'plugin:jsx-a11y/recommended',
+    'prettier',
   ],
 
   parser: '@typescript-eslint/parser',
@@ -28,12 +29,15 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    project: './tsconfig.json',
+    // This makes linting orders of magnitude slower :(
+    // project: './tsconfig.json',
+    extraFileExtensions: ['.graphql'],
   },
 
   plugins: [
     // 'babel',
     'jest',
+    'jsx-a11y',
     'graphql',
     'react-hooks',
     '@typescript-eslint',
@@ -118,5 +122,8 @@ module.exports = {
       },
     },
     'import/ignore': ['test/javascript/testUtils.js'],
+    react: {
+      version: 'detect',
+    },
   },
 };

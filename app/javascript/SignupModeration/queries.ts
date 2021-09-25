@@ -172,7 +172,7 @@ export const CreateSignupRunCardQuery = gql`
 
 export const SignupModerationQueueQuery = gql`
   query SignupModerationQueueQuery($page: Int, $perPage: Int) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
 
       signup_requests_paginated(

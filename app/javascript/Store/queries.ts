@@ -15,7 +15,7 @@ export const AdminOrdersQuery = gql`
       can_update_orders
     }
 
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       timezone_name
 
@@ -37,7 +37,7 @@ export const AdminOrdersQuery = gql`
 
 export const AdminProductsQuery = gql`
   query AdminProductsQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       products {
         id
@@ -64,7 +64,7 @@ export const AdminStoreAbilityQuery = gql`
       can_update_orders
     }
 
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       timezone_name
     }
@@ -78,7 +78,7 @@ export const CartQuery = gql`
       name_without_nickname
     }
 
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
     }
@@ -94,7 +94,7 @@ export const CartQuery = gql`
 
 export const OrderHistoryQuery = gql`
   query OrderHistoryQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
       timezone_name
@@ -166,7 +166,7 @@ export const OrderHistoryQuery = gql`
 
 export const OrderSummaryQuery = gql`
   query OrderSummaryQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       products {
         id

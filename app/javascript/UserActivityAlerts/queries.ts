@@ -43,7 +43,7 @@ export const UserActivityAlertFields = gql`
 
 export const ConventionTicketNameQuery = gql`
   query ConventionTicketNameQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ...UserActivityAlertsAdminConventionFields
     }
@@ -54,7 +54,7 @@ export const ConventionTicketNameQuery = gql`
 
 export const UserActivityAlertQuery = gql`
   query UserActivityAlertQuery($id: Int!) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ...UserActivityAlertsAdminConventionFields
 
@@ -71,7 +71,7 @@ export const UserActivityAlertQuery = gql`
 
 export const UserActivityAlertsAdminQuery = gql`
   query UserActivityAlertsAdminQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ticket_name
       ticket_mode

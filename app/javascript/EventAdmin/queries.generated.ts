@@ -178,7 +178,7 @@ export const EventAdminEventsQueryDocument = gql`
     can_override_maximum_event_provided_tickets
     can_manage_runs
   }
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ...ConventionFields
   }

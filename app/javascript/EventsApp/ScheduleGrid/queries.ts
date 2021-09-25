@@ -55,7 +55,7 @@ export const ScheduleGridEventFragment = gql`
 
 export const ScheduleGridConventionDataQuery = gql`
   query ScheduleGridConventionDataQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       pre_schedule_content_html
       ...CommonConventionData
@@ -78,7 +78,7 @@ export const ScheduleGridEventsQuery = gql`
 
 export const ScheduleGridCombinedQuery = gql`
   query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       pre_schedule_content_html
       ...CommonConventionData

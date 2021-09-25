@@ -5,17 +5,19 @@ import type Timespan from './Timespan';
 
 export type AppRootContextValue = {
   assumedIdentityFromProfile?: AppRootQueryData['assumedIdentityFromProfile'];
-  cmsNavigationItems: AppRootQueryData['cmsNavigationItems'];
+  cmsNavigationItems: AppRootQueryData['cmsParentByRequestHost']['cmsNavigationItems'];
   conventionAcceptingProposals?: boolean | null;
   conventionCanceled?: boolean | null;
   conventionDomain?: string | null;
   conventionName?: string | null;
   conventionTimespan?: Timespan;
   currentAbility: AppRootQueryData['currentAbility'];
-  currentPendingOrder?: AppRootQueryData['currentPendingOrder'];
+  currentPendingOrder?: NonNullable<
+    NonNullable<AppRootQueryData['convention']>['my_profile']
+  >['current_pending_order'];
   currentUser?: AppRootQueryData['currentUser'];
   language: string;
-  myProfile?: AppRootQueryData['myProfile'];
+  myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
   rootSiteName?: string | null;
   signupMode?: SignupMode;
   siteMode?: SiteMode;

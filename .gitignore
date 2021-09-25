@@ -11,6 +11,7 @@
 /bin/assets-manifest.json
 /doc-site/schema
 /test/html_reports
+*.tsbuildinfo
 
 # Ignore Yarn stuff
 .yarn/*

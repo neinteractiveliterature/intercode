@@ -63,7 +63,7 @@ export const AdminOrdersQueryDocument = gql`
     can_create_orders
     can_update_orders
   }
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     timezone_name
     orders_paginated(
@@ -116,7 +116,7 @@ export type AdminOrdersQueryLazyQueryHookResult = ReturnType<typeof useAdminOrde
 export type AdminOrdersQueryQueryResult = Apollo.QueryResult<AdminOrdersQueryData, AdminOrdersQueryVariables>;
 export const AdminProductsQueryDocument = gql`
     query AdminProductsQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     products {
       id
@@ -165,7 +165,7 @@ export const AdminStoreAbilityQueryDocument = gql`
     can_update_products
     can_update_orders
   }
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     timezone_name
   }
@@ -204,7 +204,7 @@ export const CartQueryDocument = gql`
     id
     name_without_nickname
   }
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
   }
@@ -243,7 +243,7 @@ export type CartQueryLazyQueryHookResult = ReturnType<typeof useCartQueryLazyQue
 export type CartQueryQueryResult = Apollo.QueryResult<CartQueryData, CartQueryVariables>;
 export const OrderHistoryQueryDocument = gql`
     query OrderHistoryQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     timezone_name
@@ -328,7 +328,7 @@ export type OrderHistoryQueryLazyQueryHookResult = ReturnType<typeof useOrderHis
 export type OrderHistoryQueryQueryResult = Apollo.QueryResult<OrderHistoryQueryData, OrderHistoryQueryVariables>;
 export const OrderSummaryQueryDocument = gql`
     query OrderSummaryQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     products {
       id

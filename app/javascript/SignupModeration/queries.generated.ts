@@ -230,7 +230,7 @@ export type CreateSignupRunCardQueryLazyQueryHookResult = ReturnType<typeof useC
 export type CreateSignupRunCardQueryQueryResult = Apollo.QueryResult<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>;
 export const SignupModerationQueueQueryDocument = gql`
     query SignupModerationQueueQuery($page: Int, $perPage: Int) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     signup_requests_paginated(
       sort: [{field: "state", desc: false}, {field: "created_at", desc: false}]

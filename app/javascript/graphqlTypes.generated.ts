@@ -342,7 +342,178 @@ export type CmsNavigationItemInput = {
   title?: Maybe<Scalars['String']>;
 };
 
-export type CmsParent = Convention | RootSite;
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParent = {
+  /**
+   * Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+   * CMS content group with that ID, or the CMS content group is associated with a different
+   * domain name, errors out.
+   */
+  cmsContentGroup: CmsContentGroup;
+  /** Returns all CMS content groups within the current domain. */
+  cmsContentGroups: Array<CmsContentGroup>;
+  /** Returns all CMS files within the current domain. */
+  cmsFiles: Array<CmsFile>;
+  /** Returns all CMS GraphQL queries within the current domain. */
+  cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /** Returns all CMS layouts within the current domain. */
+  cmsLayouts: Array<CmsLayout>;
+  /** Returns all CMS navigation items within the current domain. */
+  cmsNavigationItems: Array<CmsNavigationItem>;
+  /**
+   * Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+   * optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+   * different way of finding a page.  If the desired page can't be found within the current
+   * domain name, errors out.
+   */
+  cmsPage: Page;
+  /** Returns all CMS pages within the current domain. */
+  cmsPages: Array<Page>;
+  /** Returns all CMS partials within the current domain. */
+  cmsPartials: Array<CmsPartial>;
+  /** Returns all CMS variables within the current domain. */
+  cmsVariables: Array<CmsVariable>;
+  defaultLayout: CmsLayout;
+  /** @deprecated Use `defaultLayout` instead */
+  default_layout: CmsLayout;
+  /**
+   * Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+   * will be the page-specific layout if the URL corresponds to a page with a layout override, or
+   * the default layout for the domain otherwise.)
+   */
+  effectiveCmsLayout: CmsLayout;
+  /** Does a full-text search within this domain. */
+  fullTextSearch: SearchResult;
+  /**
+   * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+   * This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+   * CMS variables.
+   */
+  liquidAssigns: Array<LiquidAssign>;
+  /** Given a Liquid text string, renders it to HTML and returns the result. */
+  previewLiquid: Scalars['String'];
+  /** Given a Markdown text string, renders it to HTML and returns the result. */
+  previewMarkdown: Scalars['String'];
+  rootPage: Page;
+  /** @deprecated Use `rootPage` instead */
+  root_page: Page;
+  /**
+   * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+   * For example, in a convention that has a partial called `attendee_profile` and a page called
+   * `info_for_attendees`, a search for `attendee` would return both of these.
+   *
+   * This query is always limited to a maximum of 10 results.
+   */
+  typeaheadSearchCmsContent: Array<CmsContent>;
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentCmsContentGroupArgs = {
+  id: Scalars['Int'];
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentCmsPageArgs = {
+  id?: Maybe<Scalars['Int']>;
+  rootPage?: Maybe<Scalars['Boolean']>;
+  slug?: Maybe<Scalars['String']>;
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentEffectiveCmsLayoutArgs = {
+  path: Scalars['String'];
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentFullTextSearchArgs = {
+  query: Scalars['String'];
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentPreviewLiquidArgs = {
+  content: Scalars['String'];
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentPreviewMarkdownArgs = {
+  markdown: Scalars['String'];
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name.  The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name.  (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentTypeaheadSearchCmsContentArgs = {
+  name?: Maybe<Scalars['String']>;
+};
 
 export type CmsPartial = {
   __typename: 'CmsPartial';
@@ -382,7 +553,7 @@ export type ContactEmail = {
   name?: Maybe<Scalars['String']>;
 };
 
-export type Convention = {
+export type Convention = CmsParent & {
   __typename: 'Convention';
   accepting_proposals?: Maybe<Scalars['Boolean']>;
   bio_eligible_user_con_profiles: Array<UserConProfile>;
@@ -390,46 +561,154 @@ export type Convention = {
   catch_all_staff_position?: Maybe<StaffPosition>;
   clickwrap_agreement?: Maybe<Scalars['String']>;
   clickwrap_agreement_html?: Maybe<Scalars['String']>;
+  /**
+   * Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+   * CMS content group with that ID, or the CMS content group is associated with a different
+   * domain name, errors out.
+   */
+  cmsContentGroup: CmsContentGroup;
+  /** Returns all CMS content groups within the current domain. */
+  cmsContentGroups: Array<CmsContentGroup>;
+  /** Returns all CMS files within the current domain. */
+  cmsFiles: Array<CmsFile>;
+  /** Returns all CMS GraphQL queries within the current domain. */
+  cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /** Returns all CMS layouts within the current domain. */
+  cmsLayouts: Array<CmsLayout>;
+  /** Returns all CMS navigation items within the current domain. */
+  cmsNavigationItems: Array<CmsNavigationItem>;
+  /**
+   * Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+   * optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+   * different way of finding a page.  If the desired page can't be found within the current
+   * domain name, errors out.
+   */
+  cmsPage: Page;
+  /** Returns all CMS pages within the current domain. */
+  cmsPages: Array<Page>;
+  /** Returns all CMS partials within the current domain. */
+  cmsPartials: Array<CmsPartial>;
+  /** Returns all CMS variables within the current domain. */
+  cmsVariables: Array<CmsVariable>;
   cms_content_groups: Array<CmsContentGroup>;
   cms_layouts: Array<CmsLayout>;
   cms_navigation_items: Array<CmsNavigationItem>;
   coupons_paginated: CouponsPagination;
   created_at?: Maybe<Scalars['Date']>;
-  default_layout?: Maybe<CmsLayout>;
+  defaultLayout: CmsLayout;
+  /** @deprecated Use `defaultLayout` instead */
+  default_layout: CmsLayout;
   departments: Array<Department>;
   domain?: Maybe<Scalars['String']>;
+  /**
+   * Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+   * will be the page-specific layout if the URL corresponds to a page with a layout override, or
+   * the default layout for the domain otherwise.)
+   */
+  effectiveCmsLayout: CmsLayout;
   email_from: Scalars['String'];
   email_mode: EmailMode;
   ends_at?: Maybe<Scalars['Date']>;
+  /**
+   * Finds an active event by ID in this convention.  If there is no event with that ID in this
+   * convention, or the event is no longer active, errors out.
+   */
+  event: Event;
   event_categories: Array<EventCategory>;
   event_mailing_list_domain?: Maybe<Scalars['String']>;
+  /**
+   * Finds an event proposal by ID in this convention.  If there is no event proposal with that ID
+   * in this convention, errors out.
+   */
+  event_proposal: EventProposal;
   event_proposals_paginated: EventProposalsPagination;
+  /**
+   * Returns all active events in convention associated with the domain name of this HTTP request.
+   * Filterable by a range of start/finish times.
+   *
+   * **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+   * when using it.
+   */
+  events: Array<Event>;
   events_paginated: EventsPagination;
+  /**
+   * Finds a form by ID in this convention.  If there is no form with that ID in this convention,
+   * errors out.
+   */
+  form: Form;
   forms: Array<Form>;
+  /** Does a full-text search within this domain. */
+  fullTextSearch: SearchResult;
   hidden: Scalars['Boolean'];
   id: Scalars['Int'];
   language: Scalars['String'];
+  /**
+   * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+   * This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+   * CMS variables.
+   */
+  liquidAssigns: Array<LiquidAssign>;
   location?: Maybe<Scalars['Json']>;
-  /** @deprecated Mail privileges have gone away in favor of permissions */
-  mail_privilege_names: Array<Scalars['String']>;
   mailing_lists: MailingLists;
   maximum_event_signups?: Maybe<ScheduledValue>;
   maximum_tickets?: Maybe<Scalars['Int']>;
+  /**
+   * Returns the convention-specific profile for the current user within this convention.  If no
+   * user is signed in, returns null.
+   */
+  my_profile?: Maybe<UserConProfile>;
+  /**
+   * Returns all signups for the current user within this convention.  If no user is signed in,
+   * returns an empty array.
+   */
+  my_signups: Array<Signup>;
   name: Scalars['String'];
   notification_templates: Array<NotificationTemplate>;
+  /**
+   * Returns all the Liquid assigns for rendering a particular notification event in this
+   * convention.   This is a combination of globally-accessible Liquid assigns, values specific
+   * to that notification event, and convention-specific user-defined CMS variables.
+   */
+  notifier_liquid_assigns: Array<LiquidAssign>;
+  /** @deprecated Deprecated for potential performance implications.  Please use `orders_paginated` instead. */
   orders?: Maybe<OrdersConnection>;
   orders_paginated: OrdersPagination;
   organization?: Maybe<Organization>;
+  /** @deprecated This field is being renamed to `cmsPages`. */
   pages: Array<Page>;
   pre_schedule_content_html?: Maybe<Scalars['String']>;
-  /** @deprecated Privileges have gone away in favor of permissions */
-  privilege_names: Array<Scalars['String']>;
+  /** Given a Liquid text string, renders it to HTML and returns the result. */
+  previewLiquid: Scalars['String'];
+  /** Given a Markdown text string, renders it to HTML and returns the result. */
+  previewMarkdown: Scalars['String'];
+  /**
+   * Given a Liquid text string and a notification event, renders the Liquid to HTML using the
+   * current domain's CMS context as if it were the content for that notification type.
+   */
+  preview_notifier_liquid: Scalars['String'];
+  /**
+   * Finds a product by ID in this convention.  If there is no product with that ID in this
+   * convention, errors out.
+   */
+  product: Product;
   products: Array<Product>;
   reports: ConventionReports;
   rooms: Array<Room>;
-  root_page?: Maybe<Page>;
+  rootPage: Page;
+  /** @deprecated Use `rootPage` instead */
+  root_page: Page;
+  /**
+   * Finds an active run by ID in this convention.  If there is no run with that ID in this
+   * convention, or the run's event is no longer active, errors out.
+   */
+  run: Run;
   show_event_list?: Maybe<ShowSchedule>;
   show_schedule?: Maybe<ShowSchedule>;
+  /**
+   * Finds a signup by ID in this convention.  If there is no signup with that ID in this
+   * convention, errors out.
+   */
+  signup: Signup;
   signup_changes_paginated: SignupChangesPagination;
   signup_counts_by_state: Array<SignupCountByState>;
   signup_mode: SignupMode;
@@ -438,6 +717,11 @@ export type Convention = {
   /** @deprecated Use signup_changes_paginated instead */
   signup_spy_paginated: SignupsPagination;
   site_mode: SiteMode;
+  /**
+   * Finds a staff position by ID in this convention.  If there is no staff position with that ID
+   * in this convention, errors out.
+   */
+  staff_position: StaffPosition;
   staff_positions: Array<StaffPosition>;
   starts_at?: Maybe<Scalars['Date']>;
   stripe_account?: Maybe<StripeAccount>;
@@ -448,11 +732,36 @@ export type Convention = {
   tickets_available_for_purchase: Scalars['Boolean'];
   timezone_mode: TimezoneMode;
   timezone_name?: Maybe<Scalars['String']>;
+  /**
+   * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+   * For example, in a convention that has a partial called `attendee_profile` and a page called
+   * `info_for_attendees`, a search for `attendee` would return both of these.
+   *
+   * This query is always limited to a maximum of 10 results.
+   */
+  typeaheadSearchCmsContent: Array<CmsContent>;
   updated_at?: Maybe<Scalars['Date']>;
   user_activity_alert: UserActivityAlert;
   user_activity_alerts: Array<UserActivityAlert>;
+  /**
+   * Finds a UserConProfile by ID in the convention associated with this convention.  If there is
+   * no UserConProfile with that ID in this convention, errors out.
+   */
+  user_con_profile: UserConProfile;
   user_con_profile_form: Form;
   user_con_profiles_paginated: UserConProfilesPagination;
+};
+
+
+export type ConventionCmsContentGroupArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type ConventionCmsPageArgs = {
+  id?: Maybe<Scalars['Int']>;
+  rootPage?: Maybe<Scalars['Boolean']>;
+  slug?: Maybe<Scalars['String']>;
 };
 
 
@@ -464,8 +773,23 @@ export type ConventionCoupons_PaginatedArgs = {
 };
 
 
+export type ConventionEffectiveCmsLayoutArgs = {
+  path: Scalars['String'];
+};
+
+
+export type ConventionEventArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type ConventionEvent_CategoriesArgs = {
   current_ability_can_read_event_proposals?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type ConventionEvent_ProposalArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -477,11 +801,34 @@ export type ConventionEvent_Proposals_PaginatedArgs = {
 };
 
 
+export type ConventionEventsArgs = {
+  extendedCounts?: Maybe<Scalars['Boolean']>;
+  finish?: Maybe<Scalars['Date']>;
+  includeDropped?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['Date']>;
+};
+
+
 export type ConventionEvents_PaginatedArgs = {
   filters?: Maybe<EventFiltersInput>;
   page?: Maybe<Scalars['Int']>;
   per_page?: Maybe<Scalars['Int']>;
   sort?: Maybe<Array<SortInput>>;
+};
+
+
+export type ConventionFormArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type ConventionFullTextSearchArgs = {
+  query: Scalars['String'];
+};
+
+
+export type ConventionNotifier_Liquid_AssignsArgs = {
+  eventKey: Scalars['String'];
 };
 
 
@@ -501,9 +848,40 @@ export type ConventionOrders_PaginatedArgs = {
 };
 
 
+export type ConventionPreviewLiquidArgs = {
+  content: Scalars['String'];
+};
+
+
+export type ConventionPreviewMarkdownArgs = {
+  markdown: Scalars['String'];
+};
+
+
+export type ConventionPreview_Notifier_LiquidArgs = {
+  content: Scalars['String'];
+  eventKey: Scalars['String'];
+};
+
+
+export type ConventionProductArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type ConventionProductsArgs = {
   only_available?: Maybe<Scalars['Boolean']>;
   only_ticket_providing?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type ConventionRunArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type ConventionSignupArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -531,7 +909,22 @@ export type ConventionSignup_Spy_PaginatedArgs = {
 };
 
 
+export type ConventionStaff_PositionArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type ConventionTypeaheadSearchCmsContentArgs = {
+  name?: Maybe<Scalars['String']>;
+};
+
+
 export type ConventionUser_Activity_AlertArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type ConventionUser_Con_ProfileArgs = {
   id: Scalars['Int'];
 };
 
@@ -587,10 +980,14 @@ export type ConventionReports = {
 
 export type ConventionsPagination = PaginationInterface & {
   __typename: 'ConventionsPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<Convention>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -650,10 +1047,14 @@ export type CouponInput = {
 
 export type CouponsPagination = PaginationInterface & {
   __typename: 'CouponsPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<Coupon>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -1752,10 +2153,14 @@ export type EmailRouteInput = {
 
 export type EmailRoutesPagination = PaginationInterface & {
   __typename: 'EmailRoutesPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<EmailRoute>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -1906,10 +2311,14 @@ export type EventProposalInput = {
 
 export type EventProposalsPagination = PaginationInterface & {
   __typename: 'EventProposalsPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<EventProposal>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -1927,10 +2336,14 @@ export type EventWithChoiceCounts = {
 
 export type EventsPagination = PaginationInterface & {
   __typename: 'EventsPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<Event>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -2021,7 +2434,19 @@ export type FormSection = {
   form_items: Array<FormItem>;
   id: Scalars['Int'];
   position: Scalars['Int'];
+  /**
+   * Given a FormItemInput, returns a preview version of that form item within this section.  This
+   * does not actually save the form item.  This is mostly useful because of the
+   * `rendered_properties` field inside FormItem, which lets clients retrieve
+   * a rendered HTML version of the Liquid-enabled properties of the form item.
+   */
+  preview_form_item: FormItem;
   title?: Maybe<Scalars['String']>;
+};
+
+
+export type FormSectionPreview_Form_ItemArgs = {
+  formItem: FormItemInput;
 };
 
 export type FormSectionInput = {
@@ -2989,6 +3414,12 @@ export type Order = {
   order_entries: Array<OrderEntry>;
   paid_at?: Maybe<Scalars['Date']>;
   payment_amount?: Maybe<Money>;
+  /**
+   * Generates a Stripe PaymentIntent for this order and returns the client secret from that
+   * PaymentIntent.  This can be used to start a payment on the client side, for example using
+   * Apple Pay or Google Pay.
+   */
+  payment_intent_client_secret: Scalars['String'];
   payment_note?: Maybe<Scalars['String']>;
   status: OrderStatus;
   submitted_at?: Maybe<Scalars['Date']>;
@@ -3068,10 +3499,14 @@ export type OrdersConnection = {
 
 export type OrdersPagination = PaginationInterface & {
   __typename: 'OrdersPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<Order>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -3136,10 +3571,29 @@ export type PageInput = {
   slug?: Maybe<Scalars['String']>;
 };
 
+/**
+ * PaginationInterface provides a way to use offset-based pagination on a list of objects.  This
+ * is useful for UIs such as Intercode's table views, which provide a way to jump between numbered
+ * pages.
+ *
+ * Page numbers in PaginationInterface are 1-based (so, the first page is page 1, then page 2,
+ * etc.)  The number of items per page can be controlled via the per_page argument on paginated
+ * fields.  It defaults to 20, and can go up to 200.
+ *
+ * Offset-based pagination is different from
+ * [Relay's cursor-based pagination](https://relay.dev/graphql/connections.htm) that is more
+ * commonly used in GraphQL APIs.  We chose to go with an offset-based approach due to our UI
+ * needs, but if a cursor-based approach is desirable in the future, we may also implement Relay
+ * connections alongside our existing pagination fields.
+ */
 export type PaginationInterface = {
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -3279,64 +3733,332 @@ export type ProvideEventTicketPayload = {
 
 export type Query = {
   __typename: 'Query';
+  /**
+   * If there is a CMS partial on the root site called `account_form_text`, renders it to HTML
+   * and returns the result.  Otherwise, returns null.
+   *
+   * This is used by the "update your account" pages as a way to clarify that your account is
+   * shared between multiple conventions.
+   */
   accountFormContentHtml?: Maybe<Scalars['String']>;
   /**
-   * Returns the convention associated with the domain name of this request.  If one is not \
-   * present, the request will error out.
+   * Returns the convention associated with the domain name of this HTTP request.  If one is not
+   * present, the request will error out.  (For a version that will return null instead of
+   * erroring out, use `convention`.)
+   * @deprecated This field is being renamed to `conventionByRequestHost`.
    */
   assertConvention: Convention;
+  /**
+   * If the current user is an assumed identity (using the "become user" feature), this returns
+   * the actual profile of the signed-in account.  If not, returns null.
+   */
   assumedIdentityFromProfile?: Maybe<UserConProfile>;
+  /**
+   * Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+   * CMS content group with that ID, or the CMS content group is associated with a different
+   * domain name, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParent interface instead.
+   */
   cmsContentGroup: CmsContentGroup;
+  /**
+   * Returns all CMS content groups within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParent interface instead.
+   */
   cmsContentGroups: Array<CmsContentGroup>;
+  /**
+   * Returns all CMS files within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParent interface instead.
+   */
   cmsFiles: Array<CmsFile>;
+  /**
+   * Returns all CMS GraphQL queries within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParent interface instead.
+   */
   cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /**
+   * Returns all CMS layouts within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParent interface instead.
+   */
   cmsLayouts: Array<CmsLayout>;
+  /**
+   * Returns all CMS navigation items within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParent interface instead.
+   */
   cmsNavigationItems: Array<CmsNavigationItem>;
+  /**
+   * Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+   * optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+   * different way of finding a page.  If the desired page can't be found within the current
+   * domain name, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParent interface instead.
+   */
   cmsPage: Page;
+  /**
+   * Returns all CMS pages within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParent interface instead.
+   */
   cmsPages: Array<Page>;
+  /**
+   * Returns the CMS parent object associated with the domain name of this HTTP request.  In a
+   * convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+   * @deprecated This query is being renamed to `cmsParentByRequestHost`.
+   */
   cmsParent: CmsParent;
+  /**
+   * Returns the CMS parent object associated with the domain name of this HTTP request.  In a
+   * convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+   */
+  cmsParentByRequestHost: CmsParent;
+  /**
+   * Returns all CMS partials within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParent interface instead.
+   */
   cmsPartials: Array<CmsPartial>;
+  /**
+   * Returns all CMS variables within the current domain.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParent interface instead.
+   */
   cmsVariables: Array<CmsVariable>;
   /**
-   * Returns the convention associated with the domain name of this request, or null if there \
-   * is none.
+   * Returns the convention associated with the domain name of this HTTP request, or null if there
+   * is none.  (For a version that will either return a convention or error out, use
+   * `assertConvention`.)
+   * @deprecated This field is being removed in favor of `conventionByRequestHostIfPresent`.
    */
   convention?: Maybe<Convention>;
+  /** Returns the convention associated with a specified domain name. */
+  conventionByDomain: Convention;
+  /** Finds a convention by ID.  If a matching one can't be found, the request will error out. */
   conventionById: Convention;
+  /**
+   * Returns the convention associated with the domain name of this HTTP request.  If one is not
+   * present, the request will error out.  (For a version that will return null instead of
+   * erroring out, use `conventionByRequestHostIfPresent`.)
+   */
+  conventionByRequestHost: Convention;
+  /**
+   * Returns the convention associated with the domain name of this HTTP request.  If one is not
+   * present, returns null.
+   */
+  conventionByRequestHostIfPresent?: Maybe<Convention>;
+  /**
+   * Returns all conventions in the database.
+   * @deprecated This field is being removed due to its potential performance implications.  Please use conventions_paginated instead.
+   */
   conventions: Array<Convention>;
+  /**
+   * Returns a paginated list of conventions.  See PaginationInterface for details on how to use
+   * paginated lists, and ConventionFiltersInput for filters you can use here.
+   */
   conventions_paginated: ConventionsPagination;
+  /**
+   * Returns the ability object for the current user's permissions, or an ability object for an
+   * anonymous user if no user is currently signed in.
+   */
   currentAbility: Ability;
+  /**
+   * If there is a signed-in user and they have a pending store order open in the convention
+   * associated with the domain name of this HTTP request, returns that order.  Otherwise, returns
+   * null.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `current_pending_order` field on the UserConProfile type instead.
+   */
   currentPendingOrder?: Maybe<Order>;
+  /**
+   * If there is a signed-in user and they have a pending store order open in the convention
+   * associated with the domain name of this HTTP request, this generates a Stripe PaymentIntent
+   * for that order and returns the client secret from that PaymentIntent.  This can be used to
+   * start a payment on the client side, for example using Apple Pay or Google Pay.
+   *
+   * If there is no signed-in user, this query will error out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `payment_intent_client_secret` field on the Order type instead.
+   */
   currentPendingOrderPaymentIntentClientSecret: Scalars['String'];
+  /** Returns the currently signed-in user.  If no user is signed in, returns null. */
   currentUser?: Maybe<User>;
+  /**
+   * Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+   * will be the page-specific layout if the URL corresponds to a page with a layout override, or
+   * the default layout for the domain otherwise.)
+   * @deprecated Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParent interface instead.
+   */
   effectiveCmsLayout: CmsLayout;
+  /**
+   * Returns a paginated list of the _global_ email routes configured in Intercode.
+   * (Convention-specific email routing is controlled via that convention's StaffPositions.)
+   */
   email_routes_paginated: EmailRoutesPagination;
+  /**
+   * Finds an active event by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no event with that ID, or the event is associated with a different
+   * convention, or the event is no longer active, errors out.
+   * @deprecated Domain-specific queries are being deprecated.  Please use the `event` field on the Convention type instead.
+   */
   event: Event;
+  /**
+   * Finds an event proposal by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no event proposal with that ID, or the event proposal is associated
+   * with a different convention, errors out.
+   * @deprecated Domain-specific queries are being deprecated.  Please use the `event_proposal` field on the Convention type instead.
+   */
   eventProposal: EventProposal;
+  /**
+   * Returns all active events in convention associated with the domain name of this HTTP request.
+   * Filterable by a range of start/finish times.
+   *
+   * **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+   * when using it.
+   * @deprecated Domain-specific queries are being deprecated.  Please use the `events` field on the Convention type instead.
+   */
   events: Array<Event>;
+  /**
+   * Finds a form by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no form with that ID, or the form is associated
+   * with a different convention, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `form` field on the Convention object instead.
+   */
   form: Form;
+  /**
+   * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+   * This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+   * CMS variables.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParent interface instead.
+   */
   liquidAssigns: Array<LiquidAssign>;
+  /**
+   * Returns the authorized OAuth applications for the current user.  If no user is signed in,
+   * returns null.
+   */
   myAuthorizedApplications: Array<AuthorizedApplication>;
+  /**
+   * Returns the convention-specific profile for the current user within the convention associated
+   * with the domain name of this HTTP request.  If no user is signed in, returns null.
+   * @deprecated Domain-specific queries are being deprecated.  Please use the `my_profile` field on the Convention type instead.
+   */
   myProfile?: Maybe<UserConProfile>;
+  /**
+   * Returns all signups for the current user within the convention associated with the domain name
+   * of this HTTP request.  If no user is signed in, returns an empty array.
+   * @deprecated Domain-specific queries are being deprecated.  Please use the `my_signups` field on the Convention type instead.
+   */
   my_signups: Array<Signup>;
+  /**
+   * Returns all the Liquid assigns for rendering a particular notification event in the current
+   * domain name.   This is a combination of globally-accessible Liquid assigns, values specific
+   * to that notification event, and domain-specific user-defined CMS variables.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the Convention type instead.
+   */
   notifierLiquidAssigns: Array<LiquidAssign>;
+  /**
+   * Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
+   * JSON object containing the necessary data for rendering the pre-authorization screen that
+   * checks if you want to allow an application to access Intercode on your behalf.
+   *
+   * This essentially emulates the JSON behavior of
+   * [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper)'s API-only mode if you go to
+   * `/oauth/authorize` with query parameters.  The only reason this query exists, rather than
+   * simply having clients actually call `/oauth/authorize`, is that we're running Doorkeeper
+   * in regular mode so that we can get the server-rendered HTML admin views.
+   *
+   * When we've implemented our own admin screens for OAuth
+   * (see [this Github issue](https://github.com/neinteractiveliterature/intercode/issues/2740)),
+   * this query will be deprecated.
+   */
   oauthPreAuth: Scalars['Json'];
+  /** Returns all organizations in the database. */
   organizations: Array<Organization>;
+  /**
+   * Given a form section ID and a FormItemInput, returns a preview version of that form item
+   * within that section.  This does not actually save the form item.  This is mostly useful
+   * because of the `rendered_properties` field inside FormItem, which lets clients retrieve
+   * a rendered HTML version of the Liquid-enabled properties of the form item.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the FormSection type instead.
+   */
   previewFormItem: FormItem;
+  /**
+   * Given a Liquid text string, renders it to HTML using the current domain's CMS context
+   * and returns the result.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParent interface instead.
+   */
   previewLiquid: Scalars['String'];
+  /**
+   * Given a Markdown text string, renders it to HTML using the current domain's CMS context
+   * and returns the result.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParent interface instead.
+   */
   previewMarkdown: Scalars['String'];
+  /**
+   * Given a Liquid text string and a notification event, renders the Liquid to HTML using the
+   * current domain's CMS context as if it were the content for that notification type.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `preview_notifier_liquid` field on the Convention type instead.
+   */
   previewNotifierLiquid: Scalars['String'];
+  /**
+   * Finds a product by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no product with that ID, or the product is associated
+   * with a different convention, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `product` field on the Convention type instead.
+   */
   product: Product;
+  /** Returns the singleton RootSite object, which is a CMS parent. */
   rootSite: RootSite;
+  /**
+   * Finds an active run by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no run with that ID, or the run's event is associated with a different
+   * convention, or the run's event is no longer active, errors out.
+   * @deprecated Domain-specific queries are being
+   * deprecated.  Please use the `run` field on the Convention type instead.
+   */
   run: Run;
+  /**
+   * Returns all runs attached to active events in convention associated with the domain name of
+   * this HTTP request.
+   * @deprecated This field is being removed due to its potential performance implications.  Please avoid requesting unpaginated lists of all runs.  Instead, use `events_paginated` from a Convention object and request the runs from those events.
+   */
   runs: Array<Run>;
+  /**
+   * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+   * For example, in a convention that has a partial called `attendee_profile` and a page called
+   * `info_for_attendees`, a search for `attendee` would return both of these.
+   *
+   * This query is always limited to a maximum of 10 results.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParent interface instead.
+   */
   searchCmsContent: Array<CmsContent>;
+  /**
+   * Finds a signup by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no signup with that ID, or the signup is associated
+   * with a different convention, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `signup` field on the Convention type instead.
+   */
   signup: Signup;
+  /**
+   * Does a full-text search on the convention associated with the domain name of this HTTP
+   * request.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParent interface instead.
+   */
   siteSearch: SearchResult;
+  /**
+   * Finds a staff position by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no staff position with that ID, or the staff position is associated
+   * with a different convention, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `staff_position` field on the Convention object instead.
+   */
   staffPosition: StaffPosition;
+  /** Finds a user by ID.  If there is no user with that ID, errors out. */
   user: User;
+  /**
+   * Finds a UserConProfile by ID in the convention associated with the domain name of this HTTP
+   * request.  If there is no UserConProfile with that ID, or the UserConProfile is associated
+   * with a different convention, errors out.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `user_con_profile` field on the Convention object instead.
+   */
   userConProfile: UserConProfile;
+  /** Finds up to 25 users by ID.  If any of the IDs don't match an existing user, errors out. */
   users: Array<User>;
+  /**
+   * Returns a paginated list of users.  See PaginationInterface for details on how to use
+   * paginated lists, and UserFiltersInput for filters you can use here.
+   */
   users_paginated: UsersPagination;
 };
 
@@ -3350,6 +4072,11 @@ export type QueryCmsPageArgs = {
   id?: Maybe<Scalars['Int']>;
   rootPage?: Maybe<Scalars['Boolean']>;
   slug?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryConventionByDomainArgs = {
+  domain: Scalars['String'];
 };
 
 
@@ -3619,14 +4346,110 @@ export type RoomInput = {
   name?: Maybe<Scalars['String']>;
 };
 
-export type RootSite = {
+export type RootSite = CmsParent & {
   __typename: 'RootSite';
+  /**
+   * Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+   * CMS content group with that ID, or the CMS content group is associated with a different
+   * domain name, errors out.
+   */
+  cmsContentGroup: CmsContentGroup;
+  /** Returns all CMS content groups within the current domain. */
+  cmsContentGroups: Array<CmsContentGroup>;
+  /** Returns all CMS files within the current domain. */
+  cmsFiles: Array<CmsFile>;
+  /** Returns all CMS GraphQL queries within the current domain. */
+  cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /** Returns all CMS layouts within the current domain. */
+  cmsLayouts: Array<CmsLayout>;
+  /** Returns all CMS navigation items within the current domain. */
+  cmsNavigationItems: Array<CmsNavigationItem>;
+  /**
+   * Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
+   * optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
+   * different way of finding a page.  If the desired page can't be found within the current
+   * domain name, errors out.
+   */
+  cmsPage: Page;
+  /** Returns all CMS pages within the current domain. */
+  cmsPages: Array<Page>;
+  /** Returns all CMS partials within the current domain. */
+  cmsPartials: Array<CmsPartial>;
+  /** Returns all CMS variables within the current domain. */
+  cmsVariables: Array<CmsVariable>;
+  defaultLayout: CmsLayout;
+  /** @deprecated Use `defaultLayout` instead */
   default_layout: CmsLayout;
+  /**
+   * Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+   * will be the page-specific layout if the URL corresponds to a page with a layout override, or
+   * the default layout for the domain otherwise.)
+   */
+  effectiveCmsLayout: CmsLayout;
+  /** Does a full-text search within this domain. */
+  fullTextSearch: SearchResult;
   host: Scalars['String'];
   id: Scalars['Int'];
+  /**
+   * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
+   * This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
+   * CMS variables.
+   */
+  liquidAssigns: Array<LiquidAssign>;
+  /** Given a Liquid text string, renders it to HTML and returns the result. */
+  previewLiquid: Scalars['String'];
+  /** Given a Markdown text string, renders it to HTML and returns the result. */
+  previewMarkdown: Scalars['String'];
+  rootPage: Page;
+  /** @deprecated Use `rootPage` instead */
   root_page: Page;
   site_name: Scalars['String'];
+  /**
+   * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
+   * For example, in a convention that has a partial called `attendee_profile` and a page called
+   * `info_for_attendees`, a search for `attendee` would return both of these.
+   *
+   * This query is always limited to a maximum of 10 results.
+   */
+  typeaheadSearchCmsContent: Array<CmsContent>;
   url: Scalars['String'];
+};
+
+
+export type RootSiteCmsContentGroupArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type RootSiteCmsPageArgs = {
+  id?: Maybe<Scalars['Int']>;
+  rootPage?: Maybe<Scalars['Boolean']>;
+  slug?: Maybe<Scalars['String']>;
+};
+
+
+export type RootSiteEffectiveCmsLayoutArgs = {
+  path: Scalars['String'];
+};
+
+
+export type RootSiteFullTextSearchArgs = {
+  query: Scalars['String'];
+};
+
+
+export type RootSitePreviewLiquidArgs = {
+  content: Scalars['String'];
+};
+
+
+export type RootSitePreviewMarkdownArgs = {
+  markdown: Scalars['String'];
+};
+
+
+export type RootSiteTypeaheadSearchCmsContentArgs = {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type RootSiteInput = {
@@ -3808,10 +4631,14 @@ export type SignupChangeFiltersInput = {
 
 export type SignupChangesPagination = PaginationInterface & {
   __typename: 'SignupChangesPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<SignupChange>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -3876,10 +4703,14 @@ export enum SignupRequestState {
 
 export type SignupRequestsPagination = PaginationInterface & {
   __typename: 'SignupRequestsPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<SignupRequest>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -3891,10 +4722,14 @@ export enum SignupState {
 
 export type SignupsPagination = PaginationInterface & {
   __typename: 'SignupsPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<Signup>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -3921,8 +4756,17 @@ export type SortCmsNavigationItemsPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
+/**
+ * A description of a field to sort a result set by.  This is typically used in pagination
+ * fields to specify how the results should be ordered.
+ */
 export type SortInput = {
+  /**
+   * If true, the field will be sorted in descending order.  If false, it will be sorted in
+   * ascending order.
+   */
   desc: Scalars['Boolean'];
+  /** The name of the field to sort by. */
   field: Scalars['String'];
 };
 
@@ -4782,6 +5626,8 @@ export type UserConProfile = {
   city?: Maybe<Scalars['String']>;
   convention: Convention;
   country?: Maybe<Scalars['String']>;
+  /** If this profile has a pending order, returns that order.  Otherwise, returns null. */
+  current_pending_order?: Maybe<Order>;
   current_user_form_item_viewer_role: FormItemRole;
   current_user_form_item_writer_role: FormItemRole;
   /** @deprecated Daytime phone, evening phone, best time to call, and preferred contact method fields are deprecated in favor of just using the mobile phone and/or email address.  For conventions that used the deprecated fields, they will remain available in form_response_attrs_json. */
@@ -4857,10 +5703,14 @@ export type UserConProfileInput = {
 
 export type UserConProfilesPagination = PaginationInterface & {
   __typename: 'UserConProfilesPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<UserConProfile>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 
@@ -4874,10 +5724,14 @@ export type UserFiltersInput = {
 
 export type UsersPagination = PaginationInterface & {
   __typename: 'UsersPagination';
+  /** The number of the page currently being returned in this query */
   current_page: Scalars['Int'];
   entries: Array<User>;
+  /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int'];
+  /** The total number of items in the paginated list (across all pages) */
   total_entries: Scalars['Int'];
+  /** The total number of pages in the paginated list */
   total_pages: Scalars['Int'];
 };
 

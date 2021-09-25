@@ -20,7 +20,14 @@ import {
 } from './queries';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import AppRootContext from '../AppRootContext';
-import { Money } from '../graphqlTypes.generated';
+import {
+  Event,
+  Order,
+  OrderEntry,
+  Ticket,
+  TicketType,
+  UserConProfile,
+} from '../graphqlTypes.generated';
 import { useDeleteTicketMutation } from './mutations.generated';
 import {
   UserConProfileAdminQueryData,
@@ -31,32 +38,22 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 
 type TicketAdminControlsProps = {
   convention: {
+    name: string;
     ticket_name: string;
     ticket_types: AddOrderToTicketButtonProps['convention']['ticket_types'];
   };
-  userConProfile: {
-    id: number;
-    name?: string | null;
-    name_without_nickname: string;
-    ticket?: null | {
-      id: number;
-      provided_by_event?: null | {
-        title?: string | null;
-      };
-      ticket_type: {
-        id: number;
-        description?: string | null;
-      };
-      order_entry?: null | {
-        price_per_item?: Money;
-        order?: {
-          charge_id?: string | null;
-          payment_note?: string | null;
-        };
-      };
-      created_at: string;
-      updated_at: string;
-    };
+  userConProfile: Pick<UserConProfile, 'id' | 'name' | 'name_without_nickname'> & {
+    ticket?:
+      | null
+      | (Pick<Ticket, 'id' | 'created_at' | 'updated_at'> & {
+          provided_by_event?: null | Pick<Event, 'title'>;
+          ticket_type: Pick<TicketType, 'id' | 'name' | 'description'>;
+          order_entry?:
+            | null
+            | (Pick<OrderEntry, 'price_per_item'> & {
+                order?: null | Pick<Order, 'charge_id' | 'payment_note'>;
+              });
+        });
   };
 };
 
@@ -74,10 +71,13 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
   const confirm = useConfirm();
   const convertModal = useModal();
 
-  const deleteTicket = (refund: boolean) =>
-    deleteTicketMutate({
+  const deleteTicket = async (refund: boolean) => {
+    if (!userConProfile.ticket) {
+      throw new Error(`User profile has no ${convention.ticket_name} to delete`);
+    }
+    await deleteTicketMutate({
       variables: {
-        ticketId: userConProfile.ticket!.id,
+        ticketId: userConProfile.ticket.id,
         refund,
       },
       update: (cache) => {
@@ -86,19 +86,26 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
           query: UserConProfileAdminQuery,
           variables,
         });
-        cache.writeQuery({
+        if (!cacheData) {
+          return;
+        }
+        cache.writeQuery<UserConProfileAdminQueryData>({
           query: UserConProfileAdminQuery,
           variables,
           data: {
             ...cacheData,
-            userConProfile: {
-              ...cacheData?.userConProfile,
-              ticket: null,
+            convention: {
+              ...cacheData.convention,
+              user_con_profile: {
+                ...cacheData.convention.user_con_profile,
+                ticket: null,
+              },
             },
           },
         });
       },
     });
+  };
 
   if (loading) {
     return <LoadingIndicator iconSet="bootstrap-icons" />;
@@ -109,7 +116,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
   }
 
   const buttons: JSX.Element[] = [];
-  const { currentAbility } = data!;
+  const currentAbility = data?.currentAbility;
   const { ticket } = userConProfile;
   const chargeId = ticket?.order_entry?.order?.charge_id;
 
@@ -205,7 +212,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
         </button>,
       );
     }
-  } else if (currentAbility.can_create_tickets) {
+  } else if (currentAbility?.can_create_tickets) {
     buttons.push(
       <Link
         to={`/user_con_profiles/${userConProfile.id}/admin_ticket/new`}
@@ -237,7 +244,7 @@ export type TicketAdminSectionProps = {
   userConProfile: TicketAdminControlsProps['userConProfile'];
 };
 
-function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionProps) {
+function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 

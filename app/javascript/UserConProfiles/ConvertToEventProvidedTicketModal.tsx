@@ -7,7 +7,9 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 import { UserConProfileAdminQuery } from './queries';
 import EventSelect, { DefaultEventSelectOptionType } from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
-import TicketingStatusDescription from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
+import TicketingStatusDescription, {
+  TicketingStatusDescriptionProps,
+} from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
 import useAsyncFunction from '../useAsyncFunction';
 import {
   useConvertToEventProvidedTicketQuery,
@@ -15,13 +17,14 @@ import {
 } from './queries.generated';
 import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
 import { DefaultEventsQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
+import { Convention, UserConProfile } from '../graphqlTypes.generated';
 
 type EventSpecificSectionProps = {
   event: {
     id: number;
   };
-  userConProfile: any; // TODO get more specific once TicketingStatusDescription is converted
-  convention: any; // TODO ditto
+  userConProfile: TicketingStatusDescriptionProps['userConProfile'];
+  convention: Pick<Convention, 'name' | 'ticket_name'>;
   ticketTypeId?: number;
   setTicketTypeId: React.Dispatch<number>;
   disabled?: boolean;
@@ -47,6 +50,10 @@ function EventSpecificSection({
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data) {
+    return <ErrorDisplay stringError="No data loaded for query" />;
+  }
+
   return (
     <>
       <p className="mt-4">
@@ -54,8 +61,8 @@ function EventSpecificSection({
       </p>
 
       <ProvidableTicketTypeSelection
-        event={data!.event}
-        convention={data!.convention!}
+        event={data.convention.event}
+        convention={data.convention}
         value={ticketTypeId}
         onChange={setTicketTypeId}
         disabled={disabled}
@@ -65,13 +72,8 @@ function EventSpecificSection({
 }
 
 export type ConvertToEventProvidedTicketModalProps = {
-  convention: {
-    ticket_name: string;
-  };
-  userConProfile: {
-    id: number;
-    name?: string | null;
-  };
+  convention: Pick<Convention, 'name' | 'ticket_name'>;
+  userConProfile: TicketingStatusDescriptionProps['userConProfile'] & Pick<UserConProfile, 'id'>;
   visible: boolean;
   onClose: () => void;
 };
@@ -84,7 +86,7 @@ function ConvertToEventProvidedTicketModal({
   userConProfile,
   visible,
   onClose,
-}: ConvertToEventProvidedTicketModalProps) {
+}: ConvertToEventProvidedTicketModalProps): JSX.Element {
   const [event, setEvent] = useState<EventType>();
   const [ticketTypeId, setTicketTypeId] = useState<number>();
   const [convertMutate] = useConvertTicketToEventProvidedMutation();
@@ -106,15 +108,21 @@ function ConvertToEventProvidedTicketModal({
           query: UserConProfileAdminQuery,
           variables: { id: userConProfile.id },
         });
+        if (!cachedData) {
+          return;
+        }
 
-        cache.writeQuery({
+        cache.writeQuery<UserConProfileAdminQueryData>({
           query: UserConProfileAdminQuery,
           variables: { id: userConProfile.id },
           data: {
             ...cachedData,
-            userConProfile: {
-              ...cachedData?.userConProfile,
-              ticket: result.data?.convertTicketToEventProvided?.ticket,
+            convention: {
+              ...cachedData.convention,
+              user_con_profile: {
+                ...cachedData.convention.user_con_profile,
+                ticket: result.data?.convertTicketToEventProvided?.ticket,
+              },
             },
           },
         });
@@ -127,7 +135,7 @@ function ConvertToEventProvidedTicketModal({
     <Modal visible={visible}>
       <div className="modal-header">
         {'Convert '}
-        {userConProfile.name}
+        {userConProfile.name_without_nickname}
         {"'s "}
         {convention.ticket_name}
         {' to event-provided'}
@@ -136,7 +144,7 @@ function ConvertToEventProvidedTicketModal({
       <div className="modal-body">
         <p>
           {'This will delete '}
-          {userConProfile.name}
+          {userConProfile.name_without_nickname}
           ’s
           {' existing '}
           {convention.ticket_name}

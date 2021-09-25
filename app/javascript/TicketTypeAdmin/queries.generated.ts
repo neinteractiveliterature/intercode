@@ -32,7 +32,7 @@ export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     ${PricingStructureFieldsFragmentDoc}`;
 export const AdminTicketTypesQueryDocument = gql`
     query AdminTicketTypesQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ticket_types {
       id

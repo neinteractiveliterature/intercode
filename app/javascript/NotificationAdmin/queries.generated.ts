@@ -23,7 +23,7 @@ export const NotificationTemplateFieldsFragmentDoc = gql`
     `;
 export const NotificationAdminQueryDocument = gql`
     query NotificationAdminQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     notification_templates {
       id

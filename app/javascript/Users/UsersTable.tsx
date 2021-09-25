@@ -67,7 +67,7 @@ function getPossibleColumns(): Column<UserType>[] {
 
 const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 
-function UsersTable() {
+function UsersTable(): JSX.Element {
   const history = useHistory();
   const mergeModal = useModal<{ userIds: number[] }>();
   usePageTitle('Users');

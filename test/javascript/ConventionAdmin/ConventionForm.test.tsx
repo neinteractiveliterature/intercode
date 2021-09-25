@@ -18,6 +18,10 @@ describe('ConventionForm', () => {
     __typename: 'Convention',
     canceled: false,
     cms_layouts: [],
+    default_layout: {
+      __typename: 'CmsLayout',
+      id: 0,
+    },
     email_from: 'noreply@convention.test',
     id: 0,
     language: 'en',
@@ -44,6 +48,10 @@ describe('ConventionForm', () => {
     ticket_name: 'ticket',
     staff_positions: [],
     email_mode: EmailMode.Forward,
+    root_page: {
+      __typename: 'Page',
+      id: 0,
+    },
   };
 
   const renderConventionForm = (
@@ -54,6 +62,7 @@ describe('ConventionForm', () => {
       <ConventionForm
         initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
         rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: 123 }}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         saveConvention={async () => {}}
         cmsLayouts={[]}
         pages={[]}
@@ -113,7 +122,7 @@ describe('ConventionForm', () => {
 
     fireEvent.click(getByText('Events'));
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(false);
-    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes')!, {
+    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), {
       target: { checked: true },
     });
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(true);

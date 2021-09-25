@@ -43,7 +43,7 @@ export const EventCategoryFieldsFragmentDoc = gql`
     `;
 export const EventCategoryAdminQueryDocument = gql`
     query EventCategoryAdminQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     ticket_name

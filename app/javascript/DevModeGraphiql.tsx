@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
 import { Fetcher } from '@graphiql/toolkit';
@@ -18,13 +18,13 @@ export type DevModeGraphiqlProps = {
 
 function DevModeGraphiql({
   authenticityTokens: { graphql: authenticityToken },
-}: DevModeGraphiqlProps) {
+}: DevModeGraphiqlProps): JSX.Element {
   const link = useIntercodeApolloLink(authenticityToken);
 
-  // @ts-ignore
+  // @ts-expect-error We're doing some shenanigans on the fetcher to adapt it to Apollo Link
   const fetcher: Fetcher = useCallback(
     (operation) => {
-      const operationAsGraphQLRequest = (operation as unknown) as GraphQLRequest;
+      const operationAsGraphQLRequest = operation as unknown as GraphQLRequest;
       // eslint-disable-next-line no-param-reassign
       operationAsGraphQLRequest.query = parse(operation.query);
       return execute(link, operationAsGraphQLRequest);
@@ -35,4 +35,4 @@ function DevModeGraphiql({
   return <GraphiQL fetcher={fetcher} editorTheme="intercode" />;
 }
 
-mountReactComponents({ DevModeGraphiql });
+mountReactComponents({ DevModeGraphiql: DevModeGraphiql as React.FC<unknown> });

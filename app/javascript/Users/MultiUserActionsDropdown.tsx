@@ -8,7 +8,7 @@ export type MultiUserActionsDropdownProps = {
 function MultiUserActionsDropdown({
   selectedUserIds,
   onClickMerge,
-}: MultiUserActionsDropdownProps) {
+}: MultiUserActionsDropdownProps): JSX.Element {
   return (
     <DropdownMenu buttonClassName="btn btn-outline-primary dropdown-toggle" buttonContent="Actions">
       <button

@@ -27,7 +27,7 @@ export const AdminCouponFieldsFragmentDoc = gql`
     ${CouponFieldsFragmentDoc}`;
 export const AdminCouponsQueryDocument = gql`
     query AdminCouponsQuery($filters: CouponFiltersInput, $sort: [SortInput!], $page: Int, $per_page: Int) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     coupons_paginated(
       filters: $filters

@@ -58,7 +58,7 @@ export const FormEditorData = gql`
 
 export const FormAdminQuery = gql`
   query FormAdminQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
 
@@ -74,7 +74,7 @@ export const FormAdminQuery = gql`
 
 export const FormEditorQuery = gql`
   query FormEditorQuery($id: Int!) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
       starts_at

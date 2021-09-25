@@ -37,7 +37,7 @@ export type MergeUsersModalProps = {
   userIds?: number[];
 };
 
-function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps) {
+function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps): JSX.Element {
   const { data, loading, error } = useMergeUsersModalQuery({
     variables: { ids: userIds || [] },
   });
@@ -46,10 +46,16 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
   const [mutate, { error: mutationError, loading: mutationInProgress }] = useMergeUsersMutation();
 
   const performMerge = async () => {
+    if (!userIds) {
+      throw new Error('No userIds to merge');
+    }
+    if (!winningUserId) {
+      throw new Error('No winningUserId for merge');
+    }
     await mutate({
       variables: {
-        userIds: userIds!,
-        winningUserId: winningUserId!,
+        userIds: userIds,
+        winningUserId: winningUserId,
         winningUserConProfiles: [...winningProfileIds.entries()].map(
           ([conventionId, userConProfileId]) => ({
             conventionId,
@@ -101,16 +107,16 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
   );
 
   const renderMergePreview = () => {
-    if (!winningUserId) {
+    if (!winningUserId || !data) {
       return null;
     }
 
-    const winningUser = data!.users.find((user) => user.id === winningUserId);
+    const winningUser = data.users.find((user) => user.id === winningUserId);
     if (!winningUser) {
       return null;
     }
 
-    const allPrivileges = uniq(flatMap(data!.users, (user) => user.privileges));
+    const allPrivileges = uniq(flatMap(data.users, (user) => user.privileges));
 
     const renderConventionRow = (convention: ConventionType) => {
       const userConProfiles = profilesByConventionId.get(convention.id) ?? [];
@@ -197,7 +203,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
       <p>Please select a user account to merge others into:</p>
 
       <ChoiceSet
-        choices={sortBy(data!.users, (user) => user.id).map((user) => ({
+        choices={sortBy(data?.users, (user) => user.id).map((user) => ({
           label: `${user.id} (${user.name}, ${user.email})`,
           value: user.id.toString(),
         }))}

@@ -1,8 +1,8 @@
 // adapted from https://github.com/siddharthkp/use-timeout/blob/master/index.js
 import { useEffect, useRef } from 'react';
 
-function useTimeout(callback: (...args: any[]) => void, delay: number) {
-  const savedCallback = useRef<(...args: any[]) => void>();
+function useTimeout(callback: (...args: unknown[]) => void, delay: number): void {
+  const savedCallback = useRef<(...args: unknown[]) => void>();
 
   // Remember the latest callback.
   useEffect(() => {

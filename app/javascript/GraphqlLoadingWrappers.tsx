@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { QueryHookOptions, QueryResult } from '@apollo/client';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
@@ -7,7 +6,7 @@ import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/lit
 import FourOhFourPage from './FourOhFourPage';
 
 export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
-  useLoadData: (baseOptions?: QueryHookOptions<TData, {}>) => QueryResult<TData>,
+  useLoadData: (baseOptions?: QueryHookOptions<TData, unknown>) => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,
   WrappedComponent: React.ComponentType<TProps & { value: TValue; data: TData }>,
 ): (props: TProps) => JSX.Element {
@@ -24,11 +23,11 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
       return <ErrorDisplay graphQLError={error} />;
     }
 
-    if (!value) {
+    if (!data || !value) {
       return <FourOhFourPage />;
     }
 
-    return <WrappedComponent value={value} data={data!} {...props} />;
+    return <WrappedComponent value={value} data={data} {...props} />;
   };
 
   const wrappedComponentDisplayName =

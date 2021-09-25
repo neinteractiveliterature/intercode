@@ -31,6 +31,7 @@ import {
   useScheduleGridEventsQuery,
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
+import FourOhFourPage from '../../FourOhFourPage';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
@@ -74,6 +75,7 @@ export const ScheduleGridContext = createContext<ScheduleGridContextValue>({
   convention: skeletonConvention,
   isRunDetailsVisible: () => false,
   visibleRunDetails: new Map<number, RunDetailsVisibilitySpec[]>(),
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   toggleRunDetailsVisibility: () => {},
 });
 
@@ -137,7 +139,7 @@ export function useScheduleGridProvider(
 
   const toggleRunDetailsVisibility = useCallback(
     (visibilitySpec: RunDetailsVisibilitySpec) => {
-      let newVisibility: boolean = false;
+      let newVisibility = false;
 
       setVisibleRunDetailsIds((prevVisibleRunDetails) => {
         const newVisibleRunDetails = new Map<number, RunDetailsVisibilitySpec[]>();
@@ -146,10 +148,10 @@ export function useScheduleGridProvider(
         });
 
         if (checkRunDetailsVisibity(prevVisibleRunDetails, visibilitySpec)) {
-          const visibleSpecsForRun = prevVisibleRunDetails.get(visibilitySpec.runId)!;
+          const visibleSpecsForRun = prevVisibleRunDetails.get(visibilitySpec.runId);
           newVisibleRunDetails.set(
             visibilitySpec.runId,
-            visibleSpecsForRun.filter(
+            (visibleSpecsForRun ?? []).filter(
               (visibleSpec) => !runDetailsVisibilitySpecsMatch(visibleSpec, visibilitySpec),
             ),
           );
@@ -279,7 +281,7 @@ export function ScheduleGridProvider({
   children,
   myRatingFilter,
   hideConflicts,
-}: ScheduleGridProviderProps) {
+}: ScheduleGridProviderProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
@@ -326,7 +328,11 @@ export function ScheduleGridProvider({
     return <ScheduleGridSkeleton />;
   }
 
-  const convention = conventionOrNull!;
+  if (!conventionOrNull) {
+    return <FourOhFourPage />;
+  }
+
+  const convention = conventionOrNull;
 
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>

@@ -77,7 +77,7 @@ export const FormEditorDataFragmentDoc = gql`
 ${FormEditorFormItemFieldsFragmentDoc}`;
 export const FormAdminQueryDocument = gql`
     query FormAdminQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     forms {
@@ -116,7 +116,7 @@ export type FormAdminQueryLazyQueryHookResult = ReturnType<typeof useFormAdminQu
 export type FormAdminQueryQueryResult = Apollo.QueryResult<FormAdminQueryData, FormAdminQueryVariables>;
 export const FormEditorQueryDocument = gql`
     query FormEditorQuery($id: Int!) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     starts_at

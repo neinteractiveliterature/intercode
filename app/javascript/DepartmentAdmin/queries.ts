@@ -19,7 +19,7 @@ export const DepartmentAdminQuery = gql`
       can_update_departments
     }
 
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
 
       departments {
