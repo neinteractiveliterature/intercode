@@ -19560,15 +19560,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-cookie-consent@npm:6.4.0":
-  version: 6.4.0
-  resolution: "react-cookie-consent@npm:6.4.0"
+"react-cookie-consent@npm:6.4.1":
+  version: 6.4.1
+  resolution: "react-cookie-consent@npm:6.4.1"
   dependencies:
     js-cookie: ^2.2.1
     prop-types: ^15.7.2
   peerDependencies:
     react: ^16.13.1 || ^17.0.0
-  checksum: 051f54e175a600af74668d833329d4eae4571cb146406eb42ee8a435e9cd3d1fb40a84d0b77ac8d2f7db012f55f1b357eb9dcbac966eb8762e60028522bbf14a
+  checksum: 7aab1a94ef195b6421a4e9f26153507852121f243a630eacd507d0090db65c0502081b8a19abb10e2a91ba5fecbf2360f3bb9dd23a7b83791eaf248c43256728
   languageName: node
   linkType: hard
 
@@ -20906,7 +20906,7 @@ resolve@^2.0.0-next.3:
     react: 17.0.2
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
-    react-cookie-consent: 6.4.0
+    react-cookie-consent: 6.4.1
     react-dom: 17.0.2
     react-google-recaptcha: 2.1.0
     react-html-id: 0.1.5
