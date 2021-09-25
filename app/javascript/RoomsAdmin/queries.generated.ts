@@ -12,7 +12,7 @@ export type RoomsAdminQueryData = { __typename: 'Query', convention: { __typenam
 
 export const RoomsAdminQueryDocument = gql`
     query RoomsAdminQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     rooms {
       id

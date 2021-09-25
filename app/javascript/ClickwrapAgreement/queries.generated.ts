@@ -12,7 +12,7 @@ export type ClickwrapAgreementQueryData = { __typename: 'Query', convention: { _
 
 export const ClickwrapAgreementQueryDocument = gql`
     query ClickwrapAgreementQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     clickwrap_agreement_html

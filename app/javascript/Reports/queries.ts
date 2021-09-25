@@ -3,7 +3,7 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 
 export const ReportsMenuQuery = gql`
   query ReportsMenuQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ticket_mode
       ticket_name
@@ -13,7 +13,7 @@ export const ReportsMenuQuery = gql`
 
 export const AttendanceByPaymentAmountQuery = gql`
   query AttendanceByPaymentAmountQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ticket_name
 
@@ -53,7 +53,7 @@ export const AttendanceByPaymentAmountQuery = gql`
 
 export const EventProvidedTicketsQuery = gql`
   query EventProvidedTicketsQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ticket_name
 
@@ -85,7 +85,7 @@ export const EventProvidedTicketsQuery = gql`
 
 export const EventsByChoiceQuery = gql`
   query EventsByChoiceQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
 
       reports {
@@ -108,7 +108,7 @@ export const EventsByChoiceQuery = gql`
 
 export const SignupCountsByStateQuery = gql`
   query SignupCountsByStateQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       signup_counts_by_state {
         state
@@ -125,7 +125,7 @@ export const SignupSpySignupChangesQuery = gql`
     $perPage: Int
     $sort: [SortInput!]
   ) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       timezone_name
 

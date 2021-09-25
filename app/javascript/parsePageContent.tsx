@@ -1,9 +1,9 @@
 import { Suspense, CSSProperties, ReactNode } from 'react';
 import * as React from 'react';
 import camelCase from 'lodash/camelCase';
-// @ts-expect-error
+// @ts-expect-error html-to-react has no type declarations
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
-// @ts-expect-error
+// @ts-expect-error html-to-react has no type declarations
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
 import { ErrorBoundary } from '@neinteractiveliterature/litform';
@@ -14,6 +14,7 @@ import SignUpButton from './Authentication/SignUpButton';
 import Spoiler from './Spoiler';
 
 export type ComponentMap = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [name: string]: React.ComponentType<any>;
 };
 
@@ -75,7 +76,8 @@ function createStyleJsonFromString(style: string) {
     }
 
     if (key != null && value != null && key.length > 0 && value.length > 0) {
-      (jsonStyles as any)[camelCase(key)] = value as any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (jsonStyles as any)[camelCase(key as keyof CSSProperties)] = value as any;
     }
   }
   return jsonStyles;
@@ -135,7 +137,7 @@ function processDefaultNode(node: Node, children: ReactNode[], index: number) {
     return createElement(node as Element, index);
   }
 
-  // @ts-ignore I don't know what's up with node.data but I'm afraid to change it
+  // @ts-expect-error I don't know what's up with node.data but I'm afraid to change it
   return createElement(node as Element, index, node.data, children);
 }
 
@@ -160,15 +162,14 @@ const AUTHENTICATION_LINK_REPLACEMENTS = {
   ),
 };
 
-const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<Element>[] = Object.entries(
-  AUTHENTICATION_LINK_REPLACEMENTS,
-).map(([path, processNode]) => ({
-  shouldProcessNode: (node: Node) =>
-    nodeIsElement(node) &&
-    node.nodeName.toLowerCase() === 'a' &&
-    ((node.attributes.getNamedItem('href') || {}).value || '').endsWith(path),
-  processNode,
-}));
+const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<Element>[] =
+  Object.entries(AUTHENTICATION_LINK_REPLACEMENTS).map(([path, processNode]) => ({
+    shouldProcessNode: (node: Node) =>
+      nodeIsElement(node) &&
+      node.nodeName.toLowerCase() === 'a' &&
+      ((node.attributes.getNamedItem('href') || {}).value || '').endsWith(path),
+    processNode,
+  }));
 
 function processReactComponentNode(
   node: Element,
@@ -228,7 +229,7 @@ function processCmsLinkNode(node: Element, children: ReactNode[], index: number)
 function traverseDom(
   node: Node,
   isValidNode: (node: Node) => boolean,
-  processingInstructions: ProcessingInstruction<any>[],
+  processingInstructions: ProcessingInstruction<unknown>[],
   index: number,
 ): ReactNode | false {
   if (isValidNode(node)) {
@@ -259,7 +260,7 @@ function traverseDom(
 function traverseWithInstructions(
   nodes: NodeList,
   isValidNode: (node: Node) => boolean,
-  processingInstructions: ProcessingInstruction<any>[],
+  processingInstructions: ProcessingInstruction<unknown>[],
 ): ReactNode | ReactNode[] {
   const list = [...nodes].map((domTreeItem, index) =>
     traverseDom(domTreeItem, isValidNode, processingInstructions, index),
@@ -267,7 +268,7 @@ function traverseWithInstructions(
   return list.length <= 1 ? list[0] : list;
 }
 
-function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInstruction<any>[] {
+function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInstruction<unknown>[] {
   return [
     ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
     {
@@ -290,7 +291,7 @@ function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInst
 export default function parsePageContent(
   content: string,
   componentMap: ComponentMap = DEFAULT_COMPONENT_MAP,
-) {
+): { bodyComponents: ReactNode; headComponents: ReactNode } {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/html');
   const processingInstructions = buildProcessingInstructions(componentMap);

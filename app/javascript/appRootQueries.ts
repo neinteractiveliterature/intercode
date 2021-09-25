@@ -1,11 +1,27 @@
 import { gql } from '@apollo/client';
 
-// eslint-disable-next-line import/prefer-default-export
 export const AppRootQuery = gql`
   query AppRootQuery($path: String!) {
-    effectiveCmsLayout(path: $path) {
-      id
-      content_html(path: $path)
+    cmsParentByRequestHost {
+      effectiveCmsLayout(path: $path) {
+        id
+        content_html(path: $path)
+      }
+
+      cmsNavigationItems {
+        id
+        position
+        title
+
+        navigation_section {
+          id
+        }
+
+        page {
+          id
+          slug
+        }
+      }
     }
 
     currentAbility {
@@ -41,34 +57,12 @@ export const AppRootQuery = gql`
       name
     }
 
-    currentPendingOrder {
-      id
-      order_entries {
-        id
-        quantity
-      }
-    }
-
-    myProfile {
-      id
-      name
-      accepted_clickwrap_agreement
-      name_without_nickname
-      first_name
-      last_name
-      gravatar_enabled
-      gravatar_url
-      ticket {
-        id
-      }
-    }
-
     assumedIdentityFromProfile {
       id
       name_without_nickname
     }
 
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
       domain
@@ -85,6 +79,7 @@ export const AppRootQuery = gql`
       clickwrap_agreement
       tickets_available_for_purchase
       ticket_name
+
       ticket_types {
         id
         providing_products {
@@ -92,26 +87,33 @@ export const AppRootQuery = gql`
           available
         }
       }
+
+      my_profile {
+        id
+        name
+        accepted_clickwrap_agreement
+        name_without_nickname
+        first_name
+        last_name
+        gravatar_enabled
+        gravatar_url
+        ticket {
+          id
+        }
+
+        current_pending_order {
+          id
+          order_entries {
+            id
+            quantity
+          }
+        }
+      }
     }
 
     rootSite {
       id
       site_name
-    }
-
-    cmsNavigationItems {
-      id
-      position
-      title
-
-      navigation_section {
-        id
-      }
-
-      page {
-        id
-        slug
-      }
     }
   }
 `;

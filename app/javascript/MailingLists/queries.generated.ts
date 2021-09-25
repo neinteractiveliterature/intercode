@@ -69,7 +69,7 @@ export const MailingListsResultFieldsFragmentDoc = gql`
     ${ContactEmailFieldsFragmentDoc}`;
 export const MailingListsMenuQueryDocument = gql`
     query MailingListsMenuQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ticket_mode
     ticket_name
@@ -105,7 +105,7 @@ export type MailingListsMenuQueryLazyQueryHookResult = ReturnType<typeof useMail
 export type MailingListsMenuQueryQueryResult = Apollo.QueryResult<MailingListsMenuQueryData, MailingListsMenuQueryVariables>;
 export const TicketedAttendeesQueryDocument = gql`
     query TicketedAttendeesQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     ticket_name
@@ -146,7 +146,7 @@ export type TicketedAttendeesQueryLazyQueryHookResult = ReturnType<typeof useTic
 export type TicketedAttendeesQueryQueryResult = Apollo.QueryResult<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>;
 export const EventProposersQueryDocument = gql`
     query EventProposersQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     mailing_lists {
@@ -186,7 +186,7 @@ export type EventProposersQueryLazyQueryHookResult = ReturnType<typeof useEventP
 export type EventProposersQueryQueryResult = Apollo.QueryResult<EventProposersQueryData, EventProposersQueryVariables>;
 export const TeamMembersMailingListQueryDocument = gql`
     query TeamMembersMailingListQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     mailing_lists {
@@ -226,7 +226,7 @@ export type TeamMembersMailingListQueryLazyQueryHookResult = ReturnType<typeof u
 export type TeamMembersMailingListQueryQueryResult = Apollo.QueryResult<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>;
 export const UsersWithPendingBioQueryDocument = gql`
     query UsersWithPendingBioQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     mailing_lists {
@@ -266,7 +266,7 @@ export type UsersWithPendingBioQueryLazyQueryHookResult = ReturnType<typeof useU
 export type UsersWithPendingBioQueryQueryResult = Apollo.QueryResult<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>;
 export const WaitlistMailingListsQueryDocument = gql`
     query WaitlistMailingListsQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     timezone_name
@@ -319,7 +319,7 @@ export type WaitlistMailingListsQueryLazyQueryHookResult = ReturnType<typeof use
 export type WaitlistMailingListsQueryQueryResult = Apollo.QueryResult<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>;
 export const WhosFreeFormConventionQueryDocument = gql`
     query WhosFreeFormConventionQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     starts_at
@@ -358,7 +358,7 @@ export type WhosFreeFormConventionQueryLazyQueryHookResult = ReturnType<typeof u
 export type WhosFreeFormConventionQueryQueryResult = Apollo.QueryResult<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>;
 export const WhosFreeQueryDocument = gql`
     query WhosFreeQuery($start: Date!, $finish: Date!) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     mailing_lists {

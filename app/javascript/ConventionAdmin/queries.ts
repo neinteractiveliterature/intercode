@@ -77,7 +77,7 @@ export const ConventionAdminConventionFields = gql`
 
 export const ConventionAdminConventionQuery = gql`
   query ConventionAdminConventionQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ...ConventionAdminConventionFields
     }
@@ -93,7 +93,7 @@ export const ConventionAdminConventionQuery = gql`
 
 export const StripeAccountOnboardingLinkQuery = gql`
   query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
 
       stripe_account {

@@ -3,7 +3,7 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 
 export const TicketPurchaseFormQuery = gql`
   query TicketPurchaseFormQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
       ticket_name
@@ -43,7 +43,7 @@ export const TicketPurchaseFormQuery = gql`
 
 export const MyTicketDisplayQuery = gql`
   query MyTicketDisplayQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
       ticket_name

@@ -18,14 +18,14 @@ async function bundleHashMatches() {
   }
 }
 
-export async function reloadOnBundleHashMismatch() {
+export async function reloadOnBundleHashMismatch(): Promise<void> {
   const matches = await bundleHashMatches();
   if (!matches) {
     window.location.reload();
   }
 }
 
-export function checkBundleHashOnError<T>(func: () => Promise<T>) {
+export function checkBundleHashOnError<T>(func: () => Promise<T>): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     func()
       .then(resolve)
@@ -43,6 +43,6 @@ export function checkBundleHashOnError<T>(func: () => Promise<T>) {
 
 export function lazyWithBundleHashCheck<Props>(
   func: () => Promise<{ default: ComponentType<Props> }>,
-) {
+): React.LazyExoticComponent<ComponentType<Props>> {
   return lazy(() => checkBundleHashOnError(func));
 }

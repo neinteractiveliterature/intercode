@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import { RegistrationPolicyBucket } from '../graphqlTypes.generated';
 
 const humanFieldNames = {
@@ -16,7 +14,7 @@ function checkFieldMinimums(
   object: BucketType,
   targetField: CapacityField,
   sourceFields: CapacityField[],
-) {
+): string[] {
   const currentValue = object[targetField];
 
   const errorField = sourceFields.find((sourceField) => {
@@ -43,7 +41,7 @@ function checkFieldMinimums(
   return [];
 }
 
-export function checkBucketFieldMinimums(bucket: BucketType) {
+export function checkBucketFieldMinimums(bucket: BucketType): string[] {
   return [
     ...checkFieldMinimums(bucket, 'preferred_slots', ['minimum_slots']),
     ...checkFieldMinimums(bucket, 'total_slots', ['preferred_slots', 'minimum_slots']),

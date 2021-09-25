@@ -1,4 +1,4 @@
-import i18next, { BackendModule, ResourceKey } from 'i18next';
+import i18next, { BackendModule, i18n, ResourceKey } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import mapValues from 'lodash/mapValues';
 import pickBy from 'lodash/pickBy';
@@ -80,7 +80,7 @@ const i18nInitPromise = i18n.init(initOptions).then(() => {
   ready = true;
 });
 
-async function getI18n() {
+async function getI18n(): Promise<i18n> {
   if (ready) {
     return i18n;
   }

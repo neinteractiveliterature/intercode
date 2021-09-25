@@ -1,15 +1,14 @@
-/* eslint-disable import/first, import/newline-after-import */
-
 import mapValues from 'lodash/mapValues';
 
 import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const LiquidDocs = lazyWithBundleHashCheck(() =>
-  import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'),
+const LiquidDocs = lazyWithBundleHashCheck(
+  () => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'),
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const unwrappedComponents: { [name: string]: React.ComponentType<any> } = {
   AppRoot,
   LiquidDocs,

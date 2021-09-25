@@ -1,16 +1,21 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { humanize } from 'inflected';
-import { TeamMembersQueryData } from './queries.generated';
+import { Convention, Event, TicketType, UserConProfile } from '../../graphqlTypes.generated';
 
 export type TicketingStatusDescriptionProps = {
-  userConProfile: TeamMembersQueryData['event']['team_members'][0]['user_con_profile'];
-  convention: NonNullable<TeamMembersQueryData['convention']>;
+  userConProfile: Pick<UserConProfile, 'name_without_nickname'> & {
+    ticket?: null | {
+      ticket_type: Pick<TicketType, 'name'>;
+      provided_by_event?: null | Pick<Event, 'title'>;
+    };
+  };
+  convention: Pick<Convention, 'name' | 'ticket_name'>;
 };
 
 function TicketingStatusDescription({
   userConProfile,
   convention,
-}: TicketingStatusDescriptionProps) {
+}: TicketingStatusDescriptionProps): JSX.Element {
   const { t } = useTranslation();
   const { ticket_name: ticketName } = convention;
 

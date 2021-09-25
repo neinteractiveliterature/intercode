@@ -1,10 +1,14 @@
 import React, { createContext, useMemo, useEffect, InputHTMLAttributes } from 'react';
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import {
-  Column,
   CellProps,
+  Column,
+  Hooks,
+  Renderer,
+  Row,
   TableInstance,
   TableState,
+  UseRowSelectRowProps,
   useTable,
   useFilters,
   useSortBy,
@@ -13,6 +17,7 @@ import {
   useFlexLayout,
   useRowSelect,
 } from 'react-table';
+import '../@types/react-table-config';
 
 import useColumnSelection, {
   UseColumnSelectionOptions,
@@ -31,7 +36,7 @@ import useReactRouterReactTable, {
 import useCachedLoadableValue from '../useCachedLoadableValue';
 import type { TableHeaderProps } from './TableHeader';
 
-export function createQueryDataContext<DataType>() {
+export function createQueryDataContext<DataType>(): React.Context<DataType | null | undefined> {
   return createContext<DataType | null | undefined>(undefined);
 }
 export const QueryDataContext = createContext({});
@@ -39,7 +44,7 @@ export const QueryDataContext = createContext({});
 const IndeterminateCheckbox = React.forwardRef<
   HTMLInputElement,
   InputHTMLAttributes<HTMLInputElement> & { indeterminate?: boolean }
->(({ indeterminate, ...rest }, ref) => {
+>(function IndeterminateCheckbox({ indeterminate, ...rest }, ref) {
   const defaultRef = React.useRef<HTMLInputElement>(null);
   const resolvedRef = ref ?? defaultRef;
 
@@ -57,9 +62,9 @@ const IndeterminateCheckbox = React.forwardRef<
 });
 
 export type UseReactTableWithTheWorksOptions<
-  RowType extends object,
+  RowType extends Record<string, unknown>,
   QueryData,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = Omit<UseColumnSelectionOptions<RowType>, 'possibleColumns'> &
   UseGraphQLReactTableOptions<RowType, QueryData, Variables> &
   UseLocalStorageReactTableOptions &
@@ -72,8 +77,8 @@ export type UseReactTableWithTheWorksOptions<
 
 export type UseReactTableWithTheWorksResult<
   QueryData,
-  RowType extends object,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  RowType extends Record<string, unknown>,
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = {
   tableInstance: TableInstance<RowType>;
   columnSelectionProps: UseColumnSelectionResult<RowType>;
@@ -86,8 +91,8 @@ export type UseReactTableWithTheWorksResult<
 
 export default function useReactTableWithTheWorks<
   QueryData,
-  RowType extends object,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  RowType extends Record<string, unknown>,
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 >({
   alwaysVisibleColumns,
   decodeFilterValue,
@@ -172,10 +177,26 @@ export default function useReactTableWithTheWorks<
     usePagination,
     useFlexLayout,
     useRowSelect,
-    (hooks) => {
+    (hooks: Hooks<RowType>) => {
       if (rowSelect) {
-        hooks.visibleColumns.push((columns) => [
-          {
+        hooks.visibleColumns.push((columns) => {
+          const selectedColumnRenderer: Renderer<CellProps<RowType>> = ({
+            row,
+          }: {
+            row: Row<RowType> & UseRowSelectRowProps<RowType>;
+          }) => {
+            const { toggleRowSelected, isSelected } = row;
+            const toggle = (event: React.SyntheticEvent) => {
+              event.stopPropagation();
+              toggleRowSelected(!isSelected);
+            };
+
+            // The cell can use the individual row's getToggleRowSelectedProps method
+            // to the render a checkbox
+            return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} onChange={toggle} />;
+          };
+
+          const selectedColumn: Column<RowType> = {
             id: '_selected',
             width: 20,
             // The header can use the table's getToggleAllRowsSelectedProps method
@@ -183,22 +204,10 @@ export default function useReactTableWithTheWorks<
             Header: ({ getToggleAllPageRowsSelectedProps }) => (
               <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
             ),
-            // The cell can use the individual row's getToggleRowSelectedProps method
-            // to the render a checkbox
-            Cell: ({ row }: CellProps<RowType>) => {
-              const { toggleRowSelected, isSelected } = row;
-              const toggle = (event: React.SyntheticEvent) => {
-                event.stopPropagation();
-                toggleRowSelected(!isSelected);
-              };
-
-              return (
-                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} onChange={toggle} />
-              );
-            },
-          },
-          ...columns,
-        ]);
+            Cell: selectedColumnRenderer,
+          };
+          return [selectedColumn, ...columns];
+        });
       }
     },
   );

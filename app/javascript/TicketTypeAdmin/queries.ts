@@ -27,7 +27,7 @@ export const TicketTypeAdmin_TicketTypeFields = gql`
 
 export const AdminTicketTypesQuery = gql`
   query AdminTicketTypesQuery {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ticket_types {
         id

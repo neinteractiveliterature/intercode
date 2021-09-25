@@ -18,7 +18,7 @@ export type MyTicketDisplayQueryData = { __typename: 'Query', convention: { __ty
 
 export const TicketPurchaseFormQueryDocument = gql`
     query TicketPurchaseFormQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     ticket_name
@@ -76,7 +76,7 @@ export type TicketPurchaseFormQueryLazyQueryHookResult = ReturnType<typeof useTi
 export type TicketPurchaseFormQueryQueryResult = Apollo.QueryResult<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>;
 export const MyTicketDisplayQueryDocument = gql`
     query MyTicketDisplayQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     ticket_name

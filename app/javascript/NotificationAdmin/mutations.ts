@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client';
 import { NotificationTemplateFields } from './queries';
 

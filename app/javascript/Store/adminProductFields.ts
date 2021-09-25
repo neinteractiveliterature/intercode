@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import { gql } from '@apollo/client';
 import { PricingStructureFields } from './pricingStructureFields';
 

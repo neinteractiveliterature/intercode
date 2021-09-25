@@ -6,11 +6,11 @@ import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import buildNewFormItem from './buildNewFormItem';
 import { FormEditorContext } from './FormEditorContexts';
-import { buildFormItemInput, mutationUpdaterForFormSection } from './FormItemUtils';
+import { buildFormItemInput, mutationUpdaterForFormSection, ParsedFormItem } from './FormItemUtils';
 import NewFormItemModal from './NewFormItemModal';
 import { useCreateFormItemMutation } from './mutations.generated';
 
-function FormSectionEditorLayout() {
+function FormSectionEditorLayout(): JSX.Element {
   const { currentSection, form, formType } = useContext(FormEditorContext);
   const [createFormItemMutate] = useCreateFormItemMutation();
   const sectionBottomRef = useRef<HTMLDivElement>(null);
@@ -18,15 +18,19 @@ function FormSectionEditorLayout() {
   const history = useHistory();
 
   const createFormItem = useCallback(
-    async (newFormItem) => {
+    async (newFormItem: ParsedFormItem<Record<string, unknown>, unknown>) => {
+      if (!currentSection) {
+        throw new Error("Can't create a form item while not in a section");
+      }
+
       const response = await createFormItemMutate({
         variables: {
-          formSectionId: currentSection!.id,
+          formSectionId: currentSection.id,
           formItem: buildFormItemInput(newFormItem),
         },
         update: mutationUpdaterForFormSection(
           form.id,
-          currentSection!.id,
+          currentSection.id,
           (formSection, result) => ({
             ...formSection,
             form_items: [
@@ -45,10 +49,13 @@ function FormSectionEditorLayout() {
   );
 
   const createStaticText = useCallback(async () => {
+    if (!currentSection) {
+      return;
+    }
     const response = await createFormItem(buildNewFormItem('static_text'));
     const formItemId = response.data?.createFormItem?.form_item.id;
     if (formItemId) {
-      history.push(`/admin_forms/${form.id}/edit/section/${currentSection!.id}/item/${formItemId}`);
+      history.push(`/admin_forms/${form.id}/edit/section/${currentSection.id}/item/${formItemId}`);
     }
   }, [createFormItem, currentSection, form.id, history]);
 

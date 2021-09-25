@@ -22,19 +22,19 @@ import { useUpdateFormItemMutation } from './mutations.generated';
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
   return {
     ...formItem,
-    properties: addGeneratedIds(formItem.properties!),
+    properties: addGeneratedIds(formItem.properties),
     rendered_properties: addGeneratedIds(formItem.rendered_properties),
   } as FormEditorFormItem;
 }
 
-function FormItemEditorLayout() {
+function FormItemEditorLayout(): JSX.Element {
   const match = useRouteMatch<{ itemId: string; id: string; sectionId: string }>();
   const history = useHistory();
   const { convention, currentSection, formType, formTypeIdentifier, formItemsById } =
     useContext(FormEditorContext);
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
-    () => currentSection!.form_items.find((item) => item.id.toString() === match.params.itemId)!,
+    () => currentSection?.form_items.find((item) => item.id.toString() === match.params.itemId),
     [currentSection, match.params.itemId],
   );
   const [previewFormItem, setPreviewFormItem] = useState(() =>
@@ -42,9 +42,13 @@ function FormItemEditorLayout() {
   );
   const refreshRenderedFormItem = useCallback(
     async (newFormItem) => {
+      if (!currentSection) {
+        return;
+      }
+
       const response = await apolloClient.query({
         query: PreviewFormItemQuery,
-        variables: { formSectionId: currentSection!.id, formItem: buildFormItemInput(newFormItem) },
+        variables: { formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
         fetchPolicy: 'no-cache',
       });
       const responseFormItem = parseTypedFormItemObject(response.data.previewFormItem);
@@ -53,8 +57,8 @@ function FormItemEditorLayout() {
     [apolloClient, currentSection],
   );
 
-  const [formItem, setFormItem] = useDebouncedState<FormEditorFormItem>(
-    () => addGeneratedIdsToFormItem(initialFormItem),
+  const [formItem, setFormItem] = useDebouncedState<FormEditorFormItem | undefined>(
+    () => (initialFormItem ? addGeneratedIdsToFormItem(initialFormItem) : undefined),
     refreshRenderedFormItem,
     150,
   );
@@ -62,7 +66,13 @@ function FormItemEditorLayout() {
   const standardItem = findStandardItem(formType, initialFormItem?.identifier);
 
   const hasChanges = useMemo(
-    () => !isEqual(buildFormItemInput(initialFormItem), buildFormItemInput(formItem)),
+    () =>
+      formItem && initialFormItem
+        ? !isEqual(
+            buildFormItemInput<unknown>(initialFormItem),
+            buildFormItemInput<unknown>(formItem),
+          )
+        : false,
     [formItem, initialFormItem],
   );
 
@@ -70,15 +80,23 @@ function FormItemEditorLayout() {
   const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
 
   const saveFormItem = async () => {
+    if (!formItem) {
+      throw new Error('No form item to save');
+    }
+
     await updateFormItem({
       variables: {
         id: formItem.id,
-        formItem: buildFormItemInput(formItem),
+        formItem: buildFormItemInput<unknown>(formItem),
       },
     });
 
     history.push(`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`);
   };
+
+  if (!formItem) {
+    return <></>;
+  }
 
   return (
     <FormItemEditorContext.Provider
@@ -102,7 +120,9 @@ function FormItemEditorLayout() {
               convention={convention}
               formItem={previewFormItem}
               formTypeIdentifier={formTypeIdentifier}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
               onInteract={() => {}}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
               onChange={() => {}}
               value={previewFormItem.default_value}
               valueInvalid={false}

@@ -53,7 +53,7 @@ export const EventProposalQuery = gql`
       can_delete_event_proposal(event_proposal_id: $eventProposalId)
     }
 
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ...EventProposalFormData
     }
@@ -70,7 +70,7 @@ export const EventProposalQuery = gql`
 
 export const EventProposalQueryWithOwner = gql`
   query EventProposalQueryWithOwner($eventProposalId: Int!) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       ...EventProposalFormData
     }
@@ -134,7 +134,7 @@ export const ProposeEventButtonQuery = gql`
       }
     }
 
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
 
       departments {
@@ -168,7 +168,7 @@ export const EventProposalsAdminQuery = gql`
     $filters: EventProposalFiltersInput
     $sort: [SortInput!]
   ) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       timezone_name
 
@@ -218,7 +218,7 @@ export const EventProposalsAdminQuery = gql`
 
 export const EventProposalHistoryQuery = gql`
   query EventProposalHistoryQuery($id: Int!) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       starts_at
       ends_at

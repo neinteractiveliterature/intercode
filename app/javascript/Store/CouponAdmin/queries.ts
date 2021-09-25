@@ -20,7 +20,7 @@ export const AdminCouponsQuery = gql`
     $page: Int
     $per_page: Int
   ) {
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       coupons_paginated(filters: $filters, sort: $sort, page: $page, per_page: $per_page) {
         current_page

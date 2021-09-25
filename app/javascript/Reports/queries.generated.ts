@@ -43,7 +43,7 @@ export type SignupSpySignupChangesQueryData = { __typename: 'Query', convention:
 
 export const ReportsMenuQueryDocument = gql`
     query ReportsMenuQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ticket_mode
     ticket_name
@@ -79,7 +79,7 @@ export type ReportsMenuQueryLazyQueryHookResult = ReturnType<typeof useReportsMe
 export type ReportsMenuQueryQueryResult = Apollo.QueryResult<ReportsMenuQueryData, ReportsMenuQueryVariables>;
 export const AttendanceByPaymentAmountQueryDocument = gql`
     query AttendanceByPaymentAmountQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ticket_name
     reports {
@@ -138,7 +138,7 @@ export type AttendanceByPaymentAmountQueryLazyQueryHookResult = ReturnType<typeo
 export type AttendanceByPaymentAmountQueryQueryResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>;
 export const EventProvidedTicketsQueryDocument = gql`
     query EventProvidedTicketsQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ticket_name
     reports {
@@ -192,7 +192,7 @@ export type EventProvidedTicketsQueryLazyQueryHookResult = ReturnType<typeof use
 export type EventProvidedTicketsQueryQueryResult = Apollo.QueryResult<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>;
 export const EventsByChoiceQueryDocument = gql`
     query EventsByChoiceQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     reports {
       events_by_choice {
@@ -239,7 +239,7 @@ export type EventsByChoiceQueryLazyQueryHookResult = ReturnType<typeof useEvents
 export type EventsByChoiceQueryQueryResult = Apollo.QueryResult<EventsByChoiceQueryData, EventsByChoiceQueryVariables>;
 export const SignupCountsByStateQueryDocument = gql`
     query SignupCountsByStateQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     signup_counts_by_state {
       state
@@ -277,7 +277,7 @@ export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useS
 export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
     query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int, $sort: [SortInput!]) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     timezone_name
     signup_changes_paginated(

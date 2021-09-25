@@ -95,7 +95,7 @@ export const EventProposalQueryDocument = gql`
   currentAbility {
     can_delete_event_proposal(event_proposal_id: $eventProposalId)
   }
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ...EventProposalFormData
   }
@@ -136,7 +136,7 @@ export type EventProposalQueryLazyQueryHookResult = ReturnType<typeof useEventPr
 export type EventProposalQueryQueryResult = Apollo.QueryResult<EventProposalQueryData, EventProposalQueryVariables>;
 export const EventProposalQueryWithOwnerDocument = gql`
     query EventProposalQueryWithOwner($eventProposalId: Int!) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ...EventProposalFormData
   }
@@ -244,7 +244,7 @@ export const ProposeEventButtonQueryDocument = gql`
       }
     }
   }
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     departments {
       id
@@ -295,7 +295,7 @@ export type ProposeEventButtonQueryLazyQueryHookResult = ReturnType<typeof usePr
 export type ProposeEventButtonQueryQueryResult = Apollo.QueryResult<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>;
 export const EventProposalsAdminQueryDocument = gql`
     query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     timezone_name
     event_categories(current_ability_can_read_event_proposals: true) {
@@ -374,7 +374,7 @@ export type EventProposalsAdminQueryLazyQueryHookResult = ReturnType<typeof useE
 export type EventProposalsAdminQueryQueryResult = Apollo.QueryResult<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>;
 export const EventProposalHistoryQueryDocument = gql`
     query EventProposalHistoryQuery($id: Int!) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     starts_at
     ends_at

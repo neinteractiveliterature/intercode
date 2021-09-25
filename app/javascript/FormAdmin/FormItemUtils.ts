@@ -56,21 +56,24 @@ export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
 
 export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFormItem<
   infer PropertiesType,
-  any,
-  any
+  unknown,
+  unknown
 >
   ? PropertiesType
   : never;
 
 export type FormItemValueType<FormItemType> = FormItemType extends ParsedFormItem<
-  any,
+  unknown,
   infer ValueType,
-  any
+  unknown
 >
   ? ValueType
   : never;
 
-export type WithRequiredIdentifier<T extends ParsedFormItem<any, any>> = Omit<T, 'identifier'> & {
+export type WithRequiredIdentifier<T extends ParsedFormItem<unknown, unknown>> = Omit<
+  T,
+  'identifier'
+> & {
   identifier: NonNullable<T['identifier']>;
 };
 
@@ -88,11 +91,14 @@ export type PropertiesWithoutGeneratedIds<T> = {
     : T[K];
 };
 
-export type WithRequiredProperties<T extends ParsedFormItem<any, any>> = Omit<T, 'properties'> & {
+export type WithRequiredProperties<T extends ParsedFormItem<unknown, unknown>> = Omit<
+  T,
+  'properties'
+> & {
   properties: NonNullable<T['properties']>;
 };
 
-export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<any, any>> = Omit<
+export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<unknown, unknown>> = Omit<
   T,
   'properties' | 'rendered_properties'
 > & {
@@ -101,8 +107,8 @@ export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<any, any>> =
 };
 
 export type ParsedFormSection<
-  FormItemType extends ParsedFormItem<any, any> = ParsedFormItem<any, any>,
-> = Omit<FormSection, 'form_items' | 'form'> & { form_items: FormItemType[] };
+  FormItemType extends ParsedFormItem<unknown, unknown> = ParsedFormItem<unknown, unknown>,
+> = Omit<FormSection, 'form_items' | 'form' | 'preview_form_item'> & { form_items: FormItemType[] };
 
 export type CommonQuestionProperties = {
   identifier: string;
@@ -270,7 +276,7 @@ export function parseTypedFormItemObject(
     default:
       assertNever(typedFormItem, true);
       if (typeof Rollbar !== 'undefined') {
-        // @ts-ignore
+        // @ts-expect-error This is deliberately unreachable, but we want a Rollbar if this happens
         Rollbar.warn(
           `Form item ${parsedFormItem.id} has unknown type ${formItem.item_type}, ignoring`,
         );
@@ -279,11 +285,13 @@ export function parseTypedFormItemObject(
   }
 }
 
-export function parseTypedFormItemArray(formItems: CommonFormItemFieldsFragment[]) {
+export function parseTypedFormItemArray(
+  formItems: CommonFormItemFieldsFragment[],
+): TypedFormItem[] {
   return formItems.map(parseTypedFormItemObject).filter(notEmpty);
 }
 
-export function serializeParsedFormItem<FormItemType extends ParsedFormItem<any, any>>(
+export function serializeParsedFormItem<FormItemType extends ParsedFormItem<unknown, unknown>>(
   formItem: FormItemType,
 ): CommonFormItemFieldsFragment {
   if (formItem.properties != null) {
@@ -322,13 +330,15 @@ export function serializeParsedFormSection(
   };
 }
 
-export function addGeneratedIds<PropertiesType>(properties: PropertiesType) {
+export function addGeneratedIds<PropertiesType>(
+  properties: PropertiesType,
+): PropertiesWithGeneratedIds<PropertiesType> {
   return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
     const value = memo[property as keyof PropertiesType];
     if (value != null && Array.isArray(value)) {
       return {
         ...memo,
-        [property]: (value as any[]).map((item) => ({
+        [property]: value.map((item) => ({
           ...item,
           generatedId: uuidv4(),
         })),
@@ -340,10 +350,10 @@ export function addGeneratedIds<PropertiesType>(properties: PropertiesType) {
 }
 
 export function removeGeneratedIds<PropertiesType>(
-  properties: PropertiesWithGeneratedIds<PropertiesType>,
-) {
+  properties: PropertiesWithGeneratedIds<PropertiesType> | null | undefined,
+): PropertiesWithoutGeneratedIds<PropertiesType> | undefined {
   if (properties == null) {
-    return properties;
+    return undefined;
   }
 
   return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
@@ -351,7 +361,8 @@ export function removeGeneratedIds<PropertiesType>(
     if (value != null && Array.isArray(value)) {
       return {
         ...memo,
-        [property]: (value as any[]).map((item) => {
+        [property]: value.map((item) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { generatedId, ...otherItemProperties } = item;
           return otherItemProperties;
         }),
@@ -359,30 +370,34 @@ export function removeGeneratedIds<PropertiesType>(
     }
 
     return memo;
-  }, properties!) as PropertiesType;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  }, properties!) as PropertiesWithoutGeneratedIds<PropertiesType>;
 }
 
-export function buildFormItemInput(formItem: ParsedFormItem<any, any>): FormItemInput {
+export function buildFormItemInput<PropertiesType>(
+  formItem: ParsedFormItem<PropertiesWithGeneratedIds<PropertiesType>, unknown>,
+): FormItemInput {
   return {
     identifier: formItem.identifier,
     item_type: formItem.item_type,
     admin_description: formItem.admin_description,
     public_description: formItem.public_description,
     default_value: formItem.default_value ? JSON.stringify(formItem.default_value) : null,
-    properties: JSON.stringify(removeGeneratedIds(formItem.properties)),
+    properties: JSON.stringify(removeGeneratedIds<PropertiesType>(formItem.properties)),
     visibility: formItem.visibility,
     writeability: formItem.writeability,
   };
 }
 
 export function formItemPropertyUpdater<
-  FormItemType extends ParsedFormItem<any, any>,
-  PropertyName extends keyof FormItemType['properties'],
+  PropertiesType extends Record<string, unknown>,
+  FormItemType extends ParsedFormItem<PropertiesType, unknown>,
+  PropertyName extends keyof PropertiesType,
 >(
   property: PropertyName,
   onChange: (mutator: (prevFormItem: FormItemType) => FormItemType) => void,
 ) {
-  return (newValue: FormItemType[PropertyName]) =>
+  return (newValue: PropertiesType[PropertyName]): void =>
     onChange((prevFormItem) => {
       const newFormItem = {
         ...prevFormItem,
@@ -400,7 +415,7 @@ export function mutationUpdaterForFormSection<ResultDataType>(
   formSectionId: number,
   updater: (section: CommonFormSectionFieldsFragment, mutationResultData: ResultDataType) => void,
 ) {
-  return (proxy: ApolloCache<any>, mutationResultData: ResultDataType) => {
+  return (proxy: ApolloCache<unknown>, mutationResultData: ResultDataType): void => {
     const data = proxy.readQuery<FormEditorQueryData>({
       query: FormEditorQuery,
       variables: { id: formId },
@@ -454,7 +469,7 @@ export type StandardItem = Partial<
   description: string;
   required?: boolean;
   deprecation_reason?: string;
-  default_properties?: any;
+  default_properties?: Record<string, unknown>;
 };
 
 export function findStandardItem(

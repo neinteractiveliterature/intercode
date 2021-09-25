@@ -19,7 +19,7 @@ import { Money, PaymentMode } from '../graphqlTypes.generated';
 import { CurrentPendingOrderPaymentIntentClientSecretQueryData } from './queries.generated';
 import { CurrentPendingOrderPaymentIntentClientSecret } from './queries';
 
-// eslint-disable-next-line global-require
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const PoweredByStripeLogo = require('../images/powered_by_stripe.svg').default as string;
 
 type OrderPaymentModalContentsProps = {
@@ -57,10 +57,10 @@ function OrderPaymentModalContents({
       }
 
       const detailsFromEvent: PaymentDetails = {
-        name: ev.payerName!,
+        name: ev.payerName ?? '',
       };
 
-      let clientSecret: string = '';
+      let clientSecret = '';
 
       try {
         const { data } =
@@ -263,7 +263,7 @@ function OrderPaymentModal({
   orderId,
   paymentOptions,
   totalPrice,
-}: OrderPaymentModalProps) {
+}: OrderPaymentModalProps): JSX.Element {
   return (
     <Modal visible={visible && orderId != null} dialogClassName="modal-lg">
       {visible && orderId != null && (

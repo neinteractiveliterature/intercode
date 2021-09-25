@@ -76,7 +76,7 @@ export const ScheduleGridEventFragmentDoc = gql`
     ${RunBasicSignupDataFragmentDoc}`;
 export const ScheduleGridConventionDataQueryDocument = gql`
     query ScheduleGridConventionDataQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     pre_schedule_content_html
     ...CommonConventionData
@@ -150,7 +150,7 @@ export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useSc
 export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;
 export const ScheduleGridCombinedQueryDocument = gql`
     query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     pre_schedule_content_html
     ...CommonConventionData

@@ -1,4 +1,3 @@
-/* eslint-disable import/export */
 import { Suspense, useMemo, useState } from 'react';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing';
 import {
@@ -60,7 +59,7 @@ export type CustomQueries = {
     container: HTMLElement,
     formGroupLegendText: string,
     labelText: string,
-  ) => HTMLInputElement | null;
+  ) => HTMLInputElement;
 };
 
 const customQueries: CustomQueries = {
@@ -72,11 +71,23 @@ const customQueries: CustomQueries = {
     const formGroup = queries
       .getByText(container, formGroupLegendText, { selector: 'legend' })
       .closest<HTMLElement>('.mb-3');
-    return formGroup ? (queries.getByLabelText(formGroup, labelText) as HTMLInputElement) : null;
+    if (!formGroup) {
+      throw new Error(
+        `Legend with text ${formGroupLegendText} found, but it's not part of a .mb-3 element`,
+      );
+    }
+
+    const foundElement = queries.getByLabelText(formGroup, labelText);
+    if (!(foundElement instanceof HTMLInputElement)) {
+      throw new Error(
+        `Element with label ${labelText} found in group, but it's not an input (it's a ${foundElement.tagName})`,
+      );
+    }
+    return foundElement;
   },
 };
 
-async function customRender<Q extends Queries = {}>(
+async function customRender<Q extends Queries = Queries>(
   ui: JSX.Element,
   options: Omit<TestWrapperProps, 'children' | 'i18nInstance'> & RenderOptions<Q> = {},
 ): Promise<RenderResult<typeof queries & Q & CustomQueries>> {

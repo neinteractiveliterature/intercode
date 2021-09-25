@@ -67,17 +67,17 @@ export const UserConProfileAdminTicketFields = gql`
 
 export const UserConProfileQuery = gql`
   query UserConProfileQuery($id: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       ...UserConProfileFormData
 
       id
-    }
 
-    userConProfile(id: $id) {
-      id
-      current_user_form_item_viewer_role
-      current_user_form_item_writer_role
-      ...UserConProfileFields
+      user_con_profile(id: $id) {
+        id
+        current_user_form_item_viewer_role
+        current_user_form_item_writer_role
+        ...UserConProfileFields
+      }
     }
   }
 
@@ -87,17 +87,7 @@ export const UserConProfileQuery = gql`
 
 export const UserConProfileAdminQuery = gql`
   query UserConProfileAdminQuery($id: Int!) {
-    myProfile {
-      id
-      ability {
-        can_read_signups
-        can_update_user_con_profile(user_con_profile_id: $id)
-        can_delete_user_con_profile(user_con_profile_id: $id)
-        can_become_user_con_profile(user_con_profile_id: $id)
-      }
-    }
-
-    convention: assertConvention {
+    convention: conventionByRequestHost {
       id
       name
       starts_at
@@ -106,6 +96,32 @@ export const UserConProfileAdminQuery = gql`
       timezone_mode
       ticket_name
       ticket_mode
+
+      my_profile {
+        id
+        ability {
+          can_read_signups
+          can_update_user_con_profile(user_con_profile_id: $id)
+          can_delete_user_con_profile(user_con_profile_id: $id)
+          can_become_user_con_profile(user_con_profile_id: $id)
+        }
+      }
+
+      user_con_profile(id: $id) {
+        id
+        email
+        user_id
+        name
+        name_without_nickname
+        form_response_attrs_json
+        gravatar_enabled
+        gravatar_url
+
+        ticket {
+          id
+          ...UserConProfileAdminTicketFields
+        }
+      }
 
       user_con_profile_form {
         id
@@ -132,22 +148,6 @@ export const UserConProfileAdminQuery = gql`
         }
       }
     }
-
-    userConProfile(id: $id) {
-      id
-      email
-      user_id
-      name
-      name_without_nickname
-      form_response_attrs_json
-      gravatar_enabled
-      gravatar_url
-
-      ticket {
-        id
-        ...UserConProfileAdminTicketFields
-      }
-    }
   }
 
   ${AdminProductFields}
@@ -162,7 +162,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
     $filters: UserConProfileFiltersInput
     $sort: [SortInput!]
   ) {
-    convention {
+    convention: conventionByRequestHost {
       id
       name
       starts_at
@@ -246,33 +246,33 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
 
 export const ConvertToEventProvidedTicketQuery = gql`
   query ConvertToEventProvidedTicketQuery($eventId: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ticket_name
+
+      event(id: $eventId) {
+        id
+        title
+
+        event_category {
+          id
+          can_provide_tickets
+        }
+
+        provided_tickets {
+          id
+          ticket_type {
+            id
+            name
+          }
+        }
+      }
 
       ticket_types {
         id
         maximum_event_provided_tickets(event_id: $eventId)
         description
         name
-      }
-    }
-
-    event(id: $eventId) {
-      id
-      title
-
-      event_category {
-        id
-        can_provide_tickets
-      }
-
-      provided_tickets {
-        id
-        ticket_type {
-          id
-          name
-        }
       }
     }
   }

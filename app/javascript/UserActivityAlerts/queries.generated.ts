@@ -62,7 +62,7 @@ export const UserActivityAlertFieldsFragmentDoc = gql`
     `;
 export const ConventionTicketNameQueryDocument = gql`
     query ConventionTicketNameQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ...UserActivityAlertsAdminConventionFields
   }
@@ -97,7 +97,7 @@ export type ConventionTicketNameQueryLazyQueryHookResult = ReturnType<typeof use
 export type ConventionTicketNameQueryQueryResult = Apollo.QueryResult<ConventionTicketNameQueryData, ConventionTicketNameQueryVariables>;
 export const UserActivityAlertQueryDocument = gql`
     query UserActivityAlertQuery($id: Int!) {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ...UserActivityAlertsAdminConventionFields
     user_activity_alert(id: $id) {
@@ -138,7 +138,7 @@ export type UserActivityAlertQueryLazyQueryHookResult = ReturnType<typeof useUse
 export type UserActivityAlertQueryQueryResult = Apollo.QueryResult<UserActivityAlertQueryData, UserActivityAlertQueryVariables>;
 export const UserActivityAlertsAdminQueryDocument = gql`
     query UserActivityAlertsAdminQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     ticket_name
     ticket_mode

@@ -17,7 +17,7 @@ export type PageAdminDropdownQueryVariables = Types.Exact<{
 }>;
 
 
-export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, default_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } }, cmsPage: { __typename: 'Page', id: number, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }>, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> }> } };
+export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } }, cmsPage: { __typename: 'Page', id: number, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }>, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> }> } };
 
 
 export const CmsPageQueryDocument = gql`

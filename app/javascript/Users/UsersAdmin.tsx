@@ -31,7 +31,7 @@ function UserBreadcrumbItem() {
   );
 }
 
-function UsersAdmin() {
+function UsersAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_users');
   if (authorizationWarning) return authorizationWarning;
 

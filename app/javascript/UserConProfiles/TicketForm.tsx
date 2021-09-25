@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-// @ts-expect-error
+// @ts-expect-error Inflected types don't export capitalize
 import { capitalize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import {
@@ -19,7 +19,9 @@ import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderT
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';
 
-type TicketFromQuery = NonNullable<UserConProfileAdminQueryData['userConProfile']['ticket']>;
+type TicketFromQuery = NonNullable<
+  UserConProfileAdminQueryData['convention']['user_con_profile']['ticket']
+>;
 type EditingTicket = Omit<
   TicketFromQuery,
   'id' | 'ticket_type' | 'created_at' | 'updated_at' | '__typename'
@@ -40,14 +42,15 @@ function TicketForm({
   convention,
   onSubmit,
   submitCaption,
-}: TicketFormProps) {
+}: TicketFormProps): JSX.Element {
   const editOrderModal = useModal();
   const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);
   const [providedByEvent, setProvidedByEvent] = useState(initialTicket.provided_by_event);
 
-  const sortedTicketTypes = useMemo(() => sortTicketTypes(convention.ticket_types), [
-    convention.ticket_types,
-  ]);
+  const sortedTicketTypes = useMemo(
+    () => sortTicketTypes(convention.ticket_types),
+    [convention.ticket_types],
+  );
 
   const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
 

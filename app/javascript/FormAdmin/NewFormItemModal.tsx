@@ -20,6 +20,7 @@ import FormItemIdentifierInput from './ItemEditors/FormItemIdentifierInput';
 import useAsyncFunction from '../useAsyncFunction';
 import {
   FormTypeDefinition,
+  ParsedFormItem,
   StandardItem,
   StandardItemIdentifier,
   TypedFormItem,
@@ -45,7 +46,7 @@ const standardItemProperties = (standardItem: StandardItem | undefined, itemType
 export type NewFormItemModalProps<FormType extends FormTypeDefinition> = {
   visible: boolean;
   close: () => void;
-  createFormItem: (item: TypedFormItem) => Promise<any>;
+  createFormItem: (item: ParsedFormItem<Record<string, unknown>, unknown>) => Promise<unknown>;
   formType: FormType;
 };
 
@@ -54,7 +55,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
   close,
   createFormItem,
   formType,
-}: NewFormItemModalProps<FormType>) {
+}: NewFormItemModalProps<FormType>): JSX.Element {
   const { form } = useContext(FormEditorContext);
   const [itemType, setItemType] = useState<TypedFormItem['item_type']>();
   const [standardItem, setStandardItem] = useState<StandardItem>();

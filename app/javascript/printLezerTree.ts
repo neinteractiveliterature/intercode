@@ -27,7 +27,7 @@ enum Color {
   Blue = 34,
 }
 
-function colorize(value: any, color: number): string {
+function colorize(value: unknown, color: number): string {
   return `\u001b[${color}m${String(value)}\u001b[39m`;
 }
 

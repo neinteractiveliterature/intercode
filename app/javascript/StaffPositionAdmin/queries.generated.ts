@@ -37,7 +37,7 @@ export const StaffPositionFieldsFragmentDoc = gql`
     ${PermissionedModelFieldsFragmentDoc}`;
 export const StaffPositionsQueryDocument = gql`
     query StaffPositionsQuery {
-  convention: assertConvention {
+  convention: conventionByRequestHost {
     id
     name
     event_categories {
