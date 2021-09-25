@@ -2,8 +2,7 @@ class Types::QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field_class Types::BaseField # Camelize fields in this type
 
   field :convention, Types::ConventionType, null: true, deprecation_reason: "This field is being \
-removed in favor of `conventionByRequestHost`.  Its semantics are slightly different than this \
-field.  Please update accordingly." do
+removed in favor of `conventionByRequestHostIfPresent`." do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request, or null if there
       is none.  (For a version that will either return a convention or error out, use
@@ -34,11 +33,26 @@ field.  Please update accordingly." do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request.  If one is not
       present, the request will error out.  (For a version that will return null instead of
-      erroring out, use `convention`.)
+      erroring out, use `conventionByRequestHostIfPresent`.)
     MARKDOWN
   end
 
   def convention_by_request_host
+    unless context[:convention]
+      raise ActiveRecord::RecordNotFound,
+        "The host name #{context[:controller].request.host} does not belong to a convention"
+    end
+    context[:convention]
+  end
+
+  field :convention_by_request_host_if_present, Types::ConventionType, null: true do
+    description <<~MARKDOWN
+      Returns the convention associated with the domain name of this HTTP request.  If one is not
+      present, returns null.
+    MARKDOWN
+  end
+
+  def convention_by_request_host_if_present
     unless context[:convention]
       raise ActiveRecord::RecordNotFound,
         "The host name #{context[:controller].request.host} does not belong to a convention"
@@ -263,7 +277,7 @@ queries are being deprecated.  Please use the `my_profile` field on the Conventi
     context[:current_user]
   end
 
-  field :cms_parent_by_request_host, Types::CmsParentType, null: false do
+  field :cms_parent_by_request_host, Types::CmsParent, null: false do
     description <<~MARKDOWN
       Returns the CMS parent object associated with the domain name of this HTTP request.  In a
       convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
@@ -274,8 +288,8 @@ queries are being deprecated.  Please use the `my_profile` field on the Conventi
     convention || root_site
   end
 
-  field :cms_parent, Types::CmsParentType, null: false, deprecation_reason: "This query is being \
-renamed to `cmsParentByRequestHost`." do
+  field :cms_parent, Types::CmsParent, null: false, deprecation_reason: "This query is \
+being renamed to `cmsParentByRequestHost`." do
     description <<~MARKDOWN
       Returns the CMS parent object associated with the domain name of this HTTP request.  In a
       convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
@@ -286,7 +300,7 @@ renamed to `cmsParentByRequestHost`." do
 
   field :search_cms_content, [Types::CmsContentType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `typeaheadSearchCmsContent` field on the CmsParentInterface interface instead." do
+Please use the `typeaheadSearchCmsContent` field on the CmsParent interface instead." do
     argument :name, String,
       required: false,
       description: "The partial name to search by.  If not specified, returns all CMS content \
@@ -320,7 +334,7 @@ within the current domain (limited to 10 results)."
 
   field :cms_content_groups, [Types::CmsContentGroupType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsContentGroups` field on the CmsParentInterface interface instead." do
+Please use the `cmsContentGroups` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS content groups within the current domain.
     MARKDOWN
@@ -330,7 +344,7 @@ Please use the `cmsContentGroups` field on the CmsParentInterface interface inst
 
   field :cms_content_group, Types::CmsContentGroupType,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsContentGroup` field on the CmsParentInterface interface instead." do
+Please use the `cmsContentGroup` field on the CmsParent interface instead." do
     argument :id, Int, required: true, description: 'The ID of the CMS content group to find.'
 
     description <<~MARKDOWN
@@ -346,7 +360,7 @@ Please use the `cmsContentGroup` field on the CmsParentInterface interface inste
 
   field :cms_files, [Types::CmsFileType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsFiles` field on the CmsParentInterface interface instead." do
+Please use the `cmsFiles` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS files within the current domain.
     MARKDOWN
@@ -362,7 +376,7 @@ Please use the `cmsFiles` field on the CmsParentInterface interface instead." do
 
   field :cms_pages, [Types::PageType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `searchCmsContent` field on the CmsParentInterface interface instead." do
+Please use the `searchCmsContent` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS pages within the current domain.
     MARKDOWN
@@ -378,7 +392,7 @@ Please use the `searchCmsContent` field on the CmsParentInterface interface inst
 
   field :cms_page, Types::PageType,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsPage` field on the CmsParentInterface interface instead." do
+Please use the `cmsPage` field on the CmsParent interface instead." do
     argument :id, Int, required: false, description: 'The ID of the page to find.'
     argument :slug, String, required: false, description: 'The unique slug of the page to find.'
     argument :root_page, Boolean,
@@ -401,7 +415,7 @@ Please use the `cmsPage` field on the CmsParentInterface interface instead." do
 
   field :cms_layouts, [Types::CmsLayoutType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsLayouts` field on the CmsParentInterface interface instead." do
+Please use the `cmsLayouts` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS layouts within the current domain.
     MARKDOWN
@@ -417,7 +431,7 @@ Please use the `cmsLayouts` field on the CmsParentInterface interface instead." 
 
   field :cms_partials, [Types::CmsPartialType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsPartials` field on the CmsParentInterface interface instead." do
+Please use the `cmsPartials` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS partials within the current domain.
     MARKDOWN
@@ -433,7 +447,7 @@ Please use the `cmsPartials` field on the CmsParentInterface interface instead."
 
   field :cms_variables, [Types::CmsVariable],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsVariables` field on the CmsParentInterface interface instead." do
+Please use the `cmsVariables` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS variables within the current domain.
     MARKDOWN
@@ -449,7 +463,7 @@ Please use the `cmsVariables` field on the CmsParentInterface interface instead.
 
   field :cms_graphql_queries, [Types::CmsGraphqlQueryType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface instead." do
+Please use the `cmsGraphqlQueries` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS GraphQL queries within the current domain.
     MARKDOWN
@@ -465,7 +479,7 @@ Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface ins
 
   field :cms_navigation_items, [Types::CmsNavigationItemType],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `cmsNavigationItems` field on the CmsParentInterface interface instead." do
+Please use the `cmsNavigationItems` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all CMS navigation items within the current domain.
     MARKDOWN
@@ -481,7 +495,7 @@ Please use the `cmsNavigationItems` field on the CmsParentInterface interface in
 
   field :effective_cms_layout, Types::CmsLayoutType,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `effectiveCmsLayout` field on the CmsParentInterface interface instead." do
+Please use the `effectiveCmsLayout` field on the CmsParent interface instead." do
     argument :path, String,
       required: true,
       description: 'The path to find the effective layout for.'
@@ -585,7 +599,7 @@ Please use the `staff_position` field on the Convention object instead." do
 
   field :liquid_assigns, [Types::LiquidAssign],
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `liquidAssigns` field on the CmsParentInterface instead." do
+Please use the `liquidAssigns` field on the CmsParent interface instead." do
     description <<~MARKDOWN
       Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
       This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
@@ -641,7 +655,7 @@ Please use the `notifier_liquid_assigns` field on the FormSection type instead."
 
   field :preview_markdown, String,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `previewMarkdown` field on the CmsParentInterface instead." do
+Please use the `previewMarkdown` field on the CmsParent interface instead." do
     argument :markdown, String, required: true, description: 'The Markdown content to render.'
 
     description <<~MARKDOWN
@@ -656,7 +670,7 @@ Please use the `previewMarkdown` field on the CmsParentInterface instead." do
 
   field :preview_liquid, String,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `previewLiquid` field on the CmsParentInterface instead." do
+Please use the `previewLiquid` field on the CmsParent interface instead." do
     argument :content, String, required: true, description: 'The Liquid content to render.'
 
     description <<~MARKDOWN
@@ -818,7 +832,7 @@ Please use the `payment_intent_client_secret` field on the Order type instead." 
 
   field :site_search, Types::SearchResultType,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `fullTextSearch` field on the CmsParentInterface instead." do
+Please use the `fullTextSearch` field on the CmsParent interface instead." do
     argument :query, String, required: true, description: 'The text to search for.'
 
     description <<~MARKDOWN

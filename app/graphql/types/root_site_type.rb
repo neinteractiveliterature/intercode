@@ -1,5 +1,5 @@
 class Types::RootSiteType < Types::BaseObject
-  implements Types::CmsParentInterface
+  implements Types::CmsParent
 
   field :id, Int, null: false
   field :site_name, String, null: false, camelize: false

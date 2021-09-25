@@ -248,8 +248,6 @@ input CmsNavigationItemInput {
   title: String
 }
 
-union CmsParent = Convention | RootSite
-
 """
 A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
 as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
@@ -259,7 +257,7 @@ that convention's domain name.  The exception to this is the root site, which is
 renders when there is no convention associated with the current domain name.  (See the RootSite
 object for more details about this.)
 """
-interface CmsParentInterface {
+interface CmsParent {
   """
   Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
@@ -439,7 +437,7 @@ type ContactEmail {
   name: String
 }
 
-type Convention implements CmsParentInterface {
+type Convention implements CmsParent {
   accepting_proposals: Boolean
   bio_eligible_user_con_profiles: [UserConProfile!]!
   canceled: Boolean!
@@ -776,7 +774,7 @@ type Convention implements CmsParentInterface {
     sort: [SortInput!]
   ): OrdersPagination!
   organization: Organization
-  pages: [Page!]!
+  pages: [Page!]! @deprecated(reason: "This field is being renamed to `cmsPages`.")
   pre_schedule_content_html: String
 
   """
@@ -4459,32 +4457,32 @@ type Query {
     The ID of the CMS content group to find.
     """
     id: Int!
-  ): CmsContentGroup! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParentInterface interface instead.")
+  ): CmsContentGroup! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParent interface instead.")
 
   """
   Returns all CMS content groups within the current domain.
   """
-  cmsContentGroups: [CmsContentGroup!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParentInterface interface instead.")
+  cmsContentGroups: [CmsContentGroup!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroups` field on the CmsParent interface instead.")
 
   """
   Returns all CMS files within the current domain.
   """
-  cmsFiles: [CmsFile!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParentInterface interface instead.")
+  cmsFiles: [CmsFile!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsFiles` field on the CmsParent interface instead.")
 
   """
   Returns all CMS GraphQL queries within the current domain.
   """
-  cmsGraphqlQueries: [CmsGraphqlQuery!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParentInterface interface instead.")
+  cmsGraphqlQueries: [CmsGraphqlQuery!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsGraphqlQueries` field on the CmsParent interface instead.")
 
   """
   Returns all CMS layouts within the current domain.
   """
-  cmsLayouts: [CmsLayout!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParentInterface interface instead.")
+  cmsLayouts: [CmsLayout!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsLayouts` field on the CmsParent interface instead.")
 
   """
   Returns all CMS navigation items within the current domain.
   """
-  cmsNavigationItems: [CmsNavigationItem!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParentInterface interface instead.")
+  cmsNavigationItems: [CmsNavigationItem!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParent interface instead.")
 
   """
   Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
@@ -4507,12 +4505,12 @@ type Query {
     The unique slug of the page to find.
     """
     slug: String
-  ): Page! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParentInterface interface instead.")
+  ): Page! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParent interface instead.")
 
   """
   Returns all CMS pages within the current domain.
   """
-  cmsPages: [Page!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParentInterface interface instead.")
+  cmsPages: [Page!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParent interface instead.")
 
   """
   Returns the CMS parent object associated with the domain name of this HTTP request.  In a
@@ -4529,19 +4527,19 @@ type Query {
   """
   Returns all CMS partials within the current domain.
   """
-  cmsPartials: [CmsPartial!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParentInterface interface instead.")
+  cmsPartials: [CmsPartial!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPartials` field on the CmsParent interface instead.")
 
   """
   Returns all CMS variables within the current domain.
   """
-  cmsVariables: [CmsVariable!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParentInterface interface instead.")
+  cmsVariables: [CmsVariable!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsVariables` field on the CmsParent interface instead.")
 
   """
   Returns the convention associated with the domain name of this HTTP request, or null if there
   is none.  (For a version that will either return a convention or error out, use
   `assertConvention`.)
   """
-  convention: Convention @deprecated(reason: "This field is being removed in favor of `conventionByRequestHost`.  Its semantics are slightly different than this field.  Please update accordingly.")
+  convention: Convention @deprecated(reason: "This field is being removed in favor of `conventionByRequestHostIfPresent`.")
 
   """
   Returns the convention associated with a specified domain name.
@@ -4561,9 +4559,15 @@ type Query {
   """
   Returns the convention associated with the domain name of this HTTP request.  If one is not
   present, the request will error out.  (For a version that will return null instead of
-  erroring out, use `convention`.)
+  erroring out, use `conventionByRequestHostIfPresent`.)
   """
   conventionByRequestHost: Convention!
+
+  """
+  Returns the convention associated with the domain name of this HTTP request.  If one is not
+  present, returns null.
+  """
+  conventionByRequestHostIfPresent: Convention
 
   """
   Returns all conventions in the database.
@@ -4637,7 +4641,7 @@ type Query {
     The path to find the effective layout for.
     """
     path: String!
-  ): CmsLayout! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParentInterface interface instead.")
+  ): CmsLayout! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `effectiveCmsLayout` field on the CmsParent interface instead.")
 
   """
   Returns a paginated list of the _global_ email routes configured in Intercode.
@@ -4737,7 +4741,7 @@ type Query {
   This is a combination of globally-accessible Liquid assigns and domain-specific user-defined
   CMS variables.
   """
-  liquidAssigns: [LiquidAssign!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParentInterface instead.")
+  liquidAssigns: [LiquidAssign!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParent interface instead.")
 
   """
   Returns the authorized OAuth applications for the current user.  If no user is signed in,
@@ -4824,7 +4828,7 @@ type Query {
     The Liquid content to render.
     """
     content: String!
-  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParentInterface instead.")
+  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `previewLiquid` field on the CmsParent interface instead.")
 
   """
   Given a Markdown text string, renders it to HTML using the current domain's CMS context
@@ -4835,7 +4839,7 @@ type Query {
     The Markdown content to render.
     """
     markdown: String!
-  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParentInterface instead.")
+  ): String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `previewMarkdown` field on the CmsParent interface instead.")
 
   """
   Given a Liquid text string and a notification event, renders the Liquid to HTML using the
@@ -4901,7 +4905,7 @@ type Query {
     within the current domain (limited to 10 results).
     """
     name: String
-  ): [CmsContent!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParentInterface interface instead.")
+  ): [CmsContent!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `typeaheadSearchCmsContent` field on the CmsParent interface instead.")
 
   """
   Finds a signup by ID in the convention associated with the domain name of this HTTP
@@ -4924,7 +4928,7 @@ type Query {
     The text to search for.
     """
     query: String!
-  ): SearchResult! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParentInterface instead.")
+  ): SearchResult! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `fullTextSearch` field on the CmsParent interface instead.")
 
   """
   Finds a staff position by ID in the convention associated with the domain name of this HTTP
@@ -5181,7 +5185,7 @@ input RoomInput {
   name: String
 }
 
-type RootSite implements CmsParentInterface {
+type RootSite implements CmsParent {
   """
   Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
