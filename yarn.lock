@@ -8783,10 +8783,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.18.0, core-js@npm:^3.9.1":
-  version: 3.18.0
-  resolution: "core-js@npm:3.18.0"
-  checksum: 192c345eb0c8b9d582ebed798cf124e00cd8241303c3c801987563f8ebb8cb991e2ff91494c258752014c29d5515070d2c0a862687401c7d7e1e2f96f8980d42
+"core-js@npm:3.18.1":
+  version: 3.18.1
+  resolution: "core-js@npm:3.18.1"
+  checksum: 89cac0fe657df722d10b0e658ee76af12a614c0a75fe3fb11e87c2e3f27f6d7e609e3bf40748da5d8feb055b0535766a583ff1d1ac89dba57105f6f1ad64dc21
   languageName: node
   linkType: hard
 
@@ -8794,6 +8794,13 @@ __metadata:
   version: 2.6.11
   resolution: "core-js@npm:2.6.11"
   checksum: 6944011e7aa2d86dae6c42fbb15c94bf20b7499c4f5ebd5e5d11bdde7101d3724788afacc8ab93fbacb2c881d634ef9ee783e1cf724cfbaaf501e882abda957f
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.9.1":
+  version: 3.18.0
+  resolution: "core-js@npm:3.18.0"
+  checksum: 192c345eb0c8b9d582ebed798cf124e00cd8241303c3c801987563f8ebb8cb991e2ff91494c258752014c29d5515070d2c0a862687401c7d7e1e2f96f8980d42
   languageName: node
   linkType: hard
 
@@ -20931,7 +20938,7 @@ resolve@^2.0.0-next.3:
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
     compression-webpack-plugin: 8.0.1
-    core-js: 3.18.0
+    core-js: 3.18.1
     core-js-compat: 3.18.0
     crypto-browserify: 3.12.0
     css-loader: 6.3.0
