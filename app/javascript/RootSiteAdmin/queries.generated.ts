@@ -8,12 +8,12 @@ export type PageFieldsFragment = { __typename: 'Page', id: number, name?: Types.
 
 export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> };
 
-export type RootSiteFieldsFragment = { __typename: 'RootSite', id: number, site_name: string, root_page: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } };
+export type RootSiteFieldsFragment = { __typename: 'RootSite', id: number, site_name: string, rootPage: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, defaultLayout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> };
 
 export type RootSiteAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: number, site_name: string, root_page: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } }, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> };
+export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: number, site_name: string, rootPage: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, defaultLayout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } };
 
 export const PageFieldsFragmentDoc = gql`
     fragment PageFields on Page {
@@ -31,11 +31,19 @@ export const RootSiteFieldsFragmentDoc = gql`
     fragment RootSiteFields on RootSite {
   id
   site_name
-  root_page {
+  rootPage {
     id
     ...PageFields
   }
-  default_layout {
+  defaultLayout {
+    id
+    ...RootSiteAdminLayoutFields
+  }
+  cmsPages {
+    id
+    ...PageFields
+  }
+  cmsLayouts {
     id
     ...RootSiteAdminLayoutFields
   }
@@ -48,18 +56,8 @@ export const RootSiteAdminQueryDocument = gql`
     id
     ...RootSiteFields
   }
-  cmsPages {
-    id
-    ...PageFields
-  }
-  cmsLayouts {
-    id
-    ...RootSiteAdminLayoutFields
-  }
 }
-    ${RootSiteFieldsFragmentDoc}
-${PageFieldsFragmentDoc}
-${RootSiteAdminLayoutFieldsFragmentDoc}`;
+    ${RootSiteFieldsFragmentDoc}`;
 
 /**
  * __useRootSiteAdminQuery__

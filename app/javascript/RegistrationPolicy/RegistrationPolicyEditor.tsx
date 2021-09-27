@@ -25,7 +25,7 @@ type EditingRegistrationPolicy<BucketType extends EditingRegistrationBucket> = {
 
 export type RegistrationPolicyEditorProps<
   BucketType extends EditingRegistrationBucket,
-  T extends EditingRegistrationPolicy<BucketType>
+  T extends EditingRegistrationPolicy<BucketType>,
 > = {
   registrationPolicy?: T;
   onChange: React.Dispatch<T>;
@@ -40,8 +40,8 @@ export type RegistrationPolicyEditorProps<
 
 function RegistrationPolicyEditor<
   BucketType extends EditingRegistrationBucket,
-  T extends EditingRegistrationPolicy<BucketType>
->(props: RegistrationPolicyEditorProps<BucketType, T>) {
+  T extends EditingRegistrationPolicy<BucketType>,
+>(props: RegistrationPolicyEditorProps<BucketType, T>): JSX.Element {
   const {
     allowCustom,
     lockCounts,
@@ -54,10 +54,10 @@ function RegistrationPolicyEditor<
   } = props;
   const registrationPolicy: T =
     props.registrationPolicy ??
-    (({
+    ({
       buckets: [],
       prevent_no_preference_signups: false,
-    } as unknown) as T);
+    } as unknown as T);
 
   const [preset, setPreset] = useState(() => findPreset(registrationPolicy, presets ?? []));
   const [custom, setCustom] = useState(
@@ -143,9 +143,9 @@ function RegistrationPolicyEditor<
       setPreset(newPreset);
       setCustom(false);
       if (newPreset) {
-        onChange((newPreset.policy as unknown) as T);
+        onChange(newPreset.policy as unknown as T);
       } else {
-        onChange(({ buckets: [], prevent_no_preference_signups: false } as unknown) as T);
+        onChange({ buckets: [], prevent_no_preference_signups: false } as unknown as T);
       }
     }
   };

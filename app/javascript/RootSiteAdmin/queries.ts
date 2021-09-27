@@ -19,12 +19,22 @@ export const RootSiteFields = gql`
     id
     site_name
 
-    root_page {
+    rootPage {
       id
       ...PageFields
     }
 
-    default_layout {
+    defaultLayout {
+      id
+      ...RootSiteAdminLayoutFields
+    }
+
+    cmsPages {
+      id
+      ...PageFields
+    }
+
+    cmsLayouts {
       id
       ...RootSiteAdminLayoutFields
     }
@@ -40,19 +50,7 @@ export const RootSiteAdminQuery = gql`
       id
       ...RootSiteFields
     }
-
-    cmsPages {
-      id
-      ...PageFields
-    }
-
-    cmsLayouts {
-      id
-      ...RootSiteAdminLayoutFields
-    }
   }
 
   ${RootSiteFields}
-  ${PageFields}
-  ${RootSiteAdminLayoutFields}
 `;

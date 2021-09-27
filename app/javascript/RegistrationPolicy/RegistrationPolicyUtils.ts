@@ -8,7 +8,7 @@ import {
 export function presetMatchesPolicy(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
   preset: RegistrationPolicyPreset,
-) {
+): boolean {
   if (
     Boolean(registrationPolicy.prevent_no_preference_signups) !==
     Boolean(preset.policy.prevent_no_preference_signups)
@@ -58,7 +58,7 @@ export function findPreset(
 export function bucketSortCompare(
   a: BucketForRegistrationPolicyUtils,
   b: BucketForRegistrationPolicyUtils,
-) {
+): number {
   if (a.anything && !b.anything) {
     return 1;
   }
@@ -72,6 +72,6 @@ export function bucketSortCompare(
 
 export function isPreventNoPreferenceSignupsApplicable(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
-) {
+): boolean {
   return (registrationPolicy.buckets || []).filter((bucket) => bucket.slots_limited).length > 1;
 }

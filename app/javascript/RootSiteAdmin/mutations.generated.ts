@@ -2,7 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { RootSiteFieldsFragmentDoc, PageFieldsFragmentDoc, RootSiteAdminLayoutFieldsFragmentDoc } from './queries.generated';
+import { RootSiteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type UpdateRootSiteMutationVariables = Types.Exact<{
@@ -12,7 +12,7 @@ export type UpdateRootSiteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: number, site_name: string, root_page: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } } } };
+export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: number, site_name: string, rootPage: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, defaultLayout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } } };
 
 
 export const UpdateRootSiteDocument = gql`

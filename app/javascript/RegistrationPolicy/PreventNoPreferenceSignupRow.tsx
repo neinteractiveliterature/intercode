@@ -18,7 +18,7 @@ function PreventNoPreferenceSignupRow({
   onChange,
   preset,
   registrationPolicy,
-}: PreventNoPreferenceSignupRowProps) {
+}: PreventNoPreferenceSignupRowProps): JSX.Element {
   const renderPreventNoPreferenceSignupsDescription = () => {
     if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
       return (

@@ -18,7 +18,8 @@ import {
   useSignupSpySignupChangesQuery,
 } from './queries.generated';
 
-type SignupChangeType = SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
+type SignupChangeType =
+  SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -84,25 +85,19 @@ const defaultState = {
   sortBy: [{ id: 'created_at', desc: true }],
 };
 
-function SignupSpyTable() {
-  const {
-    columnSelectionProps,
-    refetch,
-    queryData,
-    loading,
-    tableHeaderProps,
-    tableInstance,
-  } = useReactTableWithTheWorks({
-    decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultState,
-    defaultVisibleColumns,
-    encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data.convention.signup_changes_paginated.entries,
-    getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
-    getPossibleColumns: () => columns,
-    useQuery: useSignupSpySignupChangesQuery,
-    storageKeyPrefix: 'signupSpy',
-  });
+function SignupSpyTable(): JSX.Element {
+  const { columnSelectionProps, refetch, queryData, loading, tableHeaderProps, tableInstance } =
+    useReactTableWithTheWorks({
+      decodeFilterValue: FILTER_CODECS.decodeFilterValue,
+      defaultState,
+      defaultVisibleColumns,
+      encodeFilterValue: FILTER_CODECS.encodeFilterValue,
+      getData: ({ data }) => data.convention.signup_changes_paginated.entries,
+      getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
+      getPossibleColumns: () => columns,
+      useQuery: useSignupSpySignupChangesQuery,
+      storageKeyPrefix: 'signupSpy',
+    });
 
   const { filters, sortBy } = tableHeaderProps;
 

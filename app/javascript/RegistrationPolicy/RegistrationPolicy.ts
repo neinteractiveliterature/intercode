@@ -24,37 +24,41 @@ export type RegistrationPolicyForRegistrationPolicyUtils = Pick<
 function sumBucketProperty(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
   property: 'total_slots' | 'minimum_slots' | 'preferred_slots',
-) {
-  return (registrationPolicy.buckets || []).reduce(
+): number {
+  return (registrationPolicy.buckets ?? []).reduce(
     (sum, bucket) => sum + (bucket[property] ?? 0),
     0,
   );
 }
 
-export function sumTotalSlots(registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils) {
+export function sumTotalSlots(
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
+): number {
   return sumBucketProperty(registrationPolicy, 'total_slots');
 }
 
-export function sumMinimumSlots(registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils) {
+export function sumMinimumSlots(
+  registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
+): number {
   return sumBucketProperty(registrationPolicy, 'minimum_slots');
 }
 
 export function sumPreferredSlots(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
-) {
+): number {
   return sumBucketProperty(registrationPolicy, 'preferred_slots');
 }
 
 export function getRegistrationPolicySlotsLimited(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
-) {
+): boolean {
   return (registrationPolicy.buckets ?? []).every((bucket) => bucket.slots_limited);
 }
 
 export function getRegistrationPolicyBucket(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
   key: string,
-) {
+): BucketForRegistrationPolicyUtils | undefined {
   return (registrationPolicy.buckets ?? []).find((bucket) => bucket.key === key);
 }
 
@@ -74,7 +78,7 @@ export function addRegistrationPolicyBucket<T extends RegistrationPolicyForRegis
 }
 
 export function removeRegistrationPolicyBucket<
-  T extends RegistrationPolicyForRegistrationPolicyUtils
+  T extends RegistrationPolicyForRegistrationPolicyUtils,
 >(registrationPolicy: T, key: string): T {
   return {
     ...registrationPolicy,
@@ -83,7 +87,7 @@ export function removeRegistrationPolicyBucket<
 }
 
 export function updateRegistrationPolicyBucket<
-  T extends RegistrationPolicyForRegistrationPolicyUtils
+  T extends RegistrationPolicyForRegistrationPolicyUtils,
 >(registrationPolicy: T, key: string, newBucket: Omit<T['buckets'][0], 'key'>): T {
   const index = (registrationPolicy.buckets ?? []).findIndex((bucket) => bucket.key === key);
 
@@ -101,7 +105,7 @@ export function updateRegistrationPolicyBucket<
 }
 
 export function getRegistrationPolicyAnythingBucket<
-  T extends RegistrationPolicyForRegistrationPolicyUtils
->(registrationPolicy: T) {
-  return (registrationPolicy.buckets || []).find((bucket) => bucket.anything);
+  T extends RegistrationPolicyForRegistrationPolicyUtils,
+>(registrationPolicy: T): BucketForRegistrationPolicyUtils | undefined {
+  return (registrationPolicy.buckets ?? []).find((bucket) => bucket.anything);
 }
