@@ -35,7 +35,7 @@ function PermissionsTableInput<RowType extends BaseRowType>({
   readOnly,
   rows,
   rowType,
-}: PermissionsTableInputProps<RowType>) {
+}: PermissionsTableInputProps<RowType>): JSX.Element {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions,
     changeSet,

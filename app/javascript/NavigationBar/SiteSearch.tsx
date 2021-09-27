@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
-import { components, MenuProps } from 'react-select';
+import { components, GroupTypeBase, IndicatorProps, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useHistory } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { CSSTransition } from 'react-transition-group';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
-// @ts-expect-error
+// @ts-expect-error porter-stemmer has no types
 import { stemmer } from 'porter-stemmer';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
-import type { UnwrapPromise } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
 import {
@@ -20,6 +19,23 @@ import {
 } from './siteSearchQueries.generated';
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
+import { GeneratedNavigationItem } from './GeneratedNavigationSection';
+
+type NavigationItemSearchDocument = GeneratedNavigationItem & {
+  id: string;
+};
+
+type NavigationItemSearchResult = {
+  title: string;
+  highlight: '';
+  model: NavigationItemSearchDocument & {
+    __typename: 'NavigationItem';
+  };
+};
+
+type SiteSearchOptionType =
+  | NavigationItemSearchResult
+  | SiteSearchQueryData['cmsParent']['fullTextSearch']['entries'][number];
 
 function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
   if (model.__typename === 'NavigationItem') {
@@ -45,7 +61,9 @@ function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
   return 'bi-square-fill';
 }
 
-function SearchDropdownIndicator(props: any) {
+function SearchDropdownIndicator(
+  props: IndicatorProps<SiteSearchOptionType, false, GroupTypeBase<SiteSearchOptionType>>,
+) {
   return (
     <components.DropdownIndicator {...props}>
       <i className="bi-search" />
@@ -53,7 +71,7 @@ function SearchDropdownIndicator(props: any) {
   );
 }
 
-function SearchMenu(props: MenuProps<any, false>) {
+function SearchMenu(props: MenuProps<SiteSearchOptionType, false>) {
   const { t } = useTranslation();
 
   return (
@@ -78,7 +96,11 @@ export type SiteSearchProps = {
   visibilityChangeComplete: (visible: boolean) => void;
 };
 
-function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearchProps) {
+function SiteSearch({
+  visible,
+  setVisible,
+  visibilityChangeComplete,
+}: SiteSearchProps): JSX.Element {
   const history = useHistory();
   const apolloClient = useApolloClient();
   const [inputValue, setInputValue] = useState('');
@@ -123,7 +145,10 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
               ...navigationItem,
             },
           }));
-          return [...navigationItemsResult, ...data!.siteSearch.entries];
+          return [
+            ...navigationItemsResult,
+            ...data.cmsParent.fullTextSearch.entries,
+          ] as SiteSearchOptionType[];
         },
         200,
         { leading: false },
@@ -131,9 +156,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
     [apolloClient, navigationItemsSearchIndex],
   );
 
-  type OptionType = UnwrapPromise<ReturnType<typeof loadOptions>>[0];
-
-  const selectRef = useRef<AsyncSelect<OptionType>>(null);
+  const selectRef = useRef<AsyncSelect<SiteSearchOptionType>>(null);
 
   const keyDownListener = useCallback(
     (event) => {
@@ -158,7 +181,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   }, [keyDownListener]);
 
   const optionSelected = useCallback(
-    (entry: OptionType) => {
+    (entry: SiteSearchOptionType) => {
       const { model } = entry;
       if (model.__typename === 'Page') {
         history.push(`/pages/${(model as { slug: string }).slug}`);
@@ -199,7 +222,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
       onEntered={entered}
       onExited={exited}
     >
-      <AsyncSelect<OptionType>
+      <AsyncSelect<SiteSearchOptionType>
         ref={selectRef}
         placeholder=""
         className="site-search"
@@ -235,7 +258,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
         loadOptions={loadOptions}
         onChange={optionSelected}
         onBlur={close}
-        formatOptionLabel={(entry: OptionType) => (
+        formatOptionLabel={(entry: SiteSearchOptionType) => (
           <>
             <div className="fw-bold mb-1">
               <i className={getSearchableModelIcon(entry.model)} /> {entry.title}

@@ -81,7 +81,7 @@ export default LoadSingleValueFromCollectionWrapper(
           </thead>
           <tbody>
             {organization.organization_roles.map((organizationRole) => (
-              <tr>
+              <tr key={organizationRole.id}>
                 <td>{organizationRole.name}</td>
                 <td>{organizationRole.users.map((user) => user.name).join(', ')}</td>
                 <td>

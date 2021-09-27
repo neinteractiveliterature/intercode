@@ -9,32 +9,34 @@ export type SiteSearchQueryVariables = Types.Exact<{
 }>;
 
 
-export type SiteSearchQueryData = { __typename: 'Query', siteSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: Types.Maybe<string>, highlight?: Types.Maybe<string>, model: { __typename: 'Event', id: number, title?: Types.Maybe<string> } | { __typename: 'EventProposal', id: number, title?: Types.Maybe<string> } | { __typename: 'Page', id: number, slug?: Types.Maybe<string> } | { __typename: 'UserConProfile', id: number } }> } };
+export type SiteSearchQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', fullTextSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: Types.Maybe<string>, highlight?: Types.Maybe<string>, model: { __typename: 'Event', id: number, title?: Types.Maybe<string> } | { __typename: 'EventProposal', id: number, title?: Types.Maybe<string> } | { __typename: 'Page', id: number, slug?: Types.Maybe<string> } | { __typename: 'UserConProfile', id: number } }> } } | { __typename: 'RootSite', fullTextSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: Types.Maybe<string>, highlight?: Types.Maybe<string>, model: { __typename: 'Event', id: number, title?: Types.Maybe<string> } | { __typename: 'EventProposal', id: number, title?: Types.Maybe<string> } | { __typename: 'Page', id: number, slug?: Types.Maybe<string> } | { __typename: 'UserConProfile', id: number } }> } } };
 
 
 export const SiteSearchQueryDocument = gql`
     query SiteSearchQuery($query: String!) {
-  siteSearch(query: $query) {
-    total_entries
-    entries {
-      title
-      highlight
-      model {
-        __typename
-        ... on Page {
-          id
-          slug
-        }
-        ... on Event {
-          id
-          title
-        }
-        ... on EventProposal {
-          id
-          title
-        }
-        ... on UserConProfile {
-          id
+  cmsParent: cmsParentByRequestHost {
+    fullTextSearch(query: $query) {
+      total_entries
+      entries {
+        title
+        highlight
+        model {
+          __typename
+          ... on Page {
+            id
+            slug
+          }
+          ... on Event {
+            id
+            title
+          }
+          ... on EventProposal {
+            id
+            title
+          }
+          ... on UserConProfile {
+            id
+          }
         }
       }
     }
