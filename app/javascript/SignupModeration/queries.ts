@@ -75,7 +75,7 @@ export const SignupModerationSignupRequestFields = gql`
 
 export const CreateSignupEventsQuery = gql`
   query CreateSignupEventsQuery($title: String) {
-    convention {
+    convention: conventionByRequestHost {
       id
       events_paginated(filters: { title: $title }, per_page: 50) {
         entries {
@@ -108,59 +108,63 @@ export const CreateSignupRunCardQuery = gql`
       can_update_event(event_id: $eventId)
     }
 
-    event(id: $eventId) {
+    convention: conventionByRequestHost {
       id
-      title
-      length_seconds
-      private_signup_list
-      can_play_concurrently
 
-      registration_policy {
-        ...RunCardRegistrationPolicyFields
-      }
-
-      team_members {
+      event(id: $eventId) {
         id
-        display_team_member
-        user_con_profile {
+        title
+        length_seconds
+        private_signup_list
+        can_play_concurrently
+
+        registration_policy {
+          ...RunCardRegistrationPolicyFields
+        }
+
+        team_members {
           id
-          gravatar_url
-          gravatar_enabled
-          name_without_nickname
+          display_team_member
+          user_con_profile {
+            id
+            gravatar_url
+            gravatar_enabled
+            name_without_nickname
+          }
+        }
+
+        event_category {
+          id
+          team_member_name
+        }
+
+        runs {
+          id
+          ...EventPageRunFields
         }
       }
 
-      event_category {
+      user_con_profile(id: $userConProfileId) {
         id
-        team_member_name
-      }
+        name_without_nickname
 
-      runs {
-        id
-        ...EventPageRunFields
-      }
-    }
-
-    userConProfile(id: $userConProfileId) {
-      id
-      name_without_nickname
-
-      signups {
-        id
-        state
-        waitlist_position
-
-        run {
+        signups {
           id
+          state
+          waitlist_position
+
+          run {
+            id
+          }
         }
-      }
 
-      signup_requests {
-        id
-        state
-
-        target_run {
+        signup_requests {
           id
+          state
+
+          target_run {
+            id
+          }
         }
       }
     }

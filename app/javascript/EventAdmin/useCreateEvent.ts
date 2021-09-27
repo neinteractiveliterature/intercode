@@ -12,8 +12,15 @@ import {
   CreateFillerEventMutationVariables,
 } from './mutations.generated';
 import { SchedulingUi } from '../graphqlTypes.generated';
+import { MutationTuple } from '@apollo/client';
 
-export function useCreateRegularEvent() {
+export type CreateRegularEventResult = ReturnType<
+  MutationTuple<CreateEventMutationData, CreateEventMutationVariables>[0]
+>;
+
+export function useCreateRegularEvent(): (options: {
+  event: Parameters<typeof buildEventInput>[0];
+}) => CreateRegularEventResult {
   const mutate = useCreateMutation<
     EventAdminEventsQueryData,
     EventAdminEventsQueryVariables,
@@ -38,7 +45,14 @@ export function useCreateRegularEvent() {
   return createEvent;
 }
 
-export function useCreateSingleRunEvent() {
+export type CreateSingleRunEventResult = ReturnType<
+  MutationTuple<CreateFillerEventMutationData, CreateFillerEventMutationVariables>[0]
+>;
+
+export function useCreateSingleRunEvent(): (options: {
+  event: Parameters<typeof buildEventInput>[0];
+  run: Parameters<typeof buildRunInput>[0];
+}) => CreateSingleRunEventResult {
   const mutate = useCreateMutation<
     EventAdminEventsQueryData,
     EventAdminEventsQueryVariables,
@@ -74,7 +88,15 @@ export function useCreateSingleRunEvent() {
   );
 }
 
-export default function useCreateEvent() {
+export type CreateEventOptions = {
+  event: Parameters<typeof buildEventInput>[0];
+  eventCategory: { scheduling_ui: SchedulingUi };
+  run?: Parameters<typeof buildRunInput>[0];
+};
+
+export type CreateEventResult = CreateRegularEventResult | CreateSingleRunEventResult;
+
+export default function useCreateEvent(): (options: CreateEventOptions) => CreateEventResult {
   const createRegularEvent = useCreateRegularEvent();
   const createSingleRunEvent = useCreateSingleRunEvent();
 
