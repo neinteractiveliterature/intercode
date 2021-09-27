@@ -8749,13 +8749,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.18.0":
-  version: 3.18.0
-  resolution: "core-js-compat@npm:3.18.0"
+"core-js-compat@npm:3.18.1":
+  version: 3.18.1
+  resolution: "core-js-compat@npm:3.18.1"
   dependencies:
-    browserslist: ^4.17.0
+    browserslist: ^4.17.1
     semver: 7.0.0
-  checksum: 2bf11676215d912c099078564bbbd837ff6b4a18635661414f3d72b4b78bee883117d583645629999407f910be311624d0380aefec69b3b77ef91001bcb30b19
+  checksum: d7afbd879fa1fd6bd20778308bfafc8b4993b13a4c24cb0793baad4b027d13f59fef78b867137b0a570df708ea2d0766a067d8c5b3dc4e5e4747d70dc91e1c98
   languageName: node
   linkType: hard
 
@@ -20939,7 +20939,7 @@ resolve@^2.0.0-next.3:
     classnames: 2.3.1
     compression-webpack-plugin: 8.0.1
     core-js: 3.18.1
-    core-js-compat: 3.18.0
+    core-js-compat: 3.18.1
     crypto-browserify: 3.12.0
     css-loader: 6.3.0
     css-minimizer-webpack-plugin: 3.0.2
