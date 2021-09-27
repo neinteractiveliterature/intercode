@@ -75,7 +75,7 @@
     "@types/file-saver": "2.0.3",
     "@types/inflected": "1.1.29",
     "@types/js-search": "1.4.0",
-    "@types/lodash": "4.14.174",
+    "@types/lodash": "4.14.175",
     "@types/luxon": "2.0.4",
     "@types/mapbox-gl": "1.13.2",
     "@types/minimist": "1.2.2",
