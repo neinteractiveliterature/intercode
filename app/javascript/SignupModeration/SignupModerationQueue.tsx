@@ -204,7 +204,7 @@ function getPossibleColumns(): Column<
   ];
 }
 
-function SignupModerationQueue() {
+function SignupModerationQueue(): JSX.Element {
   const [acceptSignupRequest] = useAcceptSignupRequestMutation();
   const [rejectSignupRequest] = useRejectSignupRequestMutation();
   const confirm = useConfirm();

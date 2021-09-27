@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import RunFormFields, { RunForRunFormFields } from '../BuiltInForms/RunFormFields';
@@ -9,15 +9,11 @@ import useAsyncFunction from '../useAsyncFunction';
 import useEventFormWithCategorySelection, {
   EventFormWithCategorySelection,
 } from './useEventFormWithCategorySelection';
-import useCreateEvent from './useCreateEvent';
+import useCreateEvent, { CreateEventOptions } from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import { useEventAdminEventsQuery, EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
-import { FormItemRole } from '../graphqlTypes.generated';
-
-type NewEventFormProps = {
-  data: EventAdminEventsQueryData;
-};
+import { FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -42,8 +38,8 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
   return run.starts_at != null;
 }
 
-function NewEventForm({ data }: NewEventFormProps) {
-  const convention = data.convention!;
+export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ data }) {
+  const convention = data.convention;
   const history = useHistory();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
@@ -51,7 +47,9 @@ function NewEventForm({ data }: NewEventFormProps) {
       convention.event_categories.find((c) => c.id === Number.parseInt(eventCategoryIdParam, 10)),
     [convention, eventCategoryIdParam],
   );
-  const [createMutate, createError] = useAsyncFunction(useCreateEvent());
+  const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(
+    useCreateEvent(),
+  );
   const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
       form_response_attrs: {},
@@ -74,25 +72,33 @@ function NewEventForm({ data }: NewEventFormProps) {
     rooms: [],
     starts_at: '',
   });
+  usePageTitle('New event');
 
   const donePath =
     convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/';
 
   const createEvent = async () => {
-    if (!validateForm() || !runIsCreatable(run)) {
+    if (!validateForm() || !runIsCreatable(run) || !eventCategory) {
       return;
     }
 
     const eventForBuildEventInput: Parameters<typeof buildEventInput>[0] = {
-      ...event!,
-      event_category: eventCategory!,
+      ...event,
+      event_category: eventCategory,
     };
 
-    await createMutate({
-      event: eventForBuildEventInput,
-      eventCategory: eventCategory!,
-      run,
-    });
+    if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
+      await createMutate({
+        event: eventForBuildEventInput,
+        eventCategory,
+        run,
+      });
+    } else {
+      await createMutate({
+        event: eventForBuildEventInput,
+        eventCategory,
+      });
+    }
     history.push(donePath);
   };
 
@@ -147,22 +153,4 @@ function NewEventForm({ data }: NewEventFormProps) {
       </div>
     </>
   );
-}
-
-function NewEvent() {
-  const { data, loading, error } = useEventAdminEventsQuery();
-
-  usePageTitle('New event');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return <NewEventForm data={data!} />;
-}
-
-export default NewEvent;
+});
