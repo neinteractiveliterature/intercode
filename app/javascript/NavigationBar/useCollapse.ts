@@ -1,9 +1,18 @@
-import { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, useEffect, HTMLAttributes } from 'react';
 import classnames from 'classnames';
 
 const COLLAPSE_DURATION = 350;
 
-export default function useCollapse<T extends HTMLElement>(elementRef: React.RefObject<T>) {
+export type UseCollapseResult = {
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleCollapsed: () => void;
+  collapseProps: HTMLAttributes<HTMLElement>;
+};
+
+export default function useCollapse<T extends HTMLElement>(
+  elementRef: React.RefObject<T>,
+): UseCollapseResult {
   const [collapsed, setCollapsed] = useState(true);
   const [prevCollapsed, setPrevCollapsed] = useState(true);
   const [collapsing, setCollapsing] = useState(false);

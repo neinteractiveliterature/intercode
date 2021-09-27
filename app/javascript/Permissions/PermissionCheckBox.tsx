@@ -2,7 +2,7 @@ export type PermissionCheckBoxProps = {
   hasPermission: boolean;
 };
 
-function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps) {
+function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps): JSX.Element {
   if (hasPermission) {
     return (
       <i className="bi-check-square-o">

@@ -16,18 +16,21 @@ const OrganizationRolePermissionNames = flatMap(
   (permissionNameGroup) => permissionNameGroup.permissions,
 );
 
-type OrganizationRoleType = OrganizationAdminOrganizationsQueryData['organizations'][0]['organization_roles'][0];
+type OrganizationRoleType =
+  OrganizationAdminOrganizationsQueryData['organizations'][0]['organization_roles'][0];
 export type OrganizationRoleFormState = {
   name: string;
   usersChangeSet: ChangeSet<OrganizationRoleType['users'][0]>;
   permissionsChangeSet: ChangeSet<PermissionWithId>;
 };
 
-export default function useOrganizationRoleForm(initialOrganizationRole: OrganizationRoleType) {
+export default function useOrganizationRoleForm(initialOrganizationRole: OrganizationRoleType): {
+  renderForm: () => JSX.Element;
+  formState: OrganizationRoleFormState;
+} {
   const [name, onNameChange] = useState(initialOrganizationRole.name);
-  const [usersChangeSet, onChangeUsers] = useChangeSetWithSelect<
-    OrganizationRoleType['users'][0]
-  >();
+  const [usersChangeSet, onChangeUsers] =
+    useChangeSetWithSelect<OrganizationRoleType['users'][0]>();
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<PermissionWithId>();
 
   const initialPermissions = useMemo(
@@ -39,10 +42,10 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
     [initialOrganizationRole],
   );
 
-  const users = useMemo(() => usersChangeSet.apply(initialOrganizationRole.users), [
-    usersChangeSet,
-    initialOrganizationRole,
-  ]);
+  const users = useMemo(
+    () => usersChangeSet.apply(initialOrganizationRole.users),
+    [usersChangeSet, initialOrganizationRole],
+  );
 
   const formState: OrganizationRoleFormState = useMemo(
     () => ({ name, usersChangeSet, permissionsChangeSet }),
@@ -77,5 +80,5 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
     </>
   );
 
-  return { renderForm, formState } as const;
+  return { renderForm, formState };
 }

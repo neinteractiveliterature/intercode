@@ -29,7 +29,7 @@ export default function usePermissionToggle({
   changeSet,
   currentPermissions,
   readOnly,
-}: UsePermissionToggleOptions) {
+}: UsePermissionToggleOptions): UsePermissionToggleResult {
   const setPermission = (value: boolean) => {
     if (value) {
       grantPermission({ role, model, permission });
@@ -65,5 +65,5 @@ export default function usePermissionToggle({
     [changeSet, readOnly, existingPermission, role, model, permission],
   );
 
-  return { hasPermission, toggle, className } as const;
+  return { hasPermission, toggle, className };
 }

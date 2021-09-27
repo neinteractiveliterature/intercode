@@ -15,7 +15,7 @@ type PolymorphicObject = { __typename?: string; id: number };
 function polymorphicObjectEquals(
   a: PolymorphicObject | null | undefined,
   b: PolymorphicObject | null | undefined,
-) {
+): boolean {
   return (a == null && b == null) || (a?.__typename === b?.__typename && a?.id === b?.id);
 }
 
@@ -32,7 +32,10 @@ export type PolymorphicPermission = Pick<Permission, 'permission'> & {
 export type PartialPolymorphicPermission = Pick<PolymorphicPermission, 'permission'> &
   Partial<Pick<PolymorphicPermission, 'role' | 'model'>>;
 
-export function permissionEquals(a: PartialPolymorphicPermission, b: PartialPolymorphicPermission) {
+export function permissionEquals(
+  a: PartialPolymorphicPermission,
+  b: PartialPolymorphicPermission,
+): boolean {
   return (
     modelEquals(a.model, b.model) && roleEquals(a.role, b.role) && a.permission === b.permission
   );
@@ -41,7 +44,7 @@ export function permissionEquals(a: PartialPolymorphicPermission, b: PartialPoly
 export function findPermission<T extends PartialPolymorphicPermission>(
   currentPermissions: T[],
   { role, model, permission }: PartialPolymorphicPermission,
-) {
+): T | undefined {
   return currentPermissions.find((currentPermission) =>
     permissionEquals(currentPermission, { role, model, permission }),
   );
@@ -81,7 +84,9 @@ export function buildPermissionInput(permission: PartialPolymorphicPermission): 
   };
 }
 
-export function getPermissionNamesForModelType(modelType: PermissionedModelTypeIndicator) {
+export function getPermissionNamesForModelType(
+  modelType: PermissionedModelTypeIndicator,
+): { permission: string; name: string }[] {
   return flatMap(
     PermissionNames.filter((permissionNameGroup) => permissionNameGroup.model_type === modelType),
     (permissionNameGroup) => permissionNameGroup.permissions,

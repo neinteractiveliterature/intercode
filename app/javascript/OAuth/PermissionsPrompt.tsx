@@ -90,7 +90,7 @@ export type PermissionsPromptProps = {
   scopeNames: string[];
 };
 
-function PermissionsPrompt({ scopeNames }: PermissionsPromptProps) {
+function PermissionsPrompt({ scopeNames }: PermissionsPromptProps): JSX.Element {
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
   const groupedScopes = groupBy(scopeNames, (scopeName) => getGroupForScopeName(scopeName));
   const { t } = useTranslation();
