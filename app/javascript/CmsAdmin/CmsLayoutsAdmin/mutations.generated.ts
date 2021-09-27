@@ -10,7 +10,7 @@ export type CreateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout?: Types.Maybe<{ __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
+export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout: { __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type UpdateLayoutMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,14 +18,14 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout?: Types.Maybe<{ __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
+export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout: { __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, navbar_classes?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type DeleteLayoutMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteLayoutMutationData = { __typename: 'Mutation', deleteCmsLayout?: Types.Maybe<{ __typename: 'DeleteCmsLayoutPayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteLayoutMutationData = { __typename: 'Mutation', deleteCmsLayout: { __typename: 'DeleteCmsLayoutPayload', clientMutationId?: Types.Maybe<string> } };
 
 
 export const CreateLayoutDocument = gql`

@@ -15,7 +15,7 @@ export type BucketChangeCellProps = {
   };
 };
 
-const BucketChangeCell = ({ value }: BucketChangeCellProps) => {
+function BucketChangeCell({ value }: BucketChangeCellProps): JSX.Element {
   const { t } = useTranslation();
   const oldBucket = value.previous_signup_change
     ? formatBucket(value.previous_signup_change, value.run.event, t)
@@ -33,6 +33,6 @@ const BucketChangeCell = ({ value }: BucketChangeCellProps) => {
       {newBucket}
     </>
   );
-};
+}
 
 export default BucketChangeCell;

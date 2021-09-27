@@ -32,12 +32,12 @@ export type AdminStoreAbilityQueryData = { __typename: 'Query', currentAbility: 
 export type CartQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CartQueryData = { __typename: 'Query', myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }>, convention: { __typename: 'Convention', id: number, name: string }, currentPendingOrder?: Types.Maybe<{ __typename: 'Order', id: number, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, total_price_before_discounts: { __typename: 'Money', fractional: number, currency_code: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }> };
+export type CartQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, my_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, current_pending_order?: Types.Maybe<{ __typename: 'Order', id: number, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, total_price_before_discounts: { __typename: 'Money', fractional: number, currency_code: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, payment_options: Array<string>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }> }> } };
 
 export type OrderHistoryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrderHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, timezone_name?: Types.Maybe<string>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string> }> }, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, orders: Array<{ __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, image_url?: Types.Maybe<string>, payment_options: Array<string> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string, image_url?: Types.Maybe<string> }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string }, price: { __typename: 'Money', fractional: number, currency_code: string } }> }> }> };
+export type OrderHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, timezone_name?: Types.Maybe<string>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string> }>, my_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, orders: Array<{ __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, product: { __typename: 'Product', id: number, name: string, image_url?: Types.Maybe<string>, payment_options: Array<string> }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string, image_url?: Types.Maybe<string> }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string }, price: { __typename: 'Money', fractional: number, currency_code: string } }> }> }> } };
 
 export type OrderSummaryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -49,12 +49,12 @@ export type OrderFormProductQueryVariables = Types.Exact<{
 }>;
 
 
-export type OrderFormProductQueryData = { __typename: 'Query', currentUser?: Types.Maybe<{ __typename: 'User', id: number }>, product: { __typename: 'Product', id: number, image_url?: Types.Maybe<string>, name: string, description_html?: Types.Maybe<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }>, product_variants: Array<{ __typename: 'ProductVariant', id: number, name: string, position?: Types.Maybe<number>, override_pricing_structure?: Types.Maybe<{ __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }> }> } };
+export type OrderFormProductQueryData = { __typename: 'Query', currentUser?: Types.Maybe<{ __typename: 'User', id: number }>, convention: { __typename: 'Convention', id: number, product: { __typename: 'Product', id: number, image_url?: Types.Maybe<string>, name: string, description_html?: Types.Maybe<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number }>, product_variants: Array<{ __typename: 'ProductVariant', id: number, name: string, position?: Types.Maybe<number>, override_pricing_structure?: Types.Maybe<{ __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }> }> } } };
 
 export type CurrentPendingOrderPaymentIntentClientSecretQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CurrentPendingOrderPaymentIntentClientSecretQueryData = { __typename: 'Query', currentPendingOrderPaymentIntentClientSecret: string };
+export type CurrentPendingOrderPaymentIntentClientSecretQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, my_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, current_pending_order?: Types.Maybe<{ __typename: 'Order', id: number, payment_intent_client_secret: string }> }> } };
 
 
 export const AdminOrdersQueryDocument = gql`
@@ -200,17 +200,17 @@ export type AdminStoreAbilityQueryLazyQueryHookResult = ReturnType<typeof useAdm
 export type AdminStoreAbilityQueryQueryResult = Apollo.QueryResult<AdminStoreAbilityQueryData, AdminStoreAbilityQueryVariables>;
 export const CartQueryDocument = gql`
     query CartQuery {
-  myProfile {
-    id
-    name_without_nickname
-  }
   convention: conventionByRequestHost {
     id
     name
-  }
-  currentPendingOrder {
-    id
-    ...CartOrderFields
+    my_profile {
+      id
+      name_without_nickname
+      current_pending_order {
+        id
+        ...CartOrderFields
+      }
+    }
   }
 }
     ${CartOrderFieldsFragmentDoc}`;
@@ -252,47 +252,47 @@ export const OrderHistoryQueryDocument = gql`
       name
       email
     }
-  }
-  myProfile {
-    id
-    name_without_nickname
-    orders {
+    my_profile {
       id
-      status
-      submitted_at
-      total_price {
-        fractional
-        currency_code
-      }
-      payment_amount {
-        fractional
-        currency_code
-      }
-      coupon_applications {
+      name_without_nickname
+      orders {
         id
-        ...CouponApplicationFields
-      }
-      order_entries {
-        id
-        quantity
-        product {
-          id
-          name
-          image_url
-          payment_options
-        }
-        product_variant {
-          id
-          name
-          image_url
-        }
-        price_per_item {
+        status
+        submitted_at
+        total_price {
           fractional
           currency_code
         }
-        price {
+        payment_amount {
           fractional
           currency_code
+        }
+        coupon_applications {
+          id
+          ...CouponApplicationFields
+        }
+        order_entries {
+          id
+          quantity
+          product {
+            id
+            name
+            image_url
+            payment_options
+          }
+          product_variant {
+            id
+            name
+            image_url
+          }
+          price_per_item {
+            fractional
+            currency_code
+          }
+          price {
+            fractional
+            currency_code
+          }
         }
       }
     }
@@ -381,23 +381,26 @@ export const OrderFormProductQueryDocument = gql`
   currentUser {
     id
   }
-  product(id: $productId) {
+  convention: conventionByRequestHost {
     id
-    image_url
-    name
-    pricing_structure {
-      ...PricingStructureFields
-    }
-    description_html
-    provides_ticket_type {
+    product(id: $productId) {
       id
-    }
-    product_variants {
-      id
+      image_url
       name
-      position
-      override_pricing_structure {
+      pricing_structure {
         ...PricingStructureFields
+      }
+      description_html
+      provides_ticket_type {
+        id
+      }
+      product_variants {
+        id
+        name
+        position
+        override_pricing_structure {
+          ...PricingStructureFields
+        }
       }
     }
   }
@@ -433,7 +436,16 @@ export type OrderFormProductQueryLazyQueryHookResult = ReturnType<typeof useOrde
 export type OrderFormProductQueryQueryResult = Apollo.QueryResult<OrderFormProductQueryData, OrderFormProductQueryVariables>;
 export const CurrentPendingOrderPaymentIntentClientSecretQueryDocument = gql`
     query CurrentPendingOrderPaymentIntentClientSecretQuery {
-  currentPendingOrderPaymentIntentClientSecret
+  convention: conventionByRequestHost {
+    id
+    my_profile {
+      id
+      current_pending_order {
+        id
+        payment_intent_client_secret
+      }
+    }
+  }
 }
     `;
 

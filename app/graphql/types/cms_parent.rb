@@ -2,6 +2,15 @@ module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
+  definition_methods do
+    def resolve_type(object, _context)
+      case object
+      when RootSite then Types::RootSiteType
+      when Convention then Types::ConventionType
+      end
+    end
+  end
+
   description <<~MARKDOWN
     A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
     as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.

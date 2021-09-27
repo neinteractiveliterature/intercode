@@ -10,21 +10,21 @@ export type CreateTicketTypeMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTicketTypeMutationData = { __typename: 'Mutation', createTicketType?: Types.Maybe<{ __typename: 'CreateTicketTypePayload', ticket_type: { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> } }> };
+export type CreateTicketTypeMutationData = { __typename: 'Mutation', createTicketType: { __typename: 'CreateTicketTypePayload', ticket_type: { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> } } };
 
 export type UpdateTicketTypeMutationVariables = Types.Exact<{
   input: Types.UpdateTicketTypeInput;
 }>;
 
 
-export type UpdateTicketTypeMutationData = { __typename: 'Mutation', updateTicketType?: Types.Maybe<{ __typename: 'UpdateTicketTypePayload', ticket_type: { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> } }> };
+export type UpdateTicketTypeMutationData = { __typename: 'Mutation', updateTicketType: { __typename: 'UpdateTicketTypePayload', ticket_type: { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> } } };
 
 export type DeleteTicketTypeMutationVariables = Types.Exact<{
   input: Types.DeleteTicketTypeInput;
 }>;
 
 
-export type DeleteTicketTypeMutationData = { __typename: 'Mutation', deleteTicketType?: Types.Maybe<{ __typename: 'DeleteTicketTypePayload', ticket_type: { __typename: 'TicketType', id: number } }> };
+export type DeleteTicketTypeMutationData = { __typename: 'Mutation', deleteTicketType: { __typename: 'DeleteTicketTypePayload', ticket_type: { __typename: 'TicketType', id: number } } };
 
 
 export const CreateTicketTypeDocument = gql`

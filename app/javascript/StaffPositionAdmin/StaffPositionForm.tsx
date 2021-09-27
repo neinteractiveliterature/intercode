@@ -21,7 +21,7 @@ export type StaffPositionFormProps = {
   onChange: React.Dispatch<EditingStaffPosition>;
 };
 
-function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) {
+function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps): JSX.Element {
   const { conventionDomain } = useContext(AppRootContext);
   const setStaffPosition = useFunctionalStateUpdater(staffPosition, onChange);
   const [setName, setEmail, setVisible, setUserConProfiles] = usePropertySetters(
@@ -87,7 +87,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps) 
             value={value}
             onTextChange={onAddValueChange}
             aria-label="Add email alias (portion before @ sign)"
-            domain={conventionDomain!}
+            domain={conventionDomain}
             name="add-alias"
             onKeyDown={onKeyDown}
           />

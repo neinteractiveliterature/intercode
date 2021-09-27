@@ -978,6 +978,17 @@ type Convention implements CmsParent {
     """
     id: Int!
   ): UserConProfile!
+
+  """
+  Finds a UserConProfile by user ID in the convention associated with this convention.  If
+  there is no UserConProfile with that user ID in this convention, errors out.
+  """
+  user_con_profile_by_user_id(
+    """
+    The user ID of the UserConProfile to find.
+    """
+    userId: Int!
+  ): UserConProfile!
   user_con_profile_form: Form!
   user_con_profiles_paginated(
     """
@@ -3231,151 +3242,151 @@ type Mutation {
     Parameters for AcceptClickwrapAgreement
     """
     input: AcceptClickwrapAgreementInput!
-  ): AcceptClickwrapAgreementPayload
+  ): AcceptClickwrapAgreementPayload!
   acceptSignupRequest(
     """
     Parameters for AcceptSignupRequest
     """
     input: AcceptSignupRequestInput!
-  ): AcceptSignupRequestPayload
+  ): AcceptSignupRequestPayload!
   addOrderEntryToCurrentPendingOrder(
     """
     Parameters for AddOrderEntryToCurrentPendingOrder
     """
     input: AddOrderEntryToCurrentPendingOrderInput!
-  ): AddOrderEntryToCurrentPendingOrderPayload
+  ): AddOrderEntryToCurrentPendingOrderPayload!
   cancelOrder(
     """
     Parameters for CancelOrder
     """
     input: CancelOrderInput!
-  ): CancelOrderPayload
+  ): CancelOrderPayload!
   convertTicketToEventProvided(
     """
     Parameters for ConvertTicketToEventProvided
     """
     input: ConvertTicketToEventProvidedInput!
-  ): ConvertTicketToEventProvidedPayload
+  ): ConvertTicketToEventProvidedPayload!
   createCmsContentGroup(
     """
     Parameters for CreateCmsContentGroup
     """
     input: CreateCmsContentGroupInput!
-  ): CreateCmsContentGroupPayload
+  ): CreateCmsContentGroupPayload!
   createCmsFile(
     """
     Parameters for CreateCmsFile
     """
     input: CreateCmsFileInput!
-  ): CreateCmsFilePayload
+  ): CreateCmsFilePayload!
   createCmsGraphqlQuery(
     """
     Parameters for CreateCmsGraphqlQuery
     """
     input: CreateCmsGraphqlQueryInput!
-  ): CreateCmsGraphqlQueryPayload
+  ): CreateCmsGraphqlQueryPayload!
   createCmsLayout(
     """
     Parameters for CreateCmsLayout
     """
     input: CreateCmsLayoutInput!
-  ): CreateCmsLayoutPayload
+  ): CreateCmsLayoutPayload!
   createCmsNavigationItem(
     """
     Parameters for CreateCmsNavigationItem
     """
     input: CreateCmsNavigationItemInput!
-  ): CreateCmsNavigationItemPayload
+  ): CreateCmsNavigationItemPayload!
   createCmsPartial(
     """
     Parameters for CreateCmsPartial
     """
     input: CreateCmsPartialInput!
-  ): CreateCmsPartialPayload
+  ): CreateCmsPartialPayload!
   createConvention(
     """
     Parameters for CreateConvention
     """
     input: CreateConventionInput!
-  ): CreateConventionPayload
+  ): CreateConventionPayload!
   createConventionStripeAccount(
     """
     Parameters for CreateConventionStripeAccount
     """
     input: CreateConventionStripeAccountInput!
-  ): CreateConventionStripeAccountPayload
+  ): CreateConventionStripeAccountPayload!
   createCoupon(
     """
     Parameters for CreateCoupon
     """
     input: CreateCouponInput!
-  ): CreateCouponPayload
+  ): CreateCouponPayload!
   createCouponApplication(
     """
     Parameters for CreateCouponApplication
     """
     input: CreateCouponApplicationInput!
-  ): CreateCouponApplicationPayload
+  ): CreateCouponApplicationPayload!
   createDepartment(
     """
     Parameters for CreateDepartment
     """
     input: CreateDepartmentInput!
-  ): CreateDepartmentPayload
+  ): CreateDepartmentPayload!
   createEmailRoute(
     """
     Parameters for CreateEmailRoute
     """
     input: CreateEmailRouteInput!
-  ): CreateEmailRoutePayload
+  ): CreateEmailRoutePayload!
   createEvent(
     """
     Parameters for CreateEvent
     """
     input: CreateEventInput!
-  ): CreateEventPayload
+  ): CreateEventPayload!
   createEventCategory(
     """
     Parameters for CreateEventCategory
     """
     input: CreateEventCategoryInput!
-  ): CreateEventCategoryPayload
+  ): CreateEventCategoryPayload!
   createEventProposal(
     """
     Parameters for CreateEventProposal
     """
     input: CreateEventProposalInput!
-  ): CreateEventProposalPayload
+  ): CreateEventProposalPayload!
   createFillerEvent(
     """
     Parameters for CreateFillerEvent
     """
     input: CreateFillerEventInput!
-  ): CreateFillerEventPayload
+  ): CreateFillerEventPayload!
   createForm(
     """
     Parameters for CreateForm
     """
     input: CreateFormInput!
-  ): CreateFormPayload
+  ): CreateFormPayload!
   createFormItem(
     """
     Parameters for CreateFormItem
     """
     input: CreateFormItemInput!
-  ): CreateFormItemPayload
+  ): CreateFormItemPayload!
   createFormSection(
     """
     Parameters for CreateFormSection
     """
     input: CreateFormSectionInput!
-  ): CreateFormSectionPayload
+  ): CreateFormSectionPayload!
   createFormWithJSON(
     """
     Parameters for CreateFormWithJSON
     """
     input: CreateFormWithJSONInput!
-  ): CreateFormWithJSONPayload
+  ): CreateFormWithJSONPayload!
   createMaximumEventProvidedTicketsOverride(
     """
     Parameters for CreateMaximumEventProvidedTicketsOverride
@@ -3387,199 +3398,199 @@ type Mutation {
     Parameters for CreateMultipleRuns
     """
     input: CreateMultipleRunsInput!
-  ): CreateMultipleRunsPayload
+  ): CreateMultipleRunsPayload!
   createMySignup(
     """
     Parameters for CreateMySignup
     """
     input: CreateMySignupInput!
-  ): CreateMySignupPayload
+  ): CreateMySignupPayload!
   createOrder(
     """
     Parameters for CreateOrder
     """
     input: CreateOrderInput!
-  ): CreateOrderPayload
+  ): CreateOrderPayload!
   createOrderEntry(
     """
     Parameters for CreateOrderEntry
     """
     input: CreateOrderEntryInput!
-  ): CreateOrderEntryPayload
+  ): CreateOrderEntryPayload!
   createOrganizationRole(
     """
     Parameters for CreateOrganizationRole
     """
     input: CreateOrganizationRoleInput!
-  ): CreateOrganizationRolePayload
+  ): CreateOrganizationRolePayload!
   createPage(
     """
     Parameters for CreatePage
     """
     input: CreatePageInput!
-  ): CreatePagePayload
+  ): CreatePagePayload!
   createProduct(
     """
     Parameters for CreateProduct
     """
     input: CreateProductInput!
-  ): CreateProductPayload
+  ): CreateProductPayload!
   createRoom(
     """
     Parameters for CreateRoom
     """
     input: CreateRoomInput!
-  ): CreateRoomPayload
+  ): CreateRoomPayload!
   createRun(
     """
     Parameters for CreateRun
     """
     input: CreateRunInput!
-  ): CreateRunPayload
+  ): CreateRunPayload!
   createSignupRequest(
     """
     Parameters for CreateSignupRequest
     """
     input: CreateSignupRequestInput!
-  ): CreateSignupRequestPayload
+  ): CreateSignupRequestPayload!
   createStaffPosition(
     """
     Parameters for CreateStaffPosition
     """
     input: CreateStaffPositionInput!
-  ): CreateStaffPositionPayload
+  ): CreateStaffPositionPayload!
   createTeamMember(
     """
     Parameters for CreateTeamMember
     """
     input: CreateTeamMemberInput!
-  ): CreateTeamMemberPayload
+  ): CreateTeamMemberPayload!
   createTicket(
     """
     Parameters for CreateTicket
     """
     input: CreateTicketInput!
-  ): CreateTicketPayload
+  ): CreateTicketPayload!
   createTicketType(
     """
     Parameters for CreateTicketType
     """
     input: CreateTicketTypeInput!
-  ): CreateTicketTypePayload
+  ): CreateTicketTypePayload!
   createUserActivityAlert(
     """
     Parameters for CreateUserActivityAlert
     """
     input: CreateUserActivityAlertInput!
-  ): CreateUserActivityAlertPayload
+  ): CreateUserActivityAlertPayload!
   createUserConProfile(
     """
     Parameters for CreateUserConProfile
     """
     input: CreateUserConProfileInput!
-  ): CreateUserConProfilePayload
+  ): CreateUserConProfilePayload!
   createUserSignup(
     """
     Parameters for CreateUserSignup
     """
     input: CreateUserSignupInput!
-  ): CreateUserSignupPayload
+  ): CreateUserSignupPayload!
   deleteCmsContentGroup(
     """
     Parameters for DeleteCmsContentGroup
     """
     input: DeleteCmsContentGroupInput!
-  ): DeleteCmsContentGroupPayload
+  ): DeleteCmsContentGroupPayload!
   deleteCmsFile(
     """
     Parameters for DeleteCmsFile
     """
     input: DeleteCmsFileInput!
-  ): DeleteCmsFilePayload
+  ): DeleteCmsFilePayload!
   deleteCmsGraphqlQuery(
     """
     Parameters for DeleteCmsGraphqlQuery
     """
     input: DeleteCmsGraphqlQueryInput!
-  ): DeleteCmsGraphqlQueryPayload
+  ): DeleteCmsGraphqlQueryPayload!
   deleteCmsLayout(
     """
     Parameters for DeleteCmsLayout
     """
     input: DeleteCmsLayoutInput!
-  ): DeleteCmsLayoutPayload
+  ): DeleteCmsLayoutPayload!
   deleteCmsNavigationItem(
     """
     Parameters for DeleteCmsNavigationItem
     """
     input: DeleteCmsNavigationItemInput!
-  ): DeleteCmsNavigationItemPayload
+  ): DeleteCmsNavigationItemPayload!
   deleteCmsPartial(
     """
     Parameters for DeleteCmsPartial
     """
     input: DeleteCmsPartialInput!
-  ): DeleteCmsPartialPayload
+  ): DeleteCmsPartialPayload!
   deleteCmsVariable(
     """
     Parameters for DeleteCmsVariable
     """
     input: DeleteCmsVariableInput!
-  ): DeleteCmsVariablePayload
+  ): DeleteCmsVariablePayload!
   deleteCoupon(
     """
     Parameters for DeleteCoupon
     """
     input: DeleteCouponInput!
-  ): DeleteCouponPayload
+  ): DeleteCouponPayload!
   deleteCouponApplication(
     """
     Parameters for DeleteCouponApplication
     """
     input: DeleteCouponApplicationInput!
-  ): DeleteCouponApplicationPayload
+  ): DeleteCouponApplicationPayload!
   deleteDepartment(
     """
     Parameters for DeleteDepartment
     """
     input: DeleteDepartmentInput!
-  ): DeleteDepartmentPayload
+  ): DeleteDepartmentPayload!
   deleteEmailRoute(
     """
     Parameters for DeleteEmailRoute
     """
     input: DeleteEmailRouteInput!
-  ): DeleteEmailRoutePayload
+  ): DeleteEmailRoutePayload!
   deleteEventCategory(
     """
     Parameters for DeleteEventCategory
     """
     input: DeleteEventCategoryInput!
-  ): DeleteEventCategoryPayload
+  ): DeleteEventCategoryPayload!
   deleteEventProposal(
     """
     Parameters for DeleteEventProposal
     """
     input: DeleteEventProposalInput!
-  ): DeleteEventProposalPayload
+  ): DeleteEventProposalPayload!
   deleteForm(
     """
     Parameters for DeleteForm
     """
     input: DeleteFormInput!
-  ): DeleteFormPayload
+  ): DeleteFormPayload!
   deleteFormItem(
     """
     Parameters for DeleteFormItem
     """
     input: DeleteFormItemInput!
-  ): DeleteFormItemPayload
+  ): DeleteFormItemPayload!
   deleteFormSection(
     """
     Parameters for DeleteFormSection
     """
     input: DeleteFormSectionInput!
-  ): DeleteFormSectionPayload
+  ): DeleteFormSectionPayload!
   deleteMaximumEventProvidedTicketsOverride(
     """
     Parameters for DeleteMaximumEventProvidedTicketsOverride
@@ -3591,289 +3602,289 @@ type Mutation {
     Parameters for DeleteOrderEntry
     """
     input: DeleteOrderEntryInput!
-  ): DeleteOrderEntryPayload
+  ): DeleteOrderEntryPayload!
   deleteOrganizationRole(
     """
     Parameters for DeleteOrganizationRole
     """
     input: DeleteOrganizationRoleInput!
-  ): DeleteOrganizationRolePayload
+  ): DeleteOrganizationRolePayload!
   deletePage(
     """
     Parameters for DeletePage
     """
     input: DeletePageInput!
-  ): DeletePagePayload
+  ): DeletePagePayload!
   deleteProduct(
     """
     Parameters for DeleteProduct
     """
     input: DeleteProductInput!
-  ): DeleteProductPayload
+  ): DeleteProductPayload!
   deleteRoom(
     """
     Parameters for DeleteRoom
     """
     input: DeleteRoomInput!
-  ): DeleteRoomPayload
+  ): DeleteRoomPayload!
   deleteRun(
     """
     Parameters for DeleteRun
     """
     input: DeleteRunInput!
-  ): DeleteRunPayload
+  ): DeleteRunPayload!
   deleteStaffPosition(
     """
     Parameters for DeleteStaffPosition
     """
     input: DeleteStaffPositionInput!
-  ): DeleteStaffPositionPayload
+  ): DeleteStaffPositionPayload!
   deleteTeamMember(
     """
     Parameters for DeleteTeamMember
     """
     input: DeleteTeamMemberInput!
-  ): DeleteTeamMemberPayload
+  ): DeleteTeamMemberPayload!
   deleteTicket(
     """
     Parameters for DeleteTicket
     """
     input: DeleteTicketInput!
-  ): DeleteTicketPayload
+  ): DeleteTicketPayload!
   deleteTicketType(
     """
     Parameters for DeleteTicketType
     """
     input: DeleteTicketTypeInput!
-  ): DeleteTicketTypePayload
+  ): DeleteTicketTypePayload!
   deleteUserActivityAlert(
     """
     Parameters for DeleteUserActivityAlert
     """
     input: DeleteUserActivityAlertInput!
-  ): DeleteUserActivityAlertPayload
+  ): DeleteUserActivityAlertPayload!
   deleteUserConProfile(
     """
     Parameters for DeleteUserConProfile
     """
     input: DeleteUserConProfileInput!
-  ): DeleteUserConProfilePayload
+  ): DeleteUserConProfilePayload!
   dropEvent(
     """
     Parameters for DropEvent
     """
     input: DropEventInput!
-  ): DropEventPayload
+  ): DropEventPayload!
   forceConfirmSignup(
     """
     Parameters for ForceConfirmSignup
     """
     input: ForceConfirmSignupInput!
-  ): ForceConfirmSignupPayload
+  ): ForceConfirmSignupPayload!
   markOrderPaid(
     """
     Parameters for MarkOrderPaid
     """
     input: MarkOrderPaidInput!
-  ): MarkOrderPaidPayload
+  ): MarkOrderPaidPayload!
   mergeUsers(
     """
     Parameters for MergeUsers
     """
     input: MergeUsersInput!
-  ): MergeUsersPayload
+  ): MergeUsersPayload!
   moveFormItem(
     """
     Parameters for MoveFormItem
     """
     input: MoveFormItemInput!
-  ): MoveFormItemPayload
+  ): MoveFormItemPayload!
   moveFormSection(
     """
     Parameters for MoveFormSection
     """
     input: MoveFormSectionInput!
-  ): MoveFormSectionPayload
+  ): MoveFormSectionPayload!
   provideEventTicket(
     """
     Parameters for ProvideEventTicket
     """
     input: ProvideEventTicketInput!
-  ): ProvideEventTicketPayload
+  ): ProvideEventTicketPayload!
   rateEvent(
     """
     Parameters for RateEvent
     """
     input: RateEventInput!
-  ): RateEventPayload
+  ): RateEventPayload!
   rejectSignupRequest(
     """
     Parameters for RejectSignupRequest
     """
     input: RejectSignupRequestInput!
-  ): RejectSignupRequestPayload
+  ): RejectSignupRequestPayload!
   renameCmsFile(
     """
     Parameters for RenameCmsFile
     """
     input: RenameCmsFileInput!
-  ): RenameCmsFilePayload
+  ): RenameCmsFilePayload!
   restoreDroppedEvent(
     """
     Parameters for RestoreDroppedEvent
     """
     input: RestoreDroppedEventInput!
-  ): RestoreDroppedEventPayload
+  ): RestoreDroppedEventPayload!
   revokeAuthorizedApplication(
     """
     Parameters for RevokeAuthorizedApplication
     """
     input: RevokeAuthorizedApplicationInput!
-  ): RevokeAuthorizedApplicationPayload
+  ): RevokeAuthorizedApplicationPayload!
   setCmsVariable(
     """
     Parameters for SetCmsVariable
     """
     input: SetCmsVariableInput!
-  ): SetCmsVariablePayload
+  ): SetCmsVariablePayload!
   setConventionCanceled(
     """
     Parameters for SetConventionCanceled
     """
     input: SetConventionCanceledInput!
-  ): SetConventionCanceledPayload
+  ): SetConventionCanceledPayload!
   sortCmsNavigationItems(
     """
     Parameters for SortCmsNavigationItems
     """
     input: SortCmsNavigationItemsInput!
-  ): SortCmsNavigationItemsPayload
+  ): SortCmsNavigationItemsPayload!
   submitEventProposal(
     """
     Parameters for SubmitEventProposal
     """
     input: SubmitEventProposalInput!
-  ): SubmitEventProposalPayload
+  ): SubmitEventProposalPayload!
   submitOrder(
     """
     Parameters for SubmitOrder
     """
     input: SubmitOrderInput!
-  ): SubmitOrderPayload
+  ): SubmitOrderPayload!
   transitionEventProposal(
     """
     Parameters for TransitionEventProposal
     """
     input: TransitionEventProposalInput!
-  ): TransitionEventProposalPayload
+  ): TransitionEventProposalPayload!
   updateCmsContentGroup(
     """
     Parameters for UpdateCmsContentGroup
     """
     input: UpdateCmsContentGroupInput!
-  ): UpdateCmsContentGroupPayload
+  ): UpdateCmsContentGroupPayload!
   updateCmsGraphqlQuery(
     """
     Parameters for UpdateCmsGraphqlQuery
     """
     input: UpdateCmsGraphqlQueryInput!
-  ): UpdateCmsGraphqlQueryPayload
+  ): UpdateCmsGraphqlQueryPayload!
   updateCmsLayout(
     """
     Parameters for UpdateCmsLayout
     """
     input: UpdateCmsLayoutInput!
-  ): UpdateCmsLayoutPayload
+  ): UpdateCmsLayoutPayload!
   updateCmsNavigationItem(
     """
     Parameters for UpdateCmsNavigationItem
     """
     input: UpdateCmsNavigationItemInput!
-  ): UpdateCmsNavigationItemPayload
+  ): UpdateCmsNavigationItemPayload!
   updateCmsPartial(
     """
     Parameters for UpdateCmsPartial
     """
     input: UpdateCmsPartialInput!
-  ): UpdateCmsPartialPayload
+  ): UpdateCmsPartialPayload!
   updateConvention(
     """
     Parameters for UpdateConvention
     """
     input: UpdateConventionInput!
-  ): UpdateConventionPayload
+  ): UpdateConventionPayload!
   updateCoupon(
     """
     Parameters for UpdateCoupon
     """
     input: UpdateCouponInput!
-  ): UpdateCouponPayload
+  ): UpdateCouponPayload!
   updateDepartment(
     """
     Parameters for UpdateDepartment
     """
     input: UpdateDepartmentInput!
-  ): UpdateDepartmentPayload
+  ): UpdateDepartmentPayload!
   updateEmailRoute(
     """
     Parameters for UpdateEmailRoute
     """
     input: UpdateEmailRouteInput!
-  ): UpdateEmailRoutePayload
+  ): UpdateEmailRoutePayload!
   updateEvent(
     """
     Parameters for UpdateEvent
     """
     input: UpdateEventInput!
-  ): UpdateEventPayload
+  ): UpdateEventPayload!
   updateEventAdminNotes(
     """
     Parameters for UpdateEventAdminNotes
     """
     input: UpdateEventAdminNotesInput!
-  ): UpdateEventAdminNotesPayload
+  ): UpdateEventAdminNotesPayload!
   updateEventCategory(
     """
     Parameters for UpdateEventCategory
     """
     input: UpdateEventCategoryInput!
-  ): UpdateEventCategoryPayload
+  ): UpdateEventCategoryPayload!
   updateEventProposal(
     """
     Parameters for UpdateEventProposal
     """
     input: UpdateEventProposalInput!
-  ): UpdateEventProposalPayload
+  ): UpdateEventProposalPayload!
   updateEventProposalAdminNotes(
     """
     Parameters for UpdateEventProposalAdminNotes
     """
     input: UpdateEventProposalAdminNotesInput!
-  ): UpdateEventProposalAdminNotesPayload
+  ): UpdateEventProposalAdminNotesPayload!
   updateForm(
     """
     Parameters for UpdateForm
     """
     input: UpdateFormInput!
-  ): UpdateFormPayload
+  ): UpdateFormPayload!
   updateFormItem(
     """
     Parameters for UpdateFormItem
     """
     input: UpdateFormItemInput!
-  ): UpdateFormItemPayload
+  ): UpdateFormItemPayload!
   updateFormSection(
     """
     Parameters for UpdateFormSection
     """
     input: UpdateFormSectionInput!
-  ): UpdateFormSectionPayload
+  ): UpdateFormSectionPayload!
   updateFormWithJSON(
     """
     Parameters for UpdateFormWithJSON
     """
     input: UpdateFormWithJSONInput!
-  ): UpdateFormWithJSONPayload
+  ): UpdateFormWithJSONPayload!
   updateMaximumEventProvidedTicketsOverride(
     """
     Parameters for UpdateMaximumEventProvidedTicketsOverride
@@ -3885,133 +3896,133 @@ type Mutation {
     Parameters for UpdateNotificationTemplate
     """
     input: UpdateNotificationTemplateInput!
-  ): UpdateNotificationTemplatePayload
+  ): UpdateNotificationTemplatePayload!
   updateOrder(
     """
     Parameters for UpdateOrder
     """
     input: UpdateOrderInput!
-  ): UpdateOrderPayload
+  ): UpdateOrderPayload!
   updateOrderEntry(
     """
     Parameters for UpdateOrderEntry
     """
     input: UpdateOrderEntryInput!
-  ): UpdateOrderEntryPayload
+  ): UpdateOrderEntryPayload!
   updateOrganizationRole(
     """
     Parameters for UpdateOrganizationRole
     """
     input: UpdateOrganizationRoleInput!
-  ): UpdateOrganizationRolePayload
+  ): UpdateOrganizationRolePayload!
   updatePage(
     """
     Parameters for UpdatePage
     """
     input: UpdatePageInput!
-  ): UpdatePagePayload
+  ): UpdatePagePayload!
   updateProduct(
     """
     Parameters for UpdateProduct
     """
     input: UpdateProductInput!
-  ): UpdateProductPayload
+  ): UpdateProductPayload!
   updateRoom(
     """
     Parameters for UpdateRoom
     """
     input: UpdateRoomInput!
-  ): UpdateRoomPayload
+  ): UpdateRoomPayload!
   updateRootSite(
     """
     Parameters for UpdateRootSite
     """
     input: UpdateRootSiteInput!
-  ): UpdateRootSitePayload
+  ): UpdateRootSitePayload!
   updateRun(
     """
     Parameters for UpdateRun
     """
     input: UpdateRunInput!
-  ): UpdateRunPayload
+  ): UpdateRunPayload!
   updateSignupBucket(
     """
     Parameters for UpdateSignupBucket
     """
     input: UpdateSignupBucketInput!
-  ): UpdateSignupBucketPayload
+  ): UpdateSignupBucketPayload!
   updateSignupCounted(
     """
     Parameters for UpdateSignupCounted
     """
     input: UpdateSignupCountedInput!
-  ): UpdateSignupCountedPayload
+  ): UpdateSignupCountedPayload!
   updateStaffPosition(
     """
     Parameters for UpdateStaffPosition
     """
     input: UpdateStaffPositionInput!
-  ): UpdateStaffPositionPayload
+  ): UpdateStaffPositionPayload!
   updateStaffPositionPermissions(
     """
     Parameters for UpdateStaffPositionPermissions
     """
     input: UpdateStaffPositionPermissionsInput!
-  ): UpdateStaffPositionPermissionsPayload
+  ): UpdateStaffPositionPermissionsPayload!
   updateTeamMember(
     """
     Parameters for UpdateTeamMember
     """
     input: UpdateTeamMemberInput!
-  ): UpdateTeamMemberPayload
+  ): UpdateTeamMemberPayload!
   updateTicket(
     """
     Parameters for UpdateTicket
     """
     input: UpdateTicketInput!
-  ): UpdateTicketPayload
+  ): UpdateTicketPayload!
   updateTicketType(
     """
     Parameters for UpdateTicketType
     """
     input: UpdateTicketTypeInput!
-  ): UpdateTicketTypePayload
+  ): UpdateTicketTypePayload!
   updateUserActivityAlert(
     """
     Parameters for UpdateUserActivityAlert
     """
     input: UpdateUserActivityAlertInput!
-  ): UpdateUserActivityAlertPayload
+  ): UpdateUserActivityAlertPayload!
   updateUserConProfile(
     """
     Parameters for UpdateUserConProfile
     """
     input: UpdateUserConProfileInput!
-  ): UpdateUserConProfilePayload
+  ): UpdateUserConProfilePayload!
   withdrawAllUserConProfileSignups(
     """
     Parameters for WithdrawAllUserConProfileSignups
     """
     input: WithdrawAllUserConProfileSignupsInput!
-  ): WithdrawAllUserConProfileSignupsPayload
+  ): WithdrawAllUserConProfileSignupsPayload!
   withdrawMySignup(
     """
     Parameters for WithdrawMySignup
     """
     input: WithdrawMySignupInput!
-  ): WithdrawMySignupPayload
+  ): WithdrawMySignupPayload!
   withdrawSignupRequest(
     """
     Parameters for WithdrawSignupRequest
     """
     input: WithdrawSignupRequestInput!
-  ): WithdrawSignupRequestPayload
+  ): WithdrawSignupRequestPayload!
   withdrawUserSignup(
     """
     Parameters for WithdrawUserSignup
     """
     input: WithdrawUserSignupInput!
-  ): WithdrawUserSignupPayload
+  ): WithdrawUserSignupPayload!
 }
 
 type NotificationDestination {

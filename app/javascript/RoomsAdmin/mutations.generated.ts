@@ -9,21 +9,21 @@ export type CreateRoomMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateRoomMutationData = { __typename: 'Mutation', createRoom?: Types.Maybe<{ __typename: 'CreateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } }> };
+export type CreateRoomMutationData = { __typename: 'Mutation', createRoom: { __typename: 'CreateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } } };
 
 export type UpdateRoomMutationVariables = Types.Exact<{
   input: Types.UpdateRoomInput;
 }>;
 
 
-export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom?: Types.Maybe<{ __typename: 'UpdateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } }> };
+export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom: { __typename: 'UpdateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } } };
 
 export type DeleteRoomMutationVariables = Types.Exact<{
   input: Types.DeleteRoomInput;
 }>;
 
 
-export type DeleteRoomMutationData = { __typename: 'Mutation', deleteRoom?: Types.Maybe<{ __typename: 'DeleteRoomPayload', room: { __typename: 'Room', id: number } }> };
+export type DeleteRoomMutationData = { __typename: 'Mutation', deleteRoom: { __typename: 'DeleteRoomPayload', room: { __typename: 'Room', id: number } } };
 
 
 export const CreateRoomDocument = gql`

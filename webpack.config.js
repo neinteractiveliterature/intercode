@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { resolve } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -16,6 +17,11 @@ const config = {
   entry: {
     application: './app/javascript/packs/applicationEntry.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',
+    ...(process.env.NODE_ENV === 'production'
+      ? {}
+      : {
+          'dev-mode-graphiql': './app/javascript/DevModeGraphiql.tsx',
+        }),
   },
   output: {
     filename: '[name]-[chunkhash].js',

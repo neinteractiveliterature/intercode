@@ -7,8 +7,8 @@ import {
   useConfirm,
   ErrorDisplay,
   sortByLocaleString,
-  PageLoadingIndicator,
   DisclosureTriangle,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
 import PermissionNames from '../../../config/permission_names.json';
@@ -165,9 +165,8 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   );
 }
 
-function StaffPositionsTable() {
+export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsTable({ data }) {
   const { conventionDomain } = useContext(AppRootContext);
-  const { data, loading, error } = useStaffPositionsQuery();
   const confirm = useConfirm();
 
   const [deleteMutate] = useDeleteStaffPositionMutation();
@@ -201,14 +200,6 @@ function StaffPositionsTable() {
   );
 
   usePageTitle('Staff positions');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const renderRow = (
     staffPosition: StaffPositionsQueryData['convention']['staff_positions'][0],
@@ -275,7 +266,7 @@ function StaffPositionsTable() {
     </tr>
   );
 
-  const staffPositions = data!.convention.staff_positions;
+  const staffPositions = data?.convention.staff_positions ?? [];
   const sortedStaffPositions = sortByLocaleString(staffPositions, (position) => position.name);
 
   return (
@@ -302,6 +293,4 @@ function StaffPositionsTable() {
       </Link>
     </div>
   );
-}
-
-export default StaffPositionsTable;
+});

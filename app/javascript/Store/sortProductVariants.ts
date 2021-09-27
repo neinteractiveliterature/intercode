@@ -22,6 +22,6 @@ const compareProductVariants = (a: ProductVariantForSort, b: ProductVariantForSo
   return a.position - b.position;
 };
 
-export default function sortProductVariants<T extends ProductVariantForSort>(variants: T[]) {
+export default function sortProductVariants<T extends ProductVariantForSort>(variants: T[]): T[] {
   return [...variants].sort(compareProductVariants);
 }

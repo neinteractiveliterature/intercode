@@ -8,7 +8,7 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function StaffPositionAdmin() {
+function StaffPositionAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_staff_positions');
   if (authorizationWarning) return authorizationWarning;
 

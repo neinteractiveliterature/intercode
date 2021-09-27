@@ -15,7 +15,7 @@ export type EditCouponModalProps = {
   close: () => void;
 };
 
-function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps) {
+function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps): JSX.Element {
   const confirm = useGraphQLConfirm();
   const [coupon, setCoupon] = useState(initialCoupon);
   const [updateCoupon] = useUpdateCouponMutation();

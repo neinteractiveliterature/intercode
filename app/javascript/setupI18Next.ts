@@ -72,22 +72,22 @@ const initOptions = {
 };
 
 let ready = false;
-const i18n = i18next
+const i18nObject = i18next
   .use(initReactI18next) // passes i18n down to react-i18next
   .use(PromiseI18nextBackend);
 
-const i18nInitPromise = i18n.init(initOptions).then(() => {
+const i18nInitPromise = i18nObject.init(initOptions).then(() => {
   ready = true;
 });
 
 async function getI18n(): Promise<i18n> {
   if (ready) {
-    return i18n;
+    return i18nObject;
   }
 
   await i18nInitPromise;
-  return i18n;
+  return i18nObject;
 }
 
-export { i18n };
+export { i18nObject as i18n };
 export default getI18n;

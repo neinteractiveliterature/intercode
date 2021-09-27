@@ -15,7 +15,11 @@ export type AdminProductCardProps = {
   product: EditingProductWithRealId;
 };
 
-function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps) {
+function AdminProductCard({
+  currentAbility,
+  startEditing,
+  product,
+}: AdminProductCardProps): JSX.Element {
   const confirm = useConfirm();
   const [deleteProduct] = useDeleteProductMutation();
 

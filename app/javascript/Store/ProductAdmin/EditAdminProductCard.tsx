@@ -29,7 +29,11 @@ export type EditAdminProductCardProps = {
   ticketTypes: AdminProductsQueryData['convention']['ticket_types'];
 };
 
-function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps) {
+function EditAdminProductCard({
+  initialProduct,
+  close,
+  ticketTypes,
+}: EditAdminProductCardProps): JSX.Element {
   const { ticketName } = useContext(AppRootContext);
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
@@ -52,7 +56,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   );
 
   const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files![0];
+    const file = (event.target.files ?? [])[0];
     if (!file) {
       return;
     }

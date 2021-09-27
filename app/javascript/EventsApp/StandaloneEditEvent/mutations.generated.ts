@@ -11,14 +11,14 @@ export type StandaloneDropEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent?: Types.Maybe<{ __typename: 'DropEventPayload', event: { __typename: 'Event', id: number, status?: Types.Maybe<string> } }> };
+export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: number, status?: Types.Maybe<string> } } };
 
 export type StandaloneUpdateEventMutationVariables = Types.Exact<{
   input: Types.UpdateEventInput;
 }>;
 
 
-export type StandaloneUpdateEventMutationData = { __typename: 'Mutation', updateEvent?: Types.Maybe<{ __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } }> } }> };
+export type StandaloneUpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, maximum_event_provided_tickets: number } }> } } };
 
 export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.CreateMaximumEventProvidedTicketsOverrideInput;

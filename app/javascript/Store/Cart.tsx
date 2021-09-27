@@ -23,7 +23,9 @@ import {
 } from './mutations.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
-type OrderEntryType = NonNullable<CartQueryData['currentPendingOrder']>['order_entries'][0];
+type OrderEntryType = NonNullable<
+  NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
+>['order_entries'][0];
 
 export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   const history = useHistory();
@@ -50,7 +52,8 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
         variables: { input: { id } },
         update: (proxy) => {
           const storeData = proxy.readQuery<CartQueryData>({ query: CartQuery });
-          if (!storeData || !storeData.currentPendingOrder) {
+          const currentPendingOrder = storeData?.convention.my_profile?.current_pending_order;
+          if (!currentPendingOrder) {
             return;
           }
 
@@ -59,10 +62,8 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
             data: {
               ...storeData,
               currentPendingOrder: {
-                ...storeData.currentPendingOrder,
-                order_entries: storeData.currentPendingOrder.order_entries.filter(
-                  (entry) => entry.id !== id,
-                ),
+                ...currentPendingOrder,
+                order_entries: currentPendingOrder.order_entries.filter((entry) => entry.id !== id),
               },
             },
           });
@@ -86,7 +87,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
   const createCouponApplication = useCallback(
     async (couponCode) => {
-      const orderId = data.currentPendingOrder?.id;
+      const orderId = data.convention.my_profile?.current_pending_order?.id;
       if (orderId) {
         await createCouponApplicationMutate({
           variables: { orderId, couponCode },
@@ -153,16 +154,16 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
       <OrderPaymentModal
         visible={checkOutModal.visible}
         onCancel={checkOutModal.close}
-        initialName={data.myProfile?.name_without_nickname}
-        orderId={(data.currentPendingOrder || {}).id}
+        initialName={data.convention.my_profile?.name_without_nickname}
+        orderId={data.convention.my_profile?.current_pending_order?.id}
         onComplete={checkOutComplete}
         paymentOptions={intersection(
-          ...((data.currentPendingOrder || {}).order_entries || []).map(
+          ...(data.convention.my_profile?.current_pending_order?.order_entries ?? []).map(
             (entry) => entry.product.payment_options,
           ),
         )}
         totalPrice={
-          data.currentPendingOrder?.total_price ?? {
+          data.convention.my_profile?.current_pending_order?.total_price ?? {
             fractional: 0,
             __typename: 'Money',
             currency_code: 'USD',

@@ -9,7 +9,7 @@ export type AdminProductVariantDragOverlayDisplayProps = {
 
 function AdminProductVariantDragOverlayDisplay({
   variant,
-}: AdminProductVariantDragOverlayDisplayProps) {
+}: AdminProductVariantDragOverlayDisplayProps): JSX.Element {
   return (
     <tr className="bg-light border border-secondary">
       <td>

@@ -17,7 +17,6 @@ import {
   useFlexLayout,
   useRowSelect,
 } from 'react-table';
-import '../@types/react-table-config';
 
 import useColumnSelection, {
   UseColumnSelectionOptions,

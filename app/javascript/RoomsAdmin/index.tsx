@@ -46,7 +46,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
   );
   const [updateRoom, updateError] = useAsyncFunction(updateMutate);
   const [deleteRoom, deleteError] = useAsyncFunction(
-    useDeleteMutation<DeleteRoomMutationData, DeleteRoomMutationVariables>(DeleteRoom, {
+    useDeleteMutation<DeleteRoomMutationVariables, DeleteRoomMutationData>(DeleteRoom, {
       query: RoomsAdminQuery,
       arrayPath: ['convention', 'rooms'],
       idVariablePath: ['input', 'id'],

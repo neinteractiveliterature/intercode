@@ -14,7 +14,7 @@ export type NewCouponModalProps = {
   close: () => void;
 };
 
-function NewCouponModal({ visible, close }: NewCouponModalProps) {
+function NewCouponModal({ visible, close }: NewCouponModalProps): JSX.Element {
   const [coupon, setCoupon] = useState<Omit<AdminCouponFieldsFragment, 'id'>>({
     __typename: 'Coupon',
     code: '',

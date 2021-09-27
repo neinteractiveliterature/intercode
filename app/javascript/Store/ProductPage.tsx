@@ -20,7 +20,12 @@ function useLoadProduct() {
 
 export default LoadQueryWrapper(
   useLoadProduct,
-  function ProductPage({ data: { product, currentUser } }) {
+  function ProductPage({
+    data: {
+      convention: { product },
+      currentUser,
+    },
+  }) {
     const { t } = useTranslation();
     const { timezoneName } = useContext(AppRootContext);
 
