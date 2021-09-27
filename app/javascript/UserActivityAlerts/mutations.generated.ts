@@ -11,7 +11,7 @@ export type CreateUserActivityAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserActivityAlertMutationData = { __typename: 'Mutation', createUserActivityAlert?: Types.Maybe<{ __typename: 'CreateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> } }> };
+export type CreateUserActivityAlertMutationData = { __typename: 'Mutation', createUserActivityAlert: { __typename: 'CreateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> } } };
 
 export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -21,14 +21,14 @@ export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserActivityAlertMutationData = { __typename: 'Mutation', updateUserActivityAlert?: Types.Maybe<{ __typename: 'UpdateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> } }> };
+export type UpdateUserActivityAlertMutationData = { __typename: 'Mutation', updateUserActivityAlert: { __typename: 'UpdateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> } } };
 
 export type DeleteUserActivityAlertMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteUserActivityAlertMutationData = { __typename: 'Mutation', deleteUserActivityAlert?: Types.Maybe<{ __typename: 'DeleteUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> } }> };
+export type DeleteUserActivityAlertMutationData = { __typename: 'Mutation', deleteUserActivityAlert: { __typename: 'DeleteUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: Types.Maybe<string>, partial_name?: Types.Maybe<string>, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }>, user_con_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }> }> } } };
 
 
 export const CreateUserActivityAlertDocument = gql`

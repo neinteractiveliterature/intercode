@@ -11,7 +11,7 @@ import buildStaffPositionInput from './buildStaffPositionInput';
 import { useCreateStaffPositionMutation } from './mutations.generated';
 import { StaffPositionsQueryData } from './queries.generated';
 
-function NewStaffPosition() {
+function NewStaffPosition(): JSX.Element {
   const history = useHistory();
   const [createMutate] = useCreateStaffPositionMutation({
     update: (proxy, result) => {
@@ -54,9 +54,11 @@ function NewStaffPosition() {
         },
       },
     });
-    history.replace(
-      `/staff_positions/${response!.data!.createStaffPosition!.staff_position.id}/edit_permissions`,
-    );
+    if (response?.data) {
+      history.replace(
+        `/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`,
+      );
+    }
   }, [history, mutate, staffPosition]);
 
   usePageTitle('New staff position');

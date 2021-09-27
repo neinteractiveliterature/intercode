@@ -4,13 +4,13 @@ import flatMap from 'lodash/flatMap';
 import ReactTableExportButton, { ReactTableExportButtonProps } from './ExportButton';
 
 export type ReactTableExportButtonWithColumnTransformProps<
-  RowType extends Record<string, undefined>,
+  RowType extends Record<string, unknown>,
 > = Omit<ReactTableExportButtonProps<RowType>, 'columns'> & {
   visibleColumnIds: string[];
   columnTransform: (columnId: string) => string | string[];
 };
 
-function ReactTableExportButtonWithColumnTransform<RowType extends Record<string, undefined>>({
+function ReactTableExportButtonWithColumnTransform<RowType extends Record<string, unknown>>({
   visibleColumnIds,
   columnTransform,
   ...otherProps

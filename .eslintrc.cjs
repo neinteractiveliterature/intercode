@@ -85,6 +85,7 @@ module.exports = {
     'import/default': 'off',
     'import/no-named-as-default-member': 'off',
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
+    '@typescript-eslint/no-empty-function': 'off',
   },
 
   overrides: [

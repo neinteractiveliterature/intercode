@@ -12,7 +12,11 @@ export type OrderPaymentFormProps = {
   disabled: boolean;
 };
 
-function OrderPaymentForm({ disabled, onChange, paymentDetails }: OrderPaymentFormProps) {
+function OrderPaymentForm({
+  disabled,
+  onChange,
+  paymentDetails,
+}: OrderPaymentFormProps): JSX.Element {
   return (
     <div>
       <BootstrapFormInput

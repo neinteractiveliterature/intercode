@@ -10,7 +10,7 @@ export type CreateCmsFileMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile?: Types.Maybe<{ __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } }> };
+export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } } };
 
 export type RenameCmsFileMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,14 +18,14 @@ export type RenameCmsFileMutationVariables = Types.Exact<{
 }>;
 
 
-export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile?: Types.Maybe<{ __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } }> };
+export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } } };
 
 export type DeleteCmsFileMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile?: Types.Maybe<{ __typename: 'DeleteCmsFilePayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId?: Types.Maybe<string> } };
 
 
 export const CreateCmsFileDocument = gql`

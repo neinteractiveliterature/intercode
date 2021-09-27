@@ -13,7 +13,7 @@ export type CreateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole?: Types.Maybe<{ __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } }> };
+export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } } };
 
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -25,14 +25,14 @@ export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole?: Types.Maybe<{ __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } }> };
+export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } } };
 
 export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole?: Types.Maybe<{ __typename: 'DeleteOrganizationRolePayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole: { __typename: 'DeleteOrganizationRolePayload', clientMutationId?: Types.Maybe<string> } };
 
 
 export const CreateOrganizationRoleDocument = gql`

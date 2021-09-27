@@ -10,7 +10,7 @@ export type PricingStructureInputProps = {
   onChange: React.Dispatch<EditingPricingStructure>;
 };
 
-function PricingStructureInput({ value, onChange }: PricingStructureInputProps) {
+function PricingStructureInput({ value, onChange }: PricingStructureInputProps): JSX.Element {
   const pricingStructureModal = useContext(PricingStructureModalContext);
 
   return (

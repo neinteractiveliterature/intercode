@@ -34,8 +34,11 @@ export type PricingStructureModalContextValue = ModalData<PricingStructureModalS
 export const PricingStructureModalContext = React.createContext<PricingStructureModalContextValue>({
   visible: false,
   state: undefined,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   open: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   close: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setState: () => {},
 });
 
@@ -49,7 +52,11 @@ export type EditPricingStructureModalProps = Pick<
   'visible' | 'state' | 'close'
 >;
 
-function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps) {
+function EditPricingStructureModal({
+  visible,
+  state,
+  close,
+}: EditPricingStructureModalProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const [pricingStructure, setPricingStructure] = useState(state?.value);
 

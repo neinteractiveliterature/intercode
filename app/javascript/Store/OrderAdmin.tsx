@@ -100,14 +100,14 @@ function getPossibleColumns(): Column<OrderType>[] {
   ];
 }
 
-function OrderAdmin() {
+function OrderAdmin(): JSX.Element {
   const newOrderModal = useModal();
   const [editingOrderId, setEditingOrderId] = useState<number>();
   usePageTitle('Orders');
 
   const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
-    getData: ({ data }) => data!.convention.orders_paginated.entries,
-    getPages: ({ data }) => data!.convention.orders_paginated.total_pages,
+    getData: ({ data }) => data?.convention.orders_paginated.entries,
+    getPages: ({ data }) => data?.convention.orders_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'orderAdmin',
     useQuery: useAdminOrdersQuery,

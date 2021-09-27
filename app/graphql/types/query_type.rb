@@ -24,7 +24,7 @@ removed in favor of `conventionByRequestHostIfPresent`." do
   end
 
   def convention_by_domain(domain:)
-    return context[:convention] if context[:convention].domain == domain
+    return context[:convention] if context[:convention]&.domain == domain
 
     Convention.find_by!(domain: domain)
   end
@@ -53,10 +53,6 @@ removed in favor of `conventionByRequestHostIfPresent`." do
   end
 
   def convention_by_request_host_if_present
-    unless context[:convention]
-      raise ActiveRecord::RecordNotFound,
-        "The host name #{context[:controller].request.host} does not belong to a convention"
-    end
     context[:convention]
   end
 
@@ -142,7 +138,7 @@ being deprecated.  Please use the `event` field on the Convention type instead."
   end
 
   def event(**args)
-    context[:convention].events.active.find(args[:id])
+    assert_convention.events.active.find(args[:id])
   end
 
   field :run, Types::RunType, null: false, deprecation_reason: "Domain-specific queries are being
@@ -157,7 +153,7 @@ deprecated.  Please use the `run` field on the Convention type instead." do
   end
 
   def run(**args)
-    Run.where(event_id: context[:convention].events.active.select(:id)).find(args[:id])
+    Run.where(event_id: assert_convention.events.active.select(:id)).find(args[:id])
   end
 
   field :runs, [Types::RunType],
@@ -172,7 +168,7 @@ implications.  Please avoid requesting unpaginated lists of all runs.  Instead, 
   end
 
   def runs
-    Run.where(event_id: context[:convention].events.active.select(:id))
+    Run.where(event_id: assert_convention.events.active.select(:id))
   end
 
   field :events, [Types::EventType], null: false, deprecation_reason: "Domain-specific queries are \
@@ -200,7 +196,7 @@ being deprecated.  Please use the `events` field on the Convention type instead.
   end
 
   def events(include_dropped: false, start: nil, finish: nil, **_args)
-    events = convention.events
+    events = assert_convention.events
     events = events.active unless include_dropped
 
     if start || finish
@@ -225,7 +221,7 @@ being deprecated.  Please use the `events` field on the Convention type instead.
   end
 
   def event_proposal(**args)
-    convention.event_proposals.find(args[:id])
+    assert_convention.event_proposals.find(args[:id])
   end
 
   field :my_signups, [Types::SignupType],
@@ -562,7 +558,7 @@ Please use the `user_con_profile` field on the Convention object instead." do
   end
 
   def user_con_profile(**args)
-    convention.user_con_profiles.find(args[:id])
+    assert_convention.user_con_profiles.find(args[:id])
   end
 
   field :form, Types::FormType,
@@ -578,7 +574,7 @@ Please use the `form` field on the Convention object instead." do
   end
 
   def form(**args)
-    convention.forms.find(args[:id])
+    assert_convention.forms.find(args[:id])
   end
 
   field :staff_position, Types::StaffPositionType,
@@ -594,7 +590,7 @@ Please use the `staff_position` field on the Convention object instead." do
   end
 
   def staff_position(id:)
-    convention.staff_positions.find(id)
+    assert_convention.staff_positions.find(id)
   end
 
   field :liquid_assigns, [Types::LiquidAssign],
@@ -708,7 +704,7 @@ Please use the `preview_notifier_liquid` field on the Convention type instead." 
     MARKDOWN
 
     authorize do |_value, _args, context|
-      Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
+      Pundit.policy(context[:pundit_user], assert_convention).view_reports?
     end
   end
 
@@ -732,7 +728,7 @@ Please use the `product` field on the Convention type instead." do
   end
 
   def product(id:)
-    policy_scope(convention.products).find(id)
+    policy_scope(assert_convention.products).find(id)
   end
 
   field :oauth_pre_auth, Types::JSON, null: false do
@@ -800,11 +796,11 @@ Please use the `payment_intent_client_secret` field on the Order type instead." 
       {
         amount: current_pending_order.total_price.fractional,
         currency: current_pending_order.total_price.currency,
-        description: "#{description} for #{convention.name}",
+        description: "#{description} for #{assert_convention.name}",
         statement_descriptor_suffix: PayOrderService.statement_descriptor_suffix(convention),
         metadata: { order_id: current_pending_order.id }
       },
-      stripe_account: convention.stripe_account_id
+      stripe_account: assert_convention.stripe_account_id
     )
 
     intent.client_secret
@@ -858,7 +854,7 @@ Please use the `signup` field on the Convention type instead." do
   end
 
   def signup(**args)
-    convention.signups.find(args[:id])
+    assert_convention.signups.find(args[:id])
   end
 
   pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType,

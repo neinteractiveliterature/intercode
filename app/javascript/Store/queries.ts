@@ -73,19 +73,19 @@ export const AdminStoreAbilityQuery = gql`
 
 export const CartQuery = gql`
   query CartQuery {
-    myProfile {
-      id
-      name_without_nickname
-    }
-
     convention: conventionByRequestHost {
       id
       name
-    }
 
-    currentPendingOrder {
-      id
-      ...CartOrderFields
+      my_profile {
+        id
+        name_without_nickname
+
+        current_pending_order {
+          id
+          ...CartOrderFields
+        }
+      }
     }
   }
 
@@ -104,57 +104,57 @@ export const OrderHistoryQuery = gql`
         name
         email
       }
-    }
 
-    myProfile {
-      id
-      name_without_nickname
-
-      orders {
+      my_profile {
         id
-        status
-        submitted_at
+        name_without_nickname
 
-        total_price {
-          fractional
-          currency_code
-        }
-
-        payment_amount {
-          fractional
-          currency_code
-        }
-
-        coupon_applications {
+        orders {
           id
-          ...CouponApplicationFields
-        }
+          status
+          submitted_at
 
-        order_entries {
-          id
-          quantity
-
-          product {
-            id
-            name
-            image_url
-            payment_options
-          }
-
-          product_variant {
-            id
-            name
-            image_url
-          }
-
-          price_per_item {
+          total_price {
             fractional
             currency_code
           }
 
-          price {
+          payment_amount {
             fractional
             currency_code
+          }
+
+          coupon_applications {
+            id
+            ...CouponApplicationFields
+          }
+
+          order_entries {
+            id
+            quantity
+
+            product {
+              id
+              name
+              image_url
+              payment_options
+            }
+
+            product_variant {
+              id
+              name
+              image_url
+            }
+
+            price_per_item {
+              fractional
+              currency_code
+            }
+
+            price {
+              fractional
+              currency_code
+            }
           }
         }
       }
@@ -197,24 +197,27 @@ export const OrderFormProductQuery = gql`
       id
     }
 
-    product(id: $productId) {
+    convention: conventionByRequestHost {
       id
-      image_url
-      name
-      pricing_structure {
-        ...PricingStructureFields
-      }
-      description_html
-      provides_ticket_type {
+      product(id: $productId) {
         id
-      }
-
-      product_variants {
-        id
+        image_url
         name
-        position
-        override_pricing_structure {
+        pricing_structure {
           ...PricingStructureFields
+        }
+        description_html
+        provides_ticket_type {
+          id
+        }
+
+        product_variants {
+          id
+          name
+          position
+          override_pricing_structure {
+            ...PricingStructureFields
+          }
         }
       }
     }
@@ -225,6 +228,15 @@ export const OrderFormProductQuery = gql`
 
 export const CurrentPendingOrderPaymentIntentClientSecret = gql`
   query CurrentPendingOrderPaymentIntentClientSecretQuery {
-    currentPendingOrderPaymentIntentClientSecret
+    convention: conventionByRequestHost {
+      id
+      my_profile {
+        id
+        current_pending_order {
+          id
+          payment_intent_client_secret
+        }
+      }
+    }
   }
 `;

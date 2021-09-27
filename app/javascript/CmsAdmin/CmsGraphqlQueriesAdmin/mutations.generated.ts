@@ -10,7 +10,7 @@ export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCmsGraphqlQueryMutationData = { __typename: 'Mutation', createCmsGraphqlQuery?: Types.Maybe<{ __typename: 'CreateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: number, identifier: string, query: string, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
+export type CreateCmsGraphqlQueryMutationData = { __typename: 'Mutation', createCmsGraphqlQuery: { __typename: 'CreateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: number, identifier: string, query: string, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,14 +18,14 @@ export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateCmsGraphqlQueryMutationData = { __typename: 'Mutation', updateCmsGraphqlQuery?: Types.Maybe<{ __typename: 'UpdateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: number, identifier: string, query: string, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } }> };
+export type UpdateCmsGraphqlQueryMutationData = { __typename: 'Mutation', updateCmsGraphqlQuery: { __typename: 'UpdateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: number, identifier: string, query: string, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteCmsGraphqlQueryMutationData = { __typename: 'Mutation', deleteCmsGraphqlQuery?: Types.Maybe<{ __typename: 'DeleteCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: number } }> };
+export type DeleteCmsGraphqlQueryMutationData = { __typename: 'Mutation', deleteCmsGraphqlQuery: { __typename: 'DeleteCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: number } } };
 
 
 export const CreateCmsGraphqlQueryDocument = gql`

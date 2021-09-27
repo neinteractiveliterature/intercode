@@ -1,13 +1,14 @@
 import { Filters, SortingRule } from 'react-table';
+import { URLParamSerializable } from './ExportButton';
 
-export function reactTableFiltersToTableResultsFilters<D extends Record<string, undefined>>(
+export function reactTableFiltersToTableResultsFilters<D extends Record<string, unknown>>(
   filters: Filters<D> | null | undefined,
-): { [field: string]: unknown } {
+): { [field: string]: URLParamSerializable } {
   if (filters == null) {
     return {};
   }
 
-  const tableResultsFilters: { [field: string]: unknown } = {};
+  const tableResultsFilters: { [field: string]: URLParamSerializable } = {};
   filters.forEach(({ id, value }) => {
     tableResultsFilters[id] = value;
   });

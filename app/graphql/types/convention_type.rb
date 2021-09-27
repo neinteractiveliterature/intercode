@@ -473,6 +473,20 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     object.user_con_profiles.find(args[:id])
   end
 
+  field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
+    argument :user_id, Integer,
+      required: true, description: 'The user ID of the UserConProfile to find.'
+
+    description <<~MARKDOWN
+      Finds a UserConProfile by user ID in the convention associated with this convention.  If
+      there is no UserConProfile with that user ID in this convention, errors out.
+    MARKDOWN
+  end
+
+  def user_con_profile_by_user_id(user_id:)
+    object.user_con_profiles.find_by!(user_id: user_id)
+  end
+
   field :user_con_profile_form, Types::FormType, null: false
 
   pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType,

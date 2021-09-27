@@ -7,7 +7,12 @@ import { useSubmitOrderMutation } from './mutations.generated';
 import { PaymentDetails } from './OrderPaymentForm';
 import { PaymentMode } from '../graphqlTypes.generated';
 
-export default function useSubmitOrder() {
+export default function useSubmitOrder(): (
+  orderId: number,
+  paymentMode: PaymentMode,
+  paymentDetails: PaymentDetails,
+  paymentIntent?: PaymentIntent,
+) => Promise<void> {
   const stripe = useStripe();
   const elements = useElements();
   const apolloClient = useApolloClient();
@@ -52,11 +57,14 @@ export default function useSubmitOrder() {
         name: paymentDetails.name,
       });
       if (tokenError) {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw tokenError;
       }
 
-      await submitOrder(orderId, paymentMode, { stripeToken: token!.id });
+      if (!token) {
+        throw new Error("Can't submit order without a Stripe token");
+      }
+
+      await submitOrder(orderId, paymentMode, { stripeToken: token.id });
     },
     [stripe, submitOrder, elements],
   );
@@ -76,7 +84,10 @@ export default function useSubmitOrder() {
       if (paymentMode === PaymentMode.Now) {
         await submitCheckOutViaStripe(orderId, paymentMode, paymentDetails);
       } else if (paymentMode === PaymentMode.PaymentIntent) {
-        await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent!.id });
+        if (!paymentIntent) {
+          throw new Error("Can't submit order without a payment intent");
+        }
+        await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent.id });
       } else {
         await submitCheckOutWithoutStripe(orderId, paymentMode);
       }

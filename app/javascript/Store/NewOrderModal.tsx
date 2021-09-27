@@ -57,7 +57,7 @@ export type NewOrderModalProps = {
   initialOrder?: CreatingOrder;
 };
 
-function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps) {
+function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JSX.Element {
   const confirm = useConfirm();
   const [order, setOrder] = useState(initialOrder ?? BLANK_ORDER);
   const [createMutate] = useCreateOrderMutation();
@@ -95,11 +95,15 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps) {
       },
     });
 
+    if (!data) {
+      return;
+    }
+
     await Promise.all(
       order.coupon_applications.map((application) =>
         createCouponApplicationMutate({
           variables: {
-            orderId: data!.createOrder!.order.id!,
+            orderId: data.createOrder.order.id,
             couponCode: application.coupon.code,
           },
         }),

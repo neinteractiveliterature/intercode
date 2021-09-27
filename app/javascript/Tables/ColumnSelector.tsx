@@ -4,20 +4,21 @@ import { Column } from 'react-table';
 import { ChoiceSet } from '@neinteractiveliterature/litform';
 
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
+import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
-export type ColumnSelectorProps<RowType extends object> = {
+export type ColumnSelectorProps<RowType extends Record<string, unknown>> = {
   alwaysVisibleColumns: string[];
   possibleColumns: Column<RowType>[];
   visibleColumnIds: string[];
   setVisibleColumnIds: React.Dispatch<string[]>;
 };
 
-function ColumnSelector<RowType extends object>({
+function ColumnSelector<RowType extends Record<string, unknown>>({
   alwaysVisibleColumns,
   possibleColumns,
   visibleColumnIds,
   setVisibleColumnIds,
-}: ColumnSelectorProps<RowType>) {
+}: ColumnSelectorProps<RowType>): JSX.Element {
   const { t } = useTranslation();
   const renderHiddenColumnCount = () => {
     const count =
@@ -54,7 +55,10 @@ function ColumnSelector<RowType extends object>({
         multiple
         choices={possibleColumns
           .filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id))
-          .map((column) => ({ label: column.Header, value: column.id! }))}
+          .map((column) =>
+            column.id != null ? { label: column.Header, value: column.id } : undefined,
+          )
+          .filter(notEmpty)}
         value={visibleColumnIds}
         onChange={setVisibleColumnIds}
       />

@@ -10,7 +10,7 @@ export type CreatePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePageMutationData = { __typename: 'Mutation', createPage?: Types.Maybe<{ __typename: 'CreatePagePayload', page: { __typename: 'Page', id: number, name?: Types.Maybe<string>, slug?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, skip_clickwrap_agreement?: Types.Maybe<boolean>, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } }> };
+export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', id: number, name?: Types.Maybe<string>, slug?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, skip_clickwrap_agreement?: Types.Maybe<boolean>, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } } };
 
 export type UpdatePageMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,14 +18,14 @@ export type UpdatePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePageMutationData = { __typename: 'Mutation', updatePage?: Types.Maybe<{ __typename: 'UpdatePagePayload', page: { __typename: 'Page', id: number, name?: Types.Maybe<string>, slug?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, skip_clickwrap_agreement?: Types.Maybe<boolean>, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } }> };
+export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', id: number, name?: Types.Maybe<string>, slug?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, skip_clickwrap_agreement?: Types.Maybe<boolean>, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }> } } };
 
 export type DeletePageMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeletePageMutationData = { __typename: 'Mutation', deletePage?: Types.Maybe<{ __typename: 'DeletePagePayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeletePageMutationData = { __typename: 'Mutation', deletePage: { __typename: 'DeletePagePayload', clientMutationId?: Types.Maybe<string> } };
 
 
 export const CreatePageDocument = gql`

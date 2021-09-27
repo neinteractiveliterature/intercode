@@ -11,7 +11,7 @@ const ACTIONS = EnumTypes.SignupChangeAction.enumValues.map(
   (value) => value.name as SignupChangeAction,
 );
 
-function SignupChangeActionFilter<RowType extends Record<string, undefined>>(
+function SignupChangeActionFilter<RowType extends Record<string, unknown>>(
   props: FilterProps<RowType>,
 ): JSX.Element {
   const { t } = useTranslation();

@@ -12,7 +12,7 @@ import { OrderHistoryQueryData, useOrderHistoryQuery } from './queries.generated
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
-type OrderType = NonNullable<OrderHistoryQueryData['myProfile']>['orders'][0];
+type OrderType = NonNullable<OrderHistoryQueryData['convention']['my_profile']>['orders'][0];
 type PaymentModalState = {
   order: OrderType;
 };
@@ -186,7 +186,7 @@ export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ da
   usePageTitle('My order history');
   useLoginRequired();
 
-  const orders = data.myProfile?.orders;
+  const orders = data.convention.my_profile?.orders;
 
   if (orders && orders?.length > 0) {
     return (
@@ -205,7 +205,7 @@ export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ da
           <OrderPaymentModal
             visible={paymentModal.visible}
             onCancel={paymentModal.close}
-            initialName={data.myProfile!.name_without_nickname}
+            initialName={data.convention.my_profile?.name_without_nickname}
             orderId={paymentModal.state?.order?.id ?? 0}
             onComplete={paymentModal.close}
             paymentOptions={

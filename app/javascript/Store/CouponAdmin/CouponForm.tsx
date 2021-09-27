@@ -51,7 +51,7 @@ export type CouponFormProps<T extends Omit<AdminCouponFieldsFragment, 'id'>> = {
 function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   value,
   onChange,
-}: CouponFormProps<T>) {
+}: CouponFormProps<T>): JSX.Element {
   const [
     setCode,
     setFixedAmount,

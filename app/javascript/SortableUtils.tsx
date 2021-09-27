@@ -1,8 +1,9 @@
 import { KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { CSS, Transform } from '@dnd-kit/utilities';
+import { CSSProperties } from 'react';
 
-export function useSortableDndSensors() {
+export function useSortableDndSensors(): ReturnType<typeof useSensors> {
   return useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -15,7 +16,7 @@ export function getSortableStyle(
   transform: Transform | null,
   transition: string | null,
   isDragging: boolean,
-) {
+): CSSProperties {
   return {
     transform: CSS.Transform.toString(transform),
     transition: transition ?? undefined,

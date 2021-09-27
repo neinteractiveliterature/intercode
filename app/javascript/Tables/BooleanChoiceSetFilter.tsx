@@ -12,9 +12,9 @@ function getBooleanFilterValue(filterValue: boolean | null | undefined) {
   return 'false';
 }
 
-function BooleanChoiceSetFilter<RowType extends object>(
+function BooleanChoiceSetFilter<RowType extends Record<string, unknown>>(
   props: ChoiceSetFilterSingleProps<RowType>,
-) {
+): JSX.Element {
   return (
     <ChoiceSetFilter
       {...props}

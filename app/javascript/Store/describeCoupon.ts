@@ -7,7 +7,7 @@ export default function describeCoupon(
   coupon: Pick<Coupon, 'percent_discount' | 'fixed_amount'> & {
     provides_product?: Pick<Product, 'name'> | null;
   },
-) {
+): string {
   if (coupon.provides_product) {
     return `1 free ${coupon.provides_product.name}`;
   }

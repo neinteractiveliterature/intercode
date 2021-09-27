@@ -145,7 +145,10 @@ export type AdminOrderFormProps<T extends AdminOrderType> = {
   updateOrder: React.Dispatch<Partial<T>>;
 };
 
-function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>) {
+function AdminOrderForm<T extends AdminOrderType>({
+  order,
+  updateOrder,
+}: AdminOrderFormProps<T>): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 

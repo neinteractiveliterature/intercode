@@ -26,7 +26,7 @@ export type EditOrderModalProps = {
   closeModal: () => void;
 };
 
-function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
+function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element {
   const confirm = useConfirm();
   const [updateMutate] = useAdminUpdateOrderMutation();
   const [createOrderEntryMutate] = useAdminCreateOrderEntryMutation();
@@ -36,22 +36,29 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
   const [deleteCouponApplicationMutate] = useDeleteCouponApplicationMutation();
 
   const updateOrder = useCallback(
-    (attributes) =>
-      updateMutate({
+    (attributes) => {
+      if (!order) {
+        return;
+      }
+      return updateMutate({
         variables: {
-          id: order!.id,
+          id: order.id,
           order: attributes,
         },
-      }),
+      });
+    },
     [order, updateMutate],
   );
 
   const createOrderEntry = useCallback(
-    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
-      createOrderEntryMutate({
+    async (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) => {
+      if (!order) {
+        return;
+      }
+      await createOrderEntryMutate({
         variables: {
           input: {
-            order_id: order!.id,
+            order_id: order.id,
             order_entry: {
               product_id: orderEntry.product.id,
               product_variant_id: orderEntry.product_variant?.id,
@@ -60,7 +67,8 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
             },
           },
         },
-      }),
+      });
+    },
     [createOrderEntryMutate, order],
   );
 
@@ -83,13 +91,17 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
   );
 
   const createCouponApplication = useCallback(
-    (couponCode) =>
-      createCouponApplicationMutate({
+    async (couponCode) => {
+      if (!order) {
+        return;
+      }
+      await createCouponApplicationMutate({
         variables: {
-          orderId: order!.id,
+          orderId: order.id,
           couponCode,
         },
-      }),
+      });
+    },
     [createCouponApplicationMutate, order],
   );
 

@@ -72,11 +72,11 @@ export type AdminOrderEntriesTableProps<
     total_price?: Money;
     coupon_applications: CouponApplicationType[];
   };
-  createOrderEntry: (orderEntry: T) => Promise<any>;
-  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => Promise<any>;
-  deleteOrderEntry: (orderEntry: T) => Promise<any>;
-  createCouponApplication: (code: string) => Promise<any>;
-  deleteCouponApplication: (couponApplication: CouponApplicationType) => Promise<any>;
+  createOrderEntry: (orderEntry: T) => Promise<unknown>;
+  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => Promise<unknown>;
+  deleteOrderEntry: (orderEntry: T) => Promise<unknown>;
+  createCouponApplication: (code: string) => Promise<unknown>;
+  deleteCouponApplication: (couponApplication: CouponApplicationType) => Promise<unknown>;
 };
 
 function AdminOrderEntriesTable<
@@ -89,7 +89,7 @@ function AdminOrderEntriesTable<
   deleteOrderEntry,
   createCouponApplication,
   deleteCouponApplication,
-}: AdminOrderEntriesTableProps<T, CouponApplicationType>) {
+}: AdminOrderEntriesTableProps<T, CouponApplicationType>): JSX.Element {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState<AddingOrderEntry<T>>();
   const [applyingCoupon, setApplyingCoupon] = useState(false);

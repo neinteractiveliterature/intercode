@@ -18,6 +18,12 @@ export type ChoiceSetFilterChoice = {
   disabled?: boolean;
 };
 
+function choiceHasValue(
+  choice: Omit<ChoiceSetFilterChoice, 'value'> & { value: string | null | undefined },
+): choice is ChoiceSetFilterChoice {
+  return choice.value != null;
+}
+
 function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
   return [...choices].sort(({ label: labelA }, { label: labelB }) =>
     labelA.localeCompare(labelB, undefined, { sensitivity: 'base' }),
@@ -26,33 +32,36 @@ function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
 
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
-type LenientFilterProps<RowType extends object> = {
+type LenientFilterProps<RowType extends Record<string, unknown>> = {
   column: Pick<FilterProps<RowType>['column'], 'filterValue' | 'setFilter'>;
 };
 
-type ChoiceSetFilterCommonProps<RowType extends object> = LenientFilterProps<RowType> & {
-  choices: readonly ChoiceSetFilterChoice[];
-  filterCodec?: FilterCodec<ChoiceSetFilterValue>;
-};
+type ChoiceSetFilterCommonProps<RowType extends Record<string, unknown>> =
+  LenientFilterProps<RowType> & {
+    choices: readonly ChoiceSetFilterChoice[];
+    filterCodec?: FilterCodec<ChoiceSetFilterValue>;
+  };
 
-export type ChoiceSetFilterSingleProps<RowType extends object> =
+export type ChoiceSetFilterSingleProps<RowType extends Record<string, unknown>> =
   ChoiceSetFilterCommonProps<RowType> & {
     multiple: false;
     renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
   };
 
-export type ChoiceSetFilterMultipleProps<RowType extends object> =
+export type ChoiceSetFilterMultipleProps<RowType extends Record<string, unknown>> =
   ChoiceSetFilterCommonProps<RowType> & {
     multiple: true;
     hideSelectNone?: boolean;
     renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
   };
 
-export type ChoiceSetFilterProps<RowType extends object> =
+export type ChoiceSetFilterProps<RowType extends Record<string, unknown>> =
   | ChoiceSetFilterSingleProps<RowType>
   | ChoiceSetFilterMultipleProps<RowType>;
 
-function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<RowType>) {
+function ChoiceSetFilter<RowType extends Record<string, unknown>>(
+  props: ChoiceSetFilterProps<RowType>,
+): JSX.Element {
   const {
     choices: rawChoices,
     column: { filterValue: filterValueFromColumn, setFilter },
@@ -64,7 +73,7 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const modifiers: Modifier<any>[] = useMemo(
+  const modifiers: Modifier<unknown>[] = useMemo(
     () => [
       {
         name: 'sameWidth',
@@ -105,41 +114,46 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
 
   const filterValue = useMemo(() => {
     const rawFilterValue = filterValueFromColumn ?? (props.multiple ? [] : undefined);
-    if (props.filterCodec) {
+    const filterCodec = props.filterCodec;
+    if (filterCodec) {
       if (props.multiple) {
-        return rawFilterValue.map((singleValue: any) =>
-          props.filterCodec!.encode(singleValue)?.toString(),
+        return rawFilterValue.map((singleValue: string) =>
+          filterCodec.encode(singleValue)?.toString(),
         );
       }
-      return props.filterCodec.encode(rawFilterValue)?.toString();
+      return filterCodec.encode(rawFilterValue)?.toString();
     }
 
     if (props.multiple) {
-      return rawFilterValue.map((singleValue: any) => singleValue?.toString());
+      return rawFilterValue.map((singleValue: string | undefined) => singleValue?.toString());
     }
 
     return rawFilterValue?.toString();
   }, [filterValueFromColumn, props.filterCodec, props.multiple]);
 
   const choices = useMemo(() => {
-    if (props.filterCodec) {
+    const filterCodec = props.filterCodec;
+    if (filterCodec) {
       return sortChoices(
-        rawChoices.map((choice) => ({
-          ...choice,
-          value: props.filterCodec!.encode(choice.value)!,
-        })),
+        rawChoices
+          .map((choice) => ({
+            ...choice,
+            value: filterCodec.encode(choice.value),
+          }))
+          .filter(choiceHasValue),
       );
     }
 
     return sortChoices(rawChoices);
   }, [rawChoices, props.filterCodec]);
 
-  const valueChanged = (value: any) => {
-    if (props.multiple && props.filterCodec) {
-      setFilter(value.map((singleValue: string) => props.filterCodec!.decode(singleValue)));
+  const valueChanged = (value: string | string[] | null) => {
+    const filterCodec = props.filterCodec;
+    if (props.multiple && filterCodec && Array.isArray(value)) {
+      setFilter(value.map((singleValue: string) => filterCodec.decode(singleValue)));
     }
-    if (!props.multiple && props.filterCodec) {
-      setFilter(props.filterCodec.decode(value)!);
+    if (!props.multiple && filterCodec && !Array.isArray(value)) {
+      setFilter(filterCodec.decode(value));
     }
     setFilter(value);
   };
@@ -213,7 +227,7 @@ function ChoiceSetFilter<RowType extends object>(props: ChoiceSetFilterProps<Row
             value={filterValue}
             choices={choices}
             onChange={valueChanged}
-            multiple={props.multiple}
+            multiple={originalMultiple}
             {...otherProps}
           />
         </div>

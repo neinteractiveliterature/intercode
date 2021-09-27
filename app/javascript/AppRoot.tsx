@@ -140,13 +140,13 @@ function AppRoot(): JSX.Element {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
-  if (error || !appRootContextValue) {
-    return (
-      <ErrorDisplay
-        graphQLError={error}
-        stringError={error ? undefined : "Couldn't load app root query"}
-      />
-    );
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (!appRootContextValue) {
+    // we need to wait a render cycle for useCachedLoadableValue to do its thing
+    return <></>;
   }
 
   return (

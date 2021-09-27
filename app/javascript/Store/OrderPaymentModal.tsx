@@ -68,7 +68,17 @@ function OrderPaymentModalContents({
             query: CurrentPendingOrderPaymentIntentClientSecret,
           });
 
-        clientSecret = data.currentPendingOrderPaymentIntentClientSecret;
+        const myProfile = data.convention.my_profile;
+        if (!myProfile) {
+          throw new Error('Must be logged in to check out');
+        }
+
+        const currentPendingOrder = myProfile.current_pending_order;
+        if (!currentPendingOrder) {
+          throw new Error('There is no order in progress');
+        }
+
+        clientSecret = currentPendingOrder.payment_intent_client_secret;
       } catch (error) {
         ev.complete('fail');
       }
