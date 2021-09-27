@@ -248,7 +248,12 @@
       "hideButton": ""
     },
     "registrationPolicies": {
+      "disableNoPreference": "",
+      "enableNoPreference": "",
+      "noPreferenceDisabled": "",
+      "noPreferenceEnabled": "",
       "noPreferenceHelpText": "",
+      "noPreferenceInapplicable": "",
       "noPreferenceInapplicableHelpText": ""
     },
     "runCapacity": {
@@ -587,6 +592,7 @@
     }
   },
   "signups": {
+    "noPreference": "",
     "noSignupsAvailable": "",
     "runCardText": {
       "confirmed": "",
