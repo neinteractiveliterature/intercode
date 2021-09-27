@@ -159,7 +159,9 @@ export default LoadQueryWrapper<
         },
       });
 
-      history.push(`/conventions/${result.data!.createConvention!.convention.id}`);
+      if (result.data) {
+        history.push(`/conventions/${result.data.createConvention.convention.id}`);
+      }
     };
 
     const timezoneNameForInputs = convention.timezone_name ?? DateTime.local().zoneName;

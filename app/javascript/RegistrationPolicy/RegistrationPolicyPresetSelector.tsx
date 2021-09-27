@@ -17,15 +17,15 @@ function RegistrationPolicyPresetSelector({
   presetSelected,
   allowCustom,
   custom,
-}: RegistrationPolicyPresetSelectorProps) {
+}: RegistrationPolicyPresetSelectorProps): JSX.Element {
   const presetSelectorId = useUniqueId('preset-');
 
   if (!presets) {
-    return null;
+    return <></>;
   }
 
   if (presets.length === 1 && !allowCustom) {
-    return null;
+    return <></>;
   }
 
   let selectorValue;
@@ -56,7 +56,7 @@ function RegistrationPolicyPresetSelector({
           id={presetSelectorId}
           className="form-select"
           value={selectorValue || ''}
-          onChange={presetSelected}
+          onBlur={presetSelected}
         >
           <option value="" disabled>
             Select one...

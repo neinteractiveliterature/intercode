@@ -14,7 +14,7 @@ export type NewEmailRouteModalProps = {
   close: () => void;
 };
 
-function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps) {
+function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps): JSX.Element {
   const [emailRoute, setEmailRoute] = useState<EmailRoute>({
     __typename: 'EmailRoute',
     id: 0,

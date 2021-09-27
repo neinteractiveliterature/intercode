@@ -36,8 +36,8 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
   };
 
   const [siteName, setSiteName] = useDirtyState(data.rootSite.site_name, setDirty);
-  const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.default_layout, setDirty);
-  const [rootPage, setRootPage] = useDirtyState(data.rootSite.root_page, setDirty);
+  const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.defaultLayout, setDirty);
+  const [rootPage, setRootPage] = useDirtyState(data.rootSite.rootPage, setDirty);
 
   usePageTitle('Root Site Settings');
 
@@ -73,8 +73,10 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         isClearable
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
-        options={data.cmsLayouts}
-        onChange={(newValue: typeof data['cmsLayouts'][0]) => setDefaultLayout(newValue)}
+        options={data.rootSite.cmsLayouts}
+        onChange={(newValue: typeof data['rootSite']['cmsLayouts'][0]) =>
+          setDefaultLayout(newValue)
+        }
         disabled={updateInProgress}
       />
 
@@ -85,8 +87,8 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         isClearable
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
-        options={data.cmsPages}
-        onChange={(newValue: typeof data['rootSite']['root_page']) => setRootPage(newValue)}
+        options={data.rootSite.cmsPages}
+        onChange={(newValue: typeof data['rootSite']['rootPage']) => setRootPage(newValue)}
         disabled={updateInProgress}
       />
 

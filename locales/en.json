@@ -247,6 +247,10 @@
       "favoriteButton": "Mark as favorite",
       "hideButton": "Hide event"
     },
+    "registrationPolicies": {
+      "noPreferenceHelpText": "For events that have more than one registration bucket with limited slots, we can display a “no preference” option for signups. Users who sign up using that option will be placed in whatever limited-slot bucket has availability, and moved between buckets to make space as necessary.",
+      "noPreferenceInapplicableHelpText": "This event doesn’t have more than one registration bucket with limited slots, so that option doesn’t apply."
+    },
     "runCapacity": {
       "label": "Capacity",
       "slotCount": "{{ count }} slot",

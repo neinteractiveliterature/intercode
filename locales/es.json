@@ -247,6 +247,10 @@
       "favoriteButton": "",
       "hideButton": ""
     },
+    "registrationPolicies": {
+      "noPreferenceHelpText": "",
+      "noPreferenceInapplicableHelpText": ""
+    },
     "runCapacity": {
       "label": "",
       "slotCount": "plaza {{ count }}",

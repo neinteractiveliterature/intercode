@@ -5,7 +5,7 @@ import mapValues from 'lodash/mapValues';
 import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import sum from 'lodash/sum';
-// @ts-expect-error
+// @ts-expect-error Inflected doesn't include capitalize in type declarations
 import { capitalize } from 'inflected';
 import { LoadQueryWrapper, titleSort } from '@neinteractiveliterature/litform';
 
@@ -49,9 +49,10 @@ export default LoadQueryWrapper(useEventsByChoiceQuery, function EventsByChoice(
     [data],
   );
 
-  const sortedRows = useMemo(() => titleSort(filteredRows, (row) => row.event.title ?? ''), [
-    filteredRows,
-  ]);
+  const sortedRows = useMemo(
+    () => titleSort(filteredRows, (row) => row.event.title ?? ''),
+    [filteredRows],
+  );
 
   // producing an array of rows where each row looks like:
   // {
