@@ -2417,7 +2417,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/utilities@npm:2.0.0, @dnd-kit/utilities@npm:^2.0.0":
+"@dnd-kit/utilities@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@dnd-kit/utilities@npm:3.0.0"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: fa5d45ba09e74f1855b485dd75404617d474aed2e37dc358150d741b238f904daa311383f2db5b8e607680abe360c28fd8869dbac8ba1867874b045515956692
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^2.0.0":
   version: 2.0.0
   resolution: "@dnd-kit/utilities@npm:2.0.0"
   dependencies:
@@ -20883,7 +20894,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/view": 0.19.8
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
-    "@dnd-kit/utilities": 2.0.0
+    "@dnd-kit/utilities": 3.0.0
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.2.2
     "@graphql-codegen/add": 3.1.0
