@@ -4167,7 +4167,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:0.15.5, @lezer/common@npm:^0.15.0":
+"@lezer/common@npm:0.15.6":
+  version: 0.15.6
+  resolution: "@lezer/common@npm:0.15.6"
+  checksum: cc89d59a2a7af1b71b08f139a1fdaeb04c3937810c0788e262a76cb1321c4e431c9ac452b786a139abf0067b8b105dbbaa054d8a2cd3662d9e652e304d24cdc1
+  languageName: node
+  linkType: hard
+
+"@lezer/common@npm:^0.15.0":
   version: 0.15.5
   resolution: "@lezer/common@npm:0.15.5"
   checksum: eb7f2b95bbbe28b7ce0cd395c2fd1203ec219695018a57385d48c1acca7de0feebec72c9f1a109de2d887c6731a63d99cd2ee11474ea13212a81a73f2e1df96c
@@ -20895,7 +20902,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@graphql-eslint/eslint-plugin": 2.2.0
     "@juggle/resize-observer": 3.3.1
-    "@lezer/common": 0.15.5
+    "@lezer/common": 0.15.6
     "@neinteractiveliterature/litform": 0.20.0
     "@popperjs/core": 2.10.2
     "@stripe/react-stripe-js": 1.5.0
