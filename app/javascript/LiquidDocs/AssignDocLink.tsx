@@ -4,10 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
 import findClass from './findClass';
-import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
+import { LiquidAssignsQueryFromLocationData } from './useLiquidAssignsQueryFromLocation';
 
 export type AssignDocLinkProps = {
-  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0];
+  assign: LiquidAssignsQueryFromLocationData['cmsParent']['liquidAssigns'][0];
   compact?: boolean;
   prefix?: string;
   preAssignNameContent?: React.ReactNode;
@@ -18,7 +18,7 @@ function AssignDocLink({
   compact = false,
   prefix,
   preAssignNameContent,
-}: AssignDocLinkProps) {
+}: AssignDocLinkProps): JSX.Element {
   const location = useLocation();
 
   const renderCard = () => (

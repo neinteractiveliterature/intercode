@@ -8,18 +8,32 @@ const defaultOptions =  {}
 export type MyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyProfileQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }>, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio?: Types.Maybe<string>, show_nickname_in_bio?: Types.Maybe<boolean>, bio_name?: Types.Maybe<string>, bio_html?: Types.Maybe<string>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole }> };
+export type MyProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, my_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio?: Types.Maybe<string>, show_nickname_in_bio?: Types.Maybe<boolean>, bio_name?: Types.Maybe<string>, bio_html?: Types.Maybe<string>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole }>, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } } };
 
 
 export const MyProfileQueryDocument = gql`
     query MyProfileQuery {
-  convention {
+  convention: conventionByRequestHost {
     id
     name
     starts_at
     ends_at
     timezone_name
     timezone_mode
+    my_profile {
+      id
+      email
+      form_response_attrs_json
+      can_have_bio
+      gravatar_url
+      gravatar_enabled
+      bio
+      show_nickname_in_bio
+      bio_name
+      bio_html
+      current_user_form_item_viewer_role
+      current_user_form_item_writer_role
+    }
     user_con_profile_form {
       id
       ...CommonFormFields
@@ -31,20 +45,6 @@ export const MyProfileQueryDocument = gql`
         }
       }
     }
-  }
-  myProfile {
-    id
-    email
-    form_response_attrs_json
-    can_have_bio
-    gravatar_url
-    gravatar_enabled
-    bio
-    show_nickname_in_bio
-    bio_name
-    bio_html
-    current_user_form_item_viewer_role
-    current_user_form_item_writer_role
   }
 }
     ${CommonFormFieldsFragmentDoc}`;

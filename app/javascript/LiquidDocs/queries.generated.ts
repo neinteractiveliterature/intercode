@@ -9,14 +9,14 @@ export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: str
 export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryData = { __typename: 'Query', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> };
+export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> } | { __typename: 'RootSite', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> } };
 
 export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
 }>;
 
 
-export type NotifierLiquidAssignsQueryData = { __typename: 'Query', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> };
+export type NotifierLiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> } };
 
 export const LiquidAssignFieldsFragmentDoc = gql`
     fragment LiquidAssignFields on LiquidAssign {
@@ -27,8 +27,10 @@ export const LiquidAssignFieldsFragmentDoc = gql`
     `;
 export const LiquidAssignsQueryDocument = gql`
     query LiquidAssignsQuery {
-  liquidAssigns {
-    ...LiquidAssignFields
+  cmsParent: cmsParentByRequestHost {
+    liquidAssigns {
+      ...LiquidAssignFields
+    }
   }
 }
     ${LiquidAssignFieldsFragmentDoc}`;
@@ -61,8 +63,11 @@ export type LiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useLiquidA
 export type LiquidAssignsQueryQueryResult = Apollo.QueryResult<LiquidAssignsQueryData, LiquidAssignsQueryVariables>;
 export const NotifierLiquidAssignsQueryDocument = gql`
     query NotifierLiquidAssignsQuery($eventKey: String!) {
-  liquidAssigns: notifierLiquidAssigns(eventKey: $eventKey) {
-    ...LiquidAssignFields
+  cmsParent: conventionByRequestHost {
+    id
+    liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {
+      ...LiquidAssignFields
+    }
   }
 }
     ${LiquidAssignFieldsFragmentDoc}`;

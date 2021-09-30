@@ -14,7 +14,10 @@ export type GeneratedNavigationSectionProps = {
   items: GeneratedNavigationItem[];
 };
 
-function GeneratedNavigationSection({ label, items }: GeneratedNavigationSectionProps) {
+function GeneratedNavigationSection({
+  label,
+  items,
+}: GeneratedNavigationSectionProps): JSX.Element {
   const sortedItems = sortByLocaleString(items, (item) => item?.label ?? '');
 
   if (items.some((item) => item)) {
@@ -36,7 +39,7 @@ function GeneratedNavigationSection({ label, items }: GeneratedNavigationSection
     );
   }
 
-  return null;
+  return <></>;
 }
 
 export default GeneratedNavigationSection;

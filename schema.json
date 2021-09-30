@@ -2316,6 +2316,31 @@
               "deprecationReason": null
             },
             {
+              "name": "content_html_with_placeholders",
+              "description": null,
+              "args": [
+                {
+                  "name": "path",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "current_ability_can_delete",
               "description": null,
               "args": [],
@@ -24837,6 +24862,39 @@
               },
               "isDeprecated": true,
               "deprecationReason": "This query is being renamed to `cmsParentByRequestHost`."
+            },
+            {
+              "name": "cmsParentByDomain",
+              "description": "Returns the CMS parent object associated with a given domain name.  In a\nconvention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.\n",
+              "args": [
+                {
+                  "name": "domain",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INTERFACE",
+                  "name": "CmsParent",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
               "name": "cmsParentByRequestHost",

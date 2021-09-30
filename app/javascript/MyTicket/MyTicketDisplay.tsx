@@ -15,11 +15,11 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
 
   usePageTitle(`My ${data.convention.ticket_name} receipt`);
 
-  const { convention, myProfile } = data;
-  const ticket = myProfile?.ticket;
+  const { convention } = data;
+  const ticket = convention.my_profile?.ticket;
   const paymentAmount = ticket?.order_entry?.price_per_item;
 
-  if (!myProfile || !ticket) {
+  if (!ticket) {
     return <Redirect to="/new" />;
   }
 
@@ -34,7 +34,7 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
       <div className="card">
         <div className="card-header">
           <div className="d-flex">
-            <div className="lead flex-grow-1">{myProfile.name_without_nickname}</div>
+            <div className="lead flex-grow-1">{convention.my_profile?.name_without_nickname}</div>
             <div className="lead fw-bold">
               {paymentAmount && paymentAmount.fractional > 0 ? 'Paid' : 'Comp'}
             </div>

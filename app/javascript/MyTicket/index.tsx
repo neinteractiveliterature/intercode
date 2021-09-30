@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import MyTicketDisplay from './MyTicketDisplay';
 import TicketPurchaseForm from './TicketPurchaseForm';
 
-function MyTicket() {
+function MyTicket(): JSX.Element {
   return (
     <Switch>
       <Route path="/ticket/new">

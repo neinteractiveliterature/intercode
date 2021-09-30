@@ -26,14 +26,14 @@ export const TicketPurchaseFormQuery = gql`
           id
         }
       }
-    }
 
-    myProfile {
-      id
-      name_without_nickname
-
-      ticket {
+      my_profile {
         id
+        name_without_nickname
+
+        ticket {
+          id
+        }
       }
     }
   }
@@ -48,39 +48,39 @@ export const MyTicketDisplayQuery = gql`
       name
       ticket_name
       timezone_name
-    }
 
-    myProfile {
-      id
-      name_without_nickname
-
-      ticket {
+      my_profile {
         id
-        created_at
-        updated_at
+        name_without_nickname
 
-        order_entry {
+        ticket {
           id
+          created_at
+          updated_at
 
-          order {
+          order_entry {
             id
-            charge_id
+
+            order {
+              id
+              charge_id
+            }
+
+            price_per_item {
+              fractional
+              currency_code
+            }
           }
 
-          price_per_item {
-            fractional
-            currency_code
+          ticket_type {
+            id
+            description
           }
-        }
 
-        ticket_type {
-          id
-          description
-        }
-
-        provided_by_event {
-          id
-          title
+          provided_by_event {
+            id
+            title
+          }
         }
       }
     }

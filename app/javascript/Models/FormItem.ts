@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { assertNever } from 'assert-never';
 
 import { TypedFormItem } from '../FormAdmin/FormItemUtils';
@@ -117,7 +118,7 @@ export function formResponseValueIsComplete(
 export function formResponseValueIsCompleteIfRequired(
   formItem: TypedFormItem,
   value: any | null | undefined,
-) {
+): boolean {
   if (formItem.item_type === 'static_text') {
     return true;
   }

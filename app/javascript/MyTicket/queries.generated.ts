@@ -8,12 +8,12 @@ const defaultOptions =  {}
 export type TicketPurchaseFormQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketPurchaseFormQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, products: Array<{ __typename: 'Product', id: number, name: string, description_html?: Types.Maybe<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }>, ticket_types: Array<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string>, providing_products: Array<{ __typename: 'Product', id: number }> }> }, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }> }> };
+export type TicketPurchaseFormQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, products: Array<{ __typename: 'Product', id: number, name: string, description_html?: Types.Maybe<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }>, ticket_types: Array<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string>, providing_products: Array<{ __typename: 'Product', id: number }> }>, my_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }> }> } };
 
 export type MyTicketDisplayQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyTicketDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, timezone_name?: Types.Maybe<string> }, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, charge_id?: Types.Maybe<string> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string> }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> }> };
+export type MyTicketDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, timezone_name?: Types.Maybe<string>, my_profile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, charge_id?: Types.Maybe<string> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string> }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> }> } };
 
 
 export const TicketPurchaseFormQueryDocument = gql`
@@ -37,12 +37,12 @@ export const TicketPurchaseFormQueryDocument = gql`
         id
       }
     }
-  }
-  myProfile {
-    id
-    name_without_nickname
-    ticket {
+    my_profile {
       id
+      name_without_nickname
+      ticket {
+        id
+      }
     }
   }
 }
@@ -81,32 +81,32 @@ export const MyTicketDisplayQueryDocument = gql`
     name
     ticket_name
     timezone_name
-  }
-  myProfile {
-    id
-    name_without_nickname
-    ticket {
+    my_profile {
       id
-      created_at
-      updated_at
-      order_entry {
+      name_without_nickname
+      ticket {
         id
-        order {
+        created_at
+        updated_at
+        order_entry {
           id
-          charge_id
+          order {
+            id
+            charge_id
+          }
+          price_per_item {
+            fractional
+            currency_code
+          }
         }
-        price_per_item {
-          fractional
-          currency_code
+        ticket_type {
+          id
+          description
         }
-      }
-      ticket_type {
-        id
-        description
-      }
-      provided_by_event {
-        id
-        title
+        provided_by_event {
+          id
+          title
+        }
       }
     }
   }

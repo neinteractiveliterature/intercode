@@ -76,19 +76,16 @@ type LoggedInDropdownTargetProps = {
 };
 
 const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTargetProps>(
-  ({ toggle, visible }, ref) => {
+  function LoggedInDropdownTarget({ toggle, visible }, ref) {
     const { t } = useTranslation();
     const { currentUser, myProfile, assumedIdentityFromProfile } = useContext(AppRootContext);
 
     if (!currentUser) {
       // this can happen in the middle of a resetStore
-      return null;
+      return <></>;
     }
 
     if (assumedIdentityFromProfile) {
-      // if assumedIdentityFromProfile is not null, myProfile must be non-null too
-      const nonNullProfile = myProfile!;
-
       return (
         <button
           className="btn btn-warning dropdown-toggle"
@@ -98,12 +95,10 @@ const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTar
         >
           <i className="bi-person-bounding-box" />
 
-          <span className="d-inline d-md-none d-lg-inline">
-            {nonNullProfile.name_without_nickname}
-          </span>
+          <span className="d-inline d-md-none d-lg-inline">{myProfile?.name_without_nickname}</span>
           <span className="d-none d-md-inline d-lg-none">
-            {(nonNullProfile.first_name ?? '')[0]}
-            {(nonNullProfile.last_name ?? '')[0]}
+            {(myProfile?.first_name ?? '')[0]}
+            {(myProfile?.last_name ?? '')[0]}
           </span>
         </button>
       );
@@ -156,7 +151,7 @@ function RevertAssumedIdentityButton() {
   );
 }
 
-function UserNavigationSection() {
+function UserNavigationSection(): JSX.Element {
   const { t } = useTranslation();
   const { conventionName, currentUser, myProfile } = useContext(AppRootContext);
 

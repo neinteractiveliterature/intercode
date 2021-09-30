@@ -12,8 +12,9 @@ import { useMyProfileQuery } from './queries.generated';
 import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
+import FourOhFourPage from '../FourOhFourPage';
 
-function MyProfileDisplay() {
+function MyProfileDisplay(): JSX.Element {
   const { t } = useTranslation();
   const { data, loading, error } = useMyProfileQuery();
 
@@ -22,11 +23,11 @@ function MyProfileDisplay() {
       return null;
     }
 
-    if (!data?.myProfile) {
+    if (!data?.convention.my_profile) {
       return null;
     }
 
-    return JSON.parse(data.myProfile.form_response_attrs_json ?? '{}');
+    return JSON.parse(data.convention.my_profile.form_response_attrs_json ?? '{}');
   }, [data, loading, error]);
 
   const formItems = useMemo(() => {
@@ -47,6 +48,10 @@ function MyProfileDisplay() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
   if (!formItems) {
     return (
       <AdminWarning>
@@ -63,8 +68,12 @@ function MyProfileDisplay() {
     );
   }
 
-  const convention = data!.convention!;
-  const myProfile = data!.myProfile!;
+  const convention = data.convention;
+  const myProfile = data.convention.my_profile;
+
+  if (!myProfile) {
+    return <FourOhFourPage />;
+  }
 
   return (
     <div className="row">

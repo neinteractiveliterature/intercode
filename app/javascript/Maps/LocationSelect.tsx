@@ -15,7 +15,7 @@ export type LocationSelectProps = Omit<
   'loadOptions' | 'formatOptionLabel' | 'getOptionValue'
 >;
 
-function LocationSelect({ ...props }: LocationSelectProps) {
+function LocationSelect({ ...props }: LocationSelectProps): JSX.Element {
   const { mapboxAccessToken } = useContext(MapboxContext);
   const loadOptions = async (inputValue: string) => {
     const uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
