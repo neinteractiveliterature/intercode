@@ -6,7 +6,7 @@ export type LiquidTagDocHeaderProps = {
   liquidTag: YardClass;
 };
 
-function LiquidTagDocHeader({ liquidTag }: LiquidTagDocHeaderProps) {
+function LiquidTagDocHeader({ liquidTag }: LiquidTagDocHeaderProps): JSX.Element {
   const liquidTagName = findLiquidTagName(liquidTag);
 
   return (

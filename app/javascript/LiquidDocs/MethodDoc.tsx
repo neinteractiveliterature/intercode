@@ -7,9 +7,9 @@ export type MethodDocProps = {
   prefix?: string;
 };
 
-function MethodDoc({ method, prefix }: MethodDocProps) {
+function MethodDoc({ method, prefix }: MethodDocProps): JSX.Element {
   if (method.tags.some((tag) => tag.tag_name === 'api')) {
-    return null;
+    return <></>;
   }
 
   const sortedTags = method.tags.sort((a, b) => {

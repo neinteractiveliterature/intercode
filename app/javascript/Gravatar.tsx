@@ -5,7 +5,7 @@ export type GravatarProps = {
   imgClassName?: string;
 };
 
-function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps) {
+function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps): JSX.Element {
   if (!url || !(enabled ?? true)) {
     return (
       <span

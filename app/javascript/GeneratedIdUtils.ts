@@ -5,7 +5,7 @@ export type WithGeneratedId<T, IdType> = T extends RealIdObject<IdType>
   ? Omit<T, 'id'> & GeneratedIdObject<IdType>
   : T & GeneratedIdObject<IdType>;
 
-export type WithoutGeneratedId<T extends GeneratedIdObject<any>> = Omit<T, 'generatedId'>;
+export type WithoutGeneratedId<T extends GeneratedIdObject<unknown>> = Omit<T, 'generatedId'>;
 
 export type WithRealId<T extends GeneratedIdObject<IdType>, IdType> = Omit<T, 'generatedId'> & {
   id: IdType;
@@ -13,7 +13,7 @@ export type WithRealId<T extends GeneratedIdObject<IdType>, IdType> = Omit<T, 'g
 
 export type ArrayWithGeneratedIds<T, IdType> = T extends RealIdObject<IdType>[]
   ? WithGeneratedId<T[0], IdType>[]
-  : T extends any[]
+  : T extends unknown[]
   ? (T[0] & GeneratedIdObject<IdType>)[]
   : never;
 
@@ -39,7 +39,7 @@ export function hasRealId<T extends RealIdObject<IdType>, IdType>(
 
 export function getRealOrGeneratedId<T extends RealIdObject<IdType>, IdType>(
   value: WithRealOrGeneratedId<T, IdType>,
-) {
+): IdType {
   if (hasRealId(value)) {
     return value.id;
   }
@@ -50,7 +50,7 @@ export function getRealOrGeneratedId<T extends RealIdObject<IdType>, IdType>(
 export function realOrGeneratedIdsMatch<T extends RealIdObject<IdType>, IdType>(
   a: WithRealOrGeneratedId<T, IdType>,
   b: WithRealOrGeneratedId<T, IdType>,
-) {
+): boolean {
   if (hasRealId(a) && hasRealId(b)) {
     return a.id === b.id;
   }
