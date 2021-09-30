@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 import { YardMethod } from './DocData';
-import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
+import { LiquidAssignsQueryFromLocationData } from './useLiquidAssignsQueryFromLocation';
 
 export type AssignNameProps = {
-  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0] | YardMethod;
+  assign: LiquidAssignsQueryFromLocationData['cmsParent']['liquidAssigns'][0] | YardMethod;
   prefix?: string;
 };
 
-function AssignName({ assign, prefix }: AssignNameProps) {
+function AssignName({ assign, prefix }: AssignNameProps): JSX.Element {
   const concatenatedName = `${prefix || ''}${assign.name}`;
   const rawParts = concatenatedName.split('.');
   const parts = rawParts.map((part, i) => (

@@ -118,11 +118,21 @@ class Types::UserConProfileType < Types::BaseObject
 
   def team_members
     AssociationLoader.for(UserConProfile, :team_members).load(object).then do |team_members|
-      readable_team_members = team_members.select { |team_member| policy(team_member).read? }
-      if context[:query_from_liquid]
-        readable_team_members.select(&:display?)
-      else
-        readable_team_members
+      # Policy code is going to check fields on the convention, so it absolutely needs to be
+      # loaded to avoid n+1 queries in all cases
+      eager_load_promises = team_members.map do |team_member|
+        AssociationLoader.for(TeamMember, :event).load(team_member).then do |event|
+          AssociationLoader.for(Event, :convention).load(event)
+        end
+      end
+
+      Promise.all(eager_load_promises).then do |_events|
+        readable_team_members = team_members.select { |team_member| policy(team_member).read? }
+        if context[:query_from_liquid]
+          readable_team_members.select(&:display?)
+        else
+          readable_team_members
+        end
       end
     end
   end

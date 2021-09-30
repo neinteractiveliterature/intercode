@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
 
-function SearchNavigationItem() {
+function SearchNavigationItem(): JSX.Element {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);

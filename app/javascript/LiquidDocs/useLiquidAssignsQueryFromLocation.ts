@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { useQuery } from '@apollo/client';
+import { QueryResult, useQuery } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 
 import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries';
@@ -10,7 +10,19 @@ import {
   NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
 
-export default function useLiquidAssignsQueryFromLocation() {
+export type LiquidAssignsQueryFromLocation = [
+  QueryResult<
+    LiquidAssignsQueryData | NotifierLiquidAssignsQueryData,
+    LiquidAssignsQueryVariables | NotifierLiquidAssignsQueryVariables
+  >,
+  string | null,
+];
+
+export type LiquidAssignsQueryFromLocationData = NonNullable<
+  LiquidAssignsQueryFromLocation[0]['data']
+>;
+
+export default function useLiquidAssignsQueryFromLocation(): LiquidAssignsQueryFromLocation {
   const location = useLocation();
   const notifierEventKey = location.search
     ? new URLSearchParams(location.search).get('notifier_event_key')
@@ -24,9 +36,5 @@ export default function useLiquidAssignsQueryFromLocation() {
       variables: notifierEventKey ? { eventKey: notifierEventKey } : {},
     }),
     notifierEventKey,
-  ] as const;
+  ];
 }
-
-export type LiquidAssignsQueryFromLocation = NonNullable<
-  ReturnType<typeof useLiquidAssignsQueryFromLocation>[0]['data']
->;

@@ -3,7 +3,7 @@ export type MenuIconProps = {
   colorClass?: string;
 };
 
-function MenuIcon({ icon, colorClass }: MenuIconProps) {
+function MenuIcon({ icon, colorClass }: MenuIconProps): JSX.Element {
   return (
     <div className={`d-inline-block me-2 ${colorClass ?? 'text-muted'}`} style={{ width: '1em' }}>
       <i className={icon} />

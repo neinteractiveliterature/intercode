@@ -47,7 +47,7 @@ module Types::CmsParent
     MARKDOWN
   end
 
-  field :cms_pages, [Types::PageType], null: false do
+  field :cms_pages, [Types::PageType], null: false, method: :pages do
     description <<~MARKDOWN
       Returns all CMS pages within the current domain.
     MARKDOWN
@@ -218,33 +218,8 @@ within the current domain (limited to 10 results)."
 
   private
 
-  def cms_content_finder
-    @cms_content_finder ||= begin
-      convention = object.is_a?(Convention) ? object : nil
-      CmsContentFinder.new(convention)
-    end
-  end
-
   def cms_rendering_context
-    return context[:cms_rendering_context] if context[:cms_rendering_context].cms_parent == object
-
-    @cms_rendering_context ||= begin
-      effective_path = context[:controller].request.path
-      user_con_profile = nil
-      if context[:convention]
-        user_con_profile = context[:convention].user_con_profiles.find_by(
-          user_id: context[:current_user]
-        )
-      end
-
-      cms_content_finder.cms_rendering_context(
-        path: effective_path,
-        controller: context[:controller],
-        user: context[:current_user],
-        user_con_profile: user_con_profile,
-        timezone: context[:timezone_for_request]
-      )
-    end
+    @cms_rendering_context ||= cms_rendering_context_for_cms_parent(object)
   end
 
   delegate :cadmus_renderer, to: :cms_rendering_context

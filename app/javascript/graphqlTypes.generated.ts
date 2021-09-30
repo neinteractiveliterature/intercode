@@ -306,6 +306,7 @@ export type CmsLayout = {
   admin_notes?: Maybe<Scalars['String']>;
   content?: Maybe<Scalars['String']>;
   content_html?: Maybe<Scalars['String']>;
+  content_html_with_placeholders?: Maybe<Scalars['String']>;
   current_ability_can_delete: Scalars['Boolean'];
   current_ability_can_update: Scalars['Boolean'];
   id: Scalars['Int'];
@@ -315,6 +316,11 @@ export type CmsLayout = {
 
 
 export type CmsLayoutContent_HtmlArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+
+export type CmsLayoutContent_Html_With_PlaceholdersArgs = {
   path?: Maybe<Scalars['String']>;
 };
 
@@ -3815,6 +3821,11 @@ export type Query = {
    */
   cmsParent: CmsParent;
   /**
+   * Returns the CMS parent object associated with a given domain name.  In a
+   * convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+   */
+  cmsParentByDomain: CmsParent;
+  /**
    * Returns the CMS parent object associated with the domain name of this HTTP request.  In a
    * convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
    */
@@ -4082,6 +4093,11 @@ export type QueryCmsPageArgs = {
   id?: Maybe<Scalars['Int']>;
   rootPage?: Maybe<Scalars['Boolean']>;
   slug?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryCmsParentByDomainArgs = {
+  domain: Scalars['String'];
 };
 
 

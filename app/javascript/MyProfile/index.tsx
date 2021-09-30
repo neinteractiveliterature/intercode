@@ -4,7 +4,7 @@ import MyProfileDisplay from './MyProfileDisplay';
 import MyProfileForm from './MyProfileForm';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
-function MyProfile() {
+function MyProfile(): JSX.Element {
   const loginRequired = useLoginRequired();
 
   if (loginRequired) {

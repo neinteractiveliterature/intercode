@@ -2,17 +2,20 @@ class Mutations::SortCmsNavigationItems < Mutations::BaseMutation
   argument :sort_items, [Mutations::UpdateCmsNavigationItem.input_type],
     required: true, camelize: false
 
-  authorize_arbitrary_cms_model :cms_navigation_items, :update
+  def authorized?(sort_items:)
+    @navigation_items = CmsNavigationItem.find(sort_items.map { |item| item[:id] })
+    @navigation_items.each do |navigation_item|
+      self.class.check_authorization(policy(navigation_item), :update)
+    end
+  end
 
-  def resolve(**args)
-    args[:sort_items].each do |sort_item|
+  def resolve(sort_items:)
+    sort_items.each do |sort_item|
       cms_navigation_item_attrs = sort_item[:cms_navigation_item].to_h.symbolize_keys
         .slice(:position, :navigation_section_id)
-      cms_parent.cms_navigation_items.where(id: sort_item[:id])
-        .update_all(cms_navigation_item_attrs)
+      navigation_item = @navigation_items.find { |item| item[:id] == sort_item[:id] }
+      navigation_item.update!(cms_navigation_item_attrs)
     end
-
-    cms_parent.touch # invalidate the navigation bar cache
 
     {}
   end

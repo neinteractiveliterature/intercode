@@ -218,6 +218,7 @@ type CmsLayout {
   admin_notes: String
   content: String
   content_html(path: String): String
+  content_html_with_placeholders(path: String): String
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
   id: Int!
@@ -4528,6 +4529,12 @@ type Query {
   convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
   """
   cmsParent: CmsParent! @deprecated(reason: "This query is being renamed to `cmsParentByRequestHost`.")
+
+  """
+  Returns the CMS parent object associated with a given domain name.  In a
+  convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+  """
+  cmsParentByDomain(domain: String!): CmsParent!
 
   """
   Returns the CMS parent object associated with the domain name of this HTTP request.  In a

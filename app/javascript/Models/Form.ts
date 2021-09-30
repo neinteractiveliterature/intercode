@@ -6,17 +6,19 @@ import {
   CommonFormItemFieldsFragment,
   CommonFormSectionFieldsFragment,
 } from './commonFormFragments.generated';
-import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';
+import { parseTypedFormItemArray, TypedFormItem } from '../FormAdmin/FormItemUtils';
 
-export function sortFormSections<T extends CommonFormSectionFieldsFragment>(formSections: T[]) {
+export function sortFormSections<T extends CommonFormSectionFieldsFragment>(
+  formSections: T[],
+): T[] {
   return [...formSections].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 }
 
-export function sortFormItems<T extends CommonFormItemFieldsFragment>(formItems: T[]) {
+export function sortFormItems<T extends CommonFormItemFieldsFragment>(formItems: T[]): T[] {
   return [...formItems].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 }
 
-export function sortAndParseFormItems(formItems: CommonFormItemFieldsFragment[]) {
+export function sortAndParseFormItems(formItems: CommonFormItemFieldsFragment[]): TypedFormItem[] {
   return parseTypedFormItemArray(sortFormItems(formItems));
 }
 
@@ -32,13 +34,13 @@ export function getSortedFormItems<T extends CommonFormFieldsFragment>(
   return flatMap(getSortedFormSections(form), (section) => sortFormItems(section.form_items));
 }
 
-export function getSortedParsedFormItems(form: CommonFormFieldsFragment) {
+export function getSortedParsedFormItems(form: CommonFormFieldsFragment): TypedFormItem[] {
   return parseTypedFormItemArray(getSortedFormItems(form));
 }
 
-export function getFormItemsByIdentifier(
-  form: CommonFormFieldsFragment,
-): { [identifier: string]: CommonFormItemFieldsFragment } {
+export function getFormItemsByIdentifier(form: CommonFormFieldsFragment): {
+  [identifier: string]: CommonFormItemFieldsFragment;
+} {
   const indexedSectionItems = form.form_sections.map((formSection) =>
     keyBy(
       formSection.form_items.filter((formItem) => formItem.identifier != null),

@@ -281,7 +281,20 @@ queries are being deprecated.  Please use the `my_profile` field on the Conventi
   end
 
   def cms_parent_by_request_host
-    convention || root_site
+    context[:convention] || root_site
+  end
+
+  field :cms_parent_by_domain, Types::CmsParent, null: false do
+    argument :domain, String, required: true
+
+    description <<~MARKDOWN
+      Returns the CMS parent object associated with a given domain name.  In a
+      convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+    MARKDOWN
+  end
+
+  def cms_parent_by_domain(domain:)
+    Convention.find_by(domain: domain) || root_site
   end
 
   field :cms_parent, Types::CmsParent, null: false, deprecation_reason: "This query is \

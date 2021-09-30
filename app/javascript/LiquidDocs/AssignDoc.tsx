@@ -6,19 +6,19 @@ import escapeRegExp from './escapeRegExp';
 import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import MethodDoc from './MethodDoc';
-import { LiquidAssignsQueryFromLocation } from './useLiquidAssignsQueryFromLocation';
+import { LiquidAssignsQueryFromLocationData } from './useLiquidAssignsQueryFromLocation';
 
 export type AssignDocProps = {
-  assign: LiquidAssignsQueryFromLocation['liquidAssigns'][0];
+  assign: LiquidAssignsQueryFromLocationData['cmsParent']['liquidAssigns'][0];
   prefix?: string;
 };
 
-function AssignDoc({ assign, prefix }: AssignDocProps) {
+function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
   const location = useLocation();
 
   const assignClass = findClass(assign.drop_class_name);
   if (!assignClass) {
-    return null;
+    return <></>;
   }
 
   const sortedMethods = assignClass.methods.sort((a, b) =>

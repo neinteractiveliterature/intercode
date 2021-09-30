@@ -1,8 +1,10 @@
 class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
+  include Minipack::Helper
   include ApplicationHelper
   include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::AssetTagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
 
   NOSCRIPT_WARNING = <<~HTML
@@ -120,6 +122,15 @@ class CmsRenderingContext
         'data-react-class' => 'AppRouter',
         'data-react-props' => { alert: controller&.flash&.alert }.to_json
       )
+    )
+  end
+
+  def liquid_assigns_for_placeholder_template
+    liquid_assigns.merge(
+      'content_for_head' => "#{stylesheet_bundle_tag 'application',
+media: 'all'}{{ content_for_head }}",
+      'content_for_navbar' => '{{ content_for_navbar }}',
+      'content_for_layout' => '{{ content_for_layout }}'
     )
   end
 
