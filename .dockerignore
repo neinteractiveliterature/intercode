@@ -58,7 +58,11 @@ cookbooks
 /public/packs-test
 /node_modules
 
+# Stuff that's sometimes lying around in dev machines
 /*.pgdump
+/*.eml
+/*.sql
+
 /Dockerfile
 /Dockerfile.*
 /docker-compose*.yml
@@ -72,3 +76,6 @@ cookbooks
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+/doc-site/.yarn
+/doc-site/build
