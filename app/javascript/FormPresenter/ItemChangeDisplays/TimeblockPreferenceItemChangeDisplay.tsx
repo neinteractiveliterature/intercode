@@ -44,7 +44,7 @@ function TimeblockPreferenceItemChangeDisplay({
   formItem,
   convention,
   change,
-}: TimeblockPreferenceItemChangeDisplayProps) {
+}: TimeblockPreferenceItemChangeDisplayProps): JSX.Element {
   const { t } = useTranslation();
   const format = useAppDateTimeFormat();
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {
@@ -63,10 +63,10 @@ function TimeblockPreferenceItemChangeDisplay({
     );
   };
 
-  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [
-    convention,
-    formItem,
-  ]);
+  const columns = useMemo(
+    () => getValidTimeblockColumns(convention, formItem),
+    [convention, formItem],
+  );
   const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (

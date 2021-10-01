@@ -4,7 +4,7 @@ export type AdminCaptionProps = {
     identifier?: string | null;
     rendered_properties?:
       | null
-      | {}
+      | Record<string, unknown>
       | {
           caption: string;
         };
@@ -12,18 +12,17 @@ export type AdminCaptionProps = {
 };
 
 function propertiesHasCaption(
-  properties?: null | {} | { caption: string },
+  properties?: null | Record<string, unknown> | { caption: string },
 ): properties is { caption: string } {
   return Object.prototype.hasOwnProperty.call(properties, 'caption');
 }
 
-function AdminCaption({ formItem }: AdminCaptionProps) {
+function AdminCaption({ formItem }: AdminCaptionProps): JSX.Element {
   if (formItem.admin_description) {
     return <span>{formItem.admin_description}</span>;
   }
 
   if (propertiesHasCaption(formItem.rendered_properties)) {
-    // eslint-disable-next-line react/no-danger
     return <span dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }} />;
   }
 

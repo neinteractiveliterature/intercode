@@ -19,21 +19,49 @@ import {
   TimespanFormItem,
   TimeblockPreferenceFormItem,
   FreeTextFormItem,
+  valueIsValidForFormItemType,
 } from '../../FormAdmin/FormItemUtils';
-import { ParsedFormResponseChange } from './FormItemChangeUtils';
+import { ParsedFormResponseChange, UnknownFormItemType } from './FormItemChangeUtils';
+import ObjectDiffDisplay from './ObjectDiffDisplay';
 
 export type ConventionForFormItemChangeDisplay = Pick<
   Convention,
   'timezone_name' | 'timezone_mode' | 'starts_at' | 'ends_at'
 >;
 
-export type FormItemChangeDisplayProps = {
-  formItem: TypedFormItem;
-  change: ParsedFormResponseChange<any>;
+export type FormItemChangeDisplayProps<FormItemType extends TypedFormItem> = {
+  formItem: FormItemType;
+  change: ParsedFormResponseChange<UnknownFormItemType>;
   convention: ConventionForFormItemChangeDisplay;
 };
 
-function FormItemChangeDisplay({ formItem, change, convention }: FormItemChangeDisplayProps) {
+function changeIsValidForFormItemType<FormItemType extends TypedFormItem>(
+  formItem: FormItemType,
+  change: ParsedFormResponseChange<UnknownFormItemType>,
+): change is ParsedFormResponseChange<FormItemType> {
+  if (
+    change.previous_value != null &&
+    !valueIsValidForFormItemType(formItem, change.previous_value)
+  ) {
+    return false;
+  }
+
+  if (change.new_value != null && !valueIsValidForFormItemType(formItem, change.new_value)) {
+    return false;
+  }
+
+  return true;
+}
+
+function FormItemChangeDisplay<FormItemType extends TypedFormItem>({
+  formItem,
+  change,
+  convention,
+}: FormItemChangeDisplayProps<FormItemType>): JSX.Element {
+  if (!changeIsValidForFormItemType(formItem, change)) {
+    return <ObjectDiffDisplay before={change.previous_value} after={change.new_value} />;
+  }
+
   switch (formItem.item_type) {
     case 'age_restrictions':
       return (

@@ -34,11 +34,15 @@ export type SectionTraversalProviderProps = {
   children: ReactNode;
 };
 
-export function SectionTraversalProvider({ form, children }: SectionTraversalProviderProps) {
+export function SectionTraversalProvider({
+  form,
+  children,
+}: SectionTraversalProviderProps): JSX.Element {
   const sortedFormSections = useMemo(() => getSortedFormSections(form), [form]);
-  const formSectionsById = useMemo(() => keyBy(form.form_sections, (section) => section.id), [
-    form,
-  ]);
+  const formSectionsById = useMemo(
+    () => keyBy(form.form_sections, (section) => section.id),
+    [form],
+  );
   const [currentSectionId, setCurrentSectionId] = useState(sortedFormSections[0]?.id);
 
   const sectionCount = sortedFormSections.length;

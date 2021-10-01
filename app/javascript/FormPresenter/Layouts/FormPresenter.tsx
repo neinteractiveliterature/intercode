@@ -40,7 +40,7 @@ function FormPresenter({
   submitButton,
   submitForm,
   footerContent,
-}: FormPresenterProps) {
+}: FormPresenterProps): JSX.Element {
   const { currentSection } = useContext(SectionTraversalContext);
 
   const headerRef = useRef<HTMLDivElement>(null);

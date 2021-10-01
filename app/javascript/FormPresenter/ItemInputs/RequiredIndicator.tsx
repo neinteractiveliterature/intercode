@@ -1,12 +1,12 @@
 import { ParsedFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type RequiredIndicatorProps<PropertiesType extends { required?: boolean }> = {
-  formItem: ParsedFormItem<PropertiesType, any>;
+  formItem: ParsedFormItem<PropertiesType, unknown>;
 };
 
-const RequiredIndicator = <PropertiesType extends { required?: boolean }>({
+export default function RequiredIndicator<PropertiesType extends { required?: boolean }>({
   formItem,
-}: RequiredIndicatorProps<PropertiesType>) => {
+}: RequiredIndicatorProps<PropertiesType>): JSX.Element {
   if (formItem.rendered_properties.required) {
     return (
       <span className="text-danger ms-1" aria-label="Required">
@@ -16,6 +16,4 @@ const RequiredIndicator = <PropertiesType extends { required?: boolean }>({
   }
 
   return <span />;
-};
-
-export default RequiredIndicator;
+}

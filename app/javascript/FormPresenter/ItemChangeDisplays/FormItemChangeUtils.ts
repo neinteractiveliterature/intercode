@@ -1,9 +1,9 @@
-// @ts-expect-error
+// @ts-expect-error md5.js has no type definitions
 import MD5 from 'md5.js';
 import { DateTime } from 'luxon';
 import sortBy from 'lodash/sortBy';
 
-import Timespan from '../../Timespan';
+import Timespan, { FiniteTimespan } from '../../Timespan';
 import { FormResponseChange, UserConProfile } from '../../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { getFormItemsByIdentifier } from '../../Models/Form';
@@ -13,7 +13,7 @@ import {
   FormItemValueType,
 } from '../../FormAdmin/FormItemUtils';
 
-export function sortChanges<T extends Pick<FormResponseChange, 'created_at'>>(changes: T[]) {
+export function sortChanges<T extends Pick<FormResponseChange, 'created_at'>>(changes: T[]): T[] {
   return [...changes].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
   );
@@ -21,18 +21,20 @@ export function sortChanges<T extends Pick<FormResponseChange, 'created_at'>>(ch
 
 export function getChangeId(
   change: Pick<FormResponseChange, 'field_identifier' | 'previous_value' | 'new_value'>,
-) {
+): string {
   return new MD5()
     .update(`${change.field_identifier}-${change.previous_value}-${change.new_value}`)
     .digest('hex');
 }
 
+export type UnknownFormItemType = ParsedFormItem<unknown, { toString(): string }, string>;
+
 export type ParsedFormResponseChange<
-  FormItemType extends ParsedFormItem<any, any, any> = ParsedFormItem<any, any, any>
+  FormItemType extends UnknownFormItemType = UnknownFormItemType,
 > = Omit<FormResponseChange, 'previous_value' | 'new_value' | 'user_con_profile'> & {
   id: string;
-  previous_value: FormItemValueType<FormItemType>;
-  new_value: FormItemValueType<FormItemType>;
+  previous_value: FormItemValueType<FormItemType> | undefined;
+  new_value: FormItemValueType<FormItemType> | undefined;
   user_con_profile: Partial<UserConProfile>;
   formItem: FormItemType;
 };
@@ -101,7 +103,7 @@ export function buildChangeGroups(
   }));
 }
 
-export function getTimespanForChangeGroup(changeGroup: FormResponseChangeGroup) {
+export function getTimespanForChangeGroup(changeGroup: FormResponseChangeGroup): FiniteTimespan {
   const allTimestamps = [
     ...changeGroup.changes.map((c) => DateTime.fromISO(c.created_at)),
     ...changeGroup.changes.map((c) => DateTime.fromISO(c.updated_at)),

@@ -47,14 +47,16 @@ export const DEFAULT_EVENT_FORM_RESPONSE_ATTRS = {
   registration_policy: buildSingleBucketRegistrationPolicy(null),
 };
 
-const processFormResponseValue = (key: string, value: any) => {
+const processFormResponseValue = (key: string, value: unknown) => {
   switch (key) {
     case 'can_play_concurrently':
       return { can_play_concurrently: value === 'true' };
     case 'total_slots':
       return {
         total_slots: value,
-        registration_policy: buildSingleBucketRegistrationPolicy(Number.parseInt(value, 10)),
+        registration_policy: buildSingleBucketRegistrationPolicy(
+          Number.parseInt(value as string, 10),
+        ),
       };
     default:
       return { [key]: value };
@@ -78,14 +80,32 @@ export type EventFormProps<
   convention: ConventionForFormItemDisplay;
   itemInteractionTrackingProps: ItemInteractionTrackerContextValue;
   event: EventType;
-  formResponseValuesChanged: (newResponseValues: any) => void;
+  formResponseValuesChanged: (newResponseValues: unknown) => void;
   formRef: React.Ref<FormBodyImperativeHandle | undefined>;
 };
+
+export type UseEventFormResult<
+  EventType extends FormResponse &
+    Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
+> = [
+  EventFormProps<EventType>,
+  {
+    event: EventType &
+      Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>;
+    setEvent: React.Dispatch<React.SetStateAction<EventType>>;
+    eventForm: CommonFormFieldsFragment;
+    validateForm: () => boolean;
+  },
+];
 
 export default function useEventForm<
   EventType extends FormResponse &
     Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
->({ convention, initialEvent, eventForm }: UseEventFormOptions<EventType>) {
+>({
+  convention,
+  initialEvent,
+  eventForm,
+}: UseEventFormOptions<EventType>): UseEventFormResult<EventType> {
   const [event, setEvent] = useState<EventType>(() => ({
     ...initialEvent,
     form_response_attrs: {
@@ -140,16 +160,15 @@ export default function useEventForm<
   );
 
   return useMemo(
-    () =>
-      [
-        eventFormProps,
-        {
-          event,
-          setEvent,
-          eventForm,
-          validateForm,
-        },
-      ] as const,
+    () => [
+      eventFormProps,
+      {
+        event,
+        setEvent,
+        eventForm,
+        validateForm,
+      },
+    ],
     [eventFormProps, event, setEvent, eventForm, validateForm],
   );
 }
@@ -164,7 +183,7 @@ export function EventForm<
   event,
   formResponseValuesChanged,
   formRef,
-}: EventFormProps<EventType>) {
+}: EventFormProps<EventType>): JSX.Element {
   return (
     <ItemInteractionTrackerContext.Provider value={itemInteractionTrackingProps}>
       <SinglePageFormPresenter

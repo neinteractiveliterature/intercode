@@ -18,7 +18,7 @@ function getIncompleteItems(items: TypedFormItem[], response: FormResponse) {
 export default function useFormValidation(
   scrollToItem: FormBodyImperativeHandle['scrollToItem'],
   interactWithItem: ItemInteractionTrackerContextValue['interactWithItem'],
-) {
+): (items: TypedFormItem[], response: FormResponse) => boolean {
   return useCallback(
     (items: TypedFormItem[], response: FormResponse) => {
       const incompleteItems = getIncompleteItems(items, response);

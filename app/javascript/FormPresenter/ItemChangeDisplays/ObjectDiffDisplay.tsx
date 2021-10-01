@@ -3,31 +3,31 @@ import uniq from 'lodash/uniq';
 
 import TextDiffDisplay from './TextDiffDisplay';
 
-export type ObjectDiffRenderFunction<T> = (
-  key: string,
-  beforeValue: T | undefined,
-  afterValue: T | undefined,
+export type ObjectDiffRenderFunction<T> = <Key extends keyof T = keyof T>(
+  key: Key,
+  beforeValue: T[Key] | undefined,
+  afterValue: T[Key] | undefined,
 ) => ReactNode;
 
 export type ObjectDiffDisplayProps<T> = {
   before?: T;
   after?: T;
-  renderKey?: ObjectDiffRenderFunction<any>;
-  renderValue?: ObjectDiffRenderFunction<any>;
+  renderKey?: ObjectDiffRenderFunction<T>;
+  renderValue?: ObjectDiffRenderFunction<T>;
   showUnchanged?: boolean;
 };
 
-function ObjectDiffDisplay<T>({
+function ObjectDiffDisplay<T extends Record<string, { toString(): string } | undefined | null>>({
   before,
   after,
   renderKey,
   renderValue,
   showUnchanged,
-}: ObjectDiffDisplayProps<T>) {
+}: ObjectDiffDisplayProps<T>): JSX.Element {
   const combinedKeys = uniq([...Object.keys(before || {}), ...Object.keys(after || {})]).sort();
 
   const keyRenderer = renderKey ?? ((key) => key);
-  const valueRenderer =
+  const valueRenderer: ObjectDiffRenderFunction<T> =
     renderValue ??
     ((key, beforeValue, afterValue) => (
       <TextDiffDisplay
@@ -38,16 +38,16 @@ function ObjectDiffDisplay<T>({
 
   return (
     <dl className="row mb-0">
-      {combinedKeys.map((key) => {
-        const beforeValue = before ? (before as any)[key] : undefined;
-        const afterValue = after ? (after as any)[key] : undefined;
+      {combinedKeys.map((key: keyof T) => {
+        const beforeValue = before ? before[key] : undefined;
+        const afterValue = after ? after[key] : undefined;
 
         if (!showUnchanged && JSON.stringify(beforeValue) === JSON.stringify(afterValue)) {
           return null;
         }
 
         return (
-          <Fragment key={key}>
+          <Fragment key={key.toString()}>
             <dt className="col-sm-3">{keyRenderer(key, beforeValue, afterValue)}</dt>
             <dd className="col-sm-9">{valueRenderer(key, beforeValue, afterValue)}</dd>
           </Fragment>

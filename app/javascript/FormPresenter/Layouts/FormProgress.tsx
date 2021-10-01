@@ -9,12 +9,13 @@ export type FormProgressProps = {
   form: CommonFormFieldsFragment;
 };
 
-export default function FormProgress({ form }: FormProgressProps) {
+export default function FormProgress({ form }: FormProgressProps): JSX.Element {
   const { currentSection, currentSectionIndex } = useContext(SectionTraversalContext);
   const items = useMemo(() => getSortedFormItems(form), [form]);
-  const sectionItems = useMemo(() => sortFormItems(currentSection?.form_items ?? []), [
-    currentSection,
-  ]);
+  const sectionItems = useMemo(
+    () => sortFormItems(currentSection?.form_items ?? []),
+    [currentSection],
+  );
   const progressPercentValue = useMemo(() => {
     const lastSectionItem = sectionItems[sectionItems.length - 1];
     const itemIndex = findIndex(items, (item) => item.id === lastSectionItem.id) + 1;
@@ -22,7 +23,7 @@ export default function FormProgress({ form }: FormProgressProps) {
   }, [items, sectionItems]);
 
   if (form.form_sections.length < 2) {
-    return null;
+    return <></>;
   }
 
   const progressPercent = `${progressPercentValue}%`;

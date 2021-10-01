@@ -72,7 +72,7 @@ function coerceDateLike(dateLike: string | DateTime): DateTime {
 export function preferencesMatch(
   a: TimeblockPreferenceForComparison,
   b: TimeblockPreferenceForComparison,
-) {
+): boolean {
   return (
     coerceDateLike(a.start).toMillis() === coerceDateLike(b.start).toMillis() &&
     coerceDateLike(a.finish).toMillis() === coerceDateLike(b.finish).toMillis()

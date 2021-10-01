@@ -9,7 +9,7 @@ import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
-import { AgeRestrictionsFormItem, AgeRestrictionsValue } from '../../FormAdmin/FormItemUtils';
+import { AgeRestrictionsFormItem } from '../../FormAdmin/FormItemUtils';
 import { FORM_ITEM_ROLE_COLOR_CLASSES, VisibilityDisclosureText } from './PermissionDisclosures';
 
 function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefined, t: TFunction) {
@@ -22,22 +22,12 @@ function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefi
   });
 }
 
-function valueIsAgeRestrictionsValue(
-  value: unknown | undefined | null,
-): value is AgeRestrictionsValue {
-  // AgeRestrictionsValue has no required properties so literally any object will do
-  return value != null && typeof value === 'object';
-}
-
 export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictionsFormItem>;
 
-function AgeRestrictionsInput(props: AgeRestrictionsInputProps) {
+function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   const { t } = useTranslation();
   const { formItem, onChange, onInteract, valueInvalid, formTypeIdentifier } = props;
-  const value = useMemo(
-    () => (valueIsAgeRestrictionsValue(props.value) ? props.value : {}),
-    [props.value],
-  );
+  const value = useMemo(() => props.value ?? {}, [props.value]);
 
   const descriptionId = useUniqueId(`${formItem.identifier}-description-`);
 
