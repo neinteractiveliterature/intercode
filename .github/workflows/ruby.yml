@@ -15,7 +15,7 @@ jobs:
       RAILS_ENV: test
     services:
       postgres:
-        image: postgres
+        image: postgres:13.4
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
