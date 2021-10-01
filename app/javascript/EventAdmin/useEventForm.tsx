@@ -1,4 +1,4 @@
-import { useCallback, useState, ReactNode, useMemo } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import * as React from 'react';
 
 import useFormResponse, { FormResponse } from '../FormPresenter/useFormResponse';
@@ -80,7 +80,6 @@ export type EventFormProps<
   event: EventType;
   formResponseValuesChanged: (newResponseValues: any) => void;
   formRef: React.Ref<FormBodyImperativeHandle | undefined>;
-  children?: ReactNode;
 };
 
 export default function useEventForm<
