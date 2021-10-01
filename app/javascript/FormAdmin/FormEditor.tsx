@@ -14,8 +14,9 @@ import usePageTitle from '../usePageTitle';
 import { useFormEditorQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
+import FourOhFourPage from '../FourOhFourPage';
 
-function FormEditor() {
+function FormEditor(): JSX.Element {
   const match = useRouteMatch<{ id: string; sectionId?: string; itemId?: string }>();
   const { data, error, loading } = useFormEditorQuery({
     variables: {
@@ -36,8 +37,8 @@ function FormEditor() {
     }
 
     return {
-      ...data.form,
-      form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
+      ...data.convention.form,
+      form_sections: sortBy(data.convention.form.form_sections, 'position').map((formSection) => ({
         ...formSection,
         form_items: sortBy(formSection.form_items, 'position')
           .map(parseTypedFormItemObject)
@@ -69,6 +70,10 @@ function FormEditor() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
   let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
   if (!match.params.sectionId) {
@@ -82,7 +87,7 @@ function FormEditor() {
     );
   }
 
-  const { convention } = data!;
+  const { convention } = data;
   const formType = FormTypes[form.form_type] || {};
 
   return (
@@ -113,7 +118,7 @@ function FormEditor() {
 
       <FormEditorContext.Provider
         value={{
-          convention: convention!,
+          convention,
           currentSection,
           form,
           formTypeIdentifier: form.form_type,

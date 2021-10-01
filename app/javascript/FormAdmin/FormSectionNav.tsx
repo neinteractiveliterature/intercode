@@ -27,7 +27,7 @@ import {
 import { useSortableDndSensors } from '../SortableUtils';
 import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
 
-function FormSectionNav() {
+function FormSectionNav(): JSX.Element {
   const collapseRef = useRef<HTMLElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
@@ -86,8 +86,10 @@ function FormSectionNav() {
     const result = await addFormSection({
       variables: { formId: form.id, formSection: { title: 'New section' } },
     });
-    const formSectionId = result.data!.createFormSection!.form_section.id;
-    history.replace(`/admin_forms/${form.id}/edit/section/${formSectionId}`);
+    const formSectionId = result.data?.createFormSection.form_section.id;
+    if (formSectionId) {
+      history.replace(`/admin_forms/${form.id}/edit/section/${formSectionId}`);
+    }
   };
 
   return (

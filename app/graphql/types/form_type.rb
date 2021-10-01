@@ -1,6 +1,9 @@
 class Types::FormType < Types::BaseObject
   field :id, Int, null: false
   field :title, String, null: false
+  field :form_section, Types::FormSectionType, null: false, camelize: false do
+    argument :id, Int, required: true, description: 'The ID of the form section to find.'
+  end
   field :form_sections, [Types::FormSectionType], null: false, camelize: false
   field :form_api_json, Types::JSON,
     null: false,
@@ -17,6 +20,10 @@ and its subfields instead"
     :user_con_profile_conventions
 
   authorize_record
+
+  def form_section(id:)
+    object.form_sections.find(id)
+  end
 
   def form_api_json
     FormApiJSONLoader.for(cadmus_renderer).load(object)

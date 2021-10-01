@@ -35,7 +35,7 @@ function MultipleChoiceOptionRow({
   choiceChanged,
   nonUnique,
   deleteChoice,
-}: MultipleChoiceOptionRowProps) {
+}: MultipleChoiceOptionRowProps): JSX.Element {
   const confirm = useConfirm();
   const { isDragging, setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: choice.generatedId.toString(),

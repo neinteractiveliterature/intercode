@@ -10,6 +10,7 @@ import type {
   MultipleChoiceFormItem,
   ParsedFormItemWithGeneratedIds,
   RegistrationPolicyFormItem,
+  StandardItem,
   StaticTextFormItem,
   TimeblockPreferenceFormItem,
   TimespanFormItem,
@@ -18,8 +19,11 @@ import type {
 } from './FormItemUtils';
 import FormTypes from '../../../config/form_types.json';
 
-export type FormEditorForm = Omit<FormEditorQueryData['form'], 'form_sections'> & {
-  form_sections: (Omit<FormEditorQueryData['form']['form_sections'][0], 'form_items'> & {
+export type FormEditorForm = Omit<FormEditorQueryData['convention']['form'], 'form_sections'> & {
+  form_sections: (Omit<
+    FormEditorQueryData['convention']['form']['form_sections'][0],
+    'form_items'
+  > & {
     form_items: TypedFormItem[];
   })[];
 };
@@ -50,6 +54,13 @@ export const FormEditorContext = React.createContext<FormEditorContextValue>({
     id: 0,
     name: '',
     timezone_mode: TimezoneMode.UserLocal,
+    form: {
+      __typename: 'Form',
+      id: 0,
+      title: '',
+      form_type: FormType.Event,
+      form_sections: [],
+    },
   },
   currentSection: undefined,
   form: {
@@ -68,7 +79,7 @@ export type FormItemEditorContextValue = {
   formItem: FormEditorFormItem;
   previewFormItem?: TypedFormItem;
   setFormItem: React.Dispatch<React.SetStateAction<FormEditorFormItem>>;
-  standardItem?: any;
+  standardItem?: StandardItem;
   disabled: boolean;
 };
 

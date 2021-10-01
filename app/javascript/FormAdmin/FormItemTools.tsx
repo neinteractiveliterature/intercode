@@ -22,6 +22,10 @@ function StandardItemMetadata() {
   const { formType } = useContext(FormEditorContext);
   const { standardItem } = useContext(FormItemEditorContext);
 
+  if (!standardItem) {
+    return <></>;
+  }
+
   return (
     <>
       <div className="me-2">
@@ -64,7 +68,9 @@ type PropertiesWithCaption = {
   caption: string;
 };
 
-function propertiesHasCaption(properties?: object): properties is PropertiesWithCaption {
+function propertiesHasCaption(
+  properties?: Record<string, unknown>,
+): properties is PropertiesWithCaption {
   return (
     typeof properties === 'object' &&
     Object.prototype.hasOwnProperty.call(properties, 'caption') &&
@@ -123,7 +129,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
           choices={form.form_sections.map((formSection) => ({
             label: formSection.title,
             value: formSection.id.toString(),
-            disabled: formSection.id === currentSection!.id,
+            disabled: currentSection && formSection.id === currentSection.id,
           }))}
           value={destinationSectionId != null ? destinationSectionId.toString() : ''}
           onChange={(value: string) => setDestinationSectionId(parseIntOrNull(value) ?? undefined)}
@@ -157,10 +163,10 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
 }
 
 export type FormItemToolsProps = {
-  saveFormItem: () => Promise<any>;
+  saveFormItem: () => Promise<unknown>;
 };
 
-function FormItemTools({ saveFormItem }: FormItemToolsProps) {
+function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
   const match = useRouteMatch<{ id: string; sectionId: string }>();
   const history = useHistory();
   const { disabled, formItem, setFormItem, standardItem } = useContext(FormItemEditorContext);

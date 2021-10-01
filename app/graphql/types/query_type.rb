@@ -641,7 +641,7 @@ Please use the `notifier_liquid_assigns` field on the Convention type instead." 
 
   field :preview_form_item, Types::FormItemType,
     null: false, deprecation_reason: "Domain-specific queries are being deprecated. \
-Please use the `notifier_liquid_assigns` field on the FormSection type instead." do
+Please use the `preview_form_item` field on the FormSection type instead." do
     argument :form_section_id, Int,
       required: true,
       description: 'The ID of the form section to preview the item in.'

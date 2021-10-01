@@ -2995,6 +2995,12 @@ type Form {
   event_categories: [EventCategory!]!
   export_json: Json!
   form_api_json: Json! @deprecated(reason: "The old form API export is deprecated; please use the \"form\" field and its subfields instead")
+  form_section(
+    """
+    The ID of the form section to find.
+    """
+    id: Int!
+  ): FormSection!
   form_sections: [FormSection!]!
   form_type: FormType!
   id: Int!
@@ -4835,7 +4841,7 @@ type Query {
     The ID of the form section to preview the item in.
     """
     formSectionId: Int!
-  ): FormItem! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the FormSection type instead.")
+  ): FormItem! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `preview_form_item` field on the FormSection type instead.")
 
   """
   Given a Liquid text string, renders it to HTML using the current domain's CMS context

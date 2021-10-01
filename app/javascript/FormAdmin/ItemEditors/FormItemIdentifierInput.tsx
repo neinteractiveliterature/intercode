@@ -12,7 +12,11 @@ export type FormItemIdentifierInputProps = {
   onChange: React.Dispatch<string | undefined>;
 };
 
-function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifierInputProps) {
+function FormItemIdentifierInput({
+  formType,
+  value,
+  onChange,
+}: FormItemIdentifierInputProps): JSX.Element {
   const standardIdentifiers = useMemo(() => {
     const standardItems = formType.standard_items || {};
     return Object.entries(standardItems).map(([identifier]) => identifier);

@@ -62,10 +62,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
   const [identifier, setIdentifier] = useState<string>();
   const [createAsync, createError, createInProgress] = useAsyncFunction(createFormItem);
 
-  const standardItems: Record<string, StandardItem> = formType.standard_items as Record<
-    string,
-    StandardItem
-  >;
+  const standardItems = formType.standard_items as Record<string, Omit<StandardItem, 'identifier'>>;
 
   const existingStandardItemIdentifiers = useMemo(
     () =>

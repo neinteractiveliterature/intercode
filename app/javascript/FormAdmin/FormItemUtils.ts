@@ -502,27 +502,36 @@ export function formItemPropertyUpdater<
 export function mutationUpdaterForFormSection<ResultDataType>(
   formId: number,
   formSectionId: number,
-  updater: (section: CommonFormSectionFieldsFragment, mutationResultData: ResultDataType) => void,
+  updater: (
+    section: CommonFormSectionFieldsFragment,
+    mutationResultData: ResultDataType,
+  ) => CommonFormSectionFieldsFragment,
 ) {
   return (proxy: ApolloCache<unknown>, mutationResultData: ResultDataType): void => {
     const data = proxy.readQuery<FormEditorQueryData>({
       query: FormEditorQuery,
       variables: { id: formId },
     });
-    proxy.writeQuery({
+    if (!data) {
+      return;
+    }
+    proxy.writeQuery<FormEditorQueryData>({
       query: FormEditorQuery,
       variables: { id: formId },
       data: {
         ...data,
-        form: {
-          ...data?.form,
-          form_sections: (data?.form.form_sections ?? []).map((section) => {
-            if (section.id !== formSectionId) {
-              return section;
-            }
+        convention: {
+          ...data.convention,
+          form: {
+            ...data.convention.form,
+            form_sections: (data.convention.form.form_sections ?? []).map((section) => {
+              if (section.id !== formSectionId) {
+                return section;
+              }
 
-            return updater(section, mutationResultData);
-          }),
+              return updater(section, mutationResultData);
+            }),
+          },
         },
       },
     });
@@ -554,6 +563,7 @@ export type StandardItem = Partial<
     | 'identifier'
   >
 > & {
+  identifier: string;
   item_type?: TypedFormItem['item_type'];
   description: string;
   required?: boolean;
@@ -573,7 +583,13 @@ export function findStandardItem(
     return undefined;
   }
 
-  return formType.standard_items[identifier as keyof FormTypeDefinition['standard_items']];
+  const standardItem: Omit<StandardItem, 'identifier'> =
+    formType.standard_items[identifier as keyof FormTypeDefinition['standard_items']];
+
+  return {
+    identifier,
+    ...standardItem,
+  };
 }
 
 export function highestLevelRole(roles: FormItemRole[]): FormItemRole {
