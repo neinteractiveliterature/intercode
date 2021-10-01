@@ -10,7 +10,7 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 export type DateItemInputProps = CommonFormItemInputProps<DateFormItem>;
 
-function DateItemInput(props: DateItemInputProps) {
+function DateItemInput(props: DateItemInputProps): JSX.Element {
   const {
     formItem,
     formTypeIdentifier,
@@ -33,7 +33,7 @@ function DateItemInput(props: DateItemInputProps) {
     [onChange, userDidInteract],
   );
 
-  const value = typeof uncheckedValue === 'string' ? uncheckedValue : '';
+  const value = uncheckedValue ?? '';
 
   return (
     <div className="mb-3">

@@ -3,7 +3,9 @@ import { FormItemValueType, MultipleChoiceFormItem } from '../../FormAdmin/FormI
 type SingleCastedValue = string | null;
 type CastedValue = SingleCastedValue | CastedValue[];
 
-function castValue(value: any): CastedValue {
+function castValue(
+  value: FormItemValueType<MultipleChoiceFormItem> | null | undefined,
+): CastedValue {
   if (value == null) {
     return null;
   }
@@ -23,7 +25,7 @@ export type MultipleChoiceItemDisplayProps = {
 function MultipleChoiceItemDisplay({
   formItem,
   value: uncastValue,
-}: MultipleChoiceItemDisplayProps) {
+}: MultipleChoiceItemDisplayProps): JSX.Element {
   const value = castValue(uncastValue);
   const isValueOther = (v: string) =>
     !formItem.rendered_properties.choices.some((choice) => choice.value === v);

@@ -23,7 +23,7 @@ export type TimeblockPreferenceCellProps = {
   onChange: TimeblockPreferenceCellChangeCallback;
 };
 
-function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
+function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps): JSX.Element {
   const { start, finish, timeblock, dayStart, existingPreferences, onChange } = props;
   const format = useAppDateTimeFormat();
 
@@ -59,7 +59,7 @@ function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
 
   return (
     <td key={format(dayStart, 'longWeekday')}>
-      <select value={ordinality || ''} onChange={selectorDidChange} className="form-select">
+      <select value={ordinality || ''} onBlur={selectorDidChange} className="form-select">
         <option value="">Don&apos;t care</option>
         <option value="1">1st choice</option>
         <option value="2">2nd choice</option>

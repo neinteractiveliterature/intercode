@@ -19,26 +19,10 @@ import TimeblockPreferenceCell, {
   TimeblockPreferenceCellChangeCallback,
 } from './TimeblockPreferenceCell';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
-import { TimeblockPreferenceFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
+import { TimeblockPreferenceFormItem } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { VisibilityDisclosureCard } from './PermissionDisclosures';
-
-function valueIsTimeblockPreferenceValue(
-  value: any | undefined | null,
-): value is FormItemValueType<TimeblockPreferenceFormItem> {
-  if (value == null || !Array.isArray(value)) {
-    return false;
-  }
-
-  return value.every((preference) =>
-    (['start', 'finish', 'label', 'ordinality'] as const).every(
-      (field) =>
-        Object.prototype.hasOwnProperty.call(preference, field) &&
-        typeof preference![field] === 'string',
-    ),
-  );
-}
 
 export type TimeblockPreferenceItemInputProps =
   CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
@@ -51,13 +35,10 @@ function TimeblockPreferenceItemInput({
   formTypeIdentifier,
   value: uncheckedValue,
   onChange,
-}: TimeblockPreferenceItemInputProps) {
+}: TimeblockPreferenceItemInputProps): JSX.Element {
   const { t } = useTranslation();
   const format = useAppDateTimeFormat();
-  const value = useMemo(
-    () => (valueIsTimeblockPreferenceValue(uncheckedValue) ? uncheckedValue : []),
-    [uncheckedValue],
-  );
+  const value = useMemo(() => uncheckedValue ?? [], [uncheckedValue]);
 
   const preferences = useMemo(() => value.map(parseTimeblockPreference), [value]);
 

@@ -73,7 +73,7 @@ function FormFooter({
   response,
   scrollToItem,
   children,
-}: FormFooterProps) {
+}: FormFooterProps): JSX.Element {
   const { currentSection, currentSectionIndex, sectionCount, previousSection, nextSection } =
     useContext(SectionTraversalContext);
   const { interactWithItem } = useContext(ItemInteractionTrackerContext);

@@ -3,7 +3,7 @@ import { Fragment, useMemo } from 'react';
 import FormItemChangeDisplay, { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
 import TextDiffDisplay from './TextDiffDisplay';
 import { getTimespanForChangeGroup, FormResponseChangeGroup } from './FormItemChangeUtils';
-import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import { parseTypedFormItemObject, TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 
 function describeFormItem(item: TypedFormItem | undefined | null, itemIdentifier: string) {
@@ -30,7 +30,7 @@ export type FormItemChangeGroupProps = {
   changeGroup: FormResponseChangeGroup;
 };
 
-function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps) {
+function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps): JSX.Element {
   const timespan = useMemo(() => getTimespanForChangeGroup(changeGroup), [changeGroup]);
   const format = useAppDateTimeFormat();
 
@@ -42,25 +42,28 @@ function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupPro
         {format(timespan.start, 'shortDateTime')} - {format(timespan.finish, 'shortTime')}
       </h3>
       <dl>
-        {changeGroup.changes.map((change) => (
-          <Fragment key={change.id}>
-            <dt>{describeFormItem(change.formItem, change.field_identifier)}</dt>
-            <dd>
-              {change.formItem ? (
-                <FormItemChangeDisplay
-                  formItem={change.formItem}
-                  change={change}
-                  convention={convention}
-                />
-              ) : (
-                <TextDiffDisplay
-                  before={(change.previous_value ?? '').toString()}
-                  after={(change.new_value ?? '').toString()}
-                />
-              )}
-            </dd>
-          </Fragment>
-        ))}
+        {changeGroup.changes.map((change) => {
+          const typedFormItem = parseTypedFormItemObject(change.formItem);
+          return (
+            <Fragment key={change.id}>
+              <dt>{describeFormItem(typedFormItem, change.field_identifier)}</dt>
+              <dd>
+                {change.formItem && typedFormItem ? (
+                  <FormItemChangeDisplay
+                    formItem={typedFormItem}
+                    change={change}
+                    convention={convention}
+                  />
+                ) : (
+                  <TextDiffDisplay
+                    before={(change.previous_value ?? '').toString()}
+                    after={(change.new_value ?? '').toString()}
+                  />
+                )}
+              </dd>
+            </Fragment>
+          );
+        })}
       </dl>
     </section>
   );

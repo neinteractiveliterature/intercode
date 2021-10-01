@@ -124,6 +124,11 @@ export type AgeRestrictionsValue = {
   minimum_age?: number | null;
 };
 
+export function valueIsAgeRestrictionsValue(value: unknown): value is AgeRestrictionsValue {
+  // AgeRestrictionsValue has no required properties so literally any object will do
+  return value != null && typeof value === 'object';
+}
+
 export type AgeRestrictionsFormItem = WithRequiredIdentifier<
   ParsedFormItem<AgeRestrictionsProperties, AgeRestrictionsValue, 'age_restrictions'>
 >;
@@ -134,6 +139,10 @@ export type DateProperties = CommonQuestionProperties & {
 
 export type DateFormItem = WithRequiredIdentifier<ParsedFormItem<DateProperties, string, 'date'>>;
 
+export function valueIsDateItemValue(value: unknown): value is FormItemValueType<DateFormItem> {
+  return typeof value === 'string';
+}
+
 export type EventEmailProperties = CommonQuestionProperties;
 
 export type EventEmailValue = {
@@ -141,6 +150,11 @@ export type EventEmailValue = {
   email?: string;
   team_mailing_list_name?: string;
 };
+
+export function valueIsEventEmailValue(value: unknown): value is EventEmailValue {
+  // EventEmailValue has no required properties so literally any object will do
+  return typeof value === 'object' && value != null;
+}
 
 export type EventEmailFormItem = WithRequiredIdentifier<
   ParsedFormItem<EventEmailProperties, EventEmailValue, 'event_email'>
@@ -159,6 +173,10 @@ export type FreeTextFormItem = WithRequiredIdentifier<
   ParsedFormItem<FreeTextProperties, string, 'free_text'>
 >;
 
+export function valueIsFreeTextValue(value: unknown): value is FormItemValueType<FreeTextFormItem> {
+  return typeof value === 'string';
+}
+
 export type MultipleChoiceProperties = CommonQuestionProperties & {
   caption: string;
   style: 'radio_vertical' | 'radio_horizontal' | 'checkbox_vertical' | 'checkbox_horizontal';
@@ -174,6 +192,20 @@ export type MultipleChoiceFormItem = WithRequiredIdentifier<
   ParsedFormItem<MultipleChoiceProperties, string | string[], 'multiple_choice'>
 >;
 
+export function valueIsMultipleChoiceValue(
+  value: unknown,
+): value is FormItemValueType<MultipleChoiceFormItem> {
+  if (typeof value === 'string') {
+    return true;
+  }
+
+  if (Array.isArray(value)) {
+    return value.every((item) => typeof item === 'string');
+  }
+
+  return false;
+}
+
 export type RegistrationPolicyPreset = {
   name: string;
   policy: RegistrationPolicy;
@@ -187,6 +219,16 @@ export type RegistrationPolicyProperties = CommonQuestionProperties & {
 export type RegistrationPolicyFormItem = WithRequiredIdentifier<
   ParsedFormItem<RegistrationPolicyProperties, RegistrationPolicy, 'registration_policy'>
 >;
+
+export function valueIsRegistrationPolicyValue(
+  value: unknown,
+): value is FormItemValueType<RegistrationPolicyFormItem> {
+  if (typeof value !== 'object' || value == null) {
+    return false;
+  }
+
+  return 'buckets' in value && Array.isArray((value as { buckets: unknown }).buckets);
+}
 
 export type StaticTextProperties = {
   content: string;
@@ -210,6 +252,22 @@ export type TimeblockPreferenceFormItem = WithRequiredIdentifier<
   >
 >;
 
+export function valueIsTimeblockPreferenceValue(
+  value: unknown,
+): value is FormItemValueType<TimeblockPreferenceFormItem> {
+  if (value == null || !Array.isArray(value)) {
+    return false;
+  }
+
+  return value.every((preference) =>
+    (['start', 'finish', 'label', 'ordinality'] as const).every(
+      (field) =>
+        Object.prototype.hasOwnProperty.call(preference, field) &&
+        typeof preference[field] === 'string',
+    ),
+  );
+}
+
 export type TimespanProperties = CommonQuestionProperties & {
   caption: string;
 };
@@ -217,6 +275,10 @@ export type TimespanProperties = CommonQuestionProperties & {
 export type TimespanFormItem = WithRequiredIdentifier<
   ParsedFormItem<TimespanProperties, number, 'timespan'>
 >;
+
+export function valueIsTimespanValue(value: unknown): value is FormItemValueType<TimespanFormItem> {
+  return typeof value === 'number';
+}
 
 export type TypedFormItem =
   | AgeRestrictionsFormItem
@@ -228,6 +290,33 @@ export type TypedFormItem =
   | StaticTextFormItem
   | TimeblockPreferenceFormItem
   | TimespanFormItem;
+
+export function valueIsValidForFormItemType<FormItemType extends TypedFormItem>(
+  formItem: FormItemType,
+  value: unknown,
+): value is FormItemValueType<FormItemType> {
+  if (formItem.item_type === 'age_restrictions') {
+    return valueIsAgeRestrictionsValue(value);
+  } else if (formItem.item_type === 'date') {
+    return valueIsDateItemValue(value);
+  } else if (formItem.item_type === 'event_email') {
+    return valueIsEventEmailValue(value);
+  } else if (formItem.item_type === 'free_text') {
+    return valueIsFreeTextValue(value);
+  } else if (formItem.item_type === 'multiple_choice') {
+    return valueIsMultipleChoiceValue(value);
+  } else if (formItem.item_type === 'registration_policy') {
+    return valueIsRegistrationPolicyValue(value);
+  } else if (formItem.item_type === 'static_text') {
+    return false;
+  } else if (formItem.item_type === 'timeblock_preference') {
+    return valueIsTimeblockPreferenceValue(value);
+  } else if (formItem.item_type === 'timespan') {
+    return valueIsTimespanValue(value);
+  } else {
+    assertNever(formItem);
+  }
+}
 
 function formItemFragmentHasProperties(
   fragment: CommonFormItemFieldsFragment,

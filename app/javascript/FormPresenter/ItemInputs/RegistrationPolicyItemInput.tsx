@@ -2,19 +2,9 @@ import { useMemo } from 'react';
 import classNames from 'classnames';
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
-import { RegistrationPolicyFormItem, FormItemValueType } from '../../FormAdmin/FormItemUtils';
+import { RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
 import { RegistrationPolicy } from '../../graphqlTypes.generated';
 import { VisibilityDisclosureCard } from './PermissionDisclosures';
-
-function valueIsRegistrationPolicy(
-  value: unknown | null | undefined,
-): value is FormItemValueType<RegistrationPolicyFormItem> {
-  if (typeof value !== 'object') {
-    return false;
-  }
-
-  return Array.isArray((value as any)?.buckets);
-}
 
 export type RegistrationPolicyItemInputProps = CommonFormItemInputProps<RegistrationPolicyFormItem>;
 
@@ -25,7 +15,7 @@ function RegistrationPolicyItemInput({
   valueInvalid,
   onChange,
   onInteract,
-}: RegistrationPolicyItemInputProps) {
+}: RegistrationPolicyItemInputProps): JSX.Element {
   const defaultValue = useMemo(() => {
     const { presets, allow_custom: allowCustom } = formItem.rendered_properties;
     if (presets && presets.length === 1 && !allowCustom) {
@@ -34,8 +24,7 @@ function RegistrationPolicyItemInput({
     return null;
   }, [formItem.rendered_properties]);
 
-  const effectiveValue =
-    !valueIsRegistrationPolicy(value) || value.buckets.length === 0 ? defaultValue : value;
+  const effectiveValue = !value || value.buckets.length === 0 ? defaultValue : value;
 
   const valueChanged = (newValue: RegistrationPolicy) => {
     onInteract(formItem.identifier);

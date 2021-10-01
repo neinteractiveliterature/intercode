@@ -4,25 +4,34 @@ import { ChoiceSet } from '@neinteractiveliterature/litform';
 
 import CaptionLegend from './CaptionLegend';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
-import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
+import { FormItemValueType, MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
 import { VisibilityDisclosureCard } from './PermissionDisclosures';
+import assertNever from 'assert-never';
 
 const OTHER_VALUE = '_OTHER_VALUE';
 
-function castSingleValue(value: any): string | null {
-  if (Array.isArray(value)) {
-    return value.length > 0 ? value[0].toString() : null;
-  }
-
+function castSingleValue(
+  value: FormItemValueType<MultipleChoiceFormItem> | null | undefined,
+): string | null {
   if (value == null) {
     return null;
   }
 
-  return value.toString();
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.length > 0 ? value[0] : null;
+  }
+
+  assertNever(value);
 }
 
-function castMultipleValue(value: any): string[] {
-  let arrayValue: any[];
+function castMultipleValue(
+  value: FormItemValueType<MultipleChoiceFormItem> | null | undefined,
+): string[] {
+  let arrayValue: string[];
 
   if (Array.isArray(value)) {
     arrayValue = value;
@@ -32,7 +41,7 @@ function castMultipleValue(value: any): string[] {
     arrayValue = [value];
   }
 
-  return arrayValue.map((item) => item.toString());
+  return arrayValue;
 }
 
 export type MultipleChoiceItemInputProps = CommonFormItemInputProps<MultipleChoiceFormItem>;
@@ -44,7 +53,7 @@ function MultipleChoiceItemInput({
   value: uncastValue,
   valueInvalid,
   onInteract,
-}: MultipleChoiceItemInputProps) {
+}: MultipleChoiceItemInputProps): JSX.Element {
   const isMultiple = useMemo(
     () => ['checkbox_horizontal', 'checkbox_vertical'].includes(formItem.rendered_properties.style),
     [formItem.rendered_properties.style],
@@ -132,7 +141,7 @@ function MultipleChoiceItemInput({
     const providedValues = (newValue ?? []).filter((choiceValue) =>
       choiceValues.some((providedValue) => providedValue === choiceValue),
     );
-    if (newValue?.includes(OTHER_VALUE)) {
+    if (otherValue && newValue?.includes(OTHER_VALUE)) {
       onChange([...providedValues, otherValue]);
     } else {
       onChange(providedValues);

@@ -5,7 +5,7 @@ export type MarkdownDisplayProps = {
   markdown?: string | null;
 };
 
-function MarkdownDisplay({ markdown }: MarkdownDisplayProps) {
+function MarkdownDisplay({ markdown }: MarkdownDisplayProps): JSX.Element {
   const { data, loading, error } = usePreviewMarkdownQuery({
     variables: { markdown: markdown ?? '' },
   });

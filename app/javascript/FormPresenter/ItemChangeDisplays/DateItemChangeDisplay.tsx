@@ -11,19 +11,17 @@ export type DateItemChangeDisplayProps = {
   change: ParsedFormResponseChange<DateFormItem>;
 };
 
-function DateItemChangeDisplay({ change }: DateItemChangeDisplayProps) {
+function DateItemChangeDisplay({ change }: DateItemChangeDisplayProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const before = useMemo(() => describeDate(change.previous_value || '', timezoneName, format), [
-    change.previous_value,
-    timezoneName,
-    format,
-  ]);
-  const after = useMemo(() => describeDate(change.new_value || '', timezoneName, format), [
-    change.new_value,
-    timezoneName,
-    format,
-  ]);
+  const before = useMemo(
+    () => describeDate(change.previous_value || '', timezoneName, format),
+    [change.previous_value, timezoneName, format],
+  );
+  const after = useMemo(
+    () => describeDate(change.new_value || '', timezoneName, format),
+    [change.new_value, timezoneName, format],
+  );
 
   return <TextDiffDisplay before={before} after={after} />;
 }

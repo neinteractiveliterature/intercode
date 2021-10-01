@@ -24,7 +24,7 @@ function FormResponseChangeHistory({
   changes,
   convention,
   form,
-}: FormResponseChangeHistoryProps) {
+}: FormResponseChangeHistoryProps): JSX.Element {
   const { t } = useTranslation();
   const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);
   const format = useAppDateTimeFormat();

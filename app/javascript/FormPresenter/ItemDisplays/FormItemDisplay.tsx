@@ -27,21 +27,21 @@ export type ConventionForFormItemDisplay = Pick<
   'timezone_name' | 'timezone_mode' | 'starts_at' | 'ends_at' | 'event_mailing_list_domain'
 >;
 
-export type FormItemDisplayProps<FormItemType extends TypedFormItem> = {
+export type FormItemDisplayProps = {
   formItem: TypedFormItem;
-  value: FormItemValueType<FormItemType>;
+  value: unknown;
   convention: ConventionForFormItemDisplay;
   displayMode: FormItemDisplayMode;
 };
 
-function FormItemDisplay<FormItemType extends TypedFormItem>({
+function FormItemDisplay({
   formItem,
   value,
   convention,
   displayMode,
-}: FormItemDisplayProps<FormItemType>) {
+}: FormItemDisplayProps): JSX.Element {
   if (value == null) {
-    return null;
+    return <></>;
   }
 
   switch (formItem.item_type) {

@@ -14,11 +14,6 @@ import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { EventEmailFormItem, EventEmailValue } from '../../FormAdmin/FormItemUtils';
 import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
-function isEventEmailValue(value: unknown | undefined | null): value is EventEmailValue {
-  // EventEmailValue has no required properties so literally any object will do
-  return typeof value === 'object' && value != null;
-}
-
 export type EventEmailInputProps = CommonFormItemInputProps<EventEmailFormItem> & {
   convention: ConventionForFormItemDisplay;
 };
@@ -35,9 +30,9 @@ function EventEmailInput({
   onChange,
   onInteract,
   valueInvalid,
-}: EventEmailInputProps) {
+}: EventEmailInputProps): JSX.Element {
   const { t } = useTranslation();
-  const value = isEventEmailValue(uncheckedValue) ? uncheckedValue : {};
+  const value = uncheckedValue ?? {};
   const [emailBehavior, setEmailBehavior] = useState<EventEmailBehavior | undefined>(() => {
     const teamMailingListName = value.team_mailing_list_name;
     return teamMailingListName && convention.event_mailing_list_domain
@@ -61,12 +56,12 @@ function EventEmailInput({
           email:
             newValue.team_mailing_list_name && newValue.team_mailing_list_name.trim() !== ''
               ? `${newValue.team_mailing_list_name}@${convention.event_mailing_list_domain}`
-              : null,
+              : undefined,
         });
       } else {
         onChange({
           ...newValue,
-          team_mailing_list_name: null,
+          team_mailing_list_name: undefined,
         });
       }
     },
@@ -75,7 +70,7 @@ function EventEmailInput({
 
   const emailBehaviorChanged = (newBehavior: EventEmailBehavior) => {
     setEmailBehavior(newBehavior);
-    if (newBehavior === 'team_mailing_list' && convention.event_mailing_list_domain) {
+    if (newBehavior === 'team_mailing_list') {
       onChange({
         // always send something Ruby will consider truthy if the email behavior is to use
         // a team mailing list
@@ -87,7 +82,7 @@ function EventEmailInput({
       onChange({
         ...(value || {}),
         con_mail_destination: newBehavior,
-        team_mailing_list_name: null,
+        team_mailing_list_name: undefined,
       });
     }
     userDidInteract();

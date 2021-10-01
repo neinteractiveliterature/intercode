@@ -8,7 +8,7 @@ export function describeDate(
   value: string,
   timezoneName: string,
   format: ReturnType<typeof useAppDateTimeFormat>,
-) {
+): string {
   return format(DateTime.fromISO(value, { zone: timezoneName }), 'longWeekdayDate');
 }
 
@@ -16,14 +16,13 @@ export type DateItemDisplayProps = {
   value: string;
 };
 
-function DateItemDisplay({ value }: DateItemDisplayProps) {
+function DateItemDisplay({ value }: DateItemDisplayProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const formattedDate = useMemo(() => describeDate(value, timezoneName, format), [
-    timezoneName,
-    value,
-    format,
-  ]);
+  const formattedDate = useMemo(
+    () => describeDate(value, timezoneName, format),
+    [timezoneName, value, format],
+  );
 
   return <>{formattedDate}</>;
 }
