@@ -90,9 +90,30 @@ export const TeamMemberFieldsWithoutPersonalInfo = gql`
 
 export const TeamMembersQuery = gql`
   query TeamMembersQuery($eventId: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
+
+      event(id: $eventId) {
+        id
+        title
+
+        event_category {
+          id
+          can_provide_tickets
+          team_member_name
+        }
+
+        provided_tickets {
+          id
+          ...TeamMemberTicketFields
+        }
+
+        team_members {
+          id
+          ...TeamMemberFields
+        }
+      }
 
       ticket_types {
         id
@@ -103,27 +124,6 @@ export const TeamMembersQuery = gql`
 
       ticket_name
     }
-
-    event(id: $eventId) {
-      id
-      title
-
-      event_category {
-        id
-        can_provide_tickets
-        team_member_name
-      }
-
-      provided_tickets {
-        id
-        ...TeamMemberTicketFields
-      }
-
-      team_members {
-        id
-        ...TeamMemberFields
-      }
-    }
   }
 
   ${CommonConventionData}
@@ -133,7 +133,7 @@ export const TeamMembersQuery = gql`
 
 export const TeamMemberUserConProfilesQuery = gql`
   query TeamMemberUserConProfilesQuery($name: String) {
-    convention {
+    convention: conventionByRequestHost {
       id
       user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
         entries {

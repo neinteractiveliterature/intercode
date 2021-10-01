@@ -11,7 +11,7 @@ export type RunBasicSignupDataFragment = { __typename: 'Run', id: number, signup
 export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CommonConventionDataQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> }> };
+export type CommonConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> } };
 
 export const CommonConventionDataFragmentDoc = gql`
     fragment CommonConventionData on Convention {
@@ -50,7 +50,7 @@ export const RunBasicSignupDataFragmentDoc = gql`
     `;
 export const CommonConventionDataQueryDocument = gql`
     query CommonConventionDataQuery {
-  convention {
+  convention: conventionByRequestHost {
     id
     ...CommonConventionData
   }

@@ -2,7 +2,7 @@ import { TeamMemberInput } from '../../graphqlTypes.generated';
 import { TeamMembersQueryData } from './queries.generated';
 
 function buildTeamMemberInput(
-  teamMember: TeamMembersQueryData['event']['team_members'][0],
+  teamMember: TeamMembersQueryData['convention']['event']['team_members'][0],
 ): TeamMemberInput {
   return {
     display_team_member: teamMember.display_team_member,

@@ -19,8 +19,9 @@ import { useDeleteMutation } from '../../MutationUtils';
 import { DeleteTeamMember } from './mutations';
 import { TeamMembersQueryData, useTeamMembersQuery } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
+import FourOhFourPage from '../../FourOhFourPage';
 
-function sortTeamMembers(teamMembers: TeamMembersQueryData['event']['team_members']) {
+function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
   return sortByLocaleString(
     teamMembers,
     (teamMember) => teamMember.user_con_profile.name_inverted ?? '',
@@ -28,9 +29,9 @@ function sortTeamMembers(teamMembers: TeamMembersQueryData['event']['team_member
 }
 
 type TeamMemberActionMenuProps = {
-  event: TeamMembersQueryData['event'];
+  event: TeamMembersQueryData['convention']['event'];
   convention: NonNullable<TeamMembersQueryData['convention']>;
-  teamMember: TeamMembersQueryData['event']['team_members'][0];
+  teamMember: TeamMembersQueryData['convention']['event']['team_members'][0];
   openProvideTicketModal: () => void;
   eventPath: string;
 };
@@ -112,26 +113,30 @@ export type TeamMembersIndexProps = {
   eventPath: string;
 };
 
-function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
+function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.Element {
   const { t } = useTranslation();
   const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
-  const modal = useModal<{ teamMember: TeamMembersQueryData['event']['team_members'][0] }>();
+  const modal =
+    useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
     () =>
       error || loading || !data
         ? null
-        : pluralize(titleize(underscore(data.event.event_category.team_member_name))),
+        : pluralize(titleize(underscore(data.convention.event.event_category.team_member_name))),
     [error, loading, data],
   );
 
   const sortedTeamMembers = useMemo(
-    () => (error || loading || !data ? null : sortTeamMembers(data.event.team_members)),
+    () => (error || loading || !data ? null : sortTeamMembers(data.convention.event.team_members)),
     [data, error, loading],
   );
 
   usePageTitle(
-    useValueUnless(() => `${titleizedTeamMemberName} - ${data?.event.title}`, error || loading),
+    useValueUnless(
+      () => `${titleizedTeamMemberName} - ${data?.convention.event.title}`,
+      error || loading,
+    ),
   );
 
   if (loading) {
@@ -142,7 +147,12 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { convention, event } = data!;
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
+  const { convention } = data;
+  const { event } = convention;
 
   return (
     <>
@@ -174,12 +184,12 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
                     'Receive email on signup or withdrawal',
                   )}
                 </th>
-                {convention!.ticket_mode !== 'disabled' && (
+                {convention.ticket_mode !== 'disabled' && (
                   <th>
                     {t(
                       'events.teamMemberAdmin.hasEventTicketHeader',
                       '{{ ticketName }} from this event',
-                      { ticketName: titleize(convention!.ticket_name) },
+                      { ticketName: titleize(convention.ticket_name) },
                     )}
                   </th>
                 )}
@@ -200,7 +210,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
                     <Checkmark value={teamMember.receive_con_email} />
                   </td>
                   <td>{humanize(teamMember.receive_signup_email)}</td>
-                  {convention!.ticket_mode !== 'disabled' && (
+                  {convention.ticket_mode !== 'disabled' && (
                     <td>
                       <Checkmark
                         value={event.provided_tickets.some(
@@ -212,7 +222,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
                   <td>
                     <TeamMemberActionMenu
                       event={event}
-                      convention={convention!}
+                      convention={convention}
                       teamMember={teamMember}
                       openProvideTicketModal={() => modal.open({ teamMember })}
                       eventPath={eventPath}
@@ -236,7 +246,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
         visible={modal.visible}
         onClose={modal.close}
         event={event}
-        convention={convention!}
+        convention={convention}
         teamMember={modal.state?.teamMember}
       />
     </>

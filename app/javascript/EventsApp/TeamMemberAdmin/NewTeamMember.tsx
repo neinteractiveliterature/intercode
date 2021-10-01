@@ -17,15 +17,15 @@ import { TeamMembersQueryData } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 
 export type NewTeamMemberProps = {
-  event: TeamMembersQueryData['event'];
+  event: TeamMembersQueryData['convention']['event'];
   eventPath: string;
 };
 
-function NewTeamMember({ event, eventPath }: NewTeamMemberProps) {
+function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
   const [teamMember, setTeamMember] = useState<
-    Partial<TeamMembersQueryData['event']['team_members'][0]>
+    Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>
   >({
     user_con_profile: undefined,
     display_team_member: true,
@@ -57,19 +57,20 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps) {
     }));
 
   const createClicked = async () => {
-    await createTeamMember({
-      variables: {
-        input: {
-          event_id: event.id,
-          team_member: buildTeamMemberInput(
-            teamMember as TeamMembersQueryData['event']['team_members'][0],
-          ),
-          user_con_profile_id: teamMember.user_con_profile!.id,
+    if (teamMember.user_con_profile) {
+      await createTeamMember({
+        variables: {
+          input: {
+            event_id: event.id,
+            team_member: buildTeamMemberInput(
+              teamMember as TeamMembersQueryData['convention']['event']['team_members'][0],
+            ),
+            user_con_profile_id: teamMember.user_con_profile.id,
+          },
         },
-      },
-    });
-
-    history.replace(`${eventPath}/team_members`);
+      });
+      history.replace(`${eventPath}/team_members`);
+    }
   };
 
   return (
