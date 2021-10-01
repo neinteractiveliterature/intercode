@@ -68,7 +68,7 @@ function EventRoutes() {
   );
 }
 
-function EventsApp() {
+function EventsApp(): JSX.Element {
   const { siteMode } = useContext(AppRootContext);
 
   return (

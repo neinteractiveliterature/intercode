@@ -61,7 +61,6 @@ function EventSpecificSection({
       </p>
 
       <ProvidableTicketTypeSelection
-        event={data.convention.event}
         convention={data.convention}
         value={ticketTypeId}
         onChange={setTicketTypeId}

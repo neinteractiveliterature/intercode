@@ -42,7 +42,7 @@ export const RunBasicSignupData = gql`
 
 export const CommonConventionDataQuery = gql`
   query CommonConventionDataQuery {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
     }

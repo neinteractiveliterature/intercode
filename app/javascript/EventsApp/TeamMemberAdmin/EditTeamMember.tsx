@@ -11,18 +11,19 @@ import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData } from './queries.generated';
 import { useUpdateTeamMemberMutation } from './mutations.generated';
+import FourOhFourPage from '../../FourOhFourPage';
 
 export type EditTeamMemberProps = {
-  event: TeamMembersQueryData['event'];
+  event: TeamMembersQueryData['convention']['event'];
   eventPath: string;
 };
 
-function EditTeamMember({ event, eventPath }: EditTeamMemberProps) {
+function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element {
   const { t } = useTranslation();
   const teamMemberId = Number.parseInt(useParams<{ teamMemberId: string }>().teamMemberId, 10);
   const history = useHistory();
   const [teamMember, setTeamMember] = useState(
-    event.team_members.find((tm) => tm.id === teamMemberId)!,
+    event.team_members.find((tm) => tm.id === teamMemberId),
   );
   const [updateMutate] = useUpdateTeamMemberMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
@@ -33,13 +34,17 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps) {
       'Editing {{ teamMemberName }} “{{ name }}” - {{ eventTitle }}',
       {
         teamMemberName: event.event_category.team_member_name,
-        name: teamMember.user_con_profile.name_without_nickname,
+        name: teamMember?.user_con_profile.name_without_nickname,
         eventTitle: event.title,
       },
     ),
   );
 
   const updateClicked = async () => {
+    if (!teamMember) {
+      return;
+    }
+
     await update({
       variables: {
         input: {
@@ -51,6 +56,10 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps) {
 
     history.replace(`${eventPath}/team_members`);
   };
+
+  if (!teamMember) {
+    return <FourOhFourPage />;
+  }
 
   return (
     <>
@@ -81,7 +90,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps) {
         event={event}
         value={teamMember}
         onChange={(newValue) =>
-          setTeamMember(newValue as TeamMembersQueryData['event']['team_members'][0])
+          setTeamMember(newValue as TeamMembersQueryData['convention']['event']['team_members'][0])
         }
         disabled={updateInProgress}
       />

@@ -9,13 +9,14 @@ import TeamMembersIndex from './TeamMembersIndex';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import { useTeamMembersQuery } from './queries.generated';
+import FourOhFourPage from '../../FourOhFourPage';
 
 export type TeamMemberAdminProps = {
   eventId: number;
   eventPath: string;
 };
 
-function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps) {
+function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Element {
   const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
   const teamMemberMatch = useRouteMatch<{ teamMemberId: string }>(
     `${eventPath}/team_members/:teamMemberId(\\d+)`,
@@ -26,7 +27,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps) {
       return null;
     }
 
-    return data.event.team_members.find(
+    return data.convention.event.team_members.find(
       (tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId,
     );
   }, [data, error, loading, teamMemberMatch]);
@@ -39,7 +40,11 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { event } = data!;
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
+  const { event } = data.convention;
 
   return (
     <>

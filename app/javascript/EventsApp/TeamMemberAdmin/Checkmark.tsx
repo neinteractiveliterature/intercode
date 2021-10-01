@@ -5,9 +5,9 @@ export type CheckmarkProps = {
   className?: string;
 };
 
-function Checkmark({ value, className }: CheckmarkProps) {
+function Checkmark({ value, className }: CheckmarkProps): JSX.Element {
   if (!value) {
-    return null;
+    return <></>;
   }
 
   return (
