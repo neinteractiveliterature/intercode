@@ -4684,10 +4684,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:1.18.0":
-  version: 1.18.0
-  resolution: "@stripe/stripe-js@npm:1.18.0"
-  checksum: 78fe1e94ef3d71f2751447ae381f3a221939179ce27f87e0345057f2321d22d3db37d250420cf7360a89ce262d404b0cf8090e76c662c73556344f93a2b49d71
+"@stripe/stripe-js@npm:1.19.0":
+  version: 1.19.0
+  resolution: "@stripe/stripe-js@npm:1.19.0"
+  checksum: d7bd0ffa5cb3f010b50410aee1ef6b83b5cfb8156f1b65efddcb94bf0ac36858b9ad2a9f5d595e53d7cc68f6c771c2f2bf01f63dddcbea172c4b4b62e25f770e
   languageName: node
   linkType: hard
 
@@ -20906,7 +20906,7 @@ resolve@^2.0.0-next.3:
     "@neinteractiveliterature/litform": 0.20.0
     "@popperjs/core": 2.10.2
     "@stripe/react-stripe-js": 1.5.0
-    "@stripe/stripe-js": 1.18.0
+    "@stripe/stripe-js": 1.19.0
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.1
     "@testing-library/react-hooks": 7.0.2
