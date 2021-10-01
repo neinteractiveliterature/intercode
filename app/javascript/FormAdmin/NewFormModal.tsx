@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-// @ts-expect-error
+// @ts-expect-error inflected type definitions don't include capitalize
 import { capitalize } from 'inflected';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
@@ -23,7 +23,7 @@ export type NewFormModalProps = {
   close: () => void;
 };
 
-function NewFormModal({ visible, close }: NewFormModalProps) {
+function NewFormModal({ visible, close }: NewFormModalProps): JSX.Element {
   const history = useHistory();
   const [title, setTitle] = useState('');
   const [formType, setFormType] = useState('');

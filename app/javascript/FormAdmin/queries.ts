@@ -82,11 +82,10 @@ export const FormEditorQuery = gql`
       timezone_name
       timezone_mode
       event_mailing_list_domain
-    }
-
-    form(id: $id) {
-      id
-      ...FormEditorData
+      form(id: $id) {
+        id
+        ...FormEditorData
+      }
     }
   }
 
@@ -94,10 +93,19 @@ export const FormEditorQuery = gql`
 `;
 
 export const PreviewFormItemQuery = gql`
-  query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
-    previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
+  query PreviewFormItemQuery($formId: Int!, $formSectionId: Int!, $formItem: FormItemInput!) {
+    convention: conventionByRequestHost {
       id
-      ...FormEditorFormItemFields
+      form(id: $formId) {
+        id
+        form_section(id: $formSectionId) {
+          id
+          preview_form_item(formItem: $formItem) {
+            id
+            ...FormEditorFormItemFields
+          }
+        }
+      }
     }
   }
 

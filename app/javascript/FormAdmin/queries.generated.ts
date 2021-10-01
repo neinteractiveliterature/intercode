@@ -22,15 +22,16 @@ export type FormEditorQueryVariables = Types.Exact<{
 }>;
 
 
-export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> }, form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } };
+export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string>, form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } } };
 
 export type PreviewFormItemQueryVariables = Types.Exact<{
+  formId: Types.Scalars['Int'];
   formSectionId: Types.Scalars['Int'];
   formItem: Types.FormItemInput;
 }>;
 
 
-export type PreviewFormItemQueryData = { __typename: 'Query', previewFormItem: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } };
+export type PreviewFormItemQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, form: { __typename: 'Form', id: number, form_section: { __typename: 'FormSection', id: number, preview_form_item: { __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, public_description?: Types.Maybe<string>, properties?: Types.Maybe<any>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole } } } } };
 
 export const FormFieldsFragmentDoc = gql`
     fragment FormFields on Form {
@@ -124,10 +125,10 @@ export const FormEditorQueryDocument = gql`
     timezone_name
     timezone_mode
     event_mailing_list_domain
-  }
-  form(id: $id) {
-    id
-    ...FormEditorData
+    form(id: $id) {
+      id
+      ...FormEditorData
+    }
   }
 }
     ${FormEditorDataFragmentDoc}`;
@@ -160,10 +161,19 @@ export type FormEditorQueryHookResult = ReturnType<typeof useFormEditorQuery>;
 export type FormEditorQueryLazyQueryHookResult = ReturnType<typeof useFormEditorQueryLazyQuery>;
 export type FormEditorQueryQueryResult = Apollo.QueryResult<FormEditorQueryData, FormEditorQueryVariables>;
 export const PreviewFormItemQueryDocument = gql`
-    query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
-  previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
+    query PreviewFormItemQuery($formId: Int!, $formSectionId: Int!, $formItem: FormItemInput!) {
+  convention: conventionByRequestHost {
     id
-    ...FormEditorFormItemFields
+    form(id: $formId) {
+      id
+      form_section(id: $formSectionId) {
+        id
+        preview_form_item(formItem: $formItem) {
+          id
+          ...FormEditorFormItemFields
+        }
+      }
+    }
   }
 }
     ${FormEditorFormItemFieldsFragmentDoc}`;
@@ -180,6 +190,7 @@ export const PreviewFormItemQueryDocument = gql`
  * @example
  * const { data, loading, error } = usePreviewFormItemQuery({
  *   variables: {
+ *      formId: // value for 'formId'
  *      formSectionId: // value for 'formSectionId'
  *      formItem: // value for 'formItem'
  *   },

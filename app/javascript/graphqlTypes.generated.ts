@@ -2385,12 +2385,18 @@ export type Form = {
   export_json: Scalars['Json'];
   /** @deprecated The old form API export is deprecated; please use the "form" field and its subfields instead */
   form_api_json: Scalars['Json'];
+  form_section: FormSection;
   form_sections: Array<FormSection>;
   form_type: FormType;
   id: Scalars['Int'];
   proposal_event_categories: Array<EventCategory>;
   title: Scalars['String'];
   user_con_profile_conventions: Array<Convention>;
+};
+
+
+export type FormForm_SectionArgs = {
+  id: Scalars['Int'];
 };
 
 export type FormInput = {
@@ -3992,7 +3998,7 @@ export type Query = {
    * within that section.  This does not actually save the form item.  This is mostly useful
    * because of the `rendered_properties` field inside FormItem, which lets clients retrieve
    * a rendered HTML version of the Liquid-enabled properties of the form item.
-   * @deprecated Domain-specific queries are being deprecated. Please use the `notifier_liquid_assigns` field on the FormSection type instead.
+   * @deprecated Domain-specific queries are being deprecated. Please use the `preview_form_item` field on the FormSection type instead.
    */
   previewFormItem: FormItem;
   /**

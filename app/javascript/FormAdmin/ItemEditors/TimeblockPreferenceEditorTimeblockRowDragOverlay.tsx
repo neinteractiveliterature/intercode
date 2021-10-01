@@ -14,7 +14,7 @@ export type TimeblockPreferenceEditorTimeblockRowDragOverlayProps = {
 
 function TimeblockPreferenceEditorTimeblockRowDragOverlay({
   timeblock,
-}: TimeblockPreferenceEditorTimeblockRowDragOverlayProps) {
+}: TimeblockPreferenceEditorTimeblockRowDragOverlayProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
 
   const selectTimespan = useMemo(
