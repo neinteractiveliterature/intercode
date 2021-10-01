@@ -501,13 +501,16 @@ export function formItemPropertyUpdater<
 
 export function mutationUpdaterForFormSection<ResultDataType>(
   formId: number,
-  formSectionId: number,
+  formSectionId: number | undefined,
   updater: (
     section: CommonFormSectionFieldsFragment,
     mutationResultData: ResultDataType,
   ) => CommonFormSectionFieldsFragment,
 ) {
   return (proxy: ApolloCache<unknown>, mutationResultData: ResultDataType): void => {
+    if (formSectionId == null) {
+      return;
+    }
     const data = proxy.readQuery<FormEditorQueryData>({
       query: FormEditorQuery,
       variables: { id: formId },

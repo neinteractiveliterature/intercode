@@ -27,7 +27,10 @@ type EditingFormJSONData = {
 };
 
 function formDataFromJSON(json: string): EditingFormJSONData {
-  const { title, sections } = JSON.parse(json) as { title: string; sections: any };
+  const { title, sections } = JSON.parse(json) as {
+    title: string;
+    sections: unknown;
+  };
   return {
     title,
     sectionsJSON: JSON.stringify(sections, null, '  '),

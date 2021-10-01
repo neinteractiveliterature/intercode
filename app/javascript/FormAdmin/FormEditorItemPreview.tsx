@@ -6,11 +6,19 @@ import { useSortable } from '@dnd-kit/sortable';
 
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
-import { mutationUpdaterForFormSection, TypedFormItem, findStandardItem } from './FormItemUtils';
+import {
+  mutationUpdaterForFormSection,
+  TypedFormItem,
+  findStandardItem,
+  StandardItem,
+} from './FormItemUtils';
 import { useDeleteFormItemMutation } from './mutations.generated';
 import { getSortableStyle } from '../SortableUtils';
 
-function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
+function describeFormItemForDelete(
+  formItem: TypedFormItem,
+  standardItem: StandardItem | undefined,
+) {
   if (standardItem) {
     return `the “${standardItem.description}” item`;
   }
@@ -26,14 +34,14 @@ export type FormEditorItemPreviewProps = {
   formItem: TypedFormItem;
 };
 
-function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
+function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps): JSX.Element {
   const confirm = useConfirm();
   const match = useRouteMatch<{ id: string; sectionId: string }>();
   const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
     useContext(FormEditorContext);
-  const renderedFormItem = formItemsById.get(formItem.id)!;
+  const renderedFormItem = formItemsById.get(formItem.id);
   const [deleteFormItem] = useDeleteFormItemMutation({
-    update: mutationUpdaterForFormSection(form.id, currentSection!.id, (section) => ({
+    update: mutationUpdaterForFormSection(form.id, currentSection?.id, (section) => ({
       ...section,
       form_items: section.form_items.filter((item) => item.id !== formItem.id),
     })),
@@ -77,15 +85,17 @@ function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
           <div className="fw-bold">Click to edit</div>
         </Link>
 
-        <FormItemInput
-          convention={convention}
-          formItem={renderedFormItem}
-          formTypeIdentifier={formTypeIdentifier}
-          onInteract={() => {}}
-          onChange={() => {}}
-          value={formItem.default_value}
-          valueInvalid={false}
-        />
+        {renderedFormItem && (
+          <FormItemInput
+            convention={convention}
+            formItem={renderedFormItem}
+            formTypeIdentifier={formTypeIdentifier}
+            onInteract={() => {}}
+            onChange={() => {}}
+            value={formItem.default_value}
+            valueInvalid={false}
+          />
+        )}
       </div>
       <div className="ms-2 mt-2">
         {standardItem && standardItem.required ? (
