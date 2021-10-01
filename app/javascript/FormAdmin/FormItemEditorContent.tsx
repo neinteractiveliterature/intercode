@@ -12,7 +12,7 @@ import TimeblockPreferenceEditor from './ItemEditors/TimeblockPreferenceEditor';
 import RegistrationPolicyItemEditor from './ItemEditors/RegistrationPolicyItemEditor';
 import { FormItemEditorContext } from './FormEditorContexts';
 
-function FormItemEditorContent() {
+function FormItemEditorContent(): JSX.Element {
   const { formItem, setFormItem } = useContext(FormItemEditorContext);
 
   switch (formItem.item_type) {

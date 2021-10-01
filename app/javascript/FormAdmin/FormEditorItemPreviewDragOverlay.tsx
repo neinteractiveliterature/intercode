@@ -10,9 +10,11 @@ export type FormEditorItemPreviewDragOverlayProps = {
   formItem: TypedFormItem;
 };
 
-function FormEditorItemPreviewDragOverlay({ formItem }: FormEditorItemPreviewDragOverlayProps) {
+function FormEditorItemPreviewDragOverlay({
+  formItem,
+}: FormEditorItemPreviewDragOverlayProps): JSX.Element {
   const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
-  const renderedFormItem = formItemsById.get(formItem.id)!;
+  const renderedFormItem = formItemsById.get(formItem.id);
 
   const standardItem = findStandardItem(formType, formItem.identifier);
 
@@ -23,15 +25,17 @@ function FormEditorItemPreviewDragOverlay({ formItem }: FormEditorItemPreviewDra
         <i className="cursor-grab bi-grip-vertical" />
       </div>
       <div className="form-editor-item flex-grow-1">
-        <FormItemInput
-          convention={convention}
-          formItem={renderedFormItem}
-          formTypeIdentifier={formTypeIdentifier}
-          onInteract={() => {}}
-          onChange={() => {}}
-          value={formItem.default_value}
-          valueInvalid={false}
-        />
+        {renderedFormItem && (
+          <FormItemInput
+            convention={convention}
+            formItem={renderedFormItem}
+            formTypeIdentifier={formTypeIdentifier}
+            onInteract={() => {}}
+            onChange={() => {}}
+            value={formItem.default_value}
+            valueInvalid={false}
+          />
+        )}
       </div>
       <div className="ms-2 mt-2">
         {standardItem && standardItem.required ? (

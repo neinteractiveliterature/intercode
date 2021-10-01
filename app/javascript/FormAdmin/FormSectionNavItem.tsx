@@ -13,7 +13,7 @@ export type FormSectionNavItemProps = {
   formSection: FormEditorForm['form_sections'][0];
 };
 
-function FormSectionNavItem({ formSection }: FormSectionNavItemProps) {
+function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Element {
   const { form, currentSection } = useContext(FormEditorContext);
   const confirm = useConfirm();
   const history = useHistory();

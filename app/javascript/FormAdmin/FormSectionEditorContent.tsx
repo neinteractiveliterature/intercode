@@ -15,7 +15,7 @@ import { serializeParsedFormItem } from './FormItemUtils';
 import { useSortableDndSensors } from '../SortableUtils';
 import FormEditorItemPreviewDragOverlay from './FormEditorItemPreviewDragOverlay';
 
-function FormSectionEditorContent() {
+function FormSectionEditorContent(): JSX.Element {
   const { currentSection } = useContext(FormEditorContext);
   const [updateFormSection] = useUpdateFormSectionMutation();
   const [moveFormItem] = useMoveFormItemMutation();
@@ -23,23 +23,29 @@ function FormSectionEditorContent() {
   const sensors = useSortableDndSensors();
 
   const updateSectionTitle = async (title: string) => {
-    await updateFormSection({
-      variables: { id: currentSection!.id, formSection: { title } },
-    });
+    if (currentSection) {
+      await updateFormSection({
+        variables: { id: currentSection.id, formSection: { title } },
+      });
+    }
   };
 
   const moveItem = useCallback(
     (dragIndex, hoverIndex) => {
+      if (!currentSection) {
+        return;
+      }
+
       const optimisticItems = buildOptimisticArrayForMove(
-        currentSection!.form_items.map(serializeParsedFormItem),
+        currentSection.form_items.map(serializeParsedFormItem),
         dragIndex,
         hoverIndex,
       );
 
       moveFormItem({
         variables: {
-          id: currentSection!.form_items[dragIndex].id,
-          formSectionId: currentSection!.id,
+          id: currentSection.form_items[dragIndex].id,
+          formSectionId: currentSection.id,
           destinationIndex: hoverIndex,
         },
         optimisticResponse: {
@@ -47,7 +53,7 @@ function FormSectionEditorContent() {
           moveFormItem: {
             __typename: 'MoveFormItemPayload',
             form_section: {
-              ...currentSection!,
+              ...currentSection,
               form_items: optimisticItems,
             },
           },
@@ -65,7 +71,7 @@ function FormSectionEditorContent() {
   );
 
   if (!currentSection) {
-    return null;
+    return <></>;
   }
 
   return (
