@@ -33,14 +33,14 @@ export function buildConventionDayUrlPortion(
   format: ReturnType<typeof useAppDateTimeFormat>,
   siteMode: SiteMode | undefined,
   conventionTimespan: Timespan | undefined,
-) {
+): string {
   return format(
     dayStart,
     conventionDayUrlPortionFormat(siteMode, conventionTimespan),
   ).toLowerCase();
 }
 
-export function useConventionDayUrlPortion() {
+export function useConventionDayUrlPortion(): (dayStart: DateTime) => string {
   const format = useAppDateTimeFormat();
   const { conventionTimespan, siteMode } = useContext(AppRootContext);
 
@@ -53,7 +53,7 @@ export function useConventionDayUrlPortion() {
 type ConventionDayTabProps = {
   basename: string;
   timespan: FiniteTimespan;
-  prefetchTimespan?: (timespan: FiniteTimespan) => Promise<any>;
+  prefetchTimespan?: (timespan: FiniteTimespan) => Promise<unknown>;
 };
 
 function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDayTabProps) {
@@ -85,7 +85,7 @@ export type ConventionDayTabContainerProps = {
   basename: string;
   conventionTimespan: FiniteTimespan;
   children: (timespan: FiniteTimespan) => JSX.Element;
-  prefetchTimespan?: (timespan: FiniteTimespan) => Promise<any>;
+  prefetchTimespan?: (timespan: FiniteTimespan) => Promise<unknown>;
   showExtendedCounts?: boolean;
 };
 
@@ -95,7 +95,7 @@ function ConventionDayTabContainer({
   prefetchTimespan,
   children,
   showExtendedCounts,
-}: ConventionDayTabContainerProps) {
+}: ConventionDayTabContainerProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();
   const conventionDayUrlPortion = useConventionDayUrlPortion();

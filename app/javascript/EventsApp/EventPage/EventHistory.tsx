@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import { useEventHistoryQuery } from './eventHistoryQuery.generated';
+import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -20,54 +20,43 @@ export type EventHistoryProps = {
   eventPath: string;
 };
 
-function EventHistory({ eventId, eventPath }: EventHistoryProps) {
-  const { t } = useTranslation();
-  const { data, loading, error } = useEventHistoryQuery({
-    variables: { id: eventId },
-  });
+export default LoadQueryWithVariablesWrapper(
+  useEventHistoryQuery,
+  ({ eventId }: EventHistoryProps) => ({ id: eventId }),
+  function EventHistory({ data, eventPath }) {
+    const { t } = useTranslation();
 
-  const changes = useMemo(
-    () =>
-      loading || error || !data
-        ? []
-        : data.event.form_response_changes.filter(
-            (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
-          ),
-    [data, error, loading],
-  );
+    const changes = useMemo(
+      () =>
+        data.convention.event.form_response_changes.filter(
+          (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
+        ),
+      [data],
+    );
 
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
+    return (
+      <>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <BreadcrumbItem to={eventPath} active={false}>
+              {data.convention.event.title}
+            </BreadcrumbItem>
+            <RouteActivatedBreadcrumbItem
+              matchProps={{ path: `${eventPath}/history`, exact: true }}
+              to={`${eventPath}/history`}
+            >
+              {t('events.history.title', 'History')}
+            </RouteActivatedBreadcrumbItem>
+          </ol>
+        </nav>
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <BreadcrumbItem to={eventPath} active={false}>
-            {data!.event.title}
-          </BreadcrumbItem>
-          <RouteActivatedBreadcrumbItem
-            matchProps={{ path: `${eventPath}/history`, exact: true }}
-            to={`${eventPath}/history`}
-          >
-            {t('events.history.title', 'History')}
-          </RouteActivatedBreadcrumbItem>
-        </ol>
-      </nav>
-
-      <FormResponseChangeHistory
-        changes={changes}
-        convention={data!.convention!}
-        basePath={`${eventPath}/history`}
-        form={data!.event.event_category.event_form}
-      />
-    </>
-  );
-}
-
-export default EventHistory;
+        <FormResponseChangeHistory
+          changes={changes}
+          convention={data.convention}
+          basePath={`${eventPath}/history`}
+          form={data.convention.event.event_category.event_form}
+        />
+      </>
+    );
+  },
+);

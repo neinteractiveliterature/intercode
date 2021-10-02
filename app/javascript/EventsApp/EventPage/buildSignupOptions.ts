@@ -63,7 +63,7 @@ function buildBucketSignupOption(
 }
 
 function buildNoPreferenceOptions(
-  event: Pick<EventPageQueryData['event'], 'registration_policy'>,
+  event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>,
 ): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
@@ -147,7 +147,7 @@ export type PartitionedSignupOptions = {
 export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
   userConProfile?: { id: number },
-) {
+): PartitionedSignupOptions {
   const allOptions = allSignupOptions(event, userConProfile);
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
   const notCountedOptions = allOptions.filter((option) => !option.counted);

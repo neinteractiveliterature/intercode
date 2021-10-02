@@ -51,15 +51,22 @@ function parseFilters(filters: Filters<PersonalScheduleFilter>) {
   return { choiceSetValue, ratingFilter, hideConflicts };
 }
 
-type UsePersonalScheduleFiltersOptions = {
+export type UsePersonalScheduleFiltersOptions = {
   showPersonalFilters: boolean;
   signedIn: boolean;
+};
+
+export type UsePersonalScheduleFiltersResult = {
+  choiceSetValue: string[];
+  choiceSetChanged: React.Dispatch<string[]>;
+  ratingFilter: number[];
+  hideConflicts: boolean;
 };
 
 export function usePersonalScheduleFilters({
   showPersonalFilters,
   signedIn,
-}: UsePersonalScheduleFiltersOptions) {
+}: UsePersonalScheduleFiltersOptions): UsePersonalScheduleFiltersResult {
   const { filters, updateSearch } = useReactRouterReactTable<PersonalScheduleFilter>({
     ...filterCodecs,
   });
@@ -127,7 +134,7 @@ type PersonalScheduleFiltersBarProps = {
 function PersonalScheduleFiltersBar({
   choiceSetValue,
   choiceSetChanged,
-}: PersonalScheduleFiltersBarProps) {
+}: PersonalScheduleFiltersBarProps): JSX.Element {
   return (
     <ChoiceSetFilter
       choices={filterOptions}

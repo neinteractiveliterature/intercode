@@ -4,12 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsPartialFieldsFragment = { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean };
+export type CmsPartialFieldsFragment = { __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsPartialsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsPartialsAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, currentAbility: { __typename: 'Ability', can_create_cms_partials: boolean }, cmsPartials: Array<{ __typename: 'CmsPartial', id: number, name?: Types.Maybe<string>, content?: Types.Maybe<string>, admin_notes?: Types.Maybe<string>, current_ability_can_update: boolean, current_ability_can_delete: boolean }> };
+export type CmsPartialsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_partials: boolean }, cmsPartials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> };
 
 export const CmsPartialFieldsFragmentDoc = gql`
     fragment CmsPartialFields on CmsPartial {

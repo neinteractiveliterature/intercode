@@ -37,11 +37,13 @@ export type EventForSignupCountData = {
 export default class SignupCountData {
   data: SignupCountDataRow[];
 
-  static fromRun(run: { signup_count_by_state_and_bucket_key_and_counted: string }) {
+  static fromRun(run: {
+    signup_count_by_state_and_bucket_key_and_counted: string;
+  }): SignupCountData {
     return SignupCountData.fromJSON(run.signup_count_by_state_and_bucket_key_and_counted);
   }
 
-  static fromJSON(json: string) {
+  static fromJSON(json: string): SignupCountData {
     const rawData: SignupCountsByStateAndBucketKeyAndCounted = JSON.parse(json);
     const rows: SignupCountDataRow[] = flatMap(
       Object.entries(rawData),
@@ -65,11 +67,11 @@ export default class SignupCountData {
     this.data = data;
   }
 
-  filterRows(filters: SignupCountDataFilter) {
+  filterRows(filters: SignupCountDataFilter): SignupCountDataRow[] {
     return Object.entries(filters).reduce((filteredData, [field, value]) => {
       if (Array.isArray(value)) {
         return filteredData.filter((row) =>
-          (value as any[]).includes(row[field as keyof SignupCountDataFilter]),
+          (value as unknown[]).includes(row[field as keyof SignupCountDataFilter]),
         );
       }
 
@@ -77,11 +79,11 @@ export default class SignupCountData {
     }, this.data);
   }
 
-  sumSignupCounts(filters: SignupCountDataFilter) {
+  sumSignupCounts(filters: SignupCountDataFilter): number {
     return sum(this.filterRows(filters).map((row) => row.signup_count));
   }
 
-  getConfirmedLimitedSignupCount(event: EventForSignupCountData) {
+  getConfirmedLimitedSignupCount(event: EventForSignupCountData): number {
     if (!event.registration_policy) {
       return 0;
     }
@@ -96,11 +98,11 @@ export default class SignupCountData {
     });
   }
 
-  getNotCountedConfirmedSignupCount() {
+  getNotCountedConfirmedSignupCount(): number {
     return this.sumSignupCounts({ state: SignupState.Confirmed, counted: false });
   }
 
-  getWaitlistCount() {
+  getWaitlistCount(): number {
     return this.sumSignupCounts({ state: SignupState.Waitlisted });
   }
 

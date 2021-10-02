@@ -35,7 +35,7 @@ export type BucketInputProps = Omit<
   onChange: (newValue: string | null | undefined) => void;
 };
 
-const BucketInput = ({ signup, ...otherProps }: BucketInputProps) => {
+export default function BucketInput({ signup, ...otherProps }: BucketInputProps): JSX.Element {
   const { t } = useTranslation();
   const bucketChoices = (signup.run.event.registration_policy?.buckets ?? []).map((bucket) => ({
     value: bucket.key,
@@ -44,6 +44,4 @@ const BucketInput = ({ signup, ...otherProps }: BucketInputProps) => {
   }));
 
   return <MultipleChoiceInput multiple={false} choices={bucketChoices} {...otherProps} />;
-};
-
-export default BucketInput;
+}

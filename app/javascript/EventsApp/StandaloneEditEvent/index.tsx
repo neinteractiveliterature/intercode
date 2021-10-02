@@ -22,9 +22,10 @@ import {
   useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
   useStandaloneUpdateEventMutation,
 } from './mutations.generated';
+import FourOhFourPage from '../../FourOhFourPage';
 
 export type StandaloneEditEventFormProps = {
-  initialEvent: WithFormResponse<StandaloneEditEventQueryData['event']>;
+  initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
   eventPath: string;
   eventForm: CommonFormFieldsFragment;
   convention: NonNullable<StandaloneEditEventQueryData['convention']>;
@@ -80,17 +81,20 @@ function StandaloneEditEventForm({
         if (!storeData) {
           return;
         }
-        store.writeQuery({
+        store.writeQuery<StandaloneEditEventQueryData>({
           query: StandaloneEditEventQueryDocument,
           ...queryOptions,
           data: {
             ...storeData,
-            event: {
-              ...storeData.event,
-              maximum_event_provided_tickets_overrides: [
-                ...storeData.event.maximum_event_provided_tickets_overrides,
-                override,
-              ],
+            convention: {
+              ...storeData.convention,
+              event: {
+                ...storeData.convention.event,
+                maximum_event_provided_tickets_overrides: [
+                  ...storeData.convention.event.maximum_event_provided_tickets_overrides,
+                  override,
+                ],
+              },
             },
           },
         });
@@ -107,17 +111,20 @@ function StandaloneEditEventForm({
         if (!storeData) {
           return;
         }
-        store.writeQuery({
+        store.writeQuery<StandaloneEditEventQueryData>({
           query: StandaloneEditEventQueryDocument,
           ...queryOptions,
           data: {
             ...storeData,
-            event: {
-              ...storeData.event,
-              maximum_event_provided_tickets_overrides:
-                storeData.event.maximum_event_provided_tickets_overrides.filter(
-                  (override) => override.id !== id,
-                ),
+            convention: {
+              ...storeData.convention,
+              event: {
+                ...storeData.convention.event,
+                maximum_event_provided_tickets_overrides:
+                  storeData.convention.event.maximum_event_provided_tickets_overrides.filter(
+                    (override) => override.id !== id,
+                  ),
+              },
             },
           },
         });
@@ -156,11 +163,11 @@ export type StandaloneEditEventProps = {
   eventPath: string;
 };
 
-function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
+function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): JSX.Element {
   const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId } });
 
   const initialEvent = useMemo(
-    () => (error || loading || !data ? null : deserializeFormResponse(data.event)),
+    () => (error || loading || !data ? null : deserializeFormResponse(data.convention.event)),
     [error, loading, data],
   );
 
@@ -174,17 +181,21 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data || !initialEvent) {
+    return <FourOhFourPage />;
+  }
+
   if (data && !data.currentAbility.can_update_event) {
     return <Redirect to="/" />;
   }
 
   return (
     <StandaloneEditEventForm
-      initialEvent={initialEvent!}
-      eventForm={data!.event.event_category.event_form}
-      convention={data!.convention!}
+      initialEvent={initialEvent}
+      eventForm={data.convention.event.event_category.event_form}
+      convention={data.convention}
       eventPath={eventPath}
-      currentAbility={data!.currentAbility}
+      currentAbility={data.currentAbility}
     />
   );
 }

@@ -4,12 +4,12 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> };
+export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> };
 
 export type OrganizationAdminOrganizationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: number, name: string, current_ability_can_manage_access: boolean, conventions: Array<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any> }>, organization_roles: Array<{ __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> }> }> };
+export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: number, name: string, current_ability_can_manage_access: boolean, conventions: Array<{ __typename: 'Convention', id: number, name: string, starts_at?: any | null | undefined }>, organization_roles: Array<{ __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> }> }> };
 
 export const OrganizationRoleFieldsFragmentDoc = gql`
     fragment OrganizationRoleFields on OrganizationRole {

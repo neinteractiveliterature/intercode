@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
 import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
+import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
 type FakeRunProps = {
-  event: EventPageQueryData['event'];
+  event: EventPageQueryData['convention']['event'];
 };
 
 function FakeRun({ event }: FakeRunProps) {
@@ -41,48 +41,39 @@ export type RunsSectionProps = {
   eventId: number;
 };
 
-function RunsSection({ eventId }: RunsSectionProps) {
-  const { data, loading, error } = useEventPageQuery({ variables: { eventId } });
+export default LoadQueryWithVariablesWrapper(
+  useEventPageQuery,
+  ({ eventId }: RunsSectionProps) => ({ eventId }),
+  function RunsSection({ data }) {
+    const sortedRuns = useMemo(
+      () => sortBy(data.convention.event.runs, (run) => DateTime.fromISO(run.starts_at).toMillis()),
+      [data],
+    );
 
-  const sortedRuns = useMemo(
-    () =>
-      error || loading || !data
-        ? []
-        : sortBy(data.event.runs, (run) => DateTime.fromISO(run.starts_at).toMillis()),
-    [data, error, loading],
-  );
+    const { currentAbility, convention } = data;
+    const myProfile = convention.my_profile;
+    const event = convention.event;
 
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
+    const showFakeRun =
+      sortedRuns.length === 0 ||
+      (convention?.site_mode === 'convention' && !currentAbility.can_read_schedule);
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { currentAbility, myProfile, convention, event } = data!;
-
-  const showFakeRun =
-    sortedRuns.length === 0 ||
-    (convention?.site_mode === 'convention' && !currentAbility.can_read_schedule);
-
-  return (
-    <div className="run-card-deck">
-      {showFakeRun ? (
-        <FakeRun event={event} />
-      ) : (
-        sortedRuns.map((run) => (
-          <EventPageRunCard
-            event={event}
-            run={run}
-            key={run.id}
-            myProfile={myProfile}
-            currentAbility={currentAbility}
-          />
-        ))
-      )}
-    </div>
-  );
-}
-
-export default RunsSection;
+    return (
+      <div className="run-card-deck">
+        {showFakeRun ? (
+          <FakeRun event={event} />
+        ) : (
+          sortedRuns.map((run) => (
+            <EventPageRunCard
+              event={event}
+              run={run}
+              key={run.id}
+              myProfile={myProfile}
+              currentAbility={currentAbility}
+            />
+          ))
+        )}
+      </div>
+    );
+  },
+);

@@ -9,7 +9,7 @@ export type OAuthAuthorizationPromptQueryVariables = Types.Exact<{
 }>;
 
 
-export type OAuthAuthorizationPromptQueryData = { __typename: 'Query', oauthPreAuth: any, currentUser?: Types.Maybe<{ __typename: 'User', id: number }> };
+export type OAuthAuthorizationPromptQueryData = { __typename: 'Query', oauthPreAuth: any, currentUser?: { __typename: 'User', id: number } | null | undefined };
 
 export type OAuthAuthorizedApplicationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 

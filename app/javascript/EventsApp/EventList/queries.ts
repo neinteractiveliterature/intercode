@@ -12,7 +12,7 @@ export const EventListEventsQuery = gql`
       can_read_schedule
     }
 
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
 

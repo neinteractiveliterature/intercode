@@ -9,14 +9,14 @@ export type CreateRoomMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateRoomMutationData = { __typename: 'Mutation', createRoom: { __typename: 'CreateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } } };
+export type CreateRoomMutationData = { __typename: 'Mutation', createRoom: { __typename: 'CreateRoomPayload', room: { __typename: 'Room', id: number, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: number }> } } };
 
 export type UpdateRoomMutationVariables = Types.Exact<{
   input: Types.UpdateRoomInput;
 }>;
 
 
-export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom: { __typename: 'UpdateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } } };
+export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom: { __typename: 'UpdateRoomPayload', room: { __typename: 'Room', id: number, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: number }> } } };
 
 export type DeleteRoomMutationVariables = Types.Exact<{
   input: Types.DeleteRoomInput;

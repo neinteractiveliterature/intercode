@@ -2,7 +2,7 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 
-function ScheduleGridSkeleton() {
+function ScheduleGridSkeleton(): JSX.Element {
   return (
     <div className="schedule-grid mb-4">
       <div

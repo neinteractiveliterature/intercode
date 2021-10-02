@@ -20,10 +20,10 @@ function describeBucketCapacity(
 }
 
 export type EventCapacityDisplayProps = {
-  event: EventPageQueryData['event'];
+  event: EventPageQueryData['convention']['event'];
 };
 
-function EventCapacityDisplay({ event }: EventCapacityDisplayProps) {
+function EventCapacityDisplay({ event }: EventCapacityDisplayProps): JSX.Element {
   const { t } = useTranslation();
   return (
     <ul className="list-inline mb-0">

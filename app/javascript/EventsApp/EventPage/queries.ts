@@ -81,64 +81,64 @@ export const EventPageQuery = gql`
       can_read_event_signups(event_id: $eventId)
     }
 
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
-    }
 
-    myProfile {
-      id
-    }
-
-    event(id: $eventId) {
-      id
-      title
-      length_seconds
-      private_signup_list
-      my_rating
-      can_play_concurrently
-      form_response_attrs_json_with_rendered_markdown
-
-      event_category {
+      my_profile {
         id
-        team_member_name
       }
 
-      form {
+      event(id: $eventId) {
         id
-        ...CommonFormFields
+        title
+        length_seconds
+        private_signup_list
+        my_rating
+        can_play_concurrently
+        form_response_attrs_json_with_rendered_markdown
 
-        form_sections {
+        event_category {
           id
-          ...CommonFormSectionFields
+          team_member_name
+        }
 
-          form_items {
+        form {
+          id
+          ...CommonFormFields
+
+          form_sections {
             id
-            public_description
-            ...CommonFormItemFields
+            ...CommonFormSectionFields
+
+            form_items {
+              id
+              public_description
+              ...CommonFormItemFields
+            }
           }
         }
-      }
 
-      team_members {
-        id
-        email
-        display_team_member
-        user_con_profile {
+        team_members {
           id
-          name_without_nickname
-          gravatar_enabled
-          gravatar_url
+          email
+          display_team_member
+          user_con_profile {
+            id
+            name_without_nickname
+            gravatar_enabled
+            gravatar_url
+          }
         }
-      }
 
-      registration_policy {
-        ...RunCardRegistrationPolicyFields
-      }
+        registration_policy {
+          ...RunCardRegistrationPolicyFields
+        }
 
-      runs {
-        id
-        ...EventPageRunFields
+        runs {
+          id
+          ...EventPageRunFields
+        }
       }
     }
   }
@@ -151,22 +151,26 @@ export const EventPageQuery = gql`
 
 export const CreateModeratedSignupModalQuery = gql`
   query CreateModeratedSignupModalQuery {
-    myProfile {
+    convention: conventionByRequestHost {
       id
 
-      signups {
+      my_profile {
         id
-        state
 
-        run {
+        signups {
           id
-          starts_at
+          state
 
-          event {
+          run {
             id
-            title
-            length_seconds
-            can_play_concurrently
+            starts_at
+
+            event {
+              id
+              title
+              length_seconds
+              can_play_concurrently
+            }
           }
         }
       }

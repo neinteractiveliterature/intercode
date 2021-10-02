@@ -7,12 +7,12 @@ const defaultOptions =  {}
 export type AccountFormContentQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AccountFormContentQueryData = { __typename: 'Query', accountFormContentHtml?: Types.Maybe<string> };
+export type AccountFormContentQueryData = { __typename: 'Query', accountFormContentHtml?: string | null | undefined };
 
 export type EditUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EditUserQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, currentUser?: Types.Maybe<{ __typename: 'User', id: number, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string> }> };
+export type EditUserQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentUser?: { __typename: 'User', id: number, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined } | null | undefined };
 
 
 export const AccountFormContentQueryDocument = gql`

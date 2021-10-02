@@ -25,7 +25,7 @@ export type DeleteCmsFileMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId?: Types.Maybe<string> } };
+export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateCmsFileDocument = gql`

@@ -43,8 +43,8 @@ export const ScheduleGridEventFragment = gql`
       title_suffix
 
       ...RunBasicSignupData
-      confirmed_signup_count @include(if: $extendedCounts)
-      not_counted_signup_count @include(if: $extendedCounts)
+      confirmed_signup_count
+      not_counted_signup_count
 
       room_names
     }
@@ -66,10 +66,13 @@ export const ScheduleGridConventionDataQuery = gql`
 `;
 
 export const ScheduleGridEventsQuery = gql`
-  query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
-    events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+  query ScheduleGridEventsQuery($start: Date, $finish: Date) {
+    convention: conventionByRequestHost {
       id
-      ...ScheduleGridEventFragment
+      events(start: $start, finish: $finish) {
+        id
+        ...ScheduleGridEventFragment
+      }
     }
   }
 
@@ -77,16 +80,16 @@ export const ScheduleGridEventsQuery = gql`
 `;
 
 export const ScheduleGridCombinedQuery = gql`
-  query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  query ScheduleGridCombinedQuery($start: Date, $finish: Date) {
     convention: conventionByRequestHost {
       id
       pre_schedule_content_html
       ...CommonConventionData
-    }
 
-    events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
-      id
-      ...ScheduleGridEventFragment
+      events(start: $start, finish: $finish) {
+        id
+        ...ScheduleGridEventFragment
+      }
     }
   }
 

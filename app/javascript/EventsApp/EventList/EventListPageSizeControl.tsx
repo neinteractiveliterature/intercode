@@ -5,13 +5,16 @@ export type EventListPageSizeControlProps = {
   onPageSizeChange: React.Dispatch<number>;
 };
 
-function EventListPageSizeControl({ pageSize, onPageSizeChange }: EventListPageSizeControlProps) {
+function EventListPageSizeControl({
+  pageSize,
+  onPageSizeChange,
+}: EventListPageSizeControlProps): JSX.Element {
   return (
     <div className="form-inline align-items-start">
       <select
         className="form-select mx-1"
         value={pageSize.toString()}
-        onChange={(event) => {
+        onBlur={(event) => {
           onPageSizeChange(Number.parseInt(event.target.value, 10));
         }}
       >

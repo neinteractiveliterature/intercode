@@ -10,7 +10,11 @@ export type SignupButtonDisplayProps = {
   disabled?: boolean;
 };
 
-function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDisplayProps) {
+function SignupButtonDisplay({
+  signupOption,
+  onClick,
+  disabled,
+}: SignupButtonDisplayProps): JSX.Element {
   const { t } = useTranslation();
   return (
     <ButtonWithTooltip

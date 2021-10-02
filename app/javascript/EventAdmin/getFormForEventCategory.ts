@@ -2,7 +2,7 @@ import { EventPageQueryData } from '../EventsApp/EventPage/queries.generated';
 import { FormType, EventCategory } from '../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 
-const BLANK_FORM: NonNullable<EventPageQueryData['event']['form']> = {
+const BLANK_FORM: NonNullable<EventPageQueryData['convention']['event']['form']> = {
   __typename: 'Form',
   id: 0,
   title: '',
@@ -37,7 +37,7 @@ function getFormDataForEventCategoryId<EventCategoryType extends EventCategoryFo
 export function getEventFormForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
   eventCategoryId: number | undefined | null,
   convention: ConventionForEventCategoryForms<EventCategoryType>,
-) {
+): CommonFormFieldsFragment {
   return getFormDataForEventCategoryId(
     eventCategoryId,
     convention,
@@ -48,7 +48,7 @@ export function getEventFormForEventCategoryId<EventCategoryType extends EventCa
 export function getProposalFormForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
   eventCategoryId: number | undefined | null,
   convention: ConventionForEventCategoryForms<EventCategoryType>,
-) {
+): CommonFormFieldsFragment {
   return getFormDataForEventCategoryId(
     eventCategoryId,
     convention,

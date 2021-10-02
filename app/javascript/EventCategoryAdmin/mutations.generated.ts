@@ -10,7 +10,7 @@ export type CreateEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: Types.Maybe<string>, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: Types.Maybe<{ __typename: 'Department', id: number, name: string }>, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> } } };
+export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: number, name: string } | null | undefined, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: number, title: string, form_type: Types.FormType } | null | undefined } } };
 
 export type UpdateEventCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,14 +18,14 @@ export type UpdateEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: Types.Maybe<string>, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: Types.Maybe<{ __typename: 'Department', id: number, name: string }>, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType }> } } };
+export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: number, name: string } | null | undefined, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: number, title: string, form_type: Types.FormType } | null | undefined } } };
 
 export type DeleteEventCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteEventCategoryMutationData = { __typename: 'Mutation', deleteEventCategory: { __typename: 'DeleteEventCategoryPayload', clientMutationId?: Types.Maybe<string> } };
+export type DeleteEventCategoryMutationData = { __typename: 'Mutation', deleteEventCategory: { __typename: 'DeleteEventCategoryPayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateEventCategoryDocument = gql`
