@@ -51,7 +51,7 @@ function ScheduleMultipleRunsModal({
   visible,
   onCancel,
   onFinish,
-}: ScheduleMultipleRunsModalProps) {
+}: ScheduleMultipleRunsModalProps): JSX.Element {
   const format = useAppDateTimeFormat();
   const [createMutate] = useCreateMultipleRunsMutation();
   const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(createMutate);
@@ -151,7 +151,7 @@ function ScheduleMultipleRunsModal({
           query: EventAdminEventsQuery,
           data: {
             ...eventsData,
-            events: eventsData.events.map((e) => {
+            events: eventsData.convention.events.map((e) => {
               if (e.id === event.id) {
                 return {
                   ...e,

@@ -24,11 +24,10 @@ import {
   useDeleteMaximumEventProvidedTicketsOverrideMutation,
 } from './mutations.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { parseIntOrNull } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
 export default LoadSingleValueFromCollectionWrapper(
   useEventAdminEventsQuery,
-  (data, id) => data.events.find((e) => e.id.toString() === id),
+  (data, id) => data.convention.events.find((e) => e.id.toString() === id),
   function EventAdminEditEventForm({ data, value: serializedEvent }) {
     const history = useHistory();
     const initialEvent = useMemo(() => deserializeFormResponse(serializedEvent), [serializedEvent]);
@@ -41,23 +40,29 @@ export default LoadSingleValueFromCollectionWrapper(
         const storeData = store.readQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQueryDocument,
         });
-        store.writeQuery({
+        if (!storeData) {
+          return;
+        }
+        store.writeQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQueryDocument,
           data: {
             ...storeData,
-            events: data.events.map((event) => {
-              if (event.id !== updatedEventId) {
-                return event;
-              }
+            convention: {
+              ...storeData.convention,
+              events: data.convention.events.map((event) => {
+                if (event.id !== updatedEventId) {
+                  return event;
+                }
 
-              return {
-                ...event,
-                maximum_event_provided_tickets_overrides: [
-                  ...event.maximum_event_provided_tickets_overrides,
-                  override,
-                ],
-              };
-            }),
+                return {
+                  ...event,
+                  maximum_event_provided_tickets_overrides: [
+                    ...event.maximum_event_provided_tickets_overrides,
+                    override,
+                  ],
+                };
+              }),
+            },
           },
         });
       },
@@ -65,17 +70,23 @@ export default LoadSingleValueFromCollectionWrapper(
         const storeData = store.readQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQueryDocument,
         });
-        store.writeQuery({
+        if (!storeData) {
+          return;
+        }
+        store.writeQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQueryDocument,
           data: {
             ...storeData,
-            events: data.events.map((event) => ({
-              ...event,
-              maximum_event_provided_tickets_overrides:
-                event.maximum_event_provided_tickets_overrides.filter(
-                  (mepto) => mepto.id !== overrideId,
-                ),
-            })),
+            convention: {
+              ...storeData.convention,
+              events: data.convention.events.map((event) => ({
+                ...event,
+                maximum_event_provided_tickets_overrides:
+                  event.maximum_event_provided_tickets_overrides.filter(
+                    (mepto) => mepto.id !== overrideId,
+                  ),
+              })),
+            },
           },
         });
       },

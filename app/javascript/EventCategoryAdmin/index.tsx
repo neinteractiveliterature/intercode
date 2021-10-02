@@ -7,7 +7,7 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function EventCategoryAdmin() {
+function EventCategoryAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_update_event_categories');
 
   if (authorizationWarning) return authorizationWarning;

@@ -10,37 +10,41 @@ import {
 import { EventAdminEventsQueryData } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 
-function useUpdateRegularEvent() {
+export type UseUpdateRegularEventOptions = {
+  event: Parameters<typeof buildEventInput>[0] & { id: number };
+};
+
+function useUpdateRegularEvent(): (options: UseUpdateRegularEventOptions) => Promise<void> {
   const [updateEventMutate] = useUpdateEventMutation();
   const updateEvent = useCallback(
-    ({ event }: { event: Parameters<typeof buildEventInput>[0] & { id: number } }) =>
-      updateEventMutate({
+    async ({ event }: UseUpdateRegularEventOptions) => {
+      await updateEventMutate({
         variables: {
           input: {
             ...buildEventInput(event),
             id: event.id,
           },
         },
-      }),
+      });
+    },
     [updateEventMutate],
   );
 
   return updateEvent;
 }
 
-function useUpdateSingleRunEvent() {
+export type UseUpdateSingleRunEventOptions = {
+  event: Parameters<typeof buildEventInput>[0] & { id: number };
+  run: Parameters<typeof buildRunInput>[0] & { id?: number | null };
+};
+
+function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) => Promise<void> {
   const [updateEvent] = useUpdateEventMutation();
   const [createRun] = useCreateRunMutation();
   const [updateRun] = useUpdateRunMutation();
 
   return useCallback(
-    async ({
-      event,
-      run,
-    }: {
-      event: Parameters<typeof buildEventInput>[0] & { id: number };
-      run: Parameters<typeof buildRunInput>[0] & { id?: number | null };
-    }) => {
+    async ({ event, run }: UseUpdateSingleRunEventOptions) => {
       const eventInput = {
         ...buildEventInput(event),
         id: event.id,
@@ -76,20 +80,23 @@ function useUpdateSingleRunEvent() {
               return;
             }
 
-            store.writeQuery({
+            store.writeQuery<EventAdminEventsQueryData>({
               query: EventAdminEventsQuery,
               data: {
                 ...eventsData,
-                events: eventsData.events.map((existingEvent) => {
-                  if (existingEvent.id === event.id) {
-                    return {
-                      ...existingEvent,
-                      runs: [...existingEvent.runs, newRun],
-                    };
-                  }
+                convention: {
+                  ...eventsData.convention,
+                  events: eventsData.convention.events.map((existingEvent) => {
+                    if (existingEvent.id === event.id) {
+                      return {
+                        ...existingEvent,
+                        runs: [...existingEvent.runs, newRun],
+                      };
+                    }
 
-                  return existingEvent;
-                }),
+                    return existingEvent;
+                  }),
+                },
               },
             });
           },
@@ -100,20 +107,18 @@ function useUpdateSingleRunEvent() {
   );
 }
 
-export default function useUpdateEvent() {
+export type UseUpdateEventOptions = {
+  event: Parameters<typeof buildEventInput>[0] & { id: number };
+  eventCategory: Pick<EventCategory, 'scheduling_ui'>;
+  run?: Parameters<typeof buildRunInput>[0] & { id?: number | null };
+};
+
+export default function useUpdateEvent(): (options: UseUpdateEventOptions) => Promise<void> {
   const updateRegularEvent = useUpdateRegularEvent();
   const updateSingleRunEvent = useUpdateSingleRunEvent();
 
   const updateEvent = useCallback(
-    ({
-      event,
-      eventCategory,
-      run,
-    }: {
-      event: Parameters<typeof buildEventInput>[0] & { id: number };
-      eventCategory: Pick<EventCategory, 'scheduling_ui'>;
-      run?: Parameters<typeof buildRunInput>[0] & { id?: number | null };
-    }) => {
+    ({ event, eventCategory, run }: UseUpdateEventOptions) => {
       if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
         if (!run) {
           throw new Error('When updating a single-run event, the run must be provided');

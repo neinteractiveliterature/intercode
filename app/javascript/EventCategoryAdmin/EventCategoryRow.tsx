@@ -12,7 +12,7 @@ export type EventCategoryRowProps = {
   eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][0];
 };
 
-function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
+function EventCategoryRow({ eventCategory }: EventCategoryRowProps): JSX.Element {
   const confirm = useConfirm();
   const deleteEventCategory = useDeleteMutation(DeleteEventCategory, {
     query: EventCategoryAdminQuery,

@@ -12,30 +12,27 @@ function getNormalizedEventTitle<EventType extends Pick<Event, 'title'>>(event: 
 }
 
 export default function useEventAdminCategory(
-  data: EventAdminEventsQueryData | undefined,
-  loading: boolean,
-  error: Error | undefined,
+  data: EventAdminEventsQueryData,
   eventCategoryId: number,
-) {
+): [
+  EventAdminEventsQueryData['convention']['event_categories'][number] | undefined,
+  EventAdminEventsQueryData['convention']['events'],
+] {
   const eventCategory = useMemo(
-    () =>
-      loading || error || !data
-        ? null
-        : data.convention!.event_categories.find((c) => c.id === eventCategoryId),
-    [data, loading, error, eventCategoryId],
+    () => data.convention.event_categories.find((c) => c.id === eventCategoryId),
+    [data, eventCategoryId],
   );
   const filteredEvents = useMemo(
     () =>
-      error || loading || !data
-        ? []
-        : data.events.filter(
-            (event) => event.event_category.id === eventCategoryId && event.status === 'active',
-          ),
-    [data, loading, error, eventCategoryId],
+      data.convention.events.filter(
+        (event) => event.event_category.id === eventCategoryId && event.status === 'active',
+      ),
+    [data, eventCategoryId],
   );
-  const sortedEvents = useMemo(() => sortByLocaleString(filteredEvents, getNormalizedEventTitle), [
-    filteredEvents,
-  ]);
+  const sortedEvents = useMemo(
+    () => sortByLocaleString(filteredEvents, getNormalizedEventTitle),
+    [filteredEvents],
+  );
 
-  return [eventCategory, sortedEvents] as const;
+  return [eventCategory, sortedEvents];
 }

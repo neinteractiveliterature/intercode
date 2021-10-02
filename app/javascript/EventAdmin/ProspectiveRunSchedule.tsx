@@ -1,7 +1,7 @@
 import { useMemo, useContext, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import { DateTime } from 'luxon';
-import { notEmpty } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform';
 
 import {
   ScheduleGridContext,
@@ -34,6 +34,8 @@ import {
   useEventAdminEventsQuery,
   EventFieldsFragment,
   RunFieldsFragment,
+  EventAdminEventsQueryData,
+  EventAdminEventsQueryVariables,
 } from './queries.generated';
 import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
@@ -165,134 +167,131 @@ export type ProspectiveRunScheduleProps = {
   event: EventFieldsFragment;
 };
 
-function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps) {
-  const { timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useEventAdminEventsQuery();
+export default LoadQueryWrapper<
+  EventAdminEventsQueryData,
+  EventAdminEventsQueryVariables,
+  ProspectiveRunScheduleProps
+>(
+  useEventAdminEventsQuery,
+  function ProspectiveRunSchedule({ day, runs, event, data }): JSX.Element {
+    const { timezoneName } = useContext(AppRootContext);
 
-  const conventionTimespan = useMemo(
-    () => (error || loading ? null : timespanFromConvention(data!.convention!)),
-    [error, loading, data],
-  );
+    const conventionTimespan = useMemo(() => timespanFromConvention(data.convention), [data]);
 
-  const prospectiveRuns: ProspectiveRun[] = useMemo(
-    () =>
-      runs.map((run) => ({
-        __typename: 'Run',
-        id: run.id,
-        event_id: event.id,
-        starts_at: run.starts_at,
-        rooms: run.rooms,
-        schedule_note: null,
-        title_suffix: null,
-        prospectiveRun: true,
-        confirmed_signup_count: 0,
-        not_counted_signup_count: 0,
-        signup_count_by_state_and_bucket_key_and_counted: '{}',
-        room_names: (run.rooms ?? []).map((room) => room.name).filter(notEmpty),
-        my_signups: [],
-        my_signup_requests: [],
-      })),
-    [runs, event.id],
-  );
+    const prospectiveRuns: ProspectiveRun[] = useMemo(
+      () =>
+        runs.map((run) => ({
+          __typename: 'Run',
+          id: run.id,
+          event_id: event.id,
+          starts_at: run.starts_at,
+          rooms: run.rooms,
+          schedule_note: null,
+          title_suffix: null,
+          prospectiveRun: true,
+          confirmed_signup_count: 0,
+          not_counted_signup_count: 0,
+          signup_count_by_state_and_bucket_key_and_counted: '{}',
+          room_names: (run.rooms ?? []).map((room) => room.name).filter(notEmpty),
+          my_signups: [],
+          my_signup_requests: [],
+        })),
+      [runs, event.id],
+    );
 
-  const eventsForSchedule: ScheduleGridEventFragment[] | undefined = useMemo(() => {
-    if (error || loading || !data) {
-      return undefined;
-    }
-
-    const filteredEvents = data.events.map((e) => {
-      if (e.id === event.id) {
-        return {
-          ...e,
-          runs: [...e.runs.filter((r) => runs.find((run) => run.id === r.id) == null)],
-        };
-      }
-
-      return e;
-    });
-
-    const effectiveEvents = filteredEvents.some((e) => e.id === event.id)
-      ? filteredEvents
-      : [...filteredEvents, event];
-
-    if (prospectiveRuns) {
-      return effectiveEvents.map((e) => {
+    const eventsForSchedule: ScheduleGridEventFragment[] | undefined = useMemo(() => {
+      const filteredEvents = data.convention.events.map((e) => {
         if (e.id === event.id) {
           return {
             ...e,
-            runs: [...e.runs, ...prospectiveRuns],
+            runs: [...e.runs.filter((r) => runs.find((run) => run.id === r.id) == null)],
           };
         }
 
         return e;
       });
+
+      const effectiveEvents = filteredEvents.some((e) => e.id === event.id)
+        ? filteredEvents
+        : [...filteredEvents, event];
+
+      if (prospectiveRuns) {
+        return effectiveEvents.map((e) => {
+          if (e.id === event.id) {
+            return {
+              ...e,
+              runs: [...e.runs, ...prospectiveRuns],
+            };
+          }
+
+          return e;
+        });
+      }
+
+      return effectiveEvents;
+    }, [data, event, prospectiveRuns, runs]);
+
+    const conventionDayTimespans = useMemo(
+      () =>
+        conventionTimespan?.isFinite()
+          ? getConventionDayTimespans(conventionTimespan, timezoneName)
+          : undefined,
+      [conventionTimespan, timezoneName],
+    );
+
+    const conventionDayTimespan = useMemo(() => {
+      if (!day) {
+        return undefined;
+      }
+      const dayTimespan = Timespan.finiteFromDateTimes(day, day.endOf('day'));
+      return conventionDayTimespans?.find((cdt) => cdt.overlapsTimespan(dayTimespan));
+    }, [conventionDayTimespans, day]);
+
+    const scheduleGridProviderValue = useScheduleGridProvider(
+      SCHEDULE_GRID_CONFIG,
+      data?.convention ?? undefined,
+      eventsForSchedule,
+    );
+    const layout = useLayoutForTimespan(scheduleGridProviderValue.schedule, conventionDayTimespan);
+
+    if (!layout) {
+      return <></>;
     }
 
-    return effectiveEvents;
-  }, [data, error, loading, event, prospectiveRuns, runs]);
-
-  const conventionDayTimespans = useMemo(
-    () =>
-      conventionTimespan?.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName)
-        : undefined,
-    [conventionTimespan, timezoneName],
-  );
-
-  const conventionDayTimespan = useMemo(() => {
-    if (!day) {
-      return undefined;
-    }
-    const dayTimespan = Timespan.finiteFromDateTimes(day, day.endOf('day'));
-    return conventionDayTimespans?.find((cdt) => cdt.overlapsTimespan(dayTimespan));
-  }, [conventionDayTimespans, day]);
-
-  const scheduleGridProviderValue = useScheduleGridProvider(
-    SCHEDULE_GRID_CONFIG,
-    data?.convention ?? undefined,
-    eventsForSchedule,
-  );
-  const layout = useLayoutForTimespan(scheduleGridProviderValue.schedule, conventionDayTimespan);
-
-  if (!layout) {
-    return null;
-  }
-
-  return (
-    <ScheduleGridContext.Provider value={scheduleGridProviderValue}>
-      <div className="schedule-grid mb-4" style={{ overflowX: 'auto' }}>
-        <div
-          className="schedule-grid-content"
-          style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}
-        >
-          <div className="mt-1 d-flex">
-            {scheduleGridProviderValue.schedule.shouldUseRowHeaders() ? (
-              <div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />
-            ) : null}
-            <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
-          </div>
-          {layout.blocksWithOptions.map(([layoutBlock, options]) => (
-            <div
-              className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
-              key={layoutBlock.id}
-            >
-              <ScheduleBlock
-                layoutBlock={layoutBlock}
-                rowHeader={options.rowHeader}
-                renderEventRun={({ layoutResult, runDimensions }) => (
-                  <ProspectiveRunScheduleEventRun
-                    convention={data!.convention!}
-                    layoutResult={layoutResult}
-                    runDimensions={runDimensions}
-                  />
-                )}
-              />
+    return (
+      <ScheduleGridContext.Provider value={scheduleGridProviderValue}>
+        <div className="schedule-grid mb-4" style={{ overflowX: 'auto' }}>
+          <div
+            className="schedule-grid-content"
+            style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}
+          >
+            <div className="mt-1 d-flex">
+              {scheduleGridProviderValue.schedule.shouldUseRowHeaders() ? (
+                <div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />
+              ) : null}
+              <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
             </div>
-          ))}
+            {layout.blocksWithOptions.map(([layoutBlock, options]) => (
+              <div
+                className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
+                key={layoutBlock.id}
+              >
+                <ScheduleBlock
+                  layoutBlock={layoutBlock}
+                  rowHeader={options.rowHeader}
+                  renderEventRun={({ layoutResult, runDimensions }) => (
+                    <ProspectiveRunScheduleEventRun
+                      convention={data.convention}
+                      layoutResult={layoutResult}
+                      runDimensions={runDimensions}
+                    />
+                  )}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </ScheduleGridContext.Provider>
-  );
-}
-
-export default ProspectiveRunSchedule;
+      </ScheduleGridContext.Provider>
+    );
+  },
+);

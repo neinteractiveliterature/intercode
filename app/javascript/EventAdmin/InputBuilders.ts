@@ -5,7 +5,7 @@ export function buildEventInput(
   event: FormResponse & {
     event_category: { id: number };
   },
-  defaultFormResponseAttrs: any = {},
+  defaultFormResponseAttrs: Record<string, unknown> = {},
 ): { event: EventInput } {
   const { total_slots: totalSlots, ...formResponseAttrs } = event.form_response_attrs;
 

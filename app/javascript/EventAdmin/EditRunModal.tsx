@@ -40,7 +40,7 @@ function EditRunModal({
   onSaveSucceeded,
   onSaveStart,
   onDelete,
-}: EditRunModalProps) {
+}: EditRunModalProps): JSX.Element {
   const [createRun] = useCreateRunMutation();
   const [updateRun] = useUpdateRunMutation();
   const [deleteMutate] = useDeleteRunMutation();
@@ -82,17 +82,20 @@ function EditRunModal({
         if (!eventsData || !newRun) {
           return;
         }
-        store.writeQuery({
+        store.writeQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQuery,
           data: {
             ...eventsData,
-            events: eventsData.events.map((e) => {
-              if (e.id === event.id) {
-                return { ...e, runs: [...e.runs, newRun] };
-              }
+            convention: {
+              ...eventsData.convention,
+              events: eventsData.convention.events.map((e) => {
+                if (e.id === event.id) {
+                  return { ...e, runs: [...e.runs, newRun] };
+                }
 
-              return e;
-            }),
+                return e;
+              }),
+            },
           },
         });
       },
@@ -124,20 +127,23 @@ function EditRunModal({
         if (!eventsData) {
           return;
         }
-        store.writeQuery({
+        store.writeQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQuery,
           data: {
             ...eventsData,
-            events: eventsData.events.map((e) => {
-              if (e.id === event.id) {
-                return {
-                  ...e,
-                  runs: e.runs.filter((r) => r.id !== run.id),
-                };
-              }
+            convention: {
+              ...eventsData.convention,
+              events: eventsData.convention.events.map((e) => {
+                if (e.id === event.id) {
+                  return {
+                    ...e,
+                    runs: e.runs.filter((r) => r.id !== run.id),
+                  };
+                }
 
-              return e;
-            }),
+                return e;
+              }),
+            },
           },
         });
       },

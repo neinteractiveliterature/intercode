@@ -8,7 +8,7 @@ import { useEventCategoryAdminQuery } from './queries.generated';
 export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCategoryIndex({ data }) {
   usePageTitle('Event Categories');
 
-  const { event_categories: eventCategories } = data!.convention;
+  const { event_categories: eventCategories } = data.convention;
 
   return (
     <>
