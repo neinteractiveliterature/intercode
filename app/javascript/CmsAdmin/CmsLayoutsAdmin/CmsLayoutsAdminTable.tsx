@@ -4,7 +4,7 @@ import {
   ErrorDisplay,
   useConfirm,
   sortByLocaleString,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
 import { CmsLayoutsAdminQuery } from './queries';
@@ -13,8 +13,7 @@ import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsLayoutsAdminQuery } from './queries.generated';
 
-function CmsLayoutsAdminTable() {
-  const { data, loading, error } = useCmsLayoutsAdminQuery();
+export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdminTable({ data }) {
   const confirm = useConfirm();
   const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
     query: CmsLayoutsAdminQuery,
@@ -23,22 +22,10 @@ function CmsLayoutsAdminTable() {
   });
 
   const layoutsSorted = useMemo(() => {
-    if (loading || error || !data) {
-      return [];
-    }
-
-    return sortByLocaleString(data.cmsLayouts, (layout) => layout.name ?? '');
-  }, [data, loading, error]);
+    return sortByLocaleString(data.cmsParent.cmsLayouts, (layout) => layout.name ?? '');
+  }, [data]);
 
   usePageTitle('CMS Layouts');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const deleteLayout = (id: number) => deleteLayoutMutate({ variables: { id } });
 
@@ -91,13 +78,11 @@ function CmsLayoutsAdminTable() {
         </tbody>
       </table>
 
-      {data!.currentAbility.can_create_cms_layouts && (
+      {data.currentAbility.can_create_cms_layouts && (
         <Link to="/cms_layouts/new" className="btn btn-secondary">
           New layout
         </Link>
       )}
     </>
   );
-}
-
-export default CmsLayoutsAdminTable;
+});

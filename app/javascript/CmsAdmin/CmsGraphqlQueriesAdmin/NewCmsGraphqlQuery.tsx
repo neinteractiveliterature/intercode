@@ -12,7 +12,7 @@ import { useCreateMutation } from '../../MutationUtils';
 
 import 'graphiql/graphiql.css';
 
-function NewCmsGraphqlQuery() {
+function NewCmsGraphqlQuery(): JSX.Element {
   const history = useHistory();
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
   const [create, createError, createInProgress] = useAsyncFunction(

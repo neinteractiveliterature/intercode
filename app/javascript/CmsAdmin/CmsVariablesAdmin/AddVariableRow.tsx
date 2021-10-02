@@ -6,7 +6,7 @@ import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
 import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';
 
-export type AddingVariable = Omit<CmsVariablesQueryData['cmsVariables'][0], 'id'> & {
+export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;
 };
 
@@ -17,7 +17,12 @@ export type AddVariableRowProps = {
   onCancel: (id: number) => void;
 };
 
-function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRowProps) {
+function AddVariableRow({
+  variable,
+  onChange,
+  onSave,
+  onCancel,
+}: AddVariableRowProps): JSX.Element {
   const [setCmsVariableMutate] = useSetCmsVariableMutation();
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();

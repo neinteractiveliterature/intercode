@@ -23,7 +23,7 @@ export type CmsPageFormProps<T extends PageFormFields> = {
   page: T;
   onChange?: React.Dispatch<React.SetStateAction<T>>;
   cmsParent: CmsPagesAdminQueryData['cmsParent'];
-  cmsLayouts: CmsPagesAdminQueryData['cmsLayouts'];
+  cmsLayouts: CmsPagesAdminQueryData['cmsParent']['cmsLayouts'];
   readOnly?: boolean;
 };
 
@@ -33,7 +33,7 @@ function CmsPageForm<T extends PageFormFields>({
   cmsParent,
   cmsLayouts,
   readOnly,
-}: CmsPageFormProps<T>) {
+}: CmsPageFormProps<T>): JSX.Element {
   const [
     setName,
     setAdminNotes,
@@ -59,7 +59,7 @@ function CmsPageForm<T extends PageFormFields>({
   const defaultLayout =
     cmsParent.__typename === 'RootSite'
       ? cmsParent.root_site_default_layout
-      : cmsParent.default_layout;
+      : cmsParent.defaultLayout;
 
   const cmsLayoutOptions = useMemo(
     () =>

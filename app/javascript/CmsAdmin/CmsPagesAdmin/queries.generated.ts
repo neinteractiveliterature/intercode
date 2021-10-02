@@ -11,7 +11,7 @@ export type CmsPageFieldsFragment = { __typename: 'Page', id: number, name?: str
 export type CmsPagesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsPagesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_pages: boolean }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined }>, cmsParent: { __typename: 'Convention', id: number, default_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } }, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }> };
+export type CmsPagesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_pages: boolean }, cmsParent: { __typename: 'Convention', id: number, defaultLayout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }> } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }> } };
 
 export const CmsPageAdminLayoutFieldsFragmentDoc = gql`
     fragment CmsPageAdminLayoutFields on CmsLayout {
@@ -38,36 +38,35 @@ export const CmsPageFieldsFragmentDoc = gql`
     ${CmsPageAdminLayoutFieldsFragmentDoc}`;
 export const CmsPagesAdminQueryDocument = gql`
     query CmsPagesAdminQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
     name
   }
   currentAbility {
     can_create_pages
   }
-  cmsPages {
+  cmsParent: cmsParentByRequestHost {
     id
-    ...CmsPageFields
-  }
-  cmsParent {
-    ... on RootSite {
+    cmsPages {
       id
-      root_site_default_layout: default_layout {
+      ...CmsPageFields
+    }
+    cmsLayouts {
+      id
+      ...CmsPageAdminLayoutFields
+    }
+    ... on RootSite {
+      root_site_default_layout: defaultLayout {
         id
         ...CmsPageAdminLayoutFields
       }
     }
     ... on Convention {
-      id
-      default_layout {
+      defaultLayout {
         id
         ...CmsPageAdminLayoutFields
       }
     }
-  }
-  cmsLayouts {
-    id
-    ...CmsPageAdminLayoutFields
   }
 }
     ${CmsPageFieldsFragmentDoc}

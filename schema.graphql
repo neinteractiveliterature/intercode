@@ -357,6 +357,7 @@ interface CmsParent {
     """
     query: String!
   ): SearchResult!
+  id: Int!
 
   """
   Returns all the Liquid assigns for regular CMS page rendering in the current domain name.

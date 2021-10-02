@@ -13,7 +13,7 @@ export const CmsPartialFields = gql`
 
 export const CmsPartialsAdminQuery = gql`
   query CmsPartialsAdminQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
     }
@@ -22,9 +22,12 @@ export const CmsPartialsAdminQuery = gql`
       can_create_cms_partials
     }
 
-    cmsPartials {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsPartialFields
+      cmsPartials {
+        id
+        ...CmsPartialFields
+      }
     }
   }
 

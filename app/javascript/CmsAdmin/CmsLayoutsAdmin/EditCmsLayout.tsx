@@ -14,7 +14,7 @@ import { useUpdateLayoutMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
   useCmsLayoutsAdminQuery,
-  (data, id) => data.cmsLayouts.find((layout) => id === layout.id.toString()),
+  (data, id) => data.cmsParent.cmsLayouts.find((layout) => id === layout.id.toString()),
   function EditCmsLayout({ value: initialLayout }) {
     const history = useHistory();
     const [layout, setLayout] = useState(initialLayout);

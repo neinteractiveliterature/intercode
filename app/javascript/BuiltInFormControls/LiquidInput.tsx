@@ -62,7 +62,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
           <>
             <SelectWithLabel<CmsFile>
               label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
-              options={data?.cmsFiles || []}
+              options={data?.cmsParent.cmsFiles ?? []}
               getOptionLabel={(f) => f.filename}
               getOptionValue={(f) => f.filename}
               value={file}
@@ -142,7 +142,7 @@ export type LiquidInputProps = Omit<
     extensions?: Extension[];
   };
 
-function LiquidInput(props: LiquidInputProps) {
+function LiquidInput(props: LiquidInputProps): JSX.Element {
   const { t } = useTranslation();
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');

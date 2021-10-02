@@ -8,10 +8,10 @@ import { useDeleteMutation } from '../../MutationUtils';
 import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';
 
 export type ExistingVariableRowProps = {
-  variable: CmsVariablesQueryData['cmsVariables'][0];
+  variable: CmsVariablesQueryData['cmsParent']['cmsVariables'][0];
 };
 
-function ExistingVariableRow({ variable }: ExistingVariableRowProps) {
+function ExistingVariableRow({ variable }: ExistingVariableRowProps): JSX.Element {
   const [setVariableMutate] = useSetCmsVariableMutation();
   const [setVariable, setVariableError, , clearSetVariableError] =
     useAsyncFunction(setVariableMutate);

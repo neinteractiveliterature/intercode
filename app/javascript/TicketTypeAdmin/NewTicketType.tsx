@@ -38,7 +38,7 @@ function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
         return;
       }
 
-      proxy.writeQuery({
+      proxy.writeQuery<AdminTicketTypesQueryData>({
         query: AdminTicketTypesQuery,
         data: {
           ...data,

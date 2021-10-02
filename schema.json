@@ -3009,6 +3009,22 @@
               "deprecationReason": null
             },
             {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "liquidAssigns",
               "description": "Returns all the Liquid assigns for regular CMS page rendering in the current domain name.\nThis is a combination of globally-accessible Liquid assigns and domain-specific user-defined\nCMS variables.\n",
               "args": [],

@@ -5,7 +5,7 @@ import EditCmsPage from './EditCmsPage';
 import NewCmsPage from './NewCmsPage';
 import ViewCmsPageSource from './ViewCmsPageSource';
 
-function CmsPagesAdmin() {
+function CmsPagesAdmin(): JSX.Element {
   return (
     <Switch>
       <Route path="/cms_pages/:id/edit">

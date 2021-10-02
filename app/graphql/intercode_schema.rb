@@ -47,7 +47,8 @@ class IntercodeSchema < GraphQL::Schema
       "Validation failed for #{err.record.class.name}: \
 #{err.record.errors.full_messages.join(', ')}",
       extensions: {
-        validationErrors: err.record.errors.as_json
+        validationErrors: err.record.errors.as_json,
+        code: 'RECORD_INVALID'
       }
     )
   end
@@ -56,10 +57,16 @@ class IntercodeSchema < GraphQL::Schema
     type_name = field.type.unwrap.graphql_name
 
     if type_name == 'Boolean'
-      raise GraphQL::ExecutionError, "Record not found while evaluating #{field.name}"
+      raise GraphQL::ExecutionError.new(
+        "Record not found while evaluating #{field.name}",
+        extensions: { code: 'NOT_FOUND' }
+      )
     end
 
-    raise GraphQL::ExecutionError, "#{field.type.unwrap.graphql_name} not found"
+    raise GraphQL::ExecutionError.new(
+      "#{field.type.unwrap.graphql_name} not found",
+      extensions: { code: 'NOT_FOUND' }
+    )
   end
 
   rescue_from Liquid::SyntaxError do |err, _obj, _args, _ctx, _field|

@@ -9,7 +9,7 @@ export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: str
 export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } | { __typename: 'RootSite', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } };
+export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } | { __typename: 'RootSite', id: number, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } };
 
 export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
@@ -28,6 +28,7 @@ export const LiquidAssignFieldsFragmentDoc = gql`
 export const LiquidAssignsQueryDocument = gql`
     query LiquidAssignsQuery {
   cmsParent: cmsParentByRequestHost {
+    id
     liquidAssigns {
       ...LiquidAssignFields
     }

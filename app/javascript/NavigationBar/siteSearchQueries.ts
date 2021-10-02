@@ -3,6 +3,8 @@ import { gql } from '@apollo/client';
 export const SiteSearchQuery = gql`
   query SiteSearchQuery($query: String!) {
     cmsParent: cmsParentByRequestHost {
+      id
+
       fullTextSearch(query: $query) {
         total_entries
         entries {

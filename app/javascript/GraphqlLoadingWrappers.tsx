@@ -1,4 +1,4 @@
-import { QueryHookOptions, QueryResult } from '@apollo/client';
+import { ApolloError, QueryHookOptions, QueryResult } from '@apollo/client';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -19,6 +19,13 @@ export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
     }
 
     if (error) {
+      if (
+        error instanceof ApolloError &&
+        error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND')
+      ) {
+        return <FourOhFourPage />;
+      }
+
       return <ErrorDisplay graphQLError={error} />;
     }
 

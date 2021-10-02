@@ -147,20 +147,23 @@ function ScheduleMultipleRunsModal({
         if (!eventsData || !newRuns) {
           return;
         }
-        store.writeQuery({
+        store.writeQuery<EventAdminEventsQueryData>({
           query: EventAdminEventsQuery,
           data: {
             ...eventsData,
-            events: eventsData.convention.events.map((e) => {
-              if (e.id === event.id) {
-                return {
-                  ...e,
-                  runs: [...e.runs, ...newRuns],
-                };
-              }
+            convention: {
+              ...eventsData.convention,
+              events: eventsData.convention.events.map((e) => {
+                if (e.id === event.id) {
+                  return {
+                    ...e,
+                    runs: [...e.runs, ...newRuns],
+                  };
+                }
 
-              return e;
-            }),
+                return e;
+              }),
+            },
           },
         });
       },

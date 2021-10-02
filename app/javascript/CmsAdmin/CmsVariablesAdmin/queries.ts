@@ -12,9 +12,12 @@ export const CmsVariableFields = gql`
 
 export const CmsVariablesQuery = gql`
   query CmsVariablesQuery {
-    cmsVariables {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsVariableFields
+      cmsVariables {
+        id
+        ...CmsVariableFields
+      }
     }
 
     currentAbility {

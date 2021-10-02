@@ -54,7 +54,7 @@ export const CmsContentGroupFields = gql`
 
 export const CmsContentGroupsAdminQuery = gql`
   query CmsContentGroupsAdminQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
 
@@ -64,9 +64,12 @@ export const CmsContentGroupsAdminQuery = gql`
       }
     }
 
-    cmsContentGroups {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsContentGroupFields
+      cmsContentGroups {
+        id
+        ...CmsContentGroupFields
+      }
     }
 
     currentAbility {
@@ -79,8 +82,12 @@ export const CmsContentGroupsAdminQuery = gql`
 
 export const SearchCmsContentQuery = gql`
   query SearchCmsContentQuery($name: String) {
-    searchCmsContent(name: $name) {
-      ...CmsContentFields
+    cmsParent: cmsParentByRequestHost {
+      id
+
+      typeaheadSearchCmsContent(name: $name) {
+        ...CmsContentFields
+      }
     }
   }
 

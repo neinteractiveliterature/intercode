@@ -13,9 +13,12 @@ export const CmsGraphqlQueryFields = gql`
 
 export const CmsGraphqlQueriesQuery = gql`
   query CmsGraphqlQueriesQuery {
-    cmsGraphqlQueries {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsGraphqlQueryFields
+      cmsGraphqlQueries {
+        id
+        ...CmsGraphqlQueryFields
+      }
     }
 
     currentAbility {

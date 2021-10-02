@@ -45,7 +45,7 @@ export default LoadSingleValueFromCollectionWrapper(
             return;
           }
 
-          proxy.writeQuery({
+          proxy.writeQuery<OrganizationAdminOrganizationsQueryData>({
             query: OrganizationAdminOrganizationsQuery,
             data: {
               ...storeData,

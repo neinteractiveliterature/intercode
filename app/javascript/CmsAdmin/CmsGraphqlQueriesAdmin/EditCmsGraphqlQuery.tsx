@@ -14,7 +14,7 @@ import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappe
 
 export default LoadSingleValueFromCollectionWrapper(
   useCmsGraphqlQueriesQuery,
-  (data, id) => data?.cmsGraphqlQueries.find((q) => q.id.toString() === id),
+  (data, id) => data.cmsParent.cmsGraphqlQueries.find((q) => q.id.toString() === id),
   function EditCmsGraphqlQuery({ value: initialQuery }) {
     const history = useHistory();
     const [query, setQuery] = useState(initialQuery);

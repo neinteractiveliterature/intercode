@@ -9,7 +9,7 @@ export type CmsPartialFieldsFragment = { __typename: 'CmsPartial', id: number, n
 export type CmsPartialsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsPartialsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_partials: boolean }, cmsPartials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> };
+export type CmsPartialsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_partials: boolean }, cmsParent: { __typename: 'Convention', id: number, cmsPartials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: number, cmsPartials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } };
 
 export const CmsPartialFieldsFragmentDoc = gql`
     fragment CmsPartialFields on CmsPartial {
@@ -23,16 +23,19 @@ export const CmsPartialFieldsFragmentDoc = gql`
     `;
 export const CmsPartialsAdminQueryDocument = gql`
     query CmsPartialsAdminQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
     name
   }
   currentAbility {
     can_create_cms_partials
   }
-  cmsPartials {
+  cmsParent: cmsParentByRequestHost {
     id
-    ...CmsPartialFields
+    cmsPartials {
+      id
+      ...CmsPartialFields
+    }
   }
 }
     ${CmsPartialFieldsFragmentDoc}`;

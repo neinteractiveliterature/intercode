@@ -4,7 +4,7 @@ import {
   ErrorDisplay,
   sortByLocaleString,
   useConfirm,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
 import { CmsPartialsAdminQuery } from './queries';
@@ -13,8 +13,7 @@ import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsPartialsAdminQuery } from './queries.generated';
 
-function CmsPartialsAdminTable() {
-  const { data, loading, error } = useCmsPartialsAdminQuery();
+export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAdminTable({ data }) {
   const confirm = useConfirm();
   const deletePartialMutate = useDeleteMutation(DeletePartial, {
     query: CmsPartialsAdminQuery,
@@ -25,20 +24,8 @@ function CmsPartialsAdminTable() {
   usePageTitle('CMS Partials');
 
   const partialsSorted = useMemo(() => {
-    if (error || loading || !data) {
-      return [];
-    }
-
-    return sortByLocaleString(data.cmsPartials, (partial) => partial.name ?? '');
-  }, [data, loading, error]);
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+    return sortByLocaleString(data.cmsParent.cmsPartials, (partial) => partial.name ?? '');
+  }, [data.cmsParent.cmsPartials]);
 
   const deletePartial = (id: number) => deletePartialMutate({ variables: { id } });
 
@@ -94,13 +81,11 @@ function CmsPartialsAdminTable() {
         </tbody>
       </table>
 
-      {data!.currentAbility.can_create_cms_partials && (
+      {data.currentAbility.can_create_cms_partials && (
         <Link to="/cms_partials/new" className="btn btn-secondary">
           New partial
         </Link>
       )}
     </>
   );
-}
-
-export default CmsPartialsAdminTable;
+});

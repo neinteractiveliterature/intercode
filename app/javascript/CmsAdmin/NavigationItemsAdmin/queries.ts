@@ -18,19 +18,23 @@ export const AdminNavigationItemFields = gql`
 
 export const NavigationItemsAdminQuery = gql`
   query NavigationItemsAdminQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
     }
 
-    cmsPages {
+    cmsParent: cmsParentByRequestHost {
       id
-      name
-    }
 
-    cmsNavigationItems {
-      id
-      ...AdminNavigationItemFields
+      cmsPages {
+        id
+        name
+      }
+
+      cmsNavigationItems {
+        id
+        ...AdminNavigationItemFields
+      }
     }
   }
 

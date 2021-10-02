@@ -12,7 +12,7 @@ import { useCreateMutation } from '../../MutationUtils';
 import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
 
-function NewCmsPartial() {
+function NewCmsPartial(): JSX.Element {
   const history = useHistory();
   const [partial, setPartial] = useState<CmsPartialFormFields>({});
   const [createPartial, createError, createInProgress] = useAsyncFunction(

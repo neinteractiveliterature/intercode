@@ -3,6 +3,8 @@ import { gql } from '@apollo/client';
 export const AppRootQuery = gql`
   query AppRootQuery($path: String!) {
     cmsParentByRequestHost {
+      id
+
       effectiveCmsLayout(path: $path) {
         id
         content_html(path: $path)

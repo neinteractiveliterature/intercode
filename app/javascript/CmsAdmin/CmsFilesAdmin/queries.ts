@@ -13,7 +13,7 @@ export const CmsFileFields = gql`
 
 export const CmsFilesAdminQuery = gql`
   query CmsFilesAdminQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
     }
@@ -22,9 +22,12 @@ export const CmsFilesAdminQuery = gql`
       can_create_cms_files
     }
 
-    cmsFiles {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsFileFields
+      cmsFiles {
+        id
+        ...CmsFileFields
+      }
     }
   }
 

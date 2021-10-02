@@ -21,7 +21,7 @@ import {
 } from './mutations.generated';
 import { useCmsFilesAdminQuery } from './queries.generated';
 
-function CmsFilesAdmin() {
+function CmsFilesAdmin(): JSX.Element {
   const { data, loading, error, refetch } = useCmsFilesAdminQuery();
   const deleteFileMutate = useDeleteMutation<
     DeleteCmsFileMutationVariables,
@@ -54,7 +54,7 @@ function CmsFilesAdmin() {
   return (
     <>
       <div className="cms-file-card-deck mb-4">
-        {data?.cmsFiles.map((cmsFile) => (
+        {data?.cmsParent.cmsFiles.map((cmsFile) => (
           <div className="card" key={cmsFile.id}>
             <div className="card-header">
               {cmsFile.current_ability_can_delete && (
