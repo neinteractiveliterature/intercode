@@ -29,7 +29,7 @@ function ConventionFormGeneralSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormGeneralSectionProps) {
+}: ConventionFormGeneralSectionProps): JSX.Element {
   const { mapboxAccessToken } = useContext(MapboxContext);
   const [
     setName,
@@ -57,10 +57,12 @@ function ConventionFormGeneralSection({
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
 
-  const startEndFields = ([
-    ['starts_at', 'Convention starts', convention.starts_at, setStartsAt, startId],
-    ['ends_at', 'Convention ends', convention.ends_at, setEndsAt, endId],
-  ] as const).map(([fieldName, label, value, onChange, inputId]) => (
+  const startEndFields = (
+    [
+      ['starts_at', 'Convention starts', convention.starts_at, setStartsAt, startId],
+      ['ends_at', 'Convention ends', convention.ends_at, setEndsAt, endId],
+    ] as const
+  ).map(([fieldName, label, value, onChange, inputId]) => (
     <div className="col-md-6" key={fieldName}>
       <label className="form-label" htmlFor={inputId}>
         {label}
@@ -80,7 +82,7 @@ function ConventionFormGeneralSection({
     [convention.location],
   );
 
-  const locationSelectChanged = async (newValue: any) => {
+  const locationSelectChanged = async (newValue: { center: [number, number] } | undefined) => {
     setLocation(newValue ? JSON.stringify(newValue) : null);
     if (newValue?.center) {
       const uri = `https://api.mapbox.com/v4/examples.4ze9z6tv/tilequery/${newValue.center[0]},${newValue.center[1]}.json?access_token=${mapboxAccessToken}`;

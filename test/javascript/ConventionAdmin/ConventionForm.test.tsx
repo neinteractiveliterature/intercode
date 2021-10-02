@@ -17,15 +17,15 @@ describe('ConventionForm', () => {
   const defaultInitialConvention: ConventionFormConvention = {
     __typename: 'Convention',
     canceled: false,
-    cms_layouts: [],
-    default_layout: {
+    cmsLayouts: [],
+    defaultLayout: {
       __typename: 'CmsLayout',
       id: 0,
     },
     email_from: 'noreply@convention.test',
     id: 0,
     language: 'en',
-    pages: [],
+    cmsPages: [],
     signup_requests_open: false,
     stripe_account_ready_to_charge: true,
     ticket_mode: TicketMode.RequiredForSignup,
@@ -48,7 +48,7 @@ describe('ConventionForm', () => {
     ticket_name: 'ticket',
     staff_positions: [],
     email_mode: EmailMode.Forward,
-    root_page: {
+    rootPage: {
       __typename: 'Page',
       id: 0,
     },

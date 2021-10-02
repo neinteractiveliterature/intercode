@@ -21,9 +21,12 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
   end
 
-  field :cms_content_groups, [Types::CmsContentGroupType], null: false
-  field :cms_layouts, [Types::CmsLayoutType], null: false
-  field :cms_navigation_items, [Types::CmsNavigationItemType], null: false
+  field :cms_content_groups, [Types::CmsContentGroupType],
+    deprecation_reason: 'Please use `cmsContentGroups` instead.', null: false
+  field :cms_layouts, [Types::CmsLayoutType],
+    deprecation_reason: 'Please use `cmsLayouts` instead.', null: false
+  field :cms_navigation_items, [Types::CmsNavigationItemType],
+    deprecation_reason: 'Please use `cmsNavigationItems` instead.', null: false
 
   pagination_field :coupons_paginated, Types::CouponsPaginationType,
     Types::CouponFiltersInputType, null: false

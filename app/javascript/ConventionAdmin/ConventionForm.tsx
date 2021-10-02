@@ -28,8 +28,8 @@ export type ConventionFormConvention = Omit<
 export type ConventionFormProps = {
   initialConvention: ConventionFormConvention;
   saveConvention: (convention: ConventionFormConvention) => Promise<void>;
-  cmsLayouts: ConventionAdminConventionQueryData['convention']['cms_layouts'];
-  pages: ConventionAdminConventionQueryData['convention']['pages'];
+  cmsLayouts: ConventionAdminConventionQueryData['convention']['cmsLayouts'];
+  pages: ConventionAdminConventionQueryData['convention']['cmsPages'];
   rootSite: ConventionAdminConventionQueryData['rootSite'];
 };
 
@@ -39,7 +39,7 @@ function ConventionForm({
   pages,
   saveConvention,
   rootSite,
-}: ConventionFormProps) {
+}: ConventionFormProps): JSX.Element {
   const [convention, setConvention] = useState(initialConvention);
   const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
 

@@ -91,7 +91,7 @@ export default LoadSingleValueFromCollectionWrapper(
             permissionNames={CmsContentGroupPermissionNames}
             initialPermissions={staffPosition.permissions}
             rowType="model"
-            rows={convention.cms_content_groups}
+            rows={convention.cmsContentGroups}
             changeSet={changeSet}
             add={add}
             remove={remove}

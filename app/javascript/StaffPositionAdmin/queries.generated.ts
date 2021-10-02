@@ -10,7 +10,7 @@ export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', id: num
 export type StaffPositionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type StaffPositionsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined }>, cms_content_groups: Array<{ __typename: 'CmsContentGroup', id: number, name: string }>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined } }> }> } };
+export type StaffPositionsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: number, name: string }>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined } }> }> } };
 
 export const StaffPositionFieldsFragmentDoc = gql`
     fragment StaffPositionFields on StaffPosition {
@@ -45,7 +45,7 @@ export const StaffPositionsQueryDocument = gql`
       name
       default_color
     }
-    cms_content_groups {
+    cmsContentGroups {
       id
       name
     }
