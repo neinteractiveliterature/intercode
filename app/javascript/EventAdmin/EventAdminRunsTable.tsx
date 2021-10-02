@@ -1,38 +1,30 @@
 import { Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useEventAdminCategory from './useEventAdminCategory';
-import { useEventAdminEventsQuery } from './queries.generated';
+import {
+  EventAdminEventsQueryData,
+  EventAdminEventsQueryVariables,
+  useEventAdminEventsQuery,
+} from './queries.generated';
 
 export type EventAdminRunsTableProps = {
   eventCategoryId: number;
 };
 
-function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsTableProps) {
-  const { data, loading, error } = useEventAdminEventsQuery();
+export default LoadQueryWrapper<
+  EventAdminEventsQueryData,
+  EventAdminEventsQueryVariables,
+  EventAdminRunsTableProps
+>(useEventAdminEventsQuery, function EventAdminRunsTable({ eventCategoryId, data }) {
+  const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
 
-  const [eventCategory, sortedEvents] = useEventAdminCategory(
-    data,
-    loading,
-    error,
-    eventCategoryId,
-  );
-
-  usePageTitle(useValueUnless(() => pluralize(eventCategory!.name), error || loading));
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(pluralize(eventCategory?.name ?? ''));
 
   return (
     <div>
@@ -54,19 +46,17 @@ function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsTableProps) {
         </thead>
         <tbody>
           {sortedEvents.map((event) => (
-            <EventAdminRow event={event} convention={data!.convention!} key={event.id} />
+            <EventAdminRow event={event} convention={data.convention} key={event.id} />
           ))}
         </tbody>
       </table>
 
       <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
-        <EditRun events={data!.events} convention={data!.convention!} />
+        <EditRun events={data.convention.events} convention={data.convention} />
       </Route>
       <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}>
-        <EditRun events={data!.events} convention={data!.convention!} />
+        <EditRun events={data.convention.events} convention={data.convention} />
       </Route>
     </div>
   );
-}
-
-export default EventAdminRunsTable;
+});

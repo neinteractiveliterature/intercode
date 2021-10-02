@@ -37,7 +37,7 @@ type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_a
 
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
   run: RunType;
-  event: EventAdminEventsQueryData['events'][0];
+  event: EventAdminEventsQueryData['convention']['events'][0];
   onChange: React.Dispatch<React.SetStateAction<RunType>>;
 };
 
@@ -45,7 +45,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   run,
   event,
   onChange,
-}: RunFormFieldsProps<RunType>) {
+}: RunFormFieldsProps<RunType>): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();

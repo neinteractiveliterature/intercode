@@ -1,7 +1,7 @@
 import { useMemo, useEffect } from 'react';
 
 import useEventCategorySelection from './useEventCategorySelection';
-import useEventForm, { EventForm, EventFormProps } from './useEventForm';
+import useEventForm, { EventForm, EventFormProps, UseEventFormResult } from './useEventForm';
 import EventCategorySelect, {
   EventCategorySelectProps,
 } from '../BuiltInFormControls/EventCategorySelect';
@@ -30,6 +30,24 @@ export type UseEventFormWithCategorySelectionOptions<
   schedulingUi?: string | null;
 };
 
+export type UseEventFormWithCategorySelectionResult<
+  EventType extends FormResponse & {
+    event_category?: {
+      id: number;
+    } | null;
+  } & Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
+  EventCategoryType extends EventCategoryFormData,
+> = [
+  {
+    selectProps: EventCategorySelectProps;
+    eventFormProps: EventFormProps<EventType>;
+  },
+  UseEventFormResult<EventType>[1] & {
+    eventCategoryId?: number;
+    eventCategory?: EventCategoryForEventFormWithCategorySelection<EventCategoryType>;
+  },
+];
+
 export default function useEventFormWithCategorySelection<
   EventCategoryType extends EventCategoryFormData,
   EventType extends FormResponse & { event_category?: { id: number } | null } & Pick<
@@ -40,7 +58,10 @@ export default function useEventFormWithCategorySelection<
   convention,
   initialEvent,
   schedulingUi,
-}: UseEventFormWithCategorySelectionOptions<EventCategoryType, EventType>) {
+}: UseEventFormWithCategorySelectionOptions<
+  EventCategoryType,
+  EventType
+>): UseEventFormWithCategorySelectionResult<EventType, EventCategoryType> {
   const selectableCategoryIds = useMemo(() => {
     if (schedulingUi) {
       return convention.event_categories
@@ -69,15 +90,14 @@ export default function useEventFormWithCategorySelection<
   }, [eventCategory, setEvent]);
 
   return useMemo(
-    () =>
-      [
-        { selectProps, eventFormProps },
-        {
-          eventCategoryId,
-          eventCategory,
-          ...eventFormHandles,
-        },
-      ] as const,
+    () => [
+      { selectProps, eventFormProps },
+      {
+        eventCategoryId,
+        eventCategory,
+        ...eventFormHandles,
+      },
+    ],
     [eventCategory, eventCategoryId, selectProps, eventFormProps, eventFormHandles],
   );
 }
@@ -96,7 +116,7 @@ export function EventFormWithCategorySelection<EventType extends FormResponse>({
 }: EventFormWithCategorySelectionProps<
   EventType &
     Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
->) {
+>): JSX.Element {
   return (
     <>
       <EventCategorySelect {...selectProps} />

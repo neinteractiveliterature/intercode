@@ -10,7 +10,7 @@ export type EditRunProps = {
   events: EventFieldsFragment[];
 };
 
-function EditRun({ convention, events }: EditRunProps) {
+function EditRun({ convention, events }: EditRunProps): JSX.Element {
   const match = useRouteMatch<{ eventId: string; runId: string }>();
   const history = useHistory();
   const event = useMemo(() => {

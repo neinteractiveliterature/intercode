@@ -141,7 +141,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
   disabled,
   ticketName,
   ticketMode,
-}: EventCategoryFormProps<T>) {
+}: EventCategoryFormProps<T>): JSX.Element {
   const [
     setName,
     setTeamMemberName,
@@ -233,26 +233,28 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         <legend className="col-form-label">Colors</legend>
 
         <div className="d-flex flex-wrap">
-          {([
-            {
-              variant: 'default',
-              color: value.default_color,
-              setColor: setDefaultColor,
-              eventRunProps: {},
-            },
-            {
-              variant: 'signed_up',
-              color: value.signed_up_color,
-              setColor: setSignedUpColor,
-              eventRunProps: { signupStatus: SignupStatus.Confirmed },
-            },
-            {
-              variant: 'full',
-              color: value.full_color,
-              setColor: setFullColor,
-              eventRunProps: { runFull: true },
-            },
-          ] as const).map(({ variant, color, setColor, eventRunProps }) => (
+          {(
+            [
+              {
+                variant: 'default',
+                color: value.default_color,
+                setColor: setDefaultColor,
+                eventRunProps: {},
+              },
+              {
+                variant: 'signed_up',
+                color: value.signed_up_color,
+                setColor: setSignedUpColor,
+                eventRunProps: { signupStatus: SignupStatus.Confirmed },
+              },
+              {
+                variant: 'full',
+                color: value.full_color,
+                setColor: setFullColor,
+                eventRunProps: { runFull: true },
+              },
+            ] as const
+          ).map(({ variant, color, setColor, eventRunProps }) => (
             <EventColorPicker
               key={variant}
               variant={variant}

@@ -190,11 +190,11 @@ export const EventAdminEventsQuery = gql`
     convention: conventionByRequestHost {
       id
       ...ConventionFields
-    }
 
-    events(includeDropped: true) {
-      id
-      ...EventFields
+      events(includeDropped: true) {
+        id
+        ...EventFields
+      }
     }
   }
 
