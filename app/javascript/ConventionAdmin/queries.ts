@@ -43,22 +43,22 @@ export const ConventionAdminConventionFields = gql`
       }
     }
 
-    default_layout {
+    defaultLayout {
       id
       name
     }
 
-    cms_layouts {
+    cmsLayouts {
       id
       name
     }
 
-    root_page {
+    rootPage {
       id
       name
     }
 
-    pages {
+    cmsPages {
       id
       name
     }

@@ -42,7 +42,7 @@ export const StaffPositionsQuery = gql`
         default_color
       }
 
-      cms_content_groups {
+      cmsContentGroups {
         id
         name
       }

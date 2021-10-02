@@ -22,7 +22,7 @@ const buildMaximumEventSignupsInput = (
   value: MaximumEventSignupsValue | undefined,
   onChange: React.Dispatch<MaximumEventSignupsValue | undefined>,
 ) => {
-  const processChangeEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const processChangeEvent = (event: React.FocusEvent<HTMLSelectElement>) => {
     const { value: newValue } = event.target;
     switch (newValue) {
       case 'not_yet':
@@ -44,7 +44,7 @@ const buildMaximumEventSignupsInput = (
   ));
 
   return (
-    <select className="form-select" value={value} onChange={processChangeEvent}>
+    <select className="form-select" value={value} onBlur={processChangeEvent}>
       <option aria-label="Blank placeholder option" />
       {options}
     </select>
@@ -61,7 +61,7 @@ function ConventionFormEventsSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormEventsSectionProps) {
+}: ConventionFormEventsSectionProps): JSX.Element {
   const timezoneName = timezoneNameForConvention(convention);
   const [
     setSignupMode,

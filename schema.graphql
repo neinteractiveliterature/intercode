@@ -520,9 +520,9 @@ type Convention implements CmsParent {
   Returns all CMS variables within the current domain.
   """
   cmsVariables: [CmsVariable!]!
-  cms_content_groups: [CmsContentGroup!]!
-  cms_layouts: [CmsLayout!]!
-  cms_navigation_items: [CmsNavigationItem!]!
+  cms_content_groups: [CmsContentGroup!]! @deprecated(reason: "Please use `cmsContentGroups` instead.")
+  cms_layouts: [CmsLayout!]! @deprecated(reason: "Please use `cmsLayouts` instead.")
+  cms_navigation_items: [CmsNavigationItem!]! @deprecated(reason: "Please use `cmsNavigationItems` instead.")
   coupons_paginated(
     """
     Filters to restrict what items will appear in the result set.

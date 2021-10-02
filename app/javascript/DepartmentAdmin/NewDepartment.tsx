@@ -8,7 +8,7 @@ import buildDepartmentInput from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
 import { useCreateMutation } from '../MutationUtils';
 
-function NewDepartment() {
+function NewDepartment(): JSX.Element {
   const createDepartment = useCreateMutation(CreateDepartment, {
     query: DepartmentAdminQuery,
     arrayPath: ['convention', 'departments'],

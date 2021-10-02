@@ -47,7 +47,7 @@ export type MaximumEventSignupsPreviewProps = {
 export default function MaximumEventSignupsPreview({
   maximumEventSignups,
   timezoneName,
-}: MaximumEventSignupsPreviewProps) {
+}: MaximumEventSignupsPreviewProps): JSX.Element {
   return (
     <ScheduledValuePreview
       scheduledValue={maximumEventSignups ?? { timespans: [] }}

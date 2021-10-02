@@ -596,8 +596,11 @@ export type Convention = CmsParent & {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** @deprecated Please use `cmsContentGroups` instead. */
   cms_content_groups: Array<CmsContentGroup>;
+  /** @deprecated Please use `cmsLayouts` instead. */
   cms_layouts: Array<CmsLayout>;
+  /** @deprecated Please use `cmsNavigationItems` instead. */
   cms_navigation_items: Array<CmsNavigationItem>;
   coupons_paginated: CouponsPagination;
   created_at?: Maybe<Scalars['Date']>;
